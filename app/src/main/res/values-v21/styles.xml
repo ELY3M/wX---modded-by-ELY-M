@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+<resources>
+
+    <!--replace AppCompat with MaterialComponents for theme-->
+
+    <style name="MyCustomTheme_NOAB"  parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="android:buttonTint">@color/primary_blue</item>
+        <item name="colorPrimaryDark">@color/primary_dark_blue</item>
+        <item name="colorAccent">@color/blue_accent</item>
+        <item name="android:statusBarColor">@color/primary_dark_blue</item>
+        <item name="android:windowBackground">@color/bg_blue</item>
+        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
+        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
+    </style>
+
+    <style name="MyCustomTheme_white_NOAB"  parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="android:buttonTint">@color/primary_blue</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:statusBarColor">@color/primary_dark_blue</item>
+        <item name="android:windowBackground">@color/bg_blue</item>
+        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorControlActivated">@color/bg_blue</item>
+        <item name="colorSwitchThumbNormal">@color/blue_accent</item>
+        <item name="android:editTextColor">@color/black</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
+        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
+    </style>
+
+    <style name="MyCustomTheme_whiter_NOAB"  parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/light_blue</item>
+        <item name="android:buttonTint">@color/light_blue</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:statusBarColor">@color/primary_dark_blue</item>
+        <item name="android:windowBackground">@color/off_white</item>
+        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorControlActivated">@color/bg_blue</item>
+        <item name="colorSwitchThumbNormal">@color/blue_accent</item>
+        <item name="android:editTextColor">@color/black</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
+        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
+    </style>
+
+    <style name="PickerDialogTheme" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="colorPrimaryDark">@color/primary_dark_blue</item>
+        <item name="colorAccent">@color/blue_accent</item>
+    </style>
+
+    <style name="PickerDialogThemeDark" parent="Theme.MaterialComponents.Light.Dialog">
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="colorPrimaryDark">@color/primary_dark_blue</item>
+        <item name="colorAccent">@color/black</item>
+    </style>
+
+    <style name="AppCompatAlertDialogStyle"  parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="colorAccent">@color/yellow</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:background">@color/primary_blue</item>
+    </style>
+
+    <style name="AppCompatAlertDialogStyleBlack"  parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="colorAccent">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:background">@color/gray_dark</item>
+    </style>
+
+    <style name="MyCustomTheme_mixedBlue_NOAB"  parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/bg_blue</item>
+        <item name="android:buttonTint">@color/bg_blue</item>
+        <item name="colorPrimaryDark">@color/primary_dark_blue</item>
+        <item name="colorAccent">@color/primary_blue</item>
+        <item name="android:statusBarColor">@color/primary_dark_blue</item>
+        <item name="android:windowBackground">@color/primary_dark_blue</item>
+        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorControlActivated">@color/primary_dark_blue</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
+        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
+    </style>
+
+    <style name="MyCustomTheme_DarkBlue_NOAB"  parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/bg_blue</item>
+        <item name="android:buttonTint">@color/bg_blue</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/blue_accent</item>
+        <item name="android:statusBarColor">@color/primary_dark_blue</item>
+        <item name="android:windowBackground">@color/primary_dark_blue</item>
+        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
+        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
+    </style>
+
+    <style name="MyCustomTheme_orange_NOAB"  parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/bg_orange</item>
+        <item name="android:buttonTint">@color/bg_orange</item>
+        <item name="colorPrimaryDark">@color/dark_orange</item>
+        <item name="colorAccent">@color/orange_accent</item>
+        <item name="android:statusBarColor">@color/primary_orange</item>
+        <item name="android:windowBackground">@color/primary_orange</item>
+        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
+        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
+    </style>
+
+    <style name="MyDarkToolbarStyle" parent="ThemeOverlay.MaterialComponents.Light">
+        <item name="android:colorBackground">?attr/colorPrimaryDark</item>
+    </style>
+
+    <style name="MyDialogTheme" parent="Theme.MaterialComponents.Dialog">
+        <item name="android:windowBackground">@color/primary_dark_blue</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+    <style name="MyDropDownNav2" parent="Widget.AppCompat.Spinner.DropDown.ActionBar"  >
+        <item name="android:popupBackground">@color/primary_dark_blue</item>
+    </style>
+
+    <style name="ABOverflow" parent="Base.Widget.AppCompat.PopupMenu.Overflow"  >
+        <item name="android:popupBackground">@color/primary_dark_blue</item>
+    </style>
+
+    <style name="MyPopupMenu" parent="@android:style/Widget.DeviceDefault.ListPopupWindow">
+        <item name="android:popupBackground">@color/primary_dark_blue</item>
+    </style>
+
+    <style name="MyCustomTheme_Holo_Dark_NOAB" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:buttonTint">@color/white</item>
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/gray_light</item>
+        <item name="android:windowBackground">@color/gray_dark</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorControlActivated">@color/primary_blue</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleBlack</item>
+        <item name="android:datePickerDialogTheme">@style/PickerDialogThemeDark</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogThemeDark</item>
+    </style>
+
+    <style name="MyCustomTheme_Green_NOAB" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:textColor">@color/white</item>
+        <item name="colorPrimary">@color/green_light</item>
+        <item name="android:buttonTint">@color/white</item>
+        <item name="colorPrimaryDark">@color/green_dark</item>
+        <item name="colorAccent">@color/green_accent</item>
+        <item name="android:windowBackground">@color/green_medium</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:statusBarColor">@color/green_dark</item>
+    </style>
+
+    <style name="MyCustomTheme_Gray_NOAB" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:textColor">@color/white</item>
+        <item name="colorPrimary">@color/gray_light</item>
+        <item name="android:buttonTint">@color/white</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/gray_accent</item>
+        <item name="android:windowBackground">@color/gray_dark</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
+
+    <!-- Telecine -->
+
+    <style name="Theme.Telecine" parent="android:Theme.Material.Light.DarkActionBar">
+        <item name="android:colorPrimary">@color/primary_normal</item>
+        <item name="android:colorPrimaryDark">@color/primary_dark_normal</item>
+        <item name="android:colorAccent">@color/accent_normal</item>
+        <item name="android:actionBarStyle">@style/Widget.Telecine.ActionBar</item>
+    </style>
+
+    <style name="Theme.Telecine.Transparent" parent="android:Theme.Translucent.NoTitleBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="Widget.Telecine.ActionBar" parent="android:Widget.Material.ActionBar.Solid">
+        <item name="android:title">@string/app_name</item>
+    </style>
+
+</resources>
+
+
+

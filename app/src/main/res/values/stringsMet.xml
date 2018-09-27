@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<resources>
+
+    <string name="label_short_sfc">SFC</string>
+    <string name="label_short_ua">UA</string>
+    <string name="label_short_cpe">CPE</string>
+    <string name="label_short_cmp">CMP</string>
+    <string name="label_short_shr">SHR</string>
+
+    <string name="label_sfc_obs">Surface Observations</string>
+    <string name="label_vis_sat">Visible Satellite</string>
+    <string name="label_base_ref">Base Reflectivity</string>
+    <string name="label_thetae">Theta-e</string>
+    <string name="label_ttd">Temp / Dew</string>
+    <string name="label_mslp">MSLP</string>
+
+    <string name="label_925mb">925mb Analysis</string>
+    <string name="label_850mb">850mb Analysis</string>
+    <string name="label_700mb">700mb Analysis</string>
+    <string name="label_500mb">500mb Analysis</string>
+    <string name="label_300mb">300mb Analysis</string>
+    <string name="label_250mb">250mb Analysis</string>
+
+    <string name="label_pwtr">Precipitable water</string>
+    <string name="label_li">Lifted Index</string>
+
+    <string name="label_laps">Mid-Level Lapse Rates</string>
+    <string name="label_lllr">Low-Level Lapse Rates</string>
+    <string name="label_lclh">LCL Height</string>
+    <string name="label_sbcape">CAPE - Surface Based</string>
+    <string name="label_mlcape">CAPE - 100mb Mixed-Layer</string>
+    <string name="label_mucape">CAPE - Most-Unstable / LPL Height</string>
+
+    <string name="label_sigh">Sgfnt Hail</string>
+    <string name="label_stpc">Sgfnt Tornado (effective layer)</string>
+    <string name="label_scp">Supercell Composite</string>
+
+    <string name="label_srh1">SR Helecity - Sfc-1km</string>
+    <string name="label_srh3">SR Helecity - Sfc-3km</string>
+    <string name="label_shr6">Bulk Shear - Sfc-6km</string>
+    <string name="label_eshr">Bulk Shear - Effective</string>
+
+    <string name="label_multi_pane">Multi Pane</string>
+
+    <string name="label_spc_day1">SPC Day 1 Convective Outlook</string>
+    <string name="label_wat_warn">Watches/Warnings</string>
+
+    <string name="label_sel_img1">Select Image 1</string>
+    <string name="label_sel_img2">Select Image 2</string>
+
+    <string name="label_sel_radar1">Select Radar 1</string>
+    <string name="label_sel_radar2">Select Radar 2</string>
+    <string name="label_sel_radar3">Select Radar 3</string>
+    <string name="label_sel_radar4">Select Radar 4</string>
+
+    <string name="label_rh">Relative Humidity</string>
+    <string name="label_dp">Dew Point</string>
+    <string name="label_temp">Temperature</string>
+    <string name="label_sfc_plot">Surface Plot</string>
+    <string name="label_sfc_wind">Surface Wind</string>
+
+
+    <string name="label_ir_unenh">IR Unenhanced</string>
+    <string name="label_ir_swir">IR Shortwave</string>
+    <string name="label_ir_avn">IR AVN</string>
+    <string name="label_ir_bd">IR Dvorak</string>
+    <string name="label_ir_jsl">IR JSL</string>
+    <string name="label_ir_rgb">IR RGB</string>
+    <string name="label_ir_ft">IR Funktop</string>
+    <string name="label_ir_rb">IR Rainbow</string>
+    <string name="label_ir_ir2f">IR Fire</string>
+
+    <string name="label_radar_mosaic">Radar Mosaic</string>
+    <string name="label_observations">Observations</string>
+    <string name="label_soundings">Soundings</string>
+    <string name="label_playlist_cab">PlayList</string>
+    <string name="label_spotters">Spotters</string>
+    <string name="label_severe_dashboard">Severe Dashboard</string>
+    <string name="label_voice_command">Voice Command</string>
+
+
+</resources>

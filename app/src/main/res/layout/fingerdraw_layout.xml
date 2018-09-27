@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:id="@+id/rl"
+    >-->
+
+    <!--     android:layout_marginTop="?attr/actionBarSize" -->
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/drawing_screen_drawlocation"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="50dip">
+
+        <joshuatee.wx.fingerdraw.DrawView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="200dip"
+            android:id="@+id/drawing_screen_drawview" />
+    </LinearLayout>
+<!--</RelativeLayout>-->

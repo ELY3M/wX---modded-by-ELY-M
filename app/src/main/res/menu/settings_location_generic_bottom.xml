@@ -1,0 +1,110 @@
+<!-- 
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item android:id="@+id/action_vr"
+          android:title="@string/label_speak_location"
+          android:icon="@drawable/ic_mic_24dp"
+          app:showAsAction="always"
+        />
+    <item android:id="@+id/action_delete"
+          android:title="@string/label_delete_location"
+          android:icon="@drawable/ic_delete_24dp"
+          app:showAsAction="always"
+        />
+    <item android:id="@+id/action_ca"
+          android:title="@string/label_CA"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_ca_map"
+          android:title="@string/label_ca_via_map"
+          app:showAsAction="never">
+        <menu>
+
+            <item android:id="@+id/action_ab"
+                  android:title="@string/label_CA_AB"
+                  app:showAsAction="never"
+                />
+            <item android:id="@+id/action_bc"
+                  android:title="@string/label_CA_BC"
+                  app:showAsAction="never"
+                />
+            <item android:id="@+id/action_mb"
+                  android:title="@string/label_CA_MB"
+                  app:showAsAction="never"
+                />
+            <item android:id="@+id/action_nb"
+                  android:title="@string/label_CA_NB"
+                  app:showAsAction="never"
+                />
+            <item android:id="@+id/action_nl"
+                  android:title="@string/label_CA_NL"
+                  app:showAsAction="never"
+                />
+            <item android:id="@+id/action_ns"
+                  android:title="@string/label_CA_NS"
+                  app:showAsAction="never"
+                />
+            <item android:id="@+id/action_nt"
+                  android:title="@string/label_CA_NT"
+                  app:showAsAction="never"
+                />
+            <item android:id="@+id/action_nu"
+                  android:title="@string/label_CA_NU"
+                  app:showAsAction="never"
+                />
+            <item android:id="@+id/action_on"
+                  android:title="@string/label_CA_ON"
+                  app:showAsAction="never"
+                />
+            <item android:id="@+id/action_pe"
+                  android:title="@string/label_CA_PE"
+                  app:showAsAction="never"
+                />
+            <item android:id="@+id/action_qc"
+                  android:title="@string/label_CA_QC"
+                  app:showAsAction="never"
+                />
+            <item android:id="@+id/action_sk"
+                  android:title="@string/label_CA_SK"
+                  app:showAsAction="never"
+                />
+            <item android:id="@+id/action_yt"
+                  android:title="@string/label_CA_YT"
+                  app:showAsAction="never"
+                />
+        </menu>
+    </item>
+
+    <item android:id="@+id/action_map"
+          android:title="@string/label_show_location_on_map"
+          android:icon="@drawable/ic_public_24dp"
+          app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/action_help"
+        app:showAsAction="never"
+        android:title="@string/help_menu_item"/>
+</menu>
+
+

@@ -1,0 +1,229 @@
+<!--
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item android:id="@+id/action_map"
+          android:title="@string/label_rid_map"
+          android:icon="@drawable/ic_public_24dp"
+          app:showAsAction="always"
+        />
+    <item android:id="@+id/action_radar_overlay"
+          android:title="@string/action_radar"
+          android:icon="@drawable/ic_flash_on_24dp"
+          app:showAsAction="always"
+        />
+    <item android:id="@+id/action_vis"
+          android:title="@string/label_vis"
+          android:icon="@drawable/ic_cloud_24dp"
+          app:showAsAction="always"
+        />
+    <item android:id="@+id/action_a"
+          android:title="@string/label_a"
+          android:icon="@drawable/ic_play_arrow_24dp"
+          app:showAsAction="always"  />
+    <item android:id="@+id/action_share"
+          android:title="@string/label_share"
+          android:icon="@drawable/ic_share_24dp"
+          app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_mosaics"
+          android:title="@string/menu_regions"
+          app:showAsAction="never"  >
+        <menu>
+            <item android:id="@+id/action_east"
+                  android:title="@string/label_E"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_west"
+                  android:title="@string/label_W"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_us"
+                  android:title="@string/label_US"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_na"
+                  android:title="@string/label_NA"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_hi"
+                  android:title="@string/label_HI"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_ak"
+                  android:title="@string/label_AK"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_nw"
+                  android:title="@string/label_NW"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_wc"
+                  android:title="@string/label_WC"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_sw"
+                  android:title="@string/label_SW"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_np"
+                  android:title="@string/label_NP"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_cp"
+                  android:title="@string/label_CP"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_sc"
+                  android:title="@string/label_SC"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_mw"
+                  android:title="@string/label_MW"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_gl"
+                  android:title="@string/label_GL"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_ne"
+                  android:title="@string/label_NE"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_ma"
+                  android:title="@string/label_MA"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_se"
+                  android:title="@string/label_SE"
+                  app:showAsAction="never"  />
+        </menu>
+    </item>
+
+    <item android:id="@+id/action_ir_sub"
+          android:title="@string/label_ir"
+          app:showAsAction="never"  >
+        <menu>
+            <item android:id="@+id/action_avn"
+                  android:title="@string/label_ir_avn"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_ir2f"
+                  android:title="@string/label_ir_ir2f"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_ir2"
+                  android:title="@string/label_ir_swir"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_bd"
+                  android:title="@string/label_ir_bd"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_ir4"
+                  android:title="@string/label_ir_unenh"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_jsl"
+                  android:title="@string/label_ir_jsl"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_rgb"
+                  android:title="@string/label_ir_rgb"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_ft"
+                  android:title="@string/label_ir_ft"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_rb"
+                  android:title="@string/label_ir_rb"
+                  app:showAsAction="never"  />
+        </menu>
+    </item>
+
+    <item android:id="@+id/action_wv"
+          android:title="@string/label_wv"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_zoomout"
+          android:title="@string/menu_zoomout"
+          app:showAsAction="never"  />
+
+    <item android:id="@+id/action_test"
+          android:title="@string/label_animate"
+          app:showAsAction="never"  >
+        <menu>
+            <item android:id="@+id/action_a6"
+                  android:title="@string/label_a6"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_a12"
+                  android:title="@string/label_a12"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_a18"
+                  android:title="@string/label_a18"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_a36"
+                  android:title="@string/label_a36"
+                  app:showAsAction="never"  />
+        </menu>
+    </item>
+
+    <item android:id="@+id/action_meso"
+          android:title="@string/menu_mesoanalysis"
+          app:showAsAction="never"  >
+        <menu>
+            <item android:id="@+id/action_clear"
+                  android:title="@string/label_clear_all"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_warn"
+                  android:title="@string/label_wat_warn"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_mlsp"
+                  android:title="@string/label_mslp"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_dew"
+                  android:title="@string/label_dp"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_rh"
+                  android:title="@string/label_rh"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_temp"
+                  android:title="@string/label_temp"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_spw"
+                  android:title="@string/label_pwtr"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_sli"
+                  android:title="@string/label_li"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_wind"
+                  android:title="@string/label_sfc_wind"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_plot"
+                  android:title="@string/label_sfc_plot"
+                  app:showAsAction="never"  />
+        </menu>
+    </item>
+
+    <item android:id="@+id/action_overlays"
+          android:title="@string/menu_overlays"
+          app:showAsAction="never"  >
+        <menu>
+            <item android:id="@+id/action_clear_overlays"
+                  android:title="@string/menu_clearall"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_fronts"
+                  android:title="@string/menu_overlay_fronts"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_counties"
+                  android:title="@string/menu_overlay_counties"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_latlon"
+                  android:title="@string/menu_overlay_latlon"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_roads"
+                  android:title="@string/menu_overlay_roads"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_cwa"
+                  android:title="@string/label_cwa"
+                  app:showAsAction="never"  />
+        </menu>
+    </item>
+</menu>
+

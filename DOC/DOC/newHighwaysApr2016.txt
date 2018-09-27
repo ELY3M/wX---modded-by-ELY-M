@@ -1,0 +1,8 @@
+North American Atlas - Roads
+
+http://nationalmap.gov/small_scale/atlasftp.html?openChapters=chptrans#chptrans
+
+http://nationalmap.gov/small_scale/mld/road00l.html
+
+apt-get install gdal-bin
+ogr2ogr -f "KML"   ushw.kml hways.shp 

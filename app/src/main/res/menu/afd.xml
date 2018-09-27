@@ -1,0 +1,129 @@
+<!-- 
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item android:id="@+id/action_map"
+          android:title="@string/label_rid_map"
+          android:icon="@drawable/ic_public_24dp"
+          app:showAsAction="always"  />
+
+    <item android:id="@+id/action_read_aloud"
+          android:title="@string/read_aloud"
+          android:icon="@drawable/ic_play_arrow_24dp"
+          app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_stop"
+          android:title="@string/stop_audio"
+          android:icon="@drawable/ic_stop_24dp"
+          app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_fav"
+          android:title="@string/label_toggle_favorite"
+          android:icon="@drawable/ic_star_outline_24dp"
+          app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_share"
+          android:title="@string/label_share"
+          app:showAsAction="always"
+          android:icon="@drawable/ic_share_24dp"
+        />
+
+    <item android:id="@+id/action_playlist"
+          android:title="@string/label_playlist"
+          app:showAsAction="never"  />
+
+    <item android:id="@+id/action_notif_text_prod"
+          android:title="@string/notif_add"
+          app:showAsAction="never"  />
+
+    <item android:id="@+id/action_pin"
+        android:title="@string/label_pin"
+        app:showAsAction="never"
+        />
+
+    <item android:id="@+id/action_prod_by_state"
+          android:title="Text Prod by state"
+          app:showAsAction="never"  />
+
+    <item android:id="@+id/action_back"
+          android:title="Back"
+          app:showAsAction="never"  />
+
+    <item android:id="@+id/action_forward"
+          android:title="Forward"
+          app:showAsAction="never"  />
+
+    <item android:id="@+id/action_afd"
+          android:title="Area Forecast Discussion"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_vfd"
+          android:title="Aviation only AFD"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_hwo"
+          android:title="Hazardous Weather Outlook"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_sps"
+          android:title="Special Weather Statement"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_rva"
+          android:title="Hydrologic Summary"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_esf"
+          android:title="Hydrologic Outlook"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_rtp"
+          android:title="Regional Temp/Precip Summary"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_fwf"
+          android:title="Fire Weather Forecast"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_pns"
+          android:title="Public Information Statement"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_lsr"
+          android:title="Local Storm Report"
+          app:showAsAction="never"  />
+
+    <item android:id="@+id/action_rer"
+          android:title="Record Event Report"
+          app:showAsAction="never"  />
+
+    <item android:id="@+id/action_nsh"
+          android:title="Nearshore Marine Forecast"
+          app:showAsAction="never"  />
+
+    <item android:id="@+id/action_website"
+          android:title="NWS Office website"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_hazards"
+          android:title="NWS Office hazards map"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_forecast"
+          android:title="Current location forecast website"
+          app:showAsAction="never"  />
+
+</menu>
+
+

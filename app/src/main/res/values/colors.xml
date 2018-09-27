@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<resources>
+
+    <color name="dividerColor">#2b5070</color>
+    <color name="my_custom_color">#2e3f59</color>
+    <color name="white">#ffffff</color>
+    <color name="off_white">#f1f1f1</color>
+    <color name="black">#000000</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="primary_blue">#2e3f59</color>
+    <color name="primary_dark_blue">#00112b</color>
+    <color name="bg_blue">#13243E</color>
+    <color name="green_dark">#001200</color>
+    <color name="green_medium">#002400</color>
+    <color name="green_light">#003300</color>
+    <color name="gray_dark">#353535</color>
+    <color name="gray_light">#393939</color>
+    <color name="blue_accent">#5879A9</color>
+    <color name="green_accent">#019101</color>
+    <color name="gray_accent">#767676</color>
+    <color name="bg_orange">#F06400</color>
+    <color name="dark_orange">#823600</color>
+    <color name="orange_accent">#5879A9</color>
+    <color name="primary_orange">#A14300</color>
+    <color name="offwhite_toolbar">#B3FFFFFF</color>
+    <!--<color name="light_blue">#4b576c</color>-->
+    <color name="light_blue">#566D87</color>
+
+    <!-- telecine -->
+    <color name="primary_normal">#ff455a64</color>
+    <color name="primary_dark_normal">#ff263238</color>
+    <color name="accent_normal">#ffe73c35</color>
+    <color name="accent_pressed">#ffa72600</color>
+    <color name="gray_normal">#ff757575</color>
+</resources>
+
+

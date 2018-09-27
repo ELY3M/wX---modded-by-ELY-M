@@ -1,0 +1,8 @@
+#!/bin/bash
+#export NDK_TOOLCHAIN_VERSION=clang 
+#export PATH=~/android-studio/jre/bin:$PATH
+
+export PATH=/Applications/"Android Studio.app"/Contents/jre/jdk/Contents/Home/bin:~/android-studio/jre/bin:$PATH
+./gradlew assembleRelease
+cd ~
+./scr.wx

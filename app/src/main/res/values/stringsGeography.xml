@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<resources>
+
+    <string name="label_NAT">National</string>
+    <string name="label_MW">Midwest</string>
+    <string name="label_NC">North-Central</string>
+    <string name="label_C">Central</string>
+    <string name="label_SC">South-Central</string>
+    <string name="label_SE">Southeast</string>
+    <string name="label_EC">East-Central</string>
+    <string name="label_NE">Northeast</string>
+    <string name="label_SW">Southwest</string>
+    <string name="label_NW">Northwest</string>
+
+    <string name="label_WC">West-Central</string>
+    <string name="label_MA">Mid-Atlantic</string>
+    <string name="label_GL">Great Lakes</string>
+    <string name="label_NP">Northern Plains</string>
+    <string name="label_CP">Central Plains</string>
+
+    <string name="label_NA">NA</string>
+    <string name="label_US">US</string>
+    <string name="label_AK">AK</string>
+    <string name="label_HI">HI</string>
+
+    <string name="label_FL">Florida</string>
+    <string name="label_TX">Texas</string>
+    <string name="label_OK_KS">OK / KS</string>
+
+    <string name="label_long_NA">North America</string>
+    <string name="label_long_SA">South America</string>
+    <string name="label_AU">Australia</string>
+    <string name="label_NZ">New Zealand</string>
+
+
+    <string name="label_E">East</string>
+    <string name="label_W">West</string>
+
+    <string name="label_ATL">Atlantic</string>
+    <string name="label_PAC">Pacific</string>
+
+    <string name="label_CA">Canada</string>
+    <string name="label_CA_BC">British Columbia</string>
+    <string name="label_CA_AB">Alberta</string>
+    <string name="label_CA_SK">Saskatchewan</string>
+    <string name="label_CA_MB">Manitoba</string>
+
+    <string name="label_CA_YT">Yukon</string>
+    <string name="label_CA_PE">Prince Edward Island</string>
+    <string name="label_CA_NU">Nunavut</string>
+    <string name="label_CA_NT">Northwest Territories</string>
+    <string name="label_CA_NS">Nova Scotia</string>
+    <string name="label_CA_NL">Newfoundland and Labrador</string>
+    <string name="label_CA_NB">New Brunswick</string>
+
+    <string name="label_CA_QC_S">Quebec - South</string>
+    <string name="label_CA_QC_N">Quebec - North</string>
+    <string name="label_CA_QC">Quebec</string>
+
+    <string name="label_CA_ON_S">Ontario - South</string>
+    <string name="label_CA_ON_N">Ontario - North</string>
+    <string name="label_CA_ON">Ontario</string>
+
+    <string name="label_PRAIRIES">Prairies</string>
+
+    <string name="label_CA_MB_S">S MB</string>
+    <string name="label_CA_MB_N">N MB</string>
+    <string name="label_CA_SK_S">S SK</string>
+    <string name="label_CA_SK_N">N SK</string>
+    <string name="label_CA_AB_S">S AB</string>
+    <string name="label_CA_AB_N">N AB</string>
+
+</resources>

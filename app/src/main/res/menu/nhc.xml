@@ -1,0 +1,105 @@
+<!-- 
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item android:id="@+id/action_read_aloud"
+        android:title="@string/read_aloud"
+        android:icon="@drawable/ic_play_arrow_24dp"
+        app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_stop"
+        android:title="@string/stop_audio"
+        android:icon="@drawable/ic_stop_24dp"
+        app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_playlist"
+        android:title="@string/label_playlist"
+        android:icon="@drawable/ic_queue_24dp"
+        app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_share"
+        android:title="@string/label_share"
+        android:icon="@drawable/ic_share_24dp"
+        app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_atl_two"
+        android:title="ATL Tropical Weather Outlook"
+        app:showAsAction="never"  />
+
+    <item android:id="@+id/action_atl_twd"
+        android:title="ATL Tropical Weather Discussion"
+        app:showAsAction="never"  />
+
+    <item android:id="@+id/action_atl_tws"
+        android:title="ATL Monthly Tropical Summary"
+        app:showAsAction="never"  />
+
+
+    <item android:id="@+id/action_epac_two"
+        android:title="EPAC Tropical Weather Outlook"
+        app:showAsAction="never"  />
+
+    <item android:id="@+id/action_epac_twd"
+        android:title="EPAC Tropical Weather Discussion"
+        app:showAsAction="never"  />
+
+    <item android:id="@+id/action_epac_tws"
+        android:title="EPAC Monthly Tropical Summary"
+        app:showAsAction="never"  />
+
+    <item android:id="@+id/action_sst"
+        android:title="SST images..."
+        app:showAsAction="never"  >
+        <menu>
+            <item android:id="@+id/action_epac_daily"
+                android:title="EPAC Daily Analysis"
+                app:showAsAction="never"  />
+            <item android:id="@+id/action_atl_daily"
+                android:title="ATL Daily Analysis"
+                app:showAsAction="never"  />
+
+            <item android:id="@+id/action_epac_7daily"
+                android:title="EPAC 7-Day Analysis"
+                app:showAsAction="never"  />
+            <item android:id="@+id/action_atl_7daily"
+                android:title="ATL 7-Day Analysis"
+                app:showAsAction="never"  />
+
+            <item android:id="@+id/action_epac_sst_anomaly"
+                android:title="EPAC SST Anomaly"
+                app:showAsAction="never"  />
+            <item android:id="@+id/action_atl_sst_anomaly"
+                android:title="ATL SST Anomaly"
+                app:showAsAction="never"  />
+
+        </menu>
+    </item>
+
+    <item android:id="@+id/action_glcfs"
+        android:title="GLCFS"
+        app:showAsAction="never"  />
+
+</menu>

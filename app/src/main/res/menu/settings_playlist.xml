@@ -1,0 +1,60 @@
+<!-- 
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item android:id="@+id/action_afd"
+          android:title="Add afd"
+          android:icon="@drawable/ic_info_outline_24dp"
+          app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_add"
+          android:title="Add"
+          android:icon="@drawable/ic_add_box_24dp"
+          app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_text"
+          android:title="View text"
+          android:icon="@drawable/ic_reorder_24dp"
+          app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_autodownload"
+          android:title="Manage auto-downloads"
+          android:icon="@drawable/ic_access_alarm_24dp"
+          app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_downloadall"
+          android:title="Download All"
+          android:icon="@drawable/ic_get_app_24dp"
+          app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_delete"
+          android:title="Delete mode"
+          android:icon="@drawable/ic_delete_24dp"
+          app:showAsAction="always"
+        />
+
+</menu>

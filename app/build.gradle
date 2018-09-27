@@ -1,0 +1,90 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion '28.0.2'
+
+
+    defaultConfig {
+        applicationId "joshuatee.wx"
+        minSdkVersion 16   // 4.1
+        targetSdkVersion 28 // 8.1
+        // Stops the Gradle plugin’s automatic rasterization of vectors (2016_02_25 add 23.2 )
+        //generatedDensities = []
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    sourceSets {
+        main {
+            jni.srcDirs = [] //disable automatic ndk-build
+            jniLibs.srcDir 'src/main/libs'
+        }
+    }
+
+    /*
+    task buildNative(type: Exec, description: 'Compile JNI source via NDK') {
+        def ndkDir = "../../../$ndkVersion"
+        commandLine "$ndkDir/ndk-build",
+                '-C', file('src/main/jni').absolutePath,
+                '-j', Runtime.runtime.availableProcessors(),
+                'all'
+
+    }
+
+    task cleanNative(type: Exec, description: 'Clean JNI object files') {
+        def ndkDir = "../../../$ndkVersion"
+        commandLine "$ndkDir/ndk-build",
+                '-C', file('src/main/jni').absolutePath,
+                'clean'
+    }
+
+    clean.dependsOn 'cleanNative'
+
+
+    tasks.withType(JavaCompile) {
+        compileTask -> compileTask.dependsOn buildNative
+    }
+*/
+
+    // Flag to tell aapt to keep the attribute ids around - (2016_02_25 add 23.2 )
+    aaptOptions {
+        additionalParameters "--no-version-vectors"
+    }
+
+    buildTypes {
+        release {
+            shrinkResources false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+
+    lintOptions {
+        disable 'Typos'
+        checkReleaseBuilds false
+        abortOnError false
+    }
+}
+
+dependencies {
+    implementation 'com.google.android.material:material:1.0.0-rc01'
+    implementation 'androidx.cardview:cardview:1.0.0-rc02'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0-rc02'
+    implementation 'androidx.media:media:1.0.0-rc02'
+    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
+    implementation 'com.jjoe64:graphview:4.2.2'
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+
+repositories {
+    mavenCentral()
+    google()
+    jcenter()
+    maven {
+        url "https://maven.google.com"
+    }
+}
+
+
+

@@ -1,0 +1,739 @@
+<!--?xml version="1.0" encoding="utf-8"?-->
+<maps>
+     <!-- <map name="gridmap">
+        <area id="@+id/area1001" shape="rect" coords="118,124,219,226" />
+        <area id="@+id/area1002" shape="rect" coords="474,374,574,476" />
+        <area id="@+id/area1004" shape="rect" coords="710,878,808,980" />
+        <area id="@+id/area1005" shape="circle" coords="574,214,74" />
+        <area id="@+id/area1006" shape="poly" coords="250,780,250,951,405,951" />
+        <area id="@+id/area1007" shape="poly" coords="592,502,592,730,808,730,808,502,709,502,709,603,690,603,690,502" />
+    </map>  -->
+
+   
+ <map name="soundings">
+       <area shape="circle" coords="47,10,5"    id="@+id/YLW"/>
+       <area shape="circle" coords="204,6,5"    id="@+id/YMO"/>
+       <area shape="circle" coords="275,36,5"   id="@+id/YQI"/>
+       <area shape="circle" coords="157,101,5"  id="@+id/SGF"/>
+       <area shape="circle" coords="164,117,5"  id="@+id/LZK"/>
+       <area shape="circle" coords="137,173,5"  id="@+id/BRO"/>
+       <area shape="circle" coords="138,160,5"  id="@+id/CRP"/>
+       <area shape="circle" coords="160,146,5"  id="@+id/LCH"/>
+       <area shape="circle" coords="110,58,5"   id="@+id/RAP"/>
+       <area shape="circle" coords="131,50,5"   id="@+id/ABR"/>
+       <area shape="circle" coords="122,41,5"   id="@+id/BIS"/>
+       <area shape="circle" coords="98,30,5"    id="@+id/GGW"/>
+       <area shape="circle" coords="77,33,5"    id="@+id/TFX"/>
+       <area shape="circle" coords="154,52,5"   id="@+id/MPX"/>
+       <area shape="circle" coords="168,72,5"   id="@+id/DVN"/>
+       <area shape="circle" coords="176,80,5"   id="@+id/ILX"/>
+       <area shape="circle" coords="178,143,5"  id="@+id/LIX"/>
+       <area shape="circle" coords="125,98,5"   id="@+id/DDC"/>
+       <area shape="circle" coords="116,114,5"  id="@+id/AMA"/>
+       <area shape="circle" coords="157,131,5"  id="@+id/SHV"/>
+       <area shape="circle" coords="176,131,5"  id="@+id/JAN"/>
+       <area shape="circle" coords="193,123,5"  id="@+id/BMX"/>
+       <area shape="circle" coords="191,104,5"  id="@+id/BNA"/>
+       <area shape="circle" coords="202,83,5"   id="@+id/ILN"/>
+       <area shape="circle" coords="202,63,5"   id="@+id/DTX"/>
+       <area shape="circle" coords="194,49,5"   id="@+id/APX"/>
+       <area shape="circle" coords="178,52,5"   id="@+id/GRB"/>
+       <area shape="circle" coords="225,101,5"  id="@+id/GSO"/>
+       <area shape="circle" coords="233,79,5"   id="@+id/IAD"/>
+       <area shape="circle" coords="153,29,5"   id="@+id/INL"/>
+       <area shape="circle" coords="205,120,5"  id="@+id/FFC"/>
+       <area shape="circle" coords="229,173,5"  id="@+id/KEY"/>
+       <area shape="circle" coords="234,164,5"  id="@+id/MFL"/>
+       <area shape="circle" coords="221,154,5"  id="@+id/TBW"/>
+       <area shape="circle" coords="222,136,5"  id="@+id/JAX"/>
+       <area shape="circle" coords="228,119,5"  id="@+id/CHS"/>
+       <area shape="circle" coords="241,104,5"  id="@+id/MHX"/>
+       <area shape="circle" coords="221,93,5"   id="@+id/RNK"/>
+       <area shape="circle" coords="218,73,5"   id="@+id/PIT"/>
+       <area shape="circle" coords="222,57,5"   id="@+id/BUF"/>
+       <area shape="circle" coords="244,83,5"   id="@+id/WAL"/>
+       <area shape="circle" coords="252,62,5"   id="@+id/OKX"/>
+       <area shape="circle" coords="244,52,5"   id="@+id/ALB"/>
+       <area shape="circle" coords="263,54,5"   id="@+id/CHH"/>
+       <area shape="circle" coords="257,40,5"   id="@+id/GYX"/>
+       <area shape="circle" coords="66,128,5"   id="@+id/TUS"/>
+       <area shape="circle" coords="65,109,5"   id="@+id/FGZ"/>
+       <area shape="circle" coords="35,119,5"   id="@+id/NKX"/>
+       <area shape="circle" coords="16,83,5"    id="@+id/OAK"/>
+       <area shape="circle" coords="30,74,5"    id="@+id/REV"/>
+       <area shape="circle" coords="21,55,5"    id="@+id/MFR"/>
+       <area shape="circle" coords="25,38,5"    id="@+id/SLE"/>
+       <area shape="circle" coords="50,26,5"    id="@+id/OTX"/>
+       <area shape="circle" coords="23,18,5"    id="@+id/UIL"/>
+       <area shape="circle" coords="145,90,5"   id="@+id/TOP"/>
+       <area shape="circle" coords="90,113,5"   id="@+id/ABQ"/>
+       <area shape="circle" coords="88,133,5"   id="@+id/EPZ"/>
+       <area shape="circle" coords="122,77,5"   id="@+id/LBF"/>
+       <area shape="circle" coords="142,76,5"   id="@+id/OAX"/>
+       <area shape="circle" coords="69,74,5"    id="@+id/SLC"/>
+       <area shape="circle" coords="52,53,5"    id="@+id/BOI"/>
+       <area shape="circle" coords="52,71,5"    id="@+id/LKN"/>
+       <area shape="circle" coords="86,62,5"    id="@+id/RIW"/>
+       <area shape="circle" coords="84,87,5"    id="@+id/GJT"/>
+       <area shape="circle" coords="119,151,5"  id="@+id/DRT"/>
+       <area shape="circle" coords="49,101,5"   id="@+id/VEF"/>
+       <area shape="circle" coords="137,114,5"  id="@+id/OUN"/>
+       <area shape="circle" coords="261,21,5"  id="@+id/CAR" />
+       <area shape="circle" coords="113,135,5" id="@+id/MAF" />
+       <area shape="circle" coords="138,129,5" id="@+id/FWD" />
+       <area shape="circle" coords="230,149,5" id="@+id/XMR" />
+       <area shape="circle" coords="20,104,5"  id="@+id/VBG" />
+       <area shape="circle" coords="165,11,5"  id="@+id/WPL" />
+       <area shape="circle" coords="209,140,5" id="@+id/TLH" />
+       <area shape="circle" coords="101,85,5"  id="@+id/DNR" />
+       <area shape="circle" coords="48,120,5"   id="@+id/A1Y7" />
+       <area shape="circle" coords="107,189,5"  id="@+id/A76526" />
+       <area shape="circle" coords="86,188,5"   id="@+id/A76458" />
+       <area shape="circle" coords="62,178,5"   id="@+id/A76405" />
+
+</map>
+
+ 
+ 
+ 
+ <map name="cwamap" >
+<area shape="rect" coords="9,1,63,13" id='@+id/afc' alt="NWS Anchorage, AK" />
+<area shape="rect" coords="15,16,70,28" id="@+id/afg" alt="NWS Fairbanks, AK" />
+<area shape="rect" coords="67,2,110,15" id="@+id/ajk" alt="NWS Juneau, AK" />
+<area shape="rect" coords="5,304,62,326" id="@+id/hnl" alt="NWS Honolulu, HI" />
+<area shape="rect" coords="5,335,42,355" id="@+id/guam" alt="NWS Guam" />
+<area shape="rect" coords="209,211,239,238" id="@+id/ama" alt="NWS Amarillo, TX" />
+<area shape="rect" coords="207,238,237,261" id="@+id/lub" alt="NWS Lubbock, TX" />
+<area shape="poly" coords="290,180,290,198,302,197,312,190,313,168,293,168,282,169,290,180" id="@+id/eax" alt="NWS Pleasent Hill, MO" />
+<area shape="poly" coords="288,142,281,150,290,152,290,166,314,166,316,141,311,135,301,132,290,133,289,143,288,142,288,142" id="@+id/dmx" alt="NWS Des Moines, IA" />
+<area shape="poly" coords="240,211,238,254,246,255,258,250,283,251,266,211,253,212,240,211,240,211" id="@+id/oun" alt="NWS Norman, OK" />
+<area shape="poly" coords="286,250,308,218,295,218,295,212,268,214,274,223,286,250,286,250" id="@+id/tsa" alt="NWS Tulsa, OK" />
+<area shape="poly" coords="219,285,220,294,238,293,251,288,246,274,248,257,238,255,238,261,231,263,219,285,219,285" id="@+id/sjt" alt="San Angelo, TX" />
+<area shape="rect" coords="242,334,307,352" id="@+id/bro" alt="NWS Brownsville, TX" />
+<area shape="rect" coords="339,121,360,137" id="@+id/mkx" alt="NWS Milwaukee, WI" />
+<area shape="poly" coords="341,142,340,152,351,165,366,164,363,149,358,144,341,142,341,142" id="@+id/lot" alt="NWS Chicago, IL" />
+<area shape="poly" coords="331,170,344,179,353,189,361,189,361,165,352,164,340,158,335,160,331,170,331,170" id="@+id/ilx" alt="NWS Lincoln, IL" />
+<area shape="poly" coords="315,191,324,194,330,205,352,187,343,177,333,178,331,170,315,169,315,191,315,191" id="@+id/lsx" alt="NWS St. Louis, MO" />
+<area shape="poly" coords="367,143,389,140,386,126,380,117,364,117,367,143,367,143" id="@+id/grr" alt="NWS Grand Rapids, MI" />
+<area shape="poly" coords="382,120,388,129,388,146,395,144,418,130,417,121,397,116,388,120,386,122,382,120,382,120" id="@+id/dtx" alt="NWS Detroit, MI" />
+<area shape="poly" coords="363,163,378,165,393,159,389,148,384,145,373,145,364,146,364,159,363,163,363,163" id="@+id/iwx" alt="NWS Northern Indiana, IN" />
+<area shape="poly" coords="362,189,367,189,381,183,381,165,366,161,361,166,362,189,362,189" id="@+id/ind" alt="NWS Indianapolis, IN" />
+<area shape="poly" coords="370,201,372,210,387,209,398,187,390,188,383,183,369,190,370,201,370,201" id="@+id/lmk" alt="NWS Louisville, KY" />
+<area shape="poly" coords="329,226,330,245,348,248,359,246,357,215,326,218,329,226,329,226" id="@+id/meg" alt="NWS Memphis, TN" />
+<area shape="poly" coords="360,224,367,232,372,233,375,226,384,229,391,222,391,212,359,214,360,224,360,224" id="@+id/bna" alt="NWS Nashville, TN" />
+<area shape="poly" coords="423,149,422,144,431,140,428,135,421,129,392,145,395,158,407,161,423,149,423,149" id="@+id/cle" alt="NWS Cleveland, OH" />
+<area shape="poly" coords="411,168,431,169,437,174,435,164,439,151,435,142,431,142,420,151,409,163,418,168,418,169,411,168,411,168" id="@+id/pbz" alt="NWS Pittsburgh, PA" />
+<area shape="poly" coords="451,133,431,137,431,140,442,147,439,163,469,158,465,143,460,136,451,133,451,133" id="@+id/ctp" alt="NWS State College, PA" />
+<area shape="poly" coords="382,176,386,188,408,182,411,170,411,164,397,159,386,160,382,176,382,176" id="@+id/iln" alt="NWS Wilmington, OH" />
+<area shape="poly" coords="441,163,438,172,438,184,449,188,451,182,467,173,468,158,441,163,441,163" id="@+id/lwx" alt="NWS Sterling, VA" />
+<area shape="poly" coords="414,188,419,201,431,189,436,182,442,178,440,173,428,169,412,169,406,184,414,188,414,188" id="@+id/rlx" alt="NWS Charleston, WV" />
+<area shape="poly" coords="421,197,423,212,449,205,454,192,452,189,436,186,428,192,421,197,421,197" id="@+id/rnk" alt="NWS Blacksburg, VA" />
+<area shape="poly" coords="396,197,389,208,416,202,417,194,410,189,398,186,396,197,396,197" id="@+id/jkl" alt="NWS Jackson, KY" />
+<area shape="poly" coords="395,211,387,230,396,229,411,217,421,212,421,206,412,204,395,211" id="@+id/mrx" alt="NWS Knoxville, TN"/>
+<area shape="poly" coords="440,224,460,221,466,205,460,200,448,204,436,208,440,224,440,224" id="@+id/rah" alt="NWS Raleigh, NC" />
+<area shape="poly" coords="417,240,408,230,401,225,411,220,419,211,434,207,438,223,427,230,417,240,417,240" id="@+id/gsp" alt="NWS Greer, SC" />
+<area shape="poly" coords="446,224,446,232,452,240,457,245,496,245,509,224,464,222,446,224,446,224" id="@+id/ilm" alt="NWS Wilmington, NC" />
+<area shape="poly" coords="395,268,416,267,424,263,421,249,403,229,385,232,395,268,395,268" id="@+id/ffc" alt="NWS Atlanta, GA" />
+<area shape="rect" coords="401,347,459,360" id="@+id/eyw" alt="NWS Key West, FL" />
+<area shape="rect" coords="485,344,531,358" id="@+id/sju" alt="NWS San Juan, PR" />
+<area shape="poly" coords="272,306,273,290,288,278,296,287,297,303,320,301,319,315,276,315,272,306,272,306" id="@+id/hgx" alt="NWS Houston, TX"  />
+<area shape="poly" coords="189,125,190,109,208,110,211,99,227,100,234,126,246,129,246,136,206,134,206,128,189,125,189,125" id="@+id/unr" alt="NWS Rapid City, SD" />
+<area shape="poly" coords="167,154,173,139,186,139,187,127,203,128,203,133,216,136,216,158,167,154,167,154" id="@+id/cys" alt="NWS Cheyenne, WY" />
+<area shape="poly" coords="127,106,112,91,101,89,100,78,108,69,118,70,113,59,115,45,131,48,136,60,133,71,139,80,136,91,123,89,127,106,127,106" id="@+id/mso" alt="NWS Missoula, MT" />
+<area shape="poly" coords="79,34,71,52,80,59,79,66,89,67,97,77,99,78,110,68,118,69,114,58,115,45,79,34,79,34" id="@+id/otx" alt="NWS Spokane, WA" />
+<area shape="poly" coords="77,36,64,65,48,61,49,56,43,54,15,54,15,29,62,29,77,36,77,36" id="@+id/sew" alt="NWS Seattle, WA"  />
+<area shape="poly" coords="69,53,51,96,67,101,70,96,82,99,86,88,99,89,101,83,87,66,76,66,75,56,69,53,69,53" id="@+id/pdt" alt="NWS Pendleton, OR" /> 
+<area shape="poly" coords="65,64,51,95,43,94,41,90,39,86,15,86,15,53,47,53,53,61,65,64,65,64" id="@+id/pqr" alt="NWS Pendleton, OR" />
+<area shape="poly" coords="67,102,64,111,69,112,68,121,60,121,58,129,28,120,30,111,24,108,9,108,9,88,34,88,41,96,50,96,67,102" id="@+id/mfr" alt="NWS Medford, OR" />
+<area shape="poly" coords="112,132,67,122,69,114,63,111,69,98,79,100,86,90,114,92,115,97,109,100,111,121,115,126,112,132,112,132" id="@+id/boi" alt="NWS Boise, ID" />
+<area shape="poly" coords="113,98,110,102,113,121,117,125,113,132,142,138,147,106,132,106,130,109,126,108,113,98,113,98" id="@+id/pih" alt="NWS Pocatello, ID" />
+<area shape="poly" coords="180,58,170,85,158,83,145,106,131,105,125,90,138,91,141,82,135,70,138,61,133,49,180,58,180,58" id="@+id/tfx" alt="NWS Great Falls, MT" />
+<area shape="poly" coords="209,88,170,83,180,56,211,60,209,88,209,88" id="@+id/ggw" alt="NWS Glasgow, MT" />
+<area shape="poly" coords="209,108,192,108,191,113,179,112,175,106,149,101,161,82,173,83,210,89,209,108,209,108" id="@+id/byz" alt="NWS Billings, MT" />
+<area shape="poly" coords="149,102,174,107,178,112,190,115,187,138,175,138,167,154,149,152,150,144,141,142,149,102" id="@+id/riw" alt="NWS Riverton, WY" />
+<area shape="poly" coords="139,138,141,144,147,145,143,186,133,200,101,194,114,134,139,138,139,138" id="@+id/slc" alt="NWS Salt Lake City, UT"  />
+<area shape="poly" coords="107,174,100,173,91,165,75,161,82,143,65,135,68,124,114,135,107,174,107,174" id="@+id/lkn" alt="NWS Elko, NV" />
+<area shape="poly" coords="53,225,58,222,61,212,44,209,39,194,28,192,0,192,0,225,53,225,53,225" id="@+id/lox" alt="NWS Los Angeles, CA" />
+<area shape="poly" coords="2,191,39,191,34,173,35,162,31,161,31,153,26,149,2,149,2,191,2,191" id="@+id/mtr" alt="NWS San Francisco, CA" />
+<area shape="poly" coords="62,210,64,201,61,191,74,191,73,184,60,184,53,166,33,175,46,208,62,210,62,210" id="@+id/hnx" alt="NWS Hanford, CA" />
+<area shape="poly" coords="67,181,57,177,49,147,63,147,61,140,48,140,47,128,58,130,61,121,66,123,64,135,80,142,73,160,67,161,71,168,64,175,67,181,67,181" id="@+id/rev" alt="NWS Reno, NV" />
+<area shape="poly" coords="9,108,25,107,29,112,29,119,36,124,28,138,12,138,1,137,9,108,9,108" id="@+id/eka" alt="NWS Eureka, CA" />
+<area shape="poly" coords="102,227,72,225,62,213,65,201,62,191,73,190,73,183,61,182,59,177,61,179,68,179,64,172,72,168,69,160,88,162,97,171,105,172,102,193,115,196,115,202,107,207,103,226,102,227" id="@+id/vef" alt="NWS Las Vegas, NV" />
+<area shape="poly" coords="149,203,144,243,132,244,119,235,102,232,107,207,115,205,115,198,149,203,149,203" id="@+id/fgz" alt="NWS Flagstaff, AZ" />
+<area shape="poly" coords="74,226,76,231,72,243,98,257,99,250,110,252,131,245,119,235,103,232,101,228,74,226,74,226" id="@+id/psr" alt="NWS Phoenix, AZ" />
+<area shape="poly" coords="71,241,62,248,11,247,6,223,54,223,61,219,63,214,72,223,76,227,71,241,71,241" id="@+id/sgx" alt="NWS San Diego, CA" />
+<area shape="poly" coords="120,268,100,257,100,250,114,251,134,243,144,246,141,270,120,268,120,268" id="@+id/twc" alt="NWS Tucson, AZ" />
+<area shape="poly" coords="149,153,143,188,133,201,168,205,173,188,179,189,178,156,149,153,149,153" id="@+id/gjt" alt="NWS Grand Junction, CO" />
+<area shape="poly" coords="369,211,348,217,329,216,327,210,351,191,367,190,369,211,369,211" id="@+id/pah" alt="NWS Paducah, KY" />
+<area shape="poly" coords="331,249,328,255,314,258,296,245,297,238,309,220,324,220,329,228,331,249,331,249" id="@+id/lzk" alt="NWS Little Rock, AR" />
+<area shape="poly" coords="324,217,296,218,296,211,289,211,290,199,299,200,313,192,322,196,328,204,324,217,324,217" id="@+id/sgf" alt="NWS Springfield, MO" />
+<area shape="poly" coords="288,211,255,212,254,196,250,196,252,186,262,186,277,199,289,200,288,211,288,211" id="@+id/ict" alt="NWS Wichita, KS" />
+<area shape="poly" coords="265,173,284,174,284,181,289,181,289,197,279,197,262,184,262,176,266,176,265,173,265,173" id="@+id/top" alt="NWS Topeka, KS" />
+<area shape="poly" coords="332,248,329,255,318,258,322,281,345,283,352,284,354,273,360,272,359,251,332,248,332,248" id="@+id/jan" alt="NWS Jackson, MS" />
+<area shape="poly" coords="388,241,377,242,373,248,370,242,360,242,360,269,364,264,369,264,384,271,395,269,395,261,388,241,388,241" id="@+id/bmx" alt="NWS Birmingham, AL" />
+<area shape="poly" coords="383,288,385,269,374,268,369,264,361,265,361,273,356,274,352,284,353,288,363,287,363,294,383,288,383,288" id="@+id/mob" alt="NWS Mobile, A" />
+<area shape="poly" coords="328,280,329,303,339,310,391,300,391,291,361,291,361,286,351,286,350,282,343,281,328,280,328,280" id="@+id/lix" alt="NWS New Orleans, LA" />
+<area shape="poly" coords="288,248,286,275,287,276,294,285,321,278,318,256,297,243,290,243,288,248,288,248" id="@+id/shv" alt="NWS Shreveport, LA" />
+<area shape="poly" coords="218,136,218,159,222,159,221,168,238,168,239,157,248,160,248,151,257,151,256,139,218,136,218,136" id="@+id/lbf" alt="NWS North Platte, NE" />
+<area shape="poly" coords="266,174,269,155,258,153,258,139,270,140,270,146,283,145,282,151,288,151,288,156,289,161,289,166,283,166,282,173,266,174,266,174" id="@+id/oax" alt="NWS Omaha, NE" />
+<area shape="poly" coords="260,186,246,186,245,174,240,174,240,161,250,162,250,154,254,154,267,157,266,174,261,174,260,186,260,186" id="@+id/gid" alt="NWS Hastings, NE"/>
+<area shape="poly" coords="244,185,240,185,239,191,230,190,228,194,219,194,219,189,210,189,211,178,215,178,215,168,222,168,222,171,238,170,238,173,244,173,244,185,244,185" id="@+id/gld" alt="NWS G
+oodland, KS" />
+<area shape="poly" coords="180,156,223,161,221,166,215,166,214,176,209,177,209,190,201,190,201,183,190,181,188,187,182,182,181,172,178,168,180,156,180,156" id="@+id/bou" alt="NWS Denver, CO" />
+<area shape="poly" coords="145,247,152,202,210,209,206,249,200,249,199,256,187,256,187,262,182,262,183,252,156,246,145,247,145,247" id="@+id/abq" alt="NWS Albuquerque, NM" />
+<area shape="poly" coords="189,266,185,288,141,272,146,248,157,247,185,253,183,263,189,266,189,266" id="@+id/elp" alt="NWS El Paso, TX" />
+<area shape="poly" coords="185,287,189,256,200,257,202,250,208,251,208,260,230,260,228,270,223,270,222,281,217,298,201,307,187,298,185,287,185,287" id="@+id/maf" alt="NWS Midland, TX" />
+<area shape="poly" coords="254,199,254,212,219,210,221,195,231,195,231,191,239,191,240,186,249,187,249,198,254,199,254,199" id="@+id/ddc" alt="NWS Dodge City, KS" />
+<area shape="poly" coords="291,332,284,315,274,318,269,311,258,314,243,316,243,320,212,320,212,332,291,332,291,332" id="@+id/crp" alt="NWS Corpus Christi, TX" />
+<area shape="poly" coords="205,306,219,299,219,294,241,294,254,286,271,293,273,299,271,304,275,307,258,314,243,315,243,320,213,319,205,306,205,306" id="@+id/ewx" alt="NWS San Antonio, TX" />
+<area shape="poly" coords="277,288,268,291,252,284,247,275,250,257,259,251,287,252,285,278,277,288,277,288" id="@+id/fwd" alt="NWS Fort Worth, TX" />
+<area shape="poly" coords="230,99,235,123,247,128,255,117,275,117,275,108,277,100,230,99,230,99" id="@+id/abr" alt="NWS Aberdeen, SD" />
+<area shape="poly" coords="288,126,288,143,280,148,270,147,270,140,248,138,248,127,255,118,281,119,288,126,288,126" id="@+id/fsd" alt="NWS Sioux Falls, SD" />
+<area shape="poly" coords="327,104,325,116,314,118,306,122,307,129,289,130,290,123,283,116,276,116,277,103,291,96,306,97,306,102,327,104,327,104" id="@+id/mpx" alt="NWS Minneapolis, MN" />
+<area shape="poly" coords="251,63,250,70,247,70,247,76,258,81,258,92,263,92,262,100,209,97,213,60,251,63,251,63" id="@+id/bis" alt="NWS Bismarck, ND" />
+<area shape="poly" coords="290,97,277,105,277,102,263,102,262,93,258,93,258,81,249,77,247,71,251,70,250,64,287,59,293,69,290,97,290,97" id="@+id/fgf" alt="NWS Grand Forks, ND" />
+<area shape="poly" coords="290,58,295,76,292,97,306,98,309,103,325,104,331,99,334,73,299,56,290,58,290,58" id="@+id/dlh" alt="NWS Duluth, MN" />
+<area shape="poly" coords="378,89,354,103,332,94,335,72,356,62,378,80,378,89,378,89" id="@+id/mqt" alt="NWS Marquette, MI" />
+<area shape="poly" coords="357,119,365,96,354,101,334,93,329,104,334,105,334,117,340,118,340,120,357,119,357,119" id="@+id/grb" alt="NWS Green Bay, WI" />
+<area shape="poly" coords="338,124,338,127,333,129,330,142,326,139,315,139,309,136,307,121,316,117,326,117,327,106,331,108,331,117,338,124,338,124" id="@+id/arx" alt="NWS La Crosse, WI" />
+<area shape="poly" coords="342,155,331,157,332,168,315,169,315,139,338,139,342,155,342,155" id="@+id/dvn" alt="NWS Quad Cities, IA"/>
+<area shape="poly" coords="448,131,448,124,466,108,458,99,418,108,417,119,432,134,448,131,448,131" id="@+id/buf" alt="NWS Buffalo, NY" />
+<area shape="poly" coords="466,146,468,138,478,131,473,117,467,116,465,110,447,124,446,129,458,134,466,146,466,146" id="@+id/bgm" alt="NWS Binghamton, NY" />
+<area shape="poly" coords="491,129,479,132,473,117,468,116,464,104,471,101,473,105,482,104,492,108,492,115,488,115,491,129,491,129" id="@+id/aly" alt="NWS Albany, NY" />
+<area shape="poly" coords="504,124,492,128,483,131,480,129,478,134,490,142,530,142,530,128,506,128,504,124,504,124" id="@+id/okx" alt="NWS New York, NY" />
+<area shape="poly" coords="482,170,469,171,468,164,468,155,466,145,469,139,475,134,487,143,527,143,522,170,482,170,482,170" id="@+id/phi" alt="NWS Philadelphia, PA" />
+<area shape="poly" coords="514,204,467,205,464,199,453,200,455,191,450,185,454,180,468,174,472,170,524,169,514,204,514,204" id="@+id/akq" alt="NWS Wakefield, VA" />
+<area shape="poly" coords="512,224,462,221,469,206,513,204,512,224,512,224" id="@+id/mhx" alt="NWS Newport, NC" />
+<area shape="poly" coords="388,239,378,241,375,246,371,246,372,241,361,241,361,233,373,232,378,226,387,230,388,239,388,239" id="@+id/hun" alt="NWS Huntsville, AL" />
+<area shape="poly" coords="446,241,425,252,418,241,429,231,437,226,443,225,446,241,446,241" id="@+id/cae" alt="NWS Columbia, SC" />
+<area shape="poly" coords="423,298,394,302,394,292,383,291,387,271,398,269,401,267,420,267,420,286,425,291,423,298,423,298" id="@+id/tlh" alt="NWS Tallahassee, FL" />
+<area shape="poly" coords="439,270,429,263,428,251,448,242,457,245,495,245,490,270,458,270,439,270,439,270" id="@+id/chs" alt="NWS Charleston, SC" />
+<area shape="poly" coords="438,270,429,263,420,265,420,286,425,293,429,294,429,300,438,299,438,293,490,293,489,270,438,270,438,270" id="@+id/jax" alt="NWS Jacksonville, FL" />
+<area shape="poly" coords="439,333,447,318,433,300,427,299,427,295,422,295,419,298,406,300,408,335,439,333,439,333" id="@+id/tbw" alt="NWS Tampa Bay, FL" />
+<area shape="poly" coords="474,319,449,319,435,300,439,292,488,292,492,314,474,319,474,319" id="@+id/mlb" alt="NWS Melbourne, FL" />
+<area shape="poly" coords="446,320,440,335,432,334,437,344,482,343,492,315,473,321,446,320,446,320" id="@+id/mfl" alt="NWS Miami, FL" />
+<area shape="poly" coords="529,126,504,126,502,123,492,126,489,114,495,106,501,106,503,109,507,107,529,107,529,126,529,126" id="@+id/box" alt="NWS Boston, MA" />
+<area shape="poly" coords="527,107,489,106,493,82,501,69,504,69,509,80,521,86,527,86,527,107,527,107" id="@+id/gyx" alt="NWS Portland, ME" />
+<area shape="poly" coords="528,85,528,65,513,41,501,47,501,65,512,80,521,85,528,85,528,85" id="@+id/car" alt="NWS Caribou, ME" />
+<area shape="poly" coords="493,79,489,105,457,100,429,99,429,81,493,79,493,79" id="@+id/btv" alt="NWS Burlington, VT" />
+<area shape="poly" coords="336,311,320,314,319,301,299,304,296,287,320,281,327,283,329,303,336,311,336,311" id="@+id/lch" alt="NWS Lake Charles, LA" />
+<area shape="poly" coords="406,113,384,121,379,116,363,118,367,95,385,85,404,101,406,113,406,113" id="@+id/apx" alt="NWS Gaylord, MI" />
+<area shape="poly" coords="51,165,47,147,62,147,61,142,46,141,45,127,36,125,26,141,9,140,9,147,24,148,29,153,29,159,34,162,34,173,51,165,51,165" id="@+id/sto" alt="NWS Sacramento, CA" />
+<area shape="poly" coords="214,208,170,205,175,189,196,184,205,192,219,192,218,208,214,208" id="@+id/pub" alt="NWS Pueblo, CO" />
+</map>
+ 
+  <map name="states" >
+  <area shape="rect" coords="546,531,615,546" id="@+id/pr" target="product_area" />
+  <area shape="rect" coords="736,223,766,241" id="@+id/md" target="product_area" />
+  <area shape="rect" coords="736,205,766,223" id="@+id/de" target="product_area" />
+  <area shape="rect" coords="736,187,766,205" id="@+id/nj" target="product_area" />
+  <area shape="rect" coords="736,169,766,187" id="@+id/ri" target="product_area" />
+  <area shape="rect" coords="736,150,766,168" id="@+id/ct" target="product_area" />
+  <area shape="rect" coords="736,132,766,150" id="@+id/ma" target="product_area" />
+  <area shape="rect" coords="736,114,766,132" id="@+id/nh" target="product_area" />
+  <area shape="rect" coords="737,93,765,114" id="@+id/vt" target="product_area" />
+  <area shape="rect" coords="659,105,687,126" id="@+id/me" target="product_area" />
+  <area shape="rect" coords="624,172,652,193" id="@+id/ny" target="product_area" />
+  <area shape="rect" coords="611,214,639,235" id="@+id/pa" target="product_area" />
+  <area shape="rect" coords="529,213,557,234" id="@+id/mi" target="product_area" />
+  <area shape="rect" coords="526,266,554,287" id="@+id/in" target="product_area" />
+  <area shape="rect" coords="560,248,588,269" id="@+id/oh" target="product_area" />
+  <area shape="rect" coords="595,262,623,283" id="@+id/wv" target="product_area" />
+  <area shape="rect" coords="628,261,656,282" id="@+id/va" target="product_area" />
+  <area shape="rect" coords="631,298,659,319" id="@+id/nc" target="product_area" />
+  <area shape="rect" coords="654,423,682,444" id="@+id/fl" target="product_area" />
+  <area shape="rect" coords="604,362,632,383" id="@+id/ga" target="product_area" />
+  <area shape="rect" coords="623,331,651,352" id="@+id/sc" target="product_area" />
+  <area shape="rect" coords="554,295,582,316" id="@+id/ky" target="product_area" />
+  <area shape="rect" coords="544,331,572,352" id="@+id/tn" target="product_area" />
+  <area shape="rect" coords="559,380,587,401" id="@+id/al" target="product_area" />
+  <area shape="rect" coords="517,390,545,411" id="@+id/ms" target="product_area" />
+  <area shape="rect" coords="472,361,500,382" id="@+id/ar" target="product_area" />
+  <area shape="rect" coords="485,419,513,440" id="@+id/la" target="product_area" />
+  <area shape="rect" coords="74,464,102,485" id="@+id/ak" target="product_area" />
+  <area shape="rect" coords="212,527,240,548" id="@+id/hi" target="product_area" />
+  <area shape="rect" coords="393,431,421,452" id="@+id/tx" target="product_area" />
+  <area shape="rect" coords="410,367,438,388" id="@+id/ok" target="product_area" />
+  <area shape="rect" coords="219,392,247,413" id="@+id/az" target="product_area" />
+  <area shape="rect" coords="293,400,321,421" id="@+id/nm" target="product_area" />
+  <area shape="rect" coords="301,315,329,336" id="@+id/co" target="product_area" />
+  <area shape="rect" coords="276,253,304,274" id="@+id/wy" target="product_area" />
+  <area shape="rect" coords="230,313,258,334" id="@+id/ut" target="product_area" />
+  <area shape="rect" coords="164,292,192,313" id="@+id/nv" target="product_area" />
+  <area shape="rect" coords="125,331,153,352" id="@+id/ca" target="product_area" />
+  <area shape="rect" coords="139,222,167,243" id="@+id/or" target="product_area" />
+  <area shape="rect" coords="204,232,232,253" id="@+id/id" target="product_area" />
+  <area shape="rect" coords="159,168,187,189" id="@+id/wa" target="product_area" />
+  <area shape="rect" coords="271,188,299,209" id="@+id/mt" target="product_area" />
+  <area shape="rect" coords="350,186,378,207" id="@+id/nd" target="product_area" />
+  <area shape="rect" coords="356,232,384,253" id="@+id/sd" target="product_area" />
+  <area shape="rect" coords="468,208,496,229" id="@+id/wi" target="product_area" />
+  <area shape="rect" coords="415,201,443,222" id="@+id/mn" target="product_area" />
+  <area shape="rect" coords="435,254,463,275" id="@+id/ia" target="product_area" />
+  <area shape="rect" coords="460,314,488,335" id="@+id/mo" target="product_area" />
+  <area shape="rect" coords="389,320,417,341" id="@+id/ks" target="product_area" />
+  <area shape="rect" coords="369,275,397,296" id="@+id/ne" target="product_area" />
+  <area shape="rect" coords="488,275,516,296" id="@+id/il" target="product_area" />
+  <area shape="rect" coords="547,516,613,531" id="@+id/gu" target="product_area" />
+  </map>
+ 
+  <map name="ncar_nexrad_sites">
+ <area shape="circle" coords="104,18,12"  id="@+id/LGX" />
+ <area shape="circle" coords="130,17,12"  id="@+id/ATX" />
+ <area shape="circle" coords="151,30,12"  id="@+id/OTX" />
+ <area shape="circle" coords="109,44,12"  id="@+id/RTX" />
+ <area shape="circle" coords="141,50,12"  id="@+id/PDT" />
+ <area shape="circle" coords="105,81,12"  id="@+id/MAX" />
+ <area shape="circle" coords="159,76,12"  id="@+id/CBX" />
+ <area shape="circle" coords="183,84,12"  id="@+id/SFX" />
+ <area shape="circle" coords="179,41,12"  id="@+id/MSX" />
+ <area shape="circle" coords="201,38,12"  id="@+id/TFX" />
+ <area shape="circle" coords="233,34,12"  id="@+id/GGW" />
+ <area shape="circle" coords="217,58,12"  id="@+id/BLX" />
+ <area shape="circle" coords="213,89,12"  id="@+id/RIW" />
+ <area shape="circle" coords="242,108,12"  id="@+id/CYS" />
+ <area shape="circle" coords="275,36,12"  id="@+id/MBX" />
+ <area shape="circle" coords="275,53,12"  id="@+id/BIS" />
+ <area shape="circle" coords="303,45,12"  id="@+id/MVX" />
+ <area shape="circle" coords="259,79,12"  id="@+id/UDX" />
+ <area shape="circle" coords="293,69,12"  id="@+id/ABR" />
+ <area shape="circle" coords="300,87,12"  id="@+id/FSD" />
+ <area shape="circle" coords="275,104,12"  id="@+id/LNX" />
+ <area shape="circle" coords="309,110,12"  id="@+id/OAX" />
+ <area shape="circle" coords="294,120,12"  id="@+id/UEX" />
+ <area shape="circle" coords="330,107,12"  id="@+id/DMX" />
+ <area shape="circle" coords="354,108,12"  id="@+id/DVN" />
+ <area shape="circle" coords="347,84,12"  id="@+id/ARX" />
+ <area shape="circle" coords="330,73,12"  id="@+id/MPX" />
+ <area shape="circle" coords="340,52,12"  id="@+id/DLH" />
+ <area shape="circle" coords="375,55,12"  id="@+id/MQT" />
+ <area shape="circle" coords="371,77,12"  id="@+id/GRB" />
+ <area shape="circle" coords="368,93,12"  id="@+id/MKX" />
+ <area shape="circle" coords="374,107,12"  id="@+id/LOT" />
+ <area shape="circle" coords="365,122,12"  id="@+id/ILX" />
+ <area shape="circle" coords="377,139,12"  id="@+id/VWX" />
+ <area shape="circle" coords="385,126,12"  id="@+id/IND" />
+ <area shape="circle" coords="408,127,12"  id="@+id/ILN" />
+ <area shape="circle" coords="390,110,12"  id="@+id/IWX" />
+ <area shape="circle" coords="390,93,12"  id="@+id/GRR" />
+ <area shape="circle" coords="397,71,12"  id="@+id/APX" />
+ <area shape="circle" coords="411,94,12"  id="@+id/DTX" />
+ <area shape="circle" coords="422,106,12"  id="@+id/CLE" />
+ <area shape="circle" coords="88,95,12"  id="@+id/BHX" />
+ <area shape="circle" coords="105,109,12"  id="@+id/BBX" />
+ <area shape="circle" coords="108,120,12"  id="@+id/DAX" />
+ <area shape="circle" coords="101,133,12"  id="@+id/MUX" />
+ <area shape="circle" coords="117,144,12"  id="@+id/HNX" />
+ <area shape="circle" coords="103,156,12"  id="@+id/VBX" />
+ <area shape="circle" coords="133,158,12"  id="@+id/EYX" />
+ <area shape="circle" coords="116,165,12"  id="@+id/VTX" />
+ <area shape="circle" coords="132,173,12"  id="@+id/SOX" />
+ <area shape="circle" coords="131,184,12"  id="@+id/NKX" />
+ <area shape="circle" coords="153,188,12"  id="@+id/YUX" />
+ <area shape="circle" coords="154,156,12"  id="@+id/ESX" />
+ <area shape="circle" coords="126,110,12"  id="@+id/RGX" />
+ <area shape="circle" coords="146,103,12"  id="@+id/LRX" />
+ <area shape="circle" coords="185,103,12"  id="@+id/MTX" />
+ <area shape="circle" coords="175,141,12"  id="@+id/ICX" />
+ <area shape="circle" coords="210,129,12"  id="@+id/GJX" />
+ <area shape="circle" coords="182,172,12"  id="@+id/FSX" />
+ <area shape="circle" coords="175,186,12"  id="@+id/IWA" />
+ <area shape="circle" coords="184,200,12"  id="@+id/EMX" />
+ <area shape="circle" coords="242,125,12"  id="@+id/FTG" />
+ <area shape="circle" coords="245,139,12"  id="@+id/PUX" />
+ <area shape="circle" coords="219,169,12"  id="@+id/ABX" />
+ <area shape="circle" coords="243,177,12"  id="@+id/FDX" />
+ <area shape="circle" coords="225,192,12"  id="@+id/HDX" />
+ <area shape="circle" coords="217,205,12"  id="@+id/EPZ" />
+ <area shape="circle" coords="294,267,12"  id="@+id/BRO" />
+ <area shape="circle" coords="293,249,12"  id="@+id/CRP" />
+ <area shape="circle" coords="271,233,12"  id="@+id/DFX" />
+ <area shape="circle" coords="320,233,12"  id="@+id/HGX" />
+ <area shape="circle" coords="293,227,12"  id="@+id/EWX" />
+ <area shape="circle" coords="333,225,12"  id="@+id/LCH" />
+ <area shape="circle" coords="334,214,12"  id="@+id/POE" />
+ <area shape="circle" coords="326,202,12"  id="@+id/SHV" />
+ <area shape="circle" coords="294,215,12"  id="@+id/GRK" />
+ <area shape="circle" coords="269,213,12"  id="@+id/SJT" />
+ <area shape="circle" coords="257,205,12"  id="@+id/MAF" />
+ <area shape="circle" coords="279,200,12"  id="@+id/DYX" />
+ <area shape="circle" coords="300,202,12"  id="@+id/FWS" />
+ <area shape="circle" coords="261,189,12"  id="@+id/LBB" />
+ <area shape="circle" coords="264,170,12"  id="@+id/AMA" />
+ <area shape="circle" coords="286,182,12"  id="@+id/FDR" />
+ <area shape="circle" coords="267,129,12"  id="@+id/GLD" />
+ <area shape="circle" coords="277,147,12"  id="@+id/DDC" />
+ <area shape="circle" coords="299,149,12"  id="@+id/ICT" />
+ <area shape="circle" coords="305,134,12"  id="@+id/TWX" />
+ <area shape="circle" coords="325,139,12"  id="@+id/EAX" />
+ <area shape="circle" coords="291,158,12"  id="@+id/VNX" />
+ <area shape="circle" coords="313,164,12"  id="@+id/INX" />
+ <area shape="circle" coords="300,173,12"  id="@+id/TLX" />
+ <area shape="circle" coords="323,174,12"  id="@+id/SRX" />
+ <area shape="circle" coords="341,178,12"  id="@+id/LZK" />
+ <area shape="circle" coords="352,138,12"  id="@+id/LSX" />
+ <area shape="circle" coords="365,152,12"  id="@+id/PAH" />
+ <area shape="circle" coords="332,153,12"  id="@+id/SGF" />
+ <area shape="circle" coords="389,143,12"  id="@+id/LVX" />
+ <area shape="circle" coords="426,137,12"  id="@+id/RLX" />
+ <area shape="circle" coords="385,157,12"  id="@+id/HPX" />
+ <area shape="circle" coords="387,164,12"  id="@+id/OHX" />
+ <area shape="circle" coords="413,160,12"  id="@+id/MRX" />
+ <area shape="circle" coords="411,146,12"  id="@+id/JKL" />
+ <area shape="circle" coords="438,149,12"  id="@+id/FCX" />
+ <area shape="circle" coords="464,147,12"  id="@+id/AKQ" />
+ <area shape="circle" coords="453,162,12"  id="@+id/RAX" />
+ <area shape="circle" coords="472,169,12"  id="@+id/MHX" />
+ <area shape="circle" coords="364,173,12"  id="@+id/NQA" />
+ <area shape="circle" coords="392,175,12"  id="@+id/HTX" />
+ <area shape="circle" coords="425,172,12"  id="@+id/GSP" />
+ <area shape="circle" coords="373,185,12"  id="@+id/GWX" />
+ <area shape="circle" coords="406,187,12"  id="@+id/FFC" />
+ <area shape="circle" coords="386,193,12"  id="@+id/BMX" />
+ <area shape="circle" coords="396,201,12"  id="@+id/MXX" />
+ <area shape="circle" coords="416,196,12"  id="@+id/JGX" />
+ <area shape="circle" coords="434,181,12"  id="@+id/CAE" />
+ <area shape="circle" coords="455,178,12"  id="@+id/LTX" />
+ <area shape="circle" coords="438,194,12"  id="@+id/CLX" />
+ <area shape="circle" coords="421,211,12"  id="@+id/VAX" />
+ <area shape="circle" coords="399,209,12"  id="@+id/EOX" />
+ <area shape="circle" coords="358,203,12"  id="@+id/DGX" />
+ <area shape="circle" coords="359,223,12"  id="@+id/LIX" />
+ <area shape="circle" coords="381,218,12"  id="@+id/MOB" />
+ <area shape="circle" coords="391,238,12"  id="@+id/EVX" />
+ <area shape="circle" coords="410,220,12"  id="@+id/TLH" />
+ <area shape="circle" coords="439,219,12"  id="@+id/JAX" />
+ <area shape="circle" coords="448,239,12"  id="@+id/MLB" />
+ <area shape="circle" coords="426,245,12"  id="@+id/TBW" />
+ <area shape="circle" coords="450,262,12"  id="@+id/AMX" />
+ <area shape="circle" coords="439,274,12"  id="@+id/BYX" />
+ <area shape="circle" coords="436,115,12"  id="@+id/PBZ" />
+ <area shape="circle" coords="454,126,12"  id="@+id/LWX" />
+ <area shape="circle" coords="477,124,12"  id="@+id/DOX" />
+ <area shape="circle" coords="454,107,12"  id="@+id/CCX" />
+ <area shape="circle" coords="479,112,12"  id="@+id/DIX" />
+ <area shape="circle" coords="491,100,12"  id="@+id/OKX" />
+ <area shape="circle" coords="462,93,12"  id="@+id/BGM" />
+ <area shape="circle" coords="442,87,12"  id="@+id/BUF" />
+ <area shape="circle" coords="480,85,12"  id="@+id/ENX" />
+ <area shape="circle" coords="463,76,12"  id="@+id/TYX" />
+ <area shape="circle" coords="502,87,12"  id="@+id/BOX" />
+ <area shape="circle" coords="482,65,12"  id="@+id/CXX" />
+ <area shape="circle" coords="506,68,12"  id="@+id/GYX" />
+ <area shape="circle" coords="519,41,12"  id="@+id/CBW" />
+ <area shape="circle" coords="17,141,12"  id="@+id/HKI" />
+ <area shape="circle" coords="43,153,12"  id="@+id/HMO" />
+ <area shape="circle" coords="67,165,12"  id="@+id/HKM" />
+ <area shape="circle" coords="63,184,12"  id="@+id/HWA" />
+ <area shape="circle" coords="84,222,12"  id="@+id/APD" />
+ <area shape="circle" coords="33,235,12"  id="@+id/AEC" />
+ <area shape="circle" coords="43,258,12"  id="@+id/ABC" />
+ <area shape="circle" coords="75,257,12"  id="@+id/AHG" />
+ <area shape="circle" coords="54,274,12"  id="@+id/AKC" />
+ <area shape="circle" coords="92,277,12"  id="@+id/AIH" />
+ <area shape="circle" coords="120,286,12"  id="@+id/ACG" />
+ <area shape="circle" coords="537,281,12"  id="@+id/JUA" />
+ <area shape="circle" coords="19,173,12"  id="@+id/GUA" />
+ <area shape="rect" coords="232,0,365,22" id="@+id/USA"/>
+</map>
+
+
+
+
+    <map  name="caradarmap" >
+        <area id="@+id/WUJ"  shape="circle" coords="68,370,5" />
+        <area id="@+id/XBE"  shape="circle" coords="200,373,8" />
+        <area id="@+id/WBI"  shape="circle" coords="401,385,9" />
+        <area id="@+id/WHK"  shape="circle" coords="141,334,8" />
+        <area id="@+id/XNC"  shape="circle" coords="505,317,6" />
+        <area id="@+id/XDR"  shape="circle" coords="294,372,7" />
+        <area id="@+id/WSO"  shape="circle" coords="407,416,8" />
+        <area id="@+id/XFW"  shape="circle" coords="231,373,8" />
+        <area id="@+id/XFT"  shape="circle" coords="440,379,6" />
+        <area id="@+id/XGO"  shape="circle" coords="526,316,6" />
+        <area id="@+id/WTP"  shape="circle" coords="567,234,6" />
+        <area id="@+id/WHN"  shape="circle" coords="170,321,8" />
+        <area id="@+id/WKR"  shape="circle" coords="421,405,6" />
+        <area id="@+id/WMB"  shape="circle" coords="455,318,7" />
+        <area id="@+id/XLA"  shape="circle" coords="407,346,10" />
+        <area id="@+id/XME"  shape="circle" coords="528,249,6" />
+        <area id="@+id/XMB"  shape="circle" coords="541,288,6" />
+        <area id="@+id/WMN"  shape="circle" coords="454,363,7" />
+        <area id="@+id/WGJ"  shape="circle" coords="364,384,7" />
+        <area id="@+id/XTI"  shape="circle" coords="375,352,9" />
+        <area id="@+id/XPG"  shape="circle" coords="81,319,8" />
+        <area id="@+id/XRA"  shape="circle" coords="185,351,8" />
+        <area id="@+id/XBU"  shape="circle" coords="164,375,9" />
+        <area id="@+id/XSS"  shape="circle" coords="98,362,8" />
+        <area id="@+id/WWW"  shape="circle" coords="112,303,9" />
+        <area id="@+id/XSM"  shape="circle" coords="141,361,7" />
+        <area shape="circle" coords="323,376,7" id="@+id/XNI"  />
+        <area id="@+id/XAM"  shape="circle" coords="476,306,7" />
+        <area id="@+id/XSI"  shape="circle" coords="58,370,5" />
+        <area id="@+id/WVY"  shape="circle" coords="461,344,8" />
+        <area id="@+id/XWL"  shape="circle" coords="255,376,8" />
+    </map>
+    <!--
+        <area id="@+id/PAC"  shape="poly" coords="38,222,40,256,37,269,35,272,33,296,32,307,24,313,24,317,27,333,34,349,40,360,53,379,65,374,79,376,92,381,106,386,127,387,130,369,99,328,116,256,94,247,60,231" />
+        <area id="@+id/WRN"  shape="poly" coords="119,255,150,262,173,265,219,265,258,261,262,273,269,273,277,289,287,286,297,287,270,341,276,385,230,390,197,391,163,391,132,386,129,382,129,370,102,326,119,255" />
+        <area id="@+id/ONT"  shape="poly" coords="303,286,329,295,346,289,368,319,381,323,388,337,396,357,400,371,411,372,432,371,452,372,463,374,450,393,440,400,431,408,429,415,423,419,418,423,411,428,406,436,400,443,395,436,395,436,388,420,382,407,368,401,357,399,336,393,301,383,281,382,277,372,270,344" />
+        <area id="@+id/QUE"  shape="poly" coords="336,203,345,226,349,237,355,244,364,251,372,261,371,274,362,286,380,306,382,320,382,322,403,371,419,371,429,368,458,371,465,377,471,352,474,341,464,321,469,278,500,259,510,218,461,262,438,259,432,240,446,226,408,187,406,212,393,210,385,201,350,195" />
+        <area id="@+id/ERN"  shape="poly" coords="408,185,448,227,434,240,439,256,459,261,512,214,503,254,470,280,466,310,464,328,474,336,487,320,508,343,529,342,556,313,594,236,578,207,550,210,530,225,507,206,485,200,463,205,431,196" />
+  -->
+
+
+
+
+    <map name="AB">
+        <area id="@+id/ab_49" coords="99,300,148,317" shape="rect" alt="Banff" title="Banff" />
+        <area id="@+id/ab_52" coords="161,308,223,329" shape="rect" alt="Calgary" title="Calgary" />
+        <area id="@+id/ab_59" coords="213,273,299,295" shape="rect" alt="Coronation" title="Coronation" />
+        <area id="@+id/ab_50" coords="178,221,248,244" shape="rect" alt="Edmonton" title="Edmonton" />
+        <area id="@+id/ab_72" coords="120,220,176,239" shape="rect" alt="Edson" title="Edson" />
+        <area id="@+id/ab_20" coords="221,115,324,151" shape="rect" alt="Fort McMurray" title="Fort McMurray" />
+        <area id="@+id/ab_31" coords="4,161,105,187" shape="rect" alt="Grande Prairie" title="Grande Prairie" />
+        <area id="@+id/ab_24" coords="123,63,207,81" shape="rect" alt="High Level" title="High Level" />
+        <area id="@+id/ab_14" coords="58,218,115,241" shape="rect" alt="Hinton" title="Hinton" />
+        <area id="@+id/ab_70" coords="69,241,141,259" shape="rect" alt="Jasper" title="Jasper" />
+        <area id="@+id/ab_30" coords="186,356,267,379" shape="rect" alt="Lethbridge" title="Lethbridge" />
+        <area id="@+id/ab_15" coords="246,240,353,259" shape="rect" alt="Lloydminster" title="Lloydminster" />
+        <area id="@+id/ab_51" coords="230,333,322,357" shape="rect" alt="Medicine Hat" title="Medicine Hat" />
+        <area id="@+id/ab_25" coords="116,130,194,156" shape="rect" alt="Peace River" title="Peace River" />
+        <area id="@+id/ab_46" coords="82,352,175,377" shape="rect" alt="Pincher Creek" title="Pincher Creek" />
+        <area id="@+id/ab_29" coords="117,265,195,285" shape="rect" alt="Red Deer" title="Red Deer" />
+        <area id="@+id/ab_54" coords="154,168,234,188" shape="rect" alt="Slave Lake" title="Slave Lake" />
+    </map>
+
+
+    <map id="BC" name="BC" title="BC">
+        <area id="@+id/bc_19" coords="74,316,176,335" shape="rect" alt="Campbell River" title="Campbell River" />
+        <area id="@+id/bc_77" coords="323,336,401,355" shape="rect" alt="Cranbrook" title="Cranbrook" />
+        <area id="@+id/bc_26" coords="309,356,374,371" shape="rect" alt="Creston" title="Creston" />
+        <area id="@+id/bc_14" coords="105,74,173,100" shape="rect" alt="Dease Lake" title="Dease Lake" />
+        <area id="@+id/bc_83" coords="210,80,281,113" shape="rect" alt="Fort Nelson" title="Fort Nelson" />
+        <area id="@+id/bc_78" coords="211,143,290,179" shape="rect" alt="Fort St. John" title="Fort St. John" />
+        <area id="@+id/bc_39" coords="246,357,311,376" shape="rect" alt="Grand Forks" title="Grand Forks" />
+        <area id="@+id/bc_45" coords="219,296,278,320" shape="rect" alt="Kamloops" title="Kamloops" />
+        <area id="@+id/bc_48" coords="257,323,324,342" shape="rect" alt="Kelowna" title="Kelowna" />
+        <area id="@+id/bc_20" coords="157,348,196,367" shape="rect" alt="Nanaimo" title="Nanaimo" />
+        <area id="@+id/bc_84" coords="256,341,320,356" shape="rect" alt="Penticton" title="Penticton" />
+        <area id="@+id/bc_89" coords="126,289,195,310" shape="rect" alt="Port Hardy" title="Port Hardy" />
+        <area id="@+id/bc_79" coords="208,215,307,242" shape="rect" alt="Prince George" title="Prince George" />
+        <area id="@+id/bc_57" coords="21,187,109,216" shape="rect" alt="Prince Rupert" title="Prince Rupert" />
+        <area id="@+id/bc_64" coords="206,244,278,264" shape="rect" alt="Quesnel" title="Quesnel" />
+        <area id="@+id/bc_65" coords="281,298,351,322" shape="rect" alt="Revelstoke" title="Revelstoke" />
+        <area id="@+id/bc_88" coords="69,218,138,249" shape="rect" alt="Sandspit" title="Sandspit" />
+        <area id="@+id/bc_82" coords="148,179,213,212" shape="rect" alt="Smithers" title="Smithers" />
+        <area id="@+id/bc_80" coords="108,185,148,210" shape="rect" alt="Terrace" title="Terrace" />
+        <area id="@+id/bc_17" coords="105,335,156,354" shape="rect" alt="Tofino" title="Tofino" />
+        <area id="@+id/bc_74" coords="194,338,255,355" shape="rect" alt="Vancouver" title="Vancouver" />
+        <area id="@+id/bc_85" coords="186,368,245,389" shape="rect" alt="Victoria" title="Victoria" />
+        <area id="@+id/bc_86" coords="183,318,234,335" shape="rect" alt="Whistler" title="Whistler" />
+        <area id="@+id/bc_76" coords="218,269,317,291" shape="rect" alt="Williams Lake" title="Williams Lake" />
+    </map>
+
+    <map id="MB" name="MB" title="MB">
+        <area id="@+id/mb_52" coords="36,342,100,370" shape="rect" alt="Brandon" title="Brandon" />
+        <area id="@+id/mb_42" coords="138,46,208,73" shape="rect" alt="Churchill" title="Churchill" />
+        <area id="@+id/mb_58" coords="84,297,144,323" shape="rect" alt="Dauphin" title="Dauphin" />
+        <area id="@+id/mb_60" coords="55,180,118,207" shape="rect" alt="Flin Flon" title="Flin Flon" />
+        <area id="@+id/mb_64" coords="186,127,268,147" shape="rect" alt="Gillam" title="Gillam" />
+        <area id="@+id/mb_62" coords="144,320,195,342" shape="rect" alt="Gimli" title="Gimli" />
+        <area id="@+id/mb_41" coords="72,118,154,138" shape="rect" alt="Lynn Lake" title="Lynn Lake" />
+        <area id="@+id/mb_25" coords="132,207,229,229" shape="rect" alt="Norway House" title="Norway House" />
+        <area id="@+id/mb_30" coords="64,211,117,242" shape="rect" alt="The Pas" title="The Pas" />
+        <area id="@+id/mb_34" coords="128,153,210,173" shape="rect" alt="Thompson" title="Thompson" />
+        <area id="@+id/mb_38" coords="146,344,217,370" shape="rect" alt="Winnipeg" title="Winnipeg" />
+    </map>
+
+
+    <map id="NB" name="NB" title="NB">
+        <area id="@+id/nb_22" coords="287,52,387,71" shape="rect" alt="Bas-Caraquet" title="Bas-Caraquet" />
+        <area id="@+id/nb_28" coords="229,70,312,90" shape="rect" alt="Bathurst" title="Bathurst" />
+        <area id="@+id/nb_2" coords="158,33,238,54" shape="rect" alt="Campbellton" title="Campbellton" />
+        <area id="@+id/nb_32" coords="64,81,150,104" shape="rect" alt="Edmundston" title="Edmundston" />
+        <area id="@+id/nb_29" coords="168,227,252,255" shape="rect" alt="Fredericton" title="Fredericton" />
+        <area id="@+id/nb_25" coords="190,124,276,147" shape="rect" alt="Miramichi" title="Miramichi" />
+        <area id="@+id/nb_31" coords="301,32,402,53" shape="rect" alt="Miscou Island" title="Miscou Island" />
+        <area id="@+id/nb_36" coords="293,213,366,236" shape="rect" alt="Moncton" title="Moncton" />
+        <area id="@+id/nb_34" coords="295,116,401,141" shape="rect" alt="Point Escuminac" title="Point Escuminac" />
+        <area id="@+id/nb_33" coords="181,317,279,333" shape="rect" alt="Point Lepreau" title="Point Lepreau" />
+        <area id="@+id/nb_23" coords="210,287,292,318" shape="rect" alt="Saint John" title="Saint John" />
+        <area id="@+id/nb_35" coords="118,286,201,318" shape="rect" alt="St. Stephen" title="St. Stephen" />
+    </map>
+
+
+    <map id="NL" name="NL" title="NL">
+        <area id="@+id/nl_34" coords="242,317,283,345" shape="rect" alt="Badger" title="Badger" />
+        <area id="@+id/qc_163" coords="152,255,242,280" shape="rect" alt="Blanc-Sablon" title="Blanc-Sablon" />
+        <area id="@+id/nl_17" coords="193,374,298,402" shape="rect" alt="Channel-Port aux Basques" title="Channel-Port aux Basques" />
+        <area id="@+id/nl_21" coords="13,200,105,219" shape="rect" alt="Churchill Falls" title="Churchill Falls" />
+        <area id="@+id/nl_41" coords="129,334,229,348" shape="rect" alt="Corner Brook" title="Corner Brook" />
+        <area id="@+id/nl_39" coords="172,317,239,335" shape="rect" alt="Deer Lake" title="Deer Lake" />
+        <area id="@+id/nl_16" coords="284,319,337,346" shape="rect" alt="Gander" title="Gander" />
+        <area id="@+id/nl_23" coords="161,206,315,229" shape="rect" alt="Happy Valley-Goose Bay" title="Happy Valley-Goose Bay" />
+        <area id="@+id/nl_38" coords="155,142,235,168" shape="rect" alt="Hopedale" title="Hopedale" />
+        <area id="@+id/nl_20" coords="46,220,138,238" shape="rect" alt="Labrador City" title="Labrador City" />
+        <area id="@+id/nl_29" coords="238,229,351,250" shape="rect" alt="Mary's Harbour" title="Mary's Harbour" />
+        <area id="@+id/nl_40" coords="124,112,204,138" shape="rect" alt="Nain" title="Nain" />
+        <area id="@+id/nl_30" coords="298,371,371,397" shape="rect" alt="Placentia" title="Placentia" />
+        <area id="@+id/nl_37" coords="244,256,329,274" shape="rect" alt="St. Anthony" title="St. Anthony" />
+        <area id="@+id/nl_24" coords="323,346,388,372" shape="rect" alt="St. John's" title="St. John's" />
+    </map>
+
+
+    <map id="NS" name="NS" title="NS">
+        <area id="@+id/ns_33" coords="123,157,188,181" shape="rect" alt="Amherst" title="Amherst" />
+        <area id="@+id/ns_37" coords="88,367,176,386" shape="rect" alt="Baccaro Point" title="Baccaro Point" />
+        <area id="@+id/ns_27" coords="22,309,102,328" shape="rect" alt="Brier Island" title="Brier Island" />
+        <area id="@+id/ns_34" coords="209,145,270,171" shape="rect" alt="Caribou" title="Caribou" />
+        <area id="@+id/ns_38" coords="287,51,372,70" shape="rect" alt="Chéticamp" title="Chéticamp" />
+        <area id="@+id/ns_20" coords="49,265,102,290" shape="rect" alt="Digby" title="Digby" />
+        <area id="@+id/ns_24" coords="341,112,408,137" shape="rect" alt="Fourchu Head" title="Fourchu Head" />
+        <area id="@+id/ns_32" coords="208,69,299,86" shape="rect" alt="Grand Étang" title="Grand Étang" />
+        <area id="@+id/ns_19" coords="135,246,200,268" shape="rect" alt="Halifax" title="Halifax" />
+        <area id="@+id/ns_42" coords="86,292,188,307" shape="rect" alt="Kejimkujik (National Park)" title="Kejimkujik (National Park)" />
+        <area id="@+id/ns_17" coords="117,223,183,245" shape="rect" alt="Kentville" title="Kentville" />
+        <area id="@+id/ns_39" coords="122,309,197,333" shape="rect" alt="Liverpool" title="Liverpool" />
+        <area id="@+id/ns_21" coords="140,280,212,290" shape="rect" alt="Lunenburg" title="Lunenburg" />
+        <area id="@+id/ns_22" coords="236,206,321,231" shape="rect" alt="Malay Falls" title="Malay Falls" />
+        <area id="@+id/ns_26" coords="288,141,399,162" shape="rect" alt="Port Hawkesbury" title="Port Hawkesbury" />
+        <area id="@+id/ns_31" coords="337,79,400,104" shape="rect" alt="Sydney" title="Sydney" />
+        <area id="@+id/ns_25" coords="184,185,236,209" shape="rect" alt="Truro" title="Truro" />
+        <area id="@+id/ns_29" coords="43,338,115,360" shape="rect" alt="Yarmouth" title="Yarmouth" />
+    </map>
+
+    <map id="NT" name="NT" title="NT">
+        <area id="@+id/nt_29" coords="90,348,154,368" shape="rect" alt="Fort Liard" title="Fort Liard" />
+        <area id="@+id/nt_27" coords="154,338,254,353" shape="rect" alt="Fort Providence" title="Fort Providence" />
+        <area id="@+id/nt_4" coords="47,318,137,336" shape="rect" alt="Fort Simpson" title="Fort Simpson" />
+        <area id="@+id/nt_17" coords="202,372,280,393" shape="rect" alt="Fort Smith" title="Fort Smith" />
+        <area id="@+id/nt_8" coords="165,353,242,371" shape="rect" alt="Hay River" title="Hay River" />
+        <area id="@+id/nt_30" coords="63,170,126,194" shape="rect" alt="Inuvik" title="Inuvik" />
+        <area id="@+id/nt_21" coords="96,241,189,263" shape="rect" alt="Norman Wells" title="Norman Wells" />
+        <area id="@+id/nt_16" coords="139,174,207,201" shape="rect" alt="Paulatuk" title="Paulatuk" />
+        <area id="@+id/nt_19" coords="141,113,211,146" shape="rect" alt="Sachs Harbour" title="Sachs Harbour" />
+        <area id="@+id/nt_20" coords="27,142,105,167" shape="rect" alt="Tuktoyaktuk" title="Tuktoyaktuk" />
+        <area id="@+id/nt_7" coords="188,156,269,175" shape="rect" alt="Ulukhaktok" title="Ulukhaktok" />
+        <area id="@+id/nt_6" coords="160,298,215,320" shape="rect" alt="Whati" title="Whati" />
+        <area id="@+id/nt_24" coords="182,321,265,339" shape="rect" alt="Yellowknife" title="Yellowknife" />
+    </map>
+
+    <map id="NU" name="NU" title="NU">
+        <area id="@+id/nu_22" coords="189,2,241,29" shape="rect" alt="Alert" title="Alert" />
+        <area id="@+id/nu_10" coords="125,152,196,174" shape="rect" alt="Arctic Bay" title="Arctic Bay" />
+        <area id="@+id/nu_20" coords="146,302,210,320" shape="rect" alt="Arviat" title="Arviat" />
+        <area id="@+id/nu_14" coords="146,265,214,283" shape="rect" alt="Baker Lake" title="Baker Lake" />
+        <area id="@+id/nu_15" coords="73,188,135,213" shape="rect" alt="Cambridge Bay" title="Cambridge Bay" />
+        <area id="@+id/nu_2" coords="176,246,277,258" shape="rect" alt="Cape Dorset" title="Cape Dorset" />
+        <area id="@+id/nu_18" coords="250,165,323,184" shape="rect" alt="Clyde River" title="Clyde River" />
+        <area id="@+id/nu_9" coords="213,264,298,278" shape="rect" alt="Coral Harbour" title="Coral Harbour" />
+        <area id="@+id/nu_11" coords="151,55,220,79" shape="rect" alt="Eureka" title="Eureka" />
+        <area id="@+id/nu_24" coords="84,214,162,236" shape="rect" alt="Gjoa Haven" title="Gjoa Haven" />
+        <area id="@+id/nu_12" coords="173,101,261,125" shape="rect" alt="Grise Fiord" title="Grise Fiord" />
+        <area id="@+id/nu_4" coords="204,195,277,213" shape="rect" alt="Hall Beach" title="Hall Beach" />
+        <area id="@+id/nu_21" coords="284,233,354,250" shape="rect" alt="Iqaluit" title="Iqaluit" />
+        <area id="@+id/nu_26" coords="287,253,356,263" shape="rect" alt="Kimmirut" title="Kimmirut" />
+        <area id="@+id/nu_13" coords="168,210,236,229" shape="rect" alt="Kugaaruk" title="Kugaaruk" />
+        <area id="@+id/nu_16" coords="1,203,71,231" shape="rect" alt="Kugluktuk" title="Kugluktuk" />
+        <area id="@+id/nu_7" coords="283,203,379,221" shape="rect" alt="Pangnirtung" title="Pangnirtung" />
+        <area id="@+id/nu_25" coords="208,142,282,165" shape="rect" alt="Pond Inlet" title="Pond Inlet" />
+        <area id="@+id/nu_5" coords="283,185,366,203" shape="rect" alt="Qikiqtarjuaq" title="Qikiqtarjuaq" />
+        <area id="@+id/nu_28" coords="166,281,247,303" shape="rect" alt="Rankin Inlet" title="Rankin Inlet" />
+        <area id="@+id/nu_3" coords="188,229,271,245" shape="rect" alt="Naujaat" title="Naujaat" />
+        <area id="@+id/nu_27" coords="137,127,202,151" shape="rect" alt="Resolute" title="Resolute" />
+        <area id="@+id/nu_29" coords="256,333,327,368" shape="rect" alt="Sanikiluaq" title="Sanikiluaq" />
+        <area id="@+id/nu_8" coords="136,184,199,210" shape="rect" alt="Taloyoak" title="Taloyoak" />
+    </map>
+
+
+    <map id="ON" name="ON" title="ON">
+        <area id="@+id/on_40" coords="211,219,259,256" shape="rect" alt="Greater Sudbury" title="Greater Sudbury" />
+        <area id="@+id/on_70" coords="129,163,190,194" shape="rect" alt="Greenstone (Geraldton)" title="Greenstone (Geraldton)" />
+        <area id="@+id/on_77" coords="270,317,340,331" shape="rect" alt="Hamilton" title="Hamilton" />
+        <area id="@+id/on_96" coords="30,182,85,201" shape="rect" alt="Kenora" title="Kenora" />
+        <area id="@+id/on_69" coords="317,273,356,300" shape="rect" alt="Kingston" title="Kingston" />
+        <area id="@+id/on_137" coords="247,330,301,348" shape="rect" alt="London" title="London" />
+        <area id="@+id/on_113" coords="194,118,262,150" shape="rect" alt="Moosonee" title="Moosonee" />
+        <area id="@+id/on_139" coords="262,236,323,258" shape="rect" alt="North Bay" title="North Bay" />
+        <area id="@+id/on_118" coords="324,247,361,274" shape="rect" alt="Ottawa (Kanata - Orléans)" title="Ottawa (Kanata - Orléans)" />
+        <area id="@+id/on_103" coords="240,259,310,281" shape="rect" alt="Parry Sound" title="Parry Sound" />
+        <area id="@+id/on_121" coords="244,280,317,300" shape="rect" alt="Peterborough" title="Peterborough" />
+        <area id="@+id/on_147" coords="187,322,244,343" shape="rect" alt="Sarnia" title="Sarnia" />
+        <area id="@+id/on_162" coords="149,231,209,263" shape="rect" alt="Sault Ste. Marie" title="Sault Ste. Marie" />
+        <area id="@+id/on_135" coords="58,151,110,182" shape="rect" alt="Sioux Lookout" title="Sioux Lookout" />
+        <area id="@+id/on_100" coords="71,200,150,224" shape="rect" alt="Thunder Bay" title="Thunder Bay" />
+        <area id="@+id/on_127" coords="215,189,273,214" shape="rect" alt="Timmins" title="Timmins" />
+        <area id="@+id/on_143" coords="234,300,297,317" shape="rect" alt="Toronto" title="Toronto" />
+        <area id="@+id/on_138" coords="168,204,211,230" shape="rect" alt="Wawa" title="Wawa" />
+        <area id="@+id/on_94" coords="171,341,243,365" shape="rect" alt="Windsor" title="Windsor" />
+    </map>
+
+    <map id="PE" name="PE" title="PE">
+        <area id="@+id/pe_5" coords="189,143,298,173" shape="rect" alt="Charlottetown" title="Charlottetown" />
+        <area id="@+id/pe_6" coords="330,4,401,42" shape="rect" alt="East Point" title="East Point" />
+        <area id="@+id/pe_2" coords="168,177,264,204" shape="rect" alt="Maple Plains" title="Maple Plains" />
+        <area id="@+id/pe_1" coords="0,43,86,72" shape="rect" alt="North Cape" title="North Cape" />
+        <area id="@+id/pe_4" coords="252,68,350,98" shape="rect" alt="St. Peters Bay" title="St. Peters Bay" />
+        <area id="@+id/pe_3" coords="80,156,169,188" shape="rect" alt="Summerside" title="Summerside" />
+    </map>
+
+    <map id="QC" name="QC" title="QC">
+        <area id="@+id/qc_160" coords="149,252,210,278" shape="rect" alt="Baie-Comeau" title="Baie-Comeau" />
+        <area id="@+id/qc_163" coords="313,152,405,178" shape="rect" alt="Blanc-Sablon" title="Blanc-Sablon" />
+        <area id="@+id/qc_120" coords="211,260,286,277" shape="rect" alt="Cap Chat" title="Cap Chat" />
+        <area id="@+id/qc_121" coords="25,262,129,284" shape="rect" alt="Chibougamau" title="Chibougamau" />
+        <area id="@+id/qc_101" coords="235,245,301,261" shape="rect" alt="Gaspé" title="Gaspé" />
+        <area id="@+id/qc_131" coords="34,97,101,125" shape="rect" alt="Inukjuak" title="Inukjuak" />
+        <area id="@+id/qc_150" coords="136,79,204,111" shape="rect" alt="Kuujjuaq" title="Kuujjuaq" />
+        <area id="@+id/qc_105" coords="40,166,143,187" shape="rect" alt="Kuujjuarapik" title="Kuujjuarapik" />
+        <area id="@+id/qc_154" coords="91,306,165,328" shape="rect" alt="La Tuque" title="La Tuque" />
+        <area id="@+id/qc_102" coords="47,336,126,358" shape="rect" alt="Maniwaki" title="Maniwaki" />
+        <area id="@+id/qc_147" coords="90,358,162,379" shape="rect" alt="Montréal" title="Montréal" />
+        <area id="@+id/qc_133" coords="171,319,254,337" shape="rect" alt="Québec" title="Québec" />
+        <area id="@+id/qc_108" coords="190,290,307,313" shape="rect" alt="Rivière-du-Loup" title="Rivière-du-Loup" />
+        <area id="@+id/qc_166" coords="103,284,181,307" shape="rect" alt="Saguenay" title="Saguenay" />
+        <area id="@+id/qc_128" coords="22,21,79,50" shape="rect" alt="Salluit" title="Salluit" />
+        <area id="@+id/qc_141" coords="154,223,234,247" shape="rect" alt="Sept-Îles" title="Sept-Îles" />
+        <area id="@+id/qc_136" coords="169,353,265,372" shape="rect" alt="Sherbrooke" title="Sherbrooke" />
+        <area id="@+id/qc_130" coords="154,335,263,353" shape="rect" alt="Trois-Rivières" title="Trois-Rivières" />
+        <area id="@+id/qc_122" coords="51,140,125,159" shape="rect" alt="Umiujaq" title="Umiujaq" />
+        <area id="@+id/qc_149" coords="28,308,89,334" shape="rect" alt="Val-d'Or" title="Val-d'Or" />
+    </map>
+
+    <map id="SK" name="SK" title="SK">
+        <area id="@+id/sk_39" coords="104,165,227,187" shape="rect" alt="Buffalo Narrows" title="Buffalo Narrows" />
+        <area id="@+id/sk_30" coords="114,84,202,111" shape="rect" alt="Collins Bay" title="Collins Bay" />
+        <area id="@+id/sk_53" coords="215,372,290,397" shape="rect" alt="Estevan" title="Estevan" />
+        <area id="@+id/sk_20" coords="154,124,232,145" shape="rect" alt="Key Lake" title="Key Lake" />
+        <area id="@+id/sk_21" coords="24,294,112,324" shape="rect" alt="Kindersley" title="Kindersley" />
+        <area id="@+id/sk_38" coords="165,190,243,214" shape="rect" alt="La Ronge" title="La Ronge" />
+        <area id="@+id/sk_56" coords="0,237,98,266" shape="rect" alt="Lloydminster" title="Lloydminster" />
+        <area id="@+id/sk_22" coords="103,211,214,238" shape="rect" alt="Meadow Lake" title="Meadow Lake" />
+        <area id="@+id/sk_24" coords="131,326,181,361" shape="rect" alt="Moose Jaw" title="Moose Jaw" />
+        <area id="@+id/sk_34" coords="108,265,231,283" shape="rect" alt="North Battleford" title="North Battleford" />
+        <area id="@+id/sk_27" coords="152,235,261,265" shape="rect" alt="Prince Albert" title="Prince Albert" />
+        <area id="@+id/sk_32" coords="181,329,244,355" shape="rect" alt="Regina" title="Regina" />
+        <area id="@+id/sk_23" coords="115,299,204,320" shape="rect" alt="Rosetown" title="Rosetown" />
+        <area id="@+id/sk_40" coords="140,283,231,300" shape="rect" alt="Saskatoon" title="Saskatoon" />
+        <area id="@+id/sk_41" coords="29,335,132,359" shape="rect" alt="Swift Current" title="Swift Current" />
+        <area id="@+id/sk_44" coords="112,48,213,75" shape="rect" alt="Uranium City" title="Uranium City" />
+        <area id="@+id/sk_33" coords="222,307,294,330" shape="rect" alt="Yorkton" title="Yorkton" />
+    </map>
+
+    <map id="YT" name="YT" title="YT">
+        <area id="@+id/yt_7" coords="41,292,124,319" shape="rect" alt="Burwash Landing" title="Burwash Landing" />
+        <area id="@+id/yt_17" coords="103,267,188,292" shape="rect" alt="Carmacks" title="Carmacks" />
+        <area id="@+id/yt_6" coords="89,193,155,219" shape="rect" alt="Dawson" title="Dawson" />
+        <area id="@+id/yt_12" coords="161,291,217,316" shape="rect" alt="Faro" title="Faro" />
+        <area id="@+id/yt_5" coords="73,318,206,334" shape="rect" alt="Haines Junction" title="Haines Junction" />
+        <area id="@+id/yt_10" coords="134,227,185,257" shape="rect" alt="Mayo" title="Mayo" />
+        <area id="@+id/yt_11" coords="126,78,200,102" shape="rect" alt="Old Crow" title="Old Crow" />
+        <area id="@+id/yt_9" coords="164,101,237,127" shape="rect" alt="Rock River" title="Rock River" />
+        <area id="@+id/yt_14" coords="150,360,215,381" shape="rect" alt="Teslin" title="Teslin" />
+        <area id="@+id/yt_13" coords="216,380,322,399" shape="rect" alt="Watson Lake" title="Watson Lake" />
+        <area id="@+id/yt_16" coords="111,333,206,354" shape="rect" alt="Whitehorse" title="Whitehorse" />
+    </map>
+
+
+</maps>

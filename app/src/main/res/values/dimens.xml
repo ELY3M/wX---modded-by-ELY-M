@@ -1,0 +1,81 @@
+<!--
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<resources>
+
+    <!-- Standart dimens for the color wheel -->
+    <dimen name="color_wheel_radius">124dp</dimen>
+    <dimen name="color_wheel_thickness">8dp</dimen>
+    <dimen name="color_center_halo_radius">60dp</dimen>
+    <dimen name="color_center_radius">54dp</dimen>
+    <dimen name="color_pointer_halo_radius">18dp</dimen>
+    <dimen name="color_pointer_radius">14dp</dimen>
+
+    <!-- Standart dimens for the bars -->
+    <dimen name="bar_thickness">4dp</dimen>
+    <dimen name="bar_length">240dp</dimen>
+    <dimen name="bar_pointer_radius">6dp</dimen>
+    <dimen name="bar_pointer_halo_radius">14dp</dimen>
+
+    <dimen name="padding">6dip</dimen>
+    <dimen name="padding_half">3dip</dimen>
+    <dimen name="padding_widget">4dip</dimen>
+
+    <dimen name="padding_dynamic_tv">1dip</dimen>
+    <dimen name="padding_dynamic_tv_small">1dip</dimen>
+
+ <!--   <dimen name="padding_dynamic_tv">2dip</dimen>
+    <dimen name="padding_dynamic_tv_small">1dip</dimen>-->
+
+    <!--  used in at least hourly, uswarn, nhc   -->
+    <dimen name="padding_ll">5dip</dimen>
+    <dimen name="normal_text">16sp</dimen>
+    <dimen name="large_text">21sp</dimen>
+    <dimen name="listitem_text">14sp</dimen>
+    <dimen name="fab_elevation_pressed">0dp</dimen>
+    <dimen name="fab_elevation">0dp</dimen>
+    <dimen name="fab_margin">18dp</dimen>
+    <dimen name="fab_margin_bottom_mini">26dp</dimen>
+    <dimen name="fab_margin_right_mini">26dp</dimen>
+    <dimen name="fab_margin2">84dp</dimen>
+    <dimen name="fab_margin3">10dp</dimen>
+    <dimen name="fab_margin_mini_2">80dp</dimen>
+    <dimen name="fab_margin_mini_1">126dp</dimen>
+    <dimen name="title_font_size">20dp</dimen>
+    <dimen name="domain_label_font_size">11dp</dimen>
+    <dimen name="range_label_font_size">13dp</dimen>
+    <dimen name="range_tick_label_font_size">13dp</dimen>
+    <dimen name="domain_tick_label_font_size">12dp</dimen>
+    <dimen name="legend_text_font_size">20dp</dimen>
+
+    <!-- telecine -->
+    <dimen name="overlay_width">144dp</dimen>
+    <dimen name="overlay_jellybean_width">96dp</dimen>
+    <dimen name="overlay_height">25dp</dimen>
+    <!-- TODO move to values-23/ as overlay_height overload when M is released. -->
+    <dimen name="overlay_height_m">24dp</dimen>
+
+    <!-- For google weatherlist widget demo -->
+    <dimen name="widget_margin_top">8dp</dimen>
+    <dimen name="widget_margin_bottom">8dp</dimen>
+    <dimen name="widget_margin_left">8dp</dimen>
+    <dimen name="widget_margin_right">8dp</dimen>
+    <!-- end google weatherlist widget demo -->
+
+</resources>

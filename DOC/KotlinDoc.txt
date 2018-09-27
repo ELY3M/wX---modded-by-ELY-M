@@ -1,0 +1,267 @@
+print("Hello, World!")
+println("Hello, World!")
+
+val x: Int
+val y = 1
+var w: Int
+var z = 2
+z = 3
+w = 1 
+
+val name: String? = null
+var lastName: String?
+lastName = null
+var firstName: String
+firstName = null // Compilation error!!
+
+val length = text?.length
+val length = text!!.length // NullPointerException if text == null
+
+val name = "John"
+val lastName = "Smith"
+val text = "My name is: $name $lastName"
+val otherText = "My name is: ${name.substring(2)}"
+
+val text = """
+        |First Line
+        |Second Line
+        |Third Line
+""".trimMargin()
+
+val text = if (x > 5)
+              "x > 5"
+            else "x <= 5"
+
+val andResult  = a and b   (&)
+val orResult   = a or b  (|)
+val xorResult  = a xor b (^)
+val rightShift = a shr 2 (>>)
+val leftShift  = a shl 2 (<<)
+
+if (x is Int) { }
+val text = other as String
+if (x in 0..10) { }
+
+if (a is String) {
+  val result = a.substring(1)
+}
+
+val x = // value
+val xResult = when (x) {
+  0, 11 -> "0 or 11"
+  in 1..10 -> "from 1 to 10"
+  !in 12..14 -> "not from 12 to 14"
+  else -> if (isOdd(x)) { "is odd" } else { "otherwise" }
+}
+
+val y = // value
+val yResult = when {
+  isNegative(y) -> "is Negative"
+  isZero(y) -> "is Zero"
+  isOdd(y) -> "is odd"
+  else -> "otherwise"
+}
+
+for (i in 1..10) { }
+for (i in 1..10 step 2) {}
+for (item in collection) {}
+for ((index, item) in collection.withIndex()) {}
+for ((key, value) in map) {}
+
+val numbers = listOf(1, 2, 3)
+
+val map = mapOf(1 to "One",
+                2 to "Two",
+                3 to "Three")
+
+numbers.forEach {
+    println(it)
+}
+
+numbers.filter  { it > 5 }
+       .forEach { println(it) }
+
+val groups = numbers.groupBy {
+                if (it and 1 == 0) "even" else "odd"
+             }
+
+val (evens, odds) = numbers.partition { it and 1 == 0 }
+
+val users = getUsers()
+users.sortedBy { it.lastname }
+
+class Person(var name: String, var age: Int, var college: String?) {
+var jake = Person("Jake Hill", 24, "Stephen's College")
+
+	
+fun Person.isTeenager(): Boolean {
+ 
+    // If age falls in the range
+    // 13-19 return true
+ 
+    return age in 13..19
+}
+
+override fun isEligibleToVote(): Boolean {
+
+val sumLambda: (Int, Int) -> Int = {x,y -> x+y}
+val actualSum = sumLambda(3,4)
+
+val r1 = 1..5
+val r2 = 5 downTo 1
+val r3 = 5 downTo 1 step 2
+
+val names = arrayOf("Anna", "Alex", "Brian", "Jack")
+val count = names.count()
+for (i in 0..count - 1) {
+    println("Person ${i + 1} is called ${names[i]}")
+}
+
+val shoppingList = arrayOf("catfish", "water",
+    "tulips", "blue paint")
+shoppingList[1] = "bottle of water"
+
+val occupations = mutableMapOf(
+    "Malcolm" to "Captain",
+    "Kaylee" to "Mechanic"
+)
+occupations["Jayne"] = "Public Relations"
+
+val emptyArray = arrayOf<String>()
+val emptyMap = mapOf<String, Float>()
+
+fun greet(name: String, day: String): String {
+    return "Hello $name, today is $day."
+}
+greet("Bob", "Tuesday")
+
+data class GasPrices(val a: Double, val b: Double,
+     val c: Double)
+fun getGasPrices() = GasPrices(3.59, 3.69, 3.79)
+
+fun sumOf(vararg numbers: Int): Int {
+    var sum = 0
+    for (number in numbers) {
+        sum += number
+    }
+    return sum
+}
+sumOf(42, 597, 12)
+
+fun makeIncrementer(): (Int) -> Int {
+    val addOne = fun(number: Int): Int {
+        return 1 + number
+    }
+    return addOne
+}
+val increment = makeIncrementer()
+increment(7)
+
+val numbers = listOf(20, 19, 7, 12)
+numbers.map { 3 * it }
+
+listOf(1, 5, 3, 12, 2).sorted()
+
+fun area(width: Int, height: Int) = width * height
+area(width = 2, height = 3)
+
+// This is also possible with named arguments
+area(2, height = 2)
+area(height = 3, width = 2)
+
+class Shape {
+    var numberOfSides = 0
+    fun simpleDescription() =
+        "A shape with $numberOfSides sides."
+}
+
+var shape = Shape()
+shape.numberOfSides = 7
+var shapeDescription = shape.simpleDescription()
+
+
+
+
+
+
+
+open class NamedShape(val name: String) {
+    var numberOfSides = 0
+
+    open fun simpleDescription() =
+        "A shape with $numberOfSides sides."
+}
+
+class Square(var sideLength: BigDecimal, name: String) :
+        NamedShape(name) {
+    init {
+        numberOfSides = 4
+    }
+
+    fun area() = sideLength.pow(2)
+
+    override fun simpleDescription() =
+        "A square with sides of length $sideLength."
+}
+
+val test = Square(BigDecimal("5.2"), "square")
+test.area()
+test.simpleDescription()
+
+var movieCount = 0
+var songCount = 0
+
+for (item in library) {
+    if (item is Movie) {
+        ++movieCount
+    } else if (item is Song) {
+        ++songCount
+    }
+}
+
+val nb = 42
+when (nb) {
+    in 0..7, 8, 9 -> println("single digit")
+    10 -> println("double digits")
+    in 11..99 -> println("double digits")
+    in 100..999 -> println("triple digits")
+    else -> println("four or more digits")
+}
+
+for (current in someObjects) {
+    if (current is Movie) {
+        println("Movie: '${current.name}', " +
+	    "dir. ${current.director}")
+    }
+}
+
+
+
+interface Nameable {
+    fun name(): String
+}
+
+fun f<T: Nameable>(x: T) {
+    println("Name is " + x.name())
+}
+
+val Double.km: Double get() = this * 1000
+val Double.m: Double get() = this
+val Double.cm: Double get() = this / 100
+val Double.mm: Double get() = this / 1000
+val Double.ft: Double get() = this / 3.28084
+
+val oneInch = 25.4.mm
+println("One inch is $oneInch meters")
+// prints "One inch is 0.0254 meters"
+val threeFeet = 3.0.ft
+println("Three feet is $threeFeet meters")
+// prints "Three feet is 0.914399970739201 meters"
+
+val data = ...
+data?.let {
+    ... // execute this block if not null
+}
+
+val list = listOf("a","a")
+list.distinct()

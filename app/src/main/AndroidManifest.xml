@@ -1,0 +1,689 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="joshuatee.wx"
+    android:versionCode="55010"
+    android:versionName="55010"
+    >
+
+ <uses-permission android:name="android.permission.INTERNET" />
+ <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+ <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+ <!-- <uses-permission android:name="android.permission.LOCATION_HARDWARE" /> -->
+
+ <!-- Needed only if your app targets Android 5.0 (API level 21) or higher.
+      Required starting Oct 15, 2016 -->
+ <!--<uses-feature android:name="android.hardware.location.gps" />-->
+
+ <!-- add for Telecine -->
+ <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+ <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+ <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
+ <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+ <uses-feature
+     android:glEsVersion="0x00020000"
+     android:required="true"
+     />
+
+ <!-- Some Chromebooks don't support touch. Although not essential,
+      it's a good idea to explicitly include this declaration. -->
+ <uses-feature android:name="android.hardware.touchscreen"
+     android:required="false" />
+
+ <!--android:icon="@drawable/wx"-->
+
+ <application
+     android:allowBackup="true"
+     android:icon="@mipmap/ic_launcher_new"
+     android:label="@string/app_name"
+     android:largeHeap="true"
+     android:theme="@style/MyCustomTheme_ActionBar"
+     android:name="MyApplication"
+     android:supportsRtl="false"
+     android:resizeableActivity="true"
+     android:usesCleartextTraffic="true"
+     >
+  <!-- <meta-data android:name="android.max_aspect" android:value="2.1" />-->
+
+  <activity
+      android:name="joshuatee.wx.StartupActivity"
+      android:label="@string/app_name"
+      android:launchMode="singleTop" >
+   <intent-filter>
+    <action android:name="android.intent.action.MAIN" />
+    <category android:name="android.intent.category.LAUNCHER" />
+    <action android:name="android.intent.action.CREATE_SHORTCUT"/>
+   </intent-filter>
+   <meta-data android:name="android.app.shortcuts"
+       android:resource="@xml/shortcuts" />
+  </activity>
+  <activity
+      android:name="joshuatee.wx.WX"
+      android:label="@string/app_name"
+      android:launchMode="singleTop"
+      android:theme="@style/MyCustomTheme_ActionBar"
+      >
+  </activity>
+  <activity
+      android:name="joshuatee.wx.CommonActionBarFragment"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsMainActivity"
+      android:label="@string/title_activity_settings_main"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsUIActivity"
+      android:label="@string/title_activity_settings_ui"
+      android:windowSoftInputMode="stateHidden"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsPrefIO"
+      android:label="@string/title_activity_settings_prefio"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.TextScreenActivity"
+      android:label="@string/title_activity_text_screen"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.SunMoonActivity"
+      android:label=""
+      android:parentActivityName="WX" >
+  </activity>
+
+  <service
+      android:name=".notifications.AlertService"
+      android:enabled="true" >
+  </service>
+  <service
+      android:name=".audio.DownloadPlaylistService"
+      android:enabled="true" >
+  </service>
+  <service
+      android:name=".util.CreateAnimatedGifService"
+      android:enabled="true" >
+  </service>
+  <service
+      android:name=".audio.StopAudioService"
+      android:enabled="true" >
+  </service>
+  <service
+      android:name=".audio.PlayAudioService"
+      android:enabled="true" >
+  </service>
+  <service
+      android:name=".audio.AudioServiceToggleState"
+      android:enabled="true" >
+  </service>
+  <service
+      android:name=".audio.AudioServiceBack"
+      android:enabled="true" >
+  </service>
+  <service
+      android:name=".audio.AudioServiceForward"
+      android:enabled="true" >
+  </service>
+
+  <receiver
+      android:name=".notifications.AlertReceiver"
+      android:permission="android.permission.INTERNET" />
+  <receiver android:name=".notifications.BootBroadcastReceiver" >
+   <intent-filter>
+    <action android:name="android.intent.action.BOOT_COMPLETED" />
+   </intent-filter>
+  </receiver>
+
+  <activity
+      android:name=".activitiesmisc.USAlertsDetailActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsLocationGenericActivity"
+      android:label="@string/title_activity_settings_location_generic"
+      android:windowSoftInputMode="stateHidden"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.HourlyActivity"
+      android:label="@string/title_activity_hourly"
+      android:hardwareAccelerated="false"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.SpottersActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.SpotterReportsActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".wpc.WPCImagesActivity"
+      android:label="@string/title_activity_hourly"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.OPCImagesActivity"
+      android:label="@string/title_activity_hourly"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.NWSObsSitesActivity"
+      android:label="NWS Observation Sites"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.ObservationsActivity"
+      android:label="Observations"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".vis.NWSGOESFullDiskActivity"
+      android:label="@string/title_activity_hourly"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".vis.GOES16Activity"
+      android:label=""
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsNotificationsActivity"
+      android:label="@string/title_activity_settings_notifications"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.WebscreenAB"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.WebscreenABState"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".spc.SPCMCDWShowActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".spc.SPCSWOStateGraphicsActivity"
+      android:parentActivityName="WX" >
+  </activity>
+
+  <activity
+      android:name=".spc.SPCMCDWShowSummaryActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".spc.SPCStormReportsActivity"
+      android:label="@string/title_activity_storm_reports"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".spc.LSRbyWFOActivity"
+      android:label=""
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".spc.SPCTstormOutlookActivity"
+      android:label="@string/title_activity_spctstorm_outlook"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".models.ModelsNSSLWRFActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".models.ModelsNCEPActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".models.ModelsESRLActivity"
+      android:label=""
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".models.ModelsSPCHRRRActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".models.ModelsSPCHREFActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".models.ModelsGLCFSActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".spc.SPCMesoActivity"
+      android:label=""
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".models.ModelsSPCSREFActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".models.ModelsWPCGEFSActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".spc.SPCSWOSummaryActivity"
+      android:label="@string/title_activity_spcswosummary"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.USWarningsWithRadarActivity"
+      android:label="@string/title_activity_uswarnings_with_radar_v3"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.USWarningsImpactActivity"
+      android:label=""
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".spc.SPCCompmapActivity"
+      android:label="@string/title_activity_spccompmap"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".spc.SPCFireOutlookActivity"
+      android:label="@string/title_activity_spcfire_outlook"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".wpc.WPCRainfallForecastActivity"
+      android:label="@string/title_activity_hpcrainfall_forecast"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".spc.SPCSoundingsActivity"
+      android:label="@string/title_activity_spcsoundings"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".radar.USNWSMosaicActivity"
+      android:label="@string/title_activity_nwsmosaic"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".wpc.WPCMPDShowSummaryActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.AFDActivity"
+      android:label=""
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".canada.CanadaTextActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".wpc.WPCTextProductsActivity"
+      android:label=""
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.SevereDashboardActivity"
+      android:label="@string/title_activity_severe_dashboard"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.AdhocForecastActivity"
+      android:label=""
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsLocationRecyclerViewActivity"
+      android:label="@string/title_activity_settings_location_list_view"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsSpotterNetwork"
+      android:label="@string/title_activity_settings_spotternetwork_view"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".audio.SettingsPlaylistActivity"
+      android:label="@string/title_activity_settings_playlist"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".audio.SettingsPlaylistAutodownloadActivity"
+      android:label="@string/title_activity_settings_playlist_autodownload"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.ImageShowActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".nhc.NHCImageShowActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.LightningActivity"
+      android:parentActivityName="WX" >
+  </activity>
+
+  <receiver android:name="joshuatee.wx.Widget" >
+   <intent-filter>
+    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   </intent-filter>
+
+   <meta-data
+       android:name="android.appwidget.provider"
+       android:resource="@xml/widget_info" />
+  </receiver>
+
+  <receiver android:name="joshuatee.wx.WidgetCC" >
+   <intent-filter>
+    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   </intent-filter>
+
+   <meta-data
+       android:name="android.appwidget.provider"
+       android:resource="@xml/widget_cc_info" />
+  </receiver>
+
+
+  <receiver android:name="joshuatee.wx.WidgetNexrad" >
+   <intent-filter>
+    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   </intent-filter>
+
+   <meta-data
+       android:name="android.appwidget.provider"
+       android:resource="@xml/widget_nexrad_info" />
+  </receiver>
+  <receiver android:name="joshuatee.wx.WidgetMosaics" >
+   <intent-filter>
+    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   </intent-filter>
+
+   <meta-data
+       android:name="android.appwidget.provider"
+       android:resource="@xml/widget_mosaics_info" />
+  </receiver>
+  <receiver android:name="joshuatee.wx.WidgetMosaicsRad" >
+   <intent-filter>
+    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   </intent-filter>
+
+   <meta-data
+       android:name="android.appwidget.provider"
+       android:resource="@xml/widget_mosaicsrad_info" />
+  </receiver>
+  <receiver android:name="joshuatee.wx.WidgetTextProd" >
+   <intent-filter>
+    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   </intent-filter>
+
+   <meta-data
+       android:name="android.appwidget.provider"
+       android:resource="@xml/widget_textprod_info" />
+  </receiver>
+  <receiver android:name="joshuatee.wx.WidgetTextHWO" >
+   <intent-filter>
+    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   </intent-filter>
+
+   <meta-data
+       android:name="android.appwidget.provider"
+       android:resource="@xml/widget_texthwo_info" />
+  </receiver>
+
+  <receiver android:name="joshuatee.wx.WidgetSPCMESO" >
+   <intent-filter>
+    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   </intent-filter>
+   <meta-data
+       android:name="android.appwidget.provider"
+       android:resource="@xml/widget_spcmeso_info" />
+  </receiver>
+
+  <receiver android:name="joshuatee.wx.WidgetSPCSWO" >
+   <intent-filter>
+    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   </intent-filter>
+   <meta-data
+       android:name="android.appwidget.provider"
+       android:resource="@xml/widget_spcswo_info" />
+  </receiver>
+
+  <receiver android:name="joshuatee.wx.WidgetWPCIMG" >
+   <intent-filter>
+    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   </intent-filter>
+   <meta-data
+       android:name="android.appwidget.provider"
+       android:resource="@xml/widget_wpcimg_info" />
+  </receiver>
+
+  <receiver android:name="joshuatee.wx.WidgetCONUSWV" >
+   <intent-filter>
+    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   </intent-filter>
+   <meta-data
+       android:name="android.appwidget.provider"
+       android:resource="@xml/widget_conuswv_info" />
+  </receiver>
+
+  <receiver android:name="joshuatee.wx.WidgetSTRPT" >
+   <intent-filter>
+    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   </intent-filter>
+   <meta-data
+       android:name="android.appwidget.provider"
+       android:resource="@xml/widget_strpt_info" />
+  </receiver>
+
+  <receiver android:name="joshuatee.wx.WidgetNHC" >
+   <intent-filter>
+    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   </intent-filter>
+   <meta-data
+       android:name="android.appwidget.provider"
+       android:resource="@xml/widget_nhc_info" />
+  </receiver>
+
+  <receiver android:name="joshuatee.wx.WidgetTextWPC" >
+   <intent-filter>
+    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   </intent-filter>
+   <meta-data
+       android:name="android.appwidget.provider"
+       android:resource="@xml/widget_textwpc_info" />
+  </receiver>
+
+  <activity
+      android:name=".settings.SettingsWidgetsActivity"
+      android:label="@string/title_activity_settings_widgets"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".canada.CanadaRadarActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsLocationCanadaActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsLocationCanadaMapActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".canada.CanadaHourlyActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".canada.CanadaAlertsActivity"
+      android:label="@string/title_activity_canada_alerts"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".nhc.NHCActivity"
+      android:label="@string/title_activity_nhc"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".nhc.NHCStormActivity"
+      android:label="@string/title_activity_nhc"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".vis.USNWSGOESActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsColorPickerActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsColorsActivity"
+      android:label="@string/title_activity_settings_colors"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsRadarActivity"
+      android:label="Radar Settings"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".radar.WXGLRadarActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".radar.WXGLRadarActivityMultiPane"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".spc.SPCSWOActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.FavAddActivity"
+      android:label=""
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.FavRemoveActivity"
+      android:label="@string/title_activity_sndadd_fav"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsColorPaletteActivity"
+      android:label=""
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsColorPaletteEditor"
+      android:label=""
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsHomeScreenActivity"
+      android:label="Manage Home Screen"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name="joshuatee.wx.ModelInterfaceActivity"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".activitiesmisc.WebscreenABModels"
+      android:parentActivityName="ModelInterfaceActivity" >
+  </activity>
+  <activity
+      android:name=".audio.VoiceCommandActivity"
+      android:theme="@style/Theme.Transparent" >
+  </activity>
+  <provider
+      android:name=".util.FileProvider"
+      android:authorities="joshuatee.wx.fileprovider"
+      android:exported="false"
+      android:grantUriPermissions="true">
+   <meta-data
+       android:name="android.support.FILE_PROVIDER_PATHS"
+       android:resource="@xml/filepaths" />
+  </provider>
+
+  <!-- Telecine -->
+  <activity
+      android:name=".telecine.SettingsTelecineActivity"
+      android:label="Screen Recorder Settings"
+      android:parentActivityName="WX"
+      android:taskAffinity=""
+      android:exported="true"
+      />
+
+  <service android:name="joshuatee.wx.telecine.TelecineService"/>
+
+  <receiver android:name="joshuatee.wx.telecine.RecordingSession$DeleteRecordingBroadcastReceiver"/>
+
+  <!-- FingerDraw -->
+  <activity
+      android:name="joshuatee.wx.fingerdraw.FingerDrawActivity"
+      android:theme="@style/Theme.Telecine.Transparent"
+      android:parentActivityName="WX"
+      />
+
+
+
+
+
+  <!-- The widget provider -->
+  <receiver android:name="WeatherWidgetProvider">
+   <intent-filter>
+    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+   </intent-filter>
+   <!-- This specifies the widget provider info -->
+   <meta-data android:name="android.appwidget.provider"
+       android:resource="@xml/widget_7day_scoll" />
+  </receiver>
+
+  <!-- The service serving the RemoteViews to the collection widget -->
+  <service android:name="WeatherWidgetService"
+      android:permission="android.permission.BIND_REMOTEVIEWS"
+      android:exported="false"
+      android:grantUriPermissions="true" />
+
+  <!-- The content provider serving the (fake) weather data -->
+  <provider android:name="WeatherDataProvider"
+      android:exported="true"
+      android:authorities="joshuatee.wx.weatherlistwidget.provider" />
+
+  <service
+      android:name="joshuatee.wx.notifications.WXJobService"
+      android:permission="android.permission.BIND_JOB_SERVICE"
+      android:exported="true"/>
+
+
+ </application>
+</manifest>
