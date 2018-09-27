@@ -1,0 +1,61 @@
+<!-- 
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item android:id="@+id/action_cloud"
+          android:title="@string/action_cloud"
+          android:icon="@drawable/ic_cloud_24dp"
+          app:showAsAction="always"
+        />
+    <item android:id="@+id/action_radar"
+          android:title="@string/action_radar"
+          android:icon="@drawable/ic_flash_on_24dp"
+          app:showAsAction="always"
+        />
+    <item android:id="@+id/action_afd"
+          android:title="Add afd"
+          android:icon="@drawable/ic_info_outline_24dp"
+          app:showAsAction="always"
+        />
+    <item android:id="@+id/action_img"
+          android:title="Add img"
+          android:icon="@drawable/ic_public_24dp"
+          app:showAsAction="always"
+        />
+    <item android:id="@+id/action_delete"
+          android:title="@string/label_mode_delete"
+          android:icon="@drawable/ic_delete_24dp"
+          app:showAsAction="always"
+        />
+    <item android:id="@+id/action_help"
+          android:title="@string/help_menu_item"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_reset"
+          android:title="Set to default"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_reset_ca"
+          android:title="Set to default (Canada)"
+          app:showAsAction="never"
+        />
+</menu>

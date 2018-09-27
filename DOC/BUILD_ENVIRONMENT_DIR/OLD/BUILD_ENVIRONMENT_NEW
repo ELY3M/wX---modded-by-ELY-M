@@ -1,0 +1,70 @@
+New Environment
+-----------------------
+MS .net 3.51
+VMWARE Player 12
+Linux Mint 17.2
+
+follow process below for adding 30GB /dev/sdb and creating datavg
+
+idisk -l shows as sdc
+
+pvcreate /dev/sdc
+vgcreate datavg /dev/sdc
+lvcreate -l 100%FREE -n lvol1 datavg 
+mkdir /data
+mkfs.ext4 /dev/datavg/lvol1
+tune2fs -c 0 /dev/datavg/lvol1
+tune2fs -i 0 /dev/datavg/lvol1
+mount /dev/datavg/lvol1 /data
+mkdir /data/josh
+chown josh:josh /data/josh
+vi /etc/fstab
+shutdown -r now
+
+#sudo apt-get -y install open-vm-tools
+install vmware tools
+
+apt-get -y install lib32stdc++6 lib32z1
+
+http://developer.android.com/sdk/index.html
+https://dl.google.com/dl/android/studio/ide-zips/1.3.2.0/android-studio-ide-141.2178183-linux.zip
+
+http://developer.android.com/ndk/downloads/index.html
+http://dl.google.com/android/ndk/android-ndk-r10e-linux-x86_64.bin
+
+http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+http://download.oracle.com/otn-pub/java/jdk/8u60-b27/jdk-8u60-linux-x64.tar.gz
+
+
+mv Downloads/jdk-8u60-linux-x64.tar.gz .
+tar zxf jdk-8u60-linux-x64.tar.gz
+
+
+mv Downloads/android-studio-ide-141.2178183-linux.zip .
+ unzip android-studio-ide-141.2178183-linux.zip
+ export JAVA_HOME=/home/josh/jdk1.8.0_60
+
+android-studio/bin/studio.sh
+ ( take the defaults, while this is going on proceed below )
+
+
+mv Downloads/android-ndk-r10e-linux-x86_64.bin .
+./android-studio/^C
+chmod +x android-ndk-r10e-linux-x86_64.bin
+./android-ndk-r10e-linux-x86_64.bin
+
+mkdir StudioProjects
+cp Downloads/wX3.7003.tar StudioProjects/
+cd StudioProjects/
+tar xf wX3.7003.tar
+
+
+
+
+
+Migimport existing project
+at first you'll need to setup API 23
+once File -> Project Structure is not greyed out, open and select the Oracle JDK in $HOMErate from existing environment.
+
+
+

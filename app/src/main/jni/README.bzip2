@@ -1,0 +1,12 @@
+The following files are part of the bzip2 distribution and the 
+licensing can be found in DOC/JNI_LEGACY/bzip2.tar.bz2 ( README )
+
+blocksort.c
+bzlib.c
+bzlib.h
+bzlib_private.h
+compress.c
+crctable.c
+decompress.c
+huffman.c
+randtable.c

@@ -1,0 +1,67 @@
+<!-- 
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item android:id="@+id/action_read_aloud"
+          android:title="@string/read_aloud"
+          android:icon="@drawable/ic_play_arrow_24dp"
+          app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_stop"
+          android:title="@string/stop_audio"
+          android:icon="@drawable/ic_stop_24dp"
+          app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_playlist"
+          android:title="@string/label_playlist"
+          android:icon="@drawable/ic_queue_24dp"
+          app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_test"
+          android:title="@string/label_share"
+          android:icon="@drawable/ic_share_24dp"
+          app:showAsAction="always"
+        >
+        <menu>
+            <item android:id="@+id/action_share_all"
+                  android:title="@string/label_all"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_share_text"
+                  android:title="@string/label_text"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_share_image"
+                  android:title="@string/label_image"
+                  app:showAsAction="never"  />
+        </menu>
+    </item>
+
+    <item android:id="@+id/action_lsrbywfo"
+          android:title="All recent LSR by WFO"
+          app:showAsAction="never"
+        />
+
+</menu>
+
+

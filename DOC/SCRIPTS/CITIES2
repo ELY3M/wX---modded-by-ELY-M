@@ -1,0 +1,26 @@
+https://www.census.gov/geo/maps-data/data/gazetteer2010.html
+
+Column 1	USPS	United States Postal Service State Abbreviation
+Column 2	GEOID	Geographic Identifier - fully concatenated geographic code (State FIPS and Place FIPS)
+Column 3	ANSICODE	American National Standards Insititute code
+Column 4	NAME	Name
+Column 5	LSAD	Legal/Statistical area descriptor.
+Column 6	FUNCSTAT	Functional status of entity.
+Column 7	POP10	2010 Census population count.
+Column 8	HU10	2010 Census housing unit count.
+Column 9	ALAND	Land Area (square meters) - Created for statistical purposes only.
+Column 10	AWATER	Water Area (square meters) - Created for statistical purposes only.
+Column 11	ALAND_SQMI	Land Area (square miles) - Created for statistical purposes only.
+Column 12	AWATER_SQMI	Water Area (square miles) - Created for statistical purposes only.
+Column 13	INTPTLAT	Latitude (decimal degrees) First character is blank or "-" denoting North or South latitude respectively
+Column 14	INTPTLONG	Longitude (decimal degrees) First character is blank or "-" denoting East or West longitude respectively.
+
+need city,lat,lon,pop sorted by pop
+
+
+dos2unix Gaz_places_national.txt
+awk -F'\t' '{print $4","$13","$14","$7}' Gaz_places_national.txt | sed 's/ *,/,/g' | sed 's/ city,/,/' \
+        | sed 's/ CDP,/,/' | sed 's/ borough,/,/' | sed 's/ town,/,/' | sed 's/ village,/,/' \
+       | sed 's/ comunidad,/,/' | sed 's/ urbana,/,/'  | sed 's/ zona,/,/'  | sort -r -n -t, -k4 > cityall.txt
+
+put in place and review

@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<resources>
+
+    <string name="label_pin">PIN</string>
+
+    <string name="radar_shortcut">Radar</string>
+    <string name="spcmesoanalysis_shortcut">SPC Mesoanalysis</string>
+    <string name="ncepModels_shortcut">NCEP Models</string>
+    <string name="spchref_shortcut">SPC HREF</string>
+    <string name="nhc_shortcut">NHC</string>
+    <string name="severeDashboard_shortcut">Severe Dashboard</string>
+
+    <string name="read_aloud">Read Aloud</string>
+    <string name="stop_audio">Stop Audio</string>
+    <string name="menu_overlays">Overlays</string>
+    <string name="menu_mesoanalysis">Mesoanalysis</string>
+    <string name="menu_mosaics">Mosaics</string>
+    <string name="menu_tools">Tools</string>
+    <string name="menu_clearall">Clear all</string>
+    <string name="menu_zoomout">Zoom out</string>
+    <string name="menu_stopanimation">Stop animation</string>
+    <string name="app_name">wX</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_radar">Radar</string>
+    <string name="action_alert">Alerts</string>
+    <string name="action_about">About</string>
+    <string name="action_cloud">Visible</string>
+    <string name="action_forecast">Hourly</string>
+    <string name="action_afd">AFD</string>
+    <string name="label_radar_markers">Help - radar markers</string>
+    <string name="title_activity_settings_main">Settings</string>
+    <string name="title_activity_settings_ui">User Interface Settings</string>
+    <string name="title_activity_settings_prefio">Settings Export/Import</string>
+    <string name="title_activity_text_screen">wX</string>
+    <string name="about_wx">wX is an efficient and configurable method to access weather content from the NWS,
+        Environment Cananda, NSSL WRF, and Blitzortung.org.
+        Additional software and tools are used from Telecine, GraphView,
+        bzip2, TouchImageView, OkHttp, ImageMap, HoloColorPicker, and OpenStreetMaps.
+        Software is provided \"as is\". Use at your own risk. Use for educational purposes and non-commercial purposes only.
+        Do not use for operational purposes.  &#169; 2013&#8211;2018 joshua.tee@gmail.com . Please report bugs or suggestions via email to me as opposed to app store reviews.
+        wX is licensed under the GNU GPLv3 license. For more information on the license please go here:
+    http://www.gnu.org/licenses/gpl-3.0.en.html</string>
+    <string name="title_activity_settings_location_generic">Location Settings</string>
+    <string name="title_activity_hourly">Hourly Forecast</string>
+    <string name="title_activity_settings_notifications">Notifications</string>
+    <string name="title_activity_storm_reports">() Storm Reports - </string>
+    <string name="title_activity_spctstorm_outlook">Thunderstorm Outlook</string>
+    <string name="title_activity_spcswosummary">Convective Outlook Summary</string>
+    <string name="label_br">Base Reflectivity</string>
+    <string name="label_bv">Base Velocity</string>
+    <string name="label_srm">Storm Relative Motion Velocity</string>
+    <string name="label_eet">Echo Tops</string>
+    <string name="label_vil">Vertically Integrated Liquid</string>
+    <string name="label_dsp">Digital Storm Total Accumulation</string>
+    <string name="label_daa">Digital Accumulation Array</string>
+    <string name="label_h0c">Hydrometeor Classification</string>
+
+    <string name="label_l2ref">SuperRes Reflectivity</string>
+    <string name="label_l2vel">SuperRes Velocity</string>
+
+
+    <string name="label_a3">Animate 3 frames</string>
+    <string name="label_a6">Animate 6 frames</string>
+    <string name="label_a12">Animate 12 frames</string>
+    <string name="label_a15">Animate 15 frames</string>
+    <string name="label_a18">Animate 18 frames</string>
+    <string name="label_a36">Animate 36 frames</string>
+    <string name="label_a72">Animate 72 frames</string>
+    <string name="label_a144">Animate 144 frames</string>
+    <string name="label_a24">Animate 24 frames</string>
+    <string name="label_a48">Animate 48 frames</string>
+    <string name="label_a60">Animate 60 frames</string>
+    <string name="label_a84">Animate 84 frames</string>
+    <string name="label_a96">Animate 96 frames</string>
+    <string name="label_a">Animate frames</string>
+    <string name="label_ir">Infrared</string>
+    <string name="label_wv">Water Vapor</string>
+    <string name="label_vis">Visible</string>
+    <string name="label_rid_map">Map</string>
+    <string name="label_toggle_favorite">Toggle favorite</string>
+    <string name="title_activity_uswarnings_with_radar_v3">US Alerts</string>
+    <string name="title_activity_spccompmap">Compmap</string>
+    <string name="drawer_open">Open Drawer</string>
+    <string name="drawer_close">Close Drawer</string>
+    <string name="label_t1">Tilt 1</string>
+    <string name="label_t2">Tilt 2</string>
+    <string name="label_t3">Tilt 3</string>
+    <string name="label_t4">Tilt 4</string>
+    <string name="label_change_tilt">Change Tilt</string>
+    <string name="label_animate">Animate</string>
+    <string name="label_other">Level 3</string>
+    <string name="label_l2">Level 2</string>
+    <string name="label_n0x">Differential Reflectivity</string>
+    <string name="label_n0c">Correlation Coefficient</string>
+    <string name="label_n0k">Specific Differential Phase</string>
+    <string name="label_settings_color_palette_94">Color Palette - Reflectivity</string>
+    <string name="label_settings_color_palette_99">Color Palette - Velocity</string>
+    <string name="label_nvw">VAD wind profile</string>
+    <string name="title_activity_spcfire_outlook">SPC Fire Weather Outlook</string>
+    <string name="title_activity_hpcrainfall_forecast">WPC Excessive Rainfall Forecast</string>
+    <string name="title_activity_spcsoundings">Sounding</string>
+    <string name="title_activity_nwsmosaic">NWS Mosaics</string>
+    <string name="title_activity_severe_dashboard">Severe Dashboard</string>
+    <string name="title_activity_settings_location_list_view">Locations</string>
+    <string name="title_activity_settings_spotternetwork_view">Spotter Network</string>
+    <string name="title_activity_settings_widgets">Widgets</string>
+    <string name="title_activity_canada_alerts">Alerts - Canada</string>
+    <string name="title_activity_nhc">NHC</string>
+    <string name="title_activity_settings_colors">Colors</string>
+    <string name="title_activity_sndadd_fav">Add SND</string>
+    <string name="title_activity_spcmesoadd_fav">Add SPCMESO</string>
+    <string name="title_activity_spcmesoremove_fav">Modify SPCMESO</string>
+    <string name="label_playlist">Add to PlayList</string>
+    <string name="label_share">Share</string>
+    <string name="label_share_and_tools">Share/Drawing Tools</string>
+    <string name="label_tdwr_sites">TDWR Sites</string>
+    <string name="title_activity_settings_playlist">PlayList</string>
+    <string name="title_activity_settings_playlist_autodownload">PlayList Autodownload</string>
+    <string name="back_arrow">Back</string>
+    <string name="forward_arrow">Forward</string>
+    <string name="animate_icon">Animate</string>
+    <string name="uswarn_start_time">Start:&#160;%1$s</string>
+    <string name="uswarn_end_time">End:&#160;&#160;&#160;%1$s</string>
+    <string name="wpc_mpd_noactive">No active MPDs</string>
+    <string name="settings_loc_generic_ca_x">CANADA:%1$s</string>
+    <string name="help_menu_item">Help</string>
+    <string name="main_screen_ca_disclaimor">Data for Canada forecasts and radar provided by http://weather.gc.ca/canada_e.html. Touch to open external browser to this site.</string>
+    <string name="menu_overlay_counties">Counties</string>
+    <string name="menu_overlay_latlon">Lat/Lon</string>
+    <string name="menu_overlay_roads">Roads</string>
+    <string name="menu_overlay_fronts">Fronts</string>
+    <string name="menu_regions">Regions</string>
+    <string name="action_radar_site_status_l3">Level 3 Radar Status</string>
+    <string name="action_radar_site_status_l2">Level 2 Radar Status</string>
+    <string name="notif_add">Add Notification</string>
+    <string name="notif_remove">Remove Notification</string>
+    <string name="label_all">All</string>
+    <string name="label_text">Text</string>
+    <string name="label_image">Image</string>
+    <string name="label_images">Images</string>
+    <string name="label_url">URL</string>
+    <string name="label_blank"> </string>
+
+    <string name="label_time_period">Time Period</string>
+    <string name="label_min_15">15 min</string>
+    <string name="label_hr_2">2 hrs</string>
+    <string name="label_hr_12">12 hrs</string>
+    <string name="label_hr_24">24 hrs</string>
+    <string name="label_hr_48">48 hrs</string>
+
+    <string name="label_layers">Layers</string>
+    <string name="label_cwa">CWA Boundaries</string>
+
+    <string name="label_cities">Cities</string>
+    <string name="label_counties">Counties</string>
+    <string name="label_population">Population</string>
+
+    <string name="label_settings">Settings</string>
+    <string name="label_help">Help</string>
+    <string name="label_about_scan">About Scan</string>
+
+    <string name="label_clear_all">Clear all</string>
+    <string name="label_reset">Reset</string>
+    <string name="label_reset_ca">Reset (Canada)</string>
+    <string name="label_mode_delete">Delete mode</string>
+    <string name="label_delete_location">Delete location</string>
+    <string name="label_speak_location">Speak location</string>
+    <string name="label_ca_via_map">Canada via map</string>
+    <string name="label_show_location_on_map">Show Current Location on Map</string>
+    <string name="label_radar_jellybean_drawtools">Draw/Distance Tool</string>
+
+    <!-- telecine -->
+    <string name="clear">Clear</string>
+    <string name="record">Record</string>
+    <string name="countdown_one">1…</string>
+    <string name="countdown_two">2…</string>
+    <string name="countdown_three">3…</string>
+    <string name="notification_captured_title">wX screen recording captured.</string>
+    <string name="notification_captured_subtitle">Touch to view your screen recording.</string>
+    <string name="notification_captured_share">Share</string>
+    <string name="notification_captured_delete">Delete</string>
+    <string name="notification_recording_title">Recording screen.</string>
+    <string name="notification_recording_subtitle">Touch the clock area to stop recording.</string>
+
+    <array name="countdown">
+        <item>@string/countdown_three</item>
+        <item>@string/countdown_two</item>
+        <item>@string/countdown_one</item>
+    </array>
+
+    <string name="notification_screenshot_captured_title">wX screenshot captured.</string>
+    <string name="notification_screenshot_captured_subtitle">Touch to view your screenshot.</string>
+
+    <!-- For google weatherlist widget demo -->
+    <string name="toast_format_string">%1$s!</string>
+    <string name="item_format_string">%2$s</string>
+    <string name="header_format_string">%1$d\u00B0 in %2$s</string>
+
+
+</resources>

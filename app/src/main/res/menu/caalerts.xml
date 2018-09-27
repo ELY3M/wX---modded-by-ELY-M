@@ -1,0 +1,90 @@
+<!-- 
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item android:id="@+id/action_ca"
+          android:title="@string/label_CA"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_ab"
+          android:title="@string/label_CA_AB"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_bc"
+          android:title="@string/label_CA_BC"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_mb"
+          android:title="@string/label_CA_MB"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_nb"
+          android:title="@string/label_CA_NB"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_nl"
+          android:title="@string/label_CA_NL"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_ns"
+          android:title="@string/label_CA_NS"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_nt"
+          android:title="@string/label_CA_NT"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_nu"
+          android:title="@string/label_CA_NU"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_son"
+          android:title="@string/label_CA_ON_S"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_non"
+          android:title="@string/label_CA_ON_N"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_pei"
+          android:title="@string/label_CA_PE"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_sqc"
+          android:title="@string/label_CA_QC_S"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_nqc"
+          android:title="@string/label_CA_QC_N"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_sk"
+          android:title="@string/label_CA_SK"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_yt"
+          android:title="@string/label_CA_YT"
+          app:showAsAction="never"
+        />
+
+</menu>
+

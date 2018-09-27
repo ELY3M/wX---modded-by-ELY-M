@@ -1,0 +1,2 @@
+export JAVA_HOME=~/jdk1.8.0_60
+export PATH=$JAVA_HOME/bin:$PATH

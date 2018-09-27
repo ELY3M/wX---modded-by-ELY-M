@@ -1,0 +1,57 @@
+<!-- 
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:scrollbars="none"
+            android:id="@+id/sv"
+    >
+
+    <LinearLayout
+        android:id="@+id/ll"
+        android:stretchColumns="*"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/padding_ll"
+        >
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv1"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <Spinner
+                android:id="@+id/spinner1"
+                android:layout_marginTop="5dip"
+                android:layout_marginBottom="5dip"
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_marginRight="@dimen/padding"
+                android:textSize="19sp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                app:theme="@style/SpinnerThemeOverlay"
+                />
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,185 @@
+<!-- 
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+<!-- Jul 22 2016 change sp to dp for text size -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/layout"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_margin="0dip"
+              android:padding="0dip"
+              android:background="@android:color/transparent"
+    >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="17dp"
+        android:gravity="start"
+        android:background="@android:color/transparent"
+        >
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="1dip"
+        android:padding="0dip"
+        >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="1dip"
+            android:padding="0dip"
+            >
+
+            <!-- image was 90 / 50 -->
+
+            <ImageView
+                android:id="@+id/iv"
+                android:maxHeight="80dip"
+                android:maxWidth="80dip"
+                android:minHeight="40dip"
+                android:minWidth="40dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:contentDescription="Conditions icon"
+                android:padding="2dip"
+                />
+
+            <TextView
+                android:id="@+id/updatetime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="10sp"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_margin="@dimen/padding_widget"
+            >
+
+            <TextView
+                android:id="@+id/bigtemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="23dp"
+                />
+            <TextView
+                android:id="@+id/bigdewpt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textSize="16sp"
+                />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/wind_barb"
+            android:maxHeight="82dp"
+            android:maxWidth="82dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="16dip"
+            android:contentDescription="Wind Direction"
+            />
+
+        <LinearLayout
+            android:id="@+id/layout3"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_margin="0dp"
+            android:padding="0dp"
+            >
+            <!--android:layout_margin="@dimen/padding_widget"-->
+
+
+            <TextView
+                android:id="@+id/wind"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="16sp"
+                />
+
+            <TextView
+                android:id="@+id/pressure"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="16sp"
+                />
+
+            <TextView
+                android:id="@+id/visibility"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:textSize="16sp"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/text4"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        />
+    <!-- style="@android:style/TextAppearance.Small" -->
+</LinearLayout>
+
+
+
+
+
+
+
+
+
+
+

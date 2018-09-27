@@ -1,0 +1,24 @@
+
+https://www.androidpit.com/how-to-disable-doze-android-marshmallow
+
+Doze mode is a great power-saving feature introduced in Android 6.0 Marshmallow. It detects when your phone is idle for extended periods of time before shutting down background processes to save battery life. But you might not want Doze to shut off app activity in every scenario. Read on to find out how to disable Doze mode for some Android Marshmallow apps.
+
+Doze is pretty cool: it activates when your phone is left idle for a period of time, while unplugged and with the screen off. It will stop some CPU and network activity operating in the background for some Android apps, thus saving battery. 
+
+You might not like it in every scenario though. Doze mode can interrupt the background activity of your apps in order to make these battery savings. So if you don't want this to happen to certain apps, you can disable Doze mode to keep these apps running. Follow the steps below to switch off the battery saving functionality of Doze.
+How to disable doze in Android 6.0 Marshmallow
+
+1. Head over to your phone's Settings.
+
+2. Select Battery from the device list and select Battery optimization from the menu icon at the top-right of the screen.
+
+3. Select All apps from the drop-down menu in the center of the display. Now you'll see all the apps that are Doze-enabled.
+nexus 6 doze mode
+Disabling Doze for particular apps isn't hard. / © ANDROIDPIT
+
+4. You can now select any apps for which you'd like to disable Doze mode.
+
+5. Select Don't optimize and then Done. Now you're set up.
+
+Now the apps you've selected won't have Doze optimizations, just as you'd prefer. Let us know in the comments section if you see changes to battery life or app activity as a result of Doze, and if you think Doze is a good addition to Marshmallow.
+

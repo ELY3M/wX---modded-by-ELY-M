@@ -1,0 +1,79 @@
+<!-- 
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <item android:id="@+id/action_test"
+          android:title="@string/label_animate"
+          android:icon="@drawable/ic_play_arrow_24dp"
+          app:showAsAction="always"   >
+        <menu>
+            <item android:id="@+id/action_a6"
+                  android:title="@string/label_a6"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_a12"
+                  android:title="@string/label_a12"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_a15"
+                  android:title="@string/label_a15"
+                  app:showAsAction="never"  />
+        </menu>
+    </item>
+
+    <item android:id="@+id/action_vis"
+          android:icon="@drawable/ic_cloud_24dp"
+          android:title="@string/label_vis"
+          app:showAsAction="always"  />
+    <item android:id="@+id/action_share"
+          android:title="@string/label_share"
+          android:icon="@drawable/ic_share_24dp"
+          app:showAsAction="always"  />
+    <item android:id="@+id/action_wv"
+          android:title="@string/label_wv"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_ir"
+          android:title="@string/label_ir_unenh"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_swir"
+          android:title="@string/label_ir_swir"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_avn"
+          android:title="@string/label_ir_avn"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_bd"
+          android:title="@string/label_ir_bd"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_jsl"
+          android:title="@string/label_ir_jsl"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_rgb"
+          android:title="@string/label_ir_rgb"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_ft"
+          android:title="@string/label_ir_ft"
+          app:showAsAction="never"  />
+    <item android:id="@+id/action_rb"
+          android:title="@string/label_ir_rb"
+          app:showAsAction="never"  />
+</menu>
+
+

@@ -1,0 +1,3 @@
+TDWR: http://wdtb.noaa.gov/buildTraining/TDWR/TDWR_SPG_ICD_v43.pdf
+http://www.roc.noaa.gov/WSR88D/BuildInfo/Files.aspx
+http://www.roc.noaa.gov/wsr88d/PublicDocs/ICDs/2620010E.pdf

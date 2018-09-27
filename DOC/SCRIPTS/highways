@@ -1,0 +1,36 @@
+  sudo  apt-get install xml-twig-tools
+
+https://catalog.data.gov/dataset/usgs-small-scale-dataset-major-roads-of-the-united-states-199911-shapefile
+
+tr  '\n' ' ' < roadtrl020.kml > roadtrl020_oneline.kml
+sed  's/<\/Placemark>/<\/Placemark>\n/g' roadtrl020_oneline.kml > roadtrl020_multline.kml 
+
+#grep ">Principal Highway<" roadtrl020_multline.kml > roadtrl020_principtalHw.kml
+#grep -v ">Principal Highway<" roadtrl020_multline.kml > roadtrl020_allElse.kml
+
+egrep -e ">Limited Access Highway.*?<" roadtrl020_multline.kml > roadtrl020_limitHw.kml
+egrep -e ">Principal Highway.*?<" roadtrl020_multline.kml > roadtrl020_prinHw.kml
+egrep -e ">Other Through Highway.*?<" roadtrl020_multline.kml > roadtrl020_otherThrHw.kml
+egrep -e ">Other Highway.*?<" roadtrl020_multline.kml > roadtrl020_otherHw.kml
+
+tail -1  roadtrl020_multline.kml >> roadtrl020_limitHw.kml
+tail -1  roadtrl020_multline.kml >> roadtrl020_prinHw.kml
+tail -1  roadtrl020_multline.kml >> roadtrl020_otherThrHw.kml
+tail -1  roadtrl020_multline.kml >> roadtrl020_otherHw.kml
+
+# <?xml version="1.0" encoding="utf-8" ?> <kml xmlns="http://www.opengis.net/kml/2.2"> <Document><Folder><name>roadtrl020</name>
+vi roadtrl020_limitHw.kml
+vi roadtrl020_prinHw.kml 
+vi roadtrl020_otherThrHw.kml
+vi roadtrl020_otherHw.kml
+
+
+limited and principal are the 1st two
+
+
+
+#egrep -v -e ">Limited Access Highway.*?<" roadtrl020_multline.kml > roadtrl020_allElse.kml
+
+
+tail -1 roadtrl020_allElse.kml >> roadtrl020_limitHw.kml
+vi roadtrl020_limitHw.kml # grab header from

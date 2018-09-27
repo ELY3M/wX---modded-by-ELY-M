@@ -1,0 +1,5 @@
+Native code compilation is handled with gradle task definition but to do this manually:
+
+cd /home/josh/StudioProjects/wX/app/src/main/jni
+~/bin/android-ndk-r12b/ndk-build 
+

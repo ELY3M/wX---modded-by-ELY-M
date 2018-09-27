@@ -1,0 +1,23 @@
+APP_NAME=wX
+cd ~/StudioProjects/$APP_NAME
+cp app/build/outputs/apk/app-release.apk $APP_NAME.apk 
+ls -l  $APP_NAME.apk
+mv .gradle ..
+cd app
+cd build
+rm -rf tmp
+rm -rf generated
+mv intermediates  ~/
+cd outputs/apk/
+rm *apk
+cd ~/StudioProjects/wX/build
+rm -rf generated
+cd ~/StudioProjects/
+ver=`grep versionName $APP_NAME/app/src/main/AndroidManifest.xml |awk -F'"'  '{print $2}'`
+#tar cf wX${ver}.tar wX
+zip -r $APP_NAME${ver}.zip $APP_NAME  > /dev/null
+ls -l $APP_NAME${ver}.zip 
+cd $APP_NAME
+mv ../.gradle .
+cd app/build
+mv ~/intermediates .

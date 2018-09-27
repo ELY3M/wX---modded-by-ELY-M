@@ -1,0 +1,147 @@
+<!-- 
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_animateMenu"
+        android:icon="@drawable/ic_play_arrow_24dp"
+        app:showAsAction="always"
+        android:title="@string/animate_icon">
+        <menu>
+            <item android:id="@+id/action_a24"
+                android:title="@string/label_a24"
+                app:showAsAction="never"  />
+            <item android:id="@+id/action_a36"
+                android:title="@string/label_a36"
+                app:showAsAction="never"  />
+            <item android:id="@+id/action_a48"
+                android:title="@string/label_a48"
+                app:showAsAction="never"  />
+            <item android:id="@+id/action_a60"
+                android:title="@string/label_a60"
+                app:showAsAction="never"  />
+            <item android:id="@+id/action_a72"
+                android:title="@string/label_a72"
+                app:showAsAction="never"  />
+            <item android:id="@+id/action_a84"
+                android:title="@string/label_a84"
+                app:showAsAction="never"  />
+            <item android:id="@+id/action_a96"
+                android:title="@string/label_a96"
+                app:showAsAction="never"  />
+        </menu>
+    </item>
+
+
+    <item android:id="@+id/action_share"
+        android:title="@string/label_share"
+        android:icon="@drawable/ic_share_24dp"
+        app:showAsAction="always"
+        />
+    <item android:id="@+id/action_pin"
+        android:title="@string/label_pin"
+        app:showAsAction="always"
+        />
+    <item android:id="@+id/action_FD"
+        android:title="Full Disk"
+        app:showAsAction="never"
+        />
+    <item android:id="@+id/action_CONUS"
+        android:title="US"
+        app:showAsAction="never"
+        />
+
+    <item android:id="@+id/action_regionalSectors"
+        android:title="Regional Views"
+        app:showAsAction="never">
+        <menu>
+            <item android:id="@+id/action_pnw"
+                android:title="Pacific Northwest"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/action_nr"
+                android:title="Northern Rockies"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/action_umv"
+                android:title="Upper Mississippi Valley"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/action_cgl"
+                android:title="Central Great Lakes"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/action_ne"
+                android:title="Northeast"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/action_psw"
+                android:title="Pacific Southwest"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/action_sr"
+                android:title="Southern Rockies"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/action_sp"
+                android:title="Southern Plains"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/action_smv"
+                android:title="Southern Mississippi Valley"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/action_se"
+                android:title="Southeast"
+                app:showAsAction="never"
+                />
+        </menu>
+    </item>
+
+    <item android:id="@+id/action_ca"
+        android:title="Caribbean / Atlantic"
+        app:showAsAction="never">
+        <menu>
+            <item android:id="@+id/action_gm"
+                android:title="Gulf of Mexico"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/action_car"
+                android:title="Caribbean"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/action_eus"
+                android:title="U.S. Atlantic Coast"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/action_pr"
+                android:title="Puerto Rico"
+                app:showAsAction="never"
+                />
+            <item android:id="@+id/action_taw"
+                android:title="Tropical Atlantic: wide view"
+                app:showAsAction="never"
+                />
+        </menu>
+    </item>
+</menu>
+
+

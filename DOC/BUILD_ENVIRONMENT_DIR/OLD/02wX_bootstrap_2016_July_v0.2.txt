@@ -1,0 +1,81 @@
+
+#
+# setup a fresh build environment under Linux Mint 17.3 for wX
+# 2016 July
+#
+# Linux Mint 17.3 install is mostly defaults, choose LVM and use 50GB at least for disk
+#
+#Download latest wX tarball and android.jks from box.com
+
+mkdir ~/StudioProjects && cd  ~/StudioProjects 
+mv ~/Downloads/wX*zip .
+mv ~/Downloads/android.jks .
+unzip wX*zip
+cd
+
+# https://developer.android.com/studio/index.html#downloads
+wget https://dl.google.com/dl/android/studio/ide-zips/2.1.2.0/android-studio-ide-143.2915827-linux.zip
+unzip android-studio-ide-143.2915827-linux.zip
+
+sudo apt-get install openjdk-8-jdk
+
+# install scripts
+mkdir ~/bin
+vi ~/bin/run
+----
+#!/bin/bash
+export NDK_TOOLCHAIN_VERSION=clang 
+$HOME/android-studio/bin/studio.sh
+
+
+chmod 755 ~/bin/run
+vi ~/.bashrc
+---
+export PATH=$PATH:$HOME/Android/Sdk/platform-tools/:$HOME/bin
+
+mkdir ~/.gradle
+vi ~/.gradle/gradle.properties
+RELEASE_STORE_FILE=$HOME/StudioProjects/android.jks
+RELEASE_STORE_PASSWORD=f
+RELEASE_KEY_ALIAS=android key
+RELEASE_KEY_PASSWORD=f
+org.gradle.daemon=true
+org.gradle.jvmargs=-Xmx2048M
+
+#
+# NDK
+#
+#https://developer.android.com/ndk/downloads/index.html#rel
+#
+cd  
+wget http://dl.google.com/android/repository/android-ndk-r12b-linux-x86_64.zip
+unzip android-ndk*zip
+
+#
+# open up a new terminal to pickup above changes, launch IDE
+# take default options will will download various SDK components
+# Choose to open existing project and choose ~/StudioProjects/wX
+# it will prompt to choose a JDK
+#
+
+#
+# install KVM for emulator
+#
+sudo apt-get install qemu-kvm libvirt-bin bridge-utils
+sudo apt-get install cpu-checker
+
+cp StudioProjects/wX/DOC/SCRIPTS/scr.wx .
+run
+
+#
+# import project
+# setup emulator
+# disable instant run
+#
+
+----------------------------
+emulator on vm
+-------------------------
+cd /home/josh/Android/Sdk/tools/lib64/libstdc++
+mv libstdc++.so.6 libstdc++.so.6.bak
+ln -s /usr/lib/x86_64-linux-gnu/libstdc++.so.6 .
