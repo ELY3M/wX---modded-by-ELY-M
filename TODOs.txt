@@ -5,7 +5,7 @@
 5. add request for sn spotter in the tap menu 
 6. allow custom icons! exp tvs and hail and gps location and cities dots - partily done.  
 7. add read mcd/mpd text like read warnings text in the radar tap menu 
-
+8. fix up my own velicity color table 
 
 
 
