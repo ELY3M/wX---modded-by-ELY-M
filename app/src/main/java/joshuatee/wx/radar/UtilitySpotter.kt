@@ -117,6 +117,8 @@ object UtilitySpotter {
     }
 
 
+    //TODO add spotter info in the tap menu in the radar!
+    /*
     fun findClosestSpotter(context: Context, location: LatLon): String {
         val xmlFileInputStream = context.resources.openRawResource(R.raw.us_metar3)
         val text = UtilityIO.readTextFile(xmlFileInputStream)
@@ -132,6 +134,7 @@ object UtilitySpotter {
                 reportsList.add(SpotterReports(tmpArr[9], tmpArr[10], tmpArr[5], tmpArr[6], tmpArr[8], tmpArr[0], tmpArr[3], tmpArr[2], tmpArr[7]))
             }
         }
+        */
 
         /*
         metarSites.indices.forEach {
@@ -142,8 +145,8 @@ object UtilitySpotter {
             }
         }
         */
-        return String
-    }
+        //return String
+    //}
 
     val spotterReports: List<SpotterReports>
         get() = reportsList
