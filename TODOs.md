@@ -1,4 +1,5 @@
-TO DO List: 
+=================================
+##TO DO List: 
 
 1. conus radar overlay when you zoom out like on pykl3 
 2. get special weather statements working - not working due because they do not have vtec like all other warnings.  
@@ -12,7 +13,7 @@ TO DO List:
 
 
 
-DONE! 
+##DONE! 
 =================================
 Spotter Network intergretion for spotters (add your SN key in the settings) 
 seperate screen on and auto refresh into 2 options. easy! 
