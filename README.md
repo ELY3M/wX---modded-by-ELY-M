@@ -10,6 +10,6 @@ this app will be customized for me and anyone who wants.
 Joshua Tee is welcome to add any of changes I did.  
 
 
-(TODOs.md)
+#include "TODOs.txt"
 
 
