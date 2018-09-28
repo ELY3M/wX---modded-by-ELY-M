@@ -781,6 +781,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 alertDialogStatusAl.add("Show nearest observation")
                 alertDialogStatusAl.add("Show nearest forecast")
                 alertDialogStatusAl.add("Show nearest meteogram")
+                alertDialogStatusAl.add("Show Spotter Info")
                 alertDialogStatusAl.add("Show radar status message")
                 diaStatus!!.show()
             } else {
@@ -987,9 +988,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                         "http://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta="
                                 + obsSite,
                         obsSite.name + " Meteogram"))
-            } else if (strName.contains("Show radar status message"))
+            } else if (strName.contains("Show Spotter Info")) {
+                GetSpotter().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            } else if (strName.contains("Show radar status message")) {
                 GetRadarStatus().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-            else if (strName.contains("Show nearest forecast")) {
+            } else if (strName.contains("Show nearest forecast")) {
                 ObjectIntent(this, AdhocForecastActivity::class.java, AdhocForecastActivity.URL, arrayOf(glview.newY.toString(), "-" + glview.newX.toString()))
             }
             dialog.dismiss()
@@ -1108,6 +1111,21 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
 
         override fun onPostExecute(result: String) {
             ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(txt, oglr.rid + " VAD Wind Profile"))
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private inner class GetSpotter : AsyncTask<String, String, String>() {
+
+        var txt = ""
+
+        override fun doInBackground(vararg params: String): String {
+            txt = UtilitySpotter.findClosestSpotter(contextg, LatLon(glview.newY.toDouble(), glview.newX.toDouble() * -1.0))
+            return "Executed"
+        }
+
+        override fun onPostExecute(result: String) {
+            UtilityAlertDialog.showHelpText(txt, act)
         }
     }
 }

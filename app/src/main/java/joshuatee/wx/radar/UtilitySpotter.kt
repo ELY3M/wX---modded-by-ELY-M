@@ -22,6 +22,7 @@
 package joshuatee.wx.radar
 
 import android.content.Context
+import android.util.Log
 import joshuatee.wx.Extensions.getHtmlSep
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
@@ -32,6 +33,7 @@ import java.util.Comparator
 
 object UtilitySpotter {
 
+    var TAG = "UtilitySpotter"
     internal var spotterList = mutableListOf<Spotter>()
     private var reportsList = mutableListOf<SpotterReports>()
     private var initialized = false
@@ -41,6 +43,8 @@ object UtilitySpotter {
         private set
     internal var y = DoubleArray(1)
         private set
+
+    private var Spotterlistbydist: String = ""
 
     // http://www.spotternetwork.org/feeds/csv.txt
     //
@@ -64,6 +68,7 @@ object UtilitySpotter {
                 val lonAl = mutableListOf<String>()
                 var html = ("http://www.spotternetwork.org/feeds/csv.txt").getHtmlSep()
                 val reportData = html.replace(".*?#storm reports".toRegex(), "")
+                Spotterlistbydist = html
                 processReportsData(reportData)
                 html = html.replace("#storm reports.*?$".toRegex(), "")
                 val htmlArr = html.split("<br>").dropLastWhile { it.isEmpty() }
@@ -71,7 +76,7 @@ object UtilitySpotter {
                 htmlArr.forEach {
                     tmpArr = it.split(";;").dropLastWhile { it.isEmpty() }
                     if (tmpArr.size > 15) {
-                        spotterList.add(Spotter(tmpArr[14], tmpArr[15], tmpArr[4], tmpArr[5], tmpArr[3], tmpArr[11], tmpArr[10], tmpArr[0]))
+                        spotterList.add(Spotter(tmpArr[0], tmpArr[1], tmpArr[2], tmpArr[3], tmpArr[4], tmpArr[5], tmpArr[6], tmpArr[7], tmpArr[8], tmpArr[9], tmpArr[10], tmpArr[11], tmpArr[12], tmpArr[13], tmpArr[14], tmpArr[15]))
                         latAl.add(tmpArr[4])
                         lonAl.add(tmpArr[5])
                     }
@@ -112,39 +117,61 @@ object UtilitySpotter {
             tmpArr = it.split(";;").dropLastWhile { it.isEmpty() }
             if (tmpArr.size > 10 && !tmpArr[0].startsWith("#")) {
                 reportsList.add(SpotterReports(tmpArr[9], tmpArr[10], tmpArr[5], tmpArr[6], tmpArr[8], tmpArr[0], tmpArr[3], tmpArr[2], tmpArr[7]))
+
             }
         }
     }
 
-/*
-    //TODO add spotter info in the tap menu in the radar!
-    fun findClosestSpotter(context: Context, location: LatLon): String {
-        val xmlFileInputStream = context.resources.openRawResource(R.raw.us_metar3)
-        val text = UtilityIO.readTextFile(xmlFileInputStream)
-        val lines = text.split("\n").dropLastWhile { it.isEmpty() }
-        var shortestDistance = 1000.00
-        var currentDistance: Double
+//LatLon.distance(LatLon(locX, locY), LatLon(pointX, pointY), DistanceUnit.MILE)
+//#uniq,icon,live camera,reportAt,lat,lon,callsign,active,moving,dir,phone,email,freq,note,first,last
 
-        val htmlArr = txt.split("<br>").dropLastWhile { it.isEmpty() }
+    fun findClosestSpotter(context: Context, location: LatLon): String {
+        var text = Spotterlistbydist
+        var SpotterInfoString = ""
+        //processReportsData(Spotterlistbydist)
+        //text = text.replace("#storm reports.*?$".toRegex(), "")
+        val spotterinfo = mutableListOf<Spotter>()
+        text = text.replace("#storm reports.*?$".toRegex(), "")
+        val htmlArr = text.split("<br>").dropLastWhile { it.isEmpty() }
         var tmpArr: List<String>
         htmlArr.forEach {
             tmpArr = it.split(";;").dropLastWhile { it.isEmpty() }
-            if (tmpArr.size > 10 && !tmpArr[0].startsWith("#")) {
-                reportsList.add(SpotterReports(tmpArr[9], tmpArr[10], tmpArr[5], tmpArr[6], tmpArr[8], tmpArr[0], tmpArr[3], tmpArr[2], tmpArr[7]))
+            if (tmpArr.size > 15) {
+                spotterinfo.add(Spotter(tmpArr[0], tmpArr[1], tmpArr[2], tmpArr[3], tmpArr[4], tmpArr[5], tmpArr[6], tmpArr[7], tmpArr[8], tmpArr[9], tmpArr[10], tmpArr[11], tmpArr[12], tmpArr[13], tmpArr[14], tmpArr[15]))
+                //Log.i(TAG, "Got: "+tmpArr[14] + " " +tmpArr[15])
             }
         }
-*/
-        /*
-        metarSites.indices.forEach {
-            currentDistance = LatLon.distance(location, metarSites[it].location, DistanceUnit.KM)
+
+        var shortestDistance = 4.13
+        var currentDistance: Double
+        var bestSpotter = -1
+
+        spotterinfo.indices.forEach {
+            //Log.i(TAG, "checking dist for: " + spotterinfo[it].firstName + " " + spotterinfo[it].lastName)
+            currentDistance = LatLon.distance(location, LatLon(spotterinfo[it].lat, spotterinfo[it].lon), DistanceUnit.MILE)
             if (currentDistance < shortestDistance) {
                 shortestDistance = currentDistance
-                bestRid = it
+                bestSpotter = it
+
+                SpotterInfoString =
+                        "Name: "+spotterinfo[it].firstName +" "+spotterinfo[it].lastName+"\nLocation: "+spotterinfo[it].lat+" "+spotterinfo[it].lon+"\nReport at: "+spotterinfo[it].reportAt+"\nEmail: "+spotterinfo[it].email+"\nPhone: "+spotterinfo[it].phone+"\nCallsign: "+spotterinfo[it].callsign+"\nfreq: "+spotterinfo[it].freq+"\nNote: "+spotterinfo[it].note+"\n============================\n"
+
+
+
             }
         }
-        */
-        //return String
-    //}
+        return if (bestSpotter == -1) {
+            "Spotter not available!"
+        } else {
+            //#uniq,icon,stamp,type,mod,lat,lon,near city,narrative,first,last
+            //tmpArr[14]
+            //"Spotter found!"
+            SpotterInfoString
+        }
+
+
+    }
+    
 
     val spotterReports: List<SpotterReports>
         get() = reportsList
