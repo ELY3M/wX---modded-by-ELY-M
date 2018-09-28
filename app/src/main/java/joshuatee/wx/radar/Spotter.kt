@@ -21,30 +21,49 @@
 
 package joshuatee.wx.radar
 
-class Spotter internal constructor(firstName: String, lastName: String, lat: String, lon: String, reportAt: String, email: String, phone: String, uniq: String) {
+//#uniq,icon,live camera,reportAt,lat,lon,callsign,active,moving,dir,phone,email,freq,note,first,last
 
-    var firstName = ""
-    var lastName = ""
+class Spotter internal constructor(uniq: String, icon: String, camera: String, reportAt: String, lat: String, lon: String, callsign: String, active: String, moving: String, dir: String, phone: String, email: String, freq: String, note: String, firstName: String, lastName: String) {
+    var uniq = ""
+    var camera = ""
+    var icon = ""
+    var reportAt = ""
     var lat = ""
     var lon = ""
-    var reportAt = ""
-    var email = ""
+    var callsign = ""
+    var active = ""
+    var moving = ""
+    var dir = ""
     var phone = ""
-    var uniq = ""
+    var email = ""
+    var freq = ""
+    var note = ""
+    var firstName = ""
+    var lastName = ""
+
     var latD = 0.0
         private set
     var lonD = 0.0
         private set
 
     init {
-        this.firstName = firstName
-        this.lastName = lastName.replace("^ ".toRegex(), "")
+        this.uniq = uniq
+        this.camera = camera
+        this.icon = icon
+        this.reportAt = reportAt
         this.lat = lat
         this.lon = lon
-        this.reportAt = reportAt
-        this.email = email
+        this.callsign = callsign
+        this.active = active
+        this.moving = moving
+        this.dir = dir
         this.phone = phone
-        this.uniq = uniq
+        this.email = email
+        this.freq = freq
+        this.note = note
+        this.firstName = firstName
+        this.lastName = lastName.replace("^ ".toRegex(), "")
+
         latD = lat.toDoubleOrNull() ?: 0.0
         lonD = -1.0 * (lon.toDoubleOrNull() ?: 0.0)
     }
