@@ -116,7 +116,7 @@ object UtilitySpotter {
         }
     }
 
-
+/*
     //TODO add spotter info in the tap menu in the radar!
     fun findClosestSpotter(context: Context, location: LatLon): String {
         val xmlFileInputStream = context.resources.openRawResource(R.raw.us_metar3)
@@ -133,8 +133,7 @@ object UtilitySpotter {
                 reportsList.add(SpotterReports(tmpArr[9], tmpArr[10], tmpArr[5], tmpArr[6], tmpArr[8], tmpArr[0], tmpArr[3], tmpArr[2], tmpArr[7]))
             }
         }
-        */
-
+*/
         /*
         metarSites.indices.forEach {
             currentDistance = LatLon.distance(location, metarSites[it].location, DistanceUnit.KM)
