@@ -1,4 +1,4 @@
-#wX---modded-by-ELY-M
+# wX app modded-by-ELY-M
 
 Thank you to Joshua Tee for this app! 
 
