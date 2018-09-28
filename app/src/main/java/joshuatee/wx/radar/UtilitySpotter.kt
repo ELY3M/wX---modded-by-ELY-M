@@ -118,7 +118,6 @@ object UtilitySpotter {
 
 
     //TODO add spotter info in the tap menu in the radar!
-    /*
     fun findClosestSpotter(context: Context, location: LatLon): String {
         val xmlFileInputStream = context.resources.openRawResource(R.raw.us_metar3)
         val text = UtilityIO.readTextFile(xmlFileInputStream)
