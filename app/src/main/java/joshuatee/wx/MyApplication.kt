@@ -628,7 +628,7 @@ class MyApplication : Application() {
         const val nwsRadarLevel2Pub = "http://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
         //conus radar for zoom out
         const val NWS_CONUS_RADAR = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
-
+        const val NWS_CONUS_RADAR_GFW = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
         var radarWarnings = false
         var locdotFollowsGps = false
         var dualpaneshareposn = false

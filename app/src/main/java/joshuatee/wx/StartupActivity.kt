@@ -10,11 +10,7 @@ import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.WXGLRadarActivity
-import joshuatee.wx.settings.Location
-import joshuatee.wx.settings.UtilityPref
-import joshuatee.wx.settings.UtilityPref2
-import joshuatee.wx.settings.UtilityPref3
-import joshuatee.wx.settings.UtilityPref4
+import joshuatee.wx.settings.*
 import joshuatee.wx.util.Utility
 import java.io.File
 import java.io.FileOutputStream

@@ -22,6 +22,7 @@
 package joshuatee.wx.radar
 
 import android.annotation.SuppressLint
+import android.util.Log
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityString
@@ -29,9 +30,10 @@ import joshuatee.wx.Extensions.*
 
 internal object UtilityConusRadar {
 
+    var TAG = "UtilityConusRadar"
     private var initialized = false
     private var lastRefresh = 0.toLong()
-    private const val REFRESH_LOC_MIN = 10
+    private const val REFRESH_LOC_MIN = 5
 
 
     fun getConus() {
@@ -41,6 +43,22 @@ internal object UtilityConusRadar {
         if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
 
             val url = MyApplication.NWS_CONUS_RADAR
+            val urlgfw = MyApplication.NWS_CONUS_RADAR_GFW
+
+            //READ and parase GFW file....
+            var gfw = (urlgfw).getHtmlSep()
+            val gfwArr = gfw.split("<br>").dropLastWhile { it.isEmpty() }
+            //var tmpArr: List<String>
+            gfwArr.forEach {
+                    //spotterList.add(Spotter(tmpArr[0], tmpArr[1], tmpArr[2], tmpArr[3], tmpArr[4], tmpArr[5], tmpArr[6], tmpArr[7], tmpArr[8], tmpArr[9], tmpArr[10], tmpArr[11], tmpArr[12], tmpArr[13], tmpArr[14], tmpArr[15]))
+                Log.i(TAG, gfwArr[0])
+                Log.i(TAG, gfwArr[1])
+                Log.i(TAG, gfwArr[2])
+                Log.i(TAG, gfwArr[3])
+                Log.i(TAG, gfwArr[4])
+                Log.i(TAG, gfwArr[5])
+                }
+            }
 
 
 
@@ -52,5 +70,7 @@ internal object UtilityConusRadar {
             val currentTime = System.currentTimeMillis()
             lastRefresh = currentTime / 1000
         }
+
+
+
     }
-}
