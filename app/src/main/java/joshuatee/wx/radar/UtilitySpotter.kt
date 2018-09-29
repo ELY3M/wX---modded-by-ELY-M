@@ -171,7 +171,7 @@ object UtilitySpotter {
 
 
     }
-    
+
 
     val spotterReports: List<SpotterReports>
         get() = reportsList
