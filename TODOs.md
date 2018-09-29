@@ -16,7 +16,9 @@ TO DO List:
 
 DONE! 
 =================================
-added request for sn spotter info in the tap menu in the radar
-Spotter Network intergretion for spotters (add your SN key in the settings) 
-seperate screen on and auto refresh into 2 options. easy! 
+added request for sn spotter info in the tap menu in the radar  
+Spotter Network intergretion for spotters (add your SN key in the settings)   
+seperate screen on and auto refresh into 2 options. easy!   
 zoom out bug fixed!  obs / spotters / tvs disappear when you zoom out.  
+
+  
