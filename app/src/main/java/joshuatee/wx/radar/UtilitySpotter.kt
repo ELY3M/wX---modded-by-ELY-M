@@ -32,8 +32,6 @@ import java.util.Collections
 import java.util.Comparator
 
 object UtilitySpotter {
-
-    var TAG = "UtilitySpotter"
     internal var spotterList = mutableListOf<Spotter>()
     private var reportsList = mutableListOf<SpotterReports>()
     private var initialized = false
@@ -128,8 +126,6 @@ object UtilitySpotter {
     fun findClosestSpotter(context: Context, location: LatLon): String {
         var text = Spotterlistbydist
         var SpotterInfoString = ""
-        //processReportsData(Spotterlistbydist)
-        //text = text.replace("#storm reports.*?$".toRegex(), "")
         val spotterinfo = mutableListOf<Spotter>()
         text = text.replace("#storm reports.*?$".toRegex(), "")
         val htmlArr = text.split("<br>").dropLastWhile { it.isEmpty() }
@@ -138,7 +134,6 @@ object UtilitySpotter {
             tmpArr = it.split(";;").dropLastWhile { it.isEmpty() }
             if (tmpArr.size > 15) {
                 spotterinfo.add(Spotter(tmpArr[0], tmpArr[1], tmpArr[2], tmpArr[3], tmpArr[4], tmpArr[5], tmpArr[6], tmpArr[7], tmpArr[8], tmpArr[9], tmpArr[10], tmpArr[11], tmpArr[12], tmpArr[13], tmpArr[14], tmpArr[15]))
-                //Log.i(TAG, "Got: "+tmpArr[14] + " " +tmpArr[15])
             }
         }
 
@@ -161,11 +156,8 @@ object UtilitySpotter {
             }
         }
         return if (bestSpotter == -1) {
-            "Spotter not available!"
+            "Spotter Info not available!"
         } else {
-            //#uniq,icon,stamp,type,mod,lat,lon,near city,narrative,first,last
-            //tmpArr[14]
-            //"Spotter found!"
             SpotterInfoString
         }
 
