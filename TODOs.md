@@ -11,12 +11,12 @@ TO DO List:
 7. add read mcd/mpd text like read warnings text in the radar tap menu 
 8. fix up my own velicity color table 
 9. add warning list within radar
-10. seperate warnings option on radar.. so can enable and disable warnings on radar.. for example.. you only want to see tor/svr and you can disable all others.  
 
 
 
 DONE! 
 =================================
+seperate warnings option on radar.. so can enable and disable indidvual warnings on radar. for example, you only want to see tor/svr and you can disable all others.
 added SVS (severe weather statement)  
 added request for sn spotter info in the tap menu in the radar  
 Spotter Network intergretion for spotters (add your SN key in the settings)   
