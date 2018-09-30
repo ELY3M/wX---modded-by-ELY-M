@@ -85,7 +85,12 @@ object UtilityPref2 {
             val rid1Default = "TLX"
             val nws1DefaultState = "OK"
             val nwsRadarBgBlack = "true"
-            val codWarningsDefault = "false"
+            var torWarnings = "true"
+            var tstWarnings = "true"
+            var ffwWarnings = "false"
+            var smwWarnings = "false"
+            var svsWarnings = "false"
+            var spsWarnings = "false"
             val codCitiesDefault = "false"
             val mediaControlNotifDefault = "false"
             val codForVisDefault = "true"
@@ -154,7 +159,12 @@ object UtilityPref2 {
             editor.putString("NWS1_STATE", nws1DefaultState)
             editor.putString("THEME_BLUE", themeBlueDefault)
             editor.putString("NWS_RADAR_BG_BLACK", nwsRadarBgBlack)
-            editor.putString("COD_WARNINGS_DEFAULT", codWarningsDefault)
+            editor.putString("TOR_WARNINGS", torWarnings)
+            editor.putString("TST_WARNINGS", tstWarnings)
+            editor.putString("FFW_WARNINGS", ffwWarnings)
+            editor.putString("SMW_WARNINGS", smwWarnings)
+            editor.putString("SVS_WARNINGS", svsWarnings)
+            editor.putString("SPS_WARNINGS", spsWarnings)
             editor.putString("COD_CITIES_DEFAULT", codCitiesDefault)
             editor.putString("MEDIA_CONTROL_NOTIF", mediaControlNotifDefault)
             editor.putString("COD_FOR_VIS", codForVisDefault)

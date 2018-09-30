@@ -619,7 +619,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 }
                 GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
             }
-            R.id.action_n0s -> changeProd("N" + tilt + "S", false)
+            R.id.action_n0s -> changeProd("N" + tilt + "S", true)
             R.id.action_net -> changeProd("EET", false)
             R.id.action_N0X -> changeProd("N" + tilt + "X", true)
             R.id.action_N0C -> changeProd("N" + tilt + "C", true)
@@ -851,10 +851,35 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             oldRid = oglr.rid
         }
         Thread(Runnable {
-            if (PolygonType.TST.pref && !archiveMode)
-                oglr.constructWarningLines()
+            if (PolygonType.TOR.pref && !archiveMode)
+                oglr.constructTorWarningLines()
             else
-                oglr.deconstructWarningLines()
+                oglr.deconstructTorWarningLines()
+
+            if (PolygonType.TST.pref && !archiveMode)
+                oglr.constructTstWarningLines()
+            else
+                oglr.deconstructTstWarningLines()
+
+            if (PolygonType.FFW.pref && !archiveMode)
+                oglr.constructFfwWarningLines()
+            else
+                oglr.deconstructFfwWarningLines()
+
+            if (PolygonType.SMW.pref && !archiveMode)
+                oglr.constructSmwWarningLines()
+            else
+                oglr.deconstructSmwWarningLines()
+
+            if (PolygonType.SVS.pref && !archiveMode)
+                oglr.constructSvsWarningLines()
+            else
+                oglr.deconstructSvsWarningLines()
+
+            if (PolygonType.SPS.pref && !archiveMode)
+                oglr.constructSpsWarningLines()
+            else
+                oglr.deconstructSpsWarningLines()
 
             if (PolygonType.MCD.pref && !archiveMode)
                 oglr.constructWATMCDLines()
@@ -1128,4 +1153,5 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             UtilityAlertDialog.showHelpText(txt, act)
         }
     }
+
 }

@@ -49,6 +49,7 @@ class SettingsColorsActivity : BaseActivity() {
                 "Tornado watch color" to "RADAR_COLOR_TOR_WATCH",
                 "Flash flood warning color" to "RADAR_COLOR_FFW",
                 "Special Marine warning color" to "RADAR_COLOR_SMW",
+                "Severe Weather Statement color" to "RADAR_COLOR_SVS",
                 "Special Weather Statement color" to "RADAR_COLOR_SPS",
                 "MCD color" to "RADAR_COLOR_MCD",
                 "MPD color" to "RADAR_COLOR_MPD",

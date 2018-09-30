@@ -44,6 +44,7 @@ internal object UtilityColor {
         "RADAR_COLOR_TOR_WATCH" -> Color.RED
         "RADAR_COLOR_FFW" -> Color.GREEN
         "RADAR_COLOR_SMW" -> Color.CYAN
+        "RADAR_COLOR_SVS" -> Color.rgb(255, 203, 103)
         "RADAR_COLOR_SPS" -> Color.rgb(255, 204, 102)
         "RADAR_COLOR_MCD" -> Color.rgb(255, 255, 163)
         "RADAR_COLOR_WAT" -> Color.rgb(255, 255, 0)

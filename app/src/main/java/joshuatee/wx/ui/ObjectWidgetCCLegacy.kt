@@ -117,7 +117,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         // local alerts ( or nat for CA )
         if (Location.isUS(widgetLocNum)) {
             UtilityWidget.setupIntent(context, remoteViews, USWarningsWithRadarActivity::class.java, R.id.b_alert, USWarningsWithRadarActivity.URL,
-                    arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?|.*?Special Marine Warning.*?|.*?Special Weather Statement.*?", "us"), ACTION_ALERT)
+                    arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?|.*?Special Marine Warning.*?|.*?Severe Weather Statement.*?|.*?Special Weather Statement.*?", "us"), ACTION_ALERT)
         } else {
             UtilityWidget.setupIntent(context, remoteViews, CanadaAlertsActivity::class.java, R.id.b_alert, ACTION_ALERT)
         }

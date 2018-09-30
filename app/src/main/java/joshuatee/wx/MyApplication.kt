@@ -259,6 +259,7 @@ class MyApplication : Application() {
         val severeDashboardTst = DataStorage("SEVERE_DASHBOARD_TST")
         val severeDashboardFfw = DataStorage("SEVERE_DASHBOARD_FFW")
         val severeDashboardSmw = DataStorage("SEVERE_DASHBOARD_SMW")
+        val severeDashboardSvs = DataStorage("SEVERE_DASHBOARD_SVS")
         val severeDashboardSps = DataStorage("SEVERE_DASHBOARD_SPS")
         val severeDashboardWat = DataStorage("SEVERE_DASHBOARD_WAT")
         val severeDashboardMcd = DataStorage("SEVERE_DASHBOARD_MCD")
@@ -414,6 +415,7 @@ class MyApplication : Application() {
             severeDashboardTst.update(context)
             severeDashboardFfw.update(context)
             severeDashboardSmw.update(context)
+            severeDashboardSvs.update(context)
             severeDashboardSps.update(context)
             severeDashboardWat.update(context)
             severeDashboardMcd.update(context)
@@ -502,6 +504,7 @@ class MyApplication : Application() {
         var radarColorTorWatch = 0
         var radarColorFfw = 0
         var radarColorSmw = 0
+        var radarColorSvs = 0
         var radarColorSps = 0
         var radarColorMcd = 0
         var radarColorMpd = 0
@@ -526,6 +529,7 @@ class MyApplication : Application() {
             radarColorTorWatch = preferences.getInt("RADAR_COLOR_TOR_WATCH", Color.RED)
             radarColorFfw = preferences.getInt("RADAR_COLOR_FFW", Color.GREEN)
             radarColorSmw = preferences.getInt("RADAR_COLOR_SMW", Color.CYAN)
+            radarColorSvs = preferences.getInt("RADAR_COLOR_SVS", Color.rgb(255, 203, 103))
             radarColorSps = preferences.getInt("RADAR_COLOR_SPS", Color.rgb(255, 204, 102))
             radarColorMcd = preferences.getInt("RADAR_COLOR_MCD", Color.rgb(255, 255, 163))
             radarColorMpd = preferences.getInt("RADAR_COLOR_MPD", Color.rgb(0, 255, 0))
@@ -629,7 +633,12 @@ class MyApplication : Application() {
         //conus radar for zoom out
         const val NWS_CONUS_RADAR = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
         const val NWS_CONUS_RADAR_GFW = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
-        var radarWarnings = false
+        var radarTorWarnings = true
+        var radarTstWarnings = true
+        var radarFfwWarnings = true
+        var radarSmwWarnings = true
+        var radarSvsWarnings = true
+        var radarSpsWarnings = false
         var locdotFollowsGps = false
         var dualpaneshareposn = false
         var radarSpotters = false
@@ -669,7 +678,12 @@ class MyApplication : Application() {
         var radarIconsLevel2 = false
 
         private fun initRadarPreferences() {
-            radarWarnings = preferences.getString("COD_WARNINGS_DEFAULT", "false").startsWith("t")
+            radarTorWarnings = preferences.getString("TOR_WARNINGS", "false").startsWith("t")
+            radarTstWarnings = preferences.getString("TST_WARNINGS", "false").startsWith("t")
+            radarFfwWarnings = preferences.getString("FFW_WARNINGS", "false").startsWith("t")
+            radarSmwWarnings = preferences.getString("SMW_WARNINGS", "false").startsWith("t")
+            radarSvsWarnings = preferences.getString("SVS_WARNINGS", "false").startsWith("t")
+            radarSpsWarnings = preferences.getString("SPS_WARNINGS", "false").startsWith("t")
             locdotFollowsGps = preferences.getString("LOCDOT_FOLLOWS_GPS", "false").startsWith("t")
             dualpaneshareposn = preferences.getString("DUALPANE_SHARE_POSN", "true").startsWith("t")
             radarSpotters = preferences.getString("WXOGL_SPOTTERS", "false").startsWith("t")

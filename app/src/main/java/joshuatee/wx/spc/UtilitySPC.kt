@@ -125,6 +125,7 @@ object UtilitySPC {
         var tstormCount = 0
         var floodCount = 0
         var marineCount = 0
+        var severeCount = 0
         var specialCount = 0
         if (MyApplication.checktor) {
             tstormCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardTst.valueGet())
@@ -135,6 +136,8 @@ object UtilitySPC {
             if (floodCount > 0) uswarnPresent = true
             marineCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardSmw.valueGet())
             if (marineCount > 0) uswarnPresent = true
+            severeCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardSvs.valueGet())
+            if (severeCount > 0) uswarnPresent = true
             specialCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardSps.valueGet())
             if (specialCount > 0) uswarnPresent = true
         }

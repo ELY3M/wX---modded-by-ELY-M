@@ -30,11 +30,12 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
     MPD(MyApplication.radarColorMpd, "MPD", MyApplication.radarMpd, 0.0f),
     WATCH(MyApplication.radarColorTstormWatch, "WATCH", MyApplication.radarWatMcd, 0.0f),
     WATCH_TORNADO(MyApplication.radarColorTorWatch, "WATCH_TORNADO", MyApplication.radarWatMcd, 0.0f),
-    TST(MyApplication.radarColorTstorm, "TST", MyApplication.radarWarnings, 0.0f),
-    TOR(MyApplication.radarColorTor, "TOR", MyApplication.radarWarnings, 0.0f),
-    FFW(MyApplication.radarColorFfw, "FFW", MyApplication.radarWarnings, 0.0f),
-    SMW(MyApplication.radarColorSmw, "SMW", MyApplication.radarWarnings, 0.0f),
-    SPS(MyApplication.radarColorSps, "SPS", MyApplication.radarWarnings, 0.0f),
+    TOR(MyApplication.radarColorTor, "TOR", MyApplication.radarTorWarnings, 0.0f),
+    TST(MyApplication.radarColorTstorm, "TST", MyApplication.radarTstWarnings, 0.0f),
+    FFW(MyApplication.radarColorFfw, "FFW", MyApplication.radarFfwWarnings, 0.0f),
+    SMW(MyApplication.radarColorSmw, "SMW", MyApplication.radarSmwWarnings, 0.0f),
+    SVS(MyApplication.radarColorSvs, "SVS", MyApplication.radarSvsWarnings, 0.0f),
+    SPS(MyApplication.radarColorSps, "SPS", MyApplication.radarSpsWarnings, 0.0f),
     SPOTTER(MyApplication.radarColorSpotter, "SPOTTER", MyApplication.radarSpotters, MyApplication.radarSpotterSize.toFloat()),
     SPOTTER_LABELS(MyApplication.radarColorSpotter, "SPOTTER_LABELS", MyApplication.radarSpottersLabel, 0.0f),
     WIND_BARB_GUSTS(Color.RED, "WIND_BARB_GUSTS", MyApplication.radarObsWindbarbs, 0.0f),
@@ -57,11 +58,12 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
             MPD.pref = MyApplication.radarMpd
             WATCH.pref = MyApplication.radarWatMcd
             WATCH_TORNADO.pref = MyApplication.radarWatMcd
-            TST.pref = MyApplication.radarWarnings
-            TOR.pref = MyApplication.radarWarnings
-            FFW.pref = MyApplication.radarWarnings
-	    SMW.pref = MyApplication.radarWarnings
-            SPS.pref = MyApplication.radarWarnings
+            TOR.pref = MyApplication.radarTorWarnings
+            TST.pref = MyApplication.radarTstWarnings
+            FFW.pref = MyApplication.radarFfwWarnings
+            SMW.pref = MyApplication.radarSmwWarnings
+            SVS.pref = MyApplication.radarSvsWarnings
+            SPS.pref = MyApplication.radarSpsWarnings
             SPOTTER.pref = MyApplication.radarSpotters
             WIND_BARB_GUSTS.pref = MyApplication.radarObsWindbarbs
             WIND_BARB.pref = MyApplication.radarObsWindbarbs
@@ -81,6 +83,7 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
             TOR.color = MyApplication.radarColorTor
             FFW.color = MyApplication.radarColorFfw
             SMW.color = MyApplication.radarColorSmw
+            SVS.color = MyApplication.radarColorSvs
             SPS.color = MyApplication.radarColorSps
             SPOTTER.color = MyApplication.radarColorSpotter
             WIND_BARB_GUSTS.color = Color.RED

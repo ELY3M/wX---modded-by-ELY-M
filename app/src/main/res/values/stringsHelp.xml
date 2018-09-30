@@ -467,6 +467,38 @@ Display warning polygons for tornado, severe thunderstorm, and flash flood. This
         Interval can be set under settings -> Notifications.
 </string>
 
+
+    <string name="tor_warnings_label">
+Display warning polygons for tornado. This will cause a periodic task to run in the background and pull data.
+        Interval can be set under settings -> Notifications.
+</string>
+
+    <string name="tst_warnings_label">
+Display warning polygons for severe thunderstorm. This will cause a periodic task to run in the background and pull data.
+        Interval can be set under settings -> Notifications.
+</string>
+
+    <string name="ffw_warnings_label">
+Display warning polygons for flash flood. This will cause a periodic task to run in the background and pull data.
+        Interval can be set under settings -> Notifications.
+</string>
+
+    <string name="smw_warnings_label">
+Display warning polygons for special marine. This will cause a periodic task to run in the background and pull data.
+        Interval can be set under settings -> Notifications.
+</string>
+
+    <string name="svs_warnings_label">
+Display polygons for severe weather statement. This will cause a periodic task to run in the background and pull data.
+        Interval can be set under settings -> Notifications.
+</string>
+
+    <string name="sps_warnings_label">
+Display polygons for special weather statement. This will cause a periodic task to run in the background and pull data.
+        Interval can be set under settings -> Notifications.
+</string>
+
+
     <string name="radar_show_watch_default_label">
 Display SPC Watch or MCD polygons. This will cause a periodic task to run in the background and pull data.
         Interval can be set under settings -> Notifications.

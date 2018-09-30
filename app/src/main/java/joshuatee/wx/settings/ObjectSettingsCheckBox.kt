@@ -102,7 +102,7 @@ class ObjectSettingsCheckBox(context: Context, private val activity: Activity, l
                 }
             }
             when (pref) {
-                "COD_WARNINGS_DEFAULT", "RADAR_SHOW_MPD", "RADAR_SHOW_WATCH" -> Utility.writePref(context, "RESTART_NOTIF", "true")
+                "TOR_WARNINGS", "TST_WARNINGS", "FFW_WARNINGS", "SMW_WARNINGS", "SVS_WARNINGS", "SPS_WARNINGS", "RADAR_SHOW_MPD", "RADAR_SHOW_WATCH" -> Utility.writePref(context, "RESTART_NOTIF", "true")
                 "RADAR_STATE_HIRES", "RADAR_COUNTY_HIRES", "RADAR_HW_ENH_EXT", "RADAR_CAMX_BORDERS" -> {
                     MyApplication.initPreferences(context)
                     when (pref) {

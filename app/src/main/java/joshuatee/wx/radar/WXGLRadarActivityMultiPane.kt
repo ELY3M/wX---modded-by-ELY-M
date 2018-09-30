@@ -813,10 +813,36 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         }
 
         Thread(Runnable {
-            if (PolygonType.TST.pref)
-                ogl.constructWarningLines()
+            if (PolygonType.TOR.pref)
+                ogl.constructTorWarningLines()
             else
-                ogl.deconstructWarningLines()
+                ogl.deconstructTorWarningLines()
+
+            if (PolygonType.TST.pref)
+                ogl.constructTstWarningLines()
+            else
+                ogl.deconstructTstWarningLines()
+
+            if (PolygonType.FFW.pref)
+                ogl.constructFfwWarningLines()
+            else
+                ogl.deconstructFfwWarningLines()
+
+            if (PolygonType.SMW.pref)
+                ogl.constructSmwWarningLines()
+            else
+                ogl.deconstructSmwWarningLines()
+
+            if (PolygonType.SVS.pref)
+                ogl.constructSvsWarningLines()
+            else
+                ogl.deconstructSvsWarningLines()
+
+            if (PolygonType.SPS.pref)
+                ogl.constructSpsWarningLines()
+            else
+                ogl.deconstructSpsWarningLines()
+
             if (PolygonType.MCD.pref)
                 ogl.constructWATMCDLines()
             else

@@ -639,29 +639,34 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         }
         Thread(Runnable {
             if (PolygonType.TOR.pref)
-                OGLRLOC.constructWarningLines()
+                OGLRLOC.constructTorWarningLines()
             else
-                OGLRLOC.deconstructWarningLines()
+                OGLRLOC.deconstructTorWarningLines()
 
             if (PolygonType.TST.pref)
-                OGLRLOC.constructWarningLines()
+                OGLRLOC.constructTstWarningLines()
             else
-                OGLRLOC.deconstructWarningLines()
+                OGLRLOC.deconstructTstWarningLines()
 
             if (PolygonType.FFW.pref)
-                OGLRLOC.constructWarningLines()
+                OGLRLOC.constructFfwWarningLines()
             else
-                OGLRLOC.deconstructWarningLines()
+                OGLRLOC.deconstructFfwWarningLines()
 
             if (PolygonType.SMW.pref)
-                OGLRLOC.constructWarningLines()
+                OGLRLOC.constructSmwWarningLines()
             else
-                OGLRLOC.deconstructWarningLines()
+                OGLRLOC.deconstructSmwWarningLines()
+
+            if (PolygonType.SVS.pref)
+                OGLRLOC.constructSvsWarningLines()
+            else
+                OGLRLOC.deconstructSvsWarningLines()
 
             if (PolygonType.SPS.pref)
-                OGLRLOC.constructWarningLines()
+                OGLRLOC.constructSpsWarningLines()
             else
-                OGLRLOC.deconstructWarningLines()
+                OGLRLOC.deconstructSpsWarningLines()
 
             if (PolygonType.MCD.pref)
                 OGLRLOC.constructWATMCDLines()

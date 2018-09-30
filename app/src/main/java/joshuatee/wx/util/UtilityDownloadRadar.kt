@@ -32,6 +32,7 @@ object UtilityDownloadRadar {
         MyApplication.severeDashboardTst.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Severe%20Thunderstorm%20Warning"))
         MyApplication.severeDashboardFfw.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Flash%20Flood%20Warning"))
         MyApplication.severeDashboardSmw.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Special%20Marine%20Warning"))
+        MyApplication.severeDashboardSvs.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Severe%20Weather%20Statement"))
         MyApplication.severeDashboardSps.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Special%20Weather%20Statement"))
         MyApplication.severeDashboardTor.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Tornado%20Warning"))
     }
