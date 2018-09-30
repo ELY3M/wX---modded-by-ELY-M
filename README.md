@@ -24,6 +24,7 @@ TO DO List:
 7. add read mcd/mpd text like read warnings text in the radar tap menu 
 8. fix up my own velicity color table 
 9. add warning list within radar
+10. add LSR reports from SN spotters/option to turn on/off LSR reports
 
 
 
