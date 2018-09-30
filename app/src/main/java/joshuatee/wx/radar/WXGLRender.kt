@@ -64,6 +64,7 @@ class WXGLRender(private val context: Context) : Renderer {
     }
 
     // this string is normally no string but for dual pane will be set to either 1 or 2 to differentiate timestamps
+    var TAG = "joshuatee-WXGLRender"
     var radarStatusStr = ""
     var idxStr = "0"
     private val mtrxProjection = FloatArray(16)
@@ -93,6 +94,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private val tvsBuffers = ObjectOglBuffers(PolygonType.TVS, 0.30f)
     private val warningSpsBuffers = ObjectOglBuffers(PolygonType.SPS)
     private val warningSmwBuffers = ObjectOglBuffers(PolygonType.SMW)
+    private val warningSvsBuffers = ObjectOglBuffers(PolygonType.SVS)
     private val warningFfwBuffers = ObjectOglBuffers(PolygonType.FFW)
     private val warningTstBuffers = ObjectOglBuffers(PolygonType.TST)
     private val warningTorBuffers = ObjectOglBuffers(PolygonType.TOR)
@@ -100,6 +102,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private val watchTornadoBuffers = ObjectOglBuffers(PolygonType.WATCH_TORNADO)
     private val mcdBuffers = ObjectOglBuffers(PolygonType.MCD)
     private val swoBuffers = ObjectOglBuffers()
+    //TODO TESTING CONUS
     private val conusBuffers = ObjectOglBuffers()
     private val locdotBuffers = ObjectOglBuffers(PolygonType.LOCDOT)
     private val locCircleBuffers = ObjectOglBuffers()
@@ -362,12 +365,10 @@ class WXGLRender(private val context: Context) : Renderer {
         listOf(stiBuffers, wbGustsBuffers, wbBuffers).forEach {
             if (zoom > it.scaleCutOff) {
                 drawPolygons(it, 16)
-                //drawTriangles(wbCircleBuffers)
             }
         }
         listOf(wbCircleBuffers).forEach {
             if (zoom > it.scaleCutOff) {
-                //drawPolygons(it, 16)
                 drawTriangles(wbCircleBuffers)
             }
         }
@@ -378,7 +379,7 @@ class WXGLRender(private val context: Context) : Renderer {
             drawPolygons(locCircleBuffers, 16)
         }
         GLES20.glLineWidth(warnLineWidth)
-        listOf(warningSpsBuffers, warningSmwBuffers, warningTstBuffers, warningFfwBuffers, warningTorBuffers).forEach { drawPolygons(it, 8) }
+        listOf(warningSpsBuffers, warningSvsBuffers, warningSmwBuffers, warningTstBuffers, warningFfwBuffers, warningTorBuffers).forEach { drawPolygons(it, 8) }
         GLES20.glLineWidth(watmcdLineWidth)
         listOf(mpdBuffers, mcdBuffers, watchBuffers, watchTornadoBuffers, swoBuffers).forEach { drawPolygons(it, 8) }
     }
@@ -565,21 +566,48 @@ class WXGLRender(private val context: Context) : Renderer {
         deconstructGenericLines(watchTornadoBuffers)
     }
 
-    fun constructWarningLines() {
-        constructGenericLines(warningTstBuffers)
+    fun constructTorWarningLines() {
         constructGenericLines(warningTorBuffers)
-        constructGenericLines(warningFfwBuffers)
-        constructGenericLines(warningSmwBuffers)
-        constructGenericLines(warningSpsBuffers)
+    }
+    fun deconstructTorWarningLines() {
+        deconstructGenericLines(warningTorBuffers)
     }
 
-    fun deconstructWarningLines() {
+    fun constructTstWarningLines() {
+        constructGenericLines(warningTstBuffers)
+    }
+    fun deconstructTstWarningLines() {
         deconstructGenericLines(warningTstBuffers)
-        deconstructGenericLines(warningTorBuffers)
+    }
+
+    fun constructFfwWarningLines() {
+        constructGenericLines(warningFfwBuffers)
+    }
+    fun deconstructFfwWarningLines() {
         deconstructGenericLines(warningFfwBuffers)
+    }
+
+    fun constructSmwWarningLines() {
+        constructGenericLines(warningSmwBuffers)
+    }
+    fun deconstructSmwWarningLines() {
         deconstructGenericLines(warningSmwBuffers)
+    }
+
+    fun constructSvsWarningLines() {
+        constructGenericLines(warningSvsBuffers)
+    }
+    fun deconstructSvsWarningLines() {
+        deconstructGenericLines(warningSvsBuffers)
+    }
+
+    fun constructSpsWarningLines() {
+        constructGenericLines(warningSpsBuffers)
+    }
+    fun deconstructSpsWarningLines() {
         deconstructGenericLines(warningSpsBuffers)
     }
+
 
     fun constructLocationDot(locXCurrent: String, locYCurrentF: String, archiveMode: Boolean) {
         var locYCurrent = locYCurrentF
@@ -703,7 +731,7 @@ class WXGLRender(private val context: Context) : Renderer {
         var fList = listOf<Double>()
         when (buffers.type) {
             PolygonType.MCD, PolygonType.MPD, PolygonType.WATCH, PolygonType.WATCH_TORNADO -> fList = UtilityWat.addWat(context, provider, rid, buffers.type).toList()
-            PolygonType.TST, PolygonType.TOR, PolygonType.FFW, PolygonType.SMW, PolygonType.SPS -> fList = WXGLPolygonWarnings.addWarnings(context, provider, rid, buffers.type).toList()
+            PolygonType.TST, PolygonType.TOR, PolygonType.FFW, PolygonType.SMW, PolygonType.SVS, PolygonType.SPS -> fList = WXGLPolygonWarnings.addWarnings(context, provider, rid, buffers.type).toList()
             PolygonType.STI -> fList = WXGLNexradLevel3StormInfo.decodeAndPlot(context, idxStr, rid, provider).toList()
             else -> {
             }

@@ -89,6 +89,7 @@ class BackgroundFetch(val context: Context) {
             MyApplication.severeDashboardTst.valueSet(context, "")
             MyApplication.severeDashboardFfw.valueSet(context, "")
             MyApplication.severeDashboardSmw.valueSet(context, "")
+            MyApplication.severeDashboardSvs.valueSet(context, "")
             MyApplication.severeDashboardSps.valueSet(context, "")
         }
         if (MyApplication.alertSpcmcdNotificationCurrent || MyApplication.checkspc || PolygonType.MCD.pref || locationNeedsMcd) {

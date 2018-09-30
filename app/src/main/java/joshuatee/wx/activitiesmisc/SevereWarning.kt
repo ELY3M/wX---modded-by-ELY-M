@@ -51,6 +51,7 @@ internal class SevereWarning(private val type: PolygonType) {
             PolygonType.TST -> label = "Severe Thunderstorm Warnings"
             PolygonType.FFW -> label = "Flash Flood Warnings"
             PolygonType.SMW -> label = "Special Marine Warnings"
+            PolygonType.SVS -> label = "Severe Weather Statement"
             //PolygonType.SPS -> label = "Special Weather Statement"
             else -> {
                 Log.i(TAG, "no label\n")

@@ -90,11 +90,13 @@ class SevereDashboardActivity : BaseActivity() {
             val wTst = SevereWarning(PolygonType.TST)
             val wFfw = SevereWarning(PolygonType.FFW)
             val wSmw = SevereWarning(PolygonType.SMW)
+            val wSvs = SevereWarning(PolygonType.SVS)
             val wSps = SpecialWeather(PolygonType.SPS)
             wTor.generateString(contextg, MyApplication.severeDashboardTor.valueGet())
             wTst.generateString(contextg, MyApplication.severeDashboardTst.valueGet())
             wFfw.generateString(contextg, MyApplication.severeDashboardFfw.valueGet())
             wSmw.generateString(contextg, MyApplication.severeDashboardSmw.valueGet())
+            wSvs.generateString(contextg, MyApplication.severeDashboardSvs.valueGet())
             wSps.generateString(contextg, MyApplication.severeDashboardSps.valueGet())
             Log.i(TAG, "spscount: "+wSps.count)
             if (wTor.count > 0) {
@@ -116,6 +118,11 @@ class SevereDashboardActivity : BaseActivity() {
                 val objSmw = ObjectCardText(contextg, wSmw.text)
                 objSmw.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Special Marine Warning.*?") })
                 linearLayout.addView(objSmw.card)
+            }
+            if (wSvs.count > 0) {
+                val objSvs = ObjectCardText(contextg, wSvs.text)
+                objSvs.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Severe Weather Statement.*?") })
+                linearLayout.addView(objSvs.card)
             }
             if (wSps.count > 0) {
                 val objSps = ObjectCardText(contextg, wSps.text)
