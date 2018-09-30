@@ -16,7 +16,7 @@ TO DO List:
 
 DONE! 
 =================================
-seperate warnings option on radar.. so can enable and disable indidvual warnings on radar. for example, you only want to see tor/svr and you can disable all others.
+seperate warnings option on radar.. so can enable and disable indidvual warnings on radar. for example, you only want to see tor/svr and you can disable all others.  
 added SVS (severe weather statement)  
 added request for sn spotter info in the tap menu in the radar  
 Spotter Network intergretion for spotters (add your SN key in the settings)   
