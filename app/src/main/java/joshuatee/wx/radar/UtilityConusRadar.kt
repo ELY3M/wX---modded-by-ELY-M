@@ -29,11 +29,18 @@ import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.opengl.GLES20
+import android.opengl.GLUtils
 import android.util.Log
 import joshuatee.wx.MyApplication
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.util.*
+import android.content.ContentValues.TAG
+import android.graphics.BitmapFactory
+import java.io.InputStream
+import java.net.URL
+
 
 /*
 *
@@ -329,8 +336,6 @@ Line 6: y-coordinate of center of upper left pixel
 
 
 
-
-/*
 internal object UtilityConusRadar {
 
     var TAG = "UtilityConusRadar"
@@ -346,7 +351,7 @@ internal object UtilityConusRadar {
     private const val REFRESH_LOC_MIN = 3
 
 
-    fun getConus() :String {
+    fun getConus(): String {
         val currentTime1 = System.currentTimeMillis()
         val currentTimeSec = currentTime1 / 1000
         val refreshIntervalSec = (REFRESH_LOC_MIN * 60).toLong()
@@ -366,32 +371,70 @@ internal object UtilityConusRadar {
                 gfw4 = gfwArr[3]
                 gfw5 = gfwArr[4]
                 gfw6 = gfwArr[5]
-                }
             }
-
-
-
-
-
-
-
-            initialized = true
-            val currentTime = System.currentTimeMillis()
-            lastRefresh = currentTime / 1000
-
-        //TODO TESTING
-        var teststr = gfw1 +"\n"+gfw2 +"\n"+gfw3 +"\n"+gfw4 +"\n"+gfw5 +"\n"+gfw6 +"\n"
-        return teststr
-
         }
 
 
 
+
+
+
+
+        initialized = true
+        val currentTime = System.currentTimeMillis()
+        lastRefresh = currentTime / 1000
+
+        //TODO TESTING
+        var teststr = gfw1 + "\n" + gfw2 + "\n" + gfw3 + "\n" + gfw4 + "\n" + gfw5 + "\n" + gfw6 + "\n"
+        return teststr
+
     }
-*/
+
+
+    fun loadconusradar(): Int {
+        val textureHandle = IntArray(1)
+
+        GLES20.glGenTextures(1, textureHandle, 0)
+
+        if (textureHandle[0] != 0) {
+            val options = BitmapFactory.Options()
+            options.inScaled = false   // No pre-scaling
+
+            // Read in the resource
+            var conusradar: Bitmap? = null
+            try {
+                conusradar = BitmapFactory.decodeStream(URL("https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif").getContent() as InputStream)
+            } catch (e: Exception) {
+                Log.e(TAG, "CRASHED: ", e)
+            }
+            ///val bitmap = BitmapFactory.decodeResource(context.resources, resourceId, options)
+
+            // Bind to the texture in OpenGL
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0])
+
+            // Set filtering
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST)
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST)
+
+            // Load the bitmap into the bound texture.
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, conusradar, 0)
+
+            // Recycle the bitmap, since its data has been loaded into OpenGL.
+            conusradar!!.recycle()
+        }
+
+        if (textureHandle[0] == 0) {
+            throw RuntimeException("Error loading texture.")
+        }
+
+        return textureHandle[0]
+    }
+}
 
 
 
+
+/*
 
 import joshuatee.wx.util.UtilityCanvasMain
 import joshuatee.wx.util.UtilityImg
@@ -429,4 +472,7 @@ object UtilityConusRadar {
         layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         return UtilityImg.layerDrawableToBitmap(layers)
     }
-}
+
+    }
+
+    */
