@@ -33,7 +33,7 @@ import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.PolygonType
 
-open class                            ObjectOglBuffers() {
+open class ObjectOglBuffers() {
 
     var floatBuffer: ByteBuffer = ByteBuffer.allocate(0)
     var indexBuffer: ByteBuffer = ByteBuffer.allocate(0)
