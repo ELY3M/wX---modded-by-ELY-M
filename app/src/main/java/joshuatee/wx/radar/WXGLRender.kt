@@ -102,8 +102,6 @@ class WXGLRender(private val context: Context) : Renderer {
     private val watchTornadoBuffers = ObjectOglBuffers(PolygonType.WATCH_TORNADO)
     private val mcdBuffers = ObjectOglBuffers(PolygonType.MCD)
     private val swoBuffers = ObjectOglBuffers()
-    //TODO TESTING CONUS
-    private val conusBuffers = ObjectOglBuffers()
     private val locdotBuffers = ObjectOglBuffers(PolygonType.LOCDOT)
     private val locCircleBuffers = ObjectOglBuffers()
     private val wbCircleBuffers = ObjectOglBuffers(PolygonType.WIND_BARB_CIRCLE, 0.30f)
