@@ -18,18 +18,18 @@ TO DO List:
 
 1. conus radar overlay when you zoom out like on pykl3 
 2. get special weather statements working - not working due because they do not have vtec like all other warnings.  
-3. add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs 
-4. add third button for SRM on radar - might 4th one for cc   
-6. allow custom icons! exp tvs and hail and gps location and cities dots - partily done.  
-7. add read mcd/mpd text like read warnings text in the radar tap menu 
-8. fix up my own velicity color table 
-9. add warning list within radar
-10. add LSR reports from SN spotters/option to turn on/off LSR reports
-
+3. add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs   
+4. allow custom icons! exp tvs and hail and gps location and cities dots - partily done.  
+5. add read mcd/mpd text like read warnings text in the radar tap menu 
+6. fix up my own velicity color table 
+7. add warning list within radar
+8. add LSR reports from SN spotters/option to turn on/off LSR reports
+9. might 4th radar icon for cc 
 
 
 DONE! 
 =================================
+add third button for SRM on radar.  
 seperate warnings option on radar.. so can enable and disable indidvual warnings on radar. for example, you only want to see tor/svr and you can disable all others.  
 added SVS (severe weather statement)  
 added request for sn spotter info in the tap menu in the radar  
