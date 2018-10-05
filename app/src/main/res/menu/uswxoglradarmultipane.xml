@@ -36,6 +36,11 @@
           android:icon="@drawable/bv"
           app:showAsAction="always"
         />
+    <item android:id="@+id/action_n0s"
+        android:title="@string/label_srm"
+        android:icon="@drawable/srm"
+        app:showAsAction="always"
+        />
 
     <item android:id="@+id/action_a"
           android:title="@string/label_a"

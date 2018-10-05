@@ -55,7 +55,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
         paintText.style = Paint.Style.FILL
         paintText.strokeWidth = 1f
         paintText.textSize = 30f
-        paintText.color = Color.rgb(255, 255, 255)
+        paintText.color = Color.WHITE
         if (!MyApplication.blackBg) {
             paintText.color = Color.BLACK
         }

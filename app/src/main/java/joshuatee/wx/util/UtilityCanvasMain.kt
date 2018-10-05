@@ -103,7 +103,22 @@ object UtilityCanvasMain {
         //    MyApplication.initBuffers()
         //}
 
+        if (PolygonType.TOR.pref) {
+            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+        }
         if (PolygonType.TST.pref) {
+            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+        }
+        if (PolygonType.FFW.pref) {
+            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+        }
+        if (PolygonType.SMW.pref) {
+            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+        }
+        if (PolygonType.SVS.pref) {
+            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+        }
+        if (PolygonType.SPS.pref) {
             UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
         }
         if (GeographyType.HIGHWAYS.pref && highwayProvider) {
