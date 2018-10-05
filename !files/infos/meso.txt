@@ -1,0 +1,2 @@
+            case NexradHeader.L3PC_DIGITAL_MESOCYCLONE /*141*/:
+                return 10;

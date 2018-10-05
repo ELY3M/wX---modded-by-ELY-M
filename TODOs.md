@@ -12,6 +12,8 @@ TO DO List:
 7. add warning list within radar
 8. add LSR reports from SN spotters/option to turn on/off LSR reports
 9. might 4th radar icon for cc 
+10. move show color legend to bottom  
+
 
 
 DONE! 

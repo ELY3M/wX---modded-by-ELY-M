@@ -74,7 +74,7 @@ class BackgroundFetch(val context: Context) {
             requestID = System.currentTimeMillis().toInt()
             notifUrls += UtilityNotification.sendNotif(context, it.toString(), requestID + 1)
         }
-        if (MyApplication.alertTornadoNotificationCurrent || MyApplication.checktor || PolygonType.TST.pref) {
+        if (MyApplication.alertTornadoNotificationCurrent || MyApplication.checktor || PolygonType.TOR.pref) {
             try {
                 // store data for use by severe dashboard and cod warnings
                 UtilityDownloadRadar.getPolygonVTEC(context)
