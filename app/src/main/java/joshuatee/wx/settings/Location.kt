@@ -114,23 +114,23 @@ class Location(val context: Context, locNumInt: Int) {
         Location.refreshLocationData(context)
     }
 
-    val notification get() = alertNotificationCurrent.startsWith("t")
+    val notification: Boolean get() = alertNotificationCurrent.startsWith("t")
 
-    val notificationRadar get() = alertNotificationRadarCurrent.startsWith("t")
+    val notificationRadar: Boolean get() = alertNotificationRadarCurrent.startsWith("t")
 
-    val ccNotification get() = alertCcNotificationCurrent.startsWith("t")
+    val ccNotification: Boolean get() = alertCcNotificationCurrent.startsWith("t")
 
-    val sevenDayNotification get() = alertSevenDayNotificationCurrent.startsWith("t")
+    val sevenDayNotification: Boolean get() = alertSevenDayNotificationCurrent.startsWith("t")
 
-    val sound get() = alertNotificationSoundCurrent.startsWith("t")
+    val sound: Boolean get() = alertNotificationSoundCurrent.startsWith("t")
 
-    val notificationMcd get() = alertNotificationMcdCurrent.startsWith("t")
+    val notificationMcd: Boolean get() = alertNotificationMcdCurrent.startsWith("t")
 
-    val notificationSwo get() = alertNotificationSwoCurrent.startsWith("t")
+    val notificationSwo: Boolean get() = alertNotificationSwoCurrent.startsWith("t")
 
-    val notificationSpcfw get() = alertNotificationSpcfwCurrent.startsWith("t")
+    val notificationSpcfw: Boolean get() = alertNotificationSpcfwCurrent.startsWith("t")
 
-    val notificationWpcmpd get() = alertNotificationWpcmpdCurrent.startsWith("t")
+    val notificationWpcmpd: Boolean get() = alertNotificationWpcmpdCurrent.startsWith("t")
 
     companion object {
         var numLocations = 1
@@ -176,21 +176,19 @@ class Location(val context: Context, locNumInt: Int) {
                 Location.currentLocation = (currentLocationStr.toIntOrNull() ?: 0) - 1
             }
 
-        //val state get() = MyApplication.locations[currentLocation].state
+        val state: String get() = MyApplication.locations.getOrNull(currentLocation)?.state ?: "MI"
 
-        val state get() = MyApplication.locations.getOrNull(currentLocation)?.state ?: "MI"
+        val wfo: String get() = MyApplication.locations.getOrNull(currentLocation)?.wfo ?: "DTX"
 
-        val wfo get() = MyApplication.locations.getOrNull(currentLocation)?.wfo ?: "DTX"
+        val rid: String get() = MyApplication.locations.getOrNull(currentLocation)?.rid ?: "DTX"
 
-        val rid get() = MyApplication.locations.getOrNull(currentLocation)?.rid ?: "DTX"
+        val x: String get() = MyApplication.locations.getOrNull(currentLocation)?.x ?: "0.0"
 
-        val x get() = MyApplication.locations.getOrNull(currentLocation)?.x ?: "0.0"
+        val y: String get() = MyApplication.locations.getOrNull(currentLocation)?.y ?: "-0.0"
 
-        val y get() = MyApplication.locations.getOrNull(currentLocation)?.y ?: "-0.0"
+        val latLon: LatLon get() = joshuatee.wx.radar.LatLon(MyApplication.locations[currentLocation].x, MyApplication.locations[currentLocation].y)
 
-        val latLon get() = joshuatee.wx.radar.LatLon(MyApplication.locations[currentLocation].x, MyApplication.locations[currentLocation].y)
-
-        val name get() = MyApplication.locations.getOrNull(currentLocation)?.name ?: ""
+        val name: String get() = MyApplication.locations.getOrNull(currentLocation)?.name ?: ""
 
         fun getName(locNum: Int) = MyApplication.locations.getOrNull(locNum)?.name ?: "0.0"
 
@@ -206,14 +204,14 @@ class Location(val context: Context, locNumInt: Int) {
                 ?: "0.0",
                 MyApplication.locations.getOrNull(locNum)?.y ?: "-0.0")
 
-        val locationIndex get() = Location.currentLocation
+        val locationIndex: Int get() = Location.currentLocation
 
         fun isUS(locationNumber: Int) = MyApplication.locations.getOrNull(locationNumber)?.isUS
                 ?: true
 
         fun isUS(locationNumberString: String) = MyApplication.locations[locationNumberString.toInt() - 1].isUS
 
-        val isUS get() = MyApplication.locations.getOrNull(currentLocation)?.isUS ?: true
+        val isUS: Boolean get() = MyApplication.locations.getOrNull(currentLocation)?.isUS ?: true
 
         fun getRid(context: Context, locNum: String): String = Utility.readPref(context, "RID$locNum", "")
 

@@ -148,6 +148,10 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private val alertDialogRadarLongpressAl = mutableListOf<String>()
     private var wxgltextArr = mutableListOf<WXGLTextObject>()
     private var objFcst: ObjectForecastPackage? = null
+    private var objHazards: ObjectForecastPackageHazards? = null
+    private var objSevenDay: ObjectForecastPackage7Day? = null
+    private var locationChangedSevenDay = false
+    private var locationChangedHazards = false
 
     private fun addDynamicCards() {
         var ccAdded = false
@@ -317,10 +321,10 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 showHelp(helpForecastGeneric)
             } else {
                 if (sevenDayExtShown) {
-                    buttonFor.text = objFcst!!.objSevenDay.sevenDayShort
+                    buttonFor.text = objSevenDay?.sevenDayShort ?: ""
                     sevenDayExtShown = false
                 } else {
-                    buttonFor.text = objFcst!!.objSevenDay.sevenDayExtStr + MyApplication.newline + MyApplication.newline + UtilityDownload.getSunriseSunset(activityReference, Location.currentLocationStr)
+                    buttonFor.text = objSevenDay?.sevenDayExtStr + MyApplication.newline + MyApplication.newline + UtilityDownload.getSunriseSunset(activityReference, Location.currentLocationStr)
                     sevenDayExtShown = true
                 }
             }
@@ -347,6 +351,8 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         if (currentLoc != pos) {
+            locationChangedHazards = true
+            locationChangedSevenDay = true
             if (pos != Location.numLocations) {
                 currentLoc = pos
                 Utility.writePref(activityReference, "CURRENT_LOC_FRAGMENT", (pos + 1).toString())
@@ -777,8 +783,8 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         hazardsCardAl[0].setTextColor(UIPreferences.textHighlightColor)
         hazardsCardAl[0].setText(hazUrl)
         val expandIndexCa = 0
-        val hazUrlCa = objFcst!!.objHazards.hazards
-        val hazardsSumCa = objFcst!!.objHazards.getHazardsShort()
+        val hazUrlCa = objHazards?.hazards ?: ""
+        val hazardsSumCa = objHazards?.getHazardsShort() ?: ""
         hazardsCardAl[0].setOnClickListener(OnClickListener {
             if (!hazardsExpandedAl[expandIndexCa]) {
                 hazardsCardAl[expandIndexCa].setTextColor(UIPreferences.backgroundColor)
@@ -919,7 +925,10 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     }
 
     private fun getForecastData() {
-        GetLocationForecast().execute()
+        //GetLocationForecast().execute()
+        GetLocationForecast().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        GetLocationForecastSevenDay().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        GetLocationHazards().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -930,17 +939,10 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
         override fun doInBackground(vararg params: String): String {
             //
-            // CC
+            // Current Conditions
             //
             try {
                 objFcst = Utility.getCurrentConditionsV2(activityReference, Location.currentLocation)
-                Utility.writePref(activityReference, "FCST", objFcst!!.objSevenDay.sevenDayExtStr)
-                //hazardRaw = if (Location.isUS) {
-                //    objFcst!!.objHazards.hazards
-                //} else {
-                //    objFcst!!.objHazards.hazards.getHtmlSep()
-                //}
-                hazardRaw = objFcst?.objHazards?.hazards ?: ""
                 if (homescreenFavLocal.contains("TXT-CC2")) {
                     bmCc = if (Location.isUS) {
                         UtilityNWS.getIconV2(activityReference, objFcst!!.objCC.iconUrl)
@@ -951,30 +953,13 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)
             }
-            //
-            // 7day
-            //
-            try {
-                Utility.writePref(activityReference, "FCST", objFcst!!.objSevenDay.sevenDayExtStr)
-                if (homescreenFavLocal.contains("TXT-7DAY")) {
-                    objFcst!!.objSevenDay.iconAl.mapTo(bmArr) { UtilityNWS.getIconV2(activityReference, it) }
-                }
-            } catch (e: Exception) {
-                UtilityLog.HandleException(e)
-            }
-            //
-            // hazards
-            //
-            //try {
-            //    hazardRaw = objFcst!!.objHazards.hazards
-            //} catch (e: Exception) { UtilityLog.HandleException(e) }
             return "Executed"
         }
 
         override fun onPostExecute(result: String) {
             if (isAdded) {
                 //
-                // CC
+                // Current Conditions
                 //
                 bmCcSize = UtilityLocationFragment.setNWSIconSize()
                 objFcst?.let {
@@ -991,14 +976,47 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         }
                     }
                 }
-                //
-                // 7day
-                //
+            }
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private inner class GetLocationForecastSevenDay : AsyncTask<String, String, String>() {
+
+        internal val bmArr = mutableListOf<Bitmap>()
+
+        override fun onPreExecute() {
+            if (locationChangedSevenDay) {
+                llCv5V?.removeAllViewsInLayout()
+                locationChangedSevenDay = false
+            }
+        }
+
+        override fun doInBackground(vararg params: String): String {
+            try {
+                objSevenDay = Utility.getCurrentSevenDay(activityReference, Location.currentLocation)
+                Utility.writePref(activityReference, "FCST", objSevenDay?.sevenDayExtStr ?: "")
+            } catch (e: Exception) {
+                UtilityLog.HandleException(e)
+            }
+            try {
+                Utility.writePref(activityReference, "FCST", objSevenDay?.sevenDayExtStr ?: "")
+                if (homescreenFavLocal.contains("TXT-7DAY")) {
+                    objSevenDay!!.iconAl.mapTo(bmArr) { UtilityNWS.getIconV2(activityReference, it) }
+                }
+            } catch (e: Exception) {
+                UtilityLog.HandleException(e)
+            }
+            return "Executed"
+        }
+
+        override fun onPostExecute(result: String) {
+            if (isAdded) {
                 bmCcSize = UtilityLocationFragment.setNWSIconSize()
-                objFcst?.let {
+                objSevenDay?.let {
                     if (homescreenFavLocal.contains("TXT-7DAY")) {
                         llCv5V?.removeAllViewsInLayout()
-                        val day7Arr = objFcst!!.objSevenDay.fcstList
+                        val day7Arr = objSevenDay!!.fcstList
                         bmArr.forEachIndexed { idx, bm ->
                             val c7day = ObjectCard7Day(activityReference, bm, Location.isUS, idx, day7Arr)
                             c7day.setOnClickListener(OnClickListener { sv.smoothScrollTo(0, 0) })
@@ -1020,7 +1038,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         }
                         llCv5V?.addView(cardSunrise.card)
                     } else {
-                        buttonFor.text = objFcst!!.objSevenDay.sevenDayShort
+                        buttonFor.text = objSevenDay?.sevenDayShort
                     }
                 }
                 //
@@ -1035,12 +1053,36 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         llCv5V?.addView(canLegal.card)
                     }
                 }
-                //
-                // hazards
-                //
+            }
+        }
+    }
+
+
+    @SuppressLint("StaticFieldLeak")
+    private inner class GetLocationHazards : AsyncTask<String, String, String>() {
+
+        override fun onPreExecute() {
+            if (locationChangedHazards) {
+                llCv4V?.removeAllViewsInLayout()
+                llCv4V?.visibility = View.GONE
+                locationChangedHazards = false
+            }
+        }
+
+        override fun doInBackground(vararg params: String): String {
+            try {
+                objHazards = Utility.getCurrentHazards(activityReference, Location.currentLocation)
+                hazardRaw = objHazards?.hazards ?: ""
+            } catch (e: Exception) {
+                UtilityLog.HandleException(e)
+            }
+            return "Executed"
+        }
+
+        override fun onPostExecute(result: String) {
+            if (isAdded) {
                 if (Location.isUS) {
                     var hazardSumAsync = ""
-                    //val idAl = hazardRaw.parseColumn("\"@id\": \"(.*?)\"")
                     val idAl = hazardRaw.parseColumn("\"id\": \"(http.*?)\"")
                     val hazardTitles = hazardRaw.parseColumn("\"event\": \"(.*?)\"")
                     hazardTitles.forEach { hazardSumAsync += it + MyApplication.newline }
@@ -1058,16 +1100,16 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     hazardsSum = hazardSumAsync
                 } else {
                     objFcst?.let {
-                        if (objFcst!!.objHazards.getHazardsShort() != "") {
-                            hazardsSum = objFcst!!.objHazards.getHazardsShort().toUpperCase(Locale.US)
+                        if (objHazards?.getHazardsShort() != "") {
+                            hazardsSum = objHazards!!.getHazardsShort().toUpperCase(Locale.US)
                             if (homescreenFavLocal.contains("TXT-HAZ")) {
                                 llCv4V?.visibility = View.VISIBLE
                                 setupHazardCardsCA(hazardsSum)
                             }
                         }
                     }
-                } // end hazard check
-            } // end isAdded() check
+                }
+            }
         }
     }
 }

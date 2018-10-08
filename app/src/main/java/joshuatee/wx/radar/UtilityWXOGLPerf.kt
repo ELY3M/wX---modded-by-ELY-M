@@ -39,10 +39,10 @@ import kotlin.math.*
 
 internal object UtilityWXOGLPerf {
 
-    private const val M_180_div_PI = (180.0 / PI).toFloat()
-    private const val M_PI_div_4 = (PI / 4.0).toFloat()
-    private const val M_PI_div_360 = (PI / 360.0).toFloat()
-    private const val TWICE_PI = (2.0f * PI).toFloat()
+    private val M_180_div_PI = (180.0 / PI).toFloat()
+    private val M_PI_div_4 = (PI / 4.0).toFloat()
+    private val M_PI_div_360 = (PI / 360.0).toFloat()
+    private val TWICE_PI = (2.0f * PI).toFloat()
 
     fun decode8BitAndGenRadials(context: Context, radarBuffers: ObjectOglRadarBuffers): Int {
         var totalBins = 0

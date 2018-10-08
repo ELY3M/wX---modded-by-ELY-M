@@ -38,10 +38,7 @@ import android.widget.RemoteViews
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
 import joshuatee.wx.ui.*
-import joshuatee.wx.util.FileProvider
-import joshuatee.wx.util.ObjectForecastPackage
-
-import joshuatee.wx.util.Utility
+import joshuatee.wx.util.*
 
 object UtilityWidget {
 
@@ -127,11 +124,11 @@ object UtilityWidget {
         }
     }
 
-    fun widgetDownloadData(context: Context, objFcst: ObjectForecastPackage) {
+    fun widgetDownloadData(context: Context, objFcst: ObjectForecastPackage, objSevenDay: ObjectForecastPackage7Day, objHazards: ObjectForecastPackageHazards) {
         //val hazardRaw = objFcst.objHazards.hazards.getHtmlSep()
-        val hazardRaw = objFcst.objHazards.hazards
-        Utility.writePref(context, "HAZARD_WIDGET", objFcst.objHazards.getHazardsShort())
-        Utility.writePref(context, "7DAY_WIDGET", objFcst.objSevenDay.sevenDayShort)
+        val hazardRaw = objHazards.hazards
+        Utility.writePref(context, "HAZARD_WIDGET", objHazards.getHazardsShort())
+        Utility.writePref(context, "7DAY_WIDGET", objSevenDay.sevenDayShort)
         if (objFcst.objCC.data1 != "") {
             Utility.writePref(context, "CC_WIDGET", objFcst.objCC.data1)
         }
@@ -139,13 +136,13 @@ object UtilityWidget {
             Utility.writePref(context, "CC_WIDGET_ICON_URL", objFcst.objCC.iconUrl)
         }
         Utility.writePref(context, "UPDTIME_WIDGET", objFcst.objCC.status)
-        if (objFcst.objSevenDay.sevenDayExtStr != "") {
-            Utility.writePref(context, "7DAY_EXT_WIDGET", objFcst.objSevenDay.sevenDayExtStr)
+        if (objSevenDay.sevenDayExtStr != "") {
+            Utility.writePref(context, "7DAY_EXT_WIDGET", objSevenDay.sevenDayExtStr)
         }
-        Utility.writePref(context, "HAZARD_URL_WIDGET", objFcst.objHazards.hazards)
+        Utility.writePref(context, "HAZARD_URL_WIDGET", objHazards.hazards)
         Utility.writePref(context, "HAZARD_RAW_WIDGET", hazardRaw)
-        if (objFcst.objSevenDay.iconstr != "") {
-            Utility.writePref(context, "7DAY_ICONS_WIDGET", objFcst.objSevenDay.iconstr)
+        if (objSevenDay.iconstr != "") {
+            Utility.writePref(context, "7DAY_ICONS_WIDGET", objSevenDay.iconstr)
         }
         Utility.commitPref(context)
         update(context, CCLegacy)

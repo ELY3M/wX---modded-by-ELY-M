@@ -21,7 +21,7 @@
 
 package joshuatee.wx.util
 
-class ObjectForecastPackage internal constructor(val objSevenDay: ObjectForecastPackage7Day, val objCC: ObjectForecastPackageCurrentConditions, val objHazards: ObjectForecastPackageHazards)
+class ObjectForecastPackage internal constructor(val objCC: ObjectForecastPackageCurrentConditions)
 
 
 

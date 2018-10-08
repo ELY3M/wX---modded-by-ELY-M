@@ -21,6 +21,7 @@
 
 package joshuatee.wx.util
 
+import joshuatee.wx.MyApplication
 import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.radar.LatLon
 import joshuatee.wx.settings.Location
@@ -35,7 +36,7 @@ class ObjectForecastPackageHazards {
 
     // US
     internal constructor(locNum: Int) {
-        if (Location.isUS(locNum)) {
+        if (Location.isUS(locNum) && MyApplication.homescreenFav.contains("TXT-HAZ")) {
             hazards = getHazardsHtml(Location.getLatLon(locNum))
         }
     }
@@ -56,7 +57,11 @@ class ObjectForecastPackageHazards {
             return obj
         }
 
-        fun getHazardsHtml(location: LatLon) = UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts?point=" + UtilityMath.latLonFix(location.latString) + "," + UtilityMath.latLonFix(location.lonString) + "&active=1")
+        fun getHazardsHtml(location: LatLon): String {
+            // was getNWSStringFromURL
+            val html = UtilityDownloadNWS.getHazardData("https://api.weather.gov/alerts?point=" + UtilityMath.latLonFix(location.latString) + "," + UtilityMath.latLonFix(location.lonString) + "&active=1")
+            return html
+        }
     }
 }
 
