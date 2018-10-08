@@ -68,7 +68,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     //
 
     companion object {
-        const val LOC_NUM = ""
+        const val LOC_NUM: String = ""
     }
 
     private var locXStr = ""
@@ -206,10 +206,6 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         }
     }
 
-    /*override fun onClick(v2: View) {
-
-    }*/
-
     private fun showHelpText(helpStr: String) {
         UtilityAlertDialog.showHelpText(helpStr, this)
     }
@@ -222,7 +218,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
             locXEt.setText(resources.getString(R.string.settings_loc_generic_ca_x, caProv))
             locYEt.setText(caId)
             locLabelEt.setText("$caCity, $caProv")
-            hideNotifsCA()
+            notifsCA(true)
         }
         afterDelete()
         super.onRestart()
@@ -263,16 +259,24 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     private inner class SaveLoc : AsyncTask<String, String, String>() {
 
         internal var toastStr = ""
+        internal var xLoc = ""
 
         override fun doInBackground(vararg params: String): String {
-            if (params[0] == "osm")
+            if (params[0] == "osm") {
                 toastStr = Location.locationSave(contextg, params[1], params[2], params[3], params[4])
+                xLoc = params[2]
+            }
             return "Executed"
         }
 
         override fun onPostExecute(result: String) {
             showMessage(toastStr)
             updateSubTitle()
+            if (xLoc.startsWith("CANADA:")){
+                notifsCA(true)
+            } else {
+                notifsCA(false)
+            }
         }
     }
 
@@ -289,6 +293,9 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         override fun onPostExecute(result: String) {
             locXEt.setText(xyStr[0])
             locYEt.setText(xyStr[1])
+            //if (xyStr[0].startsWith("CANADA")){
+            //    hideNotifsCA()
+            //}
         }
     }
 
@@ -559,16 +566,25 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         }
     }
 
-    private fun hideNotifsCA() {
-        alertMcdSw.card.visibility = View.GONE
-        alertSwoSw.card.visibility = View.GONE
-        alertSpcfwSw.card.visibility = View.GONE
-        alertWpcmpdSw.card.visibility = View.GONE
+    private fun notifsCA(hide: Boolean) {
+        if (hide) {
+            alertMcdSw.card.visibility = View.GONE
+            alertSwoSw.card.visibility = View.GONE
+            alertSpcfwSw.card.visibility = View.GONE
+            alertWpcmpdSw.card.visibility = View.GONE
+        } else {
+            alertMcdSw.card.visibility = View.VISIBLE
+            alertSwoSw.card.visibility = View.VISIBLE
+            alertSpcfwSw.card.visibility = View.VISIBLE
+            alertWpcmpdSw.card.visibility = View.VISIBLE
+        }
     }
 
     private fun hideNONUSNotifs() {
         val label = locXEt.text.toString()
-        if (label.contains("CANADA")) hideNotifsCA()
+        if (label.contains("CANADA")) {
+            notifsCA(true)
+        }
     }
 
     private fun updateSubTitle() {

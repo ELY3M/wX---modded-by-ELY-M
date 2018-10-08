@@ -131,7 +131,11 @@ object UtilityNWS {
             "nrasn.png" to R.drawable.nrasn,
             "hurr.png" to R.drawable.hurr,
             "hurr-noh.png" to R.drawable.hurr_noh,
+            "hurricane.png" to R.drawable.hurr,
+            "nhurricane.png" to R.drawable.hurr_noh,
             "tropstorm.png" to R.drawable.tropstorm,
+            "tropical_storm.png" to R.drawable.tropstorm_noh,
+            "ntropical_storm.png" to R.drawable.tropstorm_noh,
             "tropstorm-noh.png" to R.drawable.tropstorm_noh,
             "nmix.png" to R.drawable.nmix,
             "mix.png" to R.drawable.mix,
@@ -140,7 +144,9 @@ object UtilityNWS {
             "ts_warn.png" to R.drawable.tropstorm_noh,
             "nts_warn.png" to R.drawable.tropstorm_noh,
             "minus_ra.png" to R.drawable.minus_ra,
-            "nminus_ra.png" to R.drawable.nminus_ra
+            "nminus_ra.png" to R.drawable.nminus_ra,
+            "nsmoke.png" to R.drawable.nfu,
+            "smoke.png" to R.drawable.fu
     )
 
     fun getIconV2(context: Context, url: String): Bitmap {

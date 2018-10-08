@@ -57,7 +57,7 @@ class NWSObsSitesActivity : BaseActivity() {
         recyclerView = findViewById(R.id.card_list)
         recyclerView.setHasFixedSize(true)
         val llm = LinearLayoutManager(this)
-        llm.orientation = LinearLayoutManager.VERTICAL
+        llm.orientation = RecyclerView.VERTICAL
         recyclerView.layoutManager = llm
         ca = SingleTextAdapter(STATE_ARR)
         recyclerView.adapter = ca

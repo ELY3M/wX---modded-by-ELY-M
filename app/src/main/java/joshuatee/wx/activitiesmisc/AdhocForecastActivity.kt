@@ -57,6 +57,8 @@ class AdhocForecastActivity : BaseActivity() {
     private lateinit var turl: Array<String>
     private var latlon = LatLon()
     private var objFcst: ObjectForecastPackage? = null
+    private var objHazards: ObjectForecastPackageHazards? = null
+    private var objSevenDay: ObjectForecastPackage7Day? = null
     private lateinit var sv: ScrollView
     private var ccTime = ""
     private var radarTime = ""
@@ -103,16 +105,18 @@ class AdhocForecastActivity : BaseActivity() {
             // CC
             //
             objFcst = Utility.getCurrentConditionsV2byLatLon(contextg, latlon)
-            hazardRaw = objFcst!!.objHazards.hazards.getHtmlSep()
+            objHazards = Utility.getCurrentHazards(contextg, latlon)
+            objSevenDay = Utility.getCurrentSevenDay(contextg, latlon)
+            hazardRaw = objHazards!!.hazards.getHtmlSep()
             bmCc = UtilityNWS.getIconV2(contextg, objFcst!!.objCC.iconUrl)
             //
             // 7day
             //
-            objFcst!!.objSevenDay.iconAl.mapTo(bmArr) { UtilityNWS.getIconV2(contextg, it) }
+            objSevenDay!!.iconAl.mapTo(bmArr) { UtilityNWS.getIconV2(contextg, it) }
             //
             // hazards
             //
-            hazardRaw = objFcst!!.objHazards.hazards
+            hazardRaw = objHazards!!.hazards
             return "Executed"
         }
 
@@ -135,7 +139,7 @@ class AdhocForecastActivity : BaseActivity() {
             bmCcSize = UtilityLocationFragment.setNWSIconSize()
             objFcst?.let {
                 llCv5V.removeAllViewsInLayout()
-                val day7Arr = objFcst!!.objSevenDay.fcstList
+                val day7Arr = objSevenDay!!.fcstList
                 bmArr.forEachIndexed { idx, bm ->
                     val c7day = ObjectCard7Day(contextg, bm, true, idx, day7Arr)
                     c7day.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) })

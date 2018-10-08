@@ -193,10 +193,12 @@ object UtilityNotification {
             }
             if (currentUpdateTime > lastUpdateTime + 1000 * 60 * ccUpdateInterval) {
                 val objFcst = Utility.getCurrentConditionsV2(context, locNumInt)
+                val objHazards = Utility.getCurrentHazards(context, locNumInt)
+                val objSevenDay = Utility.getCurrentSevenDay(context, locNumInt)
                 val updateTime = System.currentTimeMillis()
                 Utility.writePref(context, "CC" + locNum + "_LAST_UPDATE", updateTime)
                 if (locNum == widgetLocNum && widgetsEnabled) {
-                    UtilityWidget.widgetDownloadData(context, objFcst)
+                    UtilityWidget.widgetDownloadData(context, objFcst, objSevenDay, objHazards)
                 }
                 if (MyApplication.locations[locNumInt].ccNotification) {
                     noMain = locLabelStr
@@ -243,10 +245,10 @@ object UtilityNotification {
                 if (MyApplication.locations[locNumInt].sevenDayNotification) {
                     locLabelStr = "(" + Location.getName(locNumInt) + ")" + " 7 day"
                     noMain = locLabelStr
-                    noBody = objFcst.objSevenDay.sevenDayShort
-                    noSummary = objFcst.objSevenDay.sevenDayShort
+                    noBody = objSevenDay.sevenDayShort
+                    noSummary = objSevenDay.sevenDayShort
                     val resultIntent2 = Intent(context, TextScreenActivity::class.java)
-                    resultIntent2.putExtra(TextScreenActivity.URL, arrayOf(objFcst.objSevenDay.sevenDayExtStr, locLabelStr))
+                    resultIntent2.putExtra(TextScreenActivity.URL, arrayOf(objSevenDay.sevenDayExtStr, locLabelStr))
                     val stackBuilder2 = TaskStackBuilder.create(context)
                     stackBuilder2.addParentStack(TextScreenActivity::class.java)
                     stackBuilder2.addNextIntent(resultIntent2)

@@ -43,10 +43,15 @@ import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 
+/**
+ *
+ * This is a general purpose activity used to view one image. URL and title are passed in via extras
+ *
+ */
+
 class ImageShowActivity : BaseActivity(), OnClickListener {
 
-    // This is a general purpose activity used to view one image.
-    // URL and title are passed in via extras
+
     //
     // Arguments
     // 1: URL
@@ -54,7 +59,7 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
     // 3: (optional) string "true" means a whitebg is needed
 
     companion object {
-        const val URL = ""
+        const val URL: String = ""
     }
 
     private var url = ""

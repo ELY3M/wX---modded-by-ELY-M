@@ -147,25 +147,50 @@ object Utility {
     private fun getCurrentConditionsCanada(locNum: Int): ObjectForecastPackage {
         val html = UtilityCanada.getLocationHTML(Location.getLatLon(locNum))
         val objCC = ObjectForecastPackageCurrentConditions.createForCanada(html)
-        val objSevenDay = ObjectForecastPackage7Day(locNum, html)
-        val objHazards = ObjectForecastPackageHazards.createForCanada(html)
-        return ObjectForecastPackage(objSevenDay, objCC, objHazards)
+        //val objSevenDay = ObjectForecastPackage7Day(locNum, html)
+        //val objHazards = ObjectForecastPackageHazards.createForCanada(html)
+        return ObjectForecastPackage(objCC)
     }
 
     private fun getCurrentConditionsUSV2(context: Context, locNum: Int): ObjectForecastPackage {
-        val sevenDayJson = UtilityDownloadNWS.get7DayJSON(Location.getLatLon(locNum))
-        val objSevenDay = ObjectForecastPackage7Day(locNum, sevenDayJson)
         val objCC = ObjectForecastPackageCurrentConditions(context, locNum)
-        val objHazards = ObjectForecastPackageHazards(locNum)
-        return ObjectForecastPackage(objSevenDay, objCC, objHazards)
+        return ObjectForecastPackage(objCC)
+    }
+
+    fun getCurrentHazards(context: Context, locNum: Int): ObjectForecastPackageHazards {
+        if (Location.isUS(locNum)) {
+            return ObjectForecastPackageHazards(locNum)
+        } else {
+            val html = UtilityCanada.getLocationHTML(Location.getLatLon(locNum))
+            return ObjectForecastPackageHazards.createForCanada(html)
+        }
+    }
+
+    fun getCurrentSevenDay(context: Context, locNum: Int): ObjectForecastPackage7Day {
+        if (Location.isUS(locNum)) {
+            val sevenDayJson = UtilityDownloadNWS.get7DayJSON(Location.getLatLon(locNum))
+            return ObjectForecastPackage7Day(locNum, sevenDayJson)
+        } else {
+            val html = UtilityCanada.getLocationHTML(Location.getLatLon(locNum))
+            return ObjectForecastPackage7Day(locNum, html)
+        }
+    }
+
+    fun getCurrentSevenDay(context: Context, location: LatLon): ObjectForecastPackage7Day {
+        val sevenDayJson = UtilityDownloadNWS.get7DayJSON(location)
+        return ObjectForecastPackage7Day(-1, sevenDayJson)
+    }
+
+    fun getCurrentHazards(context: Context, location: LatLon): ObjectForecastPackageHazards {
+        return ObjectForecastPackageHazards(location)
     }
 
     fun getCurrentConditionsV2byLatLon(context: Context, location: LatLon): ObjectForecastPackage {
-        val sevenDayJson = UtilityDownloadNWS.get7DayJSON(location)
-        val objSevenDay = ObjectForecastPackage7Day(-1, sevenDayJson)
+        //val sevenDayJson = UtilityDownloadNWS.get7DayJSON(location)
+        //val objSevenDay = ObjectForecastPackage7Day(-1, sevenDayJson)
         val objCC = ObjectForecastPackageCurrentConditions(context, location)
-        val objHazards = ObjectForecastPackageHazards(location)
-        return ObjectForecastPackage(objSevenDay, objCC, objHazards)
+        //val objHazards = ObjectForecastPackageHazards(location)
+        return ObjectForecastPackage(objCC)
     }
 
     fun getCurrentConditionsV2(context: Context, locNum: Int) = if (Location.isUS(locNum)) {

@@ -45,6 +45,10 @@ object UtilityDownloadNWS {
         return UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/points/$x,$y/forecast")
     }
 
+    fun getHazardData(url: String): String {
+        return UtilityDownloadNWS.getNWSStringFromURLJSON(url)
+    }
+
     fun get7DayURL(x: String, y: String) = "https://forecast-v3.weather.gov/point/$x,$y"
 
     fun getLatLonForZone(zone: String): List<String> {
@@ -80,6 +84,8 @@ object UtilityDownloadNWS {
     fun getNWSStringFromURL(url: String) = getNWSStringFromURLBase(url, "application/vnd.noaa.dwml+xml;version=1")
 
     private fun getNWSStringFromURLJSON(url: String) = getNWSStringFromURLBase(url, "application/geo+json;version=1")
+
+    private fun getNWSStringFromURLLDJSON(url: String) = getNWSStringFromURLBase(url, "application/ld+json;version=1")
 
     private fun getNWSStringFromURLBase(url: String, header: String): String {
         val out = StringBuilder(5000)

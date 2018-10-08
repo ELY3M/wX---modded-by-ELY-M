@@ -67,16 +67,16 @@ internal object UtilityMetar {
             val obsAlAviationColor = mutableListOf<Int>()
             obsStateOld = rid
             val obsList = getObservationSites(context, rid)
+            // https://www.aviationweather.gov/metar/data?ids=KDTW%2CKARB&format=raw&date=&hours=0
             val sigHtmlTmp = "http://www.aviationweather.gov/adds/metars/index?submit=1&station_ids=$obsList&chk_metars=on".getHtml()
-            val metarArr = sigHtmlTmp.parseColumn("<FONT FACE=\"Monospace,Courier\">(.*?)</FONT><BR>")
+            val metarArrTmp = sigHtmlTmp.parseColumn("<FONT FACE=\"Monospace,Courier\">(.*?)</FONT><BR>")
+            val metarArr = condenseObs(metarArrTmp)
             if (!initializedObsMap) {
                 val xmlFileInputStream = context.resources.openRawResource(R.raw.us_metar3)
                 val text = UtilityIO.readTextFile(xmlFileInputStream)
                 val lines = text.split("\n").dropLastWhile { it.isEmpty() }
-                //var tmpArr: Array<String>
                 var tmpArr: List<String>
                 lines.forEach {
-                    //tmpArr = MyApplication.space.split(it)
                     tmpArr = it.split(" ")
                     OBS_LATLON[tmpArr[0]] = arrayOf(tmpArr[1], tmpArr[2])
                 }
@@ -313,5 +313,21 @@ internal object UtilityMetar {
         }
         return obsListSb.toString().replace(",$".toRegex(), "")
         //return "KARB,KYIP,KBLF,KBKW,KCKB,KCMH,KCRW,KDCA,KEKN,KHLG,KHTS,KI16,KILN,KLEX,KLNP,KLOZ,KMGW,KMRB,KPIT,KPKB,KROA,KTRI,KW22,KW99,KZZV";
+    }
+
+    // used to condense a list of metar that contains multiple entries for one site, newest is first so simply grab first/append
+    private fun condenseObs(list: List<String>): List<String> {
+        val siteMap = mutableMapOf<String, Boolean>()
+        var goodObsList = mutableListOf<String>()
+        list.forEach {
+            val tokens = it.split(" ")
+            if (tokens.count() > 3) {
+                if (siteMap[tokens[0]] != true ){
+                    siteMap[tokens[0]] = true
+                    goodObsList.add(it)
+                }
+            }
+        }
+        return goodObsList
     }
 }
