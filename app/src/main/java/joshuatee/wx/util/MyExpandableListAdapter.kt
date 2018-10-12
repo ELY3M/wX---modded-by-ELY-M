@@ -30,11 +30,11 @@ class MyExpandableListAdapter(act: Activity, private val groups: SparseArray<Gro
         return convertView
     }
 
-    override fun getChildrenCount(groupPosition: Int) = groups.get(groupPosition).children.size
+    override fun getChildrenCount(groupPosition: Int): Int = groups.get(groupPosition).children.size
 
     override fun getGroup(groupPosition: Int): Any = groups.get(groupPosition)
 
-    override fun getGroupCount() = groups.size()
+    override fun getGroupCount(): Int = groups.size()
 
     override fun getGroupId(groupPosition: Int): Long = 0
 
@@ -49,7 +49,7 @@ class MyExpandableListAdapter(act: Activity, private val groups: SparseArray<Gro
         return convertView
     }
 
-    override fun hasStableIds() = true
+    override fun hasStableIds(): Boolean = true
 
-    override fun isChildSelectable(groupPosition: Int, childPosition: Int) = true
+    override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean = true
 } 

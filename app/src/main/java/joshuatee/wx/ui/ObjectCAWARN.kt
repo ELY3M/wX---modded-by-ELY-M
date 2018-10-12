@@ -46,7 +46,7 @@ class ObjectCAWARN(private val context: Context, private val activity: Activity,
     private var listLocWatch = mutableListOf<String>()
     private var listLocStatement = mutableListOf<String>()
     private var bitmap = UtilityImg.getBlankBitmap()
-    var prov = "ca"
+    var prov: String = "ca"
 
     fun getData() {
         listLocUrl.clear()
@@ -84,7 +84,7 @@ class ObjectCAWARN(private val context: Context, private val activity: Activity,
         var locWatch: String
         var locStatement: String
         var provL: String
-        listLocUrl.indices.forEach {
+        listLocUrl.indices.forEach { it ->
             locWarning = listLocWarning[it]
             locWatch = listLocWatch[it]
             locStatement = listLocStatement[it]
@@ -115,7 +115,7 @@ class ObjectCAWARN(private val context: Context, private val activity: Activity,
         ll.addView(cBanner.card)
     }
 
-    val title get() = PROV_TO_LABEL[prov] + " (" + listLocUrl.size + ")"
+    val title: String get() = PROV_TO_LABEL[prov] + " (" + listLocUrl.size + ")"
 
     @SuppressLint("StaticFieldLeak")
     inner class GetWarningDetail : AsyncTask<String, String, String>() {

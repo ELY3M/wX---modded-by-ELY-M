@@ -82,7 +82,7 @@ object UtilitySPCMESO {
         }
     }
 
-    const val DEFAULT_SECTOR = "19"
+    const val DEFAULT_SECTOR: String = "19"
     internal const val IMG_SF = ":ttd:mcon:thea:mxth:temp_chg:dwpt_chg:mixr_chg:thte_chg:925mb:850mb:700mb:500mb:300mb:sbcp:mlcp:mucp:muli:laps:lllr:lclh:lfch:lfrh:effh:stor:stpc:cpsh:comp:lcls:lr3c:tdlr:qlcs1:qlcs2:pwtr:tran:prop:peff:fzlv:les1:"
     internal fun setParamFromFav(token: String): List<String> {
         var param = ""
@@ -137,8 +137,8 @@ object UtilitySPCMESO {
         return listOf(param, label)
     }
 
-    var SHORT_CODES = Array(12) { Array(23) { _ -> "" } }
-    var LONG_CODES = Array(12) { Array(23) { _ -> "" } }
+    var SHORT_CODES: Array<Array<String>> = Array(12) { Array(23) { _ -> "" } }
+    var LONG_CODES: Array<Array<String>> = Array(12) { Array(23) { _ -> "" } }
     internal val GROUPS = SparseArray<Group>()
 
     internal fun createData() {

@@ -70,7 +70,7 @@ import android.widget.Toast.LENGTH_SHORT
 import joshuatee.wx.UIPreferences
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-internal class RecordingSession(private val context: Context, private val listener: Listener, private val resultCode: Int, private val data: Intent, var showDistanceTool: Boolean, var showRecordingTools: Boolean) {
+internal class RecordingSession(private val context: Context, private val listener: Listener, private val resultCode: Int, private val data: Intent, private var showDistanceTool: Boolean, private var showRecordingTools: Boolean) {
 
     private val mainThread = Handler(Looper.getMainLooper())
 

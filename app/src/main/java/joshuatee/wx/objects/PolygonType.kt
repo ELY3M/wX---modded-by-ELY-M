@@ -49,7 +49,7 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
     SWO(MyApplication.radarColorHi, "SWO", MyApplication.radarSwo, 0.0f),
     NONE(0, "", false, 0.0f);
 
-    override fun toString() = typeAsString
+    override fun toString(): String = typeAsString
 
     companion object {
         fun refresh() {
@@ -65,6 +65,7 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
             SVS.pref = MyApplication.radarSvsWarnings
             SPS.pref = MyApplication.radarSpsWarnings
             SPOTTER.pref = MyApplication.radarSpotters
+            SPOTTER_LABELS.pref = MyApplication.radarSpottersLabel
             WIND_BARB_GUSTS.pref = MyApplication.radarObsWindbarbs
             WIND_BARB.pref = MyApplication.radarObsWindbarbs
             WIND_BARB_CIRCLE.pref = MyApplication.radarObsWindbarbs

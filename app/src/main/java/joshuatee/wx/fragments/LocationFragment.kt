@@ -296,8 +296,8 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             cv5?.addView(buttonFor)
         }
         addDynamicCards()
-        cardCC?.let {
-            it.textViewTop.setOnClickListener {
+        cardCC?.let { objectCardCC ->
+            objectCardCC.textViewTop.setOnClickListener {
                 if (Location.isUS) {
                     if (MyApplication.helpMode) {
                         showHelp(helpCurrentGeneric)
@@ -307,8 +307,8 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 }
             }
         }
-        cardCC?.let {
-            it.textViewBottom.setOnClickListener {
+        cardCC?.let { objectCardCC ->
+            objectCardCC.textViewBottom.setOnClickListener {
                 if (MyApplication.helpMode) {
                     showHelp(helpForecastGenericStatus)
                 } else {
@@ -487,9 +487,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
         override fun doInBackground(vararg params: String): String {
             l = params[0].toIntOrNull() ?: 0
-            if (activityReference != null) {
-                longText = UtilityDownload.getTextProduct(activityReference, hsTextAl[l].product).replace("<br>AREA FORECAST DISCUSSION", "AREA FORECAST DISCUSSION")
-            }
+            longText = UtilityDownload.getTextProduct(MyApplication.appContext, hsTextAl[l].product).replace("<br>AREA FORECAST DISCUSSION", "AREA FORECAST DISCUSSION")
             hsTextAl[l].setTextLong(longText)
             return "Executed"
         }
@@ -509,9 +507,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
         override fun doInBackground(vararg params: String): String {
             l = params[0].toIntOrNull() ?: 0
-            if (activityReference != null) {
-                b = UtilityDownload.getImgProduct(activityReference, hsImageAl[l].product)
-            }
+            b = UtilityDownload.getImgProduct(MyApplication.appContext, hsImageAl[l].product)
             return "Executed"
         }
 
@@ -925,7 +921,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     }
 
     private fun getForecastData() {
-        //GetLocationForecast().execute()
         GetLocationForecast().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         GetLocationForecastSevenDay().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         GetLocationHazards().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
@@ -935,7 +930,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private inner class GetLocationForecast : AsyncTask<String, String, String>() {
 
         internal var bmCc: Bitmap? = null
-        internal val bmArr = mutableListOf<Bitmap>()
 
         override fun doInBackground(vararg params: String): String {
             //
@@ -962,7 +956,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 // Current Conditions
                 //
                 bmCcSize = UtilityLocationFragment.setNWSIconSize()
-                objFcst?.let {
+                objFcst?.let { _ ->
                     cardCC?.let {
                         if (homescreenFavLocal.contains("TXT-CC2")) {
                             ccTime = objFcst!!.objCC.status
@@ -994,7 +988,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
         override fun doInBackground(vararg params: String): String {
             try {
-                objSevenDay = Utility.getCurrentSevenDay(activityReference, Location.currentLocation)
+                objSevenDay = Utility.getCurrentSevenDay(Location.currentLocation)
                 Utility.writePref(activityReference, "FCST", objSevenDay?.sevenDayExtStr ?: "")
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)
@@ -1013,7 +1007,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         override fun onPostExecute(result: String) {
             if (isAdded) {
                 bmCcSize = UtilityLocationFragment.setNWSIconSize()
-                objSevenDay?.let {
+                objSevenDay?.let { _ ->
                     if (homescreenFavLocal.contains("TXT-7DAY")) {
                         llCv5V?.removeAllViewsInLayout()
                         val day7Arr = objSevenDay!!.fcstList
@@ -1071,7 +1065,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
         override fun doInBackground(vararg params: String): String {
             try {
-                objHazards = Utility.getCurrentHazards(activityReference, Location.currentLocation)
+                objHazards = Utility.getCurrentHazards(Location.currentLocation)
                 hazardRaw = objHazards?.hazards ?: ""
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)

@@ -25,6 +25,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.View
+import androidx.cardview.widget.CardView
 
 import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
@@ -40,7 +41,7 @@ class ObjectCALegal(context: Context, url: String) {
         c1.setText(context.resources.getText(R.string.main_screen_ca_disclaimor))
     }
 
-    val card get() = c1.card
+    val card: CardView get() = c1.card
 }
 
 

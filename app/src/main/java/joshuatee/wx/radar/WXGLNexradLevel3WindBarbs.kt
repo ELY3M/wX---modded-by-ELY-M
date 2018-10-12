@@ -57,9 +57,9 @@ internal object WXGLNexradLevel3WindBarbs {
         val barbLength = 15.0
         val barbOffset = 0.0
         var above50: Boolean
-        arrWb.forEach {
+        arrWb.forEach { line ->
             val ecc = ExternalGeodeticCalculator()
-            val metarArr = it.split(":").dropLastWhile { it.isEmpty() }
+            val metarArr = line.split(":").dropLastWhile { it.isEmpty() }
             var angle = 0
             var length = 0
             val locXDbl: Double

@@ -51,7 +51,6 @@ class BackgroundFetch(val context: Context) {
 
     private fun doNotifs() {
         var notifUrls = ""
-        //val sep = ","
         var watchLatlon = ""
         var watchLatlonTor = ""
         var mcdLatlon = ""

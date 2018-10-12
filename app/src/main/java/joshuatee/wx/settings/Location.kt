@@ -133,13 +133,13 @@ class Location(val context: Context, locNumInt: Int) {
     val notificationWpcmpd: Boolean get() = alertNotificationWpcmpdCurrent.startsWith("t")
 
     companion object {
-        var numLocations = 1
-        var currentLocation = 0
+        var numLocations: Int = 1
+        var currentLocation: Int = 0
             private set
 
-        val listOf = mutableListOf<String>()
+        val listOf: MutableList<String> = mutableListOf()
 
-        fun us(xStr: String) = if (xStr.isNotEmpty()) {
+        fun us(xStr: String): Boolean = if (xStr.isNotEmpty()) {
             Character.isDigit(xStr[0])
         } else {
             true
@@ -190,26 +190,26 @@ class Location(val context: Context, locNumInt: Int) {
 
         val name: String get() = MyApplication.locations.getOrNull(currentLocation)?.name ?: ""
 
-        fun getName(locNum: Int) = MyApplication.locations.getOrNull(locNum)?.name ?: "0.0"
+        fun getName(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.name ?: "0.0"
 
-        fun getX(locNum: Int) = MyApplication.locations.getOrNull(locNum)?.x ?: "0.0"
+        fun getX(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.x ?: "0.0"
 
-        fun getY(locNum: Int) = MyApplication.locations.getOrNull(locNum)?.y ?: "-0.0"
+        fun getY(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.y ?: "-0.0"
 
-        fun getRid(locNum: Int) = MyApplication.locations.getOrNull(locNum)?.rid ?: "DTX"
+        fun getRid(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.rid ?: "DTX"
 
-        fun getWfo(locNum: Int) = MyApplication.locations.getOrNull(locNum)?.wfo ?: "DTX"
+        fun getWfo(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.wfo ?: "DTX"
 
-        fun getLatLon(locNum: Int) = joshuatee.wx.radar.LatLon(MyApplication.locations.getOrNull(locNum)?.x
+        fun getLatLon(locNum: Int): LatLon = joshuatee.wx.radar.LatLon(MyApplication.locations.getOrNull(locNum)?.x
                 ?: "0.0",
                 MyApplication.locations.getOrNull(locNum)?.y ?: "-0.0")
 
         val locationIndex: Int get() = Location.currentLocation
 
-        fun isUS(locationNumber: Int) = MyApplication.locations.getOrNull(locationNumber)?.isUS
+        fun isUS(locationNumber: Int): Boolean = MyApplication.locations.getOrNull(locationNumber)?.isUS
                 ?: true
 
-        fun isUS(locationNumberString: String) = MyApplication.locations[locationNumberString.toInt() - 1].isUS
+        fun isUS(locationNumberString: String): Boolean = MyApplication.locations[locationNumberString.toInt() - 1].isUS
 
         val isUS: Boolean get() = MyApplication.locations.getOrNull(currentLocation)?.isUS ?: true
 

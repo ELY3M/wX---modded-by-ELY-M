@@ -145,17 +145,17 @@ object UtilityWXOGL {
         var q = 0
         var notFound = true
         var polyCount = -1
-        polygonArr.forEach {
+        polygonArr.forEach { polys ->
             polyCount += 1
             if (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith("0.CAN")) {
-                val polyTmp = it.replace("[", "").replace("]", "").replace(",", " ")
+                val polyTmp = polys.replace("[", "").replace("]", "").replace(",", " ")
                 testArr = polyTmp.split(" ").dropLastWhile { it.isEmpty() }
-                val y = testArr.filterIndexed { idx: Int, _: String -> idx and 1 == 0 }.map {
+                val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }.map {
                     it.toDoubleOrNull() ?: 0.0
-                }
-                val x = testArr.filterIndexed { idx: Int, _: String -> idx and 1 != 0 }.map {
+                }.toList()
+                val x = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 != 0 }.map {
                     it.toDoubleOrNull() ?: 0.0
-                }
+                }.toList()
                 if (y.size > 3 && x.size > 3 && x.size == y.size) {
                     val poly2 = ExternalPolygon.Builder()
                     x.indices.forEach { j -> poly2.addVertex(ExternalPoint(x[j].toFloat(), y[j].toFloat())) }

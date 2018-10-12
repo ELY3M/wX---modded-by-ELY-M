@@ -45,7 +45,7 @@ object UtilityMath {
     }
 
     // convert polar cords to rect
-    fun toRect(r: Float, t: Float) = floatArrayOf((r * cos(t / (180.00f / PI))).toFloat(), (r * sin(t / (180.00f / PI))).toFloat())
+    fun toRect(r: Float, t: Float): FloatArray = floatArrayOf((r * cos(t / (180.00f / PI))).toFloat(), (r * sin(t / (180.00f / PI))).toFloat())
 
     fun unitsPressure(valueF: String): String {
         var value = valueF
@@ -134,9 +134,9 @@ object UtilityMath {
         return radius * (PI / 180) * cos(Math.toRadians(centerX))
     }
 
-    fun deg2rad(deg: Double) = deg * PI / 180.0
+    fun deg2rad(deg: Double): Double = deg * PI / 180.0
 
-    fun rad2deg(rad: Double) = rad * 180.0 / PI
+    fun rad2deg(rad: Double): Double = rad * 180.0 / PI
 
     fun convertWindDir(direction: Double): String {
         var dirStr = ""

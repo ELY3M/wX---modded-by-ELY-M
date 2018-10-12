@@ -56,7 +56,7 @@ import joshuatee.wx.objects.ObjectIntent
 class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object {
-        const val NO = ""
+        const val NO: String = ""
     }
 
     private var no = ""
@@ -165,12 +165,11 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
         }
 
         override fun onPostExecute(result: String) {
-            mcdList.indices.forEach {
+            mcdList.indices.forEach { mcdIndex ->
                 val card = ObjectCardImage(contextg)
-                card.setImage(bitmapArr[it])
+                card.setImage(bitmapArr[mcdIndex])
                 ll.addView(card.card)
-                val index = it
-                card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCMCDWShowActivity::class.java, SPCMCDWShowActivity.NO, arrayOf(mcdNoArr[index], "", polygonType.toString())) })
+                card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCMCDWShowActivity::class.java, SPCMCDWShowActivity.NO, arrayOf(mcdNoArr[mcdIndex], "", polygonType.toString())) })
                 if (mcdList.size == 1) {
                     registerForContextMenu(card.img)
                 }
@@ -191,7 +190,7 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
                 miUrl.isVisible = true
                 miImage.isVisible = true
             } else {
-                setTitle(activityLabel + " " + mcdNoArr.toString().replace("\\{|\\}".toRegex(), "").replace("\\[|\\]".toRegex(), "").replace("w", ""))
+                setTitle(activityLabel + " " + mcdNoArr.toString().replace("[{}]".toRegex(), "").replace("\\[|\\]".toRegex(), "").replace("w", ""))
                 miAll.isVisible = true
             }
             val tv: TextView = findViewById(R.id.tv)

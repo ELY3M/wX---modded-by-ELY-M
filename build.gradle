@@ -4,7 +4,7 @@ buildscript {
     //ext.supportLibraryVersion = "27.1.1"
     //ext.supportLibraryVersion = "28.0.0-beta1"
     ext.okHttpVersion = "3.11.0"
-    ext.ndkVersion = "android-ndk-r17b"
+    ext.ndkVersion = "android-ndk-r18"
 
     repositories {
         jcenter()
@@ -13,7 +13,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.2.0-rc02'
+        classpath 'com.android.tools.build:gradle:3.2.0'
         // was 2.3.2 com.android.tools.build:gradle:3.2.0-alpha14
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }

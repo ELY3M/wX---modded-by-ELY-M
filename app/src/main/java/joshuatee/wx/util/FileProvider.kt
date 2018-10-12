@@ -32,7 +32,7 @@ class FileProvider : androidx.core.content.FileProvider() {
     private fun columnNamesWithData(columnNames: Array<String>): Array<String> {
         columnNames
                 .filter { MediaStore.MediaColumns.DATA == it }
-                .forEach { return columnNames }
+                .forEach { _ -> return columnNames }
         val newColumnNames = Arrays.copyOf(columnNames, columnNames.size + 1)
         newColumnNames[columnNames.size] = MediaStore.MediaColumns.DATA
         return newColumnNames

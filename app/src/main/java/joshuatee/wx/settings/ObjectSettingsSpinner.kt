@@ -31,6 +31,7 @@ import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
@@ -100,7 +101,7 @@ class ObjectSettingsSpinner(context: Context, private val activity: Activity, la
         UtilityAlertDialog.showHelpText(helpStr, activity)
     }
 
-    val card get() = objCard.card
+    val card: CardView get() = objCard.card
 }
 
 

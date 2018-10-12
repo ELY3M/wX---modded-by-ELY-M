@@ -29,30 +29,30 @@ import joshuatee.wx.util.Utility
 
 object UIPreferences {
 
-    var refreshLocMin = 0
-    var translateText = false
-    var nwsTextRemovelinebreaks = false
-    var recordScreenShare = false
-    var prefPreventAccidentalExit = false
-    var fabInModels = false
-    var backgroundColor = Color.WHITE
-    var colorNotif = 0
-    var colorBlack = 0
-    var colorOffwhiteToolbar = 0
-    var dualpaneRadarIcon = false
-    var homescreenTextLength = 0
-    var mediaControlNotif = false
-    var radarToolbarTransparent = false
-    var radarImmersiveMode = false
-    var tilesPerRow = 3
-    var themeStr = ""
-    var themeInt = 0
-    var smallTextTheme = 0
-    var textHighlightColor = 0
-    var highlightColorStr = ""
-    var themeIsWhite = true
-    var hideTopToolbar = false
-    var mainScreenRadarFab = false
+    var refreshLocMin: Int = 0
+    var translateText: Boolean = false
+    var nwsTextRemovelinebreaks: Boolean = false
+    var recordScreenShare: Boolean = false
+    var prefPreventAccidentalExit: Boolean = false
+    var fabInModels: Boolean = false
+    var backgroundColor: Int = Color.WHITE
+    var colorNotif: Int = 0
+    var colorBlack: Int = 0
+    var colorOffwhiteToolbar: Int = 0
+    var dualpaneRadarIcon: Boolean = false
+    var homescreenTextLength: Int = 0
+    var mediaControlNotif: Boolean = false
+    var radarToolbarTransparent: Boolean = false
+    var radarImmersiveMode: Boolean = false
+    var tilesPerRow: Int = 3
+    var themeStr: String = ""
+    var themeInt: Int = 0
+    var smallTextTheme: Int = 0
+    var textHighlightColor: Int = 0
+    var highlightColorStr: String = ""
+    var themeIsWhite: Boolean = true
+    var hideTopToolbar: Boolean = false
+    var mainScreenRadarFab: Boolean = false
 
     fun initPreferences(context: Context) {
         mainScreenRadarFab = Utility.readPref(context, "UI_MAIN_SCREEN_RADAR_FAB", "false").startsWith("t")

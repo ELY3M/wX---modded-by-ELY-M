@@ -46,7 +46,7 @@ object UtilityImg {
 
     fun getBlankBitmap(): Bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
 
-    fun getBitmapRemoveBG(imgUrl: String, color: Int) = UtilityImg.eraseBG(imgUrl.getImage(), color)
+    fun getBitmapRemoveBG(imgUrl: String, color: Int): Bitmap = UtilityImg.eraseBG(imgUrl.getImage(), color)
 
     fun getBitmapAddWhiteBG(context: Context, imgUrl: String): Bitmap {
         val layers = mutableListOf<Drawable>()
@@ -124,6 +124,7 @@ object UtilityImg {
                 BitmapFactory.decodeStream(inputStream)
             else
                 BitmapFactory.decodeStream(inputStream, null, options)
+                        ?: UtilityImg.getBlankBitmap()
         } catch (e: OutOfMemoryError) {
             UtilityLog.HandleException(e)
             return getBlankBitmap()
@@ -137,9 +138,9 @@ object UtilityImg {
         return bitmap
     }
 
-    fun animInterval(context: Context) = 50 * Utility.readPref(context, "ANIM_INTERVAL", 15)
+    fun animInterval(context: Context): Int = 50 * Utility.readPref(context, "ANIM_INTERVAL", 15)
 
-    fun bitmapToLayerDrawable(context: Context, bitmap: Bitmap) = LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
+    fun bitmapToLayerDrawable(context: Context, bitmap: Bitmap): LayerDrawable = LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
 
     fun layerDrawableToBitmap(layers: MutableList<Drawable>): Bitmap {
         val drawable = LayerDrawable(layers.toTypedArray())

@@ -53,7 +53,7 @@ object UtilityUI {
     fun makeSnackBar(view: View, message: String) {
         val snack = Snackbar.make(view, message, Snackbar.LENGTH_INDEFINITE)
         snack.setActionTextColor(Color.YELLOW)
-        snack.setAction("DISMISS", View.OnClickListener { snack.dismiss() })
+        snack.setAction("DISMISS") { snack.dismiss() }
         val viewSnack = snack.view
         val tv = viewSnack.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
         val fgColor = Color.WHITE

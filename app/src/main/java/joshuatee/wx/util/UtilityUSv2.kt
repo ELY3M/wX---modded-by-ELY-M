@@ -38,7 +38,7 @@ import joshuatee.wx.radar.LatLon
 // FIXME rename
 object UtilityUSv2 {
 
-    var obsClosestClass = ""
+    var obsClosestClass: String = ""
     private val OBS_CODE_TO_LOCATION = mutableMapOf<String, String>()
 
     internal fun getStatus(context: Context, conditionsTimeStrF: String): String {

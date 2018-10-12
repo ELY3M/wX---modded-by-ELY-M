@@ -53,7 +53,7 @@ class ModelsNSSLWRFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     // arg4 - title string
 
     companion object {
-        const val INFO = ""
+        const val INFO: String = ""
     }
 
     private var animRan = false

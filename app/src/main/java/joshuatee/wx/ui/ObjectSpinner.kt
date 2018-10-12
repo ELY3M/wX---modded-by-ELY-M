@@ -100,7 +100,7 @@ class ObjectSpinner {
         spinner1.onItemSelectedListener = l
     }
 
-    val selectedItemPosition get() = spinner1.selectedItemPosition
+    val selectedItemPosition: Int get() = spinner1.selectedItemPosition
 
     val selectedItem: Any
         get() = spinner1.selectedItem ?: 0
@@ -114,7 +114,7 @@ class ObjectSpinner {
             }
         }
 
-    val selectedItemId get() = spinner1.selectedItemId
+    val selectedItemId: Long get() = spinner1.selectedItemId
 
     fun addAll(tmpList: List<String>) {
         list.clear()
@@ -135,13 +135,13 @@ class ObjectSpinner {
         arrayAdapter.clear()
     }
 
-    fun size() = arrayAdapter.count
+    fun size(): Int = arrayAdapter.count
 
     fun getItemAtPosition(k: Int): Any {
         return spinner1.getItemAtPosition(k) ?: return ""
     }
 
-    operator fun get(idx: Int) = list[idx]
+    operator fun get(idx: Int): String = list[idx]
 
     operator fun set(idx: Int, value: String) {
         list[idx] = value

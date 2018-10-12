@@ -71,7 +71,7 @@ internal object WXGLNexradLevel3HailIndex {
         val posnNumbers = posnStr.parseColumnAll(RegExp.stiPattern3)
         val hailPercentNumbers = hailPercentStr.parseColumnAll(RegExp.stiPattern3)
         val hailSizeNumbers = hailSizeStr.parseColumnAll(RegExp.hiPattern4)
-        if (posnNumbers.size == hailPercentNumbers.size && posnNumbers.size > 1) {
+        if (posnNumbers.size == hailPercentNumbers.size && posnNumbers.size > 1 && hailSizeNumbers.isNotEmpty()) {
             var degree: Double
             var nm: Double
             val bearing = DoubleArray(2)

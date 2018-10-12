@@ -21,7 +21,7 @@
 
 package joshuatee.wx
 
-val NEXRAD_PRODUCT_STRING = mapOf(
+val NEXRAD_PRODUCT_STRING: Map<String, String> = mapOf(
         "N0R" to "DS.p19r0",
         "N1R" to "DS.p19r1",
         "N2R" to "DS.p19r2",

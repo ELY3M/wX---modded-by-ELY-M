@@ -35,7 +35,7 @@ import joshuatee.wx.util.Utility
 
 class ObjectWidgetMosaicRadar(context: Context) {
 
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
+    val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
 
     init {
         val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")

@@ -22,6 +22,7 @@
 package joshuatee.wx.nhc
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 
 import joshuatee.wx.util.UtilityImg
@@ -63,7 +64,7 @@ object UtilityNHC {
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl, UtilityImg.animInterval(context))
     }
 
-    fun getImage(rid: String, prod: String) = ("http://www.ssd.noaa.gov/PS/TROP/floaters/" + rid + "/imagery/" + prod + "0.gif").getImage()
+    fun getImage(rid: String, prod: String): Bitmap = ("http://www.ssd.noaa.gov/PS/TROP/floaters/" + rid + "/imagery/" + prod + "0.gif").getImage()
 }
 
 

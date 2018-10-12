@@ -31,7 +31,7 @@ import joshuatee.wx.Extensions.*
 
 object UtilityGOES16 {
 
-    const val size = "600x600"
+    const val size: String = "600x600"
 
     private val sizeMap = mapOf(
             "CONUS" to "2500x1500",
@@ -75,7 +75,7 @@ object UtilityGOES16 {
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bitmaps, UtilityImg.animInterval(context))
     }
 
-    val SECTORS = listOf(
+    val SECTORS: List<String> = listOf(
             "FD: Full Disk",
             "CONUS: US",
             "pnw: Pacific Northwest",
@@ -90,7 +90,7 @@ object UtilityGOES16 {
             "se: Southeast"
     )
 
-    val PRODUCTS = mapOf(
+    val PRODUCTS: Map<String, String> = mapOf(
             "00 True color daytime, multispectral IR at night" to "GEOCOLOR",
             "00.47 um (Band 1) Blue - Visible" to "01",
             "00.64 um (Band 2) Red - Visible" to "02",

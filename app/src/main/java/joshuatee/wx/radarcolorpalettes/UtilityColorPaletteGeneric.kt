@@ -155,7 +155,7 @@ object UtilityColorPaletteGeneric {
         var colorInt2: Int
         if (prod == "161") {
             // pad first 16, think this is needed
-            (0 until 10).forEach {
+            (0 until 10).forEach { _ ->
                 if (rAl.size > 0 && gAl.size > 0 && bAl.size > 0) {
                     colorMapR.put(rAl[0].toByte())
                     colorMapG.put(gAl[0].toByte())
@@ -175,7 +175,7 @@ object UtilityColorPaletteGeneric {
             }
         }
         if (rAl.size > 0 && gAl.size > 0 && bAl.size > 0) {
-            (lowerEnd until dbzAl[0]).forEach {
+            (lowerEnd until dbzAl[0]).forEach { _ ->
                 colorMapR.put(rAl[0].toByte())
                 colorMapG.put(gAl[0].toByte())
                 colorMapB.put(bAl[0].toByte())

@@ -51,7 +51,7 @@ class AdhocForecastActivity : BaseActivity() {
     // arg1  lon
 
     companion object {
-        const val URL = ""
+        const val URL: String = ""
     }
 
     private lateinit var turl: Array<String>
@@ -105,8 +105,8 @@ class AdhocForecastActivity : BaseActivity() {
             // CC
             //
             objFcst = Utility.getCurrentConditionsV2byLatLon(contextg, latlon)
-            objHazards = Utility.getCurrentHazards(contextg, latlon)
-            objSevenDay = Utility.getCurrentSevenDay(contextg, latlon)
+            objHazards = Utility.getCurrentHazards(latlon)
+            objSevenDay = Utility.getCurrentSevenDay(latlon)
             hazardRaw = objHazards!!.hazards.getHtmlSep()
             bmCc = UtilityNWS.getIconV2(contextg, objFcst!!.objCC.iconUrl)
             //
@@ -125,7 +125,7 @@ class AdhocForecastActivity : BaseActivity() {
             // CC
             //
             bmCcSize = UtilityLocationFragment.setNWSIconSize()
-            objFcst?.let {
+            objFcst?.let { _ ->
                 cardCC.let {
                     ccTime = objFcst!!.objCC.status
                     if (bmCc != null) {
@@ -137,7 +137,7 @@ class AdhocForecastActivity : BaseActivity() {
             // 7day
             //
             bmCcSize = UtilityLocationFragment.setNWSIconSize()
-            objFcst?.let {
+            objFcst?.let { _ ->
                 llCv5V.removeAllViewsInLayout()
                 val day7Arr = objSevenDay!!.fcstList
                 bmArr.forEachIndexed { idx, bm ->

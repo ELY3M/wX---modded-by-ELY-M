@@ -83,7 +83,7 @@ object UtilitySunMoon {
         val dateArr = text.parseColumn("\"date\":\"(.*?)\"")
         val timeArr = text.parseColumn("\"time\":\"(.*?)\"")
         var idx = 0
-        phaseArr.forEach {
+        phaseArr.forEach { _ ->
             fullText += if (phaseArr[idx].contains("Full Moon")) {
                 dateArr[idx] + " " + timeArr[idx] + " " + phaseArr[idx] + "  <-----" + MyApplication.newline
             } else {

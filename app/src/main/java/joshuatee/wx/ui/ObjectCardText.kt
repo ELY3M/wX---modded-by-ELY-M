@@ -26,6 +26,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
@@ -34,7 +35,7 @@ import joshuatee.wx.audio.UtilityTTSTranslations
 class ObjectCardText(private val context: Context) {
 
     private val objCard = ObjectCard(context)
-    val tv = TextView(context)
+    val tv: TextView = TextView(context)
 
     init {
         textViewSetup(tv)
@@ -87,7 +88,7 @@ class ObjectCardText(private val context: Context) {
         tv.setTextAppearance(context, UIPreferences.smallTextTheme)
     }
 
-    val card get() = objCard.card
+    val card: CardView get() = objCard.card
 
     fun setVisibility(visibility: Int) {
         objCard.setVisibility(visibility)

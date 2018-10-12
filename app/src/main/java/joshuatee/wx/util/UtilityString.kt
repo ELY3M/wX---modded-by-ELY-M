@@ -52,13 +52,13 @@ object UtilityString {
         return longTime.replace("-06:00", "").replace("-07:00", "")
     }
 
-    fun getHTMLandParse(url: String, matchStr: String) = url.getHtml().parse(matchStr)
+    fun getHTMLandParse(url: String, matchStr: String): String = url.getHtml().parse(matchStr)
 
-    fun getHTMLandParse(url: String, p: Pattern) = url.getHtml().parse(p)
+    fun getHTMLandParse(url: String, p: Pattern): String = url.getHtml().parse(p)
 
-    fun getHTMLandParseLastMatch(url: String, matchStr: String) = url.getHtml().parseLastMatch(matchStr)
+    fun getHTMLandParseLastMatch(url: String, matchStr: String): String = url.getHtml().parseLastMatch(matchStr)
 
-    fun getHTMLandParseLastMatch(url: String, p: Pattern) = url.getHtml().parseLastMatch(p)
+    fun getHTMLandParseLastMatch(url: String, p: Pattern): String = url.getHtml().parseLastMatch(p)
 
     fun parseLastMatchS(str: String, p: Pattern): String {
         var content = ""
@@ -122,11 +122,11 @@ object UtilityString {
         return content
     }
 
-    fun getHTMLandParseSep(url: String, matchStr: String) = url.getHtmlSep().parse(matchStr)
+    fun getHTMLandParseSep(url: String, matchStr: String): String = url.getHtmlSep().parse(matchStr)
 
     internal fun getHTMLandParseSep(url: String, p: Pattern) = url.getHtmlSep().parse(p)
 
-    fun getHTMLandParseMultipeFirstMatch(url: String, matchStr: String, number: Int) = parseMultipe(url.getHtml(), matchStr, number)
+    fun getHTMLandParseMultipeFirstMatch(url: String, matchStr: String, number: Int): MutableList<String> = parseMultipe(url.getHtml(), matchStr, number)
 
     fun parseMultipe(data: String, match_str: String, number: Int): MutableList<String> {
         val result = MutableList(number) { _ -> "" }
@@ -249,7 +249,7 @@ object UtilityString {
         return i
     }
 
-    fun getNWSPRE(url: String) = url.getHtmlSep().parse(RegExp.pre2Pattern)
+    fun getNWSPRE(url: String): String = url.getHtmlSep().parse(RegExp.pre2Pattern)
 
     fun getLastXChars(s: String, x: Int): String = when {
         s.length == x -> s
@@ -257,5 +257,5 @@ object UtilityString {
         else -> s
     }
 
-    fun addPeriodBeforeLastTwoChars(str: String) = StringBuilder(str).insert(str.length - 2, ".").toString()
+    fun addPeriodBeforeLastTwoChars(str: String): String = StringBuilder(str).insert(str.length - 2, ".").toString()
 }

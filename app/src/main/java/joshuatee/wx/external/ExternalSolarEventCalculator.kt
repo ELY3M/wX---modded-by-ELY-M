@@ -78,9 +78,9 @@ internal class ExternalSolarEventCalculator {
      * @return the sunrise time, in HH:MM format (24-hour clock), 00:00 if the sun does not rise on the given
      * date.
      */
-    fun computeSunriseTime(solarZenith: ExternalZenith, date: Calendar): String {
-        return getLocalTimeAsString(computeSolarEventTime(solarZenith, date, true))
-    }
+    //fun computeSunriseTime(solarZenith: ExternalZenith, date: Calendar): String {
+    //    return getLocalTimeAsString(computeSolarEventTime(solarZenith, date, true))
+    //}
 
     /**
      * Computes the sunrise time for the given zenith at the given date.

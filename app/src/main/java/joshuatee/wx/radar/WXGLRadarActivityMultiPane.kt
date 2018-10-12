@@ -92,7 +92,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     // 3: number of panes
 
     companion object {
-        const val RID = ""
+        const val RID: String = ""
     }
 
     private var TAG = "joshuatee-WXGLRadarActivityMultiPane"

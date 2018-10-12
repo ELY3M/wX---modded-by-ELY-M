@@ -56,7 +56,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
     // arg2: image type
 
     companion object {
-        const val RID = ""
+        const val RID: String = ""
     }
 
     private var animDrawable: AnimationDrawable = AnimationDrawable()

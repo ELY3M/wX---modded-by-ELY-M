@@ -78,8 +78,8 @@ object UtilityPreferences {
     fun applySettings(context: Context, txt: String) {
         val prefLines = txt.split(newline.toRegex()).dropLastWhile { it.isEmpty() }
         var lineArr: List<String>
-        prefLines.forEach {
-            lineArr = it.split(sep.toRegex()).dropLastWhile { it.isEmpty() }
+        prefLines.forEach { line ->
+            lineArr = line.split(sep.toRegex()).dropLastWhile { it.isEmpty() }
             when (lineArr[0]) {
                 "STRING" -> if (lineArr.size < 3) {
                     Utility.writePref(context, lineArr[1], "")

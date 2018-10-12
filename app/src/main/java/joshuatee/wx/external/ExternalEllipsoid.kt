@@ -49,32 +49,32 @@ private constructor(
          * Get inverse flattening.
          * @return
          */
-        val inverseFlattening: Double) : Serializable {
+        private val inverseFlattening: Double) : Serializable {
     companion object {
 
         /** The WGS84 ellipsoid.  */
-        val WGS84 = fromAAndInverseF(6378137.0, 298.257223563)
+        val WGS84: ExternalEllipsoid = fromAAndInverseF(6378137.0, 298.257223563)
 
         /** The GRS80 ellipsoid.  */
-        val GRS80 = fromAAndInverseF(6378137.0, 298.257222101)
+        //val GRS80: ExternalEllipsoid = fromAAndInverseF(6378137.0, 298.257222101)
 
         /** The GRS67 ellipsoid.  */
-        val GRS67 = fromAAndInverseF(6378160.0, 298.25)
+        //val GRS67: ExternalEllipsoid = fromAAndInverseF(6378160.0, 298.25)
 
         /** The ANS ellipsoid.  */
-        val ANS = fromAAndInverseF(6378160.0, 298.25)
+        //val ANS: ExternalEllipsoid = fromAAndInverseF(6378160.0, 298.25)
 
         /** The WGS72 ellipsoid.  */
-        val WGS72 = fromAAndInverseF(6378135.0, 298.26)
+        //val WGS72: ExternalEllipsoid = fromAAndInverseF(6378135.0, 298.26)
 
         /** The Clarke1858 ellipsoid.  */
-        val Clarke1858 = fromAAndInverseF(6378293.645, 294.26)
+        //val Clarke1858: ExternalEllipsoid = fromAAndInverseF(6378293.645, 294.26)
 
         /** The Clarke1880 ellipsoid.  */
-        val Clarke1880 = fromAAndInverseF(6378249.145, 293.465)
+        //val Clarke1880: ExternalEllipsoid = fromAAndInverseF(6378249.145, 293.465)
 
         /** A spherical "ellipsoid".  */
-        val Sphere = fromAAndF(6371000.0, 0.0)
+        //val Sphere: ExternalEllipsoid = fromAAndF(6371000.0, 0.0)
 
         /**
          * Build an Ellipsoid from the semi major axis measurement and the inverse flattening.

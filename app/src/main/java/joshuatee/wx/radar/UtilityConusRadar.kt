@@ -351,7 +351,8 @@ internal object UtilityConusRadar {
     private const val REFRESH_LOC_MIN = 3
 
 
-    fun getConus(): String {
+
+    fun getConusgfw(): String {
         val currentTime1 = System.currentTimeMillis()
         val currentTimeSec = currentTime1 / 1000
         val refreshIntervalSec = (REFRESH_LOC_MIN * 60).toLong()
@@ -373,12 +374,6 @@ internal object UtilityConusRadar {
                 gfw6 = gfwArr[5]
             }
         }
-
-
-
-
-
-
 
         initialized = true
         val currentTime = System.currentTimeMillis()
@@ -403,7 +398,7 @@ internal object UtilityConusRadar {
             // Read in the resource
             var conusradar: Bitmap? = null
             try {
-                conusradar = BitmapFactory.decodeStream(URL("https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif").getContent() as InputStream)
+                conusradar = BitmapFactory.decodeStream(URL(MyApplication.NWS_CONUS_RADAR).getContent() as InputStream)
             } catch (e: Exception) {
                 Log.e(TAG, "CRASHED: ", e)
             }
@@ -429,6 +424,37 @@ internal object UtilityConusRadar {
 
         return textureHandle[0]
     }
+
+
+    fun loadconusradarbitmap(context: Context): Bitmap {
+        //val imgUrl = "http://radar.weather.gov/Conus/RadarImg/latest_radaronly.gif"
+
+        val imgUrl = MyApplication.NWS_CONUS_RADAR
+
+        val layers = mutableListOf<Drawable>()
+        val cd = if (MyApplication.blackBg) {
+            ColorDrawable(Color.BLACK)
+        } else {
+            ColorDrawable(Color.WHITE)
+        }
+        var scaleType = ProjectionType.NWS_MOSAIC
+
+        var bitmap = imgUrl.getImage()
+        var bitmapCanvas = UtilityImg.getBlankBitmap()
+        if (MyApplication.blackBg) {
+            bitmap = UtilityImg.eraseBG(bitmap, -1)
+        }
+        if (bitmap.height > 10) {
+            bitmapCanvas = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+            UtilityCanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, "latest", 1, 13, false)
+        }
+        layers.add(cd)
+        layers.add(BitmapDrawable(context.resources, bitmap))
+        layers.add(BitmapDrawable(context.resources, bitmapCanvas))
+        return UtilityImg.layerDrawableToBitmap(layers)
+    }
+    
+
 }
 
 

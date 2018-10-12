@@ -48,7 +48,7 @@ class FavRemoveActivity : BaseActivity() {
     // arg1: type such as SND WFO RID
 
     companion object {
-        const val TYPE = ""
+        const val TYPE: String = ""
     }
 
     private val ridArr = mutableListOf<String>()

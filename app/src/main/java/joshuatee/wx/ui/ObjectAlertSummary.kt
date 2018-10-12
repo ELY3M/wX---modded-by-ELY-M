@@ -40,23 +40,22 @@ import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
-import java.util.regex.Pattern
 
 class ObjectAlertSummary(private val activity: Activity, private val context: Context, private val dynamicview: LinearLayout, private val sv: ScrollView) {
 
     private var totalAlertsCnt = 0
-    var navList = listOf<String>()
+    var navList: List<String> = listOf()
         private set
-    var filterArray = listOf<String>()
+    var filterArray: List<String> = listOf()
         private set
     @SuppressLint("UseSparseArrays")
-    val mapButtonZone = mutableMapOf<Int, String>()
+    val mapButtonZone: MutableMap<Int, String> = mutableMapOf()
     @SuppressLint("UseSparseArrays")
-    val mapButtonNws = mutableMapOf<Int, String>()
+    val mapButtonNws: MutableMap<Int, String> = mutableMapOf()
     @SuppressLint("UseSparseArrays")
-    val mapButtonState = mutableMapOf<Int, String>()
+    val mapButtonState: MutableMap<Int, String> = mutableMapOf()
     @SuppressLint("UseSparseArrays")
-    val mapButtonCounty = mutableMapOf<Int, String>()
+    val mapButtonCounty: MutableMap<Int, String> = mutableMapOf()
 
     fun updateContent(bm: Bitmap, data: String, filterEventStr: String, firstRun: Boolean) {
         dynamicview.removeAllViews()
@@ -83,7 +82,7 @@ class ObjectAlertSummary(private val activity: Activity, private val context: Co
             var buttonTxt: String
             var tmpStr: String
             val ca = mutableListOf<CAPAlert>()
-            val uswarnPattern: Pattern = Pattern.compile("<entry>.*?<id>(.+?)</id>.*?<title>(.+?)</title>.*?<summary>(.*?)</summary>.*?<cap:event>(.*?)</cap:event>.*?<cap:areaDesc>(.*?)</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>(.*?)</value>.*?<valueName>VTEC</valueName>.*?<value>(.*?)</value>.*?</entry>.*?")
+            //val uswarnPattern: Pattern = Pattern.compile("<entry>.*?<id>(.+?)</id>.*?<title>(.+?)</title>.*?<summary>(.*?)</summary>.*?<cap:event>(.*?)</cap:event>.*?<cap:areaDesc>(.*?)</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>(.*?)</value>.*?<valueName>VTEC</valueName>.*?<value>(.*?)</value>.*?</entry>.*?")
             //val idList = UtilityString.parseColumnMutable(data, "<entry>.*?<id>(.+?)</id>.*?<title>.+?</title>.*?<summary>.*?</summary>.*?<cap:event>.*?</cap:event>.*?<cap:areaDesc>.*?</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>.*?</value>.*?<valueName>VTEC</valueName>.*?<value>.*?</value>.*?</entry>.*?")
             //val titleList = UtilityString.parseColumnMutable(data, "<entry>.*?<id>.+?</id>.*?<title>(.+?)</title>.*?<summary>.*?</summary>.*?<cap:event>.*?</cap:event>.*?<cap:areaDesc>.*?</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>.*?</value>.*?<valueName>VTEC</valueName>.*?<value>.*?</value>.*?</entry>.*?")
             //val summaryList = UtilityString.parseColumnMutable(data, "<entry>.*?<id>.+?</id>.*?<title>.+?</title>.*?<summary>(.*?)</summary>.*?<cap:event>.*?</cap:event>.*?<cap:areaDesc>.*?</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>.*?</value>.*?<valueName>VTEC</valueName>.*?<value>.*?</value>.*?</entry>.*?")
@@ -106,7 +105,7 @@ class ObjectAlertSummary(private val activity: Activity, private val context: Co
                 zoneArr = cc.zones.split(" ")
                 if (zoneArr.isNotEmpty()) firstZone = zoneArr[0]
                 totalAlertsCnt += 1
-                val tmpStateList = zoneArr.filter { it.length > 1 }.mapTo(mutableListOf()) { it.substring(0, 2) }
+                val tmpStateList = zoneArr.asSequence().filter { it.length > 1 }.mapTo(mutableListOf()) { it.substring(0, 2) }
                 val uniqueStates = HashSet(tmpStateList)
                 uniqueStates.forEach {
                     val freq3 = mapState[it]
@@ -127,7 +126,7 @@ class ObjectAlertSummary(private val activity: Activity, private val context: Co
                         nwsOffice = ""
                         nwsLoc = ""
                     }
-                    val tmp2StateList = zoneArr.filter { it.length > 1 }.mapTo(mutableListOf()) { it.substring(0, 2) }
+                    val tmp2StateList = zoneArr.asSequence().filter { it.length > 1 }.mapTo(mutableListOf()) { it.substring(0, 2) }
                     val unique2States = HashSet(tmp2StateList)
                     unique2States.forEach { s ->
                         val freq = map[s]
@@ -157,9 +156,10 @@ class ObjectAlertSummary(private val activity: Activity, private val context: Co
         }
 
         var mapOut = map.toString()
-        mapOut = mapOut.replace("\\{|\\}".toRegex(), "")
+        mapOut = mapOut.replace("[{}]".toRegex(), "")
         var filter = filterEventStr
-        filter = filter.replace("\\||\\*|\\?|\\.".toRegex(), " ")
+        filter = filter.replace("[|*?.]".toRegex(), " ")
+        //filter = filter.replace("\\||\\*|\\?|\\.".toRegex(), " ")
         if (mapOut.isNotEmpty())
             cardText.setText("Filter: " + filter.replace("\\^".toRegex(), "") + " (" + i + ")" + MyApplication.newline + mapOut)
         else
@@ -176,5 +176,5 @@ class ObjectAlertSummary(private val activity: Activity, private val context: Co
         }
     }
 
-    fun getTitle(title: String) = "(" + totalAlertsCnt + ") " + title.toUpperCase(Locale.US) + " Alerts"
+    fun getTitle(title: String): String = "(" + totalAlertsCnt + ") " + title.toUpperCase(Locale.US) + " Alerts"
 }

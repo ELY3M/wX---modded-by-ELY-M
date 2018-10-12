@@ -28,15 +28,15 @@ import joshuatee.wx.vis.UtilityUSImgNWSGOESMercator
 
 class ProjectionNumbers {
 
-    var scale = 0.0
-    var scaleFloat = 0.0f
-    var oneDegreeScaleFactor = 0.0
-    var x = "0.0"
-    var y = "0.0"
-    var xCenter = 0.0
-    var yCenter = 0.0
-    var polygonWidth = 2.0
-    var radarSite = ""
+    var scale: Double = 0.0
+    var scaleFloat: Float = 0.0f
+    var oneDegreeScaleFactor: Double = 0.0
+    var x: String = "0.0"
+    var y: String = "0.0"
+    var xCenter: Double = 0.0
+    var yCenter: Double = 0.0
+    var polygonWidth: Double = 2.0
+    var radarSite: String = ""
 
     constructor()
 

@@ -48,22 +48,22 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
     // pinch zoom, drag, double/single tap, and long press are all handled here
 
     companion object {
-        var scaleFactorGlobal = 1.0f
+        var scaleFactorGlobal: Float = 1.0f
             private set
     }
 
-    var idx = 0
+    var idx: Int = 0
     private var listener: OnProgressChangeListener? = null
-    var fullScreen = false
+    var fullScreen: Boolean = false
     var toolbar: Toolbar? = null
     var toolbarBottom: Toolbar? = null
-    var archiveMode = false
-    var toolbarsHidden = false
+    var archiveMode: Boolean = false
+    var toolbarsHidden: Boolean = false
         private set
     private var mScaleFactor = 1.0f
-    var newX = 0.0f
+    var newX: Float = 0.0f
         private set
-    var newY = 0.0f
+    var newY: Float = 0.0f
         private set
     private var centerX = 0.0f
     private var centerY = 0.0f
@@ -78,15 +78,15 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
     private lateinit var oglrCurrent: WXGLRender
     private var density = 0.0f
     private var wxgl = mutableListOf<WXGLSurfaceView>()
-    var idxInt = 0
+    var idxInt: Int = 0
     private var widthDivider = 0
-    var citiesExtAl = mutableListOf<TextView>()
-    var countyLabelsAl = mutableListOf<TextView>()
-    var obsAl = mutableListOf<TextView>()
-    var spottersLabelAl = mutableListOf<TextView>()
-    var spotterTv = mutableListOf<TextView>()
-    var wxgltextArr = mutableListOf<WXGLTextObject>()
-    var locfrag = false
+    var citiesExtAl: MutableList<TextView> = mutableListOf()
+    var countyLabelsAl: MutableList<TextView> = mutableListOf()
+    var obsAl: MutableList<TextView> = mutableListOf()
+    var spottersLabelAl: MutableList<TextView> = mutableListOf()
+    var spotterTv: MutableList<TextView> = mutableListOf()
+    var wxgltextArr: MutableList<WXGLTextObject> = mutableListOf()
+    var locfrag: Boolean = false
     private var act: Activity? = null
 
     constructor(context: Context, wd: Int, np: Int) : super(context) {
@@ -162,9 +162,13 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
         }
     }
 
-    override fun onDown(event: MotionEvent) = true
+    override fun onDown(event: MotionEvent): Boolean {
+        return true
+    }
 
-    override fun onFling(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float) = true
+    override fun onFling(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        return true
+    }
 
     override fun onLongPress(event: MotionEvent) {
         if (fullScreen) {
@@ -230,7 +234,9 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
 
     override fun onShowPress(event: MotionEvent) {}
 
-    override fun onSingleTapUp(event: MotionEvent) = true
+    override fun onSingleTapUp(event: MotionEvent): Boolean {
+        return true
+    }
 
     override fun onDoubleTap(event: MotionEvent): Boolean {
         density = (oglrCurrent.ortInt * 2).toFloat() / width
@@ -260,7 +266,9 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
         return true
     }
 
-    override fun onDoubleTapEvent(event: MotionEvent) = true
+    override fun onDoubleTapEvent(event: MotionEvent): Boolean {
+        return true
+    }
 
     override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
         mScaleFactor /= 2.0f

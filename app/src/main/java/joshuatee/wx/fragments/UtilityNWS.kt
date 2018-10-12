@@ -134,7 +134,7 @@ object UtilityNWS {
             "hurricane.png" to R.drawable.hurr,
             "nhurricane.png" to R.drawable.hurr_noh,
             "tropstorm.png" to R.drawable.tropstorm,
-            "tropical_storm.png" to R.drawable.tropstorm_noh,
+            "tropical_storm.png" to R.drawable.tropstorm,
             "ntropical_storm.png" to R.drawable.tropstorm_noh,
             "tropstorm-noh.png" to R.drawable.tropstorm_noh,
             "nmix.png" to R.drawable.nmix,

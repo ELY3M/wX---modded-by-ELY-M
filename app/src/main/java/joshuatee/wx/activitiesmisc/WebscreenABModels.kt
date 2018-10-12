@@ -38,7 +38,7 @@ class WebscreenABModels : BaseActivity() {
     // arg1 Title
 
     companion object {
-        const val URL = ""
+        const val URL: String = ""
     }
 
     // added to support webview history, this var and block below it

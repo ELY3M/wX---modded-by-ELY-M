@@ -36,9 +36,9 @@ internal class WeatherDataPoint(var day: String, var degrees: Int)
  */
 class WeatherDataProvider : ContentProvider() {
     object Columns {
-        const val ID = "_id"
-        const val DAY = "day"
-        const val TEMPERATURE = "temperature"
+        const val ID: String = "_id"
+        const val DAY: String = "day"
+        const val TEMPERATURE: String = "temperature"
     }
 
     override fun onCreate(): Boolean {
@@ -69,7 +69,7 @@ class WeatherDataProvider : ContentProvider() {
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? = null
 
-    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?) = 0
+    override fun delete(uri: Uri, selection: String?, selectionArgs: Array<String>?): Int = 0
 
     @Synchronized
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<String>?): Int {
@@ -90,7 +90,7 @@ class WeatherDataProvider : ContentProvider() {
     }
 
     companion object {
-        val CONTENT_URI = Uri.parse("content://joshuatee.wx.weatherlistwidget.provider")
+        val CONTENT_URI: Uri = Uri.parse("content://joshuatee.wx.weatherlistwidget.provider")
         /**
          * Generally, this data will be stored in an external and persistent location (ie. File,
          * Database, SharedPreferences) so that the data can persist if the process is ever killed.

@@ -83,7 +83,7 @@ object UtilityCanadaImg {
         val baseUrl = "http://weather.gc.ca"
         val bmAl = mutableListOf<Bitmap>()
         urlAl.reverse()
-        urlAl.filter { it != "" }.mapTo(bmAl) { UtilityCanadaImg.getRadarBitmapOptionsApplied(context, rid, baseUrl + it.replace("detailed/", "")) }
+        urlAl.asSequence().filter { it != "" }.mapTo(bmAl) { UtilityCanadaImg.getRadarBitmapOptionsApplied(context, rid, baseUrl + it.replace("detailed/", "")) }
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl, UtilityImg.animInterval(context))
     }
 

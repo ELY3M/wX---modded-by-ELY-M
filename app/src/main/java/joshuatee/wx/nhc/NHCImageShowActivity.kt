@@ -47,7 +47,7 @@ class NHCImageShowActivity : VideoRecordActivity(), OnClickListener, Toolbar.OnM
     //
 
     companion object {
-        const val URL = ""
+        const val URL: String = ""
     }
 
     private var animDrawable = AnimationDrawable()

@@ -114,11 +114,10 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
 
         override fun onPostExecute(result: String) {
-            mpdList.indices.forEach {
+            mpdList.indices.forEach { mpdIndex ->
                 val card = ObjectCardImage(contextg)
-                card.setImage(bitmapArr[it])
-                val index = it
-                card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCMCDWShowActivity::class.java, SPCMCDWShowActivity.NO, arrayOf(mcdNoArr[index], "", PolygonType.MPD.toString())) })
+                card.setImage(bitmapArr[mpdIndex])
+                card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCMCDWShowActivity::class.java, SPCMCDWShowActivity.NO, arrayOf(mcdNoArr[mpdIndex], "", PolygonType.MPD.toString())) })
                 linearLayout.addView(card.card)
                 if (mpdList.size == 1) registerForContextMenu(card.img)
             }

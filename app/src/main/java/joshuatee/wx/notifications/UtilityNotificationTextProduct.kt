@@ -38,7 +38,7 @@ import joshuatee.wx.util.UtilityDownload
 
 object UtilityNotificationTextProduct {
 
-    const val PREF_TOKEN = "NOTIF_TEXT_PROD"
+    const val PREF_TOKEN: String = "NOTIF_TEXT_PROD"
 
     fun toggle(context: Context, view: View, prodF: String) {
         val prod = prodF.toUpperCase(Locale.US)
@@ -54,9 +54,9 @@ object UtilityNotificationTextProduct {
         }
     }
 
-    fun showAll() = MyApplication.notifTextProdStr
+    fun showAll(): String = MyApplication.notifTextProdStr
 
-    fun check(prod: String) = MyApplication.notifTextProdStr.contains(prod)
+    fun check(prod: String): Boolean = MyApplication.notifTextProdStr.contains(prod)
 
     internal fun notifyOnAll(context: Context) {
         var textProdChunk: String

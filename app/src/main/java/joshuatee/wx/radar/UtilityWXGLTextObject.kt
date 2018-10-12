@@ -23,9 +23,9 @@ package joshuatee.wx.radar
 
 object UtilityWXGLTextObject {
 
-    fun hideTV(numPanes: Int, wxgltextArr: MutableList<WXGLTextObject>) = (0 until numPanes).forEach { wxgltextArr[it].hideTV() }
+    fun hideTV(numPanes: Int, wxgltextArr: MutableList<WXGLTextObject>): Unit = (0 until numPanes).forEach { wxgltextArr[it].hideTV() }
 
-    fun showTV(numPanes: Int, wxgltextArr: MutableList<WXGLTextObject>) = (0 until numPanes).forEach { wxgltextArr[it].addTV() }
+    fun showTV(numPanes: Int, wxgltextArr: MutableList<WXGLTextObject>): Unit = (0 until numPanes).forEach { wxgltextArr[it].addTV() }
 
     fun updateSpotterLabels(numPanes: Int, wxgltextArr: MutableList<WXGLTextObject>) {
         (0 until numPanes).forEach {

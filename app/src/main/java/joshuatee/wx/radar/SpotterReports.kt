@@ -23,6 +23,6 @@ package joshuatee.wx.radar
 
 class SpotterReports internal constructor(val firstName: String, lastName: String, val lat: String, val lon: String, val narrative: String, val uniq: String, val type: String, val time: String, val city: String) {
 
-    val lastName = lastName.replace("^ ".toRegex(), "")
+    val lastName: String = lastName.replace("^ ".toRegex(), "")
 
 }

@@ -39,7 +39,7 @@ import joshuatee.wx.util.UtilityShare
 class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object {
-        const val URL = ""
+        const val URL: String = ""
     }
 
     private lateinit var args: Array<String>

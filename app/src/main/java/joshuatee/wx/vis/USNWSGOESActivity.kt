@@ -56,7 +56,7 @@ class USNWSGOESActivity : VideoRecordActivity(), OnClickListener, OnItemSelected
     //
 
     companion object {
-        const val RID = ""
+        const val RID: String = ""
     }
 
     private var firstTime = true

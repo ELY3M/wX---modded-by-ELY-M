@@ -8,7 +8,7 @@ import joshuatee.wx.MyApplication
 
 class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-    val tabTitles = arrayOf("LOCAL", "SPC", "MISC", "IMAGE")
+    val tabTitles: Array<String> = arrayOf("LOCAL", "SPC", "MISC", "IMAGE")
 
     override fun getCount(): Int {
         if (MyApplication.simpleMode) {

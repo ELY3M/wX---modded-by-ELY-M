@@ -43,12 +43,12 @@ class ObjectForecastPackageCurrentConditions {
     }
 
     var contextg: Context? = null
-    var data1 = ""
+    var data1: String = ""
         private set
-    var iconUrl = ""
+    var iconUrl: String = ""
         private set
     private var conditionsTimeStr = ""
-    var status = ""
+    var status: String = ""
         private set
 
     private constructor()

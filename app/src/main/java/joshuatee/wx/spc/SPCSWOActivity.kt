@@ -52,7 +52,7 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
     //
 
     companion object {
-        const val NO = ""
+        const val NO: String = ""
     }
 
     private var sigHtmlTmp = ""
@@ -162,7 +162,7 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     c4.setImage(bmAl[2])
                     c5.setImage(bmAl[3])
                     c6.setVisibility(View.GONE)
-                    listOf(c3, c4, c5).forEach { it.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) }) }
+                    listOf(c3, c4, c5).forEach { card -> card.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) }) }
                 }
                 "2" -> {
                     c1.setImage(bmAl[0])
@@ -170,7 +170,7 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     c4.setVisibility(View.GONE)
                     c5.setVisibility(View.GONE)
                     c6.setVisibility(View.GONE)
-                    listOf(c3).forEach { it.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) }) }
+                    listOf(c3).forEach { card -> card.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) }) }
                 }
                 "3" -> {
                     c1.setImage(bmAl[0])
@@ -178,7 +178,7 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     c4.setVisibility(View.GONE)
                     c5.setVisibility(View.GONE)
                     c6.setVisibility(View.GONE)
-                    listOf(c3).forEach { it.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) }) }
+                    listOf(c3).forEach { card -> card.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) }) }
                 }
                 "4-8" -> {
                     c1.setImage(bmAl[0])
@@ -186,7 +186,7 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     c4.setImage(bmAl[2])
                     c5.setImage(bmAl[3])
                     c6.setImage(bmAl[4])
-                    listOf(c3, c4, c5, c6).forEach { it.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) }) }
+                    listOf(c3, c4, c5, c6).forEach { card -> card.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) }) }
                 }
             }
         }

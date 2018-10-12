@@ -37,7 +37,7 @@ object UtilityLightning {
         return url.getImage()
     }
 
-    fun getSectorPretty(sector: String) = when (sector) {
+    fun getSectorPretty(sector: String): String = when (sector) {
         "usa_big" -> "USA"
         "florida_big" -> "FL"
         "texas_big" -> "TX"
@@ -54,7 +54,7 @@ object UtilityLightning {
         else -> ""
     }
 
-    fun getTimePretty(period: String) = when (period) {
+    fun getTimePretty(period: String): String = when (period) {
         "0.25" -> "15 MIN"
         "2" -> "2 HR"
         "12" -> "12 HR"

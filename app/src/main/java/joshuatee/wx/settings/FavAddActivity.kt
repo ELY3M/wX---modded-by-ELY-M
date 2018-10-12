@@ -37,7 +37,7 @@ import joshuatee.wx.util.Utility
 class FavAddActivity : BaseActivity() {
 
     companion object {
-        const val TYPE = ""
+        const val TYPE: String = ""
     }
 
     private var prefToken = ""

@@ -36,7 +36,7 @@ import joshuatee.wx.util.UtilityString
 class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
 
     private val tvArr = mutableListOf<TextView>()
-    var title = ""
+    var title: String = ""
         private set
 
     init {

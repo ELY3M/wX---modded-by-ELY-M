@@ -33,9 +33,9 @@ import joshuatee.wx.util.*
 class WXGLNexradLevel2 {
 
     val radialStartAngle: ByteBuffer = ByteBuffer.allocateDirect(720 * 4)
-    var binSize = 0.toFloat()
+    var binSize: Float = 0f
         private set
-    val numberOfRangeBins = 916
+    val numberOfRangeBins: Int = 916
     val binWord: ByteBuffer = ByteBuffer.allocateDirect(720 * numberOfRangeBins)
     private val days: ByteBuffer = ByteBuffer.allocateDirect(2)
     private val msecs: ByteBuffer = ByteBuffer.allocateDirect(4)

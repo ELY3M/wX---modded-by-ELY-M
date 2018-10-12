@@ -54,7 +54,7 @@ class ModelsESRLActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCli
     // arg2 - pref model token and hash lookup
 
     companion object {
-        const val INFO = ""
+        const val INFO: String = ""
     }
 
     private lateinit var spRun: ObjectSpinner

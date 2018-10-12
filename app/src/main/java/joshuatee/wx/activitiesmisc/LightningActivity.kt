@@ -42,7 +42,7 @@ import joshuatee.wx.util.UtilityShare
 class LightningActivity : VideoRecordActivity(), OnClickListener {
 
     companion object {
-        const val URL = ""
+        const val URL: String = ""
     }
 
     private var bitmap = UtilityImg.getBlankBitmap()

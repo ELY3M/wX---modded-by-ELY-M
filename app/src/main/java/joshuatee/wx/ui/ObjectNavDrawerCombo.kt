@@ -43,9 +43,9 @@ class ObjectNavDrawerCombo(activity: Activity, items: SparseArray<Group>, privat
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
     }
 
-    fun getLabel(grp: Int, ch: Int) = labels[grp][ch]
+    fun getLabel(grp: Int, ch: Int): String = labels[grp][ch]
 
-    fun getToken(grp: Int, ch: Int) = tokens[grp][ch]
+    fun getToken(grp: Int, ch: Int): String = tokens[grp][ch]
 }
 
 

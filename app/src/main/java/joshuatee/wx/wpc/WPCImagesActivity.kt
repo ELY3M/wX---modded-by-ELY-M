@@ -45,7 +45,7 @@ import joshuatee.wx.util.UtilityShare
 class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMenuItemClickListener {
 
     companion object {
-        const val URL = ""
+        const val URL: String = ""
     }
 
     private var bitmap = UtilityImg.getBlankBitmap()
@@ -215,7 +215,7 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onClick(v: View) {
         when (v.id) {R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)

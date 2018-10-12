@@ -35,7 +35,6 @@ enum class GeographyType constructor(var relativeBuffer: ByteBuffer, var count: 
     COUNTY_LABELS(ByteBuffer.allocate(0), 0, MyApplication.radarColorCountyLabels, MyApplication.radarCountyLabels),
     NONE(ByteBuffer.allocateDirect(0), 0, 0, false);
 
-
     // FIXME refresh rest of values
     companion object {
         fun refresh() {

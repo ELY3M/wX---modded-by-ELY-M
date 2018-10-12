@@ -41,7 +41,7 @@ class DownloadPlaylistService : IntentService("DownloadPlaylistService") {
     //
 
     companion object {
-        const val URL = ""
+        const val URL: String = ""
     }
 
     override fun onHandleIntent(intent: Intent?) {

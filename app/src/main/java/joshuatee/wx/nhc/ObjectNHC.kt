@@ -51,7 +51,7 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
     private val bmAl = mutableListOf<Bitmap>()
     private var cNotif: ObjectCardText? = null
     private val cardNotifHeaderText = "Currently blocked storm notifications, tap this text to clear all blocks "
-    var html = ""
+    var html: String = ""
 
     fun getData() {
         listOf("http://www.nhc.noaa.gov/xgtwo/two_atl_0d0.png", "http://www.nhc.noaa.gov/xgtwo/two_atl_2d0.png",

@@ -62,6 +62,7 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        appContext = applicationContext
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
         editor = preferences.edit()
         preferencesTelecine = getSharedPreferences("telecine", Context.MODE_PRIVATE)
@@ -122,25 +123,25 @@ class MyApplication : Application() {
 
     companion object {
 
-        val FilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/"
-        const val nwsSPCwebsitePrefix = "https://www.spc.noaa.gov"
-        const val nwsWPCwebsitePrefix = "https://www.wpc.ncep.noaa.gov"
-        const val prefSeperator = " : : :"
-        var uiAnimIconFrames = "rid"
+        val FilesPath: String = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/"
+        const val nwsSPCwebsitePrefix: String = "https://www.spc.noaa.gov"
+        const val nwsWPCwebsitePrefix: String = "https://www.wpc.ncep.noaa.gov"
+        const val prefSeperator: String = " : : :"
+        var uiAnimIconFrames: String = "rid"
         // FIXME remove in favor of notificationStrSep
         //const val NOTIF_STR_SEP = ","
-        const val WIDGET_FILE_BAK = "BAK"
-        val HM_CLASS = mutableMapOf<String, Class<*>>()
-        val HM_CLASS_ARGS = mutableMapOf<String, Array<String>>()
-        val HM_CLASS_ID = mutableMapOf<String, String>()
+        const val WIDGET_FILE_BAK: String = "BAK"
+        val HM_CLASS: MutableMap<String, Class<*>> = mutableMapOf()
+        val HM_CLASS_ARGS: MutableMap<String, Array<String>> = mutableMapOf()
+        val HM_CLASS_ID: MutableMap<String, String> = mutableMapOf()
 
         init {
             UtilityHomeScreen.setupMap()
         }
 
         var primaryColor: Int = 0
-        const val TEXTVIEW_MAGIC_FUDGE_FACTOR = 4.05f
-        var deviceScale = 0.toFloat()
+        const val TEXTVIEW_MAGIC_FUDGE_FACTOR: Float = 4.05f
+        var deviceScale: Float = 0f
         var httpClient: OkHttpClient? = null
         // FIXME make private
 
@@ -153,176 +154,176 @@ class MyApplication : Application() {
         lateinit var editor: SharedPreferences.Editor
 
         lateinit var dm: DisplayMetrics
+        lateinit var appContext: Context
 
-
-        var mediaNotifTtsTitle = ""
-        const val notificationStrSep = ","
-        var cardElevation = 0.toFloat()
-        var fabElevation = 0.toFloat()
-        var fabElevationDepressed = 0.toFloat()
-        var elevationPref = 0.toFloat()
-        var textSizeSmall = 0.toFloat()
-        var textSizeNormal = 0.toFloat()
-        var textSizeLarge = 0.toFloat()
-        var cardCorners = 0.toFloat()
-        var lLpadding = 0.toFloat()
-        var telecineVideoSizePercentage = 0
-        var telecineSwitchShowCountdown = false
-        var telecineSwitchRecordingNotification = false
-        var telecineSwitchShowTouches = false
-        var tileDownsize = false
-        var iconsEvenSpaced = false
-        var helpMode = false
-        var simpleMode = false
-        var checkspc = false
-        var checkwpc = false
-        var checktor = false
-        var vrButton = false
-        var radarUseJni = false
+        var mediaNotifTtsTitle: String = ""
+        const val notificationStrSep: String = ","
+        var cardElevation: Float = 0f
+        var fabElevation: Float = 0f
+        var fabElevationDepressed: Float = 0f
+        var elevationPref: Float = 0f
+        var textSizeSmall: Float = 0f
+        var textSizeNormal: Float = 0f
+        var textSizeLarge: Float = 0f
+        var cardCorners: Float = 0f
+        var lLpadding: Float = 0f
+        var telecineVideoSizePercentage: Int = 0
+        var telecineSwitchShowCountdown: Boolean = false
+        var telecineSwitchRecordingNotification: Boolean = false
+        var telecineSwitchShowTouches: Boolean = false
+        var tileDownsize: Boolean = false
+        var iconsEvenSpaced: Boolean = false
+        var helpMode: Boolean = false
+        var simpleMode: Boolean = false
+        var checkspc: Boolean = false
+        var checkwpc: Boolean = false
+        var checktor: Boolean = false
+        var vrButton: Boolean = false
+        var radarUseJni: Boolean = false
         var contentResolverLocal: ContentResolver? = null
-        var blackBg = false
-        var fullscreenMode = false
-        var lockToolbars = false
-        var unitsM = false
-        var unitsF = false
-        var locDisplayImg = false
+        var blackBg: Boolean = false
+        var fullscreenMode: Boolean = false
+        var lockToolbars: Boolean = false
+        var unitsM: Boolean = false
+        var unitsF: Boolean = false
+        var locDisplayImg: Boolean = false
         var comma: Pattern = Pattern.compile("")
         var bang: Pattern = Pattern.compile("")
-        var alertOnlyonce = false
-        var drawToolColor = 0
-        var widgetTextColor = 0
-        var widgetHighlightTextColor = 0
-        var widgetNexradSize = 0
-        var widgetCCShow7Day = false
-        var nwsIconTextColor = 0
-        var nwsIconBottomColor = 0
-        var nexradRadarBackgroundColor = 0
-        var wxoglSize = 0
-        var wxoglRememberLocation = false
-        var wxoglLocationAutorefresh = false
-        var wxoglkeepscreenon = false
-        var wfoFav = ""
-        var ridFav = ""
-        var sndFav = ""
-        var srefFav = ""
-        var spcmesoFav = ""
-        var spcmesoLabelFav = ""
-        var nwsTextFav = ""
-        var radarColorPalette = mutableMapOf<String, String>()
-        var notifSoundUri = ""
-        var homescreenFav = ""
-        const val HOMESCREEN_FAV_DEFAULT = "TXT-CC2:TXT-HAZ:OGL-RADAR:TXT-7DAY2"
-        const val HOMESCREEN_FAV_DEFAULT_CA = "TXT-CC2:TXT-HAZ:IMG-CARAIN:TXT-7DAY2"
-        var alertNotificationSoundTornadoCurrent = false
-        var alertNotificationSoundSpcmcd = false
-        var alertNotificationSoundWpcmpd = false
-        var alertNotificationSoundNhcEpac = false
-        var alertNotificationSoundNhcAtl = false
-        var alertNotificationSoundSpcwat = false
-        var alertNotificationSoundSpcswo = false
-        var alertNotificationSoundTextProd = false
-        var notifSoundRepeat = false
-        var notifTts = false
-        var alertBlackoutAmCurrent = 0
-        var alertBlackoutPmCurrent = 0
-        var alertTornadoNotificationCurrent = false
-        var alertSpcmcdNotificationCurrent = false
-        var alertSpcwatNotificationCurrent = false
-        var alertSpcswoNotificationCurrent = false
-        var alertSpcswoSlightNotificationCurrent = false
-        var alertWpcmpdNotificationCurrent = false
-        var alertBlackoutTornadoCurrent = false
-        var alertNhcEpacNotificationCurrent = false
-        var alertNhcAtlNotificationCurrent = false
-        var alertAutocancel = false
-        var alertBlackout = false
-        const val DEGREE_SYMBOL = "\u00B0"
-        var playlistStr = ""
-        var notifTextProdStr = ""
-        var radarColorPalette94List = ""
-        var radarColorPalette99List = ""
-        var newline = ""
+        var alertOnlyonce: Boolean = false
+        var drawToolColor: Int = 0
+        var widgetTextColor: Int = 0
+        var widgetHighlightTextColor: Int = 0
+        var widgetNexradSize: Int = 0
+        var widgetCCShow7Day: Boolean = false
+        var nwsIconTextColor: Int = 0
+        var nwsIconBottomColor: Int = 0
+        var nexradRadarBackgroundColor: Int = 0
+        var wxoglSize: Int = 0
+        var wxoglRememberLocation: Boolean = false
+        var wxoglLocationAutorefresh: Boolean = false
+        var wxoglkeepscreenon: Boolean = false
+        var wfoFav: String = ""
+        var ridFav: String = ""
+        var sndFav: String = ""
+        var srefFav: String = ""
+        var spcmesoFav: String = ""
+        var spcmesoLabelFav: String = ""
+        var nwsTextFav: String = ""
+        var radarColorPalette: MutableMap<String, String> = mutableMapOf()
+        var notifSoundUri: String = ""
+        var homescreenFav: String = ""
+        const val HOMESCREEN_FAV_DEFAULT: String = "TXT-CC2:TXT-HAZ:OGL-RADAR:TXT-7DAY2"
+        const val HOMESCREEN_FAV_DEFAULT_CA: String = "TXT-CC2:TXT-HAZ:IMG-CARAIN:TXT-7DAY2"
+        var alertNotificationSoundTornadoCurrent: Boolean = false
+        var alertNotificationSoundSpcmcd: Boolean = false
+        var alertNotificationSoundWpcmpd: Boolean = false
+        var alertNotificationSoundNhcEpac: Boolean = false
+        var alertNotificationSoundNhcAtl: Boolean = false
+        var alertNotificationSoundSpcwat: Boolean = false
+        var alertNotificationSoundSpcswo: Boolean = false
+        var alertNotificationSoundTextProd: Boolean = false
+        var notifSoundRepeat: Boolean = false
+        var notifTts: Boolean = false
+        var alertBlackoutAmCurrent: Int = 0
+        var alertBlackoutPmCurrent: Int = 0
+        var alertTornadoNotificationCurrent: Boolean = false
+        var alertSpcmcdNotificationCurrent: Boolean = false
+        var alertSpcwatNotificationCurrent: Boolean = false
+        var alertSpcswoNotificationCurrent: Boolean = false
+        var alertSpcswoSlightNotificationCurrent: Boolean = false
+        var alertWpcmpdNotificationCurrent: Boolean = false
+        var alertBlackoutTornadoCurrent: Boolean = false
+        var alertNhcEpacNotificationCurrent: Boolean = false
+        var alertNhcAtlNotificationCurrent: Boolean = false
+        var alertAutocancel: Boolean = false
+        var alertBlackout: Boolean = false
+        const val DEGREE_SYMBOL: String = "\u00B0"
+        var playlistStr: String = ""
+        var notifTextProdStr: String = ""
+        var radarColorPalette94List: String = ""
+        var radarColorPalette99List: String = ""
+        var newline: String = ""
         var space: Pattern = Pattern.compile("")
         var colon: Pattern = Pattern.compile("")
         var colonSpace: Pattern = Pattern.compile("")
         var semicolon: Pattern = Pattern.compile("")
         var period: Pattern = Pattern.compile("")
         var slash: Pattern = Pattern.compile("")
-        var spinnerLayout = R.layout.spinner_row_blue
-        var actionBarHeight = 0
-        var wxoglZoom = 0.toFloat()
-        var wxoglRid = ""
-        var wxoglProd = ""
-        var wxoglX = 0.toFloat()
-        var wxoglY = 0.toFloat()
-        val severeDashboardTor = DataStorage("SEVERE_DASHBOARD_TOR")
-        val severeDashboardTst = DataStorage("SEVERE_DASHBOARD_TST")
-        val severeDashboardFfw = DataStorage("SEVERE_DASHBOARD_FFW")
-        val severeDashboardSmw = DataStorage("SEVERE_DASHBOARD_SMW")
-        val severeDashboardSvs = DataStorage("SEVERE_DASHBOARD_SVS")
-        val severeDashboardSps = DataStorage("SEVERE_DASHBOARD_SPS")
-        val severeDashboardWat = DataStorage("SEVERE_DASHBOARD_WAT")
-        val severeDashboardMcd = DataStorage("SEVERE_DASHBOARD_MCD")
-        val severeDashboardMpd = DataStorage("SEVERE_DASHBOARD_MPD")
-        val watchLatlon = DataStorage("WATCH_LATLON")
-        val watchLatlonTor = DataStorage("WATCH_LATLON_TOR")
-        val mcdLatlon = DataStorage("MCD_LATLON")
-        val mcdNoList = DataStorage("MCD_NO_LIST")
-        val mpdLatlon = DataStorage("MPD_LATLON")
-        val mpdNoList = DataStorage("MPD_NO_LIST")
-        var wfoTextFav = ""
-        var wpcTextFav = ""
-        var spotterFav = ""
-        var sn_key = ""
-        var sn_locationreport = false
-        const val ICON_ALERT_2 = R.drawable.ic_report_24dp
-        const val ICON_MAP = R.drawable.ic_public_24dp
-        const val ICON_MPD = R.drawable.ic_brightness_7_24dp
-        const val ICON_TORNADO = R.drawable.ic_flash_off_24dp
-        const val ICON_MCD = R.drawable.ic_directions_24dp
-        const val ICON_ACTION = R.drawable.ic_play_arrow_24dp
-        const val ICON_ALERT = R.drawable.ic_warning_24dp
-        const val ICON_RADAR = R.drawable.ic_flash_on_24dp
-        const val ICON_FORECAST = R.drawable.ic_place_24dp
-        const val ICON_CURRENT = R.drawable.ic_info_outline_24dp
-        const val ICON_NHC_1 = R.drawable.ic_brightness_auto_24dp
-        const val ICON_NHC_2 = R.drawable.ic_brightness_medium_24dp
-        const val ICON_DELETE = R.drawable.ic_delete_24dp
-        const val STAR_ICON = R.drawable.ic_star_24dp
-        const val STAR_OUTLINE_ICON = R.drawable.ic_star_outline_24dp
-        const val ICON_PLAY = R.drawable.ic_play_arrow_24dp
-        const val ICON_STOP = R.drawable.ic_stop_24dp
-        const val ICON_MIC = R.drawable.ic_mic_24dp
-        const val ICON_PAUSE = R.drawable.ic_pause_24dp
-        const val ICON_PAUSE_PRESSED = R.drawable.ic_pause_white_24dp
-        const val ICON_ARROW_UP = R.drawable.ic_keyboard_arrow_up_24dp
-        const val ICON_ARROW_DOWN = R.drawable.ic_keyboard_arrow_down_24dp
-        const val ICON_ADD = R.drawable.ic_add_box_24dp
-        const val ICON_BACK = R.drawable.ic_keyboard_arrow_left_24dp
-        const val ICON_FORWARD = R.drawable.ic_keyboard_arrow_right_24dp
-        const val ICON_SKIP_BACK = R.drawable.ic_skip_previous_24dp
-        const val ICON_SKIP_FORWARD = R.drawable.ic_skip_next_24dp
-        const val MD_COMP = "<center>No Mesoscale Discussions are currently in effect."
-        const val WATCH_COMP = "<center><strong>No watches are currently valid"
-        const val MPD_COMP = "No MPDs are currently in effect."
-        const val currentConditionsViaMetar = true
-        var spchrrrZoom = 0.toFloat()
-        var spchrrrX = 0.toFloat()
-        var spchrrrY = 0.toFloat()
-        var wpcgefsZoom = 0.toFloat()
-        var wpcgefsX = 0.toFloat()
-        var wpcgefsY = 0.toFloat()
-        var spcsseoZoom = 0.toFloat()
-        var spcsseoX = 0.toFloat()
-        var spcsseoY = 0.toFloat()
-        var goesVisZoom = 0.toFloat()
-        var goesVisX = 0.toFloat()
-        var goesVisY = 0.toFloat()
-        var goesVisSector = ""
-        var nwsIconSize = 0
-        var padding = 0
-        var paddingSmall = 0
-        var tabHeaders = arrayOf("", "", "", "")
+        var spinnerLayout: Int = R.layout.spinner_row_blue
+        var actionBarHeight: Int = 0
+        var wxoglZoom: Float = 0f
+        var wxoglRid: String = ""
+        var wxoglProd: String = ""
+        var wxoglX: Float = 0f
+        var wxoglY: Float = 0f
+        val severeDashboardTor: DataStorage = DataStorage("SEVERE_DASHBOARD_TOR")
+        val severeDashboardTst: DataStorage = DataStorage("SEVERE_DASHBOARD_TST")
+        val severeDashboardFfw: DataStorage = DataStorage("SEVERE_DASHBOARD_FFW")
+        val severeDashboardSmw: DataStorage = DataStorage("SEVERE_DASHBOARD_SMW")
+        val severeDashboardSvs: DataStorage = DataStorage("SEVERE_DASHBOARD_SVS")
+        val severeDashboardSps: DataStorage = DataStorage("SEVERE_DASHBOARD_SPS")
+        val severeDashboardWat: DataStorage = DataStorage("SEVERE_DASHBOARD_WAT")
+        val severeDashboardMcd: DataStorage = DataStorage("SEVERE_DASHBOARD_MCD")
+        val severeDashboardMpd: DataStorage = DataStorage("SEVERE_DASHBOARD_MPD")
+        val watchLatlon: DataStorage = DataStorage("WATCH_LATLON")
+        val watchLatlonTor: DataStorage = DataStorage("WATCH_LATLON_TOR")
+        val mcdLatlon: DataStorage = DataStorage("MCD_LATLON")
+        val mcdNoList: DataStorage = DataStorage("MCD_NO_LIST")
+        val mpdLatlon: DataStorage = DataStorage("MPD_LATLON")
+        val mpdNoList: DataStorage = DataStorage("MPD_NO_LIST")
+        var wfoTextFav: String = ""
+        var wpcTextFav: String = ""
+        var spotterFav: String = ""
+        var sn_key: String = ""
+        var sn_locationreport: Boolean = false
+        const val ICON_ALERT_2: Int = R.drawable.ic_report_24dp
+        const val ICON_MAP: Int = R.drawable.ic_public_24dp
+        const val ICON_MPD: Int = R.drawable.ic_brightness_7_24dp
+        const val ICON_TORNADO: Int = R.drawable.ic_flash_off_24dp
+        const val ICON_MCD: Int = R.drawable.ic_directions_24dp
+        const val ICON_ACTION: Int = R.drawable.ic_play_arrow_24dp
+        const val ICON_ALERT: Int = R.drawable.ic_warning_24dp
+        const val ICON_RADAR: Int = R.drawable.ic_flash_on_24dp
+        const val ICON_FORECAST: Int = R.drawable.ic_place_24dp
+        const val ICON_CURRENT: Int = R.drawable.ic_info_outline_24dp
+        const val ICON_NHC_1: Int = R.drawable.ic_brightness_auto_24dp
+        const val ICON_NHC_2: Int = R.drawable.ic_brightness_medium_24dp
+        const val ICON_DELETE: Int = R.drawable.ic_delete_24dp
+        const val STAR_ICON: Int = R.drawable.ic_star_24dp
+        const val STAR_OUTLINE_ICON: Int = R.drawable.ic_star_outline_24dp
+        const val ICON_PLAY: Int = R.drawable.ic_play_arrow_24dp
+        const val ICON_STOP: Int = R.drawable.ic_stop_24dp
+        const val ICON_MIC: Int = R.drawable.ic_mic_24dp
+        const val ICON_PAUSE: Int = R.drawable.ic_pause_24dp
+        const val ICON_PAUSE_PRESSED: Int = R.drawable.ic_pause_white_24dp
+        const val ICON_ARROW_UP: Int = R.drawable.ic_keyboard_arrow_up_24dp
+        const val ICON_ARROW_DOWN: Int = R.drawable.ic_keyboard_arrow_down_24dp
+        const val ICON_ADD: Int = R.drawable.ic_add_box_24dp
+        const val ICON_BACK: Int = R.drawable.ic_keyboard_arrow_left_24dp
+        const val ICON_FORWARD: Int = R.drawable.ic_keyboard_arrow_right_24dp
+        const val ICON_SKIP_BACK: Int = R.drawable.ic_skip_previous_24dp
+        const val ICON_SKIP_FORWARD: Int = R.drawable.ic_skip_next_24dp
+        const val MD_COMP: String = "<center>No Mesoscale Discussions are currently in effect."
+        const val WATCH_COMP: String = "<center><strong>No watches are currently valid"
+        const val MPD_COMP: String = "No MPDs are currently in effect."
+        const val currentConditionsViaMetar: Boolean = true
+        var spchrrrZoom: Float = 0f
+        var spchrrrX: Float = 0f
+        var spchrrrY: Float = 0f
+        var wpcgefsZoom: Float = 0f
+        var wpcgefsX: Float = 0f
+        var wpcgefsY: Float = 0f
+        var spcsseoZoom: Float = 0f
+        var spcsseoX: Float = 0f
+        var spcsseoY: Float = 0f
+        var goesVisZoom: Float = 0f
+        var goesVisX: Float = 0f
+        var goesVisY: Float = 0f
+        var goesVisSector: String = ""
+        var nwsIconSize: Int = 0
+        var padding: Int = 0
+        var paddingSmall: Int = 0
+        var tabHeaders: Array<String> = arrayOf("", "", "", "")
 
         fun initPreferences(context: Context) {
             initRadarPreferences()
@@ -454,7 +455,7 @@ class MyApplication : Application() {
 
         // FIXME move to Location
         //private val locations = mutableListOf<Location>()
-        val locations = mutableListOf<Location>()
+        val locations: MutableList<Location> = mutableListOf()
 
         // source for county and state lines
         // http://www2.census.gov/geo/tiger/GENZ2010/
@@ -464,8 +465,8 @@ class MyApplication : Application() {
         // https://www.census.gov/geo/maps-data/data/kml/kml_counties.html
         // ./android-sdk-linux/platform-tools/adb pull /data/data/joshuatee.wx/files/statev3.bin
 
-        val colorMap = mutableMapOf<Int, ObjectColorPalette>()
-        var loadedBuffers = false
+        val colorMap: MutableMap<Int, ObjectColorPalette> = mutableMapOf()
+        var loadedBuffers: Boolean = false
 
         fun initBuffers(context: Context) {
             UtilityLog.d("wx", "initBuffers ran")
@@ -481,43 +482,43 @@ class MyApplication : Application() {
         private const val mxCnt = 151552
 
         var stateRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
-        var countState = 200000 // v3 205748
+        var countState: Int = 200000 // v3 205748
         var hwRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
-        var countHw = 862208 // on disk size 3448832 yields  862208
+        var countHw: Int = 862208 // on disk size 3448832 yields  862208
         var hwExtRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
-        const val countHwExt = 770048 // on disk 3080192 yields 770048
+        const val countHwExt: Int = 770048 // on disk 3080192 yields 770048
         private const val hwExtFileResid = R.raw.hwv4ext // 2016_04_06
         var lakesRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
-        const val countLakes = 503808 // was 14336 + 489476
+        const val countLakes: Int = 503808 // was 14336 + 489476
         var countyRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
-        var countCounty = 212992 // file on disk is 851968, should be
+        var countCounty: Int = 212992 // file on disk is 851968, should be
         private var hwFileResid = R.raw.hwv4
         private const val lakesFileResid = R.raw.lakesv3
         private var countyFileResid = R.raw.county
 
-        var radarColorHw = 0
-        var radarColorHwExt = 0
-        var radarColorState = 0
-        var radarColorTstorm = 0
-        var radarColorTstormWatch = 0
-        var radarColorTor = 0
-        var radarColorTorWatch = 0
-        var radarColorFfw = 0
-        var radarColorSmw = 0
-        var radarColorSvs = 0
-        var radarColorSps = 0
-        var radarColorMcd = 0
-        var radarColorMpd = 0
-        var radarColorLocdot = 0
-        var radarColorSpotter = 0
-        var radarColorCity = 0
-        var radarColorLakes = 0
-        var radarColorCounty = 0
-        var radarColorSti = 0
-        var radarColorHi = 0
-        var radarColorObs = 0
-        var radarColorObsWindbarbs = 0
-        var radarColorCountyLabels = 0
+        var radarColorHw: Int = 0
+        var radarColorHwExt: Int = 0
+        var radarColorState: Int = 0
+        var radarColorTstorm: Int = 0
+        var radarColorTstormWatch: Int = 0
+        var radarColorTor: Int = 0
+        var radarColorTorWatch: Int = 0
+        var radarColorFfw: Int = 0
+        var radarColorSmw: Int = 0
+        var radarColorSvs: Int = 0
+        var radarColorSps: Int = 0
+        var radarColorMcd: Int = 0
+        var radarColorMpd: Int = 0
+        var radarColorLocdot: Int = 0
+        var radarColorSpotter: Int = 0
+        var radarColorCity: Int = 0
+        var radarColorLakes: Int = 0
+        var radarColorCounty: Int = 0
+        var radarColorSti: Int = 0
+        var radarColorHi: Int = 0
+        var radarColorObs: Int = 0
+        var radarColorObsWindbarbs: Int = 0
+        var radarColorCountyLabels: Int = 0
 
         private fun radarGeometrySetColors() {
             radarColorHw = preferences.getInt("RADAR_COLOR_HW", Color.BLUE)
@@ -617,7 +618,7 @@ class MyApplication : Application() {
                 try {
                     val inputStream = context.resources.openRawResource(fileID)
                     val dis = DataInputStream(BufferedInputStream(inputStream))
-                    (0 until count).forEach { bb.putFloat(dis.readFloat()) }
+                    (0 until count).forEach { _ -> bb.putFloat(dis.readFloat()) }
                     dis.close()
                     inputStream.close()
                 } catch (e: IOException) {
@@ -627,55 +628,55 @@ class MyApplication : Application() {
         }
 
         // Radar Preferences
-        const val NWS_RADAR_PUB = "http://tgftp.nws.noaa.gov/" //(Official current URL, problem with cricket but so does cp.ncep now )
+        const val NWS_RADAR_PUB: String = "http://tgftp.nws.noaa.gov/" //(Official current URL, problem with cricket but so does cp.ncep now )
         //public static final String NWS_RADAR_PUB = "http://tgftp.cp.ncep.noaa.gov/";
-        const val nwsRadarLevel2Pub = "http://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
+        const val nwsRadarLevel2Pub: String = "http://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
         //conus radar for zoom out
-        const val NWS_CONUS_RADAR = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
-        const val NWS_CONUS_RADAR_GFW = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
-        var radarTorWarnings = true
-        var radarTstWarnings = true
-        var radarFfwWarnings = true
-        var radarSmwWarnings = true
-        var radarSvsWarnings = true
-        var radarSpsWarnings = false
-        var locdotFollowsGps = false
-        var dualpaneshareposn = false
-        var radarSpotters = false
-        var radarSpottersLabel = false
-        var radarObs = false
-        var radarObsWindbarbs = false
-        var radarSwo = false
+        const val NWS_CONUS_RADAR: String = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
+        const val NWS_CONUS_RADAR_GFW: String = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
+        var radarTorWarnings: Boolean = true
+        var radarTstWarnings: Boolean = true
+        var radarFfwWarnings: Boolean = true
+        var radarSmwWarnings: Boolean = true
+        var radarSvsWarnings: Boolean = true
+        var radarSpsWarnings: Boolean = false
+        var locdotFollowsGps: Boolean = false
+        var dualpaneshareposn: Boolean = false
+        var radarSpotters: Boolean = false
+        var radarSpottersLabel: Boolean = false
+        var radarObs: Boolean = false
+        var radarObsWindbarbs: Boolean = false
+        var radarSwo: Boolean = false
 
-        var radarCities = false
-        var radarHw = false
-        var radarLocDot = false
-        var radarLakes = false
-        var radarCounty = false
-        var radarCountyLabels = false
-        private var radarCountyHires = false
-        private var radarStateHires = false
-        var radarWatMcd = false
-        var radarMpd = false
-        var radarSti = false
-        var radarHi = false
-        var radarTvs = false
+        var radarCities: Boolean = false
+        var radarHw: Boolean = false
+        var radarLocDot: Boolean = false
+        var radarLakes: Boolean = false
+        var radarCounty: Boolean = false
+        var radarCountyLabels: Boolean = false
+        private var radarCountyHires: Boolean = false
+        private var radarStateHires: Boolean = false
+        var radarWatMcd: Boolean = false
+        var radarMpd: Boolean = false
+        var radarSti: Boolean = false
+        var radarHi: Boolean = false
+        var radarTvs: Boolean = false
 
-        var radarShowLegend = false
-        var drawtoolSize = 0
-        var radarObsExtZoom = 0
-        var radarSpotterSize = 0
-        var radarAviationSize = 0
-        var radarTextSize = 0.toFloat()
-        var radarLocdotSize = 0
-        var radarHiSize = 0
-        var radarTvsSize = 0
-        var radarWarnLinesize = 0
-        var radarWatmcdLinesize = 0
-        private var radarHwEnh = true
-        var radarHwEnhExt = false
-        private var radarCamxBorders = false
-        var radarIconsLevel2 = false
+        var radarShowLegend: Boolean = false
+        var drawtoolSize: Int = 0
+        var radarObsExtZoom: Int = 0
+        var radarSpotterSize: Int = 0
+        var radarAviationSize: Int = 0
+        var radarTextSize: Float = 0f
+        var radarLocdotSize: Int = 0
+        var radarHiSize: Int = 0
+        var radarTvsSize: Int = 0
+        var radarWarnLinesize: Int = 0
+        var radarWatmcdLinesize: Int = 0
+        private var radarHwEnh: Boolean = true
+        var radarHwEnhExt: Boolean = false
+        private var radarCamxBorders: Boolean = false
+        var radarIconsLevel2: Boolean = false
 
         private fun initRadarPreferences() {
             radarTorWarnings = preferences.getString("TOR_WARNINGS", "false").startsWith("t")

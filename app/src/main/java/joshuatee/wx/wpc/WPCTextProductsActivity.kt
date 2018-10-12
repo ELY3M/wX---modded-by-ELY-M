@@ -65,7 +65,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener, Ad
     //
 
     companion object {
-        const val URL = ""
+        const val URL: String = ""
     }
 
     private lateinit var turl: Array<String>
@@ -149,7 +149,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener, Ad
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         if (audioPlayMenu(item.itemId, html, prod, prod)) {

@@ -46,7 +46,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // arg2 if "sound" will play TTS on first load
 
     companion object {
-        const val URL = ""
+        const val URL: String = ""
     }
 
     private lateinit var turl: Array<String>

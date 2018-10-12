@@ -46,7 +46,7 @@ import joshuatee.wx.util.UtilityFileManagement
 class SettingsColorPaletteActivity : BaseActivity() {
 
     companion object {
-        const val TYPE = ""
+        const val TYPE: String = ""
         private var prefToken = "RADAR_COLOR_PALETTE_94"
     }
 
@@ -122,7 +122,8 @@ class SettingsColorPaletteActivity : BaseActivity() {
                 allItems.add(cmEak)
                 allItems.add(cmOwnRef)
                 val prefArr = MyApplication.radarColorPalette94List.split(":").dropLastWhile { it.isEmpty() }
-                prefArr.filter { it != "" }.mapTo(allItems) { TileObjectColorPalette(it, toolbar, prefToken, cg, type, false) }
+                prefArr.asSequence().filter { it != "" }.mapTo(allItems) { TileObjectColorPalette(it, toolbar, prefToken, cg, type, false) }
+                //prefArr.filter { it != "" }.mapTo(allItems) { TileObjectColorPalette(it, toolbar, prefToken, cg, type, false) }
                 builtinStr = "false"
                 allItems.forEach {
                     if (MyApplication.radarColorPalette[type] == it.colorMapLabel && it.builtin) {
@@ -141,7 +142,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                 allItems.add(cmEak2)
                 allItems.add(cmOwnvel)
                 val prefArr = MyApplication.radarColorPalette99List.split(":").dropLastWhile { it.isEmpty() }
-                prefArr.filter { it != "" }.mapTo(allItems) { TileObjectColorPalette(it, toolbar, prefToken, cg, type, false) }
+                prefArr.asSequence().filter { it != "" }.mapTo(allItems) { TileObjectColorPalette(it, toolbar, prefToken, cg, type, false) }
                 builtinStr = "false"
                 allItems.forEach {
                     if (MyApplication.radarColorPalette[type] == it.colorMapLabel && it.builtin) {

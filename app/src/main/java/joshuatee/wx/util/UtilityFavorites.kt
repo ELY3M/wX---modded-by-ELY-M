@@ -209,6 +209,6 @@ object UtilityFavorites {
         return ridArrLoc.toList()
     }
 
-    fun findPositionNWSTEXT(key: String) = NWS_TXT_ARR.indices.firstOrNull { NWS_TXT_ARR[it].contains(key) }
+    fun findPositionNWSTEXT(key: String): Int = NWS_TXT_ARR.indices.firstOrNull { NWS_TXT_ARR[it].contains(key) }
             ?: 0
 }

@@ -63,7 +63,7 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     // arg2 - pref model token and hash lookup
 
     companion object {
-        const val INFO = ""
+        const val INFO: String = ""
     }
 
     private var initSpinnerSetup = false

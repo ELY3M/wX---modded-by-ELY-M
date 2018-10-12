@@ -45,7 +45,6 @@ class SPCSWOSummaryActivity : BaseActivity() {
     private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
 
-
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.spc_swo_summary, menu)
         UtilityShortcut.hidePinIfNeeded(menu)
@@ -72,10 +71,10 @@ class SPCSWOSummaryActivity : BaseActivity() {
 
         override fun onPostExecute(result: String) {
             var card: ObjectCardImage
-            bmAl.forEach {
-                card = ObjectCardImage(contextg, it)
-                val day = if (bmAl.indexOf(it) < 3) {
-                    (bmAl.indexOf(it) + 1).toString()
+            bmAl.forEach { bitmap ->
+                card = ObjectCardImage(contextg, bitmap)
+                val day = if (bmAl.indexOf(bitmap) < 3) {
+                    (bmAl.indexOf(bitmap) + 1).toString()
                 } else {
                     "4-8"
                 }
