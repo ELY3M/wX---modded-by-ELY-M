@@ -71,8 +71,8 @@ object UtilitySpotter {
                 html = html.replace("#storm reports.*?$".toRegex(), "")
                 val htmlArr = html.split("<br>").dropLastWhile { it.isEmpty() }
                 var tmpArr: List<String>
-                htmlArr.forEach {
-                    tmpArr = it.split(";;").dropLastWhile { it.isEmpty() }
+                htmlArr.forEach { line ->
+                    tmpArr = line.split(";;").dropLastWhile { it.isEmpty() }
                     if (tmpArr.size > 15) {
                         spotterList.add(Spotter(tmpArr[0], tmpArr[1], tmpArr[2], tmpArr[3], tmpArr[4], tmpArr[5], tmpArr[6], tmpArr[7], tmpArr[8], tmpArr[9], tmpArr[10], tmpArr[11], tmpArr[12], tmpArr[13], tmpArr[14], tmpArr[15]))
                         latAl.add(tmpArr[4])
@@ -111,8 +111,8 @@ object UtilitySpotter {
     private fun processReportsData(txt: String) {
         val htmlArr = txt.split("<br>").dropLastWhile { it.isEmpty() }
         var tmpArr: List<String>
-        htmlArr.forEach {
-            tmpArr = it.split(";;").dropLastWhile { it.isEmpty() }
+        htmlArr.forEach { line ->
+            tmpArr = line.split(";;").dropLastWhile { it.isEmpty() }
             if (tmpArr.size > 10 && !tmpArr[0].startsWith("#")) {
                 reportsList.add(SpotterReports(tmpArr[9], tmpArr[10], tmpArr[5], tmpArr[6], tmpArr[8], tmpArr[0], tmpArr[3], tmpArr[2], tmpArr[7]))
 
@@ -130,8 +130,8 @@ object UtilitySpotter {
         text = text.replace("#storm reports.*?$".toRegex(), "")
         val htmlArr = text.split("<br>").dropLastWhile { it.isEmpty() }
         var tmpArr: List<String>
-        htmlArr.forEach {
-            tmpArr = it.split(";;").dropLastWhile { it.isEmpty() }
+        htmlArr.forEach { line->
+            tmpArr = line.split(";;").dropLastWhile { it.isEmpty() }
             if (tmpArr.size > 15) {
                 spotterinfo.add(Spotter(tmpArr[0], tmpArr[1], tmpArr[2], tmpArr[3], tmpArr[4], tmpArr[5], tmpArr[6], tmpArr[7], tmpArr[8], tmpArr[9], tmpArr[10], tmpArr[11], tmpArr[12], tmpArr[13], tmpArr[14], tmpArr[15]))
             }

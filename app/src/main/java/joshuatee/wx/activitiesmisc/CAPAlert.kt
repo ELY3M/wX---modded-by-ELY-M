@@ -27,21 +27,21 @@ import joshuatee.wx.UIPreferences
 
 class CAPAlert {
 
-    var text = ""
+    var text: String = ""
         private set
-    var title = ""
+    var title: String = ""
         private set
-    var summary = ""
+    var summary: String = ""
         private set
-    var area = ""
+    var area: String = ""
         private set
-    var instructions = ""
+    var instructions: String = ""
         private set
-    var zones = ""
-    var vtec = ""
-    var url = ""
+    var zones: String = ""
+    var vtec: String = ""
+    var url: String = ""
         private set
-    var event = ""
+    var event: String = ""
 
     constructor()
 

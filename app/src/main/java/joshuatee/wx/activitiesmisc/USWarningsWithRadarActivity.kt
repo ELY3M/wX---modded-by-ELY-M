@@ -63,7 +63,7 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
     //
 
     companion object {
-        const val URL = ""
+        const val URL: String = ""
     }
 
     private var sigHtmlTmp = ""

@@ -23,13 +23,14 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 
 import joshuatee.wx.util.Utility
 
 class ObjectCardHSText(context: Context, val product: String) {
 
     private val objCard = ObjectCard(context)
-    val tv = TextView(context)
+    val tv: TextView = TextView(context)
     private var textShort = ""
     private var textLong = ""
     private var textShownSmall = true
@@ -67,7 +68,7 @@ class ObjectCardHSText(context: Context, val product: String) {
         textShort = text
     }
 
-    val card get() = objCard.card
+    val card: CardView get() = objCard.card
 
 }
 

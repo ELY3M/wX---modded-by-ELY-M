@@ -29,7 +29,7 @@ import joshuatee.wx.settings.Location
 class ObjectForecastPackageHazards {
 
     private var hazardsShort = ""
-    var hazards = ""
+    var hazards: String = ""
         private set
 
     private constructor()
@@ -45,7 +45,7 @@ class ObjectForecastPackageHazards {
         hazards = getHazardsHtml(location)
     }
 
-    fun getHazardsShort() = hazardsShort.replace("^<BR>".toRegex(), "")
+    fun getHazardsShort(): String = hazardsShort.replace("^<BR>".toRegex(), "")
 
     companion object {
         // CA
@@ -58,9 +58,7 @@ class ObjectForecastPackageHazards {
         }
 
         fun getHazardsHtml(location: LatLon): String {
-            // was getNWSStringFromURL
-            val html = UtilityDownloadNWS.getHazardData("https://api.weather.gov/alerts?point=" + UtilityMath.latLonFix(location.latString) + "," + UtilityMath.latLonFix(location.lonString) + "&active=1")
-            return html
+            return UtilityDownloadNWS.getHazardData("https://api.weather.gov/alerts?point=" + UtilityMath.latLonFix(location.latString) + "," + UtilityMath.latLonFix(location.lonString) + "&active=1")
         }
     }
 }

@@ -69,10 +69,10 @@ class WPCRainfallForecastActivity : BaseActivity() {
 
         override fun onPostExecute(result: String) {
             var card: ObjectCardImage
-            bmAl.forEach {
-                card = ObjectCardImage(contextg, it)
-                val prodTextUrlLocal = UtilityWPCRainfallForecast.PROD_TEXT_URL[bmAl.indexOf(it)]
-                val prodTitleLocal = UtilityWPCRainfallForecast.PROD_TITLE[bmAl.indexOf(it)] + " - " + getString(UtilityWPCRainfallForecast.ACTIVITY_TITLE_INT)
+            bmAl.forEach { bitmap ->
+                card = ObjectCardImage(contextg, bitmap)
+                val prodTextUrlLocal = UtilityWPCRainfallForecast.PROD_TEXT_URL[bmAl.indexOf(bitmap)]
+                val prodTitleLocal = UtilityWPCRainfallForecast.PROD_TITLE[bmAl.indexOf(bitmap)] + " - " + getString(UtilityWPCRainfallForecast.ACTIVITY_TITLE_INT)
                 card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(prodTextUrlLocal, prodTitleLocal)) })
                 ll.addView(card.card)
             }

@@ -52,25 +52,24 @@ class WXGLRender(private val context: Context) : Renderer {
     // Java can also be used in set in settings->radar
 
     companion object {
-        var ridGlobal = ""
+        var ridGlobal: String = ""
             private set
-        var positionXGlobal = 0f
+        var positionXGlobal: Float = 0f
             private set
-        var positionYGlobal = 0f
+        var positionYGlobal: Float = 0f
             private set
-        const val ortIntGlobal = 400
-        var oneDegreeScaleFactorGlobal = 0.0f
+        const val ortIntGlobal: Int = 400
+        var oneDegreeScaleFactorGlobal: Float = 0.0f
             private set
     }
 
     // this string is normally no string but for dual pane will be set to either 1 or 2 to differentiate timestamps
-    var TAG = "joshuatee-WXGLRender"
-    var radarStatusStr = ""
-    var idxStr = "0"
+    var radarStatusStr: String = ""
+    var idxStr: String = "0"
     private val mtrxProjection = FloatArray(16)
     private val mtrxView = FloatArray(16)
     private var mtrxProjectionAndView = FloatArray(16)
-    var ridNewList = listOf<RID>()
+    var ridNewList: List<RID> = listOf()
     private var radarChunkCnt = 0
     private var lineCnt = 0
     private val breakSizeLine = 30000
@@ -114,7 +113,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private var chunkCount = 0
     private var totalBins = 0
     private var totalBinsOgl = 0
-    var zoom = 1.0f
+    var zoom: Float = 1.0f
         set(scale) {
             field = scale
 
@@ -132,17 +131,17 @@ class WXGLRender(private val context: Context) : Renderer {
             }
         }
     private var mSurfaceRatio = 0f
-    var x = 0f
+    var x: Float = 0f
         set(x) {
             field = x
             positionXGlobal = x
         }
-    var y = 0f
+    var y: Float = 0f
         set(y) {
             field = y
             positionYGlobal = y
         }
-    var rid = ""
+    var rid: String = ""
         set(rid) {
             field = rid
             ridGlobal = rid
@@ -155,11 +154,11 @@ class WXGLRender(private val context: Context) : Renderer {
     private var bgColorFRed = 0.0f
     private var bgColorFGreen = 0.0f
     private var bgColorFBlue = 0.0f
-    val ortInt = 400
+    val ortInt: Int = 400
     private val provider = ProjectionType.WX_OGL
     private val rdL2 = WXGLNexradLevel2()
-    val radarL3Object = WXGLNexradLevel3()
-    val rdDownload = WXGLDownload()
+    val radarL3Object: WXGLNexradLevel3 = WXGLNexradLevel3()
+    val rdDownload: WXGLDownload = WXGLDownload()
     private var pn = ProjectionNumbers()
     var product: String
         get() = prod
@@ -382,6 +381,14 @@ class WXGLRender(private val context: Context) : Renderer {
         listOf(mpdBuffers, mcdBuffers, watchBuffers, watchTornadoBuffers, swoBuffers).forEach { drawPolygons(it, 8) }
     }
 
+    // FIXME CRASHING HERE sometimes
+    /*
+        java.lang.IllegalArgumentException: Must use a native order direct Buffer
+        at android.opengl.GLES20.glVertexAttribPointerBounds(Native Method)
+        at android.opengl.GLES20.glVertexAttribPointer(GLES20.java:1906)
+        at joshuatee.wx.radar.WXGLRender.drawTriangles(WXGLRender.kt:388)
+        at joshuatee.wx.radar.WXGLRender.onDrawFrame(WXGLRender.kt:359)
+    * */
     private fun drawTriangles(buffers: ObjectOglBuffers) {
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
@@ -393,7 +400,8 @@ class WXGLRender(private val context: Context) : Renderer {
 
     private fun drawPolygons(buffers: ObjectOglBuffers, countDivisor: Int) {
         if (buffers.isInitialized) {
-            (0 until buffers.chunkCount).forEach {
+            // FIXME is chunkcount ever above one? "it" is never reference in the loop
+            (0 until buffers.chunkCount).forEach { _ ->
                 lineIndexBuffer.position(0)
                 buffers.setToPositionZero()
                 GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
@@ -411,10 +419,10 @@ class WXGLRender(private val context: Context) : Renderer {
                 } else {
                     2 * (buffers.count / 4 - it * breakSizeLine)
                 }
-                buffers.floatBuffer.position(it * 480000)
-                buffers.colorBuffer.position(0)
-                lineIndexBuffer.position(0)
                 try {
+                    buffers.floatBuffer.position(it * 480000)
+                    buffers.colorBuffer.position(0)
+                    lineIndexBuffer.position(0)
                     GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
                     GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, buffers.colorBuffer.slice())
                     GLES20.glDrawElements(GLES20.GL_LINES, lineCnt, GLES20.GL_UNSIGNED_SHORT, lineIndexBuffer.slice().asShortBuffer())
@@ -511,10 +519,14 @@ class WXGLRender(private val context: Context) : Renderer {
     private fun constructGenericLinesShort(buffers: ObjectOglBuffers, f: List<Double>) {
         val remainder: Int
         buffers.initialize(4 * 4 * f.size, 0, 3 * 4 * f.size, buffers.type.color)
-        if (MyApplication.radarUseJni) {
-            JNI.colorGen(buffers.colorBuffer, 4 * f.size, buffers.colorArray)
-        } else {
-            UtilityWXOGLPerf.colorGen(buffers.colorBuffer, 4 * f.size, buffers.colorArray)
+        try {
+            if (MyApplication.radarUseJni) {
+                JNI.colorGen(buffers.colorBuffer, 4 * f.size, buffers.colorArray)
+            } else {
+                UtilityWXOGLPerf.colorGen(buffers.colorBuffer, 4 * f.size, buffers.colorArray)
+            }
+        } catch (e: java.lang.Exception){
+            UtilityLog.HandleException(e)
         }
         buffers.breakSize = 15000
         buffers.chunkCount = 1
@@ -532,7 +544,7 @@ class WXGLRender(private val context: Context) : Renderer {
             if (it == buffers.chunkCount - 1) {
                 buffers.breakSize = remainder
             }
-            (0 until buffers.breakSize).forEach {
+            (0 until buffers.breakSize).forEach { _ ->
                 buffers.putFloat(f[vList].toFloat())
                 buffers.putFloat(f[vList + 1].toFloat() * -1)
                 buffers.putFloat(f[vList + 2].toFloat())
@@ -757,7 +769,7 @@ class WXGLRender(private val context: Context) : Renderer {
             if (it == buffers.chunkCount - 1) {
                 buffers.breakSize = remainder
             }
-            (0 until buffers.breakSize).forEach {
+            (0 until buffers.breakSize).forEach { _ ->
                 if (fList.size > (vList + 3)) {
                     buffers.putFloat(fList[vList].toFloat())
                     buffers.putFloat(fList[vList + 1].toFloat() * -1.0f)

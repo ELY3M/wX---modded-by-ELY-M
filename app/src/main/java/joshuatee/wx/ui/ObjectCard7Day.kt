@@ -28,6 +28,7 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.cardview.widget.CardView
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
@@ -110,7 +111,7 @@ class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7
         objCard.setOnClickListener(fn)
     }
 
-    val card get() = objCard.card
+    val card: CardView get() = objCard.card
 }
 
 

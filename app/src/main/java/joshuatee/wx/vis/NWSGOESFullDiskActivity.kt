@@ -148,7 +148,7 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener, Too
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onClick(v: View) {
         when (v.id) {R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)

@@ -141,7 +141,7 @@ class SevereDashboardActivity : BaseActivity() {
 
         override fun onPostExecute(result: String) {
             if (bitmapArrRep.size > 0) {
-                bitmapArrRep.indices.forEach {
+                bitmapArrRep.indices.forEach { it ->
                     val card = ObjectCardImage(contextg, bitmapArrRep[it])
                     card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCStormReportsActivity::class.java, SPCStormReportsActivity.NO, arrayOf("today")) })
                     linearLayout.addView(card.card)
@@ -150,13 +150,13 @@ class SevereDashboardActivity : BaseActivity() {
             listOf(snWat, snMcd, snMpd)
                     .asSequence()
                     .filter { it.bmAl.size > 0 }
-                    .forEach {
-                        it.bmAl.indices.forEach { j ->
-                            val card = ObjectCardImage(contextg, it.bmAl[j])
+                    .forEach { severeNotice ->
+                        severeNotice.bmAl.indices.forEach { j ->
+                            val card = ObjectCardImage(contextg, severeNotice.bmAl[j])
                             var cla: Class<*>? = null
                             var claStr = ""
-                            val claArgStr = it.strList[j]
-                            when (it.type) {
+                            val claArgStr = severeNotice.strList[j]
+                            when (severeNotice.type) {
                                 PolygonType.MCD -> {
                                     cla = SPCMCDWShowActivity::class.java
                                     claStr = SPCMCDWShowActivity.NO
@@ -174,8 +174,7 @@ class SevereDashboardActivity : BaseActivity() {
                             }
                             val cl = cla
                             val clStr = claStr
-                            val snFinal = it
-                            card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, cl!!, clStr, arrayOf(claArgStr, "", snFinal.toString())) })
+                            card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, cl!!, clStr, arrayOf(claArgStr, "", severeNotice.toString())) })
                             linearLayout.addView(card.card)
                         }
                     }

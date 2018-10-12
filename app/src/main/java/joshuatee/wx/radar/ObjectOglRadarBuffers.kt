@@ -31,13 +31,13 @@ import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 
 class ObjectOglRadarBuffers(val context: Context, var bgColor: Int) : ObjectOglBuffers() {
 
-    var fn = "nids"
-    var numberOfRadials = 360
-    var binSize = 0.toFloat()
-    var numRangeBins = 0
-    var productCode = 94.toShort()
+    var fn: String = "nids"
+    var numberOfRadials: Int = 360
+    var binSize: Float = 0f
+    var numRangeBins: Int = 0
+    var productCode: Short = 94.toShort()
 
-    var colormap = ObjectColorPalette(context, "94")
+    var colormap: ObjectColorPalette = ObjectColorPalette(context, "94")
         get() = MyApplication.colorMap[productCode.toInt()]!!
 
     fun extractL3Data(rd: WXGLNexradLevel3) {

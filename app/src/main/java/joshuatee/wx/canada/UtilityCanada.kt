@@ -242,7 +242,7 @@ object UtilityCanada {
         return newName
     }
 
-    fun getProvHTML(prov: String) = ("http://weather.gc.ca/forecast/canada/index_e.html?id=$prov").getHtmlSep()
+    fun getProvHTML(prov: String): String = ("http://weather.gc.ca/forecast/canada/index_e.html?id=$prov").getHtmlSep()
 
     fun getLocationHTML(location: LatLon): String {
         val prov = location.latString.split(":").dropLastWhile { it.isEmpty() }
@@ -258,7 +258,7 @@ object UtilityCanada {
         return "http://weather.gc.ca/city/pages/" + prov[1].toLowerCase(Locale.US) + "-" + id[0] + "_metric_e.html"
     }
 
-    fun getStatus(html: String) = html.parse("<b>Observed at:</b>(.*?)<br/>")
+    fun getStatus(html: String): String = html.parse("<b>Observed at:</b>(.*?)<br/>")
 
     fun getRID(x: String, y: String): String {
         val url = ("http://weather.gc.ca/city/pages/"
@@ -354,7 +354,7 @@ object UtilityCanada {
         return warningData
     }
 
-    fun getECSectorFromProv(prov: String) = PROV_HASH[prov] ?: ""
+    fun getECSectorFromProv(prov: String): String = PROV_HASH[prov] ?: ""
 
     fun isLabelPresent(label: String): Boolean {
         if (!UtilityCitiesCA.cityInit) {

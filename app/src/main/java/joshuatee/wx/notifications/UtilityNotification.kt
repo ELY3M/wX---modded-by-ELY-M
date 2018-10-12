@@ -193,8 +193,8 @@ object UtilityNotification {
             }
             if (currentUpdateTime > lastUpdateTime + 1000 * 60 * ccUpdateInterval) {
                 val objFcst = Utility.getCurrentConditionsV2(context, locNumInt)
-                val objHazards = Utility.getCurrentHazards(context, locNumInt)
-                val objSevenDay = Utility.getCurrentSevenDay(context, locNumInt)
+                val objHazards = Utility.getCurrentHazards(locNumInt)
+                val objSevenDay = Utility.getCurrentSevenDay(locNumInt)
                 val updateTime = System.currentTimeMillis()
                 Utility.writePref(context, "CC" + locNum + "_LAST_UPDATE", updateTime)
                 if (locNum == widgetLocNum && widgetsEnabled) {

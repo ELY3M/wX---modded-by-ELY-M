@@ -55,7 +55,7 @@ class Widget : AppWidgetProvider() {
     }
 
     companion object {
-        const val WIDGET_IDS_KEY = "mywidgetproviderwidgetids"
+        const val WIDGET_IDS_KEY: String = "mywidgetproviderwidgetids"
         private const val WIDGET_DATA_KEY = "mywidgetproviderwidgetdata"
     }
 } 

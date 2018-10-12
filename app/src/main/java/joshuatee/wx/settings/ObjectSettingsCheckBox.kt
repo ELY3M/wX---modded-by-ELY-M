@@ -30,6 +30,7 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
@@ -103,7 +104,7 @@ class ObjectSettingsCheckBox(context: Context, private val activity: Activity, l
             }
             when (pref) {
                 "TOR_WARNINGS", "TST_WARNINGS", "FFW_WARNINGS", "SMW_WARNINGS", "SVS_WARNINGS", "SPS_WARNINGS", "RADAR_SHOW_MPD", "RADAR_SHOW_WATCH" -> Utility.writePref(context, "RESTART_NOTIF", "true")
-                "RADAR_STATE_HIRES", "RADAR_COUNTY_HIRES", "RADAR_HW_ENH_EXT", "RADAR_CAMX_BORDERS" -> {
+                "RADAR_STATE_HIRES", "RADAR_COUNTY_HIRES", "RADAR_HW_ENH_EXT", "RADAR_CAMX_BORDERS", "WXOGL_SPOTTERS", "WXOGL_SPOTTERS_LABEL" -> {
                     MyApplication.initPreferences(context)
                     when (pref) {
                         "RADAR_STATE_HIRES" -> MyApplication.initRadarGeometryByType(context, GeographyType.STATE_LINES)
@@ -127,7 +128,7 @@ class ObjectSettingsCheckBox(context: Context, private val activity: Activity, l
         cb.isChecked = value
     }
 
-    val card get() = objCard.card
+    val card: CardView get() = objCard.card
 
     internal fun setOnCheckedChangeListener(l: CompoundButton.OnCheckedChangeListener) {
         cb.setOnCheckedChangeListener(l)

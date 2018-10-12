@@ -27,7 +27,8 @@ import kotlin.math.acos
 import kotlin.math.cos
 import kotlin.math.sin
 
-class LatLon() { // latlon: DoubleArray = doubleArrayOf(0.0,0.0)
+// latlon: DoubleArray = doubleArrayOf(0.0,0.0)
+class LatLon() { 
 
     private var x = 0.0
     private var y = 0.0

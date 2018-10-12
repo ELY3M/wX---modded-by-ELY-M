@@ -39,10 +39,10 @@ import kotlin.math.*
 
 internal object UtilityWXOGLPerf {
 
-    private val M_180_div_PI = (180.0 / PI).toFloat()
-    private val M_PI_div_4 = (PI / 4.0).toFloat()
-    private val M_PI_div_360 = (PI / 360.0).toFloat()
-    private val TWICE_PI = (2.0f * PI).toFloat()
+    private const val M_180_div_PI: Float = (180.0 / PI).toFloat()
+    private const val M_PI_div_4: Float = (PI / 4.0).toFloat()
+    private const val M_PI_div_360: Float = (PI / 360.0).toFloat()
+    private const val TWICE_PI: Float = (2.0f * PI).toFloat()
 
     fun decode8BitAndGenRadials(context: Context, radarBuffers: ObjectOglRadarBuffers): Int {
         var totalBins = 0
@@ -136,7 +136,7 @@ internal object UtilityWXOGLPerf {
                         rI += 4
                         radarBuffers.floatBuffer.putFloat(rI, binStart * angleSin)
                         rI += 4
-                        (0..3).forEach {
+                        (0..3).forEach { _ ->
                             radarBuffers.colorBuffer.put(cI++, radarBuffers.colormap.redValues.get(level.toInt() and 0xFF))
                             radarBuffers.colorBuffer.put(cI++, radarBuffers.colormap.greenValues.get(level.toInt() and 0xFF))
                             radarBuffers.colorBuffer.put(cI++, radarBuffers.colormap.blueValues.get(level.toInt() and 0xFF))
@@ -224,7 +224,7 @@ internal object UtilityWXOGLPerf {
                     rI += 4
                     radarBuffers.floatBuffer.putFloat(rI, binStart * angleSin)
                     rI += 4
-                    (0..3).forEach {
+                    (0..3).forEach { _ ->
                         radarBuffers.colorBuffer.put(cI++, radarBuffers.colormap.redValues.get(level and 0xFF))
                         radarBuffers.colorBuffer.put(cI++, radarBuffers.colormap.greenValues.get(level and 0xFF))
                         radarBuffers.colorBuffer.put(cI++, radarBuffers.colormap.blueValues.get(level and 0xFF))
@@ -357,7 +357,7 @@ internal object UtilityWXOGLPerf {
             buffers.putIndex((ixCount + 1).toShort())
             buffers.putIndex((ixCount + 2).toShort())
             ixCount += 3
-            (0..2).forEach {
+            (0..2).forEach { _ ->
                 buffers.putColor(buffers.solidColorRed)
                 buffers.putColor(buffers.solidColorGreen)
                 buffers.putColor(buffers.solidColorBlue)
@@ -393,7 +393,7 @@ internal object UtilityWXOGLPerf {
             buffers.putIndex((ixCount + 1).toShort())
             buffers.putIndex((ixCount + 2).toShort())
             ixCount += 3
-            (0..2).forEach {
+            (0..2).forEach { _ ->
                 buffers.putColor(buffers.solidColorRed)
                 buffers.putColor(buffers.solidColorGreen)
                 buffers.putColor(buffers.solidColorBlue)
@@ -443,7 +443,7 @@ internal object UtilityWXOGLPerf {
                 buffers.putIndex(iI, (ixCount + 2).toShort())
                 iI += 2
                 ixCount += 3
-                (0..2).forEach {
+                (0..2).forEach { _ ->
                     buffers.putColor(buffers.solidColorRed)
                     buffers.putColor(buffers.solidColorGreen)
                     buffers.putColor(buffers.solidColorBlue)
@@ -500,7 +500,7 @@ internal object UtilityWXOGLPerf {
                     buffers.putIndex(iI, (ixCount + 2).toShort())
                     iI += 2
                     ixCount += 3
-                    (0..2).forEach {
+                    (0..2).forEach { _ ->
                         buffers.putColor(col[0])
                         buffers.putColor(col[1])
                         buffers.putColor(col[2])
@@ -611,7 +611,7 @@ internal object UtilityWXOGLPerf {
 
     fun colorGen(colorBuff: ByteBuffer, len: Int, colArr: ByteArray) {
         if (len * 3 <= colorBuff.limit()) {
-            (0 until len).forEach {
+            (0 until len).forEach { _ ->
                 if (colorBuff.hasRemaining()) colorBuff.put(colArr[0])
                 if (colorBuff.hasRemaining()) colorBuff.put(colArr[1])
                 if (colorBuff.hasRemaining()) colorBuff.put(colArr[2])

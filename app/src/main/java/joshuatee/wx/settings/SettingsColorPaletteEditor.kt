@@ -55,7 +55,7 @@ import joshuatee.wx.util.UtilityTime
 class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
     companion object {
-        const val URL = ""
+        const val URL: String = ""
         private const val READ_REQUEST_CODE = 42
     }
 

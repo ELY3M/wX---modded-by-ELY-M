@@ -49,7 +49,7 @@ import joshuatee.wx.util.UtilityShare
 class SettingsPrefIO : AppCompatActivity(), OnClickListener, OnMenuItemClickListener {
 
     companion object {
-        const val NO = ""
+        const val NO: String = ""
         private const val READ_REQUEST_CODE = 42
     }
 

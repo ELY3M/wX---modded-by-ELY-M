@@ -23,13 +23,13 @@ package joshuatee.wx.canada
 
 object UtilityCitiesCA {
 
- var cityInit = false
+ var cityInit: Boolean = false
 
  private const val num = 838
- val CITIES_CA = Array(num) { _->""}
- val LAT_CA = DoubleArray(num)
- val LON_CA = DoubleArray(num)
- val code = MutableList(num) { _ -> ""}
+ val CITIES_CA: Array<String> = Array(num) { _->""}
+ val LAT_CA: DoubleArray = DoubleArray(num)
+ val LON_CA: DoubleArray = DoubleArray(num)
+ val code: MutableList<String> = MutableList(num) { _ -> ""}
 
  fun loadCitiesArray() {
   cityInit = true

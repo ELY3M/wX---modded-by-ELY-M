@@ -39,19 +39,19 @@ class WXGLNexradLevel3 internal constructor() {
         private set
     var radialStart: ByteBuffer = ByteBuffer.allocate(0)
         private set
-    var halfword3132 = 0.toFloat()
+    var halfword3132: Float = 0f
         private set
-    var timestamp = ""
+    var timestamp: String = ""
         private set
     var productCode: Short = 94
         private set
-    var binSize = 0.toFloat()
+    var binSize: Float = 0f
         private set
     var numberOfRangeBins: Short = 0
         private set
     var seekStart: Long = 0
         private set
-    var compressedFileSize = 0
+    var compressedFileSize: Int = 0
         private set
     var iBuff: ByteBuffer = ByteBuffer.allocate(0)
     var oBuff: ByteBuffer = ByteBuffer.allocate(0)

@@ -54,21 +54,20 @@ internal object WXGLPolygonWarnings {
         } catch (e: OutOfMemoryError){
             UtilityLog.HandleException(e)
         }
-        //warningHTML = warningHTML.replace(" ", "")
         val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
         val vtecAl = warningHTML.parseColumn(RegExp.warningVtecPattern)
         var polyCount = -1
-        polygonArr.forEach {
+        polygonArr.forEach { polygon ->
             polyCount += 1
             if (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith("0.CAN")) {
-                val polyTmp = it.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
+                val polyTmp = polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
                 val testArr = polyTmp.split(" ")
-                val y = testArr.filterIndexed { idx: Int, _: String -> idx and 1 == 0 }.map {
+                val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }.map {
                     it.toDoubleOrNull() ?: 0.0
-                }
-                val x = testArr.filterIndexed { idx: Int, _: String -> idx and 1 != 0 }.map {
+                }.toList()
+                val x = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 != 0 }.map {
                     it.toDoubleOrNull() ?: 0.0
-                }
+                }.toList()
                 if (y.isNotEmpty() && x.isNotEmpty()) {
                     var tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], pn)
                     pixXInit = tmpCoords[0]

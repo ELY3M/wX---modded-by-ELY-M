@@ -46,7 +46,7 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
     //
 
     companion object {
-        const val INFO = ""
+        const val INFO: String = ""
     }
 
     private lateinit var picker: ColorPicker

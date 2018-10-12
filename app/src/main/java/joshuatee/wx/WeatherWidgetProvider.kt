@@ -125,14 +125,14 @@ class WeatherWidgetProvider : AppWidgetProvider() {
     }
 
     companion object {
-        const val CLICK_ACTION = "joshuatee.wx.weatherlistwidget.CLICK"
-        const val REFRESH_ACTION = "joshuatee.wx.weatherlistwidget.REFRESH"
-        const val EXTRA_DAY_ID = "joshuatee.wx.weatherlistwidget.day"
+        const val CLICK_ACTION: String = "joshuatee.wx.weatherlistwidget.CLICK"
+        const val REFRESH_ACTION: String = "joshuatee.wx.weatherlistwidget.REFRESH"
+        const val EXTRA_DAY_ID: String = "joshuatee.wx.weatherlistwidget.day"
         var sWorkerThread: HandlerThread? = null
         var sWorkerQueue: Handler? = null
         var sDataObserver: WeatherDataProviderObserver? = null
         private const val sMaxDegrees = 96
-        var mIsLargeLayout = true
+        var mIsLargeLayout: Boolean = true
         fun buildLayout(context: Context, appWidgetId: Int, largeLayout: Boolean): RemoteViews {
             val rv: RemoteViews
             val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")

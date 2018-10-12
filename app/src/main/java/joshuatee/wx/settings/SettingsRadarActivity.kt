@@ -147,17 +147,17 @@ class SettingsRadarActivity : BaseActivity() {
                 if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this,
                             arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                            MY_PERMISSION_ACCESS_FINE_LOCATION)
+                            myPermissionsAccessFineLocation)
                 }
             }
         }
     }
 
-    private val MY_PERMISSION_ACCESS_FINE_LOCATION = 5001
+    private val myPermissionsAccessFineLocation = 5001
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
-            MY_PERMISSION_ACCESS_FINE_LOCATION -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            myPermissionsAccessFineLocation -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             } else {
             }
         }

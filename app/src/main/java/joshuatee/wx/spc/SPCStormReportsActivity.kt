@@ -72,7 +72,7 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     //
 
     companion object {
-        const val NO = ""
+        const val NO: String = ""
     }
 
     private var no = ""
@@ -219,7 +219,7 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 }
             }
             var mapOut = mapState.toString()
-            mapOut = mapOut.replace("\\{|\\}".toRegex(), "")
+            mapOut = mapOut.replace("[{}]".toRegex(), "")
             c1.setText(mapOut)
             out.insert(0, Utility.fromHtml("<br><b>" + mapOut + MyApplication.newline + "</b><br>"))
             if (firstRun) {

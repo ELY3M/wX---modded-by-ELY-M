@@ -47,7 +47,7 @@ class USWarningsImpactActivity : BaseActivity() {
         recyclerView = findViewById(R.id.card_list)
         recyclerView.setHasFixedSize(true)
         val llm = LinearLayoutManager(this)
-        llm.orientation = LinearLayoutManager.VERTICAL
+        llm.orientation = RecyclerView.VERTICAL
         recyclerView.layoutManager = llm
         GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }

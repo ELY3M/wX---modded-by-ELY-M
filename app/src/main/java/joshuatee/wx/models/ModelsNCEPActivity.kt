@@ -58,7 +58,7 @@ class ModelsNCEPActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCli
     // arg2 - pref model token and hash lookup
 
     companion object {
-        var INFO = ""
+        var INFO: String = ""
     }
 
     private var animRan = false

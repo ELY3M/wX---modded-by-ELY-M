@@ -55,7 +55,7 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     //
 
     companion object {
-        const val NO = ""
+        const val NO: String = ""
     }
 
     private var no = ""

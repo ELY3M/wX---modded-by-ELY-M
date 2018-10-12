@@ -54,7 +54,7 @@ object UtilityModels {
         spinnerTime.setSelection(timeTmp)
     }
 
-    fun parmInArray(arr: List<String>, parm: String) = arr.contains(parm)
+    fun parmInArray(arr: List<String>, parm: String): Boolean = arr.contains(parm)
 
     fun convertTimeRuntoTimeString(runStr: String, timeStrF: String, showDate: Boolean): String {
         var timeStr = timeStrF

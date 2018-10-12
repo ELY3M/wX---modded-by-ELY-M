@@ -37,7 +37,7 @@ import joshuatee.wx.ui.UtilityToolbar
 class CanadaHourlyActivity : BaseActivity() {
 
     companion object {
-        const val LOC_NUM = ""
+        const val LOC_NUM: String = ""
     }
 
     private var locNumInt = 0

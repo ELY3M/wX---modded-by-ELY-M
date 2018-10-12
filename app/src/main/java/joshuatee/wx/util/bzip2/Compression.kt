@@ -76,19 +76,19 @@ private constructor(private val name: String) {
          * @param  raw  the raw input stream
          * @return  the decompressed version of <tt>raw</tt>
          */
-       /* @Throws(IOException::class)
-        fun decompressStatic(raw: InputStream): InputStream {
-            var raw = raw
-            if (!raw.markSupported()) {
-                raw = BufferedInputStream(raw)
-            }
-            raw.mark(MAGIC_SIZE)
-            val buf = ByteArray(MAGIC_SIZE)
-            raw.read(buf)
-            raw.reset()
-            val compress = getCompression(buf)
-            return compress.decompress(raw)
-        }*/
+        /* @Throws(IOException::class)
+         fun decompressStatic(raw: InputStream): InputStream {
+             var raw = raw
+             if (!raw.markSupported()) {
+                 raw = BufferedInputStream(raw)
+             }
+             raw.mark(MAGIC_SIZE)
+             val buf = ByteArray(MAGIC_SIZE)
+             raw.read(buf)
+             raw.reset()
+             val compress = getCompression(buf)
+             return compress.decompress(raw)
+         }*/
 
         /**
          * A Compression object representing no compression (or perhaps an

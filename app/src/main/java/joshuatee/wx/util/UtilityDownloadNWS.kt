@@ -49,7 +49,7 @@ object UtilityDownloadNWS {
         return UtilityDownloadNWS.getNWSStringFromURLJSON(url)
     }
 
-    fun get7DayURL(x: String, y: String) = "https://forecast-v3.weather.gov/point/$x,$y"
+    fun get7DayURL(x: String, y: String): String = "https://forecast-v3.weather.gov/point/$x,$y"
 
     fun getLatLonForZone(zone: String): List<String> {
         var html = getNWSStringFromURL("https://api.weather.gov/zones/forecast/" + zone.toUpperCase(Locale.US))
@@ -60,8 +60,8 @@ object UtilityDownloadNWS {
         var lat = "42.00"
         var lon = "-84.00"
         var polyTmp: String
-        polygonArr.forEach {
-            polyTmp = it.replace("[", "").replace("]", "").replace(",", " ")
+        polygonArr.forEach { poly ->
+            polyTmp = poly.replace("[", "").replace("]", "").replace(",", " ")
             test = polyTmp.split(" ").dropLastWhile { it.isEmpty() }
             if (test.size > 1) {
                 lat = test[1]
@@ -71,7 +71,7 @@ object UtilityDownloadNWS {
         return listOf(lat, lon)
     }
 
-    fun getCAP(sector: String) = if (sector == "us") {
+    fun getCAP(sector: String): String = if (sector == "us") {
         getNWSStringFromURLXML("https://api.weather.gov/alerts/active?region_type=land")
     } else {
         //getNWSStringFromURLXML("https://api.weather.gov/alerts/active?state=" + sector.toUpperCase(Locale.US))
@@ -81,11 +81,11 @@ object UtilityDownloadNWS {
     // https://forecast-v3.weather.gov/documentation?redirect=legacy
     // http://www.nws.noaa.gov/os/notification/pns16-35forecastgov.htm
 
-    fun getNWSStringFromURL(url: String) = getNWSStringFromURLBase(url, "application/vnd.noaa.dwml+xml;version=1")
+    fun getNWSStringFromURL(url: String): String = getNWSStringFromURLBase(url, "application/vnd.noaa.dwml+xml;version=1")
 
     private fun getNWSStringFromURLJSON(url: String) = getNWSStringFromURLBase(url, "application/geo+json;version=1")
 
-    private fun getNWSStringFromURLLDJSON(url: String) = getNWSStringFromURLBase(url, "application/ld+json;version=1")
+    //private fun getNWSStringFromURLLDJSON(url: String) = getNWSStringFromURLBase(url, "application/ld+json;version=1")
 
     private fun getNWSStringFromURLBase(url: String, header: String): String {
         val out = StringBuilder(5000)

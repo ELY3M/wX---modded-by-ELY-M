@@ -51,7 +51,6 @@ import joshuatee.wx.util.UtilityShare
 
 class ImageShowActivity : BaseActivity(), OnClickListener {
 
-
     //
     // Arguments
     // 1: URL

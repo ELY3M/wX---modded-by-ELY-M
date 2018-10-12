@@ -23,12 +23,12 @@ package joshuatee.wx.models
 
 class RunTimeData {
 
-    val listRun = mutableListOf<String>()
-    var mostRecentRun = ""
-    var imageCompleteInt = 0
-    var imageCompleteStr = ""
-    var timeStrConv = ""
-    var validTime = ""
+    val listRun: MutableList<String> = mutableListOf()
+    var mostRecentRun: String = ""
+    var imageCompleteInt: Int = 0
+    var imageCompleteStr: String = ""
+    var timeStrConv: String = ""
+    var validTime: String = ""
 
     fun listRunAdd(s: String) {
         listRun.add(s)

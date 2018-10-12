@@ -34,14 +34,14 @@ import joshuatee.wx.util.UtilityImg
 
 class DisplayData(context: Context, activity: Activity, cl: View.OnClickListener, numPanes: Int, spTime: ObjectSpinner) {
 
-    var animDrawable = mutableListOf<AnimationDrawable>()
-    var param = mutableListOf<String>()
-    var paramLabel = mutableListOf<String>()
-    var img = mutableListOf<TouchImageView2>()
-    var bitmap = mutableListOf<Bitmap>()
+    var animDrawable: MutableList<AnimationDrawable> = mutableListOf()
+    var param: MutableList<String> = mutableListOf()
+    var paramLabel: MutableList<String> = mutableListOf()
+    var img: MutableList<TouchImageView2> = mutableListOf()
+    var bitmap: MutableList<Bitmap> = mutableListOf()
 
     init {
-        (0 until numPanes).forEach {
+        (0 until numPanes).forEach { _ ->
             img.add(TouchImageView2(context))
             bitmap.add(UtilityImg.getBlankBitmap())
             param.add("")

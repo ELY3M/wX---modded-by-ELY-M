@@ -29,13 +29,13 @@ import joshuatee.wx.Extensions.*
 
 class ObjectForecastPackage7Day internal constructor(locNum: Int, html: String) {
 
-    var iconstr = ""
+    var iconstr: String = ""
         private set
-    var sevenDayExtStr = ""
+    var sevenDayExtStr: String = ""
         private set
-    var sevenDayShort = ""
+    var sevenDayShort: String = ""
         private set
-    var iconAl = listOf<String>()
+    var iconAl: List<String> = listOf()
         private set
     private var detailedForecastAl = mutableListOf<String>()
 

@@ -42,7 +42,7 @@ class WebscreenAB : BaseActivity() {
     // arg1 Title
 
     companion object {
-        const val URL = ""
+        const val URL: String = ""
     }
 
     // added to support webview history, this var and block below it
@@ -81,7 +81,7 @@ class WebscreenAB : BaseActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_browser -> {
             var urlExt = url
             if (url.contains("https://twitter.com/search?q=%23tornado")) {

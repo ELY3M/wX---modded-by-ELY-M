@@ -63,7 +63,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
 
     private val requestOk = 1
     protected lateinit var helpMi: MenuItem
-    protected val helpStr = "Help is on"
+    protected val helpStr: String = "Help is on"
     lateinit var view: View
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

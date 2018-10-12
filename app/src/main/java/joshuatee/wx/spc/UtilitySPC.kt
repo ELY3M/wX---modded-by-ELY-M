@@ -35,7 +35,7 @@ object UtilitySPC {
 
     // TODO use global var for SPC website
 
-    fun getStormReportsTodayUrl() = "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/" + "today" + ".gif"
+    fun getStormReportsTodayUrl(): String = "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/" + "today" + ".gif"
 
     internal val tstormOutlookImages: List<Bitmap>
         get() {
@@ -124,9 +124,6 @@ object UtilitySPC {
         var torCount = 0
         var tstormCount = 0
         var floodCount = 0
-        var marineCount = 0
-        var severeCount = 0
-        var specialCount = 0
         if (MyApplication.checktor) {
             tstormCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardTst.valueGet())
             if (tstormCount > 0) uswarnPresent = true
@@ -134,15 +131,9 @@ object UtilitySPC {
             if (torCount > 0) uswarnPresent = true
             floodCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardFfw.valueGet())
             if (floodCount > 0) uswarnPresent = true
-            marineCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardSmw.valueGet())
-            if (marineCount > 0) uswarnPresent = true
-            severeCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardSvs.valueGet())
-            if (severeCount > 0) uswarnPresent = true
-            specialCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardSps.valueGet())
-            if (specialCount > 0) uswarnPresent = true
         }
         tabStr = if (uswarnPresent)
-            tabStr + "  " + MyApplication.tabHeaders[2] + " W(" + tstormCount + "," + torCount + "," + floodCount + "," + marineCount +","+ specialCount + ")"
+            tabStr + "  " + MyApplication.tabHeaders[2] + " W(" + tstormCount + "," + torCount + "," + floodCount + ")"
         else
             MyApplication.tabHeaders[2]
         return listOf(tabStrSpc, tabStr)

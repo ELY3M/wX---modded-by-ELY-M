@@ -50,6 +50,9 @@ internal object WXGLNexradLevel3TVS {
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
             return listOf()
+        } catch (e: OutOfMemoryError) {
+            UtilityLog.HandleException(e)
+            return listOf()
         }
         var retStr = UtilityLevel3TextProduct.read(dis)
         // P  TVS    R7   216/ 50    29    57    57/ 6.5    15.9    6.5/ 22.4    18/ 6.5    &#0;

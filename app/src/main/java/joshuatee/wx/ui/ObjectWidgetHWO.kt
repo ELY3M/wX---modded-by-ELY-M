@@ -31,7 +31,7 @@ import joshuatee.wx.util.Utility
 
 class ObjectWidgetHWO(context: Context) {
 
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget_textview_layout)
+    val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_textview_layout)
 
     init {
         val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")

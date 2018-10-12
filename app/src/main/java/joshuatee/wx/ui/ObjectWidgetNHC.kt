@@ -31,7 +31,7 @@ import joshuatee.wx.objects.WidgetFile.*
 
 class ObjectWidgetNHC(context: Context) {
 
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget_nhc_layout)
+    val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_nhc_layout)
 
     init {
         UtilityWidget.setImage(context, remoteViews, R.id.iv1, NHC.fileName + "0")

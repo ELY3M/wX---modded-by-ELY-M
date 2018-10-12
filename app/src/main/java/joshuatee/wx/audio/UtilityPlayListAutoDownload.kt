@@ -39,11 +39,11 @@ object UtilityPlayListAutoDownload {
         val ridFav = Utility.readPref(context, prefToken, "")
         val ridArr = ridFav.split(tokenSep).dropLastWhile { it.isEmpty() }
         if (ridFav.contains(tokenSep)) {
-            ridArr.indices.forEach {
-                val timeArr = ridArr[it].split(":").dropLastWhile { it.isEmpty() }
+            ridArr.indices.forEach { alarm ->
+                val timeArr = ridArr[alarm].split(":").dropLastWhile { it.isEmpty() }
                 currHr = timeArr[0].toIntOrNull() ?: 0
                 currMin = timeArr[1].toIntOrNull() ?: 0
-                setAlarm(context, it, currHr, currMin)
+                setAlarm(context, alarm, currHr, currMin)
             }
         }
     }

@@ -26,6 +26,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 
 class ObjectCardVerticalText(context: Context, numColumns: Int) {
 
@@ -56,7 +57,7 @@ class ObjectCardVerticalText(context: Context, numColumns: Int) {
         }
     }
 
-    val card get() = objCard.card
+    val card: CardView get() = objCard.card
 
     fun setOnClickListener(fn: View.OnClickListener) {
         objCard.setOnClickListener(fn)

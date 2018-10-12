@@ -133,10 +133,6 @@ class WXGLDownload {
         val frameCntInt = frameCnt.toIntOrNull() ?: 0
         val l2Arr = mutableListOf<String>()
         val tmpArr = (baseUrl + "dir.list").getHtmlSep().replace("<br>", " ").split(" ").dropLastWhile { it.isEmpty() }
-        // FIXME
-        // at joshuatee.wx.radar.WXGLDownload.getL2Arr (WXGLDownload.kt:138)
-        // Caused by: java.lang.ArrayIndexOutOfBoundsException:
-        // need tmpArr.size < 4
         if (tmpArr.isEmpty()) {
             return listOf("")
         }
@@ -146,9 +142,8 @@ class WXGLDownload {
         val fnPrevSize = tmpArr[tmpArr.size - 4].toIntOrNull() ?: 1
         val ratio = fnSize.toFloat() / fnPrevSize.toFloat()
         if (ratio < 0.75) additionalAdd = 1
-        (0 until frameCntInt).forEach {
-            //val token = tmpArr[arrLength - (frameCntInt - it + additionalAdd) * 2 + 1]
-            val token = tmpArr.getOrNull(arrLength - (frameCntInt - it + additionalAdd) * 2 + 1)
+        (0 until frameCntInt).forEach { count ->
+            val token = tmpArr.getOrNull(arrLength - (frameCntInt - count + additionalAdd) * 2 + 1)
             if (token != null) {
                 l2Arr.add(token)
                 val inputStream = UtilityDownload.getInputStreamFromURL(baseUrl + token)

@@ -58,9 +58,9 @@ class SingleTextAdapterList(private val mDataset: MutableList<String>) : Recycle
         return "$string:"
     }
 
-    fun getItem(index: Int) = mDataset[index]
+    fun getItem(index: Int): String = mDataset[index]
 
-    override fun getItemCount() = mDataset.size
+    override fun getItemCount(): Int = mDataset.size
 
     interface MyClickListener {
         fun onItemClick(position: Int)

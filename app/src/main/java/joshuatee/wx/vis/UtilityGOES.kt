@@ -81,7 +81,7 @@ object UtilityGOES {
             "HI" to "HI"
     )
 
-    val RADS = listOf(
+    val RADS: List<String> = listOf(
             "TATL:EAST: Atlantic Wide View",
             "TPAC:WEST: East & Central Pacific Wide View",
             "EPAC:WEST: East Pacific ",
@@ -91,7 +91,7 @@ object UtilityGOES {
             "WEUS:WEST: Western United States"
     )
 
-    val RADS_TOP = listOf(
+    val RADS_TOP: List<String> = listOf(
             "WEUS:WEST: Western United States",
             "HI:WEST: Hawaii",
             "AK:WEST: Alaska",
@@ -114,7 +114,7 @@ object UtilityGOES {
 
     private fun getGOESSectorFromState(state: String) = COD_HASH[state] ?: ""
 
-    fun getGOESSectorFromNWSOffice(context: Context, office: String) = getGOESSectorFromState(Utility.readPref(context, "NWS_LOCATION_" + office.toUpperCase(Locale.US), "").split(",")[0]).toLowerCase(Locale.US)
+    fun getGOESSectorFromNWSOffice(context: Context, office: String): String = getGOESSectorFromState(Utility.readPref(context, "NWS_LOCATION_" + office.toUpperCase(Locale.US), "").split(",")[0]).toLowerCase(Locale.US)
 
     fun getGOESSatSectorFromSector(sector: String): String {
         var sectorSatRet = ""

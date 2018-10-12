@@ -37,8 +37,6 @@ import joshuatee.wx.objects.PolygonType.MPD
 
 internal object UtilityNotificationWPC {
 
-    //fun locationNeedsMPD() = (0 until Location.numLocations).any { MyApplication.locations[it].notificationWpcmpd }
-
     fun locationNeedsMPD(): Boolean {
         return (0 until Location.numLocations).any {
             MyApplication.locations.getOrNull(it)?.notificationWpcmpd ?: false

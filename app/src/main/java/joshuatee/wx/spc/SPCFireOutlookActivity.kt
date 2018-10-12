@@ -71,9 +71,9 @@ class SPCFireOutlookActivity : BaseActivity() {
 
         override fun onPostExecute(result: String) {
             var card: ObjectCardImage
-            bitmaps.forEach {
-                card = ObjectCardImage(contextg, it)
-                val prod = UtilitySPCFireOutlook.PROD_TEXT_URL[bitmaps.indexOf(it)]
+            bitmaps.forEach { bitmap ->
+                card = ObjectCardImage(contextg, bitmap)
+                val prod = UtilitySPCFireOutlook.PROD_TEXT_URL[bitmaps.indexOf(bitmap)]
                 card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, WPCTextProductsActivity::class.java, WPCTextProductsActivity.URL, arrayOf(prod)) })
                 linearLayout.addView(card.card)
             }

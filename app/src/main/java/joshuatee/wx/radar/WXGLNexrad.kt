@@ -100,7 +100,7 @@ object WXGLNexrad {
     private const val binSize08 = 0.295011f
     private const val binSize16 = 0.590022f
 
-    fun getBinSize(prodId: Int) = when (prodId) {
+    fun getBinSize(prodId: Int): Float = when (prodId) {
         134, 135 -> binSize54
         186 -> binSize16
         159, 161, 163, 165, 99, 170, 172 -> binSize13
@@ -109,9 +109,9 @@ object WXGLNexrad {
         else -> binSize54
     }
 
-    fun isRIDTDWR(rid: String) = TDWR_RIDS.any { rid == MyApplication.space.split(it)[0] }
+    fun isRIDTDWR(rid: String): Boolean = TDWR_RIDS.any { rid == MyApplication.space.split(it)[0] }
 
-    fun getTDWRFromRID(rid: String) = COD_HASH[rid] ?: ""
+    fun getTDWRFromRID(rid: String): String = COD_HASH[rid] ?: ""
 
     fun savePrefs(context: Context, prefPrefix: String, oglr: WXGLRender) {
         Utility.writePref(context, prefPrefix + "_RID", oglr.rid)

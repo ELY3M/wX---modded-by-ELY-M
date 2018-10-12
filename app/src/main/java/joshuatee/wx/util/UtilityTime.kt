@@ -66,7 +66,7 @@ object UtilityTime {
         val listRun = mutableListOf<String>()
         val format = SimpleDateFormat("yyyyMMddHH", Locale.US)
         var parsed: Date
-        val ONE_MINUTE_IN_MILLIS: Long = 60000
+        val oneMinuteInMillis: Long = 60000
         var t: Long = 0
         (1 until 4).forEach {
             try {
@@ -75,7 +75,7 @@ object UtilityTime {
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)
             }
-            listRun.add(format.format(Date(t - 60 * ONE_MINUTE_IN_MILLIS * it.toLong() * hours.toLong())))
+            listRun.add(format.format(Date(t - 60 * oneMinuteInMillis * it.toLong() * hours.toLong())))
         }
         return listRun
     }
@@ -84,7 +84,7 @@ object UtilityTime {
         val listRun = mutableListOf<String>()
         val format = SimpleDateFormat(timeStr, Locale.US)
         var parsed: Date
-        val ONE_MINUTE_IN_MILLIS: Long = 60000
+        val oneMinuteInMillis: Long = 60000
         var t: Long = 0
         (1 until 4).forEach {
             try {
@@ -93,7 +93,7 @@ object UtilityTime {
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)
             }
-            listRun.add(format.format(Date(t - 60 * ONE_MINUTE_IN_MILLIS * it.toLong() * hours.toLong())))
+            listRun.add(format.format(Date(t - 60 * oneMinuteInMillis * it.toLong() * hours.toLong())))
         }
         return listRun
     }
@@ -139,13 +139,13 @@ object UtilityTime {
         return cal.time
     }
 
-    fun getCurrentLocalTimeAsString(): String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Date())
+    fun getCurrentLocalTimeAsString(): String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())
 
-    fun year() = Calendar.getInstance().get(Calendar.YEAR)
+    fun year(): Int = Calendar.getInstance().get(Calendar.YEAR)
 
-    fun month() = Calendar.getInstance().get(Calendar.MONTH) + 1
+    fun month(): Int = Calendar.getInstance().get(Calendar.MONTH) + 1
 
-    fun day() = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+    fun day(): Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
     val currentHourInUTC: Int
         get() = Calendar.getInstance(TimeZone.getTimeZone("GMT")).get(Calendar.HOUR_OF_DAY)

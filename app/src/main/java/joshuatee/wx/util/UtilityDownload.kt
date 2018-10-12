@@ -225,7 +225,7 @@ object UtilityDownload {
             text = ("http://services.swpc.noaa.gov/text/3-day-geomag-forecast.txt").getHtmlSep()
         } else if (prod.contains("MIATCP") || prod.contains("MIATCM") || prod.contains("MIATCD") || prod.contains("MIAPWS") || prod.contains("MIAHS")) {
             text = UtilityString.getNWSPRE("http://www.nhc.noaa.gov/text/$prod.shtml")
-            if (prod.contains("MIATCD")){
+            if (prod.contains("MIATCD")) {
                 text = text.replace("<br><br>", "<BR><BR>")
                 text = text.replace("<br>", " ")
             }

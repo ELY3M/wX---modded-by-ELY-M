@@ -53,7 +53,7 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
     // 1: day
 
     companion object {
-        const val NO = ""
+        const val NO: String = ""
     }
 
     private var turlDay = ""

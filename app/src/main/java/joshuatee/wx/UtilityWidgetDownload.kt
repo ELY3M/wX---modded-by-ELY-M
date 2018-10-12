@@ -64,12 +64,12 @@ internal object UtilityWidgetDownload {
 
     private fun downloadNexrad(context: Context) {
         val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
-        val rid1 = Location.getRid(context, widgetLocNum)
+        val rid = Location.getRid(context, widgetLocNum)
         try {
             val bitmap = if (Location.isUS(widgetLocNum)) {
-                UtilityUSImg.getPreferredLayeredImg(context, rid1, false)
+                UtilityUSImg.getPreferredLayeredImg(context, rid, false)
             } else {
-                UtilityCanadaImg.getRadarBitmapOptionsApplied(context, rid1, "")
+                UtilityCanadaImg.getRadarBitmapOptionsApplied(context, rid, "")
             }
             saveImage(context, bitmap, NEXRAD_RADAR.fileName)
         } catch (e: Exception) {

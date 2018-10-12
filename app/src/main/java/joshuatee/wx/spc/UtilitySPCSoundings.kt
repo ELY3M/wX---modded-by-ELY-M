@@ -22,11 +22,12 @@
 package joshuatee.wx.spc
 
 import android.content.Context
+import android.graphics.Bitmap
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityImg
 
 object UtilitySPCSoundings {
-    fun getImage(context: Context, nwsOffice: String) = UtilityImg.getBitmapAddWhiteBG(context, "${MyApplication.nwsSPCwebsitePrefix}/exper/soundings/LATEST/$nwsOffice.gif")
+    fun getImage(context: Context, nwsOffice: String): Bitmap = UtilityImg.getBitmapAddWhiteBG(context, "${MyApplication.nwsSPCwebsitePrefix}/exper/soundings/LATEST/$nwsOffice.gif")
 }
 
 

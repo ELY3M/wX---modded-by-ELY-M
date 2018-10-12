@@ -43,7 +43,7 @@ import joshuatee.wx.util.*
 class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedListener, OnMenuItemClickListener {
 
     companion object {
-        const val URL = ""
+        const val URL: String = ""
     }
 
     private var imgUrl = ""
@@ -106,7 +106,7 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
             img.visibility = View.VISIBLE
             img.setImageBitmap(bitmap)
             img.setMaxZoom(4f)
-            val soundingSector = Utility.readPref(contextg, "SOUNDING_SECTOR", "")
+            //val soundingSector = Utility.readPref(contextg, "SOUNDING_SECTOR", "")
             //if (!firstRun && nwsOffice == soundingSector) {
             img.setZoom("SOUNDING")
             //    firstRun = true

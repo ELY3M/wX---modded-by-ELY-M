@@ -141,7 +141,7 @@ object UtilityUSImgNWSMosaic {
 
     internal fun getNWSSectorLabelFromCode(code: String) = NWS_CODE_TO_LABEL[code] ?: ""
 
-    fun getNWSSectorFromState(state: String) = COD_HASH[state] ?: ""
+    fun getNWSSectorFromState(state: String): String = COD_HASH[state] ?: ""
 
     internal fun nwsMosaicAnimation(context: Context, sector: String, frameCntStr: String, isInteractive: Boolean): AnimationDrawable {
         val urlArr: List<String>

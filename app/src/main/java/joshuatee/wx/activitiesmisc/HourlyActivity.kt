@@ -53,7 +53,7 @@ class HourlyActivity : BaseActivity() { // AppCompatActivity()
     //
 
     companion object {
-        const val LOC_NUM = ""
+        const val LOC_NUM: String = ""
     }
 
     private var htmlShare = listOf<String>()
@@ -63,14 +63,14 @@ class HourlyActivity : BaseActivity() { // AppCompatActivity()
     private var hourlyData = ObjectHourly()
     private var locNum = 0
 
-    private val MENU_ITEM_SHARE = 1
-    private val MENU_ITEM_SETTINGS = 2
-    private val MENU_ITEM_TEST = 3
+    private val menuItemShare: Int = 1
+    private val menuItemSettings: Int = 2
+    private val menuItemTest: Int = 3
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add(Menu.NONE, MENU_ITEM_SHARE, Menu.NONE, "Share").setIcon(R.drawable.ic_share_24dp).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        menu.add(Menu.NONE, MENU_ITEM_SETTINGS, Menu.NONE, "Settings")
-        menu.add(Menu.NONE, MENU_ITEM_TEST, Menu.NONE, "Test Area - WPC GEFS")
+        menu.add(Menu.NONE, menuItemShare, Menu.NONE, "Share").setIcon(R.drawable.ic_share_24dp).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        menu.add(Menu.NONE, menuItemSettings, Menu.NONE, "Settings")
+        menu.add(Menu.NONE, menuItemTest, Menu.NONE, "Test Area - WPC GEFS")
         return true
     }
 
@@ -108,9 +108,9 @@ class HourlyActivity : BaseActivity() { // AppCompatActivity()
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            MENU_ITEM_SETTINGS -> ObjectIntent(this, SettingsMainActivity::class.java)
-            MENU_ITEM_TEST -> ObjectIntent(this, ModelsWPCGEFSActivity::class.java)
-            MENU_ITEM_SHARE -> if (htmlShare.size > 1) {
+            menuItemSettings -> ObjectIntent(this, SettingsMainActivity::class.java)
+            menuItemTest -> ObjectIntent(this, ModelsWPCGEFSActivity::class.java)
+            menuItemShare -> if (htmlShare.size > 1) {
                 UtilityShare.shareText(this, "Hourly", htmlShare[1])
             }
             else -> return super.onOptionsItemSelected(item)

@@ -73,7 +73,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
 
     private var locXStr = ""
     private var locYStr = ""
-    private val REQUEST_OK = 1
+    private val requestOk = 1
     private var updateTitle = true
     private var locLabelCurrent = ""
     private var locNum = ""
@@ -272,7 +272,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         override fun onPostExecute(result: String) {
             showMessage(toastStr)
             updateSubTitle()
-            if (xLoc.startsWith("CANADA:")){
+            if (xLoc.startsWith("CANADA:")) {
                 notifsCA(true)
             } else {
                 notifsCA(false)
@@ -442,7 +442,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                 val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
                 i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US")
                 try {
-                    startActivityForResult(i, REQUEST_OK)
+                    startActivityForResult(i, requestOk)
                 } catch (e: Exception) {
                     Toast.makeText(this, "Error initializing speech to text engine.", Toast.LENGTH_LONG).show()
                 }
@@ -467,9 +467,9 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                         locYEt.setText(xy[1].toString())
                     } else {
                         // The ACCESS_FINE_LOCATION is denied, then I request it and manage the result in
-                        // onRequestPermissionsResult() using the constant MY_PERMISSION_ACCESS_FINE_LOCATION
+                        // onRequestPermissionsResult() using the constant myPermissionAccessFineLocation
                         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), MY_PERMISSION_ACCESS_FINE_LOCATION)
+                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), myPermissionAccessFineLocation)
                         }
                     }
                 }
@@ -479,10 +479,10 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         }
     }
 
-    private val MY_PERMISSION_ACCESS_FINE_LOCATION = 5001
+    private val myPermissionAccessFineLocation = 5001
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {MY_PERMISSION_ACCESS_FINE_LOCATION -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        when (requestCode) {myPermissionAccessFineLocation -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             val xy = UtilityLocation.getGPS(this)
             locXEt.setText(xy[0].toString())
             locYEt.setText(xy[1].toString())
@@ -492,7 +492,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_OK && resultCode == Activity.RESULT_OK) {
+        if (requestCode == requestOk && resultCode == Activity.RESULT_OK) {
             val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             showMessage(thingsYouSaid[0])
             val addrStrTmp = thingsYouSaid[0]

@@ -43,7 +43,7 @@ object UtilityModelsSPCSREFInterface {
             ObjectMenuTitle("Fire", 48),
             ObjectMenuTitle("Aviation", 9))
 
-    val PARAMS = listOf(
+    val PARAMS: List<String> = listOf(
             "SREF_PROB_TRW_CALIBRATED_HRLY__",
             "SREF_03HR_SVR_PROBS__",
             "SREF_03HR_SVR_PROBS_CONDITIONAL__",

@@ -37,7 +37,7 @@ class SingleTextAdapter(private val myDataset: List<String>) : RecyclerView.Adap
         holder.label.text = myDataset[position]
     }
 
-    override fun getItemCount() = myDataset.size
+    override fun getItemCount(): Int = myDataset.size
 
     interface MyClickListener {
         fun onItemClick(position: Int)

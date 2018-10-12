@@ -102,10 +102,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     //
 
     companion object {
-        var RID = ""
-        var dspLegendMax = 0.0f
-        var spotterId = ""
-        var spotterShowSelected = false
+        var RID: String = ""
+        var dspLegendMax: Float = 0.0f
+        var spotterId: String = ""
+        var spotterShowSelected: Boolean = false
     }
 
     private var TAG = "joshuatee-WXGLRadarActivity"
@@ -778,6 +778,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 alertDialogStatusAl.add(UtilityStringExternal.truncate(distRid.toString(), 6) + " miles from " + oglr.rid)
                 oglr.ridNewList.mapTo(alertDialogStatusAl) { "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.readPref(contextg, "RID_LOC_" + it.name, "") }
                 alertDialogStatusAl.add("Show warning text")
+                //alertDialogStatusAl.add("Show Watch text")
+                //alertDialogStatusAl.add("Show MCD/MPD text")
                 alertDialogStatusAl.add("Show nearest observation")
                 alertDialogStatusAl.add("Show nearest forecast")
                 alertDialogStatusAl.add("Show nearest meteogram")
@@ -1002,7 +1004,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             } else if (strName.contains("Show warning text")) {
                 val polygonUrl = UtilityWXOGL.showTextProducts(glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
                 if (polygonUrl != "") ObjectIntent(this, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(polygonUrl, ""))
-            } else if (strName.contains("Show nearest observation"))
+            }
+
+            else if (strName.contains("Show nearest observation"))
                 GetMetar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
             else if (strName.contains("Show nearest meteogram")) {
                 // http://www.nws.noaa.gov/mdl/gfslamp/meteoform.php
@@ -1086,17 +1090,20 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         rl.addView(legend, rLParams)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        android.R.id.home -> {
-            if (Utility.readPref(contextg, "LAUNCH_TO_RADAR", "false") == "false")
-                NavUtils.navigateUpFromSameTask(this)
-            else
-                navigateUp()
-            true
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                if (Utility.readPref(contextg, "LAUNCH_TO_RADAR", "false") == "false")
+                    NavUtils.navigateUpFromSameTask(this)
+                else
+                    navigateUp()
+                //true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
-        else -> {
-            super.onOptionsItemSelected(item)
-        }
+        return super.onOptionsItemSelected(item)
     }
 
     // thanks http://stackoverflow.com/questions/19999619/navutils-navigateupto-does-not-start-any-activity user882209

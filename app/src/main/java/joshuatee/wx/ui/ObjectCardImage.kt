@@ -25,6 +25,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
 import android.widget.TableLayout
+import androidx.cardview.widget.CardView
 
 import joshuatee.wx.util.UtilityImg
 
@@ -62,7 +63,7 @@ open class ObjectCardImage {
         img.resetZoom()
     }
 
-    val card get() = objCard.card
+    val card: CardView get() = objCard.card
 
     fun setVisibility(visibility: Int) {
         objCard.setVisibility(visibility)

@@ -57,7 +57,7 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
     //
 
     companion object {
-        const val URL = ""
+        const val URL: String = ""
     }
 
     private lateinit var turl: List<String>

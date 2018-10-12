@@ -1,19 +1,34 @@
-// radar - have legend text in submenu match if shown or not
-// convert hourly from numeric date to day of week like wXL23
-// optimize UtilityWXOGLPerf to use ObjectOglRadarBuffers
-// add IAD to sounding sites and pref lat/lon
-// TODO in util files for submenu navdrawer remove absolute variable reference in createData
-// TODO move radar pref code into renderer ( from locfrag and single / multi-pane
-// TODO break apart prefs for MCD/WAT ??
-// fix pref inconsistency in settings
-// TODO use Utility functions to write/read prefs
-// TODO silence notif audio for telecine
-// TODO rename turl to args
-// move MyApp.locations to Location and make private, have all access go through methods
-// FIXME AF colormap does not work with TDTW
-// FIXME if add location via search, canada still shows US specific notifs
-// FIXME lightning icon in FAB centered ( like location generic )
 
+// TODO silence notif if option specifies
+
+55026 2018_10_10 (bugfix)  at joshuatee.wx.util.UtilityCanvasMain.getLocalGeometryData (UtilityCanvasMain.kt:181) java.lang.OutOfMemoryError:
+                 (bugfix) at at joshuatee.wx.radar.WXGLNexradLevel3HailIndex.decodeAndPlot (WXGLNexradLevel3HailIndex.kt:84) java.lang.IndexOutOfBoundsException:
+                 (bugfix) at  at joshuatee.wx.radar.WXGLRender.constructGenericLinesShort (WXGLRender.kt:500) java.nio.BufferOverflowException:
+55025 2018_10_08 lint cleanup
+                 (bugfix) radar spotters and spotter labels required app restart when change in settings
+55024 2018_10_07 lint cleanup save actMisc, audio, CA
+55023 2018_10_07 (bugfix) nexradTvs - handle OOO show in bugreports
+                 (bugfix) wrap this in try : at joshuatee.wx.radar.WXGLRender.drawElement (WXGLRender.kt:397), java.lang.IllegalArgumentException
+                 lint cleanup in some larger radar files
+                 (bugfix) remove sort as it does't appear to be necessary and us causing crashes
+                    at joshuatee.wx.radar.UtilitySpotter.getSpotterData (UtilitySpotter.kt:74) by: java.lang.IllegalArgumentException:
+55022 2018_10_04 PS release (bugfix) locfrag/myapp - setup global static appcontext and use in getText and getImage in locfrag
+55021 2018_10_03 (bugfix) locations - settings, if canada is choosen via city search, US specific nots are still shown
+                 lint cleanup in Location
+55020 2018_10_02 update from android-ndk-r17b to android-ndk-r18
+55019 2018_10_02 (bugfix) change in metar API caused duplicate wind barbs and scrambled text to show up in radar
+55018 2018_09_24 java.lang.IndexOutOfBoundsException: at joshuatee.wx.radar.USNWSMosaicActivity.onCreate (USNWSMosaicActivity.kt:105)
+55017 2018_09_23 update to androidx 1.0.0
+                 if location has not changed don't clear hazards/7day before refresh
+55016 2018_09_22 fix canada after recent changes, optimize clearing of cards when data is refreshed
+55015 2018_09_22 remove 7day from ObjectForecastPackage and have locfrag do hazards in parallel with cc
+55014 2018_09_22 remove hazards from ObjectForecastPackage and have locfrag do hazards in parallel with 7day/cc
+55013 2018_09_15 (bugfix)smoke icon was not working
+                 kotlin to 1.2.70 from 61
+55012 2018_09_15 in objForecastPkg check if HAZ is in homescreen var, otherwise don't download haz which is taking to long now
+55011 2018_09_08 improve formatting NHC Storm discussion
+                 update android studio 3.2 RC3
+                 (bugfix) hurr/ts icons were not working
 55010 2018_09_02 (bugfix) use novc for rare night haze
                  (bugfix) at joshuatee.wx.radar.WXGLRender.drawElement (WXGLRender.kt:400)
                  java.lang.IllegalArgumentException:

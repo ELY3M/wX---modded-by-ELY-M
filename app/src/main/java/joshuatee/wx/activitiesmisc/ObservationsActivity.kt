@@ -41,7 +41,7 @@ import joshuatee.wx.util.UtilityShare
 class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     companion object {
-        const val LOC = ""
+        const val LOC: String = ""
     }
 
     private lateinit var img: TouchImageView2

@@ -63,7 +63,7 @@ internal object UtilityColorPalette165 {
             obj165.redValues.put(rAl[it].toByte())
             obj165.greenValues.put(gAl[it].toByte())
             obj165.blueValues.put(bAl[it].toByte())
-            (1 until diff).forEach {
+            (1 until diff).forEach { _ ->
                 obj165.redValues.put(Color.red(lowColor).toByte())
                 obj165.greenValues.put(Color.green(lowColor).toByte())
                 obj165.blueValues.put(Color.blue(lowColor).toByte())

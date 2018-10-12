@@ -51,7 +51,7 @@ private constructor(latitude: Double, longitude: Double,
      * @param coords coordinates of the position
      * @param elevation elevation, in meters, above the reference ellipsoid
      */
-    constructor(coords: ExternalGlobalCoordinates, elevation: Double) : this(coords.latitude, coords.longitude, elevation) {}
+    //constructor(coords: ExternalGlobalCoordinates, elevation: Double) : this(coords.latitude, coords.longitude, elevation)
 
     /**
      * Compare this position to another. Western longitudes are less than eastern

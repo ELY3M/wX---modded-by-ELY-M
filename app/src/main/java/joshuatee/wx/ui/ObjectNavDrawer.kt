@@ -64,9 +64,9 @@ class ObjectNavDrawer(activity: Activity, private var labels: List<String>) {
         this.tokens = tokens
     }
 
-    fun getLabel(position: Int) = labels[position]
+    fun getLabel(position: Int): String = labels[position]
 
-    fun getToken(position: Int) = tokens[position]
+    fun getToken(position: Int): String = tokens[position]
 }
 
 

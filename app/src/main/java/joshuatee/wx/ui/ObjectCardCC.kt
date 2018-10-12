@@ -28,6 +28,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.cardview.widget.CardView
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
@@ -100,7 +101,7 @@ class ObjectCardCC(context: Context, version: Int) {
         imageView.setPadding(MyApplication.paddingSmall, MyApplication.paddingSmall, MyApplication.paddingSmall, MyApplication.paddingSmall)
     }
 
-    val card get() = objCard.card
+    val card: CardView get() = objCard.card
 
     fun setStatus(text: String) {
         textViewBottom.text = text

@@ -25,7 +25,7 @@ import joshuatee.wx.R
 
 object UtilityImageMap {
 
-    fun maptoRid(id: Int) = when (id) {
+    fun maptoRid(id: Int): String = when (id) {
         R.id.CBW -> "CBW"
         R.id.GYX -> "GYX"
         R.id.CXX -> "CXX"
@@ -186,7 +186,7 @@ object UtilityImageMap {
     }
 
 
-    fun maptoGOESWFO(id: Int) = when (id) {
+    fun maptoGOESWFO(id: Int): String = when (id) {
         R.id.afc -> "ak"
         R.id.afg -> "ak"
         R.id.ajk -> "ak"
@@ -312,7 +312,7 @@ object UtilityImageMap {
         else -> ""
     }
 
-    fun maptoWFO(id: Int) = when (id) {
+    fun maptoWFO(id: Int): String = when (id) {
         R.id.afc -> "afc"
         R.id.afg -> "afg"
         R.id.ajk -> "ajk"
@@ -438,7 +438,7 @@ object UtilityImageMap {
         else -> ""
     }
 
-    fun maptoSND(id: Int) = when (id) {
+    fun maptoSND(id: Int): String = when (id) {
         R.id.ABQ -> "ABQ"
         R.id.ABR -> "ABR"
         R.id.ALB -> "ALB"
@@ -521,7 +521,7 @@ object UtilityImageMap {
         else -> ""
     }
 
-    fun maptoCARid(id: Int) = when (id) {
+    fun maptoCARid(id: Int): String = when (id) {
         R.id.WUJ -> "WUJ"
         R.id.XBE -> "XBE"
         R.id.WBI -> "WBI"
@@ -556,7 +556,7 @@ object UtilityImageMap {
         else -> ""
     }
 
-    fun caMAP(id: Int) = when (id) {
+    fun caMAP(id: Int): String = when (id) {
         R.id.ab_49 -> "ab_49"
         R.id.ab_52 -> "ab_52"
         R.id.ab_59 -> "ab_59"
