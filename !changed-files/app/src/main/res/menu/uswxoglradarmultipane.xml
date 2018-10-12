@@ -1,0 +1,218 @@
+<!-- 
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+ -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item android:id="@+id/action_ridmap"
+          android:title="@string/label_rid_map"
+          android:icon="@drawable/ic_public_24dp"
+          app:showAsAction="always"
+        />
+    <item android:id="@+id/action_n0q"
+          android:title="@string/label_br"
+          android:icon="@drawable/br"
+          app:showAsAction="always"
+        />
+    <item android:id="@+id/action_n0u"
+          android:title="@string/label_bv"
+          android:icon="@drawable/bv"
+          app:showAsAction="always"
+        />
+    <item android:id="@+id/action_n0s"
+        android:title="@string/label_srm"
+        android:icon="@drawable/srm"
+        app:showAsAction="always"
+        />
+
+    <item android:id="@+id/action_a"
+          android:title="@string/label_a"
+          android:icon="@drawable/ic_play_arrow_24dp"
+          app:showAsAction="always"    />
+    <item android:id="@+id/action_fav"
+          android:title="@string/label_toggle_favorite"
+          android:icon="@drawable/ic_pause_24dp"
+          app:showAsAction="always"
+        />
+    <item android:id="@+id/action_radar1"
+          android:title="@string/label_sel_radar1"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_radar2"
+          android:title="@string/label_sel_radar2"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_radar3"
+          android:title="@string/label_sel_radar3"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_radar4"
+          android:title="@string/label_sel_radar4"
+          app:showAsAction="never"
+        />
+    <item android:id="@+id/action_share"
+          android:title="@string/label_share_and_tools"
+          android:icon="@drawable/ic_share_24dp"
+          app:showAsAction="ifRoom"
+        />
+
+    <item android:id="@+id/action_other"
+          android:title="@string/label_other"
+          app:showAsAction="never"  >
+        <menu>
+            <item android:id="@+id/action_net"
+                  android:title="@string/label_eet"
+                  app:showAsAction="ifRoom"  />
+            <item android:id="@+id/action_vil"
+                  android:title="@string/label_vil"
+                  app:showAsAction="ifRoom"  />
+            <item android:id="@+id/action_N0X"
+                  android:title="@string/label_n0x"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_N0C"
+                  android:title="@string/label_n0c"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_N0K"
+                  android:title="@string/label_n0k"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_H0C"
+                  android:title="@string/label_h0c"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_n0s"
+                  android:title="@string/label_srm"
+                  app:showAsAction="ifRoom"  />
+            <item android:id="@+id/action_dsp"
+                  android:title="@string/label_dsp"
+                  app:showAsAction="ifRoom"  />
+            <item android:id="@+id/action_daa"
+                  android:title="@string/label_daa"
+                  app:showAsAction="ifRoom"  />
+            <item android:id="@+id/action_level3_blank"
+                  android:title="@string/label_blank"
+                  app:showAsAction="never"  />
+        </menu>
+    </item>
+
+    <item android:id="@+id/action_l2"
+          android:title="@string/label_l2"
+          app:showAsAction="never"  >
+        <menu>
+            <item android:id="@+id/action_l2ref"
+                  android:title="@string/label_l2ref"
+                  app:showAsAction="ifRoom"  />
+            <item android:id="@+id/action_l2vel"
+                  android:title="@string/label_l2vel"
+                  app:showAsAction="ifRoom"  />
+            <item android:id="@+id/action_level2_blank"
+                  android:title="@string/label_blank"
+                  app:showAsAction="never"  />
+        </menu>
+    </item>
+
+    <item android:id="@+id/action_animate"
+          android:title="@string/label_animate"
+          app:showAsAction="never"  >
+        <menu>
+            <item android:id="@+id/action_a3"
+                  android:title="@string/label_a3"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_a6_sm"
+                  android:title="@string/label_a6"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_a12"
+                  android:title="@string/label_a12"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_a18"
+                  android:title="@string/label_a18"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_a36"
+                  android:title="@string/label_a36"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_a72"
+                  android:title="@string/label_a72"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_a144"
+                  android:title="@string/label_a144"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_animate_blank"
+                  android:title="@string/label_blank"
+                  app:showAsAction="never"  />
+        </menu>
+    </item>
+
+    <item android:id="@+id/action_TDWR"
+          android:title="@string/label_tdwr_sites"
+          app:showAsAction="never"  />
+
+    <item android:id="@+id/action_tools"
+          android:title="@string/menu_tools"
+          app:showAsAction="never"  >
+        <menu>
+            <item android:id="@+id/action_about"
+                  android:title="@string/label_about_scan"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_tilt"
+                  android:title="@string/label_change_tilt"
+                  app:showAsAction="never"  >
+                <menu>
+                    <item android:id="@+id/action_tilt1"
+                          android:title="@string/label_t1"
+                          app:showAsAction="never"  />
+                    <item android:id="@+id/action_tilt2"
+                          android:title="@string/label_t2"
+                          app:showAsAction="never"  />
+                    <item android:id="@+id/action_tilt3"
+                          android:title="@string/label_t3"
+                          app:showAsAction="never"  />
+                    <item android:id="@+id/action_tilt4"
+                          android:title="@string/label_t4"
+                          app:showAsAction="never"  />
+                    <item android:id="@+id/action_tilt_blank"
+                          android:title="@string/label_blank"
+                          app:showAsAction="never"  />
+                </menu>
+            </item>
+            <item android:id="@+id/action_radar_site_status_l3"
+                  android:title="@string/action_radar_site_status_l3"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_radar_site_status_l2"
+                  android:title="@string/action_radar_site_status_l2"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_settings"
+                  android:title="@string/label_settings"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_radar_markers"
+                  android:title="@string/label_radar_markers"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_help"
+                  android:title="@string/label_help"
+                  app:showAsAction="never"  />
+            <item android:id="@+id/action_tools_blank"
+                  android:title="@string/label_blank"
+                  app:showAsAction="never"  />
+        </menu>
+    </item>
+
+    <item android:id="@+id/action_blank"
+          android:title="@string/label_blank"
+          app:showAsAction="never"  />
+</menu>
+
+
