@@ -20,8 +20,8 @@ TO DO List:
 
 DONE! 
 =================================
-changed the icon to black and cyan color so one can tell which version wX is running.   
-added backup/restore settings/pallette like in pykl3
+changed the icon to black and cyan color so one can tell which version wX is running.    
+added backup/restore settings/pallette like in pykl3  
 added third button for SRM on radar.  
 seperate warnings option on radar.. so can enable and disable indidvual warnings on radar. for example, you only want to see tor/svr and you can disable all others.  
 added SVS (severe weather statement)  
