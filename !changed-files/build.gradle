@@ -1,88 +1,31 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+buildscript {
+    ext.kotlin_version = '1.2.71' // -release-Studio3.2-1
+    //ext.supportLibraryVersion = "27.1.1"
+    //ext.supportLibraryVersion = "28.0.0-beta1"
+    ext.okHttpVersion = "3.11.0"
+    ext.ndkVersion = "android-ndk-r18"
 
-android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.2'
-
-
-    defaultConfig {
-        applicationId "joshuatee.wx"
-        minSdkVersion 16   // 4.1
-        targetSdkVersion 28 // 8.1
-        // Stops the Gradle plugin’s automatic rasterization of vectors (2016_02_25 add 23.2 )
-        //generatedDensities = []
-        vectorDrawables.useSupportLibrary = true
+    repositories {
+        jcenter()
+        google()
+        maven { url 'https://maven.google.com' }
     }
 
-    sourceSets {
-        main {
-            jni.srcDirs = [] //disable automatic ndk-build
-            jniLibs.srcDir 'src/main/libs'
-        }
-    }
-
-    /*
-    task buildNative(type: Exec, description: 'Compile JNI source via NDK') {
-        def ndkDir = "../../../$ndkVersion"
-        commandLine "$ndkDir/ndk-build",
-                '-C', file('src/main/jni').absolutePath,
-                '-j', Runtime.runtime.availableProcessors(),
-                'all'
-
-    }
-
-    task cleanNative(type: Exec, description: 'Clean JNI object files') {
-        def ndkDir = "../../../$ndkVersion"
-        commandLine "$ndkDir/ndk-build",
-                '-C', file('src/main/jni').absolutePath,
-                'clean'
-    }
-
-    clean.dependsOn 'cleanNative'
-
-
-    tasks.withType(JavaCompile) {
-        compileTask -> compileTask.dependsOn buildNative
-    }
-*/
-
-    // Flag to tell aapt to keep the attribute ids around - (2016_02_25 add 23.2 )
-    aaptOptions {
-        additionalParameters "--no-version-vectors"
-    }
-
-    buildTypes {
-        release {
-            shrinkResources false
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-        }
-    }
-
-    lintOptions {
-        disable 'Typos'
-        checkReleaseBuilds false
-        abortOnError false
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.2.0'
+        // was 2.3.2 com.android.tools.build:gradle:3.2.0-alpha14
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
-dependencies {
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
-    implementation 'androidx.media:media:1.0.0'
-    implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
-    implementation 'com.jjoe64:graphview:4.2.2'
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-}
-
-repositories {
-    mavenCentral()
-    google()
-    jcenter()
-    maven {
-        url "https://maven.google.com"
+allprojects {
+    repositories {
+        jcenter()
+        maven {
+            url "https://maven.google.com"
+        }
+        google()
     }
 }
 

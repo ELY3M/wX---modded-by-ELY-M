@@ -27,10 +27,6 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.external.ExternalDuplicateRemover
 import joshuatee.wx.objects.PolygonType
 
-import joshuatee.wx.Extensions.*
-import joshuatee.wx.RegExp
-import joshuatee.wx.util.Utility
-
 //parses specical weather statements
 
 internal class SpecialWeather(private val type: PolygonType) {

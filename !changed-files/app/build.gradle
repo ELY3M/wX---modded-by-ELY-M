@@ -74,6 +74,7 @@ dependencies {
     implementation 'androidx.media:media:1.0.0'
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation 'com.jjoe64:graphview:4.2.2'
+    implementation 'com.intentfilter:android-permissions:0.1.7'
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
 

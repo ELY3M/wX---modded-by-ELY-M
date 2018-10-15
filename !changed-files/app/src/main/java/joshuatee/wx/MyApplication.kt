@@ -123,6 +123,7 @@ class MyApplication : Application() {
 
     companion object {
 
+        val TAG: String = "joshuatee MyApplication"
         val FilesPath: String = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/"
         const val nwsSPCwebsitePrefix: String = "https://www.spc.noaa.gov"
         const val nwsWPCwebsitePrefix: String = "https://www.wpc.ncep.noaa.gov"
@@ -375,7 +376,7 @@ class MyApplication : Application() {
                 notifSoundUri = Settings.System.DEFAULT_NOTIFICATION_URI.toString()
             }
             sn_key = preferences.getString("SN_KEY", "");
-            sn_locationreport = preferences.getString("SN_LOCATIONREPORT", "false").startsWith("t")
+            sn_locationreport = preferences.getString("SN_LOCATIONREPORT", "").startsWith("t")
             spotterFav = preferences.getString("SPOTTER_FAV", "")
             homescreenFav = preferences.getString("HOMESCREEN_FAV", HOMESCREEN_FAV_DEFAULT)
             locDisplayImg = homescreenFav.contains("OGL-RADAR") || homescreenFav.contains("NXRD")
@@ -463,13 +464,13 @@ class MyApplication : Application() {
         //
         // cb_2014_us_county_20m.kml
         // https://www.census.gov/geo/maps-data/data/kml/kml_counties.html
-        // ./android-sdk-linux/platform-tools/adb pull /data/data/joshuatee.wx/files/statev3.bin
+        // ./android-sdk-linux/platform-tools/adb pull /data/data/joshuatee.joshuatee.modded.joshuatee.modded.wx/files/statev3.bin
 
         val colorMap: MutableMap<Int, ObjectColorPalette> = mutableMapOf()
         var loadedBuffers: Boolean = false
 
         fun initBuffers(context: Context) {
-            UtilityLog.d("joshuatee.modded.joshuatee.modded.wx", "initBuffers ran")
+            UtilityLog.d(TAG, "initBuffers ran")
             loadedBuffers = true
             ColorPalettes.init(context)
             initRadarGeometryAll(context)

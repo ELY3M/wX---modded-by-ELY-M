@@ -50,7 +50,7 @@
  <uses-feature android:name="android.hardware.touchscreen"
      android:required="false" />
 
- <!--android:icon="@drawable/joshuatee.modded.joshuatee.modded.wx"-->
+ <!--android:icon="@drawable/wx"-->
 
  <application
      android:allowBackup="true"
