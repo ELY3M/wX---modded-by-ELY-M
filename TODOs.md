@@ -10,10 +10,11 @@ TO DO List:
 6. fix up my own velicity color table 
 7. add warning list within radar
 8. add LSR reports from SN spotters/option to turn on/off LSR reports
-9. might 4th radar icon for cc 
-10. move show color legend to bottom  
-11. considering adding extreme wind warning - I saw few requests for this warning during hurricane Michael.  
-12. rename application id and change icon color so someone can run both versions of wX   
+9. as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
+10. might 4th radar icon for cc 
+11. move show color legend to bottom  
+12. considering adding extreme wind warning - I saw few requests for this warning during hurricane Michael.  
+13. rename application id and change icon color so someone can run both versions of wX   
 
 
 

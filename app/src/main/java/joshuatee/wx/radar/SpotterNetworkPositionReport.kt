@@ -19,7 +19,7 @@
 
 */
 
-//done by ELY M.  so you can reprot your SN location within this app.
+//done by ELY M.  so you can report your SN location within this app.
 
 
 package joshuatee.wx.radar
