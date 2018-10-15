@@ -38,6 +38,13 @@ import android.graphics.BitmapFactory
 import java.io.InputStream
 import java.net.URL
 
+/*
+*
+*  Conus Radar
+*  Credit to Pykl3 and Joe Jureka for this idea!
+*
+* */
+
 
 /*
 *
