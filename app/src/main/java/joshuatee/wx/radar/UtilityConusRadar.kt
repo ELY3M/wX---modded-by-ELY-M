@@ -21,11 +21,9 @@
 
 package joshuatee.wx.radar
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -36,7 +34,6 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.util.*
-import android.content.ContentValues.TAG
 import android.graphics.BitmapFactory
 import java.io.InputStream
 import java.net.URL

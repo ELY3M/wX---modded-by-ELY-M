@@ -26,6 +26,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import joshuatee.wx.BackupRestore
 
 import joshuatee.wx.R
 import joshuatee.wx.audio.SettingsPlaylistActivity
@@ -70,6 +71,8 @@ class SettingsMainActivity : BaseActivity() {
         val cardUI = ObjectCardText(this, "User Interface", MyApplication.textSizeNormal)
         val cardCtoF = ObjectCardText(this, "Celsius to fahrenheit table", MyApplication.textSizeNormal)
         val cardDeleteFiles = ObjectCardText(this, "Delete old radar files", MyApplication.textSizeNormal)
+        val cardbackuppref = ObjectCardText(this, "Backup Settings", MyApplication.textSizeNormal)
+        val cardrestorepref = ObjectCardText(this, "Restore Settings", MyApplication.textSizeNormal)
         cardLocations.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SettingsLocationRecyclerViewActivity::class.java) })
         cardsn.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SettingsSpotterNetwork::class.java) })
         cardNotif.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SettingsNotificationsActivity::class.java) })
@@ -81,6 +84,8 @@ class SettingsMainActivity : BaseActivity() {
         cardUI.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SettingsUIActivity::class.java) })
         cardCtoF.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(UtilityMath.cToFTable(), "Celsius to Fahrenheit table")) })
         cardDeleteFiles.setOnClickListener(View.OnClickListener { UtilityUI.makeSnackBar(linearLayout, "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(contextg)) })
+        cardbackuppref.setOnClickListener(View.OnClickListener { BackupRestore.backupPrefs(contextg) })
+        cardrestorepref.setOnClickListener(View.OnClickListener { BackupRestore.restorePrefs(contextg) })
         linearLayout.addView(cardLocations.card)
         linearLayout.addView(cardsn.card)
         linearLayout.addView(cardNotif.card)
@@ -92,6 +97,8 @@ class SettingsMainActivity : BaseActivity() {
         linearLayout.addView(cardUI.card)
         linearLayout.addView(cardCtoF.card)
         linearLayout.addView(cardDeleteFiles.card)
+        linearLayout.addView(cardbackuppref.card)
+        linearLayout.addView(cardrestorepref.card)
         linearLayout.addView(ObjectSettingsCheckBox(this, this, "Check for SPC MCD/W", "CHECKSPC", R.string.checkspc_switch_label).card)
         linearLayout.addView(ObjectSettingsCheckBox(this, this, "Check for WPC MPD", "CHECKWPC", R.string.checkwpc_switch_label).card)
         linearLayout.addView(ObjectSettingsCheckBox(this, this, "Check for TOR, TST, FFW, SVS, SMW, SPS", "CHECKTOR", R.string.checktor_switch_label).card)

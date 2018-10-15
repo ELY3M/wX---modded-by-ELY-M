@@ -469,7 +469,7 @@ class MyApplication : Application() {
         var loadedBuffers: Boolean = false
 
         fun initBuffers(context: Context) {
-            UtilityLog.d("wx", "initBuffers ran")
+            UtilityLog.d("joshuatee.modded.joshuatee.modded.wx", "initBuffers ran")
             loadedBuffers = true
             ColorPalettes.init(context)
             initRadarGeometryAll(context)

@@ -22,12 +22,9 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-import android.util.Log
 import joshuatee.wx.Extensions.getHtmlSep
-import joshuatee.wx.MyApplication
-import joshuatee.wx.R
 import joshuatee.wx.objects.DistanceUnit
-import joshuatee.wx.util.UtilityIO
+
 //import java.util.Collections
 //import java.util.Comparator
 
@@ -124,7 +121,7 @@ object UtilitySpotter {
 //LatLon.distance(LatLon(locX, locY), LatLon(pointX, pointY), DistanceUnit.MILE)
 //#uniq,icon,live camera,reportAt,lat,lon,callsign,active,moving,dir,phone,email,freq,note,first,last
 
-    fun findClosestSpotter(context: Context, location: LatLon): String {
+    fun findClosestSpotter( location: LatLon): String {
         var text = Spotterlistbydist
         var SpotterInfoString = ""
         val spotterinfo = mutableListOf<Spotter>()

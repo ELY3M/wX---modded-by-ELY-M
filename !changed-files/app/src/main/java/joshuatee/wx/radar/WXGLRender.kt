@@ -364,6 +364,7 @@ class WXGLRender(private val context: Context) : Renderer {
                 drawPolygons(it, 16)
             }
         }
+        // FIXME found out why this is crashing//
         listOf(wbCircleBuffers).forEach {
             if (zoom > it.scaleCutOff) {
                 drawTriangles(wbCircleBuffers)

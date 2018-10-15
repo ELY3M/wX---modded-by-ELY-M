@@ -1,5 +1,6 @@
 package joshuatee.wx
 
+import android.Manifest
 import android.os.Bundle
 import android.app.Activity
 import android.graphics.Bitmap
@@ -14,10 +15,12 @@ import joshuatee.wx.settings.*
 import joshuatee.wx.util.Utility
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
+import androidx.core.app.ActivityCompat
+import com.intentfilter.androidpermissions.PermissionManager
+import java.util.Collections.singleton
 
 
-class StartupActivity : Activity() {
+class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCallback {
 
     // This activity is the first activity started when the app starts.
     // It's job is to initialize preferences if not done previously,
@@ -28,7 +31,8 @@ class StartupActivity : Activity() {
     var TAG = "joshuatee-StartupActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        checkfiles()
+
+
         if (Utility.readPrefWithNull(this, "NWS_UNR_X", null) == null) {
             UtilityPref.prefInitStateCode(this)
             UtilityPref.prefInitStateCodeLookup(this)
@@ -57,8 +61,23 @@ class StartupActivity : Activity() {
             val rid1 = Location.getRid(this, Location.currentLocationStr)
             ObjectIntent(this, WXGLRadarActivity::class.java, WXGLRadarActivity.RID, arrayOf(rid1, nws1StateCurrent))
         }
+
+        //storage permission so we can run checkfiles for custom icons//
+        val permissionManager = PermissionManager.getInstance(this)
+        permissionManager.checkPermissions(singleton(Manifest.permission.WRITE_EXTERNAL_STORAGE), object : PermissionManager.PermissionRequestListener {
+            override fun onPermissionGranted() {
+                Log.i(TAG, "Permissions Granted")
+                checkfiles()
+            }
+
+            override fun onPermissionDenied() {
+                Log.i(TAG, "Permissions Denied")
+            }
+        })
+
         finish()
     }
+
 
 
     fun checkfiles() {
@@ -83,9 +102,8 @@ class StartupActivity : Activity() {
         }
     }
 
-
     fun saveBitmapToFile(fileName: String, bm: Bitmap) {
-        val file = File(MyApplication.FilesPath, "location.png")
+        val file = File(MyApplication.FilesPath, fileName)
         try {
             val out = FileOutputStream(file)
             bm.compress(Bitmap.CompressFormat.PNG, 100, out)
