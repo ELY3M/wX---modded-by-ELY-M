@@ -66,14 +66,14 @@ object SpotterNetworkPositionReport {
     var gpsprovider: String = ""
 
 
-    var strkey: String = MyApplication.sn_key
-    var strlat: String = ""
-    var strlon: String = ""
-    var straltitude: String = ""
-    var strtime: String = ""
-    var strspeed: String = ""
-    var strbearing: String = ""
-    var strgpsprovider: String = ""
+    var strkey: String? = MyApplication.sn_key
+    var strlat: String? = ""
+    var strlon: String? = ""
+    var straltitude: String? = ""
+    var strtime: String? = ""
+    var strspeed: String? = ""
+    var strbearing: String? = ""
+    var strgpsprovider: String? = ""
 
 
     fun sendToast(context: Context, text: String) {
