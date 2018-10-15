@@ -50,11 +50,11 @@
  <uses-feature android:name="android.hardware.touchscreen"
      android:required="false" />
 
- <!--android:icon="@drawable/wx"-->
+ <!--android:icon="@drawable/joshuatee.modded.joshuatee.modded.wx"-->
 
  <application
      android:allowBackup="true"
-     android:icon="@mipmap/ic_launcher_new"
+     android:icon="@mipmap/ic_launcher_elys"
      android:label="@string/app_name"
      android:largeHeap="true"
      android:theme="@style/MyCustomTheme_ActionBar"

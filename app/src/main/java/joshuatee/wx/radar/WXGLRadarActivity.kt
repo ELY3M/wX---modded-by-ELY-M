@@ -1152,7 +1152,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         var txt = ""
 
         override fun doInBackground(vararg params: String): String {
-            txt = UtilitySpotter.findClosestSpotter(contextg, LatLon(glview.newY.toDouble(), glview.newX.toDouble() * -1.0))
+            txt = UtilitySpotter.findClosestSpotter(LatLon(glview.newY.toDouble(), glview.newX.toDouble() * -1.0))
             return "Executed"
         }
 

@@ -13,14 +13,17 @@ TO DO List:
 8. add LSR reports from SN spotters/option to turn on/off LSR reports
 9. might 4th radar icon for cc 
 10. move show color legend to bottom  
-11. considering adding extreme wind warning  
+11. considering adding extreme wind warning - I saw few requests for this warning during hurricane Michael.  
+12. rename application id and change icon color so someone can run both versions of wX   
 
 
 
 
 DONE! 
 =================================
-add third button for SRM on radar.  
+changed the icon to black and cyan color so one can tell which version wX is running.   
+added backup/restore settings/pallette like in pykl3
+added third button for SRM on radar.  
 seperate warnings option on radar.. so can enable and disable indidvual warnings on radar. for example, you only want to see tor/svr and you can disable all others.  
 added SVS (severe weather statement)  
 added request for sn spotter info in the tap menu in the radar  

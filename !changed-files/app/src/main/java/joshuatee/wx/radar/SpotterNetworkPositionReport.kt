@@ -19,7 +19,8 @@
 
 */
 
-//done by ELY M.  so you can see spotter info in the tap menu within radar.
+//done by ELY M.  so you can reprot your SN location within this app.
+
 
 package joshuatee.wx.radar
 
@@ -55,24 +56,24 @@ object SpotterNetworkPositionReport {
 
     var success: Boolean = false
 
-    var key = MyApplication.sn_key
-    var lat = 0.0
-    var lon = 0.0
-    var altitude = 0.0
+    var key: String = MyApplication.sn_key
+    var lat: Double = 0.0
+    var lon: Double = 0.0
+    var altitude: Double = 0.0
     var time: Long = 0
     var speed: Float = 0.0f
     var bearing: Float = 0.0f
     var gpsprovider: String = ""
 
 
-    var strkey: String? = MyApplication.sn_key
-    var strlat: String? = ""
-    var strlon: String? = ""
-    var straltitude: String? = ""
-    var strtime: String? = ""
-    var strspeed: String? = ""
-    var strbearing: String? = ""
-    var strgpsprovider: String? = ""
+    var strkey: String = MyApplication.sn_key
+    var strlat: String = ""
+    var strlon: String = ""
+    var straltitude: String = ""
+    var strtime: String = ""
+    var strspeed: String = ""
+    var strbearing: String = ""
+    var strgpsprovider: String = ""
 
 
     fun sendToast(context: Context, text: String) {

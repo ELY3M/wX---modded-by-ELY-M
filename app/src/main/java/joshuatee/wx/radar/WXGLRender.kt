@@ -31,7 +31,6 @@ import android.graphics.Color
 import android.opengl.GLSurfaceView.Renderer
 import android.opengl.GLES20
 import android.opengl.Matrix
-import android.util.Log
 
 import joshuatee.wx.JNI
 import joshuatee.wx.MyApplication
