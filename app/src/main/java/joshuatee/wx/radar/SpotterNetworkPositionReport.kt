@@ -118,6 +118,8 @@ object SpotterNetworkPositionReport {
 
 
         locationManager = context.getSystemService(Context.LOCATION_SERVICE) as (LocationManager)
+
+        //FIXME The selfcheck permissions is not working and crashing the app if the perms are off//
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 20000.toLong(), 30.toFloat(), locationListener)
 

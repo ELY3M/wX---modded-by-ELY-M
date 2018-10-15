@@ -62,16 +62,29 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
             ObjectIntent(this, WXGLRadarActivity::class.java, WXGLRadarActivity.RID, arrayOf(rid1, nws1StateCurrent))
         }
 
-        //storage permission so we can run checkfiles for custom icons//
-        val permissionManager = PermissionManager.getInstance(this)
-        permissionManager.checkPermissions(singleton(Manifest.permission.WRITE_EXTERNAL_STORAGE), object : PermissionManager.PermissionRequestListener {
+
+        //location permission//  this is needed!
+        val locationpermissionManager = PermissionManager.getInstance(this)
+        locationpermissionManager.checkPermissions(singleton(Manifest.permission.ACCESS_FINE_LOCATION), object : PermissionManager.PermissionRequestListener {
             override fun onPermissionGranted() {
-                Log.i(TAG, "Permissions Granted")
+                Log.i(TAG, "Location Permissions Granted")
+            }
+
+            override fun onPermissionDenied() {
+                Log.i(TAG, "Location Permissions Denied")
+            }
+        })
+
+        //storage permission so we can run checkfiles for custom icons//
+        val storagepermissionManager = PermissionManager.getInstance(this)
+        storagepermissionManager.checkPermissions(singleton(Manifest.permission.WRITE_EXTERNAL_STORAGE), object : PermissionManager.PermissionRequestListener {
+            override fun onPermissionGranted() {
+                Log.i(TAG, "Storage Permissions Granted")
                 checkfiles()
             }
 
             override fun onPermissionDenied() {
-                Log.i(TAG, "Permissions Denied")
+                Log.i(TAG, "Storage Permissions Denied")
             }
         })
 
