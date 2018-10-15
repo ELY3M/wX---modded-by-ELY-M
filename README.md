@@ -9,10 +9,14 @@ this app will be customized for me and anyone who wants.
 
 Joshua Tee is welcome to add any of changes I did.  
 
+================================================================
 
+The apk is in Releases section. download from there   
 
+https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 
-=================================
+================================================================
+
 
 TO DO List: 
 
