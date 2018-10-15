@@ -22,14 +22,11 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-import android.util.Log
 import joshuatee.wx.Extensions.getHtmlSep
-import joshuatee.wx.MyApplication
-import joshuatee.wx.R
 import joshuatee.wx.objects.DistanceUnit
-import joshuatee.wx.util.UtilityIO
-import java.util.Collections
-import java.util.Comparator
+
+//import java.util.Collections
+//import java.util.Comparator
 
 object UtilitySpotter {
     internal var spotterList = mutableListOf<Spotter>()
@@ -79,13 +76,14 @@ object UtilitySpotter {
                         lonAl.add(tmpArr[5])
                     }
                 }
-                Collections.sort(spotterList, Comparator<Spotter> { p1, p2 ->
+                /*Collections.sort(spotterList, Comparator<Spotter> { p1, p2 ->
                     val res = p1.lastName.compareTo(p2.lastName, ignoreCase = true)
                     if (res != 0) {
                         return@Comparator res
                     }
                     p1.firstName.compareTo(p2.firstName, ignoreCase = true)
-                })
+                })*/
+                // if we need this use Kotlin instead: var sortedList = list.sortedWith(compareBy({ it.customProperty }))
                 if (latAl.size == lonAl.size) {
                     x = DoubleArray(latAl.size)
                     y = DoubleArray(latAl.size)
@@ -123,7 +121,7 @@ object UtilitySpotter {
 //LatLon.distance(LatLon(locX, locY), LatLon(pointX, pointY), DistanceUnit.MILE)
 //#uniq,icon,live camera,reportAt,lat,lon,callsign,active,moving,dir,phone,email,freq,note,first,last
 
-    fun findClosestSpotter(context: Context, location: LatLon): String {
+    fun findClosestSpotter(location: LatLon): String {
         var text = Spotterlistbydist
         var SpotterInfoString = ""
         val spotterinfo = mutableListOf<Spotter>()

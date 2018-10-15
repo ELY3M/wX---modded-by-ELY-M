@@ -31,7 +31,6 @@ import android.graphics.Color
 import android.opengl.GLSurfaceView.Renderer
 import android.opengl.GLES20
 import android.opengl.Matrix
-import android.util.Log
 
 import joshuatee.wx.JNI
 import joshuatee.wx.MyApplication
@@ -364,7 +363,6 @@ class WXGLRender(private val context: Context) : Renderer {
                 drawPolygons(it, 16)
             }
         }
-        // FIXME found out why this is crashing//
         listOf(wbCircleBuffers).forEach {
             if (zoom > it.scaleCutOff) {
                 drawTriangles(wbCircleBuffers)
@@ -382,6 +380,14 @@ class WXGLRender(private val context: Context) : Renderer {
         listOf(mpdBuffers, mcdBuffers, watchBuffers, watchTornadoBuffers, swoBuffers).forEach { drawPolygons(it, 8) }
     }
 
+    // FIXME CRASHING HERE sometimes
+    /*
+        java.lang.IllegalArgumentException: Must use a native order direct Buffer
+        at android.opengl.GLES20.glVertexAttribPointerBounds(Native Method)
+        at android.opengl.GLES20.glVertexAttribPointer(GLES20.java:1906)
+        at joshuatee.wx.radar.WXGLRender.drawTriangles(WXGLRender.kt:388)
+        at joshuatee.wx.radar.WXGLRender.onDrawFrame(WXGLRender.kt:359)
+    * */
     private fun drawTriangles(buffers: ObjectOglBuffers) {
         if (buffers.isInitialized) {
             buffers.setToPositionZero()

@@ -121,7 +121,7 @@ object UtilitySpotter {
 //LatLon.distance(LatLon(locX, locY), LatLon(pointX, pointY), DistanceUnit.MILE)
 //#uniq,icon,live camera,reportAt,lat,lon,callsign,active,moving,dir,phone,email,freq,note,first,last
 
-    fun findClosestSpotter( location: LatLon): String {
+    fun findClosestSpotter(location: LatLon): String {
         var text = Spotterlistbydist
         var SpotterInfoString = ""
         val spotterinfo = mutableListOf<Spotter>()

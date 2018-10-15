@@ -1146,7 +1146,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         var txt = ""
 
         override fun doInBackground(vararg params: String): String {
-            txt = UtilitySpotter.findClosestSpotter(contextg, LatLon(glviewArr[idxIntG].newY.toDouble(), (glviewArr[idxIntG].newX * -1).toDouble()))
+            txt = UtilitySpotter.findClosestSpotter(LatLon(glviewArr[idxIntG].newY.toDouble(), (glviewArr[idxIntG].newX * -1).toDouble()))
             return "Executed"
         }
 
