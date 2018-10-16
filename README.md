@@ -33,16 +33,19 @@ TO DO List:
 11. move show color legend to bottom  
 12. considering adding extreme wind warning - I saw few requests for this warning during hurricane Michael.  
 13. rename application id and change icon color so someone can run both versions of wX   
-
+14. 8-bit SRM like in pykl3  
+15. fix up the ability to change products in the multi-pane radar. it seem wont change products for me
+16. android wear support. I own android wear watches and love them.  
 
 
 
 DONE! 
 =================================
-android permissions are pita! I put in perm library for filechecking for custom icons later.  
-changed the icon to black and cyan color so one can tell which version wX is running.  
-added backup/restore settings/pallette like in pykl3  
-added third button for SRM on radar.  
+added conus radar image auto-download in radaractivity, need to figure out how to plot it when the radar map gets zoom out like in pykl3  
+android permissions are pita! I put in perm library for filechecking for custom icons later.    
+changed the icon to black and cyan color so one can tell which version wX is running.    
+added backup/restore settings/pallette like in pykl3    
+added third button for SRM on radar.    
 seperate warnings option on radar.. so can enable and disable indidvual warnings on radar. for example, you only want to see tor/svr and you can disable all others.  
 added SVS (severe weather statement)  
 added request for sn spotter info in the tap menu in the radar  

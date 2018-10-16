@@ -51,16 +51,12 @@ import android.widget.TextView
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.fragment.app.Fragment
 import androidx.cardview.widget.CardView
-import joshuatee.wx.radar.LatLon
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.activitiesmisc.SunMoonActivity
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.external.UtilityStringExternal
-import joshuatee.wx.radar.UtilityWXGLTextObject
-import joshuatee.wx.radar.UtilityWXOGL
-import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectCALegal
@@ -73,10 +69,6 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.ui.ObjectSpinner
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.canada.UtilityCanada
-import joshuatee.wx.radar.WXGLNexrad
-import joshuatee.wx.radar.WXGLRender
-import joshuatee.wx.radar.WXGLSurfaceView
-import joshuatee.wx.radar.WXGLTextObject
 import joshuatee.wx.settings.SettingsLocationGenericActivity
 import joshuatee.wx.spc.SPCSoundingsActivity
 import joshuatee.wx.util.*
@@ -88,6 +80,7 @@ import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.radar.*
 
 class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
@@ -548,6 +541,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 alertDialogRadarLongpressAl.add(UtilityStringExternal.truncate(distRid.toString(), 6) + " miles from " + oglrArr[idx].rid)
                 oglrArr[idx].ridNewList.mapTo(alertDialogRadarLongpressAl) { "Radar: (" + it.distance.toString() + " mi) " + it.name + " " + Utility.readPref("RID_LOC_" + it.name, "") }
                 alertDialogRadarLongpressAl.add("Show warning text")
+                alertDialogRadarLongpressAl.add("Show Spotter Info")
                 alertDialogRadarLongpressAl.add("Show radar status message")
                 alertDialogRadarLongpress?.show()
             } else {
@@ -859,10 +853,27 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             } else if (strName.contains("Show warning text")) {
                 val polygonUrl = UtilityWXOGL.showTextProducts(glviewArr[idxIntG].newY.toDouble(), (glviewArr[idxIntG].newX * -1.0))
                 if (polygonUrl != "") ObjectIntent(activityReference, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(polygonUrl, ""))
+            } else if (strName.contains("Show Spotter Info")) {
+                GetSpotter().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
             } else if (strName.contains("Show radar status message")) {
                 GetRadarStatus().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
             }
             dialog.dismiss()
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private inner class GetSpotter : AsyncTask<String, String, String>() {
+
+        var txt = ""
+
+        override fun doInBackground(vararg params: String): String {
+            txt = UtilitySpotter.findClosestSpotter(LatLon(glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0))
+            return "Executed"
+        }
+
+        override fun onPostExecute(result: String) {
+            UtilityAlertDialog.showHelpText(txt, activityReference)
         }
     }
 

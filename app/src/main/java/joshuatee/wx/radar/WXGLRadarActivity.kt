@@ -117,6 +117,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private var mInterval = 180000 // 180 seconds by default
     private var sn_Handler_m: Handler? = null
     private var sn_Interval = 180000 // 180 seconds by default
+    private var conus_Handler_m: Handler? = null
+    private var conus_Interval = 300000 // 5 mins for conus download might more is better
     private var loopCount = 0
     private var animRan = false
     private var archiveMode = false
@@ -287,6 +289,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             sn_Handler_m = Handler()
             start_sn_reporting()
         }
+        //TODO put in option to disable and enable conus radar
+        //conus
+        conus_Handler_m = Handler()
+        start_conusimage()
 
     }
 
@@ -332,6 +338,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             sn_Handler_m = Handler()
             start_sn_reporting()
         }
+        //TODO put in option to disable and enable conus radar
+        //conus
+        conus_Handler_m = Handler()
+        start_conusimage()
         super.onRestart()
     }
 
@@ -752,6 +762,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         inOglAnim = false
         mHandler?.let { stopRepeatingTask() }
         sn_Handler_m?.let { stop_sn_reporting() }
+        conus_Handler_m?.let { stop_conusimage() }
         locationManager?.let {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
@@ -950,6 +961,25 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         sn_handler!!.removeCallbacks(sn_reporter)
     }
 
+
+    //conus radar
+    private val conus_handler = Handler()
+    private val conus_image: Runnable = object : Runnable {
+        override fun run() {
+
+            Log.i(TAG, "downloading new conus image")
+            UtilityConusRadar.getConusImage()
+            conus_handler.postDelayed(this, conus_Interval.toLong())
+        }
+    }
+
+    private fun start_conusimage() {
+        conus_image.run()
+    }
+
+    private fun stop_conusimage() {
+        conus_handler!!.removeCallbacks(conus_image)
+    }
 
     override fun onPause() {
         glview.onPause()

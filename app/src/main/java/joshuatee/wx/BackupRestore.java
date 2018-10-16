@@ -27,7 +27,7 @@ import androidx.core.content.ContextCompat;
 
 /*
 *
-* Thanks to PYKL3 / Joe jurkea for this!
+* Thanks to Joe Jurecka / Pykl3 for this!
 *
 *
 * */
@@ -36,7 +36,7 @@ import androidx.core.content.ContextCompat;
 public class BackupRestore {
     private static String TAG = "joshuatee BackupRestore";
     private static boolean verbose = true;
-    private static String FilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/";
+    //private static String FilesPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/";
 
 
     //BACKUP
@@ -75,7 +75,7 @@ public class BackupRestore {
             src.close();
             dst.close();
             File backupFilePath = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/wXBackup/");
-            String pykl3path = FilesPath;
+            String pykl3path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wXBackup/";
             Log.d(TAG, "wXPATH=" + pykl3path);
             Log.d(TAG, "where backup files are written to " + backupFilePath.getAbsolutePath());
 
