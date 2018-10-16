@@ -35,13 +35,21 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.util.*
 import android.graphics.BitmapFactory
+import android.os.AsyncTask
 import java.io.InputStream
 import java.net.URL
+import android.os.Environment.getExternalStorageDirectory
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okio.Okio
+import java.io.File
+import javax.microedition.khronos.opengles.GL10
+
 
 /*
 *
 *  Conus Radar
-*  Credit to Pykl3 and Joe Jureka for this idea!
+*  Credit to Pykl3 and Joe Jurecka for this idea!
 *
 * */
 
@@ -343,6 +351,11 @@ Line 6: y-coordinate of center of upper left pixel
 internal object UtilityConusRadar {
 
     var TAG = "UtilityConusRadar"
+    var conusurl = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif"
+    var conusbitmap: Bitmap? = null
+    var conusgif = "conus.gif"
+    var IMAGEFILE = MyApplication.FilesPath + "conus.gif"
+
     var gfw1 = ""
     var gfw2 = ""
     var gfw3 = ""
@@ -355,6 +368,40 @@ internal object UtilityConusRadar {
     private const val REFRESH_LOC_MIN = 3
 
 
+    class getConusgif : AsyncTask<Bitmap, Void, Bitmap>() {
+
+        override fun doInBackground(vararg urls: Bitmap): Bitmap? {
+            Log.i(TAG, "running getimage...")
+            val client = OkHttpClient()
+            try {
+                val request = Request.Builder()
+                        .url(conusurl)
+                        .build()
+
+                val response = client.newCall(request).execute()
+
+                val Directory = File(MyApplication.FilesPath)
+                if (!Directory.exists()) {
+                    Directory.mkdirs()
+                }
+
+                val sink = Okio.buffer(Okio.sink(File(Directory, conusgif)))
+                sink.writeAll(response.body()!!.source())
+                sink.close()
+                response.body()!!.close()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+            return conusbitmap
+        }
+
+    }
+
+    open fun getConusImage() {
+        var task = getConusgif()
+        task.execute()
+    }
 
     fun getConusgfw(): String {
         val currentTime1 = System.currentTimeMillis()
@@ -399,15 +446,6 @@ internal object UtilityConusRadar {
             val options = BitmapFactory.Options()
             options.inScaled = false   // No pre-scaling
 
-            // Read in the resource
-            var conusradar: Bitmap? = null
-            try {
-                conusradar = BitmapFactory.decodeStream(URL(MyApplication.NWS_CONUS_RADAR).getContent() as InputStream)
-            } catch (e: Exception) {
-                Log.e(TAG, "CRASHED: ", e)
-            }
-            ///val bitmap = BitmapFactory.decodeResource(context.resources, resourceId, options)
-
             // Bind to the texture in OpenGL
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0])
 
@@ -415,11 +453,22 @@ internal object UtilityConusRadar {
             GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST)
             GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST)
 
+
+            // Read in the resource
+            conusbitmap = BitmapFactory.decodeFile(IMAGEFILE)
+            if (conusbitmap == null) {
+                Log.i(TAG, "conusbitmap is null!!! redownloading")
+                val task = getConusgif()
+                task.execute()
+            } else {
+                GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, conusbitmap, 0)
+            }
+
             // Load the bitmap into the bound texture.
-            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, conusradar, 0)
+            //GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, conusbitmap, 0)
 
             // Recycle the bitmap, since its data has been loaded into OpenGL.
-            conusradar!!.recycle()
+            conusbitmap!!.recycle()
         }
 
         if (textureHandle[0] == 0) {

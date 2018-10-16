@@ -135,7 +135,7 @@ object UtilitySpotter {
             }
         }
 
-        var shortestDistance = 4.13
+        var shortestDistance = 13.0
         var currentDistance: Double
         var bestSpotter = -1
 
