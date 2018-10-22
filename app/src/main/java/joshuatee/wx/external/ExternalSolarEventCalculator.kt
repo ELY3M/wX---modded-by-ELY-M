@@ -71,9 +71,7 @@ internal class ExternalSolarEventCalculator {
     /**
      * Computes the sunrise time for the given zenith at the given date.
      *
-     * @param solarZenith
      * `Zenith` enum corresponding to the type of sunrise to compute.
-     * @param date
      * `Calendar` object representing the date to compute the sunrise for.
      * @return the sunrise time, in HH:MM format (24-hour clock), 00:00 if the sun does not rise on the given
      * date.
@@ -291,7 +289,6 @@ internal class ExternalSolarEventCalculator {
     /**
      * Returns the local rise/set time in the form HH:MM.
      *
-     * @param localTime
      * `BigDecimal` representation of the local rise/set time.
      * @return `String` representation of the local rise/set time in HH:MM format.
      */

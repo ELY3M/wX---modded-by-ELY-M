@@ -27,7 +27,7 @@ import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 import android.content.Context
-import android.graphics.Color
+import android.graphics.*
 import android.opengl.GLSurfaceView.Renderer
 import android.opengl.GLES20
 import android.opengl.Matrix
@@ -38,11 +38,9 @@ import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
+import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
-import joshuatee.wx.util.ProjectionNumbers
-import joshuatee.wx.util.UtilityCanvasProjection
-import joshuatee.wx.util.UtilityIO
-import joshuatee.wx.util.UtilityLog
+import joshuatee.wx.util.*
 
 class WXGLRender(private val context: Context) : Renderer {
 
@@ -115,7 +113,6 @@ class WXGLRender(private val context: Context) : Renderer {
     var zoom: Float = 1.0f
         set(scale) {
             field = scale
-
             listOf(locdotBuffers, hiBuffers, spotterBuffers, tvsBuffers, wbCircleBuffers).forEach {
                 if (it.isInitialized) {
                     it.lenInit = it.type.size
@@ -123,10 +120,10 @@ class WXGLRender(private val context: Context) : Renderer {
                     it.draw(pn)
                 }
             }
-
             if (locdotBuffers.isInitialized && MyApplication.locdotFollowsGps) {
                 locCircleBuffers.lenInit = locdotBuffers.lenInit
                 UtilityWXOGLPerf.genCircleLocdot(locCircleBuffers, pn, gpsX, gpsY)
+                //UtilityIcons.Locdot(locCircleBuffers)
             }
         }
     private var mSurfaceRatio = 0f
@@ -617,7 +614,6 @@ class WXGLRender(private val context: Context) : Renderer {
         deconstructGenericLines(warningSpsBuffers)
     }
 
-
     fun constructLocationDot(locXCurrent: String, locYCurrentF: String, archiveMode: Boolean) {
         var locYCurrent = locYCurrentF
         var locmarkerAl = mutableListOf<Double>()
@@ -647,7 +643,6 @@ class WXGLRender(private val context: Context) : Renderer {
                 yy += 1
             }
         }
-
         locdotBuffers.triangleCount = 12
         constructTriangles(locdotBuffers)
         locCircleBuffers.triangleCount = 36
@@ -663,7 +658,9 @@ class WXGLRender(private val context: Context) : Renderer {
         if (MyApplication.locdotFollowsGps) {
             locCircleBuffers.lenInit = locdotBuffers.lenInit
             UtilityWXOGLPerf.genCircleLocdot(locCircleBuffers, pn, gpsX, gpsY)
+            //UtilityIcons.Locdot(locCircleBuffers)
         }
+
         locdotBuffers.isInitialized = true
         locCircleBuffers.isInitialized = true
     }

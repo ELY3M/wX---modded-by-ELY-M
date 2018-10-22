@@ -41,14 +41,12 @@ private constructor(latitude: Double, longitude: Double,
                     /**
                      * Set the elevation.
                      *
-                     * @param elevation elevation about the ellipsoid in meters.
                      */
                     var elevation: Double) : ExternalGlobalCoordinates(latitude, longitude) {
 
     /**
      * Creates a new instance of GlobalPosition.
      *
-     * @param coords coordinates of the position
      * @param elevation elevation, in meters, above the reference ellipsoid
      */
     //constructor(coords: ExternalGlobalCoordinates, elevation: Double) : this(coords.latitude, coords.longitude, elevation)

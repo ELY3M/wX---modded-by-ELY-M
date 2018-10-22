@@ -94,7 +94,7 @@ object UtilityMath {
         val sb = StringBuilder(100)
         val cInit = -40
         var f: String
-        (cInit until 40).forEach { z ->
+        for (z in 40 downTo cInit) {
             f = cToFInt(z)
             sb.append(z.toString())
             sb.append("  ")

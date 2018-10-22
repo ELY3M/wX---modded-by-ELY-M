@@ -22,12 +22,10 @@
 package joshuatee.wx.util
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Path
+import android.graphics.*
 import android.graphics.Paint.Style
+import android.graphics.drawable.BitmapDrawable
+import android.util.Log
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.PolygonType
@@ -40,6 +38,7 @@ import joshuatee.wx.objects.GeographyType
 
 internal object UtilityCanvas {
 
+    val TAG = "joshuatee UtilityCanvas"
     fun addWarnings(context: Context, provider: ProjectionType, bitmap: Bitmap, rid: String) {
         val mercato = provider.isMercator
         val canvas = Canvas(bitmap)
@@ -125,7 +124,12 @@ internal object UtilityCanvas {
         val pixXInit = tmpCoords[0]
         val pixYInit = tmpCoords[1]
         paint.color = MyApplication.radarColorLocdot
-        canvas.drawCircle(pixXInit.toFloat(), pixYInit.toFloat(), 2f, paint)
+	//custom locationdot//
+        val locationicon: Bitmap = BitmapFactory.decodeFile(MyApplication.FilesPath+"location.png");
+        val locationiconresized: Bitmap = Bitmap.createScaledBitmap(locationicon, 63, 63, false)
+        canvas.drawBitmap(locationiconresized, pixXInit.toFloat(), pixYInit.toFloat(), paint)
+        ///canvas.drawCircle(pixXInit.toFloat(), pixYInit.toFloat(), 2f, paint)
+
     }
 
     fun addMCD(context: Context, provider: ProjectionType, bitmap: Bitmap, rid1: String, polyType: PolygonType) {

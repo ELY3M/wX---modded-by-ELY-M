@@ -27,6 +27,7 @@ import java.io.File
 import java.io.FileOutputStream
 import android.app.IntentService
 import android.content.Intent
+import joshuatee.wx.MyApplication
 
 // this service notifies the alarm manager to run AlertReciever ( notifications ) according to the
 // configured interval
@@ -43,8 +44,8 @@ class CreateAnimatedGifService : IntentService("CreateAnimatedGifService") {
         encoder.finish()
         val dir = File(filesDir.toString() + "/shared")
         if (!dir.mkdirs()) UtilityLog.d("wx", "unable to create: $filesDir/shared")
-        val file = File(dir, "wx_joshuatee_anim.gif")
-        val contentUri = FileProvider.getUriForFile(this, "joshuatee.wx.fileprovider", file)
+        val file = File(dir, "${MyApplication.packageNameFileNameAsString}_anim.gif")
+        val contentUri = FileProvider.getUriForFile(this, "${MyApplication.packageNameAsString}.fileprovider", file)
         val outStream: FileOutputStream
         try {
             outStream = FileOutputStream(file)

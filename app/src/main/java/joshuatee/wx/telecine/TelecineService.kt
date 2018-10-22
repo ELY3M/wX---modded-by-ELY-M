@@ -20,12 +20,12 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 
 import androidx.core.app.NotificationCompat
+import joshuatee.wx.notifications.UtilityNotification
 
 class TelecineService : Service() {
 
     private var running = false
     private var recordingSession: RecordingSession? = null
-    private val notiChannelStr = "default"
 
     private val listener = object : RecordingSession.Listener {
         override fun onStart() {
@@ -40,13 +40,12 @@ class TelecineService : Service() {
             val subtitle = context.getString(R.string.notification_recording_subtitle)
             var notification: Notification? = null
             if (android.os.Build.VERSION.SDK_INT > 20) {
-                notification = NotificationCompat.Builder(context, notiChannelStr)
+                notification = NotificationCompat.Builder(context, UtilityNotification.notiChannelStrNoSound)
                         .setContentTitle(title)
                         .setContentText(subtitle)
                         .setSmallIcon(R.drawable.ic_videocam_24dp)
                         .setColor(ContextCompat.getColor(context, R.color.primary_normal))
                         .setAutoCancel(true)
-                        //.setPriority(PRIORITY_MIN)
                         .build()
             }
             startForeground(NOTIFICATION_ID, notification)

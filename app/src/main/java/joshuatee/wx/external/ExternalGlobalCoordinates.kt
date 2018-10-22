@@ -34,8 +34,8 @@ open class ExternalGlobalCoordinates
 /**
  * Construct a new GlobalCoordinates. Angles will be canonicalized.
  *
- * @param latitude latitude in degrees
- * @param longitude longitude in degrees
+ * @param mLatitude latitude in degrees
+ * @param mLongitude longitude in degrees
  */
 (
         /** Latitude in degrees. Negative latitude is southern hemisphere.  */
@@ -52,13 +52,11 @@ open class ExternalGlobalCoordinates
      * Set latitude. The latitude value will be canonicalized (which might result
      * in a change to the longitude). Negative latitude is southern hemisphere.
      *
-     * @param latitude in degrees
      */
 
     constructor(location: LatLon) : this(location.lat, location.lon)
 
     constructor(ec: ExternalGlobalCoordinates) : this(ec.latitude, ec.longitude)
-
 
     var latitude: Double
         get() = mLatitude
@@ -76,7 +74,6 @@ open class ExternalGlobalCoordinates
      * Set longitude. The longitude value will be canonicalized. Negative
      * longitude is western hemisphere.
      *
-     * @param longitude in degrees
      */
     var longitude: Double
         get() = mLongitude

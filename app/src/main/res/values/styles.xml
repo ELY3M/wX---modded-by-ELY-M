@@ -16,12 +16,9 @@
 
     You should have received a copy of the GNU General Public License
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
-
-Android:Theme.AppCompat
  -->
 
 <resources>
-
     <style name="AppCompatAlertDialogStyle"  parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/yellow</item>
         <item name="android:textColor">@color/white</item>
@@ -96,7 +93,6 @@ Android:Theme.AppCompat
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
     </style>
 
-
     <style name="SpinnerThemeOverlay" parent="">
         <item name="colorControlNormal">@color/black</item>
     </style>
@@ -147,7 +143,6 @@ Android:Theme.AppCompat
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
     </style>
 
-
     <style name="MyDialogTheme" parent="Theme.AppCompat.Dialog">
         <item name="android:windowBackground">@color/primary_dark_blue</item>
         <item name="android:windowIsFloating">true</item>
@@ -174,14 +169,6 @@ Android:Theme.AppCompat
 
     <style name="ABOverflowWhite" parent="Base.Widget.AppCompat.PopupMenu.Overflow"  >
         <item name="android:popupBackground">@color/white</item>
-    </style>
-
-    <style name="MyDropDownNav" parent="@android:style/Widget.Holo.Spinner"  >
-        <item name="android:popupBackground">@color/primary_dark_blue</item>
-    </style>
-
-    <style name="MyPopupMenu" parent="@android:style/Widget.DeviceDefault.ListPopupWindow">
-        <item name="android:popupBackground">@color/primary_dark_blue</item>
     </style>
 
     <style name="MyCustomTheme_Holo_Dark_NOAB" parent="Theme.AppCompat.NoActionBar">
@@ -221,21 +208,11 @@ Android:Theme.AppCompat
     </style>
 
     <!-- Telecine -->
-
-    <style name="Theme.Telecine" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:actionBarStyle">@style/Widget.Telecine.ActionBar</item>
-    </style>
-
     <style name="Theme.Telecine.Transparent" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowIsFloating">true</item>
     </style>
-
-    <style name="Widget.Telecine.ActionBar" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:title">@string/app_name</item>
-    </style>
-
 </resources>
 
 

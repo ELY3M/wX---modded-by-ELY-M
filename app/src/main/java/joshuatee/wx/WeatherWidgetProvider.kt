@@ -125,9 +125,9 @@ class WeatherWidgetProvider : AppWidgetProvider() {
     }
 
     companion object {
-        const val CLICK_ACTION: String = "joshuatee.wx.weatherlistwidget.CLICK"
-        const val REFRESH_ACTION: String = "joshuatee.wx.weatherlistwidget.REFRESH"
-        const val EXTRA_DAY_ID: String = "joshuatee.wx.weatherlistwidget.day"
+        const val CLICK_ACTION: String = "${MyApplication.packageNameAsString}.weatherlistwidget.CLICK"
+        const val REFRESH_ACTION: String = "${MyApplication.packageNameAsString}.weatherlistwidget.REFRESH"
+        const val EXTRA_DAY_ID: String = "${MyApplication.packageNameAsString}.weatherlistwidget.day"
         var sWorkerThread: HandlerThread? = null
         var sWorkerQueue: Handler? = null
         var sDataObserver: WeatherDataProviderObserver? = null

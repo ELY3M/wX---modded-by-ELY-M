@@ -45,12 +45,16 @@ object UtilityWidget {
     private fun uriShareAndGenerate(context: Context, fn: String): Uri {
         val dir = File(context.filesDir.toString() + "/shared")
         val file = File(dir, fn)
-        val imgUri = FileProvider.getUriForFile(context, "joshuatee.wx.fileprovider", file)
+        val imgUri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", file)
         val localPackageManager = context.packageManager
         val intentHome = Intent("android.intent.action.MAIN")
         intentHome.addCategory("android.intent.category.HOME")
-        val str = localPackageManager.resolveActivity(intentHome, PackageManager.MATCH_DEFAULT_ONLY).activityInfo.packageName
-        context.grantUriPermission(str, imgUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        try {
+            val str = localPackageManager.resolveActivity(intentHome, PackageManager.MATCH_DEFAULT_ONLY).activityInfo.packageName
+            context.grantUriPermission(str, imgUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        } catch (e: Exception) {
+            UtilityLog.HandleException(e)
+        }
         return imgUri
     }
 

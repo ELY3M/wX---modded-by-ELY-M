@@ -73,7 +73,6 @@ private constructor(private val name: String) {
         /**
          * Returns a decompressed version of the given input stream.
          *
-         * @param  raw  the raw input stream
          * @return  the decompressed version of <tt>raw</tt>
          */
         /* @Throws(IOException::class)

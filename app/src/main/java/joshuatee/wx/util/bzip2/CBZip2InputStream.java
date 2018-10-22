@@ -115,8 +115,8 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
   private char[] seqToUnseq = new char[256];
   private char[] unseqToSeq = new char[256];
 
-  private char[] selector = new char[Companion.getMAX_SELECTORS()];
-  private char[] selectorMtf = new char[Companion.getMAX_SELECTORS()];
+  private char[] selector = new char[Companion.MAX_SELECTORS];
+  private char[] selectorMtf = new char[Companion.MAX_SELECTORS];
 
   private int[] tt;
   private char[] ll8;
@@ -127,10 +127,10 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
   */
   private int[] unzftab = new int[256];
 
-  private int[][] limit = new int[Companion.getN_GROUPS()][Companion.getMAX_ALPHA_SIZE()];
-  private int[][] base = new int[Companion.getN_GROUPS()][Companion.getMAX_ALPHA_SIZE()];
-  private int[][] perm = new int[Companion.getN_GROUPS()][Companion.getMAX_ALPHA_SIZE()];
-  private int[] minLens = new int[Companion.getN_GROUPS()];
+  private int[][] limit = new int[Companion.N_GROUPS][Companion.MAX_ALPHA_SIZE];
+  private int[][] base = new int[Companion.N_GROUPS][Companion.MAX_ALPHA_SIZE];
+  private int[][] perm = new int[Companion.N_GROUPS][Companion.MAX_ALPHA_SIZE];
+  private int[] minLens = new int[Companion.N_GROUPS];
 
   private InputStream bsStream;
 
@@ -400,18 +400,18 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
       }
     }
 
-    for (i = 0; i < Companion.getMAX_CODE_LEN(); i++) {
+    for (i = 0; i < Companion.MAX_CODE_LEN; i++) {
       base[i] = 0;
     }
     for (i = 0; i < alphaSize; i++) {
       base[length[i] + 1]++;
     }
 
-    for (i = 1; i < Companion.getMAX_CODE_LEN(); i++) {
+    for (i = 1; i < Companion.MAX_CODE_LEN; i++) {
       base[i] += base[i - 1];
     }
 
-    for (i = 0; i < Companion.getMAX_CODE_LEN(); i++) {
+    for (i = 0; i < Companion.MAX_CODE_LEN; i++) {
       limit[i] = 0;
     }
     vec = 0;
@@ -427,7 +427,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
   }
 
   private void recvDecodingTables() {
-    char len[][] = new char[Companion.getN_GROUPS()][Companion.getMAX_ALPHA_SIZE()];
+    char len[][] = new char[Companion.N_GROUPS][Companion.MAX_ALPHA_SIZE];
     int i, j, t, nGroups, nSelectors, alphaSize;
     int minLen, maxLen;
     boolean[] inUse16 = new boolean[16];
@@ -471,7 +471,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
 
     /* Undo the MTF values for the selectors. */
     {
-      char[] pos = new char[Companion.getN_GROUPS()];
+      char[] pos = new char[Companion.N_GROUPS];
       char tmp, v;
       for (v = 0; v < nGroups; v++) {
         pos[v] = v;
@@ -527,7 +527,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
     int i, j, nextSym, limitLast;
     int EOB, groupNo, groupPos;
 
-    limitLast = Companion.getBaseBlockSize() * blockSize100k;
+    limitLast = Companion.baseBlockSize * blockSize100k;
     origPtr = bsGetIntVS(24);
 
     recvDecodingTables();
@@ -555,7 +555,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
       int zt, zn, zvec, zj;
       if (groupPos == 0) {
         groupNo++;
-        groupPos = Companion.getG_SIZE();
+        groupPos = Companion.G_SIZE;
       }
       groupPos--;
       zt = selector[groupNo];
@@ -593,15 +593,15 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
         break;
       }
 
-      if (nextSym == Companion.getRUNA() || nextSym == Companion.getRUNB()) {
+      if (nextSym == Companion.RUNA || nextSym == Companion.RUNB) {
         char ch;
         int s = -1;
         int N = 1;
         do {
-          if (nextSym == Companion.getRUNA()) {
+          if (nextSym == Companion.RUNA) {
            // s = s + (0 + 1) * N;
             s = s + N;
-          } else if (nextSym == Companion.getRUNB()) {
+          } else if (nextSym == Companion.RUNB) {
             s = s + (1 + 1) * N;
           }
           N = N * 2;
@@ -609,7 +609,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
             int zt, zn, zvec, zj;
             if (groupPos == 0) {
               groupNo++;
-              groupPos = Companion.getG_SIZE();
+              groupPos = Companion.G_SIZE;
             }
             groupPos--;
             zt = selector[groupNo];
@@ -640,7 +640,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
             }
             nextSym = perm[zt][zvec - base[zt][zn]];
           }
-        } while (nextSym == Companion.getRUNA() || nextSym == Companion.getRUNB());
+        } while (nextSym == Companion.RUNA || nextSym == Companion.RUNB);
 
         s++;
         ch = seqToUnseq[yy[0]];
@@ -690,7 +690,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
           int zt, zn, zvec, zj;
           if (groupPos == 0) {
             groupNo++;
-            groupPos = Companion.getG_SIZE();
+            groupPos = Companion.G_SIZE;
           }
           groupPos--;
           zt = selector[groupNo];
@@ -891,7 +891,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
 
     //Modified  5-30-2006 by unidata to allow for reuse of the ll8 and tt buffers
 
-    int n = Companion.getBaseBlockSize() * newSize100k;
+    int n = Companion.baseBlockSize * newSize100k;
 
     if (ll8 != null && ll8.length != n) {
       ll8 = null;

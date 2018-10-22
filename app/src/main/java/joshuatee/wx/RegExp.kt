@@ -117,7 +117,7 @@ object RegExp {
     val ca7DayWindspd2: Pattern = Pattern.compile("( [0-9]{2,3}) km/h")
     val ca7DayWindspd3: Pattern = Pattern.compile("gusting to ([0-9]{2,3})")
 
-    val warningVtecPattern: Pattern = Pattern.compile("([A-Z0]{1}\\.[A-Z]{3}\\.[A-Z]{4}\\.[A-Z]{2}\\.[A-Z]\\.[0-9]{4}\\.[0-9]{6}T[0-9]{4}Z\\-[0-9]{6}T[0-9]{4}Z)")
+    val warningVtecPattern: Pattern = Pattern.compile("([A-Z0]\\.[A-Z]{3}\\.[A-Z]{4}\\.[A-Z]{2}\\.[A-Z]\\.[0-9]{4}\\.[0-9]{6}T[0-9]{4}Z\\-[0-9]{6}T[0-9]{4}Z)")
     val warningLatLonPattern: Pattern = Pattern.compile("\"coordinates\":\\[\\[(.*?)\\]\\]\\}")
     val watchPattern: Pattern = Pattern.compile("[om] Watch #([0-9]*?)</a>")
     val mcdPatternAlertr: Pattern = Pattern.compile("<strong><a href=./products/md/md.....html.>Mesoscale Discussion #(.*?)</a></strong>")

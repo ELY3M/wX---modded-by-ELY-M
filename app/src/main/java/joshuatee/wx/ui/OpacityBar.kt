@@ -351,7 +351,6 @@ class OpacityBar : View {
     /**
      * Set the pointer on the bar. With the opacity value.
 
-     * @param saturation
      * *            float between 0 > 255
      */
     var opacity: Int
@@ -374,7 +373,7 @@ class OpacityBar : View {
     /**
      * Calculate the color selected by the pointer on the bar.
 
-     * @param coord
+     * @param coordF
      * *            Coordinate of the pointer.
      */
     private fun calculateColor(coordF: Int) {
@@ -406,7 +405,6 @@ class OpacityBar : View {
      * <br></br>
      * Its discouraged to use this method.
 
-     * @param color
      */
     var color: Int
         get() = mColor
@@ -439,7 +437,6 @@ class OpacityBar : View {
      * is added to the ColorPicker
 
      * @see ColorPicker.addSVBar
-     * @param picker
      */
     //public void setColorPicker(ColorPicker picker) {
     //	mPicker = picker;
@@ -447,12 +444,10 @@ class OpacityBar : View {
 
     override fun onSaveInstanceState(): Parcelable {
         val superState = super.onSaveInstanceState()
-
         val state = Bundle()
         state.putParcelable(STATE_PARENT, superState)
         state.putFloatArray(STATE_COLOR, mHSVColor)
         state.putInt(STATE_OPACITY, opacity)
-
         return state
     }
 

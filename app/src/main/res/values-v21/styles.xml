@@ -20,9 +20,6 @@
  -->
 
 <resources>
-
-    <!--replace AppCompat with MaterialComponents for theme-->
-
     <style name="MyCustomTheme_NOAB"  parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/primary_blue</item>
         <item name="android:buttonTint">@color/primary_blue</item>
@@ -166,10 +163,6 @@
         <item name="android:popupBackground">@color/primary_dark_blue</item>
     </style>
 
-    <style name="MyPopupMenu" parent="@android:style/Widget.DeviceDefault.ListPopupWindow">
-        <item name="android:popupBackground">@color/primary_dark_blue</item>
-    </style>
-
     <style name="MyCustomTheme_Holo_Dark_NOAB" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:textColor">@color/white</item>
         <item name="android:buttonTint">@color/white</item>
@@ -206,26 +199,12 @@
         <item name="windowActionModeOverlay">true</item>
     </style>
 
-
     <!-- Telecine -->
-
-    <style name="Theme.Telecine" parent="android:Theme.Material.Light.DarkActionBar">
-        <item name="android:colorPrimary">@color/primary_normal</item>
-        <item name="android:colorPrimaryDark">@color/primary_dark_normal</item>
-        <item name="android:colorAccent">@color/accent_normal</item>
-        <item name="android:actionBarStyle">@style/Widget.Telecine.ActionBar</item>
-    </style>
-
     <style name="Theme.Telecine.Transparent" parent="android:Theme.Translucent.NoTitleBar">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowIsFloating">true</item>
     </style>
-
-    <style name="Widget.Telecine.ActionBar" parent="android:Widget.Material.ActionBar.Solid">
-        <item name="android:title">@string/app_name</item>
-    </style>
-
 </resources>
 
 

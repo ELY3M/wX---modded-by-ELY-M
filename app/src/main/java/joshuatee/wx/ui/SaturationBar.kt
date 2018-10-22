@@ -374,7 +374,7 @@ class SaturationBar : View {
     /**
      * Calculate the color selected by the pointer on the bar.
 
-     * @param coord
+     * @param coordF
      * *            Coordinate of the pointer.
      */
     private fun calculateColor(coordF: Int) {
@@ -398,7 +398,7 @@ class SaturationBar : View {
      * <br></br>
      * Its discouraged to use this method.
 
-     * @param color
+     *
      */
     var color: Int
         get() = mColor

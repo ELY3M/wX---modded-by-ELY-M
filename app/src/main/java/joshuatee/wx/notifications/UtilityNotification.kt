@@ -56,6 +56,7 @@ import joshuatee.wx.*
 
 import joshuatee.wx.Extensions.*
 import android.media.AudioAttributes
+import androidx.core.app.NotificationManagerCompat
 
 object UtilityNotification {
 
@@ -155,8 +156,11 @@ object UtilityNotification {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 )
                 if (!(MyApplication.alertOnlyonce && oldNotifStr.contains(url2 + "radar"))) {
+                    // FIXME make an object for this type of notif
                     noti2 = createNotifBigPicture(context, noMain, resultPendingIntent2, MyApplication.ICON_RADAR, bitmap)
-                    notifier2.notify(url2 + "radar", 1, noti2)
+                    if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
+                        notifier2.notify(url2 + "radar", 1, noti2)
+                    }
                 }
                 notifUrls += url2 + "radar" + MyApplication.notificationStrSep
             } // end if for radar
@@ -271,7 +275,7 @@ object UtilityNotification {
         return notifUrls
     }
 
-    private fun initChannels(context: Context) {
+    fun initChannels(context: Context) {
         if (Build.VERSION.SDK_INT < 26 || notiChannelInitialized) {
             return
         }
@@ -281,17 +285,23 @@ object UtilityNotification {
         channel.setSound(Uri.parse(MyApplication.notifSoundUri), AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_NOTIFICATION_COMMUNICATION_INSTANT)
                 .build())
-        //channel.sound = Uri.parse(MyApplication.notifSoundUri)
         notificationManager.createNotificationChannel(channel)
+
+        val channelNoSound = NotificationChannel(notiChannelStrNoSound, "wX No Sound", NotificationManager.IMPORTANCE_LOW)
+        channelNoSound.description = "wX weather no sound"
+        channelNoSound.setSound(null, null)
+        notificationManager.createNotificationChannel(channelNoSound)
+
         notiChannelInitialized = true
     }
 
-    private const val notiChannelStr = "default"
+    const val notiChannelStr = "default"
+    const val notiChannelStrNoSound = "defaultNoSound2"
 
     private fun createNotifBigPicture(context: Context, noMain: String, resultPendingIntent2: PendingIntent, iconRadar: Int, bitmap: Bitmap): Notification {
         initChannels(context)
         val noti2: Notification = NotificationCompat.BigPictureStyle(
-                NotificationCompat.Builder(context, notiChannelStr)
+                NotificationCompat.Builder(context, notiChannelStrNoSound)
                         .setContentTitle(noMain)
                         .setSmallIcon(iconRadar)
                         .setAutoCancel(MyApplication.alertAutocancel)
@@ -331,7 +341,7 @@ object UtilityNotification {
                 UtilityTTS.synthesizeTextAndPlay(notification.context, notification.noMain, notification.noMain)
         } else {
             noti = NotificationCompat.BigTextStyle(
-                    NotificationCompat.Builder(notification.context, notiChannelStr)
+                    NotificationCompat.Builder(notification.context, notiChannelStrNoSound)
                             .setContentTitle(notification.noMain)
                             .setContentText(notification.noBody)
                             .setContentIntent(notification.resultPendingIntent)
@@ -389,7 +399,7 @@ object UtilityNotification {
             val actionPlay = NotificationCompat.Action.Builder(pauseIcon, "", resultPendingIntent2).build()
             val actionForward = NotificationCompat.Action.Builder(MyApplication.ICON_SKIP_FORWARD, "", resultPendingIntentForward).build()
             val style = MediaStyle().setShowActionsInCompactView(0, 1, 2)
-            noti = NotificationCompat.Builder(context, notiChannelStr)
+            noti = NotificationCompat.Builder(context, notiChannelStrNoSound)
                     .setContentTitle("wX $title")
                     .setStyle(style)
                     .setShowWhen(false)
@@ -405,7 +415,7 @@ object UtilityNotification {
                     .build()
         } else {
             noti = NotificationCompat.BigTextStyle(
-                    NotificationCompat.Builder(context, notiChannelStr)
+                    NotificationCompat.Builder(context, notiChannelStrNoSound)
                             .setContentTitle("wX")
                             .setColor(UIPreferences.colorNotif)
                             .setContentText(txt)
@@ -456,7 +466,7 @@ object UtilityNotification {
                 UtilityTTS.synthesizeTextAndPlay(context, noMain, noMain)
         } else {
             noti = NotificationCompat.BigTextStyle(
-                    NotificationCompat.Builder(context, notiChannelStr)
+                    NotificationCompat.Builder(context, notiChannelStrNoSound)
                             .setContentTitle(noMain)
                             .setContentText(noBody)
                             .setColor(UIPreferences.colorNotif)

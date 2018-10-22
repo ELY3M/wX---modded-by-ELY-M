@@ -35,11 +35,18 @@ import joshuatee.wx.util.*
 
 class WXGLNexradLevel3 internal constructor() {
 
+    // https://www.roc.noaa.gov/WSR88D/BuildInfo/Files.aspx
+    // https://www.roc.noaa.gov/wsr88d/PublicDocs/ICDs/2620001X.pdf
+
     var binWord: ByteBuffer = ByteBuffer.allocate(0)
         private set
     var radialStart: ByteBuffer = ByteBuffer.allocate(0)
         private set
     var halfword3132: Float = 0f
+        private set
+    var halfword47: Short = -120
+        private set
+    var halfword48: Short = 120
         private set
     var timestamp: String = ""
         private set
@@ -114,9 +121,11 @@ class WXGLNexradLevel3 internal constructor() {
             halfword3132 = dis.readFloat()
             // hw 33-34 as a int
             //float halfword_33_34 = dis.readFloat();
-            dis.skipBytes(26) // was 22
-            //short halfword_47 = (short) dis.readUnsignedShort();
-            dis.skipBytes(30) // was 28
+            dis.skipBytes(28) // was 26
+            // velocity product 99 has 47 ( max neg vel ) and 48 ( max pos vel )
+            halfword47 =  dis.readUnsignedShort().toShort()
+            halfword48 =  dis.readUnsignedShort().toShort()
+            dis.skipBytes(24) // was 28
             seekStart = dis.filePointer
             if (MyApplication.radarUseJni) {
                 compressedFileSize = (dis.length() - dis.filePointer).toInt()

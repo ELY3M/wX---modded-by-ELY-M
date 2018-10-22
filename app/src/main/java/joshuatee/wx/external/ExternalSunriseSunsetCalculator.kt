@@ -31,10 +31,8 @@ class ExternalSunriseSunsetCalculator
 /**
  * Constructs a new `SunriseSunsetCalculator` with the given `ExternalSunriseLocation`
  *
- * @param ExternalSunriseLocation
  * `ExternalSunriseLocation` object containing the Latitude/Longitude of the ExternalSunriseLocation to compute
  * the sunrise/sunset for.
- * @param timeZoneIdentifier
  * String identifier for the timezone to compute the sunrise/sunset times in. In the form
  * "America/New_York". Please see the zi directory under the JDK installation for supported
  * time zones.
@@ -47,7 +45,6 @@ class ExternalSunriseSunsetCalculator
 /**
  * Constructs a new `SunriseSunsetCalculator` with the given `ExternalSunriseLocation`
  *
- * @param ExternalSunriseLocation
  * `ExternalSunriseLocation` object containing the Latitude/Longitude of the ExternalSunriseLocation to compute
  * the sunrise/sunset for.
  * @param timeZone
@@ -57,14 +54,10 @@ class ExternalSunriseSunsetCalculator
         /**
          * Computes the sunrise for an arbitrary declination.
          *
-         * @param latitude
-         * @param longitude
          * Coordinates for the ExternalSunriseLocation to compute the sunrise/sunset for.
          * @param timeZone
          * timezone to compute the sunrise/sunset times in.
-         * @param date
          * `Calendar` object containing the date to compute the official sunset for.
-         * @param degrees
          * Angle under the horizon for which to compute sunrise. For example, "civil sunrise"
          * corresponds to 6 degrees.
          * @return the requested sunset time as a `Calendar` object.
@@ -78,14 +71,10 @@ class ExternalSunriseSunsetCalculator
         /**
          * Computes the sunset for an arbitrary declination.
          *
-         * @param latitude
-         * @param longitude
          * Coordinates for the ExternalSunriseLocation to compute the sunrise/sunset for.
          * @param timeZone
          * timezone to compute the sunrise/sunset times in.
-         * @param date
          * `Calendar` object containing the date to compute the official sunset for.
-         * @param degrees
          * Angle under the horizon for which to compute sunrise. For example, "civil sunset"
          * corresponds to 6 degrees.
          * @return the requested sunset time as a `Calendar` object.
@@ -108,7 +97,6 @@ class ExternalSunriseSunsetCalculator
     /**
      * Returns the astronomical (108deg) sunrise for the given date.
      *
-     * @param date
      * `Calendar` object containing the date to compute the astronomical sunrise for.
      * @return the astronomical sunrise time in HH:MM (24-hour clock) form.
      */
@@ -119,7 +107,6 @@ class ExternalSunriseSunsetCalculator
     /**
      * Returns the astronomical (108deg) sunrise for the given date.
      *
-     * @param date
      * `Calendar` object containing the date to compute the astronomical sunrise for.
      * @return the astronomical sunrise time as a Calendar
      */
@@ -130,7 +117,6 @@ class ExternalSunriseSunsetCalculator
     /**
      * Returns the astronomical (108deg) sunset for the given date.
      *
-     * @param date
      * `Calendar` object containing the date to compute the astronomical sunset for.
      * @return the astronomical sunset time in HH:MM (24-hour clock) form.
      */
@@ -141,7 +127,6 @@ class ExternalSunriseSunsetCalculator
     /**
      * Returns the astronomical (108deg) sunset for the given date.
      *
-     * @param date
      * `Calendar` object containing the date to compute the astronomical sunset for.
      * @return the astronomical sunset time as a Calendar
      */
@@ -152,7 +137,6 @@ class ExternalSunriseSunsetCalculator
     /**
      * Returns the nautical (102deg) sunrise for the given date.
      *
-     * @param date
      * `Calendar` object containing the date to compute the nautical sunrise for.
      * @return the nautical sunrise time in HH:MM (24-hour clock) form.
      */
@@ -163,7 +147,6 @@ class ExternalSunriseSunsetCalculator
     /**
      * Returns the nautical (102deg) sunrise for the given date.
      *
-     * @param date
      * `Calendar` object containing the date to compute the nautical sunrise for.
      * @return the nautical sunrise time as a Calendar
      */
@@ -174,7 +157,6 @@ class ExternalSunriseSunsetCalculator
     /**
      * Returns the nautical (102deg) sunset for the given date.
      *
-     * @param date
      * `Calendar` object containing the date to compute the nautical sunset for.
      * @return the nautical sunset time in HH:MM (24-hour clock) form.
      */
@@ -185,7 +167,6 @@ class ExternalSunriseSunsetCalculator
     /**
      * Returns the nautical (102deg) sunset for the given date.
      *
-     * @param date
      * `Calendar` object containing the date to compute the nautical sunset for.
      * @return the nautical sunset time as a Calendar
      */
@@ -196,7 +177,6 @@ class ExternalSunriseSunsetCalculator
     /**
      * Returns the civil sunrise (twilight, 96deg) for the given date.
      *
-     * @param date
      * `Calendar` object containing the date to compute the civil sunrise for.
      * @return the civil sunrise time in HH:MM (24-hour clock) form.
      */
@@ -207,7 +187,6 @@ class ExternalSunriseSunsetCalculator
     /**
      * Returns the civil sunrise (twilight, 96deg) for the given date.
      *
-     * @param date
      * `Calendar` object containing the date to compute the civil sunrise for.
      * @return the civil sunrise time as a Calendar
      */
@@ -218,7 +197,6 @@ class ExternalSunriseSunsetCalculator
     /**
      * Returns the civil sunset (twilight, 96deg) for the given date.
      *
-     * @param date
      * `Calendar` object containing the date to compute the civil sunset for.
      * @return the civil sunset time in HH:MM (24-hour clock) form.
      */
@@ -229,7 +207,6 @@ class ExternalSunriseSunsetCalculator
     /**
      * Returns the civil sunset (twilight, 96deg) for the given date.
      *
-     * @param date
      * `Calendar` object containing the date to compute the civil sunset for.
      * @return the civil sunset time as a Calendar
      */
@@ -240,7 +217,6 @@ class ExternalSunriseSunsetCalculator
     /**
      * Returns the official sunrise (90deg 50', 90.8333deg) for the given date.
      *
-     * @param date
      * `Calendar` object containing the date to compute the official sunrise for.
      * @return the official sunrise time in HH:MM (24-hour clock) form.
      */
@@ -262,7 +238,6 @@ class ExternalSunriseSunsetCalculator
     /**
      * Returns the official sunrise (90deg 50', 90.8333deg) for the given date.
      *
-     * @param date
      * `Calendar` object containing the date to compute the official sunset for.
      * @return the official sunset time in HH:MM (24-hour clock) form.
      */

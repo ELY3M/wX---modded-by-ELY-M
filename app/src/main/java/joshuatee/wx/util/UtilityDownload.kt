@@ -328,6 +328,8 @@ object UtilityDownload {
             text = "http://tgftp.nws.noaa.gov/data/raw/fp/fpcn48.cwao..txt".getHtmlSep()
         else if (prod.contains("PMDTHR")) {
             text = UtilityString.getHTMLandParseSep("http://www.cpc.noaa.gov/products/predictions/threats/threats.php", "<div id=\"discDiv\">(.*?)</div>")
+        } else if (prod.contains("CTOF")) {
+            text = "Celsius to Fahrenheit table" + MyApplication.newline + UtilityMath.cToFTable()
         } else {
             val t1 = prod.substring(0, 3)
             var t2 = prod.substring(3)

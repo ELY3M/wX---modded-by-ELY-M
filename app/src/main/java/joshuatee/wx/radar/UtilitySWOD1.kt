@@ -65,7 +65,7 @@ internal object UtilitySWOD1 {
             val urlBlob = "${MyApplication.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt"
             val html = urlBlob.getHtmlSep()
             val htmlBlob = html.parse("... CATEGORICAL ...(.*?&)&") // was (.*?)&&
-            threatList.indices.forEach {
+            threatList.indices.forEach { it ->
                 retStr = ""
                 val threatLevelCode = threatList[it]
                 val htmlList = htmlBlob.parseColumn(threatLevelCode.substring(1) + "(.*?)[A-Z&]")
