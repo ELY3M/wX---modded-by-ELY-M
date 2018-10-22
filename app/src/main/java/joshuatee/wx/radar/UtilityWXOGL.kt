@@ -43,6 +43,10 @@ import joshuatee.wx.RegExp
 
 object UtilityWXOGL {
 
+    fun getMeteogramUrl(obsSite: String): String {
+        return "http://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=$obsSite"
+    }
+
     fun getRidPrefix(rid1: String, prod: String): String {
         var ridPrefix = when (rid1) {
             "JUA" -> "t"

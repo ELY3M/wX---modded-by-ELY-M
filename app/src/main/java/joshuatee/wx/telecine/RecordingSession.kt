@@ -9,7 +9,6 @@ joshua.tee@gmail.com
 package joshuatee.wx.telecine
 
 import android.annotation.TargetApi
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -68,6 +67,7 @@ import android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
 import android.widget.Toast.LENGTH_SHORT
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.notifications.UtilityNotification
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 internal class RecordingSession(private val context: Context, private val listener: Listener, private val resultCode: Int, private val data: Intent, private var showDistanceTool: Boolean, private var showRecordingTools: Boolean) {
@@ -76,8 +76,8 @@ internal class RecordingSession(private val context: Context, private val listen
 
     private val videoOutputRoot: File
     private val picturesOutputRoot: File
-    private val videofileFormat = SimpleDateFormat("'joshuatee_wx_'yyyy-MM-dd-HH-mm-ss'.mp4'", Locale.US)
-    private val audiofileFormat = SimpleDateFormat("'joshuatee_wx_'yyyy-MM-dd-HH-mm-ss'.jpeg'", Locale.US)
+    private val videofileFormat = SimpleDateFormat("'${MyApplication.packageNameFileNameAsString}_'yyyy-MM-dd-HH-mm-ss'.mp4'", Locale.US)
+    private val audiofileFormat = SimpleDateFormat("'${MyApplication.packageNameFileNameAsString}_'yyyy-MM-dd-HH-mm-ss'.jpeg'", Locale.US)
 
     private val notificationManager: NotificationManager
     private val windowManager: WindowManager
@@ -139,10 +139,10 @@ internal class RecordingSession(private val context: Context, private val listen
 
     init {
         val moviesDir = Environment.getExternalStoragePublicDirectory(DIRECTORY_MOVIES)
-        videoOutputRoot = File(moviesDir, "joshuatee.wx")
+        videoOutputRoot = File(moviesDir, MyApplication.packageNameAsString)
         videoOutputRoot.mkdirs()
         val picturesDir = Environment.getExternalStoragePublicDirectory(DIRECTORY_DCIM)
-        picturesOutputRoot = File(picturesDir, "joshuatee.wx")
+        picturesOutputRoot = File(picturesDir, MyApplication.packageNameAsString)
         picturesOutputRoot.mkdirs()
         notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         windowManager = context.getSystemService(WINDOW_SERVICE) as WindowManager
@@ -223,8 +223,7 @@ internal class RecordingSession(private val context: Context, private val listen
         if (android.os.Build.VERSION.SDK_INT > 20) {
             projection = projectionManager!!.getMediaProjection(resultCode, data)
             val surface = recorder!!.surface
-            display = projection!!.createVirtualDisplay(DISPLAY_NAME, recordingInfo.width, recordingInfo.height,
-                    recordingInfo.density, VIRTUAL_DISPLAY_FLAG_PRESENTATION, surface, null, null)
+            display = projection!!.createVirtualDisplay(DISPLAY_NAME, recordingInfo.width, recordingInfo.height, recordingInfo.density, VIRTUAL_DISPLAY_FLAG_PRESENTATION, surface, null, null)
         }
         recorder!!.start()
         running = true
@@ -380,7 +379,7 @@ internal class RecordingSession(private val context: Context, private val listen
     }
 
     private fun showNotification(uri: Uri?, bitmap: Bitmap?) {
-        initChannels(context)
+        UtilityNotification.initChannels(context)
         val requestID = System.currentTimeMillis().toInt()
         val viewIntent = Intent(ACTION_VIEW, uri)
         val pendingViewIntent = PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT)
@@ -400,7 +399,7 @@ internal class RecordingSession(private val context: Context, private val listen
         if (android.os.Build.VERSION.SDK_INT > 20) {
             val actionShare = NotificationCompat.Action.Builder(R.drawable.ic_share_24dp, share, pendingShareIntent).build()
             val actionDelete = NotificationCompat.Action.Builder(MyApplication.ICON_DELETE, delete, pendingDeleteIntent).build()
-            builder = NotificationCompat.Builder(context, notiChannelStr)
+            builder = NotificationCompat.Builder(context, UtilityNotification.notiChannelStrNoSound)
                     .setContentTitle(title)
                     .setContentText(subtitle)
                     .setWhen(System.currentTimeMillis())
@@ -441,7 +440,7 @@ internal class RecordingSession(private val context: Context, private val listen
         }.execute()
     }
 
-    private fun initChannels(context: Context) {
+    /*private fun initChannels(context: Context) {
         if (Build.VERSION.SDK_INT < 26 || notiChannelInitialized) {
             return
         }
@@ -457,10 +456,10 @@ internal class RecordingSession(private val context: Context, private val listen
     }
 
     private val notiChannelStr = "default"
-    private var notiChannelInitialized = false
+    private var notiChannelInitialized = false*/
 
     private fun showScreenshotNotification(uri: Uri, bitmap: Bitmap?) {
-        initChannels(context)
+        UtilityNotification.initChannels(context)
         val requestID = System.currentTimeMillis().toInt()
         val viewIntent = Intent(ACTION_VIEW, uri)
         val pendingViewIntent = PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT)
@@ -478,7 +477,7 @@ internal class RecordingSession(private val context: Context, private val listen
         val delete = context.getText(R.string.notification_captured_delete)
         val actionShare = NotificationCompat.Action.Builder(R.drawable.ic_share_24dp, share, pendingShareIntent).build()
         val actionDelete = NotificationCompat.Action.Builder(MyApplication.ICON_DELETE, delete, pendingDeleteIntent).build()
-        val builder = NotificationCompat.Builder(context, notiChannelStr)
+        val builder = NotificationCompat.Builder(context, UtilityNotification.notiChannelStrNoSound)
                 .setContentTitle(title)
                 .setContentText(subtitle)
                 .setWhen(System.currentTimeMillis())

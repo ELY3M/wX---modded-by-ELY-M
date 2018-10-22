@@ -93,7 +93,7 @@ class MyApplication : Application() {
         primaryColor = preferences.getInt("MYAPP_PRIMARY_COLOR", 0)
         Location.refreshLocationData(this)
         System.setProperty("http.keepAlive", "false")
-        newline = System.getProperty("line.separator")
+        newline = System.getProperty("line.separator") ?: "\n"
         spinnerLayout = if (UIPreferences.themeIsWhite) {
             R.layout.spinner_row_white
         } else {
@@ -123,14 +123,18 @@ class MyApplication : Application() {
 
     companion object {
 
+        //I doubt if this will work.  installation path would be same...
+    	const val packageNameAsString: String = "joshuatee.wx"
+        const val packageNameFileNameAsString: String = "joshuatee_wx"
+        const val emailAsString: String = "elymbmx@gmail.com"
+
+
         val TAG: String = "joshuatee MyApplication"
         val FilesPath: String = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/"
         const val nwsSPCwebsitePrefix: String = "https://www.spc.noaa.gov"
         const val nwsWPCwebsitePrefix: String = "https://www.wpc.ncep.noaa.gov"
         const val prefSeperator: String = " : : :"
         var uiAnimIconFrames: String = "rid"
-        // FIXME remove in favor of notificationStrSep
-        //const val NOTIF_STR_SEP = ","
         const val WIDGET_FILE_BAK: String = "BAK"
         val HM_CLASS: MutableMap<String, Class<*>> = mutableMapOf()
         val HM_CLASS_ARGS: MutableMap<String, Array<String>> = mutableMapOf()
@@ -144,19 +148,11 @@ class MyApplication : Application() {
         const val TEXTVIEW_MAGIC_FUDGE_FACTOR: Float = 4.05f
         var deviceScale: Float = 0f
         var httpClient: OkHttpClient? = null
-        // FIXME make private
-
         lateinit var preferences: SharedPreferences
-        //private lateinit var preferences: SharedPreferences
-
         private lateinit var preferencesTelecine: SharedPreferences
-
-        //private lateinit var editor: SharedPreferences.Editor
         lateinit var editor: SharedPreferences.Editor
-
         lateinit var dm: DisplayMetrics
         lateinit var appContext: Context
-
         var mediaNotifTtsTitle: String = ""
         const val notificationStrSep: String = ","
         var cardElevation: Float = 0f
@@ -364,21 +360,21 @@ class MyApplication : Application() {
             wxoglRememberLocation = preferences.getString("WXOGL_REMEMBER_LOCATION", "false").startsWith("t")
             wxoglLocationAutorefresh = preferences.getString("LOCATION_AUTOREFRESH", "false").startsWith("t")
             wxoglkeepscreenon = preferences.getString("KEEP_SCREEN_ON", "false").startsWith("t")
-            wfoFav = preferences.getString("WFO_FAV", prefSeperator)
-            ridFav = preferences.getString("RID_FAV", prefSeperator)
-            sndFav = preferences.getString("SND_FAV", prefSeperator)
-            srefFav = preferences.getString("SREF_FAV", prefSeperator)
-            spcmesoFav = preferences.getString("SPCMESO_FAV", prefSeperator)
-            spcmesoLabelFav = preferences.getString("SPCMESO_LABEL_FAV", prefSeperator)
-            nwsTextFav = preferences.getString("NWS_TEXT_FAV", prefSeperator)
-            notifSoundUri = preferences.getString("NOTIF_SOUND_URI", "")
+            wfoFav = preferences.getString("WFO_FAV", prefSeperator) ?: prefSeperator
+            ridFav = preferences.getString("RID_FAV", prefSeperator) ?: prefSeperator
+            sndFav = preferences.getString("SND_FAV", prefSeperator) ?: prefSeperator
+            srefFav = preferences.getString("SREF_FAV", prefSeperator) ?: prefSeperator
+            spcmesoFav = preferences.getString("SPCMESO_FAV", prefSeperator) ?: prefSeperator
+            spcmesoLabelFav = preferences.getString("SPCMESO_LABEL_FAV", prefSeperator) ?: prefSeperator
+            nwsTextFav = preferences.getString("NWS_TEXT_FAV", prefSeperator) ?: prefSeperator
+            notifSoundUri = preferences.getString("NOTIF_SOUND_URI", "") ?: ""
             if (notifSoundUri == "") {
                 notifSoundUri = Settings.System.DEFAULT_NOTIFICATION_URI.toString()
             }
             sn_key = preferences.getString("SN_KEY", "");
             sn_locationreport = preferences.getString("SN_LOCATIONREPORT", "").startsWith("t")
-            spotterFav = preferences.getString("SPOTTER_FAV", "")
-            homescreenFav = preferences.getString("HOMESCREEN_FAV", HOMESCREEN_FAV_DEFAULT)
+            spotterFav = preferences.getString("SPOTTER_FAV", "") ?: ""
+            homescreenFav = preferences.getString("HOMESCREEN_FAV", HOMESCREEN_FAV_DEFAULT) ?: HOMESCREEN_FAV_DEFAULT
             locDisplayImg = homescreenFav.contains("OGL-RADAR") || homescreenFav.contains("NXRD")
             alertNotificationSoundTornadoCurrent = preferences.getString("ALERT_NOTIFICATION_SOUND_TORNADO", "").startsWith("t")
             alertNotificationSoundSpcmcd = preferences.getString("ALERT_NOTIFICATION_SOUND_SPCMCD", "").startsWith("t")
@@ -403,16 +399,16 @@ class MyApplication : Application() {
             alertNhcAtlNotificationCurrent = preferences.getString("ALERT_NHC_ATL_NOTIFICATION", "").startsWith("t")
             alertAutocancel = preferences.getString("ALERT_AUTOCANCEL", "false").startsWith("t")
             alertBlackout = preferences.getString("ALERT_BLACKOUT", "").startsWith("t")
-            playlistStr = preferences.getString("PLAYLIST", "")
-            notifTextProdStr = preferences.getString(UtilityNotificationTextProduct.PREF_TOKEN, "")
-            radarColorPalette94List = preferences.getString("RADAR_COLOR_PALETTE_94_LIST", "")
-            radarColorPalette99List = preferences.getString("RADAR_COLOR_PALETTE_99_LIST", "")
+            playlistStr = preferences.getString("PLAYLIST", "") ?: ""
+            notifTextProdStr = preferences.getString(UtilityNotificationTextProduct.PREF_TOKEN, "") ?: ""
+            radarColorPalette94List = preferences.getString("RADAR_COLOR_PALETTE_94_LIST", "") ?: ""
+            radarColorPalette99List = preferences.getString("RADAR_COLOR_PALETTE_99_LIST", "") ?: ""
             wxoglZoom = preferences.getFloat("WXOGL_ZOOM", wxoglSize.toFloat() / 10.0f)
-            wxoglRid = preferences.getString("WXOGL_RID", "")
-            wxoglProd = preferences.getString("WXOGL_PROD", "N0Q")
+            wxoglRid = preferences.getString("WXOGL_RID", "") ?: ""
+            wxoglProd = preferences.getString("WXOGL_PROD", "N0Q") ?: "N0Q"
             wxoglX = preferences.getFloat("WXOGL_X", 0.0f)
             wxoglY = preferences.getFloat("WXOGL_Y", 0.0f)
-            Location.currentLocationStr = preferences.getString("CURRENT_LOC_FRAGMENT", "1")
+            Location.currentLocationStr = preferences.getString("CURRENT_LOC_FRAGMENT", "1") ?: "1"
             severeDashboardTor.update(context)
             severeDashboardTst.update(context)
             severeDashboardFfw.update(context)
@@ -428,8 +424,8 @@ class MyApplication : Application() {
             mcdNoList.update(context)
             mpdLatlon.update(context)
             mpdNoList.update(context)
-            wfoTextFav = preferences.getString("WFO_TEXT_FAV", "AFD")
-            wpcTextFav = preferences.getString("WPC_TEXT_FAV", "pmdspd")
+            wfoTextFav = preferences.getString("WFO_TEXT_FAV", "AFD") ?: "AFD"
+            wpcTextFav = preferences.getString("WPC_TEXT_FAV", "pmdspd") ?: "pmdspd"
             spchrrrZoom = preferences.getFloat("SPCHRRR_ZOOM", 1.0f)
             spchrrrX = preferences.getFloat("SPCHRRR_X", 0.5f)
             spchrrrY = preferences.getFloat("SPCHRRR_Y", 0.5f)
@@ -442,16 +438,16 @@ class MyApplication : Application() {
             goesVisZoom = preferences.getFloat("GOESVIS_ZOOM", 1.0f)
             goesVisX = preferences.getFloat("GOESVIS_X", 0.5f)
             goesVisY = preferences.getFloat("GOESVIS_Y", 0.5f)
-            goesVisSector = preferences.getString("GOESVIS_SECTOR", "")
+            goesVisSector = preferences.getString("GOESVIS_SECTOR", "") ?: ""
             elevationPref = preferences.getInt("ELEVATION_PREF", 0).toFloat()
             elevationPref = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, elevationPref, dm)
             cardElevation = elevationPref
             fabElevation = elevationPref
             fabElevationDepressed = elevationPref * 2
-            tabHeaders[0] = preferences.getString("TAB1_HEADER", "LOCAL")
-            tabHeaders[1] = preferences.getString("TAB2_HEADER", "SPC")
-            tabHeaders[2] = preferences.getString("TAB3_HEADER", "MISC")
-            tabHeaders[3] = preferences.getString("TAB4_HEADER", "IMAGES")
+            tabHeaders[0] = preferences.getString("TAB1_HEADER", "LOCAL") ?: "LOCAL"
+            tabHeaders[1] = preferences.getString("TAB2_HEADER", "SPC") ?: "SPC"
+            tabHeaders[2] = preferences.getString("TAB3_HEADER", "MISC") ?: "MISC"
+            tabHeaders[3] = preferences.getString("TAB4_HEADER", "IMAGES") ?: "IMAGES"
         }
 
         // FIXME move to Location
@@ -464,7 +460,7 @@ class MyApplication : Application() {
         //
         // cb_2014_us_county_20m.kml
         // https://www.census.gov/geo/maps-data/data/kml/kml_counties.html
-        // ./android-sdk-linux/platform-tools/adb pull /data/data/joshuatee.joshuatee.modded.joshuatee.modded.wx/files/statev3.bin
+        // ./android-sdk-linux/platform-tools/adb pull /data/data/joshuatee.wx/files/statev3.bin
 
         val colorMap: MutableMap<Int, ObjectColorPalette> = mutableMapOf()
         var loadedBuffers: Boolean = false

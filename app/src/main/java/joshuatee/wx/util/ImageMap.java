@@ -130,7 +130,6 @@ public class ImageMapTestActivity extends Activity {
 Don't hesitate to ask if you have any other questions.
  */
 
-//package com.ctc.android.widget;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -163,8 +162,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import joshuatee.wx.R;
-//import joshuatee.wx.util.UtilityLog;
-
 
 @SuppressLint("WrongCall")
 public class ImageMap extends ImageView

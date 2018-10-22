@@ -68,7 +68,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
         val screenHeight = MyApplication.dm.heightPixels.toFloat()
         var scaledHeight = (screenHeight - 2 * startHeight) / 256f
         val scaledHeightText = (screenHeight - 2 * startHeight) / (95f + 32f) // 95- -32
-        val scaledHeightVel = (screenHeight - 2 * startHeight) / (127 * 2f) // 95- -32
+        var scaledHeightVel = (screenHeight - 2 * startHeight) / (127 * 2f) // 95- -32
         var unitsDrawn = false
         when (product) {
             "N0Q", "L2REF", "TZL" -> {
@@ -93,9 +93,19 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     canvas.drawRect(widthStarting, it * scaledHeight + startHeight, width + widthStarting, it * scaledHeight + scaledHeight + startHeight, myPaint)
                 }
                 var units = " KT"
-                (122 downTo -130 + 1).forEach {
-                    if (it % 10 == 0) {
-                        canvas.drawText(it.toString() + units, widthStarting + width + textFromLegend, scaledHeightVel * (122 - it) + heightFudge + startHeight, paintText)
+                //val max = 122
+                //val min = -129
+                //val max = 230
+                //val min = -230
+                val max = WXGLRadarActivity.velMax
+                val min = WXGLRadarActivity.velMin
+                val stepSize: Int = (max - min)/25
+                //val stepSize = 10
+                //(122 downTo -130 + 1).forEach {
+                scaledHeightVel = (screenHeight - 2 * startHeight) / (max - min)
+                (max downTo min).forEach {
+                    if (it % stepSize == 0) {
+                        canvas.drawText(it.toString() + units, widthStarting + width + textFromLegend,  scaledHeightVel * (max - it) + heightFudge + startHeight, paintText) // max was 122
                         if (!unitsDrawn) {
                             unitsDrawn = true
                             units = ""

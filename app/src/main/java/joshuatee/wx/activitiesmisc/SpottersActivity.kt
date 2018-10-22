@@ -97,7 +97,7 @@ class SpottersActivity : BaseActivity() {
         recyclerView = findViewById(R.id.card_list)
         recyclerView.setHasFixedSize(true)
         val linearLayoutManager = LinearLayoutManager(this)
-        linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
+        linearLayoutManager.orientation = RecyclerView.VERTICAL
         recyclerView.layoutManager = linearLayoutManager
         GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }

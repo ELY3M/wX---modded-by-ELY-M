@@ -65,7 +65,8 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             "HWOLOC: Hazardous Weather Outlook",
             "VFDLOC: Aviation only Area Forecast Discussion",
             "SUNMOON: Sun/Moon Data",
-            "HOURLY: Hourly Forecast"
+            "HOURLY: Hourly Forecast",
+            "CTOF: Celsius to Fahrenheit table"
     )
     private val localChoicesImg = listOf(
             "RADAR: Local NEXRAD Radar",

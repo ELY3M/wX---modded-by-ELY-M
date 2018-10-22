@@ -43,7 +43,7 @@ object UtilityTTS {
     private var ttobjGlobal: TextToSpeech? = null
     private const val TEXT_OLD = ""
     var mMediaPlayer: MediaPlayer? = null
-    private const val FILENAME = "/joshuatee.wx_tts.wav"
+    private const val FILENAME = "/${MyApplication.packageNameAsString}_tts.wav"
     private var mpInit = false
     private var fileCount = 0
     private var currentFile = 0
@@ -222,7 +222,7 @@ object UtilityTTS {
         txt = UtilityTTSTranslations.tranlasteAbbrev(txt)
         val myHashRender = HashMap<String, String>()
         val musicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
-        val wxDir = File(musicDir, "joshuatee.wx")
+        val wxDir = File(musicDir, MyApplication.packageNameAsString)
         if (!wxDir.exists() && !wxDir.mkdirs()) {
             return
         }
@@ -276,7 +276,7 @@ object UtilityTTS {
 
     private fun playMediaPlayerFile(context: Context, fileNum: Int) {
         val musicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
-        val wxDir = File(musicDir, "joshuatee.wx")
+        val wxDir = File(musicDir, MyApplication.packageNameAsString)
         if (!wxDir.exists() && !wxDir.mkdirs()) {
             return
         }

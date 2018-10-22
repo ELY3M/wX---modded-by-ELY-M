@@ -467,7 +467,6 @@ class ColorPicker : View {
      * instances `SVBar` and the `OpacityBar` aren't null the color
      * will also be set to them
 
-     * @param color
      * *            The RGB value of the color to highlight. If this is not a
      * *            color displayed on the color wheel a very simple algorithm is
      * *            used to map it to the color wheel. The resulting color often
@@ -681,7 +680,6 @@ class ColorPicker : View {
     /**
      * Change the color of the center which indicates the old color.
 
-     * @param color
      * *            int of the color.
      */
     var oldCenterColor: Int
@@ -695,7 +693,6 @@ class ColorPicker : View {
     /**
      * Set whether the old color is to be shown in the center or not
 
-     * @param show true if the old color is to be shown, false otherwise
      */
     /*	public void setShowOldCenterColor(boolean show) {
 		mShowCenterOldColor = show;
@@ -722,7 +719,6 @@ class ColorPicker : View {
     /**
      * Used to change the color of the `SaturationBar`.
 
-     * @param color
      * *            int of the color used to change the opacity bar color.
      */
     /*public void changeSaturationBarColor(int color) {

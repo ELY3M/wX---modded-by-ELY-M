@@ -1,6 +1,16 @@
 
-// TODO silence notif if option specifies
+// TODO address numerous lint msg in MyApp
 
+55030 2018_10_13 (bugfix) legend for radar vel was not adaptive of halfwords 47/48
+                 (bugfix) in API26 or higher notifications were ignoring sound settings, add additional communcation channel for no sound
+55029 2018_10_13 refactor instances of package name and email address making it easier for others to create their own version
+55028 2018_10_12 tooling update
+                 (bugfix) meteogram was not working in long press in radar
+                 (bugfix) at joshuatee.wx.notifications.UtilityNotification.sendNotif$app_release (UtilityNotification.kt:159)
+                          Caused by: java.lang.SecurityException:
+                 (bugfix) at joshuatee.wx.UtilityWidget.uriShareAndGenerate (UtilityWidget.kt:52) Caused by: java.lang.NullPointerException
+55027 2018_10_11 add CTOF homescreen widget
+                 lint cleanup
 55026 2018_10_10 (bugfix)  at joshuatee.wx.util.UtilityCanvasMain.getLocalGeometryData (UtilityCanvasMain.kt:181) java.lang.OutOfMemoryError:
                  (bugfix) at at joshuatee.wx.radar.WXGLNexradLevel3HailIndex.decodeAndPlot (WXGLNexradLevel3HailIndex.kt:84) java.lang.IndexOutOfBoundsException:
                  (bugfix) at  at joshuatee.wx.radar.WXGLRender.constructGenericLinesShort (WXGLRender.kt:500) java.nio.BufferOverflowException:

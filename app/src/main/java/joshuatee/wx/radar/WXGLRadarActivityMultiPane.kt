@@ -93,6 +93,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
     companion object {
         const val RID: String = ""
+
     }
 
     private var TAG = "joshuatee-WXGLRadarActivityMultiPane"
@@ -1006,9 +1007,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 // http://www.nws.noaa.gov/mdl/gfslamp/meteoform.php
                 idxIntG = idxIntAl
                 val obsSite = UtilityMetar.findClosestObservation(contextg, LatLon(glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0))
-                ObjectIntent(contextg, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf(
-                        "http://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=$obsSite",
-                        obsSite.name + " Meteogram"))
+                ObjectIntent(contextg, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf(UtilityWXOGL.getMeteogramUrl(obsSite.name), obsSite.name + " Meteogram"))
+
             }
             else if (strName.contains("Show Spotter Info")) {
                 GetSpotter().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)

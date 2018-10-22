@@ -318,11 +318,11 @@ internal object UtilityMetar {
     // used to condense a list of metar that contains multiple entries for one site, newest is first so simply grab first/append
     private fun condenseObs(list: List<String>): List<String> {
         val siteMap = mutableMapOf<String, Boolean>()
-        var goodObsList = mutableListOf<String>()
+        val goodObsList = mutableListOf<String>()
         list.forEach {
             val tokens = it.split(" ")
             if (tokens.count() > 3) {
-                if (siteMap[tokens[0]] != true ){
+                if (siteMap[tokens[0]] != true) {
                     siteMap[tokens[0]] = true
                     goodObsList.add(it)
                 }

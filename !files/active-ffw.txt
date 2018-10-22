@@ -1,6 +1,0 @@
-{
-    "type": "FeatureCollection",
-    "features": [],
-    "title": "Current Flash Flood Warning events",
-    "updated": "2018-09-24T06:34:05+00:00"
-}

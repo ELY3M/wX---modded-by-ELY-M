@@ -104,6 +104,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     companion object {
         var RID: String = ""
         var dspLegendMax: Float = 0.0f
+        var velMax: Short = 120
+        var velMin: Short = -120
         var spotterId: String = ""
         var spotterShowSelected: Boolean = false
     }
@@ -272,7 +274,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         if (MyApplication.wxoglLocationAutorefresh) {
             // 180000 is 3 min
             mInterval = 60000 * Utility.readPref(this, "RADAR_REFRESH_INTERVAL", 3)
-            Log.i(TAG, "mInterval: "+mInterval)
             locationManager = this.getSystemService(Context.LOCATION_SERVICE) as (LocationManager)
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
@@ -290,9 +291,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             start_sn_reporting()
         }
         //TODO put in option to disable and enable conus radar
+        //TODO best to request the new image on the request instead of timer
         //conus
-        conus_Handler_m = Handler()
-        start_conusimage()
+        //conus_Handler_m = Handler()
+        //start_conusimage()
+
+
 
     }
 
@@ -321,7 +325,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
         if (MyApplication.wxoglLocationAutorefresh) {
             mInterval = 60000 * Utility.readPref(this, "RADAR_REFRESH_INTERVAL", 3)
-            Log.i(TAG, "restart mInterval: "+mInterval)
             locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
@@ -401,6 +404,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             } else {
                 oglr.deconstructLocationDot()
             }
+
             if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && !archiveMode) {
                 UtilityMetar.getStateMetarArrayForWXOGL(contextg, oglr.rid)
             }
@@ -441,8 +445,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             if (legendShown && oglr.product != oldProd && oglr.product != "DSA" && oglr.product != "DAA") {
                 updateLegend()
             }
-            if (legendShown && (oglr.product == "DSA" || oglr.product == "DAA")) {
+            if (legendShown && (oglr.product == "DSA" || oglr.product == "DAA" || oglr.product == "N0U")) {
                 dspLegendMax = (255.0f / oglr.radarL3Object.halfword3132) * 0.01f
+                velMax = oglr.radarL3Object.halfword48
+                velMin = oglr.radarL3Object.halfword47
                 updateLegend()
             }
             oldProd = oglr.product
@@ -1043,10 +1049,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 // http://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=KTEW
 
                 val obsSite = UtilityMetar.findClosestObservation(contextg, LatLon(glview.newY.toDouble(), glview.newX * -1.0))
-                ObjectIntent(this, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf(
-                        "http://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta="
-                                + obsSite,
-                        obsSite.name + " Meteogram"))
+                ObjectIntent(this, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf(UtilityWXOGL.getMeteogramUrl(obsSite.name), obsSite.name + " Meteogram"))
             } else if (strName.contains("Show Spotter Info")) {
                 GetSpotter().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
             } else if (strName.contains("Show radar status message")) {
@@ -1097,6 +1100,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         if (!legendShown) {
             if (oglr.product == "DSA" || oglr.product == "DAA")
                 dspLegendMax = (255.0f / oglr.radarL3Object.halfword3132) * 0.01f
+            velMax = oglr.radarL3Object.halfword48
+            velMin = oglr.radarL3Object.halfword47
             legendShown = true
             val rLParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
             rLParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1)

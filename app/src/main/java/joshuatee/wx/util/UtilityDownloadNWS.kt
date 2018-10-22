@@ -35,7 +35,7 @@ import joshuatee.wx.RegExp
 
 object UtilityDownloadNWS {
 
-    private const val USER_AGENT_STR = "Android joshuatee.wx joshua.tee@gmail.com"
+    private const val USER_AGENT_STR = "Android ${MyApplication.packageNameAsString} ${MyApplication.emailAsString}"
 
     internal fun get7DayJSON(location: LatLon): String {
         var x = location.latString

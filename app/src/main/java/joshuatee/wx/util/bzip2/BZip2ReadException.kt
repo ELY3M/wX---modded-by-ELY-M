@@ -45,12 +45,12 @@ package joshuatee.wx.util.bzip2
  * @author IDV Development Team
  * @version $Revision: 1.1 $
  */
-class BZip2ReadException (message: String) : RuntimeException(message) {
-/**
- * Create a new BZip2ReadException with the message
- *
- * @param message   detailed message associated with this exception
- */
+class BZip2ReadException(message: String) : RuntimeException(message) {
+    /**
+     * Create a new BZip2ReadException with the message
+     *
+     * @param message   detailed message associated with this exception
+     */
 
     /**
      * Create a new BZip2ReadException with no message

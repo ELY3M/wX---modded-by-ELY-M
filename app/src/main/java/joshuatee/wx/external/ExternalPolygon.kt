@@ -74,8 +74,8 @@ class ExternalPolygon private constructor(val sides: List<ExternalLine>, private
 
             // add line (edge) to the polygon
             if (_vertexes.size > 1) {
-                val Line = ExternalLine(_vertexes[_vertexes.size - 2], point)
-                _sides.add(Line)
+                val line = ExternalLine(_vertexes[_vertexes.size - 2], point)
+                _sides.add(line)
             }
 
             return this

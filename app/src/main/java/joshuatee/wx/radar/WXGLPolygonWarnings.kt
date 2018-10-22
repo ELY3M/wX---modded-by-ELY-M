@@ -51,7 +51,7 @@ internal object WXGLPolygonWarnings {
         var warningHTML = ""
         try {
             warningHTML = prefToken.replace("\n", "").replace(" ", "")
-        } catch (e: OutOfMemoryError){
+        } catch (e: OutOfMemoryError) {
             UtilityLog.HandleException(e)
         }
         val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)

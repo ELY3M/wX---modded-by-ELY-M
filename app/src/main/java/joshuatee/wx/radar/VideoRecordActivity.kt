@@ -91,9 +91,11 @@ abstract class VideoRecordActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_CODE_PERM) {
-            if (Settings.canDrawOverlays(this)) {
-                // continue here - permission was granted
-                fireScreenCaptureIntent()
+            if (Build.VERSION.SDK_INT >= 23) {
+                if (Settings.canDrawOverlays(this)) {
+                    // continue here - permission was granted
+                    fireScreenCaptureIntent()
+                }
             }
         }
         if (requestCode == CREATE_SCREEN_CAPTURE && resultCode == Activity.RESULT_OK) {
@@ -106,16 +108,18 @@ abstract class VideoRecordActivity : AppCompatActivity() {
     }
 
     protected fun checkDrawOverlayPermission() {
-        /** check if we already  have permission to draw over other apps  */
-        if (!Settings.canDrawOverlays(this)) {
-            /** if not construct intent to request permission  */
-            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
-            /** request permission via start activity for result  */
-            startActivityForResult(intent, REQUEST_CODE_PERM)
-            //fireScreenCaptureIntent()
+        if (Build.VERSION.SDK_INT >= 23) {
+            /** check if we already  have permission to draw over other apps  */
+            if (!Settings.canDrawOverlays(this)) {
+                /** if not construct intent to request permission  */
+                val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
+                /** request permission via start activity for result  */
+                startActivityForResult(intent, REQUEST_CODE_PERM)
+                //fireScreenCaptureIntent()
 
-        } else {
-            fireScreenCaptureIntent()
+            } else {
+                fireScreenCaptureIntent()
+            }
         }
     }
 

@@ -49,7 +49,7 @@ internal object UtilityWat {
         val textFfw = prefToken
         if (textFfw != "") {
             val tmpArr = MyApplication.colon.split(textFfw)
-            tmpArr.forEach {
+            tmpArr.forEach { it ->
                 testArr = MyApplication.space.split(it)
                 val x = testArr.filterIndexed { idx: Int, _: String -> idx and 1 == 0 }.map {
                     it.toDoubleOrNull() ?: 0.0

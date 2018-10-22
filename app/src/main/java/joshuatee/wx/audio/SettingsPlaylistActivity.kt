@@ -109,7 +109,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         val recyclerView: RecyclerView = findViewById(R.id.card_list)
         recyclerView.setHasFixedSize(true)
         val llm = LinearLayoutManager(this)
-        llm.orientation = LinearLayoutManager.VERTICAL
+        llm.orientation = RecyclerView.VERTICAL
         recyclerView.layoutManager = llm
         ca = PlayListAdapter(ridArr)
         recyclerView.adapter = ca

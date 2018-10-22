@@ -74,6 +74,7 @@ class HourlyActivity : BaseActivity() { // AppCompatActivity()
         return true
     }
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_hourly, null, false)
         val turl = intent.getStringExtra(LOC_NUM)

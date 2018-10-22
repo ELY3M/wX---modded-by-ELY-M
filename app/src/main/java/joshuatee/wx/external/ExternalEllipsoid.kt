@@ -20,8 +20,8 @@ class ExternalEllipsoid
  * Construct a new Ellipsoid.  This is private to ensure the values are
  * consistent (flattening = 1.0 / inverseFlattening).  Use the methods
  * fromAAndInverseF() and fromAAndF() to create new instances.
- * @param semiMajor
- * @param semiMinor
+ * @param semiMajorAxis
+ * @param semiMinorAxis
  * @param flattening
  * @param inverseFlattening
  */
