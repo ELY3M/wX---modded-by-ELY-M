@@ -22,8 +22,8 @@
 #
 #
 ## DONE!
-====================================  
-added EWW warnings  
+====================================    
+added Extreme Wind warnings (EWW) 
 added conus radar image auto-download in radaractivity, need to figure out how to plot it when the radar map gets zoom out like in pykl3  
 android permissions are pita! I put in perm library for filechecking for custom icons later.    
 changed the icon to black and cyan color so one can tell which version wX is running.    
