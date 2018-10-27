@@ -106,7 +106,7 @@ object UtilityCanvasMain {
         if (PolygonType.TOR.pref) {
             UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
         }
-        if (PolygonType.TST.pref) {
+        if (PolygonType.SVR.pref) {
             UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
         }
         if (PolygonType.FFW.pref) {
@@ -149,7 +149,7 @@ object UtilityCanvasMain {
             UtilityCanvasStormInfo.drawNexRadStormMotion(context, scaleType, bitmapCanvas, rid)
         }
         if (PolygonType.MCD.pref) {
-            arrayOf(PolygonType.MCD, PolygonType.WATCH, PolygonType.WATCH_TORNADO).forEach { UtilityCanvas.addMCD(context, scaleType, bitmapCanvas, rid, it) }
+            arrayOf(PolygonType.MCD, PolygonType.WATCH_SVR, PolygonType.WATCH_TOR).forEach { UtilityCanvas.addMCD(context, scaleType, bitmapCanvas, rid, it) }
         }
         if (PolygonType.MPD.pref) {
             UtilityCanvas.addMCD(context, scaleType, bitmapCanvas, rid, PolygonType.MPD)

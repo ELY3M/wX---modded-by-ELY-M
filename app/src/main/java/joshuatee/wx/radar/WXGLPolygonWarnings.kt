@@ -38,7 +38,8 @@ internal object WXGLPolygonWarnings {
         val warningList = mutableListOf<Double>()
         val prefToken = when (type) {
             PolygonType.TOR -> MyApplication.severeDashboardTor.valueGet()
-            PolygonType.TST -> MyApplication.severeDashboardTst.valueGet()
+            PolygonType.SVR -> MyApplication.severeDashboardSvr.valueGet()
+            PolygonType.EWW -> MyApplication.severeDashboardEww.valueGet()
             PolygonType.FFW -> MyApplication.severeDashboardFfw.valueGet()
             PolygonType.SMW -> MyApplication.severeDashboardSmw.valueGet()
             PolygonType.SPS -> MyApplication.severeDashboardSps.valueGet()

@@ -639,10 +639,15 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             else
                 OGLRLOC.deconstructTorWarningLines()
 
-            if (PolygonType.TST.pref)
-                OGLRLOC.constructTstWarningLines()
+            if (PolygonType.SVR.pref)
+                OGLRLOC.constructSvrWarningLines()
             else
-                OGLRLOC.deconstructTstWarningLines()
+                OGLRLOC.deconstructSvrWarningLines()
+
+            if (PolygonType.EWW.pref)
+                OGLRLOC.constructEwwWarningLines()
+            else
+                OGLRLOC.deconstructEwwWarningLines()
 
             if (PolygonType.FFW.pref)
                 OGLRLOC.constructFfwWarningLines()

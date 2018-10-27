@@ -92,7 +92,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                     showHelpCAB(item.itemId)
                 } else {
                     if (Location.isUS) {
-                        ObjectIntent(this, USWarningsWithRadarActivity::class.java, USWarningsWithRadarActivity.URL, arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?|.*?Special Marine Warning.*?|.*?Severe Weather Statement.*?|.*?Special Weather Statement.*?", "us"))
+                        ObjectIntent(this, USWarningsWithRadarActivity::class.java, USWarningsWithRadarActivity.URL, arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Extreme Wind Warning.*?|.*?Flash Flood Warning.*?|.*?Special Marine Warning.*?|.*?Severe Weather Statement.*?|.*?Special Weather Statement.*?", "us"))
                     } else {
                         ObjectIntent(this, CanadaAlertsActivity::class.java)
                     }

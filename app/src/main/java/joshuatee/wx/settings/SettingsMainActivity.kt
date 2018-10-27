@@ -101,7 +101,7 @@ class SettingsMainActivity : BaseActivity() {
         linearLayout.addView(cardrestorepref.card)
         linearLayout.addView(ObjectSettingsCheckBox(this, this, "Check for SPC MCD/W", "CHECKSPC", R.string.checkspc_switch_label).card)
         linearLayout.addView(ObjectSettingsCheckBox(this, this, "Check for WPC MPD", "CHECKWPC", R.string.checkwpc_switch_label).card)
-        linearLayout.addView(ObjectSettingsCheckBox(this, this, "Check for TOR, TST, FFW, SVS, SMW, SPS", "CHECKTOR", R.string.checktor_switch_label).card)
+        linearLayout.addView(ObjectSettingsCheckBox(this, this, "Check for TOR, TST, EWW, FFW, SVS, SMW, SPS", "CHECKTOR", R.string.checktor_switch_label).card)
         linearLayout.addView(ObjectSettingsCheckBox(this, this, "Media control notif", "MEDIA_CONTROL_NOTIF", R.string.media_control_notif_tv).card)
         linearLayout.addView(ObjectSettingsCheckBox(this, this, "Dual-pane radar from main screen", "DUALPANE_RADAR_ICON", R.string.dualpane_radar_icon_tv).card)
         linearLayout.addView(ObjectSettingsCheckBox(this, this, "Translate abbreviations", "TRANSLATE_TEXT", R.string.translate_text_label).card)

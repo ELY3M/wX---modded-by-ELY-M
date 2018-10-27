@@ -138,7 +138,7 @@ object UtilityWXOGL {
     }
 
     fun showTextProducts(lat: Double, lon: Double): String {
-        var warningHTML = MyApplication.severeDashboardTor.valueGet() + MyApplication.severeDashboardTst.valueGet() + MyApplication.severeDashboardFfw.valueGet() + MyApplication.severeDashboardSmw.valueGet() + MyApplication.severeDashboardSps.valueGet()
+        var warningHTML = MyApplication.severeDashboardTor.valueGet() + MyApplication.severeDashboardSvr.valueGet() + MyApplication.severeDashboardEww.valueGet() + MyApplication.severeDashboardFfw.valueGet() + MyApplication.severeDashboardSmw.valueGet() + MyApplication.severeDashboardSps.valueGet()
         val urlList = warningHTML.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
         warningHTML = warningHTML.replace("\n", "")
         warningHTML = warningHTML.replace(" ", "")

@@ -32,6 +32,7 @@ import joshuatee.wx.R
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.util.Utility
 
 
@@ -45,7 +46,7 @@ class SettingsSpotterNetwork : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_spotternetwork, null, false)
-
+        ObjectCard(this, R.id.cv_sn_label)
         setupEditText()
 
         val ll: LinearLayout = findViewById(R.id.sn_settings)

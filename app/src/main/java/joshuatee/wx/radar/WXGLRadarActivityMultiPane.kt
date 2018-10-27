@@ -819,10 +819,15 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             else
                 ogl.deconstructTorWarningLines()
 
-            if (PolygonType.TST.pref)
-                ogl.constructTstWarningLines()
+            if (PolygonType.SVR.pref)
+                ogl.constructSvrWarningLines()
             else
-                ogl.deconstructTstWarningLines()
+                ogl.deconstructSvrWarningLines()
+
+            if (PolygonType.EWW.pref)
+                ogl.constructEwwWarningLines()
+            else
+                ogl.deconstructEwwWarningLines()
 
             if (PolygonType.FFW.pref)
                 ogl.constructFfwWarningLines()

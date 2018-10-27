@@ -46,8 +46,8 @@ internal object UtilityCanvas {
         paint.style = Style.STROKE
         val wallpath = Path()
         wallpath.reset()
-        val paintList = listOf(MyApplication.radarColorFfw, MyApplication.radarColorTstorm, MyApplication.radarColorTor)
-        val warningDataList = listOf(MyApplication.severeDashboardFfw.valueGet(), MyApplication.severeDashboardTst.valueGet(), MyApplication.severeDashboardTor.valueGet())
+        val paintList = listOf(MyApplication.radarColorTor, MyApplication.radarColorSvr, MyApplication.radarColorEww, MyApplication.radarColorFfw, MyApplication.radarColorSmw, MyApplication.radarColorSvr, MyApplication.radarColorSps)
+        val warningDataList = listOf(MyApplication.severeDashboardTor.valueGet(), MyApplication.severeDashboardSvr.valueGet(), MyApplication.severeDashboardEww.valueGet(), MyApplication.severeDashboardFfw.valueGet(), MyApplication.severeDashboardSmw.valueGet(), MyApplication.severeDashboardSvs.valueGet(), MyApplication.severeDashboardSps.valueGet())
         if (provider.needsCanvasShift) {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         }
@@ -150,8 +150,8 @@ internal object UtilityCanvas {
         when (polyType) {
             PolygonType.MCD -> prefToken = MyApplication.mcdLatlon.valueGet()
             PolygonType.MPD -> prefToken = MyApplication.mpdLatlon.valueGet()
-            PolygonType.WATCH -> prefToken = MyApplication.watchLatlon.valueGet()
-            PolygonType.WATCH_TORNADO -> prefToken = MyApplication.watchLatlonTor.valueGet()
+            PolygonType.WATCH_SVR -> prefToken = MyApplication.watchLatlonSvr.valueGet()
+            PolygonType.WATCH_TOR -> prefToken = MyApplication.watchLatlonTor.valueGet()
             else -> {
             }
         }
