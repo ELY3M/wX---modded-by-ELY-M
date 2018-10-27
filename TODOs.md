@@ -1,6 +1,6 @@
 
 
-TO DO List: 
+## TO DO List: 
 
 1. conus radar overlay when you zoom out like on pykl3 
 2. get special weather statements working - not working due because they do not have vtec like all other warnings.  
@@ -12,17 +12,18 @@ TO DO List:
 8. add LSR reports from SN spotters/option to turn on/off LSR reports
 9. as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
 10. might 4th radar icon for cc 
-11. move show color legend to bottom  
-12. considering adding extreme wind warning - I saw few requests for this warning during hurricane Michael.  
+11. move show color legend to bottom   
 13. rename application id and change icon color so someone can run both versions of wX   
 14. 8-bit SRM like in pykl3  
 15. fix up the ability to change products in the multi-pane radar. it seem wont change products for me
 16. android wear support. I own android wear watches and love them.  
 
 
-
-DONE! 
-=================================
+#
+#
+## DONE!
+====================================  
+added EWW warnings  
 added conus radar image auto-download in radaractivity, need to figure out how to plot it when the radar map gets zoom out like in pykl3  
 android permissions are pita! I put in perm library for filechecking for custom icons later.    
 changed the icon to black and cyan color so one can tell which version wX is running.    

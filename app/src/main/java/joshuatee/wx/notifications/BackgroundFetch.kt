@@ -51,7 +51,7 @@ class BackgroundFetch(val context: Context) {
 
     private fun doNotifs() {
         var notifUrls = ""
-        var watchLatlon = ""
+        var watchLatlonSvr = ""
         var watchLatlonTor = ""
         var mcdLatlon = ""
         var mcdNoList = ""
@@ -85,7 +85,8 @@ class BackgroundFetch(val context: Context) {
             }
         } else {
             MyApplication.severeDashboardTor.valueSet(context, "")
-            MyApplication.severeDashboardTst.valueSet(context, "")
+            MyApplication.severeDashboardSvr.valueSet(context, "")
+            MyApplication.severeDashboardEww.valueSet(context, "")
             MyApplication.severeDashboardFfw.valueSet(context, "")
             MyApplication.severeDashboardSmw.valueSet(context, "")
             MyApplication.severeDashboardSvs.valueSet(context, "")
@@ -195,7 +196,7 @@ class BackgroundFetch(val context: Context) {
                         val mcdPre2 = UtilityString.getHTMLandParseLastMatch("${MyApplication.nwsSPCwebsitePrefix}/products/watch/wou$mdNo.html", RegExp.pre2Pattern)
                         if (PolygonType.MCD.pref) {
                             if (mcdPre.contains("Severe Thunderstorm Watch")) {
-                                watchLatlon += UtilityNotification.storeWatMCDLATLON(mcdPre2)
+                                watchLatlonSvr += UtilityNotification.storeWatMCDLATLON(mcdPre2)
                             } else {
                                 watchLatlonTor += UtilityNotification.storeWatMCDLATLON(mcdPre2)
                             }
@@ -255,7 +256,7 @@ class BackgroundFetch(val context: Context) {
             notifUrls += UtilityNotificationWPC.sendMPDLocationNotifs(context)
         }
         if (PolygonType.MCD.pref || locationNeedsMcd) {
-            MyApplication.watchLatlon.valueSet(context, watchLatlon)
+            MyApplication.watchLatlonSvr.valueSet(context, watchLatlonSvr)
             MyApplication.watchLatlonTor.valueSet(context, watchLatlonTor)
             MyApplication.mcdLatlon.valueSet(context, mcdLatlon)
             MyApplication.mcdNoList.valueSet(context, mcdNoList)

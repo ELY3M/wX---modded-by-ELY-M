@@ -478,6 +478,11 @@ Display warning polygons for severe thunderstorm. This will cause a periodic tas
         Interval can be set under settings -> Notifications.
 </string>
 
+    <string name="eww_warnings_label">
+Display warning polygons for extreme wind. This will cause a periodic task to run in the background and pull data.
+        Interval can be set under settings -> Notifications.
+</string>
+
     <string name="ffw_warnings_label">
 Display warning polygons for flash flood. This will cause a periodic task to run in the background and pull data.
         Interval can be set under settings -> Notifications.
@@ -487,6 +492,7 @@ Display warning polygons for flash flood. This will cause a periodic task to run
 Display warning polygons for special marine. This will cause a periodic task to run in the background and pull data.
         Interval can be set under settings -> Notifications.
 </string>
+
 
     <string name="svs_warnings_label">
 Display polygons for severe weather statement. This will cause a periodic task to run in the background and pull data.

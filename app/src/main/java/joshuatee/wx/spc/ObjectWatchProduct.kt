@@ -50,7 +50,7 @@ internal class ObjectWatchProduct(type: PolygonType, productNumber: String) {
     init {
         this.productNumber = productNumber
         when (type) {
-            PolygonType.WATCH_TORNADO, PolygonType.WATCH -> {
+            PolygonType.WATCH_TOR, PolygonType.WATCH_SVR -> {
                 this.productNumber = productNumber.replace("w".toRegex(), "")
                 imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + productNumber + "_radar.gif"
                 textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww$productNumber.html"

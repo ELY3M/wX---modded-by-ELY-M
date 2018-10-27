@@ -28,20 +28,23 @@ import joshuatee.wx.MyApplication
 internal object UtilityColor {
 
     fun setColor(prefVal: String) = when (prefVal) {
-        "RADAR_COLOR_HW" -> if (MyApplication.blackBg)
+        "RADAR_COLOR_HW" -> if (MyApplication.blackBg) {
             Color.BLUE
-        else
+        } else {
             Color.BLUE
+        }
         "DRAW_TOOL_COLOR" -> Color.rgb(143, 213, 253)
-        "RADAR_COLOR_HW_EXT" -> if (MyApplication.blackBg)
+        "RADAR_COLOR_HW_EXT" -> if (MyApplication.blackBg) {
             Color.BLUE
-        else
+        } else {
             Color.BLUE
+        }
         "RADAR_COLOR_STATE" -> Color.WHITE
-        "RADAR_COLOR_TSTORM" -> Color.YELLOW
-        "RADAR_COLOR_TSTORM_WATCH" -> Color.BLUE
-        "RADAR_COLOR_TOR" -> Color.RED
         "RADAR_COLOR_TOR_WATCH" -> Color.RED
+        "RADAR_COLOR_SVR_WATCH" -> Color.BLUE
+        "RADAR_COLOR_TOR" -> Color.RED
+        "RADAR_COLOR_SVR" -> Color.YELLOW
+        "RADAR_COLOR_EWW" -> Color.GRAY
         "RADAR_COLOR_FFW" -> Color.GREEN
         "RADAR_COLOR_SMW" -> Color.CYAN
         "RADAR_COLOR_SVS" -> Color.rgb(255, 203, 103)

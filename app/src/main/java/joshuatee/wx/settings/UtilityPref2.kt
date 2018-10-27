@@ -86,7 +86,8 @@ object UtilityPref2 {
             val nws1DefaultState = "OK"
             val nwsRadarBgBlack = "true"
             var torWarnings = "true"
-            var tstWarnings = "true"
+            var svrWarnings = "true"
+            var ewwWarnings = "false"
             var ffwWarnings = "false"
             var smwWarnings = "false"
             var svsWarnings = "false"
@@ -160,7 +161,8 @@ object UtilityPref2 {
             editor.putString("THEME_BLUE", themeBlueDefault)
             editor.putString("NWS_RADAR_BG_BLACK", nwsRadarBgBlack)
             editor.putString("TOR_WARNINGS", torWarnings)
-            editor.putString("TST_WARNINGS", tstWarnings)
+            editor.putString("TST_WARNINGS", svrWarnings)
+            editor.putString("EWW_WARNINGS", ewwWarnings)
             editor.putString("FFW_WARNINGS", ffwWarnings)
             editor.putString("SMW_WARNINGS", smwWarnings)
             editor.putString("SVS_WARNINGS", svsWarnings)

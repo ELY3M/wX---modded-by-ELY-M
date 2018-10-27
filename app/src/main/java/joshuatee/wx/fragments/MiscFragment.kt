@@ -76,7 +76,7 @@ class MiscFragment : Fragment() {
         get() {
             hm["model_ncep"] = TileObject(R.drawable.ncep, ModelsNCEPActivity::class.java, ModelsNCEPActivity.INFO, arrayOf("1", "NCEP"), resources.getString(R.string.help_ncep_models), "model_ncep")
             hm["model_hrrr"] = TileObject(R.drawable.hrrrviewer, ModelsESRLActivity::class.java, ModelsESRLActivity.INFO, arrayOf("1", "ESRL"), resources.getString(R.string.help_hrrr_viewer), "model_hrrr")
-            hm["uswarn"] = TileObject(R.drawable.warn, USWarningsWithRadarActivity::class.java, USWarningsWithRadarActivity.URL, arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?|.*?Special Marine Warning.*?|.*?Severe Weather Statement.*?|.*?Special Weather Statement.*?", "us"),
+            hm["uswarn"] = TileObject(R.drawable.warn, USWarningsWithRadarActivity::class.java, USWarningsWithRadarActivity.URL, arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Extreme Wind Warning.*?|.*?Flash Flood Warning.*?|.*?Special Marine Warning.*?|.*?Severe Weather Statement.*?|.*?Special Weather Statement.*?", "us"),
                     resources.getString(R.string.help_uswarn), "uswarn")
             hm["wpctext"] = TileObject(R.drawable.srfd, WPCTextProductsActivity::class.java, WPCTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"),
                     resources.getString(R.string.help_wpc_text_products), "wpctext")

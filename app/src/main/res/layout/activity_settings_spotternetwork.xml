@@ -1,5 +1,9 @@
 <!--
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018
+
+    Thanks to joshua.tee@gmail.com for the template.
+    Spotter Network Location reporting settings
+    created by ELY M.
 
     This file is part of wX.
 
@@ -42,7 +46,7 @@
             android:padding="@dimen/padding_ll"
             >
             <androidx.cardview.widget.CardView
-                android:id="@+id/cv_tab_labels"
+                android:id="@+id/cv_sn_label"
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

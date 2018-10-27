@@ -80,7 +80,8 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         storagepermissionManager.checkPermissions(singleton(Manifest.permission.WRITE_EXTERNAL_STORAGE), object : PermissionManager.PermissionRequestListener {
             override fun onPermissionGranted() {
                 Log.i(TAG, "Storage Permissions Granted")
-                checkfiles()
+                checkfiles(R.drawable.headingbug, "headingbug.png")
+                checkfiles(R.drawable.location, "location.png")
             }
 
             override fun onPermissionDenied() {
@@ -93,7 +94,7 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
 
 
 
-    fun checkfiles() {
+    fun checkfiles(drawable: Int, filename: String) {
         Log.i(TAG, "running files check on "+MyApplication.FilesPath)
         val dir = File(MyApplication.FilesPath)
         if (!dir.exists()) {
@@ -101,17 +102,17 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
             dir.mkdirs()
         }
 
-        var file = File(MyApplication.FilesPath+"location.png")
+        var file = File(MyApplication.FilesPath+filename)
         var fileExists = file.exists()
         if(!fileExists)
         {
             //need to copy files!
             Log.i(TAG, "files does not exist.")
-            var location: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.location)
-            saveBitmapToFile("location.png", location)
+            var bitmap: Bitmap = BitmapFactory.decodeResource(resources, drawable)
+            saveBitmapToFile(filename, bitmap)
 
         } else {
-            Log.i(TAG, "all files are there!")
+            Log.i(TAG, filename+" are there!")
         }
     }
 

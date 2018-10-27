@@ -87,13 +87,15 @@ class SevereDashboardActivity : BaseActivity() {
         override fun onPreExecute() {
             linearLayout.removeAllViews()
             val wTor = SevereWarning(PolygonType.TOR)
-            val wTst = SevereWarning(PolygonType.TST)
+            val wSvr = SevereWarning(PolygonType.SVR)
+            val wEww = SevereWarning(PolygonType.EWW)
             val wFfw = SevereWarning(PolygonType.FFW)
             val wSmw = SevereWarning(PolygonType.SMW)
             val wSvs = SevereWarning(PolygonType.SVS)
             val wSps = SpecialWeather(PolygonType.SPS)
             wTor.generateString(contextg, MyApplication.severeDashboardTor.valueGet())
-            wTst.generateString(contextg, MyApplication.severeDashboardTst.valueGet())
+            wSvr.generateString(contextg, MyApplication.severeDashboardSvr.valueGet())
+            wEww.generateString(contextg, MyApplication.severeDashboardEww.valueGet())
             wFfw.generateString(contextg, MyApplication.severeDashboardFfw.valueGet())
             wSmw.generateString(contextg, MyApplication.severeDashboardSmw.valueGet())
             wSvs.generateString(contextg, MyApplication.severeDashboardSvs.valueGet())
@@ -104,10 +106,15 @@ class SevereDashboardActivity : BaseActivity() {
                 objTor.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Tornado Warning.*?") })
                 linearLayout.addView(objTor.card)
             }
-            if (wTst.count > 0) {
-                val objTst = ObjectCardText(contextg, wTst.text)
-                objTst.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Severe Thunderstorm Warning.*?") })
-                linearLayout.addView(objTst.card)
+            if (wSvr.count > 0) {
+                val objSvr = ObjectCardText(contextg, wSvr.text)
+                objSvr.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Severe Thunderstorm Warning.*?") })
+                linearLayout.addView(objSvr.card)
+            }
+            if (wEww.count > 0) {
+                val objEww = ObjectCardText(contextg, wEww.text)
+                objEww.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Extreme Wind Warning.*?") })
+                linearLayout.addView(objEww.card)
             }
             if (wFfw.count > 0) {
                 val objFfw = ObjectCardText(contextg, wFfw.text)

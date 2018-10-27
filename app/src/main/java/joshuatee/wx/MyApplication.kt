@@ -254,7 +254,8 @@ class MyApplication : Application() {
         var wxoglX: Float = 0f
         var wxoglY: Float = 0f
         val severeDashboardTor: DataStorage = DataStorage("SEVERE_DASHBOARD_TOR")
-        val severeDashboardTst: DataStorage = DataStorage("SEVERE_DASHBOARD_TST")
+        val severeDashboardSvr: DataStorage = DataStorage("SEVERE_DASHBOARD_SVR")
+        val severeDashboardEww: DataStorage = DataStorage("SEVERE_DASHBOARD_EWW")
         val severeDashboardFfw: DataStorage = DataStorage("SEVERE_DASHBOARD_FFW")
         val severeDashboardSmw: DataStorage = DataStorage("SEVERE_DASHBOARD_SMW")
         val severeDashboardSvs: DataStorage = DataStorage("SEVERE_DASHBOARD_SVS")
@@ -262,7 +263,7 @@ class MyApplication : Application() {
         val severeDashboardWat: DataStorage = DataStorage("SEVERE_DASHBOARD_WAT")
         val severeDashboardMcd: DataStorage = DataStorage("SEVERE_DASHBOARD_MCD")
         val severeDashboardMpd: DataStorage = DataStorage("SEVERE_DASHBOARD_MPD")
-        val watchLatlon: DataStorage = DataStorage("WATCH_LATLON")
+        val watchLatlonSvr: DataStorage = DataStorage("WATCH_LATLON_SVR")
         val watchLatlonTor: DataStorage = DataStorage("WATCH_LATLON_TOR")
         val mcdLatlon: DataStorage = DataStorage("MCD_LATLON")
         val mcdNoList: DataStorage = DataStorage("MCD_NO_LIST")
@@ -410,7 +411,8 @@ class MyApplication : Application() {
             wxoglY = preferences.getFloat("WXOGL_Y", 0.0f)
             Location.currentLocationStr = preferences.getString("CURRENT_LOC_FRAGMENT", "1") ?: "1"
             severeDashboardTor.update(context)
-            severeDashboardTst.update(context)
+            severeDashboardSvr.update(context)
+            severeDashboardEww.update(context)
             severeDashboardFfw.update(context)
             severeDashboardSmw.update(context)
             severeDashboardSvs.update(context)
@@ -418,7 +420,7 @@ class MyApplication : Application() {
             severeDashboardWat.update(context)
             severeDashboardMcd.update(context)
             severeDashboardMpd.update(context)
-            watchLatlon.update(context)
+            watchLatlonSvr.update(context)
             watchLatlonTor.update(context)
             mcdLatlon.update(context)
             mcdNoList.update(context)
@@ -496,10 +498,11 @@ class MyApplication : Application() {
         var radarColorHw: Int = 0
         var radarColorHwExt: Int = 0
         var radarColorState: Int = 0
-        var radarColorTstorm: Int = 0
-        var radarColorTstormWatch: Int = 0
-        var radarColorTor: Int = 0
         var radarColorTorWatch: Int = 0
+        var radarColorSvrWatch: Int = 0
+        var radarColorTor: Int = 0
+        var radarColorSvr: Int = 0
+        var radarColorEww: Int = 0
         var radarColorFfw: Int = 0
         var radarColorSmw: Int = 0
         var radarColorSvs: Int = 0
@@ -521,10 +524,11 @@ class MyApplication : Application() {
             radarColorHw = preferences.getInt("RADAR_COLOR_HW", Color.BLUE)
             radarColorHwExt = preferences.getInt("RADAR_COLOR_HW_EXT", Color.BLUE)
             radarColorState = preferences.getInt("RADAR_COLOR_STATE", Color.WHITE)
-            radarColorTstorm = preferences.getInt("RADAR_COLOR_TSTORM", Color.YELLOW)
-            radarColorTstormWatch = preferences.getInt("RADAR_COLOR_TSTORM_WATCH", Color.BLUE)
-            radarColorTor = preferences.getInt("RADAR_COLOR_TOR", Color.RED)
+            radarColorSvrWatch = preferences.getInt("RADAR_COLOR_SVR_WATCH", Color.BLUE)
             radarColorTorWatch = preferences.getInt("RADAR_COLOR_TOR_WATCH", Color.RED)
+            radarColorTor = preferences.getInt("RADAR_COLOR_TOR", Color.RED)
+            radarColorSvr = preferences.getInt("RADAR_COLOR_SVR", Color.YELLOW)
+            radarColorEww = preferences.getInt("RADAR_COLOR_EWW", Color.GRAY)
             radarColorFfw = preferences.getInt("RADAR_COLOR_FFW", Color.GREEN)
             radarColorSmw = preferences.getInt("RADAR_COLOR_SMW", Color.CYAN)
             radarColorSvs = preferences.getInt("RADAR_COLOR_SVS", Color.rgb(255, 203, 103))
@@ -632,7 +636,8 @@ class MyApplication : Application() {
         const val NWS_CONUS_RADAR: String = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
         const val NWS_CONUS_RADAR_GFW: String = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
         var radarTorWarnings: Boolean = true
-        var radarTstWarnings: Boolean = true
+        var radarSvrWarnings: Boolean = true
+        var radarEwwWarnings: Boolean = true
         var radarFfwWarnings: Boolean = true
         var radarSmwWarnings: Boolean = true
         var radarSvsWarnings: Boolean = true
@@ -677,7 +682,8 @@ class MyApplication : Application() {
 
         private fun initRadarPreferences() {
             radarTorWarnings = preferences.getString("TOR_WARNINGS", "false").startsWith("t")
-            radarTstWarnings = preferences.getString("TST_WARNINGS", "false").startsWith("t")
+            radarSvrWarnings = preferences.getString("SVR_WARNINGS", "false").startsWith("t")
+            radarEwwWarnings = preferences.getString("EWW_WARNINGS", "false").startsWith("t")
             radarFfwWarnings = preferences.getString("FFW_WARNINGS", "false").startsWith("t")
             radarSmwWarnings = preferences.getString("SMW_WARNINGS", "false").startsWith("t")
             radarSvsWarnings = preferences.getString("SVS_WARNINGS", "false").startsWith("t")

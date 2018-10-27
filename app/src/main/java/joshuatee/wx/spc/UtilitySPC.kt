@@ -122,18 +122,37 @@ object UtilitySPC {
         // US Warn
         var uswarnPresent = false
         var torCount = 0
-        var tstormCount = 0
-        var floodCount = 0
+        var svrCount = 0
+        var ewwCount = 0
+        var ffwCount = 0
+        var smwCount = 0
+        var svsCount = 0
+        var spsCount = 0
         if (MyApplication.checktor) {
-            tstormCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardTst.valueGet())
-            if (tstormCount > 0) uswarnPresent = true
             torCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardTor.valueGet())
             if (torCount > 0) uswarnPresent = true
-            floodCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardFfw.valueGet())
-            if (floodCount > 0) uswarnPresent = true
+
+            svrCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardSvr.valueGet())
+            if (svrCount > 0) uswarnPresent = true
+
+            ewwCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardEww.valueGet())
+            if (ewwCount > 0) uswarnPresent = true
+
+            ffwCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardFfw.valueGet())
+            if (ffwCount > 0) uswarnPresent = true
+
+            smwCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardSmw.valueGet())
+            if (smwCount > 0) uswarnPresent = true
+
+            svsCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardSvs.valueGet())
+            if (svsCount > 0) uswarnPresent = true
+
+            spsCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardSps.valueGet())
+            if (spsCount > 0) uswarnPresent = true
+
         }
         tabStr = if (uswarnPresent)
-            tabStr + "  " + MyApplication.tabHeaders[2] + " W(" + tstormCount + "," + torCount + "," + floodCount + ")"
+            tabStr + "  " + MyApplication.tabHeaders[2] + " W(" + svrCount + "," + torCount + "," + ewwCount + "," + ffwCount + "," + smwCount + "," + svsCount + "," + spsCount + ")"
         else
             MyApplication.tabHeaders[2]
         return listOf(tabStrSpc, tabStr)

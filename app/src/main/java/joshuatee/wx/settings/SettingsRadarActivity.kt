@@ -67,6 +67,7 @@ class SettingsRadarActivity : BaseActivity() {
         //TODO add show conus radar option
         ll.addView(ObjectSettingsCheckBox(this, this, "Show TOR warnings", "TOR_WARNINGS", R.string.tor_warnings_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Show TST warnings", "TST_WARNINGS", R.string.tst_warnings_label).card)
+        ll.addView(ObjectSettingsCheckBox(this, this, "Show EWW warnings", "EWW_WARNINGS", R.string.eww_warnings_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Show FFW warnings", "FFW_WARNINGS", R.string.ffw_warnings_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Show SMW warnings", "SMW_WARNINGS", R.string.smw_warnings_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Show SVS warnings", "SVS_WARNINGS", R.string.svs_warnings_label).card)

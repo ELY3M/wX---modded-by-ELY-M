@@ -28,10 +28,12 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
 
     MCD(MyApplication.radarColorMcd, "MCD", MyApplication.radarWatMcd, 0.0f),
     MPD(MyApplication.radarColorMpd, "MPD", MyApplication.radarMpd, 0.0f),
-    WATCH(MyApplication.radarColorTstormWatch, "WATCH", MyApplication.radarWatMcd, 0.0f),
-    WATCH_TORNADO(MyApplication.radarColorTorWatch, "WATCH_TORNADO", MyApplication.radarWatMcd, 0.0f),
+    WATCH(MyApplication.radarColorSvrWatch, "WATCH", MyApplication.radarWatMcd, 0.0f),
+    WATCH_SVR(MyApplication.radarColorSvrWatch, "WATCH_SVR", MyApplication.radarWatMcd, 0.0f),
+    WATCH_TOR(MyApplication.radarColorTorWatch, "WATCH_TOR", MyApplication.radarWatMcd, 0.0f),
     TOR(MyApplication.radarColorTor, "TOR", MyApplication.radarTorWarnings, 0.0f),
-    TST(MyApplication.radarColorTstorm, "TST", MyApplication.radarTstWarnings, 0.0f),
+    SVR(MyApplication.radarColorSvr, "SVR", MyApplication.radarSvrWarnings, 0.0f),
+    EWW(MyApplication.radarColorEww, "EWW", MyApplication.radarEwwWarnings, 0.0f),
     FFW(MyApplication.radarColorFfw, "FFW", MyApplication.radarFfwWarnings, 0.0f),
     SMW(MyApplication.radarColorSmw, "SMW", MyApplication.radarSmwWarnings, 0.0f),
     SVS(MyApplication.radarColorSvs, "SVS", MyApplication.radarSvsWarnings, 0.0f),
@@ -57,9 +59,11 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
             MCD.pref = MyApplication.radarWatMcd
             MPD.pref = MyApplication.radarMpd
             WATCH.pref = MyApplication.radarWatMcd
-            WATCH_TORNADO.pref = MyApplication.radarWatMcd
+            WATCH_SVR.pref = MyApplication.radarWatMcd
+            WATCH_TOR.pref = MyApplication.radarWatMcd
             TOR.pref = MyApplication.radarTorWarnings
-            TST.pref = MyApplication.radarTstWarnings
+            SVR.pref = MyApplication.radarSvrWarnings
+            EWW.pref = MyApplication.radarEwwWarnings
             FFW.pref = MyApplication.radarFfwWarnings
             SMW.pref = MyApplication.radarSmwWarnings
             SVS.pref = MyApplication.radarSvsWarnings
@@ -78,10 +82,11 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
 
             MCD.color = MyApplication.radarColorMcd
             MPD.color = MyApplication.radarColorMpd
-            WATCH.color = MyApplication.radarColorTstormWatch
-            WATCH_TORNADO.color = MyApplication.radarColorTorWatch
-            TST.color = MyApplication.radarColorTstorm
+            WATCH_SVR.color = MyApplication.radarColorSvrWatch
+            WATCH_TOR.color = MyApplication.radarColorTorWatch
             TOR.color = MyApplication.radarColorTor
+            SVR.color = MyApplication.radarColorSvr
+            EWW.color = MyApplication.radarColorEww
             FFW.color = MyApplication.radarColorFfw
             SMW.color = MyApplication.radarColorSmw
             SVS.color = MyApplication.radarColorSvs

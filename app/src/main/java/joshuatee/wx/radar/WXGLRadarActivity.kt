@@ -875,10 +875,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             else
                 oglr.deconstructTorWarningLines()
 
-            if (PolygonType.TST.pref && !archiveMode)
-                oglr.constructTstWarningLines()
+            if (PolygonType.SVR.pref && !archiveMode)
+                oglr.constructSvrWarningLines()
             else
-                oglr.deconstructTstWarningLines()
+                oglr.deconstructSvrWarningLines()
+
+            if (PolygonType.EWW.pref && !archiveMode)
+                oglr.constructEwwWarningLines()
+            else
+                oglr.deconstructEwwWarningLines()
 
             if (PolygonType.FFW.pref && !archiveMode)
                 oglr.constructFfwWarningLines()

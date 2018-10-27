@@ -48,7 +48,8 @@ internal class SevereWarning(private val type: PolygonType) {
         var label = ""
         when (type) {
             PolygonType.TOR -> label = "Tornado Warnings"
-            PolygonType.TST -> label = "Severe Thunderstorm Warnings"
+            PolygonType.SVR -> label = "Severe Thunderstorm Warnings"
+            PolygonType.EWW -> label = "Extreme Wind Warnings"
             PolygonType.FFW -> label = "Flash Flood Warnings"
             PolygonType.SMW -> label = "Special Marine Warnings"
             PolygonType.SVS -> label = "Severe Weather Statement"
