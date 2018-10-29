@@ -1,6 +1,16 @@
 
 // TODO address numerous lint msg in MyApp
 
+55033 2018_10_28 update ndk from 18 to 18b
+                 make RADAR_TOOLBAR_TRANSPARENT default to true
+55032 2018_10_27 (feature in progress) add code to prevent clicking on widget ( in process )
+                 change default UI elevation height from 10 to 3
+                 change card corners from 0 to 3
+                 change nws  icon size from 24 to 20
+                 change theme from white to whiteNew
+                 add help in subtitle of some setting screens
+55031 2018_10_14 lint cleanup
+                 (bugfix) at joshuatee.wx.activitiesmisc.TextScreenActivity.onCreate (TextScreenActivity.kt:64) java.lang.IllegalStateException:
 55030 2018_10_13 (bugfix) legend for radar vel was not adaptive of halfwords 47/48
                  (bugfix) in API26 or higher notifications were ignoring sound settings, add additional communcation channel for no sound
 55029 2018_10_13 refactor instances of package name and email address making it easier for others to create their own version

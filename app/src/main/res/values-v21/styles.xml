@@ -130,6 +130,21 @@
         <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
     </style>
 
+    <style name="MyCustomTheme_BlackAqua_NOAB"  parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/black</item>
+        <item name="android:buttonTint">@color/black</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/aqua</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:windowBackground">@color/black</item>
+        <item name="android:colorBackgroundCacheHint">@color/black</item>
+        <item name="android:textColor">@color/aqua</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
+        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
+    </style>
+
     <style name="MyCustomTheme_orange_NOAB"  parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/bg_orange</item>
         <item name="android:buttonTint">@color/bg_orange</item>

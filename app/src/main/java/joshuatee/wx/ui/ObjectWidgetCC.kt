@@ -109,7 +109,9 @@ class ObjectWidgetCC(context: Context) {
         }
         remoteViews.setImageViewUri(R.id.iv, Uri.parse(""))
         remoteViews.setImageViewBitmap(R.id.iv, bmCc)
-        UtilityWidget.setupIntent(context, remoteViews, WX::class.java, R.id.layout, "WX")
+        if (!MyApplication.widgetPreventTap) {
+            UtilityWidget.setupIntent(context, remoteViews, WX::class.java, R.id.layout, "WX")
+        }
     }
 }
 

@@ -85,9 +85,8 @@ internal class ExternalLine(
         val maxY = if (start.y > end.y) start.y else end.y
         val minY = if (start.y < end.y) start.y else end.y
 
-        return if (point.x >= minX && point.x <= maxX && point.y >= minY && point.y <= maxY) {
-            true
-        } else false
+        //return if (point.x >= minX && point.x <= maxX && point.y >= minY && point.y <= maxY) {
+        return point.x in minX..maxX && point.y >= minY && point.y <= maxY
     }
 
     override fun toString(): String {

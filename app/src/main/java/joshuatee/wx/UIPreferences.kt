@@ -42,7 +42,7 @@ object UIPreferences {
     var dualpaneRadarIcon: Boolean = false
     var homescreenTextLength: Int = 0
     var mediaControlNotif: Boolean = false
-    var radarToolbarTransparent: Boolean = false
+    var radarToolbarTransparent: Boolean = true
     var radarImmersiveMode: Boolean = false
     var tilesPerRow: Int = 3
     var themeStr: String = ""
@@ -69,10 +69,11 @@ object UIPreferences {
         colorBlack = ContextCompat.getColor(context, R.color.black)
         colorOffwhiteToolbar = ContextCompat.getColor(context, R.color.offwhite_toolbar)
         mediaControlNotif = Utility.readPref(context, "MEDIA_CONTROL_NOTIF", "").startsWith("t")
-        radarToolbarTransparent = Utility.readPref(context, "RADAR_TOOLBAR_TRANSPARENT", "false").startsWith("t")
+        radarToolbarTransparent = Utility.readPref(context, "RADAR_TOOLBAR_TRANSPARENT", "true").startsWith("t")
         radarImmersiveMode = Utility.readPref(context, "RADAR_IMMERSIVE_MODE", "false").startsWith("t")
         tilesPerRow = Utility.readPref(context, "UI_TILES_PER_ROW", tilesPerRow)
-        themeStr = Utility.readPref(context, "THEME_BLUE", "blue")
+        //themeStr = Utility.readPref(context, "THEME_BLUE", "blue")
+        themeStr = Utility.readPref(context, "THEME_BLUE", "whiteNew")
         themeInt = Utility.theme(themeStr)
         if (themeInt == R.style.MyCustomTheme_white_NOAB || themeInt == R.style.MyCustomTheme_whiter_NOAB) {
             smallTextTheme = android.R.style.TextAppearance_Small_Inverse

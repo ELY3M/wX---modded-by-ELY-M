@@ -23,6 +23,7 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.widget.RemoteViews
+import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UtilityWidget
 import joshuatee.wx.nhc.NHCActivity
@@ -35,9 +36,11 @@ class ObjectWidgetNHC(context: Context) {
 
     init {
         UtilityWidget.setImage(context, remoteViews, R.id.iv1, NHC.fileName + "0")
-        UtilityWidget.setupIntent(context, remoteViews, NHCActivity::class.java, R.id.iv1, WidgetFile.NHC.action + "0")
         UtilityWidget.setImage(context, remoteViews, R.id.iv2, NHC.fileName + "1")
-        UtilityWidget.setupIntent(context, remoteViews, NHCActivity::class.java, R.id.iv2, WidgetFile.NHC.action + "1")
+        if (!MyApplication.widgetPreventTap) {
+            UtilityWidget.setupIntent(context, remoteViews, NHCActivity::class.java, R.id.iv1, WidgetFile.NHC.action + "0")
+            UtilityWidget.setupIntent(context, remoteViews, NHCActivity::class.java, R.id.iv2, WidgetFile.NHC.action + "1")
+        }
     }
 }
 

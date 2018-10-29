@@ -19,9 +19,8 @@
 -->
 
 <resources>
-
-    <string name="blank">
-
+    <string name="widget_prevent_tap">
+Prevent tapping on a widget from opening the app. Please note that after changing this setting you must then delete and re-add any widget that you want this to take effect for.
 </string>
 
     <string name="mainscreen_radar_button">
@@ -473,7 +472,7 @@ Display warning polygons for tornado. This will cause a periodic task to run in 
         Interval can be set under settings -> Notifications.
 </string>
 
-    <string name="tst_warnings_label">
+    <string name="svr_warnings_label">
 Display warning polygons for severe thunderstorm. This will cause a periodic task to run in the background and pull data.
         Interval can be set under settings -> Notifications.
 </string>

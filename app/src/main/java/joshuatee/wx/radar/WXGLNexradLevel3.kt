@@ -123,8 +123,8 @@ class WXGLNexradLevel3 internal constructor() {
             //float halfword_33_34 = dis.readFloat();
             dis.skipBytes(28) // was 26
             // velocity product 99 has 47 ( max neg vel ) and 48 ( max pos vel )
-            halfword47 =  dis.readUnsignedShort().toShort()
-            halfword48 =  dis.readUnsignedShort().toShort()
+            halfword47 = dis.readUnsignedShort().toShort()
+            halfword48 = dis.readUnsignedShort().toShort()
             dis.skipBytes(24) // was 28
             seekStart = dis.filePointer
             if (MyApplication.radarUseJni) {

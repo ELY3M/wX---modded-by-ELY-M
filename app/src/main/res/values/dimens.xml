@@ -18,7 +18,6 @@
 -->
 
 <resources>
-
     <!-- Standart dimens for the color wheel -->
     <dimen name="color_wheel_radius">124dp</dimen>
     <dimen name="color_wheel_thickness">8dp</dimen>
@@ -40,9 +39,6 @@
     <dimen name="padding_dynamic_tv">1dip</dimen>
     <dimen name="padding_dynamic_tv_small">1dip</dimen>
 
- <!--   <dimen name="padding_dynamic_tv">2dip</dimen>
-    <dimen name="padding_dynamic_tv_small">1dip</dimen>-->
-
     <!--  used in at least hourly, uswarn, nhc   -->
     <dimen name="padding_ll">5dip</dimen>
     <dimen name="normal_text">16sp</dimen>
@@ -57,12 +53,6 @@
     <dimen name="fab_margin3">10dp</dimen>
     <dimen name="fab_margin_mini_2">80dp</dimen>
     <dimen name="fab_margin_mini_1">126dp</dimen>
-    <dimen name="title_font_size">20dp</dimen>
-    <dimen name="domain_label_font_size">11dp</dimen>
-    <dimen name="range_label_font_size">13dp</dimen>
-    <dimen name="range_tick_label_font_size">13dp</dimen>
-    <dimen name="domain_tick_label_font_size">12dp</dimen>
-    <dimen name="legend_text_font_size">20dp</dimen>
 
     <!-- telecine -->
     <dimen name="overlay_width">144dp</dimen>
@@ -77,5 +67,4 @@
     <dimen name="widget_margin_left">8dp</dimen>
     <dimen name="widget_margin_right">8dp</dimen>
     <!-- end google weatherlist widget demo -->
-
 </resources>

@@ -37,7 +37,7 @@ import joshuatee.wx.util.UtilityAlertDialog
 
 class SettingsUIActivity : BaseActivity() {
 
-    private val colorArr = listOf("blue", "mixedBlue", "darkBlue", "black", "green", "gray", "white", "whiteNew", "orange")
+    private val colorArr = listOf("blue", "mixedBlue", "darkBlue", "black", "green", "gray", "white", "whiteNew", "orange", "BlackAqua")
     private val textSizeArr = mutableListOf<String>()
     private lateinit var et1: EditText
     private lateinit var et2: EditText
@@ -48,6 +48,7 @@ class SettingsUIActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_ui, null, false)
+        toolbar.subtitle = "Please tap on text for additional help."
         ObjectCard(this, R.id.cv_tab_labels)
         tilesPerRowStart = UIPreferences.tilesPerRow
         setupEditText()
@@ -72,10 +73,11 @@ class SettingsUIActivity : BaseActivity() {
         ll.addView(ObjectSettingsCheckBox(this, this, "Show VR button on main screen", "VR_BUTTON", R.string.vr_button_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "WFO - remember location", "WFO_REMEMBER_LOCATION", R.string.wfo_remember).card)
         //ll.addView(ObjectSettingsSwitch(this, this, "Use Jobservice (dev only)", "USE_JOBSERVICE", R.string.use_jobservice).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Main screen radar button", "UI_MAIN_SCREEN_RADAR_FAB", R.string.mainscreen_radar_button).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "UI elevation height", "ELEVATION_PREF", R.string.elevation_np_label, 10, 0, 30).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "NWS icon size", "NWS_ICON_SIZE_PREF", R.string.nws_icon_size_np_label, 24, 1, 50).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Card corner radius", "CARD_CORNER_RADIUS", R.string.card_corner_radius_np_label, 0, 0, 10).card)
+        ll.addView(ObjectSettingsCheckBox(this, this, "Main screen radar button (requires restart)", "UI_MAIN_SCREEN_RADAR_FAB", R.string.mainscreen_radar_button).card)
+        ll.addView(ObjectSettingsCheckBox(this, this, "Widgets: prevent opening app on tap", "UI_WIDGET_PREVENT_TAP", R.string.widget_prevent_tap).card)
+        ll.addView(ObjectSettingsNumberPicker(this, this, "UI elevation height", "ELEVATION_PREF", R.string.elevation_np_label, 3, 0, 30).card)
+        ll.addView(ObjectSettingsNumberPicker(this, this, "NWS icon size", "NWS_ICON_SIZE_PREF", R.string.nws_icon_size_np_label, 20, 1, 50).card)
+        ll.addView(ObjectSettingsNumberPicker(this, this, "Card corner radius", "CARD_CORNER_RADIUS", R.string.card_corner_radius_np_label, 3, 0, 10).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Image tiles per row", "UI_TILES_PER_ROW", R.string.tiles_per_row_label, 3, 3, 10).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Animation - frames for toolbar icon", "UI_ANIM_ICON_FRAMES", R.string.np_anim_generic_label, 6, 2, 40).card)
         ll.addView(ObjectSettingsNumberPickerArray(this, this, "Homescreen text length", R.string.homescreen_text_length_np_label, 0, textSizeArr.size - 1, textSizeArr.toTypedArray()).card)

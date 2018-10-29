@@ -79,7 +79,6 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
             HI.pref = MyApplication.radarHi
             OBS.pref = MyApplication.radarObs
             SWO.pref = MyApplication.radarSwo
-
             MCD.color = MyApplication.radarColorMcd
             MPD.color = MyApplication.radarColorMpd
             WATCH_SVR.color = MyApplication.radarColorSvrWatch

@@ -38,6 +38,8 @@ import joshuatee.wx.R
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
+import joshuatee.wx.radar.loadicon.OpenGLRenderer
+import joshuatee.wx.radar.loadicon.mesh.LoadIcon
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
@@ -103,6 +105,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private val locdotBuffers = ObjectOglBuffers(PolygonType.LOCDOT)
     private val locCircleBuffers = ObjectOglBuffers()
     private val wbCircleBuffers = ObjectOglBuffers(PolygonType.WIND_BARB_CIRCLE, 0.30f)
+    private val TestBuffers = ObjectOglBuffers()
     private val colorSwo = IntArray(5)
     private var breakSize15 = 15000
     private val breakSizeRadar = 15000
@@ -383,6 +386,10 @@ class WXGLRender(private val context: Context) : Renderer {
         GLES20.glLineWidth(watmcdLineWidth)
         listOf(mpdBuffers, mcdBuffers, watchSvrBuffers, watchTorBuffers, swoBuffers).forEach { drawPolygons(it, 8) }
 
+
+        //drawTriangles(TestBuffers)
+
+
     }
 
     // FIXME CRASHING HERE sometimes
@@ -628,6 +635,48 @@ class WXGLRender(private val context: Context) : Renderer {
     }
     fun deconstructSpsWarningLines() {
         deconstructGenericLines(warningSpsBuffers)
+    }
+
+    fun constructTest(locXCurrent: String, locYCurrentF: String, archiveMode: Boolean) {
+        var locYCurrent = locYCurrentF
+        var locmarkerAl = mutableListOf<Double>()
+        locYCurrent = locYCurrent.replace("-", "")
+        val x = locXCurrent.toDoubleOrNull() ?: 0.0
+        val y = locYCurrent.toDoubleOrNull() ?: 0.0
+        if (PolygonType.LOCDOT.pref) {
+            locmarkerAl = UtilityLocation.latLonAsDouble
+        }
+        if (MyApplication.locdotFollowsGps || archiveMode) {
+            locmarkerAl.add(x)
+            locmarkerAl.add(y)
+            gpsX = x
+            gpsY = y
+        }
+        TestBuffers.xList = DoubleArray(locmarkerAl.size)
+        TestBuffers.yList = DoubleArray(locmarkerAl.size)
+        var xx = 0
+        var yy = 0
+        locmarkerAl.indices.forEach {
+            if (it and 1 == 0) {
+                TestBuffers.xList[xx] = locmarkerAl[it]
+                xx += 1
+            } else {
+                TestBuffers.yList[yy] = locmarkerAl[it]
+                yy += 1
+            }
+        }
+
+
+
+
+        UtilityIcons.Locdot(TestBuffers)
+
+
+    }
+
+
+    fun deconstructTest() {
+        TestBuffers.isInitialized = false
     }
 
     fun constructLocationDot(locXCurrent: String, locYCurrentF: String, archiveMode: Boolean) {

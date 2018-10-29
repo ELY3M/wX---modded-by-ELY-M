@@ -53,13 +53,6 @@ import java.nio.ByteOrder
 
 class MyApplication : Application() {
 
-    // This is called when the overall system is running low on memory,
-    // and would like actively running processes to tighten their belts.
-    // Overriding this method is totally optional!
-    //override fun onLowMemory() {
-    //super.onLowMemory()
-    //}
-
     override fun onCreate() {
         super.onCreate()
         appContext = applicationContext
@@ -179,6 +172,7 @@ class MyApplication : Application() {
         var radarUseJni: Boolean = false
         var contentResolverLocal: ContentResolver? = null
         var blackBg: Boolean = false
+        var widgetPreventTap: Boolean = false
         var fullscreenMode: Boolean = false
         var lockToolbars: Boolean = false
         var unitsM: Boolean = false
@@ -328,7 +322,7 @@ class MyApplication : Application() {
             UIPreferences.initPreferences(context)
             radarGeometrySetColors()
             listOf(94, 99, 134, 135, 159, 161, 163, 165, 172).forEach { radarColorPalette[it.toString()] = preferences.getString("RADAR_COLOR_PALETTE_" + it.toString(), "CODENH") }
-            cardCorners = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, preferences.getInt("CARD_CORNER_RADIUS", 0).toFloat(), dm)
+            cardCorners = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, preferences.getInt("CARD_CORNER_RADIUS", 0).toFloat(), dm) //I hate rounded //was 3 was 0 as of 2018-10-27
             telecineVideoSizePercentage = preferencesTelecine.getInt("video-size", 100)
             telecineSwitchShowCountdown = preferencesTelecine.getBoolean("show-countdown", false)
             telecineSwitchRecordingNotification = preferencesTelecine.getBoolean("recording-notification", false)
@@ -341,9 +335,10 @@ class MyApplication : Application() {
             checkspc = preferences.getString("CHECKSPC", "false").startsWith("t")
             checkwpc = preferences.getString("CHECKWPC", "false").startsWith("t")
             checktor = preferences.getString("CHECKTOR", "false").startsWith("t")
-            nwsIconSize = preferences.getInt("NWS_ICON_SIZE_PREF", 24)
+            nwsIconSize = preferences.getInt("NWS_ICON_SIZE_PREF", 20) // was 24 10-27-2018
             uiAnimIconFrames = preferences.getString("UI_ANIM_ICON_FRAMES", "6")
             blackBg = preferences.getString("NWS_RADAR_BG_BLACK", "").startsWith("t")
+            widgetPreventTap = preferences.getString("UI_WIDGET_PREVENT_TAP", "").startsWith("t")
             fullscreenMode = preferences.getString("FULLSCREEN_MODE", "false").startsWith("t")
             lockToolbars = preferences.getString("LOCK_TOOLBARS", "false").startsWith("t")
             alertOnlyonce = preferences.getString("ALERT_ONLYONCE", "false").startsWith("t")

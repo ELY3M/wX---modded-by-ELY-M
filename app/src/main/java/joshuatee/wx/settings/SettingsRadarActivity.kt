@@ -51,6 +51,7 @@ class SettingsRadarActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
+        toolbar.subtitle = "Please tap on text for additional help."
         val ll: LinearLayout = findViewById(R.id.ll)
         val cardColors = ObjectCardText(this, "Colors", MyApplication.textSizeNormal)
         cardPal94 = ObjectCardText(this, resources.getString(R.string.label_settings_color_palette_94) + ": " + MyApplication.radarColorPalette["94"], MyApplication.textSizeNormal)
@@ -66,7 +67,7 @@ class SettingsRadarActivity : BaseActivity() {
         ll.addView(cardRecorder.card)
         //TODO add show conus radar option
         ll.addView(ObjectSettingsCheckBox(this, this, "Show TOR warnings", "TOR_WARNINGS", R.string.tor_warnings_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show TST warnings", "TST_WARNINGS", R.string.tst_warnings_label).card)
+        ll.addView(ObjectSettingsCheckBox(this, this, "Show SVR warnings", "SVR_WARNINGS", R.string.svr_warnings_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Show EWW warnings", "EWW_WARNINGS", R.string.eww_warnings_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Show FFW warnings", "FFW_WARNINGS", R.string.ffw_warnings_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Show SMW warnings", "SMW_WARNINGS", R.string.smw_warnings_label).card)

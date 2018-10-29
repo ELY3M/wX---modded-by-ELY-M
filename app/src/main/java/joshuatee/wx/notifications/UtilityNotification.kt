@@ -295,8 +295,8 @@ object UtilityNotification {
         notiChannelInitialized = true
     }
 
-    const val notiChannelStr = "default"
-    const val notiChannelStrNoSound = "defaultNoSound2"
+    private const val notiChannelStr = "default"
+    const val notiChannelStrNoSound: String = "defaultNoSound2"
 
     private fun createNotifBigPicture(context: Context, noMain: String, resultPendingIntent2: PendingIntent, iconRadar: Int, bitmap: Bitmap): Notification {
         initChannels(context)

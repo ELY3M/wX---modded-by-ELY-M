@@ -4,7 +4,7 @@ buildscript {
     //ext.supportLibraryVersion = "27.1.1"
     //ext.supportLibraryVersion = "28.0.0-beta1"
     ext.okHttpVersion = "3.11.0"
-    ext.ndkVersion = "android-ndk-r18"
+    ext.ndkVersion = "android-ndk-r18b"
 
     repositories {
         jcenter()

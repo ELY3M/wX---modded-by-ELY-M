@@ -50,6 +50,7 @@ class SettingsNotificationsActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
+        toolbar.subtitle = "Please tap on text for additional help."
         val ll: LinearLayout = findViewById(R.id.ll)
         val cardSound = ObjectCardText(this, "Notification sound chooser", MyApplication.textSizeNormal)
         val cardWFOFilter = ObjectCardText(this, "WFO notification filter", MyApplication.textSizeNormal)
