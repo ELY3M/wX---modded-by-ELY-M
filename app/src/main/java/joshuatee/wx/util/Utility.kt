@@ -140,6 +140,7 @@ object Utility {
         themeStr == "white" -> R.style.MyCustomTheme_white_NOAB
         themeStr.startsWith("whiteNew") -> R.style.MyCustomTheme_whiter_NOAB
         themeStr.startsWith("orange") -> R.style.MyCustomTheme_orange_NOAB
+        themeStr.startsWith("BlackAqua") -> R.style.MyCustomTheme_BlackAqua_NOAB
         themeStr.startsWith("WhiteToolbar") -> R.style.MyCustomTheme_white_NOAB
         else -> R.style.MyCustomTheme_NOAB
     }

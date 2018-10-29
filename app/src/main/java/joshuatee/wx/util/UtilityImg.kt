@@ -35,8 +35,8 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import androidx.core.graphics.drawable.DrawableCompat
-import androidx.appcompat.widget.AppCompatDrawableManager
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.MyApplication
@@ -266,7 +266,7 @@ object UtilityImg {
     }
 
     fun vectorDrawableToBitmap(context: Context, resdraw: Int, color: Int): Bitmap {
-        val d = AppCompatDrawableManager.get().getDrawable(context, resdraw)
+        val d = ContextCompat.getDrawable(context, resdraw)!!
         DrawableCompat.setTint(d, color)
         val b = Bitmap.createBitmap(d.intrinsicWidth, d.intrinsicHeight, Bitmap.Config.ARGB_8888)
         val c = Canvas(b)

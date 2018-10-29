@@ -29,6 +29,10 @@ import joshuatee.wx.util.UtilityIO
 
 object UtilityColorPalette {
 
+
+    //TODO move those files to /wX/pal/
+    //todo Where is one for SRM (code 56)
+
     fun getColorMapStringFromDisk(context: Context, prod: String, code: String): String {
         var cmFileInt = 0
         var text = "null"
@@ -42,14 +46,14 @@ object UtilityColorPalette {
                 "NWSD" -> cmFileInt = R.raw.colormaprefnwsd
                 "COD", "CODENH" -> cmFileInt = R.raw.colormaprefcodenh
                 "MENH" -> cmFileInt = R.raw.colormaprefmenh
-                "OWN" -> cmFileInt = R.raw.colormapownref
+                "ELY" -> cmFileInt = R.raw.colormapownref
                 else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
             }
             "99" -> when (code) {
                 "COD", "CODENH" -> cmFileInt = R.raw.colormapbvcod
                 "AF" -> cmFileInt = R.raw.colormapbvaf
                 "EAK" -> cmFileInt = R.raw.colormapbveak
-                "OWN" -> cmFileInt = R.raw.colormapownvel
+                "ELY" -> cmFileInt = R.raw.colormapownvel
                 else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
             }
             "135" -> when (code) {

@@ -30,7 +30,6 @@ import android.graphics.Canvas
 import android.os.Build
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.core.content.ContextCompat
-import androidx.appcompat.widget.AppCompatDrawableManager
 import android.view.View
 import android.widget.RemoteViews
 
@@ -57,7 +56,10 @@ class ObjectFab {
     }
 
     fun setVisibility(vis: Int) {
-        fab.visibility = vis
+        when (vis) {
+            View.GONE -> fab.hide()
+            View.VISIBLE -> fab.show()
+        }
     }
 
     companion object {
@@ -86,7 +88,8 @@ class ObjectFab {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 fab.setImageDrawable(ContextCompat.getDrawable(context, resdraw))
             } else {
-                val d = AppCompatDrawableManager.get().getDrawable(context, resdraw)
+                //val d = AppCompatDrawableManager.get().getDrawable(context, resdraw)
+                val d = ContextCompat.getDrawable(context, resdraw)!!
                 val b = Bitmap.createBitmap(d.intrinsicWidth, d.intrinsicHeight, Bitmap.Config.ARGB_8888)
                 val c = Canvas(b)
                 d.setBounds(0, 0, c.width, c.height)

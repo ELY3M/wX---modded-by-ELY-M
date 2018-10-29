@@ -23,6 +23,7 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.widget.RemoteViews
+import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UtilityWidget
 import joshuatee.wx.activitiesmisc.AFDActivity
@@ -42,7 +43,9 @@ class ObjectWidgetAFD(context: Context) {
         if (Utility.readPref(context, "WFO_TEXT_FAV", "").startsWith("VFD")) {
             prodToGoTo = "VFD"
         }
-        UtilityWidget.setupIntent(context, remoteViews, AFDActivity::class.java, R.id.text1, AFDActivity.URL, arrayOf(nws1Current, prodToGoTo), WidgetFile.AFD.action)
+        if (!MyApplication.widgetPreventTap) {
+            UtilityWidget.setupIntent(context, remoteViews, AFDActivity::class.java, R.id.text1, AFDActivity.URL, arrayOf(nws1Current, prodToGoTo), WidgetFile.AFD.action)
+        }
     }
 }
 

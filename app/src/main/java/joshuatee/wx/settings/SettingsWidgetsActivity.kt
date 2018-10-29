@@ -44,6 +44,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_widgets, null, false)
+        toolbar.subtitle = "Please tap on text for additional help."
         val locNumIntCurrent = Location.numLocations
         val locTruncateLen = 20
         val locationAl = (1 until locNumIntCurrent + 1).mapTo(mutableListOf()) { it.toString() + ": " + UtilityStringExternal.truncate(Utility.readPref(this, "LOC" + it + "_LABEL", ""), locTruncateLen) }

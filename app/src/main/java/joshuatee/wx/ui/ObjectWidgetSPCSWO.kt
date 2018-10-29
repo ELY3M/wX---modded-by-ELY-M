@@ -23,6 +23,7 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.widget.RemoteViews
+import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UtilityWidget
 import joshuatee.wx.objects.WidgetFile
@@ -38,7 +39,9 @@ class ObjectWidgetSPCSWO(context: Context) {
         (0..3).forEach {
             val dayAsString = (it + 1).toString()
             UtilityWidget.setImage(context, remoteViews, ivList[it], SPCSWO.fileName + dayAsString)
-            UtilityWidget.setupIntent(context, remoteViews, SPCSWOActivity::class.java, ivList[it], SPCSWOActivity.NO, arrayOf(dayAsString, ""), WidgetFile.SPCSWO.action + dayAsString)
+            if (!MyApplication.widgetPreventTap) {
+                UtilityWidget.setupIntent(context, remoteViews, SPCSWOActivity::class.java, ivList[it], SPCSWOActivity.NO, arrayOf(dayAsString, ""), WidgetFile.SPCSWO.action + dayAsString)
+            }
         }
     }
 }

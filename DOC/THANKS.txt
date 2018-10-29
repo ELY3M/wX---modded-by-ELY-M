@@ -1,4 +1,5 @@
-
+Content Credits
+--------------------
 National Weather Service
 - current conditions
 - 7day forecast
@@ -8,25 +9,53 @@ National Weather Service
 - Weather alerts
 - NHC
 - GOES imagery
+- WPC
 
 Environment Canada
  - everything for Canada
  
 LightningMaps.org CC BY-SA 4.0 / Lightning data by Blitzortung.org and its participants
 
-Telecine ( screenrecording ): Jake Wharton
-
-TouchImageView used pervasively: Michael Ortiz
-
-ItemTouchHelper: Paul Burke
-
+Included Binary Credits
+--------------------
 http://square.github.io/okhttp/
-
-AndroidPlot.com APL2.0 - graphing software
-
 http://www.android-graphview.org/ - APL2.0 - Jonas Gehring
 
-ImageMap used in Nexrad map rid selector: Scott Lund
+Source Code Credits
+--------------------
+This application uses Open Source components. You can find the source code of their open source projects along with license information below. We acknowledge and are grateful to these developers for their contributions to open source.
+
+Telecine - APL 2.0
+Jake Wharton
+https://github.com/JakeWharton/Telecine
+
+TouchImageView - see license file in this directory
+Michael Ortiz
+https://github.com/MikeOrtiz/TouchImageView
+
+ItemTouchHelper - APL 2.0
+Paul Burke
+https://github.com/iPaulPro/Android-ItemTouchHelper-Demo
+
+ImageMap
+Scott Lund
+https://github.com/catchthecows/AndroidImageMap
+
+HoloColorPicker - APL 2.0
+Lars Werkman 
+https://github.com/LarsWerkman/HoloColorPicker
+
+Polygon contains point - APL 2.0
+sromku
+https://github.com/sromku/polygon-contains-point
+
+Sunrise,Sunset calc - APL 2.0
+mikereedell
+https://github.com/mikereedell/sunrisesunsetlib-java
+
+FingerDraw 
+Chris Lizon
+https://github.com/ChrisLizon/FingerDraw
 
 eraseBG used in and NWS images: Paul - http://stackoverflow.com/questions/20056050/transparent-gif-in-android-imageview
 
@@ -34,12 +63,6 @@ Lars Vogel for ExpandableListView code used in SPC Meso:
 http://www.vogella.com/tutorials/AndroidListView/article.html
 
 GPS function , Phobos: http://stackoverflow.com/questions/4735942/android-get-location-only-one-time
-
-//GIF* class files
-//GifDecoder.java - not sure who original authors but tutorital and hosted by Johannes Borchardt
-//GifAnimationDrawable.java -  Femi Omojola <femi@hipmob.com>
-
-HoloColorPicker - Lars Werkman https://github.com/LarsWerkman/HoloColorPicker/blob/master/README.md
 
 Assistance with nexrad decoding:
 gottipati, harpchad http://sourceforge.net/projects/nexrad-perl/files/nexrad-perl/
@@ -49,18 +72,15 @@ UncompressInputStream.java This file is part of the HTTPClient package Ronald Ts
 Compression.java Mark Taylor (Starlink)
 http://stackoverflow.com/questions/4414673/android-color-between-two-colors-based-on-percentage Stuck Mark Renouf
 
-Launcher Icon ( http://creativecommons.org/licenses/by/3.0/ ):
-thanks to Roman Nurik for this website to design and generate necessary icons
-http://romannurik.github.io/AndroidAssetStudio/icons-launcher.html#foreground.type=text&foreground.space.trim=1&foreground.space.pad=0.1&foreground.text.text=wX&foreground.text.font=&foreColor=fff%2C100&crop=0&backgroundShape=square&backColor=2e3f59%2C100&effects=none
+//GIF* class files
+//GifDecoder.java - not sure who original authors but tutorital and hosted by Johannes Borchardt
+//GifAnimationDrawable.java -  Femi Omojola <femi@hipmob.com>
 
-Polygon contains point (sromku):
-https://github.com/sromku/polygon-contains-point
-
-Sunrise,Sunset calc:
-https://github.com/mikereedell/sunrisesunsetlib-java
-
+Non-code Credits
+--------------------
 Color Palettes ( apart from COD and DKenh ):
 http://almanydesigns.com/grx/
 
-FingerDraw https://github.com/ChrisLizon/FingerDraw (Chris Lizon)
-
+Launcher Icon ( http://creativecommons.org/licenses/by/3.0/ ):
+thanks to Roman Nurik for this website to design and generate necessary icons
+http://romannurik.github.io/AndroidAssetStudio/icons-launcher.html#foreground.type=text&foreground.space.trim=1&foreground.space.pad=0.1&foreground.text.text=wX&foreground.text.font=&foreColor=fff%2C100&crop=0&backgroundShape=square&backColor=2e3f59%2C100&effects=none

@@ -65,7 +65,7 @@ class ObjectSettingsCheckBox(context: Context, private val activity: Activity, l
         cb = CheckBox(context)
         cb.gravity = Gravity.CENTER_VERTICAL
         val truePrefs = listOf("COD_HW_DEFAULT", "DUALPANE_SHARE_POSN", "UNITS_F", "UNITS_M", "FAB_IN_MODELS", "NWS_TEXT_REMOVELINEBREAKS",
-                "RECORD_SCREEN_SHARE", "PREF_PREVENT_ACCIDENTAL_EXIT", "COD_LOCDOT_DEFAULT")
+                "RECORD_SCREEN_SHARE", "PREF_PREVENT_ACCIDENTAL_EXIT", "COD_LOCDOT_DEFAULT", "UI_MAIN_SCREEN_RADAR_FAB", "RADAR_TOOLBAR_TRANSPARENT")
         cb.isChecked = Utility.readPref(context, pref, java.lang.Boolean.toString(truePrefs.contains(pref))) == "true"
         cb.setOnCheckedChangeListener { compoundButton, _ ->
             if (compoundButton.isChecked) {
@@ -103,7 +103,7 @@ class ObjectSettingsCheckBox(context: Context, private val activity: Activity, l
                 }
             }
             when (pref) {
-                "TOR_WARNINGS", "TST_WARNINGS", "EWW_WARNINGS", "FFW_WARNINGS", "SMW_WARNINGS", "SVS_WARNINGS", "SPS_WARNINGS", "RADAR_SHOW_MPD", "RADAR_SHOW_WATCH" -> Utility.writePref(context, "RESTART_NOTIF", "true")
+                "TOR_WARNINGS", "SVR_WARNINGS", "EWW_WARNINGS", "FFW_WARNINGS", "SMW_WARNINGS", "SVS_WARNINGS", "SPS_WARNINGS", "RADAR_SHOW_MPD", "RADAR_SHOW_WATCH" -> Utility.writePref(context, "RESTART_NOTIF", "true")
                 "RADAR_STATE_HIRES", "RADAR_COUNTY_HIRES", "RADAR_HW_ENH_EXT", "RADAR_CAMX_BORDERS", "WXOGL_SPOTTERS", "WXOGL_SPOTTERS_LABEL" -> {
                     MyApplication.initPreferences(context)
                     when (pref) {

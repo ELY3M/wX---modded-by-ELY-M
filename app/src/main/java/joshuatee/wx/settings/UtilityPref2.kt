@@ -34,7 +34,7 @@ object UtilityPref2 {
         if (value == null) {
             val stateDefault = "Oklahoma"
             val simpleModeDefault = "false"
-            val themeBlueDefault = "white"
+            val themeBlueDefault = "whiteNew" // was white on 2018-10-27
             val refreshMainMinDefault = 15
             val locNumIntDefault = 1
             val refreshSpcMinDefault = 15
@@ -161,7 +161,7 @@ object UtilityPref2 {
             editor.putString("THEME_BLUE", themeBlueDefault)
             editor.putString("NWS_RADAR_BG_BLACK", nwsRadarBgBlack)
             editor.putString("TOR_WARNINGS", torWarnings)
-            editor.putString("TST_WARNINGS", svrWarnings)
+            editor.putString("SVR_WARNINGS", svrWarnings)
             editor.putString("EWW_WARNINGS", ewwWarnings)
             editor.putString("FFW_WARNINGS", ffwWarnings)
             editor.putString("SMW_WARNINGS", smwWarnings)
@@ -173,7 +173,7 @@ object UtilityPref2 {
             editor.putString("OU_FOR_SOUNDINGS", ouForSoundingsDefault)
             editor.putString("OU_FOR_SOUNDINGS", ouForSoundingsDefault)
             editor.putString("CARDS_MAIN_SCREEN", "true")
-            editor.putInt("ELEVATION_PREF", 10)
+            editor.putInt("ELEVATION_PREF", 0) //was 3 // was 10 on 2018-10-27
             editor.apply()
         }
     }

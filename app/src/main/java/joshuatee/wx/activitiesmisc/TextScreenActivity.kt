@@ -38,6 +38,7 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
 
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.util.UtilityLog
 
 class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -61,7 +62,11 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val playlistMi = menu.findItem(R.id.action_playlist)
         playlistMi.isVisible = false
         toolbarBottom.setOnMenuItemClickListener(this)
-        turl = intent.getStringArrayExtra(URL)
+        try {
+            turl = intent.getStringArrayExtra(URL)
+        } catch (e: IllegalStateException) {
+            UtilityLog.HandleException(e)
+        }
         url = turl[0]
         title = turl[1]
         val linearLayout: LinearLayout = findViewById(R.id.ll)

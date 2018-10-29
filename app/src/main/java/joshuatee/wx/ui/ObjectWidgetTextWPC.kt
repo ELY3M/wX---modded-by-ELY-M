@@ -23,6 +23,7 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.widget.RemoteViews
+import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UtilityWidget
 import joshuatee.wx.objects.WidgetFile.*
@@ -36,7 +37,9 @@ class ObjectWidgetTextWPC(context: Context) {
     init {
         val text = Utility.readPref(context, "TEXTWPC_WIDGET", "")
         remoteViews.setTextViewText(R.id.text1, Utility.fromHtml(text))
-        UtilityWidget.setupIntent(context, remoteViews, WPCTextProductsActivity::class.java, R.id.text1, WPCTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"), TEXT_WPC.action)
+        if (!MyApplication.widgetPreventTap) {
+            UtilityWidget.setupIntent(context, remoteViews, WPCTextProductsActivity::class.java, R.id.text1, WPCTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"), TEXT_WPC.action)
+        }
     }
 }
 
