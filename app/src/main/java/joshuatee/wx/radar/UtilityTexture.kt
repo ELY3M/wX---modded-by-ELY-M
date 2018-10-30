@@ -54,6 +54,8 @@ import android.graphics.Bitmap
 import android.opengl.GLES10
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.nio.FloatBuffer
+import java.nio.ShortBuffer
 import javax.microedition.khronos.opengles.GL10
 
 
@@ -80,9 +82,69 @@ object UtilityTexture {
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE.toFloat())
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE.toFloat())
         val bitmap = BitmapFactory.decodeFile(imagefile, options)
-        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0)
+        if (bitmap != null) {
+            GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0)
+        } else {
+            Log.i(TAG, "bitmap is null")
+        }
         return textures[0]
     }
+
+    private val VERTEX_COORDINATES = floatArrayOf(-1.0f, +1.0f, 0.0f, +1.0f, +1.0f, 0.0f, -1.0f, -1.0f, 0.0f, +1.0f, -1.0f, 0.0f)
+
+    private val TEXTURE_COORDINATES = floatArrayOf(0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f)
+
+    private val TEXCOORD_BUFFER = ByteBuffer.allocateDirect(TEXTURE_COORDINATES.size * 4)
+            .order(ByteOrder.nativeOrder()).asFloatBuffer().put(TEXTURE_COORDINATES).rewind()
+    private val VERTEX_BUFFER = ByteBuffer.allocateDirect(VERTEX_COORDINATES.size * 4)
+            .order(ByteOrder.nativeOrder()).asFloatBuffer().put(VERTEX_COORDINATES).rewind()
+
+
+    fun drawimage(gl: GL10, texture: Int) {
+        gl.glActiveTexture(GL10.GL_TEXTURE0)
+        gl.glBindTexture(GL10.GL_TEXTURE_2D, texture)
+        gl.glVertexPointer(3, GL10.GL_FLOAT, 0, VERTEX_BUFFER)
+        gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, TEXCOORD_BUFFER)
+        gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4)
+    }
+
+
+
+    fun SetupImage(imagefile: String): Bitmap {
+        var indices: ShortArray
+        var uvs: FloatArray
+        var uvBuffer: FloatBuffer
+        // Create our UV coordinates.
+        uvs = floatArrayOf(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f)
+        // The texture buffer
+        val bb = ByteBuffer.allocateDirect(uvs.size * 4)
+        bb.order(ByteOrder.nativeOrder())
+        uvBuffer = bb.asFloatBuffer()
+        uvBuffer.put(uvs)
+        uvBuffer.position(0)
+        // Generate Textures, if more needed, alter these numbers.
+        val texturenames = IntArray(1)
+        GLES20.glGenTextures(1, texturenames, 0)
+        // Temporary create a bitmap
+        val options = BitmapFactory.Options()
+        options.inScaled = false
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888
+        val bmp = BitmapFactory.decodeFile(imagefile, options)
+        // Bind texture to texturename
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[0])
+        // Set filtering
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST)
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST)
+        // Load the bitmap into the bound texture.
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0)
+
+        // We are done using the bitmap so we should recycle it.
+        //bmp.recycle()
+        return bmp
+
+    }
+
 
 
 /*
