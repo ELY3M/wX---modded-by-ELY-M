@@ -17,9 +17,9 @@
 14. 8-bit SRM like in pykl3  
 15. fix up the ability to change products in the multi-pane radar. it seem wont change products for me
 16. android wear support. I own android wear watches and love them.  
-17. change the way the wX do radar pallettes - move the pallettes over to /wX/pal folder and have the app get palletes from there.  
-will keep them in raw and copy them from there to /wX/pal on first time start up and run file check.   
-right now, the app save custom pallettes to prefs I think.  
+17. change the way the wX do radar pallettes - move the pallettes over to /wX/pal folder and have the app get palletes from there.   
+will keep them in raw and copy them from there to /wX/pal on first time start up and run file check on next startups.     
+right now, the app save custom pallettes to prefs I think.   
 
 
 
