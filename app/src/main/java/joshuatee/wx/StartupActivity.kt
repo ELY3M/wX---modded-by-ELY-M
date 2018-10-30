@@ -80,7 +80,8 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         storagepermissionManager.checkPermissions(singleton(Manifest.permission.WRITE_EXTERNAL_STORAGE), object : PermissionManager.PermissionRequestListener {
             override fun onPermissionGranted() {
                 Log.i(TAG, "Storage Permissions Granted")
-                checkfiles(R.drawable.headingbug, "headingbug.png")
+		checkfiles(R.drawable.headingbug, "headingbug.png")
+                checkfiles(R.drawable.star_cyan, "star_cyan.png")
                 checkfiles(R.drawable.location, "location.png")
             }
 

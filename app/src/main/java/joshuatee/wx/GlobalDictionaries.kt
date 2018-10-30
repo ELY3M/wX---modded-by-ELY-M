@@ -47,6 +47,7 @@ val NEXRAD_PRODUCT_STRING: Map<String, String> = mapOf(
         "HI" to "DS.p59hi",
         "DVL" to "DS.134il",
         "EET" to "DS.135et",
+        "MDA" to "DS.141md",
         "TR0" to "DS.181r0",
         "TR1" to "DS.181r1",
         "TR2" to "DS.181r2",

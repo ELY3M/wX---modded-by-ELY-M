@@ -32,6 +32,32 @@ internal object OpenGLShaderUniform {
                     "  gl_FragColor = v_Color;" +
                     "}"
 
+
+
+
+    /* SHADER Image
+ *
+ * This shader is for rendering 2D images straight from a texture
+ * No additional effects.
+ *
+ */
+    const val vs_Image = "uniform mat4 uMVPMatrix;" +
+            "attribute vec4 vPosition;" +
+            "attribute vec2 a_texCoord;" +
+            "varying vec2 v_texCoord;" +
+            "void main() {" +
+            "  gl_Position = uMVPMatrix * vPosition;" +
+            "  v_texCoord = a_texCoord;" +
+            "}"
+
+    const val fs_Image = (
+            "precision mediump float;" +
+                    "varying vec2 v_texCoord;" +
+                    "uniform sampler2D s_texture;" +
+                    "void main() {" +
+                    "  gl_FragColor = texture2D( s_texture, v_texCoord );" +
+                    "}")
+
     fun loadShader(type: Int, shaderCode: String): Int {
 
         // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
