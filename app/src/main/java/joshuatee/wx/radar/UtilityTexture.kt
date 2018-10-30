@@ -57,12 +57,35 @@ import java.nio.ByteOrder
 import javax.microedition.khronos.opengles.GL10
 
 
-object UtilityIcons {
+object UtilityTexture {
 
-    var TAG: String = "joshuatee UtilityIcons"
+    var TAG: String = "joshuatee UtilityTexture"
 
-    var unloadTextures: Boolean = false;
+    //var unloadTextures: Boolean = false;
 
+
+    fun loadimage(gl: GL10, imagefile: String): Int {
+        val options = BitmapFactory.Options()
+        options.inScaled = false
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888
+        val textures = IntArray(1)
+        gl.glEnable(GL10.GL_TEXTURE_2D)
+        gl.glEnableClientState(GL10.GL_VERTEX_ARRAY)
+        gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY)
+        gl.glGenTextures(1, textures, 0)
+        gl.glPixelStorei(GL10.GL_UNPACK_ALIGNMENT, 1)
+        gl.glBindTexture(GL10.GL_TEXTURE_2D, textures[0])
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_NEAREST.toFloat())
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_NEAREST.toFloat())
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, GL10.GL_CLAMP_TO_EDGE.toFloat())
+        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, GL10.GL_CLAMP_TO_EDGE.toFloat())
+        val bitmap = BitmapFactory.decodeFile(imagefile, options)
+        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0)
+        return textures[0]
+    }
+
+
+/*
 
     fun sample() {
         var bitmap: Bitmap = Bitmap.createBitmap(128, 128, Bitmap.Config.ARGB_8888);
@@ -281,19 +304,6 @@ object UtilityIcons {
 
     }
 
-/*
-    fun createTexture(bitmap: Bitmap): Int {
-        val texture = createTexture(bitmap)
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture)
-        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0)
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR)
-        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR)
-        //GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE)
-        //GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE)
-        Log.i(TAG, "texImage2D")
-        return texture
-    }
-*/
 
 
 
@@ -369,5 +379,5 @@ object UtilityIcons {
         }
     }
 
-
+*/
 }
