@@ -16,6 +16,7 @@
 
 package joshuatee.wx.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -384,6 +385,7 @@ class ColorPicker : View {
         }
     }
 
+    @SuppressLint("SwitchIntDef")
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val intrinsicSize = 2 * (mPreferredColorWheelRadius + mColorPointerHaloRadius)
 

@@ -16,6 +16,7 @@
 
 package joshuatee.wx.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -196,6 +197,7 @@ class SaturationBar : View {
         mSatToPosFactor = mBarLength.toFloat() / 1
     }
 
+    @SuppressLint("SwitchIntDef")
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val intrinsicSize = mPreferredBarLength + mBarPointerHaloRadius * 2
         // Variable orientation

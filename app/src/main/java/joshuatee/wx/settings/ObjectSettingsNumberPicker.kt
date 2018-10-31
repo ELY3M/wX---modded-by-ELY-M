@@ -45,7 +45,7 @@ internal class ObjectSettingsNumberPicker(context: Context, private val activity
             "RADAR_TEXT_SIZE" -> (Utility.readPref(context, pref, defValue.toFloat()) * 10).toInt()
             "UI_ANIM_ICON_FRAMES" -> (Utility.readPref(context, pref, MyApplication.uiAnimIconFrames)).toIntOrNull()
                     ?: 0
-            "CARD_CORNER_RADIUS" -> (Utility.readPref(context, pref, 3)).toInt()
+            "CARD_CORNER_RADIUS" -> (Utility.readPref(context, pref, 3))
             else -> Utility.readPref(context, pref, defValue)
         }
         val tv = TextView(context)

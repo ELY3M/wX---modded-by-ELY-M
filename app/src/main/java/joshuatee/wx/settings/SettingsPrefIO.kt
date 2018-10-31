@@ -91,7 +91,8 @@ class SettingsPrefIO : AppCompatActivity(), OnClickListener, OnMenuItemClickList
     }
 
     override fun onClick(v: View) {
-        when (v.id) {R.id.tv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
+        when (v.id) {
+            R.id.tv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
         }
     }
 
