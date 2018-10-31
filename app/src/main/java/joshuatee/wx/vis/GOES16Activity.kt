@@ -266,7 +266,8 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
     override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onClick(v: View) {
-        when (v.id) {R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
+        when (v.id) {
+            R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
         }
     }
 

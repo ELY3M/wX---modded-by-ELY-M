@@ -482,11 +482,12 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     private val myPermissionAccessFineLocation = 5001
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {myPermissionAccessFineLocation -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            val xy = UtilityLocation.getGPS(this)
-            locXEt.setText(xy[0].toString())
-            locYEt.setText(xy[1].toString())
-        }
+        when (requestCode) {
+            myPermissionAccessFineLocation -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                val xy = UtilityLocation.getGPS(this)
+                locXEt.setText(xy[0].toString())
+                locYEt.setText(xy[1].toString())
+            }
         }
     }
 
