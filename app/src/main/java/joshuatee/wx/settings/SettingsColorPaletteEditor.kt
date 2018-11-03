@@ -128,7 +128,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         val lines = text.split("\n".toRegex()).dropLastWhile { it.isEmpty() }
         var tmpArr: List<String>
         var errors = ""
-        var priorVal = -200
+        var priorVal = -231 //was -200
         var lineCnt = 0
         lines.forEach { s ->
             if (s.contains("olor") && !s.contains("#")) {

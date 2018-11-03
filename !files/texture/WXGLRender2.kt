@@ -28,15 +28,14 @@ import javax.microedition.khronos.opengles.GL10
 
 import android.content.Context
 import android.graphics.*
-import android.opengl.*
 import android.opengl.GLSurfaceView.Renderer
+import android.opengl.GLES20
+import android.opengl.GLUtils
 import android.opengl.Matrix
-import android.util.Log
 
 import joshuatee.wx.JNI
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.UtilityLightning
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
@@ -64,7 +63,6 @@ class WXGLRender(private val context: Context) : Renderer {
             private set
     }
 
-    val TAG: String = "joshuatee WXGLRender"
     // this string is normally no string but for dual pane will be set to either 1 or 2 to differentiate timestamps
     var radarStatusStr: String = ""
     var idxStr: String = "0"
@@ -112,12 +110,23 @@ class WXGLRender(private val context: Context) : Renderer {
     private val breakSizeRadar = 15000
     private var mPositionHandle = 0
     private var colorHandle = 0
+    private var mTexCoordLoc = 0
+    private var mTextureHandle = 0
+    var uvBuffer: FloatBuffer = FloatBuffer.allocate(1)
     private var tdwr = false
     private var chunkCount = 0
     private var totalBins = 0
     private var totalBinsOgl = 0
-    
-    
+
+    var cyanimage = 0
+    var testimage = 0
+    var locationimage = 0
+
+    var cyanbitmap: Bitmap = UtilityTexture.SetupImage(MyApplication.FilesPath+"testcyan.png")
+    var testbitmap: Bitmap = UtilityTexture.SetupImage(MyApplication.FilesPath+"star_cyan.png")
+    var locationbitmap: Bitmap = UtilityTexture.SetupImage(MyApplication.FilesPath+"location.png")
+
+
     var zoom: Float = 1.0f
         set(scale) {
             field = scale
@@ -323,12 +332,36 @@ class WXGLRender(private val context: Context) : Renderer {
         GLES20.glAttachShader(OpenGLShader.sp_SolidColor, OpenGLShader.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShader.fs_SolidColor))
         GLES20.glLinkProgram(OpenGLShader.sp_SolidColor)
         GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
-        val vertexShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShaderUniform.vs_SolidColorUnfiform)
-        val fragmentShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShaderUniform.fs_SolidColorUnfiform)
+        var vertexShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShaderUniform.vs_SolidColorUnfiform)
+        var fragmentShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShaderUniform.fs_SolidColorUnfiform)
         OpenGLShaderUniform.sp_SolidColorUniform = GLES20.glCreateProgram()
         GLES20.glAttachShader(OpenGLShaderUniform.sp_SolidColorUniform, vertexShaderUniform)
         GLES20.glAttachShader(OpenGLShaderUniform.sp_SolidColorUniform, fragmentShaderUniform)
         GLES20.glLinkProgram(OpenGLShaderUniform.sp_SolidColorUniform)
+
+
+        //TODO TESTING!
+        // Create the shaders, images
+        vertexShaderUniform  = OpenGLShader.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShader.vs_Image)
+        fragmentShaderUniform = OpenGLShader.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShader.fs_Image)
+        OpenGLShader.sp_Image = GLES20.glCreateProgram()             // create empty OpenGL ES Program
+        GLES20.glAttachShader(OpenGLShader.sp_Image, vertexShaderUniform)   // add the vertex shader to program
+        GLES20.glAttachShader(OpenGLShader.sp_Image, fragmentShaderUniform) // add the fragment shader to program
+        GLES20.glLinkProgram(OpenGLShader.sp_Image)                  // creates OpenGL ES program executables
+        // Set our shader programm
+        GLES20.glUseProgram(OpenGLShader.sp_Image)
+
+        //load our textures
+        cyanimage = UtilityTexture.loadimage(gl, MyApplication.FilesPath+"testcyan.png")
+        testimage = UtilityTexture.loadimage(gl, MyApplication.FilesPath+"star_cyan.png")
+        locationimage = UtilityTexture.loadimage(gl, MyApplication.FilesPath+"location.png")
+
+        cyanbitmap = UtilityTexture.SetupImage(MyApplication.FilesPath+"testcyan.png")
+        testbitmap = UtilityTexture.SetupImage(MyApplication.FilesPath+"star_cyan.png")
+        locationbitmap = UtilityTexture.SetupImage(MyApplication.FilesPath+"location.png")
+
+
+
     }
 
     override fun onDrawFrame(gl: GL10) {
@@ -339,12 +372,17 @@ class WXGLRender(private val context: Context) : Renderer {
         colorHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_SolidColor, "a_Color")
         GLES20.glEnableVertexAttribArray(mPositionHandle)
         // required for color on VBO basis
+        mTexCoordLoc = GLES20.glGetAttribLocation(OpenGLShader.sp_Image, "a_texCoord")
         GLES20.glEnableVertexAttribArray(colorHandle)
+        GLES20.glEnableVertexAttribArray(mTexCoordLoc)
+
         mtrxProjectionAndView = mtrxProjectionAndViewOrig
         Matrix.multiplyMM(mtrxProjectionAndView, 0, mtrxProjection, 0, mtrxView, 0)
         Matrix.translateM(mtrxProjectionAndView, 0, x, y, 0f)
         Matrix.scaleM(mtrxProjectionAndView, 0, zoom, zoom, 1f)
         GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_SolidColor, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
+        GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_Image, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
+
 
         (0 until chunkCount).forEach {
             radarChunkCnt = if (it < chunkCount - 1) {
@@ -363,6 +401,25 @@ class WXGLRender(private val context: Context) : Renderer {
                 UtilityLog.HandleException(e)
             }
         }
+
+/*
+        //TODO TESTING
+        GLES20.glUseProgram(OpenGLShader.sp_Image)
+        GLES20.glClearColor(bgColorFRed, bgColorFGreen, bgColorFBlue, 1f)
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
+        mPositionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_Image, "vPosition")
+        colorHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_Image, "a_texCoord")
+        GLES20.glEnableVertexAttribArray(mPositionHandle)
+        // required for color on VBO basis
+        GLES20.glEnableVertexAttribArray(colorHandle)
+        mtrxProjectionAndView = mtrxProjectionAndViewOrig
+        Matrix.multiplyMM(mtrxProjectionAndView, 0, mtrxProjection, 0, mtrxView, 0)
+        Matrix.translateM(mtrxProjectionAndView, 0, x, y, 0f)
+        Matrix.scaleM(mtrxProjectionAndView, 0, zoom, zoom, 1f)
+        GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_Image, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
+*/
+
+
         GLES20.glLineWidth(defaultLineWidth)
         listOf(countyLineBuffers, stateLineBuffers, hwBuffers, hwExtBuffers, lakeBuffers).forEach {
             if (zoom > it.scaleCutOff) {
@@ -386,10 +443,8 @@ class WXGLRender(private val context: Context) : Renderer {
             }
         }
         GLES20.glLineWidth(defaultLineWidth)
-        drawTriangles(locdotBuffers)
-
-        //drawLocation(locdotBuffers)
-        //drawTrianglestexture(locdotBuffers)
+        //drawTriangles(locdotBuffers)
+        drawTrianglesTexture2(locdotBuffers, cyanimage, cyanbitmap)
         if (MyApplication.locdotFollowsGps && locCircleBuffers.floatBuffer.capacity() != 0 && locCircleBuffers.indexBuffer.capacity() != 0 && locCircleBuffers.colorBuffer.capacity() != 0) {
             locCircleBuffers.chunkCount = 1
             drawPolygons(locCircleBuffers, 16)
@@ -401,22 +456,6 @@ class WXGLRender(private val context: Context) : Renderer {
 
 
 
-    }
-
-
-
-
-
-
-    //weird rainbow dot hahahah
-    private fun drawTrianglestextureRainbow(buffers: ObjectOglBuffers) {
-        if (buffers.isInitialized) {
-            buffers.setToPositionZero()
-            UtilityTexture.SetupImage(MyApplication.FilesPath+"testcyan.png")
-            GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
-            GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, buffers.colorBuffer.slice().asFloatBuffer())
-            GLES20.glDrawElements(GLES20.GL_TRIANGLES, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
-        }
     }
 
     // FIXME CRASHING HERE sometimes
@@ -436,26 +475,87 @@ class WXGLRender(private val context: Context) : Renderer {
         }
     }
 
-    private fun drawTrianglesTexture(buffers: ObjectOglBuffers, texture: Int, bitmap: Bitmap) {
+
+    private fun drawTrianglestest(buffers: ObjectOglBuffers, texture: Int, bitmap: Bitmap) {
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
+
+            GLES20.glClearColor(0f, 0f, 0f, 0f)
+
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture)
             GLES20.glEnable(GLES20.GL_BLEND)
             // Set filtering
             GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST)
             GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST)
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE)
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE)
             // Load the bitmap into the bound texture.
             GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0)
-            GLES20.glClearColor(0f, 0f, 0f, 0f)
+
+
+
             GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
             GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, buffers.colorBuffer.slice().asFloatBuffer())
+            GLES20.glDrawElements(GLES20.GL_TRIANGLES, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+        }
+    }
+
+
+    private fun drawTrianglesTexture(buffers: ObjectOglBuffers, texture: Int, bitmap: Bitmap) {
+        if (buffers.isInitialized) {
+            buffers.setToPositionZero()
+            GLES20.glClearColor(0f, 0f, 0f, 0f)
+
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture)
+            GLES20.glEnable(GLES20.GL_BLEND)
+            // Set filtering
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST)
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST)
+            // Load the bitmap into the bound texture.
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0)
+
+            //GLES20.glClearColor(0f, 0f, 0f, 0f)
+
+            GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
+            GLES20.glUniform1i(mTextureHandle, 0)
+            // Prepare the texturecoordinates
+            GLES20.glVertexAttribPointer(mTexCoordLoc, 2, GLES20.GL_FLOAT, false, 0, buffers.colorBuffer.slice().asFloatBuffer())
+            //GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, buffers.colorBuffer.slice().asFloatBuffer())
             GLES20.glDrawElements(GLES20.GL_TRIANGLES, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
 
         }
     }
+
+
+    private fun drawTrianglesTexture2(buffers: ObjectOglBuffers, texture: Int, bitmap: Bitmap) {
+        if (buffers.isInitialized) {
+            buffers.setToPositionZero()
+            GLES20.glClearColor(0f, 0f, 0f, 0f)
+
+
+            GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
+            GLES20.glUniform1i(mTextureHandle, 0)
+            // Prepare the texturecoordinates
+            GLES20.glVertexAttribPointer(mTexCoordLoc, 2, GLES20.GL_FLOAT, false, 0, buffers.colorBuffer.slice().asFloatBuffer())
+            //GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, buffers.colorBuffer.slice().asFloatBuffer())
+            GLES20.glDrawElements(GLES20.GL_TRIANGLES, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+
+
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texture)
+            GLES20.glEnable(GLES20.GL_BLEND)
+            // Set filtering
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST)
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST)
+            // Load the bitmap into the bound texture.
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0)
+
+
+
+
+        }
+    }
+
 
 
 
@@ -493,6 +593,7 @@ class WXGLRender(private val context: Context) : Renderer {
             }
         }
     }
+
 
     override fun onSurfaceChanged(gl: GL10, width: Int, height: Int) {
         mSurfaceRatio = width.toFloat() / height
@@ -586,7 +687,7 @@ class WXGLRender(private val context: Context) : Renderer {
             } else {
                 UtilityWXOGLPerf.colorGen(buffers.colorBuffer, 4 * f.size, buffers.colorArray)
             }
-        } catch (e: java.lang.Exception) {
+        } catch (e: java.lang.Exception){
             UtilityLog.HandleException(e)
         }
         buffers.breakSize = 15000
@@ -715,7 +816,6 @@ class WXGLRender(private val context: Context) : Renderer {
                 yy += 1
             }
         }
-
         locdotBuffers.triangleCount = 12
         constructTriangles(locdotBuffers)
 
@@ -788,7 +888,6 @@ class WXGLRender(private val context: Context) : Renderer {
         buffers.draw(pn)
         buffers.isInitialized = true
     }
-
 
     fun deconstructHI() {
         hiBuffers.isInitialized = false

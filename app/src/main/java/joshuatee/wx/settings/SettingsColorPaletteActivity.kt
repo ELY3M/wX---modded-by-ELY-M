@@ -137,10 +137,12 @@ class SettingsColorPaletteActivity : BaseActivity() {
                 val cmAf = TileObjectColorPalette("AF", toolbar, prefToken, cg, type, true)
                 val cmEak2 = TileObjectColorPalette("EAK", toolbar, prefToken, cg, type, true)
                 val cmOwnvel = TileObjectColorPalette("ELY", toolbar, prefToken, cg, type, true)
+                val cmOwnenhvel = TileObjectColorPalette("ENH", toolbar, prefToken, cg, type, true)
                 allItems.add(cmCodenh)
                 allItems.add(cmAf)
                 allItems.add(cmEak2)
                 allItems.add(cmOwnvel)
+                allItems.add(cmOwnenhvel)
                 val prefArr = MyApplication.radarColorPalette99List.split(":").dropLastWhile { it.isEmpty() }
                 prefArr.asSequence().filter { it != "" }.mapTo(allItems) { TileObjectColorPalette(it, toolbar, prefToken, cg, type, false) }
                 builtinStr = "false"

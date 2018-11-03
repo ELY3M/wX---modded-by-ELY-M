@@ -54,6 +54,7 @@ object UtilityColorPalette {
                 "AF" -> cmFileInt = R.raw.colormapbvaf
                 "EAK" -> cmFileInt = R.raw.colormapbveak
                 "ELY" -> cmFileInt = R.raw.colormapownvel
+                "ENH" -> cmFileInt = R.raw.colormapownenhvel
                 else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
             }
             "135" -> when (code) {

@@ -1,0 +1,40 @@
+color;=========================================
+;   SRV Color Table for GR3v2
+;   Storm Relative Velocity
+
+; Tornado EF Scale
+;   65-85 mph => EF0
+;  86-110 mph => EF1
+; 111-135 mph => EF2
+; 136-165 mph => EF3
+; 166-200 mph => EF4
+; 201 + => EF5
+;
+
+
+Product: SRV
+units: MPH
+scale: 2.237
+step: 10
+
+Color: 200  095 035 000
+Color: 150  071 000 191   220 080 000
+Color: 100  218 023 223
+Color:  65  255 255 000   164 089 068
+Color:  50  255 055 026
+Color:  40  255 000 000
+Color:  20  119 064 064
+
+Color:   2  119 119 119
+Color:   0  032 032 032
+Color:  -2  119 119 119  
+
+Color:  -20  064 119 064
+Color:  -40  000 255 000
+Color:  -50  082 247 089
+Color:  -65  071 240 240
+Color: -100  000 000 225
+Color: -150  020 070 065  030 180 170
+Color: -200  045 045 070  110 110 170
+
+RF: 064 000 100

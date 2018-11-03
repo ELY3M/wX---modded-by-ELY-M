@@ -87,25 +87,28 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     }
                 }
             }
+
+            //TODO figure out how to read pal files//
             "N0U", "L2VEL", "TV0" -> {
                 (0 until 256).forEach {
                     setColorWithBuffers(99, 255 - it, strokeWidth)
                     canvas.drawRect(widthStarting, it * scaledHeight + startHeight, width + widthStarting, it * scaledHeight + scaledHeight + startHeight, myPaint)
                 }
                 var units = " KT"
-                //val max = 122
-                //val min = -129
+                val max = 122
+                val min = -129
                 //val max = 230
                 //val min = -230
-                val max = WXGLRadarActivity.velMax
-                val min = WXGLRadarActivity.velMin
-                val stepSize: Int = (max - min)/25
-                //val stepSize = 10
-                //(122 downTo -130 + 1).forEach {
-                scaledHeightVel = (screenHeight - 2 * startHeight) / (max - min)
+                //val max = WXGLRadarActivity.velMax
+                //val min = WXGLRadarActivity.velMin
+                //val stepSize: Int = (max - min) / 25
+                val stepSize = 10
+                //scaledHeightVel = (screenHeight - 2 * startHeight) / (max - min)
                 (max downTo min).forEach {
+                //(122 downTo -130 + 1).forEach {
                     if (it % stepSize == 0) {
-                        canvas.drawText(it.toString() + units, widthStarting + width + textFromLegend,  scaledHeightVel * (max - it) + heightFudge + startHeight, paintText) // max was 122
+                        //canvas.drawText(it.toString() + units, widthStarting + width + textFromLegend, scaledHeightVel * (max - it) + heightFudge + startHeight, paintText) // max was 122
+                        canvas.drawText(it.toString() + units, widthStarting + width + textFromLegend, scaledHeightVel * (122 - it) + heightFudge + startHeight, paintText)
                         if (!unitsDrawn) {
                             unitsDrawn = true
                             units = ""

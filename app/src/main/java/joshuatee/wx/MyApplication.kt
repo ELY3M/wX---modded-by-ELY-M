@@ -124,6 +124,7 @@ class MyApplication : Application() {
 
         val TAG: String = "joshuatee MyApplication"
         val FilesPath: String = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/"
+        val PalFilesPath: String = Environment.getExternalStorageDirectory().getAbsolutePath() + "/wX/pal/"
         const val nwsSPCwebsitePrefix: String = "https://www.spc.noaa.gov"
         const val nwsWPCwebsitePrefix: String = "https://www.wpc.ncep.noaa.gov"
         const val prefSeperator: String = " : : :"
