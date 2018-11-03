@@ -25,7 +25,8 @@ right now, the app save custom pallettes to prefs I think.
 #
 #
 ## DONE!
-====================================  
+====================================
+added enhanced vel color table - cool one that help you to see tornadoes.     
 fixed up my own vel table colors.     
 reverted the vel color table fix due to messed up color table in vel  
 added checkpalfiles function to check pal files and copy them if any missing * reading from files is not done yet! *       
