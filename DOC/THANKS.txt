@@ -72,6 +72,8 @@ UncompressInputStream.java This file is part of the HTTPClient package Ronald Ts
 Compression.java Mark Taylor (Starlink)
 http://stackoverflow.com/questions/4414673/android-color-between-two-colors-based-on-percentage Stuck Mark Renouf
 
+Ely M - finding bugs and prodiving code for fixes ( as specified in ChangeLog )
+
 //GIF* class files
 //GifDecoder.java - not sure who original authors but tutorital and hosted by Johannes Borchardt
 //GifAnimationDrawable.java -  Femi Omojola <femi@hipmob.com>

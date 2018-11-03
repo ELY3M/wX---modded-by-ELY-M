@@ -25,7 +25,6 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 3. add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs   
 4. allow custom icons! exp tvs and hail and gps location and cities dots - partily done.  
 5. add read mcd/mpd text like read warnings text in the radar tap menu 
-6. fix up my own velicity color table 
 7. add warning list within radar
 8. add LSR reports from SN spotters/option to turn on/off LSR reports
 9. as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
@@ -44,7 +43,10 @@ right now, the app save custom pallettes to prefs I think.
 #
 #
 ## DONE!
-====================================    
+====================================  
+fixed up my own vel table colors.     
+reverted the vel color table fix due to messed up color table in vel  
+added checkpalfiles function to check pal files and copy them if any missing * reading from files is not done yet! *       
 added Extreme Wind warnings (EWW) 
 added conus radar image auto-download in radaractivity, need to figure out how to plot it when the radar map gets zoom out like in pykl3  
 android permissions are pita! I put in perm library for filechecking for custom icons later.    
