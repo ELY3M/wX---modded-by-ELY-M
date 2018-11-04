@@ -68,11 +68,11 @@ object UtilityFavorites {
             ridArr[1] = ADD_STR
             ridArr[2] = MODIFY_STR
         } else {
-            ridArr = Array(3) { _ -> "" }
+            ridArr = Array(3) { "" }
             ridArr[1] = ADD_STR
             ridArr[2] = MODIFY_STR
         }
-        val ridArrLoc = MutableList(ridArr.size) { _ -> "" }
+        val ridArrLoc = MutableList(ridArr.size) { "" }
         var ridLoc: String
         ridArr.indices.forEach { k ->
             ridLoc = Utility.readPref(context, prefTokenLocation + ridArr[k], "")
@@ -91,7 +91,7 @@ object UtilityFavorites {
         ridArr[0] = nwsOffice
         ridArr[1] = ADD_STR
         ridArr[2] = MODIFY_STR
-        val ridArrLoc = MutableList(ridArr.size) { _ -> "" }
+        val ridArrLoc = MutableList(ridArr.size) { "" }
         ridArr.indices.forEach { k ->
             CA_RID_ARR.indices.filter { CA_RID_ARR[it].contains(ridArr[k]) }.forEach { ridArrLoc[k] = CA_RID_ARR[it].replace(":", "") }
             if (k == 1 || k == 2) {
@@ -165,7 +165,7 @@ object UtilityFavorites {
         ridArr[0] = param
         ridArr[1] = ADD_STR
         ridArr[2] = MODIFY_STR
-        val ridArrLoc = MutableList(ridArr.size) { _ -> "" }
+        val ridArrLoc = MutableList(ridArr.size) { "" }
         ridArr.indices.forEach {
             if (it == 1 || it == 2)
                 ridArrLoc[it] = ridArr[it]
@@ -179,12 +179,12 @@ object UtilityFavorites {
         var ridArr = MyApplication.colon.split(ridFav)
         // bug experienced where somehow size was below 3
         if (ridArr.size < 3) {
-            ridArr = Array(3) { _ -> "" }
+            ridArr = Array(3) { "" }
         }
         ridArr[0] = param
         ridArr[1] = ADD_STR
         ridArr[2] = MODIFY_STR
-        val ridArrLoc = MutableList(ridArr.size) { _ -> "" }
+        val ridArrLoc = MutableList(ridArr.size) { "" }
         ridArr.indices.forEach {
             if (it == 1 || it == 2)
                 ridArrLoc[it] = ridArr[it]
@@ -199,7 +199,7 @@ object UtilityFavorites {
         ridArr[0] = param
         ridArr[1] = ADD_STR
         ridArr[2] = MODIFY_STR
-        val ridArrLoc = MutableList(ridArr.size) { _ -> "" }
+        val ridArrLoc = MutableList(ridArr.size) { "" }
         ridArr.indices.forEach {
             if (it == 1 || it == 2)
                 ridArrLoc[it] = ridArr[it]

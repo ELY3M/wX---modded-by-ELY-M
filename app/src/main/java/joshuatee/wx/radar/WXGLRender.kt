@@ -44,7 +44,7 @@ import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.*
-import java.nio.FloatBuffer
+
 
 class WXGLRender(private val context: Context) : Renderer {
 
@@ -389,7 +389,9 @@ class WXGLRender(private val context: Context) : Renderer {
         drawTriangles(locdotBuffers)
 
         //drawLocation(locdotBuffers)
-        //drawTrianglestexture(locdotBuffers)
+        //drawTrianglesTexture(locdotBuffers, locationtexture, locationbitmap)
+
+
         if (MyApplication.locdotFollowsGps && locCircleBuffers.floatBuffer.capacity() != 0 && locCircleBuffers.indexBuffer.capacity() != 0 && locCircleBuffers.colorBuffer.capacity() != 0) {
             locCircleBuffers.chunkCount = 1
             drawPolygons(locCircleBuffers, 16)
@@ -405,6 +407,14 @@ class WXGLRender(private val context: Context) : Renderer {
 
 
 
+    private fun drawLocation(buffers: ObjectOglBuffers) {
+        if (buffers.isInitialized) {
+            buffers.setToPositionZero()
+
+
+        }
+
+    }
 
 
 

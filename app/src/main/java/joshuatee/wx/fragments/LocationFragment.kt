@@ -96,7 +96,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private var x = ""
     private var y = ""
     private var ts = ""
-    private var tmpArr = Array(2) { _ -> "" }
+    private var tmpArr = Array(2) { "" }
     private var glviewInitialized = false
     private var hazardsSum = ""
     private var currentLoc = -1
@@ -119,7 +119,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private var oglrArr = mutableListOf<WXGLRender>()
     private var glviewArr = mutableListOf<WXGLSurfaceView>()
     private var numRadars = 0
-    private var oldRidArr = MutableList(2) { _ -> "" }
+    private var oldRidArr = MutableList(2) { "" }
     private val radarLocationChangedAl = mutableListOf<Boolean>()
     // used to track the wxogl # for the wxogl that is tied to current location
     private var oglrIdx = -1
@@ -151,7 +151,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         var day7Added = false
         val tmpArr = MyApplication.colon.split(homescreenFavLocal)
         numRadars = tmpArr.count { it == "OGL-RADAR" || it.contains("NXRD-") }
-        oldRidArr = MutableList(numRadars) { _ -> "" }
+        oldRidArr = MutableList(numRadars) { "" }
         val rlArr = mutableListOf<RelativeLayout>()
         glviewArr.clear()
         wxgltextArr.clear()

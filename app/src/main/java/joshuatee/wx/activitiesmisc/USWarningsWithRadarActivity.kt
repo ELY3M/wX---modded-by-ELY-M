@@ -69,7 +69,7 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
     private var sigHtmlTmp = ""
     private var usDownloaded = false
     private var usDataStr = ""
-    private val turlLocal = Array(3) { _ -> "" }
+    private val turlLocal = Array(3) { "" }
     private var firstRun = true
     private var bm = UtilityImg.getBlankBitmap()
     private lateinit var drw: ObjectNavDrawer

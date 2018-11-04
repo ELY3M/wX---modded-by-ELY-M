@@ -40,8 +40,8 @@ internal object UtilityModelWPCGEFSInterface {
             ObjectMenuTitle("Other", 46)
     )
     // FIXME should be 4 more params in storm attributes
-    var SHORT_CODES = Array(13) { Array(50) { _ -> "" } }
-    var LONG_CODES = Array(13) { Array(50) { _ -> "" } }
+    var SHORT_CODES = Array(13) { Array(50) { "" } }
+    var LONG_CODES = Array(13) { Array(50) { "" } }
     val GROUPS = SparseArray<Group>()
 
     internal fun createData() {

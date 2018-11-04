@@ -322,90 +322,90 @@ class MyApplication : Application() {
             initRadarPreferences()
             UIPreferences.initPreferences(context)
             radarGeometrySetColors()
-            listOf(94, 99, 134, 135, 159, 161, 163, 165, 172).forEach { radarColorPalette[it.toString()] = preferences.getString("RADAR_COLOR_PALETTE_" + it.toString(), "CODENH") }
-            cardCorners = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, preferences.getInt("CARD_CORNER_RADIUS", 0).toFloat(), dm) //I hate rounded //was 3 was 0 as of 2018-10-27
+            listOf(94, 99, 134, 135, 159, 161, 163, 165, 172).forEach { radarColorPalette[it.toString()] = getInitialPreferenceString("RADAR_COLOR_PALETTE_" + it.toString(), "CODENH") }
+            cardCorners = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, preferences.getInt("CARD_CORNER_RADIUS", 0).toFloat(), dm) //was 3 i hate rounded corners // was 0 as of 2018-10-27
             telecineVideoSizePercentage = preferencesTelecine.getInt("video-size", 100)
             telecineSwitchShowCountdown = preferencesTelecine.getBoolean("show-countdown", false)
             telecineSwitchRecordingNotification = preferencesTelecine.getBoolean("recording-notification", false)
             telecineSwitchShowTouches = false
-            vrButton = preferences.getString("VR_BUTTON", "false").startsWith("t")
-            radarUseJni = preferences.getString("RADAR_USE_JNI", "false").startsWith("t")
-            tileDownsize = preferences.getString("TILE_IMAGE_DOWNSIZE", "false").startsWith("t")
-            iconsEvenSpaced = preferences.getString("UI_ICONS_EVENLY_SPACED", "true").startsWith("t")
-            simpleMode = preferences.getString("SIMPLE_MODE", "").startsWith("t")
-            checkspc = preferences.getString("CHECKSPC", "false").startsWith("t")
-            checkwpc = preferences.getString("CHECKWPC", "false").startsWith("t")
-            checktor = preferences.getString("CHECKTOR", "false").startsWith("t")
+            vrButton = getInitialPreference("VR_BUTTON", "false")
+            radarUseJni = getInitialPreference("RADAR_USE_JNI", "false")
+            tileDownsize = getInitialPreference("TILE_IMAGE_DOWNSIZE", "false")
+            iconsEvenSpaced = getInitialPreference("UI_ICONS_EVENLY_SPACED", "true")
+            simpleMode = getInitialPreference("SIMPLE_MODE", "")
+            checkspc = getInitialPreference("CHECKSPC", "false")
+            checkwpc = getInitialPreference("CHECKWPC", "false")
+            checktor = getInitialPreference("CHECKTOR", "false")
             nwsIconSize = preferences.getInt("NWS_ICON_SIZE_PREF", 20) // was 24 10-27-2018
-            uiAnimIconFrames = preferences.getString("UI_ANIM_ICON_FRAMES", "6")
-            blackBg = preferences.getString("NWS_RADAR_BG_BLACK", "").startsWith("t")
-            widgetPreventTap = preferences.getString("UI_WIDGET_PREVENT_TAP", "").startsWith("t")
-            fullscreenMode = preferences.getString("FULLSCREEN_MODE", "false").startsWith("t")
-            lockToolbars = preferences.getString("LOCK_TOOLBARS", "false").startsWith("t")
-            alertOnlyonce = preferences.getString("ALERT_ONLYONCE", "false").startsWith("t")
-            unitsM = preferences.getString("UNITS_M", "true").startsWith("t")
-            unitsF = preferences.getString("UNITS_F", "true").startsWith("t")
-            drawToolColor = preferences.getInt("DRAW_TOOL_COLOR", Color.rgb(143, 213, 253))
-            widgetTextColor = preferences.getInt("WIDGET_TEXT_COLOR", Color.WHITE)
-            widgetHighlightTextColor = preferences.getInt("WIDGET_HIGHLIGHT_TEXT_COLOR", Color.YELLOW)
-            widgetNexradSize = preferences.getInt("WIDGET_NEXRAD_SIZE", 10)
-            widgetCCShow7Day = preferences.getString("WIDGET_CC_DONOTSHOW_7_DAY", "true").startsWith("t")
-            nwsIconTextColor = preferences.getInt("NWS_ICON_TEXT_COLOR", Color.rgb(38, 97, 139))
-            nwsIconBottomColor = preferences.getInt("NWS_ICON_BOTTOM_COLOR", Color.rgb(255, 255, 255))
-            nexradRadarBackgroundColor = preferences.getInt("NEXRAD_RADAR_BACKGROUND_COLOR", Color.rgb(0, 0, 0))
-            wxoglSize = preferences.getInt("WXOGL_SIZE", 8)
-            wxoglRememberLocation = preferences.getString("WXOGL_REMEMBER_LOCATION", "false").startsWith("t")
-            wxoglLocationAutorefresh = preferences.getString("LOCATION_AUTOREFRESH", "false").startsWith("t")
-            wxoglkeepscreenon = preferences.getString("KEEP_SCREEN_ON", "false").startsWith("t")
-            wfoFav = preferences.getString("WFO_FAV", prefSeperator) ?: prefSeperator
-            ridFav = preferences.getString("RID_FAV", prefSeperator) ?: prefSeperator
-            sndFav = preferences.getString("SND_FAV", prefSeperator) ?: prefSeperator
-            srefFav = preferences.getString("SREF_FAV", prefSeperator) ?: prefSeperator
-            spcmesoFav = preferences.getString("SPCMESO_FAV", prefSeperator) ?: prefSeperator
-            spcmesoLabelFav = preferences.getString("SPCMESO_LABEL_FAV", prefSeperator) ?: prefSeperator
-            nwsTextFav = preferences.getString("NWS_TEXT_FAV", prefSeperator) ?: prefSeperator
-            notifSoundUri = preferences.getString("NOTIF_SOUND_URI", "") ?: ""
+            uiAnimIconFrames = getInitialPreferenceString("UI_ANIM_ICON_FRAMES", "6")
+            blackBg = getInitialPreference("NWS_RADAR_BG_BLACK", "")
+            widgetPreventTap = getInitialPreference("UI_WIDGET_PREVENT_TAP", "")
+            fullscreenMode = getInitialPreference("FULLSCREEN_MODE", "false")
+            lockToolbars = getInitialPreference("LOCK_TOOLBARS", "false")
+            alertOnlyonce = getInitialPreference("ALERT_ONLYONCE", "false")
+            unitsM = getInitialPreference("UNITS_M", "true")
+            unitsF = getInitialPreference("UNITS_F", "true")
+            drawToolColor = getInitialPreference("DRAW_TOOL_COLOR", Color.rgb(255, 0, 0))
+            widgetTextColor = getInitialPreference("WIDGET_TEXT_COLOR", Color.WHITE)
+            widgetHighlightTextColor = getInitialPreference("WIDGET_HIGHLIGHT_TEXT_COLOR", Color.YELLOW)
+            widgetNexradSize = getInitialPreference("WIDGET_NEXRAD_SIZE", 10)
+            widgetCCShow7Day = getInitialPreference("WIDGET_CC_DONOTSHOW_7_DAY", "true")
+            nwsIconTextColor = getInitialPreference("NWS_ICON_TEXT_COLOR", Color.rgb(38, 97, 139))
+            nwsIconBottomColor = getInitialPreference("NWS_ICON_BOTTOM_COLOR", Color.rgb(255, 255, 255))
+            nexradRadarBackgroundColor = getInitialPreference("NEXRAD_RADAR_BACKGROUND_COLOR", Color.rgb(0, 0, 0))
+            wxoglSize = getInitialPreference("WXOGL_SIZE", 8)
+            wxoglRememberLocation = getInitialPreference("WXOGL_REMEMBER_LOCATION", "false")
+            wxoglLocationAutorefresh = getInitialPreference("LOCATION_AUTOREFRESH", "false")
+            wxoglkeepscreenon = getInitialPreference("KEEP_SCREEN_ON", "false")
+            wfoFav = getInitialPreferenceString("WFO_FAV", prefSeperator)
+            ridFav = getInitialPreferenceString("RID_FAV", prefSeperator)
+            sndFav = getInitialPreferenceString("SND_FAV", prefSeperator)
+            srefFav = getInitialPreferenceString("SREF_FAV", prefSeperator)
+            spcmesoFav = getInitialPreferenceString("SPCMESO_FAV", prefSeperator)
+            spcmesoLabelFav = getInitialPreferenceString("SPCMESO_LABEL_FAV", prefSeperator)
+            nwsTextFav = getInitialPreferenceString("NWS_TEXT_FAV", prefSeperator)
+            notifSoundUri = getInitialPreferenceString("NOTIF_SOUND_URI", "")
             if (notifSoundUri == "") {
                 notifSoundUri = Settings.System.DEFAULT_NOTIFICATION_URI.toString()
             }
-            sn_key = preferences.getString("SN_KEY", "");
-            sn_locationreport = preferences.getString("SN_LOCATIONREPORT", "").startsWith("t")
+            sn_key = getInitialPreferenceString("SN_KEY", "")
+            sn_locationreport = getInitialPreference("SN_LOCATIONREPORT", "")
             spotterFav = preferences.getString("SPOTTER_FAV", "") ?: ""
             homescreenFav = preferences.getString("HOMESCREEN_FAV", HOMESCREEN_FAV_DEFAULT) ?: HOMESCREEN_FAV_DEFAULT
             locDisplayImg = homescreenFav.contains("OGL-RADAR") || homescreenFav.contains("NXRD")
-            alertNotificationSoundTornadoCurrent = preferences.getString("ALERT_NOTIFICATION_SOUND_TORNADO", "").startsWith("t")
-            alertNotificationSoundSpcmcd = preferences.getString("ALERT_NOTIFICATION_SOUND_SPCMCD", "").startsWith("t")
-            alertNotificationSoundWpcmpd = preferences.getString("ALERT_NOTIFICATION_SOUND_WPCMPD", "").startsWith("t")
-            alertNotificationSoundNhcEpac = preferences.getString("ALERT_NOTIFICATION_SOUND_NHC_EPAC", "").startsWith("t")
-            alertNotificationSoundNhcAtl = preferences.getString("ALERT_NOTIFICATION_SOUND_NHC_ATL", "").startsWith("t")
-            alertNotificationSoundSpcwat = preferences.getString("ALERT_NOTIFICATION_SOUND_SPCWAT", "").startsWith("t")
-            alertNotificationSoundSpcswo = preferences.getString("ALERT_NOTIFICATION_SOUND_SPCSWO", "").startsWith("t")
-            alertNotificationSoundTextProd = preferences.getString("ALERT_NOTIFICATION_SOUND_TEXT_PROD", "").startsWith("t")
-            notifSoundRepeat = preferences.getString("NOTIF_SOUND_REPEAT", "").startsWith("t")
-            notifTts = preferences.getString("NOTIF_TTS", "").startsWith("t")
-            alertBlackoutAmCurrent = preferences.getInt("ALERT_BLACKOUT_AM", -1)
-            alertBlackoutPmCurrent = preferences.getInt("ALERT_BLACKOUT_PM", -1)
-            alertTornadoNotificationCurrent = preferences.getString("ALERT_TORNADO_NOTIFICATION", "").startsWith("t")
-            alertSpcmcdNotificationCurrent = preferences.getString("ALERT_SPCMCD_NOTIFICATION", "").startsWith("t")
-            alertSpcwatNotificationCurrent = preferences.getString("ALERT_SPCWAT_NOTIFICATION", "").startsWith("t")
-            alertSpcswoNotificationCurrent = preferences.getString("ALERT_SPCSWO_NOTIFICATION", "").startsWith("t")
-            alertSpcswoSlightNotificationCurrent = preferences.getString("ALERT_SPCSWO_SLIGHT_NOTIFICATION", "").startsWith("t")
-            alertWpcmpdNotificationCurrent = preferences.getString("ALERT_WPCMPD_NOTIFICATION", "").startsWith("t")
-            alertBlackoutTornadoCurrent = preferences.getString("ALERT_BLACKOUT_TORNADO", "").startsWith("t")
-            alertNhcEpacNotificationCurrent = preferences.getString("ALERT_NHC_EPAC_NOTIFICATION", "").startsWith("t")
-            alertNhcAtlNotificationCurrent = preferences.getString("ALERT_NHC_ATL_NOTIFICATION", "").startsWith("t")
-            alertAutocancel = preferences.getString("ALERT_AUTOCANCEL", "false").startsWith("t")
-            alertBlackout = preferences.getString("ALERT_BLACKOUT", "").startsWith("t")
-            playlistStr = preferences.getString("PLAYLIST", "") ?: ""
-            notifTextProdStr = preferences.getString(UtilityNotificationTextProduct.PREF_TOKEN, "") ?: ""
-            radarColorPalette94List = preferences.getString("RADAR_COLOR_PALETTE_94_LIST", "") ?: ""
-            radarColorPalette99List = preferences.getString("RADAR_COLOR_PALETTE_99_LIST", "") ?: ""
+            alertNotificationSoundTornadoCurrent = getInitialPreference("ALERT_NOTIFICATION_SOUND_TORNADO", "")
+            alertNotificationSoundSpcmcd = getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCMCD", "")
+            alertNotificationSoundWpcmpd = getInitialPreference("ALERT_NOTIFICATION_SOUND_WPCMPD", "")
+            alertNotificationSoundNhcEpac = getInitialPreference("ALERT_NOTIFICATION_SOUND_NHC_EPAC", "")
+            alertNotificationSoundNhcAtl = getInitialPreference("ALERT_NOTIFICATION_SOUND_NHC_ATL", "")
+            alertNotificationSoundSpcwat = getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCWAT", "")
+            alertNotificationSoundSpcswo = getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCSWO", "")
+            alertNotificationSoundTextProd = getInitialPreference("ALERT_NOTIFICATION_SOUND_TEXT_PROD", "")
+            notifSoundRepeat = getInitialPreference("NOTIF_SOUND_REPEAT", "")
+            notifTts = getInitialPreference("NOTIF_TTS", "")
+            alertBlackoutAmCurrent = getInitialPreference("ALERT_BLACKOUT_AM", -1)
+            alertBlackoutPmCurrent = getInitialPreference("ALERT_BLACKOUT_PM", -1)
+            alertTornadoNotificationCurrent = getInitialPreference("ALERT_TORNADO_NOTIFICATION", "")
+            alertSpcmcdNotificationCurrent = getInitialPreference("ALERT_SPCMCD_NOTIFICATION", "")
+            alertSpcwatNotificationCurrent = getInitialPreference("ALERT_SPCWAT_NOTIFICATION", "")
+            alertSpcswoNotificationCurrent = getInitialPreference("ALERT_SPCSWO_NOTIFICATION", "")
+            alertSpcswoSlightNotificationCurrent = getInitialPreference("ALERT_SPCSWO_SLIGHT_NOTIFICATION", "")
+            alertWpcmpdNotificationCurrent = getInitialPreference("ALERT_WPCMPD_NOTIFICATION", "")
+            alertBlackoutTornadoCurrent = getInitialPreference("ALERT_BLACKOUT_TORNADO", "")
+            alertNhcEpacNotificationCurrent = getInitialPreference("ALERT_NHC_EPAC_NOTIFICATION", "")
+            alertNhcAtlNotificationCurrent = getInitialPreference("ALERT_NHC_ATL_NOTIFICATION", "")
+            alertAutocancel = getInitialPreference("ALERT_AUTOCANCEL", "false")
+            alertBlackout = getInitialPreference("ALERT_BLACKOUT", "")
+            playlistStr = getInitialPreferenceString("PLAYLIST", "")
+            notifTextProdStr = getInitialPreferenceString(UtilityNotificationTextProduct.PREF_TOKEN, "")
+            radarColorPalette94List = getInitialPreferenceString("RADAR_COLOR_PALETTE_94_LIST", "")
+            radarColorPalette99List = getInitialPreferenceString("RADAR_COLOR_PALETTE_99_LIST", "")
             wxoglZoom = preferences.getFloat("WXOGL_ZOOM", wxoglSize.toFloat() / 10.0f)
-            wxoglRid = preferences.getString("WXOGL_RID", "") ?: ""
-            wxoglProd = preferences.getString("WXOGL_PROD", "N0Q") ?: "N0Q"
-            wxoglX = preferences.getFloat("WXOGL_X", 0.0f)
-            wxoglY = preferences.getFloat("WXOGL_Y", 0.0f)
-            Location.currentLocationStr = preferences.getString("CURRENT_LOC_FRAGMENT", "1") ?: "1"
+            wxoglRid = getInitialPreferenceString("WXOGL_RID", "")
+            wxoglProd = getInitialPreferenceString("WXOGL_PROD", "N0Q")
+            wxoglX = getInitialPreference("WXOGL_X", 0.0f)
+            wxoglY = getInitialPreference("WXOGL_Y", 0.0f)
+            Location.currentLocationStr = getInitialPreferenceString("CURRENT_LOC_FRAGMENT", "1")
             severeDashboardTor.update(context)
             severeDashboardSvr.update(context)
             severeDashboardEww.update(context)
@@ -422,34 +422,32 @@ class MyApplication : Application() {
             mcdNoList.update(context)
             mpdLatlon.update(context)
             mpdNoList.update(context)
-            wfoTextFav = preferences.getString("WFO_TEXT_FAV", "AFD") ?: "AFD"
-            wpcTextFav = preferences.getString("WPC_TEXT_FAV", "pmdspd") ?: "pmdspd"
-            spchrrrZoom = preferences.getFloat("SPCHRRR_ZOOM", 1.0f)
-            spchrrrX = preferences.getFloat("SPCHRRR_X", 0.5f)
-            spchrrrY = preferences.getFloat("SPCHRRR_Y", 0.5f)
-            wpcgefsZoom = preferences.getFloat("WPCGEFS_ZOOM", 1.0f)
-            wpcgefsX = preferences.getFloat("WPCGEFS_X", 0.5f)
-            wpcgefsY = preferences.getFloat("WPCGEFS_Y", 0.5f)
-            spcsseoZoom = preferences.getFloat("SPCSSEO_ZOOM", 1.0f)
-            spcsseoX = preferences.getFloat("SPCSSEO_X", 0.5f)
-            spcsseoY = preferences.getFloat("SPCSSEO_Y", 0.5f)
-            goesVisZoom = preferences.getFloat("GOESVIS_ZOOM", 1.0f)
-            goesVisX = preferences.getFloat("GOESVIS_X", 0.5f)
-            goesVisY = preferences.getFloat("GOESVIS_Y", 0.5f)
-            goesVisSector = preferences.getString("GOESVIS_SECTOR", "") ?: ""
-            elevationPref = preferences.getInt("ELEVATION_PREF", 0).toFloat()
+            wfoTextFav = getInitialPreferenceString("WFO_TEXT_FAV", "AFD")
+            wpcTextFav = getInitialPreferenceString("WPC_TEXT_FAV", "pmdspd")
+            spchrrrZoom = getInitialPreference("SPCHRRR_ZOOM", 1.0f)
+            spchrrrX = getInitialPreference("SPCHRRR_X", 0.5f)
+            spchrrrY = getInitialPreference("SPCHRRR_Y", 0.5f)
+            wpcgefsZoom = getInitialPreference("WPCGEFS_ZOOM", 1.0f)
+            wpcgefsX = getInitialPreference("WPCGEFS_X", 0.5f)
+            wpcgefsY = getInitialPreference("WPCGEFS_Y", 0.5f)
+            spcsseoZoom = getInitialPreference("SPCSSEO_ZOOM", 1.0f)
+            spcsseoX = getInitialPreference("SPCSSEO_X", 0.5f)
+            spcsseoY = getInitialPreference("SPCSSEO_Y", 0.5f)
+            goesVisZoom = getInitialPreference("GOESVIS_ZOOM", 1.0f)
+            goesVisX = getInitialPreference("GOESVIS_X", 0.5f)
+            goesVisY = getInitialPreference("GOESVIS_Y", 0.5f)
+            goesVisSector = getInitialPreferenceString("GOESVIS_SECTOR", "")
+            elevationPref = getInitialPreference("ELEVATION_PREF", 0).toFloat()
             elevationPref = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, elevationPref, dm)
             cardElevation = elevationPref
             fabElevation = elevationPref
             fabElevationDepressed = elevationPref * 2
-            tabHeaders[0] = preferences.getString("TAB1_HEADER", "LOCAL") ?: "LOCAL"
-            tabHeaders[1] = preferences.getString("TAB2_HEADER", "SPC") ?: "SPC"
-            tabHeaders[2] = preferences.getString("TAB3_HEADER", "MISC") ?: "MISC"
-            tabHeaders[3] = preferences.getString("TAB4_HEADER", "IMAGES") ?: "IMAGES"
+            tabHeaders[0] = getInitialPreferenceString("TAB1_HEADER", "LOCAL")
+            tabHeaders[1] = getInitialPreferenceString("TAB2_HEADER", "SPC")
+            tabHeaders[2] = getInitialPreferenceString("TAB3_HEADER", "MISC")
+            tabHeaders[3] = getInitialPreferenceString("TAB4_HEADER", "IMAGES")
         }
 
-        // FIXME move to Location
-        //private val locations = mutableListOf<Location>()
         val locations: MutableList<Location> = mutableListOf()
 
         // source for county and state lines
@@ -466,7 +464,8 @@ class MyApplication : Application() {
         fun initBuffers(context: Context) {
             UtilityLog.d(TAG, "initBuffers ran")
             loadedBuffers = true
-            ColorPalettes.init(context)
+            //need to run this after check perms and files in startup!
+            //ColorPalettes.init(context)
             initRadarGeometryAll(context)
             GeographyType.refresh()
         }
@@ -517,30 +516,30 @@ class MyApplication : Application() {
         var radarColorCountyLabels: Int = 0
 
         private fun radarGeometrySetColors() {
-            radarColorHw = preferences.getInt("RADAR_COLOR_HW", Color.BLUE)
-            radarColorHwExt = preferences.getInt("RADAR_COLOR_HW_EXT", Color.BLUE)
-            radarColorState = preferences.getInt("RADAR_COLOR_STATE", Color.WHITE)
-            radarColorSvrWatch = preferences.getInt("RADAR_COLOR_SVR_WATCH", Color.BLUE)
-            radarColorTorWatch = preferences.getInt("RADAR_COLOR_TOR_WATCH", Color.RED)
-            radarColorTor = preferences.getInt("RADAR_COLOR_TOR", Color.RED)
-            radarColorSvr = preferences.getInt("RADAR_COLOR_SVR", Color.YELLOW)
-            radarColorEww = preferences.getInt("RADAR_COLOR_EWW", Color.GRAY)
-            radarColorFfw = preferences.getInt("RADAR_COLOR_FFW", Color.GREEN)
-            radarColorSmw = preferences.getInt("RADAR_COLOR_SMW", Color.CYAN)
-            radarColorSvs = preferences.getInt("RADAR_COLOR_SVS", Color.rgb(255, 203, 103))
-            radarColorSps = preferences.getInt("RADAR_COLOR_SPS", Color.rgb(255, 204, 102))
-            radarColorMcd = preferences.getInt("RADAR_COLOR_MCD", Color.rgb(255, 255, 163))
-            radarColorMpd = preferences.getInt("RADAR_COLOR_MPD", Color.rgb(0, 255, 0))
-            radarColorLocdot = preferences.getInt("RADAR_COLOR_LOCDOT", Color.WHITE)
-            radarColorSpotter = preferences.getInt("RADAR_COLOR_SPOTTER", Color.GREEN)
-            radarColorCity = preferences.getInt("RADAR_COLOR_CITY", Color.WHITE)
-            radarColorLakes = preferences.getInt("RADAR_COLOR_LAKES", Color.rgb(0, 0, 163))
-            radarColorCounty = preferences.getInt("RADAR_COLOR_COUNTY", Color.rgb(75, 75, 75))
-            radarColorSti = preferences.getInt("RADAR_COLOR_STI", Color.WHITE)
-            radarColorHi = preferences.getInt("RADAR_COLOR_HI", Color.GREEN)
-            radarColorObs = preferences.getInt("RADAR_COLOR_OBS", Color.WHITE)
-            radarColorObsWindbarbs = preferences.getInt("RADAR_COLOR_OBS_WINDBARBS", Color.WHITE)
-            radarColorCountyLabels = preferences.getInt("RADAR_COLOR_COUNTY_LABELS", Color.rgb(75, 75, 75))
+            radarColorHw = getInitialPreference("RADAR_COLOR_HW", Color.BLUE)
+            radarColorHwExt = getInitialPreference("RADAR_COLOR_HW_EXT", Color.BLUE)
+            radarColorState = getInitialPreference("RADAR_COLOR_STATE", Color.WHITE)
+            radarColorSvrWatch = getInitialPreference("RADAR_COLOR_SVR_WATCH", Color.BLUE)
+            radarColorTorWatch = getInitialPreference("RADAR_COLOR_TOR_WATCH", Color.rgb(113,0,0)) //darker red than torning warning polygon
+            radarColorTor = getInitialPreference("RADAR_COLOR_TOR", Color.RED)
+            radarColorSvr = getInitialPreference("RADAR_COLOR_SVR", Color.YELLOW)
+            radarColorEww = getInitialPreference("RADAR_COLOR_EWW", Color.GRAY)
+            radarColorFfw = getInitialPreference("RADAR_COLOR_FFW", Color.GREEN)
+            radarColorSmw = getInitialPreference("RADAR_COLOR_SMW", Color.CYAN)
+            radarColorSvs = getInitialPreference("RADAR_COLOR_SVS", Color.rgb(255, 203, 103))
+            radarColorSps = getInitialPreference("RADAR_COLOR_SPS", Color.rgb(255, 204, 102))
+            radarColorMcd = getInitialPreference("RADAR_COLOR_MCD", Color.rgb(255, 255, 163))
+            radarColorMpd = getInitialPreference("RADAR_COLOR_MPD", Color.GREEN)
+            radarColorLocdot = getInitialPreference("RADAR_COLOR_LOCDOT", Color.WHITE)
+            radarColorSpotter = getInitialPreference("RADAR_COLOR_SPOTTER", Color.GREEN)
+            radarColorCity = getInitialPreference("RADAR_COLOR_CITY", Color.WHITE)
+            radarColorLakes = getInitialPreference("RADAR_COLOR_LAKES", Color.rgb(0, 0, 163))
+            radarColorCounty = getInitialPreference("RADAR_COLOR_COUNTY", Color.rgb(75, 75, 75))
+            radarColorSti = getInitialPreference("RADAR_COLOR_STI", Color.WHITE)
+            radarColorHi = getInitialPreference("RADAR_COLOR_HI", Color.GREEN)
+            radarColorObs = getInitialPreference("RADAR_COLOR_OBS", Color.rgb(255, 255, 255))
+            radarColorObsWindbarbs = getInitialPreference("RADAR_COLOR_OBS_WINDBARBS", Color.WHITE)
+            radarColorCountyLabels = getInitialPreference("RADAR_COLOR_COUNTY_LABELS", Color.rgb(75, 75, 75))
         }
 
         private fun initRadarGeometryAll(context: Context) = GeographyType.values().forEach { initRadarGeometryByType(context, it) }
@@ -645,7 +644,6 @@ class MyApplication : Application() {
         var radarObs: Boolean = false
         var radarObsWindbarbs: Boolean = false
         var radarSwo: Boolean = false
-
         var radarCities: Boolean = false
         var radarHw: Boolean = false
         var radarLocDot: Boolean = false
@@ -659,7 +657,6 @@ class MyApplication : Application() {
         var radarSti: Boolean = false
         var radarHi: Boolean = false
         var radarTvs: Boolean = false
-
         var radarShowLegend: Boolean = false
         var drawtoolSize: Int = 0
         var radarObsExtZoom: Int = 0
@@ -677,52 +674,63 @@ class MyApplication : Application() {
         var radarIconsLevel2: Boolean = false
 
         private fun initRadarPreferences() {
-            radarTorWarnings = preferences.getString("TOR_WARNINGS", "false").startsWith("t")
-            radarSvrWarnings = preferences.getString("SVR_WARNINGS", "false").startsWith("t")
-            radarEwwWarnings = preferences.getString("EWW_WARNINGS", "false").startsWith("t")
-            radarFfwWarnings = preferences.getString("FFW_WARNINGS", "false").startsWith("t")
-            radarSmwWarnings = preferences.getString("SMW_WARNINGS", "false").startsWith("t")
-            radarSvsWarnings = preferences.getString("SVS_WARNINGS", "false").startsWith("t")
-            radarSpsWarnings = preferences.getString("SPS_WARNINGS", "false").startsWith("t")
-            locdotFollowsGps = preferences.getString("LOCDOT_FOLLOWS_GPS", "false").startsWith("t")
-            dualpaneshareposn = preferences.getString("DUALPANE_SHARE_POSN", "true").startsWith("t")
-            radarSpotters = preferences.getString("WXOGL_SPOTTERS", "false").startsWith("t")
-            radarSpottersLabel = preferences.getString("WXOGL_SPOTTERS_LABEL", "false").startsWith("t")
-            radarObs = preferences.getString("WXOGL_OBS", "false").startsWith("t")
-            radarObsWindbarbs = preferences.getString("WXOGL_OBS_WINDBARBS", "false").startsWith("t")
-            radarSwo = preferences.getString("RADAR_SHOW_SWO", "false").startsWith("t")
-            radarCities = preferences.getString("COD_CITIES_DEFAULT", "").startsWith("t")
-            radarHw = preferences.getString("COD_HW_DEFAULT", "true").startsWith("t")
-            radarLocDot = preferences.getString("COD_LOCDOT_DEFAULT", "true").startsWith("t")
-            radarLakes = preferences.getString("COD_LAKES_DEFAULT", "false").startsWith("t")
-            radarCounty = preferences.getString("RADAR_SHOW_COUNTY", "true").startsWith("t")
-            radarWatMcd = preferences.getString("RADAR_SHOW_WATCH", "false").startsWith("t")
-            radarMpd = preferences.getString("RADAR_SHOW_MPD", "false").startsWith("t")
-            radarSti = preferences.getString("RADAR_SHOW_STI", "false").startsWith("t")
-            radarHi = preferences.getString("RADAR_SHOW_HI", "false").startsWith("t")
-            radarTvs = preferences.getString("RADAR_SHOW_TVS", "false").startsWith("t")
-            //radarHwEnh = preferences.getString("RADAR_HW_ENH", "false").startsWith("t")
-            //radarHwEnh = preferences.getString("RADAR_HW_ENH", "true").startsWith("t")
-            radarHwEnhExt = preferences.getString("RADAR_HW_ENH_EXT", "false").startsWith("t")
-            radarCamxBorders = preferences.getString("RADAR_CAMX_BORDERS", "false").startsWith("t")
-            radarCountyLabels = preferences.getString("RADAR_COUNTY_LABELS", "false").startsWith("t")
-            radarCountyHires = preferences.getString("RADAR_COUNTY_HIRES", "false").startsWith("t")
-            radarStateHires = preferences.getString("RADAR_STATE_HIRES", "false").startsWith("t")
-            radarIconsLevel2 = preferences.getString("WXOGL_ICONS_LEVEL2", "false").startsWith("t")
-
-            radarShowLegend = preferences.getString("RADAR_SHOW_LEGEND", "false").startsWith("t")
-            drawtoolSize = preferences.getInt("DRAWTOOL_SIZE", 4)
-            radarObsExtZoom = preferences.getInt("RADAR_OBS_EXT_ZOOM", 7)
-            radarSpotterSize = preferences.getInt("RADAR_SPOTTER_SIZE", 4)
-            radarAviationSize = preferences.getInt("RADAR_AVIATION_SIZE", 7)
-            radarTextSize = preferences.getFloat("RADAR_TEXT_SIZE", 1.0f)
-            radarLocdotSize = preferences.getInt("RADAR_LOCDOT_SIZE", 8)
-            radarHiSize = preferences.getInt("RADAR_HI_SIZE", 8)
-            radarTvsSize = preferences.getInt("RADAR_TVS_SIZE", 8)
-            radarWarnLinesize = preferences.getInt("RADAR_WARN_LINESIZE", 2)
-            radarWatmcdLinesize = preferences.getInt("RADAR_WATMCD_LINESIZE", 2)
+            radarTorWarnings = getInitialPreference("TOR_WARNINGS", "false")
+            radarSvrWarnings = getInitialPreference("SVR_WARNINGS", "false")
+            radarEwwWarnings = getInitialPreference("EWW_WARNINGS", "false")
+            radarFfwWarnings = getInitialPreference("FFW_WARNINGS", "false")
+            radarSmwWarnings = getInitialPreference("SMW_WARNINGS", "false")
+            radarSvsWarnings = getInitialPreference("SVS_WARNINGS", "false")
+            radarSpsWarnings = getInitialPreference("SPS_WARNINGS", "false")
+            locdotFollowsGps = getInitialPreference("LOCDOT_FOLLOWS_GPS", "false")
+            dualpaneshareposn = getInitialPreference("DUALPANE_SHARE_POSN", "true")
+            radarSpotters = getInitialPreference("WXOGL_SPOTTERS", "false")
+            radarSpottersLabel = getInitialPreference("WXOGL_SPOTTERS_LABEL", "false")
+            radarObs = getInitialPreference("WXOGL_OBS", "false")
+            radarObsWindbarbs = getInitialPreference("WXOGL_OBS_WINDBARBS", "false")
+            radarSwo = getInitialPreference("RADAR_SHOW_SWO", "false")
+            radarCities = getInitialPreference("COD_CITIES_DEFAULT", "")
+            radarHw = getInitialPreference("COD_HW_DEFAULT", "true")
+            radarLocDot = getInitialPreference("COD_LOCDOT_DEFAULT", "true")
+            radarLakes = getInitialPreference("COD_LAKES_DEFAULT", "false")
+            radarCounty = getInitialPreference("RADAR_SHOW_COUNTY", "true")
+            radarWatMcd = getInitialPreference("RADAR_SHOW_WATCH", "false")
+            radarMpd = getInitialPreference("RADAR_SHOW_MPD", "false")
+            radarSti = getInitialPreference("RADAR_SHOW_STI", "false")
+            radarHi = getInitialPreference("RADAR_SHOW_HI", "false")
+            radarTvs = getInitialPreference("RADAR_SHOW_TVS", "false")
+            radarHwEnhExt = getInitialPreference("RADAR_HW_ENH_EXT", "false")
+            radarCamxBorders = getInitialPreference("RADAR_CAMX_BORDERS", "false")
+            radarCountyLabels = getInitialPreference("RADAR_COUNTY_LABELS", "false")
+            radarCountyHires = getInitialPreference("RADAR_COUNTY_HIRES", "false")
+            radarStateHires = getInitialPreference("RADAR_STATE_HIRES", "false")
+            radarIconsLevel2 = getInitialPreference("WXOGL_ICONS_LEVEL2", "false")
+            radarShowLegend = getInitialPreference("RADAR_SHOW_LEGEND", "false")
+            drawtoolSize = getInitialPreference("DRAWTOOL_SIZE", 4)
+            radarObsExtZoom = getInitialPreference("RADAR_OBS_EXT_ZOOM", 7)
+            radarSpotterSize = getInitialPreference("RADAR_SPOTTER_SIZE", 4)
+            radarAviationSize = getInitialPreference("RADAR_AVIATION_SIZE", 7)
+            radarTextSize = getInitialPreference("RADAR_TEXT_SIZE", 1.0f)
+            radarLocdotSize = getInitialPreference("RADAR_LOCDOT_SIZE", 8)
+            radarHiSize = getInitialPreference("RADAR_HI_SIZE", 8)
+            radarTvsSize = getInitialPreference("RADAR_TVS_SIZE", 8)
+            radarWarnLinesize = getInitialPreference("RADAR_WARN_LINESIZE", 2)
+            radarWatmcdLinesize = getInitialPreference("RADAR_WATMCD_LINESIZE", 2)
         }
 
+        private fun getInitialPreference(pref: String, initValue: Int): Int {
+            return preferences.getInt(pref, initValue)
+        }
 
+        private fun getInitialPreference(pref: String, initValue: Float): Float {
+            return preferences.getFloat(pref, initValue)
+        }
+
+        private fun getInitialPreference(pref: String, initValue: String): Boolean {
+            return (preferences.getString(pref, initValue) ?: initValue).startsWith("t")
+        }
+
+        private fun getInitialPreferenceString(pref: String, initValue: String): String {
+            return preferences.getString(pref, initValue) ?: initValue
+        }
     } // end companion object
 }

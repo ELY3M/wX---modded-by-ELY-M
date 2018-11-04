@@ -14,11 +14,10 @@
 11. move show color legend to bottom   
 13. rename application id and change icon color so someone can run both versions of wX   
 14. 8-bit SRM like in pykl3  
-15. fix up the ability to change products in the multi-pane radar. it seem wont change products for me
-16. android wear support. I own android wear watches and love them.  
-17. change the way the wX do radar pallettes - move the pallettes over to /wX/pal folder and have the app get palletes from there.   
-will keep them in raw and copy them from there to /wX/pal on first time start up and run file check on next startups.     
-right now, the app save custom pallettes to prefs I think.   
+15. fix up the ability to change products in the multi-pane radar. it seem wont change products for me  
+16. android wear support. I own android wear watches and love them.      
+17. have color table editor save a file to /wX/pal/ on sdcard  - Might not, would need to make a function to read all txt files in /wX/pal/  
+
 
 
 
@@ -26,6 +25,7 @@ right now, the app save custom pallettes to prefs I think.
 #
 ## DONE!
 ====================================  
+reading from pal files on sdcard are done!  I had to redo checkfiles and permissions processing abit.   
 added enhanced vel color table - cool one that help you to see tornadoes.     
 fixed up my own vel table colors.     
 reverted the vel color table fix due to messed up color table in vel  

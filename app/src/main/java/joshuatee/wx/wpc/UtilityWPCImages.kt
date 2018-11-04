@@ -320,8 +320,8 @@ internal object UtilityWPCImages {
     )
 
     val GROUPS = SparseArray<Group>()
-    var SHORT_CODES = Array(8) { Array(28) { _ -> "" } }
-    var LONG_CODES = Array(8) { Array(28) { _ -> "" } }
+    var SHORT_CODES = Array(8) { Array(28) { "" } }
+    var LONG_CODES = Array(8) { Array(28) { "" } }
 
     internal fun createData() {
         var k = 0

@@ -29,7 +29,7 @@ import joshuatee.wx.util.UtilityIO
 internal object UtilityCountyLabels {
 
     private var initialized = false
-    var countyName = Array(1) { _ -> "" }
+    var countyName = Array(1) { "" }
     var countyLat = DoubleArray(1)
     var countyLon = DoubleArray(1)
 

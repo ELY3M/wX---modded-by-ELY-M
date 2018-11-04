@@ -50,7 +50,7 @@ object UtilityTTS {
     var ttsIsPaused: Boolean = false
     private var playlistTotal = 0
     private var playlistNumber = 0
-    private var playlistArr = List(2) { _ -> "" }
+    private var playlistArr = List(2) { "" }
 
     fun initTTS(context: Context) {
         // samsung bug, if users do not have google TTS selected it will crash - add try-catch so user can at least use rest of prog

@@ -21,76 +21,112 @@
 
 package joshuatee.wx.radarcolorpalettes
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import android.util.Log
+import androidx.core.content.ContextCompat
+import com.intentfilter.androidpermissions.PermissionManager
+import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityIO
+import java.io.*
+import java.nio.charset.Charset
+import java.util.*
 
 object UtilityColorPalette {
 
+    val TAG: String = "joshuatee ColorPalette"
 
-    //TODO move those files to /wX/pal/
-    //todo Where is one for SRM (code 56)
+    //TODO Where is one for SRM (code 56)
+    //TODO make color table for SRM
 
     fun getColorMapStringFromDisk(context: Context, prod: String, code: String): String {
-        var cmFileInt = 0
-        var text = "null"
-        when (prod) {
-            "94" -> when (code) {
-                "AF" -> cmFileInt = R.raw.colormaprefaf
-                "EAK" -> cmFileInt = R.raw.colormaprefeak
-                "DKenh" -> cmFileInt = R.raw.colormaprefdkenh
-                "CUST", "CODE" -> cmFileInt = R.raw.colormaprefcode
-                "NSSL" -> cmFileInt = R.raw.colormaprefnssl
-                "NWSD" -> cmFileInt = R.raw.colormaprefnwsd
-                "COD", "CODENH" -> cmFileInt = R.raw.colormaprefcodenh
-                "MENH" -> cmFileInt = R.raw.colormaprefmenh
-                "ELY" -> cmFileInt = R.raw.colormapownref
-                else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
-            }
-            "99" -> when (code) {
-                "COD", "CODENH" -> cmFileInt = R.raw.colormapbvcod
-                "AF" -> cmFileInt = R.raw.colormapbvaf
-                "EAK" -> cmFileInt = R.raw.colormapbveak
-                "ELY" -> cmFileInt = R.raw.colormapownvel
-                "ENH" -> cmFileInt = R.raw.colormapownenhvel
-                else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
-            }
-            "135" -> when (code) {
-                "COD", "CODENH" -> cmFileInt = R.raw.colormap135cod
-                else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
-            }
-            "161" -> when (code) {
-                "COD", "CODENH" -> cmFileInt = R.raw.colormap161cod
-                else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
-            }
-            "163" -> when (code) {
-                "COD", "CODENH" -> cmFileInt = R.raw.colormap163cod
-                else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
-            }
-            "159" -> when (code) {
-                "COD", "CODENH" -> cmFileInt = R.raw.colormap159cod
-                else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
-            }
-            "134" -> when (code) {
-                "COD", "CODENH" -> cmFileInt = R.raw.colormap134cod
-                else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
-            }
-            "165" -> when (code) {
-                "COD", "CODENH" -> cmFileInt = R.raw.colormap165cod
-                else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
-            }
-            "172" -> when (code) {
-                "COD", "CODENH" -> cmFileInt = R.raw.colormap172cod
-                else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
-            }
+
+        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED|| ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            Log.i(TAG, "stupid permission!!!!!!!!!!!!!!!")
         }
-        if (text == "null") {
-            text = UtilityIO.readTextFile(context.resources.openRawResource(cmFileInt))
-        }
+
+
+            var cmFileInt: Int = 0
+            var text = "null"
+            when (prod) {
+                "94" -> when (code) {
+                    "AF" -> text = readpalfile("colormaprefaf.txt")
+                    "EAK" -> text = readpalfile("colormaprefeak.txt")
+                    "DKenh" -> text = readpalfile("colormaprefdkenh.txt")
+                    "CUST", "CODE" -> text = readpalfile("colormaprefcode.txt")
+                    "NSSL" -> text = readpalfile("colormaprefnssl.txt")
+                    "NWSD" -> text = readpalfile("colormaprefnwsd.txt")
+                    "COD", "CODENH" -> text = readpalfile("colormaprefcodenh.txt")
+                    "MENH" -> text = readpalfile("colormaprefmenh.txt")
+                    "ELY" -> text = readpalfile("colormapownref.txt")
+
+                    else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
+                }
+                "99" -> when (code) {
+                    "COD", "CODENH" -> text = readpalfile("colormapbvcod.txt")
+                    "AF" -> text = readpalfile("colormapbvaf.txt")
+                    "EAK" -> text = readpalfile("colormapbveak.txt")
+                    "ELY" -> text = readpalfile("colormapownvel.txt")
+                    "ENH" -> text = readpalfile("colormapownenhvel.txt")
+
+                    else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
+                }
+                "135" -> when (code) {
+                    "COD", "CODENH" -> text = readpalfile("colormap135cod.txt")
+                    else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
+                }
+                "161" -> when (code) {
+                    "COD", "CODENH" -> text = readpalfile("colormap161cod.txt")
+                    else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
+                }
+                "163" -> when (code) {
+                    "COD", "CODENH" -> text = readpalfile("colormap163cod.txt")
+                    else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
+                }
+                "159" -> when (code) {
+                    "COD", "CODENH" -> text = readpalfile("colormap159cod.txt")
+                    else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
+                }
+                "134" -> when (code) {
+                    "COD", "CODENH" -> text = readpalfile("colormap134cod.txt")
+                    else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
+                }
+                "165" -> when (code) {
+                    "COD", "CODENH" -> text = readpalfile("colormap165cod.txt")
+                    else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
+                }
+                "172" -> when (code) {
+                    "COD", "CODENH" -> text = readpalfile("colormap172cod.txt")
+                    else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
+                }
+            }
+            if (text == "null") {
+                text = UtilityIO.readTextFile(context.resources.openRawResource(cmFileInt))
+            }
+            return text
+    }
+
+
+    fun readpalfile(palfile: String): String {
+        Log.i(TAG, "trying to open "+palfile)
+        var text = ""
+        try {
+            val initialFile = File(MyApplication.PalFilesPath + palfile)
+            val getpalfile = FileInputStream(initialFile)
+            text = UtilityIO.readTextFile(getpalfile)
+            Log.i(TAG, palfile + ": " + text + "\n")
+        } catch (e: IOException) {
+            Log.i(TAG, "failed to open file "+palfile+"\nopenpalfile error: "+e.message)
+            }
         return text
     }
+
+
+
 }
 
 

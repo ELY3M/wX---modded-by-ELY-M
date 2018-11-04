@@ -3,8 +3,13 @@
 // TODO look at kotlin coroutines
 // TODO find new material design icons as used in google cal / clock
 // TODO base velocity legend
-// TODO submit to fdroid
 
+55037 2018_11_04 (bugfix) at joshuatee.wx.settings.SettingsLocationAdapterList.deleteItem (SettingsLocationAdapterList.kt:85)
+                java.lang.ArrayIndexOutOfBoundsException:
+                lint cleanup
+55036 2018_11_04 introduce helper methods in myapp to reduce boilerplate and reduce lint warnings related to initial preference processing
+                 remove app/build from git tracking with .gitignore (as rerequested for f-droid submission)
+                 in res/raw move files that have .bin to have no extension (mainly geographic binary files for radar)
 55035 2018_11_02 revert changes to vel color legenc
 55034 2018_10_29 (bugfix - thanks Ely ) revert lint suggestion Oct 13 activity_settings_color_palette_editor.xml
                  update kotlin to 1.3.0

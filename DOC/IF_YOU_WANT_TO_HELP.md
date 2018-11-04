@@ -20,7 +20,11 @@ With that said, please respect these items:
 
 8. Bugs - If you submit a new feature and there are manual or automated user bug reports please understand that I will request your assistance to fix bugs in your code. One reason it might take to have code integrated is because I need to be comfortable with it in case any contributor decides to leave the project so to speak and not be available to fix bugs in their code. 
 
-9. All contributors will need to electronically sign for a Contributor License Agreement to protect both parties and the code, see here for a good idea of why and a sample which will likely be followed
+9. It is a goal to keep as much data within the private storage space of the application if possible. Any writing to external storage space ( accessible via other apps, etc ) must be done with very good reason, ie no alternative.
+
+10. In general, the apps basic function should occur without any needed permissions from the user. For example to check the weather/radar it should not be necessary to have access to users GPS location or to write to their external storage. Such permissions should be requested later on as add needed basis for advanced functionality.
+
+11. All contributors will need to electronically sign for a Contributor License Agreement to protect both parties and the code, see here for a good idea of why and a sample which will likely be followed
 http://infrequently.org/2008/06/why-do-i-need-to-sign-this/ (overview)
 https://github.com/mapsme/omim/blob/master/docs/CLA.md (a good template CLA also used by apache I think )
 https://github.com/fusionpbx/open-source/blob/master/sign-cla.md (an example of electronic signing)

@@ -56,7 +56,6 @@ import joshuatee.wx.activitiesmisc.TextScreenActivity
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.activitiesmisc.WebscreenABModels
 import joshuatee.wx.external.UtilityStringExternal
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.telecine.TelecineService
 import joshuatee.wx.util.ImageMap
 import joshuatee.wx.MyApplication
@@ -68,9 +67,6 @@ import joshuatee.wx.util.UtilityFileManagement
 import joshuatee.wx.util.UtilityImageMap
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityLog
-import joshuatee.wx.settings.FavAddActivity
-import joshuatee.wx.settings.FavRemoveActivity
-import joshuatee.wx.settings.SettingsRadarActivity
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.UtilityShare
 
@@ -84,6 +80,9 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 
 import joshuatee.wx.radar.SpotterNetworkPositionReport.SendPosition
+import joshuatee.wx.radarcolorpalettes.UtilityColorPalette
+import joshuatee.wx.settings.*
+import java.util.*
 
 class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuItemClickListener {
 

@@ -162,8 +162,8 @@ internal object UtilityWPCText {
     )
 
     val GROUPS = SparseArray<Group>()
-    var SHORT_CODES = Array(12) { Array(39) { _ -> "" } }
-    var LONG_CODES = Array(12) { Array(39) { _ -> "" } }
+    var SHORT_CODES = Array(12) { Array(39) { "" } }
+    var LONG_CODES = Array(12) { Array(39) { "" } }
 
     internal fun createData() {
         var k = 0
