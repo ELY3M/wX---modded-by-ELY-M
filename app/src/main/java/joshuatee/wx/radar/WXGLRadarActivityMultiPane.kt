@@ -109,12 +109,12 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private var restartedZoom = false
     private var inOglAnim = false
     private var inOglAnimPaused = false
-    private var infoArr = Array(2) { _ -> "" }
+    private var infoArr = Array(2) { "" }
     private var oglInView = true
     private var oglrArr = mutableListOf<WXGLRender>()
     private var glviewArr = mutableListOf<WXGLSurfaceView>()
     private var tilt = "0"
-    private var oldRidArr = Array(2) { _ -> "" }
+    private var oldRidArr = Array(2) { "" }
     private lateinit var imageMap: ObjectImageMap
     private var mapShown = false
     private lateinit var star: MenuItem
@@ -123,11 +123,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private var frameCntStrGlobal = ""
     private var locXCurrent = ""
     private var locYCurrent = ""
-    private var infoAnim = Array(2) { _ -> "" }
-    private var tmpArr1 = Array(2) { _ -> "" }
-    private var tmpArr2 = Array(2) { _ -> "" }
-    private var tmpArr3 = Array(2) { _ -> "" }
-    private var tmpArr4 = Array(2) { _ -> "" }
+    private var infoAnim = Array(2) { "" }
+    private var tmpArr1 = Array(2) { "" }
+    private var tmpArr2 = Array(2) { "" }
+    private var tmpArr3 = Array(2) { "" }
+    private var tmpArr4 = Array(2) { "" }
     private val latlonArr = mutableListOf("", "")
     private var latD = 0.0
     private var lonD = 0.0
@@ -166,9 +166,9 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         UtilityUI.immersiveMode(this as Activity)
         locXCurrent = joshuatee.wx.settings.Location.x
         locYCurrent = joshuatee.wx.settings.Location.y
-        infoAnim = Array(numPanes) { _ -> "" }
-        oldRidArr = Array(numPanes) { _ -> "" }
-        infoArr = Array(numPanes) { _ -> "" }
+        infoAnim = Array(numPanes) { "" }
+        oldRidArr = Array(numPanes) { "" }
+        infoArr = Array(numPanes) { "" }
         var widthDivider = 1
         if (numPanes == 4) {
             widthDivider = 2

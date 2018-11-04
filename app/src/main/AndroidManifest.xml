@@ -21,8 +21,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55035"
-    android:versionName="55035"
+    android:versionCode="55037"
+    android:versionName="55037"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -39,6 +39,7 @@
  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
  <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+ <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
  <uses-feature
      android:glEsVersion="0x00020000"

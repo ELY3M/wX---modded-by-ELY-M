@@ -82,8 +82,10 @@ internal class SettingsLocationAdapterList(private val mDataset: MutableList<Str
     }
 
     fun deleteItem(index: Int) {
-        mDataset.removeAt(index)
-        notifyDataSetChanged()
+        if (index < mDataset.count()) {
+            mDataset.removeAt(index)
+            notifyDataSetChanged()
+        }
     }
 
     override fun getItemCount() = mDataset.size

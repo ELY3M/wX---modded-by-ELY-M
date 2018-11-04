@@ -327,7 +327,8 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
     override fun onClick(v: View) {
-        when (v.id) {R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
+        when (v.id) {
+            R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
         }
     }
 

@@ -129,7 +129,7 @@ object UtilityString {
     fun getHTMLandParseMultipeFirstMatch(url: String, matchStr: String, number: Int): MutableList<String> = parseMultipe(url.getHtml(), matchStr, number)
 
     fun parseMultipe(data: String, match_str: String, number: Int): MutableList<String> {
-        val result = MutableList(number) { _ -> "" }
+        val result = MutableList(number) { "" }
         try {
             val p = Pattern.compile(match_str)
             val m = p.matcher(data)
@@ -143,7 +143,7 @@ object UtilityString {
     }
 
     fun parseMultipe(data: String, p: Pattern, number: Int): MutableList<String> {
-        val result = MutableList(number) { _ -> "" }
+        val result = MutableList(number) { "" }
         try {
             val m = p.matcher(data)
             while (m.find()) {

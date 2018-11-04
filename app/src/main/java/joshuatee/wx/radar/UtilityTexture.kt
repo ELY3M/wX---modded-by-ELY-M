@@ -33,8 +33,6 @@ import org.intellij.lang.annotations.Language
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.FloatBuffer
-import java.nio.ShortBuffer
-import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
 
@@ -47,8 +45,16 @@ object UtilityTexture {
 
     //var unloadTextures: Boolean = false;
 
+    fun LoadBitmap(imagefile: String): Bitmap {
+        val options = BitmapFactory.Options()
+        options.inScaled = false
+        //options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        return BitmapFactory.decodeFile(imagefile, options)
 
-    fun loadimage(gl: GL10, imagefile: String): Int {
+    }
+
+
+    fun LoadTexture(gl: GL10, imagefile: String): Int {
         val options = BitmapFactory.Options()
         options.inScaled = false
         options.inPreferredConfig = Bitmap.Config.ARGB_8888
@@ -71,6 +77,9 @@ object UtilityTexture {
         }
         return textures[0]
     }
+
+
+
 
     val VERTEX_COORDINATES = floatArrayOf(-1.0f, +1.0f, 0.0f, +1.0f, +1.0f, 0.0f, -1.0f, -1.0f, 0.0f, +1.0f, -1.0f, 0.0f)
 

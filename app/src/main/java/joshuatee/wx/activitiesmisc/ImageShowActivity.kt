@@ -141,7 +141,8 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
     }
 
     override fun onClick(v: View) {
-        when (v.id) {R.id.iv -> UtilityToolbar.showHide(toolbar)
+        when (v.id) {
+            R.id.iv -> UtilityToolbar.showHide(toolbar)
         }
     }
 }

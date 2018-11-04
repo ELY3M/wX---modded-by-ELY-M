@@ -699,8 +699,8 @@ object UtilityModelsSPCSREFInterface {
             "[CPR]:Conditional_Prob_CCT_>37KFT"
     )
 
-    internal var SHORT_CODES = Array(12) { Array(50) { _ -> "" } }
-    internal var LONG_CODES = Array(12) { Array(50) { _ -> "" } }
+    internal var SHORT_CODES = Array(12) { Array(50) { "" } }
+    internal var LONG_CODES = Array(12) { Array(50) { "" } }
     internal val GROUPS = SparseArray<Group>()
 
     internal fun createData() {

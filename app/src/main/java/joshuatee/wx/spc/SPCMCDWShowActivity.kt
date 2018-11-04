@@ -82,6 +82,8 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         when (turl[2]) {
             "MCD" -> objWatch = ObjectWatchProduct(PolygonType.MCD, no)
             "WATCH" -> objWatch = ObjectWatchProduct(PolygonType.WATCH, no)
+            "WATCH_TOR" -> objWatch = ObjectWatchProduct(PolygonType.WATCH_TOR, no)
+            "WATCH_SVR" -> objWatch = ObjectWatchProduct(PolygonType.WATCH_SVR, no)
             "MPD" -> objWatch = ObjectWatchProduct(PolygonType.MPD, no)
             else -> {
             }

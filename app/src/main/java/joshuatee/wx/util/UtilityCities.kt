@@ -25,7 +25,7 @@ object UtilityCities {
 
     private const val num = 345
     internal val CITY_OBJ = arrayOfNulls<City>(num)
-    val cities: Array<String> = Array(num) { _ -> "" }
+    val cities: Array<String> = Array(num) { "" }
     val lat: DoubleArray = DoubleArray(num)
     val lon: DoubleArray = DoubleArray(num)
 

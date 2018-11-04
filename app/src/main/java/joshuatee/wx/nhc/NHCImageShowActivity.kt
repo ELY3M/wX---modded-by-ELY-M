@@ -141,7 +141,8 @@ class NHCImageShowActivity : VideoRecordActivity(), OnClickListener, Toolbar.OnM
     }
 
     override fun onClick(v: View) {
-        when (v.id) {R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
+        when (v.id) {
+            R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
         }
     }
 }

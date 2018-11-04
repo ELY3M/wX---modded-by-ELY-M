@@ -91,8 +91,8 @@ object UtilityCanvasStormInfo {
             val bearing = DoubleArray(2)
             var start: ExternalGlobalCoordinates
             var ec: ExternalGlobalCoordinates
-            val ecArr = Array(4) { _ -> ExternalGlobalCoordinates(0.0, 0.0) }
-            val tmpCoordsArr = Array(4) { _ -> LatLon() }
+            val ecArr = Array(4) { ExternalGlobalCoordinates(0.0, 0.0) }
+            val tmpCoordsArr = Array(4) { LatLon() }
             var endPoint: DoubleArray
             val degreeShift = 180.00
             val arrowLength = 2.0

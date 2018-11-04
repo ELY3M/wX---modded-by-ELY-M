@@ -26,10 +26,10 @@ object UtilityCitiesCA {
  var cityInit: Boolean = false
 
  private const val num = 838
- val CITIES_CA: Array<String> = Array(num) { _->""}
+ val CITIES_CA: Array<String> = Array(num) { "" }
  val LAT_CA: DoubleArray = DoubleArray(num)
  val LON_CA: DoubleArray = DoubleArray(num)
- val code: MutableList<String> = MutableList(num) { _ -> ""}
+ val code: MutableList<String> = MutableList(num) { "" }
 
  fun loadCitiesArray() {
   cityInit = true

@@ -137,8 +137,8 @@ object UtilitySPCMESO {
         return listOf(param, label)
     }
 
-    var SHORT_CODES: Array<Array<String>> = Array(12) { Array(23) { _ -> "" } }
-    var LONG_CODES: Array<Array<String>> = Array(12) { Array(23) { _ -> "" } }
+    var SHORT_CODES: Array<Array<String>> = Array(12) { Array(23) { "" } }
+    var LONG_CODES: Array<Array<String>> = Array(12) { Array(23) { "" } }
     internal val GROUPS = SparseArray<Group>()
 
     internal fun createData() {

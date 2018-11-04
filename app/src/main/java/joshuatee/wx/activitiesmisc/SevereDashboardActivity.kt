@@ -80,7 +80,9 @@ class SevereDashboardActivity : BaseActivity() {
     private inner class GetContent : AsyncTask<String, String, String>() {
 
         internal val bitmapArrRep = mutableListOf<Bitmap>()
-        internal val snWat = SevereNotice(PolygonType.WATCH)
+        internal val snWatch = SevereNotice(PolygonType.WATCH)
+        internal val snWatchTor = SevereNotice(PolygonType.WATCH_TOR)
+        internal val snWatchSvr = SevereNotice(PolygonType.WATCH_SVR)
         internal val snMcd = SevereNotice(PolygonType.MCD)
         internal val snMpd = SevereNotice(PolygonType.MPD)
 
@@ -140,7 +142,9 @@ class SevereDashboardActivity : BaseActivity() {
 
         override fun doInBackground(vararg params: String): String {
             snMcd.getBitmaps(MyApplication.severeDashboardMcd.valueGet())
-            snWat.getBitmaps(MyApplication.severeDashboardWat.valueGet())
+            snWatch.getBitmaps(MyApplication.severeDashboardWat.valueGet())
+            snWatchTor.getBitmaps(MyApplication.severeDashboardWat.valueGet())
+            snWatchSvr.getBitmaps(MyApplication.severeDashboardWat.valueGet())
             snMpd.getBitmaps(MyApplication.severeDashboardMpd.valueGet())
             bitmapArrRep.add((UtilitySPC.getStormReportsTodayUrl()).getImage())
             return "Executed"
@@ -154,7 +158,7 @@ class SevereDashboardActivity : BaseActivity() {
                     linearLayout.addView(card.card)
                 }
             }
-            listOf(snWat, snMcd, snMpd)
+            listOf(snWatchTor, snWatchSvr, snMcd, snMpd)
                     .asSequence()
                     .filter { it.bmAl.size > 0 }
                     .forEach { severeNotice ->
@@ -168,7 +172,7 @@ class SevereDashboardActivity : BaseActivity() {
                                     cla = SPCMCDWShowActivity::class.java
                                     claStr = SPCMCDWShowActivity.NO
                                 }
-                                PolygonType.WATCH -> {
+                                PolygonType.WATCH, PolygonType.WATCH_TOR, PolygonType.WATCH_SVR -> {
                                     cla = SPCMCDWShowActivity::class.java
                                     claStr = SPCMCDWShowActivity.NO
                                 }
@@ -185,7 +189,9 @@ class SevereDashboardActivity : BaseActivity() {
                             linearLayout.addView(card.card)
                         }
                     }
-            bmAl.addAll(snWat.bmAl)
+            bmAl.addAll(snWatch.bmAl)
+            bmAl.addAll(snWatchTor.bmAl)
+            bmAl.addAll(snWatchSvr.bmAl)
             bmAl.addAll(snMcd.bmAl)
             bmAl.addAll(snMpd.bmAl)
             bmAl.addAll(bitmapArrRep)

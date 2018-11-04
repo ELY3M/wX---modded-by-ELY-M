@@ -40,8 +40,8 @@ internal object UtilityModelSPCHREFInterface {
             ObjectMenuTitle("Storm Attributes", 24)
     )
     // FIXME should be 4 more params in storm attributes
-    var SHORT_CODES = Array(13) { Array(30) { _ -> "" } }
-    var LONG_CODES = Array(13) { Array(30) { _ -> "" } }
+    var SHORT_CODES = Array(13) { Array(30) { "" } }
+    var LONG_CODES = Array(13) { Array(30) { "" } }
     val GROUPS = SparseArray<Group>()
 
     internal fun createData() {

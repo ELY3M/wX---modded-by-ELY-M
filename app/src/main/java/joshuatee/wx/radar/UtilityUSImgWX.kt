@@ -153,7 +153,7 @@ object UtilityUSImgWX {
             rid1 = ridTdwr
             scaleType = ProjectionType.WX_RENDER_48
         }
-        val nidsArr = Array(frameCntStr.toIntOrNull() ?: 0) { _ -> "" }
+        val nidsArr = Array(frameCntStr.toIntOrNull() ?: 0) { "" }
         (0 until frameCnt).forEach {
             if (idxStr == "") {
                 nidsArr[it] = "nexrad_anim" + it.toString()
@@ -169,7 +169,7 @@ object UtilityUSImgWX {
         } else {
             ColorDrawable(Color.WHITE)
         }
-        val bmArr = Array(frameCnt) { _ -> UtilityImg.getBlankBitmap() }
+        val bmArr = Array(frameCnt) { UtilityImg.getBlankBitmap() }
         (0 until frameCnt).forEach {
             bmArr[it] = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
             if (prod.contains("N0R") || prod.contains("N0S") || prod.contains("N0V") || prod.contains("TR")) {
