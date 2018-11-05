@@ -51,6 +51,9 @@ import joshuatee.wx.util.UtilityFileManagement
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityTime
+import java.io.File
+import java.io.InputStream
+import java.nio.charset.Charset
 
 class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
@@ -108,11 +111,13 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                 if (!MyApplication.radarColorPalette94List.contains(palTitle.text.toString())) {
                     MyApplication.radarColorPalette94List = MyApplication.radarColorPalette94List + ":" + palTitle.text.toString()
                     Utility.writePref(context, "RADAR_COLOR_PALETTE_94_LIST", MyApplication.radarColorPalette94List)
+                    savepalfile(palTitle.text.toString()+"_94.txt", textToSave)
                 }
             } else {
                 if (!MyApplication.radarColorPalette99List.contains(palTitle.text.toString())) {
                     MyApplication.radarColorPalette99List = MyApplication.radarColorPalette99List + ":" + palTitle.text.toString()
                     Utility.writePref(context, "RADAR_COLOR_PALETTE_99_LIST", MyApplication.radarColorPalette99List)
+                    savepalfile(palTitle.text.toString()+"_99.txt", textToSave)
                 }
             }
             toolbar.subtitle = "Last saved: $date"
@@ -292,4 +297,15 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         palTitle.setText(name)
         return convertPal(stringBuilder.toString())
     }
+
+
+    private fun savepalfile(fileName: String, text: String) {
+        val dir = MyApplication.PalFilesPath
+        //println(content)
+        File("$dir/$fileName").printWriter().use {
+            it.println(text)
+        }
+    }
+
+
 }
