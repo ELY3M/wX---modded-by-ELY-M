@@ -43,6 +43,7 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 #
 ## DONE!
 ====================================  
+the color table editor is saving txt to /wX/pal/ now  
 reading from pal files on sdcard are done!  I had to redo checkfiles and permissions processing abit.   
 added enhanced vel color table - cool one that help you to see tornadoes.     
 fixed up my own vel table colors.     
