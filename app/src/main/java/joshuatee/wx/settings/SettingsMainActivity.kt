@@ -52,6 +52,7 @@ class SettingsMainActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         UtilityTheme.setPrimaryColor(this)
         contextg = this
+        var backuprestore: BackupRestore = BackupRestore()
         var vers = ""
         try {
             vers = packageManager.getPackageInfo(packageName, 0).versionName
@@ -84,8 +85,8 @@ class SettingsMainActivity : BaseActivity() {
         cardUI.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SettingsUIActivity::class.java) })
         cardCtoF.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(UtilityMath.cToFTable(), "Celsius to Fahrenheit table")) })
         cardDeleteFiles.setOnClickListener(View.OnClickListener { UtilityUI.makeSnackBar(linearLayout, "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(contextg)) })
-        cardbackuppref.setOnClickListener(View.OnClickListener { BackupRestore.backupPrefs(contextg) })
-        cardrestorepref.setOnClickListener(View.OnClickListener { BackupRestore.restorePrefs(contextg) })
+        cardbackuppref.setOnClickListener(View.OnClickListener { backuprestore.backupPrefs(contextg) })
+        cardrestorepref.setOnClickListener(View.OnClickListener { backuprestore.restorePrefs(contextg) })
         linearLayout.addView(cardLocations.card)
         linearLayout.addView(cardsn.card)
         linearLayout.addView(cardNotif.card)
