@@ -29,6 +29,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.EditText
@@ -62,6 +63,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         private const val READ_REQUEST_CODE = 42
     }
 
+    private var TAG: String = "ColorPaletteEditor"
     private lateinit var turl: Array<String>
     private lateinit var palTitle: EditText
     private lateinit var palContent: EditText
@@ -111,15 +113,17 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                 if (!MyApplication.radarColorPalette94List.contains(palTitle.text.toString())) {
                     MyApplication.radarColorPalette94List = MyApplication.radarColorPalette94List + ":" + palTitle.text.toString()
                     Utility.writePref(context, "RADAR_COLOR_PALETTE_94_LIST", MyApplication.radarColorPalette94List)
-                    savepalfile(palTitle.text.toString()+"_94.txt", textToSave)
+                    //savepalfile(palTitle.text.toString()+"_94.txt", textToSave)
                 }
             } else {
                 if (!MyApplication.radarColorPalette99List.contains(palTitle.text.toString())) {
                     MyApplication.radarColorPalette99List = MyApplication.radarColorPalette99List + ":" + palTitle.text.toString()
                     Utility.writePref(context, "RADAR_COLOR_PALETTE_99_LIST", MyApplication.radarColorPalette99List)
-                    savepalfile(palTitle.text.toString()+"_99.txt", textToSave)
+                    //savepalfile(palTitle.text.toString()+"_99.txt", textToSave)
                 }
             }
+
+            savepalfile(palTitle.text.toString()+"_"+turl[0]+".txt", textToSave)
             toolbar.subtitle = "Last saved: $date"
         } else {
             UtilityAlertDialog.showHelpText(errorCheck, this)
@@ -301,6 +305,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
     private fun savepalfile(fileName: String, text: String) {
         val dir = MyApplication.PalFilesPath
+        Log.i(TAG, "saving palfile: "+fileName)
         //println(content)
         File("$dir/$fileName").printWriter().use {
             it.println(text)

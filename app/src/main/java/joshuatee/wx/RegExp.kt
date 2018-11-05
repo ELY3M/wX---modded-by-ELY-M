@@ -125,5 +125,9 @@ object RegExp {
     val mpdPattern: Pattern = Pattern.compile(">MPD #(.*?)</a></strong>")
     val prePattern: Pattern = Pattern.compile("<pre.*?>(.*?)</pre>")
     val pre2Pattern: Pattern = Pattern.compile("<pre>(.*?)</pre>")
+
+    val txtfile: Pattern = Pattern.compile("(.*?).txt$")
+    val palfile94: Pattern = Pattern.compile("(.*?)_94.txt(.*?)")
+    val palfile99: Pattern = Pattern.compile("(.*?)_99.txt(.*?)")
 }
 

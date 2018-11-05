@@ -34,7 +34,7 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 14. 8-bit SRM like in pykl3  
 15. fix up the ability to change products in the multi-pane radar. it seem wont change products for me  
 16. android wear support. I own android wear watches and love them.      
-17. have color table editor save a file to /wX/pal/ on sdcard  - Might not, would need to make a function to read all txt files in /wX/pal/  
+17. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor.    
 
 
 
@@ -43,6 +43,8 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 #
 ## DONE!
 ====================================  
+The BackupRestore function now backup everything that are in wX folder even your icons and any files.  
+added pal files backup/restore function in BackupRestore function  
 the color table editor is saving txt to /wX/pal/ now  
 reading from pal files on sdcard are done!  I had to redo checkfiles and permissions processing abit.   
 added enhanced vel color table - cool one that help you to see tornadoes.     

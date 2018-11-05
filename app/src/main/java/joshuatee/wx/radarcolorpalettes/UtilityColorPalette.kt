@@ -30,6 +30,7 @@ import com.intentfilter.androidpermissions.PermissionManager
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
+import joshuatee.wx.RegExp
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityIO
 import java.io.*
@@ -49,6 +50,8 @@ object UtilityColorPalette {
             Log.i(TAG, "stupid permission!!!!!!!!!!!!!!!")
         }
 
+        //TODO TESTING scan dir for *_94.txt files....
+        scanfor94pal()
 
             var cmFileInt: Int = 0
             var text = "null"
@@ -63,7 +66,6 @@ object UtilityColorPalette {
                     "COD", "CODENH" -> text = readpalfile("colormaprefcodenh.txt")
                     "MENH" -> text = readpalfile("colormaprefmenh.txt")
                     "ELY" -> text = readpalfile("colormapownref.txt")
-
                     else -> text = Utility.readPref(context, "RADAR_COLOR_PAL_" + prod + "_" + code, "")
                 }
                 "99" -> when (code) {
@@ -123,6 +125,20 @@ object UtilityColorPalette {
             Log.i(TAG, "failed to open file "+palfile+"\nopenpalfile error: "+e.message)
             }
         return text
+    }
+
+
+    fun scanfor94pal() {
+        Log.i(TAG, "running scanfor94pal()")
+        File(MyApplication.PalFilesPath).walk().forEach {
+            if (it.toString().equals(RegExp.palfile94)) {
+                Log.i(TAG, "found: "+it)
+                val file = File(it.toString())
+                var content: String = file.readText()
+                Log.i(TAG, content)
+            }
+
+        }
     }
 
 
