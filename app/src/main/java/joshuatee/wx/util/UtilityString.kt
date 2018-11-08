@@ -126,7 +126,20 @@ object UtilityString {
 
     internal fun getHTMLandParseSep(url: String, p: Pattern) = url.getHtmlSep().parse(p)
 
-    fun getHTMLandParseMultipeFirstMatch(url: String, matchStr: String, number: Int): MutableList<String> = parseMultipe(url.getHtml(), matchStr, number)
+    fun getHTMLandParseMultipeFirstMatch(url: String, matchStr: String, number: Int): MutableList<String> = parseMultipeFirst(url.getHtml(), matchStr, number)
+
+    fun parseMultipeFirst(data: String, match_str: String, number: Int): MutableList<String> {
+        val result = MutableList(number) { "" }
+        try {
+            val p = Pattern.compile(match_str)
+            val m = p.matcher(data)
+            m.find()
+            (0 until number).forEach { result[it] = m.group(it + 1) }
+        } catch (e: Exception) {
+            UtilityLog.HandleException(e)
+        }
+        return result
+    }
 
     fun parseMultipe(data: String, match_str: String, number: Int): MutableList<String> {
         val result = MutableList(number) { "" }

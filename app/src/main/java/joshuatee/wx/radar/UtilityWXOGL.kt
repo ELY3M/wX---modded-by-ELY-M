@@ -67,6 +67,7 @@ object UtilityWXOGL {
         return ridPrefix
     }
 
+    //FIXME make better VWP chart like one on cod.edu
     fun getVWP(context: Context, rid1: String): String {
         // http://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.48vwp/SI.kccx/
         val prod = "VWP"

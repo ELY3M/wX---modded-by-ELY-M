@@ -34,12 +34,12 @@ object UtilitySPCMESO {
     private val TITLES = Arrays.asList(
             ObjectMenuTitle("Observations", 3),
             ObjectMenuTitle("Surface", 15),
-            ObjectMenuTitle("Upper Air", 23),
+            ObjectMenuTitle("Upper Air", 24),
             ObjectMenuTitle("Thermodynamics", 19),
-            ObjectMenuTitle("Wind Shear", 17),
+            ObjectMenuTitle("Wind Shear", 18),
             ObjectMenuTitle("Composite Indices", 21),
             ObjectMenuTitle("Multi-Parameter Fields", 10),
-            ObjectMenuTitle("Heavy Rain", 5),
+            ObjectMenuTitle("Heavy Rain", 8),
             ObjectMenuTitle("Winter Weather", 14),
             ObjectMenuTitle("Fire Weather", 6),
             ObjectMenuTitle("Classic", 3),
@@ -83,7 +83,9 @@ object UtilitySPCMESO {
     }
 
     const val DEFAULT_SECTOR: String = "19"
-    internal const val IMG_SF = ":ttd:mcon:thea:mxth:temp_chg:dwpt_chg:mixr_chg:thte_chg:925mb:850mb:700mb:500mb:300mb:sbcp:mlcp:mucp:muli:laps:lllr:lclh:lfch:lfrh:effh:stor:stpc:cpsh:comp:lcls:lr3c:tdlr:qlcs1:qlcs2:pwtr:tran:prop:peff:fzlv:les1:"
+    internal const val IMG_SF = ":mixr:ttd:mcon:thea:mxth:temp_chg:dwpt_chg:mixr_chg:thte_chg:925mb:850mb:700mb:500mb:300mb:sbcp:mlcp:mucp:muli:laps:lllr:lclh:lfch:lfrh:effh:stor:stpc:cpsh:comp:lcls:lr3c:tdlr:qlcs1:qlcs2:pwtr:tran:tran_925:tran_925-850:prop:peff:fzlv:les1:" +
+            "tadv_925:7tad:tadv:"
+
     internal fun setParamFromFav(token: String): List<String> {
         var param = ""
         var label = ""
@@ -137,8 +139,8 @@ object UtilitySPCMESO {
         return listOf(param, label)
     }
 
-    var SHORT_CODES: Array<Array<String>> = Array(12) { Array(23) { "" } }
-    var LONG_CODES: Array<Array<String>> = Array(12) { Array(23) { "" } }
+    var SHORT_CODES: Array<Array<String>> = Array(12) { Array(24) { "" } }
+    var LONG_CODES: Array<Array<String>> = Array(12) { Array(24) { "" } }
     internal val GROUPS = SparseArray<Group>()
 
     internal fun createData() {
@@ -176,6 +178,7 @@ object UtilitySPCMESO {
             "dwpt_chg",
             "mixr_chg",
             "thte_chg",
+
             "925mb",
             "850mb",
             "700mb",
@@ -183,6 +186,7 @@ object UtilitySPCMESO {
             "300mb",
             "dlcp",
             "sfnt",
+            "tadv_925",
             "tadv",
             "7tad",
             "9fnt",
@@ -199,6 +203,7 @@ object UtilitySPCMESO {
             "500mb_chg",
             "trap_500",
             "trap_250",
+
             "sbcp",
             "mlcp",
             "mucp",
@@ -221,7 +226,8 @@ object UtilitySPCMESO {
             "eshr",
             "shr6",
             "shr8",
-            "srh1",
+            "shr3",
+            "shr1",
             "brns",
             "effh",
             "srh3",
@@ -271,8 +277,11 @@ object UtilitySPCMESO {
             "pwtr",
             "pwtr2",
             "tran",
+            "tran_925",
+            "tran_925-850",
             "prop",
             "peff",
+            "mixr",
 
             "ptyp",
             "fztp",
@@ -334,6 +343,7 @@ object UtilitySPCMESO {
             "300mb Analysis",
             "Deep Moisture Convergence",
             "Sfc Frontogenesis",
+            "925mb Temp Advection",
             "850mb Temp Advection",
             "700mb Temp Advection",
             "925mb Frontogenesis",
@@ -372,6 +382,7 @@ object UtilitySPCMESO {
             "Bulk Shear - Effective",
             "Bulk Shear - Sfc-6km",
             "Bulk Shear - Sfc-8km",
+            "Bulk Shear - Sfc-3km",
             "Bulk Shear - Sfc-1km",
             "BRN Shear",
             "SR Helicity - Effective",
@@ -422,8 +433,11 @@ object UtilitySPCMESO {
             "Precipitable Water",
             "Precipitable Water (w/850mb Moisture Transport Vector)",
             "850mb Moisture Transport",
+            "925mb Moisture Transport",
+            "925-850mb Moisture Transport",
             "Upwind Propagation Vector",
             "Precipitation Potential Placement",
+            "100mb Mean Mixing Ratio",
 
             "Precipitation Type",
             "Near-Freezing Surface Temp.",
@@ -440,7 +454,7 @@ object UtilitySPCMESO {
             "Dendritic Growth Layer Depth & RH",
             "Max Wet Bulb Temperature",
 
-            "Sfc RH, Temp, Wind",
+            "Sfc RH / Temp / Wind",
             "Fosberg Index",
             "Low Altitude Haines Index",
             "Mid Altitude Haines Index",

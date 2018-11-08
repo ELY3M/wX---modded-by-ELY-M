@@ -22,10 +22,12 @@ android {
         }
     }
 
-    /*
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    def ndkDir = properties.getProperty('ndk.dir')
+
     task buildNative(type: Exec, description: 'Compile JNI source via NDK') {
-        def ndkDir = "../../../$ndkVersion"
-        commandLine "$ndkDir/ndk-build",
+        commandLine "$ndkDir\\ndk-build.cmd",
                 '-C', file('src/main/jni').absolutePath,
                 '-j', Runtime.runtime.availableProcessors(),
                 'all'
@@ -33,8 +35,7 @@ android {
     }
 
     task cleanNative(type: Exec, description: 'Clean JNI object files') {
-        def ndkDir = "../../../$ndkVersion"
-        commandLine "$ndkDir/ndk-build",
+        commandLine "$ndkDir\\ndk-build.cmd",
                 '-C', file('src/main/jni').absolutePath,
                 'clean'
     }
@@ -45,7 +46,7 @@ android {
     tasks.withType(JavaCompile) {
         compileTask -> compileTask.dependsOn buildNative
     }
-*/
+
 
     // Flag to tell aapt to keep the attribute ids around - (2016_02_25 add 23.2 )
     aaptOptions {

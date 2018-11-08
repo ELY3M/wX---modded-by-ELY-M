@@ -21,6 +21,12 @@ Included Binary Credits
 http://square.github.io/okhttp/
 http://www.android-graphview.org/ - APL2.0 - Jonas Gehring
 
+Geography Data Credits
+--------------------
+Geometry data in "res/raw" used for Nexrad Radar was obtained and then modified from:
+https://catalog.data.gov/dataset (license: https://www.usa.gov/government-works)
+https://www.nohrsc.noaa.gov/gisdatasets/ (license: https://www.weather.gov/disclaimer)
+
 Source Code Credits
 --------------------
 This application uses Open Source components. You can find the source code of their open source projects along with license information below. We acknowledge and are grateful to these developers for their contributions to open source.

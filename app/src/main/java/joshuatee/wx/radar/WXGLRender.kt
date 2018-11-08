@@ -90,21 +90,21 @@ class WXGLRender(private val context: Context) : Renderer {
     private val stiBuffers = ObjectOglBuffers(PolygonType.STI, 0.0f)
     private val wbBuffers = ObjectOglBuffers(PolygonType.WIND_BARB, 0.30f)
     private val wbGustsBuffers = ObjectOglBuffers(PolygonType.WIND_BARB_GUSTS, 0.30f)
-    private val mpdBuffers = ObjectOglBuffers(PolygonType.MPD)
+    private val mpdBuffers = ObjectOglBuffers(PolygonType.MPD, 0.0f)
     private val hiBuffers = ObjectOglBuffers(PolygonType.HI, 0.30f)
     private val tvsBuffers = ObjectOglBuffers(PolygonType.TVS, 0.30f)
-    private val warningTorBuffers = ObjectOglBuffers(PolygonType.TOR)
-    private val warningSvrBuffers = ObjectOglBuffers(PolygonType.SVR)
-    private val warningEwwBuffers = ObjectOglBuffers(PolygonType.EWW)
-    private val warningFfwBuffers = ObjectOglBuffers(PolygonType.FFW)
-    private val warningSmwBuffers = ObjectOglBuffers(PolygonType.SMW)
-    private val warningSvsBuffers = ObjectOglBuffers(PolygonType.SVS)
-    private val warningSpsBuffers = ObjectOglBuffers(PolygonType.SPS)
-    private val watchSvrBuffers = ObjectOglBuffers(PolygonType.WATCH_SVR)
+    private val warningTorBuffers = ObjectOglBuffers(PolygonType.TOR, 0.0f)
+    private val warningSvrBuffers = ObjectOglBuffers(PolygonType.SVR, 0.0f)
+    private val warningEwwBuffers = ObjectOglBuffers(PolygonType.EWW, 0.0f)
+    private val warningFfwBuffers = ObjectOglBuffers(PolygonType.FFW, 0.0f)
+    private val warningSmwBuffers = ObjectOglBuffers(PolygonType.SMW, 0.0f)
+    private val warningSvsBuffers = ObjectOglBuffers(PolygonType.SVS, 0.0f)
+    private val warningSpsBuffers = ObjectOglBuffers(PolygonType.SPS, 0.0f)
+    private val watchSvrBuffers = ObjectOglBuffers(PolygonType.WATCH_SVR, 0.0f)
     private val watchTorBuffers = ObjectOglBuffers(PolygonType.WATCH_TOR)
-    private val mcdBuffers = ObjectOglBuffers(PolygonType.MCD)
+    private val mcdBuffers = ObjectOglBuffers(PolygonType.MCD, 0.0f)
     private val swoBuffers = ObjectOglBuffers()
-    private val locdotBuffers = ObjectOglBuffers(PolygonType.LOCDOT)
+    private val locdotBuffers = ObjectOglBuffers(PolygonType.LOCDOT, 0.0f)
     private val locCircleBuffers = ObjectOglBuffers()
     private val wbCircleBuffers = ObjectOglBuffers(PolygonType.WIND_BARB_CIRCLE, 0.30f)
     private val colorSwo = IntArray(5)
@@ -760,7 +760,7 @@ class WXGLRender(private val context: Context) : Renderer {
     }
 
     fun constructSpotters() {
-        spotterBuffers.isInitialized = true
+        spotterBuffers.isInitialized = false //leave it at false or the app will crash randomly
         spotterBuffers.lenInit = MyApplication.radarSpotterSize.toFloat()
         spotterBuffers.triangleCount = 6
         UtilitySpotter.spotterData

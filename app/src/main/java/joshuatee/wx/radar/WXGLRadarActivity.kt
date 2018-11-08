@@ -1170,6 +1170,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
     }
 
+    //FIXME make better VWP chart like one on cod.edu
     @SuppressLint("StaticFieldLeak")
     private inner class GetContentVWP : AsyncTask<String, String, String>() {
 
@@ -1181,7 +1182,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
 
         override fun onPostExecute(result: String) {
-            ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(txt, oglr.rid + " VAD Wind Profile"))
+
+            ///ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(txt, oglr.rid + " VAD Wind Profile"))
+            var vmpurl = "https://weather.cod.edu/satrad/nexrad/index.php?type="+oglr.rid+"-NVW"
+            ObjectIntent(contextg, WebscreenABModels::class.java, WebscreenABModels.URL, arrayOf(vmpurl, oglr.rid + " VAD Wind Profile"))
         }
     }
 

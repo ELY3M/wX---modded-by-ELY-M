@@ -25,16 +25,17 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 3. add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs   
 4. allow custom icons! exp tvs and hail and gps location and cities dots - partily done.  
 5. add read mcd/mpd text like read warnings text in the radar tap menu 
-7. add warning list within radar
-8. add LSR reports from SN spotters/option to turn on/off LSR reports
-9. as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
-10. might 4th radar icon for cc 
-11. move show color legend to bottom   
-13. rename application id and change icon color so someone can run both versions of wX   
-14. 8-bit SRM like in pykl3  
-15. fix up the ability to change products in the multi-pane radar. it seem wont change products for me  
-16. android wear support. I own android wear watches and love them.      
-17. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor.    
+6. add warning list within radar
+7. add LSR reports from SN spotters/option to turn on/off LSR reports
+8. as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
+9. might 4th radar icon for cc 
+10. move show color legend to bottom   
+11. rename application id and change icon color so someone can run both versions of wX   
+12. 8-bit SRM like in pykl3  
+13. fix up the ability to change products in the multi-pane radar. it seem wont change products for me  
+14. android wear support. I own android wear watches and love them.      
+15. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor. 
+16. make VAD Wind Profile more better and friendly  like the one at cod.edu   
 
 
 
@@ -43,6 +44,7 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 #
 ## DONE!
 ====================================  
+for now, I put in cod.edu url to load up for VAD Wind Profile  
 The BackupRestore function now backup everything that are in wX folder even your icons and any files.  
 added pal files backup/restore function in BackupRestore function  
 the color table editor is saving txt to /wX/pal/ now  
