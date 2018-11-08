@@ -65,51 +65,22 @@ object UtilityShortcut {
         // https://developer.android.com/guide/topics/ui/shortcuts
         // Pinned shortcuts in API 26 8.0
         if (android.os.Build.VERSION.SDK_INT > 25) {
-            //val mShortcutManager = getSystemService(ShortcutManager::class.java)
-
-            /* if (mShortcutManager.isRequestPinShortcutSupported) {
-                 // Assumes there's already a shortcut with the ID "my-shortcut".
-                 // The shortcut must be enabled.
-
-                 listOf(shortcutId).forEach {
-                     val pinShortcutInfo = ShortcutInfo.Builder(this, it).build()
-                     // Create the PendingIntent object only if your app needs to be notified
-                     // that the user allowed the shortcut to be pinned. Note that, if the
-                     // pinning operation fails, your app isn't notified. We assume here that the
-                     // app has implemented a method called createShortcutResultIntent() that
-                     // returns a broadcast intent.
-                     val pinnedShortcutCallbackIntent = mShortcutManager.createShortcutResultIntent(pinShortcutInfo)
-                     // Configure the intent so that your app's broadcast receiver gets
-                     // the callback successfully.
-                     val successCallback = PendingIntent.getBroadcast(this, 0, pinnedShortcutCallbackIntent, 0)
-                     mShortcutManager.requestPinShortcut(pinShortcutInfo, successCallback.intentSender)
-                 }
-             }*/
-
-            //var shortcutId = ""
-            //var clz: Class<*> = SevereDashboardActivity::class.java
-
             val intent: Intent?
             var imageId = 0
-
             when (type) {
                 ShortcutType.SevereDashboard -> {
-                    //shortcutId = "SD"
                     intent = ObjectIntentShortcut(context, SevereDashboardActivity::class.java).intent
                     imageId = R.drawable.ntor
                 }
                 ShortcutType.AFD -> {
-                    //shortcutId = "AFD"
                     intent = ObjectIntentShortcut(context, AFDActivity::class.java).intent
                     imageId = R.drawable.widget_afd
                 }
                 ShortcutType.GOES16 -> {
-                    //shortcutId = "GOES16"
                     intent = ObjectIntentShortcut(context, GOES16Activity::class.java, GOES16Activity.RID, arrayOf("")).intent
                     imageId = R.drawable.goes
                 }
                 ShortcutType.RADAR_MOSAIC -> {
-                    //shortcutId = "GOES16"
                     intent = ObjectIntentShortcut(context, USNWSMosaicActivity::class.java).intent
                     imageId = R.drawable.widget_radar_mosaic
                 }
@@ -119,12 +90,6 @@ object UtilityShortcut {
                 }
             }
             val shortcutId = type.toString()
-
-            //val intent = ObjectIntentShortcut(context, clz).intent
-
-            //val intent = Intent(Intent.ACTION_VIEW, Uri.EMPTY, context, clz)
-            // ObjectIntent(contextg, SPCSWOActivity::class.java, SPCSWOActivity.NO, arrayOf(day, ""))
-
             val mShortcutManager = context.getSystemService(ShortcutManager::class.java)
             val shortcut = ShortcutInfo.Builder(context, shortcutId)
                     .setShortLabel(shortcutId)
@@ -134,7 +99,6 @@ object UtilityShortcut {
                             Intent(Intent.ACTION_MAIN, Uri.EMPTY, context, joshuatee.wx.WX::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK),
                             intent))
                     .build()
-            //mShortcutManager.setDynamicShortcuts(Arrays.asList(shortcut))
             val pinnedShortcutCallbackIntent = mShortcutManager.createShortcutResultIntent(shortcut)
             val successCallback = PendingIntent.getBroadcast(context, 0, pinnedShortcutCallbackIntent, 0)
             mShortcutManager.requestPinShortcut(shortcut, successCallback.intentSender)
@@ -152,7 +116,6 @@ object UtilityShortcut {
 
     fun hidePinIfNeeded(menu: Menu) {
         if (android.os.Build.VERSION.SDK_INT < 26) {
-            //val menu = toolbar.menu
             val pin = menu.findItem(R.id.action_pin)
             pin.isVisible = false
         }

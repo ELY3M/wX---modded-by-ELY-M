@@ -21,8 +21,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55037"
-    android:versionName="55037"
+    android:versionCode="55039"
+    android:versionName="55039"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -392,6 +392,11 @@
       android:parentActivityName="WX" >
   </activity>
 
+  <activity
+      android:name=".radar.Website"
+      android:parentActivityName="WX" >
+  </activity>
+
   <receiver android:name="joshuatee.wx.Widget" >
    <intent-filter>
     <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -614,12 +619,8 @@
       android:parentActivityName="WX" >
   </activity>
   <activity
-      android:name="joshuatee.wx.ModelInterfaceActivity"
-      android:parentActivityName="WX" >
-  </activity>
-  <activity
       android:name=".activitiesmisc.WebscreenABModels"
-      android:parentActivityName="ModelInterfaceActivity" >
+      android:parentActivityName="WX" >
   </activity>
   <activity
       android:name=".audio.VoiceCommandActivity"

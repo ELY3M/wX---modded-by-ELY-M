@@ -3,7 +3,16 @@
 // TODO look at kotlin coroutines
 // TODO find new material design icons as used in google cal / clock
 // TODO base velocity legend
+// TODO SPC MESO rescan for _sf
 
+55039 2018_11_07 (bugfix) UtilityLocation.getXYFromAddressOSM was not optimal
+55038 2018_11_06 remove uneeded RadarType.kt
+                 add new SPC MESO parm: "Bulk Shear - Sfc-3km", "shr3"
+                 (bugfix) "Bulk Shear - Sfc-1km" was incorrectly srh1 and not shr1
+                 SPC MESO add parm: "925mb Moisture Transport", "925-850mb Moisture Transport", "100mb Mean Mixing Ratio"
+                 SPC MESO update label from "Sfc RH, Temp, Wind" to "Sfc RH / Temp / Wind"
+                 SPC MESO add parm: "925mb Temp Advection" "tadv_925"
+                 add icon ic_touch_app_24dp.xml and use in dashboard and SPC SWO summary, goes16, radar mosaic
 55037 2018_11_04 (bugfix) at joshuatee.wx.settings.SettingsLocationAdapterList.deleteItem (SettingsLocationAdapterList.kt:85)
                 java.lang.ArrayIndexOutOfBoundsException:
                 lint cleanup

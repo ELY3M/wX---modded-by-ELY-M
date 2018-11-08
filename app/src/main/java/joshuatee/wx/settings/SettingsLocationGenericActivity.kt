@@ -293,9 +293,6 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         override fun onPostExecute(result: String) {
             locXEt.setText(xyStr[0])
             locYEt.setText(xyStr[1])
-            //if (xyStr[0].startsWith("CANADA")){
-            //    hideNotifsCA()
-            //}
         }
     }
 

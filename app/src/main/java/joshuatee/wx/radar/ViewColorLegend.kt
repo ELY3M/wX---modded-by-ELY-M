@@ -68,7 +68,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
         val screenHeight = MyApplication.dm.heightPixels.toFloat()
         var scaledHeight = (screenHeight - 2 * startHeight) / 256f
         val scaledHeightText = (screenHeight - 2 * startHeight) / (95f + 32f) // 95- -32
-        var scaledHeightVel = (screenHeight - 2 * startHeight) / (127 * 2f) // 95- -32
+        val scaledHeightVel = (screenHeight - 2 * startHeight) / (127 * 2f) // 95- -32
         var unitsDrawn = false
         when (product) {
             "N0Q", "L2REF", "TZL" -> {
@@ -105,7 +105,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                 val stepSize = 10
                 //scaledHeightVel = (screenHeight - 2 * startHeight) / (max - min)
                 (max downTo min).forEach {
-                //(122 downTo -130 + 1).forEach {
+                    //(122 downTo -130 + 1).forEach {
                     if (it % stepSize == 0) {
                         //canvas.drawText(it.toString() + units, widthStarting + width + textFromLegend, scaledHeightVel * (max - it) + heightFudge + startHeight, paintText) // max was 122
                         canvas.drawText(it.toString() + units, widthStarting + width + textFromLegend, scaledHeightVel * (122 - it) + heightFudge + startHeight, paintText)

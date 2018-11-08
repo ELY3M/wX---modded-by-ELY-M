@@ -55,6 +55,7 @@
         />
     <item android:id="@+id/action_pin"
         android:title="@string/label_pin"
+        android:icon="@drawable/ic_touch_app_24dp"
         app:showAsAction="always"
         />
 

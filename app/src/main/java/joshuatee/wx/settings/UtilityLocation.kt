@@ -68,7 +68,8 @@ object UtilityLocation {
     fun getXYFromAddressOSM(addressF: String): List<String> {
         val address = addressF.replace(" ", "+")
         val url = "http://nominatim.openstreetmap.org/search?q=$address&format=xml&polygon=0&addressdetails=1"
-        return UtilityString.getHTMLandParseMultipeFirstMatch(url, "lat=.(.*?).\\slon=.(.*?).\\s", 2).toList()
+        val location = UtilityString.getHTMLandParseMultipeFirstMatch(url, "lat=.(.*?).\\slon=.(.*?).\\s", 2).toList()
+        return location
     }
 
     fun getGPS(context: Context): DoubleArray {

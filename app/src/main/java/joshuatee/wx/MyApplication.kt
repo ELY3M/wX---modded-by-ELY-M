@@ -372,8 +372,8 @@ class MyApplication : Application() {
             }
             sn_key = getInitialPreferenceString("SN_KEY", "")
             sn_locationreport = getInitialPreference("SN_LOCATIONREPORT", "")
-            spotterFav = preferences.getString("SPOTTER_FAV", "") ?: ""
-            homescreenFav = preferences.getString("HOMESCREEN_FAV", HOMESCREEN_FAV_DEFAULT) ?: HOMESCREEN_FAV_DEFAULT
+            spotterFav = getInitialPreferenceString("SPOTTER_FAV", "")
+            homescreenFav = getInitialPreferenceString("HOMESCREEN_FAV", HOMESCREEN_FAV_DEFAULT)
             locDisplayImg = homescreenFav.contains("OGL-RADAR") || homescreenFav.contains("NXRD")
             alertNotificationSoundTornadoCurrent = getInitialPreference("ALERT_NOTIFICATION_SOUND_TORNADO", "")
             alertNotificationSoundSpcmcd = getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCMCD", "")
