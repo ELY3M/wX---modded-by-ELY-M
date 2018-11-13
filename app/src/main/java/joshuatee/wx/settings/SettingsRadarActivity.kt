@@ -117,7 +117,7 @@ class SettingsRadarActivity : BaseActivity() {
         ll.addView(ObjectSettingsNumberPicker(this, this, "Animation interval", "ANIM_INTERVAL", R.string.anim_np_label, 15, 1, 15).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Warning line size", "RADAR_WARN_LINESIZE", R.string.warn_linesize_np_label, 4, 1, 10).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Watch/MCD line size", "RADAR_WATMCD_LINESIZE", R.string.watmcd_linesize_np, 4, 1, 10).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Location marker size", "RADAR_LOCDOT_SIZE", R.string.locdot_size_np, 8, 1, 50).card)
+        ll.addView(ObjectSettingsNumberPicker(this, this, "Location Icon size", "RADAR_LOCDOT_SIZE", R.string.locdot_size_np, 8, 1, 301).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Hail marker size", "RADAR_HI_SIZE", R.string.hi_size_np, 8, 1, 50).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "TVS marker size", "RADAR_TVS_SIZE", R.string.tvs_size_np, 8, 1, 50).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "WXOGL initial view size", "WXOGL_SIZE", R.string.wxogl_size_np, 8, 5, 25).card)

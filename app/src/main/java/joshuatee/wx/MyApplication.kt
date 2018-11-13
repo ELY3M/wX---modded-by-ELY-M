@@ -712,7 +712,7 @@ class MyApplication : Application() {
             radarSpotterSize = getInitialPreference("RADAR_SPOTTER_SIZE", 4)
             radarAviationSize = getInitialPreference("RADAR_AVIATION_SIZE", 7)
             radarTextSize = getInitialPreference("RADAR_TEXT_SIZE", 1.0f)
-            radarLocdotSize = getInitialPreference("RADAR_LOCDOT_SIZE", 8)
+            radarLocdotSize = getInitialPreference("RADAR_LOCDOT_SIZE", 75)
             radarHiSize = getInitialPreference("RADAR_HI_SIZE", 8)
             radarTvsSize = getInitialPreference("RADAR_TVS_SIZE", 8)
             radarWarnLinesize = getInitialPreference("RADAR_WARN_LINESIZE", 2)
