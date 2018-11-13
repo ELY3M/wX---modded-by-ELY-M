@@ -44,6 +44,20 @@ import joshuatee.wx.ui.TouchImageView2
 
 object UtilityImg {
 
+    fun mergeImages(context: Context, imageA: Bitmap, imageB: Bitmap): Bitmap {
+        val layers = mutableListOf<Drawable>()
+        layers.add(BitmapDrawable(context.resources, imageA))
+        layers.add(BitmapDrawable(context.resources, imageB))
+        return UtilityImg.layerDrawableToBitmap(layers)
+    }
+
+    fun addColorBG(context: Context, imageA: Bitmap, color: Int): Bitmap {
+        val layers = mutableListOf<Drawable>()
+        layers.add(ColorDrawable(color))
+        layers.add(BitmapDrawable(context.resources, imageA))
+        return UtilityImg.layerDrawableToBitmap(layers)
+    }
+
     fun getBlankBitmap(): Bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
 
     fun getBitmapRemoveBG(imgUrl: String, color: Int): Bitmap = UtilityImg.eraseBG(imgUrl.getImage(), color)

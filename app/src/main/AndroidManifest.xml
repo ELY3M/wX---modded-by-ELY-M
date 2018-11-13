@@ -21,8 +21,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55039"
-    android:versionName="55039"
+    android:versionCode="55040"
+    android:versionName="55040"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -389,11 +389,6 @@
   </activity>
   <activity
       android:name=".activitiesmisc.LightningActivity"
-      android:parentActivityName="WX" >
-  </activity>
-
-  <activity
-      android:name=".radar.Website"
       android:parentActivityName="WX" >
   </activity>
 
