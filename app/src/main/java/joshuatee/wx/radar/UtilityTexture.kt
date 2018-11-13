@@ -43,18 +43,148 @@ object UtilityTexture {
 
     var TAG: String = "joshuatee UtilityTexture"
 
-    //var unloadTextures: Boolean = false;
 
     fun LoadBitmap(imagefile: String): Bitmap {
         val options = BitmapFactory.Options()
         options.inScaled = false
-        //options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         return BitmapFactory.decodeFile(imagefile, options)
 
     }
 
 
-    fun LoadTexture(gl: GL10, imagefile: String): Int {
+
+    fun LoadTexture(imagefile: String): Int {
+
+        Log.i(TAG, "Loadtexture")
+        var img: Bitmap? = null
+        val textures = IntArray(1)
+        try {
+            val options = BitmapFactory.Options()
+            options.inScaled = false
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888
+            img = BitmapFactory.decodeFile(imagefile, options)
+            GLES20.glGenTextures(1, textures, 0)
+
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0])
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST.toFloat())
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST.toFloat())
+            GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, img, 0)
+            Log.i(TAG, "Loaded texture" + ":H:" + img!!.height + ":W:" + img.width)
+        } catch (e: Exception) {
+            Log.i(TAG, e.toString() + ":" + e.message + ":" + e.localizedMessage)
+        }
+
+        try {
+            img!!.recycle()
+        } catch (e: NullPointerException) {
+            Log.i(TAG, e.toString() + ":" + e.message + ":" + e.localizedMessage)
+        }
+
+        return textures[0]
+    }
+
+    fun LoadShader(strSource: String, iType: Int): Int {
+        Log.i(TAG, "LoadShader")
+        val compiled = IntArray(1)
+        val iShader = GLES20.glCreateShader(iType)
+        GLES20.glShaderSource(iShader, strSource)
+        GLES20.glCompileShader(iShader)
+        GLES20.glGetShaderiv(iShader, GLES20.GL_COMPILE_STATUS, compiled, 0)
+        if (compiled[0] == 0) {
+            Log.i(TAG, "Load Shader Failed Compilation\n" + GLES20.glGetShaderInfoLog(iShader))
+            return 0
+        }
+        return iShader
+    }
+
+    fun LoadProgram(strVSource: String, strFSource: String): Int {
+        Log.i(TAG, "LoadProgram")
+        val iVShader: Int
+        val iFShader: Int
+        val iProgId: Int
+        val link = IntArray(1)
+
+        iVShader = LoadShader(strVSource, GLES20.GL_VERTEX_SHADER)
+        if (iVShader == 0) {
+            Log.i(TAG, "Vertex Shader Failed")
+            return 0
+        }
+        iFShader = LoadShader(strFSource, GLES20.GL_FRAGMENT_SHADER)
+        if (iFShader == 0) {
+            Log.i(TAG, "Fragment Shader Failed")
+            return 0
+        }
+
+        iProgId = GLES20.glCreateProgram()
+
+        GLES20.glAttachShader(iProgId, iVShader)
+        GLES20.glAttachShader(iProgId, iFShader)
+
+        GLES20.glLinkProgram(iProgId)
+
+        GLES20.glGetProgramiv(iProgId, GLES20.GL_LINK_STATUS, link, 0)
+        if (link[0] <= 0) {
+            Log.i(TAG, "Linking Failed")
+            return 0
+        }
+        GLES20.glDeleteShader(iVShader)
+        GLES20.glDeleteShader(iFShader)
+        return iProgId
+    }
+
+
+
+    fun SetupImage(imagefile: String) {
+        var indices: ShortArray
+        val uvs: FloatArray
+        val uvBuffer: FloatBuffer
+        // Create our UV coordinates.
+        uvs = floatArrayOf(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f)
+
+        // The texture buffer
+        val bb = ByteBuffer.allocateDirect(uvs.size * 4)
+        bb.order(ByteOrder.nativeOrder())
+        uvBuffer = bb.asFloatBuffer()
+        uvBuffer.put(uvs)
+        uvBuffer.position(0)
+
+        // Generate Textures, if more needed, alter these numbers.
+        val texturenames = IntArray(1)
+        GLES20.glGenTextures(1, texturenames, 0)
+
+        // Temporary create a bitmap
+        val options = BitmapFactory.Options()
+        options.inScaled = false
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888
+        val bmp = BitmapFactory.decodeFile(imagefile, options)
+
+        // Bind texture to texturename
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[0])
+
+        // Set filtering
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST)
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST)
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE.toFloat())
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE.toFloat())
+        // Load the bitmap into the bound texture.
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0)
+
+        // We are done using the bitmap so we should recycle it.
+        try {
+            bmp.recycle()
+        } catch(e: Exception) {
+            Log.i(TAG, "bmp recycle() crashed: "+e.message)
+        }
+
+    }
+
+
+
+/*
+
+    fun LoadTextureold(gl: GL10, imagefile: String): Int {
         val options = BitmapFactory.Options()
         options.inScaled = false
         options.inPreferredConfig = Bitmap.Config.ARGB_8888
@@ -98,16 +228,17 @@ object UtilityTexture {
         gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, TEXCOORD_BUFFER)
         gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4)
     }
+*/
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Geometric variables
-
+/*
 
     var vertices: FloatArray = floatArrayOf(10.0f, 200f, 0.0f, 10.0f, 100f, 0.0f, 100f, 100f, 0.0f, 100f, 200f, 0.0f)
     var indices: ShortArray = shortArrayOf(0, 1, 2, 0, 2, 3)
     var uvs: FloatArray = floatArrayOf(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f)
 
-/*
+
     private fun Render(m: FloatArray) {
         var uvBuffer: FloatBuffer
         // The texture buffer
@@ -162,6 +293,8 @@ object UtilityTexture {
     }
 */
 
+
+    /*
     fun SetupImage(imagefile: String) {
         var indices: ShortArray
         val uvs: FloatArray
@@ -396,7 +529,7 @@ object UtilityTexture {
         }
         return iShader
     }
-
+*/
 
 
 /*

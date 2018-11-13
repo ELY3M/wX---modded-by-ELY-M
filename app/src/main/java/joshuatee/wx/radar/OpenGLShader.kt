@@ -12,28 +12,40 @@ internal object OpenGLShader {
     // Program variables
     var sp_SolidColor: Int = 0
     var sp_Image: Int = 0
+    var sp_point: Int = 0
+    var sp_loadimage: Int = 0
+    var imagesize: Double = 103.0
+    var setfragcolor: String = "color"
 
     /* SHADER Solid
      *
      * This shader is for rendering a colored primitive.
      *
      */
-    const val vs_SolidColor =
+    var vs_SolidColor =
             "uniform    mat4        uMVPMatrix;" +
+                    //"varying vec2 v_pointsize;" +
                     "attribute  vec4        vPosition;" +
                     "attribute  vec3        a_Color;" + // was attribute
-
                     "varying  vec3        v_Color;" +
                     "void main() {" +
+                    "gl_PointSize = "+ imagesize+";" +
                     "  gl_Position = uMVPMatrix * vPosition;" +
                     "  v_Color = a_Color;" +
                     "}"
 
-    const val fs_SolidColor =
+    var fs_SolidColor =
             "precision mediump float;" +
                     "varying vec3 v_Color;" +
+                    "uniform sampler2D s_texture;" +
                     "void main() {" +
-                    "  gl_FragColor = vec4(v_Color,1.0);" +
+                    "vec4 color;" +
+                    "color = vec4(v_Color,1.0);" +
+                    "gl_FragColor = "+ setfragcolor+";" +
+                    //"gl_FragColor = *texture2D(s_texture, gl_PointCoord);" +
+                    //"vec4 color;" +
+                    //"color = texture2D(s_texture, gl_PointCoord);" +
+                    //"  gl_FragColor = color;" +
                     "}"
 
 
@@ -60,6 +72,26 @@ internal object OpenGLShader {
     "  gl_FragColor = texture2D( s_texture, v_texCoord );" +
     "}")
 
+
+
+    //I hope this fucking work!!!!
+    var vs_loadimage =
+            "uniform    mat4        uMVPMatrix;" +
+                    "varying vec3 v_pointsize;" +
+                    "attribute  vec4        vPosition;" +
+                    "void main() {" +
+                    "gl_PointSize = v_pointsize;" +
+                    "  gl_Position = uMVPMatrix * vPosition;" +
+                    "}"
+
+    var fs_loadimage =
+            "precision mediump float;" +
+                    "uniform sampler2D u_texture;" +
+                    "void main() {" +
+                    "vec4 color;" +
+                    "color = texture2D(u_texture, gl_PointCoord);" +
+                    "  gl_FragColor = color;" +
+                    "}"
 
 
     fun loadShader(type: Int, shaderCode: String): Int {

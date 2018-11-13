@@ -80,6 +80,7 @@ internal object UtilityModelSPCHREFInterface {
             "guidance_hail_spchazcal_024h",
             "guidance_tor_spchazcal_024h",
             "guidance_wind_spchazcal_024h",
+
             "500w_mean,500h_mean",
             "700w_mean,700h_mean",
             "850w_mean,850h_mean",
@@ -180,6 +181,7 @@ internal object UtilityModelSPCHREFInterface {
             "24-hr HREF/SREF Calibrated: Hail",
             "24-hr HREF/SREF Calibrated: Tornado",
             "24-hr HREF/SREF Calibrated: Wind",
+
             "500 mb Height/Wind",
             "700 mb Height/Wind",
             "850 mb Height/Wind",

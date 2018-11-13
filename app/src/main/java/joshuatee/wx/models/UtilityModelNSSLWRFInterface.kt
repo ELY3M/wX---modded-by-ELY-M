@@ -23,63 +23,207 @@ package joshuatee.wx.models
 
 internal object UtilityModelNSSLWRFInterface {
 
-    val PARAMS = listOf(
-            "pptslp",
-            "pptsix",
-            "rflslp",
-            "rflmax",
-            "rfcslp",
-            "uphlcy",
-            "uph3km",
-            "hail",
-            "grplmx",
-            "wndspd",
-            "updrft",
-            "dndrft",
-            "sfcvis",
-            "ltg1mx",
-            "ltg2mx",
-            "ltg3mx",
-            "tmfwnd",
-            "tdfwnd",
-            "capwnd",
-            "csbwnd",
-            "stpslp",
-            "simsvr",
-            "ppthvy",
-            "wnd5mb",
-            "vrt5mb",
-            "wnd2mb"
+    val models = listOf(
+            "WRF", "FV3", "HRRRV3", "WRF_3KM"
     )
 
-    val LABELS = listOf(
-            "1hr QPF",
-            "6hr QPF",
-            "1km AGL Sim. Reflectivity",
-            "Hourly Max Sim. Reflectivity",
-            "Max Column Sim. Reflectivity",
-            "Hr Max Updraft Helicity",
-            "Hr Max Updraft Hel. (0-3km)",
-            "Hr Max Hailsize (HAILCAST)",
-            "Hr Max Column Int. Graupel",
-            "Hr Max 10m Wind Speed",
-            "Hr Max Column Updraft",
-            "Hr Max Column Downdraft",
-            "Surface Visibility",
-            "Hr Max Lightning Threat 1",
-            "Hr Max Lightning Threat 2",
-            "Hr Max Lightning Threat 3",
-            "2m Temperature",
-            "2m Dew Point",
+    val paramsNsslWrf = listOf(
+            "mslp",
+            "10mwind",
+            "sfct",
+            "sfctd",
+            "visibility",
+            "250w",
+            "500w",
+            "850w",
+
+            "mucape",
+            "sbcape",
+            "srh01",
+            "srh03",
+            "stp",
+
+            "qpf_001h",
+            "qpf_006h",
+            "qpf_total",
+            "snowfall_total",
+
+            "cref_uh075",
+            "maxref_1000m",
+            "ref1000m_uh075",
+            "uh03_004hmax",
+            "uh25_004hmax",
+            "dd_004hmax",
+            "ud_004hmax",
+            "wspd_004hmax",
+            "graupelsize_001hmax",
+            "hailcast_004hmax",
+            "ltgthrt1",
+            "ltgthrt2",
+            "ltgthrt3"
+    )
+
+    val labelsNsslWrf = listOf(
+            "MSLP (mb)",
+            "10 m Wind (kt)",
+            "2-m Temperature",
+            "2-m Dew Point",
+            "Visibility",
+            "250 mb",
+            "500 mb",
+            "850 mb",
+
             "MUCAPE",
             "SBCAPE",
-            "SIG TOR (fixed layer)",
-            "Experimental Surrogate Severe",
-            "Experimental Heavy Rain Guidance",
-            "500mb Z and Winds",
-            "500mb Z and Vorticity",
-            "250mb Z and Winds"
+            "0-1km SRH",
+            "0-3km SRH",
+            "STP",
+
+            "1-h QPF",
+            "6-h QPF",
+            "Total QPF",
+            "Total Snowfall",
+
+            "Reflectivity - Composite",
+            "Reflectivity - 1h-max (1km AGL)",
+            "Reflectivity - 1km AGL",
+            "Updraft Helicity - 4-h max (0-3km)",
+            "Updraft Helicity - 4-h max (2-5km)",
+            "Vertical Velocity - 4-h min Downdraft",
+            "Vertical Velocity - 4-h max Updraft",
+            "Wind Speed - 4-h max",
+            "Hail - 1-h max Graupel",
+            "Hail - 4-h max HAILCAST",
+            "Lightning - 1-h max Threat1",
+            "Lightning - 1-h max Threat2",
+            "Lightning - 1-h max Threat3"
     )
 
-    val SECTORS = listOf("CONUS")
+    val paramsNsslFv3 = listOf(
+            "mslp",
+            "10mwind",
+            "sfct",
+            "sfctd",
+            "250w",
+            "500w",
+            "850w",
+
+            "sbcape",
+            "srh01",
+            "srh03",
+            "stp",
+
+            "qpf_001h",
+            "qpf_006h",
+            "qpf_total",
+
+            "cref_uh075",
+            "uh25_004hmax",
+            "dd_004hmax",
+            "ud_004hmax"
+    )
+
+    val labelsNsslFv3 = listOf(
+            "MSLP (mb)",
+            "10 m Wind (kt)",
+            "2-m Temperature",
+            "2-m Dew Point",
+            "250 mb",
+            "500 mb",
+            "850 mb",
+
+            "SBCAPE",
+            "0-1km SRH",
+            "0-3km SRH",
+            "STP",
+
+            "1-h QPF",
+            "6-h QPF",
+            "Total QPF",
+
+            "Reflectivity - Composite",
+            "Updraft Helicity - 4-h max (2-5km)",
+            "Vertical Velocity - 4-h min Downdraft",
+            "Vertical Velocity - 4-h max Updraft"
+    )
+
+    val paramsNsslHrrrv3 = listOf(
+            "mslp",
+            "10mwind",
+            "sfct",
+            "sfctd",
+            "250w",
+            "500w",
+            "850w",
+
+            "mucape",
+            "sbcape",
+            "srh01",
+            "srh03",
+            "stp",
+
+            "qpf_001h",
+            "qpf_006h",
+            "qpf_total",
+
+            "cref_uh075",
+            "maxref_1000m",
+            "ref1000m_uh075",
+            "uh25_004hmax",
+            "ud_004hmax",
+            "wspd_004hmax"
+    )
+
+    val labelsNsslHrrrv3 = listOf(
+            "MSLP (mb)",
+            "10 m Wind (kt)",
+            "2-m Temperature",
+            "2-m Dew Point",
+            "250 mb",
+            "500 mb",
+            "850 mb",
+
+            "MUCAPE",
+            "SBCAPE",
+            "0-1km SRH",
+            "0-3km SRH",
+            "STP",
+
+            "1-h QPF",
+            "6-h QPF",
+            "Total QPF",
+
+            "Reflectivity - Composite",
+            "Reflectivity - 1h-max (1km AGL)",
+            "Reflectivity - 1km AGL",
+            "Updraft Helicity - 4-h max (2-5km)",
+            "Vertical Velocity - 4-h max Updraft",
+            "Wind Speed - 4-h max"
+    )
+
+    val sectorsLong = listOf(
+            "CONUS",
+            "Central Plains",
+            "Mid Atlantic",
+            "Midwest",
+            "Northeast",
+            "Northern Plains",
+            "Northwest",
+            "Southeast",
+            "Southern Plains",
+            "Southwest"
+    )
+
+    val sectors = listOf(
+            "conus",
+            "cp",
+            "ma",
+            "mw",
+            "ne",
+            "np",
+            "nw",
+            "se",
+            "sp",
+            "sw"
+    )
 }

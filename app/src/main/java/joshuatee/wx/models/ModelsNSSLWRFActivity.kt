@@ -147,10 +147,10 @@ class ModelsNSSLWRFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         })
         spRun = ObjectSpinner(this, this, R.id.spinner_run)
         spRun.setOnItemSelectedListener(this)
-        spSector = ObjectSpinner(this, this, R.id.spinner_sector, UtilityModelNSSLWRFInterface.SECTORS)
+        spSector = ObjectSpinner(this, this, R.id.spinner_sector, UtilityModelNSSLWRFInterface.sectorsLong)
         spSector.setOnItemSelectedListener(this)
-        spSector.setSelection(Utility.readPref(this, prefSector, UtilityModelNSSLWRFInterface.SECTORS[0]))
-        drw = ObjectNavDrawer(this, UtilityModelNSSLWRFInterface.LABELS, UtilityModelNSSLWRFInterface.PARAMS)
+        spSector.setSelection(Utility.readPref(this, prefSector, UtilityModelNSSLWRFInterface.sectorsLong[0]))
+        drw = ObjectNavDrawer(this, UtilityModelNSSLWRFInterface.labelsNsslWrf, UtilityModelNSSLWRFInterface.paramsNsslWrf)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
             drw.drawerLayout.closeDrawer(drw.listView)
@@ -180,14 +180,14 @@ class ModelsNSSLWRFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         override fun onPreExecute() {
             run = spRun.selectedItem.toString()
             time = spTime.selectedItem.toString()
-            if (prefModel == "NCAR_ENSEMBLE") {
+            //if (prefModel == "NCAR_ENSEMBLE") {
                 sector = spSector.selectedItem.toString()
-            }
+            //}
             Utility.writePref(contextg, prefSector, sector)
         }
 
         override fun doInBackground(vararg params: String): String {
-            (0 until numPanes).forEach { displayData.bitmap[it] = UtilityModelNSSLWRFInputOutput.getImage(sector, displayData.param[it], run, time) }
+            (0 until numPanes).forEach { displayData.bitmap[it] = UtilityModelNSSLWRFInputOutput.getImage(contextg, sector, displayData.param[it], run, time) }
             return "Executed"
         }
 
@@ -297,18 +297,18 @@ class ModelsNSSLWRFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
 
     private fun setupModel() {
         (0 until numPanes).forEach {
-            displayData.param[it] = UtilityModelNSSLWRFInterface.PARAMS[0]
+            displayData.param[it] = UtilityModelNSSLWRFInterface.paramsNsslWrf[0]
             displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[it])
-            displayData.paramLabel[it] = UtilityModelNSSLWRFInterface.LABELS[0]
+            displayData.paramLabel[it] = UtilityModelNSSLWRFInterface.labelsNsslWrf[0]
             displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[it])
 
         }
-        if (!UtilityModels.parmInArray(UtilityModelNSSLWRFInterface.PARAMS, displayData.param[0])) {
+        if (!UtilityModels.parmInArray(UtilityModelNSSLWRFInterface.paramsNsslWrf, displayData.param[0])) {
             displayData.param[0] = "speed500_mean"
             displayData.paramLabel[0] = "500 mb Wind/Height"
         }
         if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNSSLWRFInterface.PARAMS, displayData.param[1])) {
+            if (!UtilityModels.parmInArray(UtilityModelNSSLWRFInterface.paramsNsslWrf, displayData.param[1])) {
                 displayData.param[1] = "speed500_mean"
                 displayData.paramLabel[1] = "500 mb Wind/Height"
             }
