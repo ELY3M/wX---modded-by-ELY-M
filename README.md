@@ -36,7 +36,7 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 14. android wear support. I own android wear watches and love them.      
 15. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor. 
 16. make VAD Wind Profile more better and friendly  like the one at cod.edu   
-
+17. option to change location image size  
 
 
 
@@ -44,6 +44,7 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 #
 ## DONE!
 ====================================  
+the gps location is loaded by location.png now.    
 for now, I put in cod.edu url to load up for VAD Wind Profile  
 The BackupRestore function now backup everything that are in wX folder even your icons and any files.  
 added pal files backup/restore function in BackupRestore function  
