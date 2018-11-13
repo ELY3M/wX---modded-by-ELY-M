@@ -186,7 +186,8 @@ class Location(val context: Context, locNumInt: Int) {
 
         val y: String get() = MyApplication.locations.getOrNull(currentLocation)?.y ?: "-0.0"
 
-        val latLon: LatLon get() = joshuatee.wx.radar.LatLon(MyApplication.locations[currentLocation].x, MyApplication.locations[currentLocation].y)
+        //val latLon: LatLon get() = joshuatee.wx.radar.LatLon(MyApplication.locations[currentLocation].x, MyApplication.locations[currentLocation].y)
+        val latLon: LatLon get() = joshuatee.wx.radar.LatLon(x, y)
 
         val name: String get() = MyApplication.locations.getOrNull(currentLocation)?.name ?: ""
 
@@ -200,9 +201,11 @@ class Location(val context: Context, locNumInt: Int) {
 
         fun getWfo(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.wfo ?: "DTX"
 
-        fun getLatLon(locNum: Int): LatLon = joshuatee.wx.radar.LatLon(MyApplication.locations.getOrNull(locNum)?.x
-                ?: "0.0",
-                MyApplication.locations.getOrNull(locNum)?.y ?: "-0.0")
+        //fun getLatLon(locNum: Int): LatLon = joshuatee.wx.radar.LatLon(MyApplication.locations.getOrNull(locNum)?.x
+        //        ?: "0.0",
+        //        MyApplication.locations.getOrNull(locNum)?.y ?: "-0.0")
+
+        fun getLatLon(locNum: Int): LatLon = joshuatee.wx.radar.LatLon(getX(locNum), getY(locNum))
 
         val locationIndex: Int get() = Location.currentLocation
 

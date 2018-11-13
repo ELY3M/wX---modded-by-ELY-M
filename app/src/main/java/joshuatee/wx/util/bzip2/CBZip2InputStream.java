@@ -141,12 +141,12 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
   private int storedBlockCRC, storedCombinedCRC;
   private int computedBlockCRC, computedCombinedCRC;
 
-  int i2, count, chPrev, ch2;
-  int i, tPos;
-  int rNToGo = 0;
-  int rTPos = 0;
-  int j2;
-  char z;
+  private int i2, count, chPrev, ch2;
+  private int i, tPos;
+  private int rNToGo = 0;
+  private int rTPos = 0;
+  private int j2;
+  private char z;
 
   public CBZip2InputStream() {
   }

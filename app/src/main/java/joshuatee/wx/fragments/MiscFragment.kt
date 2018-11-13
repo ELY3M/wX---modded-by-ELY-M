@@ -102,7 +102,7 @@ class MiscFragment : Fragment() {
             //val locInt = Location.currentLocation
             hm["wxoglquad"] = TileObject(R.drawable.wxoglquadpane, WXGLRadarActivityMultiPane::class.java, WXGLRadarActivityMultiPane.RID,
                     arrayOf(Location.rid, "", "4"), "", "wxoglquad")
-            hm["model_nssl_wrf"] = TileObject(R.drawable.nsslwrf, ModelsNSSLWRFActivity::class.java, ModelsNSSLWRFActivity.INFO, arrayOf("1", "true", "NSSLWRF", "NSSL WRF"),
+            hm["model_nssl_wrf"] = TileObject(R.drawable.nsslwrf, ModelsNSSLWRFActivity::class.java, ModelsNSSLWRFActivity.INFO, arrayOf("1", "true", "NSSLWRF", "NSSL"),
                     resources.getString(R.string.help_models_nssl_wrf), "model_nssl_wrf")
             hm["goes16"] = TileObject(R.drawable.goes16, GOES16Activity::class.java, GOES16Activity.RID, arrayOf(""), resources.getString(R.string.help_goes16), "goes16")
             val tileOrder = "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:"

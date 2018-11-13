@@ -113,13 +113,11 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                 if (!MyApplication.radarColorPalette94List.contains(palTitle.text.toString())) {
                     MyApplication.radarColorPalette94List = MyApplication.radarColorPalette94List + ":" + palTitle.text.toString()
                     Utility.writePref(context, "RADAR_COLOR_PALETTE_94_LIST", MyApplication.radarColorPalette94List)
-                    //savepalfile(palTitle.text.toString()+"_94.txt", textToSave)
                 }
             } else {
                 if (!MyApplication.radarColorPalette99List.contains(palTitle.text.toString())) {
                     MyApplication.radarColorPalette99List = MyApplication.radarColorPalette99List + ":" + palTitle.text.toString()
                     Utility.writePref(context, "RADAR_COLOR_PALETTE_99_LIST", MyApplication.radarColorPalette99List)
-                    //savepalfile(palTitle.text.toString()+"_99.txt", textToSave)
                 }
             }
 

@@ -4,7 +4,14 @@
 // TODO find new material design icons as used in google cal / clock
 // TODO base velocity legend
 // TODO SPC MESO rescan for _sf
+// TODO add other models to new NWS WRF, remove global icon
+// TODO optimize model setup in esrl,ncep like nssl
 
+55042 2018_11_13 (bugfix) at joshuatee.wx.settings.Location$Companion.getLatLon (Location.kt:189)
+                 java.lang.IndexOutOfBoundsException:
+                 lint cleanup
+55041 2018_11_12 (bugfix) NSL WRF website was changed completely, add other models
+55040 2018_11_12 (bugfix) NSL WRF website was changed completely, fix WRF as a starter
 55039 2018_11_07 (bugfix) UtilityLocation.getXYFromAddressOSM was not optimal
 55038 2018_11_06 remove uneeded RadarType.kt
                  add new SPC MESO parm: "Bulk Shear - Sfc-3km", "shr3"

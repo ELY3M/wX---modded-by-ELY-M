@@ -81,7 +81,6 @@ object RegExp {
     val srefPattern3: Pattern = Pattern.compile("<tr><td class=.previous.><a href=sref.php\\?run=[0-9]{10}&id=SREF_H5__>([0-9]{10}z)</a></td></tr>")
     val ncepPattern1: Pattern = Pattern.compile("([0-9]{2}Z)")
     val ncepPattern2: Pattern = Pattern.compile("([0-9]{10}UTC selected_cell)")
-    val ncarEnsPattern2: Pattern = Pattern.compile("([0-9]{2})$")
     val eslHrrrPattern1: Pattern = Pattern.compile("<option selected>([0-9]{2} \\w{3} [0-9]{4} - [0-9]{2}Z)<.option>")
     val eslHrrrPattern2: Pattern = Pattern.compile("<option>([0-9]{2} \\w{3} [0-9]{4} - [0-9]{2}Z)<.option>")
     val eslHrrrPattern3: Pattern = Pattern.compile("[0-9]{2} \\w{3} ([0-9]{4}) - [0-9]{2}Z")

@@ -39,7 +39,6 @@ open class ObjectOglBuffers() {
     var indexBuffer: ByteBuffer = ByteBuffer.allocate(0)
         private set
     var colorBuffer: ByteBuffer = ByteBuffer.allocate(0)
-    var imageBuffer: ByteBuffer = ByteBuffer.allocate(0)
     var colorIntArray: List<Int> = listOf()
     var solidColorRed: Byte = 0
         private set
@@ -98,8 +97,6 @@ open class ObjectOglBuffers() {
             indexBuffer.order(ByteOrder.nativeOrder())
             colorBuffer = ByteBuffer.allocateDirect(colorCount)
             colorBuffer.order(ByteOrder.nativeOrder())
-            imageBuffer = ByteBuffer.allocateDirect(colorCount)
-            imageBuffer.order(ByteOrder.nativeOrder())
             setToPositionZero()
         } catch (e: OutOfMemoryError) {
             UtilityLog.HandleException(e)
@@ -117,7 +114,6 @@ open class ObjectOglBuffers() {
         floatBuffer.position(0)
         indexBuffer.position(0)
         colorBuffer.position(0)
-        imageBuffer.position(0)
     }
 
     fun putFloat(newValue: Float) {

@@ -85,6 +85,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end" />
+                <Spinner
+                    android:id="@+id/spinner_model"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    />
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -117,18 +124,25 @@
                     android:gravity="center_horizontal"
                     />
 
+              <!--  <joshuatee.wx.util.ImageMap
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/cwa"
+                    ctc:map="cwamap"/>-->
+
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
 
-    <ExpandableListView android:id="@+id/left_drawer"
-                        android:layout_width="480dp"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="start"
-                        android:choiceMode="singleChoice"
-                        android:divider="@android:color/transparent"
-                        android:dividerHeight="0dp"
-                        android:background="@color/primary_dark_blue"/>
+    <ListView android:id="@+id/left_drawer"
+              android:layout_width="360dp"
+              android:layout_height="match_parent"
+              android:layout_gravity="start"
+              android:choiceMode="singleChoice"
+              android:divider="@android:color/transparent"
+              android:dividerHeight="0dp"
+              android:background="@color/primary_dark_blue"/>
 </androidx.drawerlayout.widget.DrawerLayout>
 
 
