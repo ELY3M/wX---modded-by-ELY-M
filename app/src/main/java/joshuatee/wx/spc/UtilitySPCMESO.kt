@@ -163,6 +163,7 @@ object UtilitySPCMESO {
             "bigsfc",
             "1kmv",
             "rgnlrad",
+
             "pmsl",
             "ttd",
             "mcon",
@@ -223,6 +224,7 @@ object UtilitySPCMESO {
             "mucp_chg",
             "lllr_chg",
             "laps_chg",
+
             "eshr",
             "shr6",
             "shr8",
@@ -321,6 +323,7 @@ object UtilitySPCMESO {
             "Surface Observations",
             "Visible Satellite",
             "Radar Base Reflectivity",
+
             "MSL Pressure/Wind",
             "Temp/Dewpt/Wind",
             "Moisture Convergence",
@@ -336,6 +339,7 @@ object UtilitySPCMESO {
             "3-hour Dwpt Change",
             "3-hour 100 mb Mixing Ratio Change",
             "3-hour Theta-E Change",
+
             "925mb Analysis",
             "850mb Analysis",
             "700mb Analysis",
@@ -360,6 +364,7 @@ object UtilitySPCMESO {
             "12-hour 500mb Height Change",
             "Fluid Trapping (500 mb)",
             "Fluid Trapping (250 mb)",
+
             "CAPE - Surface Based",
             "CAPE - 100mb Mixed-Layer",
             "CAPE - Most-Unstable / LPL Height",
@@ -397,6 +402,7 @@ object UtilitySPCMESO {
             "3hr Sfc-3km SR Helicity Change",
             "3hr Sfc-1km Bulk Shear Change",
             "3hr Sfc-6km Bulk Shear Change",
+
             "Supercell Composite",
             "Supercell Composite (left-moving)",
             "Sgfnt Tornado (fixed layer)",

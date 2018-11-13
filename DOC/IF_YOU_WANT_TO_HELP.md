@@ -28,3 +28,5 @@ With that said, please respect these items:
 http://infrequently.org/2008/06/why-do-i-need-to-sign-this/ (overview)
 https://github.com/mapsme/omim/blob/master/docs/CLA.md (a good template CLA also used by apache I think )
 https://github.com/fusionpbx/open-source/blob/master/sign-cla.md (an example of electronic signing)
+
+12. Please respect the privacy policy. No code will be accepted that does not respect the privacy policy.

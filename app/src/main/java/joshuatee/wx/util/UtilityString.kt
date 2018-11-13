@@ -128,7 +128,7 @@ object UtilityString {
 
     fun getHTMLandParseMultipeFirstMatch(url: String, matchStr: String, number: Int): MutableList<String> = parseMultipeFirst(url.getHtml(), matchStr, number)
 
-    fun parseMultipeFirst(data: String, match_str: String, number: Int): MutableList<String> {
+    private fun parseMultipeFirst(data: String, match_str: String, number: Int): MutableList<String> {
         val result = MutableList(number) { "" }
         try {
             val p = Pattern.compile(match_str)
