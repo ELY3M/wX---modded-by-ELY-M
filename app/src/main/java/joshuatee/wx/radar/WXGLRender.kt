@@ -123,7 +123,7 @@ class WXGLRender(private val context: Context) : Renderer {
 
     private var sp_loadimage: Int = 0
     private var iTexture: Int = 0
-    private var imagesize: Double = 103.0
+    private var imagesize: Double = MyApplication.radarLocdotSize.toDouble()
 
     private var locationId = -1
 
@@ -419,6 +419,8 @@ class WXGLRender(private val context: Context) : Renderer {
                 drawElement(it)
             }
         }
+
+        //TODO do custom icons for tvs and hail//
         listOf(spotterBuffers, hiBuffers, tvsBuffers).forEach {
             if (zoom > it.scaleCutOff) {
                 drawTriangles(it)
@@ -437,11 +439,8 @@ class WXGLRender(private val context: Context) : Renderer {
         }
         GLES20.glLineWidth(defaultLineWidth)
         //drawTriangles(locdotBuffers)
-
-
         drawLocation(locdotBuffers)
-        //drawLocationtest(locdotBuffers)
-        //drawTrianglesTexture(locdotBuffers, locationId, locationbitmap)
+
 
         /*
         if (MyApplication.locdotFollowsGps && locCircleBuffers.floatBuffer.capacity() != 0 && locCircleBuffers.indexBuffer.capacity() != 0 && locCircleBuffers.colorBuffer.capacity() != 0) {
@@ -465,7 +464,7 @@ class WXGLRender(private val context: Context) : Renderer {
                 GLES20.glUseProgram(sp_loadimage)
                 mPositionHandle = GLES20.glGetAttribLocation(sp_loadimage, "vPosition")
                 GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
-                imagesize = 93.0
+                imagesize = MyApplication.radarLocdotSize.toDouble()
                 iTexture = GLES20.glGetUniformLocation(sp_loadimage, "u_texture")
                 locationId = LoadTexture(MyApplication.FilesPath + "location.png")
 
@@ -488,16 +487,6 @@ class WXGLRender(private val context: Context) : Renderer {
         }
     }
 
-    //weird rainbow dot hahahah
-    private fun drawTrianglestextureRainbow(buffers: ObjectOglBuffers) {
-        if (buffers.isInitialized) {
-            buffers.setToPositionZero()
-            UtilityTexture.SetupImage(MyApplication.FilesPath+"testcyan.png")
-            GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
-            GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, buffers.colorBuffer.slice().asFloatBuffer())
-            GLES20.glDrawElements(GLES20.GL_TRIANGLES, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
-        }
-    }
 
     // FIXME CRASHING HERE sometimes
     /*

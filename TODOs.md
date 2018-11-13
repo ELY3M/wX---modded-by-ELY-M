@@ -5,7 +5,7 @@
 1. conus radar overlay when you zoom out like on pykl3 
 2. get special weather statements working - not working due because they do not have vtec like all other warnings.  
 3. add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs   
-4. allow custom icons! exp tvs and hail and gps location and cities dots - partily done.  
+4. allow custom icons! exp tvs and hail and cities dots - location image is done!.    
 5. add read mcd/mpd text like read warnings text in the radar tap menu 
 6. add warning list within radar
 7. add LSR reports from SN spotters/option to turn on/off LSR reports
@@ -18,7 +18,7 @@
 14. android wear support. I own android wear watches and love them.      
 15. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor. 
 16. make VAD Wind Profile more better and friendly  like the one at cod.edu   
-17. option to change location image size  
+
 
 
 
@@ -26,6 +26,7 @@
 #
 ## DONE!
 ====================================  
+you are able to change location icon size now.  I increased the location size to 301 in the settings   
 the gps location is loaded by location.png now.    
 for now, I put in cod.edu url to load up for VAD Wind Profile  
 The BackupRestore function now backup everything that are in wX folder even your icons and any files.  
