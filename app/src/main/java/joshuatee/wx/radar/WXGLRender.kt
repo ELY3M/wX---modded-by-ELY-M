@@ -40,8 +40,6 @@ import joshuatee.wx.activitiesmisc.UtilityLightning
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
-import joshuatee.wx.radar.UtilityTexture.LoadProgram
-import joshuatee.wx.radar.UtilityTexture.LoadTexture
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
@@ -343,6 +341,8 @@ class WXGLRender(private val context: Context) : Renderer {
         GLES20.glLinkProgram(OpenGLShaderUniform.sp_SolidColorUniform)
 
 
+        //Thanks to this for point sprite shader and codes
+        //http://opengles2learning.blogspot.com/2011/05/applying-texture-to-point-sprite.html
         Log.i(TAG, "imagesize: " + imagesize)
         //I hope this fucking work!!!!
         var vs_loadimage =
@@ -367,16 +367,6 @@ class WXGLRender(private val context: Context) : Renderer {
         GLES20.glAttachShader(sp_loadimage, OpenGLShader.loadShader(GLES20.GL_VERTEX_SHADER, vs_loadimage))
         GLES20.glAttachShader(sp_loadimage, OpenGLShader.loadShader(GLES20.GL_FRAGMENT_SHADER, fs_loadimage))
         GLES20.glLinkProgram(sp_loadimage)
-        //GLES20.glUseProgram(sp_loadimage)
-
-
-        //iProgId = LoadProgram(vs_loadimage, fs_loadimage)
-        //GLES20.glUseProgram(iProgId)
-
-        //iTexture = GLES20.glGetUniformLocation(sp_loadimage, "u_texture")
-        //testId = LoadTexture(MyApplication.FilesPath + "testcyan.png")
-        //locationId = LoadTexture(MyApplication.FilesPath + "location.png")
-
 
     }
 
@@ -466,7 +456,7 @@ class WXGLRender(private val context: Context) : Renderer {
                 GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
                 imagesize = MyApplication.radarLociconSize.toDouble()
                 iTexture = GLES20.glGetUniformLocation(sp_loadimage, "u_texture")
-                locationId = LoadTexture(MyApplication.FilesPath + "location.png")
+                locationId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "location.png")
 
                 GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
                 GLES20.glEnableVertexAttribArray(mPositionHandle)

@@ -1,21 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
 
-    This file is part of wX.
-
-    wX is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    wX is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
@@ -65,7 +50,6 @@ object UtilityTexture {
             options.inPreferredConfig = Bitmap.Config.ARGB_8888
             img = BitmapFactory.decodeFile(imagefile, options)
             GLES20.glGenTextures(1, textures, 0)
-
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0])
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST.toFloat())
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST.toFloat())
@@ -182,7 +166,6 @@ object UtilityTexture {
 
 
 
-/*
 
     fun LoadTextureold(gl: GL10, imagefile: String): Int {
         val options = BitmapFactory.Options()
@@ -228,11 +211,11 @@ object UtilityTexture {
         gl.glTexCoordPointer(2, GL10.GL_FLOAT, 0, TEXCOORD_BUFFER)
         gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4)
     }
-*/
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Geometric variables
-/*
+
 
     var vertices: FloatArray = floatArrayOf(10.0f, 200f, 0.0f, 10.0f, 100f, 0.0f, 100f, 100f, 0.0f, 100f, 200f, 0.0f)
     var indices: ShortArray = shortArrayOf(0, 1, 2, 0, 2, 3)
@@ -291,10 +274,10 @@ object UtilityTexture {
         GLES20.glDisableVertexAttribArray(mTexCoordLoc)
 
     }
-*/
 
-
-    /*
+	
+	
+	
     fun SetupImage(imagefile: String) {
         var indices: ShortArray
         val uvs: FloatArray
@@ -529,10 +512,10 @@ object UtilityTexture {
         }
         return iShader
     }
-*/
 
-
-/*
+	
+	
+	
 
     fun sample() {
         var bitmap: Bitmap = Bitmap.createBitmap(128, 128, Bitmap.Config.ARGB_8888);
@@ -826,5 +809,6 @@ object UtilityTexture {
         }
     }
 
-*/
+
+	
 }
