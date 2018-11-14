@@ -549,6 +549,9 @@ Thickness of lines for SPC Watch/MCD. Smaller is thinner. Default is 4.
      <string name="locdot_size_np">
 Allows one to change the size of the location marker. Default value is 8</string>
 
+    <string name="locicon_size_np">
+Allows one to change the size of the GPS location Image. Default value is 75</string>
+
     <string name="wxogl_size_np">
 Allows one to change the default view size for the WXOGL Nexrad radar interface. Default value is 10. Larger value is more zoomed in.</string>
 

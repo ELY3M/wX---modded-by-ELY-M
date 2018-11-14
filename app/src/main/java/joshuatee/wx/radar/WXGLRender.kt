@@ -123,7 +123,7 @@ class WXGLRender(private val context: Context) : Renderer {
 
     private var sp_loadimage: Int = 0
     private var iTexture: Int = 0
-    private var imagesize: Double = MyApplication.radarLocdotSize.toDouble()
+    private var imagesize: Double = MyApplication.radarLociconSize.toDouble()
 
     private var locationId = -1
 
@@ -464,7 +464,7 @@ class WXGLRender(private val context: Context) : Renderer {
                 GLES20.glUseProgram(sp_loadimage)
                 mPositionHandle = GLES20.glGetAttribLocation(sp_loadimage, "vPosition")
                 GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
-                imagesize = MyApplication.radarLocdotSize.toDouble()
+                imagesize = MyApplication.radarLociconSize.toDouble()
                 iTexture = GLES20.glGetUniformLocation(sp_loadimage, "u_texture")
                 locationId = LoadTexture(MyApplication.FilesPath + "location.png")
 
