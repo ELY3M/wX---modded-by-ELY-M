@@ -41,7 +41,7 @@ internal object UtilityModelNSSLWRFInterface {
             "sbcape",
             "srh01",
             "srh03",
-            "stp",
+            "stpfixed",
 
             "qpf_001h",
             "qpf_006h",
@@ -49,7 +49,7 @@ internal object UtilityModelNSSLWRFInterface {
             "snowfall_total",
 
             "cref_uh075",
-            "maxref_1000m",
+            "maxref1000m",
             "ref1000m_uh075",
             "uh03_004hmax",
             "uh25_004hmax",
@@ -160,7 +160,7 @@ internal object UtilityModelNSSLWRFInterface {
             "sbcape",
             "srh01",
             "srh03",
-            "stp",
+            "stpfixed",
 
             "qpf_001h",
             "qpf_006h",
