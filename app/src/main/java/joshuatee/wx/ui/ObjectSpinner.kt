@@ -93,7 +93,11 @@ class ObjectSpinner {
     }
 
     fun setSelection(key: String) {
-        spinner1.setSelection(arrayAdapter.getPosition(key))
+        var index = arrayAdapter.getPosition(key)
+        if ( index == -1 ){
+            index = 0
+        }
+        spinner1.setSelection(index)
     }
 
     fun setOnItemSelectedListener(l: AdapterView.OnItemSelectedListener) {
