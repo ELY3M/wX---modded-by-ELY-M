@@ -466,8 +466,7 @@ class MyApplication : Application() {
         fun initBuffers(context: Context) {
             UtilityLog.d(TAG, "initBuffers ran")
             loadedBuffers = true
-            //need to run this after check perms and files in startup!
-            //ColorPalettes.init(context)
+            ColorPalettes.init(context)
             initRadarGeometryAll(context)
             GeographyType.refresh()
         }

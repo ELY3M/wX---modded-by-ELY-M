@@ -94,7 +94,7 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
                 checkpalfiles(R.raw.colormapownref, "colormapownref.txt")
                 checkpalfiles(R.raw.colormapownvel, "colormapownvel.txt")
                 checkpalfiles(R.raw.colormapownenhvel, "colormapownenhvel.txt")
-
+                //need to run it again
                 ColorPalettes.init(applicationContext)
 
                 runme()
