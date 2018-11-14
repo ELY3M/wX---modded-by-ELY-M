@@ -666,6 +666,7 @@ class MyApplication : Application() {
         var radarAviationSize: Int = 0
         var radarTextSize: Float = 0f
         var radarLocdotSize: Int = 0
+        var radarLociconSize: Int = 0
         var radarHiSize: Int = 0
         var radarTvsSize: Int = 0
         var radarWarnLinesize: Int = 0
@@ -712,7 +713,8 @@ class MyApplication : Application() {
             radarSpotterSize = getInitialPreference("RADAR_SPOTTER_SIZE", 4)
             radarAviationSize = getInitialPreference("RADAR_AVIATION_SIZE", 7)
             radarTextSize = getInitialPreference("RADAR_TEXT_SIZE", 1.0f)
-            radarLocdotSize = getInitialPreference("RADAR_LOCDOT_SIZE", 75)
+            radarLocdotSize = getInitialPreference("RADAR_LOCDOT_SIZE", 10)
+            radarLociconSize = getInitialPreference("RADAR_LOCICON_SIZE", 75)
             radarHiSize = getInitialPreference("RADAR_HI_SIZE", 8)
             radarTvsSize = getInitialPreference("RADAR_TVS_SIZE", 8)
             radarWarnLinesize = getInitialPreference("RADAR_WARN_LINESIZE", 2)
