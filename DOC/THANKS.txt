@@ -80,6 +80,9 @@ http://stackoverflow.com/questions/4414673/android-color-between-two-colors-base
 
 Ely M - finding bugs and prodiving code for fixes ( as specified in ChangeLog )
 
+Point Sprite shader and codes used for loading icons and images on radar  
+http://opengles2learning.blogspot.com/2011/05/applying-texture-to-point-sprite.html
+
 //GIF* class files
 //GifDecoder.java - not sure who original authors but tutorital and hosted by Johannes Borchardt
 //GifAnimationDrawable.java -  Femi Omojola <femi@hipmob.com>

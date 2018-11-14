@@ -1,10 +1,20 @@
 package joshuatee.wx.radar
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.opengl.GLES20
+import android.opengl.GLUtils
+import android.util.Log
+import javax.microedition.khronos.opengles.GL10
 
 // thanks! http://androidblog.reindustries.com/a-real-open-gl-es-2-0-2d-tutorial-part-1/
 
+//Thanks to this for LoadTexture
+//http://opengles2learning.blogspot.com/2011/05/applying-texture-to-point-sprite.html
+
 internal object OpenGLShader {
+
+    var TAG: String = "joshuatee OpenGLShader"
 
     // Program variables
     var sp_SolidColor: Int = 0
@@ -45,4 +55,36 @@ internal object OpenGLShader {
         // return the shader
         return shader
     }
+
+
+    fun LoadTexture(imagefile: String): Int {
+
+        Log.i(TAG, "Loadtexture")
+        var img: Bitmap? = null
+        val textures = IntArray(1)
+        try {
+            val options = BitmapFactory.Options()
+            options.inScaled = false
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888
+            img = BitmapFactory.decodeFile(imagefile, options)
+            GLES20.glGenTextures(1, textures, 0)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0])
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST.toFloat())
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST.toFloat())
+            GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, img, 0)
+            Log.i(TAG, "Loaded texture" + ":H:" + img!!.height + ":W:" + img.width)
+        } catch (e: Exception) {
+            Log.i(TAG, e.toString() + ":" + e.message + ":" + e.localizedMessage)
+        }
+
+        try {
+            img!!.recycle()
+        } catch (e: NullPointerException) {
+            Log.i(TAG, e.toString() + ":" + e.message + ":" + e.localizedMessage)
+        }
+
+        return textures[0]
+    }
+
+
 }
