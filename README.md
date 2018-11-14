@@ -44,9 +44,10 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 #
 ## DONE!
 ====================================  
-you are able to change location icon size now.  I increased the location size to 301 in the settings   
+due to a bug in location dot size if not following gps, I added a new setting for location icon size  
+you are able to change location icon size now.  I increased the location size to 530 in the settings.    
 the gps location is loaded by location.png now.    
-for now, I put in cod.edu url to load up for VAD Wind Profile  
+for now, I put in cod.edu url to load up for VAD Wind Profile.  
 The BackupRestore function now backup everything that are in wX folder even your icons and any files.  
 added pal files backup/restore function in BackupRestore function  
 the color table editor is saving txt to /wX/pal/ now  
