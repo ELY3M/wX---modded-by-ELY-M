@@ -78,6 +78,7 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 
 import joshuatee.wx.radar.SpotterNetworkPositionReport.SendPosition
+import kotlinx.coroutines.*
 
 class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListener {
 
@@ -97,6 +98,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     private var TAG = "joshuatee-WXGLRadarActivityMultiPane"
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var numPanes = 4
     private var numPanesArr = listOf<Int>()
     private var mHandler: Handler? = null
@@ -747,6 +749,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.readPref(contextg, "RID_LOC_" + it.name, "")
                 }
                 alertDialogStatusAl.add("Show warning text")
+                alertDialogStatusAl.add("Show MCD")
                 alertDialogStatusAl.add("Show nearest observation")
                 alertDialogStatusAl.add("Show nearest meteogram")
                 alertDialogStatusAl.add("Show Spotter Info")
@@ -1005,7 +1008,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             } else if (strName.contains("Show warning text")) {
                 val polygonUrl = UtilityWXOGL.showTextProducts(glviewArr[idxIntAl].newY.toDouble(), glviewArr[idxIntAl].newX.toDouble() * -1.0)
                 if (polygonUrl != "") ObjectIntent(contextg, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(polygonUrl, ""))
-            } else if (strName.contains("Show nearest observation")) {
+            }
+            else if (strName.contains("Show MCD text")) {
+                getMCD()
+            }
+            else if (strName.contains("Show nearest observation")) {
                 idxIntG = idxIntAl
                 GetMetar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
             } else if (strName.contains("Show nearest meteogram")) {
@@ -1016,7 +1023,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
             }
             else if (strName.contains("Show Spotter Info")) {
-                GetSpotter().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getSpotterInfo()
             }
             else if (strName.contains("Show radar status message")) {
                 GetRadarStatus().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
@@ -1145,6 +1152,18 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         }
     }
 
+
+    private fun getSpotterInfo() = GlobalScope.launch(uiDispatcher) {
+        var txt = withContext(Dispatchers.IO) { UtilitySpotter.findClosestSpotter(LatLon(glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0)) }
+        UtilityAlertDialog.showHelpText(txt, act)
+    }
+
+    private fun getMCD() = GlobalScope.launch(uiDispatcher) {
+        var txt = withContext(Dispatchers.IO) { UtilityDownload.getStringFromURLS(MyApplication.NWS_RADAR_PUB+"/data/raw/ac/acus11.kwns.swo.mcd.txt") }
+        UtilityAlertDialog.showHelpText(txt, act)
+    }
+
+    /*
     @SuppressLint("StaticFieldLeak")
     private inner class GetSpotter : AsyncTask<String, String, String>() {
 
@@ -1159,6 +1178,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             UtilityAlertDialog.showHelpText(txt, act)
         }
     }
+    */
 
     private fun getContent(glvg: WXGLSurfaceView, OGLRg: WXGLRender, curRadar: Int) {
         val gc = GetContent()
