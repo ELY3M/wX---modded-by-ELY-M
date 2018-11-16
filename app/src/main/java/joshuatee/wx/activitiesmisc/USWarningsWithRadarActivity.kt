@@ -24,7 +24,6 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -52,6 +51,7 @@ import joshuatee.wx.util.UtilityDownloadNWS
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.vis.USNWSGOESActivity
+import kotlinx.coroutines.*
 
 class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
 
@@ -66,6 +66,7 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
         const val URL: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var sigHtmlTmp = ""
     private var usDownloaded = false
     private var usDataStr = ""
@@ -105,9 +106,9 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
                 turlLocal[0] = ".*?"
                 turlLocal[1] = objAlertSummary.filterArray[position].toLowerCase(Locale.US)
             }
-            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContent()
         }
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
@@ -138,22 +139,22 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun locationAdd(id: Int) {
-        SaveLocFromZone().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, id)
+        saveLocFromZone(id)
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class SaveLocFromZone : AsyncTask<Int, String, String>() {
+    private fun saveLocFromZone(id: Int) = GlobalScope.launch(uiDispatcher) {
 
-        internal var toastStr = ""
-        internal var coord = listOf<String>()
+        var toastStr = ""
+        var coord = listOf<String>()
 
-        override fun doInBackground(vararg params: Int?): String? {
+        // FIXME remove what does not depend on IO
+        withContext(Dispatchers.IO) {
             var locNumIntCurrent = Location.numLocations
             locNumIntCurrent += 1
             val locNumToSaveStr = locNumIntCurrent.toString()
-            val zone = objAlertSummary.mapButtonZone[params[0]]
-            var state = objAlertSummary.mapButtonState[params[0]]
-            val county = objAlertSummary.mapButtonCounty[params[0]]
+            val zone = objAlertSummary.mapButtonZone[id]
+            var state = objAlertSummary.mapButtonState[id]
+            val county = objAlertSummary.mapButtonCounty[id]
             if (zone!!.length > 3) {
                 coord = if (zone.matches("[A-Z][A-Z]C.*?".toRegex())) {
                     UtilityLocation.getXYFromAddressOSM(county + "," + zone.substring(0, 2))
@@ -165,12 +166,9 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
             val x = coord[0]
             val y = coord[1]
             toastStr = Location.locationSave(contextg, locNumToSaveStr, x, y, state + "_" + county)
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            UtilityUI.makeSnackBar(linearLayout, toastStr)
-        }
+        UtilityUI.makeSnackBar(linearLayout, toastStr)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -178,10 +176,10 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
         return super.onOptionsItemSelected(item)
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
-        override fun doInBackground(vararg params: String): String {
+        // FIXME remove what does not depending on IO
+        withContext(Dispatchers.IO) {
             bm = "http://forecast.weather.gov/wwamap/png/US.png".getImage()
             try {
                 if (turlLocal[1] == "us" && usDownloaded) {
@@ -196,16 +194,13 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)
             }
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            objAlertSummary.updateContent(bm, sigHtmlTmp, turlLocal[0], firstRun)
-            title = objAlertSummary.getTitle(turlLocal[1])
-            if (firstRun) {
-                drw.updateLists(contextg, objAlertSummary.navList.toList())
-                firstRun = false
-            }
+        objAlertSummary.updateContent(bm, sigHtmlTmp, turlLocal[0], firstRun)
+        title = objAlertSummary.getTitle(turlLocal[1])
+        if (firstRun) {
+            drw.updateLists(contextg, objAlertSummary.navList.toList())
+            firstRun = false
         }
     }
 

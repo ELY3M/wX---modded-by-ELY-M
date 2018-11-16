@@ -27,7 +27,6 @@ import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -42,6 +41,8 @@ import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
+
+import kotlinx.coroutines.*
 
 /**
  *
@@ -61,6 +62,7 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
         const val URL: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var url = ""
     private var urlArr = listOf<String>()
     private var bitmap = UtilityImg.getBlankBitmap()
@@ -94,7 +96,7 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
                 urlArr = url.split(":")
                 loadRawBitmap()
             }
-            else -> GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            else -> getContent()
         }
     }
 
@@ -103,23 +105,15 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
         img.setImageBitmap(bitmap)
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            bitmap = url.getImage()
-            return "Executed"
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        bitmap = withContext(Dispatchers.IO) { url.getImage() }
+        if (needsWhitebg) {
+            val layers = mutableListOf<Drawable>()
+            layers.add(ColorDrawable(Color.WHITE))
+            layers.add(BitmapDrawable(resources, bitmap))
+            bitmap = UtilityImg.layerDrawableToBitmap(layers)
         }
-
-        override fun onPostExecute(result: String) {
-            if (needsWhitebg) {
-                val layers = mutableListOf<Drawable>()
-                layers.add(ColorDrawable(Color.WHITE))
-                layers.add(BitmapDrawable(resources, bitmap))
-                bitmap = UtilityImg.layerDrawableToBitmap(layers)
-            }
-            img.setImageBitmap(bitmap)
-        }
+        img.setImageBitmap(bitmap)
     }
 
     private fun getContentFromStorage() {

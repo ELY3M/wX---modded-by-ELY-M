@@ -23,7 +23,6 @@ package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
 import android.graphics.Color
-import android.os.AsyncTask
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -51,9 +50,11 @@ import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMap
 import joshuatee.wx.util.UtilityTime
+import kotlinx.coroutines.*
 
 class SpottersActivity : BaseActivity() {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var ca: AdapterSpotter
     private var spotterlist = mutableListOf<Spotter>()
     private var spotterlist2 = mutableListOf<Spotter>()
@@ -99,7 +100,7 @@ class SpottersActivity : BaseActivity() {
         val linearLayoutManager = LinearLayoutManager(this)
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         recyclerView.layoutManager = linearLayoutManager
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     private fun toggleMode(am: ActionMode) {
@@ -111,25 +112,17 @@ class SpottersActivity : BaseActivity() {
         ObjectIntent(this, SpotterReportsActivity::class.java)
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            spotterlist = UtilitySpotter.spotterData
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            markFavorites()
-            ca = AdapterSpotter(spotterlist)
-            recyclerView.adapter = ca
-            title = spotterlist.size.toString() + " spotters active " + UtilityTime.gmtTime("HH:mm")
-            ca.setOnItemClickListener(object : AdapterSpotter.MyClickListener {
-                override fun onItemClick(position: Int) {
-                    itemSelected(position)
-                }
-            })
-        }
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        spotterlist = withContext(Dispatchers.IO) { UtilitySpotter.spotterData }
+        markFavorites()
+        ca = AdapterSpotter(spotterlist)
+        recyclerView.adapter = ca
+        title = spotterlist.size.toString() + " spotters active " + UtilityTime.gmtTime("HH:mm")
+        ca.setOnItemClickListener(object : AdapterSpotter.MyClickListener {
+            override fun onItemClick(position: Int) {
+                itemSelected(position)
+            }
+        })
     }
 
     private fun changeSearchViewTextColor(view: View?) {

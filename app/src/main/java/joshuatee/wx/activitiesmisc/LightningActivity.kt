@@ -23,7 +23,6 @@ package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -39,12 +38,15 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 
+import kotlinx.coroutines.*
+
 class LightningActivity : VideoRecordActivity(), OnClickListener {
 
     companion object {
         const val URL: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
     private var sector = "usa_big"
     private var sectorPretty = "USA"
@@ -72,32 +74,21 @@ class LightningActivity : VideoRecordActivity(), OnClickListener {
         sectorPretty = UtilityLightning.getSectorPretty(sector)
         periodPretty = UtilityLightning.getTimePretty(period)
         title = "Lightning Strikes"
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            bitmap = UtilityLightning.getImage(sector, period)
-            return "Executed"
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        title = "Lightning $sectorPretty"
+        toolbar.subtitle = periodPretty
+        bitmap = withContext(Dispatchers.IO) { UtilityLightning.getImage(sector, period) }
+        img.setImageBitmap(bitmap)
+        if (!firstRun) {
+            img.setZoom("LIGHTNING")
+            firstRun = true
         }
-
-        override fun onPostExecute(result: String) {
-            img.setImageBitmap(bitmap)
-            if (!firstRun) {
-                img.setZoom("LIGHTNING")
-                firstRun = true
-            }
-            Utility.writePref(contextg, "LIGHTNING_SECTOR", sector)
-            Utility.writePref(contextg, "LIGHTNING_PERIOD", period)
-            imageLoaded = true
-        }
-
-        override fun onPreExecute() {
-            title = "Lightning $sectorPretty"
-            toolbar.subtitle = periodPretty
-        }
+        Utility.writePref(contextg, "LIGHTNING_SECTOR", sector)
+        Utility.writePref(contextg, "LIGHTNING_PERIOD", period)
+        imageLoaded = true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -135,13 +126,13 @@ class LightningActivity : VideoRecordActivity(), OnClickListener {
     private fun setSectorGetContent(sector: String, sectorPretty: String) {
         this.sector = sector
         this.sectorPretty = sectorPretty
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     private fun setPeriodGetContent(period: String, periodPretty: String) {
         this.period = period
         this.periodPretty = periodPretty
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     override fun onClick(v: View) {

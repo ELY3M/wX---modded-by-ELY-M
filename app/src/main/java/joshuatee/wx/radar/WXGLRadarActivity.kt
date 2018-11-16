@@ -317,7 +317,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         // if the top toolbar is not showing then neither are showing and the only restart
         // is from an app switch or resume from sleep, therefore get content directly
         if (glview.toolbarsHidden) {
-            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContent()
         } else {
             ridArrLoc = UtilityFavorites.setupFavMenu(this, MyApplication.ridFav, oglr.rid, prefTokenLocation, prefToken)
             sp.refreshData(contextg, ridArrLoc)
@@ -347,35 +347,35 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         super.onRestart()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
-        var ridIsTdwr = false
-
-        override fun onPreExecute() {
-            ridIsTdwr = WXGLNexrad.isRIDTDWR(oglr.rid)
-            if (ridIsTdwr) {
-                l3Menu.isVisible = false
-                l2Menu.isVisible = false
-            } else {
-                l3Menu.isVisible = true
-                l2Menu.isVisible = true
-            }
-            if ((oglr.product == "N0Q" || oglr.product == "N1Q" || oglr.product == "N2Q" || oglr.product == "N3Q" || oglr.product == "L2REF") && ridIsTdwr) oglr.product = "TZL"
-            if (oglr.product == "TZL" && !ridIsTdwr) oglr.product = "N0Q"
-            if ((oglr.product == "N0U" || oglr.product == "N1U" || oglr.product == "N2U" || oglr.product == "N3U" || oglr.product == "L2VEL") && ridIsTdwr) oglr.product = "TV0"
-            if (oglr.product == "TV0" && !ridIsTdwr) oglr.product = "N0U"
-            //prod = WXGLNexrad.checkTdwrProd(prod, ridIsTdwr)
-            title = oglr.product
-            if (MyApplication.ridFav.contains(":" + oglr.rid + ":"))
-                star.setIcon(MyApplication.STAR_ICON)
-            else
-                star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-            toolbar.subtitle = ""
-            if (!oglr.product.startsWith("2")) initWXOGLGeom()
+        //@SuppressLint("StaticFieldLeak")
+        //private inner class GetContent : AsyncTask<String, String, String>() {
+        //override fun onPreExecute() {
+        val ridIsTdwr = WXGLNexrad.isRIDTDWR(oglr.rid)
+        if (ridIsTdwr) {
+            l3Menu.isVisible = false
+            l2Menu.isVisible = false
+        } else {
+            l3Menu.isVisible = true
+            l2Menu.isVisible = true
         }
+        if ((oglr.product == "N0Q" || oglr.product == "N1Q" || oglr.product == "N2Q" || oglr.product == "N3Q" || oglr.product == "L2REF") && ridIsTdwr) oglr.product = "TZL"
+        if (oglr.product == "TZL" && !ridIsTdwr) oglr.product = "N0Q"
+        if ((oglr.product == "N0U" || oglr.product == "N1U" || oglr.product == "N2U" || oglr.product == "N3U" || oglr.product == "L2VEL") && ridIsTdwr) oglr.product = "TV0"
+        if (oglr.product == "TV0" && !ridIsTdwr) oglr.product = "N0U"
+        //prod = WXGLNexrad.checkTdwrProd(prod, ridIsTdwr)
+        title = oglr.product
+        if (MyApplication.ridFav.contains(":" + oglr.rid + ":"))
+            star.setIcon(MyApplication.STAR_ICON)
+        else
+            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+        toolbar.subtitle = ""
+        if (!oglr.product.startsWith("2")) initWXOGLGeom()
+        //}
 
-        override fun doInBackground(vararg params: String): String {
+        //override fun doInBackground(vararg params: String): String {
+        withContext(Dispatchers.IO) {
             oglr.constructPolygons("", urlStr, true)
             if ((PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) && !archiveMode)
                 oglr.constructSpotters()
@@ -403,7 +403,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             } else {
                 oglr.deconstructLocationDot()
             }
-
             if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && !archiveMode) {
                 UtilityMetar.getStateMetarArrayForWXOGL(contextg, oglr.rid)
             }
@@ -418,49 +417,49 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             } else {
                 oglr.deconstructSWOLines()
             }
-            return "Executed"
+            //return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            if (!oglInView) {
-                img.visibility = View.GONE
-                glview.visibility = View.VISIBLE
-                oglInView = true
-            }
-            if (ridChanged && !restartedZoom) {
-                ridChanged = false
-            }
-            if (restartedZoom) {
-                restartedZoom = false
-                ridChanged = false
-            }
-            if (PolygonType.SPOTTER_LABELS.pref && !archiveMode) {
-                UtilityWXGLTextObject.updateSpotterLabels(numPanes, wxgltextArr)
-            }
-            if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && !archiveMode) {
-                UtilityWXGLTextObject.updateObs(numPanes, wxgltextArr)
-            }
-            glview.requestRender()
-            if (legendShown && oglr.product != oldProd && oglr.product != "DSA" && oglr.product != "DAA") {
-                updateLegend()
-            }
-            if (legendShown && (oglr.product == "DSA" || oglr.product == "DAA" || oglr.product == "N0U")) {
-                dspLegendMax = (255.0f / oglr.radarL3Object.halfword3132) * 0.01f
-                velMax = oglr.radarL3Object.halfword48
-                velMin = oglr.radarL3Object.halfword47
-                updateLegend()
-            }
-            oldProd = oglr.product
-            val info = Utility.readPref(contextg, "WX_RADAR_CURRENT_INFO", "")
-            //val tmpArr = MyApplication.space.split(info)
-            val tmpArr = info.split(" ")
-            if (tmpArr.size > 3)
-                toolbar.subtitle = tmpArr[3]
-            else
-                toolbar.subtitle = ""
-            animRan = false
-            firstRun = false
+        //override fun onPostExecute(result: String) {
+        if (!oglInView) {
+            img.visibility = View.GONE
+            glview.visibility = View.VISIBLE
+            oglInView = true
         }
+        if (ridChanged && !restartedZoom) {
+            ridChanged = false
+        }
+        if (restartedZoom) {
+            restartedZoom = false
+            ridChanged = false
+        }
+        if (PolygonType.SPOTTER_LABELS.pref && !archiveMode) {
+            UtilityWXGLTextObject.updateSpotterLabels(numPanes, wxgltextArr)
+        }
+        if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && !archiveMode) {
+            UtilityWXGLTextObject.updateObs(numPanes, wxgltextArr)
+        }
+        glview.requestRender()
+        if (legendShown && oglr.product != oldProd && oglr.product != "DSA" && oglr.product != "DAA") {
+            updateLegend()
+        }
+        if (legendShown && (oglr.product == "DSA" || oglr.product == "DAA" || oglr.product == "N0U")) {
+            dspLegendMax = (255.0f / oglr.radarL3Object.halfword3132) * 0.01f
+            velMax = oglr.radarL3Object.halfword48
+            velMin = oglr.radarL3Object.halfword47
+            updateLegend()
+        }
+        oldProd = oglr.product
+        val info = Utility.readPref(contextg, "WX_RADAR_CURRENT_INFO", "")
+        //val tmpArr = MyApplication.space.split(info)
+        val tmpArr = info.split(" ")
+        if (tmpArr.size > 3)
+            toolbar.subtitle = tmpArr[3]
+        else
+            toolbar.subtitle = ""
+        animRan = false
+        firstRun = false
+        //}
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -617,7 +616,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                         tiltOption = false
                     }
                 }
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_n0u -> {
                 if (MyApplication.radarIconsLevel2 && oglr.product.matches("N[0-3]U".toRegex())) {
@@ -632,7 +631,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                         tiltOption = true
                     }
                 }
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_n0s -> changeProd("N" + tilt + "S", true)
             R.id.action_net -> changeProd("EET", false)
@@ -695,13 +694,13 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private fun changeProd(prodF: String, canTilt: Boolean) {
         oglr.product = prodF
         tiltOption = canTilt
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     private fun changeTilt(tiltStr: String) {
         tilt = tiltStr
         oglr.product = oglr.product.replace("N[0-3]".toRegex(), "N$tilt")
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     fun ridMapSwitch(r: String) {
@@ -745,7 +744,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     }
                     restarted = false
                     ridChanged = true
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
                 }
             }
             if (firstTime) {
@@ -936,7 +935,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 if (inOglAnim)
                     animTriggerDownloads = true
                 else
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
             }
             loopCount += 1
             handler.postDelayed(this, mInterval.toLong())
@@ -1061,7 +1060,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             } else if (strName.contains("Show Spotter Info")) {
                 getSpotterInfo()
             } else if (strName.contains("Show radar status message")) {
-                GetRadarStatus().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getRadarStatus()
             } else if (strName.contains("Show nearest forecast")) {
                 ObjectIntent(this, AdhocForecastActivity::class.java, AdhocForecastActivity.URL, arrayOf(glview.newY.toString(), "-" + glview.newX.toString()))
             }
@@ -1081,25 +1080,25 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             oglr.product = "TZL"
             ridMapSwitch(oglr.rid)
             title = oglr.product
-            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContent()
             dialog.dismiss()
         })
         diaTdwr.show()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetRadarStatus : AsyncTask<String, String, String>() {
+    private fun getRadarStatus() = GlobalScope.launch(uiDispatcher) {
+        //@SuppressLint("StaticFieldLeak")
+        //private inner class GetRadarStatus : AsyncTask<String, String, String>() {
 
-        var radarStatus = ""
+        //var radarStatus = ""
 
-        override fun doInBackground(vararg params: String): String {
-            radarStatus = UtilityDownload.getRadarStatusMessage(contextg, oglr.rid)
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            UtilityAlertDialog.showHelpText(Utility.fromHtml(radarStatus), act)
-        }
+        //override fun doInBackground(vararg params: String): String {
+        val radarStatus = withContext(Dispatchers.IO) { UtilityDownload.getRadarStatusMessage(contextg, oglr.rid) }
+        //    return "Executed"
+        //}
+        //override fun onPostExecute(result: String) {
+        UtilityAlertDialog.showHelpText(Utility.fromHtml(radarStatus), act)
+        //}
     }
 
     private var legend: ViewColorLegend? = null

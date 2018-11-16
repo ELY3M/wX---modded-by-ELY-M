@@ -36,9 +36,11 @@ import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.Location
+import kotlinx.coroutines.*
 
 class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var content = ""
     private var contentFull = ""
     private lateinit var card0: ObjectCardText
@@ -56,26 +58,20 @@ class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
         card0 = ObjectCardText(this)
         linearLayout.addView(card0.card)
         card0.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        withContext(Dispatchers.IO) {
             content = UtilitySunMoon.getExtendedSunMoonData(Location.locationIndex)
             contentFull = UtilitySunMoon.getFullMoonDates()
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            val (A, B) = UtilitySunMoon.parseData(content)
-            dataA = A
-            dataB = B
-            title = dataA
-            toolbar.subtitle = Location.name
-            card0.setText(dataB + MyApplication.newline + MyApplication.newline + contentFull)
-        }
+        val (A, B) = UtilitySunMoon.parseData(content)
+        dataA = A
+        dataB = B
+        title = dataA
+        toolbar.subtitle = Location.name
+        card0.setText(dataB + MyApplication.newline + MyApplication.newline + contentFull)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

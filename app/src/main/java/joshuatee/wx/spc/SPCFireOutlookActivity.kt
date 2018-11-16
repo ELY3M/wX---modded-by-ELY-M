@@ -24,7 +24,6 @@ package joshuatee.wx.spc
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -38,9 +37,11 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.wpc.WPCTextProductsActivity
+import kotlinx.coroutines.*
 
 class SPCFireOutlookActivity : BaseActivity() {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val bitmaps = mutableListOf<Bitmap>()
     private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
@@ -58,25 +59,17 @@ class SPCFireOutlookActivity : BaseActivity() {
         linearLayout = findViewById(R.id.ll)
         title = "SPC"
         toolbar.subtitle = "Fire Weather Outlook"
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            UtilitySPCFireOutlook.PROD_IMG_URL.mapTo(bitmaps) { it.getImage() }
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            var card: ObjectCardImage
-            bitmaps.forEach { bitmap ->
-                card = ObjectCardImage(contextg, bitmap)
-                val prod = UtilitySPCFireOutlook.PROD_TEXT_URL[bitmaps.indexOf(bitmap)]
-                card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, WPCTextProductsActivity::class.java, WPCTextProductsActivity.URL, arrayOf(prod)) })
-                linearLayout.addView(card.card)
-            }
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        withContext(Dispatchers.IO) { UtilitySPCFireOutlook.PROD_IMG_URL.mapTo(bitmaps) { it.getImage() } }
+        var card: ObjectCardImage
+        bitmaps.forEach { bitmap ->
+            card = ObjectCardImage(contextg, bitmap)
+            val prod = UtilitySPCFireOutlook.PROD_TEXT_URL[bitmaps.indexOf(bitmap)]
+            card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, WPCTextProductsActivity::class.java, WPCTextProductsActivity.URL, arrayOf(prod)) })
+            linearLayout.addView(card.card)
         }
     }
 

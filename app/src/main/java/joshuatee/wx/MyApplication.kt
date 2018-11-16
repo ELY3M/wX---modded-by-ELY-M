@@ -670,6 +670,7 @@ class MyApplication : Application() {
         var radarLociconSize: Int = 0
         var radarHiSize: Int = 0
         var radarTvsSize: Int = 0
+        var radarDefaultLinesize: Int = 0
         var radarWarnLinesize: Int = 0
         var radarWatmcdLinesize: Int = 0
         private var radarHwEnh: Boolean = true
@@ -718,7 +719,8 @@ class MyApplication : Application() {
             radarLociconSize = getInitialPreference("RADAR_LOCICON_SIZE", 75)
             radarHiSize = getInitialPreference("RADAR_HI_SIZE", 8)
             radarTvsSize = getInitialPreference("RADAR_TVS_SIZE", 8)
-            radarWarnLinesize = getInitialPreference("RADAR_WARN_LINESIZE", 2)
+            radarDefaultLinesize = getInitialPreference("RADAR_DEFAULT_LINESIZE", 1)
+            radarWarnLinesize = getInitialPreference("RADAR_WARN_LINESIZE", 4)
             radarWatmcdLinesize = getInitialPreference("RADAR_WATMCD_LINESIZE", 2)
         }
 

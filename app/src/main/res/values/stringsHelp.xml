@@ -538,6 +538,10 @@ Use a white or black background in as many radar products as possible.
 Animation speed. Lower is faster. Default is 5.
       </string>
 
+    <string name="default_linesize_np_label">
+Thickness of lines for State, Rivers, highways Lines. Smaller is thinner. Default is 1.
+    </string>
+
     <string name="warn_linesize_np_label">
 Thickness of lines for warnings. Smaller is thinner. Default is 4.
     </string>

@@ -143,7 +143,7 @@ object UtilityUSImgNWSMosaic {
 
     fun getNWSSectorFromState(state: String): String = COD_HASH[state] ?: ""
 
-    internal fun nwsMosaicAnimation(context: Context, sector: String, frameCntStr: String, isInteractive: Boolean): AnimationDrawable {
+    internal fun nwsMosaicAnimation(context: Context, sector: String, frameCount: Int, isInteractive: Boolean): AnimationDrawable {
         val urlArr: List<String>
         val bmAl = mutableListOf<Bitmap>()
         var scaleType = ProjectionType.NWS_MOSAIC_SECTOR
@@ -166,7 +166,7 @@ object UtilityUSImgNWSMosaic {
         if (sectorUrl == "alaska") {
             sPattern = "href=.(" + "NATAK" + "_[0-9]{8}_[0-9]{4}.gif)"
         }
-        urlArr = UtilityImgAnim.getURLArray("http://radar.weather.gov/ridge/Conus/RadarImg/", sPattern, frameCntStr)
+        urlArr = UtilityImgAnim.getUrlArray("http://radar.weather.gov/ridge/Conus/RadarImg/", sPattern, frameCount)
         urlArr.forEach {
             if (MyApplication.blackBg && sector != "alaska") {
                 bmAl.add(UtilityImg.getBitmapRemoveBG(baseUrl + it, -1))

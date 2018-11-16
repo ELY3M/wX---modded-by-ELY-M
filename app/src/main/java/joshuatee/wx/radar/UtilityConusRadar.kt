@@ -446,7 +446,7 @@ internal object UtilityConusRadar {
 
     }
 
-    open fun getConusImage() {
+    fun getConusImage() {
         var task = getConusgif()
         task.execute()
     }

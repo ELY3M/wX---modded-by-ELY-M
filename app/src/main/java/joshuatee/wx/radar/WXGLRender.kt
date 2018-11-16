@@ -164,7 +164,7 @@ class WXGLRender(private val context: Context) : Renderer {
             ridGlobal = rid
         }
     private var prod = "N0Q"
-    private val defaultLineWidth = 2.0f
+    private var defaultLineWidth = 1.0f  //was 2.0f
     private var warnLineWidth = 2.0f
     private var watmcdLineWidth = 2.0f
     private var ridPrefixGlobal = ""
@@ -187,6 +187,7 @@ class WXGLRender(private val context: Context) : Renderer {
         bgColorFRed = Color.red(MyApplication.nexradRadarBackgroundColor) / 255.0f
         bgColorFGreen = Color.green(MyApplication.nexradRadarBackgroundColor) / 255.0f
         bgColorFBlue = Color.blue(MyApplication.nexradRadarBackgroundColor) / 255.0f
+        defaultLineWidth = MyApplication.radarDefaultLinesize.toFloat()
         warnLineWidth = MyApplication.radarWarnLinesize.toFloat()
         watmcdLineWidth = MyApplication.radarWatmcdLinesize.toFloat()
         try {
@@ -337,8 +338,8 @@ class WXGLRender(private val context: Context) : Renderer {
         GLES20.glAttachShader(OpenGLShader.sp_SolidColor, OpenGLShader.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShader.fs_SolidColor))
         GLES20.glLinkProgram(OpenGLShader.sp_SolidColor)
         GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
-        var vertexShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShaderUniform.vs_SolidColorUnfiform)
-        var fragmentShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShaderUniform.fs_SolidColorUnfiform)
+        val vertexShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShaderUniform.vs_SolidColorUnfiform)
+        val fragmentShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShaderUniform.fs_SolidColorUnfiform)
         OpenGLShaderUniform.sp_SolidColorUniform = GLES20.glCreateProgram()
         GLES20.glAttachShader(OpenGLShaderUniform.sp_SolidColorUniform, vertexShaderUniform)
         GLES20.glAttachShader(OpenGLShaderUniform.sp_SolidColorUniform, fragmentShaderUniform)
@@ -421,9 +422,15 @@ class WXGLRender(private val context: Context) : Renderer {
             }
         }
 
-        if (zoom > tvsBuffers.scaleCutOff) {
-            drawTVS(tvsBuffers)
+        listOf(tvsBuffers).forEach {
+            if (zoom > it.scaleCutOff) {
+                drawTVS(tvsBuffers)
+            }
         }
+
+        //if (zoom > tvsBuffers.scaleCutOff) {
+        //    drawTVS(tvsBuffers)
+        //}
 
         GLES20.glLineWidth(3.0f)
         listOf(stiBuffers, wbGustsBuffers, wbBuffers).forEach {

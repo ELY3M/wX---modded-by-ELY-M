@@ -40,12 +40,12 @@ would have to do the latlon method that is used for watches/mcds/mpds
 
 
 
-
 #
 #
 ## DONE!
 ====================================  
-added "show MCD text" in radar" - needs more testing esp when there are more than 1 mcd.  may show all texts from all mcds.  
+added option to change default lines on radar in the radar settings.  
+added "show MCD text" in radar" - It only show last MCD right now.  
 added TVS Icon - replaced the tvs triangle with tvs.png - need more testing and adjusting - need more badass storms!  
 due to a bug in location dot size if not following gps, I added a new setting for location icon size  
 you are able to change location icon size now.  I increased the location size to 530 in the settings.    
