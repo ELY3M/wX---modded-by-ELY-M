@@ -23,7 +23,6 @@ package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.content.res.Configuration
 import androidx.appcompat.widget.Toolbar
@@ -42,9 +41,11 @@ import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
+import kotlinx.coroutines.*
 
 class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMenuItemClickListener {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
     private var timePeriod = 1
     private var firstRun = false
@@ -91,42 +92,34 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
             title = drw.getLabel(position)
             imgUrl = drw.getToken(position)
             imgIdx = position
-            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContent()
         }
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        internal var getUrl = ""
-
-        override fun onPreExecute() {
-            toolbar.subtitle = title
-            if (imgUrl.contains("http://graphical.weather.gov/images/conus/")) {
-                getUrl = imgUrl + timePeriod.toString() + "_conus.png"
-                actionBack.isVisible = true
-                actionForward.isVisible = true
-            } else {
-                actionBack.isVisible = false
-                actionForward.isVisible = false
-                getUrl = imgUrl
-            }
-            Utility.writePref(contextg, "OPC_IMG_FAV_TITLE", title)
-            Utility.writePref(contextg, "OPC_IMG_FAV_URL", imgUrl)
-            Utility.writePref(contextg, "OPC_IMG_FAV_IDX", imgIdx)
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        val getUrl: String
+        toolbar.subtitle = title
+        if (imgUrl.contains("http://graphical.weather.gov/images/conus/")) {
+            getUrl = imgUrl + timePeriod.toString() + "_conus.png"
+            actionBack.isVisible = true
+            actionForward.isVisible = true
+        } else {
+            actionBack.isVisible = false
+            actionForward.isVisible = false
+            getUrl = imgUrl
         }
+        Utility.writePref(contextg, "OPC_IMG_FAV_TITLE", title)
+        Utility.writePref(contextg, "OPC_IMG_FAV_URL", imgUrl)
+        Utility.writePref(contextg, "OPC_IMG_FAV_IDX", imgIdx)
 
-        override fun doInBackground(vararg params: String): String {
-            bitmap = getUrl.getImage()
-            return "Executed"
-        }
+        //bitmap = withContext(Dispatchers.IO) { getUrl.getImage() }
+        val result = async(Dispatchers.IO) { getUrl.getImage() }
+        bitmap = result.await()
 
-        override fun onPostExecute(result: String) {
-            img.setImageBitmap(bitmap)
-            firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "OPCIMG")
-            imageLoaded = true
-        }
+        img.setImageBitmap(bitmap)
+        firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "OPCIMG")
+        imageLoaded = true
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -146,11 +139,13 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         when (item.itemId) {
             R.id.action_forward -> {
                 timePeriod += 1
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                //GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_back -> {
                 timePeriod -= 1
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                //GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
@@ -191,7 +186,8 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         }
         title = UtilityOPCImages.LABELS[imgIdx]
         imgUrl = UtilityOPCImages.URL_INDEX[imgIdx]
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        //GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     private fun showPrevImg() {
@@ -201,6 +197,7 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         }
         title = UtilityOPCImages.LABELS[imgIdx]
         imgUrl = UtilityOPCImages.URL_INDEX[imgIdx]
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        //GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 }

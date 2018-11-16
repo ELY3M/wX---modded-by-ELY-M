@@ -24,7 +24,6 @@ package joshuatee.wx.wpc
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -54,6 +53,7 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.NWS_TXT_ARR
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectNavDrawerCombo
+import kotlinx.coroutines.*
 
 class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener, AdapterView.OnItemSelectedListener {
 
@@ -68,6 +68,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener, Ad
         const val URL: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var turl: Array<String>
     private var prod = ""
     private var html = ""
@@ -116,36 +117,28 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener, Ad
 
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
-        override fun onPreExecute() {
-            updateSubmenuNotifText()
-            sv.smoothScrollTo(0, 0)
-            if (MyApplication.nwsTextFav.contains(":$prod:")) {
-                star.setIcon(MyApplication.STAR_ICON)
-            } else {
-                star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-            }
-            ridFavOld = MyApplication.nwsTextFav
+        updateSubmenuNotifText()
+        sv.smoothScrollTo(0, 0)
+        if (MyApplication.nwsTextFav.contains(":$prod:")) {
+            star.setIcon(MyApplication.STAR_ICON)
+        } else {
+            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         }
+        ridFavOld = MyApplication.nwsTextFav
 
-        override fun doInBackground(vararg params: String): String {
-            html = UtilityDownload.getTextProduct(contextg, prod)
-            return "Executed"
+        html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(contextg, prod) }
+
+        c0.setTextAndTranslate(Utility.fromHtml(html))
+        if (turl.size > 2) {
+            if (turl[2] == "sound") {
+                UtilityTTS.synthesizeTextAndPlay(applicationContext, html, "wpctext")
+            }
         }
-
-        override fun onPostExecute(result: String) {
-            c0.setTextAndTranslate(Utility.fromHtml(html))
-            if (turl.size > 2) {
-                if (turl[2] == "sound") {
-                    UtilityTTS.synthesizeTextAndPlay(applicationContext, html, "wpctext")
-                }
-            }
-            if (initProd != prod) {
-                Utility.writePref(contextg, "WPC_TEXT_FAV", prod)
-                MyApplication.wpcTextFav = prod
-            }
+        if (initProd != prod) {
+            Utility.writePref(contextg, "WPC_TEXT_FAV", prod)
+            MyApplication.wpcTextFav = prod
         }
     }
 
@@ -180,7 +173,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener, Ad
             2 -> ObjectIntent(this, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf("NWSTEXT"))
             else -> {
                 prod = prodListArr[pos].split(":").getOrNull(0) ?: ""
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
         }
     }

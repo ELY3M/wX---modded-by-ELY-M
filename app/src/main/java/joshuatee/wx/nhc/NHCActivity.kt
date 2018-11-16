@@ -24,7 +24,6 @@ package joshuatee.wx.nhc
 import android.annotation.SuppressLint
 import java.util.Locale
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.content.Intent
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -40,9 +39,11 @@ import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.models.ModelsGLCFSActivity
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.wpc.WPCTextProductsActivity
+import kotlinx.coroutines.*
 
 class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var dynamicview: LinearLayout
     private lateinit var objNHC: ObjectNHC
 
@@ -52,25 +53,14 @@ class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
         toolbarBottom.setOnMenuItemClickListener(this)
         dynamicview = findViewById(R.id.ll)
         objNHC = ObjectNHC(this, dynamicview)
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun onPreExecute() {
-            val sv: ScrollView = findViewById(R.id.sv)
-            sv.smoothScrollTo(0, 0)
-        }
-
-        override fun doInBackground(vararg params: String): String {
-            objNHC.getData()
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            objNHC.showData()
-        }
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        val sv: ScrollView = findViewById(R.id.sv)
+        sv.smoothScrollTo(0, 0)
+        withContext(Dispatchers.IO) { objNHC.getData() }
+        objNHC.showData()
     }
 
     private fun showTextProduct(prod: String) {

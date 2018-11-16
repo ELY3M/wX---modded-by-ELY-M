@@ -25,7 +25,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.drawable.AnimationDrawable
-import android.os.AsyncTask
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
@@ -42,6 +41,7 @@ import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.ui.OnSwipeTouchListener
 import joshuatee.wx.util.*
+import kotlinx.coroutines.*
 
 class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMenuItemClickListener {
 
@@ -49,6 +49,7 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
         const val RID: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
     private var firstRun = false
     private var imageLoaded = false
@@ -96,38 +97,22 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
             imageTitle = drw.getLabel(position)
             productCode = drw.getToken(position)
             imgIdx = position
-            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContent()
         }
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        var timeStamp = ""
-
-        override fun onPreExecute() {
-            writePrefs()
-            //firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "GOES16_IMG")
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        writePrefs()
+        val urlAndTime = withContext(Dispatchers.IO) { UtilityGOES16.getUrl(productCode, sector) }
+        bitmap = withContext(Dispatchers.IO) { urlAndTime[0].getImage() }
+        img.setImageBitmap(bitmap)
+        if (!firstRun) {
+            img.setZoom("GOES16_IMG")
+            firstRun = true
         }
-
-        override fun doInBackground(vararg params: String): String {
-            val urlAndTime = UtilityGOES16.getUrl(productCode, sector)
-            bitmap = urlAndTime[0].getImage()
-            timeStamp = urlAndTime[1]
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            img.setImageBitmap(bitmap)
-            if (!firstRun) {
-                img.setZoom("GOES16_IMG")
-                firstRun = true
-                //firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "GOES16_IMG")
-            }
-            imageLoaded = true
-            toolbar.subtitle = imageTitle
-        }
+        imageLoaded = true
+        toolbar.subtitle = imageTitle
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -171,76 +156,100 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.GOES16)
             R.id.action_a24 -> {
-                frameCnt = 24; GetAnimate().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                frameCnt = 24
+                getAnimate()
             }
             R.id.action_a36 -> {
-                frameCnt = 36; GetAnimate().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                frameCnt = 36
+                getAnimate()
             }
             R.id.action_a48 -> {
-                frameCnt = 48; GetAnimate().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                frameCnt = 48
+                getAnimate()
             }
             R.id.action_a60 -> {
-                frameCnt = 60; GetAnimate().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                frameCnt = 60
+                getAnimate()
             }
             R.id.action_a72 -> {
-                frameCnt = 72; GetAnimate().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                frameCnt = 72
+                getAnimate()
             }
             R.id.action_a84 -> {
-                frameCnt = 84; GetAnimate().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                frameCnt = 84
+                getAnimate()
             }
             R.id.action_a96 -> {
-                frameCnt = 96; GetAnimate().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                frameCnt = 96
+                getAnimate()
             }
             R.id.action_FD -> {
-                sector = "FD"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "FD"
+                getContent()
             }
             R.id.action_CONUS -> {
-                sector = "CONUS"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "CONUS"
+                getContent()
             }
             R.id.action_pnw -> {
-                sector = "pnw"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "pnw"
+                getContent()
             }
             R.id.action_nr -> {
-                sector = "nr"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "nr"
+                getContent()
             }
             R.id.action_umv -> {
-                sector = "umv"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "umv"
+                getContent()
             }
             R.id.action_cgl -> {
-                sector = "cgl"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "cgl"
+                getContent()
             }
             R.id.action_ne -> {
-                sector = "ne"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "ne"
+                getContent()
             }
             R.id.action_psw -> {
-                sector = "psw"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "psw"
+                getContent()
             }
             R.id.action_sr -> {
-                sector = "sr"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "sr"
+                getContent()
             }
             R.id.action_sp -> {
-                sector = "sp"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "sp"
+                getContent()
             }
             R.id.action_smv -> {
-                sector = "smv"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "smv"
+                getContent()
             }
             R.id.action_se -> {
-                sector = "se"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "se"
+                getContent()
             }
             R.id.action_gm -> {
-                sector = "gm"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "gm"
+                getContent()
             }
             R.id.action_car -> {
-                sector = "car"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "car"
+                getContent()
             }
             R.id.action_eus -> {
-                sector = "eus"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "eus"
+                getContent()
             }
             R.id.action_pr -> {
-                sector = "pr"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "pr"
+                getContent()
             }
             R.id.action_taw -> {
-                sector = "taw"; GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                sector = "taw"
+                getContent()
             }
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
@@ -259,7 +268,7 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
     }
 
     override fun onRestart() {
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
         super.onRestart()
     }
 
@@ -276,17 +285,22 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
         super.onStop()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetAnimate : AsyncTask<String, String, String>() {
+    /*  @SuppressLint("StaticFieldLeak")
+      private inner class GetAnimate : AsyncTask<String, String, String>() {
+  
+          override fun doInBackground(vararg params: String): String {
+              animDrawable = UtilityGOES16.getAnimation(contextg, productCode, sector, frameCnt)
+              return "Executed"
+          }
+  
+          override fun onPostExecute(result: String) {
+              UtilityImgAnim.startAnimation(animDrawable, img)
+          }
+      }*/
 
-        override fun doInBackground(vararg params: String): String {
-            animDrawable = UtilityGOES16.getAnimation(contextg, productCode, sector, frameCnt)
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            UtilityImgAnim.startAnimation(animDrawable, img)
-        }
+    private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
+        animDrawable = withContext(Dispatchers.IO) { UtilityGOES16.getAnimation(contextg, productCode, sector, frameCnt) }
+        UtilityImgAnim.startAnimation(animDrawable, img)
     }
 
     private fun showNextImg() {
@@ -296,7 +310,7 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
         }
         imageTitle = UtilityGOES16.PRODUCTS.keys.sorted()[imgIdx]
         productCode = drw.getToken(imgIdx)
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     private fun showPrevImg() {
@@ -306,6 +320,6 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
         }
         imageTitle = UtilityGOES16.PRODUCTS.keys.sorted()[imgIdx]
         productCode = drw.getToken(imgIdx)
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 }

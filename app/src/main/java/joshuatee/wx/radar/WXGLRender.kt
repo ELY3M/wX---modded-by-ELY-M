@@ -121,9 +121,13 @@ class WXGLRender(private val context: Context) : Renderer {
 
     private var sp_loadimage: Int = 0
     private var iTexture: Int = 0
-    private var imagesize: Double = MyApplication.radarLociconSize.toDouble()
+
+    private var imagesize: Double = 75.0
+    private var locationsize: Double = MyApplication.radarLociconSize.toDouble()
+    private var tvssize: Double = MyApplication.radarTvsSize.toDouble()
 
     private var locationId = -1
+    private var tvsId = -1
 
 
     var zoom: Float = 1.0f
@@ -411,11 +415,16 @@ class WXGLRender(private val context: Context) : Renderer {
         }
 
         //TODO do custom icons for tvs and hail//
-        listOf(spotterBuffers, hiBuffers, tvsBuffers).forEach {
+        listOf(spotterBuffers, hiBuffers).forEach {
             if (zoom > it.scaleCutOff) {
                 drawTriangles(it)
             }
         }
+
+        if (zoom > tvsBuffers.scaleCutOff) {
+            drawTVS(tvsBuffers)
+        }
+
         GLES20.glLineWidth(3.0f)
         listOf(stiBuffers, wbGustsBuffers, wbBuffers).forEach {
             if (zoom > it.scaleCutOff) {
@@ -454,12 +463,13 @@ class WXGLRender(private val context: Context) : Renderer {
                 GLES20.glUseProgram(sp_loadimage)
                 mPositionHandle = GLES20.glGetAttribLocation(sp_loadimage, "vPosition")
                 GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
-                imagesize = MyApplication.radarLociconSize.toDouble()
+                //imagesize = MyApplication.radarLociconSize.toDouble()
+                imagesize = locationsize
                 iTexture = GLES20.glGetUniformLocation(sp_loadimage, "u_texture")
                 locationId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "location.png")
 
                 GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
-                GLES20.glEnableVertexAttribArray(mPositionHandle)
+                //GLES20.glEnableVertexAttribArray(mPositionHandle)
                 GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, locationId)
                 GLES20.glUniform1i(iTexture, 0)
@@ -473,6 +483,32 @@ class WXGLRender(private val context: Context) : Renderer {
                 GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, buffers.colorBuffer.slice().asFloatBuffer())
                 GLES20.glDrawElements(GLES20.GL_TRIANGLES, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
             }
+
+        }
+    }
+
+
+    private fun drawTVS(buffers: ObjectOglBuffers) {
+        if (buffers.isInitialized) {
+            buffers.setToPositionZero()
+                GLES20.glUseProgram(sp_loadimage)
+                mPositionHandle = GLES20.glGetAttribLocation(sp_loadimage, "vPosition")
+                GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
+                //imagesize = MyApplication.radarTvsSize.toDouble()
+                imagesize - tvssize
+                iTexture = GLES20.glGetUniformLocation(sp_loadimage, "u_texture")
+                tvsId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "tvs.png")
+                GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
+                //GLES20.glEnableVertexAttribArray(mPositionHandle)
+                GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+                GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, tvsId)
+                GLES20.glUniform1i(iTexture, 0)
+                GLES20.glEnable(GLES20.GL_BLEND);
+                GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
+                //GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1)
+                GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+                GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
+
 
         }
     }

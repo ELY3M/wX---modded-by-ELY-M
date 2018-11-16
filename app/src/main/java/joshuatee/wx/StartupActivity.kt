@@ -71,6 +71,7 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
                 checkfiles(R.drawable.headingbug, "headingbug.png")
                 checkfiles(R.drawable.star_cyan, "star_cyan.png")
                 checkfiles(R.drawable.location, "location.png")
+                checkfiles(R.drawable.tvs, "tvs.png")
 
                 checkpalfiles(R.raw.colormap134cod, "colormap134cod.txt")
                 checkpalfiles(R.raw.colormap135cod, "colormap135cod.txt")

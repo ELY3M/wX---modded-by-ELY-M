@@ -51,7 +51,7 @@ object UtilityColorPalette {
         }
 
         //TODO TESTING scan dir for *_94.txt files....
-        scanfor94pal()
+        //scanfor94pal()
 
             var cmFileInt: Int = 0
             var text = "null"
@@ -114,7 +114,7 @@ object UtilityColorPalette {
 
 
     fun readpalfile(palfile: String): String {
-        Log.i(TAG, "trying to open "+palfile)
+        //Log.i(TAG, "trying to open "+palfile)
         var text = ""
         try {
             val initialFile = File(MyApplication.PalFilesPath + palfile)
@@ -129,7 +129,7 @@ object UtilityColorPalette {
 
 
     fun scanfor94pal() {
-        Log.i(TAG, "running scanfor94pal()")
+        //Log.i(TAG, "running scanfor94pal()")
         File(MyApplication.PalFilesPath).walk().forEach {
             if (it.toString().equals(RegExp.palfile94)) {
                 Log.i(TAG, "found: "+it)

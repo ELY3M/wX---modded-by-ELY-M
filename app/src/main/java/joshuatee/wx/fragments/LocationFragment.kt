@@ -21,14 +21,12 @@
 
 package joshuatee.wx.fragments
 
-import android.annotation.SuppressLint
 import java.util.Locale
 
 import android.content.BroadcastReceiver
 import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.opengl.GLSurfaceView
-import android.os.AsyncTask
 import android.os.Bundle
 import android.content.Context
 import android.content.Intent
@@ -81,6 +79,7 @@ import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.radar.*
+import kotlinx.coroutines.*
 
 class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
@@ -88,6 +87,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     // hazards, 7 days and radar ( option )
     //
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var sv: ScrollView
     private lateinit var spinner1: Spinner
     private var lastRefresh = 0.toLong()
@@ -376,8 +376,8 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         if (needForecastData) {
             getForecastData()
         }
-        hsTextAl.indices.forEach { GetTEXT().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, it.toString()) }
-        hsImageAl.indices.forEach { GetIMG().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, it.toString()) }
+        hsTextAl.indices.forEach { getTextProduct(it.toString()) }
+        hsImageAl.indices.forEach { getImageProduct(it.toString()) }
         x = Location.x
         y = Location.y
         if (MyApplication.locDisplayImg) {
@@ -418,25 +418,21 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         if (MyApplication.helpMode) showHelp(v2.id)
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetRadar internal constructor(internal val idx: Int) : AsyncTask<Int, String, String>() {
+    private fun getRadar(idx: Int) = GlobalScope.launch(uiDispatcher) {
+        if (oglrIdx != -1)
+            if (!radarLocationChangedAl[oglrIdx])
+                oglrArr[oglrIdx].rid = Location.rid
+        if (oglrArr[idx].product == "N0Q" && WXGLNexrad.isRIDTDWR(oglrArr[idx].rid))
+            oglrArr[idx].product = "TZL"
+        if (oglrArr[idx].product == "TZL" && !WXGLNexrad.isRIDTDWR(oglrArr[idx].rid))
+            oglrArr[idx].product = "N0Q"
+        if (oglrArr[idx].product == "N0U" && WXGLNexrad.isRIDTDWR(oglrArr[idx].rid))
+            oglrArr[idx].product = "TV0"
+        if (oglrArr[idx].product == "TV0" && !WXGLNexrad.isRIDTDWR(oglrArr[idx].rid))
+            oglrArr[idx].product = "N0U"
+        initWXOGLGeom(glviewArr[idx], oglrArr[idx], idx)
 
-        override fun onPreExecute() {
-            if (oglrIdx != -1)
-                if (!radarLocationChangedAl[oglrIdx])
-                    oglrArr[oglrIdx].rid = Location.rid
-            if (oglrArr[idx].product == "N0Q" && WXGLNexrad.isRIDTDWR(oglrArr[idx].rid))
-                oglrArr[idx].product = "TZL"
-            if (oglrArr[idx].product == "TZL" && !WXGLNexrad.isRIDTDWR(oglrArr[idx].rid))
-                oglrArr[idx].product = "N0Q"
-            if (oglrArr[idx].product == "N0U" && WXGLNexrad.isRIDTDWR(oglrArr[idx].rid))
-                oglrArr[idx].product = "TV0"
-            if (oglrArr[idx].product == "TV0" && !WXGLNexrad.isRIDTDWR(oglrArr[idx].rid))
-                oglrArr[idx].product = "N0U"
-            initWXOGLGeom(glviewArr[idx], oglrArr[idx], idx)
-        }
-
-        override fun doInBackground(vararg params: Int?): String? {
+        withContext(Dispatchers.IO) {
             if (Location.isUS)
                 oglrArr[idx].constructPolygons("", "", true)
             if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref)
@@ -455,58 +451,35 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 oglrArr[idx].constructTVS()
             else
                 oglrArr[idx].deconstructTVS()
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            if (Location.isUS) {
-                if (PolygonType.SPOTTER_LABELS.pref)
-                    UtilityWXGLTextObject.updateSpotterLabels(numRadars, wxgltextArr)
-                glviewArr[idx].requestRender()
-                if (idx == oglrIdx) {
-                    radarTime = radarTimeStamp
-                    cardCC?.setStatus(ccTime + radarTime)
-                }
+        if (Location.isUS) {
+            if (PolygonType.SPOTTER_LABELS.pref)
+                UtilityWXGLTextObject.updateSpotterLabels(numRadars, wxgltextArr)
+            glviewArr[idx].requestRender()
+            if (idx == oglrIdx) {
+                radarTime = radarTimeStamp
+                cardCC?.setStatus(ccTime + radarTime)
             }
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetTEXT : AsyncTask<String, String, String>() {
-
-        internal var l = 0
-        internal var longText = ""
-        internal var shortText = ""
-
-        override fun doInBackground(vararg params: String): String {
-            l = params[0].toIntOrNull() ?: 0
-            longText = UtilityDownload.getTextProduct(MyApplication.appContext, hsTextAl[l].product).replace("<br>AREA FORECAST DISCUSSION", "AREA FORECAST DISCUSSION")
-            hsTextAl[l].setTextLong(longText)
-            return "Executed"
+    private fun getTextProduct(productString: String) = GlobalScope.launch(uiDispatcher) {
+        val productIndex = productString.toIntOrNull() ?: 0
+        val longText = withContext(Dispatchers.IO) {
+            UtilityDownload.getTextProduct(MyApplication.appContext,
+                    hsTextAl[productIndex].product).replace("<br>AREA FORECAST DISCUSSION", "AREA FORECAST DISCUSSION")
         }
-
-        override fun onPostExecute(result: String) {
-            shortText = UtilityStringExternal.truncate(longText, UIPreferences.homescreenTextLength)
-            hsTextAl[l].setTextShort(shortText)
-            hsTextAl[l].setText(shortText)
-        }
+        hsTextAl[productIndex].setTextLong(longText)
+        val shortText = UtilityStringExternal.truncate(longText, UIPreferences.homescreenTextLength)
+        hsTextAl[productIndex].setTextShort(shortText)
+        hsTextAl[productIndex].setText(shortText)
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetIMG : AsyncTask<String, String, String>() {
-
-        internal var b = UtilityImg.getBlankBitmap()
-        internal var l = 0
-
-        override fun doInBackground(vararg params: String): String {
-            l = params[0].toIntOrNull() ?: 0
-            b = UtilityDownload.getImgProduct(MyApplication.appContext, hsImageAl[l].product)
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            hsImageAl[l].setImage(b)
-        }
+    private fun getImageProduct(productString: String) = GlobalScope.launch(uiDispatcher) {
+        val productIndex = productString.toIntOrNull() ?: 0
+        val b = withContext(Dispatchers.IO) { UtilityDownload.getImgProduct(MyApplication.appContext, hsImageAl[productIndex].product) }
+        hsImageAl[productIndex].setImage(b)
     }
 
     private fun showHelp(helpItem: Int) {
@@ -751,9 +724,9 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private fun getAllRadars() {
         glviewArr.indices.forEach {
             if (!(PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref)) {
-                GetRadar(it).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, it)
+                getRadar(it)
             } else {
-                GetRadar(it).execute(it)
+                getRadar(it)
             }
         }
     }
@@ -854,47 +827,27 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 radarLocationChangedAl[idxIntG] = true
                 glviewArr[idxIntG].scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
                 oglrArr[idxIntG].setViewInitial(MyApplication.wxoglSize.toFloat() / 10.0f, 0.0f, 0.0f)
-                GetRadar(idxIntG).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, idxIntG)
+                getRadar(idxIntG)
             } else if (strName.contains("Show warning text")) {
                 val polygonUrl = UtilityWXOGL.showTextProducts(glviewArr[idxIntG].newY.toDouble(), (glviewArr[idxIntG].newX * -1.0))
                 if (polygonUrl != "") ObjectIntent(activityReference, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(polygonUrl, ""))
             } else if (strName.contains("Show Spotter Info")) {
-                GetSpotter().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getSpotterInfo()
             } else if (strName.contains("Show radar status message")) {
-                GetRadarStatus().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getRadarStatus()
             }
             dialog.dismiss()
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetSpotter : AsyncTask<String, String, String>() {
-
-        var txt = ""
-
-        override fun doInBackground(vararg params: String): String {
-            txt = UtilitySpotter.findClosestSpotter(LatLon(glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0))
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            UtilityAlertDialog.showHelpText(txt, activityReference)
-        }
+    private fun getSpotterInfo() = GlobalScope.launch(uiDispatcher) {
+         var txt = withContext(Dispatchers.IO) { UtilitySpotter.findClosestSpotter(LatLon(glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0)) }
+         UtilityAlertDialog.showHelpText(txt, activityReference)
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetRadarStatus : AsyncTask<String, String, String>() {
-
-        internal var radarStatus = ""
-
-        override fun doInBackground(vararg params: String): String {
-            radarStatus = UtilityDownload.getRadarStatusMessage(activityReference, oglrArr[idxIntG].rid)
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            UtilityAlertDialog.showHelpText(Utility.fromHtml(radarStatus), activityReference)
-        }
+    private fun getRadarStatus() = GlobalScope.launch(uiDispatcher) {
+        val radarStatus = withContext(Dispatchers.IO) { UtilityDownload.getRadarStatusMessage(activityReference, oglrArr[idxIntG].rid) }
+        UtilityAlertDialog.showHelpText(Utility.fromHtml(radarStatus), activityReference)
     }
 
     private var mActivity: FragmentActivity? = null
@@ -937,20 +890,19 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     }
 
     private fun getForecastData() {
-        GetLocationForecast().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-        GetLocationForecastSevenDay().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-        GetLocationHazards().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getLocationForecast()
+        getLocationForecastSevenDay()
+        getLocationHazards()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetLocationForecast : AsyncTask<String, String, String>() {
+    private fun getLocationForecast() = GlobalScope.launch(uiDispatcher) {
 
-        internal var bmCc: Bitmap? = null
+        var bmCc: Bitmap? = null
 
-        override fun doInBackground(vararg params: String): String {
-            //
-            // Current Conditions
-            //
+        //
+        // Current Conditions
+        //
+        withContext(Dispatchers.IO) {
             try {
                 objFcst = Utility.getCurrentConditionsV2(activityReference, Location.currentLocation)
                 if (homescreenFavLocal.contains("TXT-CC2")) {
@@ -963,46 +915,40 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)
             }
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            if (isAdded) {
-                //
-                // Current Conditions
-                //
-                bmCcSize = UtilityLocationFragment.setNWSIconSize()
-                objFcst?.let { _ ->
-                    cardCC?.let {
-                        if (homescreenFavLocal.contains("TXT-CC2")) {
-                            ccTime = objFcst!!.objCC.status
-                            if (bmCc != null) {
-                                it.updateContent(bmCc!!, bmCcSize, objFcst!!, Location.isUS, ccTime, radarTime)
-                            }
-                        } else {
-                            it.setTopLine(objFcst!!.objCC.data1)
-                            ccTime = objFcst!!.objCC.status
-                            it.setStatus(ccTime + radarTime)
+        if (isAdded) {
+            //
+            // Current Conditions
+            //
+            bmCcSize = UtilityLocationFragment.setNWSIconSize()
+            objFcst?.let { _ ->
+                cardCC?.let {
+                    if (homescreenFavLocal.contains("TXT-CC2")) {
+                        ccTime = objFcst!!.objCC.status
+                        if (bmCc != null) {
+                            it.updateContent(bmCc!!, bmCcSize, objFcst!!, Location.isUS, ccTime, radarTime)
                         }
+                    } else {
+                        it.setTopLine(objFcst!!.objCC.data1)
+                        ccTime = objFcst!!.objCC.status
+                        it.setStatus(ccTime + radarTime)
                     }
                 }
             }
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetLocationForecastSevenDay : AsyncTask<String, String, String>() {
+    private fun getLocationForecastSevenDay() = GlobalScope.launch(uiDispatcher) {
 
-        internal val bmArr = mutableListOf<Bitmap>()
+        val bmArr = mutableListOf<Bitmap>()
 
-        override fun onPreExecute() {
-            if (locationChangedSevenDay) {
-                llCv5V?.removeAllViewsInLayout()
-                locationChangedSevenDay = false
-            }
+        if (locationChangedSevenDay) {
+            llCv5V?.removeAllViewsInLayout()
+            locationChangedSevenDay = false
         }
 
-        override fun doInBackground(vararg params: String): String {
+        withContext(Dispatchers.IO) {
             try {
                 objSevenDay = Utility.getCurrentSevenDay(Location.currentLocation)
                 Utility.writePref(activityReference, "FCST", objSevenDay?.sevenDayExtStr ?: "")
@@ -1017,105 +963,95 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)
             }
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            if (isAdded) {
-                bmCcSize = UtilityLocationFragment.setNWSIconSize()
-                objSevenDay?.let { _ ->
-                    if (homescreenFavLocal.contains("TXT-7DAY")) {
-                        llCv5V?.removeAllViewsInLayout()
-                        val day7Arr = objSevenDay!!.fcstList
-                        bmArr.forEachIndexed { idx, bm ->
-                            val c7day = ObjectCard7Day(activityReference, bm, Location.isUS, idx, day7Arr)
-                            c7day.setOnClickListener(OnClickListener { sv.smoothScrollTo(0, 0) })
-                            llCv5V?.addView(c7day.card)
-                        }
-                        // sunrise card
-                        val cardSunrise = ObjectCardText(activityReference)
-                        cardSunrise.center()
-                        cardSunrise.lightText()
-                        cardSunrise.setOnClickListener(OnClickListener { refreshDynamicContent() })
-                        try {
-                            if (Location.isUS) {
-                                cardSunrise.setText(UtilityDownload.getSunriseSunset(activityReference, Location.currentLocationStr) + MyApplication.newline + UtilityTime.gmtTime())
-                            } else {
-                                cardSunrise.setText(UtilityDownload.getSunriseSunset(activityReference, Location.currentLocationStr) + MyApplication.newline + UtilityTime.gmtTime())
-                            }
-                        } catch (e: Exception) {
-                            UtilityLog.HandleException(e)
-                        }
-                        llCv5V?.addView(cardSunrise.card)
-                    } else {
-                        buttonFor.text = objSevenDay?.sevenDayShort
+        if (isAdded) {
+            bmCcSize = UtilityLocationFragment.setNWSIconSize()
+            objSevenDay?.let { _ ->
+                if (homescreenFavLocal.contains("TXT-7DAY")) {
+                    llCv5V?.removeAllViewsInLayout()
+                    val day7Arr = objSevenDay!!.fcstList
+                    bmArr.forEachIndexed { idx, bm ->
+                        val c7day = ObjectCard7Day(activityReference, bm, Location.isUS, idx, day7Arr)
+                        c7day.setOnClickListener(OnClickListener { sv.smoothScrollTo(0, 0) })
+                        llCv5V?.addView(c7day.card)
                     }
+                    // sunrise card
+                    val cardSunrise = ObjectCardText(activityReference)
+                    cardSunrise.center()
+                    cardSunrise.lightText()
+                    cardSunrise.setOnClickListener(OnClickListener { refreshDynamicContent() })
+                    try {
+                        if (Location.isUS) {
+                            cardSunrise.setText(UtilityDownload.getSunriseSunset(activityReference, Location.currentLocationStr) + MyApplication.newline + UtilityTime.gmtTime())
+                        } else {
+                            cardSunrise.setText(UtilityDownload.getSunriseSunset(activityReference, Location.currentLocationStr) + MyApplication.newline + UtilityTime.gmtTime())
+                        }
+                    } catch (e: Exception) {
+                        UtilityLog.HandleException(e)
+                    }
+                    llCv5V?.addView(cardSunrise.card)
+                } else {
+                    buttonFor.text = objSevenDay?.sevenDayShort
                 }
-                //
-                // CA Legal card
-                //
-                //
-                // Canada legal card
-                //
-                if (!Location.isUS) {
-                    val canLegal = ObjectCALegal(activityReference, UtilityCanada.getLocationURL(x, y))
-                    if (homescreenFavLocal.contains("TXT-7DAY2")) {
-                        llCv5V?.addView(canLegal.card)
-                    }
+            }
+            //
+            // CA Legal card
+            //
+            //
+            // Canada legal card
+            //
+            if (!Location.isUS) {
+                val canLegal = ObjectCALegal(activityReference, UtilityCanada.getLocationURL(x, y))
+                if (homescreenFavLocal.contains("TXT-7DAY2")) {
+                    llCv5V?.addView(canLegal.card)
                 }
             }
         }
     }
 
+    private fun getLocationHazards() = GlobalScope.launch(uiDispatcher) {
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetLocationHazards : AsyncTask<String, String, String>() {
-
-        override fun onPreExecute() {
-            if (locationChangedHazards) {
-                llCv4V?.removeAllViewsInLayout()
-                llCv4V?.visibility = View.GONE
-                locationChangedHazards = false
-            }
+        if (locationChangedHazards) {
+            llCv4V?.removeAllViewsInLayout()
+            llCv4V?.visibility = View.GONE
+            locationChangedHazards = false
         }
 
-        override fun doInBackground(vararg params: String): String {
+        withContext(Dispatchers.IO) {
             try {
                 objHazards = Utility.getCurrentHazards(Location.currentLocation)
                 hazardRaw = objHazards?.hazards ?: ""
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)
             }
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            if (isAdded) {
-                if (Location.isUS) {
-                    var hazardSumAsync = ""
-                    val idAl = hazardRaw.parseColumn("\"id\": \"(http.*?)\"")
-                    val hazardTitles = hazardRaw.parseColumn("\"event\": \"(.*?)\"")
-                    hazardTitles.forEach { hazardSumAsync += it + MyApplication.newline }
-                    if (hazardSumAsync == "") {
-                        if (homescreenFavLocal.contains("TXT-HAZ")) {
-                            llCv4V?.removeAllViews()
-                            llCv4V?.visibility = View.GONE
-                        }
-                    } else {
+        if (isAdded) {
+            if (Location.isUS) {
+                var hazardSumAsync = ""
+                val idAl = hazardRaw.parseColumn("\"id\": \"(http.*?)\"")
+                val hazardTitles = hazardRaw.parseColumn("\"event\": \"(.*?)\"")
+                hazardTitles.forEach { hazardSumAsync += it + MyApplication.newline }
+                if (hazardSumAsync == "") {
+                    if (homescreenFavLocal.contains("TXT-HAZ")) {
+                        llCv4V?.removeAllViews()
+                        llCv4V?.visibility = View.GONE
+                    }
+                } else {
+                    if (homescreenFavLocal.contains("TXT-HAZ")) {
+                        llCv4V?.visibility = View.VISIBLE
+                        setupHazardCards(hazardSumAsync, idAl)
+                    }
+                }
+                hazardsSum = hazardSumAsync
+            } else {
+                objFcst?.let {
+                    if (objHazards?.getHazardsShort() != "") {
+                        hazardsSum = objHazards!!.getHazardsShort().toUpperCase(Locale.US)
                         if (homescreenFavLocal.contains("TXT-HAZ")) {
                             llCv4V?.visibility = View.VISIBLE
-                            setupHazardCards(hazardSumAsync, idAl)
-                        }
-                    }
-                    hazardsSum = hazardSumAsync
-                } else {
-                    objFcst?.let {
-                        if (objHazards?.getHazardsShort() != "") {
-                            hazardsSum = objHazards!!.getHazardsShort().toUpperCase(Locale.US)
-                            if (homescreenFavLocal.contains("TXT-HAZ")) {
-                                llCv4V?.visibility = View.VISIBLE
-                                setupHazardCardsCA(hazardsSum)
-                            }
+                            setupHazardCardsCA(hazardsSum)
                         }
                     }
                 }
