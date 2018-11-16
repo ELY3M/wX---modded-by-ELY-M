@@ -24,7 +24,6 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -46,9 +45,10 @@ import joshuatee.wx.spc.SPCStormReportsActivity
 import joshuatee.wx.spc.UtilitySPC
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityShortcut
-
+import kotlinx.coroutines.*
 class SevereDashboardActivity : BaseActivity() {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     var TAG = "SevereDashboardActivity"
     private val bmAl = mutableListOf<Bitmap>()
     private lateinit var linearLayout: LinearLayout
@@ -73,20 +73,18 @@ class SevereDashboardActivity : BaseActivity() {
     }
 
     private fun refreshDynamicContent() {
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
-        internal val bitmapArrRep = mutableListOf<Bitmap>()
-        internal val snWatch = SevereNotice(PolygonType.WATCH)
-        internal val snWatchTor = SevereNotice(PolygonType.WATCH_TOR)
-        internal val snWatchSvr = SevereNotice(PolygonType.WATCH_SVR)
-        internal val snMcd = SevereNotice(PolygonType.MCD)
-        internal val snMpd = SevereNotice(PolygonType.MPD)
+        val bitmapArrRep = mutableListOf<Bitmap>()
+        val snWatch = SevereNotice(PolygonType.WATCH)
+        val snWatchTor = SevereNotice(PolygonType.WATCH_TOR)
+        val snWatchSvr = SevereNotice(PolygonType.WATCH_SVR)
+        val snMcd = SevereNotice(PolygonType.MCD)
+        val snMpd = SevereNotice(PolygonType.MPD)
 
-        override fun onPreExecute() {
             linearLayout.removeAllViews()
             val wTor = SevereWarning(PolygonType.TOR)
             val wSvr = SevereWarning(PolygonType.SVR)
@@ -138,19 +136,17 @@ class SevereDashboardActivity : BaseActivity() {
                 objSps.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Special Weather Statement.*?") })
                 linearLayout.addView(objSps.card)
             }
-        }
+        
+	withContext(Dispatchers.IO) {
 
-        override fun doInBackground(vararg params: String): String {
             snMcd.getBitmaps(MyApplication.severeDashboardMcd.valueGet())
             snWatch.getBitmaps(MyApplication.severeDashboardWat.valueGet())
             snWatchTor.getBitmaps(MyApplication.severeDashboardWat.valueGet())
             snWatchSvr.getBitmaps(MyApplication.severeDashboardWat.valueGet())
             snMpd.getBitmaps(MyApplication.severeDashboardMpd.valueGet())
             bitmapArrRep.add((UtilitySPC.getStormReportsTodayUrl()).getImage())
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
             if (bitmapArrRep.size > 0) {
                 bitmapArrRep.indices.forEach { it ->
                     val card = ObjectCardImage(contextg, bitmapArrRep[it])
@@ -195,7 +191,6 @@ class SevereDashboardActivity : BaseActivity() {
             bmAl.addAll(snMcd.bmAl)
             bmAl.addAll(snMpd.bmAl)
             bmAl.addAll(bitmapArrRep)
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

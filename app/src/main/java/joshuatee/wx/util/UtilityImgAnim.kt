@@ -36,6 +36,7 @@ import joshuatee.wx.Extensions.*
 
 object UtilityImgAnim {
 
+    // FIXME deprecate in favor of one using Int
     fun getURLArray(url: String, pattern: String, count: String): List<String> {
         val retAl = mutableListOf<String>()
         try {
@@ -44,6 +45,22 @@ object UtilityImgAnim {
             val frameCnt = count.toIntOrNull() ?: 0
             if (radarAl.size >= frameCnt) {
                 (radarAl.size - frameCnt until radarAl.size).mapTo(retAl) { radarAl[it] }
+            } else {
+                (0 until radarAl.size).mapTo(retAl) { radarAl[it] }
+            }
+        } catch (e: Exception) {
+            UtilityLog.HandleException(e)
+        }
+        return retAl
+    }
+
+    fun getUrlArray(url: String, pattern: String, frameCount: Int): List<String> {
+        val retAl = mutableListOf<String>()
+        try {
+            val radarIndexHtml = url.getHtml()
+            val radarAl = radarIndexHtml.parseColumn(pattern)
+            if (radarAl.size >= frameCount) {
+                (radarAl.size - frameCount until radarAl.size).mapTo(retAl) { radarAl[it] }
             } else {
                 (0 until radarAl.size).mapTo(retAl) { radarAl[it] }
             }

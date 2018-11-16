@@ -42,6 +42,7 @@ import joshuatee.wx.ui.OnSwipeTouchListener
 import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.*
+import kotlinx.coroutines.*
 
 class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelectedListener, Toolbar.OnMenuItemClickListener {
 
@@ -54,6 +55,7 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         const val URL: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var animRan = false
     private var animDrawable = AnimationDrawable()
     private lateinit var img: TouchImageView2
@@ -125,53 +127,55 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
     }
 
     override fun onRestart() {
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
         super.onRestart()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        //@SuppressLint("StaticFieldLeak")
+        //private inner class GetContent : AsyncTask<String, String, String>() {
 
-        override fun doInBackground(vararg params: String): String {
-            bitmap = UtilityUSImgNWSMosaic.nwsMosaic(contextg, nwsRadarMosaicSectorCurrent, true)
-            return "Executed"
-        }
+        //override fun doInBackground(vararg params: String): String {
+        bitmap = withContext(Dispatchers.IO) { UtilityUSImgNWSMosaic.nwsMosaic(contextg, nwsRadarMosaicSectorCurrent, true) }
+        //return "Executed"
+        //}
 
         // FIXME bug in API 28 after changing
-        override fun onPostExecute(result: String) {
-            if (!doNotSavePref) {
-                Utility.writePref(contextg, "NWS_RADAR_MOSAIC_SECTOR_CURRENT", nwsRadarMosaicSectorLabelCurrent)
-            }
-            img.setImageBitmap(bitmap)
-            animRan = false
-            //firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "NWSRADMOS")
-            //if (!firstRun) {
-            img.setZoom("NWSRADMOS")
-            //    firstRun = true
-            //}
-            imageLoaded = true
+        //override fun onPostExecute(result: String) {
+        if (!doNotSavePref) {
+            Utility.writePref(contextg, "NWS_RADAR_MOSAIC_SECTOR_CURRENT", nwsRadarMosaicSectorLabelCurrent)
         }
+        img.setImageBitmap(bitmap)
+        animRan = false
+        //firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "NWSRADMOS")
+        //if (!firstRun) {
+        img.setZoom("NWSRADMOS")
+        //    firstRun = true
+        //}
+        imageLoaded = true
+        //}
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class AnimateRadar : AsyncTask<String, String, String>() {
+    private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
+        //@SuppressLint("StaticFieldLeak")
+        //private inner class AnimateRadar : AsyncTask<String, String, String>() {
 
-        override fun doInBackground(vararg params: String): String {
-            animDrawable = UtilityUSImgNWSMosaic.nwsMosaicAnimation(contextg, nwsRadarMosaicSectorCurrent, params[0], true)
-            return "Executed"
-        }
+        //override fun doInBackground(vararg params: String): String {
+        animDrawable = withContext(Dispatchers.IO) { UtilityUSImgNWSMosaic.nwsMosaicAnimation(contextg, nwsRadarMosaicSectorCurrent, frameCount, true) }
+        //return "Executed"
+        //}
 
-        override fun onPostExecute(result: String) {
-            animRan = UtilityImgAnim.startAnimation(animDrawable, img)
-        }
+        //override fun onPostExecute(result: String) {
+        animRan = UtilityImgAnim.startAnimation(animDrawable, img)
+        //}
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.RADAR_MOSAIC)
-            R.id.action_a12 -> AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "12")
-            R.id.action_a18 -> AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "18")
-            R.id.action_a6 -> AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "6")
+            R.id.action_a12 -> getAnimate(12)
+            R.id.action_a18 -> getAnimate(18)
+            R.id.action_a6 -> getAnimate(6)
             R.id.action_stop -> animDrawable.stop()
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
@@ -208,7 +212,7 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         }
         img.resetZoom()
         imgIdx = pos
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {}

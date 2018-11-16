@@ -1,0 +1,26 @@
+#
+# The following was used as a basis for this color palette
+# which is the default for the program for reflectivity
+# College of DuPage ( COD )
+# http://weather.cod.edu/satrad/
+#
+#Color,-32,0,0,0
+Color,-20,64,64,80
+Color,-6,100,100,130
+Color,-5,31,42,104
+Color,0,53,77,164
+Color,11,79,118,236
+Color,12,3,101,31
+Color,20,41,172,49
+Color,31,80,245,69
+Color,32,255,247,39
+Color,40,255,176,28
+Color,50,255,84,13
+Color,63,188,0,0
+Color,64,231,7,203
+Color,75,253,132,250
+Color,76,190,158,245
+Color,80,0,235,230
+Color,81,255,255,255
+Color,95,255,255,255
+

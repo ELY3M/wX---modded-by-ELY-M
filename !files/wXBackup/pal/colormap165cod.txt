@@ -1,0 +1,22 @@
+#
+# H0C
+# Hydrometer Classification
+# ND , BI, GC, IC, DS, WS, RA, HR, BD, GR
+# HA .... UK, RF
+Color,0,0,0,0
+Color,16,127,35,35
+Color,32,118,118,118
+Color,48,255,176,176
+Color,64,235,235,235
+Color,80,0,144,255
+Color,96,0,251,144
+Color,112,0,187,0
+Color,128,208,208,96
+Color,144,210,132,132
+Color,160,255,0,0
+Color,176,0,0,0
+Color,192,0,0,0
+Color,208,0,0,0
+Color,224,231,0,255
+Color,240,119,0,255
+

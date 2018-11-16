@@ -23,7 +23,6 @@ package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.content.res.Configuration
 import android.view.Menu
@@ -38,9 +37,11 @@ import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
+import kotlinx.coroutines.*
 
 class SPCCompmapActivity : BaseActivity() {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var layerStr = ""
     private var firstRun = false
     private var imageLoaded = false
@@ -68,18 +69,18 @@ class SPCCompmapActivity : BaseActivity() {
             if (paramList[position].contains("(on)")) {
                 paramList[position] = paramList[position].replace("\\(on\\) ".toRegex(), "")
                 layerStr = layerStr.replace("a$positionStr:", "")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             } else {
                 paramList[position] = "(on) " + paramList[position]
                 layerStr = layerStr + "a" + positionStr + ":"
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
         }
         toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
         img = findViewById(R.id.iv)
         layerStr = Utility.readPref(this, "SPCCOMPMAP_LAYERSTR", "a7:a19:") // mslp, hpc fronts
         setupInitLayerString()
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     private fun setupInitLayerString() {
@@ -102,20 +103,12 @@ class SPCCompmapActivity : BaseActivity() {
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            bitmap = UtilitySPCCompmap.getImage(contextg, layerStr)
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            img.setImageBitmap(bitmap)
-            img.setMaxZoom(4f)
-            firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "SPCCOMPMAP")
-            imageLoaded = true
-        }
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        bitmap = withContext(Dispatchers.IO) { UtilitySPCCompmap.getImage(contextg, layerStr) }
+        img.setImageBitmap(bitmap)
+        img.setMaxZoom(4f)
+        firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "SPCCOMPMAP")
+        imageLoaded = true
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

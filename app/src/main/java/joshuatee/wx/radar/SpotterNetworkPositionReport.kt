@@ -47,13 +47,14 @@ import okhttp3.Request
 import okhttp3.RequestBody
 import okhttp3.Response
 import java.util.*
+import kotlinx.coroutines.*
 
 
 
 
 object SpotterNetworkPositionReport {
     var TAG = "joshuatee-SpotterNetworkPositionReport"
-
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     var success: Boolean = false
 
     var key: String = MyApplication.sn_key
@@ -109,7 +110,7 @@ object SpotterNetworkPositionReport {
 
     }
 
-    open fun SendPosition(context: Context): Boolean {
+    fun SendPosition(context: Context): Boolean {
 
         criteria.accuracy = Criteria.ACCURACY_FINE
         criteria.isAltitudeRequired = true;
@@ -126,6 +127,10 @@ object SpotterNetworkPositionReport {
         val provider = locationManager?.getBestProvider(criteria, false)
         location = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
 
+        if (location == null) {
+            Log.i(TAG, "location is null!");
+            return false;
+        }
 
         lat = location!!.latitude
         lon = location!!.longitude
@@ -175,8 +180,9 @@ object SpotterNetworkPositionReport {
         strgpsprovider = info[8]
 
 
-        var task = Send_Location_Task()
-        task.execute()
+        Send_Location_Task()
+        //var task = Send_Location_Task()
+        //task.execute()
         return false
     }
 
@@ -201,6 +207,76 @@ object SpotterNetworkPositionReport {
 
 
 
+    fun Send_Location_Task() = GlobalScope.launch(uiDispatcher) {
+        var success: Boolean = false
+            withContext(Dispatchers.IO) {
+            ///override fun doInBackground(vararg params: String): String {
+            val sh = OkHttpClient()
+            val JSON = MediaType.parse("application/json; charset=utf-8")
+            val url = "https://www.spotternetwork.org/positions/update"
+            val `object` = JSONObject()
+            try {
+                `object`.put("id", strkey)
+                `object`.put("report_at", strtime)
+                `object`.put("lat", strlat)
+                `object`.put("lon", strlon)
+                `object`.put("elev", Math.round(straltitude!!.toDouble()))
+                `object`.put("mph", Math.round(strspeed!!.toDouble()))
+                `object`.put("dir", Math.round(strbearing!!.toDouble()))
+                `object`.put("active", 1)
+                `object`.put("gps", Integer.parseInt(strgpsprovider))
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+
+            Log.i(TAG, "Sending SN Position " + strlat + " " + strlon)
+
+
+            val body = RequestBody.create(JSON, `object`.toString())
+            val request = Request.Builder()
+                    .url(url)
+                    .header("User-Agent", "wX SN location report - email me at elymbmx@gmail.com if there is problems!")
+                    .post(body)
+                    .build()
+
+            var response: Response? = null
+            var jsonStr: String? = null
+            try {
+                response = sh.newCall(request).execute()
+                jsonStr = response!!.body()!!.string()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+
+            Log.i(TAG, "jsonStr: "+jsonStr)
+
+            if (jsonStr != null) {
+                try {
+                    success = JSONObject(jsonStr).getBoolean("success")
+                    if (!success) {
+                        //sendToast("SpotterNetwork was unable to process your position update")
+                        Log.i(TAG, "SpotterNetwork was unable to process your position update")
+                    }
+                } catch (e: JSONException) {
+                    Log.i(TAG, "SpotterNetwork did not process position update JSON ERROR")
+                }
+
+            } else {
+                Log.i(TAG, "SpotterNetwork did not process position update NULL RETURNED")
+            }
+            if (success) {
+
+                Log.i(TAG, "SpotterNetwork did sent location report successful!")
+            }
+            //return "Executed"
+        }
+
+
+    }
+
+
+
+    /*
     class Send_Location_Task : AsyncTask<String, String, String>() {
 
     @SuppressLint("StaticFieldLeak")
@@ -272,5 +348,7 @@ object SpotterNetworkPositionReport {
 
 
     }
+
+    */
 
 }

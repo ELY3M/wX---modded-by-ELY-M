@@ -115,6 +115,7 @@ class SettingsRadarActivity : BaseActivity() {
         ll.addView(ObjectSettingsCheckBox(this, this, "Use JNI for radar (beta)", "RADAR_USE_JNI", R.string.radar_use_jni_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Enable multipurpose radar icons", "WXOGL_ICONS_LEVEL2", R.string.radar_icons_level2_label).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Animation interval", "ANIM_INTERVAL", R.string.anim_np_label, 15, 1, 15).card)
+        ll.addView(ObjectSettingsNumberPicker(this, this, "Default line size", "RADAR_DEFAULT_LINESIZE", R.string.default_linesize_np_label, 1, 1, 10).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Warning line size", "RADAR_WARN_LINESIZE", R.string.warn_linesize_np_label, 4, 1, 10).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Watch/MCD line size", "RADAR_WATMCD_LINESIZE", R.string.watmcd_linesize_np, 4, 1, 10).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Location dot size", "RADAR_LOCDOT_SIZE", R.string.locdot_size_np, 10, 1, 75).card)

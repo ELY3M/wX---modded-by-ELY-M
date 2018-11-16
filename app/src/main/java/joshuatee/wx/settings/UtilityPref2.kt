@@ -99,6 +99,7 @@ object UtilityPref2 {
             editor.putString("UI_ICONS_EVENLY_SPACED", "false")
             editor.putString("ALERT_ONLYONCE", "true")
             editor.putString("ALERT_AUTOCANCEL", "true")
+            editor.putInt("RADAR_DEFAULT_LINESIZE", 1)
             editor.putInt("RADAR_WARN_LINESIZE", 4)
             editor.putInt("RADAR_WATMCD_LINESIZE", 4)
             editor.putInt("WXOGL_SIZE", 13) // was 15

@@ -23,7 +23,6 @@ package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -32,9 +31,11 @@ import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.util.UtilityTime
+import kotlinx.coroutines.*
 
 class USWarningsImpactActivity : BaseActivity() {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var recyclerView: RecyclerView
     private var warningsList = listOf<ObjectImpactGraphic>()
     private lateinit var contextg: Context
@@ -49,27 +50,19 @@ class USWarningsImpactActivity : BaseActivity() {
         val llm = LinearLayoutManager(this)
         llm.orientation = RecyclerView.VERTICAL
         recyclerView.layoutManager = llm
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            warningsList = UtilityWarningsImpact.impactWarningData
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            val ca = AdapterUSWarningsImpact(warningsList)
-            recyclerView.adapter = ca
-            title = warningsList.size.toString() + " NWS warnings active " + UtilityTime.gmtTime("HH:mm")
-            ca.setOnItemClickListener(object : AdapterUSWarningsImpact.MyClickListener {
-                override fun onItemClick(position: Int) {
-                    showImage(position)
-                }
-            })
-        }
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        warningsList = withContext(Dispatchers.IO) { UtilityWarningsImpact.impactWarningData }
+        val ca = AdapterUSWarningsImpact(warningsList)
+        recyclerView.adapter = ca
+        title = warningsList.size.toString() + " NWS warnings active " + UtilityTime.gmtTime("HH:mm")
+        ca.setOnItemClickListener(object : AdapterUSWarningsImpact.MyClickListener {
+            override fun onItemClick(position: Int) {
+                showImage(position)
+            }
+        })
     }
 
     private fun showImage(position: Int) {
