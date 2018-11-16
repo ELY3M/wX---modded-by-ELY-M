@@ -795,7 +795,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 oglr.ridNewList.mapTo(alertDialogStatusAl) { "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.readPref(contextg, "RID_LOC_" + it.name, "") }
                 alertDialogStatusAl.add("Show warning text")
                 //alertDialogStatusAl.add("Show Watch text")
-                //alertDialogStatusAl.add("Show MCD/MPD text")
+                alertDialogStatusAl.add("Show MCD text")
                 alertDialogStatusAl.add("Show nearest observation")
                 alertDialogStatusAl.add("Show nearest forecast")
                 alertDialogStatusAl.add("Show nearest meteogram")
@@ -1046,6 +1046,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 if (polygonUrl != "") ObjectIntent(this, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(polygonUrl, ""))
             }
 
+            //Show MCD
+            else if (strName.contains("Show MCD text")) {
+                GetMCD().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            }
+
             else if (strName.contains("Show nearest observation"))
                 GetMetar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
             else if (strName.contains("Show nearest meteogram")) {
@@ -1203,5 +1208,22 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             UtilityAlertDialog.showHelpText(txt, act)
         }
     }
+
+    //UtilityDownload.getStringFromURLS("http://tgftp.nws.noaa.gov/data/raw/ac/acus11.kwns.swo.mcd.txt")
+    @SuppressLint("StaticFieldLeak")
+    private inner class GetMCD : AsyncTask<String, String, String>() {
+
+        var txt = ""
+
+        override fun doInBackground(vararg params: String): String {
+            txt = UtilityDownload.getStringFromURLS("http://"+MyApplication.NWS_RADAR_PUB+"/data/raw/ac/acus11.kwns.swo.mcd.txt")
+            return "Executed"
+        }
+
+        override fun onPostExecute(result: String) {
+            UtilityAlertDialog.showHelpText(txt, act)
+        }
+    }
+
 
 }

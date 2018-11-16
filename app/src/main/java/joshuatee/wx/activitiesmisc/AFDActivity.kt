@@ -50,8 +50,9 @@ import joshuatee.wx.WFO_ARR
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.util.*
+import kotlinx.coroutines.*
 
-class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClickListener {
+class AFDActivity: AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClickListener {
 
     // The primary purpose of this activity is to view AFD from location's NWS office
     // However, other NWS office text products are also available from the AB menu
@@ -69,6 +70,7 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         const val URL: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var firstTime = true
     private lateinit var turl: Array<String>
     private var prod = ""
@@ -150,57 +152,50 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         super.onRestart()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun onPreExecute() {
-            updateSubmenuNotifText()
-            if (MyApplication.wfoFav.contains(":$nwsOffice:")) {
-                star.setIcon(MyApplication.STAR_ICON)
-            } else {
-                star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-            }
-            sv.smoothScrollTo(0, 0)
-            ridFavOld = MyApplication.wfoFav
-            if (prod != oldProd) {
-                version = 1
-            }
-            if (nwsOffice != oldNwsOffice) {
-                version = 1
-            }
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        updateSubmenuNotifText()
+        if (MyApplication.wfoFav.contains(":$nwsOffice:")) {
+            star.setIcon(MyApplication.STAR_ICON)
+        } else {
+            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+        }
+        sv.smoothScrollTo(0, 0)
+        ridFavOld = MyApplication.wfoFav
+        if (prod != oldProd) {
+            version = 1
+        }
+        if (nwsOffice != oldNwsOffice) {
+            version = 1
         }
 
-        override fun doInBackground(vararg params: String): String {
-            sigHtmlTmp = if (version == 1) {
+        sigHtmlTmp = withContext(Dispatchers.IO) {
+            if (version == 1) {
                 UtilityDownload.getTextProduct(contextg, prod + nwsOffice)
             } else {
                 UtilityDownload.getTextProduct(prod + nwsOffice, version)
             }
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            title = prod
-            cardList.forEach { ll.removeView(it) }
-            c0.setVisibility(View.VISIBLE)
-            sv.visibility = View.VISIBLE
-            if (sigHtmlTmp == "") {
-                sigHtmlTmp = "None issued by this office recently."
-            }
-            c0.setTextAndTranslate(Utility.fromHtml(sigHtmlTmp))
-            if (turl.size > 2) {
-                if (turl[2] == "sound") {
-                    UtilityTTS.synthesizeTextAndPlay(applicationContext, sigHtmlTmp, prod)
-                }
-            }
-            if (turl[1] == "") {
-                Utility.writePref(contextg, "WFO_TEXT_FAV", prod)
-                MyApplication.wfoTextFav = prod
-            }
-            oldProd = prod
-            oldNwsOffice = nwsOffice
-            Utility.writePref(contextg, "WFO_LAST_USED", nwsOffice)
+        title = prod
+        cardList.forEach { ll.removeView(it) }
+        c0.setVisibility(View.VISIBLE)
+        sv.visibility = View.VISIBLE
+        if (sigHtmlTmp == "") {
+            sigHtmlTmp = "None issued by this office recently."
         }
+        c0.setTextAndTranslate(Utility.fromHtml(sigHtmlTmp))
+        if (turl.size > 2) {
+            if (turl[2] == "sound") {
+                UtilityTTS.synthesizeTextAndPlay(applicationContext, sigHtmlTmp, prod)
+            }
+        }
+        if (turl[1] == "") {
+            Utility.writePref(contextg, "WFO_TEXT_FAV", prod)
+            MyApplication.wfoTextFav = prod
+        }
+        oldProd = prod
+        oldNwsOffice = nwsOffice
+        Utility.writePref(contextg, "WFO_LAST_USED", nwsOffice)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -210,13 +205,13 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         when (item.itemId) {
             R.id.action_back -> {
                 version += 2
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_forward -> {
                 if (version > 1) {
                     version -= 2
                 }
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_fav -> toggleFavorite()
             R.id.action_notif_text_prod -> {
@@ -252,7 +247,7 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
 
     private fun getProduct(prod: String) {
         this.prod = prod
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     private fun mapSwitch(loc: String) {
@@ -275,7 +270,7 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
                 2 -> ObjectIntent(this, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf("WFO"))
                 else -> {
                     nwsOffice = ridArrLoc[pos].split(" ").getOrNull(0) ?: ""
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
                 }
             }
             if (firstTime) {

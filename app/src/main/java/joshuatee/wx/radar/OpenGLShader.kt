@@ -59,7 +59,7 @@ internal object OpenGLShader {
 
     fun LoadTexture(imagefile: String): Int {
 
-        Log.i(TAG, "Loadtexture")
+        Log.i(TAG, "Loadtexture: "+imagefile)
         var img: Bitmap? = null
         val textures = IntArray(1)
         try {

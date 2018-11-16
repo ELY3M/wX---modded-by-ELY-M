@@ -23,7 +23,6 @@ package joshuatee.wx.wpc
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.content.res.Configuration
 import androidx.appcompat.widget.Toolbar
@@ -41,6 +40,7 @@ import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
+import kotlinx.coroutines.*
 
 class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMenuItemClickListener {
 
@@ -48,6 +48,7 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         const val URL: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
     private var timePeriod = 1
     private var firstRun = false
@@ -96,7 +97,7 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
             title = drw.getLabel(groupPosition, childPosition)
             imgIdx = childPosition
             imgGroupIdx = groupPosition
-            GetContent().execute()
+            getContent()
             true
         }
         toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
@@ -112,52 +113,44 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         drw.drawerLayout.closeDrawer(drw.listView)
         title = UtilityWPCImages.LABELS[position]
         imgUrl = UtilityWPCImages.PARAMS[position]
-        GetContent().execute()
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
-        internal var getUrl = ""
+        val getUrl: String
 
-        override fun onPreExecute() {
-            setTitle(title)
-            when {
-                imgUrl.contains("http://graphical.weather.gov/images/conus/") -> {
-                    getUrl = imgUrl + timePeriod + "_conus.png"
-                    actionBack.isVisible = true
-                    actionForward.isVisible = true
-                }
-                imgUrl.contains("aviationweather") -> {
-                    actionBack.isVisible = true
-                    actionForward.isVisible = true
-                    getUrl = imgUrl
-                }
-                else -> {
-                    actionBack.isVisible = false
-                    actionForward.isVisible = false
-                    getUrl = imgUrl
-                }
+        setTitle(title)
+        when {
+            imgUrl.contains("http://graphical.weather.gov/images/conus/") -> {
+                getUrl = imgUrl + timePeriod + "_conus.png"
+                actionBack.isVisible = true
+                actionForward.isVisible = true
             }
-            Utility.writePref(contextg, "WPG_IMG_FAV_TITLE", title)
-            Utility.writePref(contextg, "WPG_IMG_FAV_URL", imgUrl)
-            Utility.writePref(contextg, "WPG_IMG_IDX", imgIdx)
-            Utility.writePref(contextg, "WPG_IMG_GROUPIDX", imgGroupIdx)
-        }
-
-        override fun doInBackground(vararg params: String): String {
-            bitmap = getUrl.getImage()
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            img.setImageBitmap(bitmap)
-            if (!firstRun) {
-                img.setZoom("WPCIMG")
-                firstRun = true
+            imgUrl.contains("aviationweather") -> {
+                actionBack.isVisible = true
+                actionForward.isVisible = true
+                getUrl = imgUrl
             }
-            imageLoaded = true
+            else -> {
+                actionBack.isVisible = false
+                actionForward.isVisible = false
+                getUrl = imgUrl
+            }
         }
+        Utility.writePref(contextg, "WPG_IMG_FAV_TITLE", title)
+        Utility.writePref(contextg, "WPG_IMG_FAV_URL", imgUrl)
+        Utility.writePref(contextg, "WPG_IMG_IDX", imgIdx)
+        Utility.writePref(contextg, "WPG_IMG_GROUPIDX", imgGroupIdx)
+
+        bitmap = withContext(Dispatchers.IO) { getUrl.getImage() }
+
+        img.setImageBitmap(bitmap)
+        if (!firstRun) {
+            img.setZoom("WPCIMG")
+            firstRun = true
+        }
+        imageLoaded = true
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -184,7 +177,7 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
                     imgUrl = UtilityWPCImages.SHORT_CODES[imgGroupIdx][imgIdx]
                     title = UtilityWPCImages.LONG_CODES[imgGroupIdx][imgIdx]
                 }
-                GetContent().execute()
+                getContent()
             }
             R.id.action_back -> {
                 timePeriod--
@@ -196,7 +189,7 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
                     imgUrl = UtilityWPCImages.SHORT_CODES[imgGroupIdx][imgIdx]
                     title = UtilityWPCImages.LONG_CODES[imgGroupIdx][imgIdx]
                 }
-                GetContent().execute()
+                getContent()
             }
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
@@ -237,7 +230,7 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         }
         imgUrl = UtilityWPCImages.SHORT_CODES[imgGroupIdx][imgIdx]
         title = UtilityWPCImages.LONG_CODES[imgGroupIdx][imgIdx]
-        GetContent().execute()
+        getContent()
     }
 
     private fun showPrevImg() {
@@ -252,6 +245,6 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         }
         imgUrl = UtilityWPCImages.SHORT_CODES[imgGroupIdx][imgIdx]
         title = UtilityWPCImages.LONG_CODES[imgGroupIdx][imgIdx]
-        GetContent().execute()
+        getContent()
     }
 }

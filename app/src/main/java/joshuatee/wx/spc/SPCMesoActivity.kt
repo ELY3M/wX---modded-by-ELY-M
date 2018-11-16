@@ -24,7 +24,6 @@ package joshuatee.wx.spc
 import android.annotation.SuppressLint
 import android.content.Context
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.content.res.Configuration
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -52,6 +51,7 @@ import joshuatee.wx.util.UtilityAlertDialog
 import joshuatee.wx.util.UtilityFavorites
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
+import kotlinx.coroutines.*
 
 class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener, AdapterView.OnItemSelectedListener {
 
@@ -64,6 +64,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
         var INFO: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var animRan = false
     private var showRadar = true
     private var showOutlook = true
@@ -213,65 +214,56 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
         super.onRestart()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
-        override fun onPreExecute() {
-            if (MyApplication.spcmesoFav.contains(":" + displayData.param[curImg] + ":"))
-                star.setIcon(MyApplication.STAR_ICON)
-            else
-                star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-        }
+        if (MyApplication.spcmesoFav.contains(":" + displayData.param[curImg] + ":"))
+            star.setIcon(MyApplication.STAR_ICON)
+        else
+            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
 
-        override fun doInBackground(vararg params: String): String {
+        withContext(Dispatchers.IO) {
             (0 until numPanes).forEach { displayData.bitmap[it] = UtilitySPCMESOInputOutput.getImage(contextg, displayData.param[it], sector) }
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
+        (0 until numPanes).forEach {
+            if (numPanes > 1) {
+                UtilityImg.resizeViewSetImgByHeight(displayData.bitmap[it], displayData.img[it])
+            } else {
+                displayData.img[it].setImageBitmap(displayData.bitmap[it])
+            }
+            displayData.img[it].setMaxZoom(4f)
+            animRan = false
+        }
+        if (!firstRun) {
             (0 until numPanes).forEach {
-                if (numPanes > 1) {
-                    UtilityImg.resizeViewSetImgByHeight(displayData.bitmap[it], displayData.img[it])
-                } else {
-                    displayData.img[it].setImageBitmap(displayData.bitmap[it])
-                }
-                displayData.img[it].setMaxZoom(4f)
-                animRan = false
+                displayData.img[it].setZoom(
+                        Utility.readPref(contextg, prefModel + numPanes + it.toString() + "_ZOOM", 1.0f),
+                        Utility.readPref(contextg, prefModel + numPanes + it.toString() + "_X", 0.5f),
+                        Utility.readPref(contextg, prefModel + numPanes + it.toString() + "_Y", 0.5f)
+                )
             }
-            if (!firstRun) {
-                (0 until numPanes).forEach {
-                    displayData.img[it].setZoom(
-                            Utility.readPref(contextg, prefModel + numPanes + it.toString() + "_ZOOM", 1.0f),
-                            Utility.readPref(contextg, prefModel + numPanes + it.toString() + "_X", 0.5f),
-                            Utility.readPref(contextg, prefModel + numPanes + it.toString() + "_Y", 0.5f)
-                    )
-                }
-                firstRun = true
-            }
-            imageLoaded = true
-            if (numPanes > 1)
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1) + ")"
-                        + displayData.paramLabel[0] + "/" + displayData.paramLabel[1])
-
+            firstRun = true
         }
+        imageLoaded = true
+        if (numPanes > 1)
+            UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1) + ")"
+                    + displayData.paramLabel[0] + "/" + displayData.paramLabel[1])
+
+
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class AnimateRadar : AsyncTask<String, String, String>() {
+    private fun getAnimate(frames: Int) = GlobalScope.launch(uiDispatcher) {
 
-        override fun doInBackground(vararg params: String): String {
-            (0 until numPanes).forEach { displayData.animDrawable[it] = UtilitySPCMESOInputOutput.getAnim(contextg, sector, displayData.param[it], params[0]) }
-            return "Executed"
+        withContext(Dispatchers.IO) {
+            (0 until numPanes).forEach { displayData.animDrawable[it] = UtilitySPCMESOInputOutput.getAnim(contextg, sector, displayData.param[it], frames) }
         }
 
-        override fun onPostExecute(result: String) {
-            (0 until numPanes).forEach {
-                displayData.img[it].setImageDrawable(displayData.animDrawable[it])
-                displayData.animDrawable[it].isOneShot = false
-                displayData.animDrawable[it].start()
-            }
-            animRan = true
+        (0 until numPanes).forEach {
+            displayData.img[it].setImageDrawable(displayData.animDrawable[it])
+            displayData.animDrawable[it].isOneShot = false
+            displayData.animDrawable[it].start()
         }
+        animRan = true
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -289,7 +281,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
                     menuRadar.title = on + menuRadarStr
                     Utility.writePref(this, prefModel + "_SHOW_RADAR", "true")
                 }
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_toggleTopography -> {
                 if (showTopography) {
@@ -301,7 +293,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
                     menuTopography.title = on + menuTopographyStr
                     Utility.writePref(this, prefModel + "_SHOW_TOPO", "true")
                 }
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_toggleSPCOutlook -> {
                 if (showOutlook) {
@@ -313,7 +305,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
                     menuOutlook.title = on + menuOutlookStr
                     Utility.writePref(this, prefModel + "_SHOW_OUTLOOK", "true")
                 }
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_toggleWatWarn -> {
                 if (showWatwarn) {
@@ -325,7 +317,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
                     menuWatwarn.title = on + menuWatwarnStr
                     Utility.writePref(this, prefModel + "_SHOW_WATWARN", "true")
                 }
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_mslp -> setAndLaunchParam("pmsl", 1, 0)
             R.id.action_ttd -> setAndLaunchParam("ttd", 1, 1)
@@ -363,7 +355,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
             R.id.action_SE -> setAndLaunchSector("18")
             R.id.action_SW -> setAndLaunchSector("12")
             R.id.action_NW -> setAndLaunchSector("11")
-            R.id.action_help -> GetContentHelp().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            R.id.action_help -> getHelp()
             R.id.action_multipane -> ObjectIntent(this, SPCMesoActivity::class.java, SPCMesoActivity.INFO, arrayOf("", "2", prefModel))
             R.id.action_fav -> toggleFavorite()
             R.id.action_img1 -> {
@@ -382,9 +374,9 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
         when (item.itemId) {
-            R.id.action_a6 -> AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "6", "")
-            R.id.action_a12 -> AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "12", "")
-            R.id.action_a18 -> AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "18", "")
+            R.id.action_a6 -> getAnimate(6)
+            R.id.action_a12 -> getAnimate(12)
+            R.id.action_a18 -> getAnimate(18)
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20) {
                     if (isStoragePermissionGranted) {
@@ -422,25 +414,14 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
         drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContentHelp : AsyncTask<String, String, String>() {
+    private fun getHelp() = GlobalScope.launch(uiDispatcher) {
 
-        internal var helpText = ""
+        var helpText = withContext(Dispatchers.IO) { ("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/help_" + displayData.param[curImg] + ".html").getHtml() }
 
-        override fun onPreExecute() {}
+        if (helpText.contains("Page Not Found"))
+            helpText = "Help is not available for this parameter."
+        showHelpTextDialog(Utility.fromHtml(helpText))
 
-        override fun doInBackground(vararg params: String): String {
-            helpText = ("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/help_" + displayData.param[curImg] + ".html").getHtml()
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            if (helpText.contains("Page Not Found"))
-                helpText = "Help is not available for this parameter."
-            showHelpTextDialog(Utility.fromHtml(helpText))
-        }
-
-        override fun onProgressUpdate(vararg values: String) {}
     }
 
     private fun showHelpTextDialog(help_str: String) {
@@ -459,7 +440,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
         Utility.writePref(this, prefParam + curImg, displayData.param[curImg])
         Utility.writePref(this, prefParamLabel + curImg, displayData.paramLabel[curImg])
         refreshSpinner()
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     private fun setAndLaunchSector(sectorNo: String) {
@@ -467,7 +448,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
         if (numPanes > 1) displayData.img[1].resetZoom()
         sector = sectorNo
         Utility.writePref(this, prefSector, sector)
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     override fun onStop() {
@@ -496,7 +477,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
                             displayData.paramLabel[curImg] = favListLabel[pos]
                             Utility.writePref(this, prefParam + curImg, displayData.param[curImg])
                             Utility.writePref(this, prefParamLabel + curImg, displayData.paramLabel[curImg])
-                            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                            getContent()
                         }
                     }
                 }

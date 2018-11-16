@@ -22,7 +22,6 @@
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.LinearLayout
@@ -35,13 +34,15 @@ import joshuatee.wx.ui.ObjectAlertDetail
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
+import kotlinx.coroutines.*
 
-class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
+class USAlertsDetailActivity: AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object {
         const val URL: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var args: Array<String>
     private var ca = CAPAlert()
     private lateinit var objAlerts: ObjectAlertDetail
@@ -58,24 +59,16 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val linearLayout: LinearLayout = findViewById(R.id.ll)
         objAlerts = ObjectAlertDetail(this, linearLayout)
         args = intent.getStringArrayExtra(URL)
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            ca = CAPAlert.createFromURL(args[0])
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            objAlerts.updateContent(ca, args[0])
-            toolbar.subtitle = ca.area
-            title = objAlerts.title
-            if (args.size > 1 && args[1] == "sound") {
-                UtilityTTS.synthesizeTextAndPlay(applicationContext, Utility.fromHtml(ca.text), "alert")
-            }
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        ca = withContext(Dispatchers.IO) { CAPAlert.createFromURL(args[0]) }
+        objAlerts.updateContent(ca, args[0])
+        toolbar.subtitle = ca.area
+        title = objAlerts.title
+        if (args.size > 1 && args[1] == "sound") {
+            UtilityTTS.synthesizeTextAndPlay(applicationContext, Utility.fromHtml(ca.text), "alert")
         }
     }
 

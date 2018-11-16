@@ -24,9 +24,14 @@ With that said, please respect these items:
 
 10. In general, the apps basic function should occur without any needed permissions from the user. For example to check the weather/radar it should not be necessary to have access to users GPS location or to write to their external storage. Such permissions should be requested later on as add needed basis for advanced functionality.
 
-11. All contributors will need to electronically sign for a Contributor License Agreement to protect both parties and the code, see here for a good idea of why and a sample which will likely be followed
-http://infrequently.org/2008/06/why-do-i-need-to-sign-this/ (overview)
-https://github.com/mapsme/omim/blob/master/docs/CLA.md (a good template CLA also used by apache I think )
-https://github.com/fusionpbx/open-source/blob/master/sign-cla.md (an example of electronic signing)
+11. All contributors will need to electronically sign for a Contributor License Agreement to protect both parties and the code:
+https://gitlab.com/joshua.tee/wx/blob/master/DOC/CLA.md
+
+Submission process forthcoming. I also need to review this document more thoroughly.
 
 12. Please respect the privacy policy. No code will be accepted that does not respect the privacy policy.
+
+13. Please respect the code of conduct as documented here (I still need to review this more thoroughly):
+https://gitlab.com/joshua.tee/wx/blob/master/DOC/CODEOFCONDUCT.md
+
+14. For the time being I will merge all patches myself into the main branch.

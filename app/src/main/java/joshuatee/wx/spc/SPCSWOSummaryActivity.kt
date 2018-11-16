@@ -24,7 +24,6 @@ package joshuatee.wx.spc
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -38,9 +37,11 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityShortcut
+import kotlinx.coroutines.*
 
 class SPCSWOSummaryActivity : BaseActivity() {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val bmAl = mutableListOf<Bitmap>()
     private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
@@ -58,29 +59,23 @@ class SPCSWOSummaryActivity : BaseActivity() {
         linearLayout = findViewById(R.id.ll)
         title = "SPC"
         toolbar.subtitle = "Convective Outlook Summary"
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
-        override fun doInBackground(vararg params: String): String {
-            arrayOf("1", "2", "3", "4-8").forEach { bmAl.addAll(UtilitySPCSWO.getImageURLs(it, false)) }
-            return "Executed"
-        }
+        withContext(Dispatchers.IO) { arrayOf("1", "2", "3", "4-8").forEach { bmAl.addAll(UtilitySPCSWO.getImageURLs(it, false)) } }
 
-        override fun onPostExecute(result: String) {
-            var card: ObjectCardImage
-            bmAl.forEach { bitmap ->
-                card = ObjectCardImage(contextg, bitmap)
-                val day = if (bmAl.indexOf(bitmap) < 3) {
-                    (bmAl.indexOf(bitmap) + 1).toString()
-                } else {
-                    "4-8"
-                }
-                card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCSWOActivity::class.java, SPCSWOActivity.NO, arrayOf(day, "")) })
-                linearLayout.addView(card.card)
+        var card: ObjectCardImage
+        bmAl.forEach { bitmap ->
+            card = ObjectCardImage(contextg, bitmap)
+            val day = if (bmAl.indexOf(bitmap) < 3) {
+                (bmAl.indexOf(bitmap) + 1).toString()
+            } else {
+                "4-8"
             }
+            card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCSWOActivity::class.java, SPCSWOActivity.NO, arrayOf(day, "")) })
+            linearLayout.addView(card.card)
         }
     }
 

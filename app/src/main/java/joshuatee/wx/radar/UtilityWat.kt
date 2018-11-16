@@ -22,6 +22,7 @@
 package joshuatee.wx.radar
 
 import android.content.Context
+import android.util.Log
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
@@ -29,7 +30,7 @@ import joshuatee.wx.util.UtilityCanvasProjection
 import joshuatee.wx.util.ProjectionNumbers
 
 internal object UtilityWat {
-
+    var TAG: String = "joshuatee UtilityWat"
     fun addWat(context: Context, provider: ProjectionType, rid1: String, type: PolygonType): List<Double> {
         var testArr: Array<String>
         val warningList = mutableListOf<Double>()
@@ -39,6 +40,7 @@ internal object UtilityWat {
             PolygonType.WATCH_SVR -> prefToken = MyApplication.watchLatlonSvr.valueGet()
             PolygonType.WATCH_TOR -> prefToken = MyApplication.watchLatlonTor.valueGet()
             PolygonType.MPD -> prefToken = MyApplication.mpdLatlon.valueGet()
+            PolygonType.SPS -> prefToken = MyApplication.SPSLatlon.valueGet()
             else -> {
             }
         }

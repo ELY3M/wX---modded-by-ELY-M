@@ -22,7 +22,6 @@
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -45,6 +44,7 @@ import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.DefaultLabelFormatter
 import joshuatee.wx.objects.ObjectIntent
+import kotlinx.coroutines.*
 
 class HourlyActivity : BaseActivity() { // AppCompatActivity()
 
@@ -56,6 +56,7 @@ class HourlyActivity : BaseActivity() { // AppCompatActivity()
         const val LOC_NUM: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var htmlShare = listOf<String>()
     private lateinit var cv1: ObjectCard
     private var color = 0
@@ -88,23 +89,19 @@ class HourlyActivity : BaseActivity() { // AppCompatActivity()
         c0.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar) })
         title = "Hourly"
         toolbar.subtitle = Location.getName(locNum)
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
-        override fun doInBackground(vararg params: String): String {
-            htmlShare = UtilityUSHourly.getHourlyString(locNum)
-            hourlyData = UtilityUSHourly.getHourlyStringForActivity(htmlShare[1])
-            return "Executed"
-        }
+        val result1 = async(Dispatchers.IO) { UtilityUSHourly.getHourlyString(locNum) }
+        htmlShare = result1.await()
+        val result2 = async(Dispatchers.IO) { UtilityUSHourly.getHourlyStringForActivity(htmlShare[1]) }
+        hourlyData = result2.await()
 
-        override fun onPostExecute(result: String) {
-            cv1.setVisibility(View.VISIBLE)
-            c0.setText(listOf(hourlyData.time, hourlyData.temp, hourlyData.windSpeed, hourlyData.windDir, hourlyData.conditions))
-            plot1()
-        }
+        cv1.setVisibility(View.VISIBLE)
+        c0.setText(listOf(hourlyData.time, hourlyData.temp, hourlyData.windSpeed, hourlyData.windDir, hourlyData.conditions))
+        plot1()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
