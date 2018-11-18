@@ -24,7 +24,6 @@ package joshuatee.wx.wpc
 import android.annotation.SuppressLint
 import android.content.Context
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.graphics.Bitmap
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -54,6 +53,7 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 import joshuatee.wx.RegExp
 import joshuatee.wx.objects.ObjectIntent
+import kotlinx.coroutines.*
 
 class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -64,6 +64,7 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
         private const val NO = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var imgUrl = ""
     private var url = ""
     private var text = ""
@@ -87,16 +88,15 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
         imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$no.gif"
         url = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd.php"
         setTitle("MPDs")
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
-        internal var sigHtmlTmp = ""
-        internal var mpdList = listOf<String>()
+        var sigHtmlTmp: String
+        var mpdList = listOf<String>()
 
-        override fun doInBackground(vararg params: String): String {
+        withContext(Dispatchers.IO) {
             sigHtmlTmp = url.getHtml()
             mpdList = sigHtmlTmp.parseColumn(RegExp.mpdPattern)
             mpdList.forEach {
@@ -110,34 +110,31 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 prod = "WPCMPD" + mcdNoArr[0]
                 text = UtilityDownload.getTextProduct(contextg, prod)
             }
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            mpdList.indices.forEach { mpdIndex ->
-                val card = ObjectCardImage(contextg)
-                card.setImage(bitmapArr[mpdIndex])
-                card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCMCDWShowActivity::class.java, SPCMCDWShowActivity.NO, arrayOf(mcdNoArr[mpdIndex], "", PolygonType.MPD.toString())) })
-                linearLayout.addView(card.card)
-                if (mpdList.size == 1) registerForContextMenu(card.img)
-            }
-            if (mpdList.size == 1) {
-                val wfoStr = text.parse("ATTN...WFO...(.*?)...<br>")
-                wfoArr = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
-                val card2 = ObjectCardText(contextg)
-                card2.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
-                card2.setText(Utility.fromHtml(text))
-                linearLayout.addView(card2.card)
-                setTitle(title)
-                toolbar.subtitle = text.parse("AREAS AFFECTED...(.*?)CONCERNING").replace("<BR>", "")
-            }
-            val tv: TextView = findViewById(R.id.tv)
-            if (mpdList.isEmpty())
-                tv.text = resources.getString(R.string.wpc_mpd_noactive)
-            else
-                tv.visibility = View.GONE
-            objCard.setVisibility(View.GONE)
+        mpdList.indices.forEach { mpdIndex ->
+            val card = ObjectCardImage(contextg)
+            card.setImage(bitmapArr[mpdIndex])
+            card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCMCDWShowActivity::class.java, SPCMCDWShowActivity.NO, arrayOf(mcdNoArr[mpdIndex], "", PolygonType.MPD.toString())) })
+            linearLayout.addView(card.card)
+            if (mpdList.size == 1) registerForContextMenu(card.img)
         }
+        if (mpdList.size == 1) {
+            val wfoStr = text.parse("ATTN...WFO...(.*?)...<br>")
+            wfoArr = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
+            val card2 = ObjectCardText(contextg)
+            card2.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
+            card2.setText(Utility.fromHtml(text))
+            linearLayout.addView(card2.card)
+            setTitle(title)
+            toolbar.subtitle = text.parse("AREAS AFFECTED...(.*?)CONCERNING").replace("<BR>", "")
+        }
+        val tv: TextView = findViewById(R.id.tv)
+        if (mpdList.isEmpty())
+            tv.text = resources.getString(R.string.wpc_mpd_noactive)
+        else
+            tv.visibility = View.GONE
+        objCard.setVisibility(View.GONE)
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo) {
@@ -153,29 +150,18 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
         return true
     }
 
-    private fun saveLocation(nws_office: String) {
-        SaveLoc().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, nws_office)
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private inner class SaveLoc : AsyncTask<String, String, String>() {
-
-        internal var toastStr = ""
-
-        override fun doInBackground(vararg params: String): String {
+    private fun saveLocation(nwsOffice: String) = GlobalScope.launch(uiDispatcher) {
+        var toastStr = ""
+        withContext(Dispatchers.IO) {
             var locNumIntCurrent = Location.numLocations
             locNumIntCurrent += 1
             val locNumToSaveStr = locNumIntCurrent.toString()
-            val loc = Utility.readPref(contextg, "NWS_LOCATION_" + params[0], "")
+            val loc = Utility.readPref(contextg, "NWS_LOCATION_$nwsOffice", "")
             val addrSend = loc.replace(" ", "+")
             val xyStr = UtilityLocation.getXYFromAddressOSM(addrSend)
             toastStr = Location.locationSave(contextg, locNumToSaveStr, xyStr[0], xyStr[1], loc)
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            UtilityUI.makeSnackBar(linearLayout, toastStr)
-        }
+        UtilityUI.makeSnackBar(linearLayout, toastStr)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

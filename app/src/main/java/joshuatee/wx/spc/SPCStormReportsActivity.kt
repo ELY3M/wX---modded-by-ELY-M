@@ -62,6 +62,7 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.*
+import kotlinx.coroutines.*
 
 class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -75,6 +76,7 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         const val NO: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var no = ""
     private var imgUrl = ""
     private var textUrl = ""

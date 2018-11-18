@@ -285,19 +285,6 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
         super.onStop()
     }
 
-    /*  @SuppressLint("StaticFieldLeak")
-      private inner class GetAnimate : AsyncTask<String, String, String>() {
-  
-          override fun doInBackground(vararg params: String): String {
-              animDrawable = UtilityGOES16.getAnimation(contextg, productCode, sector, frameCnt)
-              return "Executed"
-          }
-  
-          override fun onPostExecute(result: String) {
-              UtilityImgAnim.startAnimation(animDrawable, img)
-          }
-      }*/
-
     private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
         animDrawable = withContext(Dispatchers.IO) { UtilityGOES16.getAnimation(contextg, productCode, sector, frameCnt) }
         UtilityImgAnim.startAnimation(animDrawable, img)

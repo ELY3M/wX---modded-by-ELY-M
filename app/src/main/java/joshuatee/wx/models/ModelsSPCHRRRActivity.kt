@@ -23,7 +23,6 @@ package joshuatee.wx.models
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.content.res.Configuration
 
@@ -48,9 +47,11 @@ import joshuatee.wx.ui.ObjectSpinner
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.util.*
+import kotlinx.coroutines.*
 
 class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener, OnItemSelectedListener {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var spRun: ObjectSpinner
     private lateinit var spTime: ObjectSpinner
     private lateinit var spSector: ObjectSpinner
@@ -133,17 +134,17 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             Utility.writePref(this, prefParam, param)
             Utility.writePref(this, prefParamLabel, paramLabel)
             modelParmSelected(param)
-            GetContent().execute()
+            getContent()
         }
         model = "HRRR"
         Utility.writePref(this, prefModel, model)
         setupHRRR()
-        GetRunStatus().execute()
+        getRunStatus()
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         if (spinnerRunRan && spinnerTimeRan && spinnerSectorRan) {
-            GetContent().execute()
+            getContent()
         } else {
             when (parent.id) {
                 R.id.spinner_run -> if (!spinnerRunRan)
@@ -162,38 +163,29 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
 
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun onPreExecute() {
-            run = spRun.selectedItem.toString()
-            time = spTime.selectedItem.toString()
-            sector = spSector.selectedItem.toString()
-            time = UtilityStringExternal.truncate(time, 2)
-            Utility.writePref(contextg, prefSector, sector)
-        }
-
-        override fun doInBackground(vararg params: String): String {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        run = spRun.selectedItem.toString()
+        time = spTime.selectedItem.toString()
+        sector = spSector.selectedItem.toString()
+        time = UtilityStringExternal.truncate(time, 2)
+        Utility.writePref(contextg, prefSector, sector)
+        withContext(Dispatchers.IO) {
             displayData.bitmap[curImg] = UtilityModelSPCHRRRInputOutput.getImage(contextg, sector, run, time, rtd.validTime, overlayImg, modelparmsImg)
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            displayData.img[curImg].visibility = View.VISIBLE
-            displayData.img[curImg].setImageDrawable(UtilityImg.bitmapToLayerDrawable(contextg, displayData.bitmap[curImg]))
-            displayData.img[curImg].setMaxZoom(4f)
-            animRan = false
-            if (!firstRun) {
-                displayData.img[curImg].setZoom(MyApplication.spchrrrZoom, MyApplication.spchrrrX, MyApplication.spchrrrY)
-                firstRun = true
-                if (UIPreferences.fabInModels) {
-                    fab1.setVisibility(View.VISIBLE)
-                    fab2.setVisibility(View.VISIBLE)
-                }
+        displayData.img[curImg].visibility = View.VISIBLE
+        displayData.img[curImg].setImageDrawable(UtilityImg.bitmapToLayerDrawable(contextg, displayData.bitmap[curImg]))
+        displayData.img[curImg].setMaxZoom(4f)
+        animRan = false
+        if (!firstRun) {
+            displayData.img[curImg].setZoom(MyApplication.spchrrrZoom, MyApplication.spchrrrX, MyApplication.spchrrrY)
+            firstRun = true
+            if (UIPreferences.fabInModels) {
+                fab1.setVisibility(View.VISIBLE)
+                fab2.setVisibility(View.VISIBLE)
             }
-            imageLoaded = true
-            UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1).toString() + ")" + modelparmsImg.toString().replace("[", "").replace("]", ""))
         }
+        imageLoaded = true
+        UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1).toString() + ")" + modelparmsImg.toString().replace("[", "").replace("]", ""))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
@@ -213,15 +205,15 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             R.id.action_layer_cnty -> overlaySelected("cnty")
             R.id.action_layer_clear -> {
                 overlayImg.clear()
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_clear_params -> {
                 modelparmsImg.clear()
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_back -> UtilityModels.moveBack(spTime)
             R.id.action_forward -> UtilityModels.moveBack(spTime)
-            R.id.action_animate -> GetAnimate().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            R.id.action_animate -> getAnimate()
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     if (isStoragePermissionGranted) {
@@ -247,7 +239,6 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             overlayImg.remove(mesoS)
         else
             overlayImg.add(mesoS)
-        //GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
     private fun modelParmSelected(mesoS: String) {
@@ -257,50 +248,31 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             modelparmsImg.add(mesoS)
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetAnimate : AsyncTask<String, String, String>() {
-
-        internal var spinnerTimeValue: Int = 0
-        internal val timeAl = mutableListOf<String>()
-
-        override fun onPreExecute() {
-            spinnerTimeValue = spTime.selectedItemPosition
-            (spinnerTimeValue until spTime.size()).mapTo(timeAl) { spTime.getItemAtPosition(it).toString() }
-        }
-
-        override fun doInBackground(vararg params: String): String {
+    private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
+        val timeAl = mutableListOf<String>()
+        val spinnerTimeValue = spTime.selectedItemPosition
+        (spinnerTimeValue until spTime.size()).mapTo(timeAl) { spTime.getItemAtPosition(it).toString() }
+        withContext(Dispatchers.IO) {
             displayData.animDrawable[curImg] = UtilityModelSPCHRRRInputOutput.getAnimation(contextg, sector, run, rtd.validTime, spinnerTimeValue, spTime.list, overlayImg, modelparmsImg)
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            animRan = UtilityImgAnim.startAnimation(displayData.animDrawable[curImg], displayData.img[curImg])
-        }
+        animRan = UtilityImgAnim.startAnimation(displayData.animDrawable[curImg], displayData.img[curImg])
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetRunStatus : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            rtd = UtilityModelSPCHRRRInputOutput.runTime
-            return "Executed"
+    private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
+        rtd = withContext(Dispatchers.IO) { UtilityModelSPCHRRRInputOutput.runTime }
+        spRun.clear()
+        spRun.addAll(rtd.listRun)
+        spRun.notifyDataSetChanged()
+        miStatus.title = "in through " + rtd.imageCompleteStr
+        toolbar.title = rtd.imageCompleteStr
+        spRun.setSelection(0)
+        spTime.setSelection(0)
+        if (!firstRunTimeSet) {
+            firstRunTimeSet = true
+            spTime.setSelection(Utility.readPref(contextg, prefRunPosn, 0))
         }
-
-        override fun onPostExecute(result: String) {
-            spRun.clear()
-            spRun.addAll(rtd.listRun)
-            spRun.notifyDataSetChanged()
-            miStatus.title = "in through " + rtd.imageCompleteStr
-            toolbar.title = rtd.imageCompleteStr
-            spRun.setSelection(0)
-            spTime.setSelection(0)
-            if (!firstRunTimeSet) {
-                firstRunTimeSet = true
-                spTime.setSelection(Utility.readPref(contextg, prefRunPosn, 0))
-            }
-            spTime.notifyDataSetChanged()
-            GetContent().execute()
-        }
+        spTime.notifyDataSetChanged()
+        getContent()
     }
 
     private fun setupHRRR() {

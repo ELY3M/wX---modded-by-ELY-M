@@ -23,7 +23,6 @@ package joshuatee.wx.models
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.content.res.Configuration
 import java.util.Locale
@@ -46,6 +45,7 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityShare
+import kotlinx.coroutines.*
 
 class ModelsGLCFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener, OnItemSelectedListener {
 
@@ -54,6 +54,7 @@ class ModelsGLCFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCl
     // http://www.glerl.noaa.gov/res/glcfs
     //
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var animRan = false
     private var paramLabel = ""
     private var spinnerTimeRan = false
@@ -118,15 +119,15 @@ class ModelsGLCFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCl
             paramLabel = drw.getLabel(position)
             Utility.writePref(this, "MODEL_GLCFS_PARAM_LAST_USED", displayData.param[curImg])
             Utility.writePref(this, "MODEL_GLCFS_PARAM_LAST_USED_LABEL", paramLabel)
-            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContent()
         }
         setupGLCFS()
-        GetContent().execute()
+        getContent()
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         if (spinnerTimeRan && spinnerSectorRan) {
-            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContent()
         } else {
             when (parent.id) {
                 R.id.spinner_time -> if (!spinnerTimeRan)
@@ -139,43 +140,32 @@ class ModelsGLCFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCl
 
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        toolbar.subtitle = paramLabel
+        time = spTime.selectedString
+        val sectorOrig = spSector.selectedString
+        sector = ""
+        if (sectorOrig.split(" ").size > 1) {
+            sector = sectorOrig.split(" ")[1].substring(0, 1).toLowerCase()
+        }
+        paramTmp = displayData.param[curImg]
+        Utility.writePref(contextg, "MODEL_GLCFS_SECTOR_LAST_USED", sectorOrig)
 
-        internal var sectorOrig: String = ""
+        // http://www.glerl.noaa.gov/res/glcfs/fcast/swv+05.gif
+        displayData.bitmap[curImg] = withContext(Dispatchers.IO) { UtilityModelGLCFSInputOutput.getImage(sector, paramTmp, time) }
 
-        override fun onPreExecute() {
-            toolbar.subtitle = paramLabel
-            time = spTime.selectedString
-            sectorOrig = spSector.selectedString
-            sector = ""
-            if (sectorOrig.split(" ").size > 1) {
-                sector = sectorOrig.split(" ")[1].substring(0, 1).toLowerCase()
+        displayData.img[curImg].visibility = View.VISIBLE
+        displayData.img[curImg].setImageDrawable(UtilityImg.bitmapToLayerDrawable(contextg, displayData.bitmap[curImg]))
+        animRan = false
+        if (!firstRun) {
+            UtilityImg.imgRestorePosnZoom(contextg, displayData.img[curImg], "GLCFS")
+            firstRun = true
+            if (UIPreferences.fabInModels) {
+                fab1.setVisibility(View.VISIBLE)
+                fab2.setVisibility(View.VISIBLE)
             }
-            paramTmp = displayData.param[curImg]
-            Utility.writePref(contextg, "MODEL_GLCFS_SECTOR_LAST_USED", sectorOrig)
         }
-
-        override fun doInBackground(vararg params: String): String {
-            // http://www.glerl.noaa.gov/res/glcfs/fcast/swv+05.gif
-            displayData.bitmap[curImg] = UtilityModelGLCFSInputOutput.getImage(sector, paramTmp, time)
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            displayData.img[curImg].visibility = View.VISIBLE
-            displayData.img[curImg].setImageDrawable(UtilityImg.bitmapToLayerDrawable(contextg, displayData.bitmap[curImg]))
-            animRan = false
-            if (!firstRun) {
-                UtilityImg.imgRestorePosnZoom(contextg, displayData.img[curImg], "GLCFS")
-                firstRun = true
-                if (UIPreferences.fabInModels) {
-                    fab1.setVisibility(View.VISIBLE)
-                    fab2.setVisibility(View.VISIBLE)
-                }
-            }
-            imageLoaded = true
-        }
+        imageLoaded = true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
@@ -185,7 +175,7 @@ class ModelsGLCFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCl
         when (item.itemId) {
             R.id.action_back -> UtilityModels.moveBack(spTime)
             R.id.action_forward -> UtilityModels.moveForward(spTime)
-            R.id.action_animate -> GetAnimate().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            R.id.action_animate -> getAnimate()
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     if (isStoragePermissionGranted) {
@@ -206,23 +196,10 @@ class ModelsGLCFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCl
         return true
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetAnimate : AsyncTask<String, String, String>() {
-
-        internal var spinnerTimeValue: Int = 0
-
-        override fun onPreExecute() {
-            spinnerTimeValue = spTime.selectedItemPosition
-        }
-
-        override fun doInBackground(vararg params: String): String {
-            displayData.animDrawable[curImg] = UtilityModelGLCFSInputOutput.getAnimation(contextg, sector, paramTmp, spinnerTimeValue, spTime.list)
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            animRan = UtilityImgAnim.startAnimation(displayData.animDrawable[curImg], displayData.img[curImg])
-        }
+    private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
+        val spinnerTimeValue = spTime.selectedItemPosition
+        displayData.animDrawable[curImg] = withContext(Dispatchers.IO) { UtilityModelGLCFSInputOutput.getAnimation(contextg, sector, paramTmp, spinnerTimeValue, spTime.list) }
+        animRan = UtilityImgAnim.startAnimation(displayData.animDrawable[curImg], displayData.img[curImg])
     }
 
     private fun setupGLCFS() {

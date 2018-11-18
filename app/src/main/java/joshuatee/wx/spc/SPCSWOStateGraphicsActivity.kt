@@ -22,7 +22,6 @@
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -44,6 +43,7 @@ import joshuatee.wx.util.UtilityShare
 
 import joshuatee.wx.STATE_ARR
 import joshuatee.wx.util.Utility
+import kotlinx.coroutines.*
 
 class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelectedListener, OnMenuItemClickListener {
 
@@ -56,6 +56,7 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
         const val NO: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var turlDay = ""
     private var imgUrl = ""
     private lateinit var img: TouchImageView2
@@ -81,34 +82,21 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
     }
 
     override fun onRestart() {
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
         super.onRestart()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun onPreExecute() {
-            title = "$nws1StateCurrent SWO D$turlDay"
-            imgUrl = UtilitySPCSWO.getSWOStateURL(nws1StateCurrent, turlDay)
-            //imgUrl = "http://www.spc.noaa.gov/public/state/images/" + nws1StateCurrent + "_swody" + turlDay + ".png"
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        title = "$nws1StateCurrent SWO D$turlDay"
+        imgUrl = UtilitySPCSWO.getSWOStateURL(nws1StateCurrent, turlDay)
+        bitmap = withContext(Dispatchers.IO) { imgUrl.getImage() }
+        img.visibility = View.VISIBLE
+        img.setImageBitmap(bitmap)
+        if (!firstRun) {
+            img.setZoom(imgPrefToken)
+            firstRun = true
         }
-
-        override fun doInBackground(vararg params: String): String {
-            bitmap = imgUrl.getImage()
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            img.visibility = View.VISIBLE
-            img.setImageBitmap(bitmap)
-            //img.resetZoom()
-            if (!firstRun) {
-                img.setZoom(imgPrefToken)
-                firstRun = true
-            }
-            imageLoaded = true
-        }
+        imageLoaded = true
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -126,7 +114,7 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
         }
         img.setMaxZoom(3.0f)
         nws1StateCurrent = MyApplication.colon.split(STATE_ARR[pos])[0]
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {}

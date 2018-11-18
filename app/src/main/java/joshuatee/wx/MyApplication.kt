@@ -194,8 +194,7 @@ class MyApplication : Application() {
         var nexradRadarBackgroundColor: Int = 0
         var wxoglSize: Int = 0
         var wxoglRememberLocation: Boolean = false
-        var wxoglLocationAutorefresh: Boolean = false
-        var wxoglkeepscreenon: Boolean = false
+        var wxoglRadarAutorefresh: Boolean = false
         var wfoFav: String = ""
         var ridFav: String = ""
         var sndFav: String = ""
@@ -358,8 +357,7 @@ class MyApplication : Application() {
             nexradRadarBackgroundColor = getInitialPreference("NEXRAD_RADAR_BACKGROUND_COLOR", Color.rgb(0, 0, 0))
             wxoglSize = getInitialPreference("WXOGL_SIZE", 8)
             wxoglRememberLocation = getInitialPreference("WXOGL_REMEMBER_LOCATION", "false")
-            wxoglLocationAutorefresh = getInitialPreference("LOCATION_AUTOREFRESH", "false")
-            wxoglkeepscreenon = getInitialPreference("KEEP_SCREEN_ON", "false")
+            wxoglRadarAutorefresh = getInitialPreference("RADAR_AUTOREFRESH", "false")
             wfoFav = getInitialPreferenceString("WFO_FAV", prefSeperator)
             ridFav = getInitialPreferenceString("RID_FAV", prefSeperator)
             sndFav = getInitialPreferenceString("SND_FAV", prefSeperator)
@@ -522,8 +520,9 @@ class MyApplication : Application() {
             radarColorHw = getInitialPreference("RADAR_COLOR_HW", Color.BLUE)
             radarColorHwExt = getInitialPreference("RADAR_COLOR_HW_EXT", Color.BLUE)
             radarColorState = getInitialPreference("RADAR_COLOR_STATE", Color.WHITE)
+            radarColorTorWatch = getInitialPreference("RADAR_COLOR_TOR_WATCH", Color.rgb(113,0,0)) //darker red than tornado warning polygon
             radarColorSvrWatch = getInitialPreference("RADAR_COLOR_SVR_WATCH", Color.BLUE)
-            radarColorTorWatch = getInitialPreference("RADAR_COLOR_TOR_WATCH", Color.rgb(113,0,0)) //darker red than torning warning polygon
+
             radarColorTor = getInitialPreference("RADAR_COLOR_TOR", Color.RED)
             radarColorSvr = getInitialPreference("RADAR_COLOR_SVR", Color.YELLOW)
             radarColorEww = getInitialPreference("RADAR_COLOR_EWW", Color.GRAY)

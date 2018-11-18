@@ -25,7 +25,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import java.util.Locale
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.content.res.Configuration
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -54,6 +53,7 @@ import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityString
+import kotlinx.coroutines.*
 
 class ModelsSPCSREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener, OnItemSelectedListener {
 
@@ -66,6 +66,7 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         const val INFO: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var initSpinnerSetup = false
     private var animRan = false
     private var runStr = "f000"
@@ -160,7 +161,7 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             refreshSpinner()
             true
         }
-        GetRunStatus().execute()
+        getRunStatus()
     }
 
     override fun onRestart() {
@@ -169,103 +170,75 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         super.onRestart()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun onPreExecute() {
-            if (MyApplication.srefFav.contains(":" + displayData.param[curImg] + ":"))
-                star.setIcon(MyApplication.STAR_ICON)
-            else
-                star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-            runStr = UtilityStringExternal.truncate(spTime.selectedItem.toString(), 4)
-            if (spRun.list.size > 0) {
-                runModelStr = MyApplication.space.split(spRun.selectedItem.toString().replace("z", ""))[0]
-            }
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        if (MyApplication.srefFav.contains(":" + displayData.param[curImg] + ":"))
+            star.setIcon(MyApplication.STAR_ICON)
+        else
+            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+        runStr = UtilityStringExternal.truncate(spTime.selectedItem.toString(), 4)
+        if (spRun.list.size > 0) {
+            runModelStr = MyApplication.space.split(spRun.selectedItem.toString().replace("z", ""))[0]
         }
-
-        override fun doInBackground(vararg params: String): String {
+        withContext(Dispatchers.IO) {
             (0 until numPanes).forEach { displayData.bitmap[it] = UtilityModelsSPCSREFInputOutput.getImage(contextg, displayData.param[it], runModelStr, runStr) }
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            (0 until numPanes).forEach {
-                if (numPanes > 1)
-                    UtilityImg.resizeViewSetImgByHeight(displayData.bitmap[it], displayData.img[it])
-                else
-                    displayData.img[it].setImageBitmap(displayData.bitmap[it])
-                displayData.img[it].setMaxZoom(4f)
-            }
-            animRan = false
-            if (!firstRun) {
-                (0 until numPanes).forEach { UtilityImg.imgRestorePosnZoom(contextg, displayData.img[it], modelProvider + numPanes.toString() + it.toString()) }
-                if (UIPreferences.fabInModels && numPanes < 2) {
-                    fab1.setVisibility(View.VISIBLE)
-                    fab2.setVisibility(View.VISIBLE)
-                }
-                firstRun = true
-            }
+        (0 until numPanes).forEach {
             if (numPanes > 1)
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1).toString() + ")" + displayData.param[0] + "/" + displayData.param[1])
-            imageLoaded = true
-            (0 until numPanes).forEach {
-                Utility.writePref(contextg, prefParam + it.toString(), displayData.param[it])
-                Utility.writePref(contextg, prefParamLabel + it.toString(), displayData.paramLabel[it])
+                UtilityImg.resizeViewSetImgByHeight(displayData.bitmap[it], displayData.img[it])
+            else
+                displayData.img[it].setImageBitmap(displayData.bitmap[it])
+            displayData.img[it].setMaxZoom(4f)
+        }
+        animRan = false
+        if (!firstRun) {
+            (0 until numPanes).forEach { UtilityImg.imgRestorePosnZoom(contextg, displayData.img[it], modelProvider + numPanes.toString() + it.toString()) }
+            if (UIPreferences.fabInModels && numPanes < 2) {
+                fab1.setVisibility(View.VISIBLE)
+                fab2.setVisibility(View.VISIBLE)
             }
-            imageLoaded = true
+            firstRun = true
+        }
+        if (numPanes > 1)
+            UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1).toString() + ")" + displayData.param[0] + "/" + displayData.param[1])
+        imageLoaded = true
+        (0 until numPanes).forEach {
+            Utility.writePref(contextg, prefParam + it.toString(), displayData.param[it])
+            Utility.writePref(contextg, prefParamLabel + it.toString(), displayData.paramLabel[it])
+        }
+        imageLoaded = true
+    }
+
+    private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
+        rtd = withContext(Dispatchers.IO) { UtilityModelsSPCSREFInputOutput.runTime }
+        spRun.clear()
+        spRun.addAll(rtd.listRun)
+        spRun.notifyDataSetChanged()
+        (0 until spTime.size()).forEach { spTime[it] = spTime[it] + " " + UtilityModels.convertTimeRuntoTimeString(rtd.mostRecentRun.replace("z", ""), spTime[it].replace("f", ""), false) }
+        spTime.notifyDataSetChanged()
+        spRun.setSelection(0)
+        initSpinnerSetup = true
+        miStatus.title = Utility.fromHtml(rtd.imageCompleteStr.replace("in through", "-"))
+        val titleTmpArr = MyApplication.space.split(rtd.imageCompleteStr.replace("in through", "-"))
+        if (titleTmpArr.size > 2) {
+            toolbar.subtitle = Utility.fromHtml(titleTmpArr[2])
+        }
+        if (!firstRunTimeSet) {
+            firstRunTimeSet = true
+            spTime.setSelection(Utility.readPref(contextg, prefRunPosn, 0))
+        }
+        spTime.notifyDataSetChanged()
+        if (spTime.selectedItemPosition == 0 || numPanes > 1) {
+            getContent()
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetRunStatus : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            rtd = UtilityModelsSPCSREFInputOutput.runTime
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            spRun.clear()
-            spRun.addAll(rtd.listRun)
-            spRun.notifyDataSetChanged()
-            (0 until spTime.size()).forEach { spTime[it] = spTime[it] + " " + UtilityModels.convertTimeRuntoTimeString(rtd.mostRecentRun.replace("z", ""), spTime[it].replace("f", ""), false) }
-            spTime.notifyDataSetChanged()
-            spRun.setSelection(0)
-            initSpinnerSetup = true
-            miStatus.title = Utility.fromHtml(rtd.imageCompleteStr.replace("in through", "-"))
-            val titleTmpArr = MyApplication.space.split(rtd.imageCompleteStr.replace("in through", "-"))
-            if (titleTmpArr.size > 2) {
-                toolbar.subtitle = Utility.fromHtml(titleTmpArr[2])
-            }
-            if (!firstRunTimeSet) {
-                firstRunTimeSet = true
-                spTime.setSelection(Utility.readPref(contextg, prefRunPosn, 0))
-            }
-            spTime.notifyDataSetChanged()
-            if (spTime.selectedItemPosition == 0 || numPanes > 1) {
-                GetContent().execute()
-            }
-        }
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private inner class AnimateRadar : AsyncTask<String, String, String>() {
-
-        internal var spinnerTimeValue: Int = 0
-
-        override fun onPreExecute() {
-            spinnerTimeValue = spTime.selectedItemPosition
-        }
-
-        override fun doInBackground(vararg params: String): String {
+    private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
+        val spinnerTimeValue = spTime.selectedItemPosition
+        withContext(Dispatchers.IO) {
             (0 until numPanes).forEach { displayData.animDrawable[it] = UtilityModelsSPCSREFInputOutput.getAnimation(contextg, displayData.param[it], runModelStr, spinnerTimeValue, spTime.list) }
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            (0 until numPanes).forEach { UtilityImgAnim.startAnimation(displayData.animDrawable[it], displayData.img[it]) }
-            animRan = true
-        }
+        (0 until numPanes).forEach { UtilityImgAnim.startAnimation(displayData.animDrawable[it], displayData.img[it]) }
+        animRan = true
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -301,7 +274,7 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                         UtilityShare.shareBitmap(this, title + " " + spTime.selectedItem.toString(), displayData.bitmap[0])
                 }
             }
-            R.id.action_animate -> AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            R.id.action_animate -> getAnimate()
             R.id.action_help -> showHelpTextDialog()
             else -> return super.onOptionsItemSelected(item)
         }
@@ -342,12 +315,12 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                     else -> {
                         displayData.param[curImg] = favList[pos]
                         if (initSpinnerSetup) {
-                            GetContent().execute()
+                            getContent()
                         }
                     }
                 }
             } else {
-                GetContent().execute()
+                getContent()
             }
         } else {
             when (parent.id) {

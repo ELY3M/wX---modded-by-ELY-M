@@ -23,7 +23,6 @@ package joshuatee.wx.models
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.content.res.Configuration
 import java.util.Locale
@@ -49,6 +48,7 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityShare
+import kotlinx.coroutines.*
 
 class ModelsNCEPActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener, OnItemSelectedListener {
 
@@ -61,6 +61,7 @@ class ModelsNCEPActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCli
         var INFO: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var animRan = false
     private var firstRun = false
     private var firstRunTimeSet = false
@@ -170,7 +171,7 @@ class ModelsNCEPActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCli
                 Utility.writePref(this, "MODEL_NCEP" + numPanes.toString() + "_PARAM_LAST_USED" + i.toString(), displayData.param[i])
                 Utility.writePref(this, "MODEL_NCEP" + numPanes.toString() + "_PARAM_LAST_USED_LABEL" + i.toString(), displayData.paramLabel[i])
             }
-            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContent()
         }
     }
 
@@ -263,10 +264,10 @@ class ModelsNCEPActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCli
                     setupFIREWX()
                 }
             }
-            GetRunStatus().execute()
+            getRunStatus()
         } else {
             if (firstRunTimeSet) {
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             } else {
                 when (parent.id) {
                     R.id.spinner_run -> if (!spinnerRunRan) spinnerRunRan = true
@@ -282,11 +283,14 @@ class ModelsNCEPActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCli
 
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
-        override fun doInBackground(vararg params: String): String {
+        run = spRun.selectedItem.toString()
+        time = spTime.selectedItem.toString()
+        sector = spSector.selectedItem.toString()
+        model = spModel.selectedItem.toString()
 
+        withContext(Dispatchers.IO) {
             if (model == "NAM4KM") model = "NAM-HIRES"
             if (model.contains("HRW") && model.contains("-AK")) model = model.replace("-AK", "")
             if (model.contains("HRW") && model.contains("-PR")) model = model.replace("-PR", "")
@@ -296,40 +300,31 @@ class ModelsNCEPActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCli
                 UtilityStringExternal.truncate(time, 5)
             Utility.writePref(contextg, "MODEL_NCEP" + numPanes.toString() + "_SECTOR_LAST_USED", sector)
             (0 until numPanes).forEach { displayData.bitmap[it] = UtilityModelNCEPInputOutput.getImage(model, sector, displayData.param[it], run, time) }
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            (0 until numPanes).forEach {
-                displayData.img[it].visibility = View.VISIBLE
-                if (numPanes > 1)
-                    UtilityImg.resizeViewSetImgByHeight(displayData.bitmap[it], displayData.img[it])
-                else
-                    displayData.img[it].setImageBitmap(displayData.bitmap[it])
-                displayData.img[it].setMaxZoom(4f)
-            }
-            animRan = false
-            if (!firstRun) {
-                (0 until numPanes).forEach { UtilityImg.imgRestorePosnZoom(contextg, displayData.img[it], "NCEP" + numPanes.toString() + it.toString()) }
-                if (UIPreferences.fabInModels && numPanes < 2) {
-                    fab1.setVisibility(View.VISIBLE)
-                    fab2.setVisibility(View.VISIBLE)
-                }
-                firstRun = true
-            }
+        (0 until numPanes).forEach {
+            displayData.img[it].visibility = View.VISIBLE
             if (numPanes > 1)
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1).toString() + ")" + displayData.param[0] + "/" + displayData.param[1])
+                UtilityImg.resizeViewSetImgByHeight(displayData.bitmap[it], displayData.img[it])
             else
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1).toString() + ")" + displayData.param[0])
-            imageLoaded = true
+                displayData.img[it].setImageBitmap(displayData.bitmap[it])
+            displayData.img[it].setMaxZoom(4f)
         }
+        animRan = false
+        if (!firstRun) {
+            (0 until numPanes).forEach { UtilityImg.imgRestorePosnZoom(contextg, displayData.img[it], "NCEP" + numPanes.toString() + it.toString()) }
+            if (UIPreferences.fabInModels && numPanes < 2) {
+                fab1.setVisibility(View.VISIBLE)
+                fab2.setVisibility(View.VISIBLE)
+            }
+            firstRun = true
+        }
+        if (numPanes > 1)
+            UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1).toString() + ")" + displayData.param[0] + "/" + displayData.param[1])
+        else
+            UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1).toString() + ")" + displayData.param[0])
+        imageLoaded = true
 
-        override fun onPreExecute() {
-            run = spRun.selectedItem.toString()
-            time = spTime.selectedItem.toString()
-            sector = spSector.selectedItem.toString()
-            model = spModel.selectedItem.toString()
-        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
@@ -339,7 +334,7 @@ class ModelsNCEPActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCli
         when (item.itemId) {
             R.id.action_back -> UtilityModels.moveBack(spTime)
             R.id.action_forward -> UtilityModels.moveForward(spTime)
-            R.id.action_animate -> GetAnimate().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            R.id.action_animate -> getAnimate()
             R.id.action_img1 -> {
                 curImg = 0
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1).toString() + ")" + displayData.param[0] + "/" + displayData.param[1])
@@ -369,60 +364,36 @@ class ModelsNCEPActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCli
         return true
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetAnimate : AsyncTask<String, String, String>() {
-
-        internal var spinnerTimeValue: Int = 0
-
-        override fun onPreExecute() {
-            spinnerTimeValue = spTime.selectedItemPosition
-        }
-
-        override fun doInBackground(vararg params: String): String {
+    private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
+        val spinnerTimeValue = spTime.selectedItemPosition
+        withContext(Dispatchers.IO) {
             (0 until numPanes).forEach { displayData.animDrawable[it] = UtilityModelNCEPInputOutput.getAnimation(contextg, model, sector, displayData.param[it], run, spinnerTimeValue, spTime.list) }
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            (0 until numPanes).forEach { UtilityImgAnim.startAnimation(displayData.animDrawable[it], displayData.img[it]) }
-            animRan = true
-        }
+        (0 until numPanes).forEach { UtilityImgAnim.startAnimation(displayData.animDrawable[it], displayData.img[it]) }
+        animRan = true
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetRunStatus : AsyncTask<String, String, String>() {
-
-        internal var spinnerSectorFirst = ""
-
-        override fun onPreExecute() {
-            spinnerSectorFirst = spSector.getItemAtPosition(0).toString()
+    private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
+        val spinnerSectorFirst = spSector.getItemAtPosition(0).toString()
+        rtd = withContext(Dispatchers.IO) { UtilityModelNCEPInputOutput.getRunTime(model, displayData.param[0], spinnerSectorFirst) }
+        time = rtd.mostRecentRun
+        spRun.notifyDataSetChanged()
+        spRun.setSelection(rtd.mostRecentRun)
+        if (model == "CFS" && 0 == spRun.selectedItemPosition) {
+            getContent()
         }
-
-        override fun doInBackground(vararg params: String): String {
-            rtd = UtilityModelNCEPInputOutput.getRunTime(model, displayData.param[0], spinnerSectorFirst)
-            return "Executed"
+        title = rtd.imageCompleteStr
+        miStatus.title = "in through " + rtd.imageCompleteStr
+        var tmpStr: String
+        (0 until spTime.size()).forEach {
+            tmpStr = MyApplication.space.split(spTime[it])[0]
+            spTime[it] = tmpStr + " " + UtilityModels.convertTimeRuntoTimeString(rtd.mostRecentRun.replace("Z", ""), tmpStr, true)
         }
-
-        override fun onPostExecute(result: String) {
-            time = rtd.mostRecentRun
-            spRun.notifyDataSetChanged()
-            spRun.setSelection(rtd.mostRecentRun)
-            if (model == "CFS" && 0 == spRun.selectedItemPosition) {
-                GetContent().execute()
-            }
-            title = rtd.imageCompleteStr
-            miStatus.title = "in through " + rtd.imageCompleteStr
-            var tmpStr: String
-            (0 until spTime.size()).forEach {
-                tmpStr = MyApplication.space.split(spTime[it])[0]
-                spTime[it] = tmpStr + " " + UtilityModels.convertTimeRuntoTimeString(rtd.mostRecentRun.replace("Z", ""), tmpStr, true)
-            }
-            if (!firstRunTimeSet) {
-                firstRunTimeSet = true
-                spTime.setSelection(Utility.readPref(contextg, prefRunPosn, 1))
-            }
-            spTime.notifyDataSetChanged()
+        if (!firstRunTimeSet) {
+            firstRunTimeSet = true
+            spTime.setSelection(Utility.readPref(contextg, prefRunPosn, 1))
         }
+        spTime.notifyDataSetChanged()
     }
 
     private fun addItemsOnSpinnerSectors(listSectorArr: List<String>) {

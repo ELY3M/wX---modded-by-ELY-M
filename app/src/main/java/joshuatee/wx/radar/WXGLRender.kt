@@ -106,7 +106,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private val mcdBuffers = ObjectOglBuffers(PolygonType.MCD, 0.0f)
     private val swoBuffers = ObjectOglBuffers()
     private val locdotBuffers = ObjectOglBuffers(PolygonType.LOCDOT, 0.0f)
-    ///private val locCircleBuffers = ObjectOglBuffers()
+    private val locIconBuffers = ObjectOglBuffers()
     private val wbCircleBuffers = ObjectOglBuffers(PolygonType.WIND_BARB_CIRCLE, 0.30f)
     private val colorSwo = IntArray(5)
     private var breakSize15 = 15000
@@ -140,12 +140,12 @@ class WXGLRender(private val context: Context) : Renderer {
                     it.draw(pn)
                 }
             }
-            /*
+
             if (locdotBuffers.isInitialized && MyApplication.locdotFollowsGps) {
-                locCircleBuffers.lenInit = locdotBuffers.lenInit
-                UtilityWXOGLPerf.genCircleLocdot(locCircleBuffers, pn, gpsX, gpsY)
+                locIconBuffers.lenInit = locdotBuffers.lenInit
+                UtilityWXOGLPerf.genCircleLocdot(locIconBuffers, pn, gpsX, gpsY)
             }
-            */
+
         }
     private var mSurfaceRatio = 0f
     var x: Float = 0f
@@ -444,16 +444,18 @@ class WXGLRender(private val context: Context) : Renderer {
             }
         }
         GLES20.glLineWidth(defaultLineWidth)
-        //drawTriangles(locdotBuffers)
-        drawLocation(locdotBuffers)
+
+        drawTriangles(locdotBuffers)
+        //drawLocation(locdotBuffers)
 
 
-        /*
-        if (MyApplication.locdotFollowsGps && locCircleBuffers.floatBuffer.capacity() != 0 && locCircleBuffers.indexBuffer.capacity() != 0 && locCircleBuffers.colorBuffer.capacity() != 0) {
-            locCircleBuffers.chunkCount = 1
-            drawPolygons(locCircleBuffers, 16)
+
+        if (MyApplication.locdotFollowsGps && locIconBuffers.floatBuffer.capacity() != 0 && locIconBuffers.indexBuffer.capacity() != 0) {
+            locIconBuffers.chunkCount = 1
+            //drawPolygons(locIconBuffers, 16)
+            drawLocation(locIconBuffers)
         }
-        */
+
 
         GLES20.glLineWidth(warnLineWidth)
         listOf(warningSpsBuffers, warningSvsBuffers, warningSmwBuffers, warningSvrBuffers, warningEwwBuffers, warningFfwBuffers, warningTorBuffers).forEach { drawPolygons(it, 8) }
@@ -466,7 +468,6 @@ class WXGLRender(private val context: Context) : Renderer {
     private fun drawLocation(buffers: ObjectOglBuffers) {
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
-            if (MyApplication.locdotFollowsGps) {
                 GLES20.glUseProgram(sp_loadimage)
                 mPositionHandle = GLES20.glGetAttribLocation(sp_loadimage, "vPosition")
                 GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
@@ -485,12 +486,6 @@ class WXGLRender(private val context: Context) : Renderer {
                 GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1)
                 //GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
                 GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
-            } else {
-                GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
-                GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, buffers.colorBuffer.slice().asFloatBuffer())
-                GLES20.glDrawElements(GLES20.GL_TRIANGLES, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
-            }
-
         }
     }
 
@@ -807,38 +802,37 @@ class WXGLRender(private val context: Context) : Renderer {
         constructTriangles(locdotBuffers)
 
 
-        /*
+
         //Circle around the location dot//
-        locCircleBuffers.triangleCount = 36
-        locCircleBuffers.initialize(32 * locCircleBuffers.triangleCount,
-                8 * locCircleBuffers.triangleCount,
-                6 * locCircleBuffers.triangleCount,
+        locIconBuffers.triangleCount = 1 //36
+        locIconBuffers.initialize(32 * locIconBuffers.triangleCount,
+                8 * locIconBuffers.triangleCount,
+                6 * locIconBuffers.triangleCount,
                 MyApplication.radarColorLocdot)
 
 
 
         if (MyApplication.radarUseJni) {
-            JNI.colorGen(locCircleBuffers.colorBuffer, 2 * locCircleBuffers.triangleCount, locCircleBuffers.colorArray)
+            JNI.colorGen(locIconBuffers.colorBuffer, 2 * locIconBuffers.triangleCount, locIconBuffers.colorArray)
         } else {
-            UtilityWXOGLPerf.colorGen(locCircleBuffers.colorBuffer, 2 * locCircleBuffers.triangleCount, locCircleBuffers.colorArray)
+            UtilityWXOGLPerf.colorGen(locIconBuffers.colorBuffer, 2 * locIconBuffers.triangleCount, locIconBuffers.colorArray)
         }
 
         if (MyApplication.locdotFollowsGps) {
-            locCircleBuffers.lenInit = locdotBuffers.lenInit
-            UtilityWXOGLPerf.genCircleLocdot(locCircleBuffers, pn, gpsX, gpsY)
-            //UtilityIcons.Locdot(locCircleBuffers)
+            locIconBuffers.lenInit = locdotBuffers.lenInit
+            UtilityWXOGLPerf.genCircleLocdot(locIconBuffers, pn, gpsX, gpsY)
 
         }
-        */
+
 
 
         locdotBuffers.isInitialized = true
-        //locCircleBuffers.isInitialized = true
+        locIconBuffers.isInitialized = true
     }
 
     fun deconstructLocationDot() {
         locdotBuffers.isInitialized = false
-        //locCircleBuffers.isInitialized = false
+        locIconBuffers.isInitialized = false
     }
 
     fun constructSpotters() {

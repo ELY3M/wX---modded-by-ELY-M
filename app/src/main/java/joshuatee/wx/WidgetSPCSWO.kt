@@ -21,17 +21,18 @@
 
 package joshuatee.wx
 
-import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
-import android.os.AsyncTask
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
+import kotlinx.coroutines.*
 
 class WidgetSPCSWO : AppWidgetProvider() {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var contextg: Context
+    private val type = SPCSWO
 
     override fun onDisabled(context: Context) {
         UtilityWidget.disableWidget(context, WidgetFile.SPCSWO)
@@ -41,24 +42,18 @@ class WidgetSPCSWO : AppWidgetProvider() {
     override fun onEnabled(context: Context) {
         UtilityWidget.enableWidget(context, WidgetFile.SPCSWO)
         contextg = context
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
         super.onEnabled(context)
     }
 
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
-        UtilityWidget.update(context, SPCSWO)
+        UtilityWidget.update(context, type)
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            UtilityWidgetDownload.download(contextg, SPCSWO)
-            return "Executed"
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        withContext(Dispatchers.IO) {
+            UtilityWidgetDownload.download(contextg, type)
         }
-
-        override fun onPostExecute(result: String) {
-            UtilityWidget.update(contextg, SPCSWO)
-        }
+        UtilityWidget.update(contextg, type)
     }
 } 

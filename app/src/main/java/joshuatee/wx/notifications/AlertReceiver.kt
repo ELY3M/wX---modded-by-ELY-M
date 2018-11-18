@@ -21,7 +21,6 @@
 
 package joshuatee.wx.notifications
 
-import android.os.AsyncTask
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -35,7 +34,7 @@ class AlertReceiver : BroadcastReceiver() {
     // This is the main code that handles notifications
 
     override fun onReceive(context1: Context, intent1: Intent) {
-        BackgroundFetch(context1).GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        BackgroundFetch(context1).getContent()
         UtilityLog.d("wx", "legacy jobservice ran BackgroundFetch")
         Utility.writePref(context1, "JOBSERVICE_TIME_LAST_RAN", UtilityTime.getCurrentLocalTimeAsString())
     }

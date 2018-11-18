@@ -40,7 +40,7 @@ internal object UtilityColor {
             Color.BLUE
         }
         "RADAR_COLOR_STATE" -> Color.WHITE
-        "RADAR_COLOR_TOR_WATCH" -> Color.RED
+        "RADAR_COLOR_TOR_WATCH" -> Color.rgb(113,0,0) //darker red than tornado warning polygon
         "RADAR_COLOR_SVR_WATCH" -> Color.BLUE
         "RADAR_COLOR_TOR" -> Color.RED
         "RADAR_COLOR_SVR" -> Color.YELLOW

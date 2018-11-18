@@ -24,7 +24,6 @@ package joshuatee.wx.wpc
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -38,9 +37,11 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.util.UtilityShare
+import kotlinx.coroutines.*
 
 class WPCRainfallForecastActivity : BaseActivity() {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val bmAl = mutableListOf<Bitmap>()
     private lateinit var ll: LinearLayout
     private lateinit var contextg: Context
@@ -56,26 +57,20 @@ class WPCRainfallForecastActivity : BaseActivity() {
         contextg = this
         title = getString(UtilityWPCRainfallForecast.ACTIVITY_TITLE_INT)
         ll = findViewById(R.id.ll)
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        withContext(Dispatchers.IO) {
             UtilityWPCRainfallForecast.PROD_IMG_URL.forEach { bmAl.add(it.getImage()) }
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            var card: ObjectCardImage
-            bmAl.forEach { bitmap ->
-                card = ObjectCardImage(contextg, bitmap)
-                val prodTextUrlLocal = UtilityWPCRainfallForecast.PROD_TEXT_URL[bmAl.indexOf(bitmap)]
-                val prodTitleLocal = UtilityWPCRainfallForecast.PROD_TITLE[bmAl.indexOf(bitmap)] + " - " + getString(UtilityWPCRainfallForecast.ACTIVITY_TITLE_INT)
-                card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(prodTextUrlLocal, prodTitleLocal)) })
-                ll.addView(card.card)
-            }
+        var card: ObjectCardImage
+        bmAl.forEach { bitmap ->
+            card = ObjectCardImage(contextg, bitmap)
+            val prodTextUrlLocal = UtilityWPCRainfallForecast.PROD_TEXT_URL[bmAl.indexOf(bitmap)]
+            val prodTitleLocal = UtilityWPCRainfallForecast.PROD_TITLE[bmAl.indexOf(bitmap)] + " - " + getString(UtilityWPCRainfallForecast.ACTIVITY_TITLE_INT)
+            card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(prodTextUrlLocal, prodTitleLocal)) })
+            ll.addView(card.card)
         }
     }
 

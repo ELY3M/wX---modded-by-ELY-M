@@ -23,7 +23,6 @@ package joshuatee.wx.canada
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -40,9 +39,11 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityString
+import kotlinx.coroutines.*
 
 class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var prod = "focn45"
     private var description = "Significant Weather Discussion, PASPC"
     private var sigHtmlTmp = ""
@@ -63,31 +64,22 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         linearLayout.addView(ObjectCALegal(this, "").card)
         prod = Utility.readPref(this, "CA_TEXT_LASTUSED", prod)
         description = Utility.readPref(this, "CA_TEXT_LASTUSED_TITLE", description)
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun onPreExecute() {
-            title = description
-            sv.smoothScrollTo(0, 0)
-        }
-
-        override fun doInBackground(vararg params: String): String {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        title = description
+        sv.smoothScrollTo(0, 0)
+        withContext(Dispatchers.IO) {
             sigHtmlTmp = if (prod != "https://weather.gc.ca/forecast/public_bulletins_e.html?Bulletin=fpcn48.cwao") {
                 UtilityDownload.getTextProduct(contextg, prod)
             } else {
                 UtilityString.getHTMLandParseSep(prod, "<pre>(.*?)</pre>")
             }
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            c0.setTextAndTranslate(Utility.fromHtml(sigHtmlTmp))
-            Utility.writePref(contextg, "CA_TEXT_LASTUSED", prod)
-            Utility.writePref(contextg, "CA_TEXT_LASTUSED_TITLE", description)
-        }
+        c0.setTextAndTranslate(Utility.fromHtml(sigHtmlTmp))
+        Utility.writePref(contextg, "CA_TEXT_LASTUSED", prod)
+        Utility.writePref(contextg, "CA_TEXT_LASTUSED_TITLE", description)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -110,7 +102,7 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.id.action_n_ab -> setProdAndDescription("awcn16", "Weather Summary N. Alberta")
             else -> return super.onOptionsItemSelected(item)
         }
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
         return true
     }
 

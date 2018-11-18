@@ -23,7 +23,6 @@ package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.ContextMenu
@@ -44,6 +43,7 @@ import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
+import kotlinx.coroutines.*
 
 class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -58,6 +58,7 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         const val NO: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var no = ""
     private lateinit var turl: Array<String>
     private lateinit var c0: ObjectCardImage
@@ -89,27 +90,19 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
             }
         }
         title = objWatch.title
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            objWatch.getData(contextg)
-            return "Executed"
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        withContext(Dispatchers.IO) { objWatch.getData(contextg) }
+        c1.setText(Utility.fromHtml(objWatch.text))
+        if (turl[2] == "MCD" || turl[2] == "MPD") {
+            toolbar.subtitle = objWatch.textForSubtitle
         }
-
-        override fun onPostExecute(result: String) {
-            c1.setText(Utility.fromHtml(objWatch.text))
-            if (turl[2] == "MCD" || turl[2] == "MPD") {
-                toolbar.subtitle = objWatch.textForSubtitle
-            }
-            c0.setImage(objWatch.bitmap)
-            registerForContextMenu(c0.img)
-            if (turl[1] == "sound") {
-                UtilityTTS.synthesizeTextAndPlay(applicationContext, objWatch.text, objWatch.prod)
-            }
+        c0.setImage(objWatch.bitmap)
+        registerForContextMenu(c0.img)
+        if (turl[1] == "sound") {
+            UtilityTTS.synthesizeTextAndPlay(applicationContext, objWatch.text, objWatch.prod)
         }
     }
 
@@ -128,27 +121,19 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         return true
     }
 
-    private fun saveLocation(nwsOffice: String) {
-        SaveLoc().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, nwsOffice)
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private inner class SaveLoc : AsyncTask<String, String, String>() {
-        internal var toastStr = ""
-        override fun doInBackground(vararg params: String): String {
+    private fun saveLocation(location: String) = GlobalScope.launch(uiDispatcher) {
+        // FIXME not everything needs to be in IO
+        var toastStr = ""
+        withContext(Dispatchers.IO) {
             var locNumIntCurrent = Location.numLocations
             locNumIntCurrent += 1
             val locNumToSaveStr = locNumIntCurrent.toString()
-            val loc = Utility.readPref(contextg, "NWS_LOCATION_" + params[0], "")
+            val loc = Utility.readPref(contextg, "NWS_LOCATION_$location", "")
             val addrSend = loc.replace(" ", "+")
             val xyStr = UtilityLocation.getXYFromAddressOSM(addrSend)
             toastStr = Location.locationSave(contextg, locNumToSaveStr, xyStr[0], xyStr[1], loc)
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            UtilityUI.makeSnackBar(linearLayout, toastStr)
-        }
+        UtilityUI.makeSnackBar(linearLayout, toastStr)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

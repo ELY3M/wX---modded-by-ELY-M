@@ -33,7 +33,6 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.opengl.GLSurfaceView
-import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -283,19 +282,13 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             getContentSerial()
         else
             getContentParallel()
-        if (MyApplication.wxoglLocationAutorefresh) {
+        if (MyApplication.wxoglRadarAutorefresh) {
             mInterval = 60000 * Utility.readPref(this, "RADAR_REFRESH_INTERVAL", 3)
             locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                 locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 20000.toLong(), 30.0f, locationListener)
-            if (MyApplication.wxoglkeepscreenon) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
-                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            }
-            if (MyApplication.sn_locationreport) {
-                Log.i(TAG, "sending sn location report")
-            }
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             mHandler = Handler()
             startRepeatingTask()
         }
@@ -322,7 +315,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             getContentSerial()
         else
             getContentParallel()
-        if (MyApplication.wxoglLocationAutorefresh) {
+        if (MyApplication.wxoglRadarAutorefresh) {
             mInterval = 60000 * Utility.readPref(this, "RADAR_REFRESH_INTERVAL", 3)
             locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             locationManager?.let {
@@ -330,10 +323,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                         || ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
                     it.requestLocationUpdates(LocationManager.GPS_PROVIDER, 20000.toLong(), 30.toFloat(), locationListener)
             }
-            if (MyApplication.wxoglkeepscreenon) {
-                window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
-                window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            }
+            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             mHandler = Handler()
             startRepeatingTask()
         }
@@ -421,23 +411,17 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         //}
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class AnimateRadar : AsyncTask<String, String, String>() {
-
-        override fun onPreExecute() {
-            if (!oglInView) {
-                glviewShow()
-                oglInView = true
-            }
-            inOglAnim = true
-            animRan = true
+    private fun getAnimate(frameCntStr: String) = GlobalScope.launch(uiDispatcher) {
+        if (!oglInView) {
+            glviewShow()
+            oglInView = true
         }
-
-        override fun doInBackground(vararg params: String): String {
+        inOglAnim = true
+        animRan = true
+        withContext(Dispatchers.IO) {
             var fh: File
             var timeMilli: Long
             var priorTime: Long
-            val frameCntStr = params[0]
             frameCntStrGlobal = frameCntStr
             val animArray = Array(numPanes) { Array(frameCntStr.toIntOrNull() ?: 0) { "" } }
             numPanesArr.forEach { z ->
@@ -487,7 +471,10 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                             oglrArr[z].constructPolygons((z + 1).toString() + oglrArr[z].product + "nexrad_anim" + r.toString(), "", true)
                         }
                     }
-                    publishProgress((r + 1).toString(), (animArray[0].size).toString())
+                    //publishProgress((r + 1).toString(), (animArray[0].size).toString())
+                    launch(uiDispatcher) {
+                        progressUpdate((r + 1).toString(), (animArray[0].size).toString())
+                    }
                     numPanesArr.forEach { glviewArr[it].requestRender() }
                     timeMilli = System.currentTimeMillis()
                     if ((timeMilli - priorTime) < delay) SystemClock.sleep(delay - ((timeMilli - priorTime)))
@@ -496,22 +483,18 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 }
                 loopCnt += 1
             }
-            return "Executed"
         }
+        UtilityFileManagement.deleteCacheFiles(contextg)
+    }
 
-        override fun onProgressUpdate(vararg values: String) {
-            //This method runs on the UI thread, it receives progress updates
-            //from the background thread and publishes them to the status bar
-            //mNotificationHelper.progressUpdate(progress[0])
-            if ((values[1].toIntOrNull() ?: 0) > 1) {
-                setSubTitle(values[0], values[1])
-            } else {
-                toolbar.subtitle = "Problem downloading"
-            }
-        }
-
-        override fun onPostExecute(result: String) {
-            UtilityFileManagement.deleteCacheFiles(contextg)
+    private fun progressUpdate(vararg values: String) {
+        //This method runs on the UI thread, it receives progress updates
+        //from the background thread and publishes them to the status bar
+        //mNotificationHelper.progressUpdate(progress[0])
+        if ((values[1].toIntOrNull() ?: 0) > 1) {
+            setSubTitle(values[0], values[1])
+        } else {
+            toolbar.subtitle = "Problem downloading"
         }
     }
 
@@ -639,7 +622,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private fun animateRadar(frameCnt: String) {
         anim.setIcon(MyApplication.ICON_STOP)
         star.setIcon(MyApplication.ICON_PAUSE)
-        AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, frameCnt, oglrArr[curRadar].product)
+        //AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, frameCnt, oglrArr[curRadar].product)
+        getAnimate(frameCnt)
     }
 
     private fun changeTilt(tiltStr: String) {
@@ -1016,7 +1000,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             }
             else if (strName.contains("Show nearest observation")) {
                 idxIntG = idxIntAl
-                GetMetar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getMetar()
             } else if (strName.contains("Show nearest meteogram")) {
                 // http://www.nws.noaa.gov/mdl/gfslamp/meteoform.php
                 idxIntG = idxIntAl
@@ -1028,7 +1012,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 getSpotterInfo()
             }
             else if (strName.contains("Show radar status message")) {
-                GetRadarStatus().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getRadarStatus()
             }
         })
     }
@@ -1053,19 +1037,9 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         diaTdwr.show()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetRadarStatus : AsyncTask<String, String, String>() {
-
-        var radarStatus = ""
-
-        override fun doInBackground(vararg params: String): String {
-            radarStatus = UtilityDownload.getRadarStatusMessage(contextg, oglrArr[idxIntAl].rid)
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            UtilityAlertDialog.showHelpText(Utility.fromHtml(radarStatus), act)
-        }
+    private fun getRadarStatus() = GlobalScope.launch(uiDispatcher) {
+        val radarStatus = withContext(Dispatchers.IO) { UtilityDownload.getRadarStatusMessage(contextg, oglrArr[idxIntAl].rid) }
+        UtilityAlertDialog.showHelpText(Utility.fromHtml(radarStatus), act)
     }
 
     private fun getContentSerial() {
@@ -1138,21 +1112,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 toolbar.subtitle = ""
         }
     }
-
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetMetar : AsyncTask<String, String, String>() {
-
-        var txt = ""
-
-        override fun doInBackground(vararg params: String): String {
-            txt = UtilityMetar.findClosestMetar(contextg, LatLon(glviewArr[idxIntG].newY.toDouble(), (glviewArr[idxIntG].newX * -1).toDouble()))
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            UtilityAlertDialog.showHelpText(txt, act)
-        }
+    private fun getMetar() = GlobalScope.launch(uiDispatcher) {
+        val txt = withContext(Dispatchers.IO) { UtilityMetar.findClosestMetar(contextg, LatLon(glviewArr[idxIntG].newY.toDouble(), (glviewArr[idxIntG].newX * -1).toDouble())) }
+        UtilityAlertDialog.showHelpText(txt, act)
     }
+
 
 
     private fun getSpotterInfo() = GlobalScope.launch(uiDispatcher) {
@@ -1165,34 +1129,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         UtilityAlertDialog.showHelpText(txt, act)
     }
 
-    /*
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetSpotter : AsyncTask<String, String, String>() {
-
-        var txt = ""
-
-        override fun doInBackground(vararg params: String): String {
-            txt = UtilitySpotter.findClosestSpotter(LatLon(glviewArr[idxIntG].newY.toDouble(), (glviewArr[idxIntG].newX * -1).toDouble()))
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            UtilityAlertDialog.showHelpText(txt, act)
-        }
-    }
-    */
-
     private fun getContentWrapper(glvg: WXGLSurfaceView, OGLRg: WXGLRender, curRadar: Int) {
-        //val gc = GetContent()
-        //gc.setVars(glvg, OGLRg, curRadar)
-        //gc.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         getContent(glvg, OGLRg, curRadar)
     }
 
     fun getContentSingleThreaded(glvg: WXGLSurfaceView, OGLRg: WXGLRender, curRadar: Int) {
-        //val gc = GetContent()
-        //gc.setVars(glvg, OGLRg, curRadar)
-        //gc.execute()
         getContent(glvg, OGLRg, curRadar)
     }
 }

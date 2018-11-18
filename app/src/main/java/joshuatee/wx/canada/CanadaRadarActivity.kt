@@ -24,7 +24,6 @@ package joshuatee.wx.canada
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
-import android.os.AsyncTask
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
@@ -47,6 +46,7 @@ import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.ObjectImageMap
 import joshuatee.wx.util.*
+import kotlinx.coroutines.*
 
 class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelectedListener, OnMenuItemClickListener {
 
@@ -59,6 +59,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         const val RID: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var animDrawable: AnimationDrawable = AnimationDrawable()
     private var firstTime = true
     private var animRan = false
@@ -121,128 +122,110 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         super.onRestart()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun onPreExecute() {
-            if (ridFav.contains(":$rid1:")) {
-                star.setIcon(MyApplication.STAR_ICON)
-            } else {
-                star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-            }
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        if (ridFav.contains(":$rid1:")) {
+            star.setIcon(MyApplication.STAR_ICON)
+        } else {
+            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         }
-
-        override fun doInBackground(vararg params: String): String {
+        withContext(Dispatchers.IO) {
             bitmap = if (imageType == "rad") {
                 UtilityCanadaImg.getRadarBitmapOptionsApplied(contextg, rad, "")
             } else {
                 url.getImage()
             }
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            img.visibility = View.VISIBLE
-            img.setImageBitmap(bitmap)
-            firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "CA_LAST_RID")
-            animRan = false
-        }
+        img.visibility = View.VISIBLE
+        img.setImageBitmap(bitmap)
+        firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "CA_LAST_RID")
+        animRan = false
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetMosaic : AsyncTask<String, String, String>() {
-
-        internal var sector = ""
-
-        override fun doInBackground(vararg params: String): String {
-            sector = params[0]
+    private fun getMosaic(sector: String) = GlobalScope.launch(uiDispatcher) {
+        withContext(Dispatchers.IO) {
             mosaicShownId = sector
             bitmap = UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(contextg, sector)
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            img.setImageBitmap(bitmap)
-            animRan = false
-        }
+        img.setImageBitmap(bitmap)
+        animRan = false
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_animate -> AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "short")
-            R.id.action_animate_long -> AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "long")
+            R.id.action_animate -> getAnimate("short")
+            R.id.action_animate_long -> getAnimate("long")
             R.id.action_animate_stop -> {
                 animDrawable.stop()
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_local -> {
                 mosaicShown = false
                 imageType = "rad"
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_ir -> {
                 mosaicShown = false
                 imageType = "ir"
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_wv -> {
                 mosaicShown = false
                 imageType = "wv"
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_vis_west -> {
                 mosaicShown = false
                 imageType = "vis"
                 url = "https://weather.gc.ca/data/satellite/goes_wcan_visible_100.jpg"
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_vis_east -> {
                 mosaicShown = false
                 imageType = "vis"
                 url = "https://weather.gc.ca/data/satellite/goes_ecan_visible_100.jpg"
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_ir_west -> {
                 mosaicShown = false
                 imageType = "ir"
                 url = "https://weather.gc.ca/data/satellite/goes_wcan_1070_100.jpg"
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_ir_east -> {
                 mosaicShown = false
                 imageType = "ir"
                 url = "https://weather.gc.ca/data/satellite/goes_ecan_1070_100.jpg"
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_can -> {
                 mosaicShown = true
                 imageType = "rad"
-                GetMosaic().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "CAN")
+                getMosaic("CAN")
             }
             R.id.action_pac -> {
                 mosaicShown = true
                 imageType = "rad"
-                GetMosaic().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "PAC")
+                getMosaic("PAC")
             }
             R.id.action_wrn -> {
                 mosaicShown = true
                 imageType = "rad"
-                GetMosaic().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "WRN")
+                getMosaic("WRN")
             }
             R.id.action_ont -> {
                 mosaicShown = true
                 imageType = "rad"
-                GetMosaic().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "ONT")
+                getMosaic("ONT")
             }
             R.id.action_que -> {
                 mosaicShown = true
                 imageType = "rad"
-                GetMosaic().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "QUE")
+                getMosaic("QUE")
             }
             R.id.action_ern -> {
                 mosaicShown = true
                 imageType = "rad"
-                GetMosaic().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "ERN")
+                getMosaic("ERN")
             }
             R.id.action_fav -> toggleFavorite()
             R.id.action_share -> {
@@ -274,27 +257,18 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         sp.refreshData(this, ridArrLoc)
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class AnimateRadar : AsyncTask<String, String, String>() {
-
-        internal var frameCntStr = ""
-
-        override fun doInBackground(vararg params: String): String {
-            frameCntStr = params[0]
+    private fun getAnimate(frameCountStr: String) = GlobalScope.launch(uiDispatcher) {
+        withContext(Dispatchers.IO) {
             animDrawable = if (imageType == "vis" || imageType == "wv" || imageType == "ir") {
                 UtilityCanadaImg.getGOESAnim(contextg, url)
             } else {
                 if (!mosaicShown)
-                    UtilityCanadaImg.getRadarAnimOptionsApplied(contextg, rad, frameCntStr)
+                    UtilityCanadaImg.getRadarAnimOptionsApplied(contextg, rad, frameCountStr)
                 else
-                    UtilityCanadaImg.getRadarMosaicAnimation(contextg, mosaicShownId, frameCntStr)
+                    UtilityCanadaImg.getRadarMosaicAnimation(contextg, mosaicShownId, frameCountStr)
             }
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            animRan = UtilityImgAnim.startAnimation(animDrawable, img)
-        }
+        animRan = UtilityImgAnim.startAnimation(animDrawable, img)
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
@@ -310,14 +284,14 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                     rad = UtilityStringExternal.truncate(ridArrLoc[pos], 3)
                     mosaicShown = false
                     img.resetZoom()
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
                 } else {
                     mosaicShown = true
                     img.resetZoom()
                     if (imageType == "rad") {
-                        GetMosaic().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, ridArrLoc[pos])
+                        getMosaic(ridArrLoc[pos])
                     } else {
-                        GetContent().execute()
+                        getContent()
                     }
                 }
             }

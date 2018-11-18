@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.system.Os.read
 import android.util.Log
 
 import joshuatee.wx.notifications.UtilityNotification
@@ -16,17 +15,9 @@ import joshuatee.wx.settings.*
 import joshuatee.wx.util.Utility
 import androidx.core.app.ActivityCompat
 import com.intentfilter.androidpermissions.PermissionManager
-import java.lang.System.out
 import java.util.Collections.singleton
-import android.os.Environment.DIRECTORY_DOWNLOADS
-import android.os.Environment.getExternalStoragePublicDirectory
-import android.os.Environment.getExternalStorageDirectory
 import java.io.*
-import android.os.Environment.DIRECTORY_DOWNLOADS
-import android.os.Environment.getExternalStoragePublicDirectory
-import android.os.Handler
 import java.nio.charset.Charset
-import java.util.*
 
 
 class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCallback {

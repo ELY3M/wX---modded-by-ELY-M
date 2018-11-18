@@ -21,10 +21,8 @@
 
 package joshuatee.wx.ui
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.os.AsyncTask
 import androidx.appcompat.widget.Toolbar
 import android.view.View
 import android.widget.LinearLayout
@@ -37,9 +35,11 @@ import joshuatee.wx.util.*
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.ObjectIntent
+import kotlinx.coroutines.*
 
 class ObjectCAWARN(private val context: Context, private val activity: Activity, private val ll: LinearLayout, private val toolbar: Toolbar) {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var listLocUrl = mutableListOf<String>()
     private var listLocName = mutableListOf<String>()
     private var listLocWarning = mutableListOf<String>()
@@ -108,7 +108,7 @@ class ObjectCAWARN(private val context: Context, private val activity: Activity,
             cText.setText(Utility.fromHtml(provL.toUpperCase(Locale.US) + ": " + listLocName[it] + " " + locWarning + " " + locWatch + " " + locStatement))
             val urlStr = "http://weather.gc.ca" + listLocUrl[it]
             val location = listLocName[it]
-            cText.setOnClickListener(View.OnClickListener { GetWarningDetail().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, urlStr, location) })
+            cText.setOnClickListener(View.OnClickListener { getWarningDetail(urlStr, location) })
             ll.addView(cText.card)
         }
         val cBanner = ObjectCALegal(activity, "http://weather.gc.ca/warnings/index_e.html")
@@ -117,21 +117,12 @@ class ObjectCAWARN(private val context: Context, private val activity: Activity,
 
     val title: String get() = PROV_TO_LABEL[prov] + " (" + listLocUrl.size + ")"
 
-    @SuppressLint("StaticFieldLeak")
-    inner class GetWarningDetail : AsyncTask<String, String, String>() {
-
-        internal var data = ""
-        internal var loc = ""
-
-        override fun doInBackground(vararg params: String): String {
-            loc = params[1]
-            data = UtilityCanada.getHazardsFromURL(params[0])
-            return "Executed"
+    private fun getWarningDetail(urlStr: String, location: String) = GlobalScope.launch(uiDispatcher) {
+        var data = ""
+        withContext(Dispatchers.IO) {
+            data = UtilityCanada.getHazardsFromURL(urlStr)
         }
-
-        override fun onPostExecute(result: String) {
-            ObjectIntent(context, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(data, loc))
-        }
+        ObjectIntent(context, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(data, location))
     }
 
     companion object {
