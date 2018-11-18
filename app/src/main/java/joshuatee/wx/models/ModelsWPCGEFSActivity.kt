@@ -23,7 +23,6 @@ package joshuatee.wx.models
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.content.res.Configuration
 
@@ -43,12 +42,14 @@ import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
+import kotlinx.coroutines.*
 
 class ModelsWPCGEFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener, OnItemSelectedListener {
 
     // This code provides a native android interface to the WPC GEFS ( non operational )
     //
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var animRan = false
     private var spinnerRunRan = false
     private var spinnerTimeRan = false
@@ -117,18 +118,18 @@ class ModelsWPCGEFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             drw.drawerLayout.closeDrawer(drw.listView)
             displayData.param[curImg] = drw.getToken(groupPosition, childPosition)
             displayData.paramLabel[curImg] = drw.getLabel(groupPosition, childPosition)
-            GetContent().execute()
+            getContent()
             true
         }
         model = prefModel
         Utility.writePref(this, prefModel, model)
         setupModel()
-        GetRunStatus().execute()
+        getRunStatus()
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         if (spinnerRunRan && spinnerTimeRan && spinnerSectorRan) {
-            GetContent().execute()
+            getContent()
         } else {
             when (parent.id) {
                 R.id.spinner_run -> if (!spinnerRunRan)
@@ -147,39 +148,30 @@ class ModelsWPCGEFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
 
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun onPreExecute() {
-            run = spRun.selectedItem.toString()
-            time = spTime.selectedItem.toString()
-            sector = spSector.selectedItem.toString()
-            time = UtilityStringExternal.truncate(time, 3)
-            Utility.writePref(contextg, prefSector, sector)
-        }
-
-        override fun doInBackground(vararg params: String): String {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        run = spRun.selectedItem.toString()
+        time = spTime.selectedItem.toString()
+        sector = spSector.selectedItem.toString()
+        time = UtilityStringExternal.truncate(time, 3)
+        Utility.writePref(contextg, prefSector, sector)
+        withContext(Dispatchers.IO) {
             displayData.bitmap[curImg] = UtilityModelWPCGEFSInputOutput.getImage(sector, displayData.param[curImg], run, time)
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            displayData.img[curImg].visibility = View.VISIBLE
-            displayData.img[curImg].setImageDrawable(UtilityImg.bitmapToLayerDrawable(contextg, displayData.bitmap[curImg]))
-            displayData.img[curImg].setMaxZoom(4f)
-            animRan = false
-            if (!firstRun) {
-                displayData.img[curImg].setZoom(MyApplication.wpcgefsZoom, MyApplication.wpcgefsX, MyApplication.wpcgefsY)
-                firstRun = true
-                if (UIPreferences.fabInModels) {
-                    fab1.setVisibility(View.VISIBLE)
-                    fab2.setVisibility(View.VISIBLE)
-                }
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, displayData.paramLabel[curImg])
+        displayData.img[curImg].visibility = View.VISIBLE
+        displayData.img[curImg].setImageDrawable(UtilityImg.bitmapToLayerDrawable(contextg, displayData.bitmap[curImg]))
+        displayData.img[curImg].setMaxZoom(4f)
+        animRan = false
+        if (!firstRun) {
+            displayData.img[curImg].setZoom(MyApplication.wpcgefsZoom, MyApplication.wpcgefsX, MyApplication.wpcgefsY)
+            firstRun = true
+            if (UIPreferences.fabInModels) {
+                fab1.setVisibility(View.VISIBLE)
+                fab2.setVisibility(View.VISIBLE)
             }
-            imageLoaded = true
-            toolbar.subtitle = displayData.paramLabel[curImg]
+            UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, displayData.paramLabel[curImg])
         }
+        imageLoaded = true
+        toolbar.subtitle = displayData.paramLabel[curImg]
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
@@ -190,7 +182,7 @@ class ModelsWPCGEFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         when (item.itemId) {
             R.id.action_back -> UtilityModels.moveBack(spTime)
             R.id.action_forward -> UtilityModels.moveForward(spTime)
-            R.id.action_animate -> GetAnimate().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            R.id.action_animate -> getAnimate()
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     if (isStoragePermissionGranted) {
@@ -211,49 +203,28 @@ class ModelsWPCGEFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         return true
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetAnimate : AsyncTask<String, String, String>() {
-
-        internal var spinnerTimeValue: Int = 0
-        internal val timeAl = mutableListOf<String>()
-
-        override fun onPreExecute() {
-            spinnerTimeValue = spTime.selectedItemPosition
-            (spinnerTimeValue until spTime.size()).mapTo(timeAl) { spTime.getItemAtPosition(it).toString() }
-        }
-
-        override fun doInBackground(vararg params: String): String {
-            displayData.animDrawable[curImg] = UtilityModelWPCGEFSInputOutput.getAnimation(contextg, sector, displayData.param[curImg], run, spinnerTimeValue, spTime.list)
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            animRan = UtilityImgAnim.startAnimation(displayData.animDrawable[curImg], displayData.img[curImg])
-        }
+    private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
+        val timeAl = mutableListOf<String>()
+        val spinnerTimeValue = spTime.selectedItemPosition
+        (spinnerTimeValue until spTime.size()).mapTo(timeAl) { spTime.getItemAtPosition(it).toString() }
+        displayData.animDrawable[curImg] = withContext(Dispatchers.IO) { UtilityModelWPCGEFSInputOutput.getAnimation(contextg, sector, displayData.param[curImg], run, spinnerTimeValue, spTime.list) }
+        animRan = UtilityImgAnim.startAnimation(displayData.animDrawable[curImg], displayData.img[curImg])
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetRunStatus : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            rtd = UtilityModelWPCGEFSInputOutput.runTime
-            return "Executed"
+    private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
+        rtd = withContext(Dispatchers.IO) { UtilityModelWPCGEFSInputOutput.runTime }
+        spRun.clear()
+        spRun.addAll(rtd.listRun)
+        spRun.notifyDataSetChanged()
+        toolbar.title = rtd.imageCompleteStr
+        spRun.setSelection(0)
+        spTime.setSelection(0)
+        if (!firstRunTimeSet) {
+            firstRunTimeSet = true
+            spTime.setSelection(Utility.readPref(contextg, prefRunPosn, 0))
         }
-
-        override fun onPostExecute(result: String) {
-            spRun.clear()
-            spRun.addAll(rtd.listRun)
-            spRun.notifyDataSetChanged()
-            toolbar.title = rtd.imageCompleteStr
-            spRun.setSelection(0)
-            spTime.setSelection(0)
-            if (!firstRunTimeSet) {
-                firstRunTimeSet = true
-                spTime.setSelection(Utility.readPref(contextg, prefRunPosn, 0))
-            }
-            spTime.notifyDataSetChanged()
-            GetContent().execute()
-        }
+        spTime.notifyDataSetChanged()
+        getContent()
     }
 
     private fun setupModel() {

@@ -6,8 +6,15 @@
 // TODO SPC MESO rescan for _sf
 // TODO add other models to new NWS WRF, remove global icon
 // TODO optimize model setup in esrl,ncep like nssl
-// TODO NHC test SST
 
+55049 2018_11_17 coroutine conversion: BackgroundFetch, WXGLRadarActivity, WXGLRadarActivityMultiPane
+55048 2018_11_17 coroutine conversion: SPCTstormOutlookActivity, SPCSWOStateGraphicsActivity, SPCSoundingsActivity
+                                        SPCMCDWShowActivity, SPCMCDWShowSummaryActivity, LSRbyWFOActivity, NWSGOESFullDiskActivity, SettingsLocationGenericActivity
+                                        ModelsESRLActivity, ModelsGLCFSActivity, ModelsNCEPActivity, ModelsNSSLWRFActivity
+                                        CanadaAlertsActivity, CanadaHourlyActivity, CanadaRadarActivity, CanadaTextActivity, ModelsSPCHREFActivity
+                                        ModelsSPCHRRRActivity, ModelsSPCSREFActivity, ModelsWPCGEFSActivity, WPCMPDShowSummaryActivity, WPCRainfallForecastActivity
+                                        Widget*, SettingsLocationCanadaActivity, NHCStormActivity, ObservationsActivity, AdhocForecastActivity
+                 remove NHCImageShowActivity
 55047 2018_11_16 coroutine conversion: ImageShowActivity, LightningActivity, SpottersActivity, SevereDashboardActivity, USWarningsImpactActivity, USWarningsWithRadarActivity
                  SPCFireOutlookActivity, SPCCompmapActivity
 55046 2018_11_16 coroutine conversion (partial): WXGLRadarActivity, WXGLRadarActivityMultiPane, USNWSMosaicActivity, SunMoonActivity

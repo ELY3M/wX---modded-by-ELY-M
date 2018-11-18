@@ -21,9 +21,7 @@
 
 package joshuatee.wx.spc
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -39,6 +37,7 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.settings.*
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
+import kotlinx.coroutines.*
 
 class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedListener, OnMenuItemClickListener {
 
@@ -46,6 +45,7 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
         const val URL: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var imgUrl = ""
     private lateinit var img: TouchImageView2
     private lateinit var imageMap: ObjectImageMap
@@ -63,7 +63,6 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
     private lateinit var sp: ObjectSpinner
     private lateinit var contextg: Context
 
-    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_spcsoundings, R.menu.spcsoundings, true)
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -93,53 +92,30 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
         super.onRestart()
     }
 
-    // FIXME not working after change on map
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        if (MyApplication.sndFav.contains(":$nwsOffice:"))
+            star.setIcon(MyApplication.STAR_ICON)
+        else
+            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+        withContext(Dispatchers.IO) {
             bitmap = UtilitySPCSoundings.getImage(contextg, nwsOffice)
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            img.visibility = View.VISIBLE
-            img.setImageBitmap(bitmap)
-            img.setMaxZoom(4f)
-            //val soundingSector = Utility.readPref(contextg, "SOUNDING_SECTOR", "")
-            //if (!firstRun && nwsOffice == soundingSector) {
-            img.setZoom("SOUNDING")
-            //    firstRun = true
-            //}
-            imageLoaded = true
-        }
-
-        override fun onPreExecute() {
-            if (MyApplication.sndFav.contains(":$nwsOffice:"))
-                star.setIcon(MyApplication.STAR_ICON)
-            else
-                star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-        }
+        img.visibility = View.VISIBLE
+        img.setImageBitmap(bitmap)
+        img.setMaxZoom(4f)
+        img.setZoom("SOUNDING")
+        imageLoaded = true
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContentSPCPlot : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
+    private fun getContentSPCPlot() = GlobalScope.launch(uiDispatcher) {
+        imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/$upperAir"
+        withContext(Dispatchers.IO) {
             val date = UtilityString.getHTMLandParse("${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/", "/obswx/maps/" + upperAir + "_([0-9]{6}_[0-9]{2}).gif")
             bitmap = UtilityImg.getBitmapAddWhiteBG(contextg, imgUrl + "_" + date + ".gif")
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            img.visibility = View.VISIBLE
-            img.setImageBitmap(bitmap)
-            img.setMaxZoom(4f)
-        }
-
-        override fun onPreExecute() {
-            imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/$upperAir"
-        }
+        img.visibility = View.VISIBLE
+        img.setImageBitmap(bitmap)
+        img.setMaxZoom(4f)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -162,7 +138,7 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
 
     private fun setPlotAndGet(upperAir: String) {
         this.upperAir = upperAir
-        GetContentSPCPlot().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContentSPCPlot()
     }
 
     private fun mapSwitch(loc: String) {
@@ -190,7 +166,7 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
                 2 -> ObjectIntent(this, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf("SND"))
                 else -> {
                     nwsOffice = ridArrLoc[pos].split(" ").getOrNull(0) ?: ""
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
                 }
             }
         }

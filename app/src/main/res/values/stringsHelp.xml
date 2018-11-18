@@ -59,10 +59,6 @@ Interface for the NSSL WRF Forecasts found at http://wrf.nssl.noaa.gov/newsite/
 Interface for GOES16 images.
 </string>
 
-     <string name="help_models_ncar_ensemble">
-Interface for the NCAR Ensemble Forecasts found at https://ensemble.ucar.edu/index.php
-</string>
-
      <string name="obs_ext_zoom_label">
 With observations or wind barbs enabled if you zoom in closely on an obs site the detailed METAR will appear.
          This setting controls how close you need to zoom. Lower numbers will show detailed METAR without having to zoom in as far. Default is 7.
@@ -98,11 +94,6 @@ On first start, the built-in color palettes are shown with a yellow label. The c
         instead of clone with the current selected palette.
 </string>
 
-     <string name="help_spcsseo_models">
-Interface to the SPC SSEO: Storm-Scale Ensemble of Opportunity. For some paramaters ( not 1km reflectivity ) runs ending in 00Z start at 015 instead of 003.
-         This is an experimental product from SPC.
-     </string>
-
      <string name="radar_use_jni_label">
 Use JNI ( native C code ) for performance sensitive areas in radar. Although this performs better for fast animations in general it is not as robust as the default Java based code especially if your device and Android version
          is not close to stock Android. If this works without any crashes great, if not I recommend to turn it off. All development is occuring in the Java code first at this point in time.
@@ -112,11 +103,6 @@ Use JNI ( native C code ) for performance sensitive areas in radar. Although thi
 Interface to the SPC HRRR viewer. Multiple parameters selected via the left pullout drawer will be used as layers. Select them again to no longer show them or clear all parameters
          from the sub-menu.
      </string>
-
-    <string name="cloud_icon_show_2km_label">
-If enabled, show the regional vis image instead of local if the cloud icon is selected in the toolbar.
-</string>
-
 
     <string name="prevent_accidental_exit_label">
 If enabled, on the main screen if you tap the back arrow at the bottom left you will be required to tap this twice to exit the program.
@@ -167,12 +153,6 @@ Determines whether borders for Canada and Mexico should be displayed. Without th
         Show centered labels for each county.
 </string>
 
-
-    <string name="hw_enh_label">
-Show enhanced highway dataset. Dataset is 8x as large.
-        The enhanced data is roughly 3.3MB in size as compared to the 440KB.
-</string>
-
      <string name="hw_enh_ext_label">
 Show additional roads when zoomed in.
         This additional dataset is roughly 3.0MB in size.
@@ -213,7 +193,7 @@ If set to true the lightning icon on the bottom toolbar of the main screen will 
 
 
     <string name="locdot_follows_gps_label">
-Location dot will use the GPS of your device and will update on every scan as opposed to using the lat/lon of your saved location. If \"Location auto refresh\" is enabled
+Location dot will use the GPS of your device and will update on every scan as opposed to using the lat/lon of your saved location. If \"Screen on, auto refresh\" is enabled
         it will update location frequently.
 </string>
 
@@ -720,10 +700,7 @@ This activity can be used to add or modify an existing location. To add a new lo
     <string name="show_county_label">
 Enable counties to be displayed.</string>
 
-    <string name="locationautorefresh_label">If enabled the WXOGL activity will attempt to auto refresh your GPS location roughly every 3 minutes ( by default ).
-        Interval is configurable.</string>
-
-    <string name="keepscreenon_label">
+    <string name="autorefresh_label">
 If enabled the WXOGL activity will attempt to prevent the screen from turning off and will auto refresh roughly every 3 minutes ( by default ).
         Interval is configurable. Additionally, the GPS will be queried to show your current location on the radar.</string>
 

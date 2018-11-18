@@ -27,7 +27,6 @@ import java.util.Locale
 
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -49,6 +48,7 @@ import joshuatee.wx.util.UtilityFavorites
 import joshuatee.wx.util.UtilityImageMap
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityString
+import kotlinx.coroutines.*
 
 class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClickListener {
 
@@ -62,6 +62,7 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
         const val URL: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var firstTime = true
     private var prod = ""
     private var nwsOffice = ""
@@ -151,7 +152,7 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
                 2 -> ObjectIntent(this, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf("WFO"))
                 else -> {
                     nwsOffice = ridArrLoc[pos].split(" ").getOrNull(0) ?: ""
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
                 }
             }
             if (firstTime) {
@@ -163,23 +164,12 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
 
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun onPreExecute() {
-            sv.smoothScrollTo(0, 0)
-            ridFavOld = MyApplication.wfoFav
-        }
-
-        override fun doInBackground(vararg params: String): String {
-            wfoProd = lsrFromWFO
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            linearLayout.removeAllViewsInLayout()
-            wfoProd.forEach { linearLayout.addView(ObjectCardText(contextg, Utility.fromHtml(it)).card) }
-        }
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        sv.smoothScrollTo(0, 0)
+        ridFavOld = MyApplication.wfoFav
+        wfoProd = withContext(Dispatchers.IO) { lsrFromWFO }
+        linearLayout.removeAllViewsInLayout()
+        wfoProd.forEach { linearLayout.addView(ObjectCardText(contextg, Utility.fromHtml(it)).card) }
     }
 
     private val lsrFromWFO: List<String>

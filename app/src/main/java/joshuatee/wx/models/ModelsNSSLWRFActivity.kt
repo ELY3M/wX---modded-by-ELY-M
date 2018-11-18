@@ -23,7 +23,6 @@ package joshuatee.wx.models
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.content.res.Configuration
 
@@ -42,6 +41,7 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
+import kotlinx.coroutines.*
 
 class ModelsNSSLWRFActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener, OnItemSelectedListener {
 
@@ -56,6 +56,7 @@ class ModelsNSSLWRFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         const val INFO: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var animRan = false
     private var run = "00Z"
     private var time = "00"
@@ -148,7 +149,7 @@ class ModelsNSSLWRFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                 Utility.writePref(this, prefParam + it.toString(), displayData.param[it])
                 Utility.writePref(this, prefParamLabel + it.toString(), displayData.paramLabel[it])
             }
-            GetContent().execute()
+            getContent()
         }
     }
 
@@ -177,52 +178,45 @@ class ModelsNSSLWRFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                     setupModel(UtilityModelNSSLWRFInterface.paramsNsslWrf, UtilityModelNSSLWRFInterface.labelsNsslWrf, 1, 36)
                 }
             }
-            GetRunStatus().execute()
+            getRunStatus()
         } else if (firstRunTimeSet) {
-            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContent()
         }
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        run = spRun.selectedItem.toString()
+        time = spTime.selectedItem.toString()
+        sector = spSector.selectedItem.toString()
+        Utility.writePref(contextg, prefSector, sector)
 
-        override fun onPreExecute() {
-            run = spRun.selectedItem.toString()
-            time = spTime.selectedItem.toString()
-            sector = spSector.selectedItem.toString()
-            Utility.writePref(contextg, prefSector, sector)
-        }
-
-        override fun doInBackground(vararg params: String): String {
+        withContext(Dispatchers.IO) {
             (0 until numPanes).forEach { displayData.bitmap[it] = UtilityModelNSSLWRFInputOutput.getImage(contextg, model, sector, displayData.param[it], run, time) }
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            (0 until numPanes).forEach {
-                if (numPanes > 1)
-                    UtilityImg.resizeViewSetImgByHeight(displayData.bitmap[it], displayData.img[it])
-                else
-                    displayData.img[it].setImageBitmap(displayData.bitmap[it])
-            }
-            animRan = false
-            if (!firstRun) {
-                (0 until numPanes).forEach { UtilityImg.imgRestorePosnZoom(contextg, displayData.img[it], modelProvider + numPanes.toString() + it.toString()) }
-                if (UIPreferences.fabInModels && numPanes < 2) {
-                    fab1.setVisibility(View.VISIBLE)
-                    fab2.setVisibility(View.VISIBLE)
-                }
-                firstRun = true
-            }
-            if (numPanes > 1) {
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1).toString() + ")" + displayData.param[0] + "/" + displayData.param[1])
-            } else {
-                toolbar.subtitle = displayData.paramLabel[0]
-            }
-            imageLoaded = true
+        (0 until numPanes).forEach {
+            if (numPanes > 1)
+                UtilityImg.resizeViewSetImgByHeight(displayData.bitmap[it], displayData.img[it])
+            else
+                displayData.img[it].setImageBitmap(displayData.bitmap[it])
         }
+        animRan = false
+        if (!firstRun) {
+            (0 until numPanes).forEach { UtilityImg.imgRestorePosnZoom(contextg, displayData.img[it], modelProvider + numPanes.toString() + it.toString()) }
+            if (UIPreferences.fabInModels && numPanes < 2) {
+                fab1.setVisibility(View.VISIBLE)
+                fab2.setVisibility(View.VISIBLE)
+            }
+            firstRun = true
+        }
+        if (numPanes > 1) {
+            UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1).toString() + ")" + displayData.param[0] + "/" + displayData.param[1])
+        } else {
+            toolbar.subtitle = displayData.paramLabel[0]
+        }
+        imageLoaded = true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
@@ -233,7 +227,7 @@ class ModelsNSSLWRFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         when (item.itemId) {
             R.id.action_back -> UtilityModels.moveBack(spTime)
             R.id.action_forward -> UtilityModels.moveForward(spTime)
-            R.id.action_animate -> GetAnimate().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            R.id.action_animate -> getAnimate()
             R.id.action_img1 -> {
                 curImg = 0
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1).toString() + ")" + displayData.param[0] + "/" + displayData.param[1])
@@ -263,46 +257,27 @@ class ModelsNSSLWRFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         return true
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetAnimate : AsyncTask<String, String, String>() {
-
-        internal var spinnerTimeValue: Int = 0
-
-        override fun onPreExecute() {
-            spinnerTimeValue = spTime.selectedItemPosition
-        }
-
-        override fun doInBackground(vararg params: String): String {
+    private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
+        val spinnerTimeValue = spTime.selectedItemPosition
+        withContext(Dispatchers.IO) {
             (0 until numPanes).forEach { displayData.animDrawable[it] = UtilityModelNSSLWRFInputOutput.getAnimation(contextg, model, sector, displayData.param[it], run, spinnerTimeValue, spTime.list) }
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            (0 until numPanes).forEach { UtilityImgAnim.startAnimation(displayData.animDrawable[it], displayData.img[it]) }
-            animRan = true
-        }
+        (0 until numPanes).forEach { UtilityImgAnim.startAnimation(displayData.animDrawable[it], displayData.img[it]) }
+        animRan = true
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetRunStatus : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            rtd = UtilityModelNSSLWRFInputOutput.runTime
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            spRun.clear()
-            spRun.addAll(rtd.listRun)
-            //miStatus.title = "in through " + rtd.imageCompleteStr
-            miStatus.isVisible = false
-            spRun.notifyDataSetChanged()
-            (0 until spTime.size()).forEach { spTime[it] = spTime[it] + " " + UtilityModels.convertTimeRuntoTimeString(rtd.timeStrConv.replace("Z", ""), spTime[it], false) }
-            spTime.notifyDataSetChanged()
-            if (!firstRunTimeSet) {
-                firstRunTimeSet = true
-                spTime.setSelection(Utility.readPref(contextg, prefRunPosn, 1))
-            }
+    private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
+        rtd = withContext(Dispatchers.IO) { UtilityModelNSSLWRFInputOutput.runTime }
+        spRun.clear()
+        spRun.addAll(rtd.listRun)
+        miStatus.isVisible = false
+        spRun.notifyDataSetChanged()
+        (0 until spTime.size()).forEach { spTime[it] = spTime[it] + " " + UtilityModels.convertTimeRuntoTimeString(rtd.timeStrConv.replace("Z", ""), spTime[it], false) }
+        spTime.notifyDataSetChanged()
+        if (!firstRunTimeSet) {
+            firstRunTimeSet = true
+            spTime.setSelection(Utility.readPref(contextg, prefRunPosn, 1))
         }
     }
 

@@ -23,7 +23,6 @@ package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.graphics.Bitmap
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -52,6 +51,7 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ObjectIntent
+import kotlinx.coroutines.*
 
 class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -59,6 +59,7 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
         const val NO: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var no = ""
     private var imgUrl = ""
     private var textUrl = ""
@@ -122,16 +123,15 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
             polygonType = PolygonType.MCD
         }
         setTitle(activityLabel)
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
-        internal var sigHtmlTmp = ""
-        internal var mcdList = listOf<String>()
+        var sigHtmlTmp: String
+        var mcdList = listOf<String>()
 
-        override fun doInBackground(vararg params: String): String {
+        withContext(Dispatchers.IO) {
             try {
                 sigHtmlTmp = url.getHtml()
                 mcdList = sigHtmlTmp.parseColumn(patternStr)
@@ -161,46 +161,43 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
                 }
                 text = UtilityDownload.getTextProduct(contextg, prod)
             }
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            mcdList.indices.forEach { mcdIndex ->
-                val card = ObjectCardImage(contextg)
-                card.setImage(bitmapArr[mcdIndex])
-                ll.addView(card.card)
-                card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCMCDWShowActivity::class.java, SPCMCDWShowActivity.NO, arrayOf(mcdNoArr[mcdIndex], "", polygonType.toString())) })
-                if (mcdList.size == 1) {
-                    registerForContextMenu(card.img)
-                }
-            }
+        mcdList.indices.forEach { mcdIndex ->
+            val card = ObjectCardImage(contextg)
+            card.setImage(bitmapArr[mcdIndex])
+            ll.addView(card.card)
+            card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCMCDWShowActivity::class.java, SPCMCDWShowActivity.NO, arrayOf(mcdNoArr[mcdIndex], "", polygonType.toString())) })
             if (mcdList.size == 1) {
-                val wfoStr = text.parse("ATTN...WFO...(.*?)... ")
-                wfoArr = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
-                val card2 = ObjectCardText(contextg)
-                card2.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
-                card2.setText(Utility.fromHtml(text))
-                ll.addView(card2.card)
-                setTitle(title)
-                if (!no.contains("at")) {
-                    toolbar.subtitle = text.parse("Areas affected...(.*?)<BR>")
-                }
-                miAll.isVisible = true
-                miText.isVisible = true
-                miUrl.isVisible = true
-                miImage.isVisible = true
-            } else {
-                setTitle(activityLabel + " " + mcdNoArr.toString().replace("[{}]".toRegex(), "").replace("\\[|\\]".toRegex(), "").replace("w", ""))
-                miAll.isVisible = true
+                registerForContextMenu(card.img)
             }
-            val tv: TextView = findViewById(R.id.tv)
-            if (mcdList.isEmpty()) {
-                tv.text = nothingPresentStr
-                miTest.isVisible = false
-            } else {
-                tv.visibility = View.GONE
-                objCard.setVisibility(View.GONE)
+        }
+        if (mcdList.size == 1) {
+            val wfoStr = text.parse("ATTN...WFO...(.*?)... ")
+            wfoArr = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
+            val card2 = ObjectCardText(contextg)
+            card2.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
+            card2.setText(Utility.fromHtml(text))
+            ll.addView(card2.card)
+            setTitle(title)
+            if (!no.contains("at")) {
+                toolbar.subtitle = text.parse("Areas affected...(.*?)<BR>")
             }
+            miAll.isVisible = true
+            miText.isVisible = true
+            miUrl.isVisible = true
+            miImage.isVisible = true
+        } else {
+            setTitle(activityLabel + " " + mcdNoArr.toString().replace("[{}]".toRegex(), "").replace("\\[|\\]".toRegex(), "").replace("w", ""))
+            miAll.isVisible = true
+        }
+        val tv: TextView = findViewById(R.id.tv)
+        if (mcdList.isEmpty()) {
+            tv.text = nothingPresentStr
+            miTest.isVisible = false
+        } else {
+            tv.visibility = View.GONE
+            objCard.setVisibility(View.GONE)
         }
     }
 
@@ -219,28 +216,18 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
         return true
     }
 
-    private fun saveLocation(nws_office: String) {
-        SaveLoc().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, nws_office)
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    private inner class SaveLoc : AsyncTask<String, String, String>() {
-
-        internal var toastStr = ""
-
-        override fun doInBackground(vararg params: String): String {
+    private fun saveLocation(nwsOffice: String) = GlobalScope.launch(uiDispatcher) {
+        var toastStr = ""
+        // FIXME not everything needs to be on IO
+        withContext(Dispatchers.IO) {
             val locNumIntCurrent = Location.numLocations + 1
             val locNumToSaveStr = locNumIntCurrent.toString()
-            val loc = Utility.readPref(contextg, "NWS_LOCATION_" + params[0], "")
+            val loc = Utility.readPref(contextg, "NWS_LOCATION_$nwsOffice", "")
             val addrSend = loc.replace(" ", "+")
             val xyStr = UtilityLocation.getXYFromAddressOSM(addrSend)
             toastStr = Location.locationSave(contextg, locNumToSaveStr, xyStr[0], xyStr[1], loc)
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            UtilityUI.makeSnackBar(ll, toastStr)
-        }
+        UtilityUI.makeSnackBar(ll, toastStr)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

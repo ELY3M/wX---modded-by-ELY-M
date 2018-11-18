@@ -25,7 +25,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.drawable.AnimationDrawable
-import android.os.AsyncTask
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
@@ -44,9 +43,11 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityShare
+import kotlinx.coroutines.*
 
 class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMenuItemClickListener {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
     private var firstRun = false
     private var imageLoaded = false
@@ -89,32 +90,23 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener, Too
             title = drw.getLabel(position)
             imgUrl = drw.getToken(position)
             imgIdx = position
-            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContent()
         }
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        setTitle(title)
+        actionAnimate.isVisible = imgUrl.contains("jma")
+        Utility.writePref(contextg, "GOESFULLDISK_IMG_FAV_TITLE", title)
+        Utility.writePref(contextg, "GOESFULLDISK_IMG_FAV_URL", imgUrl)
+        Utility.writePref(contextg, "GOESFULLDISK_IMG_FAV_IDX", imgIdx)
 
-        override fun onPreExecute() {
-            setTitle(title)
-            actionAnimate.isVisible = imgUrl.contains("jma")
-            Utility.writePref(contextg, "GOESFULLDISK_IMG_FAV_TITLE", title)
-            Utility.writePref(contextg, "GOESFULLDISK_IMG_FAV_URL", imgUrl)
-            Utility.writePref(contextg, "GOESFULLDISK_IMG_FAV_IDX", imgIdx)
-        }
+        bitmap = withContext(Dispatchers.IO) { imgUrl.getImage() }
 
-        override fun doInBackground(vararg params: String): String {
-            bitmap = imgUrl.getImage()
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            img.setImageBitmap(bitmap)
-            firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "GOESFULLDISKIMG")
-            imageLoaded = true
-        }
+        img.setImageBitmap(bitmap)
+        firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "GOESFULLDISKIMG")
+        imageLoaded = true
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -131,7 +123,7 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener, Too
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item))
             return true
         when (item.itemId) {
-            R.id.action_animate -> GetAnimate().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            R.id.action_animate -> getAnimate()
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     if (isStoragePermissionGranted) {
@@ -161,17 +153,9 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener, Too
         super.onStop()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetAnimate : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            animDrawable = UtilityNWSGOESFullDisk.getAnimation(contextg, imgUrl)
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            UtilityImgAnim.startAnimation(animDrawable, img)
-        }
+    private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
+        animDrawable = withContext(Dispatchers.IO) { UtilityNWSGOESFullDisk.getAnimation(contextg, imgUrl) }
+        UtilityImgAnim.startAnimation(animDrawable, img)
     }
 
     private fun showNextImg() {
@@ -181,7 +165,7 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener, Too
         }
         title = UtilityNWSGOESFullDisk.MODEL_PARAMS_LABELS[imgIdx]
         imgUrl = UtilityNWSGOESFullDisk.URL_INDEX[imgIdx]
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     private fun showPrevImg() {
@@ -191,6 +175,6 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener, Too
         }
         title = UtilityNWSGOESFullDisk.MODEL_PARAMS_LABELS[imgIdx]
         imgUrl = UtilityNWSGOESFullDisk.URL_INDEX[imgIdx]
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 }

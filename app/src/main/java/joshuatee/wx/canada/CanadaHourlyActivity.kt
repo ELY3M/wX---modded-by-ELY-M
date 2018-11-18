@@ -22,7 +22,6 @@
 package joshuatee.wx.canada
 
 import android.annotation.SuppressLint
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
@@ -33,6 +32,7 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCALegal
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.ui.UtilityToolbar
+import kotlinx.coroutines.*
 
 class CanadaHourlyActivity : BaseActivity() {
 
@@ -40,6 +40,7 @@ class CanadaHourlyActivity : BaseActivity() {
         const val LOC_NUM: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var locNumInt = 0
     private lateinit var c0: ObjectCardText
 
@@ -54,21 +55,11 @@ class CanadaHourlyActivity : BaseActivity() {
         linearLayout.addView(c0.card)
         linearLayout.addView(ObjectCALegal(this, UtilityCanadaHourly.getHourlyURL(Location.locationIndex)).card)
         title = Location.getName(locNumInt) + " hourly forecast"
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        internal var html = ""
-
-        override fun doInBackground(vararg params: String): String {
-            html = UtilityCanadaHourly.getHourlyString(locNumInt)
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            c0.setText(html)
-        }
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        val html = withContext(Dispatchers.IO) { UtilityCanadaHourly.getHourlyString(locNumInt) }
+        c0.setText(html)
     }
 }

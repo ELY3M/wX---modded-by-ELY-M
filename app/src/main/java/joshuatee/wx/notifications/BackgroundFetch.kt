@@ -21,11 +21,9 @@
 
 package joshuatee.wx.notifications
 
-import android.annotation.SuppressLint
 import java.util.regex.Matcher
 
 import android.graphics.Color
-import android.os.AsyncTask
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.app.NotificationManager
 import android.app.Notification
@@ -44,10 +42,13 @@ import joshuatee.wx.objects.PolygonType.MCD
 import joshuatee.wx.objects.PolygonType.MPD
 import joshuatee.wx.objects.PolygonType.WATCH
 import joshuatee.wx.util.*
+import kotlinx.coroutines.*
 
 class BackgroundFetch(val context: Context) {
 
     // This is the main code that handles notifications ( formerly in AlertReciever )
+
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
 
     private fun doNotifs() {
         var notifUrls = ""
@@ -73,7 +74,7 @@ class BackgroundFetch(val context: Context) {
             requestID = System.currentTimeMillis().toInt()
             notifUrls += UtilityNotification.sendNotif(context, it.toString(), requestID + 1)
         }
-        if (MyApplication.alertTornadoNotificationCurrent || MyApplication.checktor || PolygonType.TOR.pref) {
+        if (MyApplication.alertTornadoNotificationCurrent || MyApplication.checktor || PolygonType.SVR.pref) {
             try {
                 // store data for use by severe dashboard and cod warnings
                 UtilityDownloadRadar.getPolygonVTEC(context)
@@ -279,12 +280,7 @@ class BackgroundFetch(val context: Context) {
         Utility.writePref(context, "NOTIF_STR", notifStr)
     }
 
-    @SuppressLint("StaticFieldLeak")
-    inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            doNotifs()
-            return "Executed"
-        }
+    public fun getContent() = GlobalScope.launch(uiDispatcher) {
+        withContext(Dispatchers.IO) { doNotifs() }
     }
 }

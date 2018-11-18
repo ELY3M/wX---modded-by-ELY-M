@@ -24,7 +24,6 @@ package joshuatee.wx.settings
 import android.annotation.SuppressLint
 import java.util.Locale
 
-import android.os.AsyncTask
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -37,9 +36,11 @@ import joshuatee.wx.canada.UtilityCanada
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.util.Utility
+import kotlinx.coroutines.*
 
 class SettingsLocationCanadaActivity : BaseActivity() {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var listIds = listOf<String>()
     private var listCity = listOf<String>()
     private var cityDisplay = false
@@ -86,17 +87,13 @@ class SettingsLocationCanadaActivity : BaseActivity() {
         if (!cityDisplay) {
             provSelected = UtilityStringExternal.truncate(provArr[position], 2)
             title = "Canadian Locations ($provSelected)"
-            provSelected()
+            getContent()
         } else {
             Utility.writePref(this, "LOCATION_CANADA_PROV", provSelected)
             Utility.writePref(this, "LOCATION_CANADA_CITY", listCity[position])
             Utility.writePref(this, "LOCATION_CANADA_ID", listIds[position])
             finishSave()
         }
-    }
-
-    private fun provSelected() {
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
     private fun finishSave() {
@@ -106,20 +103,14 @@ class SettingsLocationCanadaActivity : BaseActivity() {
         toolbar.subtitle = "Selected: $locStr"
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        withContext(Dispatchers.IO) {
             val html = UtilityCanada.getProvHTML(provSelected)
             listIds = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-(.*?)_metric_e.html\">.*?</a></li>")
             listCity = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-.*?_metric_e.html\">(.*?)</a></li>")
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            ca = SingleTextAdapter(listCity.distinct())
-            recyclerView.adapter = ca
-            cityDisplay = true
-        }
+        ca = SingleTextAdapter(listCity.distinct())
+        recyclerView.adapter = ca
+        cityDisplay = true
     }
 } 

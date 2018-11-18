@@ -29,7 +29,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
@@ -61,6 +60,7 @@ import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMap
+import kotlinx.coroutines.*
 
 class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener { // OnCheckedChangeListener OnClickListener
 
@@ -71,6 +71,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         const val LOC_NUM: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var locXStr = ""
     private var locYStr = ""
     private val requestOk = 1
@@ -197,11 +198,11 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         if (locNumArr[1] != "") {
             if (locNumArr[1] == " roaming") {
                 locLabelEt.setText(locNumArr[1].toUpperCase(Locale.US))
-                GPSAndSave().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "osm", locNum, locNumArr[1].toUpperCase(Locale.US))
+                gpsAndSave("osm", locNum, locNumArr[1].toUpperCase(Locale.US))
             } else {
                 val addrSend = locNumArr[1].replace(" ", "+")
                 locLabelEt.setText(locNumArr[1])
-                AddressSearchAndSave().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "osm", locNum, addrSend, locNumArr[1])
+                addressSearchAndSave("osm", locNum, addrSend, locNumArr[1])
             }
         }
     }
@@ -255,45 +256,33 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         hideNONUSNotifs()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class SaveLoc : AsyncTask<String, String, String>() {
+    // FIXME rename args
+    private fun saveLoc(params0: String, params1: String, params2: String, params3: String, params4: String) = GlobalScope.launch(uiDispatcher) {
 
-        internal var toastStr = ""
-        internal var xLoc = ""
+        var toastStr = ""
+        var xLoc = ""
 
-        override fun doInBackground(vararg params: String): String {
-            if (params[0] == "osm") {
-                toastStr = Location.locationSave(contextg, params[1], params[2], params[3], params[4])
-                xLoc = params[2]
+        withContext(Dispatchers.IO) {
+            if (params0 == "osm") {
+                toastStr = Location.locationSave(contextg, params1, params2, params3, params4)
+                xLoc = params2
             }
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            showMessage(toastStr)
-            updateSubTitle()
-            if (xLoc.startsWith("CANADA:")) {
-                notifsCA(true)
-            } else {
-                notifsCA(false)
-            }
+        showMessage(toastStr)
+        updateSubTitle()
+        if (xLoc.startsWith("CANADA:")) {
+            notifsCA(true)
+        } else {
+            notifsCA(false)
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class AddressSearch : AsyncTask<String, String, String>() {
-
-        internal var xyStr = listOf<String>()
-
-        override fun doInBackground(vararg params: String): String {
-            if (params[0] == "osm") xyStr = UtilityLocation.getXYFromAddressOSM(params[1])
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            locXEt.setText(xyStr[0])
-            locYEt.setText(xyStr[1])
-        }
+    private fun addressSearch(type: String, address: String) = GlobalScope.launch(uiDispatcher) {
+        var xyStr = listOf<String>()
+        if (type == "osm") xyStr = withContext(Dispatchers.IO) { UtilityLocation.getXYFromAddressOSM(address) }
+        locXEt.setText(xyStr[0])
+        locYEt.setText(xyStr[1])
     }
 
     override fun onStop() {
@@ -334,7 +323,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                 val xStr = locXEt.text.toString()
                 val yStr = locYEt.text.toString()
                 val labelStr = locLabelEt.text.toString()
-                SaveLoc().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "osm", locNum, xStr, yStr, labelStr)
+                saveLoc("osm", locNum, xStr, yStr, labelStr)
             } else {
                 k -= UtilityCities.cities.size
                 var prov = MyApplication.comma.split(cityAa.getItem(position))[1]
@@ -352,7 +341,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                 val yStr = locYEt.text.toString()
                 val labelStr = locLabelEt.text.toString()
                 showMessage("Saving location: $labelStr")
-                SaveLoc().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "osm", locNum, xStr, yStr, labelStr)
+                saveLoc("osm", locNum, xStr, yStr, labelStr)
             }
         })
 
@@ -366,7 +355,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                 locLabelEt = findViewById(R.id.loc_label_text)
                 locLabelEt.setText(query)
                 val addrSend = query.replace(" ", "+")
-                AddressSearch().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "osm", addrSend)
+                addressSearch("osm", addrSend)
                 val searchViewLocal = menuLocal!!.findItem(R.id.ab_search).actionView as SearchView
                 searchViewLocal.onActionViewCollapsed()
                 return false
@@ -496,72 +485,61 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
             val addrStrTmp = thingsYouSaid[0]
             locLabelEt.setText(addrStrTmp)
             val addrSend = addrStrTmp.replace(" ", "+")
-            AddressSearchAndSave().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "osm", locNum, addrSend, addrStrTmp)
+            addressSearchAndSave("osm", locNum, addrSend, addrStrTmp)
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class AddressSearchAndSave : AsyncTask<String, String, String>() {
+    // FIXME rename args
+    private fun addressSearchAndSave(type: String, params1: String, params2: String, params3: String) = GlobalScope.launch(uiDispatcher) {
 
-        internal var xyStr = listOf<String>()
-        internal var toastStr = ""
-        internal var goodLocation = false
+        var xyStr = listOf<String>()
+        var toastStr = ""
+        var goodLocation = false
 
-        override fun doInBackground(vararg params: String): String {
-            if (params[0] == "osm") {
-                xyStr = UtilityLocation.getXYFromAddressOSM(params[2])
+        withContext(Dispatchers.IO) {
+            if (type == "osm") {
+                xyStr = UtilityLocation.getXYFromAddressOSM(params2)
                 if (xyStr.size > 1) {
-                    toastStr = Location.locationSave(contextg, params[1], xyStr[0], xyStr[1], params[3])
+                    toastStr = Location.locationSave(contextg, params1, xyStr[0], xyStr[1], params3)
                     goodLocation = true
                 }
             }
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            locXEt.setText(xyStr[0])
-            locYEt.setText(xyStr[1])
-            if (goodLocation) {
-                showMessage(toastStr)
-                Utility.writePref(contextg, "CURRENT_LOC_FRAGMENT", locNum)
-                Location.currentLocationStr = locNum
-            }
-            finish()
+        locXEt.setText(xyStr[0])
+        locYEt.setText(xyStr[1])
+        if (goodLocation) {
+            showMessage(toastStr)
+            Utility.writePref(contextg, "CURRENT_LOC_FRAGMENT", locNum)
+            Location.currentLocationStr = locNum
         }
+        finish()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GPSAndSave : AsyncTask<String, String, String>() {
+    // FIXME rename args
+    private fun gpsAndSave(params0: String, params1: String, params2: String) = GlobalScope.launch(uiDispatcher) {
 
-        internal var xyStr = listOf<String>()
-        internal var toastStr = ""
-        internal var xy = doubleArrayOf(0.0, 0.0)
-        internal var goodLocation = false
+        var toastStr = ""
+        var goodLocation = false
+        val xy = UtilityLocation.getGPS(contextg)
+        locXEt.setText(xy[0].toString())
+        locYEt.setText(xy[1].toString())
 
-        override fun doInBackground(vararg params: String): String {
-            xyStr = listOf(xy[0].toString(), xy[1].toString())
+        withContext(Dispatchers.IO) {
+            val xyStr = listOf(xy[0].toString(), xy[1].toString())
             if (xyStr.size > 1) {
-                toastStr = Location.locationSave(contextg, params[1], xyStr[0], xyStr[1], params[2])
+                toastStr = Location.locationSave(contextg, params1, xyStr[0], xyStr[1], params2)
                 goodLocation = true
             }
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            if (goodLocation) {
-                showMessage(toastStr)
-                Utility.writePref(contextg, "ALERT" + locNum + "_NOTIFICATION", "true")
-                Utility.writePref(contextg, "CURRENT_LOC_FRAGMENT", locNum)
-                Location.currentLocationStr = locNum
-            }
-            finish()
+        if (goodLocation) {
+            showMessage(toastStr)
+            Utility.writePref(contextg, "ALERT" + locNum + "_NOTIFICATION", "true")
+            Utility.writePref(contextg, "CURRENT_LOC_FRAGMENT", locNum)
+            Location.currentLocationStr = locNum
         }
-
-        override fun onPreExecute() {
-            xy = UtilityLocation.getGPS(contextg)
-            locXEt.setText(xy[0].toString())
-            locYEt.setText(xy[1].toString())
-        }
+        finish()
     }
 
     private fun notifsCA(hide: Boolean) {
@@ -606,7 +584,7 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         val xStr = locXEt.text.toString()
         val yStr = locYEt.text.toString()
         val labelStr = locLabelEt.text.toString()
-        SaveLoc().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "osm", locNum, xStr, yStr, labelStr)
+        saveLoc("osm", locNum, xStr, yStr, labelStr)
     }
 
     private fun openCAMap(s: String) {

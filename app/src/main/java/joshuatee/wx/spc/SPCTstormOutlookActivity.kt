@@ -24,7 +24,6 @@ package joshuatee.wx.spc
 import android.annotation.SuppressLint
 import android.content.Context
 
-import android.os.AsyncTask
 import android.os.Bundle
 import android.graphics.Bitmap
 import android.view.Menu
@@ -35,9 +34,11 @@ import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.util.UtilityShare
+import kotlinx.coroutines.*
 
 class SPCTstormOutlookActivity : BaseActivity() {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmapArr = listOf<Bitmap>()
     private lateinit var contextg: Context
 
@@ -52,21 +53,13 @@ class SPCTstormOutlookActivity : BaseActivity() {
         contextg = this
         title = "SPC"
         toolbar.subtitle = "Thunderstorm Outook"
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            bitmapArr = UtilitySPC.tstormOutlookImages
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            val linearLayout: LinearLayout = findViewById(R.id.ll)
-            bitmapArr.forEach { linearLayout.addView(ObjectCardImage(contextg, it).card) }
-        }
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        bitmapArr = withContext(Dispatchers.IO) { UtilitySPC.tstormOutlookImages }
+        val linearLayout: LinearLayout = findViewById(R.id.ll)
+        bitmapArr.forEach { linearLayout.addView(ObjectCardImage(contextg, it).card) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

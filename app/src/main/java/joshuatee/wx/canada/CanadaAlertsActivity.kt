@@ -24,7 +24,6 @@ package joshuatee.wx.canada
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -36,9 +35,11 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCAWARN
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
+import kotlinx.coroutines.*
 
 class CanadaAlertsActivity : BaseActivity() {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var firstTime = true
     private lateinit var objWarn: ObjectCAWARN
     private lateinit var contextg: Context
@@ -56,31 +57,20 @@ class CanadaAlertsActivity : BaseActivity() {
         objWarn = ObjectCAWARN(this, this, linearLayout, toolbar)
         objWarn.prov = Utility.readPref(this, "CA_ALERTS_PROV", objWarn.prov)
         title = "Canada Alerts"
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun onPreExecute() {
-            val sv: ScrollView = findViewById(R.id.sv)
-            sv.smoothScrollTo(0, 0)
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        val sv: ScrollView = findViewById(R.id.sv)
+        sv.smoothScrollTo(0, 0)
+        withContext(Dispatchers.IO) { objWarn.getData() }
+        objWarn.showData()
+        if (firstTime) {
+            UtilityToolbar.fullScreenMode(toolbar)
+            firstTime = false
         }
-
-        override fun doInBackground(vararg params: String): String {
-            objWarn.getData()
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            objWarn.showData()
-            if (firstTime) {
-                UtilityToolbar.fullScreenMode(toolbar)
-                firstTime = false
-            }
-            Utility.writePref(contextg, "CA_ALERTS_PROV", objWarn.prov)
-            toolbar.subtitle = objWarn.title
-        }
+        Utility.writePref(contextg, "CA_ALERTS_PROV", objWarn.prov)
+        toolbar.subtitle = objWarn.title
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -103,7 +93,7 @@ class CanadaAlertsActivity : BaseActivity() {
             R.id.action_yt -> objWarn.prov = "yt"
             else -> return super.onOptionsItemSelected(item)
         }
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
         return true
     }
 }

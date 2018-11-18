@@ -27,7 +27,6 @@ import java.util.Collections
 import java.util.Locale
 
 import android.graphics.drawable.AnimationDrawable
-import android.os.AsyncTask
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.text.TextUtils
@@ -44,6 +43,7 @@ import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
+import kotlinx.coroutines.*
 
 class USNWSGOESActivity : VideoRecordActivity(), OnClickListener, OnItemSelectedListener, OnMenuItemClickListener {
 
@@ -59,6 +59,7 @@ class USNWSGOESActivity : VideoRecordActivity(), OnClickListener, OnItemSelected
         const val RID: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var firstTime = true
     private var animRan = false
     private var animDrawable = AnimationDrawable()
@@ -139,72 +140,58 @@ class USNWSGOESActivity : VideoRecordActivity(), OnClickListener, OnItemSelected
 
     override fun onRestart() {
         if (satSector == "jma" || satSector == "eumet")
-            GetContentNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContentNONGOES()
         else
-            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContent()
         super.onRestart()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
-        override fun doInBackground(vararg params: String): String {
+        if (wfoChoosen && !satSector.contains("wfo")) satSector += "/wfo"
+        // EEPAC:EAST needs to be east/epac not to be confused with west/epac
+        if (sector == "eepac") sector = "epac"
+        miRadar.isVisible = !(sector == "ceus" || sector == "weus" || sector == "eaus" || sector == "hi" || sector == "ak")
+        miWv.isVisible = !wfoChoosen
+        miZoomout.isVisible = !(sector == "ceus" || sector == "eaus" || sector.contains("pac") || sector.contains("atl"))
+        toolbar.title = imageTypeNhc
+        sector = sector.replace(":", "")
+
+        withContext(Dispatchers.IO) {
             bitmap = UtilityUSImgNWSGOES.getGOESMosaic(contextg, satSector, sector, imageTypeNhc, mesoImg, overlayImg, wfoChoosen, true)
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            img.visibility = View.VISIBLE
-            img.setImageBitmap(bitmap)
-            animRan = false
-            if (!firstRun2) {
-                img.setZoom(MyApplication.goesVisZoom, MyApplication.goesVisX, MyApplication.goesVisY)
-                firstRun2 = true
-            }
-            miMeso.isVisible = wfoChoosen || sector.length == 2
-            imageLoaded = true
+        img.visibility = View.VISIBLE
+        img.setImageBitmap(bitmap)
+        animRan = false
+        if (!firstRun2) {
+            img.setZoom(MyApplication.goesVisZoom, MyApplication.goesVisX, MyApplication.goesVisY)
+            firstRun2 = true
         }
-
-        override fun onPreExecute() {
-            if (wfoChoosen && !satSector.contains("wfo")) satSector += "/wfo"
-            // EEPAC:EAST needs to be east/epac not to be confused with west/epac
-            if (sector == "eepac") sector = "epac"
-            miRadar.isVisible = !(sector == "ceus" || sector == "weus" || sector == "eaus" || sector == "hi" || sector == "ak")
-            miWv.isVisible = !wfoChoosen
-            miZoomout.isVisible = !(sector == "ceus" || sector == "eaus" || sector.contains("pac") || sector.contains("atl"))
-            toolbar.title = imageTypeNhc
-            sector = sector.replace(":", "")
-        }
+        miMeso.isVisible = wfoChoosen || sector.length == 2
+        imageLoaded = true
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContentNONGOES : AsyncTask<String, String, String>() {
+    private fun getContentNONGOES() = GlobalScope.launch(uiDispatcher) {
 
-        internal var imgFormat = ""
+        var imgFormat = ".gif"
+        if (satSector == "eumet") imgFormat = ".jpg"
+        toolbar.title = imageTypeNhc
+        sector = sector.replace(":", "")
 
-        override fun doInBackground(vararg params: String): String {
+        withContext(Dispatchers.IO) {
             bitmap = UtilityUSImgNWSGOES.getGOESMosaicNONGOES(contextg, satSector, sector, imageTypeNhc, imgFormat, mesoImg, overlayImg, wfoChoosen, true)
-            return "Executed"
         }
 
-        override fun onPostExecute(result: String) {
-            img.visibility = View.VISIBLE
-            img.setImageBitmap(bitmap)
-            animRan = false
-            if (!firstRun2 && sector == MyApplication.goesVisSector) {
-                img.setZoom(MyApplication.goesVisZoom, MyApplication.goesVisX, MyApplication.goesVisY)
-                firstRun2 = true
-            }
-            miMeso.isVisible = wfoChoosen || sector.length == 2
-            imageLoaded = true
+        img.visibility = View.VISIBLE
+        img.setImageBitmap(bitmap)
+        animRan = false
+        if (!firstRun2 && sector == MyApplication.goesVisSector) {
+            img.setZoom(MyApplication.goesVisZoom, MyApplication.goesVisX, MyApplication.goesVisY)
+            firstRun2 = true
         }
-
-        override fun onPreExecute() {
-            imgFormat = ".gif"
-            if (satSector == "eumet") imgFormat = ".jpg"
-            toolbar.title = imageTypeNhc
-            sector = sector.replace(":", "")
-        }
+        miMeso.isVisible = wfoChoosen || sector.length == 2
+        imageLoaded = true
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -227,110 +214,110 @@ class USNWSGOESActivity : VideoRecordActivity(), OnClickListener, OnItemSelected
             R.id.action_map -> imageMap.toggleMap()
             R.id.action_a12 -> {
                 if (satSector == "jma" || satSector == "eumet")
-                    AnimateRadarNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "12")
+                    animateRadarNONGOES("12")
                 else
-                    AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "12")
+                    animateRadar("12")
             }
             R.id.action_a18 -> {
                 if (satSector == "jma" || satSector == "eumet")
-                    AnimateRadarNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "18")
+                    animateRadarNONGOES("18")
                 else
-                    AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "18")
+                    animateRadar("18")
             }
             R.id.action_a36 -> {
                 if (satSector == "jma" || satSector == "eumet")
-                    AnimateRadarNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "36")
+                    animateRadarNONGOES("36")
                 else
-                    AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "36")
+                    animateRadar("36")
             }
             R.id.action_a6 -> {
                 if (satSector == "jma" || satSector == "eumet")
-                    AnimateRadarNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "6")
+                    animateRadarNONGOES("6")
                 else
-                    AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, "6")
+                    animateRadar("6")
             }
             R.id.action_a -> {
                 if (satSector == "jma" || satSector == "eumet")
-                    AnimateRadarNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, MyApplication.uiAnimIconFrames)
+                    animateRadarNONGOES(MyApplication.uiAnimIconFrames)
                 else
-                    AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, MyApplication.uiAnimIconFrames)
+                    animateRadar(MyApplication.uiAnimIconFrames)
             }
             R.id.action_vis -> {
                 imageTypeNhc = "vis"
                 if (satSector == "jma" || satSector == "eumet")
-                    GetContentNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContentNONGOES()
                 else
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
             }
             R.id.action_avn -> {
                 imageTypeNhc = "avn"
                 if (satSector == "jma" || satSector == "eumet")
-                    GetContentNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContentNONGOES()
                 else
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
             }
             R.id.action_ir2 -> {
                 imageTypeNhc = "ir2"
                 if (satSector == "jma" || satSector == "eumet")
-                    GetContentNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContentNONGOES()
                 else
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
             }
             R.id.action_ir2f -> {
                 imageTypeNhc = "ir2f"
                 if (satSector == "jma" || satSector == "eumet")
-                    GetContentNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContentNONGOES()
                 else
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
             }
             R.id.action_bd -> {
                 imageTypeNhc = "bd"
                 if (satSector == "jma" || satSector == "eumet")
-                    GetContentNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContentNONGOES()
                 else
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
             }
             R.id.action_ir4 -> {
                 imageTypeNhc = "ir4"
                 if (satSector == "jma" || satSector == "eumet")
-                    GetContentNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContentNONGOES()
                 else
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
             }
             R.id.action_jsl -> {
                 imageTypeNhc = "jsl"
                 if (satSector == "jma" || satSector == "eumet")
-                    GetContentNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContentNONGOES()
                 else
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
             }
             R.id.action_rgb -> {
                 imageTypeNhc = "rgb"
                 if (satSector == "jma" || satSector == "eumet")
-                    GetContentNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContentNONGOES()
                 else
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
             }
             R.id.action_ft -> {
                 imageTypeNhc = "ft"
                 if (satSector == "jma" || satSector == "eumet")
-                    GetContentNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContentNONGOES()
                 else
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
             }
             R.id.action_rb -> {
                 imageTypeNhc = "rb"
                 if (satSector == "jma" || satSector == "eumet")
-                    GetContentNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContentNONGOES()
                 else
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
             }
             R.id.action_wv -> {
                 imageTypeNhc = "wv"
                 if (satSector == "jma" || satSector == "eumet")
-                    GetContentNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContentNONGOES()
                 else
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
             }
             R.id.action_zoomout -> {
                 if (wfoChoosen) {
@@ -354,75 +341,75 @@ class USNWSGOESActivity : VideoRecordActivity(), OnClickListener, OnItemSelected
                         "weus"
                 }
                 img.resetZoom()
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_mlsp -> {
                 mesoSelected("pmsl2")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_temp -> {
                 mesoSelected("temp")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_dew -> {
                 mesoSelected("d-temp")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_rh -> {
                 mesoSelected("rh")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_spw -> {
                 mesoSelected("spw")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_sli -> {
                 mesoSelected("sli")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_wind -> {
                 mesoSelected("wind")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_plot -> {
                 mesoSelected("plot")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_radar_overlay -> {
                 mesoSelected("radar")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_clear -> {
                 mesoImg.clear()
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_fronts -> {
                 overlaySelected("FRNT")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_counties -> {
                 overlaySelected("CNTY")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_latlon -> {
                 overlaySelected("LALO")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_roads -> {
                 overlaySelected("ROAD")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_cwa -> {
                 overlaySelected("CWA")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_warn -> {
                 mesoSelected("warn")
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_clear_overlays -> {
                 overlayImg.clear()
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContent()
             }
             R.id.action_east -> {
                 sector = "eaus"
@@ -531,39 +518,14 @@ class USNWSGOESActivity : VideoRecordActivity(), OnClickListener, OnItemSelected
         return true
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class AnimateRadar : AsyncTask<String, String, String>() {
-
-        internal var frameCntStr = ""
-
-        override fun doInBackground(vararg params: String): String {
-            frameCntStr = params[0]
-            animDrawable = UtilityUSImgNWSGOES.getNWSGOESAnim(contextg, satSector, sector, imageTypeNhc, frameCntStr)
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            animRan = UtilityImgAnim.startAnimation(animDrawable, img)
-        }
+    private fun animateRadar(frameCntStr: String) = GlobalScope.launch(uiDispatcher) {
+        animDrawable = withContext(Dispatchers.IO) { UtilityUSImgNWSGOES.getNWSGOESAnim(contextg, satSector, sector, imageTypeNhc, frameCntStr) }
+        animRan = UtilityImgAnim.startAnimation(animDrawable, img)
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class AnimateRadarNONGOES : AsyncTask<String, String, String>() {
-
-        internal var frameCntStr = ""
-
-        override fun doInBackground(vararg params: String): String {
-            frameCntStr = params[0]
-            animDrawable = UtilityUSImgNWSGOES.getNWSGOESAnimNONGOES(contextg, satSector, sector, imageTypeNhc, frameCntStr)
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            img.setImageDrawable(animDrawable)
-            animDrawable.isOneShot = false
-            animDrawable.start()
-            animRan = true
-        }
+    private fun animateRadarNONGOES(frameCntStr: String) = GlobalScope.launch(uiDispatcher) {
+        animDrawable = withContext(Dispatchers.IO) { UtilityUSImgNWSGOES.getNWSGOESAnimNONGOES(contextg, satSector, sector, imageTypeNhc, frameCntStr) }
+        animRan = UtilityImgAnim.startAnimation(animDrawable, img)
     }
 
     private fun mesoSelected(meso_s: String) {
@@ -603,7 +565,7 @@ class USNWSGOESActivity : VideoRecordActivity(), OnClickListener, OnItemSelected
             sector = tmpArr2[1].toLowerCase(Locale.US)
             satSector = tmpArr2[0].toLowerCase(Locale.US)
             wfoChoosen = false
-            GetContentNONGOES().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContentNONGOES()
         } else {
             if (firstRun && turl[1] != "") {
                 firstRun = false
@@ -622,7 +584,7 @@ class USNWSGOESActivity : VideoRecordActivity(), OnClickListener, OnItemSelected
                         } else {
                             "east"
                         }
-                        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                        getContent()
                     }
                     "mosaic" -> {
                         sector = UtilityGOES.getGOESSectorFromNWSOffice(contextg, nwsOffice)
@@ -639,27 +601,27 @@ class USNWSGOESActivity : VideoRecordActivity(), OnClickListener, OnItemSelected
                         } else {
                             "east"
                         }
-                        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                        getContent()
                     }
                     "nws_warn" -> {
                         sector = nwsOffice
                         satSector = UtilityGOES.getGOESSatSectorFromNWSOffice(contextg, sector)
                         wfoChoosen = true
                         mesoSelected("radar")
-                        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                        getContent()
                     }
                     "wv" -> {
                         sector = "ceus"
                         satSector = "comp"
                         imageTypeNhc = "wv"
-                        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                        getContent()
                     }
                     "tab" -> {
                         imageTypeNhc = "vis"
                         sector = nwsOffice
                         satSector = UtilityGOES.getGOESSatSectorFromSector(sector)
                         wfoChoosen = false
-                        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                        getContent()
                     }
                     else -> {
                         sector = nwsOffice
@@ -682,7 +644,7 @@ class USNWSGOESActivity : VideoRecordActivity(), OnClickListener, OnItemSelected
                         } else {
                             wfoChoosen = true
                         }
-                        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                        getContent()
                     }
                 }
             } else {
@@ -692,7 +654,7 @@ class USNWSGOESActivity : VideoRecordActivity(), OnClickListener, OnItemSelected
                     sector = tmpArr[0].toLowerCase(Locale.US)
                     satSector = tmpArr[1].toLowerCase(Locale.US)
                     img.resetZoom()
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
                 } else {
                     tmpArr = radsNws[pos].split(":")
                     sector = tmpArr[0].toLowerCase(Locale.US)
@@ -709,7 +671,7 @@ class USNWSGOESActivity : VideoRecordActivity(), OnClickListener, OnItemSelected
                         satSector = tmpArr[1].toLowerCase(Locale.US)
                     }
                     img.resetZoom()
-                    GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                    getContent()
                 }
             }
         }

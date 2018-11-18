@@ -23,7 +23,6 @@ package joshuatee.wx.notifications
 
 import android.app.job.JobParameters
 import android.app.job.JobService
-import android.os.AsyncTask
 import joshuatee.wx.util.Utility
 
 import joshuatee.wx.util.UtilityLog
@@ -35,18 +34,13 @@ class WXJobService : JobService() {
     override fun onStartJob(params: JobParameters): Boolean {
         // Note: this is preformed on the main thread.
         try {
-            BackgroundFetch(this).GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            BackgroundFetch(this).getContent()
             UtilityLog.d("wx", "jobservice ran BackgroundFetch")
         } catch (e: RejectedExecutionException) {
             UtilityLog.HandleException(e)
         }
 
         Utility.writePref(this, "JOBSERVICE_TIME_LAST_RAN", UtilityTime.getCurrentLocalTimeAsString())
-
-        //val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        //val editor = preferences.edit()
-        //editor.putString("JOBSERVICE_TIME_LAST_RAN", UtilityTime.getCurrentLocalTimeAsString())
-        //editor.apply()
 
         // below was commented out till 2018-06-02 and was causing wakelock issues
         if (android.os.Build.VERSION.SDK_INT > 20) {
