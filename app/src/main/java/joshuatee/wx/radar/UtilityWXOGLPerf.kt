@@ -511,7 +511,7 @@ internal object UtilityWXOGLPerf {
         }
     }
 
-    fun genCircleLocdot(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: Double, y: Double) {
+    fun genLocdot(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: Double, y: Double) {
         buffers.setToPositionZero()
         val pixYD: Float
         val pixXD = (-((y - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
@@ -530,6 +530,7 @@ internal object UtilityWXOGLPerf {
             buffers.putIndex((ixCount + 1).toShort())
             ixCount += 2
         }
+
     }
 
     fun decode8BitWX(context: Context, src: String, radialStartAngle: ByteBuffer, binWord: ByteBuffer): Short {

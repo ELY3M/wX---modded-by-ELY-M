@@ -24,7 +24,6 @@ package joshuatee.wx.nhc
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -42,6 +41,7 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.*
+import kotlinx.coroutines.*
 
 class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -60,6 +60,7 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         const val URL: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var turl: List<String>
     private var url = ""
     private var sigHtmlTmp = ""
@@ -108,52 +109,35 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         cTextProd.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
         ll.addView(cTextProd.card)
         prod = "MIATCP$stormId"
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun onPreExecute() {
-            bmAl.clear()
-        }
-
-        override fun doInBackground(vararg params: String): String {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        bmAl.clear()
+        withContext(Dispatchers.IO) {
             url = UtilityDownload.getTextProduct(contextg, prod)
             listOf("_W5_NL_sm2.png", "_5day_cone_with_line_and_wind_sm2.png", "_W_NL_sm2.gif", "_wind_probs_34_F120_sm2.png", "_wind_probs_50_F120_sm2.png",
                     "_wind_probs_64_F120_sm2.png", "_R_sm2.png", "_S_sm2.png", "_WPCQPF_sm2.png").forEach { bmAl.add((baseUrl + it).getImage()) }
             bmAl.add("http://www.nhc.noaa.gov/tafb_latest/danger_pac_latestBW_sm3.gif".getImage())
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            cTextProd.setText(Utility.fromHtml(url))
-            sigHtmlTmp = url
-            sv.smoothScrollTo(0, 0)
-            bmAl.filter { it.width > 100 }.forEach { ll.addView(ObjectCardImage(contextg, it).card) }
-            if (turl.size > 2) {
-                if (turl[2] == "sound") UtilityTTS.synthesizeTextAndPlay(applicationContext, sigHtmlTmp, prod)
-            }
+        cTextProd.setText(Utility.fromHtml(url))
+        sigHtmlTmp = url
+        sv.smoothScrollTo(0, 0)
+        bmAl.filter { it.width > 100 }.forEach { ll.addView(ObjectCardImage(contextg, it).card) }
+        if (turl.size > 2) {
+            if (turl[2] == "sound") UtilityTTS.synthesizeTextAndPlay(applicationContext, sigHtmlTmp, prod)
         }
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetText : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            url = UtilityDownload.getTextProduct(contextg, prod)
-            return "Executed"
+    private fun getText() = GlobalScope.launch(uiDispatcher) {
+        url = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(contextg, prod) }
+        if (url.contains("<")) {
+            cTextProd.setText(Utility.fromHtml(url))
+        } else {
+            cTextProd.setText(url)
         }
-
-        override fun onPostExecute(result: String) {
-            if (url.contains("<")) {
-                cTextProd.setText(Utility.fromHtml(url))
-            } else {
-                cTextProd.setText(url)
-            }
-            sigHtmlTmp = url
-            sv.smoothScrollTo(0, 0)
-        }
+        sigHtmlTmp = url
+        sv.smoothScrollTo(0, 0)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -164,19 +148,19 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.id.action_share -> UtilityShare.shareText(this, turl[1], Utility.fromHtml(url), bmAl)
             R.id.action_MIATCPEP2 -> {
                 prod = "MIATCP$stormId"
-                GetText().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getText()
             }
             R.id.action_MIATCMEP2 -> {
                 prod = "MIATCM$stormId"
-                GetText().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getText()
             }
             R.id.action_MIATCDEP2 -> {
                 prod = "MIATCD$stormId"
-                GetText().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getText()
             }
             R.id.action_MIAPWSEP2 -> {
                 prod = "MIAPWS$stormId"
-                GetText().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getText()
             }
             R.id.action_mute_notification -> UtilityNotificationNHC.muteNotification(this, toolbarTitle)
             else -> return super.onOptionsItemSelected(item)

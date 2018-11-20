@@ -28,7 +28,6 @@ import java.util.TreeMap
 import java.util.regex.Pattern
 
 import android.app.Activity
-import android.os.AsyncTask
 import android.os.Bundle
 import android.app.DatePickerDialog
 import android.content.Context
@@ -137,107 +136,103 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             drw.listView.setItemChecked(position, false)
             drw.drawerLayout.closeDrawer(drw.listView)
             filter = stateArray.getOrNull(position) ?: ""
-            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContent()
         }
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun onPreExecute() {
-            sv.smoothScrollTo(0, 0)
-        }
-
-        override fun doInBackground(vararg params: String): String {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        sv.smoothScrollTo(0, 0)
+        withContext(Dispatchers.IO) {
             if (firstRun) {
                 text = textUrl.getHtmlSep()
                 bitmap = imgUrl.getImage()
             }
-            return "Executed"
         }
+        displayData()
+    }
 
-        override fun onPostExecute(result: String) {
-            // Time,F_Scale,Location,County,State,Lat,Lon,Comments ( Speed / Size )
-            out.setLength(0)
-            val textArr = br.split(text)
-            mapState.clear()
-            title = "Storm Reports"
-            toolbar.subtitle = no
-            val ll: LinearLayout = findViewById(R.id.ll)
-            ll.removeAllViews()
-            val c0 = ObjectCardImage(contextg, bitmap)
-            ll.addView(c0.card)
-            c0.setOnClickListener(View.OnClickListener {
-                val stDatePicker = DatePickerDialog(this@SPCStormReportsActivity,
-                        pDateSetListener,
-                        pYear, pMonth, pDay)
-                val cal = Calendar.getInstance()
-                cal.set(Calendar.YEAR, 2004) // 2011-05-27 was the earliest date for filtered, moved to non-filtered and can go back to 2004-03-23
-                cal.set(Calendar.MONTH, 2)
-                cal.set(Calendar.DAY_OF_MONTH, 23)
-                stDatePicker.datePicker.minDate = cal.timeInMillis - 1000
-                stDatePicker.datePicker.maxDate = System.currentTimeMillis()
-                stDatePicker.setCanceledOnTouchOutside(true)
-                stDatePicker.show()
-            })
-            c0.resetZoom()
-            val c1 = ObjectCardText(contextg)
-            ll.addView(c1.card)
-            c1.setVisibility(View.GONE)
-            c1.setOnClickListener(View.OnClickListener {
-                filter = "All"
-                GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-            })
-            storms = UtilitySPCStormReports.processData(textArr.toList())
-            var stormCnt = -3
-            storms.forEachIndexed { k, s ->
-                if (filter == "All" || s.state == filter || s.text.contains("<H2>") || s.text == "Tornado Reports" || s.text == "Wind Reports" || s.text == "Hail Reports") {
-                    stormCnt += 1
-                    if (s.state != "") {
-                        val freq3 = mapState[s.state]
-                        mapState[s.state] = if (freq3 == null) 1 else freq3 + 1
-                    }
-                    val cTmp = ObjectCardText(contextg)
-                    ll.addView(cTmp.card)
-                    cTmp.setText(Utility.fromHtml(s.text))
-                    cTmp.setId(k)
-                    out.append(MyApplication.newline)
-                    out.append(Utility.fromHtml(s.text))
-                    if (!s.text.contains("<H2>")) {
-                        registerForContextMenu(cTmp.tv)
-                    }
-                    val xStr = s.lat
-                    val yStr = s.lon
-                    cTmp.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, WebscreenAB::class.java, WebscreenAB.URL, arrayOf(UtilityMap.genMapURL(xStr, yStr, "10"), "$xStr,$yStr")) })
-                    if (s.text.contains("(") && s.text.contains(")")) {
+    fun displayData() {
+        // Time,F_Scale,Location,County,State,Lat,Lon,Comments ( Speed / Size )
+        out.setLength(0)
+        val textArr = br.split(text)
+        mapState.clear()
+        title = "Storm Reports"
+        toolbar.subtitle = no
+        val ll: LinearLayout = findViewById(R.id.ll)
+        ll.removeAllViews()
+        val c0 = ObjectCardImage(contextg, bitmap)
+        ll.addView(c0.card)
+        c0.setOnClickListener(View.OnClickListener {
+            val stDatePicker = DatePickerDialog(this@SPCStormReportsActivity,
+                    pDateSetListener,
+                    pYear, pMonth, pDay)
+            val cal = Calendar.getInstance()
+            cal.set(Calendar.YEAR, 2004) // 2011-05-27 was the earliest date for filtered, moved to non-filtered and can go back to 2004-03-23
+            cal.set(Calendar.MONTH, 2)
+            cal.set(Calendar.DAY_OF_MONTH, 23)
+            stDatePicker.datePicker.minDate = cal.timeInMillis - 1000
+            stDatePicker.datePicker.maxDate = System.currentTimeMillis()
+            stDatePicker.setCanceledOnTouchOutside(true)
+            stDatePicker.show()
+        })
+        c0.resetZoom()
+        val c1 = ObjectCardText(contextg)
+        ll.addView(c1.card)
+        c1.setVisibility(View.GONE)
+        c1.setOnClickListener(View.OnClickListener {
+            filter = "All"
+            //GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            displayData()
+        })
+        storms = UtilitySPCStormReports.processData(textArr.toList())
+        var stormCnt = -3
+        storms.forEachIndexed { k, s ->
+            if (filter == "All" || s.state == filter || s.text.contains("<H2>") || s.text == "Tornado Reports" || s.text == "Wind Reports" || s.text == "Hail Reports") {
+                stormCnt += 1
+                if (s.state != "") {
+                    val freq3 = mapState[s.state]
+                    mapState[s.state] = if (freq3 == null) 1 else freq3 + 1
+                }
+                val cTmp = ObjectCardText(contextg)
+                ll.addView(cTmp.card)
+                cTmp.setText(Utility.fromHtml(s.text))
+                cTmp.setId(k)
+                out.append(MyApplication.newline)
+                out.append(Utility.fromHtml(s.text))
+                if (!s.text.contains("<H2>")) {
+                    registerForContextMenu(cTmp.tv)
+                }
+                val xStr = s.lat
+                val yStr = s.lon
+                cTmp.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, WebscreenAB::class.java, WebscreenAB.URL, arrayOf(UtilityMap.genMapURL(xStr, yStr, "10"), "$xStr,$yStr")) })
+                if (s.text.contains("(") && s.text.contains(")")) {
 
-                    } else {
-                        cTmp.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-                        cTmp.setTextColor(UIPreferences.textHighlightColor)
-                        cTmp.setText(Utility.fromHtml(s.text.toUpperCase()))
-                        cTmp.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) })
-                    }
+                } else {
+                    cTmp.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
+                    cTmp.setTextColor(UIPreferences.textHighlightColor)
+                    cTmp.setText(Utility.fromHtml(s.text.toUpperCase()))
+                    cTmp.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) })
                 }
             }
-            var mapOut = mapState.toString()
-            mapOut = mapOut.replace("[{}]".toRegex(), "")
-            c1.setText(mapOut)
-            out.insert(0, Utility.fromHtml("<br><b>" + mapOut + MyApplication.newline + "</b><br>"))
-            if (firstRun) {
-                stateArray = mapState.keys.toList()
-                val stateArrayLabel = mutableListOf<String>()
-                stateArray.indices.forEach { stateArrayLabel.add(stateArray[it] + ": " + mapState[stateArray[it]]) }
-                if (stateArrayLabel.size > 0) drw.updateLists(activity, stateArrayLabel)
-                firstRun = false
-            }
-            title = "(" + stormCnt.toString() + ") Storm Reports"
-            toolbar.subtitle = no
-            if (stormCnt > 0) {
-                c1.setVisibility(View.VISIBLE)
-            } else {
-                c1.setVisibility(View.GONE)
-            }
+        }
+        var mapOut = mapState.toString()
+        mapOut = mapOut.replace("[{}]".toRegex(), "")
+        c1.setText(mapOut)
+        out.insert(0, Utility.fromHtml("<br><b>" + mapOut + MyApplication.newline + "</b><br>"))
+        if (firstRun) {
+            stateArray = mapState.keys.toList()
+            val stateArrayLabel = mutableListOf<String>()
+            stateArray.indices.forEach { stateArrayLabel.add(stateArray[it] + ": " + mapState[stateArray[it]]) }
+            if (stateArrayLabel.size > 0) drw.updateLists(activity, stateArrayLabel)
+            firstRun = false
+        }
+        title = "(" + stormCnt.toString() + ") Storm Reports"
+        toolbar.subtitle = no
+        if (stormCnt > 0) {
+            c1.setVisibility(View.VISIBLE)
+        } else {
+            c1.setVisibility(View.GONE)
         }
     }
 
@@ -256,7 +251,7 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             textUrl = "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/$no.csv"
             firstRun = true
             filter = "All"
-            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContent()
             cYear = pYear
             cMonth = pMonth
             cDay = pDay

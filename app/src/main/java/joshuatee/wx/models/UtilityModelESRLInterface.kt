@@ -23,7 +23,7 @@ package joshuatee.wx.models
 
 internal object UtilityModelESRLInterface {
 
-    val MODELS_ARR = listOf(
+    val models = listOf(
             "HRRR",
             "HRRR_AK",
             "HRRR_NCEP",
@@ -31,7 +31,7 @@ internal object UtilityModelESRLInterface {
             "RAP_NCEP"
     )
 
-    val LIST_SECTOR_ARR_HRRR = listOf(
+    val sectorsHrrr = listOf(
             "Full",
             "NW",
             "NC",
@@ -51,9 +51,9 @@ internal object UtilityModelESRLInterface {
             "CLE"
     )
 
-    val LIST_SECTOR_ARR_HRRR_AK = listOf("Full")
+    val sectorsHrrrAk = listOf("Full")
 
-    val MODEL_HRRR_PARAMS = listOf(
+    val paramsHrrr = listOf(
             "1ref_sfc",
             "cref_sfc",
             "cref_esbl",
@@ -147,7 +147,7 @@ internal object UtilityModelESRLInterface {
             "solar_sfc"
     )
 
-    val MODEL_HRRR_PARAMS_LABELS = listOf(
+    val labelsHrrr = listOf(
             "1 km agl reflectivity",
             "composite reflectivity",
             "ensemble comp reflectivity",
@@ -241,7 +241,7 @@ internal object UtilityModelESRLInterface {
             "incoming shortwave radiation"
     )
 
-    val LIST_SECTOR_ARR_RAP = listOf(
+    val sectorsRap = listOf(
             "Full",
             "CONUS",
             "NW",
@@ -256,7 +256,7 @@ internal object UtilityModelESRLInterface {
             "HI"
     )
 
-    val MODEL_RAP_PARAMS = listOf(
+    val paramsRap = listOf(
             "cref_sfc",
             "cape_sfc",
             "cin_sfc",
@@ -318,7 +318,7 @@ internal object UtilityModelESRLInterface {
             "soilw_10cm"
     )
 
-    val MODEL_RAP_PARAMS_LABELS = listOf(
+    val labelsRap = listOf(
             "reflectivity",
             "surface CAPE",
             "surface CIN",
