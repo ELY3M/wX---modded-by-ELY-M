@@ -74,7 +74,7 @@ internal object UtilityModelNSSLWRFInputOutput {
         val day = runF.substring(6, 8)
         val hour = runF.substring(8, 10)
         val url = baseUrl + "/graphics/models/" + model + modelPostfix + "/" + year + "/" + month + "/" +
-                day + "/" + hour + "00/f0" + time + "00/" + param + ".spc_" + sector.toLowerCase() + ".f0" + time + "00.png"
+                day + "/" + hour + "00/f" + time + "00/" + param + ".spc_" + sector.toLowerCase() + ".f" + time + "00.png"
         val baseLayer = baseLayerUrl.getImage()
         val prodLayer = url.getImage()
         return UtilityImg.addColorBG(context, UtilityImg.mergeImages(context, prodLayer, baseLayer), Color.WHITE)
