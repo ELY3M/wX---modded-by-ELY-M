@@ -28,7 +28,6 @@ import java.util.Locale
 import androidx.cardview.widget.CardView
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -52,7 +51,7 @@ import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class AFDActivity: AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClickListener {
+class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClickListener {
 
     // The primary purpose of this activity is to view AFD from location's NWS office
     // However, other NWS office text products are also available from the AB menu
@@ -220,7 +219,7 @@ class AFDActivity: AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClickL
             }
             R.id.action_prod_by_state -> {
                 wfoByState()
-                GetContentByState().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                getContentByState()
             }
             R.id.action_map -> imageMap.toggleMap()
             R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.AFD)
@@ -300,24 +299,18 @@ class AFDActivity: AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClickL
         wfoListPerState.sort()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContentByState : AsyncTask<String, String, String>() {
-
-        internal val wfoProd = mutableListOf<String>()
-
-        override fun onPreExecute() {
-            sv.smoothScrollTo(0, 0)
-            ridFavOld = MyApplication.wfoFav
-            if (prod != oldProd) {
-                version = 1
-            }
-            if (nwsOffice != oldNwsOffice) {
-                version = 1
-            }
-            title = prod
+    private fun getContentByState() = GlobalScope.launch(uiDispatcher) {
+        val wfoProd = mutableListOf<String>()
+        sv.smoothScrollTo(0, 0)
+        ridFavOld = MyApplication.wfoFav
+        if (prod != oldProd) {
+            version = 1
         }
-
-        override fun doInBackground(vararg params: String): String {
+        if (nwsOffice != oldNwsOffice) {
+            version = 1
+        }
+        title = prod
+        withContext(Dispatchers.IO) {
             sigHtmlTmp = ""
             wfoListPerState.forEach {
                 sigHtmlTmp = if (version == 1) {
@@ -327,18 +320,14 @@ class AFDActivity: AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClickL
                 }
                 wfoProd.add(sigHtmlTmp)
             }
-            return "Executed"
         }
-
-        override fun onPostExecute(result: String) {
-            c0.setVisibility(View.GONE)
-            cardList.clear()
-            wfoProd.forEach {
-                val cTmp = ObjectCardText(contextg)
-                cTmp.setTextAndTranslate(Utility.fromHtml(it))
-                cardList.add(cTmp.card)
-                ll.addView(cTmp.card)
-            }
+        c0.setVisibility(View.GONE)
+        cardList.clear()
+        wfoProd.forEach {
+            val cTmp = ObjectCardText(contextg)
+            cTmp.setTextAndTranslate(Utility.fromHtml(it))
+            cardList.add(cTmp.card)
+            ll.addView(cTmp.card)
         }
     }
 }

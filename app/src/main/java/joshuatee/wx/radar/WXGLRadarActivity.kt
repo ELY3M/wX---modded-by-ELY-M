@@ -150,6 +150,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private var frameCntStrGlobal = ""
     private var locXCurrent = ""
     private var locYCurrent = ""
+    private var bearingCurrent = 0.0f
+    private var speedCurrent = 0.0f
     private var urlStr = ""
     private var fixedSite = false
     private lateinit var rl: RelativeLayout
@@ -397,7 +399,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 locYCurrent = latlonArr[1]
             }
             if (PolygonType.LOCDOT.pref || archiveMode || MyApplication.locdotFollowsGps) {
-                oglr.constructLocationDot(locXCurrent, locYCurrent, archiveMode)
+                oglr.constructLocationDot(locXCurrent, locYCurrent, bearingCurrent, archiveMode)
             } else {
                 oglr.deconstructLocationDot()
             }
@@ -1001,7 +1003,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             locYCurrent = latlonArr[1]
         }
         if (PolygonType.LOCDOT.pref || MyApplication.locdotFollowsGps) // added locdot gps apr 2016
-            oglr.constructLocationDot(locXCurrent, locYCurrent, archiveMode)
+            oglr.constructLocationDot(locXCurrent, locYCurrent, bearingCurrent, archiveMode)
         else
             oglr.deconstructLocationDot()
         img.visibility = View.GONE
@@ -1095,10 +1097,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private fun makeUseOfNewLocation(location: Location) {
         latD = location.latitude
         lonD = location.longitude
+        bearingCurrent = location.bearing
+        speedCurrent = location.speed
+        Log.i(TAG, "bearing: "+bearingCurrent)
+        Log.i(TAG, "speed: "+speedCurrent)
+        Log.i(TAG, "speed in mph: "+(speedCurrent * 3.6 * 0.62137119))
         getGPSFromDouble()
         locXCurrent = latlonArr[0]
         locYCurrent = latlonArr[1]
-        oglr.constructLocationDot(locXCurrent, locYCurrent, archiveMode)
+        oglr.constructLocationDot(locXCurrent, locYCurrent, bearingCurrent, archiveMode)
         glview.requestRender()
     }
 

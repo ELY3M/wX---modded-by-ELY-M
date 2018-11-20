@@ -60,9 +60,13 @@ internal object UtilityModelWPCGEFSInterface {
         }
     }
 
-    val SECTORS = listOf(
+    val sectors = listOf(
             "US",
             "AK"
+    )
+
+    val models = listOf(
+            "WPCGEFS"
     )
 
     // grep "option value" params | awk -F">" '{print $1}' | awk '{print $4}' | sed 's/$/,/g'

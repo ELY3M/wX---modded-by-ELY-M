@@ -3,8 +3,11 @@
 // TODO find new material design icons as used in google cal / clock
 // TODO base velocity legend
 // TODO SPC MESO rescan for _sf, convert to list
+// TODO make model activities more consistent, ex SPC SREF does not have setupModel()
 
 55051 2018_11_18 coroutine conversion: SPCStormReportsActivity
+                 refactor model code such as WPCGEFS
+                 implement generic model activity and move WPCGEFS to it
 55050 2018_11_18 rationalize ESRL and NCEP to be more like WRF in terms of setupModel and var naming
                  (bugfix) NCEP RAP has more time increments to offer now
 55049 2018_11_17 coroutine conversion: BackgroundFetch, WXGLRadarActivity, WXGLRadarActivityMultiPane

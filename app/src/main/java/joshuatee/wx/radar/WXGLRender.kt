@@ -63,6 +63,7 @@ class WXGLRender(private val context: Context) : Renderer {
         const val ortIntGlobal: Int = 400
         var oneDegreeScaleFactorGlobal: Float = 0.0f
             private set
+        var displayhold: Boolean = false
     }
 
     val TAG: String = "joshuatee WXGLRender"
@@ -117,7 +118,6 @@ class WXGLRender(private val context: Context) : Renderer {
     private var chunkCount = 0
     private var totalBins = 0
     private var totalBinsOgl = 0
-
 
     private var sp_loadimage: Int = 0
     private var iTexture: Int = 0
@@ -376,6 +376,7 @@ class WXGLRender(private val context: Context) : Renderer {
     }
 
     override fun onDrawFrame(gl: GL10) {
+        Log.i(TAG, "displayhold: "+displayhold)
         GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
         GLES20.glClearColor(bgColorFRed, bgColorFGreen, bgColorFBlue, 1f)
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
@@ -416,11 +417,14 @@ class WXGLRender(private val context: Context) : Renderer {
         }
 
         //TODO do custom icons for tvs and hail//
+        if (displayhold == false) { //hides some when screen is touched
+
         listOf(spotterBuffers, hiBuffers).forEach {
             if (zoom > it.scaleCutOff) {
                 drawTriangles(it)
             }
         }
+
 
         listOf(tvsBuffers).forEach {
             if (zoom > it.scaleCutOff) {
@@ -443,19 +447,19 @@ class WXGLRender(private val context: Context) : Renderer {
                 drawTriangles(wbCircleBuffers)
             }
         }
+
         GLES20.glLineWidth(defaultLineWidth)
 
         //drawTriangles(locdotBuffers)
         //drawLocation(locdotBuffers)
 
-
-        if (MyApplication.locdotFollowsGps) {
-            locIconBuffers.chunkCount = 1
-            //drawPolygons(locIconBuffers, 16)
-            drawLocation(locIconBuffers)
-        } else {
-            drawTriangles(locdotBuffers)
-        }
+            if (MyApplication.locdotFollowsGps) {
+                locIconBuffers.chunkCount = 1
+                drawLocation(locIconBuffers)
+            } else {
+                drawTriangles(locdotBuffers)
+            }
+        } //displayhold
 
 
         GLES20.glLineWidth(warnLineWidth)
@@ -767,7 +771,7 @@ class WXGLRender(private val context: Context) : Renderer {
         deconstructGenericLines(warningSpsBuffers)
     }
 
-    fun constructLocationDot(locXCurrent: String, locYCurrentF: String, archiveMode: Boolean) {
+    fun constructLocationDot(locXCurrent: String, locYCurrentF: String, locBearing: Float, archiveMode: Boolean) {
         var locYCurrent = locYCurrentF
         var locmarkerAl = mutableListOf<Double>()
         if (MyApplication.locdotFollowsGps) {

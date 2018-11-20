@@ -19,13 +19,15 @@ would have to do the latlon method that is used for watches/mcds/mpds
 14. android wear support. I own android wear watches and love them.      
 15. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor. 
 16. make VAD Wind Profile more better and friendly  like the one at cod.edu   
-
+17. add setting for adjusting width of colorbar (color table on side if enabled) due to some stupid phones!
 
 
 #
 #
 ## DONE!
 ====================================  
+I started on heading bug on GPS location  
+added "displayhold" function as seen in pykl3 because I liked it and it helps very much with "GLThread" crashes!  
 added option to change default lines on radar in the radar settings.  
 added "show MCD text" in radar" - It only show last MCD right now.  
 added TVS Icon - replaced the tvs triangle with tvs.png - need more testing and adjusting - need more badass storms!  

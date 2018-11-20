@@ -22,7 +22,6 @@
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -39,6 +38,7 @@ import joshuatee.wx.util.UtilityShare
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.util.UtilityLog
+import kotlinx.coroutines.*
 
 class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -50,6 +50,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         const val URL: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var turl: Array<String>
     private var url = ""
     private var html = ""
@@ -81,31 +82,23 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
             }
             html = url
         } else {
-            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContent()
         }
     }
 
     override fun onRestart() {
         if (url.startsWith("http")) {
-            GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            getContent()
         }
         super.onRestart()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            html = url.getHtml()
-            return "Executed"
-        }
-
-        override fun onPostExecute(result: String) {
-            c0.setTextAndTranslate(Utility.fromHtml(html))
-            if (turl.size > 2) {
-                if (turl[2] == "sound") {
-                    UtilityTTS.synthesizeTextAndPlay(applicationContext, html, "textscreen")
-                }
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        html = withContext(Dispatchers.IO) { url.getHtml() }
+        c0.setTextAndTranslate(Utility.fromHtml(html))
+        if (turl.size > 2) {
+            if (turl[2] == "sound") {
+                UtilityTTS.synthesizeTextAndPlay(applicationContext, html, "textscreen")
             }
         }
     }
