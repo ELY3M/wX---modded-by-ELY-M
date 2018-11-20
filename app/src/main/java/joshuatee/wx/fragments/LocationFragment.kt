@@ -95,6 +95,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private var radarTime = ""
     private var x = ""
     private var y = ""
+    private var bearing = 0.0f
     private var ts = ""
     private var tmpArr = Array(2) { "" }
     private var glviewInitialized = false
@@ -653,7 +654,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             glviewloc.requestRender()
         }).start()
         if (PolygonType.LOCDOT.pref) {
-            OGLRLOC.constructLocationDot(Location.x, Location.y, false)
+            OGLRLOC.constructLocationDot(Location.x, Location.y, 0.0f, false)
         } else {
             OGLRLOC.deconstructLocationDot()
         }

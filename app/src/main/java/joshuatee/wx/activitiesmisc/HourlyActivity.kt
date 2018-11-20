@@ -30,7 +30,7 @@ import android.widget.LinearLayout
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
-import joshuatee.wx.models.ModelsWPCGEFSActivity
+import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.SettingsMainActivity
 import joshuatee.wx.ui.BaseActivity
@@ -43,6 +43,7 @@ import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.DefaultLabelFormatter
+import joshuatee.wx.models.ModelsNSSLWRFActivity
 import joshuatee.wx.objects.ObjectIntent
 import kotlinx.coroutines.*
 
@@ -107,7 +108,7 @@ class HourlyActivity : BaseActivity() { // AppCompatActivity()
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             menuItemSettings -> ObjectIntent(this, SettingsMainActivity::class.java)
-            menuItemTest -> ObjectIntent(this, ModelsWPCGEFSActivity::class.java)
+            menuItemTest -> ObjectIntent(this, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "WPCGEFS", "WPC"))
             menuItemShare -> if (htmlShare.size > 1) {
                 UtilityShare.shareText(this, "Hourly", htmlShare[1])
             }

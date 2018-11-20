@@ -119,7 +119,10 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
         when (action) {
             MotionEvent.ACTION_DOWN -> {
                 if (!locfrag) {
-                    (0 until numPanes).forEach { wxgltextArr[it].hideTV() }
+                    (0 until numPanes).forEach {
+                        wxgltextArr[it].hideTV()
+                        WXGLRender.displayhold = true
+                    }
                 }
                 if (numPanes == 1 && fullScreen || numPanes > 1) {
                     UtilityUI.immersiveMode(act!!)
@@ -127,7 +130,10 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
             }
             MotionEvent.ACTION_MOVE -> {
             }
-            MotionEvent.ACTION_UP -> listener?.onProgressChanged(50000, idx, idxInt)
+            MotionEvent.ACTION_UP -> {
+                WXGLRender.displayhold = false
+                listener?.onProgressChanged(50000, idx, idxInt)
+            }
         }
         var retVal = mScaleDetector.onTouchEvent(event)
         retVal = mGestureDetector.onTouchEvent(event) || retVal

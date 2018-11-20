@@ -23,7 +23,6 @@ package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -37,6 +36,7 @@ import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
+import kotlinx.coroutines.*
 
 class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
@@ -44,6 +44,7 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
         const val LOC: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var img: TouchImageView2
     private var bitmap = UtilityImg.getBlankBitmap()
     private var firstRun = false
@@ -71,41 +72,30 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
         })
         imgUrl = Utility.readPref(this, prefToken, imgUrl)
         imgIdx = Utility.readPref(this, prefTokenIdx, 0)
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
-
-        override fun doInBackground(vararg params: String): String {
-            bitmap = imgUrl.getImage()
-            return "Executed"
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        title = "Observations"
+        bitmap = withContext(Dispatchers.IO) { imgUrl.getImage() }
+        if (imgUrl.contains("large_latestsfc.gif")) {
+            img.setMaxZoom(16f)
+        } else {
+            img.setMaxZoom(4f)
         }
-
-        override fun onPostExecute(result: String) {
-            if (imgUrl.contains("large_latestsfc.gif")) {
-                img.setMaxZoom(16f)
-            } else {
-                img.setMaxZoom(4f)
-            }
-            img.setImageBitmap(bitmap)
-            img.resetZoom()
-            firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "OBS")
-            imageLoaded = true
-            Utility.writePref(contextg, prefToken, imgUrl)
-            Utility.writePref(contextg, prefTokenIdx, imgIdx)
-            toolbar.subtitle = UtilityObservations.IMG_NAME_ARR[imgIdx]
-        }
-
-        override fun onPreExecute() {
-            title = "Observations"
-        }
+        img.setImageBitmap(bitmap)
+        img.resetZoom()
+        firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "OBS")
+        imageLoaded = true
+        Utility.writePref(contextg, prefToken, imgUrl)
+        Utility.writePref(contextg, prefTokenIdx, imgIdx)
+        toolbar.subtitle = UtilityObservations.IMG_NAME_ARR[imgIdx]
     }
 
     private fun getContent(idx: Int) {
         imgUrl = UtilityObservations.IMG_URL_ARR[idx]
         imgIdx = idx
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -152,7 +142,7 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
             imgIdx = 0
         }
         imgUrl = UtilityObservations.IMG_URL_ARR[imgIdx]
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 
     private fun showPrevImg() {
@@ -161,7 +151,7 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
             imgIdx = UtilityObservations.IMG_URL_ARR.size - 1
         }
         imgUrl = UtilityObservations.IMG_URL_ARR[imgIdx]
-        GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        getContent()
     }
 }
 

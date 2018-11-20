@@ -83,7 +83,8 @@ class ModelsWPCGEFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         super.onCreate(savedInstanceState, R.layout.activity_modelswpcgefs, R.menu.models_wpcgefs, false, true)
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        prefModel = "WPCGEFS"
+        val numPanesStr = numPanes.toString()
+        prefModel = "WPCGEFS$numPanesStr"
         prefSector = "MODEL_" + prefModel + "_SECTOR_LAST_USED"
         prefParam = "MODEL_" + prefModel + "_PARAM_LAST_USED"
         prefParamLabel = "MODEL_" + prefModel + "_PARAM_LAST_USED_LABEL"
@@ -108,7 +109,7 @@ class ModelsWPCGEFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         displayData = DisplayData(this, this, this, numPanes, spTime)
         spRun = ObjectSpinner(this, this, R.id.spinner_run)
         spRun.setOnItemSelectedListener(this)
-        spSector = ObjectSpinner(this, this, R.id.spinner_sector, UtilityModelWPCGEFSInterface.SECTORS)
+        spSector = ObjectSpinner(this, this, R.id.spinner_sector, UtilityModelWPCGEFSInterface.sectors)
         spSector.setOnItemSelectedListener(this)
         sector = Utility.readPref(this, prefSector, "S19")
         spSector.setSelection(sector)
@@ -123,7 +124,10 @@ class ModelsWPCGEFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         }
         model = prefModel
         Utility.writePref(this, prefModel, model)
-        setupModel()
+        setupModel(UtilityModelWPCGEFSInterface.PARAMS,
+                UtilityModelWPCGEFSInterface.LABELS,
+                UtilityModelWPCGEFSInterface.sectors,
+                0, 241, 6, 0)
         getRunStatus()
     }
 
@@ -227,19 +231,46 @@ class ModelsWPCGEFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         getContent()
     }
 
-    private fun setupModel() {
-        displayData.param[curImg] = "capegt500"
-        displayData.param[curImg] = Utility.readPref(this, prefParam, displayData.param[curImg])
-        displayData.paramLabel[curImg] = "CAPE > 500J/kg"
-        displayData.paramLabel[curImg] = Utility.readPref(this, prefParamLabel, displayData.paramLabel[curImg])
-        if (!UtilityModels.parmInArray(UtilityModelWPCGEFSInterface.PARAMS, displayData.param[curImg])) {
-            displayData.param[curImg] = "capegt500"
-            displayData.paramLabel[curImg] = "CAPE > 500J/kg"
+    /* private fun setupModel() {
+         displayData.param[curImg] = "capegt500"
+         displayData.param[curImg] = Utility.readPref(this, prefParam, displayData.param[curImg])
+         displayData.paramLabel[curImg] = "CAPE > 500J/kg"
+         displayData.paramLabel[curImg] = Utility.readPref(this, prefParamLabel, displayData.paramLabel[curImg])
+         if (!UtilityModels.parmInArray(UtilityModelWPCGEFSInterface.PARAMS, displayData.param[curImg])) {
+             displayData.param[curImg] = "capegt500"
+             displayData.paramLabel[curImg] = "CAPE > 500J/kg"
+         }
+         spRun.setSelection(0)
+         spTime.setSelection(0)
+         spTime.clear()
+         (0..241 step 6).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
+     }*/
+
+
+    private fun setupModel(params: List<String>, labels: List<String>, sectors: List<String>, startStep: Int, endStep: Int, stepAmount: Int, numberRuns: Int) {
+        (0 until numPanes).forEach {
+            displayData.param[it] = params[0]
+            displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
+            displayData.paramLabel[it] = params[0]
+            displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
         }
+        if (!UtilityModels.parmInArray(params, displayData.param[0])) {
+            displayData.param[0] = params[0]
+            displayData.paramLabel[0] = labels[0]
+        }
+        if (numPanes > 1)
+            if (!UtilityModels.parmInArray(params, displayData.param[1])) {
+                displayData.param[1] = params[0]
+                displayData.paramLabel[1] = labels[0]
+            }
+        //spSector.refreshData(this, UtilityModelNSSLWRFInterface.sectorsLong)
+        //spSector.setSelection(sectorOrig)
+        //drw.updateLists(this, labels, params)
         spRun.setSelection(0)
         spTime.setSelection(0)
-        spTime.clear()
-        (0..241 step 6).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
+        spTime.list.clear()
+        // FIXME format list should be paramertized
+        (startStep..endStep step stepAmount).forEach { spTime.list.add(String.format(Locale.US, "%03d", it)) }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

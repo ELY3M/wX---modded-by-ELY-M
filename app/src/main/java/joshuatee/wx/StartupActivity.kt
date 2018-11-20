@@ -145,6 +145,8 @@ fun checkperms() {
         override fun onPermissionGranted() {
             Log.i(TAG, "Storage Permissions Granted")
             checkfiles(R.drawable.headingbug, "headingbug.png")
+            checkfiles(R.drawable.tinyfly, "tinyfly.png")
+            checkfiles(R.drawable.pixelfly, "pixelfly.png")
             checkfiles(R.drawable.star_cyan, "star_cyan.png")
             checkfiles(R.drawable.location, "location.png")
 

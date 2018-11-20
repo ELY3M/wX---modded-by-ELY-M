@@ -139,12 +139,10 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         when (item.itemId) {
             R.id.action_forward -> {
                 timePeriod += 1
-                //GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
                 getContent()
             }
             R.id.action_back -> {
                 timePeriod -= 1
-                //GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
                 getContent()
             }
             R.id.action_share -> {
@@ -186,7 +184,6 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         }
         title = UtilityOPCImages.LABELS[imgIdx]
         imgUrl = UtilityOPCImages.URL_INDEX[imgIdx]
-        //GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         getContent()
     }
 
@@ -197,7 +194,6 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         }
         title = UtilityOPCImages.LABELS[imgIdx]
         imgUrl = UtilityOPCImages.URL_INDEX[imgIdx]
-        //GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         getContent()
     }
 }

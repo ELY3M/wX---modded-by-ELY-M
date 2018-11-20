@@ -24,7 +24,6 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.os.AsyncTask
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
@@ -43,6 +42,7 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.LatLon
+import kotlinx.coroutines.*
 
 class AdhocForecastActivity : BaseActivity() {
 
@@ -54,6 +54,7 @@ class AdhocForecastActivity : BaseActivity() {
         const val URL: String = ""
     }
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var turl: Array<String>
     private var latlon = LatLon()
     private var objFcst: ObjectForecastPackage? = null
@@ -91,16 +92,14 @@ class AdhocForecastActivity : BaseActivity() {
         llCv5V.orientation = LinearLayout.VERTICAL
         ll.addView(llCv5V)
         contextg = this
-        GetContent().execute()
+        getContent()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private inner class GetContent : AsyncTask<String, String, String>() {
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        var bmCc: Bitmap? = null
+        val bmArr = mutableListOf<Bitmap>()
 
-        internal var bmCc: Bitmap? = null
-        internal val bmArr = mutableListOf<Bitmap>()
-
-        override fun doInBackground(vararg params: String): String {
+        withContext(Dispatchers.IO) {
             //
             // CC
             //
@@ -117,62 +116,58 @@ class AdhocForecastActivity : BaseActivity() {
             // hazards
             //
             hazardRaw = objHazards!!.hazards
-            return "Executed"
+        }
+        //
+        // CC
+        //
+        bmCcSize = UtilityLocationFragment.setNWSIconSize()
+        objFcst?.let { _ ->
+            cardCC.let {
+                ccTime = objFcst!!.objCC.status
+                if (bmCc != null) {
+                    it.updateContent(bmCc!!, bmCcSize, objFcst!!, true, ccTime, radarTime)
+                }
+            }
+        }
+        //
+        // 7day
+        //
+        bmCcSize = UtilityLocationFragment.setNWSIconSize()
+        objFcst?.let { _ ->
+            llCv5V.removeAllViewsInLayout()
+            val day7Arr = objSevenDay!!.fcstList
+            bmArr.forEachIndexed { idx, bm ->
+                val c7day = ObjectCard7Day(contextg, bm, true, idx, day7Arr)
+                c7day.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) })
+                llCv5V.addView(c7day.card)
+            }
+            // sunrise card
+            val cardSunrise = ObjectCardText(contextg)
+            cardSunrise.center()
+            cardSunrise.lightText()
+            try {
+                cardSunrise.setText(UtilityDownload.getSunriseSunset(contextg, Location.currentLocationStr) + MyApplication.newline + UtilityTime.gmtTime())
+            } catch (e: Exception) {
+                UtilityLog.HandleException(e)
+            }
+            llCv5V.addView(cardSunrise.card)
         }
 
-        override fun onPostExecute(result: String) {
-            //
-            // CC
-            //
-            bmCcSize = UtilityLocationFragment.setNWSIconSize()
-            objFcst?.let { _ ->
-                cardCC.let {
-                    ccTime = objFcst!!.objCC.status
-                    if (bmCc != null) {
-                        it.updateContent(bmCc!!, bmCcSize, objFcst!!, true, ccTime, radarTime)
-                    }
-                }
-            }
-            //
-            // 7day
-            //
-            bmCcSize = UtilityLocationFragment.setNWSIconSize()
-            objFcst?.let { _ ->
-                llCv5V.removeAllViewsInLayout()
-                val day7Arr = objSevenDay!!.fcstList
-                bmArr.forEachIndexed { idx, bm ->
-                    val c7day = ObjectCard7Day(contextg, bm, true, idx, day7Arr)
-                    c7day.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) })
-                    llCv5V.addView(c7day.card)
-                }
-                // sunrise card
-                val cardSunrise = ObjectCardText(contextg)
-                cardSunrise.center()
-                cardSunrise.lightText()
-                try {
-                    cardSunrise.setText(UtilityDownload.getSunriseSunset(contextg, Location.currentLocationStr) + MyApplication.newline + UtilityTime.gmtTime())
-                } catch (e: Exception) {
-                    UtilityLog.HandleException(e)
-                }
-                llCv5V.addView(cardSunrise.card)
-            }
-
-            //
-            // hazards
-            //
-            var hazardSumAsync = ""
-            val idAl = hazardRaw.parseColumn("\"@id\": \"(.*?)\"")
-            val hazardTitles = hazardRaw.parseColumn("\"event\": \"(.*?)\"")
-            hazardTitles.forEach { hazardSumAsync += it + MyApplication.newline }
-            if (hazardSumAsync == "") {
-                llCv4V.removeAllViews()
-                llCv4V.visibility = View.GONE
-            } else {
-                llCv4V.visibility = View.VISIBLE
-                setupHazardCards(hazardSumAsync, idAl)
-            }
-            hazardsSum = hazardSumAsync
+        //
+        // hazards
+        //
+        var hazardSumAsync = ""
+        val idAl = hazardRaw.parseColumn("\"@id\": \"(.*?)\"")
+        val hazardTitles = hazardRaw.parseColumn("\"event\": \"(.*?)\"")
+        hazardTitles.forEach { hazardSumAsync += it + MyApplication.newline }
+        if (hazardSumAsync == "") {
+            llCv4V.removeAllViews()
+            llCv4V.visibility = View.GONE
+        } else {
+            llCv4V.visibility = View.VISIBLE
+            setupHazardCards(hazardSumAsync, idAl)
         }
+        hazardsSum = hazardSumAsync
     }
 
     private fun setupHazardCards(hazStr: String, idAl: List<String>) {
