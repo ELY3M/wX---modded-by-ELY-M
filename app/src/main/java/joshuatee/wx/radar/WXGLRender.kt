@@ -142,8 +142,8 @@ class WXGLRender(private val context: Context) : Renderer {
             }
 
             if (locdotBuffers.isInitialized && MyApplication.locdotFollowsGps) {
-                locIconBuffers.lenInit = locdotBuffers.lenInit
-                UtilityWXOGLPerf.genCircleLocdot(locIconBuffers, pn, gpsX, gpsY)
+                locIconBuffers.lenInit = 0f //was locdotBuffers.lenInit
+                UtilityWXOGLPerf.genLocdot(locIconBuffers, pn, gpsX, gpsY)
             }
 
         }
@@ -445,15 +445,16 @@ class WXGLRender(private val context: Context) : Renderer {
         }
         GLES20.glLineWidth(defaultLineWidth)
 
-        drawTriangles(locdotBuffers)
+        //drawTriangles(locdotBuffers)
         //drawLocation(locdotBuffers)
 
 
-
-        if (MyApplication.locdotFollowsGps && locIconBuffers.floatBuffer.capacity() != 0 && locIconBuffers.indexBuffer.capacity() != 0) {
+        if (MyApplication.locdotFollowsGps) {
             locIconBuffers.chunkCount = 1
             //drawPolygons(locIconBuffers, 16)
             drawLocation(locIconBuffers)
+        } else {
+            drawTriangles(locdotBuffers)
         }
 
 
@@ -475,17 +476,19 @@ class WXGLRender(private val context: Context) : Renderer {
                 imagesize = locationsize
                 iTexture = GLES20.glGetUniformLocation(sp_loadimage, "u_texture")
                 locationId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "location.png")
-
                 GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
-                //GLES20.glEnableVertexAttribArray(mPositionHandle)
+                GLES20.glEnableVertexAttribArray(mPositionHandle)
                 GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, locationId)
                 GLES20.glUniform1i(iTexture, 0)
                 GLES20.glEnable(GLES20.GL_BLEND);
                 GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
-                GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1)
+                //GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1)
+                GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
                 //GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
-                GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
+
+
+            GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
         }
     }
 
@@ -767,7 +770,11 @@ class WXGLRender(private val context: Context) : Renderer {
     fun constructLocationDot(locXCurrent: String, locYCurrentF: String, archiveMode: Boolean) {
         var locYCurrent = locYCurrentF
         var locmarkerAl = mutableListOf<Double>()
-        locdotBuffers.lenInit = MyApplication.radarLocdotSize.toFloat()
+        if (MyApplication.locdotFollowsGps) {
+            locdotBuffers.lenInit = 0f
+        } else {
+            locdotBuffers.lenInit = MyApplication.radarLocdotSize.toFloat()
+        }
         locYCurrent = locYCurrent.replace("-", "")
         val x = locXCurrent.toDoubleOrNull() ?: 0.0
         val y = locYCurrent.toDoubleOrNull() ?: 0.0
@@ -794,17 +801,13 @@ class WXGLRender(private val context: Context) : Renderer {
             }
         }
 
-        if (MyApplication.locdotFollowsGps) {
-            locdotBuffers.triangleCount = 1
-        } else {
-            locdotBuffers.triangleCount = 12
-        }
+
+        locdotBuffers.triangleCount = 12
         constructTriangles(locdotBuffers)
 
 
-
         //Circle around the location dot//
-        locIconBuffers.triangleCount = 1 //36
+        locIconBuffers.triangleCount = 1 //was 36
         locIconBuffers.initialize(32 * locIconBuffers.triangleCount,
                 8 * locIconBuffers.triangleCount,
                 6 * locIconBuffers.triangleCount,
@@ -818,9 +821,10 @@ class WXGLRender(private val context: Context) : Renderer {
             UtilityWXOGLPerf.colorGen(locIconBuffers.colorBuffer, 2 * locIconBuffers.triangleCount, locIconBuffers.colorArray)
         }
 
+
         if (MyApplication.locdotFollowsGps) {
             locIconBuffers.lenInit = locdotBuffers.lenInit
-            UtilityWXOGLPerf.genCircleLocdot(locIconBuffers, pn, gpsX, gpsY)
+            UtilityWXOGLPerf.genLocdot(locIconBuffers, pn, gpsX, gpsY)
 
         }
 

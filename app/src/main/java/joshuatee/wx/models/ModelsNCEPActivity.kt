@@ -53,6 +53,7 @@ import kotlinx.coroutines.*
 class ModelsNCEPActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener, OnItemSelectedListener {
 
     // This code provides a native android interface to Weather Models @ NCEP
+    // http://mag.ncep.noaa.gov/model-guidance-model-area.php
     //
     // arg1 - number of panes, 1 or 2
     // arg2 - pref model token and hash lookup
@@ -157,7 +158,7 @@ class ModelsNCEPActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCli
         }
         (0 until 24).forEach { spRun.add(String.format(Locale.US, "%02d", it) + "Z") }
         (0 until 16).forEach { spRun.add(String.format(Locale.US, "%03d", it) + "00") }
-        setupListRunZ()
+        setupListRunZ(4)
         spRun.notifyDataSetChanged()
         spRun.setSelection(0)
         spTime.setSelection(0)
@@ -180,90 +181,123 @@ class ModelsNCEPActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCli
             when (parent.selectedItemPosition) {
                 R.id.spinner_run, 1 -> {
                     model = "GFS"
-                    Utility.writePref(this, prefModel, model)
                     setupGFS()
                 }
                 2 -> {
                     model = "NAM"
-                    Utility.writePref(this, prefModel, model)
-                    setupNAM()
+                    setupModel(UtilityModelNCEPInterface.MODEL_NAM_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_NAM_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_NAM,
+                            0, 85, 3, 4)
+
                 }
                 4 -> {
                     model = "RAP"
-                    Utility.writePref(this, prefModel, model)
-                    setupRAP()
+                    setupModel(UtilityModelNCEPInterface.MODEL_RAP_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_RAP_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_RAP,
+                            0, 39, 1, 24)
                 }
                 0 -> {
                     model = "HRRR"
-                    Utility.writePref(this, prefModel, model)
-                    setupHRRR()
+                    setupModel(UtilityModelNCEPInterface.MODEL_HRRR_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_HRRR_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_HRRR,
+                            0, 18, 1, 24)
                 }
                 3 -> {
                     model = "NAM-HIRES"
-                    Utility.writePref(this, prefModel, model)
-                    setupNAM4KM()
+                    setupModel(UtilityModelNCEPInterface.MODEL_NAM_4_KM_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_NAM_4_KM_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_NAM_4_KM,
+                            0, 60, 1, 4)
                 }
                 5 -> {
                     model = "HRW-NMMB"
-                    Utility.writePref(this, prefModel, model)
-                    setupHRWNMM()
+                    setupModel(UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_HRW_NMM,
+                            0, 49, 1, 2)
                 }
                 6 -> {
                     model = "HRW-ARW"
-                    Utility.writePref(this, prefModel, model)
-                    setupHRWNMM()
+                    setupModel(UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_HRW_NMM,
+                            0, 49, 1, 2)
                 }
                 7 -> {
                     model = "GEFS-SPAG"
-                    Utility.writePref(this, prefModel, model)
-                    setupGEFSSPAG()
+                    setupModel(UtilityModelNCEPInterface.MODEL_GEFS_SPAG_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_GEFS_SPAG_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_GEFS_SPAG,
+                            0, 385, 6, 4)
                 }
                 8 -> {
                     model = "GEFS-MEAN-SPRD"
-                    Utility.writePref(this, prefModel, model)
-                    setupGEFSMNSPRD()
+                    setupModel(UtilityModelNCEPInterface.MODEL_GEFS_MNSPRD_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_GEFS_MNSPRD_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_GEFS_MNSPRD,
+                            0, 385, 6, 4)
                 }
                 9 -> {
                     model = "SREF"
-                    Utility.writePref(this, prefModel, model)
-                    setupSREF()
+                    setupModel(UtilityModelNCEPInterface.MODEL_SREF_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_SREF_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_SREF,
+                            0, 88, 3, 5)
                 }
                 10 -> {
                     model = "NAEFS"
-                    Utility.writePref(this, prefModel, model)
-                    setupNAEFS()
+                    setupModel(UtilityModelNCEPInterface.MODEL_NAEFS_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_NAEFS_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_NAEFS,
+                            6, 385, 6, 4)
                 }
                 11 -> {
                     model = "POLAR"
-                    Utility.writePref(this, prefModel, model)
-                    setupPOLAR()
+                    setupModel(UtilityModelNCEPInterface.MODEL_POLAR_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_POLAR_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_POLAR,
+                            24, 385, 24, 1)
                 }
                 12 -> {
                     model = "WW3"
-                    Utility.writePref(this, prefModel, model)
-                    setupWW3()
+                    setupModel(UtilityModelNCEPInterface.MODEL_WW_3_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_WW_3_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_WW_3,
+                            0, 127, 6, 4)
                 }
                 13 -> {
                     model = "WW3-ENP"
-                    Utility.writePref(this, prefModel, model)
-                    setupWW3ENP()
+                    setupModel(UtilityModelNCEPInterface.MODEL_WW_3_ENP_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_WW_3_ENP_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_WW_3_ENP,
+                            0, 127, 6, 4)
                 }
                 14 -> {
                     model = "WW3-WNA"
-                    Utility.writePref(this, prefModel, model)
-                    setupWW3WNA()
+                    setupModel(UtilityModelNCEPInterface.MODEL_WW_3_WNA_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_WW_3_WNA_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_WW_3_WNA,
+                            0, 127, 6, 4)
                 }
                 15 -> {
                     model = "ESTOFS"
-                    Utility.writePref(this, prefModel, model)
-                    setupESTOFS()
+                    setupModel(UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_ESTOFS,
+                            0, 181, 1, 4)
                 }
                 16 -> {
                     model = "FIREWX"
-                    Utility.writePref(this, prefModel, model)
-                    setupFIREWX()
+                    setupModel(UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS,
+                            UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS_LABELS,
+                            UtilityModelNCEPInterface.LIST_SECTOR_ARR_FIREWX,
+                            0, 37, 1, 4)
                 }
             }
+            Utility.writePref(this, prefModel, model)
             getRunStatus()
         } else {
             if (firstRunTimeSet) {
@@ -422,416 +456,67 @@ class ModelsNCEPActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCli
         drw.updateLists(this, UtilityModelNCEPInterface.MODEL_GFS_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_GFS_PARAMS)
         spRun.setSelection(0)
         spTime.setSelection(0)
-        setupListRunZ()
+        setupListRunZ(4)
         spTime.clear()
         (0..241 step 3).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
         (252..385 step 12).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
     }
 
-    private fun setupListRunZ() {
+    private fun setupListRunZ(numberRuns: Int) {
         spRun.clear()
-        spRun.add("00Z")
-        spRun.add("06Z")
-        spRun.add("12Z")
-        spRun.add("18Z")
+        when (numberRuns) {
+            1 -> spRun.add("00Z")
+            2 -> {
+                spRun.add("00Z")
+                spRun.add("12Z")
+            }
+            4 -> {
+                spRun.add("00Z")
+                spRun.add("06Z")
+                spRun.add("12Z")
+                spRun.add("18Z")
+            }
+            5 -> {  // FIXME use enum
+                spRun.add("03Z")
+                spRun.add("09Z")
+                spRun.add("15Z")
+                spRun.add("21Z")
+            }
+            24 -> (0..23).forEach { spRun.add(String.format(Locale.US, "%02d", it) + "Z") }
+        }
         spRun.notifyDataSetChanged()
     }
 
-    private fun setupNAM() {
+    private fun setupModel(params: List<String>, labels: List<String>, sectors: List<String>, startStepTime: Int, endStepTime: Int, stepAmount: Int, numberRuns: Int) {
         (0 until numPanes).forEach {
-            displayData.param[it] = "500_vort_ht"
+            displayData.param[it] = params[0]
             displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
-            displayData.paramLabel[it] = "500mb Vorticity, Wind, and Height"
+            displayData.paramLabel[it] = params[0]
             displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
         }
-        if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_NAM_PARAMS, displayData.param[0])) {
-            displayData.param[0] = "500_vort_ht"
-            displayData.paramLabel[0] = "500mb Vorticity, Wind, and Height"
+        if (!UtilityModels.parmInArray(params, displayData.param[0])) {
+            displayData.param[0] = params[0]
+            displayData.paramLabel[0] = labels[0]
         }
         if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_NAM_PARAMS, displayData.param[1])) {
-                displayData.param[1] = "500_vort_ht"
-                displayData.paramLabel[1] = "500mb Vorticity, Wind, and Height"
+            if (!UtilityModels.parmInArray(params, displayData.param[1])) {
+                displayData.param[1] = params[0]
+                displayData.paramLabel[1] = labels[0]
             }
-        addItemsOnSpinnerSectors(UtilityModelNCEPInterface.LIST_SECTOR_ARR_NAM)
-        drw.updateLists(this, UtilityModelNCEPInterface.MODEL_NAM_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_NAM_PARAMS)
-        spRun.setSelection(0)
-        spTime.setSelection(0)
-        setupListRunZ()
-        spTime.clear()
-        (0..85 step 3).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
-    }
-
-    private fun setupRAP() {
-        (0 until numPanes).forEach {
-            displayData.param[it] = "500_vort_ht"
-            displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
-            displayData.paramLabel[it] = "500mb Vorticity, Wind, and Height"
-            displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
-        }
-        if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_RAP_PARAMS, displayData.param[0])) {
-            displayData.param[0] = "500_vort_ht"
-            displayData.paramLabel[0] = "500mb Vorticity, Wind, and Height"
-        }
-        if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_RAP_PARAMS, displayData.param[1])) {
-                displayData.param[1] = "500_vort_ht"
-                displayData.paramLabel[1] = "500mb Vorticity, Wind, and Height"
-            }
-        addItemsOnSpinnerSectors(UtilityModelNCEPInterface.LIST_SECTOR_ARR_RAP)
-        drw.updateLists(this, UtilityModelNCEPInterface.MODEL_RAP_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_RAP_PARAMS)
-        spRun.setSelection(0)
-        spTime.setSelection(0)
-        spRun.clear()
-        for (i in (0 until 24)) {
-            spRun.add(String.format(Locale.US, "%02d", i) + "Z")
-        }
-        spTime.clear()
-        for (i in (0 until 22)) {
-            spTime.add(String.format(Locale.US, "%03d", i))
-        }
-    }
-
-    private fun setupGEFSSPAG() {
-        (0 until numPanes).forEach {
-            displayData.param[it] = "500_510_552_ht"
-            displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
-            displayData.paramLabel[it] = "500mb 510/552 Height Contours"
-            displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
-        }
-        if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_GEFS_SPAG_PARAMS, displayData.param[0])) {
-            displayData.param[0] = "500_510_552_ht"
-            displayData.paramLabel[0] = "500mb 510/552 Height Contours"
-        }
-        if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_GEFS_SPAG_PARAMS, displayData.param[1])) {
-                displayData.param[1] = "500_510_552_ht"
-                displayData.paramLabel[1] = "500mb 510/552 Height Contours"
-            }
-        addItemsOnSpinnerSectors(UtilityModelNCEPInterface.LIST_SECTOR_ARR_GEFS_SPAG)
-        drw.updateLists(this, UtilityModelNCEPInterface.MODEL_GEFS_SPAG_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_GEFS_SPAG_PARAMS)
-        spRun.setSelection(0)
-        spTime.setSelection(0)
-        setupListRunZ()
-        spTime.clear()
-        (0..181 step 6).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
-        (192..385 step 12).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
-    }
-
-    private fun setupGEFSMNSPRD() {
-        (0 until numPanes).forEach {
-            displayData.param[it] = "mslp"
-            displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
-            displayData.paramLabel[it] = "Mean Sea Level Pressure"
-            displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
-        }
-
-        if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_GEFS_MNSPRD_PARAMS, displayData.param[0])) {
-            displayData.param[0] = "mslp"
-            displayData.paramLabel[0] = "Mean Sea Level Pressure"
-        }
-
-        if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_GEFS_MNSPRD_PARAMS, displayData.param[1])) {
-                displayData.param[1] = "mslp"
-                displayData.paramLabel[1] = "Mean Sea Level Pressure"
-            }
-
-        addItemsOnSpinnerSectors(UtilityModelNCEPInterface.LIST_SECTOR_ARR_GEFS_MNSPRD)
-        drw.updateLists(this, UtilityModelNCEPInterface.MODEL_GEFS_MNSPRD_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_GEFS_MNSPRD_PARAMS)
-        spRun.setSelection(0)
-        spTime.setSelection(0)
-        setupListRunZ()
-        spTime.clear()
-        (0..181 step 6).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
-        (192..385 step 12).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
-    }
-
-    private fun setupHRWNMM() {
-        (0 until numPanes).forEach {
-            displayData.param[it] = "sim_radar_1km"
-            displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
-            displayData.paramLabel[it] = "Simulated Radar Reflectivity 1km"
-            displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
-        }
-        if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS, displayData.param[0])) {
-            displayData.param[0] = "sim_radar_1km"
-            displayData.paramLabel[0] = "Simulated Radar Reflectivity 1km"
-        }
-        if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS, displayData.param[1])) {
-                displayData.param[1] = "sim_radar_1km"
-                displayData.paramLabel[1] = "Simulated Radar Reflectivity 1km"
-            }
-        addItemsOnSpinnerSectors(UtilityModelNCEPInterface.LIST_SECTOR_ARR_HRW_NMM)
-        drw.updateLists(this, UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS)
+        addItemsOnSpinnerSectors(sectors)
+        drw.updateLists(this, labels, params)
         spRun.setSelection(0)
         spTime.setSelection(1)
-        spRun.clear()
-        spRun.add("00Z")
-        spRun.add("12Z")
+        setupListRunZ(numberRuns)
         spTime.clear()
-        (0 until 49).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
-    }
-
-    private fun setupNAEFS() {
-        (0 until numPanes).forEach {
-            displayData.param[it] = "mslp"
-            displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
-            displayData.paramLabel[it] = "Mean Sea Level Pressure"
-            displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
-        }
-        if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_NAEFS_PARAMS, displayData.param[0])) {
-            displayData.param[0] = "mslp"
-            displayData.paramLabel[0] = "Mean Sea Level Pressure"
-        }
-        if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_NAEFS_PARAMS, displayData.param[1])) {
-                displayData.param[1] = "mslp"
-                displayData.paramLabel[1] = "Mean Sea Level Pressure"
+        when (model) {
+            "HRRR" -> (startStepTime..endStepTime step stepAmount).forEach { spTime.add(String.format(Locale.US, "%03d" + "00", it)) }
+            "GEFS-SPAG", "GEFS-MEAN-SPRD" -> {
+                (0..181 step 6).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
+                (192..385 step 12).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
             }
-        addItemsOnSpinnerSectors(UtilityModelNCEPInterface.LIST_SECTOR_ARR_NAEFS)
-        drw.updateLists(this, UtilityModelNCEPInterface.MODEL_NAEFS_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_NAEFS_PARAMS)
-        spRun.setSelection(0)
-        spTime.setSelection(0)
-        setupListRunZ()
-        spTime.clear()
-        (6..385 step 6).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
-    }
-
-    private fun setupPOLAR() {
-        (0 until numPanes).forEach {
-            displayData.param[it] = "ice_drift"
-            displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
-            displayData.paramLabel[it] = "Polar Ice Drift"
-            displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
+            else -> (startStepTime..endStepTime step stepAmount).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
         }
-        if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_POLAR_PARAMS, displayData.param[0])) {
-            displayData.param[0] = "ice_drift"
-            displayData.paramLabel[0] = "Polar Ice Drift"
-        }
-        if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_POLAR_PARAMS, displayData.param[1])) {
-                displayData.param[1] = "ice_drift"
-                displayData.paramLabel[1] = "Polar Ice Drift"
-            }
-        addItemsOnSpinnerSectors(UtilityModelNCEPInterface.LIST_SECTOR_ARR_POLAR)
-        drw.updateLists(this, UtilityModelNCEPInterface.MODEL_POLAR_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_POLAR_PARAMS)
-        spRun.setSelection(0)
-        spTime.setSelection(0)
-        spRun.clear()
-        spRun.add("00Z")
-        spTime.clear()
-        (24..385 step 24).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
-    }
-
-    private fun setupWW3() {
-        (0 until numPanes).forEach {
-            displayData.param[it] = "regional_wv_dir_per"
-            displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
-            displayData.paramLabel[it] = "Significant Wave Height and Wind"
-            displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
-        }
-        if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_WW_3_PARAMS, displayData.param[0])) {
-            displayData.param[0] = "regional_wv_dir_per"
-            displayData.paramLabel[0] = "Significant Wave Height and Wind"
-        }
-        if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_WW_3_PARAMS, displayData.param[1])) {
-                displayData.param[1] = "regional_wv_dir_per"
-                displayData.paramLabel[1] = "Significant Wave Height and Wind"
-            }
-        addItemsOnSpinnerSectors(UtilityModelNCEPInterface.LIST_SECTOR_ARR_WW_3)
-        drw.updateLists(this, UtilityModelNCEPInterface.MODEL_WW_3_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_WW_3_PARAMS)
-        spRun.setSelection(0)
-        spTime.setSelection(0)
-        setupListRunZ()
-        spTime.clear()
-        (0..127 step 6).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
-    }
-
-    private fun setupWW3ENP() {
-        (0 until numPanes).forEach {
-            displayData.param[it] = "regional_wv_ht"
-            displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
-            displayData.paramLabel[it] = "Regional WW3 Model Sig Wave Height and Wind"
-            displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
-        }
-        if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_WW_3_ENP_PARAMS, displayData.param[0])) {
-            displayData.param[0] = "regional_wv_ht"
-            displayData.paramLabel[0] = "Regional WW3 Model Sig Wave Height and Wind"
-        }
-        if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_WW_3_ENP_PARAMS, displayData.param[1])) {
-                displayData.param[1] = "regional_wv_ht"
-                displayData.paramLabel[1] = "Regional WW3 Model Sig Wave Height and Wind"
-            }
-        addItemsOnSpinnerSectors(UtilityModelNCEPInterface.LIST_SECTOR_ARR_WW_3_ENP)
-        drw.updateLists(this, UtilityModelNCEPInterface.MODEL_WW_3_ENP_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_WW_3_ENP_PARAMS)
-        spRun.setSelection(0)
-        spTime.setSelection(0)
-        setupListRunZ()
-        spTime.clear()
-        (0..127 step 6).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
-    }
-
-    private fun setupWW3WNA() {
-        (0 until numPanes).forEach {
-            displayData.param[it] = "regional_wv_ht"
-            displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
-            displayData.paramLabel[it] = "Regional WW3 Model Sig Wave Height and Wind"
-            displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
-        }
-        if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_WW_3_WNA_PARAMS, displayData.param[0])) {
-            displayData.param[0] = "regional_wv_ht"
-            displayData.paramLabel[0] = "Regional WW3 Model Sig Wave Height and Wind"
-        }
-        if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_WW_3_WNA_PARAMS, displayData.param[1])) {
-                displayData.param[1] = "regional_wv_ht"
-                displayData.paramLabel[1] = "Regional WW3 Model Sig Wave Height and Wind"
-            }
-        addItemsOnSpinnerSectors(UtilityModelNCEPInterface.LIST_SECTOR_ARR_WW_3_WNA)
-        drw.updateLists(this, UtilityModelNCEPInterface.MODEL_WW_3_WNA_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_WW_3_WNA_PARAMS)
-        spRun.setSelection(0)
-        spTime.setSelection(0)
-        setupListRunZ()
-        spTime.clear()
-        (0..127 step 6).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
-    }
-
-    private fun setupHRRR() {
-        (0 until numPanes).forEach {
-            displayData.param[it] = "sim_radar_1km"
-            displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
-            displayData.paramLabel[it] = "Simulated Reflectivity"
-            displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
-        }
-        if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_HRRR_PARAMS, displayData.param[0])) {
-            displayData.param[0] = "sim_radar_1km"
-            displayData.paramLabel[0] = "Simulated Reflectivity"
-        }
-        if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_HRRR_PARAMS, displayData.param[1])) {
-                displayData.param[1] = "sim_radar_1km"
-                displayData.paramLabel[1] = "Simulated Reflectivity"
-            }
-        addItemsOnSpinnerSectors(UtilityModelNCEPInterface.LIST_SECTOR_ARR_HRRR)
-        drw.updateLists(this, UtilityModelNCEPInterface.MODEL_HRRR_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_HRRR_PARAMS)
-        spRun.setSelection(0)
-        spTime.setSelection(0)
-        spRun.clear()
-        for (i in (0 until 24)) {
-            spRun.add(String.format(Locale.US, "%02d", i) + "Z")
-        }
-        spTime.clear()
-        for (i in (0 until 19)) {
-            spTime.add(String.format(Locale.US, "%03d", i) + "00")
-        }
-    }
-
-    private fun setupNAM4KM() {
-        (0 until numPanes).forEach {
-            displayData.param[it] = "sim_radar_1km"
-            displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
-            displayData.paramLabel[it] = "Simulated Radar Reflectivity 1km"
-            displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
-        }
-        if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_NAM_4_KM_PARAMS, displayData.param[0])) {
-            displayData.param[0] = "sim_radar_1km"
-            displayData.paramLabel[0] = "Simulated Radar Reflectivity 1km"
-        }
-        if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_NAM_4_KM_PARAMS, displayData.param[1])) {
-                displayData.param[1] = "sim_radar_1km"
-                displayData.paramLabel[1] = "Simulated Radar Reflectivity 1km"
-            }
-        addItemsOnSpinnerSectors(UtilityModelNCEPInterface.LIST_SECTOR_ARR_NAM_4_KM)
-        drw.updateLists(this, UtilityModelNCEPInterface.MODEL_NAM_4_KM_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_NAM_4_KM_PARAMS)
-        spRun.setSelection(0)
-        setupListRunZ()
-        spTime.clear()
-        (0..60 step 1).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
-        spTime.setSelection(1)
-    }
-
-    private fun setupSREF() {
-        (0 until numPanes).forEach {
-            displayData.param[it] = "mslp"
-            displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
-            displayData.paramLabel[it] = "Mean Sea Level Pressure"
-            displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
-        }
-        if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_SREF_PARAMS, displayData.param[0])) {
-            displayData.param[0] = "mslp"
-            displayData.paramLabel[0] = "Mean Sea Level Pressure"
-        }
-        if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_SREF_PARAMS, displayData.param[1])) {
-                displayData.param[1] = "mslp"
-                displayData.paramLabel[1] = "Mean Sea Level Pressure"
-            }
-        addItemsOnSpinnerSectors(UtilityModelNCEPInterface.LIST_SECTOR_ARR_SREF)
-        drw.updateLists(this, UtilityModelNCEPInterface.MODEL_SREF_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_SREF_PARAMS)
-        spRun.setSelection(0)
-        spTime.setSelection(0)
-        spRun.clear()
-        spRun.add("03Z")
-        spRun.add("09Z")
-        spRun.add("15Z")
-        spRun.add("21Z")
-        spTime.clear()
-        (0..88 step 3).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
-    }
-
-    private fun setupESTOFS() {
-        (0 until numPanes).forEach {
-            displayData.param[it] = UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS[0]
-            displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
-            displayData.paramLabel[it] = UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS_LABELS[0]
-            displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
-        }
-        if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS, displayData.param[0])) {
-            displayData.param[0] = UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS[0]
-            displayData.paramLabel[0] = UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS_LABELS[0]
-        }
-        if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS, displayData.param[1])) {
-                displayData.param[1] = UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS[1]
-                displayData.paramLabel[1] = UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS_LABELS[1]
-            }
-        addItemsOnSpinnerSectors(UtilityModelNCEPInterface.LIST_SECTOR_ARR_ESTOFS)
-        drw.updateLists(this, UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS)
-        spRun.setSelection(0)
-        spTime.setSelection(0)
-        setupListRunZ()
-        spTime.clear()
-        (0 until 181).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
-    }
-
-    private fun setupFIREWX() {
-        (0 until numPanes).forEach {
-            displayData.param[it] = UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS[0]
-            displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[0])
-            displayData.paramLabel[it] = UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS_LABELS[0]
-            displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[0])
-        }
-        if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS, displayData.param[0])) {
-            displayData.param[0] = UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS[0]
-            displayData.paramLabel[0] = UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS_LABELS[0]
-        }
-        if (numPanes > 1)
-            if (!UtilityModels.parmInArray(UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS, displayData.param[1])) {
-                displayData.param[1] = UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS[1]
-                displayData.paramLabel[1] = UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS_LABELS[1]
-            }
-        addItemsOnSpinnerSectors(UtilityModelNCEPInterface.LIST_SECTOR_ARR_FIREWX)
-        drw.updateLists(this, UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS_LABELS, UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS)
-        spRun.setSelection(0)
-        spTime.setSelection(0)
-        setupListRunZ()
-        spTime.clear()
-        (0 until 37).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
