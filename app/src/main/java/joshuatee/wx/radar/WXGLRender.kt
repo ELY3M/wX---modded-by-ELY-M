@@ -45,6 +45,11 @@ import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.*
 import java.nio.FloatBuffer
+import android.opengl.ETC1.getHeight
+import android.opengl.ETC1.getWidth
+import android.graphics.Bitmap
+
+
 
 
 class WXGLRender(private val context: Context) : Renderer {
