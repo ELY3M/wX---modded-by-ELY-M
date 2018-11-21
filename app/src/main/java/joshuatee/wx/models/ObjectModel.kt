@@ -39,11 +39,11 @@ class ObjectModel(val context: Context, var prefModel: String) {
     var sectorInt: Int = 0
     var sectorOrig: String = ""
     var curImg: Int = 0
-    private var modelType: ModelType = ModelType.NSSL
+    var modelType: ModelType = ModelType.NSSL
     var startStep: Int = 0
     var endStep: Int = 0
     var stepAmount: Int = 1
-    var numberRuns: Int = 0
+    var numberRuns: Int = 4
     var timeTruncate: Int = 2
     var format: String = "%03d"
     var truncateTime: Boolean = true
@@ -58,7 +58,7 @@ class ObjectModel(val context: Context, var prefModel: String) {
     var labels: List<String> = listOf("")
     var params: List<String> = listOf("")
     var models: List<String> = listOf("")
-    var defaultModel: String = ""
+    private var defaultModel: String = ""
 
     init {
 
@@ -69,6 +69,8 @@ class ObjectModel(val context: Context, var prefModel: String) {
             }
             "NSSL" -> {
                 modelType = ModelType.NSSL
+                models = UtilityModelNSSLWRFInterface.models
+                defaultModel = "WRF"
             }
             "ESRL" -> {
                 modelType = ModelType.ESRL
@@ -76,10 +78,17 @@ class ObjectModel(val context: Context, var prefModel: String) {
             }
             "NCEP" -> {
                 modelType = ModelType.NCEP
+                models = UtilityModelNCEPInterface.MODELS_ARR
+                defaultModel = "GFS"
+            }
+            "GLCFS" -> {
+                modelType = ModelType.GLCFS
+                models = UtilityModelGLCFSInterface.models
+                defaultModel = "GLCFS"
             }
         }
 
-        prefModel += numPanesStr
+        //prefModel += numPanesStr
         model = Utility.readPref(context, prefModel, defaultModel)
         prefSector = "MODEL_" + prefModel + numPanesStr + "_SECTOR_LAST_USED"
         prefParam = "MODEL_" + prefModel + numPanesStr + "_PARAM_LAST_USED"
@@ -98,6 +107,8 @@ class ObjectModel(val context: Context, var prefModel: String) {
             ModelType.WPCGEFS -> UtilityModelWPCGEFSInputOutput.getImage(sector, displayData.param[index], run, time)
             ModelType.ESRL -> UtilityModelESRLInputOutput.getImage(model, sectorOrig, sectorInt, displayData.param[index], run, time)
             ModelType.NSSL -> UtilityModelNSSLWRFInputOutput.getImage(context, model, sector, displayData.param[index], run, time)
+            ModelType.GLCFS -> UtilityModelGLCFSInputOutput.getImage(sector, displayData.param[index], time)
+            ModelType.NCEP -> UtilityModelNCEPInputOutput.getImage(model, sector, displayData.param[index], run, time)
             else -> UtilityImg.getBlankBitmap()
         }
     }
@@ -107,6 +118,8 @@ class ObjectModel(val context: Context, var prefModel: String) {
             ModelType.WPCGEFS -> UtilityModelWPCGEFSInputOutput.getAnimation(context, sector, displayData.param[index], run, spinnerTimeValue, timeList)
             ModelType.ESRL -> UtilityModelESRLInputOutput.getAnimation(context, model, sectorOrig, sectorInt, displayData.param[index], run, spinnerTimeValue, timeList)
             ModelType.NSSL -> UtilityModelNSSLWRFInputOutput.getAnimation(context, model, sector, displayData.param[index], run, spinnerTimeValue, timeList)
+            ModelType.GLCFS -> UtilityModelGLCFSInputOutput.getAnimation(context, sector, displayData.param[index], spinnerTimeValue, timeList)
+            ModelType.NCEP -> UtilityModelNCEPInputOutput.getAnimation(context, model, sector, displayData.param[index], run, spinnerTimeValue, timeList)
             else -> AnimationDrawable()
         }
     }
@@ -116,12 +129,204 @@ class ObjectModel(val context: Context, var prefModel: String) {
             ModelType.WPCGEFS -> UtilityModelWPCGEFSInputOutput.runTime
             ModelType.ESRL -> UtilityModelESRLInputOutput.getRunTime(model)
             ModelType.NSSL -> UtilityModelNSSLWRFInputOutput.runTime
+            ModelType.NCEP -> UtilityModelNCEPInputOutput.getRunTime(model, displayData.param[0], sector)
             else -> RunTimeData()
         }
     }
 
     fun setParams(selectedItemPosition: Int) {
         when (modelType) {
+            ModelType.NCEP -> {
+                timeTruncate = 3
+                when (selectedItemPosition) {
+                    1 -> {
+                        model = "GFS"
+                        params = UtilityModelNCEPInterface.MODEL_GFS_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_GFS_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_GFS
+                        startStep = 0
+                        endStep = 85
+                        stepAmount = 3
+                        numberRuns = 4
+                    }
+                    2 -> {
+                        model = "NAM"
+                        params = UtilityModelNCEPInterface.MODEL_NAM_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_NAM_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_NAM
+                        startStep = 0
+                        endStep = 85
+                        stepAmount = 3
+                        numberRuns = 4
+                    }
+                    4 -> {
+                        model = "RAP"
+                        params = UtilityModelNCEPInterface.MODEL_RAP_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_RAP_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_RAP
+                        startStep = 0
+                        endStep = 39
+                        stepAmount = 1
+                        numberRuns = 24
+                    }
+                    0 -> {
+                        model = "HRRR"
+                        params = UtilityModelNCEPInterface.MODEL_HRRR_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_HRRR_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_HRRR
+                        startStep = 0
+                        endStep = 18
+                        stepAmount = 1
+                        numberRuns = 24
+                    }
+                    3 -> {
+                        model = "NAM-HIRES"
+                        params = UtilityModelNCEPInterface.MODEL_NAM_4_KM_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_NAM_4_KM_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_NAM_4_KM
+                        startStep = 0
+                        endStep = 60
+                        stepAmount = 1
+                        numberRuns = 4
+                    }
+                    5 -> {
+                        model = "HRW-NMMB"
+                        params = UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_HRW_NMM
+                        startStep = 0
+                        endStep = 49
+                        stepAmount = 1
+                        numberRuns = 2
+                    }
+                    6 -> {
+                        model = "HRW-ARW"
+                        params = UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_HRW_NMM
+                        startStep = 0
+                        endStep = 49
+                        stepAmount = 1
+                        numberRuns = 2
+                    }
+                    7 -> {
+                        model = "GEFS-SPAG"
+                        params = UtilityModelNCEPInterface.MODEL_GEFS_SPAG_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_GEFS_SPAG_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_GEFS_SPAG
+                        startStep = 0
+                        endStep = 385
+                        stepAmount = 6
+                        numberRuns = 4
+                    }
+                    8 -> {
+                        model = "GEFS-MEAN-SPRD"
+                        params = UtilityModelNCEPInterface.MODEL_GEFS_MNSPRD_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_GEFS_MNSPRD_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_GEFS_MNSPRD
+                        startStep = 0
+                        endStep = 385
+                        stepAmount = 6
+                        numberRuns = 4
+                    }
+                    9 -> {
+                        model = "SREF"
+                        params = UtilityModelNCEPInterface.MODEL_SREF_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_SREF_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_SREF
+                        startStep = 0
+                        endStep = 88
+                        stepAmount = 3
+                        numberRuns = 5
+                    }
+                    10 -> {
+                        model = "NAEFS"
+                        params = UtilityModelNCEPInterface.MODEL_NAEFS_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_NAEFS_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_NAEFS
+                        startStep = 6
+                        endStep = 385
+                        stepAmount = 6
+                        numberRuns = 4
+                    }
+                    11 -> {
+                        model = "POLAR"
+                        params = UtilityModelNCEPInterface.MODEL_POLAR_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_POLAR_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_POLAR
+                        startStep = 24
+                        endStep = 385
+                        stepAmount = 24
+                        numberRuns = 1
+                    }
+                    12 -> {
+                        model = "WW3"
+                        params = UtilityModelNCEPInterface.MODEL_WW_3_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_WW_3_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_WW_3
+                        startStep = 0
+                        endStep = 127
+                        stepAmount = 6
+                        numberRuns = 4
+                    }
+                    13 -> {
+                        model = "WW3-ENP"
+                        params = UtilityModelNCEPInterface.MODEL_WW_3_ENP_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_WW_3_ENP_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_WW_3_ENP
+                        startStep = 0
+                        endStep = 127
+                        stepAmount = 6
+                        numberRuns = 4
+                    }
+                    14 -> {
+                        model = "WW3-WNA"
+                        params = UtilityModelNCEPInterface.MODEL_WW_3_WNA_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_WW_3_WNA_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_WW_3_WNA
+                        startStep = 0
+                        endStep = 127
+                        stepAmount = 6
+                        numberRuns = 4
+                    }
+                    15 -> {
+                        model = "ESTOFS"
+                        params = UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_ESTOFS
+                        startStep = 0
+                        endStep = 181
+                        stepAmount = 1
+                        numberRuns = 4
+                    }
+                    16 -> {
+                        model = "FIREWX"
+                        params = UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS
+                        labels = UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS_LABELS
+                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_FIREWX
+                        startStep = 0
+                        endStep = 37
+                        stepAmount = 1
+                        numberRuns = 4
+                    }
+
+                }
+            }
+            ModelType.GLCFS -> {
+                when (selectedItemPosition) {
+                    0 -> {
+                        model = "GLCFS"
+                        labels = UtilityModelGLCFSInterface.labels
+                        params = UtilityModelGLCFSInterface.params
+                        sectors = UtilityModelGLCFSInterface.sectors
+                        startStep = 1
+                        endStep = 48
+                        stepAmount = 1
+                        numberRuns = 0
+                        timeTruncate = 3
+                    }
+                }
+            }
             ModelType.WPCGEFS -> {
                 when (selectedItemPosition) {
                     0 -> {

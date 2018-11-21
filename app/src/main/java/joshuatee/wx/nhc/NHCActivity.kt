@@ -37,6 +37,7 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.models.ModelsGLCFSActivity
+import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.wpc.WPCTextProductsActivity
 import kotlinx.coroutines.*
@@ -89,7 +90,8 @@ class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.id.action_atl_7daily -> showImageProduct("http://www.nhc.noaa.gov/tafb/atl_anal.gif", "ATL 7-Day Analysis", "true")
             R.id.action_epac_sst_anomaly -> showImageProduct("http://www.nhc.noaa.gov/tafb/pac_anom.gif", "EPAC SST Anomaly", "true")
             R.id.action_atl_sst_anomaly -> showImageProduct("http://www.nhc.noaa.gov/tafb/atl_anom.gif", "ATL SST Anomaly", "true")
-            R.id.action_glcfs -> startActivity(Intent(this, ModelsGLCFSActivity::class.java))
+            //R.id.action_glcfs -> startActivity(Intent(this, ModelsGLCFSActivity::class.java))
+            R.id.action_glcfs  -> ObjectIntent(this, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "GLCFS", "GLCFS"))
             else -> return super.onOptionsItemSelected(item)
         }
         return true

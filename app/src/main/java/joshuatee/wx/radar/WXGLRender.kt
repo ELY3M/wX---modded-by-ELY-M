@@ -32,22 +32,15 @@ import android.opengl.*
 import android.opengl.GLSurfaceView.Renderer
 import android.opengl.Matrix
 import android.util.Log
-
 import joshuatee.wx.JNI
 import joshuatee.wx.MyApplication
-import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.UtilityLightning
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
-import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.*
-import java.nio.FloatBuffer
-import android.opengl.ETC1.getHeight
-import android.opengl.ETC1.getWidth
-import android.graphics.Bitmap
+
 
 
 
@@ -495,6 +488,32 @@ class WXGLRender(private val context: Context) : Renderer {
                 //GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1)
                 GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
                 //GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+
+
+            GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
+        }
+    }
+
+    private fun drawLocationBug(buffers: ObjectOglBuffers) {
+        if (buffers.isInitialized) {
+            buffers.setToPositionZero()
+            GLES20.glUseProgram(sp_loadimage)
+            mPositionHandle = GLES20.glGetAttribLocation(sp_loadimage, "vPosition")
+            GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
+            //imagesize = MyApplication.radarLociconSize.toDouble()
+            imagesize = locationsize
+            iTexture = GLES20.glGetUniformLocation(sp_loadimage, "u_texture")
+            locationId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "headingbug.png")
+            GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
+            GLES20.glEnableVertexAttribArray(mPositionHandle)
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, locationId)
+            GLES20.glUniform1i(iTexture, 0)
+            GLES20.glEnable(GLES20.GL_BLEND);
+            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
+            //GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1)
+            GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+            //GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
 
 
             GLES20.glUseProgram(OpenGLShader.sp_SolidColor)

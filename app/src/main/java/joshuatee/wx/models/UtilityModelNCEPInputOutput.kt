@@ -56,6 +56,8 @@ internal object UtilityModelNCEPInputOutput {
     fun getImage(model: String, sector: String, param: String, run: String, time: String): Bitmap {
         val imgUrl: String = if (model == "GFS") {
             "http://mag.ncep.noaa.gov/data/" + model.toLowerCase(Locale.US) + "/" + run.replace("Z", "") + "/" + sector.toLowerCase(Locale.US) + "/" + param + "/" + model.toLowerCase(Locale.US) + "_" + sector.toLowerCase(Locale.US) + "_" + time + "_" + param + ".gif"
+        } else if (model == "HRRR") {
+            "http://mag.ncep.noaa.gov/data/" + model.toLowerCase(Locale.US) + "/" + run.replace("Z", "") + "/" + model.toLowerCase(Locale.US) + "_" + sector.toLowerCase(Locale.US) + "_" + time + "00_" + param + ".gif"
         } else {
             "http://mag.ncep.noaa.gov/data/" + model.toLowerCase(Locale.US) + "/" + run.replace("Z", "") + "/" + model.toLowerCase(Locale.US) + "_" + sector.toLowerCase(Locale.US) + "_" + time + "_" + param + ".gif"
         }

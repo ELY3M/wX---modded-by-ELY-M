@@ -105,13 +105,13 @@ class ModelsGLCFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCl
         }
         spTime.notifyDataSetChanged()
         displayData = DisplayData(this, this, this, numPanes, spTime)
-        spSector = ObjectSpinner(this, this, R.id.spinner_sector, UtilityModelGLCFSInterface.SECTORS)
+        spSector = ObjectSpinner(this, this, R.id.spinner_sector, UtilityModelGLCFSInterface.sectors)
         spTime.setOnItemSelectedListener(this)
         spSector.setOnItemSelectedListener(this)
         sector = Utility.readPref(this, "MODEL_GLCFS_SECTOR_LAST_USED", "s")
         spSector.setSelection(sector)
         spTime.setSelection(Utility.readPref(this, "GLCFS_RUN_POSN", 0))
-        drw = ObjectNavDrawer(this, UtilityModelGLCFSInterface.LABELS, UtilityModelGLCFSInterface.PARAMS)
+        drw = ObjectNavDrawer(this, UtilityModelGLCFSInterface.labels, UtilityModelGLCFSInterface.params)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, true)
             drw.drawerLayout.closeDrawer(drw.listView)
@@ -207,7 +207,7 @@ class ModelsGLCFSActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCl
         displayData.param[curImg] = Utility.readPref(this, "MODEL_GLCFS_PARAM_LAST_USED", displayData.param[curImg])
         paramLabel = "Wave Height"
         paramLabel = Utility.readPref(this, "MODEL_GLCFS_PARAM_LAST_USED_LABEL", paramLabel)
-        if (!UtilityModels.parmInArray(UtilityModelGLCFSInterface.PARAMS, displayData.param[curImg])) {
+        if (!UtilityModels.parmInArray(UtilityModelGLCFSInterface.params, displayData.param[curImg])) {
             displayData.param[curImg] = "1ref_sfc"
             paramLabel = "1 km agl reflectivity"
         }

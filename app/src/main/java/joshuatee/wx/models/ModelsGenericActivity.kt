@@ -34,10 +34,12 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.external.UtilityStringExternal
+import joshuatee.wx.objects.ModelType
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.*
@@ -155,6 +157,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         om.run = spRun.selectedItem.toString()
         om.time = spTime.selectedItem.toString()
         om.sector = spSector.selectedItem.toString()
+        om.sectorInt = spSector.selectedItemPosition
         if (om.truncateTime) {
             om.time = UtilityStringExternal.truncate(om.time, om.timeTruncate)
         }
@@ -236,18 +239,41 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     }
 
     private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
-        om.rtd = withContext(Dispatchers.IO) { om.getRunTime() }
-        spRun.clear()
-        spRun.addAll(om.rtd.listRun)
-        miStatus.isVisible = true
-        miStatus.title = "in through " + om.rtd.imageCompleteStr
-        spRun.notifyDataSetChanged()
-        // FIXME
-        (0 until spTime.size()).forEach { spTime[it] = spTime[it] + " " + UtilityModels.convertTimeRuntoTimeString(om.rtd.timeStrConv.replace("Z", ""), spTime[it], false) }
-        spTime.notifyDataSetChanged()
-        if (!firstRunTimeSet) {
-            firstRunTimeSet = true
-            spTime.setSelection(Utility.readPref(contextg, om.prefRunPosn, 1))
+        // FIXME NCEP should not have different code
+        if (om.modelType == ModelType.NCEP){
+            om.rtd = withContext(Dispatchers.IO) { UtilityModelNCEPInputOutput.getRunTime(om.model, om.displayData.param[0], om.sectors[0]) }
+            om.time = om.rtd.mostRecentRun
+            spRun.notifyDataSetChanged()
+            spRun.setSelection(om.rtd.mostRecentRun)
+            if (om.model == "CFS" && 0 == spRun.selectedItemPosition) {
+                getContent()
+            }
+            //title = om.rtd.imageCompleteStr
+            miStatus.title = "in through " + om.rtd.imageCompleteStr
+            var tmpStr: String
+            (0 until spTime.size()).forEach {
+                tmpStr = MyApplication.space.split(spTime[it])[0]
+                spTime[it] = tmpStr + " " + UtilityModels.convertTimeRuntoTimeString(om.rtd.mostRecentRun.replace("Z", ""), tmpStr, true)
+            }
+            if (!firstRunTimeSet) {
+                firstRunTimeSet = true
+                spTime.setSelection(Utility.readPref(contextg, om.prefRunPosn, 1))
+            }
+            spTime.notifyDataSetChanged()
+        } else {
+            om.rtd = withContext(Dispatchers.IO) { om.getRunTime() }
+            spRun.clear()
+            spRun.addAll(om.rtd.listRun)
+            miStatus.isVisible = true
+            miStatus.title = "in through " + om.rtd.imageCompleteStr
+            spRun.notifyDataSetChanged()
+            // FIXME
+            (0 until spTime.size()).forEach { spTime[it] = spTime[it] + " " + UtilityModels.convertTimeRuntoTimeString(om.rtd.timeStrConv.replace("Z", ""), spTime[it], false) }
+            spTime.notifyDataSetChanged()
+            if (!firstRunTimeSet) {
+                firstRunTimeSet = true
+                spTime.setSelection(Utility.readPref(contextg, om.prefRunPosn, 1))
+            }
         }
     }
 
@@ -295,9 +321,69 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         spSector.setSelection(om.sectorOrig)
         drw.updateLists(this, om.labels, om.params)
         spRun.setSelection(0)
+        when (om.modelType) {
+            ModelType.NCEP -> {
+                setupListRunZ(om.numberRuns)
+            }
+        }
         spTime.setSelection(0)
         spTime.list.clear()
-        (om.startStep..om.endStep step om.stepAmount).forEach { spTime.list.add(String.format(Locale.US, om.format, it)) }
+
+
+        when (om.modelType) {
+            ModelType.GLCFS -> {
+                (om.startStep..om.endStep step om.stepAmount).forEach { spTime.list.add(String.format(Locale.US, om.format, it)) }
+                (51..121 step 3).forEach { spTime.list.add(String.format(Locale.US, om.format, it)) }
+            }
+            ModelType.NCEP -> {
+                when (om.model) {
+                    "HRRR" -> {
+                        (om.startStep..om.endStep step om.stepAmount).forEach { spTime.add(String.format(Locale.US, "%03d" + "00", it)) }
+                    }
+                    "GEFS-SPAG", "GEFS-MEAN-SPRD" -> {
+                        (0..181 step 6).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
+                        (192..385 step 12).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
+                    }
+                    "GFS" -> {
+                        (0..241 step 3).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
+                        (252..385 step 12).forEach { spTime.add(String.format(Locale.US, "%03d", it)) }
+                    }
+                    else -> {
+                        (om.startStep..om.endStep step om.stepAmount).forEach { spTime.list.add(String.format(Locale.US, om.format, it)) }
+                    }
+                }
+            }
+            else -> {
+                (om.startStep..om.endStep step om.stepAmount).forEach { spTime.list.add(String.format(Locale.US, om.format, it)) }
+            }
+        }
     }
+
+    private fun setupListRunZ(numberRuns: Int) {
+        spRun.clear()
+        when (numberRuns) {
+            1 -> spRun.add("00Z")
+            2 -> {
+                spRun.add("00Z")
+                spRun.add("12Z")
+            }
+            4 -> {
+                spRun.add("00Z")
+                spRun.add("06Z")
+                spRun.add("12Z")
+                spRun.add("18Z")
+            }
+            5 -> {  // FIXME use enum
+                spRun.add("03Z")
+                spRun.add("09Z")
+                spRun.add("15Z")
+                spRun.add("21Z")
+            }
+            24 -> (0..23).forEach { spRun.add(String.format(Locale.US, "%02d", it) + "Z") }
+        }
+        spRun.notifyDataSetChanged()
+    }
+
+
 }
 

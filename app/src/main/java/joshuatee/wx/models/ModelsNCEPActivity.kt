@@ -179,7 +179,8 @@ class ModelsNCEPActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCli
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         if (parent.id == R.id.spinner_model) {
             when (parent.selectedItemPosition) {
-                R.id.spinner_run, 1 -> {
+                R.id.spinner_run,
+                1 -> {
                     model = "GFS"
                     setupGFS()
                 }
@@ -408,8 +409,8 @@ class ModelsNCEPActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCli
     }
 
     private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
-        val spinnerSectorFirst = spSector.getItemAtPosition(0).toString()
-        rtd = withContext(Dispatchers.IO) { UtilityModelNCEPInputOutput.getRunTime(model, displayData.param[0], spinnerSectorFirst) }
+        //val spinnerSectorFirst = spSector.getItemAtPosition(0).toString()
+        rtd = withContext(Dispatchers.IO) { UtilityModelNCEPInputOutput.getRunTime(model, displayData.param[0], sector) }
         time = rtd.mostRecentRun
         spRun.notifyDataSetChanged()
         spRun.setSelection(rtd.mostRecentRun)
