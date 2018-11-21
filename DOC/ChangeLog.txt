@@ -5,6 +5,9 @@
 // TODO SPC MESO rescan for _sf, convert to list
 // TODO make model activities more consistent, ex SPC SREF does not have setupModel()
 
+55054 2018_11_20 bugfix for NSSL - models not showing
+                 bugfix for ESRL - sectors not working
+                 convert GLCFS, NCEP to new generic framework
 55053 2018_11_20 move NSSL to generic model
 55052 2018_11_20 move ESRL to generic model
 55051 2018_11_19 coroutine conversion: SPCStormReportsActivity

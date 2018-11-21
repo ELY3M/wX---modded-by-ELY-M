@@ -74,9 +74,10 @@ class MiscFragment : Fragment() {
 
     private val allItemList: MutableList<TileObject>
         get() {
-            hm["model_ncep"] = TileObject(R.drawable.ncep, ModelsNCEPActivity::class.java, ModelsNCEPActivity.INFO, arrayOf("1", "NCEP"), resources.getString(R.string.help_ncep_models), "model_ncep")
+            hm["model_ncep"] = TileObject(R.drawable.ncep, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "NCEP", "NCEP"), resources.getString(R.string.help_ncep_models), "model_ncep")
             //hm["model_hrrr"] = TileObject(R.drawable.hrrrviewer, ModelsESRLActivity::class.java, ModelsESRLActivity.INFO, arrayOf("1", "ESRL"), resources.getString(R.string.help_hrrr_viewer), "model_hrrr")
             hm["model_hrrr"] = TileObject(R.drawable.hrrrviewer, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "ESRL", "ESRL"), resources.getString(R.string.help_hrrr_viewer), "model_hrrr")
+
             hm["uswarn"] = TileObject(R.drawable.warn, USWarningsWithRadarActivity::class.java, USWarningsWithRadarActivity.URL, arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Extreme Wind Warning.*?|.*?Flash Flood Warning.*?|.*?Special Marine Warning.*?|.*?Severe Weather Statement.*?|.*?Special Weather Statement.*?", "us"),
                     resources.getString(R.string.help_uswarn), "uswarn")
             hm["wpctext"] = TileObject(R.drawable.srfd, WPCTextProductsActivity::class.java, WPCTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"),
@@ -103,7 +104,7 @@ class MiscFragment : Fragment() {
             //val locInt = Location.currentLocation
             hm["wxoglquad"] = TileObject(R.drawable.wxoglquadpane, WXGLRadarActivityMultiPane::class.java, WXGLRadarActivityMultiPane.RID,
                     arrayOf(Location.rid, "", "4"), "", "wxoglquad")
-            hm["model_nssl_wrf"] = TileObject(R.drawable.nsslwrf, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "NSSLWRF", "NSSL"),
+            hm["model_nssl_wrf"] = TileObject(R.drawable.nsslwrf, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "NSSL", "NSSL"),
                     resources.getString(R.string.help_models_nssl_wrf), "model_nssl_wrf")
             hm["goes16"] = TileObject(R.drawable.goes16, GOES16Activity::class.java, GOES16Activity.RID, arrayOf(""), resources.getString(R.string.help_goes16), "goes16")
             val tileOrder = "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:"

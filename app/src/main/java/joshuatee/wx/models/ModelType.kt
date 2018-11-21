@@ -27,7 +27,8 @@ enum class ModelType {
     ESRL,
     NCEP,
     SPCHREF,
-    SPCHRRR
+    SPCHRRR,
+    GLCFS,
 }
 
 
