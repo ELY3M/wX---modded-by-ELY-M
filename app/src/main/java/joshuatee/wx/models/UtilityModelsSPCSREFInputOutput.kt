@@ -52,14 +52,16 @@ internal object UtilityModelsSPCSREFInputOutput {
             return runData
         }
 
-    fun getImage(context: Context, param: String, runF: String, time: String): Bitmap {
-        val run = runF.replace("z", "")
-        return UtilityImg.getBitmapAddWhiteBG(context, "${MyApplication.nwsSPCwebsitePrefix}/exper/sref/gifs/$run/$param$time.gif")
+    fun getImage(context: Context, om: ObjectModel, time: String): Bitmap {
+        val run = om.run.replace("z", "")
+        return UtilityImg.getBitmapAddWhiteBG(context, "${MyApplication.nwsSPCwebsitePrefix}/exper/sref/gifs/$run/${om.currentParam}$time.gif")
     }
 
-    fun getAnimation(context: Context, param: String, run: String, spinnerTimeValue: Int, listTime: List<String>): AnimationDrawable {
+    fun getAnimation(context: Context, om: ObjectModel, spinnerTimeValue: Int, listTime: List<String>): AnimationDrawable {
         if (spinnerTimeValue == -1) return AnimationDrawable()
-        val bmAl = (spinnerTimeValue until listTime.size).mapTo(mutableListOf()) { k -> getImage(context, param, run, listTime[k].split(" ").dropLastWhile { it.isEmpty() }[0]) }
+        val bmAl = (spinnerTimeValue until listTime.size).mapTo(mutableListOf()) {
+            getImage(context, om, listTime[it].split(" ").getOrNull(0) ?: "")
+        }
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
     }
 }

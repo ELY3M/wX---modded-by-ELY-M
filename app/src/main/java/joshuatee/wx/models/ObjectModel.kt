@@ -25,16 +25,16 @@ import joshuatee.wx.util.Utility
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
-import joshuatee.wx.objects.ModelType
+import joshuatee.wx.ui.ObjectSpinner
 import joshuatee.wx.util.UtilityImg
 
-class ObjectModel(val context: Context, var prefModel: String, var numPanesStr: String) {
+class ObjectModel(val context: Context, var prefModel: String, numPanesStr: String) {
 
     var run: String = "00Z"
     var time: String = "00"
     var sector: String = ""
+    var currentParam: String = ""
     var numPanes: Int = 1
-    //var numPanesStr: String = "1"
     var model: String = "WRF"
     var sectorInt: Int = 0
     var sectorOrig: String = ""
@@ -59,6 +59,8 @@ class ObjectModel(val context: Context, var prefModel: String, var numPanesStr: 
     var params: List<String> = listOf("")
     var models: List<String> = listOf("")
     private var defaultModel: String = ""
+    var spinnerTimeValue: Int = 0
+    lateinit var spTime: ObjectSpinner
 
     init {
         numPanes = numPanesStr.toIntOrNull() ?: 0
@@ -105,44 +107,42 @@ class ObjectModel(val context: Context, var prefModel: String, var numPanesStr: 
                 timeTruncate = 2
             }
         }
-
-        //prefModel += numPanesStr
         model = Utility.readPref(context, prefModel, defaultModel)
         prefSector = "MODEL_" + prefModel + numPanesStr + "_SECTOR_LAST_USED"
         prefParam = "MODEL_" + prefModel + numPanesStr + "_PARAM_LAST_USED"
         prefParamLabel = "MODEL_" + prefModel + numPanesStr + "_PARAM_LAST_USED_LABEL"
         prefRunPosn = "MODEL_" + prefModel + numPanesStr + "_RUN_POSN"
         modelProvider = "MODEL_$prefModel"
-
-        //sectors = UtilityModelWPCGEFSInterface.sectors
-        //labels = UtilityModelWPCGEFSInterface.LABELS
-        //params = UtilityModelWPCGEFSInterface.PARAMS
-        //models = UtilityModelWPCGEFSInterface.models
     }
 
+    // FIXME move spinner for Time into object model
+
     fun getImage(index: Int): Bitmap {
+        currentParam = displayData.param[index]
         return when (modelType) {
-            // FIXME remove params already part of ObjectModel and update aux methods to use object
-            ModelType.WPCGEFS -> UtilityModelWPCGEFSInputOutput.getImage(sector, displayData.param[index], run, time)
-            ModelType.ESRL -> UtilityModelESRLInputOutput.getImage(model, sectorOrig, sectorInt, displayData.param[index], run, time)
-            ModelType.NSSL -> UtilityModelNSSLWRFInputOutput.getImage(context, model, sector, displayData.param[index], run, time)
-            ModelType.GLCFS -> UtilityModelGLCFSInputOutput.getImage(sector, displayData.param[index], time)
-            ModelType.NCEP -> UtilityModelNCEPInputOutput.getImage(model, sector, displayData.param[index], run, time)
-            ModelType.SPCSREF -> UtilityModelsSPCSREFInputOutput.getImage(context, displayData.param[index], run, time)
-            ModelType.SPCHREF -> UtilityModelSPCHREFInputOutput.getImage(context, sector, run, time, displayData.param[index])
+            ModelType.WPCGEFS -> UtilityModelWPCGEFSInputOutput.getImage(this, time)
+            ModelType.ESRL -> UtilityModelESRLInputOutput.getImage(this, time)
+            ModelType.NSSL -> UtilityModelNSSLWRFInputOutput.getImage(context, this, time)
+            ModelType.GLCFS -> UtilityModelGLCFSInputOutput.getImage(this, time)
+            ModelType.NCEP -> UtilityModelNCEPInputOutput.getImage(this, time)
+            ModelType.SPCSREF -> UtilityModelsSPCSREFInputOutput.getImage(context, this, time)
+            ModelType.SPCHREF -> UtilityModelSPCHREFInputOutput.getImage(context, this, time)
             else -> UtilityImg.getBlankBitmap()
         }
     }
 
-    fun getAnimate(index: Int, spinnerTimeValue: Int, timeList: List<String>): AnimationDrawable {
+    fun getAnimate(index: Int): AnimationDrawable {
+        currentParam = displayData.param[index]
+        spinnerTimeValue = spTime.selectedItemPosition
         return when (modelType) {
-            ModelType.WPCGEFS -> UtilityModelWPCGEFSInputOutput.getAnimation(context, sector, displayData.param[index], run, spinnerTimeValue, timeList)
-            ModelType.ESRL -> UtilityModelESRLInputOutput.getAnimation(context, model, sectorOrig, sectorInt, displayData.param[index], run, spinnerTimeValue, timeList)
-            ModelType.NSSL -> UtilityModelNSSLWRFInputOutput.getAnimation(context, model, sector, displayData.param[index], run, spinnerTimeValue, timeList)
-            ModelType.GLCFS -> UtilityModelGLCFSInputOutput.getAnimation(context, sector, displayData.param[index], spinnerTimeValue, timeList)
-            ModelType.NCEP -> UtilityModelNCEPInputOutput.getAnimation(context, model, sector, displayData.param[index], run, spinnerTimeValue, timeList)
-            ModelType.SPCSREF -> UtilityModelsSPCSREFInputOutput.getAnimation(context, displayData.param[index], run, spinnerTimeValue, timeList)
-            ModelType.SPCHREF -> UtilityModelSPCHREFInputOutput.getAnimation(context, sector, run, spinnerTimeValue, timeList, displayData.param[index])
+            // FIXME remove trailing 2 args
+            ModelType.WPCGEFS -> UtilityModelWPCGEFSInputOutput.getAnimation(context, this, spinnerTimeValue, spTime.list)
+            ModelType.ESRL -> UtilityModelESRLInputOutput.getAnimation(context, this, spinnerTimeValue, spTime.list)
+            ModelType.NSSL -> UtilityModelNSSLWRFInputOutput.getAnimation(context, this, spinnerTimeValue, spTime.list)
+            ModelType.GLCFS -> UtilityModelGLCFSInputOutput.getAnimation(context, this, spinnerTimeValue, spTime.list)
+            ModelType.NCEP -> UtilityModelNCEPInputOutput.getAnimation(context, this, spinnerTimeValue, spTime.list)
+            ModelType.SPCSREF -> UtilityModelsSPCSREFInputOutput.getAnimation(context, this, spinnerTimeValue, spTime.list)
+            ModelType.SPCHREF -> UtilityModelSPCHREFInputOutput.getAnimation(context, this, spinnerTimeValue, spTime.list)
             else -> AnimationDrawable()
         }
     }
@@ -469,8 +469,9 @@ class ObjectModel(val context: Context, var prefModel: String, var numPanesStr: 
                     }
                 }
             }
+            else -> {
+            }
         }
-
     }
 }
 

@@ -44,7 +44,7 @@ would have to do the latlon method that is used for watches/mcds/mpds
 #
 ## DONE!
 ====================================  
-I started on heading bug on GPS location  
+heading bug on GPS location is done and it have setting to enable and disable and can set bug size too.    
 added "displayhold" function as seen in pykl3 because I liked it and it helps very much with "GLThread" crashes!  
 added option to change default lines on radar in the radar settings.  
 added "show MCD text" in radar" - It only show last MCD right now.  

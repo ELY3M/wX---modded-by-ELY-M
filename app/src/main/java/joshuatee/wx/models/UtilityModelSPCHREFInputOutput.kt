@@ -49,13 +49,13 @@ internal object UtilityModelSPCHREFInputOutput {
             return runData
         }
 
-    fun getImage(context: Context, sector: String, run: String, time: String, param: String): Bitmap {
-        if (run.length < 10) return UtilityImg.getBlankBitmap()
-        val year = run.substring(0, 4)
-        val month = run.substring(4, 6)
-        val day = run.substring(6, 8)
-        val hour = run.substring(8, 10)
-        val products = param.split(",")
+    fun getImage(context: Context, om: ObjectModel, time: String): Bitmap {
+        if (om.run.length < 10) return UtilityImg.getBlankBitmap()
+        val year = om.run.substring(0, 4)
+        val month = om.run.substring(4, 6)
+        val day = om.run.substring(6, 8)
+        val hour = om.run.substring(8, 10)
+        val products = om.currentParam.split(",")
         val bitmapArr = mutableListOf<Bitmap>()
         val urlArr = mutableListOf<String>()
         urlArr.add("${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/spc_white_1050px.png")
@@ -63,22 +63,24 @@ internal object UtilityModelSPCHREFInputOutput {
         products.forEach {
             val url = if (it.contains("cref_members")) {
                 val paramArr = it.split(" ")
-                "${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year + "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" + paramArr[0] + "." + sector.toLowerCase() + ".f0" + time + "00." + paramArr[1] + ".tl00.png"
+                "${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year + "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" + paramArr[0] + "." + om.sector.toLowerCase() + ".f0" + time + "00." + paramArr[1] + ".tl00.png"
             } else {
-                "${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year + "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" + it + "." + sector.toLowerCase() + ".f0" + time + "00.png"
+                "${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year + "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" + it + "." + om.sector.toLowerCase() + ".f0" + time + "00.png"
             }
             urlArr.add(url)
         }
-        urlArr.add("${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/blank_maps/$sector.png")
+        urlArr.add("${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/blank_maps/$om.sector.png")
         urlArr.forEach { bitmapArr.add(it.getImage()) }
         val layers = mutableListOf<Drawable>()
         bitmapArr.forEach { layers.add(BitmapDrawable(context.resources, it)) }
         return UtilityImg.layerDrawableToBitmap(layers)
     }
 
-    fun getAnimation(context: Context, sector: String, run: String, spinnerTimeValue: Int, listTime: List<String>, param: String): AnimationDrawable {
+    fun getAnimation(context: Context, om: ObjectModel, spinnerTimeValue: Int, listTime: List<String>): AnimationDrawable {
         if (spinnerTimeValue == -1) return AnimationDrawable()
-        val bmAl = (spinnerTimeValue until listTime.size).mapTo(mutableListOf()) { k -> getImage(context, sector, run, listTime[k].split(" ").dropLastWhile { it.isEmpty() }[0], param) }
+        val bmAl = (spinnerTimeValue until listTime.size).mapTo(mutableListOf()) {
+            getImage(context, om, listTime[it].split(" ").getOrNull(0) ?: "")
+        }
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
     }
 }

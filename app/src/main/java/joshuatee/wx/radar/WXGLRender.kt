@@ -29,8 +29,8 @@ import javax.microedition.khronos.opengles.GL10
 import android.content.Context
 import android.graphics.*
 import android.opengl.*
-import android.opengl.GLSurfaceView.Renderer
 import android.opengl.Matrix
+import android.opengl.GLSurfaceView.Renderer
 import android.util.Log
 import joshuatee.wx.JNI
 import joshuatee.wx.MyApplication
@@ -40,9 +40,7 @@ import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.*
-
-
-
+import android.graphics.Bitmap
 
 
 class WXGLRender(private val context: Context) : Renderer {
@@ -123,7 +121,7 @@ class WXGLRender(private val context: Context) : Renderer {
 
     private var imagesize: Double = 75.0
     private var locationsize: Double = MyApplication.radarLociconSize.toDouble()
-    private var locationbugsize: Double = MyApplication.radarLociconSize.toDouble()
+    private var locationbugsize: Double = MyApplication.radarLocBugSize.toDouble()
     private var tvssize: Double = MyApplication.radarTvsSize.toDouble()
 
     private var locationId = -1
@@ -463,12 +461,14 @@ class WXGLRender(private val context: Context) : Renderer {
         } //displayhold
 
 
-        Log.i(TAG, "bearing: "+ WXGLRadarActivity.bearingCurrent)
-        Log.i(TAG, "speed: "+ WXGLRadarActivity.speedCurrent)
-        if (WXGLRadarActivity.speedCurrent >= 0.43) {
-            //set up location bug
-            Log.i(TAG, "location bug!!!!")
-            drawLocationBug(locBugBuffers)
+        if (MyApplication.locdotBug) {
+            Log.i(TAG, "bearing: " + WXGLRadarActivity.bearingCurrent)
+            Log.i(TAG, "speed: " + WXGLRadarActivity.speedCurrent)
+            if (WXGLRadarActivity.speedCurrent >= 0.43) {
+                //set up location bug
+                Log.i(TAG, "location bug!!!!")
+                drawLocationBug(locBugBuffers)
+            }
         }
 
 
@@ -503,9 +503,7 @@ class WXGLRender(private val context: Context) : Renderer {
         }
     }
 
-    //TODO need to rotate the bug
     private fun drawLocationBug(buffers: ObjectOglBuffers) {
-        val rotate = FloatArray(16)
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
             GLES20.glUseProgram(sp_loadimage)
@@ -514,7 +512,9 @@ class WXGLRender(private val context: Context) : Renderer {
             //imagesize = MyApplication.radarLociconSize.toDouble()
             imagesize = locationbugsize
             iTexture = GLES20.glGetUniformLocation(sp_loadimage, "u_texture")
-            locationBugId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "headingbug.png")
+            val rotatebug: Bitmap = OpenGLShader.RotateBitmap(MyApplication.FilesPath + "headingbug.png", WXGLRadarActivity.bearingCurrent.toDouble())
+            //locationBugId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "headingbug.png")
+            locationBugId = OpenGLShader.LoadBitmapTexture(rotatebug)
             GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
             GLES20.glEnableVertexAttribArray(mPositionHandle)
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
@@ -527,6 +527,7 @@ class WXGLRender(private val context: Context) : Renderer {
             GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
         }
     }
+
 
 
     private fun drawTVS(buffers: ObjectOglBuffers) {
@@ -870,8 +871,10 @@ class WXGLRender(private val context: Context) : Renderer {
             locIconBuffers.lenInit = locdotBuffers.lenInit
             UtilityWXOGLPerf.genLocdot(locIconBuffers, pn, gpsX, gpsY)
             //location bug//
-            locBugBuffers.lenInit = 2f //MyApplication.radarLociconSize.toFloat()
-            UtilityWXOGLPerf.genLocdot(locBugBuffers, pn , gpsX, gpsY)
+            if (MyApplication.locdotBug) {
+                locBugBuffers.lenInit = 0f //MyApplication.radarLociconSize.toFloat()
+                UtilityWXOGLPerf.genLocdot(locBugBuffers, pn, gpsX, gpsY)
+            }
 
         }
 

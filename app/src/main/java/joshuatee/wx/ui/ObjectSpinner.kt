@@ -94,7 +94,7 @@ class ObjectSpinner {
 
     fun setSelection(key: String) {
         var index = arrayAdapter.getPosition(key)
-        if ( index == -1 ){
+        if (index == -1) {
             index = 0
         }
         spinner1.setSelection(index)
@@ -109,7 +109,7 @@ class ObjectSpinner {
     val selectedItem: Any
         get() = spinner1.selectedItem ?: 0
 
-    val selectedString: String
+    /*val selectedString: String
         get() {
             return if (spinner1.selectedItem != null) {
                 spinner1.selectedItem.toString()
@@ -118,7 +118,7 @@ class ObjectSpinner {
             }
         }
 
-    val selectedItemId: Long get() = spinner1.selectedItemId
+    val selectedItemId: Long get() = spinner1.selectedItemId*/
 
     fun addAll(tmpList: List<String>) {
         list.clear()

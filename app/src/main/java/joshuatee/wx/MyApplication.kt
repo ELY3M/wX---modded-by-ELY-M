@@ -640,6 +640,7 @@ class MyApplication : Application() {
         var radarSvsWarnings: Boolean = true
         var radarSpsWarnings: Boolean = false
         var locdotFollowsGps: Boolean = false
+        var locdotBug: Boolean = false
         var dualpaneshareposn: Boolean = false
         var radarSpotters: Boolean = false
         var radarSpottersLabel: Boolean = false
@@ -667,6 +668,7 @@ class MyApplication : Application() {
         var radarTextSize: Float = 0f
         var radarLocdotSize: Int = 0
         var radarLociconSize: Int = 0
+        var radarLocBugSize: Int = 0
         var radarHiSize: Int = 0
         var radarTvsSize: Int = 0
         var radarDefaultLinesize: Int = 0
@@ -686,6 +688,7 @@ class MyApplication : Application() {
             radarSvsWarnings = getInitialPreference("SVS_WARNINGS", "false")
             radarSpsWarnings = getInitialPreference("SPS_WARNINGS", "false")
             locdotFollowsGps = getInitialPreference("LOCDOT_FOLLOWS_GPS", "false")
+            locdotBug = getInitialPreference("LOCDOT_BUG", "false")
             dualpaneshareposn = getInitialPreference("DUALPANE_SHARE_POSN", "true")
             radarSpotters = getInitialPreference("WXOGL_SPOTTERS", "false")
             radarSpottersLabel = getInitialPreference("WXOGL_SPOTTERS_LABEL", "false")
@@ -716,6 +719,7 @@ class MyApplication : Application() {
             radarTextSize = getInitialPreference("RADAR_TEXT_SIZE", 1.0f)
             radarLocdotSize = getInitialPreference("RADAR_LOCDOT_SIZE", 10)
             radarLociconSize = getInitialPreference("RADAR_LOCICON_SIZE", 75)
+            radarLocBugSize = getInitialPreference("RADAR_LOCBUG_SIZE", 75)
             radarHiSize = getInitialPreference("RADAR_HI_SIZE", 8)
             radarTvsSize = getInitialPreference("RADAR_TVS_SIZE", 8)
             radarDefaultLinesize = getInitialPreference("RADAR_DEFAULT_LINESIZE", 1)

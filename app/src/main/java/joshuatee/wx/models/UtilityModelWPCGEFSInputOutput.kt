@@ -58,18 +58,20 @@ internal object UtilityModelWPCGEFSInputOutput {
             return runData
         }
 
-    fun getImage(sector: String, param: String, run: String, time: String): Bitmap {
+    fun getImage(om: ObjectModel, time: String): Bitmap {
         var sectorAdd = ""
-        if (sector == "AK") {
+        if (om.sector == "AK") {
             sectorAdd = "_ak"
         }
-        val imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/exper/gefs/" + run + "/GEFS_" + param + "_" + run + "Z_f" + time + sectorAdd + ".gif"
+        val imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/exper/gefs/" + om.run + "/GEFS_" + om.currentParam + "_" + om.run + "Z_f" + time + sectorAdd + ".gif"
         return imgUrl.getImage()
     }
 
-    fun getAnimation(context: Context, sector: String, param: String, run: String, spinnerTimeValue: Int, listTime: List<String>): AnimationDrawable {
+    fun getAnimation(context: Context, om: ObjectModel, spinnerTimeValue: Int, listTime: List<String>): AnimationDrawable {
         if (spinnerTimeValue == -1) return AnimationDrawable()
-        val bmAl = (spinnerTimeValue until listTime.size).mapTo(mutableListOf()) { k -> getImage(sector, param, run, listTime[k].split(" ").dropLastWhile { it.isEmpty() }[0]) }
+        val bmAl = (spinnerTimeValue until listTime.size).mapTo(mutableListOf()) {
+            getImage(om, listTime[it].split(" ").getOrNull(0) ?: "")
+        }
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
     }
 }

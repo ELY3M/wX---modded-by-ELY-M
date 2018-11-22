@@ -30,24 +30,25 @@ import joshuatee.wx.util.UtilityImgAnim
 
 internal object UtilityModelGLCFSInputOutput {
 
-    fun getImage(sectorF: String, param: String, timeF: String): Bitmap {
+    fun getImage(om: ObjectModel, timeF: String): Bitmap {
         var sector = ""
-        if (sectorF.split(" ").size > 1) {
-            sector = sectorF.split(" ")[1].substring(0, 1).toLowerCase()
+        if (om.sector.split(" ").size > 1) {
+            sector = om.sector.split(" ")[1].substring(0, 1).toLowerCase()
         }
-        var time = timeF.replace("00","0")
+        var time = timeF.replace("00", "0")
         val timeInt = time.toIntOrNull() ?: 0
-        if (timeInt > 9){
-            time = time.replace(Regex("^0"),"")
+        if (timeInt > 9) {
+            time = time.replace(Regex("^0"), "")
         }
-        val url = "http://www.glerl.noaa.gov/res/glcfs/fcast/$sector$param+$time.gif"
-        val bitmap = url.getImage()
-        return bitmap
+        val url = "http://www.glerl.noaa.gov/res/glcfs/fcast/$sector${om.currentParam}+$time.gif"
+        return url.getImage()
     }
 
-    fun getAnimation(context: Context, sector: String, param: String, spinnerTimeValue: Int, listTime: List<String>): AnimationDrawable {
+    fun getAnimation(context: Context, om: ObjectModel, spinnerTimeValue: Int, listTime: List<String>): AnimationDrawable {
         if (spinnerTimeValue == -1) return AnimationDrawable()
-        val bmAl = (spinnerTimeValue until listTime.size).mapTo(mutableListOf()) { getImage(sector, param, listTime[it]) }
+        val bmAl = (spinnerTimeValue until listTime.size).mapTo(mutableListOf()) {
+            getImage(om, listTime[it].split(" ").getOrNull(0) ?: "")
+        }
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
     }
 }

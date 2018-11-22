@@ -53,7 +53,7 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
     private var bitmap = UtilityImg.getBlankBitmap()
     private var firstRun = false
     private var imageLoaded = false
-    private var productCode = "02"
+    private var productCode = "GEOCOLOR"
     private lateinit var img: TouchImageView2
     private var imageTitle = ""
     private var animDrawable = AnimationDrawable()
