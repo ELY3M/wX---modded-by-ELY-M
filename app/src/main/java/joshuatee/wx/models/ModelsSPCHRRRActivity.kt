@@ -37,10 +37,10 @@ import android.view.View.OnClickListener
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.external.UtilityStringExternal
+import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.ObjectSpinner
@@ -51,94 +51,92 @@ import kotlinx.coroutines.*
 
 class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener, OnItemSelectedListener {
 
+    companion object {
+        const val INFO: String = ""
+    }
+
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var spRun: ObjectSpinner
     private lateinit var spTime: ObjectSpinner
     private lateinit var spSector: ObjectSpinner
     private var animRan = false
-    private var paramLabel = ""
     private var spinnerRunRan = false
     private var spinnerTimeRan = false
     private var spinnerSectorRan = false
-    private var run = "00Z"
-    private var time = "00"
-    private var param = "sfc_prec"
-    private var model = "HRRR Experimental"
-    private var sector = "US"
     private var firstRun = false
     private var imageLoaded = false
     private var firstRunTimeSet = false
     private lateinit var fab1: ObjectFab
     private lateinit var fab2: ObjectFab
     private val overlayImg = mutableListOf<String>()
-    private val modelparmsImg = mutableListOf<String>()
     private lateinit var miStatus: MenuItem
-    private val curImg = 0
-    private var prefSector = ""
-    private var prefModel = ""
-    private var prefParam = ""
-    private var prefParamLabel = ""
-    private var prefRunPosn = ""
-    private var rtd = RunTimeData()
     private lateinit var drw: ObjectNavDrawer
-    private val numPanes = 1
     private lateinit var displayData: DisplayData
     private lateinit var contextg: Context
+    private lateinit var om: ObjectModel
+    private lateinit var turl: Array<String>
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_modelsspchrrr, R.menu.models_spchrrr, false, true)
         contextg = this
-        toolbarBottom.setOnMenuItemClickListener(this)
-        title = "HRRR"
-        prefModel = "SPCHRRR"
-        prefSector = "MODEL_" + prefModel + "_SECTOR_LAST_USED"
-        prefParam = "MODEL_" + prefModel + "_PARAM_LAST_USED"
-        prefParamLabel = "MODEL_" + prefModel + "_PARAM_LAST_USED_LABEL"
-        prefRunPosn = prefModel + "_RUN_POSN"
-        overlayImg.addAll(Arrays.asList(*TextUtils.split(Utility.readPref(this, "SPCHRRR_OVERLAY", ""), ":")))
-        modelparmsImg.addAll(Arrays.asList(*TextUtils.split(Utility.readPref(this, "SPCHRRR_PARMS", "refc:pmsl"), ":")))
-        fab1 = ObjectFab(this, this, R.id.fab1)
-        fab2 = ObjectFab(this, this, R.id.fab2)
-        val m = toolbarBottom.menu
-        if (UIPreferences.fabInModels) {
-            fab1.setOnClickListener(View.OnClickListener { UtilityModels.moveBack(spTime) })
-            fab2.setOnClickListener(View.OnClickListener { UtilityModels.moveForward(spTime) })
-            val leftArrow = m.findItem(R.id.action_back)
-            val rightArrow = m.findItem(R.id.action_forward)
-            leftArrow.isVisible = false
-            rightArrow.isVisible = false
+        turl = intent.getStringArrayExtra(INFO)
+        om = ObjectModel(this, turl[1], turl[0])
+        if (om.numPanes == 1) {
+            super.onCreate(savedInstanceState, R.layout.activity_models_generic, R.menu.models_spchrrr, false, true)
+        } else {
+            super.onCreate(savedInstanceState, R.layout.activity_models_generic_multipane, R.menu.models_spchrrr, false, true)
         }
-        fab1.setVisibility(View.GONE)
-        fab2.setVisibility(View.GONE)
+        toolbarBottom.setOnMenuItemClickListener(this)
+        title = turl[2]
+        overlayImg.addAll(Arrays.asList(*TextUtils.split(Utility.readPref(this, "SPCHRRR_OVERLAY", ""), ":")))
+        val m = toolbarBottom.menu
+        if (om.numPanes < 2) {
+            fab1 = ObjectFab(this, this, R.id.fab1)
+            fab2 = ObjectFab(this, this, R.id.fab2)
+            m.findItem(R.id.action_img1).isVisible = false
+            m.findItem(R.id.action_img2).isVisible = false
+            if (UIPreferences.fabInModels) {
+                fab1.setOnClickListener(View.OnClickListener { UtilityModels.moveBack(spTime) })
+                fab2.setOnClickListener(View.OnClickListener { UtilityModels.moveForward(spTime) })
+                val leftArrow = m.findItem(R.id.action_back)
+                val rightArrow = m.findItem(R.id.action_forward)
+                leftArrow.isVisible = false
+                rightArrow.isVisible = false
+            }
+            fab1.setVisibility(View.GONE)
+            fab2.setVisibility(View.GONE)
+        } else {
+            m.findItem(R.id.action_multipane).isVisible = false
+        }
         miStatus = m.findItem(R.id.action_status)
         miStatus.title = "in through"
-        model = Utility.readPref(this, prefModel, "HRRR")
         spTime = ObjectSpinner(this, this, R.id.spinner_time)
-        displayData = DisplayData(this, this, this, numPanes, spTime)
+        om.displayData = DisplayData(this, this, this, om.numPanes, spTime)
+        displayData = DisplayData(this, this, this, om.numPanes, spTime)
         spRun = ObjectSpinner(this, this, R.id.spinner_run)
         spSector = ObjectSpinner(this, this, R.id.spinner_sector, UtilityModelSPCHRRRInterface.SECTORS)
-        sector = Utility.readPref(this, prefSector, "S19")
-        spSector.setSelection(sector)
+        spSector.setSelection(om.sector)
         spTime.setOnItemSelectedListener(this)
         spRun.setOnItemSelectedListener(this)
         spSector.setOnItemSelectedListener(this)
         spRun.setSelection(0)
         spTime.setSelection(0)
+        val spModel = ObjectSpinner(this, this, R.id.spinner_model, om.models)
+        spModel.setOnItemSelectedListener(this)
+        spModel.setSelection(om.model)
         drw = ObjectNavDrawer(this, UtilityModelSPCHRRRInterface.LABELS, UtilityModelSPCHRRRInterface.PARAMS)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
             drw.drawerLayout.closeDrawer(drw.listView)
-            param = drw.getToken(position)
-            paramLabel = drw.getLabel(position)
-            Utility.writePref(this, prefParam, param)
-            Utility.writePref(this, prefParamLabel, paramLabel)
-            modelParmSelected(param)
+            om.displayData.param[om.curImg] = drw.getToken(position)
+            om.displayData.paramLabel[om.curImg] = drw.getLabel(position)
+            (0 until om.numPanes).forEach {
+                Utility.writePref(this, om.prefParam + it.toString(), om.displayData.param[it])
+                Utility.writePref(this, om.prefParamLabel + it.toString(), om.displayData.paramLabel[it])
+            }
             getContent()
         }
-        model = "HRRR"
-        Utility.writePref(this, prefModel, model)
-        setupHRRR()
+        setupModel()
         getRunStatus()
     }
 
@@ -157,35 +155,45 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         }
         if (parent.id == R.id.spinner_run) {
             UtilityModels.updateTime(UtilityString.getLastXChars(spRun.selectedItem.toString(), 2),
-                    rtd.mostRecentRun, spTime.list, spTime.arrayAdapter, "", false)
+                    om.rtd.mostRecentRun, spTime.list, spTime.arrayAdapter, "", false)
         }
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        run = spRun.selectedItem.toString()
-        time = spTime.selectedItem.toString()
-        sector = spSector.selectedItem.toString()
-        time = UtilityStringExternal.truncate(time, 2)
-        Utility.writePref(contextg, prefSector, sector)
+        om.run = spRun.selectedItem.toString()
+        om.time = spTime.selectedItem.toString()
+        om.sector = spSector.selectedItem.toString()
+        om.time = UtilityStringExternal.truncate(om.time, 2)
+        Utility.writePref(contextg, om.prefSector, om.sector)
+
         withContext(Dispatchers.IO) {
-            displayData.bitmap[curImg] = UtilityModelSPCHRRRInputOutput.getImage(contextg, sector, run, time, rtd.validTime, overlayImg, modelparmsImg)
+            // fixme
+            (0 until om.numPanes).forEach { om.displayData.bitmap[it] = UtilityModelSPCHRRRInputOutput.getImage(contextg, om.sector, om.run, om.time, om.rtd.validTime, overlayImg, om.displayData.param[it]) }
         }
-        displayData.img[curImg].visibility = View.VISIBLE
-        displayData.img[curImg].setImageDrawable(UtilityImg.bitmapToLayerDrawable(contextg, displayData.bitmap[curImg]))
-        displayData.img[curImg].setMaxZoom(4f)
+
+        (0 until om.numPanes).forEach {
+            if (om.numPanes > 1)
+                UtilityImg.resizeViewSetImgByHeight(om.displayData.bitmap[it], om.displayData.img[it])
+            else
+                om.displayData.img[it].setImageBitmap(om.displayData.bitmap[it])
+        }
         animRan = false
         if (!firstRun) {
-            displayData.img[curImg].setZoom(MyApplication.spchrrrZoom, MyApplication.spchrrrX, MyApplication.spchrrrY)
-            firstRun = true
-            if (UIPreferences.fabInModels) {
+            (0 until om.numPanes).forEach { UtilityImg.imgRestorePosnZoom(contextg, om.displayData.img[it], om.modelProvider + om.numPanes.toString() + it.toString()) }
+            if (UIPreferences.fabInModels && om.numPanes < 2) {
                 fab1.setVisibility(View.VISIBLE)
                 fab2.setVisibility(View.VISIBLE)
             }
+            firstRun = true
+        }
+        if (om.numPanes > 1) {
+            UtilityModels.setSubtitleRestoreIMGXYZOOM(om.displayData.img, toolbar, "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1])
+        } else {
+            toolbar.subtitle = om.displayData.paramLabel[0]
         }
         imageLoaded = true
-        UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1).toString() + ")" + modelparmsImg.toString().replace("[", "").replace("]", ""))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
@@ -194,6 +202,14 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item))
             return true
         when (item.itemId) {
+            R.id.action_img1 -> {
+                om.curImg = 0
+                UtilityModels.setSubtitleRestoreIMGXYZOOM(om.displayData.img, toolbar, "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1])
+            }
+            R.id.action_img2 -> {
+                om.curImg = 1
+                UtilityModels.setSubtitleRestoreIMGXYZOOM(om.displayData.img, toolbar, "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1])
+            }
             R.id.action_layer_obs -> overlaySelected("bigsfc")
             R.id.action_layer_topo -> overlaySelected("topo")
             R.id.action_layer_rgnlrad -> overlaySelected("rgnlrad")
@@ -207,12 +223,9 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                 overlayImg.clear()
                 getContent()
             }
-            R.id.action_clear_params -> {
-                modelparmsImg.clear()
-                getContent()
-            }
+            R.id.action_multipane -> ObjectIntent(this, ModelsSPCHRRRActivity::class.java, ModelsSPCHRRRActivity.INFO, arrayOf("2", turl[1], turl[2]))
             R.id.action_back -> UtilityModels.moveBack(spTime)
-            R.id.action_forward -> UtilityModels.moveBack(spTime)
+            R.id.action_forward -> UtilityModels.moveForward(spTime)
             R.id.action_animate -> getAnimate()
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
@@ -224,9 +237,11 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                     }
                 } else {
                     if (animRan)
-                        UtilityShare.shareAnimGif(this, model + " " + paramLabel + " " + spTime.selectedItem.toString(), displayData.animDrawable[curImg])
+                        UtilityShare.shareAnimGif(this, om.model + " " +
+                                om.displayData.paramLabel[om.curImg] + " " + spTime.selectedItem.toString(), displayData.animDrawable[om.curImg])
                     else
-                        UtilityShare.shareBitmap(this, model + " " + paramLabel + " " + spTime.selectedItem.toString(), displayData.bitmap[curImg])
+                        UtilityShare.shareBitmap(this, om.model + " " +
+                                om.displayData.paramLabel[om.curImg] + " " + spTime.selectedItem.toString(), displayData.bitmap[om.curImg])
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -241,48 +256,49 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             overlayImg.add(mesoS)
     }
 
-    private fun modelParmSelected(mesoS: String) {
-        if (modelparmsImg.contains(mesoS))
-            modelparmsImg.remove(mesoS)
-        else
-            modelparmsImg.add(mesoS)
-    }
-
     private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
+
         val timeAl = mutableListOf<String>()
         val spinnerTimeValue = spTime.selectedItemPosition
         (spinnerTimeValue until spTime.size()).mapTo(timeAl) { spTime.getItemAtPosition(it).toString() }
         withContext(Dispatchers.IO) {
-            displayData.animDrawable[curImg] = UtilityModelSPCHRRRInputOutput.getAnimation(contextg, sector, run, rtd.validTime, spinnerTimeValue, spTime.list, overlayImg, modelparmsImg)
+            (0 until om.numPanes).forEach {
+                // fixme
+                om.displayData.animDrawable[it] = UtilityModelSPCHRRRInputOutput.getAnimation(contextg, om.sector, om.run,
+                        om.rtd.validTime, spinnerTimeValue, spTime.list, overlayImg, om.displayData.param[it])
+            }
         }
-        animRan = UtilityImgAnim.startAnimation(displayData.animDrawable[curImg], displayData.img[curImg])
+        (0 until om.numPanes).forEach { UtilityImgAnim.startAnimation(om.displayData.animDrawable[it], om.displayData.img[it]) }
+        animRan = true
     }
 
     private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
-        rtd = withContext(Dispatchers.IO) { UtilityModelSPCHRRRInputOutput.runTime }
+        om.rtd = withContext(Dispatchers.IO) { UtilityModelSPCHRRRInputOutput.runTime }
         spRun.clear()
-        spRun.addAll(rtd.listRun)
+        spRun.addAll(om.rtd.listRun)
         spRun.notifyDataSetChanged()
-        miStatus.title = "in through " + rtd.imageCompleteStr
-        toolbar.title = rtd.imageCompleteStr
+        miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
+        //toolbar.title = om.rtd.imageCompleteStr
         spRun.setSelection(0)
         spTime.setSelection(0)
         if (!firstRunTimeSet) {
             firstRunTimeSet = true
-            spTime.setSelection(Utility.readPref(contextg, prefRunPosn, 0))
+            spTime.setSelection(Utility.readPref(contextg, om.prefRunPosn, 0))
         }
         spTime.notifyDataSetChanged()
         getContent()
     }
 
-    private fun setupHRRR() {
-        param = "refc"
-        param = Utility.readPref(this, prefParam, param)
-        paramLabel = "Composite Reflectivity"
-        paramLabel = Utility.readPref(this, prefParamLabel, paramLabel)
-        if (!UtilityModels.parmInArray(UtilityModelSPCHRRRInterface.PARAMS, param)) {
-            param = "refc"
-            paramLabel = "Composite Reflectivity"
+    private fun setupModel() {
+        (0 until om.numPanes).forEach {
+            om.displayData.param[it] = "refc"
+            om.displayData.param[it] = Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[it])
+            om.displayData.paramLabel[it] = "Composite Reflectivity"
+            om.displayData.paramLabel[it] = Utility.readPref(this, om.prefParamLabel + it.toString(), om.displayData.paramLabel[it])
+            if (!UtilityModels.parmInArray(UtilityModelSPCHRRRInterface.PARAMS, om.displayData.param[it])) {
+                om.displayData.param[it] = "refc"
+                om.displayData.paramLabel[it] = "Composite Reflectivity"
+            }
         }
         spRun.setSelection(0)
         spTime.setSelection(0)
@@ -309,9 +325,8 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     override fun onStop() {
         if (imageLoaded) {
             Utility.writePref(this, "SPCHRRR_OVERLAY", TextUtils.join(":", overlayImg))
-            Utility.writePref(this, "SPCHRRR_PARMS", TextUtils.join(":", modelparmsImg))
-            UtilityImg.imgSavePosnZoom(this, displayData.img[curImg], prefModel)
-            Utility.writePref(this, prefRunPosn, spTime.selectedItemPosition)
+            (0 until om.numPanes).forEach { UtilityImg.imgSavePosnZoom(this, om.displayData.img[it], om.modelProvider + om.numPanes.toString() + it.toString()) }
+            Utility.writePref(this, om.prefRunPosn, spTime.selectedItemPosition)
         }
         super.onStop()
     }

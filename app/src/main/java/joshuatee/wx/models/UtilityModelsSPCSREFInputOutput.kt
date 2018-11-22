@@ -22,6 +22,7 @@
 package joshuatee.wx.models
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 
 import joshuatee.wx.util.UtilityImg
@@ -51,7 +52,10 @@ internal object UtilityModelsSPCSREFInputOutput {
             return runData
         }
 
-    fun getImage(context: Context, param: String, run: String, time: String) = UtilityImg.getBitmapAddWhiteBG(context, "${MyApplication.nwsSPCwebsitePrefix}/exper/sref/gifs/$run/$param$time.gif")
+    fun getImage(context: Context, param: String, runF: String, time: String): Bitmap {
+        val run = runF.replace("z", "")
+        return UtilityImg.getBitmapAddWhiteBG(context, "${MyApplication.nwsSPCwebsitePrefix}/exper/sref/gifs/$run/$param$time.gif")
+    }
 
     fun getAnimation(context: Context, param: String, run: String, spinnerTimeValue: Int, listTime: List<String>): AnimationDrawable {
         if (spinnerTimeValue == -1) return AnimationDrawable()
@@ -59,3 +63,4 @@ internal object UtilityModelsSPCSREFInputOutput {
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
     }
 }
+

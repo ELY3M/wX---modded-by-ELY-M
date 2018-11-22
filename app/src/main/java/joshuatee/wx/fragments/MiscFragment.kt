@@ -35,8 +35,6 @@ import joshuatee.wx.activitiesmisc.LightningActivity
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.models.ModelsGenericActivity
-import joshuatee.wx.models.ModelsNCEPActivity
-import joshuatee.wx.models.ModelsNSSLWRFActivity
 import joshuatee.wx.nhc.NHCActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.vis.NWSGOESFullDiskActivity

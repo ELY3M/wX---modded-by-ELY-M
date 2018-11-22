@@ -106,6 +106,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private val swoBuffers = ObjectOglBuffers()
     private val locdotBuffers = ObjectOglBuffers(PolygonType.LOCDOT, 0.0f)
     private val locIconBuffers = ObjectOglBuffers()
+    private val locBugBuffers = ObjectOglBuffers()
     private val wbCircleBuffers = ObjectOglBuffers(PolygonType.WIND_BARB_CIRCLE, 0.30f)
     private val colorSwo = IntArray(5)
     private var breakSize15 = 15000
@@ -122,9 +123,11 @@ class WXGLRender(private val context: Context) : Renderer {
 
     private var imagesize: Double = 75.0
     private var locationsize: Double = MyApplication.radarLociconSize.toDouble()
+    private var locationbugsize: Double = MyApplication.radarLociconSize.toDouble()
     private var tvssize: Double = MyApplication.radarTvsSize.toDouble()
 
     private var locationId = -1
+    private var locationBugId = -1
     private var tvsId = -1
 
 
@@ -460,6 +463,15 @@ class WXGLRender(private val context: Context) : Renderer {
         } //displayhold
 
 
+        Log.i(TAG, "bearing: "+ WXGLRadarActivity.bearingCurrent)
+        Log.i(TAG, "speed: "+ WXGLRadarActivity.speedCurrent)
+        if (WXGLRadarActivity.speedCurrent >= 0.43) {
+            //set up location bug
+            Log.i(TAG, "location bug!!!!")
+            drawLocationBug(locBugBuffers)
+        }
+
+
         GLES20.glLineWidth(warnLineWidth)
         listOf(warningSpsBuffers, warningSvsBuffers, warningSmwBuffers, warningSvrBuffers, warningEwwBuffers, warningFfwBuffers, warningTorBuffers).forEach { drawPolygons(it, 8) }
         GLES20.glLineWidth(watmcdLineWidth)
@@ -485,37 +497,33 @@ class WXGLRender(private val context: Context) : Renderer {
                 GLES20.glUniform1i(iTexture, 0)
                 GLES20.glEnable(GLES20.GL_BLEND);
                 GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
-                //GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1)
                 GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
                 //GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
-
-
-            GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
+                GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
         }
     }
 
+    //TODO need to rotate the bug
     private fun drawLocationBug(buffers: ObjectOglBuffers) {
+        val rotate = FloatArray(16)
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
             GLES20.glUseProgram(sp_loadimage)
             mPositionHandle = GLES20.glGetAttribLocation(sp_loadimage, "vPosition")
             GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
             //imagesize = MyApplication.radarLociconSize.toDouble()
-            imagesize = locationsize
+            imagesize = locationbugsize
             iTexture = GLES20.glGetUniformLocation(sp_loadimage, "u_texture")
-            locationId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "headingbug.png")
+            locationBugId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "headingbug.png")
             GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
             GLES20.glEnableVertexAttribArray(mPositionHandle)
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, locationId)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, locationBugId)
             GLES20.glUniform1i(iTexture, 0)
             GLES20.glEnable(GLES20.GL_BLEND);
             GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
-            //GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1)
             GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
             //GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
-
-
             GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
         }
     }
@@ -528,7 +536,7 @@ class WXGLRender(private val context: Context) : Renderer {
                 mPositionHandle = GLES20.glGetAttribLocation(sp_loadimage, "vPosition")
                 GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
                 //imagesize = MyApplication.radarTvsSize.toDouble()
-                imagesize - tvssize
+                imagesize = tvssize
                 iTexture = GLES20.glGetUniformLocation(sp_loadimage, "u_texture")
                 tvsId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "tvs.png")
                 GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
@@ -538,7 +546,7 @@ class WXGLRender(private val context: Context) : Renderer {
                 GLES20.glUniform1i(iTexture, 0)
                 GLES20.glEnable(GLES20.GL_BLEND);
                 GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
-                //GLES20.glDrawArrays(GLES20.GL_POINTS, 0, 1)
+                //GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
                 GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
                 GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
 
@@ -795,7 +803,7 @@ class WXGLRender(private val context: Context) : Renderer {
         deconstructGenericLines(warningSpsBuffers)
     }
 
-    fun constructLocationDot(locXCurrent: String, locYCurrentF: String, locBearing: Float, archiveMode: Boolean) {
+    fun constructLocationDot(locXCurrent: String, locYCurrentF: String, archiveMode: Boolean) {
         var locYCurrent = locYCurrentF
         var locmarkerAl = mutableListOf<Double>()
         if (MyApplication.locdotFollowsGps) {
@@ -834,6 +842,7 @@ class WXGLRender(private val context: Context) : Renderer {
         constructTriangles(locdotBuffers)
 
 
+
         //Circle around the location dot//
         locIconBuffers.triangleCount = 1 //was 36
         locIconBuffers.initialize(32 * locIconBuffers.triangleCount,
@@ -841,6 +850,13 @@ class WXGLRender(private val context: Context) : Renderer {
                 6 * locIconBuffers.triangleCount,
                 MyApplication.radarColorLocdot)
 
+
+        //location bug
+        locBugBuffers.triangleCount = 1 //was 36
+        locBugBuffers.initialize(32 * locBugBuffers.triangleCount,
+                8 * locBugBuffers.triangleCount,
+                6 * locBugBuffers.triangleCount,
+                MyApplication.radarColorLocdot)
 
 
         if (MyApplication.radarUseJni) {
@@ -853,6 +869,9 @@ class WXGLRender(private val context: Context) : Renderer {
         if (MyApplication.locdotFollowsGps) {
             locIconBuffers.lenInit = locdotBuffers.lenInit
             UtilityWXOGLPerf.genLocdot(locIconBuffers, pn, gpsX, gpsY)
+            //location bug//
+            locBugBuffers.lenInit = 2f //MyApplication.radarLociconSize.toFloat()
+            UtilityWXOGLPerf.genLocdot(locBugBuffers, pn , gpsX, gpsY)
 
         }
 
@@ -860,11 +879,13 @@ class WXGLRender(private val context: Context) : Renderer {
 
         locdotBuffers.isInitialized = true
         locIconBuffers.isInitialized = true
+        locBugBuffers.isInitialized = true
     }
 
     fun deconstructLocationDot() {
         locdotBuffers.isInitialized = false
         locIconBuffers.isInitialized = false
+        locBugBuffers.isInitialized = false
     }
 
     fun constructSpotters() {

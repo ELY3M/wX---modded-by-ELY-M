@@ -29,6 +29,7 @@ enum class ModelType {
     SPCHREF,
     SPCHRRR,
     GLCFS,
+    SPCSREF,
 }
 
 

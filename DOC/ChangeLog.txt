@@ -3,8 +3,14 @@
 // TODO find new material design icons as used in google cal / clock
 // TODO base velocity legend
 // TODO SPC MESO rescan for _sf, convert to list
-// TODO make model activities more consistent, ex SPC SREF does not have setupModel()
+// TODO camelCase all vars in model's interfaces
+// TODO use ObjectModel as arg in ObjectModel's getImg/Anim
 
+55057 2018_11_21 bugfix in spc href/hrrr related to forward arrow
+                 cleanup
+55056 2018_11_21 continue to migrate SPCSREF, SPCHRRR - add multipane support for both ( remove SPC HRRR multiple params in same image for consistency )
+                 cleanup manifest after recent changes
+55055 2018_11_21 migrate SPCSREF to ObjectModel (partially)
 55054 2018_11_20 bugfix for NSSL - models not showing
                  bugfix for ESRL - sectors not working
                  convert GLCFS, NCEP to new generic framework

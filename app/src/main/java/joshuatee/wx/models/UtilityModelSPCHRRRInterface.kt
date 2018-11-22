@@ -23,6 +23,8 @@ package joshuatee.wx.models
 
 internal object UtilityModelSPCHRRRInterface {
 
+    val models = listOf("HRRR")
+
     val SECTORS = listOf(
             "National",
             "Northwest US",

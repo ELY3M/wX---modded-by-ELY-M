@@ -32,6 +32,14 @@
         app:showAsAction="always"
         android:title="@string/forward_arrow"/>
     <item
+        android:id="@+id/action_img1"
+        app:showAsAction="never"
+        android:title="@string/label_sel_img1"/>
+    <item
+        android:id="@+id/action_img2"
+        app:showAsAction="never"
+        android:title="@string/label_sel_img2"/>
+    <item
         android:id="@+id/action_animate"
         android:icon="@drawable/ic_play_arrow_24dp"
         app:showAsAction="never"
@@ -40,10 +48,16 @@
         android:id="@+id/action_share"
         android:title="@string/label_share"
         app:showAsAction="never"  />
-    <item
+
+    <item android:id="@+id/action_multipane"
+        android:title="@string/label_multi_pane"
+        app:showAsAction="never"  />
+
+ <!--   <item
         android:id="@+id/action_clear_params"
         android:title="@string/label_clear_all"
-        app:showAsAction="never"  />
+        app:showAsAction="never"  />-->
+
     <item
         android:id="@+id/action_layers"
         android:title="@string/label_layers"

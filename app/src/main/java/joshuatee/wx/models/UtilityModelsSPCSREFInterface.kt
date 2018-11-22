@@ -30,6 +30,8 @@ import joshuatee.wx.util.Group
 
 object UtilityModelsSPCSREFInterface {
 
+    val models = listOf("SREF")
+
     private val TITLES = Arrays.asList(
             ObjectMenuTitle("SPC Guidance", 11),
             ObjectMenuTitle("Overview", 24),

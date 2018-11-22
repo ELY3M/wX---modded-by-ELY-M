@@ -68,7 +68,7 @@ class SPCFragment : Fragment() {
     private val allItemList: MutableList<TileObject>
         get() {
             hm["spcsref"] = TileObject(R.drawable.spcsref, ModelsSPCSREFActivity::class.java, ModelsSPCSREFActivity.INFO,
-                    arrayOf("1", "SPCSREF"), resources.getString(R.string.help_spc_sref), "spcsref")
+                    arrayOf("1", "SPCSREF", "SPCSREF"), resources.getString(R.string.help_spc_sref), "spcsref")
             hm["spcsummary"] = TileObject(R.drawable.spc_sum, SPCSWOSummaryActivity::class.java, "",
                     arrayOf(), resources.getString(R.string.help_spc_swo_summary), "spcsummary")
             hm["spcswod1"] = TileObject(R.drawable.day1, SPCSWOActivity::class.java, SPCSWOActivity.NO,
@@ -96,9 +96,9 @@ class SPCFragment : Fragment() {
             hm["spccompmap"] = TileObject(R.drawable.spccompmap, SPCCompmapActivity::class.java, "",
                     arrayOf(), resources.getString(R.string.help_spc_compmap), "spccompmap")
             hm["spchrrr"] = TileObject(R.drawable.spchrrr, ModelsSPCHRRRActivity::class.java, "",
-                    arrayOf(""), resources.getString(R.string.help_spchrrr_models), "spchrrr")
+                    arrayOf("1", "SPCHRRR", "SPC HRRR"), resources.getString(R.string.help_spchrrr_models), "spchrrr")
             hm["spchref"] = TileObject(R.drawable.spchref, ModelsSPCHREFActivity::class.java, "",
-                    arrayOf(""), resources.getString(R.string.help_spchref_models), "spchref")
+                    arrayOf("1", "SPCHREF", "SPC HREF"), resources.getString(R.string.help_spchref_models), "spchref")
             val tileOrder = "spcsref:spcsummary:spcswod1:spcswod2:spcswod3:spcswod48:spcstormrpt1:spcstormrpt2:spcmcd:spcwat:spcmeso:spcfire:spctstorm:spccompmap:"
             var spcPref: String = Utility.readPref("FRAGMENT_SPC_ORDER", tileOrder)
             if (!spcPref.contains("spchrrr")) {

@@ -28,13 +28,13 @@ import android.graphics.drawable.AnimationDrawable
 import joshuatee.wx.objects.ModelType
 import joshuatee.wx.util.UtilityImg
 
-class ObjectModel(val context: Context, var prefModel: String) {
+class ObjectModel(val context: Context, var prefModel: String, var numPanesStr: String) {
 
     var run: String = "00Z"
     var time: String = "00"
     var sector: String = ""
     var numPanes: Int = 1
-    var numPanesStr: String = "1"
+    //var numPanesStr: String = "1"
     var model: String = "WRF"
     var sectorInt: Int = 0
     var sectorOrig: String = ""
@@ -61,7 +61,7 @@ class ObjectModel(val context: Context, var prefModel: String) {
     private var defaultModel: String = ""
 
     init {
-
+        numPanes = numPanesStr.toIntOrNull() ?: 0
         when (prefModel) {
             "WPCGEFS" -> {
                 modelType = ModelType.WPCGEFS
@@ -86,6 +86,24 @@ class ObjectModel(val context: Context, var prefModel: String) {
                 models = UtilityModelGLCFSInterface.models
                 defaultModel = "GLCFS"
             }
+            "SPCSREF" -> {
+                modelType = ModelType.SPCSREF
+                models = UtilityModelsSPCSREFInterface.models
+                defaultModel = "SREF"
+                timeTruncate = 4
+            }
+            "SPCHREF" -> {
+                modelType = ModelType.SPCHREF
+                models = UtilityModelSPCHREFInterface.models
+                defaultModel = "HREF"
+                timeTruncate = 4
+            }
+            "SPCHRRR" -> {
+                modelType = ModelType.SPCHRRR
+                models = UtilityModelSPCHRRRInterface.models
+                defaultModel = "HRRR"
+                timeTruncate = 2
+            }
         }
 
         //prefModel += numPanesStr
@@ -104,11 +122,14 @@ class ObjectModel(val context: Context, var prefModel: String) {
 
     fun getImage(index: Int): Bitmap {
         return when (modelType) {
+            // FIXME remove params already part of ObjectModel and update aux methods to use object
             ModelType.WPCGEFS -> UtilityModelWPCGEFSInputOutput.getImage(sector, displayData.param[index], run, time)
             ModelType.ESRL -> UtilityModelESRLInputOutput.getImage(model, sectorOrig, sectorInt, displayData.param[index], run, time)
             ModelType.NSSL -> UtilityModelNSSLWRFInputOutput.getImage(context, model, sector, displayData.param[index], run, time)
             ModelType.GLCFS -> UtilityModelGLCFSInputOutput.getImage(sector, displayData.param[index], time)
             ModelType.NCEP -> UtilityModelNCEPInputOutput.getImage(model, sector, displayData.param[index], run, time)
+            ModelType.SPCSREF -> UtilityModelsSPCSREFInputOutput.getImage(context, displayData.param[index], run, time)
+            ModelType.SPCHREF -> UtilityModelSPCHREFInputOutput.getImage(context, sector, run, time, displayData.param[index])
             else -> UtilityImg.getBlankBitmap()
         }
     }
@@ -120,6 +141,8 @@ class ObjectModel(val context: Context, var prefModel: String) {
             ModelType.NSSL -> UtilityModelNSSLWRFInputOutput.getAnimation(context, model, sector, displayData.param[index], run, spinnerTimeValue, timeList)
             ModelType.GLCFS -> UtilityModelGLCFSInputOutput.getAnimation(context, sector, displayData.param[index], spinnerTimeValue, timeList)
             ModelType.NCEP -> UtilityModelNCEPInputOutput.getAnimation(context, model, sector, displayData.param[index], run, spinnerTimeValue, timeList)
+            ModelType.SPCSREF -> UtilityModelsSPCSREFInputOutput.getAnimation(context, displayData.param[index], run, spinnerTimeValue, timeList)
+            ModelType.SPCHREF -> UtilityModelSPCHREFInputOutput.getAnimation(context, sector, run, spinnerTimeValue, timeList, displayData.param[index])
             else -> AnimationDrawable()
         }
     }
@@ -130,6 +153,8 @@ class ObjectModel(val context: Context, var prefModel: String) {
             ModelType.ESRL -> UtilityModelESRLInputOutput.getRunTime(model)
             ModelType.NSSL -> UtilityModelNSSLWRFInputOutput.runTime
             ModelType.NCEP -> UtilityModelNCEPInputOutput.getRunTime(model, displayData.param[0], sector)
+            ModelType.SPCSREF -> UtilityModelsSPCSREFInputOutput.runTime
+            ModelType.SPCHREF -> UtilityModelSPCHREFInputOutput.runTime
             else -> RunTimeData()
         }
     }
