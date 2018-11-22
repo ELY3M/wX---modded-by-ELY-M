@@ -129,6 +129,8 @@ class SettingsRadarActivity : BaseActivity() {
         ll.addView(ObjectSettingsNumberPicker(this, this, "Aviation dot size", "RADAR_AVIATION_SIZE", R.string.aviation_size_label, 7, 1, 50).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Text size", "RADAR_TEXT_SIZE", R.string.text_size_label, (MyApplication.radarTextSize * 10).toInt(), 4, 20).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Draw tool line size", "DRAWTOOL_SIZE", R.string.drawtool_size_label, 4, 1, 20).card)
+        ll.addView(ObjectSettingsNumberPicker(this, this, "Color Legend width", "RADAR_SHOW_LEGEND_WIDTH", R.string.showlegendwidth, 50, 1, 75).card)
+        ll.addView(ObjectSettingsNumberPicker(this, this, "Color Legend text size", "RADAR_SHOW_LEGEND_TEXTSIZE", R.string.showlegendtextsize, 10, 1, 50).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Detailed observations Zoom", "RADAR_OBS_EXT_ZOOM", R.string.obs_ext_zoom_label, 7, 1, 10).card)
     }
 
