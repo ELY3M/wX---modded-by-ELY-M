@@ -53,24 +53,26 @@ internal object UtilityModelNCEPInputOutput {
         return runData
     }
 
-    fun getImage(model: String, sector: String, param: String, run: String, time: String): Bitmap {
-        val imgUrl: String = if (model == "GFS") {
-            "http://mag.ncep.noaa.gov/data/" + model.toLowerCase(Locale.US) + "/" + run.replace("Z", "") + "/" + sector.toLowerCase(Locale.US) + "/" + param + "/" + model.toLowerCase(Locale.US) + "_" + sector.toLowerCase(Locale.US) + "_" + time + "_" + param + ".gif"
-        } else if (model == "HRRR") {
-            "http://mag.ncep.noaa.gov/data/" + model.toLowerCase(Locale.US) + "/" + run.replace("Z", "") + "/" + model.toLowerCase(Locale.US) + "_" + sector.toLowerCase(Locale.US) + "_" + time + "00_" + param + ".gif"
+    fun getImage(om: ObjectModel, time: String): Bitmap {
+        val imgUrl: String = if (om.model == "GFS") {
+            "http://mag.ncep.noaa.gov/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace("Z", "") +
+                    "/" + om.sector.toLowerCase(Locale.US) + "/" + om.currentParam + "/" + om.model.toLowerCase(Locale.US) + "_" +
+                    om.sector.toLowerCase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
+        } else if (om.model == "HRRR") {
+            "http://mag.ncep.noaa.gov/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace("Z", "") +
+                    "/" + om.model.toLowerCase(Locale.US) + "_" + om.sector.toLowerCase(Locale.US) + "_" + time + "00_" + om.currentParam + ".gif"
         } else {
-            "http://mag.ncep.noaa.gov/data/" + model.toLowerCase(Locale.US) + "/" + run.replace("Z", "") + "/" + model.toLowerCase(Locale.US) + "_" + sector.toLowerCase(Locale.US) + "_" + time + "_" + param + ".gif"
+            "http://mag.ncep.noaa.gov/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace("Z", "") +
+                    "/" + om.model.toLowerCase(Locale.US) + "_" + om.sector.toLowerCase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
         }
         return imgUrl.getImage()
     }
 
-    fun getAnimation(context: Context, model: String, sector: String, param: String, run: String, spinnerTimeValue: Int, listTime: List<String>): AnimationDrawable {
+    fun getAnimation(context: Context, om: ObjectModel, spinnerTimeValue: Int, listTime: List<String>): AnimationDrawable {
         if (spinnerTimeValue == -1) return AnimationDrawable()
-        val bmAl = (spinnerTimeValue until listTime.size)
-                .filter { k -> listTime[k].split(" ").dropLastWhile { it.isEmpty() }.isNotEmpty() }
-                .mapTo(mutableListOf()) { k ->
-                    getImage(model, sector, param, run, listTime[k].split(" ").getOrNull(0) ?: "")
-                }
+        val bmAl = (spinnerTimeValue until listTime.size).mapTo(mutableListOf()) {
+            getImage(om, listTime[it].split(" ").getOrNull(0) ?: "")
+        }
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
     }
 }

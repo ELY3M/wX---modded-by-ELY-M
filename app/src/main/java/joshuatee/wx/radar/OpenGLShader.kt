@@ -2,6 +2,7 @@ package joshuatee.wx.radar
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.opengl.GLES20
 import android.opengl.GLUtils
 import android.util.Log
@@ -58,7 +59,6 @@ internal object OpenGLShader {
 
 
     fun LoadTexture(imagefile: String): Int {
-
         Log.i(TAG, "Loadtexture: "+imagefile)
         var img: Bitmap? = null
         val textures = IntArray(1)
@@ -79,6 +79,53 @@ internal object OpenGLShader {
 
         try {
             img!!.recycle()
+        } catch (e: NullPointerException) {
+            Log.i(TAG, e.toString() + ":" + e.message + ":" + e.localizedMessage)
+        }
+
+        return textures[0]
+    }
+
+    fun LoadBitmap(imagefile: String): Bitmap? {
+        Log.i(TAG, "LoadBitmap: " + imagefile)
+        var img: Bitmap? = null
+        try {
+            val options = BitmapFactory.Options()
+            options.inScaled = false
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888
+            img = BitmapFactory.decodeFile(imagefile, options)
+
+        } catch (e: NullPointerException) {
+            Log.i(TAG, e.toString() + ":" + e.message + ":" + e.localizedMessage)
+        }
+        return img
+    }
+
+    fun RotateBitmap(imagefile: String, d: Double): Bitmap {
+        Log.i(TAG, "rotating bitmap: "+ imagefile + " to: "+d)
+        val bitmap: Bitmap? = LoadBitmap(imagefile)
+        val matrix = Matrix()
+        matrix.setRotate(d.toFloat())
+        matrix.postTranslate(0.0f, bitmap!!.width.toFloat())
+        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+    }
+
+    fun LoadBitmapTexture(img: Bitmap): Int {
+        Log.i(TAG, "Loadtexture")
+        val textures = IntArray(1)
+        try {
+            GLES20.glGenTextures(1, textures, 0)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0])
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST.toFloat())
+            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST.toFloat())
+            GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, img, 0)
+            Log.i(TAG, "Loaded texture" + ":H:" + img.height + ":W:" + img.width)
+        } catch (e: Exception) {
+            Log.i(TAG, e.toString() + ":" + e.message + ":" + e.localizedMessage)
+        }
+
+        try {
+            img.recycle()
         } catch (e: NullPointerException) {
             Log.i(TAG, e.toString() + ":" + e.message + ":" + e.localizedMessage)
         }

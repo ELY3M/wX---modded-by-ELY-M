@@ -98,6 +98,7 @@ class SettingsRadarActivity : BaseActivity() {
                 Utility.writePref(this, "LOCDOT_FOLLOWS_GPS", "false")
             }
         })
+        ll.addView(ObjectSettingsCheckBox(this, this, "Location Heading Bug", "LOCDOT_BUG", R.string.locdot_bug_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Black background", "NWS_RADAR_BG_BLACK", R.string.nws_black_bg_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Show counties", "RADAR_SHOW_COUNTY", R.string.show_county_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Show county labels", "RADAR_COUNTY_LABELS", R.string.show_county_labels_label).card)
@@ -119,6 +120,7 @@ class SettingsRadarActivity : BaseActivity() {
         ll.addView(ObjectSettingsNumberPicker(this, this, "Watch/MCD line size", "RADAR_WATMCD_LINESIZE", R.string.watmcd_linesize_np, 4, 1, 10).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Location dot size", "RADAR_LOCDOT_SIZE", R.string.locdot_size_np, 10, 1, 75).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Location icon size", "RADAR_LOCICON_SIZE", R.string.locicon_size_np, 75, 1, 530).card)
+        ll.addView(ObjectSettingsNumberPicker(this, this, "Location Bug size", "RADAR_LOCBUG_SIZE", R.string.locbug_size_np, 75, 1, 530).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Hail marker size", "RADAR_HI_SIZE", R.string.hi_size_np, 8, 1, 50).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "TVS icon size", "RADAR_TVS_SIZE", R.string.tvs_size_np, 75, 1, 530).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "WXOGL initial view size", "WXOGL_SIZE", R.string.wxogl_size_np, 8, 5, 25).card)

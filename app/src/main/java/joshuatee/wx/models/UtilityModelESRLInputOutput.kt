@@ -82,43 +82,43 @@ internal object UtilityModelESRLInputOutput {
     // http://rapidrefresh.noaa.gov/RAP/for_web/rap_jet/2016091600/full/cref_sfc_f00.png
     // http://rapidrefresh.noaa.gov/HRRR/for_web/hrrr_jet/2016091607/full/1ref_sfc_f00.png
 
-    fun getImage(model: String, sectorF: String, sectorInt: Int, paramTmpF: String, run: String, time: String): Bitmap {
-        var sector = sectorF
-        var paramTmp = paramTmpF
+    fun getImage(om: ObjectModel, time: String): Bitmap {
+        var sector = om.sector
+        var paramTmp = om.currentParam
         val imgUrl: String
         val zipStr = "TZA"
-        when (model) {
+        when (om.model) {
             "HRRR", "HRRR_NCEP" -> when {
-                sectorInt == 0 -> {
+                om.sectorInt == 0 -> {
                 }
-                sectorInt < 9 -> {
-                    sector = "t" + sectorInt.toString()
+                om.sectorInt < 9 -> {
+                    sector = "t" + om.sectorInt.toString()
                     paramTmp = paramTmp.replace("_", "_$sector")
                 }
                 else -> {
-                    sector = "z" + (sectorInt - 9).toString()
+                    sector = "z" + (om.sectorInt - 9).toString()
                     paramTmp = paramTmp.replace("_", "_$sector")
                 }
             }
             "HRRR_AK" -> {
             }
-            "RAP", "RAP_NCEP" -> if (sectorInt == 0 || sectorInt == 1) {
-            } else if (sectorInt == 9) { // AK
+            "RAP", "RAP_NCEP" -> if (om.sectorInt == 0 || om.sectorInt == 1) {
+            } else if (om.sectorInt == 9) { // AK
                 sector = "alaska"
-            } else if (sectorInt == 10) { // AK Zoom
+            } else if (om.sectorInt == 10) { // AK Zoom
                 sector = "a1"
                 paramTmp = paramTmp.replace("_", "_$sector")
-            } else if (sectorInt == 11) { // HI
+            } else if (om.sectorInt == 11) { // HI
                 sector = "r1"
                 paramTmp = paramTmp.replace("_", "_$sector")
-            } else if (sectorInt < 9) {
-                sector = "t" + (sectorInt - 1).toString()
+            } else if (om.sectorInt < 9) {
+                sector = "t" + (om.sectorInt - 1).toString()
                 paramTmp = paramTmp.replace("_", "_$sector")
             }
         }
         val param = paramTmp
-        var parentModel = model.replace("HRRR_AK", "alaska")
-        when (model) {
+        var parentModel = om.model.replace("HRRR_AK", "alaska")
+        when (om.model) {
             "RAP_NCEP" -> parentModel = "RAP"
             "HRRR_NCEP" -> parentModel = "HRRR"
             else -> {
@@ -126,20 +126,20 @@ internal object UtilityModelESRLInputOutput {
         }
         val onDemandUrl: String
         if (parentModel.contains("RAP")) {
-            imgUrl = "$urlBase/" + parentModel + "/for_web/" + model.toLowerCase(Locale.US) + "_jet/" + run.replace("Z", "") +
+            imgUrl = "$urlBase/" + parentModel + "/for_web/" + om.model.toLowerCase(Locale.US) + "_jet/" + om.run.replace("Z", "") +
                     "/" + sector.toLowerCase(Locale.US) + "/" + param + "_f" + time + ".png"
             onDemandUrl = "$urlBase/" + parentModel + "/" +
-                    "displayMapLocalDiskDateDomainZip" + zipStr + ".cgi?keys=" + model.toLowerCase(Locale.US) + "_jet:&runtime=" + run.replace("Z", "") +
-                    "&plot_type=" + param + "&fcst=" + time + "&time_inc=60&num_times=16&model=" + model.toLowerCase(Locale.US) + "&ptitle=" + model +
+                    "displayMapLocalDiskDateDomainZip" + zipStr + ".cgi?keys=" + om.model.toLowerCase(Locale.US) + "_jet:&runtime=" + om.run.replace("Z", "") +
+                    "&plot_type=" + param + "&fcst=" + time + "&time_inc=60&num_times=16&model=" + om.model.toLowerCase(Locale.US) + "&ptitle=" + om.model +
                     "%20Model%20Fields%20-%20Experimental&maxFcstLen=15&fcstStrLen=-1&domain=" +
                     sector.toLowerCase(Locale.US) + "&adtfn=1"
 
         } else {
-            imgUrl = "$urlBase/hrrr/" + parentModel.toUpperCase(Locale.US) + "/for_web/" + model.toLowerCase(Locale.US) + "_jet/" + run.replace("Z", "") +
+            imgUrl = "$urlBase/hrrr/" + parentModel.toUpperCase(Locale.US) + "/for_web/" + om.model.toLowerCase(Locale.US) + "_jet/" + om.run.replace("Z", "") +
                     "/" + sector.toLowerCase(Locale.US) + "/" + param + "_f" + time + ".png"
             onDemandUrl = "$urlBase/hrrr/" + parentModel.toUpperCase(Locale.US) + "/" +
-                    "displayMapLocalDiskDateDomainZip" + zipStr + ".cgi?keys=" + model.toLowerCase(Locale.US) + "_jet:&runtime=" + run.replace("Z", "") +
-                    "&plot_type=" + param + "&fcst=" + time + "&time_inc=60&num_times=16&model=" + model.toLowerCase(Locale.US) + "&ptitle=" + model +
+                    "displayMapLocalDiskDateDomainZip" + zipStr + ".cgi?keys=" + om.model.toLowerCase(Locale.US) + "_jet:&runtime=" + om.run.replace("Z", "") +
+                    "&plot_type=" + param + "&fcst=" + time + "&time_inc=60&num_times=16&model=" + om.model.toLowerCase(Locale.US) + "&ptitle=" + om.model +
                     "%20Model%20Fields%20-%20Experimental&maxFcstLen=15&fcstStrLen=-1&domain=" +
                     sector.toLowerCase(Locale.US) + "&adtfn=1"
         }
@@ -147,11 +147,10 @@ internal object UtilityModelESRLInputOutput {
         return imgUrl.getImage()
     }
 
-    fun getAnimation(context: Context, model: String, sector: String, sectorInt: Int, paramTmp: String, run: String, spinnerTimeValue: Int, listTime: List<String>): AnimationDrawable {
+    fun getAnimation(context: Context, om: ObjectModel, spinnerTimeValue: Int, listTime: List<String>): AnimationDrawable {
         if (spinnerTimeValue == -1) return AnimationDrawable()
-        val bmAl = (spinnerTimeValue until listTime.size).mapTo(mutableListOf()) { k ->
-            getImage(model, sector, sectorInt, paramTmp, run, listTime[k].split(" ").getOrNull(0)
-                    ?: "")
+        val bmAl = (spinnerTimeValue until listTime.size).mapTo(mutableListOf()) {
+            getImage(om, listTime[it].split(" ").getOrNull(0) ?: "")
         }
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
     }

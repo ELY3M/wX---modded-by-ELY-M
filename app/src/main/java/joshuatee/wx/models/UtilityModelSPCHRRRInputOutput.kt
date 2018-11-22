@@ -54,31 +54,31 @@ internal object UtilityModelSPCHRRRInputOutput {
             return runData
         }
 
-    fun getImage(context: Context, sector: String, run: String, time: String, validTime: String, overlayImg: List<String>, param: String): Bitmap {
+    fun getImage(context: Context, om: ObjectModel, time: String, overlayImg: List<String>): Bitmap {
         val layerUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/"
         var imgUrl: String
         val bitmapAl = mutableListOf<Bitmap>()
         val layersAl = mutableListOf<Drawable>()
         overlayImg.forEach {
-            imgUrl = layerUrl + getSectorCode(sector).toLowerCase(Locale.US) + "/" + it + "/" + it + ".gif"
+            imgUrl = layerUrl + getSectorCode(om.sector).toLowerCase(Locale.US) + "/" + it + "/" + it + ".gif"
             bitmapAl.add(UtilityImg.eraseBG(imgUrl.getImage(), -1))
         }
         imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/hrrr/data/hrrr3/" +
-                getSectorCode(sector).toLowerCase(Locale.US) + "/R" +
-                run.replace("Z", "") + "_F" +
-                formatTime(time) + "_V" + getValidTime(run, time, validTime) +
-                "_" + getSectorCode(sector) + "_" + param + ".gif"
+                getSectorCode(om.sector).toLowerCase(Locale.US) + "/R" +
+                om.run.replace("Z", "") + "_F" +
+                formatTime(time) + "_V" + getValidTime(om.run, time, om.rtd.validTime) +
+                "_" + getSectorCode(om.sector) + "_" + om.currentParam + ".gif"
         bitmapAl.add(UtilityImg.eraseBG(imgUrl.getImage(), -1))
         layersAl.add(ColorDrawable(Color.WHITE))
         bitmapAl.mapTo(layersAl) { BitmapDrawable(context.resources, it) }
         return UtilityImg.layerDrawableToBitmap(layersAl)
     }
 
-    fun getAnimation(context: Context, sector: String, run: String, validTime: String, spinnerTimeValue: Int, listTime: List<String>, overlayImg: List<String>, param: String): AnimationDrawable {
-        if (spinnerTimeValue == -1) return AnimationDrawable()
-        val bmAl = (spinnerTimeValue until listTime.size).mapTo(mutableListOf()) { k ->
-            getImage(context, sector, run, listTime[k].split(" ").dropLastWhile { it.isEmpty() }.getOrNull(0)
-                    ?: "", validTime, overlayImg, param)
+    fun getAnimation(context: Context, om: ObjectModel, overlayImg: List<String>): AnimationDrawable {
+        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) { k ->
+            getImage(context, om, om.spTime.list[k].split(" ").dropLastWhile { it.isEmpty() }.getOrNull(0)
+                    ?: "", overlayImg)
         }
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
     }

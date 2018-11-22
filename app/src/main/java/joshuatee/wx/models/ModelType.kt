@@ -19,7 +19,7 @@
 
 */
 
-package joshuatee.wx.objects
+package joshuatee.wx.models
 
 enum class ModelType {
     WPCGEFS,

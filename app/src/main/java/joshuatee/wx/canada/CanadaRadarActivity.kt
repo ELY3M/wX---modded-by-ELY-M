@@ -163,11 +163,11 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                 imageType = "rad"
                 getContent()
             }
-            R.id.action_ir -> {
+           /* R.id.action_ir -> {
                 mosaicShown = false
                 imageType = "ir"
                 getContent()
-            }
+            }*/
             R.id.action_wv -> {
                 mosaicShown = false
                 imageType = "wv"

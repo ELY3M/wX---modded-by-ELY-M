@@ -70,41 +70,4 @@
             android:targetClass="joshuatee.wx.models.ModelsSPCHREFActivity" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
-
-    <!--<shortcut
-        android:shortcutId="NHC"
-        android:enabled="true"
-        android:icon="@drawable/nhc"
-        android:shortcutShortLabel="@string/nhc_shortcut"
-        android:shortcutLongLabel="@string/nhc_shortcut"
-        android:shortcutDisabledMessage="@string/nhc_shortcut">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="joshuatee.wx"
-            android:targetClass="joshuatee.wx.WX" />
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetPackage="joshuatee.wx"
-            android:targetClass="joshuatee.wx.nhc.NHCActivity" />
-        <categories android:name="android.shortcut.conversation" />
-    </shortcut>-->
-
-   <!-- <shortcut
-        android:enabled="true"
-        android:icon="@drawable/nfu"
-        android:shortcutDisabledMessage="@string/severeDashboard_shortcut"
-        android:shortcutId="SD"
-        android:shortcutLongLabel="@string/severeDashboard_shortcut"
-        android:shortcutShortLabel="@string/severeDashboard_shortcut">
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetClass="joshuatee.wx.WX"
-            android:targetPackage="joshuatee.wx" />
-        <intent
-            android:action="android.intent.action.VIEW"
-            android:targetClass="joshuatee.wx.activitiesmisc.SevereDashboardActivity"
-            android:targetPackage="joshuatee.wx" />
-        <categories android:name="android.shortcut.conversation" />
-    </shortcut>-->
-
 </shortcuts>

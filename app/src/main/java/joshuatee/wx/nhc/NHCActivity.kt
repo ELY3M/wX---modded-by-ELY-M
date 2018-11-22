@@ -25,7 +25,6 @@ import android.annotation.SuppressLint
 import java.util.Locale
 
 import android.os.Bundle
-import android.content.Intent
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import android.widget.LinearLayout

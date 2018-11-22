@@ -191,6 +191,10 @@ Location dot will use the GPS of your device and will update on every scan as op
         it will update location frequently.
 </string>
 
+    <string name="locdot_bug_label">
+add heading bug to your GPS location if you are following your GPS.
+</string>
+
     <string name="dualpaneshareposn_label">
 If in a multi-pane radar mode each pane will share the same zoom lat/lon provided they are using the same radar site.
 </string>
@@ -529,6 +533,9 @@ Allows one to change the size of the location marker. Default value is 8</string
 
     <string name="locicon_size_np">
 Allows one to change the size of the GPS location Image. Default value is 75</string>
+
+    <string name="locbug_size_np">
+Allows one to change the size of the GPS location Bug. Default value is 75</string>
 
     <string name="wxogl_size_np">
 Allows one to change the default view size for the WXOGL Nexrad radar interface. Default value is 10. Larger value is more zoomed in.</string>
