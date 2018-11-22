@@ -30,6 +30,7 @@ import joshuatee.wx.Extensions.getImage
 import java.util.Locale
 
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.MyApplication
 import joshuatee.wx.RegExp
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityString
@@ -39,14 +40,14 @@ internal object UtilityModelNCEPInputOutput {
     fun getRunTime(model: String, param: String, spinnerSectorCurrent: String): RunTimeData {
         val runData = RunTimeData()
         val runCompletionDataStr = StringBuilder(100)
-        var sigHtmlTmp = UtilityString.getHTMLandParse("http://mag.ncep.noaa.gov/model-guidance-model-parameter.php?group=Model%20Guidance&model="
+        var sigHtmlTmp = UtilityString.getHTMLandParse("${MyApplication.nwsMagNcepWebsitePrefix}/model-guidance-model-parameter.php?group=Model%20Guidance&model="
                 + model.toUpperCase(Locale.US) + "&area=" + spinnerSectorCurrent + "&ps=area", RegExp.ncepPattern2)
         sigHtmlTmp = sigHtmlTmp.replace("UTC selected_cell", "Z")
         runCompletionDataStr.append(sigHtmlTmp.replace("Z", " UTC"))
         if (runCompletionDataStr.length > 8) {
             runCompletionDataStr.insert(8, " ")
         }
-        val timeCompleteUrl = "http://mag.ncep.noaa.gov/model-fhrs.php?group=Model%20Guidance&model=" + model.toLowerCase(Locale.US) + "&fhr_mode=image&loop_start=-1&loop_end=-1&area=" + spinnerSectorCurrent + "&fourpan=no&imageSize=&preselected_formatted_cycle_date=" + runCompletionDataStr + "&cycle=" + runCompletionDataStr + "&param=" + param + "&ps=area"
+        val timeCompleteUrl = "${MyApplication.nwsMagNcepWebsitePrefix}/model-fhrs.php?group=Model%20Guidance&model=" + model.toLowerCase(Locale.US) + "&fhr_mode=image&loop_start=-1&loop_end=-1&area=" + spinnerSectorCurrent + "&fourpan=no&imageSize=&preselected_formatted_cycle_date=" + runCompletionDataStr + "&cycle=" + runCompletionDataStr + "&param=" + param + "&ps=area"
         val timeCompleteHTML = (timeCompleteUrl.replace(" ", "%20")).getHtml()
         runData.imageCompleteStr = timeCompleteHTML.parseLastMatch("SubmitImageForm.(.*?).\"")
         runData.mostRecentRun = sigHtmlTmp.parseLastMatch(RegExp.ncepPattern1)
@@ -55,23 +56,23 @@ internal object UtilityModelNCEPInputOutput {
 
     fun getImage(om: ObjectModel, time: String): Bitmap {
         val imgUrl: String = if (om.model == "GFS") {
-            "http://mag.ncep.noaa.gov/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace("Z", "") +
+            "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace("Z", "") +
                     "/" + om.sector.toLowerCase(Locale.US) + "/" + om.currentParam + "/" + om.model.toLowerCase(Locale.US) + "_" +
                     om.sector.toLowerCase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
         } else if (om.model == "HRRR") {
-            "http://mag.ncep.noaa.gov/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace("Z", "") +
+            "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace("Z", "") +
                     "/" + om.model.toLowerCase(Locale.US) + "_" + om.sector.toLowerCase(Locale.US) + "_" + time + "00_" + om.currentParam + ".gif"
         } else {
-            "http://mag.ncep.noaa.gov/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace("Z", "") +
+            "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace("Z", "") +
                     "/" + om.model.toLowerCase(Locale.US) + "_" + om.sector.toLowerCase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
         }
         return imgUrl.getImage()
     }
 
-    fun getAnimation(context: Context, om: ObjectModel, spinnerTimeValue: Int, listTime: List<String>): AnimationDrawable {
-        if (spinnerTimeValue == -1) return AnimationDrawable()
-        val bmAl = (spinnerTimeValue until listTime.size).mapTo(mutableListOf()) {
-            getImage(om, listTime[it].split(" ").getOrNull(0) ?: "")
+    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
+        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) {
+            getImage(om, om.spTime.list[it].split(" ").getOrNull(0) ?: "")
         }
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
     }

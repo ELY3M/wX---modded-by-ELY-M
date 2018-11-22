@@ -188,8 +188,8 @@ internal object UtilityWidgetDownload {
     }
 
     private fun downloadNHC(context: Context, type: WidgetFile) {
-        val bm1 = "http://www.nhc.noaa.gov/xgtwo/two_atl_0d0.png".getImage()
-        val bm2 = "http://www.nhc.noaa.gov/xgtwo/two_pac_0d0.png".getImage()
+        val bm1 = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png".getImage()
+        val bm2 = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png".getImage()
         saveImage(context, bm1, type.fileName + "0")
         saveImage(context, bm2, type.fileName + "1")
     }

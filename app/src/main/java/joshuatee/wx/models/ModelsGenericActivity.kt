@@ -68,7 +68,6 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     private lateinit var contextg: Context
     private lateinit var om: ObjectModel
     private lateinit var spRun: ObjectSpinner
-    //private lateinit var spTime: ObjectSpinner
     private lateinit var spSector: ObjectSpinner
     private lateinit var drw: ObjectNavDrawer
     private var firstRunTimeSet = false

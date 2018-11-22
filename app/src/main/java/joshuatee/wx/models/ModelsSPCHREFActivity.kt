@@ -125,7 +125,7 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             getContent()
             true
         }
-        setup()
+        setupModel()
         getRunStatus()
     }
 
@@ -156,18 +156,15 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         om.sector = spSector.selectedItem.toString()
         om.time = UtilityStringExternal.truncate(om.time, 2)
         Utility.writePref(contextg, om.prefSector, om.sector)
-
         withContext(Dispatchers.IO) {
             (0 until om.numPanes).forEach { om.displayData.bitmap[it] = om.getImage(it) }
         }
-
         (0 until om.numPanes).forEach {
             if (om.numPanes > 1)
                 UtilityImg.resizeViewSetImgByHeight(om.displayData.bitmap[it], om.displayData.img[it])
             else
                 om.displayData.img[it].setImageBitmap(om.displayData.bitmap[it])
         }
-
         animRan = false
         if (!firstRun) {
             (0 until om.numPanes).forEach { UtilityImg.imgRestorePosnZoom(contextg, om.displayData.img[it], om.modelProvider + om.numPanes.toString() + it.toString()) }
@@ -248,7 +245,7 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         getContent()
     }
 
-    private fun setup() {
+    private fun setupModel() {
         (0 until om.numPanes).forEach {
             om.displayData.param[it] = "500w_mean,500h_mean"
             om.displayData.param[it] = Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[it])

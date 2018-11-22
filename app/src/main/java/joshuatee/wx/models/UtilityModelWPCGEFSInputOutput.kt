@@ -67,10 +67,10 @@ internal object UtilityModelWPCGEFSInputOutput {
         return imgUrl.getImage()
     }
 
-    fun getAnimation(context: Context, om: ObjectModel, spinnerTimeValue: Int, listTime: List<String>): AnimationDrawable {
-        if (spinnerTimeValue == -1) return AnimationDrawable()
-        val bmAl = (spinnerTimeValue until listTime.size).mapTo(mutableListOf()) {
-            getImage(om, listTime[it].split(" ").getOrNull(0) ?: "")
+    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
+        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) {
+            getImage(om, om.spTime.list[it].split(" ").getOrNull(0) ?: "")
         }
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
     }

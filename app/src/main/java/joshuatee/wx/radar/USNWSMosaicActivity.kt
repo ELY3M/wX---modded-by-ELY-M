@@ -24,7 +24,6 @@ package joshuatee.wx.radar
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -132,42 +131,20 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        //@SuppressLint("StaticFieldLeak")
-        //private inner class GetContent : AsyncTask<String, String, String>() {
-
-        //override fun doInBackground(vararg params: String): String {
         bitmap = withContext(Dispatchers.IO) { UtilityUSImgNWSMosaic.nwsMosaic(contextg, nwsRadarMosaicSectorCurrent, true) }
-        //return "Executed"
-        //}
-
         // FIXME bug in API 28 after changing
-        //override fun onPostExecute(result: String) {
         if (!doNotSavePref) {
             Utility.writePref(contextg, "NWS_RADAR_MOSAIC_SECTOR_CURRENT", nwsRadarMosaicSectorLabelCurrent)
         }
         img.setImageBitmap(bitmap)
         animRan = false
-        //firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "NWSRADMOS")
-        //if (!firstRun) {
         img.setZoom("NWSRADMOS")
-        //    firstRun = true
-        //}
         imageLoaded = true
-        //}
     }
 
     private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
-        //@SuppressLint("StaticFieldLeak")
-        //private inner class AnimateRadar : AsyncTask<String, String, String>() {
-
-        //override fun doInBackground(vararg params: String): String {
         animDrawable = withContext(Dispatchers.IO) { UtilityUSImgNWSMosaic.nwsMosaicAnimation(contextg, nwsRadarMosaicSectorCurrent, frameCount, true) }
-        //return "Executed"
-        //}
-
-        //override fun onPostExecute(result: String) {
         animRan = UtilityImgAnim.startAnimation(animDrawable, img)
-        //}
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
