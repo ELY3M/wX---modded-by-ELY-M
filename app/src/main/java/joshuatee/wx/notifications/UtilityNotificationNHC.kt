@@ -62,7 +62,7 @@ object UtilityNotificationNHC {
         var dataRet: ObjectNHCStormInfo
         if (atl) {
             (1 until 6).forEach {
-                dataRet = UtilityNHC.getHurricaneInfo("http://www.nhc.noaa.gov/nhc_at" + it.toString() + ".xml")
+                dataRet = UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_at" + it.toString() + ".xml")
                 if (dataRet.title != "") {
                     atlTitleList.add(dataRet.title.replace("NHC Atlantic Wallet", ""))
                     atlSumList.add(dataRet.summary)
@@ -75,7 +75,7 @@ object UtilityNotificationNHC {
         }
         if (epac) {
             (1 until 6).forEach {
-                dataRet = UtilityNHC.getHurricaneInfo("http://www.nhc.noaa.gov/nhc_ep" + it.toString() + ".xml")
+                dataRet = UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_ep" + it.toString() + ".xml")
                 if (dataRet.title != "") {
                     pacTitleList.add(dataRet.title.replace("NHC Eastern Pacific Wallet", ""))
                     pacSumList.add(dataRet.summary)

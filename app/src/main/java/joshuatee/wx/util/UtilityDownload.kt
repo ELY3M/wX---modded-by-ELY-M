@@ -224,14 +224,14 @@ object UtilityDownload {
         } else if (prod == "SWPC3DAYGEO") {
             text = ("http://services.swpc.noaa.gov/text/3-day-geomag-forecast.txt").getHtmlSep()
         } else if (prod.contains("MIATCP") || prod.contains("MIATCM") || prod.contains("MIATCD") || prod.contains("MIAPWS") || prod.contains("MIAHS")) {
-            text = UtilityString.getNWSPRE("http://www.nhc.noaa.gov/text/$prod.shtml")
+            text = UtilityString.getNWSPRE("${MyApplication.nwsNhcWebsitePrefix}/text/$prod.shtml")
             if (prod.contains("MIATCD")) {
                 text = text.replace("<br><br>", "<BR><BR>")
                 text = text.replace("<br>", " ")
             }
             text = text.replace("^<br>".toRegex(), "")
         } else if (prod.contains("MIAT")) {
-            text = UtilityString.getHTMLandParseSep("http://www.nhc.noaa.gov/ftp/pub/forecasts/discussion/$prod", "(.*)")
+            text = UtilityString.getHTMLandParseSep("${MyApplication.nwsNhcWebsitePrefix}/ftp/pub/forecasts/discussion/$prod", "(.*)")
             text = text.substring(text.indexOf('>') + 1)
             text = text.substring(text.indexOf('>') + 1)
             text = text.substring(text.indexOf('>') + 1)
@@ -294,14 +294,14 @@ object UtilityDownload {
         } else if (prod.startsWith("GLF") && !prod.contains("%")) {
             text = getTextProduct(context, "$prod%")
         } else if (prod.contains("FOCN45")) {
-            text = "http://tgftp.nws.noaa.gov/data/raw/fo/focn45.cwwg..txt".getHtmlSep()
+            text = "${MyApplication.NWS_RADAR_PUB}/data/raw/fo/focn45.cwwg..txt".getHtmlSep()
             if (UIPreferences.nwsTextRemovelinebreaks) {
                 text = text.replace(" &nbsp", "")
                 text = text.replace("<br><br>", "<BR><BR>")
                 text = text.replace("<br>", " ")
             }
         } else if (prod.startsWith("AWCN"))
-            text = ("http://tgftp.nws.noaa.gov/data/raw/aw/" + prod.toLowerCase(Locale.US) + ".cwwg..txt").getHtmlSep()
+            text = ("${MyApplication.NWS_RADAR_PUB}/data/raw/aw/" + prod.toLowerCase(Locale.US) + ".cwwg..txt").getHtmlSep()
         else if (prod.contains("NFD"))
             text = ("http://www.opc.ncep.noaa.gov/mobile/mobile_product.php?id=" + prod.toUpperCase(Locale.US)).getHtml()
         else if (prod.contains("FWDDY38")) {
@@ -314,7 +314,7 @@ object UtilityDownload {
                 text = text.replace("<br>", " ")
             }
         } else if (prod.contains("FXCN01"))
-            text = ("http://tgftp.nws.noaa.gov/data/raw/fx/fxcn01.cwao..txt").getHtmlSep()
+            text = ("${MyApplication.NWS_RADAR_PUB}/data/raw/fx/fxcn01.cwao..txt").getHtmlSep()
         else if (prod.startsWith("VFD")) {
             val t2 = prod.substring(3)
             text = ("http://www.aviationweather.gov/fcstdisc/data?cwa=K$t2").getHtmlSep()
@@ -325,7 +325,7 @@ object UtilityDownload {
                 text = text.replace("<br>", " ")
             }
         } else if (prod.contains("FPCN48"))
-            text = "http://tgftp.nws.noaa.gov/data/raw/fp/fpcn48.cwao..txt".getHtmlSep()
+            text = "${MyApplication.NWS_RADAR_PUB}/data/raw/fp/fpcn48.cwao..txt".getHtmlSep()
         else if (prod.contains("PMDTHR")) {
             text = UtilityString.getHTMLandParseSep("http://www.cpc.noaa.gov/products/predictions/threats/threats.php", "<div id=\"discDiv\">(.*?)</div>")
         } else if (prod.contains("CTOF")) {

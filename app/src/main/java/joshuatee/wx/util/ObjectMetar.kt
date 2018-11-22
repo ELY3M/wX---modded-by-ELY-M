@@ -480,7 +480,7 @@ internal class ObjectMetar(context: Context, location: LatLon) {
         val observationData = ("https://api.weather.gov/stations/" + obsClosest.name + "/observations/current").getNwsHtml()
         icon = observationData.parse("\"icon\": \"(.*?)\",")
         condition = observationData.parse("\"textDescription\": \"(.*?)\",")
-        val metarData = ("http://tgftp.nws.noaa.gov/data/observations/metar/decoded/" + obsClosest.name + ".TXT").getHtmlSep().replace("<br>", MyApplication.newline)
+        val metarData = ("${MyApplication.NWS_RADAR_PUB}/data/observations/metar/decoded/" + obsClosest.name + ".TXT").getHtmlSep().replace("<br>", MyApplication.newline)
         temperature = metarData.parse("Temperature: (.*?) F")
         dewpoint = metarData.parse("Dew Point: (.*?) F")
         windDirection = metarData.parse("Wind: from the (.*?) \\(.*? degrees\\) at .*? MPH ")

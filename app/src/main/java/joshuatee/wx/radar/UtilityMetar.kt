@@ -68,7 +68,7 @@ internal object UtilityMetar {
             obsStateOld = rid
             val obsList = getObservationSites(context, rid)
             // https://www.aviationweather.gov/metar/data?ids=KDTW%2CKARB&format=raw&date=&hours=0
-            val sigHtmlTmp = "http://www.aviationweather.gov/adds/metars/index?submit=1&station_ids=$obsList&chk_metars=on".getHtml()
+            val sigHtmlTmp = "${MyApplication.nwsAWCwebsitePrefix}/adds/metars/index?submit=1&station_ids=$obsList&chk_metars=on".getHtml()
             val metarArrTmp = sigHtmlTmp.parseColumn("<FONT FACE=\"Monospace,Courier\">(.*?)</FONT><BR>")
             val metarArr = condenseObs(metarArrTmp)
             if (!initializedObsMap) {

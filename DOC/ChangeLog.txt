@@ -4,9 +4,11 @@
 // TODO base velocity legend
 // TODO SPC MESO rescan for _sf, convert to list
 // TODO camelCase all vars in model's interfaces
-// TODO use ObjectModel as arg in ObjectModel's getImg/Anim
+// TODO NWS URLs http to https const myapp
 
-55058 2018_11_21 more model refactor and bugfix
+55059 2018_11_22 more model refactor and bugfix
+                 add NWS URL const to Myapp and switch to https when possible in response to SCN18-100
+55058 2018_11_22 more model refactor and bugfix
 55057 2018_11_21 bugfix in spc href/hrrr related to forward arrow
                  cleanup
 55056 2018_11_21 continue to migrate SPCSREF, SPCHRRR - add multipane support for both ( remove SPC HRRR multiple params in same image for consistency )

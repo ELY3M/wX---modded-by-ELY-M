@@ -158,7 +158,7 @@ object UtilityUSImgNWSMosaic {
             ColorDrawable(Color.WHITE)
         }
         var bitmapCanvas = UtilityImg.getBlankBitmap()
-        val baseUrl = "http://radar.weather.gov/ridge/Conus/RadarImg/"
+        val baseUrl = "${MyApplication.nwsRadarWebsitePrefix}/ridge/Conus/RadarImg/"
         if (sector == "latest") {
             scaleType = ProjectionType.NWS_MOSAIC
         }
@@ -166,7 +166,7 @@ object UtilityUSImgNWSMosaic {
         if (sectorUrl == "alaska") {
             sPattern = "href=.(" + "NATAK" + "_[0-9]{8}_[0-9]{4}.gif)"
         }
-        urlArr = UtilityImgAnim.getUrlArray("http://radar.weather.gov/ridge/Conus/RadarImg/", sPattern, frameCount)
+        urlArr = UtilityImgAnim.getUrlArray("${MyApplication.nwsRadarWebsitePrefix}/ridge/Conus/RadarImg/", sPattern, frameCount)
         urlArr.forEach {
             if (MyApplication.blackBg && sector != "alaska") {
                 bmAl.add(UtilityImg.getBitmapRemoveBG(baseUrl + it, -1))
@@ -187,9 +187,9 @@ object UtilityUSImgNWSMosaic {
     }
 
     fun nwsMosaic(context: Context, sector: String, isInteractive: Boolean): Bitmap {
-        val imgUrl = "http://radar.weather.gov/Conus/RadarImg/" + sector + "_radaronly.gif"
+        val imgUrl = "${MyApplication.nwsRadarWebsitePrefix}/Conus/RadarImg/" + sector + "_radaronly.gif"
         if (sector == "alaska") {
-            return "http://radar.weather.gov/ridge/Conus/RadarImg/alaska.gif".getImage()
+            return "${MyApplication.nwsRadarWebsitePrefix}/ridge/Conus/RadarImg/alaska.gif".getImage()
         }
         val layers = mutableListOf<Drawable>()
         val cd = if (MyApplication.blackBg) {

@@ -29,6 +29,7 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
 import joshuatee.wx.activitiesmisc.ImageShowActivity
@@ -84,12 +85,11 @@ class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.id.action_share -> UtilityShare.shareText(this, "", Utility.fromHtml(objNHC.html))
             R.id.action_epac_daily -> showImageProduct("http://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/PAC/20.jpg", "EPAC Daily Analysis", "false")
             R.id.action_atl_daily -> showImageProduct("http://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/ATL/20.jpg", "ATL Daily Analysis", "false")
-            R.id.action_epac_7daily -> showImageProduct("http://www.nhc.noaa.gov/tafb/pac_anal.gif", "EPAC 7-Day Analysis", "true")
-            R.id.action_atl_7daily -> showImageProduct("http://www.nhc.noaa.gov/tafb/atl_anal.gif", "ATL 7-Day Analysis", "true")
-            R.id.action_epac_sst_anomaly -> showImageProduct("http://www.nhc.noaa.gov/tafb/pac_anom.gif", "EPAC SST Anomaly", "true")
-            R.id.action_atl_sst_anomaly -> showImageProduct("http://www.nhc.noaa.gov/tafb/atl_anom.gif", "ATL SST Anomaly", "true")
-            //R.id.action_glcfs -> startActivity(Intent(this, ModelsGLCFSActivity::class.java))
-            R.id.action_glcfs  -> ObjectIntent(this, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "GLCFS", "GLCFS"))
+            R.id.action_epac_7daily -> showImageProduct("${MyApplication.nwsNhcWebsitePrefix}/tafb/pac_anal.gif", "EPAC 7-Day Analysis", "true")
+            R.id.action_atl_7daily -> showImageProduct("${MyApplication.nwsNhcWebsitePrefix}/tafb/atl_anal.gif", "ATL 7-Day Analysis", "true")
+            R.id.action_epac_sst_anomaly -> showImageProduct("${MyApplication.nwsNhcWebsitePrefix}/tafb/pac_anom.gif", "EPAC SST Anomaly", "true")
+            R.id.action_atl_sst_anomaly -> showImageProduct("${MyApplication.nwsNhcWebsitePrefix}/tafb/atl_anom.gif", "ATL SST Anomaly", "true")
+            R.id.action_glcfs -> ObjectIntent(this, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "GLCFS", "GLCFS"))
             else -> return super.onOptionsItemSelected(item)
         }
         return true

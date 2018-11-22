@@ -114,9 +114,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
         prefRunPosn = "MODEL_" + prefModel + numPanesStr + "_RUN_POSN"
         modelProvider = "MODEL_$prefModel"
     }
-
-    // FIXME move spinner for Time into object model
-
+    
     fun getImage(index: Int): Bitmap {
         currentParam = displayData.param[index]
         return when (modelType) {
@@ -135,14 +133,13 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
         currentParam = displayData.param[index]
         spinnerTimeValue = spTime.selectedItemPosition
         return when (modelType) {
-            // FIXME remove trailing 2 args
-            ModelType.WPCGEFS -> UtilityModelWPCGEFSInputOutput.getAnimation(context, this, spinnerTimeValue, spTime.list)
-            ModelType.ESRL -> UtilityModelESRLInputOutput.getAnimation(context, this, spinnerTimeValue, spTime.list)
-            ModelType.NSSL -> UtilityModelNSSLWRFInputOutput.getAnimation(context, this, spinnerTimeValue, spTime.list)
-            ModelType.GLCFS -> UtilityModelGLCFSInputOutput.getAnimation(context, this, spinnerTimeValue, spTime.list)
-            ModelType.NCEP -> UtilityModelNCEPInputOutput.getAnimation(context, this, spinnerTimeValue, spTime.list)
-            ModelType.SPCSREF -> UtilityModelsSPCSREFInputOutput.getAnimation(context, this, spinnerTimeValue, spTime.list)
-            ModelType.SPCHREF -> UtilityModelSPCHREFInputOutput.getAnimation(context, this, spinnerTimeValue, spTime.list)
+            ModelType.WPCGEFS -> UtilityModelWPCGEFSInputOutput.getAnimation(context, this)
+            ModelType.ESRL -> UtilityModelESRLInputOutput.getAnimation(context, this)
+            ModelType.NSSL -> UtilityModelNSSLWRFInputOutput.getAnimation(context, this)
+            ModelType.GLCFS -> UtilityModelGLCFSInputOutput.getAnimation(context, this)
+            ModelType.NCEP -> UtilityModelNCEPInputOutput.getAnimation(context, this)
+            ModelType.SPCSREF -> UtilityModelsSPCSREFInputOutput.getAnimation(context, this)
+            ModelType.SPCHREF -> UtilityModelSPCHREFInputOutput.getAnimation(context, this)
             else -> AnimationDrawable()
         }
     }

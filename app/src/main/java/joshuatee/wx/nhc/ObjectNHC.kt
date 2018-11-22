@@ -32,6 +32,7 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityString
 
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ObjectIntent
 
 class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
@@ -54,12 +55,12 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
     var html: String = ""
 
     fun getData() {
-        listOf("http://www.nhc.noaa.gov/xgtwo/two_atl_0d0.png", "http://www.nhc.noaa.gov/xgtwo/two_atl_2d0.png",
-                "http://www.nhc.noaa.gov/xgtwo/two_atl_5d0.png", "http://www.nhc.noaa.gov/xgtwo/two_pac_0d0.png",
-                "http://www.nhc.noaa.gov/xgtwo/two_pac_2d0.png", "http://www.nhc.noaa.gov/xgtwo/two_pac_5d0.png").forEach { bmAl.add(it.getImage()) }
+        listOf("${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png", "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png",
+                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png", "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png",
+                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png", "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png").forEach { bmAl.add(it.getImage()) }
         var dataRet: ObjectNHCStormInfo
         (1 until 6).forEach {
-            dataRet = UtilityNHC.getHurricaneInfo("http://www.nhc.noaa.gov/nhc_at" + it.toString() + ".xml")
+            dataRet = UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_at" + it.toString() + ".xml")
             if (dataRet.title != "") {
                 atlSumList.add(dataRet.summary)
                 atlLinkList.add(UtilityString.getNWSPRE(dataRet.url))
@@ -70,7 +71,7 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
             }
         }
         (1 until 6).forEach {
-            dataRet = UtilityNHC.getHurricaneInfo("http://www.nhc.noaa.gov/nhc_ep" + it.toString() + ".xml")
+            dataRet = UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_ep" + it.toString() + ".xml")
             if (dataRet.title != "") {
                 pacSumList.add(dataRet.summary)
                 pacLinkList.add(UtilityString.getNWSPRE(dataRet.url))

@@ -31,6 +31,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
 import joshuatee.wx.audio.UtilityTTS
@@ -118,7 +119,7 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
             url = UtilityDownload.getTextProduct(contextg, prod)
             listOf("_W5_NL_sm2.png", "_5day_cone_with_line_and_wind_sm2.png", "_W_NL_sm2.gif", "_wind_probs_34_F120_sm2.png", "_wind_probs_50_F120_sm2.png",
                     "_wind_probs_64_F120_sm2.png", "_R_sm2.png", "_S_sm2.png", "_WPCQPF_sm2.png").forEach { bmAl.add((baseUrl + it).getImage()) }
-            bmAl.add("http://www.nhc.noaa.gov/tafb_latest/danger_pac_latestBW_sm3.gif".getImage())
+            bmAl.add("${MyApplication.nwsNhcWebsitePrefix}/tafb_latest/danger_pac_latestBW_sm3.gif".getImage())
         }
         cTextProd.setText(Utility.fromHtml(url))
         sigHtmlTmp = url

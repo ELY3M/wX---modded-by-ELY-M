@@ -23,6 +23,7 @@ package joshuatee.wx.vis
 
 import android.content.Context
 import android.graphics.drawable.AnimationDrawable
+import joshuatee.wx.MyApplication
 
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
@@ -47,20 +48,20 @@ internal object UtilityNWSGOESFullDisk {
     )
 
     val URL_INDEX = listOf(
-            "http://www.goes.noaa.gov/FULLDISK/GWIR.JPG",
-            "http://www.goes.noaa.gov/FULLDISK/GWVS.JPG",
-            "http://www.goes.noaa.gov/FULLDISK/GMIR.JPG",
-            "http://www.goes.noaa.gov/FULLDISK/GMVS.JPG",
-            "http://www.goes.noaa.gov/FULLDISK/GIIR.JPG",
-            "http://www.goes.noaa.gov/FULLDISK/GIVS.JPG",
-            "http://www.goes.noaa.gov/dimg/jma/fd/rb/10.gif",
-            "http://www.goes.noaa.gov/dimg/jma/fd/ir4/10.gif",
-            "http://www.goes.noaa.gov/dimg/jma/fd/wv/10.gif",
-            "http://www.goes.noaa.gov/dimg/jma/fd/wvblue/10.gif",
-            "http://www.goes.noaa.gov/dimg/jma/fd/vis/10.gif",
-            "http://www.goes.noaa.gov/dimg/jma/fd/avn/10.gif",
-            "http://www.goes.noaa.gov/dimg/jma/fd/ft/10.gif",
-            "http://www.goes.noaa.gov/dimg/jma/fd/rbtop/10.gif"
+            "${MyApplication.nwsGoesWebsitePrefix}/FULLDISK/GWIR.JPG",
+            "${MyApplication.nwsGoesWebsitePrefix}/FULLDISK/GWVS.JPG",
+            "${MyApplication.nwsGoesWebsitePrefix}/FULLDISK/GMIR.JPG",
+            "${MyApplication.nwsGoesWebsitePrefix}/FULLDISK/GMVS.JPG",
+            "${MyApplication.nwsGoesWebsitePrefix}/FULLDISK/GIIR.JPG",
+            "${MyApplication.nwsGoesWebsitePrefix}/FULLDISK/GIVS.JPG",
+            "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/rb/10.gif",
+            "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/ir4/10.gif",
+            "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/wv/10.gif",
+            "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/wvblue/10.gif",
+            "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/vis/10.gif",
+            "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/avn/10.gif",
+            "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/ft/10.gif",
+            "${MyApplication.nwsGoesWebsitePrefix}/dimg/jma/fd/rbtop/10.gif"
     )
 
     fun getAnimation(context: Context, urlF: String): AnimationDrawable {
