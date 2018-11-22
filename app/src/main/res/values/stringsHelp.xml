@@ -121,6 +121,17 @@ Show nearby wind barbs for the state the currently selected radar is in.
 Set the line width for the drawing and distance tools available in radar. Default is 3.
 </string>
 
+
+
+    <string name="showlegendwidth">
+Set the color legend width in radar. Default is 50.
+</string>
+
+    <string name="showlegendtextsize">
+Set the color legend text size in radar. Default is 10.
+</string>
+
+
     <string name="radar_toolbar_transparent_label">
 Nexrad radar single pane activity will have transparent toolbars if enabled.</string>
 

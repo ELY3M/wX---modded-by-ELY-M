@@ -670,6 +670,8 @@ class MyApplication : Application() {
         var radarHi: Boolean = false
         var radarTvs: Boolean = false
         var radarShowLegend: Boolean = false
+        var radarShowLegendWidth: Int = 0
+        var radarShowLegendTextSize: Int = 0
         var drawtoolSize: Int = 0
         var radarObsExtZoom: Int = 0
         var radarSpotterSize: Int = 0
@@ -687,6 +689,7 @@ class MyApplication : Application() {
         var radarHwEnhExt: Boolean = false
         private var radarCamxBorders: Boolean = false
         var radarIconsLevel2: Boolean = false
+
 
         private fun initRadarPreferences() {
             radarTorWarnings = getInitialPreference("TOR_WARNINGS", "false")
@@ -721,6 +724,8 @@ class MyApplication : Application() {
             radarStateHires = getInitialPreference("RADAR_STATE_HIRES", "false")
             radarIconsLevel2 = getInitialPreference("WXOGL_ICONS_LEVEL2", "false")
             radarShowLegend = getInitialPreference("RADAR_SHOW_LEGEND", "false")
+            radarShowLegendWidth = getInitialPreference("RADAR_SHOW_LEGEND_WIDTH", 50)
+            radarShowLegendTextSize = getInitialPreference("RADAR_SHOW_LEGEND_TEXTSIZE", 10)
             drawtoolSize = getInitialPreference("DRAWTOOL_SIZE", 4)
             radarObsExtZoom = getInitialPreference("RADAR_OBS_EXT_ZOOM", 7)
             radarSpotterSize = getInitialPreference("RADAR_SPOTTER_SIZE", 4)
