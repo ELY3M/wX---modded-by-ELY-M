@@ -30,6 +30,8 @@ import joshuatee.wx.util.Group
 
 internal object UtilityModelSPCHREFInterface {
 
+    val models = listOf("HREF")
+
     private val TITLES = Arrays.asList(
             ObjectMenuTitle("SPC Guidance", 6),
             ObjectMenuTitle("Synoptic", 5),

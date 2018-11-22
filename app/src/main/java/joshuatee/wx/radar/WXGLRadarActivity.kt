@@ -106,6 +106,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         var velMin: Short = -120
         var spotterId: String = ""
         var spotterShowSelected: Boolean = false
+        var bearingCurrent = 0.0f
+        var speedCurrent = 0.0f
     }
 
     private var TAG = "joshuatee-WXGLRadarActivity"
@@ -150,8 +152,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private var frameCntStrGlobal = ""
     private var locXCurrent = ""
     private var locYCurrent = ""
-    private var bearingCurrent = 0.0f
-    private var speedCurrent = 0.0f
     private var urlStr = ""
     private var fixedSite = false
     private lateinit var rl: RelativeLayout
@@ -399,7 +399,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 locYCurrent = latlonArr[1]
             }
             if (PolygonType.LOCDOT.pref || archiveMode || MyApplication.locdotFollowsGps) {
-                oglr.constructLocationDot(locXCurrent, locYCurrent, bearingCurrent, archiveMode)
+                oglr.constructLocationDot(locXCurrent, locYCurrent, archiveMode)
             } else {
                 oglr.deconstructLocationDot()
             }
@@ -1003,7 +1003,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             locYCurrent = latlonArr[1]
         }
         if (PolygonType.LOCDOT.pref || MyApplication.locdotFollowsGps) // added locdot gps apr 2016
-            oglr.constructLocationDot(locXCurrent, locYCurrent, bearingCurrent, archiveMode)
+            oglr.constructLocationDot(locXCurrent, locYCurrent, archiveMode)
         else
             oglr.deconstructLocationDot()
         img.visibility = View.GONE
@@ -1105,7 +1105,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         getGPSFromDouble()
         locXCurrent = latlonArr[0]
         locYCurrent = latlonArr[1]
-        oglr.constructLocationDot(locXCurrent, locYCurrent, bearingCurrent, archiveMode)
+        oglr.constructLocationDot(locXCurrent, locYCurrent, archiveMode)
         glview.requestRender()
     }
 

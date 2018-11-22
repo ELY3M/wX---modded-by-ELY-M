@@ -31,10 +31,6 @@ Show a floating action button on the main screen for access to radar.
 Hide the top toolbar on the main screen.
 </string>
 
-    <string name="use_jobservice">
-Developer only option: use the new job service - testing only.
-</string>
-
     <string name="wfo_remember">
 Remember the last WFO used for product viewer.
 </string>
@@ -157,8 +153,6 @@ Determines whether borders for Canada and Mexico should be displayed. Without th
 Show additional roads when zoomed in.
         This additional dataset is roughly 3.0MB in size.
 </string>
-
-
 
      <string name="text_size_label">
 Used as a scale factor for the text overlays on the main radar interface. Default is 10. Larger values result in larger text. If 20 is chosen the text labels
@@ -619,9 +613,7 @@ to download warning data.
      <string name="fullscreen_mode_label">
  Use fullscreen when viewing content as much as possible.
     </string>
-     <string name="debug_status_label">
- Debug mode used mostly by the developer.
-    </string>
+
       <string name="simple_mode_label">
 Only the first tab will be available along with all action bar items. Can be used to present a more simplistic weather application.
     </string>

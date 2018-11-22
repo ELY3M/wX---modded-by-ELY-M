@@ -123,8 +123,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private var frameCntStrGlobal = ""
     private var locXCurrent = ""
     private var locYCurrent = ""
-    private var bearingCurrent = 0.0f
-    private var speedCurrent = 0.0f
     private var infoAnim = Array(2) { "" }
     private var tmpArr1 = Array(2) { "" }
     private var tmpArr2 = Array(2) { "" }
@@ -390,7 +388,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 locYCurrent = latlonArr[1]
             }
             if (PolygonType.LOCDOT.pref || MyApplication.locdotFollowsGps)
-                ogl.constructLocationDot(locXCurrent, locYCurrent, bearingCurrent, false)
+                ogl.constructLocationDot(locXCurrent, locYCurrent, false)
             else
                 ogl.deconstructLocationDot()
             //return "Executed"
@@ -856,7 +854,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             locYCurrent = latlonArr[1]
         }
         if (PolygonType.LOCDOT.pref || MyApplication.locdotFollowsGps)
-            ogl.constructLocationDot(locXCurrent, locYCurrent, bearingCurrent, false)
+            ogl.constructLocationDot(locXCurrent, locYCurrent, false)
         else
             ogl.deconstructLocationDot()
         if (imageMap.map.visibility != View.VISIBLE) {
@@ -956,7 +954,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         locXCurrent = latlonArr[0]
         locYCurrent = latlonArr[1]
         numPanesArr.forEach {
-            oglrArr[it].constructLocationDot(locXCurrent, locYCurrent, bearingCurrent, false)
+            oglrArr[it].constructLocationDot(locXCurrent, locYCurrent, false)
             glviewArr[it].requestRender()
         }
     }

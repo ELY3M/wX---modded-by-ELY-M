@@ -654,7 +654,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             glviewloc.requestRender()
         }).start()
         if (PolygonType.LOCDOT.pref) {
-            OGLRLOC.constructLocationDot(Location.x, Location.y, 0.0f, false)
+            OGLRLOC.constructLocationDot(Location.x, Location.y, false)
         } else {
             OGLRLOC.deconstructLocationDot()
         }

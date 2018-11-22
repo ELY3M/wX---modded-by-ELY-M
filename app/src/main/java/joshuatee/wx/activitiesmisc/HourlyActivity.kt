@@ -43,7 +43,6 @@ import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.DefaultLabelFormatter
-import joshuatee.wx.models.ModelsNSSLWRFActivity
 import joshuatee.wx.objects.ObjectIntent
 import kotlinx.coroutines.*
 
