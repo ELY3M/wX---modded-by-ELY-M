@@ -57,6 +57,10 @@ fun String.getHtml(): String {
     return UtilityDownload.getStringFromURLS(this)
 }
 
+fun String.getHtmlUnsafe(): String {
+    return UtilityDownload.getStringFromURLSUnsafe(this)
+}
+
 fun String.getNwsHtml(): String {
     return UtilityDownloadNWS.getNWSStringFromURL(this)
 }

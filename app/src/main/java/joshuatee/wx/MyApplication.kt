@@ -42,6 +42,7 @@ import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityHomeScreen
 import joshuatee.wx.util.UtilityCities
+import joshuatee.wx.util.UtilityHttp
 import joshuatee.wx.util.UtilityLog
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -112,6 +113,8 @@ class MyApplication : Application() {
         if (!loadedBuffers) {
             initBuffers(this)
         }
+
+        httpClientUnsafe = UtilityHttp.getUnsafeOkHttpClient()
     }
 
     companion object {
@@ -137,6 +140,7 @@ class MyApplication : Application() {
         const val nwsNhcWebsitePrefix: String = "https://www.nhc.noaa.gov"
         const val nwsRadarWebsitePrefix: String = "http://radar.weather.gov"
         const val nwsMagNcepWebsitePrefix: String = "http://mag.ncep.noaa.gov"
+        const val sunMoonDataUrl: String = "https://api.usno.navy.mil"
 
         const val prefSeperator: String = " : : :"
         var uiAnimIconFrames: String = "rid"
@@ -153,6 +157,7 @@ class MyApplication : Application() {
         const val TEXTVIEW_MAGIC_FUDGE_FACTOR: Float = 4.05f
         var deviceScale: Float = 0f
         var httpClient: OkHttpClient? = null
+        var httpClientUnsafe: OkHttpClient? = null
         lateinit var preferences: SharedPreferences
         private lateinit var preferencesTelecine: SharedPreferences
         lateinit var editor: SharedPreferences.Editor
@@ -725,7 +730,7 @@ class MyApplication : Application() {
             radarIconsLevel2 = getInitialPreference("WXOGL_ICONS_LEVEL2", "false")
             radarShowLegend = getInitialPreference("RADAR_SHOW_LEGEND", "false")
             radarShowLegendWidth = getInitialPreference("RADAR_SHOW_LEGEND_WIDTH", 50)
-            radarShowLegendTextSize = getInitialPreference("RADAR_SHOW_LEGEND_TEXTSIZE", 10)
+            radarShowLegendTextSize = getInitialPreference("RADAR_SHOW_LEGEND_TEXTSIZE", 30)
             drawtoolSize = getInitialPreference("DRAWTOOL_SIZE", 4)
             radarObsExtZoom = getInitialPreference("RADAR_OBS_EXT_ZOOM", 7)
             radarSpotterSize = getInitialPreference("RADAR_SPOTTER_SIZE", 4)

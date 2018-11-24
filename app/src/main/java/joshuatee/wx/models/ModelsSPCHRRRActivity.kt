@@ -266,7 +266,7 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     }
 
     private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
-        om.rtd = withContext(Dispatchers.IO) { UtilityModelSPCHRRRInputOutput.runTime }
+        om.rtd = withContext(Dispatchers.IO) { om.getRunTime() }
         spRun.clear()
         spRun.addAll(om.rtd.listRun)
         spRun.notifyDataSetChanged()
@@ -283,19 +283,19 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
 
     private fun setupModel() {
         (0 until om.numPanes).forEach {
-            om.displayData.param[it] = "refc"
+            om.displayData.param[it] = om.params[0]
             om.displayData.param[it] = Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[it])
-            om.displayData.paramLabel[it] = "Composite Reflectivity"
+            om.displayData.paramLabel[it] = om.labels[0]
             om.displayData.paramLabel[it] = Utility.readPref(this, om.prefParamLabel + it.toString(), om.displayData.paramLabel[it])
-            if (!UtilityModels.parmInArray(UtilityModelSPCHRRRInterface.PARAMS, om.displayData.param[it])) {
-                om.displayData.param[it] = "refc"
-                om.displayData.paramLabel[it] = "Composite Reflectivity"
+            if (!UtilityModels.parmInArray(om.params, om.displayData.param[it])) {
+                om.displayData.param[it] = om.params[0]
+                om.displayData.paramLabel[it] = om.labels[0]
             }
         }
         spRun.setSelection(0)
         om.spTime.setSelection(0)
         om.spTime.clear()
-        (2 until 16).forEach { om.spTime.add(String.format(Locale.US, "%02d", it)) }
+        (om.startStep until om.endStep).forEach { om.spTime.add(String.format(Locale.US, "%02d", it)) }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

@@ -30,7 +30,6 @@ import android.widget.LinearLayout
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
-import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.SettingsMainActivity
 import joshuatee.wx.ui.BaseActivity
@@ -66,12 +65,12 @@ class HourlyActivity : BaseActivity() { // AppCompatActivity()
 
     private val menuItemShare: Int = 1
     private val menuItemSettings: Int = 2
-    private val menuItemTest: Int = 3
+    //private val menuItemTest: Int = 3
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menu.add(Menu.NONE, menuItemShare, Menu.NONE, "Share").setIcon(R.drawable.ic_share_24dp).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         menu.add(Menu.NONE, menuItemSettings, Menu.NONE, "Settings")
-        menu.add(Menu.NONE, menuItemTest, Menu.NONE, "Test Area - WPC GEFS")
+        //menu.add(Menu.NONE, menuItemTest, Menu.NONE, "Test Area - WPC GEFS")
         return true
     }
 
@@ -107,7 +106,7 @@ class HourlyActivity : BaseActivity() { // AppCompatActivity()
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             menuItemSettings -> ObjectIntent(this, SettingsMainActivity::class.java)
-            menuItemTest -> ObjectIntent(this, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "WPCGEFS", "WPC"))
+            //menuItemTest -> ObjectIntent(this, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "WPCGEFS", "WPC"))
             menuItemShare -> if (htmlShare.size > 1) {
                 UtilityShare.shareText(this, "Hourly", htmlShare[1])
             }

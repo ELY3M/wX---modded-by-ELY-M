@@ -941,6 +941,7 @@ class WXGLRender(private val context: Context) : Renderer {
         val stormList = WXGLNexradLevel3TVS.decodeAndPlot(context, rid, idxStr)
         tvsBuffers.setXYList(stormList)
         constructTriangles(tvsBuffers)
+
     }
 
     fun deconstructTVS() {
