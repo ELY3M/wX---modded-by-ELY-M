@@ -105,7 +105,11 @@ class MiscFragment : Fragment() {
             hm["model_nssl_wrf"] = TileObject(R.drawable.nsslwrf, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "NSSL", "NSSL"),
                     resources.getString(R.string.help_models_nssl_wrf), "model_nssl_wrf")
             hm["goes16"] = TileObject(R.drawable.goes16, GOES16Activity::class.java, GOES16Activity.RID, arrayOf(""), resources.getString(R.string.help_goes16), "goes16")
+            hm["wpcgefs"] = TileObject(R.drawable.wpcgefs, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "WPCGEFS", "WPC"),
+                    resources.getString(R.string.help_wpcgefs), "wpcgefs")
             val tileOrder = "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:"
+
+            // fixme
             var miscPref: String = Utility.readPref("FRAGMENT_MISC_ORDER", tileOrder)
             if (!miscPref.contains("wxoglquad")) {
                 miscPref += "wxoglquad:"
@@ -124,6 +128,11 @@ class MiscFragment : Fragment() {
             miscPref = Utility.readPref("FRAGMENT_MISC_ORDER", tileOrder)
             if (!miscPref.contains("goes16")) {
                 miscPref += "goes16:"
+                Utility.writePref("FRAGMENT_MISC_ORDER", miscPref)
+            }
+            miscPref = Utility.readPref("FRAGMENT_MISC_ORDER", tileOrder)
+            if (!miscPref.contains("wpcgefs")) {
+                miscPref += "wpcgefs:"
                 Utility.writePref("FRAGMENT_MISC_ORDER", miscPref)
             }
             val tileOrderArr = MyApplication.colon.split(miscPref)

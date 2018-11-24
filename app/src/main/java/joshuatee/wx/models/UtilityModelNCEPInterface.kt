@@ -27,7 +27,7 @@ internal object UtilityModelNCEPInterface {
             "HRRR",
             "GFS",
             "NAM",
-            "NAM4KM",
+            "NAM-HIRES",
             "RAP",
             "HRW-NMMB",
             "HRW-ARW",

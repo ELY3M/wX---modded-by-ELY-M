@@ -63,8 +63,14 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     var imageLoaded: Boolean = false
     private lateinit var fab1: ObjectFab
     private lateinit var fab2: ObjectFab
-    private lateinit var turl: Array<String>
+    private var spinnerRunRan = false
+    private var spinnerTimeRan = false
+    private var spinnerSectorRan = false
+    private var spinnerModelRan = false
+    private lateinit var activityArguments: Array<String>
     private lateinit var miStatus: MenuItem
+    private lateinit var miStatusParam1: MenuItem
+    private lateinit var miStatusParam2: MenuItem
     private lateinit var contextg: Context
     private lateinit var om: ObjectModel
     private lateinit var spRun: ObjectSpinner
@@ -75,16 +81,18 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         contextg = this
-        turl = intent.getStringArrayExtra(INFO)
-        om = ObjectModel(this, turl[1], turl[0])
+        activityArguments = intent.getStringArrayExtra(INFO)
+        om = ObjectModel(this, activityArguments[1], activityArguments[0])
         if (om.numPanes == 1) {
             super.onCreate(savedInstanceState, R.layout.activity_models_generic, R.menu.models_generic, false, true)
         } else {
             super.onCreate(savedInstanceState, R.layout.activity_models_generic_multipane, R.menu.models_generic, false, true)
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = turl[2]
+        title = activityArguments[2]
         val m = toolbarBottom.menu
+        miStatusParam1 = m.findItem(R.id.action_status_param1)
+        miStatusParam2 = m.findItem(R.id.action_status_param2)
         if (om.numPanes < 2) {
             fab1 = ObjectFab(this, this, R.id.fab1)
             fab2 = ObjectFab(this, this, R.id.fab2)
@@ -100,6 +108,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             }
             fab1.setVisibility(View.GONE)
             fab2.setVisibility(View.GONE)
+            miStatusParam2.isVisible = false
         } else {
             m.findItem(R.id.action_multipane).isVisible = false
         }
@@ -111,12 +120,9 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         om.displayData = DisplayData(this, this, this, om.numPanes, om.spTime)
         spRun = ObjectSpinner(this, this, R.id.spinner_run)
         spRun.setOnItemSelectedListener(this)
-        // FIXME
         spSector = ObjectSpinner(this, this, R.id.spinner_sector, om.sectors)
         spSector.setOnItemSelectedListener(this)
-        // FIXME
-        om.sectorOrig = Utility.readPref(this, om.prefSector, om.sectors[0])
-        spSector.setSelection(om.sectorOrig)
+        spSector.setSelection(om.sector)
         val spModel = ObjectSpinner(this, this, R.id.spinner_model, om.models)
         spModel.setOnItemSelectedListener(this)
         spModel.setSelection(om.model)
@@ -135,15 +141,29 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+        when (parent.id) {
+            R.id.spinner_run -> if (!spinnerRunRan)
+                spinnerRunRan = true
+            R.id.spinner_time -> if (!spinnerTimeRan)
+                spinnerTimeRan = true
+            R.id.spinner_sector -> if (!spinnerSectorRan)
+                spinnerSectorRan = true
+        }
         if (parent.id == R.id.spinner_model) {
+            spinnerRunRan = false
+            spinnerSectorRan = false
+            spinnerTimeRan = false
             firstRunTimeSet = false
+            spinnerModelRan = true
             om.setParams(parent.selectedItemPosition)
             setupModel()
+            //drw.updateLists(this, om.labels, om.params)
             Utility.writePref(this, om.prefModel, om.model)
             getRunStatus()
-        } else if (firstRunTimeSet) {
+        } else if (firstRunTimeSet ) { // && spinnerRunRan && spinnerTimeRan && spinnerSectorRan && spinnerModelRan
             getContent()
         }
+
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {}
@@ -179,8 +199,11 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         }
         if (om.numPanes > 1) {
             UtilityModels.setSubtitleRestoreIMGXYZOOM(om.displayData.img, toolbar, "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1])
+            miStatusParam1.title = om.displayData.paramLabel[0]
+            miStatusParam2.title = om.displayData.paramLabel[1]
         } else {
             toolbar.subtitle = om.displayData.paramLabel[0]
+            miStatusParam1.title = om.displayData.paramLabel[0]
         }
         imageLoaded = true
     }
@@ -202,7 +225,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                 om.curImg = 1
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(om.displayData.img, toolbar, "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1])
             }
-            R.id.action_multipane -> ObjectIntent(this, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("2", turl[1], turl[2]))
+            R.id.action_multipane -> ObjectIntent(this, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("2", activityArguments[1], activityArguments[2]))
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     if (isStoragePermissionGranted) {
@@ -233,7 +256,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
 
     private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
         // FIXME NCEP should not have different code
-        if (om.modelType == ModelType.NCEP){
+        if (om.modelType == ModelType.NCEP) {
             om.rtd = withContext(Dispatchers.IO) { UtilityModelNCEPInputOutput.getRunTime(om.model, om.displayData.param[0], om.sectors[0]) }
             om.time = om.rtd.mostRecentRun
             spRun.notifyDataSetChanged()
@@ -242,23 +265,26 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                 getContent()
             }
             //title = om.rtd.imageCompleteStr
-            miStatus.title = "in through " + om.rtd.imageCompleteStr
+            //miStatus.title = "in through " + om.rtd.imageCompleteStr
+            miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
             var tmpStr: String
             (0 until om.spTime.size()).forEach {
                 tmpStr = MyApplication.space.split(om.spTime[it])[0]
                 om.spTime[it] = tmpStr + " " + UtilityModels.convertTimeRuntoTimeString(om.rtd.mostRecentRun.replace("Z", ""), tmpStr, true)
             }
+            om.spTime.notifyDataSetChanged()
             if (!firstRunTimeSet) {
                 firstRunTimeSet = true
                 om.spTime.setSelection(Utility.readPref(contextg, om.prefRunPosn, 1))
             }
-            om.spTime.notifyDataSetChanged()
+            //om.spTime.notifyDataSetChanged()
         } else {
             om.rtd = withContext(Dispatchers.IO) { om.getRunTime() }
             spRun.clear()
             spRun.addAll(om.rtd.listRun)
             miStatus.isVisible = true
-            miStatus.title = "in through " + om.rtd.imageCompleteStr
+            //miStatus.title = "in through " + om.rtd.imageCompleteStr
+            miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
             spRun.notifyDataSetChanged()
             // FIXME
             (0 until om.spTime.size()).forEach { om.spTime[it] = om.spTime[it] + " " + UtilityModels.convertTimeRuntoTimeString(om.rtd.timeStrConv.replace("Z", ""), om.spTime[it], false) }
@@ -311,7 +337,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                 om.displayData.paramLabel[1] = om.labels[0]
             }
         spSector.refreshData(this, om.sectors)
-        spSector.setSelection(om.sectorOrig)
+        spSector.setSelection(om.sector)
         drw.updateLists(this, om.labels, om.params)
         spRun.setSelection(0)
         when (om.modelType) {

@@ -55,6 +55,10 @@ Interface for the NSSL WRF Forecasts found at http://wrf.nssl.noaa.gov/newsite/
 Interface for GOES16 images.
 </string>
 
+    <string name="help_wpcgefs">
+Interface for WPC GEFS model images.
+</string>
+
      <string name="obs_ext_zoom_label">
 With observations or wind barbs enabled if you zoom in closely on an obs site the detailed METAR will appear.
          This setting controls how close you need to zoom. Lower numbers will show detailed METAR without having to zoom in as far. Default is 7.

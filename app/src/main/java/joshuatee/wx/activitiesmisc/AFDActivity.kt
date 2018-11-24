@@ -63,9 +63,6 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     //
 
     companion object {
-        /**
-         *
-         */
         const val URL: String = ""
     }
 

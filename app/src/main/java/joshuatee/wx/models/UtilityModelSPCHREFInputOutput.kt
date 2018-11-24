@@ -69,7 +69,7 @@ internal object UtilityModelSPCHREFInputOutput {
             }
             urlArr.add(url)
         }
-        urlArr.add("${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/blank_maps/$om.sector.png")
+        urlArr.add("${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/blank_maps/${om.sector}.png")
         urlArr.forEach { bitmapArr.add(it.getImage()) }
         val layers = mutableListOf<Drawable>()
         bitmapArr.forEach { layers.add(BitmapDrawable(context.resources, it)) }

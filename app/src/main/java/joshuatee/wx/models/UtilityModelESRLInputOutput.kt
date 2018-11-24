@@ -31,20 +31,23 @@ import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityString
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
+import joshuatee.wx.util.UtilityLog
 
 internal object UtilityModelESRLInputOutput {
 
     private const val urlBase = "https://rapidrefresh.noaa.gov"
 
-    fun getRunTime(model: String): RunTimeData {
+    fun getRunTime(model: String, param: String): RunTimeData {
         val runData = RunTimeData()
         val htmlRunstatus: String = when (model) {
             "HRRR_AK" -> ("$urlBase/alaska/").getHtml()
+            // https://rapidrefresh.noaa.gov/RAP/Welcome.cgi?dsKey=rap_jet&domain=full&run_time=23+Nov+2018+-+08Z
             "RAP_NCEP" -> ("$urlBase/RAP/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
             "RAP" -> ("$urlBase/RAP/").getHtml()
             "HRRR_NCEP" -> ("$urlBase/hrrr/HRRR/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
             else -> ("$urlBase/" + model.toLowerCase(Locale.US) + "/" + model + "/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
         }
+        //UtilityLog.d("wx-model", htmlRunstatus)
         val oldRunTimes: List<String>
         var sigHtmlTmp = htmlRunstatus.parse(RegExp.eslHrrrPattern1)
         oldRunTimes = htmlRunstatus.parseColumn(RegExp.eslHrrrPattern2)
@@ -58,7 +61,8 @@ internal object UtilityModelESRLInputOutput {
         sigHtmlTmp = year + monthStr + day + hour
         runData.listRunAdd(sigHtmlTmp)
         runData.mostRecentRun = sigHtmlTmp
-        runData.imageCompleteInt = UtilityString.parseAndCount(htmlRunstatus, ".(allfields).") - 1
+        //runData.imageCompleteInt = UtilityString.parseAndCount(htmlRunstatus, ".(allfields).") - 1
+        runData.imageCompleteInt = UtilityString.parseAndCount(htmlRunstatus, ".(${param}).") - 3
         runData.imageCompleteStr = runData.imageCompleteInt.toString()
         if (sigHtmlTmp != "") {
             var i = 0
@@ -130,7 +134,7 @@ internal object UtilityModelESRLInputOutput {
                     "/" + sector.toLowerCase(Locale.US) + "/" + param + "_f" + time + ".png"
             onDemandUrl = "$urlBase/" + parentModel + "/" +
                     "displayMapLocalDiskDateDomainZip" + zipStr + ".cgi?keys=" + om.model.toLowerCase(Locale.US) + "_jet:&runtime=" + om.run.replace("Z", "") +
-                    "&plot_type=" + param + "&fcst=" + time + "&time_inc=60&num_times=16&model=" + om.model.toLowerCase(Locale.US) + "&ptitle=" + om.model +
+                    "&plot_type=" + param + "&fcst=" + time + "&time_inc=60&num_times=16&model=" + "rr" + "&ptitle=" + om.model +
                     "%20Model%20Fields%20-%20Experimental&maxFcstLen=15&fcstStrLen=-1&domain=" +
                     sector.toLowerCase(Locale.US) + "&adtfn=1"
 
@@ -143,6 +147,10 @@ internal object UtilityModelESRLInputOutput {
                     "%20Model%20Fields%20-%20Experimental&maxFcstLen=15&fcstStrLen=-1&domain=" +
                     sector.toLowerCase(Locale.US) + "&adtfn=1"
         }
+
+        UtilityLog.d("wx-model", onDemandUrl)
+        UtilityLog.d("wx-model", imgUrl)
+
         onDemandUrl.getHtml()
         return imgUrl.getImage()
     }

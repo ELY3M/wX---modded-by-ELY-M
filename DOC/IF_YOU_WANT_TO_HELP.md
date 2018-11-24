@@ -18,7 +18,7 @@ With that said, please respect these items:
 
 7. Lint checks - Please make sure any reasonable issues that Lint checks are pointing out are resolved before submission.
 
-8. Bugs - If you submit a new feature and there are manual or automated user bug reports please understand that I will request your assistance to fix bugs in your code. One reason it might take to have code integrated is because I need to be comfortable with it in case any contributor decides to leave the project so to speak and not be available to fix bugs in their code. 
+8. Bugs - If you submit a new feature and there are manual or automated user bug reports please understand that I will request but not expect your assistance to fix bugs in your code. One reason it might take to have code integrated is because I need to be comfortable with it in case any contributor decides to leave the project so to speak and not be available to fix bugs in their code. 
 
 9. It is a goal to keep as much data within the private storage space of the application if possible. Any writing to external storage space ( accessible via other apps, etc ) must be done with very good reason, ie no alternative.
 
@@ -27,11 +27,16 @@ With that said, please respect these items:
 11. All contributors will need to electronically sign for a Contributor License Agreement to protect both parties and the code:
 https://gitlab.com/joshua.tee/wx/blob/master/DOC/CLA.md
 
-Submission process forthcoming. I also need to review this document more thoroughly.
+Send an email to joshua.tee@gmail.com from the email account you will correspond with her me. In the email indicate your GitHub or Gitlab username as another identifier. If you agree state the following in the email:
 
-12. Please respect the privacy policy. No code will be accepted that does not respect the privacy policy.
+-------
+I accept the following contributor license agreement agreement.
+------ ( paste the entire CLA as found at the URL above and paste in below this statement
 
-13. Please respect the code of conduct as documented here (I still need to review this more thoroughly):
+12. Please respect the privacy policy. No code will be accepted that does not respect the privacy policy:
+https://gitlab.com/joshua.tee/wx/blob/master/DOC/PRIVACY_POLICY_FOR_WX.txt
+
+13. Please respect the code of conduct as documented here:
 https://gitlab.com/joshua.tee/wx/blob/master/DOC/CODEOFCONDUCT.md
 
 14. For the time being I will merge all patches myself into the main branch.

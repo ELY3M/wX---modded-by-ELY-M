@@ -457,6 +457,27 @@ object UtilityDownload {
         return out.toString()
     }
 
+    fun getStringFromURLSUnsafe(strURL: String): String {
+        val out = StringBuilder(5000)
+        try {
+            val request = Request.Builder().url(strURL).build()
+            val response = MyApplication.httpClientUnsafe!!.newCall(request).execute()
+            val inputStream = BufferedInputStream(response.body()!!.byteStream())
+            val br = BufferedReader(InputStreamReader(inputStream))
+            var line: String? = br.readLine()
+            while (line != null) {
+                out.append(line)
+                line = br.readLine()
+            }
+            br.close()
+        } catch (e: Exception) {
+            UtilityLog.HandleException(e)
+        } catch (e: OutOfMemoryError) {
+            UtilityLog.HandleException(e)
+        }
+        return out.toString()
+    }
+
     fun getStringFromURLSepS(strURL: String): String {
         val breakStr = "ABC123_456ZZ"
         val out = StringBuilder(5000)
