@@ -60,46 +60,7 @@ import javax.microedition.khronos.opengles.GL10
 2018-10-24 14:26:30.534 5282-5351/? D/RadarSites: SELECT id,  ((69.1 * (lat - 52.929176))*(69.1 * (lat - 52.929176)) +  ((69.1 * (-92.875999 - lon))*(69.1 * (-92.875999 - lon)))*0.363370) AS distance FROM RDAINFO WHERE type <> 1  ORDER BY distance LIMIT 1;
 */
 
-//val radarLocation = UtilityLocation.getSiteLocation(context, rid)
-/*
-private fun getObservationSites(context: Context, rid: String): String {
-    val radarLocation = UtilityLocation.getSiteLocation(context, rid)
-    val obsListSb = StringBuilder(100)
-    val xmlFileInputStream = context.resources.openRawResource(R.raw.us_metar3)
-    val text = UtilityIO.readTextFile(xmlFileInputStream)
-    val lines = text.split("\n").dropLastWhile { it.isEmpty() }
-    val obsSites = mutableListOf<RID>()
-    lines.forEach {
-        val tmpArr = it.split(" ")
-        obsSites.add(RID(tmpArr[0], LatLon(tmpArr[1], tmpArr[2])))
-    }
-    val obsSiteRange = 200.0
-    var currentDistance: Double
-    obsSites.indices.forEach {
-        currentDistance = LatLon.distance(radarLocation, obsSites[it].location, DistanceUnit.MILE)
-        if (currentDistance < obsSiteRange) {
-            obsListSb.append(obsSites[it].name)
-            obsListSb.append(",")
-        }
-    }
-    return obsListSb.toString().replace(",$".toRegex(), "")
-    //return "KARB,KYIP,KBLF,KBKW,KCKB,KCMH,KCRW,KDCA,KEKN,KHLG,KHTS,KI16,KILN,KLEX,KLNP,KLOZ,KMGW,KMRB,KPIT,KPKB,KROA,KTRI,KW22,KW99,KZZV";
-}
-*/
 
-/*
-*
-*     fun getSiteLocation(context: Context, site: String, officeType: String = "RID"): LatLon {
-        var addChar = "-"
-        if (officeType == "NWS") {
-            addChar = ""
-        } // WFO
-        val x = Utility.readPref(context, officeType + "_" + site.toUpperCase() + "_X", "0.0")
-        val y = addChar + Utility.readPref(context, officeType + "_" + site.toUpperCase() + "_Y", "0.0")
-        return LatLon(x, y)
-    }
-*
-* */
 
 
 /*
@@ -550,6 +511,35 @@ internal object UtilityConusRadar {
             UtilityCanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, "latest", 1, 13, false)
         }
         layers.add(cd)
+        layers.add(BitmapDrawable(context.resources, bitmap))
+        layers.add(BitmapDrawable(context.resources, bitmapCanvas))
+        return UtilityImg.layerDrawableToBitmap(layers)
+    }
+
+
+
+    //get conus bitmap!!//
+    fun nwsMosaic(context: Context): Bitmap {
+        val imgUrl = "${MyApplication.nwsRadarWebsitePrefix}/Conus/RadarImg/latest_radaronly.gif"
+        val layers = mutableListOf<Drawable>()
+        //leave it transparent//
+        /*
+        val cd = if (MyApplication.blackBg) {
+            ColorDrawable(Color.BLACK)
+        } else {
+            ColorDrawable(Color.WHITE)
+        }
+        */
+        var bitmap = imgUrl.getImage()
+        var bitmapCanvas = UtilityImg.getBlankBitmap()
+        if (MyApplication.blackBg) {
+            bitmap = UtilityImg.eraseBG(bitmap, -1)
+        }
+        if (bitmap.height > 10) {
+            bitmapCanvas = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+            //UtilityCanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, sector, 1, 13, isInteractive)
+        }
+        //layers.add(cd)
         layers.add(BitmapDrawable(context.resources, bitmap))
         layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         return UtilityImg.layerDrawableToBitmap(layers)

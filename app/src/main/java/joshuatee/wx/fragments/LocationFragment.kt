@@ -95,7 +95,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private var radarTime = ""
     private var x = ""
     private var y = ""
-    private var bearing = 0.0f
     private var ts = ""
     private var tmpArr = Array(2) { "" }
     private var glviewInitialized = false

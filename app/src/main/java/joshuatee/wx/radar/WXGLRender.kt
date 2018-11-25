@@ -59,7 +59,7 @@ class WXGLRender(private val context: Context) : Renderer {
         const val ortIntGlobal: Int = 400
         var oneDegreeScaleFactorGlobal: Float = 0.0f
             private set
-        var displayhold: Boolean = false
+        var displayHold: Boolean = false
     }
 
     val TAG: String = "joshuatee WXGLRender"
@@ -375,7 +375,7 @@ class WXGLRender(private val context: Context) : Renderer {
     }
 
     override fun onDrawFrame(gl: GL10) {
-        Log.i(TAG, "displayhold: "+displayhold)
+        Log.i(TAG, "displayHold: "+displayHold)
         GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
         GLES20.glClearColor(bgColorFRed, bgColorFGreen, bgColorFBlue, 1f)
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
@@ -416,7 +416,7 @@ class WXGLRender(private val context: Context) : Renderer {
         }
 
         //TODO do custom icons for tvs and hail//
-        if (displayhold == false) { //hides some when screen is touched
+        if (displayHold == false) { //hides some when screen is touched
 
         listOf(spotterBuffers, hiBuffers).forEach {
             if (zoom > it.scaleCutOff) {

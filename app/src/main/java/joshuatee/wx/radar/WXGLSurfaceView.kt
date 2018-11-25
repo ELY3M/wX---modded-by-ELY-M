@@ -121,7 +121,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
                 if (!locfrag) {
                     (0 until numPanes).forEach {
                         wxgltextArr[it].hideTV()
-                        WXGLRender.displayhold = true
+                        WXGLRender.displayHold = true
                     }
                 }
                 if (numPanes == 1 && fullScreen || numPanes > 1) {
@@ -131,7 +131,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
             MotionEvent.ACTION_MOVE -> {
             }
             MotionEvent.ACTION_UP -> {
-                WXGLRender.displayhold = false
+                WXGLRender.displayHold = false
                 listener?.onProgressChanged(50000, idx, idxInt)
             }
         }
