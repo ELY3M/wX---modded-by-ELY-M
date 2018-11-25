@@ -22,6 +22,7 @@
 package joshuatee.wx.radar
 
 import android.content.Context
+import android.util.Log
 
 import java.io.EOFException
 import java.io.File
@@ -43,6 +44,7 @@ import joshuatee.wx.RegExp
 
 object UtilityWXOGL {
 
+    val TAG: String = "joshuatee UtilityWXOGL"
     fun getMeteogramUrl(obsSite: String): String {
         return "http://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=$obsSite"
     }
@@ -139,6 +141,7 @@ object UtilityWXOGL {
     }
 
     fun showTextProducts(lat: Double, lon: Double): String {
+        Log.i(TAG, "Touch lat: "+lat+" lon: "+lon)
         var warningHTML = MyApplication.severeDashboardTor.valueGet() + MyApplication.severeDashboardSvr.valueGet() + MyApplication.severeDashboardEww.valueGet() + MyApplication.severeDashboardFfw.valueGet() + MyApplication.severeDashboardSmw.valueGet() + MyApplication.severeDashboardSps.valueGet()
         val urlList = warningHTML.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
         warningHTML = warningHTML.replace("\n", "")
@@ -169,10 +172,16 @@ object UtilityWXOGL {
                     if (contains && notFound) {
                         retStr = urlList[q]
                         notFound = false
+                        Log.i(TAG, "test: "+testArr)
+                        Log.i(TAG, "q: "+q)
+                        Log.i(TAG, "y: "+y)
+                        Log.i(TAG, "x: "+x)
+
                     }
                 }
             }
             q += 1
+
         }
         return retStr
     }

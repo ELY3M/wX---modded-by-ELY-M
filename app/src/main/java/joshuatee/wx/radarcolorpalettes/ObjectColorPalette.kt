@@ -22,15 +22,12 @@
 package joshuatee.wx.radarcolorpalettes
 
 import android.content.Context
-import android.util.Log
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 import joshuatee.wx.util.UtilityLog
 
 class ObjectColorPalette(val context: Context, private val colormapCode: String) {
-
-    var TAG: String = "joshuatee ObjectColorPalette"
 
     var redValues: ByteBuffer = ByteBuffer.allocateDirect(16)
         private set
@@ -49,7 +46,6 @@ class ObjectColorPalette(val context: Context, private val colormapCode: String)
     }
 
     fun init() {
-        Log.i(TAG, "init() ran")
         when (colormapCode) {
             "56" -> {
                 setupBuffers(16)

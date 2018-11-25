@@ -1174,18 +1174,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     }
 
     private fun getRadarStatus() = GlobalScope.launch(uiDispatcher) {
-        //@SuppressLint("StaticFieldLeak")
-        //private inner class GetRadarStatus : AsyncTask<String, String, String>() {
-
-        //var radarStatus = ""
-
-        //override fun doInBackground(vararg params: String): String {
         val radarStatus = withContext(Dispatchers.IO) { UtilityDownload.getRadarStatusMessage(contextg, oglr.rid) }
-        //    return "Executed"
-        //}
-        //override fun onPostExecute(result: String) {
         UtilityAlertDialog.showHelpText(Utility.fromHtml(radarStatus), act)
-        //}
     }
 
     private var legend: ViewColorLegend? = null
@@ -1250,8 +1240,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         UtilityAlertDialog.showHelpText(txt, act)
     }
     private fun getContentVWP() = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) { UtilityWXOGL.getVWP(contextg, oglr.rid) }
-        ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(txt, oglr.rid + " VAD Wind Profile"))
+        //val txt = withContext(Dispatchers.IO) { UtilityWXOGL.getVWP(contextg, oglr.rid) }
+        //ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(txt, oglr.rid + " VAD Wind Profile"))
+        var vmpurl = "https://weather.cod.edu/satrad/nexrad/index.php?type="+oglr.rid+"-NVW"
+        ObjectIntent(contextg, WebscreenABModels::class.java, WebscreenABModels.URL, arrayOf(vmpurl, oglr.rid + " VAD Wind Profile"))
+
     }
     
     
@@ -1262,7 +1255,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
 
 
     private fun getMCD() = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) { UtilityDownload.getStringFromURLS(MyApplication.NWS_RADAR_PUB+"/data/raw/ac/acus11.kwns.swo.mcd.txt") }
+        //var txt = withContext(Dispatchers.IO) { UtilityDownload.getStringFromURLS(MyApplication.NWS_RADAR_PUB+"/data/raw/ac/acus11.kwns.swo.mcd.txt") }
+        var txt = withContext(Dispatchers.IO) {  UtilityWat.showTextProducts(contextg, glview.newY.toDouble(), glview.newX.toDouble() * -1.0) }
         UtilityAlertDialog.showHelpText(txt, act)
     }
     
