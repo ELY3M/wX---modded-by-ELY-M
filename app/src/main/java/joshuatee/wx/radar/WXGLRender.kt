@@ -116,13 +116,9 @@ class WXGLRender(private val context: Context) : Renderer {
     private var totalBins = 0
     private var totalBinsOgl = 0
 
-    private var sp_loadimage: Int = 0
+    //private var sp_loadimage: Int = 0
+    private var mSizeHandle = 0
     private var iTexture: Int = 0
-
-    private var imagesize: Double = 75.0
-    private var locationsize: Double = MyApplication.radarLociconSize.toDouble()
-    private var locationbugsize: Double = MyApplication.radarLocBugSize.toDouble()
-    private var tvssize: Double = MyApplication.radarTvsSize.toDouble()
 
     private var locationId = -1
     private var locationBugId = -1
@@ -347,33 +343,10 @@ class WXGLRender(private val context: Context) : Renderer {
         GLES20.glAttachShader(OpenGLShaderUniform.sp_SolidColorUniform, fragmentShaderUniform)
         GLES20.glLinkProgram(OpenGLShaderUniform.sp_SolidColorUniform)
 
-
-        //Thanks to this for point sprite shader and codes
-        //http://opengles2learning.blogspot.com/2011/05/applying-texture-to-point-sprite.html
-        Log.i(TAG, "imagesize: " + imagesize)
-        //I hope this fucking work!!!!
-        var vs_loadimage =
-                "uniform    mat4        uMVPMatrix;" +
-                        "attribute  vec4        vPosition;" +
-                        "void main() {" +
-                        "gl_PointSize = " + imagesize + ";" +
-                        "  gl_Position = uMVPMatrix * vPosition;" +
-                        "}"
-
-        var fs_loadimage =
-                "precision mediump float;" +
-                        "uniform sampler2D u_texture;" +
-                        "void main() {" +
-                        "vec4 color;" +
-                        "color = texture2D(u_texture, gl_PointCoord);" +
-                        "  gl_FragColor = color;" +
-                        "}"
-
-
-        sp_loadimage = GLES20.glCreateProgram()
-        GLES20.glAttachShader(sp_loadimage, OpenGLShader.loadShader(GLES20.GL_VERTEX_SHADER, vs_loadimage))
-        GLES20.glAttachShader(sp_loadimage, OpenGLShader.loadShader(GLES20.GL_FRAGMENT_SHADER, fs_loadimage))
-        GLES20.glLinkProgram(sp_loadimage)
+        OpenGLShader.sp_loadimage = GLES20.glCreateProgram()
+        GLES20.glAttachShader(OpenGLShader.sp_loadimage, OpenGLShader.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShader.vs_loadimage))
+        GLES20.glAttachShader(OpenGLShader.sp_loadimage, OpenGLShader.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShader.fs_loadimage))
+        GLES20.glLinkProgram(OpenGLShader.sp_loadimage)
 
     }
 
@@ -489,12 +462,12 @@ class WXGLRender(private val context: Context) : Renderer {
     private fun drawLocation(buffers: ObjectOglBuffers) {
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
-                GLES20.glUseProgram(sp_loadimage)
-                mPositionHandle = GLES20.glGetAttribLocation(sp_loadimage, "vPosition")
-                GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
-                //imagesize = MyApplication.radarLociconSize.toDouble()
-                imagesize = locationsize
-                iTexture = GLES20.glGetUniformLocation(sp_loadimage, "u_texture")
+                GLES20.glUseProgram(OpenGLShader.sp_loadimage)
+                mPositionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
+                GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
+                mSizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
+                GLES20.glUniform1f(mSizeHandle, MyApplication.radarLocIconSize.toFloat())
+                iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
                 locationId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "location.png")
                 GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
                 GLES20.glEnableVertexAttribArray(mPositionHandle)
@@ -512,14 +485,13 @@ class WXGLRender(private val context: Context) : Renderer {
     private fun drawLocationBug(buffers: ObjectOglBuffers) {
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
-            GLES20.glUseProgram(sp_loadimage)
-            mPositionHandle = GLES20.glGetAttribLocation(sp_loadimage, "vPosition")
-            GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
-            //imagesize = MyApplication.radarLociconSize.toDouble()
-            imagesize = locationbugsize
-            iTexture = GLES20.glGetUniformLocation(sp_loadimage, "u_texture")
+            GLES20.glUseProgram(OpenGLShader.sp_loadimage)
+            mPositionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
+            GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
+            mSizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
+            GLES20.glUniform1f(mSizeHandle, MyApplication.radarLocBugSize.toFloat())
+            iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
             val rotatebug: Bitmap = OpenGLShader.RotateBitmap(MyApplication.FilesPath + "headingbug.png", WXGLRadarActivity.bearingCurrent.toDouble())
-            //locationBugId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "headingbug.png")
             locationBugId = OpenGLShader.LoadBitmapTexture(rotatebug)
             GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
             GLES20.glEnableVertexAttribArray(mPositionHandle)
@@ -539,23 +511,22 @@ class WXGLRender(private val context: Context) : Renderer {
     private fun drawTVS(buffers: ObjectOglBuffers) {
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
-                GLES20.glUseProgram(sp_loadimage)
-                mPositionHandle = GLES20.glGetAttribLocation(sp_loadimage, "vPosition")
-                GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
-                //imagesize = MyApplication.radarTvsSize.toDouble()
-                imagesize = tvssize
-                iTexture = GLES20.glGetUniformLocation(sp_loadimage, "u_texture")
+                GLES20.glUseProgram(OpenGLShader.sp_loadimage)
+                mPositionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
+                GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
+                mSizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
+                GLES20.glUniform1f(mSizeHandle, MyApplication.radarTvsSize.toFloat())
+                iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
                 tvsId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "tvs.png")
                 GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
                 GLES20.glEnableVertexAttribArray(mPositionHandle)
                 GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, tvsId)
                 GLES20.glUniform1i(iTexture, 0)
-                GLES20.glEnable(GLES20.GL_BLEND);
+                GLES20.glEnable(GLES20.GL_BLEND)
                 GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
                 //GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
                 GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
-                //GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
                 GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
 
 
@@ -563,7 +534,7 @@ class WXGLRender(private val context: Context) : Renderer {
     }
 
 
-    // FIXME CRASHING HERE sometimes
+    // FIXME CRASHING HERE sometimes -- FIXED via "displayhold" code
     /*
         java.lang.IllegalArgumentException: Must use a native order direct Buffer
         at android.opengl.GLES20.glVertexAttribPointerBounds(Native Method)
