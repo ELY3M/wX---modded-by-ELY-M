@@ -255,10 +255,12 @@ class WXGLRender(private val context: Context) : Renderer {
                     rdL2.decocodeAndPlotNexradL2(context, radarBuffers.fn, prod, radarStatusStr, idxStr, performDecomp)
                     radarBuffers.extractL2Data(rdL2)
                 }
-                product.contains("N0S") -> {
+                //FIXME this might be better way to do SRM tilts
+                product.contains("N0S") || product.contains("N1S") || product.contains("N2S") || product.contains("N3S") -> {
                     radarL3Object.decocodeAndPlotNexradLevel3FourBit(context, radarBuffers.fn, radarStatusStr)
                     radarBuffers.extractL3Data(radarL3Object)
                 }
+                /*
                 product.contains("N1S") -> {
                     radarL3Object.decocodeAndPlotNexradLevel3FourBit(context, radarBuffers.fn, radarStatusStr)
                     radarBuffers.extractL3Data(radarL3Object)
@@ -271,6 +273,7 @@ class WXGLRender(private val context: Context) : Renderer {
                     radarL3Object.decocodeAndPlotNexradLevel3FourBit(context, radarBuffers.fn, radarStatusStr)
                     radarBuffers.extractL3Data(radarL3Object)
                 }
+                */
                 else -> {
                     radarL3Object.decocodeAndPlotNexradDigital(context, radarBuffers.fn, radarStatusStr)
                     radarBuffers.extractL3Data(radarL3Object)
@@ -415,25 +418,28 @@ class WXGLRender(private val context: Context) : Renderer {
             }
         }
 
-        //TODO do custom icons for tvs and hail//
+
         if (displayHold == false) { //hides some when screen is touched
 
+
+            // TODO do custom icons for hail//
         listOf(spotterBuffers, hiBuffers).forEach {
             if (zoom > it.scaleCutOff) {
                 drawTriangles(it)
             }
         }
 
-
+        /*
         listOf(tvsBuffers).forEach {
             if (zoom > it.scaleCutOff) {
                 drawTVS(tvsBuffers)
             }
         }
+        */
 
-        //if (zoom > tvsBuffers.scaleCutOff) {
-        //    drawTVS(tvsBuffers)
-        //}
+        if (zoom > tvsBuffers.scaleCutOff) {
+            drawTVS(tvsBuffers)
+        }
 
         GLES20.glLineWidth(3.0f)
         listOf(stiBuffers, wbGustsBuffers, wbBuffers).forEach {
@@ -541,7 +547,7 @@ class WXGLRender(private val context: Context) : Renderer {
                 iTexture = GLES20.glGetUniformLocation(sp_loadimage, "u_texture")
                 tvsId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "tvs.png")
                 GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
-                //GLES20.glEnableVertexAttribArray(mPositionHandle)
+                GLES20.glEnableVertexAttribArray(mPositionHandle)
                 GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, tvsId)
                 GLES20.glUniform1i(iTexture, 0)
@@ -549,6 +555,7 @@ class WXGLRender(private val context: Context) : Renderer {
                 GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
                 //GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
                 GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+                //GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
                 GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
 
 
@@ -931,16 +938,36 @@ class WXGLRender(private val context: Context) : Renderer {
         buffers.isInitialized = true
     }
 
+    private fun constructMarker(buffers: ObjectOglBuffers) {
+        buffers.count = buffers.xList.size
+        if (buffers.count == 0) {
+            Log.i(TAG, "buffer count is 0")
+            Log.i(TAG, "Not loading anything!")
+            buffers.isInitialized = false
+        } else {
+            Log.i(TAG, "buffer count: " + buffers.count)
+            buffers.triangleCount = 1
+            buffers.initialize(
+                    24 * buffers.count * buffers.triangleCount,
+                    12 * buffers.count * buffers.triangleCount,
+                    9 * buffers.count * buffers.triangleCount,
+                    buffers.type.color)
+            buffers.lenInit = 0f //scaleLength(buffers.lenInit)
+            buffers.draw(pn)
+            buffers.isInitialized = true
+        }
+    }
 
     fun deconstructHI() {
         hiBuffers.isInitialized = false
     }
 
     fun constructTVS() {
-        tvsBuffers.lenInit = MyApplication.radarTvsSize.toFloat()
+        tvsBuffers.lenInit = 0f //MyApplication.radarTvsSize.toFloat()
         val stormList = WXGLNexradLevel3TVS.decodeAndPlot(context, rid, idxStr)
         tvsBuffers.setXYList(stormList)
-        constructTriangles(tvsBuffers)
+        //constructTriangles(tvsBuffers)
+        constructMarker(tvsBuffers)
 
     }
 

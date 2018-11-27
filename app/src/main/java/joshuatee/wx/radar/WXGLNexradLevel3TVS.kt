@@ -34,6 +34,7 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.UtilityIO
+import java.io.File
 
 internal object WXGLNexradLevel3TVS {
 
@@ -43,6 +44,7 @@ internal object WXGLNexradLevel3TVS {
         val stormList = mutableListOf<Double>()
         val location = UtilityLocation.getSiteLocation(context, rid)
         WXGLDownload.getNidsTab(context, "TVS", rid, tvsBaseFn + fnSuffix)
+        //File("/sdcard/wX/tornadointuscaloosa").copyTo(File("/data/user/0/joshuatee.wx/files/nids_tvs_tab0"), true);
         val dis: UCARRandomAccessFile
         try {
             dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, tvsBaseFn + fnSuffix))

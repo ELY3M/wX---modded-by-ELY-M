@@ -532,6 +532,57 @@ internal object UtilityWXOGLPerf {
         }
     }
 
+    fun genMarker(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: DoubleArray, y: DoubleArray) {
+            var pointX: Double
+            var pointY: Double
+            var pixYD: Float
+            var pixXD: Float
+            var iCount = 0
+            var ixCount = 0
+            var test1: Float
+            var test2: Float
+            val len = 0f //buffers.lenInit * 0.50f
+            val triangleAmount = 1 //buffers.triangleCount
+            var iI = 0
+            var lI = 0
+            buffers.setToPositionZero()
+            while (iCount < buffers.count) {
+                pointX = x[iCount]
+                pointY = y[iCount]
+                test1 = M_180_div_PI * log(tan(M_PI_div_4 + pointX * M_PI_div_360), E).toFloat()
+                test2 = M_180_div_PI * log(tan(M_PI_div_4 + pn.xDbl * M_PI_div_360), E).toFloat()
+                pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
+                pixXD = (-((pointY - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
+                (0 until triangleAmount).forEach {
+                    buffers.putFloat(lI, pixXD)
+                    lI += 4
+                    buffers.putFloat(lI, -pixYD)
+                    lI += 4
+                    buffers.putFloat(lI, pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                    lI += 4
+                    buffers.putFloat(lI, -pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                    lI += 4
+                    buffers.putFloat(lI, pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                    lI += 4
+                    buffers.putFloat(lI, -pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                    lI += 4
+                    buffers.putIndex(iI, ixCount.toShort())
+                    iI += 2
+                    buffers.putIndex(iI, (ixCount + 1).toShort())
+                    iI += 2
+                    buffers.putIndex(iI, (ixCount + 2).toShort())
+                    iI += 2
+                    ixCount += 3
+                    (0..2).forEach { _ ->
+                        buffers.putColor(buffers.solidColorRed)
+                        buffers.putColor(buffers.solidColorGreen)
+                        buffers.putColor(buffers.solidColorBlue)
+                    }
+                }
+                iCount += 1
+            }
+        }
+
     fun decode8BitWX(context: Context, src: String, radialStartAngle: ByteBuffer, binWord: ByteBuffer): Short {
         var numberOfRangeBins = 0
         try {
