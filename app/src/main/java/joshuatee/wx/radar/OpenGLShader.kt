@@ -8,6 +8,8 @@ import android.opengl.GLUtils
 import android.util.Log
 import javax.microedition.khronos.opengles.GL10
 
+
+
 // thanks! http://androidblog.reindustries.com/a-real-open-gl-es-2-0-2d-tutorial-part-1/
 
 //Thanks to this for LoadTexture
@@ -19,6 +21,7 @@ internal object OpenGLShader {
 
     // Program variables
     var sp_SolidColor: Int = 0
+    var sp_loadimage: Int = 0
 
     /* SHADER Solid
      *
@@ -42,6 +45,33 @@ internal object OpenGLShader {
                     "void main() {" +
                     "  gl_FragColor = vec4(v_Color,1.0);" +
                     "}"
+
+
+
+
+
+    //Thanks to this for point sprite shader and codes
+    //http://opengles2learning.blogspot.com/2011/05/applying-texture-to-point-sprite.html
+    //I hope this fucking work!!!!
+    //This is my modified shader :) ELY M.
+    var vs_loadimage =
+            "uniform    mat4        uMVPMatrix;" +
+                    "attribute  vec4        vPosition;" +
+                    "uniform  float        imagesize;" +
+                    "void main() {" +
+                    "  gl_PointSize = imagesize;" +
+                    "  gl_Position = uMVPMatrix * vPosition;" +
+                    "}"
+
+    var fs_loadimage =
+            "precision mediump float;" +
+                    "uniform sampler2D u_texture;" +
+                    "void main() {" +
+                    "vec4 color;" +
+                    "  gl_FragColor = texture2D(u_texture, gl_PointCoord);" +
+                    "}"
+
+
 
     fun loadShader(type: Int, shaderCode: String): Int {
 
@@ -99,6 +129,17 @@ internal object OpenGLShader {
             Log.i(TAG, e.toString() + ":" + e.message + ":" + e.localizedMessage)
         }
         return img
+    }
+
+    fun resizeBitmap(imagefile: String, size: Double): Bitmap {
+        val bitmap: Bitmap? = LoadBitmap(imagefile)
+        val newWidth: Double = (bitmap!!.getWidth() * (size / 100))
+        val newHeight: Double = (bitmap!!.getHeight() * (size / 100))
+        Log.i(TAG, "old size: "+bitmap.getWidth()+" x "+bitmap.getHeight())
+        Log.i(TAG, "new size: "+(size / 100))
+        Log.i(TAG, "new size: "+newWidth+" x "+newHeight)
+        Log.i(TAG, "new size int: "+newWidth.toInt()+" x "+newHeight.toInt())
+        return Bitmap.createScaledBitmap(bitmap, newWidth.toInt(), newHeight.toInt(), true)
     }
 
     fun RotateBitmap(imagefile: String, d: Double): Bitmap {
