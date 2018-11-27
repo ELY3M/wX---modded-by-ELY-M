@@ -166,7 +166,7 @@ open class ObjectOglBuffers() {
         when (type) {
             PolygonType.HI -> ObjectOglBuffers.redrawTriangleUp(this, pn)
             PolygonType.SPOTTER -> ObjectOglBuffers.redrawCircle(this, pn)
-            PolygonType.TVS -> ObjectOglBuffers.redrawTriangleUp(this, pn)
+            PolygonType.TVS -> ObjectOglBuffers.redrawTriangle(this, pn)
             PolygonType.LOCDOT -> ObjectOglBuffers.redrawCircle(this, pn)
             PolygonType.WIND_BARB_CIRCLE -> ObjectOglBuffers.redrawCircleWithColor(this, pn)
             else -> ObjectOglBuffers.redrawTriangle(this, pn)
@@ -177,7 +177,7 @@ open class ObjectOglBuffers() {
         // TVS
         private fun redrawTriangle(buffers: ObjectOglBuffers, pn: ProjectionNumbers) {
             if (!MyApplication.radarUseJni)
-                UtilityWXOGLPerf.genTriangle(buffers, pn, buffers.xList, buffers.yList)
+                UtilityWXOGLPerf.genMarker(buffers, pn, buffers.xList, buffers.yList)
             else
                 JNI.genTriangle(buffers.floatBuffer, buffers.indexBuffer, pn.xFloat, pn.yFloat, pn.xCenter.toFloat(), pn.yCenter.toFloat(),
                         pn.oneDegreeScaleFactorFloat, buffers.xList, buffers.yList, buffers.count, buffers.lenInit, buffers.colorBuffer, buffers.colorArray)

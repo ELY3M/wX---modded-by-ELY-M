@@ -1247,17 +1247,16 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
 
     }
     
-    
     private fun getSpotterInfo() = GlobalScope.launch(uiDispatcher) {
         var txt = withContext(Dispatchers.IO) { UtilitySpotter.findClosestSpotter(LatLon(glview.newY.toDouble(), glview.newX.toDouble() * -1.0)) }
         UtilityAlertDialog.showHelpText(txt, act)
     }
 
-
     private fun getMCD() = GlobalScope.launch(uiDispatcher) {
-        //var txt = withContext(Dispatchers.IO) { UtilityDownload.getStringFromURLS(MyApplication.NWS_RADAR_PUB+"/data/raw/ac/acus11.kwns.swo.mcd.txt") }
-        var txt = withContext(Dispatchers.IO) {  UtilityWat.showTextProducts(contextg, glview.newY.toDouble(), glview.newX.toDouble() * -1.0) }
-        UtilityAlertDialog.showHelpText(txt, act)
+        var txt = withContext(Dispatchers.IO) {  UtilityWat.showMCDProducts(contextg, glview.newY.toDouble(), glview.newX.toDouble() * -1.0) }
+        if (txt != "") {
+            UtilityAlertDialog.showHelpText(txt, act)
+        }
     }
     
 

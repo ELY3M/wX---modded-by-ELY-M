@@ -1,0 +1,12 @@
+I have to root my test phone.... 
+get a sn file with tvs in it... 
+put it in shared folder in the files area.  
+
+
+        //WXGLDownload.getNidsTab(context, "TVS", rid, tvsBaseFn + fnSuffix)
+        File("/data/user/0/joshuatee.wx/files/shared/sn.0216").copyTo(File("/data/user/0/joshuatee.wx/files/nids_tvs_tab0"), true);
+
+
+
+be sure to uncomment and remove copy file in prod apk  
+

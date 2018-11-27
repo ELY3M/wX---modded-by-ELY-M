@@ -169,15 +169,72 @@ internal object UtilityWat {
 
     //joshuatee UtilityWat: mcdnolist: 1656:1655:
     //todo add get watch texts//
-    fun showTextProducts(context: Context, lat: Double, lon: Double): String {
+    fun showMCDProducts(context: Context, lat: Double, lon: Double): String {
         var text: String = ""
         Log.i(TAG, "Touch lat: "+lat+" lon: "+lon)
         //get mcd numbers
-        //TODO TESTING mcd text//
         val textMcdNoList = MyApplication.mcdNoList.valueGet()
-        //val textMcdNoList = "1657:"
         Log.i(TAG, "textMcdNoList: "+textMcdNoList)
         val mcdNoArr = MyApplication.colon.split(textMcdNoList)
+
+        //get mcd latlons
+        val mcdLatLon = MyApplication.mcdLatlon.valueGet()
+        Log.i(TAG, "mcdLatLon: "+mcdLatLon)
+        val latlonArr = MyApplication.colon.split(mcdLatLon)
+
+        var x = mutableListOf<Double>()
+        var y = mutableListOf<Double>()
+        var i: Int
+        var testArr: List<String>
+        var z = 0
+        var notFound = true
+
+
+        while (z < latlonArr.size) {
+            testArr = latlonArr[z].split(" ")
+            x.clear()
+            y.clear()
+            i = 0
+            while (i < testArr.size) {
+                if (i and 1 == 0) {
+                    x.add(testArr[i].toDoubleOrNull() ?: 0.0)
+                } else {
+                    y.add((testArr[i].toDoubleOrNull() ?: 0.0) * -1)
+                }
+                i += 1
+            }
+            if (y.size > 3 && x.size > 3 && x.size == y.size) {
+                val poly2 = ExternalPolygon.Builder()
+                for (j in x.indices) {
+                    poly2.addVertex(ExternalPoint(x[j].toFloat(), y[j].toFloat()))
+                }
+                val polygon2 = poly2.build()
+                val contains = polygon2.contains(ExternalPoint(lat.toFloat(), lon.toFloat()))
+                if (contains && notFound) {
+                    Log.i(TAG, "trying to get mcd #"+mcdNoArr[z])
+                    var mcdPre = UtilityDownload.getTextProduct(context, "SPCMCD"+mcdNoArr[z])
+                    text = Utility.fromHtml(mcdPre)
+                    notFound = false
+                }
+            }
+            z += 1
+
+        }
+
+        return text
+    }
+
+
+    fun showWatchProducts(context: Context, lat: Double, lon: Double): String {
+        var text: String = ""
+        Log.i(TAG, "Touch lat: "+lat+" lon: "+lon)
+
+        //TODO TESTING Watch text//
+        //get watch numbers
+        val textWatNoList = MyApplication.mcdNoList.valueGet()
+        //val textMcdNoList = "1657:"
+        Log.i(TAG, "textMcdNoList: "+textWatNoList)
+        val mcdNoArr = MyApplication.colon.split(textWatNoList)
 
         //get mcd latlons
         val mcdLatLon = MyApplication.mcdLatlon.valueGet()
@@ -216,26 +273,16 @@ internal object UtilityWat {
                 if (contains && notFound) {
                     Log.i(TAG, "trying to get mcd #"+mcdNoArr[z])
                     var mcdPre = UtilityDownload.getTextProduct(context, "SPCMCD"+mcdNoArr[z])
-                    mcdPre = mcdPre.replace("<.*?>".toRegex(), "\n")
-                    mcdPre = mcdPre.replace("  ", " ")
-                    text = mcdPre //mcdPre
-                    Log.i(TAG, "found!!!!!")
+                    text = Utility.fromHtml(mcdPre)
                     notFound = false
-                } else {
-                    Log.i(TAG, "cant find it!!!!!")
                 }
-
             }
             z += 1
-
 
         }
 
         return text
     }
-
-
-
 
 }
 
