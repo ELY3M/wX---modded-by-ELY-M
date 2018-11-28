@@ -875,12 +875,16 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 alertDialogStatusAl.add(UtilityStringExternal.truncate(distRid.toString(), 6) + " miles from " + oglr.rid)
                 oglr.ridNewList.mapTo(alertDialogStatusAl) { "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.readPref(contextg, "RID_LOC_" + it.name, "") }
                 alertDialogStatusAl.add("Show warning text")
-                //alertDialogStatusAl.add("Show Watch text")
-                alertDialogStatusAl.add("Show MCD text")
+                if (MyApplication.radarWatMcd) {
+                    //alertDialogStatusAl.add("Show Watch text")
+                    alertDialogStatusAl.add("Show MCD text")
+                }
                 alertDialogStatusAl.add("Show nearest observation")
                 alertDialogStatusAl.add("Show nearest forecast")
                 alertDialogStatusAl.add("Show nearest meteogram")
-                alertDialogStatusAl.add("Show Spotter Info")
+                if (MyApplication.radarSpotters || MyApplication.radarSpottersLabel) {
+                    alertDialogStatusAl.add("Show Spotter Info")
+                }
                 alertDialogStatusAl.add("Show radar status message")
                 diaStatus!!.show()
             } else {

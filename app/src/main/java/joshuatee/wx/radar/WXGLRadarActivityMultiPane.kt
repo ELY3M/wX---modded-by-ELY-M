@@ -735,10 +735,15 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.readPref(contextg, "RID_LOC_" + it.name, "")
                 }
                 alertDialogStatusAl.add("Show warning text")
-                alertDialogStatusAl.add("Show MCD")
+                if (MyApplication.radarWatMcd) {
+                    //alertDialogStatusAl.add("Show Watch text")
+                    alertDialogStatusAl.add("Show MCD")
+                }
                 alertDialogStatusAl.add("Show nearest observation")
                 alertDialogStatusAl.add("Show nearest meteogram")
-                alertDialogStatusAl.add("Show Spotter Info")
+                if (MyApplication.radarSpotters || MyApplication.radarSpottersLabel) {
+                    alertDialogStatusAl.add("Show Spotter Info")
+                }
                 alertDialogStatusAl.add("Show radar status message")
                 diaStatus!!.show()
             } else {
