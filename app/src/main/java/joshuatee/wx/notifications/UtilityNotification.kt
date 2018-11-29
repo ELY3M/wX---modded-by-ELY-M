@@ -87,7 +87,7 @@ object UtilityNotification {
                     alertPresent = true
                 }
             } else {
-                html = UtilityCanada.getLocationHTML(Location.getLatLon(locNumInt))
+                html = UtilityCanada.getLocationHtml(Location.getLatLon(locNumInt))
                 val hazArr = UtilityCanada.getHazards(html)
                 val hazSum = Utility.fromHtml(hazArr[0])
                 val hazUrls = hazArr[1]

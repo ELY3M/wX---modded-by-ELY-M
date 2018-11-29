@@ -82,7 +82,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:textSize="18sp"
-                                android:inputType="numberDecimal" />
+                                android:inputType="text" />
                             <!--   android:inputType="numberDecimal|numberSigned" -->
                             <EditText
                                 android:id="@+id/loc_lon_text"
@@ -90,7 +90,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:textSize="18sp"
-                                android:inputType="numberDecimal" />
+                                android:inputType="text" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 

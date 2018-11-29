@@ -120,7 +120,7 @@ class ObjectCAWARN(private val context: Context, private val activity: Activity,
     private fun getWarningDetail(urlStr: String, location: String) = GlobalScope.launch(uiDispatcher) {
         var data = ""
         withContext(Dispatchers.IO) {
-            data = UtilityCanada.getHazardsFromURL(urlStr)
+            data = UtilityCanada.getHazardsFromUrl(urlStr)
         }
         ObjectIntent(context, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(data, location))
     }
