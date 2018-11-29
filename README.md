@@ -24,8 +24,8 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 2. get special weather statements working - not working due because they do not have vtec like all other warnings.  
 would have to do the latlon method that is used for watches/mcds/mpds  
 3. add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs   
-4. allow custom icons! esp hail and cities dots - location image is done!.    
-5. add read mcd/mpd text like read warnings text in the radar tap menu 
+4. allow custom icons! esp hail and cities dots - tvs/location image is done!.    
+5. add read watch/mpd text like read warnings text in the radar tap menu 
 6. add warning list within radar
 7. add LSR reports from SN spotters/option to turn on/off LSR reports
 8. as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
@@ -37,7 +37,7 @@ would have to do the latlon method that is used for watches/mcds/mpds
 14. android wear support. I own android wear watches and love them.      
 15. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor. 
 16. make VAD Wind Profile more better and friendly  like the one at cod.edu   
-17. add setting for adjusting width of colorbar (color table on side if enabled) due to some stupid phones!
+17. add Spectrum Width product as requested by Mike   
 
 
 #
@@ -45,6 +45,7 @@ would have to do the latlon method that is used for watches/mcds/mpds
 ## DONE!
 ====================================  
 reading MCD texts within radar is working properly now.  
+added setting for adjusting width of colorbar (color table on side if enabled) and text size too.  
 heading bug on GPS location is done and it have setting to enable and disable and can set bug size too.    
 added "displayhold" function as seen in pykl3 because I liked it and it helps very much with "GLThread" crashes!  
 added option to change default lines on radar in the radar settings.  
