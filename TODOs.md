@@ -19,6 +19,7 @@ would have to do the latlon method that is used for watches/mcds/mpds
 14. android wear support. I own android wear watches and love them.      
 15. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor. 
 16. make VAD Wind Profile more better and friendly  like the one at cod.edu   
+17. add Spectrum Width product as requested by Mike   
 
 
 #
