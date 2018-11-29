@@ -43,6 +43,7 @@ object UIPreferences {
     var homescreenTextLength: Int = 0
     var mediaControlNotif: Boolean = false
     var radarToolbarTransparent: Boolean = true
+    var radarStatusBarTransparent: Boolean = false
     var radarImmersiveMode: Boolean = false
     var tilesPerRow: Int = 3
     var themeStr: String = ""
@@ -70,6 +71,7 @@ object UIPreferences {
         colorOffwhiteToolbar = ContextCompat.getColor(context, R.color.offwhite_toolbar)
         mediaControlNotif = Utility.readPref(context, "MEDIA_CONTROL_NOTIF", "").startsWith("t")
         radarToolbarTransparent = Utility.readPref(context, "RADAR_TOOLBAR_TRANSPARENT", "true").startsWith("t")
+        radarStatusBarTransparent = Utility.readPref(context, "RADAR_STATUSBAR_TRANSPARENT", "false").startsWith("t")
         radarImmersiveMode = Utility.readPref(context, "RADAR_IMMERSIVE_MODE", "false").startsWith("t")
         tilesPerRow = Utility.readPref(context, "UI_TILES_PER_ROW", tilesPerRow)
         //themeStr = Utility.readPref(context, "THEME_BLUE", "blue")

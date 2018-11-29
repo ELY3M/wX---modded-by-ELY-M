@@ -66,6 +66,7 @@ class SettingsUIActivity : BaseActivity() {
         ll.addView(ObjectSettingsCheckBox(this, this, "Use FAB in models", "FAB_IN_MODELS", R.string.fab_in_models_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "NWS Text, remove line breaks", "NWS_TEXT_REMOVELINEBREAKS", R.string.nws_text_removelinebreak_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Radar: transparent toolbars", "RADAR_TOOLBAR_TRANSPARENT", R.string.radar_toolbar_transparent_label).card)
+        ll.addView(ObjectSettingsCheckBox(this, this, "Radar: transparent status bar", "RADAR_STATUSBAR_TRANSPARENT", R.string.radar_statusbar_transparent_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Radar: immersive mode", "RADAR_IMMERSIVE_MODE", R.string.radar_immersive_mode_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Record screen for sharing", "RECORD_SCREEN_SHARE", R.string.record_screen_share_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Prevent accidental exit", "PREF_PREVENT_ACCIDENTAL_EXIT", R.string.prevent_accidental_exit_label).card)

@@ -244,13 +244,13 @@ object UtilityCanada {
 
     fun getProvHTML(prov: String): String = ("http://weather.gc.ca/forecast/canada/index_e.html?id=$prov").getHtmlSep()
 
-    fun getLocationHTML(location: LatLon): String {
+    fun getLocationHtml(location: LatLon): String {
         val prov = location.latString.split(":").dropLastWhile { it.isEmpty() }
         val id = location.lonString.split(":").dropLastWhile { it.isEmpty() }
         return ("http://weather.gc.ca/rss/city/" + prov[1].toLowerCase(Locale.US) + "-" + id[0] + "_e.xml").getHtmlSep()
     }
 
-    fun getLocationURL(x: String, y: String): String {
+    fun getLocationUrl(x: String, y: String): String {
         val prov = x.split(":").dropLastWhile { it.isEmpty() }
         val id = y.split(":").dropLastWhile { it.isEmpty() }
         if (prov.count() < 2 || id.count() < 1)
@@ -260,7 +260,7 @@ object UtilityCanada {
 
     fun getStatus(html: String): String = html.parse("<b>Observed at:</b>(.*?)<br/>")
 
-    fun getRID(x: String, y: String): String {
+    fun getRid(x: String, y: String): String {
         val url = ("http://weather.gc.ca/city/pages/"
                 + x.split(":").dropLastWhile { it.isEmpty() }[1].toLowerCase(Locale.US) + "-"
                 + y.split(":").dropLastWhile { it.isEmpty() }[0] + "_metric_e.html")
@@ -330,14 +330,14 @@ object UtilityCanada {
         result[0] = warning + statement + watch
         result[1] = "$warningUrl,$statementUrl,$watchUrl"
         if (!result[0].contains("No watches or warnings in effect")) {
-            result[1] = getHazardsFromURL(warningUrl)
+            result[1] = getHazardsFromUrl(warningUrl)
         } else {
             result[1] = result[0]
         }
         return result
     }
 
-    fun getHazardsFromURL(url: String): String {
+    fun getHazardsFromUrl(url: String): String {
         var warningData = ""
         val urlArr = url.split(",").dropLastWhile { it.isEmpty() }
         var notFound = true

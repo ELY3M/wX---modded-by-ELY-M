@@ -7,6 +7,9 @@
 // TODO NWS URLs http to https const myapp
 // TODO SPC HREF use long names for sectors
 
+55065 2018_11_28 radar - add option in settings/ui to have translucent status bar
+55064 2018_11_27 (bugfix) Dave reported unable to manually enter a negative number of longitude in settings edit
+55063 2018_11_24 camelCase some methods to match iOS code
 55062 2018_11_23 add okhttpUnsafe and use in sun/moon
 55061 2018_11_23 bugfix in SPCHREF and NCEP MAG
 55060 2018_11_23 bugfix in SPCHRRR

@@ -514,7 +514,13 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 alertDialogRadarLongpressAl.add(UtilityStringExternal.truncate(distRid.toString(), 6) + " miles from " + oglrArr[idx].rid)
                 oglrArr[idx].ridNewList.mapTo(alertDialogRadarLongpressAl) { "Radar: (" + it.distance.toString() + " mi) " + it.name + " " + Utility.readPref("RID_LOC_" + it.name, "") }
                 alertDialogRadarLongpressAl.add("Show warning text")
-                alertDialogRadarLongpressAl.add("Show Spotter Info")
+                if (MyApplication.radarWatMcd) {
+                    //alertDialogStatusAl.add("Show Watch text")
+                    alertDialogStatusAl.add("Show MCD text")
+                }
+                if (MyApplication.radarSpotters || MyApplication.radarSpottersLabel) {
+                    alertDialogRadarLongpressAl.add("Show Spotter Info")
+                }
                 alertDialogRadarLongpressAl.add("Show radar status message")
                 alertDialogRadarLongpress?.show()
             } else {
@@ -831,6 +837,8 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             } else if (strName.contains("Show warning text")) {
                 val polygonUrl = UtilityWXOGL.showTextProducts(glviewArr[idxIntG].newY.toDouble(), (glviewArr[idxIntG].newX * -1.0))
                 if (polygonUrl != "") ObjectIntent(activityReference, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(polygonUrl, ""))
+            } else if (strName.contains("Show MCD text")) {
+                getMCD()
             } else if (strName.contains("Show Spotter Info")) {
                 getSpotterInfo()
             } else if (strName.contains("Show radar status message")) {
@@ -843,6 +851,13 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private fun getSpotterInfo() = GlobalScope.launch(uiDispatcher) {
          var txt = withContext(Dispatchers.IO) { UtilitySpotter.findClosestSpotter(LatLon(glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0)) }
          UtilityAlertDialog.showHelpText(txt, activityReference)
+    }
+
+    private fun getMCD() = GlobalScope.launch(uiDispatcher) {
+        var txt = withContext(Dispatchers.IO) {  UtilityWat.showMCDProducts(MyApplication.appContext, glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0) }
+        if (txt != "") {
+            UtilityAlertDialog.showHelpText(txt, activityReference)
+        }
     }
 
     private fun getRadarStatus() = GlobalScope.launch(uiDispatcher) {
@@ -1002,7 +1017,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             // Canada legal card
             //
             if (!Location.isUS) {
-                val canLegal = ObjectCALegal(activityReference, UtilityCanada.getLocationURL(x, y))
+                val canLegal = ObjectCALegal(activityReference, UtilityCanada.getLocationUrl(x, y))
                 if (homescreenFavLocal.contains("TXT-7DAY2")) {
                     llCv5V?.addView(canLegal.card)
                 }

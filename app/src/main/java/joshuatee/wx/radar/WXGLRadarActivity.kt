@@ -29,10 +29,12 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.opengl.GLSurfaceView
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import androidx.core.app.NavUtils
@@ -46,6 +48,7 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.os.Handler
+import android.view.Window
 import android.util.Log
 
 import joshuatee.wx.R
@@ -175,6 +178,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         super.onCreate(savedInstanceState, R.layout.activity_uswxogl, R.menu.uswxoglradar, true, true)
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityUI.immersiveMode(this as Activity)
+
+        if (UIPreferences.radarStatusBarTransparent && Build.VERSION.SDK_INT >= 21) {
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+            window.statusBarColor = Color.TRANSPARENT
+        }
+	
         act = this
         spotterShowSelected = false
         locXCurrent = joshuatee.wx.settings.Location.x
@@ -1015,6 +1024,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     }
 
     private val handler = Handler()
+
     private val mStatusChecker: Runnable = object : Runnable {
         override fun run() {
             if (loopCount > 0) {
@@ -1134,15 +1144,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             } else if (strName.contains("Show warning text")) {
                 val polygonUrl = UtilityWXOGL.showTextProducts(glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
                 if (polygonUrl != "") ObjectIntent(this, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(polygonUrl, ""))
-            }
-
-            else if (strName.contains("Show MCD text")) {
+            } else if (strName.contains("Show MCD text")) {
                 getMCD()
-            }
-
-            else if (strName.contains("Show nearest observation"))
+            } else if (strName.contains("Show nearest observation")) {
                 getMetar()
-            else if (strName.contains("Show nearest meteogram")) {
+            } else if (strName.contains("Show nearest meteogram")) {
                 // http://www.nws.noaa.gov/mdl/gfslamp/meteoform.php
                 // http://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=KTEW
 

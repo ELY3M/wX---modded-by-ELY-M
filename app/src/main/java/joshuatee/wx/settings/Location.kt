@@ -281,7 +281,7 @@ class Location(val context: Context, locNumInt: Int) {
                 Utility.writePref(context, "LOC" + locNum + "_X", "CANADA" + ":" + prov + ":" + tmpLatlon.latStr)
                 Utility.writePref(context, "LOC" + locNum + "_Y", id + ":" + tmpLatlon.lonStr)
                 joshuatee.wx.settings.Location.setNumLocations(context, locNumToSave)
-                rid = UtilityCanada.getRID(xStr, yStr)
+                rid = UtilityCanada.getRid(xStr, yStr)
                 Utility.writePref(context, "RID$locNum", rid.toUpperCase(Locale.US))
                 Utility.writePref(context, "NWS" + locNum + "_STATE", prov)
                 Utility.writePref(context, "ZONE$locNum", "")

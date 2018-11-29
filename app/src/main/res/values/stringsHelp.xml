@@ -139,6 +139,9 @@ Set the color legend text size in radar. Default is 10.
     <string name="radar_toolbar_transparent_label">
 Nexrad radar single pane activity will have transparent toolbars if enabled.</string>
 
+    <string name="radar_statusbar_transparent_label">
+Nexrad radar single pane activity will have transparent status bar if enabled.</string>
+
      <string name="radar_immersive_mode_label">
 Nexrad radar single pane activity will have the status bar and navigation bar hidden
      </string>
