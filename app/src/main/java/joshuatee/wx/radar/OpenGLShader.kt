@@ -12,9 +12,6 @@ import javax.microedition.khronos.opengles.GL10
 
 // thanks! http://androidblog.reindustries.com/a-real-open-gl-es-2-0-2d-tutorial-part-1/
 
-//Thanks to this for LoadTexture
-//http://opengles2learning.blogspot.com/2011/05/applying-texture-to-point-sprite.html
-
 internal object OpenGLShader {
 
     var TAG: String = "joshuatee OpenGLShader"
@@ -52,7 +49,6 @@ internal object OpenGLShader {
 
     //Thanks to this for point sprite shader and codes
     //http://opengles2learning.blogspot.com/2011/05/applying-texture-to-point-sprite.html
-    //I hope this fucking work!!!!
     //This is my modified shader :) ELY M.
     var vs_loadimage =
             "uniform    mat4        uMVPMatrix;" +

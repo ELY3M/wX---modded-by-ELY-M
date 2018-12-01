@@ -220,14 +220,29 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         tiltMenu = menu.findItem(R.id.action_tilt)
         l3Menu = menu.findItem(R.id.action_l3)
         l2Menu = menu.findItem(R.id.action_l2)
+        val blank = menu.findItem(R.id.action_blank)
+
+        //FIXME fix overlaying issue when transparent status bar is enabled!
         if (!UIPreferences.radarImmersiveMode) {
-            val blank = menu.findItem(R.id.action_blank)
-            blank.isVisible = false
-            menu.findItem(R.id.action_level3_blank).isVisible = false
-            menu.findItem(R.id.action_level2_blank).isVisible = false
-            menu.findItem(R.id.action_animate_blank).isVisible = false
-            menu.findItem(R.id.action_tilt_blank).isVisible = false
-            menu.findItem(R.id.action_tools_blank).isVisible = false
+            Log.i(TAG, "UIPreferences.radarImmersiveMode: "+UIPreferences.radarImmersiveMode)
+            if (UIPreferences.radarStatusBarTransparent && Build.VERSION.SDK_INT >= 21) {
+                Log.i(TAG, "statusbar is trans")
+                blank.isVisible = true
+                menu.findItem(R.id.action_level3_blank).isVisible = true
+                menu.findItem(R.id.action_level2_blank).isVisible = true
+                menu.findItem(R.id.action_animate_blank).isVisible = true
+                menu.findItem(R.id.action_tilt_blank).isVisible = true
+                menu.findItem(R.id.action_tools_blank).isVisible = true
+            } else {
+                Log.i(TAG, "statusbar is not trans")
+                blank.isVisible = false
+                menu.findItem(R.id.action_level3_blank).isVisible = false
+                menu.findItem(R.id.action_level2_blank).isVisible = false
+                menu.findItem(R.id.action_animate_blank).isVisible = false
+                menu.findItem(R.id.action_tilt_blank).isVisible = false
+                menu.findItem(R.id.action_tools_blank).isVisible = false
+            }
+
         }
         if (android.os.Build.VERSION.SDK_INT > 20)
             menu.findItem(R.id.action_jellybean_drawtools).isVisible = false
@@ -885,7 +900,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 oglr.ridNewList.mapTo(alertDialogStatusAl) { "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.readPref(contextg, "RID_LOC_" + it.name, "") }
                 alertDialogStatusAl.add("Show warning text")
                 if (MyApplication.radarWatMcd) {
-                    //alertDialogStatusAl.add("Show Watch text")
+                    alertDialogStatusAl.add("Show Watch text")
                     alertDialogStatusAl.add("Show MCD text")
                 }
                 alertDialogStatusAl.add("Show nearest observation")
@@ -1144,6 +1159,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             } else if (strName.contains("Show warning text")) {
                 val polygonUrl = UtilityWXOGL.showTextProducts(glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
                 if (polygonUrl != "") ObjectIntent(this, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(polygonUrl, ""))
+            } else if (strName.contains("Show Watch text")) {
+                getWatch()
             } else if (strName.contains("Show MCD text")) {
                 getMCD()
             } else if (strName.contains("Show nearest observation")) {
@@ -1260,6 +1277,13 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private fun getSpotterInfo() = GlobalScope.launch(uiDispatcher) {
         var txt = withContext(Dispatchers.IO) { UtilitySpotter.findClosestSpotter(LatLon(glview.newY.toDouble(), glview.newX.toDouble() * -1.0)) }
         UtilityAlertDialog.showHelpText(txt, act)
+    }
+
+    private fun getWatch() = GlobalScope.launch(uiDispatcher) {
+        var txt = withContext(Dispatchers.IO) {  UtilityWat.showWatchProducts(contextg, glview.newY.toDouble(), glview.newX.toDouble() * -1.0) }
+        if (txt != "") {
+            UtilityAlertDialog.showHelpText(txt, act)
+        }
     }
 
     private fun getMCD() = GlobalScope.launch(uiDispatcher) {
