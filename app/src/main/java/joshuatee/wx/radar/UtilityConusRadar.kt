@@ -488,60 +488,13 @@ internal object UtilityConusRadar {
     }
 
 
-    fun loadconusradarbitmap(context: Context): Bitmap {
-        //val imgUrl = "http://radar.weather.gov/Conus/RadarImg/latest_radaronly.gif"
-
-        val imgUrl = MyApplication.NWS_CONUS_RADAR
-
-        val layers = mutableListOf<Drawable>()
-        val cd = if (MyApplication.blackBg) {
-            ColorDrawable(Color.BLACK)
-        } else {
-            ColorDrawable(Color.WHITE)
-        }
-        var scaleType = ProjectionType.NWS_MOSAIC
-
-        var bitmap = imgUrl.getImage()
-        var bitmapCanvas = UtilityImg.getBlankBitmap()
-        if (MyApplication.blackBg) {
-            bitmap = UtilityImg.eraseBG(bitmap, -1)
-        }
-        if (bitmap.height > 10) {
-            bitmapCanvas = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-            UtilityCanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, "latest", 1, 13, false)
-        }
-        layers.add(cd)
-        layers.add(BitmapDrawable(context.resources, bitmap))
-        layers.add(BitmapDrawable(context.resources, bitmapCanvas))
-        return UtilityImg.layerDrawableToBitmap(layers)
-    }
-
-
-
     //get conus bitmap!!//
-    fun nwsMosaic(context: Context): Bitmap {
+    fun nwsConusRadar(context: Context): Bitmap {
         val imgUrl = "${MyApplication.nwsRadarWebsitePrefix}/Conus/RadarImg/latest_radaronly.gif"
         val layers = mutableListOf<Drawable>()
-        //leave it transparent//
-        /*
-        val cd = if (MyApplication.blackBg) {
-            ColorDrawable(Color.BLACK)
-        } else {
-            ColorDrawable(Color.WHITE)
-        }
-        */
         var bitmap = imgUrl.getImage()
-        var bitmapCanvas = UtilityImg.getBlankBitmap()
-        if (MyApplication.blackBg) {
-            bitmap = UtilityImg.eraseBG(bitmap, -1)
-        }
-        if (bitmap.height > 10) {
-            bitmapCanvas = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-            //UtilityCanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, sector, 1, 13, isInteractive)
-        }
-        //layers.add(cd)
+        bitmap = UtilityImg.eraseBG(bitmap, -1)
         layers.add(BitmapDrawable(context.resources, bitmap))
-        layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         return UtilityImg.layerDrawableToBitmap(layers)
     }
     
