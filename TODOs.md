@@ -25,6 +25,7 @@ would have to do the latlon method that is used for watches/mcds/mpds
 #
 ## DONE!
 ====================================  
+show MPD text within text is done and working.  
 Conus Radar is being worked on... right now, It is not being plotted right  so keep it off in the radar settings  
 added base spectrum width - thanks to Joshua Tee for doing it first before me!  
 reading Watch texts within radar is working properly now.  
