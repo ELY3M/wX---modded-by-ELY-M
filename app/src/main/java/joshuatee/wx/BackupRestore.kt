@@ -89,8 +89,6 @@ class BackupRestore {
                 dst.transferFrom(src, 0, src.size())
                 src.close()
                 dst.close()
-                //al backupFilePath = File(Environment.getExternalStorageDirectory().absolutePath + "/wXBackup/")
-                //val pykl3path = Environment.getExternalStorageDirectory().absolutePath + "/wXBackup/"
                 Log.d(TAG, "wXPATH=${MyApplication.BackupFilesPath}")
                 Log.d(TAG, "where backup files are written to " + backupFilePath.absolutePath)
                 DialogBox("Backup performed", Html.fromHtml("Backed up user preferences to " + MyApplication.BackupFilesPath), context)

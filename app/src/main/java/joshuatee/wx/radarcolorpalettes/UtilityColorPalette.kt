@@ -120,7 +120,7 @@ object UtilityColorPalette {
             val initialFile = File(MyApplication.PalFilesPath + palfile)
             val getpalfile = FileInputStream(initialFile)
             text = UtilityIO.readTextFile(getpalfile)
-            Log.i(TAG, palfile + ": " + text + "\n")
+            //Log.i(TAG, palfile + ": " + text + "\n")
         } catch (e: IOException) {
             Log.i(TAG, "failed to open file "+palfile+"\nopenpalfile error: "+e.message)
             }
@@ -132,10 +132,10 @@ object UtilityColorPalette {
         //Log.i(TAG, "running scanfor94pal()")
         File(MyApplication.PalFilesPath).walk().forEach {
             if (it.toString().equals(RegExp.palfile94)) {
-                Log.i(TAG, "found: "+it)
+                //Log.i(TAG, "found: "+it)
                 val file = File(it.toString())
                 var content: String = file.readText()
-                Log.i(TAG, content)
+                //Log.i(TAG, content)
             }
 
         }

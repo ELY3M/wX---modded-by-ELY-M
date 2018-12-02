@@ -106,6 +106,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private val locIconBuffers = ObjectOglBuffers()
     private val locBugBuffers = ObjectOglBuffers()
     private val wbCircleBuffers = ObjectOglBuffers(PolygonType.WIND_BARB_CIRCLE, 0.30f)
+    private val conusRadarBuffers = ObjectOglBuffers()
     private val colorSwo = IntArray(5)
     private var breakSize15 = 15000
     private val breakSizeRadar = 15000
@@ -120,6 +121,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private var mSizeHandle = 0
     private var iTexture: Int = 0
 
+    private var conusradarId = -1
     private var locationId = -1
     private var locationBugId = -1
     private var tvsId = -1
@@ -392,8 +394,14 @@ class WXGLRender(private val context: Context) : Renderer {
         }
 
 
+
         if (displayHold == false) { //hides some when screen is touched
 
+            Log.i(TAG, "zoom: "+zoom)
+            if (zoom < 0.093f) {
+            Log.i(TAG, "zoom out to conusradar")
+            drawConusRadar(conusRadarBuffers)
+        }
 
             // TODO do custom icons for hail//
         listOf(spotterBuffers, hiBuffers).forEach {
@@ -458,6 +466,32 @@ class WXGLRender(private val context: Context) : Renderer {
 
     }
 
+
+    private fun drawConusRadar(buffers: ObjectOglBuffers) {
+        if (buffers.isInitialized) {
+            buffers.setToPositionZero()
+            GLES20.glUseProgram(OpenGLShader.sp_loadimage)
+            mPositionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
+            GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
+            mSizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
+            //var conusbitmap: Bitmap? = OpenGLShader.LoadBitmap(MyApplication.FilesPath + "conus.gif")
+
+            GLES20.glUniform1f(mSizeHandle, 1600f)
+            iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
+            //val conusbitmap: Bitmap? = ///UtilityConusRadar.nwsConusRadar(context)
+            conusradarId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "conus.gif")
+            GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
+            GLES20.glEnableVertexAttribArray(mPositionHandle)
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, conusradarId)
+            GLES20.glUniform1i(iTexture, 0)
+            GLES20.glEnable(GLES20.GL_BLEND);
+            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
+            GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+            //GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+            GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
+        }
+    }
 
     private fun drawLocation(buffers: ObjectOglBuffers) {
         if (buffers.isInitialized) {
@@ -867,6 +901,31 @@ class WXGLRender(private val context: Context) : Renderer {
         locdotBuffers.isInitialized = false
         locIconBuffers.isInitialized = false
         locBugBuffers.isInitialized = false
+    }
+
+
+    /*
+    *
+    *
+-127.620375523875420
+50.406626367301044
+    * */
+
+    fun constructConusRadar() {
+        conusRadarBuffers.lenInit = 0f
+        conusRadarBuffers.triangleCount = 1 //was 36
+        conusRadarBuffers.initialize(32 * conusRadarBuffers.triangleCount,
+                8 * conusRadarBuffers.triangleCount,
+                6 * conusRadarBuffers.triangleCount,
+                0)
+        UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, 39.50, 98.35)
+
+
+        conusRadarBuffers.isInitialized = true
+    }
+
+    fun deconstructConusRadar() {
+        conusRadarBuffers.isInitialized = false
     }
 
     fun constructSpotters() {

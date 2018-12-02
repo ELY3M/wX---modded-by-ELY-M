@@ -61,6 +61,7 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
     private lateinit var drw: ObjectNavDrawer
     private var productCodes = mutableListOf<String>()
     private var sector = "cgl"
+    private var oldSector = "cgl"
     private var frameCnt = 24
     private var savePrefs = true
     private lateinit var activityArguments: Array<String>
@@ -113,6 +114,10 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
         }
         imageLoaded = true
         toolbar.subtitle = imageTitle
+        if (oldSector != sector){
+            img.setZoom(1.0f)
+            oldSector = sector
+        }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -148,6 +153,7 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
                 imageTitle = "06.9 um (Band 9) Mid-Level Water Vapor - IR"
             }
         }
+        oldSector = sector
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

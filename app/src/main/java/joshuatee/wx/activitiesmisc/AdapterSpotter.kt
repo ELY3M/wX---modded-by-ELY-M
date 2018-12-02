@@ -83,7 +83,6 @@ internal class AdapterSpotter(private val mDataset: MutableList<Spotter>) : Recy
             UtilityLog.d("wx", "EMAIL: $emailAddress")
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:")
-            //intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(mDataset[position].email))
             intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailAddress))
             intent.putExtra(Intent.EXTRA_SUBJECT, "")
             he.context.startActivity(Intent.createChooser(intent, "Send Email"))
