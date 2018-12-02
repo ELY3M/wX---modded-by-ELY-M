@@ -903,6 +903,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     alertDialogStatusAl.add("Show Watch text")
                     alertDialogStatusAl.add("Show MCD text")
                 }
+                if (MyApplication.radarMpd) {
+                    alertDialogStatusAl.add("Show MPD text")
+                }
                 alertDialogStatusAl.add("Show nearest observation")
                 alertDialogStatusAl.add("Show nearest forecast")
                 alertDialogStatusAl.add("Show nearest meteogram")
@@ -1170,6 +1173,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 getWatch()
             } else if (strName.contains("Show MCD text")) {
                 getMCD()
+            } else if (strName.contains("Show MPD text")) {
+                getMPD()
             } else if (strName.contains("Show nearest observation")) {
                 getMetar()
             } else if (strName.contains("Show nearest meteogram")) {
@@ -1299,7 +1304,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             UtilityAlertDialog.showHelpText(txt, act)
         }
     }
-    
+    private fun getMPD() = GlobalScope.launch(uiDispatcher) {
+        var txt = withContext(Dispatchers.IO) {  UtilityWat.showMPDProducts(contextg, glview.newY.toDouble(), glview.newX.toDouble() * -1.0) }
+        if (txt != "") {
+            UtilityAlertDialog.showHelpText(txt, act)
+        }
+    }
 
 
 }

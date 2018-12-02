@@ -737,8 +737,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 }
                 alertDialogStatusAl.add("Show warning text")
                 if (MyApplication.radarWatMcd) {
-                    //alertDialogStatusAl.add("Show Watch text")
+                    alertDialogStatusAl.add("Show Watch text")
                     alertDialogStatusAl.add("Show MCD")
+                }
+                if (MyApplication.radarMpd) {
+                    alertDialogStatusAl.add("Show MPD text")
                 }
                 alertDialogStatusAl.add("Show nearest observation")
                 alertDialogStatusAl.add("Show nearest meteogram")
@@ -1001,8 +1004,14 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 val polygonUrl = UtilityWXOGL.showTextProducts(glviewArr[idxIntAl].newY.toDouble(), glviewArr[idxIntAl].newX.toDouble() * -1.0)
                 if (polygonUrl != "") ObjectIntent(contextg, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(polygonUrl, ""))
             }
+            else if (strName.contains("Show Watch text")) {
+                getWatch()
+            }
             else if (strName.contains("Show MCD text")) {
                 getMCD()
+            }
+            else if (strName.contains("Show MPD text")) {
+                getMPD()
             }
             else if (strName.contains("Show nearest observation")) {
                 idxIntG = idxIntAl
@@ -1129,8 +1138,21 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         UtilityAlertDialog.showHelpText(txt, act)
     }
 
+    private fun getWatch() = GlobalScope.launch(uiDispatcher) {
+        var txt = withContext(Dispatchers.IO) {  UtilityWat.showWatchProducts(contextg, glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0) }
+        if (txt != "") {
+            UtilityAlertDialog.showHelpText(txt, act)
+        }
+    }
+
     private fun getMCD() = GlobalScope.launch(uiDispatcher) {
         var txt = withContext(Dispatchers.IO) {  UtilityWat.showMCDProducts(contextg, glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0) }
+        if (txt != "") {
+            UtilityAlertDialog.showHelpText(txt, act)
+        }
+    }
+    private fun getMPD() = GlobalScope.launch(uiDispatcher) {
+        var txt = withContext(Dispatchers.IO) {  UtilityWat.showMPDProducts(contextg, glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0) }
         if (txt != "") {
             UtilityAlertDialog.showHelpText(txt, act)
         }
