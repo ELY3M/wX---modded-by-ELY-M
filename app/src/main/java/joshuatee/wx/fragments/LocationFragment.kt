@@ -518,8 +518,11 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 oglrArr[idx].ridNewList.mapTo(alertDialogRadarLongpressAl) { "Radar: (" + it.distance.toString() + " mi) " + it.name + " " + Utility.readPref("RID_LOC_" + it.name, "") }
                 alertDialogRadarLongpressAl.add("Show warning text")
                 if (MyApplication.radarWatMcd) {
-                    alertDialogStatusAl.add("Show Watch text")
-                    alertDialogStatusAl.add("Show MCD text")
+                    alertDialogRadarLongpressAl.add("Show Watch text")
+                    alertDialogRadarLongpressAl.add("Show MCD text")
+                }
+                if (MyApplication.radarMpd) {
+                    alertDialogRadarLongpressAl.add("Show MPD text")
                 }
                 if (MyApplication.radarSpotters || MyApplication.radarSpottersLabel) {
                     alertDialogRadarLongpressAl.add("Show Spotter Info")
@@ -655,10 +658,18 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 OGLRLOC.constructWATMCDLines()
             else
                 OGLRLOC.deconstructWATMCDLines()
+
             if (PolygonType.MPD.pref)
                 OGLRLOC.constructMPDLines()
             else
                 OGLRLOC.deconstructMPDLines()
+
+            if (PolygonType.SWO.pref) {
+                UtilitySWOD1.getSWO()
+                OGLRLOC.constructSWOLines()
+            } else {
+                OGLRLOC.deconstructSWOLines()
+            }
             glviewloc.requestRender()
         }).start()
         if (PolygonType.LOCDOT.pref) {
@@ -844,6 +855,8 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 getWatch()
             } else if (strName.contains("Show MCD text")) {
                 getMCD()
+            } else if (strName.contains("Show MPD text")) {
+                getMPD()
             } else if (strName.contains("Show Spotter Info")) {
                 getSpotterInfo()
             } else if (strName.contains("Show radar status message")) {
@@ -867,6 +880,13 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
     private fun getMCD() = GlobalScope.launch(uiDispatcher) {
         var txt = withContext(Dispatchers.IO) {  UtilityWat.showMCDProducts(MyApplication.appContext, glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0) }
+        if (txt != "") {
+            UtilityAlertDialog.showHelpText(txt, activityReference)
+        }
+    }
+
+    private fun getMPD() = GlobalScope.launch(uiDispatcher) {
+        var txt = withContext(Dispatchers.IO) {  UtilityWat.showMPDProducts(MyApplication.appContext, glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0) }
         if (txt != "") {
             UtilityAlertDialog.showHelpText(txt, activityReference)
         }
