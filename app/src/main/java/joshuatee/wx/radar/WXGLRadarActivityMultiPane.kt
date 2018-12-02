@@ -578,6 +578,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             R.id.action_vil -> changeProd("DVL")
             R.id.action_dsp -> changeProd("DSA")
             R.id.action_daa -> changeProd("DAA")
+            R.id.action_nsw -> changeProd("NSW")
             R.id.action_l2vel -> changeProd("L2VEL")
             R.id.action_l2ref -> changeProd("L2REF")
             R.id.action_tilt1 -> changeTilt("0")

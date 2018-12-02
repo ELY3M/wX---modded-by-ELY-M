@@ -530,6 +530,10 @@ Toggle location ( as in current selected location on first tab ) dot on/off.
 Use a white or black background in as many radar products as possible.
     </string>
 
+    <string name="conus_radar_label">
+Show Conus Radar when you zoom out to the whole map.
+    </string>
+
       <string name="anim_np_label">
 Animation speed. Lower is faster. Default is 5.
       </string>

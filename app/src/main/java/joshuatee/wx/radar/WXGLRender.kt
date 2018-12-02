@@ -254,11 +254,15 @@ class WXGLRender(private val context: Context) : Renderer {
                     radarBuffers.extractL2Data(rdL2)
                 }
                 //FIXME this might be better way to do SRM tilts
-                product.contains("N0S") || product.contains("N1S") || product.contains("N2S") || product.contains("N3S") -> {
+                product.contains("NSW") || product.contains("N0S") || product.contains("N1S") || product.contains("N2S") || product.contains("N3S") -> {
                     radarL3Object.decocodeAndPlotNexradLevel3FourBit(context, radarBuffers.fn, radarStatusStr)
                     radarBuffers.extractL3Data(radarL3Object)
                 }
                 /*
+		product.contains("NSW") -> {
+                    radarL3Object.decocodeAndPlotNexradLevel3FourBit(context, radarBuffers.fn, radarStatusStr)
+                    radarBuffers.extractL3Data(radarL3Object)
+                }
                 product.contains("N1S") -> {
                     radarL3Object.decocodeAndPlotNexradLevel3FourBit(context, radarBuffers.fn, radarStatusStr)
                     radarBuffers.extractL3Data(radarL3Object)
@@ -296,7 +300,7 @@ class WXGLRender(private val context: Context) : Renderer {
         val cB = objColPal.blueValues
         try {
             if (!product.contains("L2")) {
-                totalBins = if (radarBuffers.productCode != 56.toShort()) {
+                totalBins = if (radarBuffers.productCode != 56.toShort() && radarBuffers.productCode != 30.toShort()) {
                     if (!MyApplication.radarUseJni)
                         UtilityWXOGLPerf.decode8BitAndGenRadials(context, radarBuffers)
                     else {
@@ -398,9 +402,11 @@ class WXGLRender(private val context: Context) : Renderer {
         if (displayHold == false) { //hides some when screen is touched
 
             Log.i(TAG, "zoom: "+zoom)
-            if (zoom < 0.093f) {
-            Log.i(TAG, "zoom out to conusradar")
-            drawConusRadar(conusRadarBuffers)
+            if (MyApplication.radarConusRadar) {
+            if (zoom < 0.043f) {
+                Log.i(TAG, "zoom out to conusradar")
+                drawConusRadar(conusRadarBuffers)
+            }
         }
 
             // TODO do custom icons for hail//
@@ -487,8 +493,8 @@ class WXGLRender(private val context: Context) : Renderer {
             GLES20.glUniform1i(iTexture, 0)
             GLES20.glEnable(GLES20.GL_BLEND);
             GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
-            GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
-            //GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+            //GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+            GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
             GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
         }
     }
@@ -918,13 +924,41 @@ class WXGLRender(private val context: Context) : Renderer {
                 8 * conusRadarBuffers.triangleCount,
                 6 * conusRadarBuffers.triangleCount,
                 0)
-        UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, 39.50, 98.35)
+        UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, 40.750220, 99.476964)
+
+        //UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, pn.xDbl, pn.yDbl)
+        //UtilityWXOGLPerf.genMercato(conusRadarBuffers.geotype.relativeBuffer, conusRadarBuffers.floatBuffer, pn, conusRadarBuffers.count)
 
 
         conusRadarBuffers.isInitialized = true
     }
 
     fun deconstructConusRadar() {
+        conusRadarBuffers.isInitialized = false
+    }
+
+
+    fun constructConusRadar2() {
+        if (!conusRadarBuffers.isInitialized) {
+            conusRadarBuffers.count = conusRadarBuffers.geotype.count
+            conusRadarBuffers.breakSize = 30000
+            conusRadarBuffers.initialize(4 * conusRadarBuffers.count, 0, 3 * conusRadarBuffers.breakSize * 2, conusRadarBuffers.geotype.color)
+            if (MyApplication.radarUseJni) {
+                JNI.colorGen(conusRadarBuffers.colorBuffer, conusRadarBuffers.breakSize * 2, conusRadarBuffers.colorArray)
+            } else {
+                UtilityWXOGLPerf.colorGen(conusRadarBuffers.colorBuffer, conusRadarBuffers.breakSize * 2, conusRadarBuffers.colorArray)
+            }
+            conusRadarBuffers.isInitialized = true
+        }
+        if (!MyApplication.radarUseJni) {
+            UtilityWXOGLPerf.genMercato(conusRadarBuffers.geotype.relativeBuffer, conusRadarBuffers.floatBuffer, pn, conusRadarBuffers.count)
+        } else {
+            JNI.genMercato(conusRadarBuffers.geotype.relativeBuffer, conusRadarBuffers.floatBuffer, pn.xFloat, pn.yFloat, pn.xCenter.toFloat(), pn.yCenter.toFloat(), pn.oneDegreeScaleFactorFloat, conusRadarBuffers.count)
+        }
+        conusRadarBuffers.setToPositionZero()
+    }
+
+    fun deconstructConusRadar2() {
         conusRadarBuffers.isInitialized = false
     }
 

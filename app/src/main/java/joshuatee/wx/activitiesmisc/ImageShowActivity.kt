@@ -64,7 +64,7 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var url = ""
-    private var urlArr = listOf<String>()
+    private var urls = listOf<String>()
     private var bitmap = UtilityImg.getBlankBitmap()
     private var shareTitle = ""
     private var needsWhitebg = false
@@ -80,20 +80,20 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
         super.onCreate(savedInstanceState, R.layout.activity_image_show, null, false)
         img = findViewById(R.id.iv)
         img.setOnClickListener(this)
-        val turl = intent.getStringArrayExtra(URL)
-        url = turl[0]
-        title = turl[1]
-        shareTitle = turl[1]
-        if (turl.size > 2) {
-            needsWhitebg = turl[2] == "true"
+        val activityArguments = intent.getStringArrayExtra(URL)
+        url = activityArguments[0]
+        title = activityArguments[1]
+        shareTitle = activityArguments[1]
+        if (activityArguments.size > 2) {
+            needsWhitebg = activityArguments[2] == "true"
         }
         when {
             url.contains("file:") -> {
-                urlArr = url.split(":")
+                urls = url.split(":")
                 getContentFromStorage()
             }
             url.contains("raw:") -> {
-                urlArr = url.split(":")
+                urls = url.split(":")
                 loadRawBitmap()
             }
             else -> getContent()
@@ -118,7 +118,7 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
 
     private fun getContentFromStorage() {
         try {
-            val inputStream = openFileInput(urlArr[1])
+            val inputStream = openFileInput(urls[1])
             val bm = BitmapFactory.decodeStream(inputStream)
             img.setImageBitmap(bm)
         } catch (e: Exception) {

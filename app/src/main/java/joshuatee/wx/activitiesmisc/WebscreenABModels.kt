@@ -31,6 +31,8 @@ import joshuatee.wx.ui.BaseActivity
 
 class WebscreenABModels : BaseActivity() {
 
+    // FIXME why is this needed along with WebscreenAB? it is used by other activities
+
     // This is a general purpose activity used to view web pages.
     // Toolbar is displayed ( thus AB ie ActionBar (old name) in activity name )
     // URL and title are passed in via extras
@@ -54,9 +56,9 @@ class WebscreenABModels : BaseActivity() {
     @SuppressLint("SetJavaScriptEnabled", "MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_webview_toolbar, null, false)
-        val args = intent.getStringArrayExtra(URL)
-        val url = args[0]
-        title = args[1]
+        val activityArguments = intent.getStringArrayExtra(URL)
+        val url = activityArguments[0]
+        title = activityArguments[1]
         webview = findViewById(R.id.webview)
         val webSettings = webview.settings
         webSettings.javaScriptEnabled = true

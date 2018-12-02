@@ -80,7 +80,9 @@ internal class SevereWarning(private val type: PolygonType) {
         }
         val remover = ExternalDuplicateRemover()
         text = remover.stripDuplicates(text)
-        text = "(" + text.split(MyApplication.newline).dropLastWhile { it.isEmpty() }.size + ") " + label + MyApplication.newline + text.replace((MyApplication.newline + "$").toRegex(), "")
+        text = "(" + text.split(MyApplication.newline).dropLastWhile { it.isEmpty() }.size +
+                ") " + label + MyApplication.newline +
+                text.replace((MyApplication.newline + "$").toRegex(), "")
     }
 }
 

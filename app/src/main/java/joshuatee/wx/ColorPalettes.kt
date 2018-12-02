@@ -27,7 +27,7 @@ import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 internal object ColorPalettes {
 
     fun init(context: Context) {
-        val colorMapIntArr = listOf(56, 134, 135, 159, 161, 163, 165)
+        val colorMapIntArr = listOf(30, 56, 134, 135, 159, 161, 163, 165)
         val cm94 = ObjectColorPalette(context, "94")
         MyApplication.colorMap[94] = cm94
         MyApplication.colorMap[94]!!.init()

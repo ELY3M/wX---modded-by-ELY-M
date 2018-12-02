@@ -104,6 +104,9 @@
             <item android:id="@+id/action_daa"
                   android:title="@string/label_daa"
                   app:showAsAction="ifRoom"  />
+            <item android:id="@+id/action_nsw"
+                android:title="@string/label_nsw"
+                app:showAsAction="ifRoom"  />
             <item android:id="@+id/action_level3_blank"
                   android:title="@string/label_blank"
                   app:showAsAction="never"  />

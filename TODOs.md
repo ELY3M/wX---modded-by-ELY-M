@@ -18,14 +18,16 @@ would have to do the latlon method that is used for watches/mcds/mpds
 13. fix up the ability to change products in the multi-pane radar. it seem wont change products for me  
 14. android wear support. I own android wear watches and love them.      
 15. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor. 
-16. make VAD Wind Profile more better and friendly  like the one at cod.edu   
-17. add Spectrum Width product as requested by Mike   
+16. make VAD Wind Profile more better and friendly  like the one at cod.edu    
+17. color tables for SRM and Spectrum Width   
 
 
 #
 #
 ## DONE!
 ====================================  
+Conus Radar is being worked on... right now, It is not being plotted right  so keep it off in the radar settings  
+added base spectrum width - thanks to Joshua Tee for doing it first before me!  
 reading Watch texts within radar is working properly now.  
 reading MCD texts within radar is working properly now.  
 added setting for adjusting width of colorbar (color table on side if enabled) and text size too.  

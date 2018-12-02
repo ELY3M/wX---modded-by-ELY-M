@@ -498,6 +498,23 @@ internal object UtilityConusRadar {
         layers.add(BitmapDrawable(context.resources, bitmap))
         return UtilityImg.layerDrawableToBitmap(layers)
     }
+
+
+
+    var vs_loadconus =
+            "uniform    mat4        uMVPMatrix;" +
+                    "attribute  vec4        vPosition;" +
+                    "void main() {" +
+                    "  gl_Position = uMVPMatrix * vPosition;" +
+                    "}"
+
+    var fs_loadconus =
+            "precision mediump float;" +
+                    "uniform sampler2D u_texture;" +
+                    "void main() {" +
+                    "vec4 color;" +
+                    "  gl_FragColor = texture2D(u_texture, gl_PointCoord);" +
+                    "}"
     
 
 }

@@ -96,6 +96,9 @@
             <item android:id="@+id/action_daa"
                   android:title="@string/label_daa"
                   app:showAsAction="ifRoom"  />
+            <item android:id="@+id/action_nsw"
+                android:title="@string/label_nsw"
+                app:showAsAction="ifRoom"  />
             <item android:id="@+id/action_NVW"
                   android:title="@string/label_nvw"
                   app:showAsAction="never"  />

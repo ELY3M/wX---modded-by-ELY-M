@@ -57,7 +57,7 @@ class SpotterReportsActivity : BaseActivity() {
     }
 
     private fun itemSelected(position: Int) {
-        val rid = UtilityLocation.getNearestOffice(this, "RADAR", LatLon(UtilitySpotter.spotterReports[position].lat, UtilitySpotter.spotterReports[position].lon))
-        ObjectIntent(this, WXGLRadarActivity::class.java, WXGLRadarActivity.RID, arrayOf(rid, "", "N0Q", "", UtilitySpotter.spotterReports[position].uniq))
+        val radarSite = UtilityLocation.getNearestOffice(this, "RADAR", LatLon(UtilitySpotter.spotterReports[position].lat, UtilitySpotter.spotterReports[position].lon))
+        ObjectIntent(this, WXGLRadarActivity::class.java, WXGLRadarActivity.RID, arrayOf(radarSite, "", "N0Q", "", UtilitySpotter.spotterReports[position].uniq))
     }
 } 

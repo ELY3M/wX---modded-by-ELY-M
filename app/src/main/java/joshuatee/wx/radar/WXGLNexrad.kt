@@ -78,6 +78,10 @@ object WXGLNexrad {
     )
 
     // 19    .54   124 16
+
+    // DS.p28sw NSP .13x1 32/60 8 0.5° Base spectrum Width
+    // DS.p30sw NSW .54x1 124/230 8 0.5° Base spectrum Width
+    // 56  srm is same specs as 30 minus 16 bit color
     // 94    .54   248 256  ( bins 460 , radials 360, scale factor 999 )
     // 99    .13   124 256  ( bins 1200, radials 360, scale factor 999 )
     // 134 DVL .54   248 256   ( bins 460, radials 360, scale factor 1 )

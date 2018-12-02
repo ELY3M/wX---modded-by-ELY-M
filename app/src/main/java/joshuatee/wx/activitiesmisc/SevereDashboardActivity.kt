@@ -50,7 +50,7 @@ class SevereDashboardActivity : BaseActivity() {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     var TAG = "SevereDashboardActivity"
-    private val bmAl = mutableListOf<Bitmap>()
+    private val bitmaps = mutableListOf<Bitmap>()
     private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
 
@@ -147,55 +147,55 @@ class SevereDashboardActivity : BaseActivity() {
             bitmapArrRep.add((UtilitySPC.getStormReportsTodayUrl()).getImage())
         }
 
-            if (bitmapArrRep.size > 0) {
-                bitmapArrRep.indices.forEach { it ->
-                    val card = ObjectCardImage(contextg, bitmapArrRep[it])
-                    card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCStormReportsActivity::class.java, SPCStormReportsActivity.NO, arrayOf("today")) })
-                    linearLayout.addView(card.card)
-                }
+        if (bitmapArrRep.size > 0) {
+            bitmapArrRep.indices.forEach { it ->
+                val card = ObjectCardImage(contextg, bitmapArrRep[it])
+                card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCStormReportsActivity::class.java, SPCStormReportsActivity.NO, arrayOf("today")) })
+                linearLayout.addView(card.card)
             }
-            listOf(snWatchTor, snWatchSvr, snMcd, snMpd)
-                    .asSequence()
-                    .filter { it.bmAl.size > 0 }
-                    .forEach { severeNotice ->
-                        severeNotice.bmAl.indices.forEach { j ->
-                            val card = ObjectCardImage(contextg, severeNotice.bmAl[j])
-                            var cla: Class<*>? = null
-                            var claStr = ""
-                            val claArgStr = severeNotice.strList[j]
-                            when (severeNotice.type) {
-                                PolygonType.MCD -> {
-                                    cla = SPCMCDWShowActivity::class.java
-                                    claStr = SPCMCDWShowActivity.NO
-                                }
-                                PolygonType.WATCH, PolygonType.WATCH_TOR, PolygonType.WATCH_SVR -> {
-                                    cla = SPCMCDWShowActivity::class.java
-                                    claStr = SPCMCDWShowActivity.NO
-                                }
-                                PolygonType.MPD -> {
-                                    cla = SPCMCDWShowActivity::class.java
-                                    claStr = SPCMCDWShowActivity.NO
-                                }
-                                else -> {
-                                }
+        }
+        listOf(snWatchTor, snWatchSvr, snMcd, snMpd)
+                .asSequence()
+                .filter { it.bitmaps.size > 0 }
+                .forEach { severeNotice ->
+                    severeNotice.bitmaps.indices.forEach { j ->
+                        val card = ObjectCardImage(contextg, severeNotice.bitmaps[j])
+                        var cla: Class<*>? = null
+                        var claStr = ""
+                        val claArgStr = severeNotice.strList[j]
+                        when (severeNotice.type) {
+                            PolygonType.MCD -> {
+                                cla = SPCMCDWShowActivity::class.java
+                                claStr = SPCMCDWShowActivity.NO
                             }
-                            val cl = cla
-                            val clStr = claStr
-                            card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, cl!!, clStr, arrayOf(claArgStr, "", severeNotice.toString())) })
-                            linearLayout.addView(card.card)
+                            PolygonType.WATCH, PolygonType.WATCH_TOR, PolygonType.WATCH_SVR -> {
+                                cla = SPCMCDWShowActivity::class.java
+                                claStr = SPCMCDWShowActivity.NO
+                            }
+                            PolygonType.MPD -> {
+                                cla = SPCMCDWShowActivity::class.java
+                                claStr = SPCMCDWShowActivity.NO
+                            }
+                            else -> {
+                            }
                         }
+                        val cl = cla
+                        val clStr = claStr
+                        card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, cl!!, clStr, arrayOf(claArgStr, "", severeNotice.toString())) })
+                        linearLayout.addView(card.card)
                     }
-            bmAl.addAll(snWatch.bmAl)
-            bmAl.addAll(snWatchTor.bmAl)
-            bmAl.addAll(snWatchSvr.bmAl)
-            bmAl.addAll(snMcd.bmAl)
-            bmAl.addAll(snMpd.bmAl)
-            bmAl.addAll(bitmapArrRep)
+                }
+        bitmaps.addAll(snWatch.bitmaps)
+        bitmaps.addAll(snWatchTor.bitmaps)
+        bitmaps.addAll(snWatchSvr.bitmaps)
+        bitmaps.addAll(snMcd.bitmaps)
+        bitmaps.addAll(snMpd.bitmaps)
+        bitmaps.addAll(bitmapArrRep)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, "Severe Dashboard", "", bmAl)
+            R.id.action_share -> UtilityShare.shareText(this, "Severe Dashboard", "", bitmaps)
             R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.SevereDashboard)
             else -> return super.onOptionsItemSelected(item)
         }

@@ -840,6 +840,8 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             } else if (strName.contains("Show warning text")) {
                 val polygonUrl = UtilityWXOGL.showTextProducts(glviewArr[idxIntG].newY.toDouble(), (glviewArr[idxIntG].newX * -1.0))
                 if (polygonUrl != "") ObjectIntent(activityReference, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(polygonUrl, ""))
+            } else if (strName.contains("Show Watch text")) {
+                getWatch()
             } else if (strName.contains("Show MCD text")) {
                 getMCD()
             } else if (strName.contains("Show Spotter Info")) {

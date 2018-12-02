@@ -24,14 +24,14 @@ package joshuatee.wx.activitiesmisc
 internal class ObjectImpactGraphic(var title: String, var cities: String, var population: String, var imgFile: String) {
 
     companion object {
-        private const val BASE_IMG_URL = "https://www.weather.gov/images/crh/impact/"
+        private const val baseImageUrl = "https://www.weather.gov/images/crh/impact/"
     }
 
     init {
         this.title = title.replace("^.*?Sev".toRegex(), "Sev")
         this.cities = "Cities: " + cities.replace("\"", "")
         this.population = "Population: " + population.replace("\"", "")
-        this.imgFile = BASE_IMG_URL + imgFile.replace("\"", "").replace("file:", "")
+        this.imgFile = baseImageUrl + imgFile.replace("\"", "").replace("file:", "")
     }
 }
 

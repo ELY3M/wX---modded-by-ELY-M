@@ -25,14 +25,14 @@ import joshuatee.wx.Extensions.*
 
 internal object UtilityWarningsImpact {
 
-    private const val DATA_URL = "http://www.weather.gov/source/crh/impact/filelist2.json"
+    private const val url = "http://www.weather.gov/source/crh/impact/filelist2.json"
 
     // main site is http://www.weather.gov/crh/impact
 
     val impactWarningData: List<ObjectImpactGraphic>
         get() {
             val warningsList = mutableListOf<ObjectImpactGraphic>()
-            val html = DATA_URL.getHtmlSep()
+            val html = url.getHtmlSep()
             val outerChunk = html.parse("\\[(.*?)\\]")
             val warningListTmp = outerChunk.parseColumn("\\{(.*?)\\}")
             warningListTmp.forEach {

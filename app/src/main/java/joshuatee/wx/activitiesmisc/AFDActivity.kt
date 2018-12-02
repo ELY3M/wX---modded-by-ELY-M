@@ -68,13 +68,13 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var firstTime = true
-    private lateinit var turl: Array<String>
-    private var prod = ""
+    private lateinit var activityArguments: Array<String>
+    private var product = ""
     private var nwsOffice = ""
     private var sector = ""
     private lateinit var imageMap: ObjectImageMap
-    private lateinit var sv: ScrollView
-    private var sigHtmlTmp = ""
+    private lateinit var scrollView: ScrollView
+    private var html = ""
     private var mapShown = false
     private lateinit var notifToggle: MenuItem
     private lateinit var star: MenuItem
@@ -86,7 +86,7 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     private var oldProd = ""
     private var oldNwsOffice = ""
     private var wfoListPerState = mutableListOf<String>()
-    private lateinit var ll: LinearLayout
+    private lateinit var linearLayout: LinearLayout
     private val cardList = mutableListOf<CardView>()
     private lateinit var c0: ObjectCardText
     private lateinit var spinner1: ObjectSpinner
@@ -101,34 +101,34 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
-        ll = findViewById(R.id.ll)
+        linearLayout = findViewById(R.id.ll)
         c0 = ObjectCardText(this)
-        ll.addView(c0.card)
+        linearLayout.addView(c0.card)
         c0.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         notifToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
-        turl = intent.getStringArrayExtra(URL)
-        nwsOffice = turl[0]
+        activityArguments = intent.getStringArrayExtra(URL)
+        nwsOffice = activityArguments[0]
         if (Utility.readPref(this, "WFO_REMEMBER_LOCATION", "") == "true") {
             nwsOffice = Utility.readPref(this, "WFO_LAST_USED", Location.wfo)
         }
         if (nwsOffice == "") {
             nwsOffice = "OUN"
         }
-        prod = if (turl[1] == "") {
+        product = if (activityArguments[1] == "") {
             MyApplication.wfoTextFav
         } else {
-            turl[1]
+            activityArguments[1]
         }
-        title = prod
+        title = product
         version = 1
         oldProd = ""
         oldNwsOffice = ""
         ridArrLoc = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, nwsOffice, prefTokenLocation, prefToken)
         spinner1 = ObjectSpinner(this, this, R.id.spinner1, ridArrLoc)
         spinner1.setOnItemSelectedListener(this)
-        sv = findViewById(R.id.sv)
-        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(c0.card, sv))
+        scrollView = findViewById(R.id.sv)
+        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(c0.card, scrollView))
         imageMap.addOnImageMapClickedHandler(object : ImageMap.OnImageMapClickedHandler {
             override fun onImageMapClicked(id: Int, im2: ImageMap) {
                 sector = UtilityImageMap.maptoWFO(id)
@@ -155,47 +155,47 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         } else {
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         }
-        sv.smoothScrollTo(0, 0)
+        scrollView.smoothScrollTo(0, 0)
         ridFavOld = MyApplication.wfoFav
-        if (prod != oldProd) {
+        if (product != oldProd) {
             version = 1
         }
         if (nwsOffice != oldNwsOffice) {
             version = 1
         }
-
-        sigHtmlTmp = withContext(Dispatchers.IO) {
+        html = withContext(Dispatchers.IO) {
             if (version == 1) {
-                UtilityDownload.getTextProduct(contextg, prod + nwsOffice)
+                UtilityDownload.getTextProduct(contextg, product + nwsOffice)
             } else {
-                UtilityDownload.getTextProduct(prod + nwsOffice, version)
+                UtilityDownload.getTextProduct(product + nwsOffice, version)
             }
         }
-
-        title = prod
-        cardList.forEach { ll.removeView(it) }
+        title = product
+        cardList.forEach {
+            linearLayout.removeView(it)
+        }
         c0.setVisibility(View.VISIBLE)
-        sv.visibility = View.VISIBLE
-        if (sigHtmlTmp == "") {
-            sigHtmlTmp = "None issued by this office recently."
+        scrollView.visibility = View.VISIBLE
+        if (html == "") {
+            html = "None issued by this office recently."
         }
-        c0.setTextAndTranslate(Utility.fromHtml(sigHtmlTmp))
-        if (turl.size > 2) {
-            if (turl[2] == "sound") {
-                UtilityTTS.synthesizeTextAndPlay(applicationContext, sigHtmlTmp, prod)
+        c0.setTextAndTranslate(Utility.fromHtml(html))
+        if (activityArguments.size > 2) {
+            if (activityArguments[2] == "sound") {
+                UtilityTTS.synthesizeTextAndPlay(applicationContext, html, product)
             }
         }
-        if (turl[1] == "") {
-            Utility.writePref(contextg, "WFO_TEXT_FAV", prod)
-            MyApplication.wfoTextFav = prod
+        if (activityArguments[1] == "") {
+            Utility.writePref(contextg, "WFO_TEXT_FAV", product)
+            MyApplication.wfoTextFav = product
         }
-        oldProd = prod
+        oldProd = product
         oldNwsOffice = nwsOffice
         Utility.writePref(contextg, "WFO_LAST_USED", nwsOffice)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, sigHtmlTmp, prod, prod + nwsOffice)) {
+        if (audioPlayMenu(item.itemId, html, product, product + nwsOffice)) {
             return true
         }
         when (item.itemId) {
@@ -211,7 +211,7 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
             }
             R.id.action_fav -> toggleFavorite()
             R.id.action_notif_text_prod -> {
-                UtilityNotificationTextProduct.toggle(this, ll, prod + nwsOffice)
+                UtilityNotificationTextProduct.toggle(this, linearLayout, product + nwsOffice)
                 updateSubmenuNotifText()
             }
             R.id.action_prod_by_state -> {
@@ -235,14 +235,14 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
             R.id.action_website -> ObjectIntent(this, WebscreenABModels::class.java, WebscreenABModels.URL, arrayOf("http://www.weather.gov/" + nwsOffice.toLowerCase(Locale.US), nwsOffice))
             R.id.action_hazards -> ObjectIntent(this, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf("http://www.weather.gov/wwamap/png/" + nwsOffice.toLowerCase(Locale.US) + ".png", "$nwsOffice WWA Map"))
             R.id.action_forecast -> ObjectIntent(this, WebscreenABModels::class.java, WebscreenABModels.URL, arrayOf(UtilityDownloadNWS.get7DayURL(Location.x, Location.y), "Local forecast"))
-            R.id.action_share -> UtilityShare.shareText(this, prod + nwsOffice, Utility.fromHtml(sigHtmlTmp))
+            R.id.action_share -> UtilityShare.shareText(this, product + nwsOffice, Utility.fromHtml(html))
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
-    private fun getProduct(prod: String) {
-        this.prod = prod
+    private fun getProduct(product: String) {
+        this.product = product
         getContent()
     }
 
@@ -279,7 +279,7 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
     private fun updateSubmenuNotifText() {
-        if (UtilityNotificationTextProduct.check(prod + nwsOffice)) {
+        if (UtilityNotificationTextProduct.check(product + nwsOffice)) {
             notifToggle.title = resources.getString(R.string.notif_remove)
         } else {
             notifToggle.title = resources.getString(R.string.notif_add)
@@ -298,24 +298,24 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
 
     private fun getContentByState() = GlobalScope.launch(uiDispatcher) {
         val wfoProd = mutableListOf<String>()
-        sv.smoothScrollTo(0, 0)
+        scrollView.smoothScrollTo(0, 0)
         ridFavOld = MyApplication.wfoFav
-        if (prod != oldProd) {
+        if (product != oldProd) {
             version = 1
         }
         if (nwsOffice != oldNwsOffice) {
             version = 1
         }
-        title = prod
+        title = product
         withContext(Dispatchers.IO) {
-            sigHtmlTmp = ""
+            html = ""
             wfoListPerState.forEach {
-                sigHtmlTmp = if (version == 1) {
-                    UtilityDownload.getTextProduct(contextg, prod + it)
+                html = if (version == 1) {
+                    UtilityDownload.getTextProduct(contextg, product + it)
                 } else {
-                    UtilityDownload.getTextProduct(prod + it, version)
+                    UtilityDownload.getTextProduct(product + it, version)
                 }
-                wfoProd.add(sigHtmlTmp)
+                wfoProd.add(html)
             }
         }
         c0.setVisibility(View.GONE)
@@ -324,7 +324,7 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
             val cTmp = ObjectCardText(contextg)
             cTmp.setTextAndTranslate(Utility.fromHtml(it))
             cardList.add(cTmp.card)
-            ll.addView(cTmp.card)
+            linearLayout.addView(cTmp.card)
         }
     }
 }
