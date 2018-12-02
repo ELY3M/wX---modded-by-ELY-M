@@ -181,7 +181,7 @@ internal object UtilityWXOGLPerf {
         var angleVCos: Float
         val radarBlackHole: Float
         val radarBlackHoleAdd: Float
-        if (radarBuffers.productCode == 56.toShort()) {
+        if (radarBuffers.productCode == 56.toShort() || radarBuffers.productCode == 30.toShort()) {
             radarBlackHole = 1.0f
             radarBlackHoleAdd = 0.0f
         } else {

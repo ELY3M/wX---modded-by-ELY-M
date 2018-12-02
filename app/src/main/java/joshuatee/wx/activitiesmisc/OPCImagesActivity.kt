@@ -76,8 +76,8 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
             }
         })
         setTitle(title)
-        title = Utility.readPref(this, "OPC_IMG_FAV_TITLE", UtilityOPCImages.LABELS[0])
-        imgUrl = Utility.readPref(this, "OPC_IMG_FAV_URL", UtilityOPCImages.URL_INDEX[0])
+        title = Utility.readPref(this, "OPC_IMG_FAV_TITLE", UtilityOPCImages.labels[0])
+        imgUrl = Utility.readPref(this, "OPC_IMG_FAV_URL", UtilityOPCImages.urls[0])
         imgIdx = Utility.readPref(this, "OPC_IMG_FAV_IDX", 0)
         toolbar.subtitle = title
         val menu = toolbarBottom.menu
@@ -85,7 +85,7 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         actionForward = menu.findItem(R.id.action_forward)
         actionBack.isVisible = false
         actionForward.isVisible = false
-        drw = ObjectNavDrawer(this, UtilityOPCImages.LABELS, UtilityOPCImages.URL_INDEX)
+        drw = ObjectNavDrawer(this, UtilityOPCImages.labels, UtilityOPCImages.urls)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
             drw.drawerLayout.closeDrawer(drw.listView)
@@ -113,7 +113,6 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         Utility.writePref(contextg, "OPC_IMG_FAV_URL", imgUrl)
         Utility.writePref(contextg, "OPC_IMG_FAV_IDX", imgIdx)
 
-        //bitmap = withContext(Dispatchers.IO) { getUrl.getImage() }
         val result = async(Dispatchers.IO) { getUrl.getImage() }
         bitmap = result.await()
 
@@ -179,21 +178,21 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
 
     private fun showNextImg() {
         imgIdx += 1
-        if (imgIdx == UtilityOPCImages.URL_INDEX.size) {
+        if (imgIdx == UtilityOPCImages.urls.size) {
             imgIdx = 0
         }
-        title = UtilityOPCImages.LABELS[imgIdx]
-        imgUrl = UtilityOPCImages.URL_INDEX[imgIdx]
+        title = UtilityOPCImages.labels[imgIdx]
+        imgUrl = UtilityOPCImages.urls[imgIdx]
         getContent()
     }
 
     private fun showPrevImg() {
         imgIdx -= 1
         if (imgIdx == -1) {
-            imgIdx = UtilityOPCImages.URL_INDEX.size - 1
+            imgIdx = UtilityOPCImages.urls.size - 1
         }
-        title = UtilityOPCImages.LABELS[imgIdx]
-        imgUrl = UtilityOPCImages.URL_INDEX[imgIdx]
+        title = UtilityOPCImages.labels[imgIdx]
+        imgUrl = UtilityOPCImages.urls[imgIdx]
         getContent()
     }
 }

@@ -51,7 +51,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private lateinit var turl: Array<String>
+    private lateinit var activityArguments: Array<String>
     private var url = ""
     private var html = ""
     private lateinit var c0: ObjectCardText
@@ -64,12 +64,12 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         playlistMi.isVisible = false
         toolbarBottom.setOnMenuItemClickListener(this)
         try {
-            turl = intent.getStringArrayExtra(URL)
+            activityArguments = intent.getStringArrayExtra(URL)
         } catch (e: IllegalStateException) {
             UtilityLog.HandleException(e)
         }
-        url = turl[0]
-        title = turl[1]
+        url = activityArguments[0]
+        title = activityArguments[1]
         val linearLayout: LinearLayout = findViewById(R.id.ll)
         c0 = ObjectCardText(this)
         linearLayout.addView(c0.card)
@@ -96,8 +96,8 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         html = withContext(Dispatchers.IO) { url.getHtml() }
         c0.setTextAndTranslate(Utility.fromHtml(html))
-        if (turl.size > 2) {
-            if (turl[2] == "sound") {
+        if (activityArguments.size > 2) {
+            if (activityArguments[2] == "sound") {
                 UtilityTTS.synthesizeTextAndPlay(applicationContext, html, "textscreen")
             }
         }
@@ -108,7 +108,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, turl[1], Utility.fromHtml(html))
+            R.id.action_share -> UtilityShare.shareText(this, activityArguments[1], Utility.fromHtml(html))
             else -> return super.onOptionsItemSelected(item)
         }
         return true

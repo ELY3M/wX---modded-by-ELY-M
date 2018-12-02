@@ -49,7 +49,7 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private var bitmap = UtilityImg.getBlankBitmap()
     private var firstRun = false
     private var imageLoaded = false
-    private var imgUrl = UtilityObservations.IMG_URL_ARR[0]
+    private var imgUrl = UtilityObservations.urls[0]
     private val prefToken = "SFC_OBS_IMG"
     private val prefTokenIdx = "SFC_OBS_IMG_IDX"
     private var imgIdx = 0
@@ -89,11 +89,11 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
         imageLoaded = true
         Utility.writePref(contextg, prefToken, imgUrl)
         Utility.writePref(contextg, prefTokenIdx, imgIdx)
-        toolbar.subtitle = UtilityObservations.IMG_NAME_ARR[imgIdx]
+        toolbar.subtitle = UtilityObservations.labels[imgIdx]
     }
 
     private fun getContent(idx: Int) {
-        imgUrl = UtilityObservations.IMG_URL_ARR[idx]
+        imgUrl = UtilityObservations.urls[idx]
         imgIdx = idx
         getContent()
     }
@@ -138,19 +138,19 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun showNextImg() {
         imgIdx += 1
-        if (imgIdx == UtilityObservations.IMG_URL_ARR.size) {
+        if (imgIdx == UtilityObservations.urls.size) {
             imgIdx = 0
         }
-        imgUrl = UtilityObservations.IMG_URL_ARR[imgIdx]
+        imgUrl = UtilityObservations.urls[imgIdx]
         getContent()
     }
 
     private fun showPrevImg() {
         imgIdx -= 1
         if (imgIdx == -1) {
-            imgIdx = UtilityObservations.IMG_URL_ARR.size - 1
+            imgIdx = UtilityObservations.urls.size - 1
         }
-        imgUrl = UtilityObservations.IMG_URL_ARR[imgIdx]
+        imgUrl = UtilityObservations.urls[imgIdx]
         getContent()
     }
 }

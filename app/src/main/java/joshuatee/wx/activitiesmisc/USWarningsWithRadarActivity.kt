@@ -67,12 +67,12 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private var sigHtmlTmp = ""
+    private var html = ""
     private var usDownloaded = false
     private var usDataStr = ""
     private val turlLocal = Array(3) { "" }
     private var firstRun = true
-    private var bm = UtilityImg.getBlankBitmap()
+    private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var drw: ObjectNavDrawer
     private lateinit var objAlertSummary: ObjectAlertSummary
     private lateinit var linearLayout: LinearLayout
@@ -89,12 +89,12 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
         super.onCreate(savedInstanceState, R.layout.activity_uswarnings_with_radar, null, false)
         contextg = this
         toolbar.setOnClickListener { toolbar.showOverflowMenu() }
-        val turl = intent.getStringArrayExtra(URL)
-        turlLocal[0] = turl[0]
-        turlLocal[1] = turl[1]
+        val actvityArguments = intent.getStringArrayExtra(URL)
+        turlLocal[0] = actvityArguments[0]
+        turlLocal[1] = actvityArguments[1]
         linearLayout = findViewById(R.id.ll)
-        val sv: ScrollView = findViewById(R.id.sv)
-        objAlertSummary = ObjectAlertSummary(this, this, linearLayout, sv)
+        val scrollView: ScrollView = findViewById(R.id.sv)
+        objAlertSummary = ObjectAlertSummary(this, this, linearLayout, scrollView)
         drw = ObjectNavDrawer(this, objAlertSummary.filterArray.toList())
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
@@ -180,14 +180,14 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
 
         // FIXME remove what does not depending on IO
         withContext(Dispatchers.IO) {
-            bm = "http://forecast.weather.gov/wwamap/png/US.png".getImage()
+            bitmap = "http://forecast.weather.gov/wwamap/png/US.png".getImage()
             try {
                 if (turlLocal[1] == "us" && usDownloaded) {
-                    sigHtmlTmp = usDataStr
+                    html = usDataStr
                 } else {
-                    sigHtmlTmp = UtilityDownloadNWS.getCAP(turlLocal[1])
+                    html = UtilityDownloadNWS.getCAP(turlLocal[1])
                     if (turlLocal[1] == "us") {
-                        usDataStr = sigHtmlTmp
+                        usDataStr = html
                         usDownloaded = true
                     }
                 }
@@ -195,8 +195,7 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
                 UtilityLog.HandleException(e)
             }
         }
-
-        objAlertSummary.updateContent(bm, sigHtmlTmp, turlLocal[0], firstRun)
+        objAlertSummary.updateContent(bitmap, html, turlLocal[0], firstRun)
         title = objAlertSummary.getTitle(turlLocal[1])
         if (firstRun) {
             drw.updateLists(contextg, objAlertSummary.navList.toList())

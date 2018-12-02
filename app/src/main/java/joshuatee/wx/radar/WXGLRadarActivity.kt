@@ -313,11 +313,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             sn_Handler_m = Handler()
             start_sn_reporting()
         }
-        //TODO put in option to disable and enable conus radar
-        //TODO best to request the new image on the request instead of timer
-        //conus
-        conus_Handler_m = Handler()
-        start_conusimage()
+
+        if (MyApplication.radarConusRadar) {
+            conus_Handler_m = Handler()
+            start_conusimage()
+        }
 
 
 
@@ -362,12 +362,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             sn_Handler_m = Handler()
             start_sn_reporting()
         }
-	
-        //TODO put in option to disable and enable conus radar
-        //TODO best to request the new image on the request instead of timer
-        //conus
-        conus_Handler_m = Handler()
-        start_conusimage()
+
+        if (MyApplication.radarConusRadar) {
+            conus_Handler_m = Handler()
+            start_conusimage()
+        }
         super.onRestart()
     }
 
@@ -749,6 +748,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             R.id.action_vil -> changeProd("DVL", false)
             R.id.action_dsp -> changeProd("DSA", false)
             R.id.action_daa -> changeProd("DAA", false)
+            R.id.action_nsw -> changeProd("NSW", false)
             R.id.action_l2vel -> changeProd("L2VEL", false)
             R.id.action_l2ref -> changeProd("L2REF", false)
             R.id.action_tilt1 -> changeTilt("0")
@@ -979,8 +979,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
 
         Thread(Runnable {
-            //TODO conusradar
-            if (!archiveMode)
+            if (MyApplication.radarConusRadar && !archiveMode)
                 oglr.constructConusRadar()
             else
                 oglr.deconstructConusRadar()
@@ -1095,7 +1094,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private val conus_handler = Handler()
     private val conus_image: Runnable = object : Runnable {
         override fun run() {
-
             Log.i(TAG, "downloading new conus image")
             UtilityConusRadar.getConusImage()
             conus_handler.postDelayed(this, conus_Interval.toLong())

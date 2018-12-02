@@ -34,7 +34,7 @@ internal class SevereNotice(val type: PolygonType) {
 
     // encapsulates a string array representation and bitmap arraylist of current mcd, wat, or mpd
 
-    val bmAl = mutableListOf<Bitmap>()
+    val bitmaps = mutableListOf<Bitmap>()
     var strList = mutableListOf<String>()
     var pattern: Pattern = Pattern.compile("")
     private var typeAsString = ""
@@ -86,7 +86,7 @@ internal class SevereNotice(val type: PolygonType) {
                 else -> {
                 }
             }
-            bmAl.add(url.getImage())
+            bitmaps.add(url.getImage())
         }
     }
 

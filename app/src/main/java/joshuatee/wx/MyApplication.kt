@@ -650,6 +650,7 @@ class MyApplication : Application() {
         //conus radar for zoom out
         const val NWS_CONUS_RADAR: String = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
         const val NWS_CONUS_RADAR_GFW: String = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
+        var radarConusRadar: Boolean = false
         var radarTorWarnings: Boolean = true
         var radarSvrWarnings: Boolean = true
         var radarEwwWarnings: Boolean = true
@@ -701,6 +702,7 @@ class MyApplication : Application() {
 
 
         private fun initRadarPreferences() {
+            radarConusRadar = getInitialPreference("CONUS_RADAR", "false")
             radarTorWarnings = getInitialPreference("TOR_WARNINGS", "false")
             radarSvrWarnings = getInitialPreference("SVR_WARNINGS", "false")
             radarEwwWarnings = getInitialPreference("EWW_WARNINGS", "false")

@@ -100,6 +100,7 @@ class SettingsRadarActivity : BaseActivity() {
         })
         ll.addView(ObjectSettingsCheckBox(this, this, "Location Heading Bug", "LOCDOT_BUG", R.string.locdot_bug_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Black background", "NWS_RADAR_BG_BLACK", R.string.nws_black_bg_label).card)
+        ll.addView(ObjectSettingsCheckBox(this, this, "Show Conus Radar", "CONUS_RADAR", R.string.conus_radar_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Show counties", "RADAR_SHOW_COUNTY", R.string.show_county_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Show county labels", "RADAR_COUNTY_LABELS", R.string.show_county_labels_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Counties - use hires data", "RADAR_COUNTY_HIRES", R.string.county_hires_label).card)

@@ -104,6 +104,7 @@
     <string name="label_n0x">Differential Reflectivity</string>
     <string name="label_n0c">Correlation Coefficient</string>
     <string name="label_n0k">Specific Differential Phase</string>
+    <string name="label_nsw">Base Spectrum Width</string>
     <string name="label_settings_color_palette_94">Color Palette - Reflectivity</string>
     <string name="label_settings_color_palette_99">Color Palette - Velocity</string>
     <string name="label_nvw">VAD wind profile</string>

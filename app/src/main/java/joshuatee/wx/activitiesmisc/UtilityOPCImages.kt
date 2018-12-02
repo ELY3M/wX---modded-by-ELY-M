@@ -25,7 +25,7 @@ import joshuatee.wx.MyApplication
 
 internal object UtilityOPCImages {
 
-    val LABELS = listOf(
+    val labels = listOf(
             "Atlantic Surface Analysis",
             "Atlantic Wind/Wave Analysis",
             "Atlantic 24-hour 500 mb",
@@ -67,7 +67,7 @@ internal object UtilityOPCImages {
             "Alaska/Arctic 96-hour Wave period & Direction"
     )
 
-    val URL_INDEX = listOf(
+    val urls = listOf(
             "${MyApplication.nwsOpcWebsitePrefix}/A_sfc_full_ocean_color.png",
             "${MyApplication.nwsOpcWebsitePrefix}/shtml/ira1.gif",
             "${MyApplication.nwsOpcWebsitePrefix}/shtml/A_24hr500.gif",

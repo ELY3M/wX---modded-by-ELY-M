@@ -25,7 +25,7 @@ import joshuatee.wx.MyApplication
 
 internal object UtilityObservations {
 
-    val IMG_URL_ARR = listOf(
+    val urls = listOf(
             "${MyApplication.nwsWPCwebsitePrefix}/sfc/sfcobs/large_latestsfc.gif",
             "${MyApplication.nwsWPCwebsitePrefix}/sfc/namswsfcwbg.gif",
             "${MyApplication.nwsWPCwebsitePrefix}/sfc/namscsfcwbg.gif",
@@ -40,7 +40,7 @@ internal object UtilityObservations {
             "${MyApplication.nwsWPCwebsitePrefix}/sfc/namak2sfcwbg.gif"
     )
 
-    val IMG_NAME_ARR = listOf(
+    val labels = listOf(
             "CONUS Surface Obs",
             "SW Surface Analysis",
             "SC Surface Analysis",

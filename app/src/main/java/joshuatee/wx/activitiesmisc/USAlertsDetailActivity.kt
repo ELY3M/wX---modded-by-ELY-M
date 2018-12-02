@@ -43,7 +43,7 @@ class USAlertsDetailActivity: AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private lateinit var args: Array<String>
+    private lateinit var activityArguments: Array<String>
     private var ca = CAPAlert()
     private lateinit var objAlerts: ObjectAlertDetail
 
@@ -58,16 +58,16 @@ class USAlertsDetailActivity: AudioPlayActivity(), OnMenuItemClickListener {
         toolbarBottom.setOnMenuItemClickListener(this)
         val linearLayout: LinearLayout = findViewById(R.id.ll)
         objAlerts = ObjectAlertDetail(this, linearLayout)
-        args = intent.getStringArrayExtra(URL)
+        activityArguments = intent.getStringArrayExtra(URL)
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        ca = withContext(Dispatchers.IO) { CAPAlert.createFromURL(args[0]) }
-        objAlerts.updateContent(ca, args[0])
+        ca = withContext(Dispatchers.IO) { CAPAlert.createFromURL(activityArguments[0]) }
+        objAlerts.updateContent(ca, activityArguments[0])
         toolbar.subtitle = ca.area
         title = objAlerts.title
-        if (args.size > 1 && args[1] == "sound") {
+        if (activityArguments.size > 1 && activityArguments[1] == "sound") {
             UtilityTTS.synthesizeTextAndPlay(applicationContext, Utility.fromHtml(ca.text), "alert")
         }
     }
