@@ -316,8 +316,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         //TODO put in option to disable and enable conus radar
         //TODO best to request the new image on the request instead of timer
         //conus
-        //conus_Handler_m = Handler()
-        //start_conusimage()
+        conus_Handler_m = Handler()
+        start_conusimage()
 
 
 
@@ -366,8 +366,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         //TODO put in option to disable and enable conus radar
         //TODO best to request the new image on the request instead of timer
         //conus
-        //conus_Handler_m = Handler()
-        //start_conusimage()
+        conus_Handler_m = Handler()
+        start_conusimage()
         super.onRestart()
     }
 
@@ -977,6 +977,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             wxgltextArr[0].addTV()
             oldRid = oglr.rid
         }
+
+        Thread(Runnable {
+            //TODO conusradar
+            if (!archiveMode)
+                oglr.constructConusRadar()
+            else
+                oglr.deconstructConusRadar()
+        }).start()
+
         Thread(Runnable {
             if (PolygonType.TOR.pref && !archiveMode)
                 oglr.constructTorWarningLines()

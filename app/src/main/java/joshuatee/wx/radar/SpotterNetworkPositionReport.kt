@@ -210,7 +210,6 @@ object SpotterNetworkPositionReport {
     fun Send_Location_Task() = GlobalScope.launch(uiDispatcher) {
         var success: Boolean = false
             withContext(Dispatchers.IO) {
-            ///override fun doInBackground(vararg params: String): String {
             val sh = OkHttpClient()
             val JSON = MediaType.parse("application/json; charset=utf-8")
             val url = "https://www.spotternetwork.org/positions/update"
@@ -268,7 +267,6 @@ object SpotterNetworkPositionReport {
 
                 Log.i(TAG, "SpotterNetwork did sent location report successful!")
             }
-            //return "Executed"
         }
 
 

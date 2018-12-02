@@ -55,21 +55,21 @@ class AdhocForecastActivity : BaseActivity() {
     }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private lateinit var turl: Array<String>
+    private lateinit var activityArguments: Array<String>
     private var latlon = LatLon()
     private var objFcst: ObjectForecastPackage? = null
     private var objHazards: ObjectForecastPackageHazards? = null
     private var objSevenDay: ObjectForecastPackage7Day? = null
-    private lateinit var sv: ScrollView
+    private lateinit var scrollView: ScrollView
     private var ccTime = ""
     private var radarTime = ""
     private var hazardsSum = ""
     private var hazardRaw = ""
     private lateinit var cardCC: ObjectCardCC
-    private var bmCcSize = 300
-    private lateinit var llCv5V: LinearLayout
-    private lateinit var llCv4V: LinearLayout
-    private lateinit var ll: LinearLayout
+    private var bitmapSize = 300
+    private lateinit var linearLayoutForecast : LinearLayout
+    private lateinit var linearLayoutHazards: LinearLayout
+    private lateinit var linearLayout: LinearLayout
     private val hazardsCardAl = mutableListOf<ObjectCardText>()
     private val hazardsExpandedAl = mutableListOf<Boolean>()
     private lateinit var contextg: Context
@@ -77,20 +77,20 @@ class AdhocForecastActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        turl = intent.getStringArrayExtra(URL)
-        latlon = LatLon(turl[0], turl[1])
+        activityArguments = intent.getStringArrayExtra(URL)
+        latlon = LatLon(activityArguments[0], activityArguments[1])
         title = "Forecast for"
         toolbar.subtitle = latlon.latString + "," + latlon.lonString
-        sv = findViewById(R.id.sv)
-        ll = findViewById(R.id.ll)
+        scrollView = findViewById(R.id.sv)
+        linearLayout = findViewById(R.id.ll)
         cardCC = ObjectCardCC(this, 2)
-        ll.addView(cardCC.card)
-        llCv4V = LinearLayout(this)
-        llCv4V.orientation = LinearLayout.VERTICAL
-        ll.addView(llCv4V)
-        llCv5V = LinearLayout(this)
-        llCv5V.orientation = LinearLayout.VERTICAL
-        ll.addView(llCv5V)
+        linearLayout.addView(cardCC.card)
+        linearLayoutHazards = LinearLayout(this)
+        linearLayoutHazards.orientation = LinearLayout.VERTICAL
+        linearLayout.addView(linearLayoutHazards)
+        linearLayoutForecast = LinearLayout(this)
+        linearLayoutForecast.orientation = LinearLayout.VERTICAL
+        linearLayout.addView(linearLayoutForecast)
         contextg = this
         getContent()
     }
@@ -120,26 +120,27 @@ class AdhocForecastActivity : BaseActivity() {
         //
         // CC
         //
-        bmCcSize = UtilityLocationFragment.setNWSIconSize()
+        bitmapSize = UtilityLocationFragment.setNWSIconSize()
         objFcst?.let { _ ->
             cardCC.let {
                 ccTime = objFcst!!.objCC.status
                 if (bmCc != null) {
-                    it.updateContent(bmCc!!, bmCcSize, objFcst!!, true, ccTime, radarTime)
+                    it.updateContent(bmCc!!, bitmapSize, objFcst!!, true, ccTime, radarTime)
                 }
             }
         }
         //
         // 7day
         //
-        bmCcSize = UtilityLocationFragment.setNWSIconSize()
         objFcst?.let { _ ->
-            llCv5V.removeAllViewsInLayout()
+            linearLayoutForecast.removeAllViewsInLayout()
             val day7Arr = objSevenDay!!.fcstList
             bmArr.forEachIndexed { idx, bm ->
                 val c7day = ObjectCard7Day(contextg, bm, true, idx, day7Arr)
-                c7day.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) })
-                llCv5V.addView(c7day.card)
+                c7day.setOnClickListener(View.OnClickListener {
+                    scrollView.smoothScrollTo(0, 0)
+                })
+                linearLayoutForecast.addView(c7day.card)
             }
             // sunrise card
             val cardSunrise = ObjectCardText(contextg)
@@ -150,7 +151,7 @@ class AdhocForecastActivity : BaseActivity() {
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)
             }
-            llCv5V.addView(cardSunrise.card)
+            linearLayoutForecast.addView(cardSunrise.card)
         }
 
         //
@@ -161,17 +162,17 @@ class AdhocForecastActivity : BaseActivity() {
         val hazardTitles = hazardRaw.parseColumn("\"event\": \"(.*?)\"")
         hazardTitles.forEach { hazardSumAsync += it + MyApplication.newline }
         if (hazardSumAsync == "") {
-            llCv4V.removeAllViews()
-            llCv4V.visibility = View.GONE
+            linearLayoutHazards.removeAllViews()
+            linearLayoutHazards.visibility = View.GONE
         } else {
-            llCv4V.visibility = View.VISIBLE
+            linearLayoutHazards.visibility = View.VISIBLE
             setupHazardCards(hazardSumAsync, idAl)
         }
         hazardsSum = hazardSumAsync
     }
 
     private fun setupHazardCards(hazStr: String, idAl: List<String>) {
-        llCv4V.removeAllViews()
+        linearLayoutHazards.removeAllViews()
         hazardsExpandedAl.clear()
         hazardsCardAl.clear()
         val tmpArr = hazStr.split(MyApplication.newline).dropLastWhile { it.isEmpty() }
@@ -183,7 +184,7 @@ class AdhocForecastActivity : BaseActivity() {
             hazardsCardAl[z].setText(tmpArr[z].toUpperCase(Locale.US))
             val url = idAl[z]
             hazardsCardAl[z].setOnClickListener(View.OnClickListener { ObjectIntent(contextg, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(url)) })
-            llCv4V.addView(hazardsCardAl[z].card)
+            linearLayoutHazards.addView(hazardsCardAl[z].card)
         }
     }
 }

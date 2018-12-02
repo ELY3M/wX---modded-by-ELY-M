@@ -7,6 +7,10 @@
 // TODO NWS URLs http to https const myapp
 // TODO SPC HREF use long names for sectors
 
+55066 2018_12_01 goes16 - set zoom to 1.0 on sector change
+                 OKHTTP - update from 3.11 to 3.12
+                 refactor/rename in activiesmisc
+                 use more variables in build.gradles files (androidx,coroutine)
 55065 2018_11_28 radar - add option in settings/ui to have translucent status bar
 55064 2018_11_27 (bugfix) Dave reported unable to manually enter a negative number of longitude in settings edit
 55063 2018_11_24 camelCase some methods to match iOS code

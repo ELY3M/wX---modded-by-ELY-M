@@ -44,7 +44,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okio.Okio
 import java.io.File
-import javax.microedition.khronos.opengles.GL10
+import kotlinx.coroutines.*
 
 
 /*
@@ -360,7 +360,7 @@ Line 6: y-coordinate of center of upper left pixel
 internal object UtilityConusRadar {
 
     var TAG = "UtilityConusRadar"
-    var conusurl = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif"
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     var conusbitmap: Bitmap? = null
     var conusgif = "conus.gif"
     var IMAGEFILE = MyApplication.FilesPath + "conus.gif"
@@ -374,17 +374,18 @@ internal object UtilityConusRadar {
 
     private var initialized = false
     private var lastRefresh = 0.toLong()
-    private const val REFRESH_LOC_MIN = 3
+    private const val REFRESH_LOC_MIN = 5
 
 
-    class getConusgif : AsyncTask<Bitmap, Void, Bitmap>() {
-
-        override fun doInBackground(vararg urls: Bitmap): Bitmap? {
+    //class getConusgif : AsyncTask<Bitmap, Void, Bitmap>() {
+    fun getConusgif() = GlobalScope.launch(uiDispatcher) {
+        //override fun doInBackground(vararg urls: Bitmap): Bitmap? {
+        withContext(Dispatchers.IO) {
             Log.i(TAG, "running getimage...")
             val client = OkHttpClient()
             try {
                 val request = Request.Builder()
-                        .url(conusurl)
+                        .url(MyApplication.NWS_CONUS_RADAR)
                         .build()
 
                 val response = client.newCall(request).execute()
@@ -402,14 +403,14 @@ internal object UtilityConusRadar {
                 e.printStackTrace()
             }
 
-            return conusbitmap
+            //return conusbitmap
         }
-
     }
 
     fun getConusImage() {
-        var task = getConusgif()
-        task.execute()
+        //var task = getConusgif()
+        //task.execute()
+        getConusgif()
     }
 
     fun getConusgfw(): String {
@@ -468,7 +469,7 @@ internal object UtilityConusRadar {
             if (conusbitmap == null) {
                 Log.i(TAG, "conusbitmap is null!!! redownloading")
                 val task = getConusgif()
-                task.execute()
+                //task.execute()
             } else {
                 GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, conusbitmap, 0)
             }
