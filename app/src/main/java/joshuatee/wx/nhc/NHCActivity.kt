@@ -44,21 +44,21 @@ import kotlinx.coroutines.*
 class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private lateinit var dynamicview: LinearLayout
+    private lateinit var linearLayout: LinearLayout
     private lateinit var objNHC: ObjectNHC
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.nhc)
         toolbarBottom.setOnMenuItemClickListener(this)
-        dynamicview = findViewById(R.id.ll)
-        objNHC = ObjectNHC(this, dynamicview)
+        linearLayout = findViewById(R.id.ll)
+        objNHC = ObjectNHC(this, linearLayout)
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        val sv: ScrollView = findViewById(R.id.sv)
-        sv.smoothScrollTo(0, 0)
+        val scrollView: ScrollView = findViewById(R.id.sv)
+        scrollView.smoothScrollTo(0, 0)
         withContext(Dispatchers.IO) { objNHC.getData() }
         objNHC.showData()
     }

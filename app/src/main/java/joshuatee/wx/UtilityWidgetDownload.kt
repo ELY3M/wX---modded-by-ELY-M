@@ -182,7 +182,7 @@ internal object UtilityWidgetDownload {
     }
 
     private fun downloadWPCIMG(context: Context, type: WidgetFile) {
-        val imgUrl = Utility.readPref(context, "WPG_IMG_FAV_URL", UtilityWPCImages.PARAMS[0])
+        val imgUrl = Utility.readPref(context, "WPG_IMG_FAV_URL", UtilityWPCImages.urls[0])
         val bitmap = imgUrl.getImage()
         saveImage(context, bitmap, type.fileName)
     }

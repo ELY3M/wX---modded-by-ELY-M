@@ -31,7 +31,7 @@ import joshuatee.wx.util.UtilityLog
 
 object UtilitySPCMESO {
 
-    private val TITLES = Arrays.asList(
+    private val titles = Arrays.asList(
             ObjectMenuTitle("Observations", 3),
             ObjectMenuTitle("Surface", 15),
             ObjectMenuTitle("Upper Air", 24),
@@ -82,7 +82,7 @@ object UtilitySPCMESO {
         }
     }
 
-    const val DEFAULT_SECTOR: String = "19"
+    const val defaultSector: String = "19"
     internal const val IMG_SF = ":mixr:ttd:mcon:thea:mxth:temp_chg:dwpt_chg:mixr_chg:thte_chg:925mb:850mb:700mb:500mb:300mb:sbcp:mlcp:mucp:muli:laps:lllr:lclh:lfch:lfrh:effh:stor:stpc:cpsh:comp:lcls:lr3c:tdlr:qlcs1:qlcs2:pwtr:tran:tran_925:tran_925-850:prop:peff:fzlv:les1:" +
             "tadv_925:7tad:tadv:"
 
@@ -139,27 +139,27 @@ object UtilitySPCMESO {
         return listOf(param, label)
     }
 
-    var SHORT_CODES: Array<Array<String>> = Array(12) { Array(24) { "" } }
-    var LONG_CODES: Array<Array<String>> = Array(12) { Array(24) { "" } }
-    internal val GROUPS = SparseArray<Group>()
+    var shortCodes: Array<Array<String>> = Array(12) { Array(24) { "" } }
+    var longCodes: Array<Array<String>> = Array(12) { Array(24) { "" } }
+    internal val groups = SparseArray<Group>()
 
     internal fun createData() {
         var k = 0
-        TITLES.indices.forEach { index ->
-            val group = Group(TITLES[index].title)
+        titles.indices.forEach { index ->
+            val group = Group(titles[index].title)
             var m = 0
-            for (j in (ObjectMenuTitle.getStart(TITLES, index) until TITLES[index].count + ObjectMenuTitle.getStart(TITLES, index))) {
-                group.children.add(LABELS[j])
-                SHORT_CODES[index][m] = PARAMS[k]
-                LONG_CODES[index][m] = LABELS[k]
+            for (j in (ObjectMenuTitle.getStart(titles, index) until titles[index].count + ObjectMenuTitle.getStart(titles, index))) {
+                group.children.add(labels[j])
+                shortCodes[index][m] = params[k]
+                longCodes[index][m] = labels[k]
                 k += 1
                 m += 1
             }
-            GROUPS.append(index, group)
+            groups.append(index, group)
         }
     }
 
-    internal val PARAMS = listOf(
+    internal val params = listOf(
             "bigsfc",
             "1kmv",
             "rgnlrad",
@@ -319,7 +319,7 @@ object UtilitySPCMESO {
             "vtp"
     )
 
-    internal val LABELS = listOf(
+    internal val labels = listOf(
             "Surface Observations",
             "Visible Satellite",
             "Radar Base Reflectivity",

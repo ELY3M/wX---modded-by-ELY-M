@@ -75,22 +75,7 @@ object UtilityGOES16 {
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bitmaps, UtilityImg.animInterval(context))
     }
 
-    /* val SECTORS: List<String> = listOf(
-             "FD: Full Disk",
-             "CONUS: US",
-             "pnw: Pacific Northwest",
-             "nr: Northern Rockies",
-             "umv: Upper Mississippi Valley",
-             "cgl: Central Great Lakes",
-             "ne: Northeast",
-             "psw: Pacific Southwest",
-             "sr: Southern Rockies",
-             "sp: Southern Plains",
-             "smv: Southern Mississippi Valley",
-             "se: Southeast"
-     )*/
-
-    val PRODUCTS: Map<String, String> = mapOf(
+    val labelToCode: Map<String, String> = mapOf(
             "00 True color daytime, multispectral IR at night" to "GEOCOLOR",
             "00.47 um (Band 1) Blue - Visible" to "01",
             "00.64 um (Band 2) Red - Visible" to "02",

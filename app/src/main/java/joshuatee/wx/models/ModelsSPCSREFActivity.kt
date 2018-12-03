@@ -69,15 +69,13 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var initSpinnerSetup = false
     private var animRan = false
-    //private var runStr = "f000"
-    //private var runModelStr = ""
     private var favList = listOf<String>()
     private lateinit var star: MenuItem
     private var firstRun = false
     private var imageLoaded = false
     private lateinit var fab1: ObjectFab
     private lateinit var fab2: ObjectFab
-    private lateinit var turl: Array<String>
+    private lateinit var activityArguments: Array<String>
     private lateinit var miStatus: MenuItem
     private lateinit var spRun: ObjectSpinner
     private lateinit var spFav: ObjectSpinner
@@ -90,9 +88,9 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        turl = intent.getStringArrayExtra(INFO)
+        activityArguments = intent.getStringArrayExtra(INFO)
         contextg = this
-        om = ObjectModel(this, turl[1], turl[0])
+        om = ObjectModel(this, activityArguments[1], activityArguments[0])
         if (om.numPanes == 1) {
             super.onCreate(savedInstanceState, R.layout.activity_models_spcsref, R.menu.models_spcsref, false, true)
         } else {
@@ -102,7 +100,7 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         val menu = toolbarBottom.menu
         star = menu.findItem(R.id.action_fav)
         star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-        title = turl[2]
+        title = activityArguments[2]
         val m = toolbarBottom.menu
         if (om.numPanes < 2) {
             fab1 = ObjectFab(this, this, R.id.fab1)
@@ -134,7 +132,7 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         spFav = ObjectSpinner(this, this, R.id.spinner1, favList)
         spFav.setOnItemSelectedListener(this)
         UtilityModelsSPCSREFInterface.createData()
-        drw = ObjectNavDrawerCombo(this, UtilityModelsSPCSREFInterface.GROUPS, UtilityModelsSPCSREFInterface.LONG_CODES, UtilityModelsSPCSREFInterface.SHORT_CODES)
+        drw = ObjectNavDrawerCombo(this, UtilityModelsSPCSREFInterface.groups, UtilityModelsSPCSREFInterface.longCodes, UtilityModelsSPCSREFInterface.shortCodes)
         drw.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
             drw.drawerLayout.closeDrawer(drw.listView)
             om.displayData.param[om.curImg] = drw.getToken(groupPosition, childPosition)
@@ -249,7 +247,7 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                 om.curImg = 1
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(om.displayData.img, toolbar, "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1])
             }
-            R.id.action_multipane -> ObjectIntent(this, ModelsSPCSREFActivity::class.java, ModelsSPCSREFActivity.INFO, arrayOf("2", turl[1], turl[2]))
+            R.id.action_multipane -> ObjectIntent(this, ModelsSPCSREFActivity::class.java, ModelsSPCSREFActivity.INFO, arrayOf("2", activityArguments[1], activityArguments[2]))
             R.id.action_fav -> toggleFavorite()
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {

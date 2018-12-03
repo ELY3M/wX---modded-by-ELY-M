@@ -98,7 +98,7 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var br: Pattern
     private val out = StringBuilder(5000)
-    private lateinit var sv: ScrollView
+    private lateinit var scrollView: ScrollView
     private var storms = mutableListOf<StormReport>()
     private lateinit var drw: ObjectNavDrawer
     private lateinit var activity: Activity
@@ -113,9 +113,9 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val menu = toolbarBottom.menu
         val playlistMi = menu.findItem(R.id.action_playlist)
         playlistMi.isVisible = false
-        sv = findViewById(R.id.sv)
-        val turl = intent.getStringArrayExtra(NO)
-        no = turl[0]
+        scrollView = findViewById(R.id.sv)
+        val activityArguments = intent.getStringArrayExtra(NO)
+        no = activityArguments[0]
         val cal = Calendar.getInstance()
         pYear = cal.get(Calendar.YEAR)
         pMonth = cal.get(Calendar.MONTH)
@@ -142,7 +142,7 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        sv.smoothScrollTo(0, 0)
+        scrollView.smoothScrollTo(0, 0)
         withContext(Dispatchers.IO) {
             if (firstRun) {
                 text = textUrl.getHtmlSep()
@@ -152,7 +152,7 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         displayData()
     }
 
-    fun displayData() {
+    private fun displayData() {
         // Time,F_Scale,Location,County,State,Lat,Lon,Comments ( Speed / Size )
         out.setLength(0)
         val textArr = br.split(text)
@@ -212,7 +212,7 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     cTmp.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
                     cTmp.setTextColor(UIPreferences.textHighlightColor)
                     cTmp.setText(Utility.fromHtml(s.text.toUpperCase()))
-                    cTmp.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) })
+                    cTmp.setOnClickListener(View.OnClickListener { scrollView.smoothScrollTo(0, 0) })
                 }
             }
         }

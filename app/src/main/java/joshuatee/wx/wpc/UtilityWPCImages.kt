@@ -30,7 +30,7 @@ import java.util.*
 
 internal object UtilityWPCImages {
 
-    private val TITLES = Arrays.asList(
+    private val titles = Arrays.asList(
             ObjectMenuTitle("Surface Analysis", 7),
             ObjectMenuTitle("Forecast Maps", 20),
             ObjectMenuTitle("QPF", 27),
@@ -41,7 +41,7 @@ internal object UtilityWPCImages {
             ObjectMenuTitle("Space Weather", 3)
     )
 
-    val LABELS = listOf(
+    val labels = listOf(
             "WPC Analysis, Radar, Warnings",
             "Surface Analysis with Obs (CONUS)",
             "Surface Analysis with Obs (NHEM)",
@@ -180,7 +180,7 @@ internal object UtilityWPCImages {
             "Estimated Planetary K index"
     )
 
-    val PARAMS = listOf(
+    val urls = listOf(
             "${MyApplication.nwsWPCwebsitePrefix}/images/wwd/radnat/NATRAD_24.gif",
             "${MyApplication.nwsWPCwebsitePrefix}/sfc/namussfcwbg.gif",
             "${MyApplication.nwsWPCwebsitePrefix}/sfc/90fwbg.gif",
@@ -319,23 +319,23 @@ internal object UtilityWPCImages {
             "http://services.swpc.noaa.gov/images/planetary-k-index.gif"
     )
 
-    val GROUPS = SparseArray<Group>()
-    var SHORT_CODES = Array(8) { Array(28) { "" } }
-    var LONG_CODES = Array(8) { Array(28) { "" } }
+    val groups = SparseArray<Group>()
+    var shortCodes = Array(8) { Array(28) { "" } }
+    var longCodes = Array(8) { Array(28) { "" } }
 
     internal fun createData() {
         var k = 0
-        TITLES.indices.forEach { index ->
-            val group = Group(TITLES[index].title)
+        titles.indices.forEach { index ->
+            val group = Group(titles[index].title)
             var m = 0
-            for (j in (ObjectMenuTitle.getStart(TITLES, index) until TITLES[index].count + ObjectMenuTitle.getStart(TITLES, index))) {
-                group.children.add(LABELS[j])
-                SHORT_CODES[index][m] = PARAMS[k]
-                LONG_CODES[index][m] = LABELS[k]
+            for (j in (ObjectMenuTitle.getStart(titles, index) until titles[index].count + ObjectMenuTitle.getStart(titles, index))) {
+                group.children.add(labels[j])
+                shortCodes[index][m] = urls[k]
+                longCodes[index][m] = labels[k]
                 k += 1
                 m += 1
             }
-            GROUPS.append(index, group)
+            groups.append(index, group)
         }
     }
 }

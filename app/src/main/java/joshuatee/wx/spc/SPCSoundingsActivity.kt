@@ -54,7 +54,7 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
     private var mapShown = false
     private var firstTime = true
     private lateinit var star: MenuItem
-    private var ridArrLoc = listOf<String>()
+    private var locations = listOf<String>()
     private val prefTokenLocation = "NWS_LOCATION_"
     private val prefToken = "SND_FAV"
     private var upperAir = ""
@@ -71,8 +71,8 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
         img.setOnClickListener(this)
         contextg = this
         nwsOffice = UtilityLocation.getNearestSnd(this, Location.latLon)
-        ridArrLoc = UtilityFavorites.setupFavMenu(this, MyApplication.sndFav, nwsOffice, prefTokenLocation, prefToken)
-        sp = ObjectSpinner(this, this, R.id.spinner1, ridArrLoc)
+        locations = UtilityFavorites.setupFavMenu(this, MyApplication.sndFav, nwsOffice, prefTokenLocation, prefToken)
+        sp = ObjectSpinner(this, this, R.id.spinner1, locations)
         sp.setOnItemSelectedListener(this)
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img))
         imageMap.addOnImageMapClickedHandler(object : ImageMap.OnImageMapClickedHandler {
@@ -87,8 +87,8 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
     }
 
     override fun onRestart() {
-        ridArrLoc = UtilityFavorites.setupFavMenu(this, MyApplication.sndFav, nwsOffice, prefTokenLocation, prefToken)
-        sp.refreshData(this, ridArrLoc)
+        locations = UtilityFavorites.setupFavMenu(this, MyApplication.sndFav, nwsOffice, prefTokenLocation, prefToken)
+        sp.refreshData(this, locations)
         super.onRestart()
     }
 
@@ -144,19 +144,19 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
     private fun mapSwitch(loc: String) {
         nwsOffice = loc
         mapShown = false
-        ridArrLoc = UtilityFavorites.setupFavMenu(this, MyApplication.sndFav, nwsOffice, prefTokenLocation, prefToken)
-        sp.refreshData(this, ridArrLoc)
+        locations = UtilityFavorites.setupFavMenu(this, MyApplication.sndFav, nwsOffice, prefTokenLocation, prefToken)
+        sp.refreshData(this, locations)
         img.resetZoom()
     }
 
     private fun toggleFavorite() {
         val ridFav = UtilityFavorites.toggleFavoriteString(this, nwsOffice, star, prefToken)
-        ridArrLoc = UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefTokenLocation, prefToken)
-        sp.refreshData(this, ridArrLoc)
+        locations = UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefTokenLocation, prefToken)
+        sp.refreshData(this, locations)
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        if (ridArrLoc.isNotEmpty()) {
+        if (locations.isNotEmpty()) {
             if (firstTime) {
                 UtilityToolbar.fullScreenMode(toolbar, toolbarBottom)
                 firstTime = false
@@ -165,7 +165,7 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
                 1 -> ObjectIntent(this, FavAddActivity::class.java, FavAddActivity.TYPE, arrayOf("SND"))
                 2 -> ObjectIntent(this, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf("SND"))
                 else -> {
-                    nwsOffice = ridArrLoc[pos].split(" ").getOrNull(0) ?: ""
+                    nwsOffice = locations[pos].split(" ").getOrNull(0) ?: ""
                     getContent()
                 }
             }

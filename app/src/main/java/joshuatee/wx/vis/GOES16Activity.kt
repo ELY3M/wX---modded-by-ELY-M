@@ -88,10 +88,10 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
         activityArguments = intent.getStringArrayExtra(RID)
         readPrefs(this)
         toolbar.subtitle = imageTitle
-        UtilityGOES16.PRODUCTS.keys.sorted().forEach {
-            productCodes.add(UtilityGOES16.PRODUCTS[it] ?: "")
+        UtilityGOES16.labelToCode.keys.sorted().forEach {
+            productCodes.add(UtilityGOES16.labelToCode[it] ?: "")
         }
-        drw = ObjectNavDrawer(this, UtilityGOES16.PRODUCTS.keys.sorted(), productCodes)
+        drw = ObjectNavDrawer(this, UtilityGOES16.labelToCode.keys.sorted(), productCodes)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, true)
             drw.drawerLayout.closeDrawer(drw.listView)
@@ -114,7 +114,7 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
         }
         imageLoaded = true
         toolbar.subtitle = imageTitle
-        if (oldSector != sector){
+        if (oldSector != sector) {
             img.setZoom(1.0f)
             oldSector = sector
         }
@@ -141,7 +141,7 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
 
     private fun readPrefs(context: Context) {
         if (activityArguments.isNotEmpty() && activityArguments[0] == "") {
-            imageTitle = Utility.readPref(context, "GOES16_IMG_FAV_TITLE", UtilityGOES16.PRODUCTS.keys.sorted()[0])
+            imageTitle = Utility.readPref(context, "GOES16_IMG_FAV_TITLE", UtilityGOES16.labelToCode.keys.sorted()[0])
             sector = Utility.readPref(context, "GOES16_SECTOR", sector)
             productCode = Utility.readPref(context, "GOES16_PROD", productCode)
             imgIdx = Utility.readPref(context, "GOES16_IMG_FAV_IDX", imgIdx)
@@ -298,10 +298,10 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
 
     private fun showNextImg() {
         imgIdx += 1
-        if (imgIdx == UtilityGOES16.PRODUCTS.size) {
+        if (imgIdx == UtilityGOES16.labelToCode.size) {
             imgIdx = 0
         }
-        imageTitle = UtilityGOES16.PRODUCTS.keys.sorted()[imgIdx]
+        imageTitle = UtilityGOES16.labelToCode.keys.sorted()[imgIdx]
         productCode = drw.getToken(imgIdx)
         getContent()
     }
@@ -309,9 +309,9 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
     private fun showPrevImg() {
         imgIdx -= 1
         if (imgIdx == -1) {
-            imgIdx = UtilityGOES16.PRODUCTS.size - 1
+            imgIdx = UtilityGOES16.labelToCode.size - 1
         }
-        imageTitle = UtilityGOES16.PRODUCTS.keys.sorted()[imgIdx]
+        imageTitle = UtilityGOES16.labelToCode.keys.sorted()[imgIdx]
         productCode = drw.getToken(imgIdx)
         getContent()
     }

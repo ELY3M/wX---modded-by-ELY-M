@@ -77,7 +77,7 @@ object UtilitySPCMESOInputOutput {
         return UtilityImg.layerDrawableToBitmap(layersAl)
     }
 
-    fun getAnim(context: Context, sector: String, param: String, frameCnt: Int): AnimationDrawable {
+    fun getAnimation(context: Context, sector: String, param: String, frameCnt: Int): AnimationDrawable {
         val urlAl = mutableListOf<String>()
         val timeList = ("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/new/archiveviewer.php?sector=19&parm=pmsl").getHtml().parseColumn("dattim\\[[0-9]{1,2}\\].*?=.*?([0-9]{8})")
         val delay = UtilityImg.animInterval(context)

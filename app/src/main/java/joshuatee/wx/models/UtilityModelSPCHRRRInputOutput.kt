@@ -83,9 +83,9 @@ internal object UtilityModelSPCHRRRInputOutput {
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
     }
 
-    private fun getSectorCode(sectorName: String) = (0 until UtilityModelSPCHRRRInterface.SECTORS.size)
-            .firstOrNull { sectorName == UtilityModelSPCHRRRInterface.SECTORS[it] }
-            ?.let { UtilityModelSPCHRRRInterface.SECTOR_CODES[it] }
+    private fun getSectorCode(sectorName: String) = (0 until UtilityModelSPCHRRRInterface.sectors.size)
+            .firstOrNull { sectorName == UtilityModelSPCHRRRInterface.sectors[it] }
+            ?.let { UtilityModelSPCHRRRInterface.sectorCodes[it] }
             ?: "S19"
 
 

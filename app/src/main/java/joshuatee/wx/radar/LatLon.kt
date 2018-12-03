@@ -27,8 +27,7 @@ import kotlin.math.acos
 import kotlin.math.cos
 import kotlin.math.sin
 
-// latlon: DoubleArray = doubleArrayOf(0.0,0.0)
-class LatLon() { 
+class LatLon() {
 
     private var x = 0.0
     private var y = 0.0
@@ -103,13 +102,6 @@ class LatLon() {
             dist = acos(dist)
             dist = UtilityMath.rad2deg(dist)
             dist *= 60.0 * 1.1515
-
-            //if (unit == 'K') {
-            //    dist *= 1.609344
-            //} else if (unit == 'N') {
-            //    dist *= 0.8684
-            //}
-
             when (unit) {
                 DistanceUnit.KM -> dist *= 1.609344
                 DistanceUnit.NAUTICAL_MILE -> dist *= 0.8684

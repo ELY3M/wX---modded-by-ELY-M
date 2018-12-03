@@ -39,7 +39,7 @@ import kotlinx.coroutines.*
 class SPCTstormOutlookActivity : BaseActivity() {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private var bitmapArr = listOf<Bitmap>()
+    private var bitmaps = listOf<Bitmap>()
     private lateinit var contextg: Context
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -57,14 +57,14 @@ class SPCTstormOutlookActivity : BaseActivity() {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        bitmapArr = withContext(Dispatchers.IO) { UtilitySPC.tstormOutlookImages }
+        bitmaps = withContext(Dispatchers.IO) { UtilitySPC.tstormOutlookImages }
         val linearLayout: LinearLayout = findViewById(R.id.ll)
-        bitmapArr.forEach { linearLayout.addView(ObjectCardImage(contextg, it).card) }
+        bitmaps.forEach { linearLayout.addView(ObjectCardImage(contextg, it).card) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, "SPC Thunderstorm Outlook", "", bitmapArr)
+            R.id.action_share -> UtilityShare.shareText(this, "SPC Thunderstorm Outlook", "", bitmaps)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

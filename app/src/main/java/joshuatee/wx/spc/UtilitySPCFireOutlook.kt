@@ -26,19 +26,19 @@ import joshuatee.wx.R
 
 internal object UtilitySPCFireOutlook {
 
-    val PROD_TEXT_URL = listOf(
+    val textProducts = listOf(
             "fwddy1",
             "fwddy2",
             "fwddy38"
     )
 
-    val PROD_IMG_URL = listOf(
+    val imageUrls = listOf(
             "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/day1otlk_fire.gif",
             "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/day2otlk_fire.gif",
             "${MyApplication.nwsSPCwebsitePrefix}/products/exper/fire_wx/imgs/day38otlk_fire.gif"
     )
 
-    const val ACTIVITY_TITLE_INT = R.string.title_activity_spcfire_outlook
+    const val activityTitle = R.string.title_activity_spcfire_outlook
 }
 
 

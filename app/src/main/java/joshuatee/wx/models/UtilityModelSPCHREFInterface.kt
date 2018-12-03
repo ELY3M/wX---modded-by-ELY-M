@@ -32,7 +32,7 @@ internal object UtilityModelSPCHREFInterface {
 
     val models = listOf("HREF")
 
-    private val TITLES = Arrays.asList(
+    private val titles = Arrays.asList(
             ObjectMenuTitle("SPC Guidance", 6),
             ObjectMenuTitle("Synoptic", 5),
             ObjectMenuTitle("Severe", 12),
@@ -42,23 +42,23 @@ internal object UtilityModelSPCHREFInterface {
             ObjectMenuTitle("Storm Attributes", 24)
     )
     // FIXME should be 4 more params in storm attributes
-    var SHORT_CODES = Array(13) { Array(30) { "" } }
-    var LONG_CODES = Array(13) { Array(30) { "" } }
-    val GROUPS = SparseArray<Group>()
+    var shortCodes = Array(13) { Array(30) { "" } }
+    var longCodes = Array(13) { Array(30) { "" } }
+    val groups = SparseArray<Group>()
 
     internal fun createData() {
         var k = 0
-        TITLES.indices.forEach { index ->
-            val group = Group(TITLES[index].title)
+        titles.indices.forEach { index ->
+            val group = Group(titles[index].title)
             var m = 0
-            for (j in (ObjectMenuTitle.getStart(TITLES, index) until TITLES[index].count + ObjectMenuTitle.getStart(TITLES, index))) {
-                group.children.add(LABELS[j])
-                SHORT_CODES[index][m] = PARAMS[k]
-                LONG_CODES[index][m] = LABELS[k]
+            for (j in (ObjectMenuTitle.getStart(titles, index) until titles[index].count + ObjectMenuTitle.getStart(titles, index))) {
+                group.children.add(labels[j])
+                shortCodes[index][m] = params[k]
+                longCodes[index][m] = labels[k]
                 k += 1
                 m += 1
             }
-            GROUPS.append(index, group)
+            groups.append(index, group)
         }
     }
 
@@ -75,7 +75,7 @@ internal object UtilityModelSPCHREFInterface {
             "sw"
     )
 
-    val PARAMS = listOf(
+    val params = listOf(
             "guidance_hail_spchazcal_004h",
             "guidance_tor_spchazcal_004h",
             "guidance_wind_spchazcal_004h",
@@ -176,7 +176,7 @@ internal object UtilityModelSPCHREFInterface {
             "wspd_024hmax_pb30_members"
     )
 
-    val LABELS = listOf(
+    private val labels = listOf(
             "4-hr HREF/SREF Calibrated: Hail",
             "4-hr HREF/SREF Calibrated: Tornado",
             "4-hr HREF/SREF Calibrated: Wind",

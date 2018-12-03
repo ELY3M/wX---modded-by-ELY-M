@@ -52,13 +52,6 @@ object UtilityNHC {
         return ObjectNHCStormInfo(title, summary, url, img1, img2, wallet)
     }
 
-   /* fun getAnim(context: Context, rid: String, prodId: String, frameCntStr: String): AnimationDrawable {
-        val baseUrl = "http://www.ssd.noaa.gov/PS/TROP/floaters/$rid/imagery/"
-        val urlArr = UtilityImgAnim.getURLArray(baseUrl, "<a href=\"([0-9]{8}_[0-9]{4}Z-$prodId\\.gif)\">", frameCntStr)
-        val bmAl = urlArr.mapTo(mutableListOf()) { (baseUrl + it).getImage() }
-        return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl, UtilityImg.animInterval(context))
-    }*/
-
     fun getImage(rid: String, prod: String): Bitmap = ("http://www.ssd.noaa.gov/PS/TROP/floaters/" + rid + "/imagery/" + prod + "0.gif").getImage()
 }
 

@@ -66,20 +66,20 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     private lateinit var drw: ObjectNavDrawerCombo
     private lateinit var contextg: Context
     private lateinit var om: ObjectModel
-    private lateinit var turl: Array<String>
+    private lateinit var activityArguments: Array<String>
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         contextg = this
-        turl = intent.getStringArrayExtra(INFO)
-        om = ObjectModel(this, turl[1], turl[0])
+        activityArguments = intent.getStringArrayExtra(INFO)
+        om = ObjectModel(this, activityArguments[1], activityArguments[0])
         if (om.numPanes == 1) {
             super.onCreate(savedInstanceState, R.layout.activity_modelsspchref, R.menu.models_spchref, false, true)
         } else {
             super.onCreate(savedInstanceState, R.layout.activity_models_spchrefmultipane, R.menu.models_spchref, false, true)
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = turl[2]
+        title = activityArguments[2]
         val m = toolbarBottom.menu
         if (om.numPanes < 2) {
             fab1 = ObjectFab(this, this, R.id.fab1)
@@ -113,7 +113,7 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         spRun.setSelection(0)
         om.spTime.setSelection(0)
         UtilityModelSPCHREFInterface.createData()
-        drw = ObjectNavDrawerCombo(this, UtilityModelSPCHREFInterface.GROUPS, UtilityModelSPCHREFInterface.LONG_CODES, UtilityModelSPCHREFInterface.SHORT_CODES)
+        drw = ObjectNavDrawerCombo(this, UtilityModelSPCHREFInterface.groups, UtilityModelSPCHREFInterface.longCodes, UtilityModelSPCHREFInterface.shortCodes)
         drw.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
             drw.drawerLayout.closeDrawer(drw.listView)
             om.displayData.param[om.curImg] = drw.getToken(groupPosition, childPosition)
@@ -199,7 +199,7 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(om.displayData.img, toolbar, "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1])
             }
             R.id.action_animate -> getAnimate()
-            R.id.action_multipane -> ObjectIntent(this, ModelsSPCHREFActivity::class.java, ModelsSPCHREFActivity.INFO, arrayOf("2", turl[1], turl[2]))
+            R.id.action_multipane -> ObjectIntent(this, ModelsSPCHREFActivity::class.java, ModelsSPCHREFActivity.INFO, arrayOf("2", activityArguments[1], activityArguments[2]))
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     if (isStoragePermissionGranted) {
@@ -251,7 +251,7 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             om.displayData.param[it] = Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[it])
             om.displayData.paramLabel[it] = "500 mb Height/Wind"
             om.displayData.paramLabel[it] = Utility.readPref(this, om.prefParamLabel + it.toString(), om.displayData.paramLabel[it])
-            if (!UtilityModels.parmInArray(UtilityModelSPCHREFInterface.PARAMS, om.displayData.param[it])) {
+            if (!UtilityModels.parmInArray(UtilityModelSPCHREFInterface.params, om.displayData.param[it])) {
                 om.displayData.param[it] = "500w_mean,500h_mean"
                 om.displayData.paramLabel[it] = "500 mb Height/Wind"
             }

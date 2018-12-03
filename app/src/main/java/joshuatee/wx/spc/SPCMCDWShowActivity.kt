@@ -59,8 +59,8 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private var no = ""
-    private lateinit var turl: Array<String>
+    private var number = ""
+    private lateinit var activityArguments: Array<String>
     private lateinit var c0: ObjectCardImage
     private lateinit var c1: ObjectCardText
     private lateinit var objWatch: ObjectWatchProduct
@@ -78,14 +78,14 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         linearLayout.addView(c0.card)
         linearLayout.addView(c1.card)
         c1.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
-        turl = intent.getStringArrayExtra(NO)
-        no = turl[0]
-        when (turl[2]) {
-            "MCD" -> objWatch = ObjectWatchProduct(PolygonType.MCD, no)
-            "WATCH" -> objWatch = ObjectWatchProduct(PolygonType.WATCH, no)
-            "WATCH_TOR" -> objWatch = ObjectWatchProduct(PolygonType.WATCH_TOR, no)
-            "WATCH_SVR" -> objWatch = ObjectWatchProduct(PolygonType.WATCH_SVR, no)
-            "MPD" -> objWatch = ObjectWatchProduct(PolygonType.MPD, no)
+        activityArguments = intent.getStringArrayExtra(NO)
+        number = activityArguments[0]
+        when (activityArguments[2]) {
+            "MCD" -> objWatch = ObjectWatchProduct(PolygonType.MCD, number)
+            "WATCH" -> objWatch = ObjectWatchProduct(PolygonType.WATCH, number)
+            "WATCH_TOR" -> objWatch = ObjectWatchProduct(PolygonType.WATCH_TOR, number)
+            "WATCH_SVR" -> objWatch = ObjectWatchProduct(PolygonType.WATCH_SVR, number)
+            "MPD" -> objWatch = ObjectWatchProduct(PolygonType.MPD, number)
             else -> {
             }
         }
@@ -96,12 +96,12 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) { objWatch.getData(contextg) }
         c1.setText(Utility.fromHtml(objWatch.text))
-        if (turl[2] == "MCD" || turl[2] == "MPD") {
+        if (activityArguments[2] == "MCD" || activityArguments[2] == "MPD") {
             toolbar.subtitle = objWatch.textForSubtitle
         }
         c0.setImage(objWatch.bitmap)
         registerForContextMenu(c0.img)
-        if (turl[1] == "sound") {
+        if (activityArguments[1] == "sound") {
             UtilityTTS.synthesizeTextAndPlay(applicationContext, objWatch.text, objWatch.prod)
         }
     }
@@ -137,7 +137,7 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, objWatch.text, no, objWatch.prod)) {
+        if (audioPlayMenu(item.itemId, objWatch.text, number, objWatch.prod)) {
             return true
         }
         when (item.itemId) {

@@ -30,7 +30,7 @@ import joshuatee.wx.util.UtilityImgAnim
 
 internal object UtilityNWSGOESFullDisk {
 
-    val MODEL_PARAMS_LABELS = listOf(
+    val labels = listOf(
             "GOES West Infrared",
             "GOES West Visible",
             "Meteosat Infrared",
@@ -47,7 +47,7 @@ internal object UtilityNWSGOESFullDisk {
             "Himawari-8 RBTop Infrared, Ch. 4"
     )
 
-    val URL_INDEX = listOf(
+    val urls = listOf(
             "${MyApplication.nwsGoesWebsitePrefix}/FULLDISK/GWIR.JPG",
             "${MyApplication.nwsGoesWebsitePrefix}/FULLDISK/GWVS.JPG",
             "${MyApplication.nwsGoesWebsitePrefix}/FULLDISK/GMIR.JPG",

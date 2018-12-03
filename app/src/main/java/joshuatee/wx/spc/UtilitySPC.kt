@@ -52,28 +52,28 @@ object UtilitySPC {
         val enhStr = "THERE IS AN ENHANCED RISK OF"
         val mrglStr = "THERE IS A MARGINAL RISK OF"
         var returnStr = ""
-        var sigHtmlTmp = UtilityDownload.getTextProduct(context, prod)
-        if (sigHtmlTmp.contains(mrglStr)) {
+        var html = UtilityDownload.getTextProduct(context, prod)
+        if (html.contains(mrglStr)) {
             returnStr = "marginal"
         }
-        if (sigHtmlTmp.contains(slightStr)) {
+        if (html.contains(slightStr)) {
             returnStr = "slight"
         }
-        if (sigHtmlTmp.contains(enhStr)) {
+        if (html.contains(enhStr)) {
             returnStr = "enh"
         }
-        if (sigHtmlTmp.contains(modtStr)) {
+        if (html.contains(modtStr)) {
             returnStr = "modt"
         }
-        if (sigHtmlTmp.contains(highStr)) {
+        if (html.contains(highStr)) {
             returnStr = "high"
         }
-        sigHtmlTmp = sigHtmlTmp.replace("ACUS[0-9]{2} KWNS [0-9]{6}".toRegex(), "")
-        sigHtmlTmp = sigHtmlTmp.replace("SWOD[Y4][1-3]".toRegex(), "")
-        sigHtmlTmp = sigHtmlTmp.replace("SPC AC [0-9]{6}".toRegex(), "")
-        sigHtmlTmp = sigHtmlTmp.replace("NWS STORM PREDICTION CENTER NORMAN OK", "")
-        sigHtmlTmp = sigHtmlTmp.replace("CONVECTIVE OUTLOOK", "")
-        return listOf(returnStr, sigHtmlTmp)
+        html = html.replace("ACUS[0-9]{2} KWNS [0-9]{6}".toRegex(), "")
+        html = html.replace("SWOD[Y4][1-3]".toRegex(), "")
+        html = html.replace("SPC AC [0-9]{6}".toRegex(), "")
+        html = html.replace("NWS STORM PREDICTION CENTER NORMAN OK", "")
+        html = html.replace("CONVECTIVE OUTLOOK", "")
+        return listOf(returnStr, html)
     }
 
     fun checkSPC(context: Context): List<String> {

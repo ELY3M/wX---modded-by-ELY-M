@@ -40,7 +40,7 @@ import joshuatee.wx.Extensions.*
 
 object UtilityUSImgNWSMosaic {
 
-    internal val NWS_SECTORS = listOf(
+    internal val sectors = listOf(
             "alaska",
             "hawaii",
             "pacsouthwest",
@@ -55,7 +55,8 @@ object UtilityUSImgNWSMosaic {
             "northeast",
             "conus"
     )
-    internal val NWS_SECTORS_LABELS = listOf(
+
+    internal val labels = listOf(
             "Alaska",
             "Hawaii",
             "Pacific Southwest",
@@ -71,7 +72,7 @@ object UtilityUSImgNWSMosaic {
             "CONUS"
     )
 
-    private val NWS_CODE_TO_LABEL = mapOf(
+    private val sectorToLabel = mapOf(
             "alaska" to "Alaska",
             "hawaii" to "Hawaii",
             "pacsouthwest" to "Pacific Southwest",
@@ -139,7 +140,7 @@ object UtilityUSImgNWSMosaic {
             "HI" to "hawaii"
     )
 
-    internal fun getNWSSectorLabelFromCode(code: String) = NWS_CODE_TO_LABEL[code] ?: ""
+    internal fun getNWSSectorLabelFromCode(code: String) = sectorToLabel[code] ?: ""
 
     fun getNWSSectorFromState(state: String): String = COD_HASH[state] ?: ""
 

@@ -42,7 +42,7 @@ import kotlinx.coroutines.*
 class SPCSWOSummaryActivity : BaseActivity() {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private val bmAl = mutableListOf<Bitmap>()
+    private val bitmaps = mutableListOf<Bitmap>()
     private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
 
@@ -64,13 +64,13 @@ class SPCSWOSummaryActivity : BaseActivity() {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
-        withContext(Dispatchers.IO) { arrayOf("1", "2", "3", "4-8").forEach { bmAl.addAll(UtilitySPCSWO.getImageURLs(it, false)) } }
+        withContext(Dispatchers.IO) { arrayOf("1", "2", "3", "4-8").forEach { bitmaps.addAll(UtilitySPCSWO.getImageURLs(it, false)) } }
 
         var card: ObjectCardImage
-        bmAl.forEach { bitmap ->
+        bitmaps.forEach { bitmap ->
             card = ObjectCardImage(contextg, bitmap)
-            val day = if (bmAl.indexOf(bitmap) < 3) {
-                (bmAl.indexOf(bitmap) + 1).toString()
+            val day = if (bitmaps.indexOf(bitmap) < 3) {
+                (bitmaps.indexOf(bitmap) + 1).toString()
             } else {
                 "4-8"
             }
@@ -82,7 +82,7 @@ class SPCSWOSummaryActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.SPC_SWO_SUMMARY)
-            R.id.action_share -> UtilityShare.shareText(this, "Convective Outlook Summary", "", bmAl)
+            R.id.action_share -> UtilityShare.shareText(this, "Convective Outlook Summary", "", bitmaps)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

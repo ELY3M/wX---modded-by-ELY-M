@@ -34,11 +34,11 @@ internal object UtilitySPCSWO {
 
     fun getImageURLs(day: String, getAllImages: Boolean): List<Bitmap> {
         val imgURLs = mutableListOf<String>()
-        val bitmapArr = mutableListOf<Bitmap>()
+        val bitmaps = mutableListOf<Bitmap>()
         if (day == "4-8" || day == "48" || day == "4") {
             (4..8).forEach { imgURLs.add("${MyApplication.nwsSPCwebsitePrefix}/products/exper/day4-8/day" + it.toString() + "prob.gif") }
-            imgURLs.mapTo(bitmapArr) { it.getImage() }
-            return bitmapArr
+            imgURLs.mapTo(bitmaps) { it.getImage() }
+            return bitmaps
         }
         val html = ("${MyApplication.nwsSPCwebsitePrefix}/products/outlook/day" + day + "otlk.html").getHtml()
         val time = html.parse("show_tab\\(.otlk_([0-9]{4}).\\)")
@@ -61,11 +61,11 @@ internal object UtilitySPCSWO {
             }
         }
         if (getAllImages) {
-            imgURLs.mapTo(bitmapArr) { it.getImage() }
+            imgURLs.mapTo(bitmaps) { it.getImage() }
         } else {
-            bitmapArr.add(imgURLs[0].getImage())
+            bitmaps.add(imgURLs[0].getImage())
         }
-        return bitmapArr
+        return bitmaps
     }
 }
 

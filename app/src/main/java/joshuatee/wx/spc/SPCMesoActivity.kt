@@ -195,7 +195,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
         sp = ObjectSpinner(this, this, R.id.spinner1, favListLabel)
         sp.setOnItemSelectedListener(this)
         UtilitySPCMESO.createData()
-        drw = ObjectNavDrawerCombo(this, UtilitySPCMESO.GROUPS, UtilitySPCMESO.LONG_CODES, UtilitySPCMESO.SHORT_CODES)
+        drw = ObjectNavDrawerCombo(this, UtilitySPCMESO.groups, UtilitySPCMESO.longCodes, UtilitySPCMESO.shortCodes)
         drw.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
             drw.drawerLayout.closeDrawer(drw.listView)
             displayData.param[curImg] = drw.getToken(groupPosition, childPosition)
@@ -255,7 +255,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
     private fun getAnimate(frames: Int) = GlobalScope.launch(uiDispatcher) {
 
         withContext(Dispatchers.IO) {
-            (0 until numPanes).forEach { displayData.animDrawable[it] = UtilitySPCMESOInputOutput.getAnim(contextg, sector, displayData.param[it], frames) }
+            (0 until numPanes).forEach { displayData.animDrawable[it] = UtilitySPCMESOInputOutput.getAnimation(contextg, sector, displayData.param[it], frames) }
         }
 
         (0 until numPanes).forEach {
@@ -436,7 +436,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
 
     private fun setAndLaunchParam(paramStr: String, a: Int, b: Int) {
         displayData.param[curImg] = paramStr
-        displayData.paramLabel[curImg] = UtilitySPCMESO.LONG_CODES[a][b]
+        displayData.paramLabel[curImg] = UtilitySPCMESO.longCodes[a][b]
         Utility.writePref(this, prefParam + curImg, displayData.param[curImg])
         Utility.writePref(this, prefParamLabel + curImg, displayData.paramLabel[curImg])
         refreshSpinner()

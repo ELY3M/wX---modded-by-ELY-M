@@ -71,7 +71,7 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
     private lateinit var sv: ScrollView
     private var mapShown = false
     private lateinit var star: MenuItem
-    private var ridArrLoc = listOf<String>()
+    private var locations = listOf<String>()
     private val prefTokenLocation = "NWS_LOCATION_"
     private val prefToken = "WFO_FAV"
     private var ridFavOld = ""
@@ -95,8 +95,8 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
         else
             turl[1]
         toolbar.title = prod
-        ridArrLoc = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, nwsOffice, prefTokenLocation, prefToken)
-        sp = ObjectSpinner(this, this, R.id.spinner1, ridArrLoc)
+        locations = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, nwsOffice, prefTokenLocation, prefToken)
+        sp = ObjectSpinner(this, this, R.id.spinner1, locations)
         sp.setOnItemSelectedListener(this)
         sv = findViewById(R.id.sv)
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(sv))
@@ -113,8 +113,8 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
 
     override fun onRestart() {
         if (ridFavOld != MyApplication.wfoFav) {
-            ridArrLoc = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, nwsOffice, prefTokenLocation, prefToken)
-            sp.refreshData(contextg, ridArrLoc)
+            locations = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, nwsOffice, prefTokenLocation, prefToken)
+            sp.refreshData(contextg, locations)
         }
         super.onRestart()
     }
@@ -135,23 +135,23 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
         sv.visibility = View.VISIBLE
         nwsOffice = loc
         mapShown = false
-        ridArrLoc = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, nwsOffice, prefTokenLocation, prefToken)
-        sp.refreshData(contextg, ridArrLoc)
+        locations = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, nwsOffice, prefTokenLocation, prefToken)
+        sp.refreshData(contextg, locations)
     }
 
     private fun toggleFavorite() {
         val ridFav = UtilityFavorites.toggleFavoriteString(this, nwsOffice, star, prefToken)
-        ridArrLoc = UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefTokenLocation, prefToken)
-        sp.refreshData(contextg, ridArrLoc)
+        locations = UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefTokenLocation, prefToken)
+        sp.refreshData(contextg, locations)
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        if (ridArrLoc.isNotEmpty()) {
+        if (locations.isNotEmpty()) {
             when (pos) {
                 1 -> ObjectIntent(this, FavAddActivity::class.java, FavAddActivity.TYPE, arrayOf("WFO"))
                 2 -> ObjectIntent(this, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf("WFO"))
                 else -> {
-                    nwsOffice = ridArrLoc[pos].split(" ").getOrNull(0) ?: ""
+                    nwsOffice = locations[pos].split(" ").getOrNull(0) ?: ""
                     getContent()
                 }
             }

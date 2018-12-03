@@ -259,7 +259,7 @@ class WXGLRender(private val context: Context) : Renderer {
                     radarBuffers.extractL3Data(radarL3Object)
                 }
                 /*
-		product.contains("NSW") -> {
+		        product.contains("NSW") -> {
                     radarL3Object.decocodeAndPlotNexradLevel3FourBit(context, radarBuffers.fn, radarStatusStr)
                     radarBuffers.extractL3Data(radarL3Object)
                 }
@@ -403,7 +403,7 @@ class WXGLRender(private val context: Context) : Renderer {
 
             Log.i(TAG, "zoom: "+zoom)
             if (MyApplication.radarConusRadar) {
-            if (zoom < 0.043f) {
+            if (zoom < 0.093f) {
                 Log.i(TAG, "zoom out to conusradar")
                 drawConusRadar(conusRadarBuffers)
             }

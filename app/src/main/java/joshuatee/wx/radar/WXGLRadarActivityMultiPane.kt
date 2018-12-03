@@ -146,8 +146,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        val turl = intent.getStringArrayExtra(RID)
-        numPanes = turl[2].toIntOrNull() ?: 0
+        val activityArguments = intent.getStringArrayExtra(RID)
+        numPanes = activityArguments[2].toIntOrNull() ?: 0
         numPanesArr = (0 until numPanes).toList()
         UtilityFileManagement.deleteCacheFiles(this)
         if (numPanes == 2) {
@@ -246,7 +246,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             override fun onBubbleClicked(id: Int) {}
         })
         oglInView = true
-        numPanesArr.forEach { oglrArr[it].rid = Utility.readPref(this, prefPrefix + "_RID" + (it + 1).toString(), turl[0]) }
+        numPanesArr.forEach { oglrArr[it].rid = Utility.readPref(this, prefPrefix + "_RID" + (it + 1).toString(), activityArguments[0]) }
         if (MyApplication.dualpaneshareposn) {
             (1 until numPanes).forEach { oglrArr[it].rid = oglrArr[0].rid }
         }
