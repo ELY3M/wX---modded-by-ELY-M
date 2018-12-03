@@ -28,7 +28,7 @@ import java.util.*
 
 internal object UtilityModelWPCGEFSInterface {
 
-    private val TITLES = Arrays.asList(
+    private val titles = Arrays.asList(
             ObjectMenuTitle("Precip", 37),
             ObjectMenuTitle("QPF > Annual Chance (CONUS only)", 8),
             ObjectMenuTitle("Precip Type", 4),
@@ -39,24 +39,24 @@ internal object UtilityModelWPCGEFSInterface {
             ObjectMenuTitle("Stnd Anom Temp", 18),
             ObjectMenuTitle("Other", 46)
     )
-    // FIXME should be 4 more params in storm attributes
-    var SHORT_CODES = Array(13) { Array(50) { "" } }
-    var LONG_CODES = Array(13) { Array(50) { "" } }
-    val GROUPS = SparseArray<Group>()
+
+    var shortCodes = Array(13) { Array(50) { "" } }
+    var longCodes = Array(13) { Array(50) { "" } }
+    val groups = SparseArray<Group>()
 
     internal fun createData() {
         var k = 0
-        TITLES.indices.forEach { index ->
-            val group = Group(TITLES[index].title)
+        titles.indices.forEach { index ->
+            val group = Group(titles[index].title)
             var m = 0
-            for (j in (ObjectMenuTitle.getStart(TITLES, index) until TITLES[index].count + ObjectMenuTitle.getStart(TITLES, index))) {
-                group.children.add(LABELS[j])
-                SHORT_CODES[index][m] = PARAMS[k]
-                LONG_CODES[index][m] = LABELS[k]
+            for (j in (ObjectMenuTitle.getStart(titles, index) until titles[index].count + ObjectMenuTitle.getStart(titles, index))) {
+                group.children.add(labels[j])
+                shortCodes[index][m] = params[k]
+                longCodes[index][m] = labels[k]
                 k += 1
                 m += 1
             }
-            GROUPS.append(index, group)
+            groups.append(index, group)
         }
     }
 
@@ -71,7 +71,7 @@ internal object UtilityModelWPCGEFSInterface {
 
     // grep "option value" params | awk -F">" '{print $1}' | awk '{print $4}' | sed 's/$/,/g'
 
-    val PARAMS = listOf(
+    val params = listOf(
             "p06igt0p01",
             "p06igt0p1",
             "p06igt0p25",
@@ -240,7 +240,7 @@ internal object UtilityModelWPCGEFSInterface {
 
     // grep "option value" params | awk -F"\">" '{print $2}' | sed 's/<\/option>/",/' | sed 's/^/"/'
 
-    val LABELS = listOf(
+    val labels = listOf(
             "6-hr precip > 0.01\"",
             "6-hr precip > 0.10\"",
             "6-hr precip > 0.25\"",

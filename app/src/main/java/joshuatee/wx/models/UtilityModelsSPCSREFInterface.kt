@@ -30,9 +30,9 @@ import joshuatee.wx.util.Group
 
 object UtilityModelsSPCSREFInterface {
 
-    val models = listOf("SREF")
+    val models: List<String> = listOf("SREF")
 
-    private val TITLES = Arrays.asList(
+    private val titles = Arrays.asList(
             ObjectMenuTitle("SPC Guidance", 11),
             ObjectMenuTitle("Overview", 24),
             ObjectMenuTitle("Moisture", 23),
@@ -45,7 +45,7 @@ object UtilityModelsSPCSREFInterface {
             ObjectMenuTitle("Fire", 48),
             ObjectMenuTitle("Aviation", 9))
 
-    val PARAMS: List<String> = listOf(
+    val params: List<String> = listOf(
             "SREF_PROB_TRW_CALIBRATED_HRLY__",
             "SREF_03HR_SVR_PROBS__",
             "SREF_03HR_SVR_PROBS_CONDITIONAL__",
@@ -373,7 +373,7 @@ object UtilityModelsSPCSREFInterface {
             "SREF_maxtop_prob_high_"
     )
 
-    private val LABELS = listOf(
+    private val labels = listOf(
             "[PR]:3hr Calibrated Thunderstorm",
             "[PR]:3hr Calibrated Severe Thunderstorm",
             "[PR]:3hr Calibrated Conditional Severe Tstm",
@@ -701,23 +701,23 @@ object UtilityModelsSPCSREFInterface {
             "[CPR]:Conditional_Prob_CCT_>37KFT"
     )
 
-    internal var SHORT_CODES = Array(12) { Array(50) { "" } }
-    internal var LONG_CODES = Array(12) { Array(50) { "" } }
-    internal val GROUPS = SparseArray<Group>()
+    internal var shortCodes = Array(12) { Array(50) { "" } }
+    internal var longCodes = Array(12) { Array(50) { "" } }
+    internal val groups = SparseArray<Group>()
 
     internal fun createData() {
         var k = 0
-        TITLES.indices.forEach { index ->
-            val group = Group(TITLES[index].title)
+        titles.indices.forEach { index ->
+            val group = Group(titles[index].title)
             var m = 0
-            for (j in (ObjectMenuTitle.getStart(TITLES, index) until TITLES[index].count + ObjectMenuTitle.getStart(TITLES, index))) {
-                group.children.add(LABELS[j])
-                SHORT_CODES[index][m] = PARAMS[k]
-                LONG_CODES[index][m] = LABELS[k]
+            for (j in (ObjectMenuTitle.getStart(titles, index) until titles[index].count + ObjectMenuTitle.getStart(titles, index))) {
+                group.children.add(labels[j])
+                shortCodes[index][m] = params[k]
+                longCodes[index][m] = labels[k]
                 k += 1
                 m += 1
             }
-            GROUPS.append(index, group)
+            groups.append(index, group)
         }
     }
 }

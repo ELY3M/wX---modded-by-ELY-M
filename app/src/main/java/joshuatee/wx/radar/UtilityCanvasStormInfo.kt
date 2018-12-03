@@ -67,8 +67,6 @@ object UtilityCanvasStormInfo {
         val retStr: String
         val location = UtilityLocation.getSiteLocation(context, rid)
         try {
-            // FIXME create method to getFile
-            //val dis = UCARRandomAccessFile(context.getFileStreamPath(stiBaseFn + "").absolutePath, "r")
             val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, stiBaseFn + ""))
             dis.bigEndian = true
             retStr = UtilityLevel3TextProduct.read(dis)

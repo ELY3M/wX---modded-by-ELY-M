@@ -54,7 +54,7 @@ internal object UtilitySPCCompmap {
         return UtilityImg.layerDrawableToBitmap(layersAl)
     }
 
-    val MODEL_PARAMS_LABELS = listOf(
+    val labels = listOf(
             "IR satellite",
             "MAPS sea-level pressure (mb)",
             "2-meter temperature  (F)",
@@ -79,7 +79,7 @@ internal object UtilitySPCCompmap {
             "HPC 6-hr QPF (92E)"
     )
 
-    val URL_INDEX = listOf(
+    val urlIndex = listOf(
             "16",
             "7",
             "1",

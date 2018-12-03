@@ -72,16 +72,16 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener, Ad
     private lateinit var turl: Array<String>
     private var prod = ""
     private var html = ""
-    private lateinit var sv: ScrollView
+    private lateinit var scrollView: ScrollView
     private var initProd = ""
-    private var prodListArr = listOf<String>()
+    private var products = listOf<String>()
     private lateinit var star: MenuItem
     private lateinit var notifToggle: MenuItem
     private var ridFavOld = ""
     private lateinit var c0: ObjectCardText
     private lateinit var sp: ObjectSpinner
     private lateinit var drw: ObjectNavDrawerCombo
-    private lateinit var ll: LinearLayout
+    private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
@@ -98,16 +98,16 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener, Ad
             prod = turl[0]
             initProd = prod
         }
-        sv = findViewById(R.id.sv)
-        ll = findViewById(R.id.ll)
+        scrollView = findViewById(R.id.sv)
+        linearLayout = findViewById(R.id.ll)
         c0 = ObjectCardText(this)
-        ll.addView(c0.card)
+        linearLayout.addView(c0.card)
         c0.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
-        prodListArr = UtilityFavorites.setupFavMenuNWSTEXT(MyApplication.nwsTextFav, prod)
-        sp = ObjectSpinner(this, this, R.id.spinner1, prodListArr)
+        products = UtilityFavorites.setupFavMenuNWSTEXT(MyApplication.nwsTextFav, prod)
+        sp = ObjectSpinner(this, this, R.id.spinner1, products)
         sp.setOnItemSelectedListener(this)
         UtilityWPCText.createData()
-        drw = ObjectNavDrawerCombo(this, UtilityWPCText.GROUPS, UtilityWPCText.LONG_CODES, UtilityWPCText.SHORT_CODES)
+        drw = ObjectNavDrawerCombo(this, UtilityWPCText.groups, UtilityWPCText.longCodes, UtilityWPCText.shortCodes)
         drw.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
             drw.drawerLayout.closeDrawer(drw.listView)
             prod = drw.getToken(groupPosition, childPosition)
@@ -118,9 +118,8 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener, Ad
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-
         updateSubmenuNotifText()
-        sv.smoothScrollTo(0, 0)
+        scrollView.smoothScrollTo(0, 0)
         if (MyApplication.nwsTextFav.contains(":$prod:")) {
             star.setIcon(MyApplication.STAR_ICON)
         } else {
@@ -151,7 +150,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener, Ad
         when (item.itemId) {
             R.id.action_fav -> toggleFavorite()
             R.id.action_notif_text_prod -> {
-                UtilityNotificationTextProduct.toggle(this, ll, prod.toUpperCase(Locale.US))
+                UtilityNotificationTextProduct.toggle(this, linearLayout, prod.toUpperCase(Locale.US))
                 updateSubmenuNotifText()
             }
             R.id.action_mpd -> ObjectIntent(this, WPCMPDShowSummaryActivity::class.java)
@@ -172,7 +171,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener, Ad
             1 -> ObjectIntent(this, FavAddActivity::class.java, FavAddActivity.TYPE, arrayOf("NWSTEXT"))
             2 -> ObjectIntent(this, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf("NWSTEXT"))
             else -> {
-                prod = prodListArr[pos].split(":").getOrNull(0) ?: ""
+                prod = products[pos].split(":").getOrNull(0) ?: ""
                 getContent()
             }
         }
@@ -185,21 +184,21 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener, Ad
 
     override fun onRestart() {
         if (ridFavOld != MyApplication.nwsTextFav) {
-            prodListArr = UtilityFavorites.setupFavMenuNWSTEXT(MyApplication.nwsTextFav, NWS_TXT_ARR[findPosition(prod)])
-            sp.refreshData(this, prodListArr)
+            products = UtilityFavorites.setupFavMenuNWSTEXT(MyApplication.nwsTextFav, NWS_TXT_ARR[findPosition(prod)])
+            sp.refreshData(this, products)
         }
         super.onRestart()
     }
 
     private fun toggleFavorite() {
         UtilityFavorites.toggleFavorite(this, prod, star, "NWS_TEXT_FAV")
-        prodListArr = UtilityFavorites.setupFavMenuNWSTEXT(MyApplication.nwsTextFav, prod)
-        sp.refreshData(this, prodListArr)
+        products = UtilityFavorites.setupFavMenuNWSTEXT(MyApplication.nwsTextFav, prod)
+        sp.refreshData(this, products)
     }
 
     private fun changeProduct() {
-        prodListArr = UtilityFavorites.setupFavMenuNWSTEXT(MyApplication.nwsTextFav, NWS_TXT_ARR[findPosition(prod)])
-        sp.refreshData(this, prodListArr)
+        products = UtilityFavorites.setupFavMenuNWSTEXT(MyApplication.nwsTextFav, NWS_TXT_ARR[findPosition(prod)])
+        sp.refreshData(this, products)
     }
 
     private fun updateSubmenuNotifText() {

@@ -7,7 +7,8 @@
 // TODO NWS URLs http to https const myapp
 // TODO SPC HREF use long names for sectors
 
-55066 2018_12_01 goes16 - set zoom to 1.0 on sector change
+55067 2018_12_02 refactor/rename in wpc/spc/vis/models
+55066 2018_12_02 goes16 - set zoom to 1.0 on sector change
                  OKHTTP - update from 3.11 to 3.12
                  refactor/rename in activiesmisc
                  use more variables in build.gradles files (androidx,coroutine)

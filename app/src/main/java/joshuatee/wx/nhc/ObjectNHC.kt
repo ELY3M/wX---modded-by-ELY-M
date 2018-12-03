@@ -49,7 +49,7 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
     private val pacImg2List = mutableListOf<String>()
     private val pacWalletList = mutableListOf<String>()
     private val pacTitleList = mutableListOf<String>()
-    private val bmAl = mutableListOf<Bitmap>()
+    private val bitmaps = mutableListOf<Bitmap>()
     private var cNotif: ObjectCardText? = null
     private val cardNotifHeaderText = "Currently blocked storm notifications, tap this text to clear all blocks "
     var html: String = ""
@@ -57,7 +57,7 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
     fun getData() {
         listOf("${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png", "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png",
                 "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png", "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png",
-                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png", "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png").forEach { bmAl.add(it.getImage()) }
+                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png", "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png").forEach { bitmaps.add(it.getImage()) }
         var dataRet: ObjectNHCStormInfo
         (1 until 6).forEach {
             dataRet = UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_at" + it.toString() + ".xml")
@@ -147,7 +147,7 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
     }
 
     private fun showTwoBitmaps() {
-        bmAl.forEach { dynamicview.addView(ObjectCardImage(context, it).card) }
+        bitmaps.forEach { dynamicview.addView(ObjectCardImage(context, it).card) }
     }
 
     private fun clearNHCNotifBlock() {

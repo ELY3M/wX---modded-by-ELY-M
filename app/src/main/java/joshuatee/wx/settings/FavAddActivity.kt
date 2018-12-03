@@ -82,13 +82,13 @@ class FavAddActivity : BaseActivity() {
             }
             "SREF" -> {
                 prefToken = "SREF_FAV"
-                data = UtilityModelsSPCSREFInterface.PARAMS
+                data = UtilityModelsSPCSREFInterface.params
             }
             "SPCMESO" -> {
                 prefToken = "SPCMESO_FAV"
                 prefTokenLabel = "SPCMESO_LABEL_FAV"
-                data = UtilitySPCMESO.LABELS
-                dataTokens = UtilitySPCMESO.PARAMS
+                data = UtilitySPCMESO.labels
+                dataTokens = UtilitySPCMESO.params
             }
         }
         val recyclerView: RecyclerView = findViewById(R.id.card_list)
@@ -138,8 +138,8 @@ class FavAddActivity : BaseActivity() {
         if (!ridFav.contains(tmpArr[0])) {
             when (type) {
                 "SPCMESO" -> {
-                    ridFav += UtilitySPCMESO.PARAMS[position] + ":"
-                    ridFavLabel += UtilitySPCMESO.LABELS[position] + ":"
+                    ridFav += UtilitySPCMESO.params[position] + ":"
+                    ridFavLabel += UtilitySPCMESO.labels[position] + ":"
                     Utility.writePref(this, prefTokenLabel, ridFavLabel)
                 }
                 else -> ridFav += tmpArr[0] + ":"

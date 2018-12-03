@@ -136,42 +136,42 @@ object UtilityDownload {
                 tmpArr = MyApplication.spcmesoFav.split(":")
                 if (tmpArr.size > 3) param = tmpArr[3]
                 needsBitmap = false
-                bm = UtilitySPCMESOInputOutput.getImage(context, param, Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySPCMESO.DEFAULT_SECTOR))
+                bm = UtilitySPCMESOInputOutput.getImage(context, param, Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySPCMESO.defaultSector))
             }
             "SPCMESO2" -> {
                 var param = "pmsl"
                 tmpArr = MyApplication.spcmesoFav.split(":")
                 if (tmpArr.size > 4) param = tmpArr[4]
                 needsBitmap = false
-                bm = UtilitySPCMESOInputOutput.getImage(context, param, Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySPCMESO.DEFAULT_SECTOR))
+                bm = UtilitySPCMESOInputOutput.getImage(context, param, Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySPCMESO.defaultSector))
             }
             "SPCMESO3" -> {
                 var param = "ttd"
                 tmpArr = MyApplication.spcmesoFav.split(":")
                 if (tmpArr.size > 5) param = tmpArr[5]
                 needsBitmap = false
-                bm = UtilitySPCMESOInputOutput.getImage(context, param, Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySPCMESO.DEFAULT_SECTOR))
+                bm = UtilitySPCMESOInputOutput.getImage(context, param, Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySPCMESO.defaultSector))
             }
             "SPCMESO4" -> {
                 var param = "rgnlrad"
                 tmpArr = MyApplication.spcmesoFav.split(":")
                 if (tmpArr.size > 6) param = tmpArr[6]
                 needsBitmap = false
-                bm = UtilitySPCMESOInputOutput.getImage(context, param, Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySPCMESO.DEFAULT_SECTOR))
+                bm = UtilitySPCMESOInputOutput.getImage(context, param, Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySPCMESO.defaultSector))
             }
             "SPCMESO5" -> {
                 var param = "lllr"
                 tmpArr = MyApplication.spcmesoFav.split(":")
                 if (tmpArr.size > 7) param = tmpArr[7]
                 needsBitmap = false
-                bm = UtilitySPCMESOInputOutput.getImage(context, param, Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySPCMESO.DEFAULT_SECTOR))
+                bm = UtilitySPCMESOInputOutput.getImage(context, param, Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySPCMESO.defaultSector))
             }
             "SPCMESO6" -> {
                 var param = "laps"
                 tmpArr = MyApplication.spcmesoFav.split(":")
                 if (tmpArr.size > 8) param = tmpArr[8]
                 needsBitmap = false
-                bm = UtilitySPCMESOInputOutput.getImage(context, param, Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySPCMESO.DEFAULT_SECTOR))
+                bm = UtilitySPCMESOInputOutput.getImage(context, param, Utility.readPref(context, "SPCMESO" + 1 + "_SECTOR_LAST_USED", UtilitySPCMESO.defaultSector))
             }
             "CONUSWV" -> {
                 needsBitmap = false

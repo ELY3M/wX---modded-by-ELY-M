@@ -29,7 +29,7 @@ import joshuatee.wx.util.Utility
 
 object UtilityGOES {
 
-    private val COD_HASH = mapOf(
+    private val stateToRegion = mapOf(
             "WA" to "NW",
             "ID" to "NW",
             "OR" to "NW",
@@ -112,7 +112,7 @@ object UtilityGOES {
             "EUMET:NEATL: Northeast Atlantic"
     )
 
-    private fun getGOESSectorFromState(state: String) = COD_HASH[state] ?: ""
+    private fun getGOESSectorFromState(state: String) = stateToRegion[state] ?: ""
 
     fun getGOESSectorFromNWSOffice(context: Context, office: String): String = getGOESSectorFromState(Utility.readPref(context, "NWS_LOCATION_" + office.toUpperCase(Locale.US), "").split(",")[0]).toLowerCase(Locale.US)
 

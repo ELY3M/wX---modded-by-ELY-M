@@ -29,7 +29,7 @@ import java.util.*
 
 internal object UtilityWPCText {
 
-    private val TITLES = Arrays.asList(
+    private val titles = Arrays.asList(
             ObjectMenuTitle("General", 3),
             ObjectMenuTitle("General Forecast Discussions", 8),
             ObjectMenuTitle("Precipitation Discussions", 3),
@@ -44,7 +44,7 @@ internal object UtilityWPCText {
             ObjectMenuTitle("Space Weather", 6)
     )
 
-    val LABELS = listOf(
+    val labels = listOf(
             "pmdspd: Short Range Forecast Discussion",
             "pmdepd: Extended Forecast Discussion",
             "pmdhmd: Model Diagnostics Discussion",
@@ -161,23 +161,23 @@ internal object UtilityWPCText {
             "swpcwwa: Advisory Outlook"
     )
 
-    val GROUPS = SparseArray<Group>()
-    var SHORT_CODES = Array(12) { Array(39) { "" } }
-    var LONG_CODES = Array(12) { Array(39) { "" } }
+    val groups = SparseArray<Group>()
+    var shortCodes = Array(12) { Array(39) { "" } }
+    var longCodes = Array(12) { Array(39) { "" } }
 
     internal fun createData() {
         var k = 0
-        TITLES.indices.forEach { index ->
-            val group = Group(TITLES[index].title)
+        titles.indices.forEach { index ->
+            val group = Group(titles[index].title)
             var m = 0
-            for (j in (ObjectMenuTitle.getStart(TITLES, index) until TITLES[index].count + ObjectMenuTitle.getStart(TITLES, index))) {
-                group.children.add(LABELS[j])
-                SHORT_CODES[index][m] = LABELS[k].split(":")[0]
-                LONG_CODES[index][m] = LABELS[k]
+            for (j in (ObjectMenuTitle.getStart(titles, index) until titles[index].count + ObjectMenuTitle.getStart(titles, index))) {
+                group.children.add(labels[j])
+                shortCodes[index][m] = labels[k].split(":")[0]
+                longCodes[index][m] = labels[k]
                 k += 1
                 m += 1
             }
-            GROUPS.append(index, group)
+            groups.append(index, group)
         }
     }
 }

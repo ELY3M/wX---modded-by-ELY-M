@@ -79,8 +79,8 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
                 if (img.currentZoom < 1.01f) showPrevImg()
             }
         })
-        title = Utility.readPref(this, "WPG_IMG_FAV_TITLE", UtilityWPCImages.LABELS[0])
-        imgUrl = Utility.readPref(this, "WPG_IMG_FAV_URL", UtilityWPCImages.PARAMS[0])
+        title = Utility.readPref(this, "WPG_IMG_FAV_TITLE", UtilityWPCImages.labels[0])
+        imgUrl = Utility.readPref(this, "WPG_IMG_FAV_URL", UtilityWPCImages.urls[0])
         imgIdx = Utility.readPref(this, "WPG_IMG_IDX", 0)
         imgGroupIdx = Utility.readPref(this, "WPG_IMG_GROUPIDX", 0)
         setTitle(title)
@@ -90,7 +90,7 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         actionBack.isVisible = false
         actionForward.isVisible = false
         UtilityWPCImages.createData()
-        drw = ObjectNavDrawerCombo(this, UtilityWPCImages.GROUPS, UtilityWPCImages.LONG_CODES, UtilityWPCImages.SHORT_CODES)
+        drw = ObjectNavDrawerCombo(this, UtilityWPCImages.groups, UtilityWPCImages.longCodes, UtilityWPCImages.shortCodes)
         drw.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
             drw.drawerLayout.closeDrawer(drw.listView)
             imgUrl = drw.getToken(groupPosition, childPosition)
@@ -105,14 +105,14 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         selectItem(findPosn(imgUrl))
     }
 
-    private fun findPosn(url: String) = (0 until UtilityWPCImages.PARAMS.size).firstOrNull { UtilityWPCImages.PARAMS[it] == url }
+    private fun findPosn(url: String) = (0 until UtilityWPCImages.urls.size).firstOrNull { UtilityWPCImages.urls[it] == url }
             ?: 0
 
     private fun selectItem(position: Int) {
         drw.listView.setItemChecked(position, false)
         drw.drawerLayout.closeDrawer(drw.listView)
-        title = UtilityWPCImages.LABELS[position]
-        imgUrl = UtilityWPCImages.PARAMS[position]
+        title = UtilityWPCImages.labels[position]
+        imgUrl = UtilityWPCImages.urls[position]
         getContent()
     }
 
@@ -174,8 +174,8 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
                     if (imgIdx >= numAviationImg) {
                         imgIdx = 0
                     }
-                    imgUrl = UtilityWPCImages.SHORT_CODES[imgGroupIdx][imgIdx]
-                    title = UtilityWPCImages.LONG_CODES[imgGroupIdx][imgIdx]
+                    imgUrl = UtilityWPCImages.shortCodes[imgGroupIdx][imgIdx]
+                    title = UtilityWPCImages.longCodes[imgGroupIdx][imgIdx]
                 }
                 getContent()
             }
@@ -186,8 +186,8 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
                     if (imgIdx < 0) {
                         imgIdx = numAviationImg - 1
                     }
-                    imgUrl = UtilityWPCImages.SHORT_CODES[imgGroupIdx][imgIdx]
-                    title = UtilityWPCImages.LONG_CODES[imgGroupIdx][imgIdx]
+                    imgUrl = UtilityWPCImages.shortCodes[imgGroupIdx][imgIdx]
+                    title = UtilityWPCImages.longCodes[imgGroupIdx][imgIdx]
                 }
                 getContent()
             }
@@ -225,26 +225,26 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
 
     private fun showNextImg() {
         imgIdx += 1
-        if (UtilityWPCImages.SHORT_CODES[imgGroupIdx][imgIdx] == "") {
+        if (UtilityWPCImages.shortCodes[imgGroupIdx][imgIdx] == "") {
             imgIdx = 0
         }
-        imgUrl = UtilityWPCImages.SHORT_CODES[imgGroupIdx][imgIdx]
-        title = UtilityWPCImages.LONG_CODES[imgGroupIdx][imgIdx]
+        imgUrl = UtilityWPCImages.shortCodes[imgGroupIdx][imgIdx]
+        title = UtilityWPCImages.longCodes[imgGroupIdx][imgIdx]
         getContent()
     }
 
     private fun showPrevImg() {
         imgIdx -= 1
         if (imgIdx == -1) {
-            for (j in 0 until UtilityWPCImages.SHORT_CODES[imgGroupIdx].size) {
-                if (UtilityWPCImages.SHORT_CODES[imgGroupIdx][j] == "") {
+            for (j in 0 until UtilityWPCImages.shortCodes[imgGroupIdx].size) {
+                if (UtilityWPCImages.shortCodes[imgGroupIdx][j] == "") {
                     imgIdx = j - 1
                     break
                 }
             }
         }
-        imgUrl = UtilityWPCImages.SHORT_CODES[imgGroupIdx][imgIdx]
-        title = UtilityWPCImages.LONG_CODES[imgGroupIdx][imgIdx]
+        imgUrl = UtilityWPCImages.shortCodes[imgGroupIdx][imgIdx]
+        title = UtilityWPCImages.longCodes[imgGroupIdx][imgIdx]
         getContent()
     }
 }

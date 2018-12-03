@@ -42,8 +42,8 @@ import kotlinx.coroutines.*
 class WPCRainfallForecastActivity : BaseActivity() {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private val bmAl = mutableListOf<Bitmap>()
-    private lateinit var ll: LinearLayout
+    private val bitmaps = mutableListOf<Bitmap>()
+    private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -55,28 +55,30 @@ class WPCRainfallForecastActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         contextg = this
-        title = getString(UtilityWPCRainfallForecast.ACTIVITY_TITLE_INT)
-        ll = findViewById(R.id.ll)
+        title = getString(UtilityWPCRainfallForecast.activityTitle)
+        linearLayout = findViewById(R.id.ll)
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
-            UtilityWPCRainfallForecast.PROD_IMG_URL.forEach { bmAl.add(it.getImage()) }
+            UtilityWPCRainfallForecast.imageUrls.forEach { bitmaps.add(it.getImage()) }
         }
         var card: ObjectCardImage
-        bmAl.forEach { bitmap ->
+        bitmaps.forEach { bitmap ->
             card = ObjectCardImage(contextg, bitmap)
-            val prodTextUrlLocal = UtilityWPCRainfallForecast.PROD_TEXT_URL[bmAl.indexOf(bitmap)]
-            val prodTitleLocal = UtilityWPCRainfallForecast.PROD_TITLE[bmAl.indexOf(bitmap)] + " - " + getString(UtilityWPCRainfallForecast.ACTIVITY_TITLE_INT)
-            card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(prodTextUrlLocal, prodTitleLocal)) })
-            ll.addView(card.card)
+            val prodTextUrlLocal = UtilityWPCRainfallForecast.textUrls[bitmaps.indexOf(bitmap)]
+            val prodTitleLocal = UtilityWPCRainfallForecast.productLabels[bitmaps.indexOf(bitmap)] + " - " + getString(UtilityWPCRainfallForecast.activityTitle)
+            card.setOnClickListener(View.OnClickListener {
+                ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(prodTextUrlLocal, prodTitleLocal))
+            })
+            linearLayout.addView(card.card)
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, getString(UtilityWPCRainfallForecast.ACTIVITY_TITLE_INT), "", bmAl)
+            R.id.action_share -> UtilityShare.shareText(this, getString(UtilityWPCRainfallForecast.activityTitle), "", bitmaps)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

@@ -60,12 +60,12 @@ class SPCCompmapActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, null, false)
         contextg = this
-        paramList = UtilitySPCCompmap.MODEL_PARAMS_LABELS.toMutableList()
+        paramList = UtilitySPCCompmap.labels.toMutableList()
         drw = ObjectNavDrawer(this, paramList)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
             drw.drawerLayout.closeDrawer(drw.listView)
-            val positionStr = UtilitySPCCompmap.URL_INDEX[position]
+            val positionStr = UtilitySPCCompmap.urlIndex[position]
             if (paramList[position].contains("(on)")) {
                 paramList[position] = paramList[position].replace("\\(on\\) ".toRegex(), "")
                 layerStr = layerStr.replace("a$positionStr:", "")
@@ -90,8 +90,8 @@ class SPCCompmapActivity : BaseActivity() {
 
     private fun selectItemNoGet(positionF: Int) {
         var position = positionF
-        for (i in (0 until UtilitySPCCompmap.URL_INDEX.size)) {
-            if (position.toString() == UtilitySPCCompmap.URL_INDEX[i]) {
+        for (i in (0 until UtilitySPCCompmap.urlIndex.size)) {
+            if (position.toString() == UtilitySPCCompmap.urlIndex[i]) {
                 position = i
                 break
             }

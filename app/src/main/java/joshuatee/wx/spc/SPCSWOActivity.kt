@@ -56,9 +56,9 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private var sigHtmlTmp = ""
-    private var bmAl = listOf<Bitmap>()
-    private lateinit var turl: Array<String>
+    private var html = ""
+    private var bitmaps = listOf<Bitmap>()
+    private lateinit var activityArguments: Array<String>
     private var turlDay = ""
     private var playlistProd = ""
     private lateinit var c1: ObjectCardImage
@@ -67,7 +67,7 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var c4: ObjectCardImage
     private lateinit var c5: ObjectCardImage
     private lateinit var c6: ObjectCardImage
-    private lateinit var sv: ScrollView
+    private lateinit var scrollView: ScrollView
     private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
@@ -75,7 +75,7 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcswo)
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        sv = findViewById(R.id.sv)
+        scrollView = findViewById(R.id.sv)
         c1 = ObjectCardImage(this)
         c2 = ObjectCardText(this)
         c3 = ObjectCardImage(this)
@@ -90,8 +90,8 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
         ll.addView(c4.card)
         ll.addView(c5.card)
         ll.addView(c6.card)
-        turl = intent.getStringArrayExtra(NO)
-        turlDay = turl[0]
+        activityArguments = intent.getStringArrayExtra(NO)
+        turlDay = activityArguments[0]
         title = "Day $turlDay Convective Outlook"
         val menu = toolbarBottom.menu
         val miTornado = menu.findItem(R.id.action_share_tornado)
@@ -143,68 +143,68 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
 
         withContext(Dispatchers.IO) {
-            sigHtmlTmp = UtilityDownload.getTextProduct(contextg, textUrl)
-            bmAl = UtilitySPCSWO.getImageURLs(turlDay, true)
+            html = UtilityDownload.getTextProduct(contextg, textUrl)
+            bitmaps = UtilitySPCSWO.getImageURLs(turlDay, true)
         }
 
-        c2.setText(Utility.fromHtml(sigHtmlTmp))
-        toolbar.subtitle = sigHtmlTmp.parse("(Valid.*?)<")
-        if (turl[1] == "sound") {
-            UtilityTTS.synthesizeTextAndPlay(applicationContext, sigHtmlTmp, "spcswo")
+        c2.setText(Utility.fromHtml(html))
+        toolbar.subtitle = html.parse("(Valid.*?)<")
+        if (activityArguments[1] == "sound") {
+            UtilityTTS.synthesizeTextAndPlay(applicationContext, html, "spcswo")
         }
         when (turlDay) {
             "1" -> {
-                c1.setImage(bmAl[0])
-                c3.setImage(bmAl[1])
-                c4.setImage(bmAl[2])
-                c5.setImage(bmAl[3])
+                c1.setImage(bitmaps[0])
+                c3.setImage(bitmaps[1])
+                c4.setImage(bitmaps[2])
+                c5.setImage(bitmaps[3])
                 c6.setVisibility(View.GONE)
-                listOf(c3, c4, c5).forEach { card -> card.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) }) }
+                listOf(c3, c4, c5).forEach { card -> card.setOnClickListener(View.OnClickListener { scrollView.smoothScrollTo(0, 0) }) }
             }
             "2" -> {
-                c1.setImage(bmAl[0])
-                c3.setImage(bmAl[1])
+                c1.setImage(bitmaps[0])
+                c3.setImage(bitmaps[1])
                 c4.setVisibility(View.GONE)
                 c5.setVisibility(View.GONE)
                 c6.setVisibility(View.GONE)
-                listOf(c3).forEach { card -> card.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) }) }
+                listOf(c3).forEach { card -> card.setOnClickListener(View.OnClickListener { scrollView.smoothScrollTo(0, 0) }) }
             }
             "3" -> {
-                c1.setImage(bmAl[0])
-                c3.setImage(bmAl[1])
+                c1.setImage(bitmaps[0])
+                c3.setImage(bitmaps[1])
                 c4.setVisibility(View.GONE)
                 c5.setVisibility(View.GONE)
                 c6.setVisibility(View.GONE)
-                listOf(c3).forEach { card -> card.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) }) }
+                listOf(c3).forEach { card -> card.setOnClickListener(View.OnClickListener { scrollView.smoothScrollTo(0, 0) }) }
             }
             "4-8" -> {
-                c1.setImage(bmAl[0])
-                c3.setImage(bmAl[1])
-                c4.setImage(bmAl[2])
-                c5.setImage(bmAl[3])
-                c6.setImage(bmAl[4])
-                listOf(c3, c4, c5, c6).forEach { card -> card.setOnClickListener(View.OnClickListener { sv.smoothScrollTo(0, 0) }) }
+                c1.setImage(bitmaps[0])
+                c3.setImage(bitmaps[1])
+                c4.setImage(bitmaps[2])
+                c5.setImage(bitmaps[3])
+                c6.setImage(bitmaps[4])
+                listOf(c3, c4, c5, c6).forEach { card -> card.setOnClickListener(View.OnClickListener { scrollView.smoothScrollTo(0, 0) }) }
             }
         }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, sigHtmlTmp, playlistProd, playlistProd)) {
+        if (audioPlayMenu(item.itemId, html, playlistProd, playlistProd)) {
             return true
         }
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.shareText(this, "Day $turlDay Convective Outlook", Utility.fromHtml(sigHtmlTmp), bmAl)
-            R.id.action_share_text -> UtilityShare.shareText(this, "Day $turlDay Convective Outlook - Text", Utility.fromHtml(sigHtmlTmp))
-            R.id.action_share_tornado -> if (bmAl.size > 1) UtilityShare.shareBitmap(this, "Day $turlDay Convective Outlook - Tornado", bmAl[1])
-            R.id.action_share_hail -> if (bmAl.size > 2) UtilityShare.shareBitmap(this, "Day $turlDay Convective Outlook - Hail", bmAl[2])
-            R.id.action_share_wind -> if (bmAl.size > 3) UtilityShare.shareBitmap(this, "Day $turlDay Convective Outlook - Wind", bmAl[3])
-            R.id.action_share_categorical -> if (bmAl.isNotEmpty()) UtilityShare.shareBitmap(this, "Day $turlDay Convective Outlook - Categorical", bmAl[0])
-            R.id.action_share_probabilistic -> if (bmAl.size > 1) UtilityShare.shareBitmap(this, "Day $turlDay Convective Outlook - Probabilistic", bmAl[1])
-            R.id.action_share_d4 -> if (bmAl.isNotEmpty()) UtilityShare.shareBitmap(this, "Day " + "4" + " Convective Outlook - Image", bmAl[0])
-            R.id.action_share_d5 -> if (bmAl.size > 1) UtilityShare.shareBitmap(this, "Day " + "5" + " Convective Outlook - Image", bmAl[1])
-            R.id.action_share_d6 -> if (bmAl.size > 2) UtilityShare.shareBitmap(this, "Day " + "6" + " Convective Outlook - Image", bmAl[2])
-            R.id.action_share_d7 -> if (bmAl.size > 3) UtilityShare.shareBitmap(this, "Day " + "7" + " Convective Outlook - Image", bmAl[3])
-            R.id.action_share_d8 -> if (bmAl.size > 4) UtilityShare.shareBitmap(this, "Day " + "8" + " Convective Outlook - Image", bmAl[4])
+            R.id.action_share_all -> UtilityShare.shareText(this, "Day $turlDay Convective Outlook", Utility.fromHtml(html), bitmaps)
+            R.id.action_share_text -> UtilityShare.shareText(this, "Day $turlDay Convective Outlook - Text", Utility.fromHtml(html))
+            R.id.action_share_tornado -> if (bitmaps.size > 1) UtilityShare.shareBitmap(this, "Day $turlDay Convective Outlook - Tornado", bitmaps[1])
+            R.id.action_share_hail -> if (bitmaps.size > 2) UtilityShare.shareBitmap(this, "Day $turlDay Convective Outlook - Hail", bitmaps[2])
+            R.id.action_share_wind -> if (bitmaps.size > 3) UtilityShare.shareBitmap(this, "Day $turlDay Convective Outlook - Wind", bitmaps[3])
+            R.id.action_share_categorical -> if (bitmaps.isNotEmpty()) UtilityShare.shareBitmap(this, "Day $turlDay Convective Outlook - Categorical", bitmaps[0])
+            R.id.action_share_probabilistic -> if (bitmaps.size > 1) UtilityShare.shareBitmap(this, "Day $turlDay Convective Outlook - Probabilistic", bitmaps[1])
+            R.id.action_share_d4 -> if (bitmaps.isNotEmpty()) UtilityShare.shareBitmap(this, "Day " + "4" + " Convective Outlook - Image", bitmaps[0])
+            R.id.action_share_d5 -> if (bitmaps.size > 1) UtilityShare.shareBitmap(this, "Day " + "5" + " Convective Outlook - Image", bitmaps[1])
+            R.id.action_share_d6 -> if (bitmaps.size > 2) UtilityShare.shareBitmap(this, "Day " + "6" + " Convective Outlook - Image", bitmaps[2])
+            R.id.action_share_d7 -> if (bitmaps.size > 3) UtilityShare.shareBitmap(this, "Day " + "7" + " Convective Outlook - Image", bitmaps[3])
+            R.id.action_share_d8 -> if (bitmaps.size > 4) UtilityShare.shareBitmap(this, "Day " + "8" + " Convective Outlook - Image", bitmaps[4])
             R.id.action_state_graphics -> ObjectIntent(this, SPCSWOStateGraphicsActivity::class.java, SPCSWOStateGraphicsActivity.NO, arrayOf(turlDay, ""))
             else -> return super.onOptionsItemSelected(item)
         }

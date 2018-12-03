@@ -69,10 +69,10 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var url = ""
     private var text = ""
     private var title = ""
-    private var wfoArr = listOf<String>()
-    private var prod = ""
-    private val bitmapArr = mutableListOf<Bitmap>()
-    private val mcdNoArr = mutableListOf<String>()
+    private var wfos = listOf<String>()
+    private var product = ""
+    private val bitmaps = mutableListOf<Bitmap>()
+    private val mpdNumbers = mutableListOf<String>()
     private lateinit var objCard: ObjectCard
     private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
@@ -101,27 +101,29 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
             mpdList = sigHtmlTmp.parseColumn(RegExp.mpdPattern)
             mpdList.forEach {
                 imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$it.gif"
-                mcdNoArr.add(it)
-                bitmapArr.add(imgUrl.getImage())
+                mpdNumbers.add(it)
+                bitmaps.add(imgUrl.getImage())
             }
             if (mpdList.size == 1) {
-                imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd" + mcdNoArr[0] + ".gif"
-                title = "MPD " + mcdNoArr[0]
-                prod = "WPCMPD" + mcdNoArr[0]
-                text = UtilityDownload.getTextProduct(contextg, prod)
+                imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd" + mpdNumbers[0] + ".gif"
+                title = "MPD " + mpdNumbers[0]
+                product = "WPCMPD" + mpdNumbers[0]
+                text = UtilityDownload.getTextProduct(contextg, product)
             }
         }
 
         mpdList.indices.forEach { mpdIndex ->
             val card = ObjectCardImage(contextg)
-            card.setImage(bitmapArr[mpdIndex])
-            card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCMCDWShowActivity::class.java, SPCMCDWShowActivity.NO, arrayOf(mcdNoArr[mpdIndex], "", PolygonType.MPD.toString())) })
+            card.setImage(bitmaps[mpdIndex])
+            card.setOnClickListener(View.OnClickListener {
+                ObjectIntent(contextg, SPCMCDWShowActivity::class.java, SPCMCDWShowActivity.NO, arrayOf(mpdNumbers[mpdIndex], "", PolygonType.MPD.toString()))
+            })
             linearLayout.addView(card.card)
             if (mpdList.size == 1) registerForContextMenu(card.img)
         }
         if (mpdList.size == 1) {
             val wfoStr = text.parse("ATTN...WFO...(.*?)...<br>")
-            wfoArr = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
+            wfos = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
             val card2 = ObjectCardText(contextg)
             card2.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
             card2.setText(Utility.fromHtml(text))
@@ -139,14 +141,16 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo)
-        (0 until wfoArr.size - 1).forEach { menu.add(0, v.id, 0, "Add location: " + wfoArr[it] + " - " + Utility.readPref(this, "NWS_LOCATION_" + wfoArr[it], "")) }
+        (0 until wfos.size - 1).forEach {
+            menu.add(0, v.id, 0, "Add location: " + wfos[it] + " - " + Utility.readPref(this, "NWS_LOCATION_" + wfos[it], ""))
+        }
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         val itemStr = item.title.toString()
-        (0 until wfoArr.size - 1)
-                .filter { itemStr.contains(wfoArr[it]) }
-                .forEach { saveLocation(wfoArr[it]) }
+        (0 until wfos.size - 1)
+                .filter { itemStr.contains(wfos[it]) }
+                .forEach { saveLocation(wfos[it]) }
         return true
     }
 
@@ -165,13 +169,13 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, text, prod, prod)) return true
+        if (audioPlayMenu(item.itemId, text, product, product)) return true
         return when (item.itemId) {
             R.id.action_share -> {
-                if (bitmapArr.size > 1)
-                    UtilityShare.shareText(this, title, "", bitmapArr)
-                else if (bitmapArr.size == 1)
-                    UtilityShare.shareText(this, title, Utility.fromHtml(text), bitmapArr[0])
+                if (bitmaps.size > 1)
+                    UtilityShare.shareText(this, title, "", bitmaps)
+                else if (bitmaps.size == 1)
+                    UtilityShare.shareText(this, title, Utility.fromHtml(text), bitmaps[0])
                 true
             }
             else -> super.onOptionsItemSelected(item)

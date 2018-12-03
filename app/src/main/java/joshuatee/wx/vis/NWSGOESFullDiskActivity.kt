@@ -76,14 +76,14 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener, Too
                 if (img.currentZoom < 1.01f) showPrevImg()
             }
         })
-        title = Utility.readPref(this, "GOESFULLDISK_IMG_FAV_TITLE", UtilityNWSGOESFullDisk.MODEL_PARAMS_LABELS[0])
-        imgUrl = Utility.readPref(this, "GOESFULLDISK_IMG_FAV_URL", UtilityNWSGOESFullDisk.URL_INDEX[0])
+        title = Utility.readPref(this, "GOESFULLDISK_IMG_FAV_TITLE", UtilityNWSGOESFullDisk.labels[0])
+        imgUrl = Utility.readPref(this, "GOESFULLDISK_IMG_FAV_URL", UtilityNWSGOESFullDisk.urls[0])
         imgIdx = Utility.readPref(this, "GOESFULLDISK_IMG_FAV_IDX", imgIdx)
         setTitle(title)
         val menu = toolbarBottom.menu
         actionAnimate = menu.findItem(R.id.action_animate)
         actionAnimate.isVisible = false
-        drw = ObjectNavDrawer(this, UtilityNWSGOESFullDisk.MODEL_PARAMS_LABELS, UtilityNWSGOESFullDisk.URL_INDEX)
+        drw = ObjectNavDrawer(this, UtilityNWSGOESFullDisk.labels, UtilityNWSGOESFullDisk.urls)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, true)
             drw.drawerLayout.closeDrawer(drw.listView)
@@ -160,21 +160,21 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener, Too
 
     private fun showNextImg() {
         imgIdx += 1
-        if (imgIdx == UtilityNWSGOESFullDisk.URL_INDEX.size) {
+        if (imgIdx == UtilityNWSGOESFullDisk.urls.size) {
             imgIdx = 0
         }
-        title = UtilityNWSGOESFullDisk.MODEL_PARAMS_LABELS[imgIdx]
-        imgUrl = UtilityNWSGOESFullDisk.URL_INDEX[imgIdx]
+        title = UtilityNWSGOESFullDisk.labels[imgIdx]
+        imgUrl = UtilityNWSGOESFullDisk.urls[imgIdx]
         getContent()
     }
 
     private fun showPrevImg() {
         imgIdx -= 1
         if (imgIdx == -1) {
-            imgIdx = UtilityNWSGOESFullDisk.URL_INDEX.size - 1
+            imgIdx = UtilityNWSGOESFullDisk.urls.size - 1
         }
-        title = UtilityNWSGOESFullDisk.MODEL_PARAMS_LABELS[imgIdx]
-        imgUrl = UtilityNWSGOESFullDisk.URL_INDEX[imgIdx]
+        title = UtilityNWSGOESFullDisk.labels[imgIdx]
+        imgUrl = UtilityNWSGOESFullDisk.urls[imgIdx]
         getContent()
     }
 }

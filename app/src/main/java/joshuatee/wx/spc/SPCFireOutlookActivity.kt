@@ -55,7 +55,7 @@ class SPCFireOutlookActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         contextg = this
-        title = getString(UtilitySPCFireOutlook.ACTIVITY_TITLE_INT)
+        title = getString(UtilitySPCFireOutlook.activityTitle)
         linearLayout = findViewById(R.id.ll)
         title = "SPC"
         toolbar.subtitle = "Fire Weather Outlook"
@@ -63,11 +63,11 @@ class SPCFireOutlookActivity : BaseActivity() {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        withContext(Dispatchers.IO) { UtilitySPCFireOutlook.PROD_IMG_URL.mapTo(bitmaps) { it.getImage() } }
+        withContext(Dispatchers.IO) { UtilitySPCFireOutlook.imageUrls.mapTo(bitmaps) { it.getImage() } }
         var card: ObjectCardImage
         bitmaps.forEach { bitmap ->
             card = ObjectCardImage(contextg, bitmap)
-            val prod = UtilitySPCFireOutlook.PROD_TEXT_URL[bitmaps.indexOf(bitmap)]
+            val prod = UtilitySPCFireOutlook.textProducts[bitmaps.indexOf(bitmap)]
             card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, WPCTextProductsActivity::class.java, WPCTextProductsActivity.URL, arrayOf(prod)) })
             linearLayout.addView(card.card)
         }
@@ -75,7 +75,7 @@ class SPCFireOutlookActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, getString(UtilitySPCFireOutlook.ACTIVITY_TITLE_INT), "", bitmaps)
+            R.id.action_share -> UtilityShare.shareText(this, getString(UtilitySPCFireOutlook.activityTitle), "", bitmaps)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

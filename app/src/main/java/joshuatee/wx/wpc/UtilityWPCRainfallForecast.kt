@@ -26,24 +26,24 @@ import joshuatee.wx.R
 
 internal object UtilityWPCRainfallForecast {
 
-    val PROD_TEXT_URL = listOf(
+    val textUrls = listOf(
             "${MyApplication.nwsWPCwebsitePrefix}/qpf/94epoints.txt",
             "${MyApplication.nwsWPCwebsitePrefix}/qpf/98epoints.txt",
             "${MyApplication.nwsWPCwebsitePrefix}/qpf/99epoints.txt"
     )
 
-    val PROD_TITLE = listOf(
+    val productLabels = listOf(
             "Day 1",
             "Day 2",
             "Day 3"
     )
 
-    val PROD_IMG_URL = listOf(
+    val imageUrls = listOf(
             "${MyApplication.nwsWPCwebsitePrefix}/qpf/94ewbg.gif",
             "${MyApplication.nwsWPCwebsitePrefix}/qpf/98ewbg.gif",
             "${MyApplication.nwsWPCwebsitePrefix}/qpf/99ewbg.gif"
     )
 
-    const val ACTIVITY_TITLE_INT = R.string.title_activity_hpcrainfall_forecast
+    const val activityTitle = R.string.title_activity_hpcrainfall_forecast
 }
 

@@ -179,32 +179,33 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityUI.immersiveMode(this as Activity)
 
+
         if (UIPreferences.radarStatusBarTransparent && Build.VERSION.SDK_INT >= 21) {
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.statusBarColor = Color.TRANSPARENT
         }
-	
+
         act = this
         spotterShowSelected = false
         locXCurrent = joshuatee.wx.settings.Location.x
         locYCurrent = joshuatee.wx.settings.Location.y
-        val turl = intent.getStringArrayExtra(RID)
+        val activityArguments = intent.getStringArrayExtra(RID)
         numPanesArr = (0 until numPanes).toList()
         UtilityFileManagement.deleteCacheFiles(this)
         // for L2 archive called from storm reports
-        if (turl != null) {
-            if (turl.size > 6) {
-                urlStr = turl[4]
-                locXCurrent = turl[5]
-                locYCurrent = turl[6]
+        if (activityArguments != null) {
+            if (activityArguments.size > 6) {
+                urlStr = activityArguments[4]
+                locXCurrent = activityArguments[5]
+                locYCurrent = activityArguments[6]
                 archiveMode = true
-            } else if (turl.size > 4) {
-                spotterId = turl[4]
+            } else if (activityArguments.size > 4) {
+                spotterId = activityArguments[4]
                 spotterShowSelected = true
             }
-            if (turl.size > 3)
+            if (activityArguments.size > 3)
                 fixedSite = true
-            if (turl.size < 7)
+            if (activityArguments.size < 7)
                 archiveMode = false
         }
         contextg = this
@@ -220,29 +221,14 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         tiltMenu = menu.findItem(R.id.action_tilt)
         l3Menu = menu.findItem(R.id.action_l3)
         l2Menu = menu.findItem(R.id.action_l2)
-        val blank = menu.findItem(R.id.action_blank)
-
-        //FIXME fix overlaying issue when transparent status bar is enabled!
         if (!UIPreferences.radarImmersiveMode) {
-            Log.i(TAG, "UIPreferences.radarImmersiveMode: "+UIPreferences.radarImmersiveMode)
-            if (UIPreferences.radarStatusBarTransparent && Build.VERSION.SDK_INT >= 21) {
-                Log.i(TAG, "statusbar is trans")
-                blank.isVisible = true
-                menu.findItem(R.id.action_level3_blank).isVisible = true
-                menu.findItem(R.id.action_level2_blank).isVisible = true
-                menu.findItem(R.id.action_animate_blank).isVisible = true
-                menu.findItem(R.id.action_tilt_blank).isVisible = true
-                menu.findItem(R.id.action_tools_blank).isVisible = true
-            } else {
-                Log.i(TAG, "statusbar is not trans")
-                blank.isVisible = false
-                menu.findItem(R.id.action_level3_blank).isVisible = false
-                menu.findItem(R.id.action_level2_blank).isVisible = false
-                menu.findItem(R.id.action_animate_blank).isVisible = false
-                menu.findItem(R.id.action_tilt_blank).isVisible = false
-                menu.findItem(R.id.action_tools_blank).isVisible = false
-            }
-
+            val blank = menu.findItem(R.id.action_blank)
+            blank.isVisible = false
+            menu.findItem(R.id.action_level3_blank).isVisible = false
+            menu.findItem(R.id.action_level2_blank).isVisible = false
+            menu.findItem(R.id.action_animate_blank).isVisible = false
+            menu.findItem(R.id.action_tilt_blank).isVisible = false
+            menu.findItem(R.id.action_tools_blank).isVisible = false
         }
         if (android.os.Build.VERSION.SDK_INT > 20)
             menu.findItem(R.id.action_jellybean_drawtools).isVisible = false
@@ -267,15 +253,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         initGLVIEW()
         oglr.product = "N0Q"
         oglInView = true
-        if (turl == null)
+        if (activityArguments == null)
             oglr.rid = joshuatee.wx.settings.Location.rid
         else
-            oglr.rid = turl[0]
+            oglr.rid = activityArguments[0]
         // hack, in rare cases a user will save a location that doesn't pick up RID
         if (oglr.rid == "") oglr.rid = "TLX"
         //state = turl[1]
-        if (turl != null && turl.size > 2) {
-            oglr.product = turl[2]
+        if (activityArguments != null && activityArguments.size > 2) {
+            oglr.product = activityArguments[2]
             if (oglr.product == "N0R") {
                 oglr.product = "N0Q"
             }

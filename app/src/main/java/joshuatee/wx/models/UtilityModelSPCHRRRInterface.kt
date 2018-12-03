@@ -25,7 +25,7 @@ internal object UtilityModelSPCHRRRInterface {
 
     val models = listOf("HRRR")
 
-    val SECTORS = listOf(
+    val sectors = listOf(
             "National",
             "Northwest US",
             "Southwest US",
@@ -38,7 +38,7 @@ internal object UtilityModelSPCHRRRInterface {
             "Midwest"
     )
 
-    val SECTOR_CODES = listOf(
+    val sectorCodes = listOf(
             "S19",
             "S11",
             "S12",
@@ -51,7 +51,7 @@ internal object UtilityModelSPCHRRRInterface {
             "S20"
     )
 
-    val PARAMS = listOf(
+    val params = listOf(
             "refc",
             "pmsl",
             "srh3",
@@ -61,9 +61,10 @@ internal object UtilityModelSPCHRRRInterface {
             "scp",
             "uh",
             "ptype",
-            "ttd")
+            "ttd"
+    )
 
-    val LABELS = listOf(
+    val labels = listOf(
             "Composite Reflectivity",
             "MSL Pressure & Wind",
             "Shear Parameters",

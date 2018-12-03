@@ -62,18 +62,18 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private lateinit var turl: List<String>
+    private lateinit var activityArguments: List<String>
     private var url = ""
-    private var sigHtmlTmp = ""
-    private var prod = ""
+    private var html = ""
+    private var product = ""
     private var stormId = ""
     private var goesId = ""
     private var goesSector = ""
     private var toolbarTitle = ""
-    private lateinit var sv: ScrollView
-    private val bmAl = mutableListOf<Bitmap>()
+    private lateinit var scrollView: ScrollView
+    private val bitmaps = mutableListOf<Bitmap>()
     private var baseUrl = ""
-    private lateinit var ll: LinearLayout
+    private lateinit var linearLayout: LinearLayout
     private lateinit var cTextProd: ObjectCardText
     private lateinit var contextg: Context
 
@@ -82,22 +82,22 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.nhc_storm)
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        ll = findViewById(R.id.ll)
-        sv = findViewById(R.id.sv)
-        turl = intent.getStringArrayExtra(URL).toList()
-        url = turl[0]
-        toolbarTitle = turl[1]
+        linearLayout = findViewById(R.id.ll)
+        scrollView = findViewById(R.id.sv)
+        activityArguments = intent.getStringArrayExtra(URL).toList()
+        url = activityArguments[0]
+        toolbarTitle = activityArguments[1]
         val titleArr = toolbarTitle.split(" - ")
         if (titleArr.size > 1) {
             title = titleArr[1]
         }
-        val imgUrl1 = turl[3]
+        val imgUrl1 = activityArguments[3]
         val year = UtilityTime.year()
         var yearInString = year.toString()
         yearInString = yearInString.substring(Math.max(yearInString.length - 2, 0))
         baseUrl = imgUrl1.replace(yearInString + "_5day_cone_with_line_and_wind_sm2.png", "")
         baseUrl += yearInString
-        stormId = turl[5]
+        stormId = activityArguments[5]
         stormId = stormId.replace("EP0", "EP").replace("AL0", "AL")
         goesSector = UtilityStringExternal.truncate(stormId, 1)
         goesSector = goesSector.replace("A", "L")  // value is either E or L
@@ -108,61 +108,54 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         cTextProd = ObjectCardText(this)
         cTextProd.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
-        ll.addView(cTextProd.card)
-        prod = "MIATCP$stormId"
+        linearLayout.addView(cTextProd.card)
+        product = "MIATCP$stormId"
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        bmAl.clear()
+        bitmaps.clear()
         withContext(Dispatchers.IO) {
-            url = UtilityDownload.getTextProduct(contextg, prod)
+            url = UtilityDownload.getTextProduct(contextg, product)
             listOf("_W5_NL_sm2.png", "_5day_cone_with_line_and_wind_sm2.png", "_W_NL_sm2.gif", "_wind_probs_34_F120_sm2.png", "_wind_probs_50_F120_sm2.png",
-                    "_wind_probs_64_F120_sm2.png", "_R_sm2.png", "_S_sm2.png", "_WPCQPF_sm2.png").forEach { bmAl.add((baseUrl + it).getImage()) }
-            bmAl.add("${MyApplication.nwsNhcWebsitePrefix}/tafb_latest/danger_pac_latestBW_sm3.gif".getImage())
+                    "_wind_probs_64_F120_sm2.png", "_R_sm2.png", "_S_sm2.png", "_WPCQPF_sm2.png").forEach { bitmaps.add((baseUrl + it).getImage()) }
+            bitmaps.add("${MyApplication.nwsNhcWebsitePrefix}/tafb_latest/danger_pac_latestBW_sm3.gif".getImage())
         }
         cTextProd.setText(Utility.fromHtml(url))
-        sigHtmlTmp = url
-        sv.smoothScrollTo(0, 0)
-        bmAl.filter { it.width > 100 }.forEach { ll.addView(ObjectCardImage(contextg, it).card) }
-        if (turl.size > 2) {
-            if (turl[2] == "sound") UtilityTTS.synthesizeTextAndPlay(applicationContext, sigHtmlTmp, prod)
+        html = url
+        scrollView.smoothScrollTo(0, 0)
+        bitmaps.filter { it.width > 100 }.forEach { linearLayout.addView(ObjectCardImage(contextg, it).card) }
+        if (activityArguments.size > 2) {
+            if (activityArguments[2] == "sound") UtilityTTS.synthesizeTextAndPlay(applicationContext, html, product)
         }
     }
 
     private fun getText() = GlobalScope.launch(uiDispatcher) {
-        url = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(contextg, prod) }
+        url = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(contextg, product) }
         if (url.contains("<")) {
             cTextProd.setText(Utility.fromHtml(url))
         } else {
             cTextProd.setText(url)
         }
-        sigHtmlTmp = url
-        sv.smoothScrollTo(0, 0)
+        html = url
+        scrollView.smoothScrollTo(0, 0)
+    }
+
+    fun setProduct(productF: String) {
+        product = productF
+        getText()
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, sigHtmlTmp, prod, prod)) {
+        if (audioPlayMenu(item.itemId, html, product, product)) {
             return true
         }
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, turl[1], Utility.fromHtml(url), bmAl)
-            R.id.action_MIATCPEP2 -> {
-                prod = "MIATCP$stormId"
-                getText()
-            }
-            R.id.action_MIATCMEP2 -> {
-                prod = "MIATCM$stormId"
-                getText()
-            }
-            R.id.action_MIATCDEP2 -> {
-                prod = "MIATCD$stormId"
-                getText()
-            }
-            R.id.action_MIAPWSEP2 -> {
-                prod = "MIAPWS$stormId"
-                getText()
-            }
+            R.id.action_share -> UtilityShare.shareText(this, activityArguments[1], Utility.fromHtml(url), bitmaps)
+            R.id.action_MIATCPEP2 -> setProduct("MIATCP$stormId")
+            R.id.action_MIATCMEP2 -> setProduct("MIATCM$stormId")
+            R.id.action_MIATCDEP2 -> setProduct("MIATCD$stormId")
+            R.id.action_MIAPWSEP2 -> setProduct("MIAPWS$stormId")
             R.id.action_mute_notification -> UtilityNotificationNHC.muteNotification(this, toolbarTitle)
             else -> return super.onOptionsItemSelected(item)
         }
