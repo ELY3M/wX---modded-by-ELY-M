@@ -88,7 +88,7 @@ object UtilityUSImgNWSMosaic {
             "conus" to "CONUS"
     )
 
-    private val COD_HASH = mapOf(
+    private val stateToSector = mapOf(
             "WA" to "pacnorthwest",
             "ID" to "pacnorthwest",
             "OR" to "pacnorthwest",
@@ -142,7 +142,7 @@ object UtilityUSImgNWSMosaic {
 
     internal fun getNWSSectorLabelFromCode(code: String) = sectorToLabel[code] ?: ""
 
-    fun getNWSSectorFromState(state: String): String = COD_HASH[state] ?: ""
+    fun getNWSSectorFromState(state: String): String = stateToSector[state] ?: ""
 
     internal fun nwsMosaicAnimation(context: Context, sector: String, frameCount: Int, isInteractive: Boolean): AnimationDrawable {
         val urlArr: List<String>

@@ -1,12 +1,15 @@
 
-// TODO finish coroutine migration -  telecine
-// TODO find new material design icons as used in google cal / clock
 // TODO base velocity legend
-// TODO SPC MESO rescan for _sf, convert to list
-// TODO camelCase all vars in model's interfaces
 // TODO NWS URLs http to https const myapp
-// TODO SPC HREF use long names for sectors
+// TODO refactor nexrad radar to match architecture of wXL23 Metal to remove code duplicity
 
+55069 2018_12_09 SPC MESO  _sf, convert to list
+                 refactor/rename in models
+55068 2018_12_07 refactor/rename in wpc/spc/vis/models
+                 modify zoom levels for additional radar elements per Ely's suggestion
+                 add rectangular projection code to radar to make easier for Conus radar that Ely is working on
+                 (bugfix/feature) hide certain radar elements on touch per Ely's suggestion
+                 add more code and FIXME in case NWS does not act on CERT issue for TGFTP
 55067 2018_12_02 refactor/rename in wpc/spc/vis/models
 55066 2018_12_02 goes16 - set zoom to 1.0 on sector change
                  OKHTTP - update from 3.11 to 3.12

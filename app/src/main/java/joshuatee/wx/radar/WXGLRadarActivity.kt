@@ -901,7 +901,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 alertDialogStatusAl.add("Show radar status message")
                 diaStatus!!.show()
             } else {
-                numPanesArr.forEach { wxgltextArr[it].addTV() }
+                numPanesArr.forEach {
+                    wxgltextArr[it].addTV()
+                }
             }
         }
     }
@@ -1199,7 +1201,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     }
 
     private fun getRadarStatus() = GlobalScope.launch(uiDispatcher) {
-        val radarStatus = withContext(Dispatchers.IO) { UtilityDownload.getRadarStatusMessage(contextg, oglr.rid) }
+        var radarStatus = withContext(Dispatchers.IO) { UtilityDownload.getRadarStatusMessage(contextg, oglr.rid) }
+        if (radarStatus == "") { radarStatus = "The current radar status is not available." }
         UtilityAlertDialog.showHelpText(Utility.fromHtml(radarStatus), act)
     }
 

@@ -257,6 +257,29 @@ internal object UtilityWXOGLPerf {
         }
     }
 
+    fun generate4326Projection(inBuff: ByteBuffer, outBuff: ByteBuffer, pn: ProjectionNumbers, count: Int) {
+        //val centerX = pn.xFloat
+        //val centerY = pn.yFloat
+        //val xImageCenterPixels = pn.xCenter.toFloat()
+        //val yImageCenterPixels = pn.yCenter.toFloat()
+        val pnXFloat = pn.xFloat
+        val pnYFloat = pn.yFloat
+        val pnXCenter = pn.xCenter
+        val pnYCenter = pn.yCenter
+        //val oneDegreeScaleFactor = pn.oneDegreeScaleFactorFloat
+        val pnScaleFloat = pn.scaleFloat
+        var iCount = 0
+        if (count * 4 <= outBuff.limit()) {
+            while (iCount < count) {
+                outBuff.putFloat(iCount * 4, (-((inBuff.getFloat(iCount * 4 + 4) - pnYFloat) * pnScaleFloat) + pnXCenter.toFloat()))
+                outBuff.putFloat(iCount * 4 + 4, -(-((inBuff.getFloat(iCount * 4) - pnXFloat) * pnScaleFloat) + pnYCenter.toFloat()))
+                //outBuff.putFloat(iCount * 4 + 4, -1.0f * (-((M_180_div_PI * log(tan((M_PI_div_4 + inBuff.getFloat(iCount * 4) * M_PI_div_360).toDouble()), E).toFloat() - M_180_div_PI * log(tan((M_PI_div_4 + centerX * M_PI_div_360).toDouble()), E).toFloat()) * oneDegreeScaleFactor) + yImageCenterPixels))
+                //outBuff.putFloat(iCount * 4, -((inBuff.getFloat(iCount * 4 + 4) - centerY) * oneDegreeScaleFactor) + xImageCenterPixels)
+                iCount += 2
+            }
+        }
+    }
+
     fun genIndex(indexBuff: ByteBuffer, len: Int, breakSizeF: Int) {
         var breakSize = breakSizeF
         var incr: Int

@@ -62,7 +62,7 @@ internal object UtilityModelSPCHREFInterface {
         }
     }
 
-    val SECTORS = listOf(
+    val sectors = listOf(
             "conus",
             "cp",
             "ma",
@@ -73,6 +73,19 @@ internal object UtilityModelSPCHREFInterface {
             "se",
             "sp",
             "sw"
+    )
+
+    val sectorsLong = listOf(
+            "CONUS",
+            "Central Plains",
+            "Mid Atlantic",
+            "Midwest",
+            "Northeast",
+            "Northern Plains",
+            "Northwest",
+            "Southeast",
+            "Southern Plains",
+            "Southwest"
     )
 
     val params = listOf(

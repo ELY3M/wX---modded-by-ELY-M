@@ -47,7 +47,7 @@ object UtilitySPCMESOInputOutput {
         val showWatwarn = Utility.readPref(context, prefModel + "_SHOW_WATWARN", "false").startsWith("t")
         val showTopo = Utility.readPref(context, prefModel + "_SHOW_TOPO", "false").startsWith("t")
         val layersAl = mutableListOf<Drawable>()
-        val gifUrl = if (UtilitySPCMESO.IMG_SF.contains(":$param:") && !showRadar) {
+        val gifUrl = if (UtilitySPCMESO.imgSf.contains(param) && !showRadar) {
             "_sf.gif"
         } else {
             ".gif"

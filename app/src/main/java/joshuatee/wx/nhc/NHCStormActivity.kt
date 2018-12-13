@@ -79,7 +79,11 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.nhc_storm)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout_bottom_toolbar,
+            R.menu.nhc_storm
+        )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         linearLayout = findViewById(R.id.ll)
@@ -107,7 +111,12 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
             goesId = "0$goesId"
         }
         cTextProd = ObjectCardText(this)
-        cTextProd.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
+        cTextProd.setOnClickListener(View.OnClickListener {
+            UtilityToolbar.showHide(
+                toolbar,
+                toolbarBottom
+            )
+        })
         linearLayout.addView(cTextProd.card)
         product = "MIATCP$stormId"
         getContent()
@@ -117,16 +126,30 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         bitmaps.clear()
         withContext(Dispatchers.IO) {
             url = UtilityDownload.getTextProduct(contextg, product)
-            listOf("_W5_NL_sm2.png", "_5day_cone_with_line_and_wind_sm2.png", "_W_NL_sm2.gif", "_wind_probs_34_F120_sm2.png", "_wind_probs_50_F120_sm2.png",
-                    "_wind_probs_64_F120_sm2.png", "_R_sm2.png", "_S_sm2.png", "_WPCQPF_sm2.png").forEach { bitmaps.add((baseUrl + it).getImage()) }
+            listOf(
+                "_W5_NL_sm2.png",
+                "_5day_cone_with_line_and_wind_sm2.png",
+                "_W_NL_sm2.gif",
+                "_wind_probs_34_F120_sm2.png",
+                "_wind_probs_50_F120_sm2.png",
+                "_wind_probs_64_F120_sm2.png",
+                "_R_sm2.png",
+                "_S_sm2.png",
+                "_WPCQPF_sm2.png"
+            ).forEach { bitmaps.add((baseUrl + it).getImage()) }
             bitmaps.add("${MyApplication.nwsNhcWebsitePrefix}/tafb_latest/danger_pac_latestBW_sm3.gif".getImage())
         }
         cTextProd.setText(Utility.fromHtml(url))
         html = url
         scrollView.smoothScrollTo(0, 0)
-        bitmaps.filter { it.width > 100 }.forEach { linearLayout.addView(ObjectCardImage(contextg, it).card) }
+        bitmaps.filter { it.width > 100 }
+            .forEach { linearLayout.addView(ObjectCardImage(contextg, it).card) }
         if (activityArguments.size > 2) {
-            if (activityArguments[2] == "sound") UtilityTTS.synthesizeTextAndPlay(applicationContext, html, product)
+            if (activityArguments[2] == "sound") UtilityTTS.synthesizeTextAndPlay(
+                applicationContext,
+                html,
+                product
+            )
         }
     }
 
@@ -141,7 +164,7 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         scrollView.smoothScrollTo(0, 0)
     }
 
-    fun setProduct(productF: String) {
+    private fun setProduct(productF: String) {
         product = productF
         getText()
     }
@@ -151,12 +174,20 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, activityArguments[1], Utility.fromHtml(url), bitmaps)
+            R.id.action_share -> UtilityShare.shareText(
+                this,
+                activityArguments[1],
+                Utility.fromHtml(url),
+                bitmaps
+            )
             R.id.action_MIATCPEP2 -> setProduct("MIATCP$stormId")
             R.id.action_MIATCMEP2 -> setProduct("MIATCM$stormId")
             R.id.action_MIATCDEP2 -> setProduct("MIATCD$stormId")
             R.id.action_MIAPWSEP2 -> setProduct("MIAPWS$stormId")
-            R.id.action_mute_notification -> UtilityNotificationNHC.muteNotification(this, toolbarTitle)
+            R.id.action_mute_notification -> UtilityNotificationNHC.muteNotification(
+                this,
+                toolbarTitle
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true

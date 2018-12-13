@@ -1053,7 +1053,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     private fun getRadarStatus() = GlobalScope.launch(uiDispatcher) {
-        val radarStatus = withContext(Dispatchers.IO) { UtilityDownload.getRadarStatusMessage(contextg, oglrArr[idxIntAl].rid) }
+        var radarStatus = withContext(Dispatchers.IO) { UtilityDownload.getRadarStatusMessage(contextg, oglrArr[idxIntAl].rid) }
+        if (radarStatus == "") { radarStatus = "The current radar status is not available." }
         UtilityAlertDialog.showHelpText(Utility.fromHtml(radarStatus), act)
     }
 
