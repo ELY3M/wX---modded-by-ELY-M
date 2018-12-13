@@ -104,7 +104,7 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         om.spTime = ObjectSpinner(this, this, R.id.spinner_time)
         om.displayData = DisplayData(this, this, this, om.numPanes, om.spTime)
         spRun = ObjectSpinner(this, this, R.id.spinner_run)
-        spSector = ObjectSpinner(this, this, R.id.spinner_sector, UtilityModelSPCHREFInterface.SECTORS)
+        spSector = ObjectSpinner(this, this, R.id.spinner_sector, UtilityModelSPCHREFInterface.sectorsLong)
         om.sector = Utility.readPref(this, om.prefSector, "S19")
         spSector.setSelection(om.sector)
         om.spTime.setOnItemSelectedListener(this)

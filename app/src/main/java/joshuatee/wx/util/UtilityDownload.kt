@@ -498,6 +498,26 @@ object UtilityDownload {
         return out.toString().replace(breakStr, "<br>")
     }
 
+    fun getStringFromURLSepSUnsafe(strURL: String): String {
+        val breakStr = "ABC123_456ZZ"
+        val out = StringBuilder(5000)
+        try {
+            val request = Request.Builder().url(strURL).build()
+            val response = MyApplication.httpClientUnsafe!!.newCall(request).execute()
+            val br = BufferedReader(InputStreamReader(BufferedInputStream(response.body()!!.byteStream())))
+            var line: String? = br.readLine()
+            while (line != null) {
+                out.append(line)
+                out.append(breakStr)
+                line = br.readLine()
+            }
+            br.close()
+        } catch (e: Exception) {
+            UtilityLog.HandleException(e)
+        }
+        return out.toString().replace(breakStr, "<br>")
+    }
+
     fun getBitmapFromURLS(url: String): Bitmap {
         return try {
             val request = Request.Builder().url(url).build()
@@ -516,6 +536,18 @@ object UtilityDownload {
             val response = MyApplication.httpClient!!.newCall(request).execute()
             response.body()!!.byteStream()
         } catch (e: IOException) {
+            UtilityLog.HandleException(e)
+            null
+        }
+    }
+
+    fun getInputStreamFromUrlUnsafe(strURL: String): InputStream? {
+        return try {
+            val request = Request.Builder().url(strURL).build()
+            val response = MyApplication.httpClientUnsafe!!.newCall(request).execute()
+            response.body()!!.byteStream()
+        } catch (e: IOException) {
+            UtilityLog.HandleException(e)
             null
         }
     }

@@ -136,10 +136,10 @@ class MyApplication : Application() {
         const val nwsGraphicalWebsitePrefix: String = "http://graphical.weather.gov"
         const val nwsCPCNcepWebsitePrefix: String = "http://www.cpc.ncep.noaa.gov"
         const val nwsGoesWebsitePrefix: String = "https://www.goes.noaa.gov"
-        const val nwsOpcWebsitePrefix: String = "https://www.opc.ncep.noaa.gov"
+        const val nwsOpcWebsitePrefix: String = "http://www.opc.ncep.noaa.gov"
         const val nwsNhcWebsitePrefix: String = "https://www.nhc.noaa.gov"
-        const val nwsRadarWebsitePrefix: String = "http://radar.weather.gov"
-        const val nwsMagNcepWebsitePrefix: String = "http://mag.ncep.noaa.gov"
+        const val nwsRadarWebsitePrefix: String = "https://radar.weather.gov"
+        const val nwsMagNcepWebsitePrefix: String = "https://mag.ncep.noaa.gov"
         const val sunMoonDataUrl: String = "https://api.usno.navy.mil"
 
         const val prefSeperator: String = " : : :"
@@ -482,7 +482,7 @@ class MyApplication : Application() {
         var loadedBuffers: Boolean = false
 
         fun initBuffers(context: Context) {
-            UtilityLog.d(TAG, "initBuffers ran")
+            UtilityLog.d("wx", "initBuffers ran")
             loadedBuffers = true
             ColorPalettes.init(context)
             initRadarGeometryAll(context)
@@ -644,6 +644,7 @@ class MyApplication : Application() {
         }
 
         // Radar Preferences
+        // FIXME will need to be HTTPS soon
         const val NWS_RADAR_PUB: String = "http://tgftp.nws.noaa.gov/" //(Official current URL, problem with cricket but so does cp.ncep now )
         //public static final String NWS_RADAR_PUB = "http://tgftp.cp.ncep.noaa.gov/";
         const val nwsRadarLevel2Pub: String = "http://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"

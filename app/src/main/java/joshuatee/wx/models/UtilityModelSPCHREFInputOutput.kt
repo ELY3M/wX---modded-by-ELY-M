@@ -50,6 +50,12 @@ internal object UtilityModelSPCHREFInputOutput {
         }
 
     fun getImage(context: Context, om: ObjectModel, time: String): Bitmap {
+        val sectorIndex: Int = if (om.sector == "") {
+            0
+        } else {
+            UtilityModelSPCHREFInterface.sectorsLong.indexOf(om.sector)
+        }
+        val sector = UtilityModelSPCHREFInterface.sectors[sectorIndex]
         if (om.run.length < 10) return UtilityImg.getBlankBitmap()
         val year = om.run.substring(0, 4)
         val month = om.run.substring(4, 6)
@@ -63,13 +69,13 @@ internal object UtilityModelSPCHREFInputOutput {
         products.forEach {
             val url = if (it.contains("cref_members")) {
                 val paramArr = it.split(" ")
-                "${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year + "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" + paramArr[0] + "." + om.sector.toLowerCase() + ".f0" + time + "00." + paramArr[1] + ".tl00.png"
+                "${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year + "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" + paramArr[0] + "." + sector.toLowerCase() + ".f0" + time + "00." + paramArr[1] + ".tl00.png"
             } else {
-                "${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year + "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" + it + "." + om.sector.toLowerCase() + ".f0" + time + "00.png"
+                "${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year + "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" + it + "." + sector.toLowerCase() + ".f0" + time + "00.png"
             }
             urlArr.add(url)
         }
-        urlArr.add("${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/blank_maps/${om.sector}.png")
+        urlArr.add("${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/blank_maps/${sector}.png")
         urlArr.forEach { bitmapArr.add(it.getImage()) }
         val layers = mutableListOf<Drawable>()
         bitmapArr.forEach { layers.add(BitmapDrawable(context.resources, it)) }

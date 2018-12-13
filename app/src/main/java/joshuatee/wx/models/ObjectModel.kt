@@ -82,7 +82,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
             }
             "NCEP" -> {
                 modelType = ModelType.NCEP
-                models = UtilityModelNCEPInterface.MODELS_ARR
+                models = UtilityModelNCEPInterface.models
                 defaultModel = "GFS"
             }
             "GLCFS" -> {
@@ -195,9 +195,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                 when (selectedItemPosition) {
                     1 -> {
                         model = "GFS"
-                        params = UtilityModelNCEPInterface.MODEL_GFS_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_GFS_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_GFS
+                        params = UtilityModelNCEPInterface.paramsGfs
+                        labels = UtilityModelNCEPInterface.labelsGfs
+                        sectors = UtilityModelNCEPInterface.sectorsGfs
                         startStep = 0
                         endStep = 85
                         stepAmount = 3
@@ -205,9 +205,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     2 -> {
                         model = "NAM"
-                        params = UtilityModelNCEPInterface.MODEL_NAM_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_NAM_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_NAM
+                        params = UtilityModelNCEPInterface.paramsNam
+                        labels = UtilityModelNCEPInterface.labelsNam
+                        sectors = UtilityModelNCEPInterface.sectorsNam
                         startStep = 0
                         endStep = 85
                         stepAmount = 3
@@ -215,9 +215,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     4 -> {
                         model = "RAP"
-                        params = UtilityModelNCEPInterface.MODEL_RAP_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_RAP_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_RAP
+                        params = UtilityModelNCEPInterface.paramsRap
+                        labels = UtilityModelNCEPInterface.labelsRap
+                        sectors = UtilityModelNCEPInterface.sectorsRap
                         startStep = 0
                         endStep = 39
                         stepAmount = 1
@@ -225,9 +225,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     0 -> {
                         model = "HRRR"
-                        params = UtilityModelNCEPInterface.MODEL_HRRR_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_HRRR_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_HRRR
+                        params = UtilityModelNCEPInterface.paramsHrrr
+                        labels = UtilityModelNCEPInterface.labelsHrrr
+                        sectors = UtilityModelNCEPInterface.sectorsHrrr
                         startStep = 0
                         endStep = 18
                         stepAmount = 1
@@ -235,9 +235,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     3 -> {
                         model = "NAM-HIRES"
-                        params = UtilityModelNCEPInterface.MODEL_NAM_4_KM_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_NAM_4_KM_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_NAM_4_KM
+                        params = UtilityModelNCEPInterface.paramsNamHires
+                        labels = UtilityModelNCEPInterface.labelsNamHires
+                        sectors = UtilityModelNCEPInterface.sectorsNamHires
                         startStep = 0
                         endStep = 60
                         stepAmount = 1
@@ -245,9 +245,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     5 -> {
                         model = "HRW-NMMB"
-                        params = UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_HRW_NMM
+                        params = UtilityModelNCEPInterface.paramsHrwNmm
+                        labels = UtilityModelNCEPInterface.labelsHrwNmm
+                        sectors = UtilityModelNCEPInterface.sectorsHrwNmm
                         startStep = 0
                         endStep = 49
                         stepAmount = 1
@@ -255,9 +255,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     6 -> {
                         model = "HRW-ARW"
-                        params = UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_HRW_NMM_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_HRW_NMM
+                        params = UtilityModelNCEPInterface.paramsHrwNmm
+                        labels = UtilityModelNCEPInterface.labelsHrwNmm
+                        sectors = UtilityModelNCEPInterface.sectorsHrwNmm
                         startStep = 0
                         endStep = 49
                         stepAmount = 1
@@ -265,9 +265,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     7 -> {
                         model = "GEFS-SPAG"
-                        params = UtilityModelNCEPInterface.MODEL_GEFS_SPAG_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_GEFS_SPAG_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_GEFS_SPAG
+                        params = UtilityModelNCEPInterface.paramsGefsSpag
+                        labels = UtilityModelNCEPInterface.labelsGefsSpag
+                        sectors = UtilityModelNCEPInterface.sectorsGefsSpag
                         startStep = 0
                         endStep = 385
                         stepAmount = 6
@@ -275,9 +275,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     8 -> {
                         model = "GEFS-MEAN-SPRD"
-                        params = UtilityModelNCEPInterface.MODEL_GEFS_MNSPRD_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_GEFS_MNSPRD_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_GEFS_MNSPRD
+                        params = UtilityModelNCEPInterface.paramsGefsMnsprd
+                        labels = UtilityModelNCEPInterface.labelsGefsMnsprd
+                        sectors = UtilityModelNCEPInterface.sectorsGefsMnsprd
                         startStep = 0
                         endStep = 385
                         stepAmount = 6
@@ -285,9 +285,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     9 -> {
                         model = "SREF"
-                        params = UtilityModelNCEPInterface.MODEL_SREF_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_SREF_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_SREF
+                        params = UtilityModelNCEPInterface.paramsSref
+                        labels = UtilityModelNCEPInterface.labelsSref
+                        sectors = UtilityModelNCEPInterface.sectorsSref
                         startStep = 0
                         endStep = 88
                         stepAmount = 3
@@ -295,9 +295,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     10 -> {
                         model = "NAEFS"
-                        params = UtilityModelNCEPInterface.MODEL_NAEFS_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_NAEFS_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_NAEFS
+                        params = UtilityModelNCEPInterface.paramsNaefs
+                        labels = UtilityModelNCEPInterface.labelsNaefs
+                        sectors = UtilityModelNCEPInterface.sectorsNaefs
                         startStep = 6
                         endStep = 385
                         stepAmount = 6
@@ -305,9 +305,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     11 -> {
                         model = "POLAR"
-                        params = UtilityModelNCEPInterface.MODEL_POLAR_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_POLAR_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_POLAR
+                        params = UtilityModelNCEPInterface.paramsPolar
+                        labels = UtilityModelNCEPInterface.labelsPolar
+                        sectors = UtilityModelNCEPInterface.sectorsPolar
                         startStep = 24
                         endStep = 385
                         stepAmount = 24
@@ -315,9 +315,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     12 -> {
                         model = "WW3"
-                        params = UtilityModelNCEPInterface.MODEL_WW_3_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_WW_3_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_WW_3
+                        params = UtilityModelNCEPInterface.paramsWw3
+                        labels = UtilityModelNCEPInterface.labelsWw3
+                        sectors = UtilityModelNCEPInterface.sectorsWw3
                         startStep = 0
                         endStep = 127
                         stepAmount = 6
@@ -325,9 +325,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     13 -> {
                         model = "WW3-ENP"
-                        params = UtilityModelNCEPInterface.MODEL_WW_3_ENP_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_WW_3_ENP_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_WW_3_ENP
+                        params = UtilityModelNCEPInterface.paramsWw3Enp
+                        labels = UtilityModelNCEPInterface.labelsWw3Enp
+                        sectors = UtilityModelNCEPInterface.sectorsWw3Enp
                         startStep = 0
                         endStep = 127
                         stepAmount = 6
@@ -335,9 +335,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     14 -> {
                         model = "WW3-WNA"
-                        params = UtilityModelNCEPInterface.MODEL_WW_3_WNA_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_WW_3_WNA_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_WW_3_WNA
+                        params = UtilityModelNCEPInterface.paramsWw3Wna
+                        labels = UtilityModelNCEPInterface.labelsWw3Wna
+                        sectors = UtilityModelNCEPInterface.sectorsWw3Wna
                         startStep = 0
                         endStep = 127
                         stepAmount = 6
@@ -345,9 +345,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     15 -> {
                         model = "ESTOFS"
-                        params = UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_ESTOFS_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_ESTOFS
+                        params = UtilityModelNCEPInterface.paramsEstofs
+                        labels = UtilityModelNCEPInterface.labelsEstofs
+                        sectors = UtilityModelNCEPInterface.sectorsEstofs
                         startStep = 0
                         endStep = 181
                         stepAmount = 1
@@ -355,9 +355,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     16 -> {
                         model = "FIREWX"
-                        params = UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS
-                        labels = UtilityModelNCEPInterface.MODEL_FIREWX_PARAMS_LABELS
-                        sectors = UtilityModelNCEPInterface.LIST_SECTOR_ARR_FIREWX
+                        params = UtilityModelNCEPInterface.paramsFirefx
+                        labels = UtilityModelNCEPInterface.labelsFirefx
+                        sectors = UtilityModelNCEPInterface.sectorsFirewx
                         startStep = 0
                         endStep = 37
                         stepAmount = 1

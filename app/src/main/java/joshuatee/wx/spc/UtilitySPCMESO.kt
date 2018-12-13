@@ -83,8 +83,55 @@ object UtilitySPCMESO {
     }
 
     const val defaultSector: String = "19"
-    internal const val IMG_SF = ":mixr:ttd:mcon:thea:mxth:temp_chg:dwpt_chg:mixr_chg:thte_chg:925mb:850mb:700mb:500mb:300mb:sbcp:mlcp:mucp:muli:laps:lllr:lclh:lfch:lfrh:effh:stor:stpc:cpsh:comp:lcls:lr3c:tdlr:qlcs1:qlcs2:pwtr:tran:tran_925:tran_925-850:prop:peff:fzlv:les1:" +
+    internal const val IMG_SFA = ":mixr:ttd:mcon:thea:mxth:temp_chg:dwpt_chg:mixr_chg:thte_chg:925mb:850mb:700mb:500mb:300mb:sbcp:mlcp:mucp:muli:laps:lllr:lclh:lfch:lfrh:effh:stor:stpc:cpsh:comp:lcls:lr3c:tdlr:qlcs1:qlcs2:pwtr:tran:tran_925:tran_925-850:prop:peff:fzlv:les1:" +
             "tadv_925:7tad:tadv:"
+
+    internal val imgSf = listOf(
+            "mixr",
+            "ttd",
+            "mcon",
+            "thea",
+            "mxth",
+            "temp_chg",
+            "dwpt_chg",
+            "mixr_chg",
+            "thte_chg",
+            "925mb",
+            "850mb",
+            "700mb",
+            "500mb",
+            "300mb",
+            "sbcp",
+            "mlcp",
+            "mucp",
+            "muli",
+            "laps",
+            "lllr",
+            "lclh",
+            "lfch",
+            "lfrh",
+            "effh",
+            "stor",
+            "stpc",
+            "cpsh",
+            "comp",
+            "lcls",
+            "lr3c",
+            "tdlr",
+            "qlcs1",
+            "qlcs2",
+            "pwtr",
+            "tran",
+            "tran_925",
+            "tran_925-850",
+            "prop",
+            "peff",
+            "fzlv",
+            "les1",
+            "tadv_925",
+            "7tad",
+            "tadv"
+    )
 
     internal fun setParamFromFav(token: String): List<String> {
         var param = ""

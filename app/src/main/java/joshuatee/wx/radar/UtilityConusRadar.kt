@@ -500,22 +500,24 @@ internal object UtilityConusRadar {
     }
 
 
-
     var vs_loadconus =
             "uniform    mat4        uMVPMatrix;" +
-                    "attribute  vec4        vPosition;" +
+                    "attribute  vec4 vPosition;" +
+                    "attribute  vec2 a_texCoords;" +
                     "void main() {" +
-                    "  gl_Position = uMVPMatrix * vPosition;" +
+                    "gl_Position = uMVPMatrix * vPosition;" +
+                    "v_texCoords = a_texCoords;" +
                     "}"
 
     var fs_loadconus =
             "precision mediump float;" +
+                    "varying vec2 v_texCoords;" +
                     "uniform sampler2D u_texture;" +
                     "void main() {" +
                     "vec4 color;" +
-                    "  gl_FragColor = texture2D(u_texture, gl_PointCoord);" +
+                    "  gl_FragColor = texture2D(u_texture, v_texCoords);" +
                     "}"
-    
+
 
 }
 

@@ -59,7 +59,6 @@ class WXGLRender(private val context: Context) : Renderer {
         const val ortIntGlobal: Int = 400
         var oneDegreeScaleFactorGlobal: Float = 0.0f
             private set
-        var displayHold: Boolean = false
     }
 
     val TAG: String = "joshuatee WXGLRender"
@@ -78,19 +77,20 @@ class WXGLRender(private val context: Context) : Renderer {
     private var lineIndexBuffer: ByteBuffer = ByteBuffer.allocate(0)
     private var gpsX = 0.toDouble()
     private var gpsY = 0.toDouble()
+    private val zoomToHideMiscFeatures = 0.5f
     private val radarBuffers = ObjectOglRadarBuffers(context, MyApplication.nexradRadarBackgroundColor)
-    private val spotterBuffers = ObjectOglBuffers(PolygonType.SPOTTER, 0.30f)
+    private val spotterBuffers = ObjectOglBuffers(PolygonType.SPOTTER, zoomToHideMiscFeatures)
     private val stateLineBuffers = ObjectOglBuffers(GeographyType.STATE_LINES, 0.0f)
     private val countyLineBuffers = ObjectOglBuffers(GeographyType.COUNTY_LINES, 0.75f)
     private val hwBuffers = ObjectOglBuffers(GeographyType.HIGHWAYS, 0.45f)
     private val hwExtBuffers = ObjectOglBuffers(GeographyType.HIGHWAYS_EXTENDED, 3.00f)
-    private val lakeBuffers = ObjectOglBuffers(GeographyType.LAKES, 0.30f)
-    private val stiBuffers = ObjectOglBuffers(PolygonType.STI, 0.0f)
-    private val wbBuffers = ObjectOglBuffers(PolygonType.WIND_BARB, 0.30f)
-    private val wbGustsBuffers = ObjectOglBuffers(PolygonType.WIND_BARB_GUSTS, 0.30f)
-    private val mpdBuffers = ObjectOglBuffers(PolygonType.MPD, 0.0f)
-    private val hiBuffers = ObjectOglBuffers(PolygonType.HI, 0.30f)
-    private val tvsBuffers = ObjectOglBuffers(PolygonType.TVS, 0.30f)
+    private val lakeBuffers = ObjectOglBuffers(GeographyType.LAKES, zoomToHideMiscFeatures)
+    private val stiBuffers = ObjectOglBuffers(PolygonType.STI, zoomToHideMiscFeatures)
+    private val wbBuffers = ObjectOglBuffers(PolygonType.WIND_BARB, zoomToHideMiscFeatures)
+    private val wbGustsBuffers = ObjectOglBuffers(PolygonType.WIND_BARB_GUSTS, zoomToHideMiscFeatures)
+    private val mpdBuffers = ObjectOglBuffers(PolygonType.MPD)
+    private val hiBuffers = ObjectOglBuffers(PolygonType.HI, zoomToHideMiscFeatures)
+    private val tvsBuffers = ObjectOglBuffers(PolygonType.TVS, zoomToHideMiscFeatures)
     private val warningTorBuffers = ObjectOglBuffers(PolygonType.TOR, 0.0f)
     private val warningSvrBuffers = ObjectOglBuffers(PolygonType.SVR, 0.0f)
     private val warningEwwBuffers = ObjectOglBuffers(PolygonType.EWW, 0.0f)
@@ -105,7 +105,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private val locdotBuffers = ObjectOglBuffers(PolygonType.LOCDOT, 0.0f)
     private val locIconBuffers = ObjectOglBuffers()
     private val locBugBuffers = ObjectOglBuffers()
-    private val wbCircleBuffers = ObjectOglBuffers(PolygonType.WIND_BARB_CIRCLE, 0.30f)
+    private val wbCircleBuffers = ObjectOglBuffers(PolygonType.WIND_BARB_CIRCLE, zoomToHideMiscFeatures)
     private val conusRadarBuffers = ObjectOglBuffers()
     private val colorSwo = IntArray(5)
     private var breakSize15 = 15000
@@ -116,8 +116,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private var chunkCount = 0
     private var totalBins = 0
     private var totalBinsOgl = 0
-
-    //private var sp_loadimage: Int = 0
+    var displayHold: Boolean = false
     private var mSizeHandle = 0
     private var iTexture: Int = 0
 
@@ -170,6 +169,11 @@ class WXGLRender(private val context: Context) : Renderer {
     private var bgColorFBlue = 0.0f
     val ortInt: Int = 400
     private val provider = ProjectionType.WX_OGL
+    // this controls if the projection is mercator (nexrad) or 4326 / rectangular
+    // after you zoom out past a certain point you need to hide the nexrad, show the mosaic
+    // and reconstruct all geometry and warning/watch lines using 4326 projection (set this variable to false to not use mercator transformation )
+    // so far, only the base geometry ( state lines, county, etc ) respect this setting
+    private var useMercatorProjection = true
     private val rdL2 = WXGLNexradLevel2()
     val radarL3Object: WXGLNexradLevel3 = WXGLNexradLevel3()
     val rdDownload: WXGLDownload = WXGLDownload()
@@ -397,9 +401,12 @@ class WXGLRender(private val context: Context) : Renderer {
             }
         }
 
+        // FIXME
+        // whether or not to respect the display being touched needs to be stored in
+        // objectglbuffers. The wXL23 Metal code is more generic and thus each element drawn will need
+        // to be checked. Will do this later when I have more time
+        if (!displayHold) {
 
-
-        if (displayHold == false) { //hides some when screen is touched
 
             Log.i(TAG, "zoom: "+zoom)
             if (MyApplication.radarConusRadar) {
@@ -416,31 +423,23 @@ class WXGLRender(private val context: Context) : Renderer {
             }
         }
 
-        /*
-        listOf(tvsBuffers).forEach {
-            if (zoom > it.scaleCutOff) {
-                drawTVS(tvsBuffers)
-            }
-        }
-        */
 
         if (zoom > tvsBuffers.scaleCutOff) {
             drawTVS(tvsBuffers)
         }
 
-        GLES20.glLineWidth(3.0f)
-        listOf(stiBuffers, wbGustsBuffers, wbBuffers).forEach {
-            if (zoom > it.scaleCutOff) {
-                drawPolygons(it, 16)
+            GLES20.glLineWidth(3.0f)
+            listOf(stiBuffers, wbGustsBuffers, wbBuffers).forEach {
+                if (zoom > it.scaleCutOff) {
+                    drawPolygons(it, 16)
+                }
             }
-        }
-        listOf(wbCircleBuffers).forEach {
-            if (zoom > it.scaleCutOff) {
+
+            if (zoom > wbCircleBuffers.scaleCutOff) {
                 drawTriangles(wbCircleBuffers)
             }
-        }
 
-        GLES20.glLineWidth(defaultLineWidth)
+            GLES20.glLineWidth(defaultLineWidth)
 
         //drawTriangles(locdotBuffers)
         //drawLocation(locdotBuffers)
@@ -498,6 +497,7 @@ class WXGLRender(private val context: Context) : Renderer {
             GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
         }
     }
+
 
     private fun drawLocation(buffers: ObjectOglBuffers) {
         if (buffers.isInitialized) {
@@ -689,6 +689,8 @@ class WXGLRender(private val context: Context) : Renderer {
         deconstructGenericGeographic(countyLineBuffers)
     }
 
+    // FIXME this check for 4326 will need to be done in other locations as well but for now just testing to see
+    // if the rectangular projection is realized.
     private fun constructGenericGeographic(buffers: ObjectOglBuffers) {
         if (!buffers.isInitialized) {
             buffers.count = buffers.geotype.count
@@ -702,9 +704,18 @@ class WXGLRender(private val context: Context) : Renderer {
             buffers.isInitialized = true
         }
         if (!MyApplication.radarUseJni) {
-            UtilityWXOGLPerf.genMercato(buffers.geotype.relativeBuffer, buffers.floatBuffer, pn, buffers.count)
+            if (useMercatorProjection) {
+                UtilityWXOGLPerf.genMercato(buffers.geotype.relativeBuffer, buffers.floatBuffer, pn, buffers.count)
+            } else {
+                UtilityWXOGLPerf.generate4326Projection(buffers.geotype.relativeBuffer, buffers.floatBuffer, pn, buffers.count)
+            }
         } else {
-            JNI.genMercato(buffers.geotype.relativeBuffer, buffers.floatBuffer, pn.xFloat, pn.yFloat, pn.xCenter.toFloat(), pn.yCenter.toFloat(), pn.oneDegreeScaleFactorFloat, buffers.count)
+            if (useMercatorProjection) {
+                JNI.genMercato(buffers.geotype.relativeBuffer, buffers.floatBuffer, pn.xFloat, pn.yFloat, pn.xCenter.toFloat(), pn.yCenter.toFloat(), pn.oneDegreeScaleFactorFloat, buffers.count)
+            } else {
+                // FIXME - will want native code version for 4326
+                UtilityWXOGLPerf.generate4326Projection(buffers.geotype.relativeBuffer, buffers.floatBuffer, pn, buffers.count)
+            }
         }
         buffers.setToPositionZero()
     }
@@ -862,7 +873,7 @@ class WXGLRender(private val context: Context) : Renderer {
 
 
 
-        //Circle around the location dot//
+        //Custom location icon//
         locIconBuffers.triangleCount = 1 //was 36
         locIconBuffers.initialize(32 * locIconBuffers.triangleCount,
                 8 * locIconBuffers.triangleCount,
@@ -878,11 +889,13 @@ class WXGLRender(private val context: Context) : Renderer {
                 MyApplication.radarColorLocdot)
 
 
+        /* not needed .. if have custom location icon
         if (MyApplication.radarUseJni) {
             JNI.colorGen(locIconBuffers.colorBuffer, 2 * locIconBuffers.triangleCount, locIconBuffers.colorArray)
         } else {
             UtilityWXOGLPerf.colorGen(locIconBuffers.colorBuffer, 2 * locIconBuffers.triangleCount, locIconBuffers.colorArray)
         }
+        */
 
 
         if (MyApplication.locdotFollowsGps) {
@@ -890,7 +903,7 @@ class WXGLRender(private val context: Context) : Renderer {
             UtilityWXOGLPerf.genLocdot(locIconBuffers, pn, gpsX, gpsY)
             //location bug//
             if (MyApplication.locdotBug) {
-                locBugBuffers.lenInit = 0f //MyApplication.radarLociconSize.toFloat()
+                locBugBuffers.lenInit = 0f
                 UtilityWXOGLPerf.genLocdot(locBugBuffers, pn, gpsX, gpsY)
             }
 
@@ -924,10 +937,10 @@ class WXGLRender(private val context: Context) : Renderer {
                 8 * conusRadarBuffers.triangleCount,
                 6 * conusRadarBuffers.triangleCount,
                 0)
-        UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, 40.750220, 99.476964)
+        //UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, 40.750220, 99.476964)
 
         //UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, pn.xDbl, pn.yDbl)
-        //UtilityWXOGLPerf.genMercato(conusRadarBuffers.geotype.relativeBuffer, conusRadarBuffers.floatBuffer, pn, conusRadarBuffers.count)
+        UtilityWXOGLPerf.genMercato(MyApplication.stateRelativeBuffer, conusRadarBuffers.floatBuffer, pn, conusRadarBuffers.count)
 
 
         conusRadarBuffers.isInitialized = true

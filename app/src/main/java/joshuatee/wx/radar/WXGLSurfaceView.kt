@@ -41,7 +41,8 @@ import joshuatee.wx.util.Utility
 
 import kotlin.math.*
 
-class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
+class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
+    GestureDetector.OnDoubleTapListener {
 
     // currently used in location frag and USWXOGLRadarAtivity to more clearly seperate touch events
     // WXGLSurfaceView is used to track and respond to user touch events when in the OpenGL based radar
@@ -101,13 +102,22 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
         mScaleDetector = ScaleGestureDetector(context, ScaleListener())
     }
 
-    fun setRenderVar(oglrR: WXGLRender, OGLR_r: MutableList<WXGLRender>, wxglR: MutableList<WXGLSurfaceView>) {
+    fun setRenderVar(
+        oglrR: WXGLRender,
+        OGLR_r: MutableList<WXGLRender>,
+        wxglR: MutableList<WXGLSurfaceView>
+    ) {
         oglr = OGLR_r
         oglrCurrent = oglrR
         wxgl = wxglR
     }
 
-    fun setRenderVar(oglrR: WXGLRender, OGLR_r: MutableList<WXGLRender>, wxglR: MutableList<WXGLSurfaceView>, activity: Activity) {
+    fun setRenderVar(
+        oglrR: WXGLRender,
+        OGLR_r: MutableList<WXGLRender>,
+        wxglR: MutableList<WXGLSurfaceView>,
+        activity: Activity
+    ) {
         oglr = OGLR_r
         oglrCurrent = oglrR
         wxgl = wxglR
@@ -121,7 +131,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
                 if (!locfrag) {
                     (0 until numPanes).forEach {
                         wxgltextArr[it].hideTV()
-                        WXGLRender.displayHold = true
+                        oglr[it].displayHold = true
                     }
                 }
                 if (numPanes == 1 && fullScreen || numPanes > 1) {
@@ -131,8 +141,11 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
             MotionEvent.ACTION_MOVE -> {
             }
             MotionEvent.ACTION_UP -> {
-                WXGLRender.displayHold = false
                 listener?.onProgressChanged(50000, idx, idxInt)
+                (0 until numPanes).forEach {
+                    oglr[it].displayHold = false
+                    wxgl[it].requestRender()
+                }
             }
         }
         var retVal = mScaleDetector.onTouchEvent(event)
@@ -172,7 +185,12 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
         return true
     }
 
-    override fun onFling(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+    override fun onFling(
+        event1: MotionEvent,
+        event2: MotionEvent,
+        velocityX: Float,
+        velocityY: Float
+    ): Boolean {
         return true
     }
 
@@ -197,11 +215,20 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
         val test2 = 180 / PI * log(tan(PI / 4 + centerX * (PI / 180) / 2), E)
         newY = test2.toFloat() + (-oglrCurrent.y / mScaleFactor + diffY) / ppd
         newY = (180 / PI * (2 * atan(exp(newY * PI / 180)) - PI / 2)).toFloat()
-        oglrCurrent.ridNewList = UtilityLocation.getNearestRid(context, LatLon(newY.toString(), (newX * -1).toString()), 5)
+        oglrCurrent.ridNewList = UtilityLocation.getNearestRid(
+            context,
+            LatLon(newY.toString(), (newX * -1).toString()),
+            5
+        )
         listener?.onProgressChanged(idx, idx, idxInt)
     }
 
-    override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+    override fun onScroll(
+        e1: MotionEvent,
+        e2: MotionEvent,
+        distanceX: Float,
+        distanceY: Float
+    ): Boolean {
         var panned = false
         if (!locfrag) {
             if (distanceX != 0f) {
@@ -253,13 +280,21 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
         if (MyApplication.dualpaneshareposn && !locfrag) {
             mScaleFactor *= 2.0f
             (0 until numPanes).forEach {
-                oglr[it].setViewInitial(mScaleFactor, oglr[it].x * 2.0f + (xPos - xMiddle) * -2.0f * density, oglr[it].y * 2.0f + (yMiddle - yPos) * -2.0f * density)
+                oglr[it].setViewInitial(
+                    mScaleFactor,
+                    oglr[it].x * 2.0f + (xPos - xMiddle) * -2.0f * density,
+                    oglr[it].y * 2.0f + (yMiddle - yPos) * -2.0f * density
+                )
                 wxgl[it].mScaleFactor = mScaleFactor
                 wxgl[it].requestRender()
             }
         } else {
             mScaleFactor *= 2.0f
-            oglrCurrent.setViewInitial(mScaleFactor, oglrCurrent.x * 2.0f + (xPos - xMiddle) * -2.0f * density, oglrCurrent.y * 2.0f + (yMiddle - yPos) * -2.0f * density)
+            oglrCurrent.setViewInitial(
+                mScaleFactor,
+                oglrCurrent.x * 2.0f + (xPos - xMiddle) * -2.0f * density,
+                oglrCurrent.y * 2.0f + (yMiddle - yPos) * -2.0f * density
+            )
             requestRender()
         }
         scaleFactorGlobal = mScaleFactor
@@ -317,14 +352,16 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener, Gestur
                 this.setMeasuredDimension(width, width)
             }
         } else {
-            width = if (Build.VERSION.SDK_INT >= 19 && (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent))
-                MyApplication.dm.widthPixels / widthDivider
-            else
-                MyApplication.dm.widthPixels / widthDivider
+            width =
+                    if (Build.VERSION.SDK_INT >= 19 && (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent))
+                        MyApplication.dm.widthPixels / widthDivider
+                    else
+                        MyApplication.dm.widthPixels / widthDivider
             if (Build.VERSION.SDK_INT >= 19 && (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent)) {
                 height = MyApplication.dm.heightPixels / 2 + UtilityUI.statusBarHeight(context)
                 if (numPanes == 2) {
-                    height = MyApplication.dm.heightPixels / 2 - UtilityUI.statusBarHeight(context) / 2
+                    height = MyApplication.dm.heightPixels /
+                            2 - UtilityUI.statusBarHeight(context) / 2
                 }
             } else {
                 height = MyApplication.dm.heightPixels / 2 - MyApplication.actionBarHeight

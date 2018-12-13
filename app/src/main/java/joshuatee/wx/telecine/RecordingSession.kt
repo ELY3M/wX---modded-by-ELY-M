@@ -440,24 +440,6 @@ internal class RecordingSession(private val context: Context, private val listen
         }.execute()
     }
 
-    /*private fun initChannels(context: Context) {
-        if (Build.VERSION.SDK_INT < 26 || notiChannelInitialized) {
-            return
-        }
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channel = NotificationChannel("default", "Channel name", NotificationManager.IMPORTANCE_DEFAULT)
-        channel.description = "wX weather"
-        channel.setSound(Uri.parse(MyApplication.notifSoundUri), AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_NOTIFICATION_COMMUNICATION_INSTANT)
-                .build())
-        //channel.sound = Uri.parse(MyApplication.notifSoundUri)
-        notificationManager.createNotificationChannel(channel)
-        notiChannelInitialized = true
-    }
-
-    private val notiChannelStr = "default"
-    private var notiChannelInitialized = false*/
-
     private fun showScreenshotNotification(uri: Uri, bitmap: Bitmap?) {
         UtilityNotification.initChannels(context)
         val requestID = System.currentTimeMillis().toInt()
