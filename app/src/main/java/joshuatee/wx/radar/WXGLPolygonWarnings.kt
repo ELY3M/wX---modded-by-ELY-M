@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//modded by ELY M.  
 
 package joshuatee.wx.radar
 
@@ -34,7 +35,12 @@ import joshuatee.wx.util.UtilityLog
 
 internal object WXGLPolygonWarnings {
 
-    fun addWarnings(context: Context, provider: ProjectionType, rid1: String, type: PolygonType): List<Double> {
+    fun addWarnings(
+        context: Context,
+        provider: ProjectionType,
+        rid1: String,
+        type: PolygonType
+    ): List<Double> {
         val warningList = mutableListOf<Double>()
         val prefToken = when (type) {
             PolygonType.TOR -> MyApplication.severeDashboardTor.valueGet()
@@ -60,15 +66,21 @@ internal object WXGLPolygonWarnings {
         var polyCount = -1
         polygonArr.forEach { polygon ->
             polyCount += 1
-            if (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith("0.CAN")) {
-                val polyTmp = polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
+            if (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith(
+                    "0.CAN"
+                )
+            ) {
+                val polyTmp =
+                    polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
                 val testArr = polyTmp.split(" ")
-                val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }.map {
-                    it.toDoubleOrNull() ?: 0.0
-                }.toList()
-                val x = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 != 0 }.map {
-                    it.toDoubleOrNull() ?: 0.0
-                }.toList()
+                val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }
+                    .map {
+                        it.toDoubleOrNull() ?: 0.0
+                    }.toList()
+                val x = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 != 0 }
+                    .map {
+                        it.toDoubleOrNull() ?: 0.0
+                    }.toList()
                 if (y.isNotEmpty() && x.isNotEmpty()) {
                     var tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], pn)
                     pixXInit = tmpCoords[0]
@@ -78,7 +90,8 @@ internal object WXGLPolygonWarnings {
                     if (x.size == y.size) {
                         j = 1
                         while (j < x.size) {
-                            tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[j], y[j], pn)
+                            tmpCoords =
+                                    UtilityCanvasProjection.computeMercatorNumbers(x[j], y[j], pn)
                             warningList.add(tmpCoords[0])
                             warningList.add(tmpCoords[1])
                             warningList.add(tmpCoords[0])

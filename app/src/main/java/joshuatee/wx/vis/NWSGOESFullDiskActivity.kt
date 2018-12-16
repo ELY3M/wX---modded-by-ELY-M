@@ -45,7 +45,8 @@ import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
-class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMenuItemClickListener {
+class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
+    Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
@@ -62,7 +63,13 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener, Too
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer_bottom_toolbar, R.menu.nwsgoesfulldiskimages, true, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_image_show_navdrawer_bottom_toolbar,
+            R.menu.nwsgoesfulldiskimages,
+            true,
+            true
+        )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         img = findViewById(R.id.iv)
@@ -76,7 +83,11 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener, Too
                 if (img.currentZoom < 1.01f) showPrevImg()
             }
         })
-        title = Utility.readPref(this, "GOESFULLDISK_IMG_FAV_TITLE", UtilityNWSGOESFullDisk.labels[0])
+        title = Utility.readPref(
+            this,
+            "GOESFULLDISK_IMG_FAV_TITLE",
+            UtilityNWSGOESFullDisk.labels[0]
+        )
         imgUrl = Utility.readPref(this, "GOESFULLDISK_IMG_FAV_URL", UtilityNWSGOESFullDisk.urls[0])
         imgIdx = Utility.readPref(this, "GOESFULLDISK_IMG_FAV_IDX", imgIdx)
         setTitle(title)
@@ -140,7 +151,8 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener, Too
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onClick(v: View) {
         when (v.id) {
@@ -154,7 +166,12 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener, Too
     }
 
     private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
-        animDrawable = withContext(Dispatchers.IO) { UtilityNWSGOESFullDisk.getAnimation(contextg, imgUrl) }
+        animDrawable = withContext(Dispatchers.IO) {
+            UtilityNWSGOESFullDisk.getAnimation(
+                contextg,
+                imgUrl
+            )
+        }
         UtilityImgAnim.startAnimation(animDrawable, img)
     }
 

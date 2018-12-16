@@ -41,14 +41,20 @@ object UtilityCanadaImg {
     internal fun getGOESAnim(context: Context, url: String): AnimationDrawable {
         val region = url.parse("goes_(.*?)_")
         val imgType = url.parse("goes_.*?_(.*?)_")
-        val urlAnim = "https://weather.gc.ca/satellite/satellite_anim_e.html?sat=goes&area=$region&type=$imgType"
+        val urlAnim =
+            "https://weather.gc.ca/satellite/satellite_anim_e.html?sat=goes&area=$region&type=$imgType"
         val html = urlAnim.getHtml()
         val times = html.parseColumn(">([0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}h[0-9]{2}m)</option>")
         val frameCnt = 10
         val delay = UtilityImg.animInterval(context)
         val urlAl = mutableListOf<String>()
         if (times.size > frameCnt)
-            (times.size - frameCnt until times.size).mapTo(urlAl) { "https://weather.gc.ca/data/satellite/goes_" + region + "_" + imgType + "_m_" + times[it].replace(" ", "_").replace("/", "@") + ".jpg" }
+            (times.size - frameCnt until times.size).mapTo(urlAl) {
+                "https://weather.gc.ca/data/satellite/goes_" + region + "_" + imgType + "_m_" + times[it].replace(
+                    " ",
+                    "_"
+                ).replace("/", "@") + ".jpg"
+            }
         return UtilityImgAnim.getAnimationDrawableFromURLList(context, urlAl, delay)
     }
 
@@ -77,14 +83,28 @@ object UtilityCanadaImg {
         return sb.toString()
     }
 
-    internal fun getRadarAnimOptionsApplied(context: Context, rid: String, frameCntStr: String): AnimationDrawable {
+    internal fun getRadarAnimOptionsApplied(
+        context: Context,
+        rid: String,
+        frameCntStr: String
+    ): AnimationDrawable {
         val urlStr = UtilityCanadaImg.getRadarAnimStringArray(rid, frameCntStr)
         val urlAl = urlStr.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
         val baseUrl = "http://weather.gc.ca"
         val bmAl = mutableListOf<Bitmap>()
         urlAl.reverse()
-        urlAl.asSequence().filter { it != "" }.mapTo(bmAl) { UtilityCanadaImg.getRadarBitmapOptionsApplied(context, rid, baseUrl + it.replace("detailed/", "")) }
-        return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl, UtilityImg.animInterval(context))
+        urlAl.asSequence().filter { it != "" }.mapTo(bmAl) {
+            UtilityCanadaImg.getRadarBitmapOptionsApplied(
+                context,
+                rid,
+                baseUrl + it.replace("detailed/", "")
+            )
+        }
+        return UtilityImgAnim.getAnimationDrawableFromBMList(
+            context,
+            bmAl,
+            UtilityImg.animInterval(context)
+        )
     }
 
     fun getRadarBitmapOptionsApplied(context: Context, rid: String, url: String): Bitmap {
@@ -106,7 +126,10 @@ object UtilityCanadaImg {
         val layers = mutableListOf<Drawable>()
         bitmapArr.add(urlImg.getImage())
         if (GeographyType.CITIES.pref) {
-            val cityUrl = "http://weather.gc.ca/cacheable/images/radar/layers_detailed/default_cities/" + rid.toLowerCase(Locale.US) + "_towns.gif"
+            val cityUrl =
+                "http://weather.gc.ca/cacheable/images/radar/layers_detailed/default_cities/" + rid.toLowerCase(
+                    Locale.US
+                ) + "_towns.gif"
             val bmTmp = cityUrl.getImage()
             val bigBitmap = Bitmap.createBitmap(bmTmp.width, bmTmp.height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bigBitmap)
@@ -150,16 +173,21 @@ object UtilityCanadaImg {
             "ERN" -> sectorMap = "atl"
         }
         if (GeographyType.CITIES.pref) {
-            val cityUrl = "http://weather.gc.ca/cacheable/images/radar/layers/composite_cities/" + sectorMap + "_composite.gif"
+            val cityUrl =
+                "http://weather.gc.ca/cacheable/images/radar/layers/composite_cities/" + sectorMap + "_composite.gif"
             val bmTmp = cityUrl.getImage()
-            val bigBitmap = Bitmap.createBitmap(bmTmp.width + offset, bmTmp.height, Bitmap.Config.ARGB_8888)
+            val bigBitmap =
+                Bitmap.createBitmap(bmTmp.width + offset, bmTmp.height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bigBitmap)
             canvas.drawBitmap(bmTmp, 0f, 0f, Paint(Paint.FILTER_BITMAP_FLAG))
             bitmapArr.add(bigBitmap)
         }
         (0 until layerCnt).forEach { j ->
             val bmdr = if (j == 1) {
-                BitmapDrawable(context.resources, UtilityImg.eraseBG(bitmapArr[j], -1)) // was -16777216
+                BitmapDrawable(
+                    context.resources,
+                    UtilityImg.eraseBG(bitmapArr[j], -1)
+                ) // was -16777216
             } else {
                 BitmapDrawable(context.resources, bitmapArr[j])
             }
@@ -168,7 +196,11 @@ object UtilityCanadaImg {
         return UtilityImg.layerDrawableToBitmap(layers)
     }
 
-    internal fun getRadarMosaicAnimation(context: Context, sectorF: String, duration: String): AnimationDrawable {
+    internal fun getRadarMosaicAnimation(
+        context: Context,
+        sectorF: String,
+        duration: String
+    ): AnimationDrawable {
         var sector = sectorF
         var url = "http://weather.gc.ca/radar/index_e.html?id=$sector"
         if (sector == "CAN") {
@@ -199,8 +231,13 @@ object UtilityCanadaImg {
             sb.append(it)
         }
         val urlArr = sb.toString().split(":").dropLastWhile { it.isEmpty() }
-        val urlAl = urlArr.mapTo(mutableListOf()) { "http://weather.gc.ca" + it.replace("detailed/", "") }
+        val urlAl =
+            urlArr.mapTo(mutableListOf()) { "http://weather.gc.ca" + it.replace("detailed/", "") }
         urlAl.reverse()
-        return UtilityImgAnim.getAnimationDrawableFromURLList(context, urlAl, UtilityImg.animInterval(context))
+        return UtilityImgAnim.getAnimationDrawableFromURLList(
+            context,
+            urlAl,
+            UtilityImg.animInterval(context)
+        )
     }
 }

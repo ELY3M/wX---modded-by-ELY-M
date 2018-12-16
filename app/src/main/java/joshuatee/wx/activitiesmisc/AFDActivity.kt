@@ -104,7 +104,12 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         linearLayout = findViewById(R.id.ll)
         c0 = ObjectCardText(this)
         linearLayout.addView(c0.card)
-        c0.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
+        c0.setOnClickListener(View.OnClickListener {
+            UtilityToolbar.showHide(
+                toolbar,
+                toolbarBottom
+            )
+        })
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         notifToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
         activityArguments = intent.getStringArrayExtra(URL)
@@ -124,11 +129,24 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         version = 1
         oldProd = ""
         oldNwsOffice = ""
-        ridArrLoc = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, nwsOffice, prefTokenLocation, prefToken)
+        ridArrLoc = UtilityFavorites.setupFavMenu(
+            this,
+            MyApplication.wfoFav,
+            nwsOffice,
+            prefTokenLocation,
+            prefToken
+        )
         spinner1 = ObjectSpinner(this, this, R.id.spinner1, ridArrLoc)
         spinner1.setOnItemSelectedListener(this)
         scrollView = findViewById(R.id.sv)
-        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(c0.card, scrollView))
+        imageMap = ObjectImageMap(
+            this,
+            this,
+            R.id.map,
+            toolbar,
+            toolbarBottom,
+            listOf<View>(c0.card, scrollView)
+        )
         imageMap.addOnImageMapClickedHandler(object : ImageMap.OnImageMapClickedHandler {
             override fun onImageMapClicked(id: Int, im2: ImageMap) {
                 sector = UtilityImageMap.maptoWFO(id)
@@ -142,7 +160,13 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
 
     override fun onRestart() {
         if (ridFavOld != MyApplication.wfoFav) {
-            ridArrLoc = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, nwsOffice, prefTokenLocation, prefToken)
+            ridArrLoc = UtilityFavorites.setupFavMenu(
+                this,
+                MyApplication.wfoFav,
+                nwsOffice,
+                prefTokenLocation,
+                prefToken
+            )
             spinner1.refreshData(this, ridArrLoc)
         }
         super.onRestart()
@@ -232,10 +256,32 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
             R.id.action_lsr -> getProduct("LSR")
             R.id.action_rer -> getProduct("RER")
             R.id.action_nsh -> getProduct("NSH")
-            R.id.action_website -> ObjectIntent(this, WebscreenABModels::class.java, WebscreenABModels.URL, arrayOf("http://www.weather.gov/" + nwsOffice.toLowerCase(Locale.US), nwsOffice))
-            R.id.action_hazards -> ObjectIntent(this, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf("http://www.weather.gov/wwamap/png/" + nwsOffice.toLowerCase(Locale.US) + ".png", "$nwsOffice WWA Map"))
-            R.id.action_forecast -> ObjectIntent(this, WebscreenABModels::class.java, WebscreenABModels.URL, arrayOf(UtilityDownloadNWS.get7DayURL(Location.x, Location.y), "Local forecast"))
-            R.id.action_share -> UtilityShare.shareText(this, product + nwsOffice, Utility.fromHtml(html))
+            R.id.action_website -> ObjectIntent(
+                this,
+                WebscreenABModels::class.java,
+                WebscreenABModels.URL,
+                arrayOf("http://www.weather.gov/" + nwsOffice.toLowerCase(Locale.US), nwsOffice)
+            )
+            R.id.action_hazards -> ObjectIntent(
+                this,
+                ImageShowActivity::class.java,
+                ImageShowActivity.URL,
+                arrayOf(
+                    "http://www.weather.gov/wwamap/png/" + nwsOffice.toLowerCase(Locale.US) + ".png",
+                    "$nwsOffice WWA Map"
+                )
+            )
+            R.id.action_forecast -> ObjectIntent(
+                this,
+                WebscreenABModels::class.java,
+                WebscreenABModels.URL,
+                arrayOf(UtilityDownloadNWS.get7DayURL(Location.x, Location.y), "Local forecast")
+            )
+            R.id.action_share -> UtilityShare.shareText(
+                this,
+                product + nwsOffice,
+                Utility.fromHtml(html)
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -249,21 +295,38 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     private fun mapSwitch(loc: String) {
         nwsOffice = loc
         mapShown = false
-        ridArrLoc = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, nwsOffice, prefTokenLocation, prefToken)
+        ridArrLoc = UtilityFavorites.setupFavMenu(
+            this,
+            MyApplication.wfoFav,
+            nwsOffice,
+            prefTokenLocation,
+            prefToken
+        )
         spinner1.refreshData(this, ridArrLoc)
     }
 
     private fun toggleFavorite() {
         val ridFav = UtilityFavorites.toggleFavoriteString(this, nwsOffice, star, prefToken)
-        ridArrLoc = UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefTokenLocation, prefToken)
+        ridArrLoc =
+                UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefTokenLocation, prefToken)
         spinner1.refreshData(this, ridArrLoc)
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         if (ridArrLoc.isNotEmpty()) {
             when (pos) {
-                1 -> ObjectIntent(this, FavAddActivity::class.java, FavAddActivity.TYPE, arrayOf("WFO"))
-                2 -> ObjectIntent(this, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf("WFO"))
+                1 -> ObjectIntent(
+                    this,
+                    FavAddActivity::class.java,
+                    FavAddActivity.TYPE,
+                    arrayOf("WFO")
+                )
+                2 -> ObjectIntent(
+                    this,
+                    FavRemoveActivity::class.java,
+                    FavRemoveActivity.TYPE,
+                    arrayOf("WFO")
+                )
                 else -> {
                     nwsOffice = ridArrLoc[pos].split(" ").getOrNull(0) ?: ""
                     getContent()
@@ -291,8 +354,8 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         wfoListPerState = mutableListOf()
         wfoListPerState.clear()
         WFO_ARR
-                .filter { it.contains(state) }
-                .forEach { wfoListPerState.add(MyApplication.space.split(it)[0].replace(":", "")) }
+            .filter { it.contains(state) }
+            .forEach { wfoListPerState.add(MyApplication.space.split(it)[0].replace(":", "")) }
         wfoListPerState.sort()
     }
 

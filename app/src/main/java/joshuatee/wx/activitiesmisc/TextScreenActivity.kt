@@ -58,7 +58,11 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.shared_tts)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout_bottom_toolbar,
+            R.menu.shared_tts
+        )
         val menu = toolbarBottom.menu
         val playlistMi = menu.findItem(R.id.action_playlist)
         playlistMi.isVisible = false
@@ -73,7 +77,12 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val linearLayout: LinearLayout = findViewById(R.id.ll)
         c0 = ObjectCardText(this)
         linearLayout.addView(c0.card)
-        c0.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
+        c0.setOnClickListener(View.OnClickListener {
+            UtilityToolbar.showHide(
+                toolbar,
+                toolbarBottom
+            )
+        })
         if (!url.startsWith("http")) {
             if (url.contains("<")) {
                 c0.setText(Utility.fromHtml(url))
@@ -108,7 +117,11 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, activityArguments[1], Utility.fromHtml(html))
+            R.id.action_share -> UtilityShare.shareText(
+                this,
+                activityArguments[1],
+                Utility.fromHtml(html)
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true

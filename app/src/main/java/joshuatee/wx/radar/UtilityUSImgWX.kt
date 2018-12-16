@@ -65,7 +65,11 @@ object UtilityUSImgWX {
         val ridPrefix = UtilityWXOGL.getRidPrefix(rid1, tdwr)
         val inputStream: InputStream?
         if (!prod.contains("L2")) {
-            inputStream = UtilityDownload.getInputStreamFromURL(MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(Locale.US) + "/sn.last")
+            inputStream = UtilityDownload.getInputStreamFromURL(
+                MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(
+                    Locale.US
+                ) + "/sn.last"
+            )
             inputStream?.let { UtilityIO.saveInputStream(context, it, "nids") }
         } else {
             val wd = WXGLDownload()
@@ -83,10 +87,18 @@ object UtilityUSImgWX {
         try {
             var bitmapCanvas = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
             if (!prod.contains("L2")) {
-                if (prod.contains("N0R") || prod.contains("N0S") || prod.contains("N0V") || prod.contains("TR")) {
+                if (prod.contains("N0R") || prod.contains("N0S") || prod.contains("N0V") || prod.contains(
+                        "TR"
+                    )
+                ) {
                     UtilityNexradRadial4Bit.decodeAndPlotNexrad(context, bitmapCanvas, "nids", prod)
                 } else {
-                    UtilityNexradRadial8Bit.decodeAndPlotNexradDigital(context, bitmapCanvas, "nids", prod)
+                    UtilityNexradRadial8Bit.decodeAndPlotNexradDigital(
+                        context,
+                        bitmapCanvas,
+                        "nids",
+                        prod
+                    )
                 }
             } else {
                 UtilityNexradL2.decodeAndPlotNexradL2(context, bitmapCanvas, prod)
@@ -95,7 +107,15 @@ object UtilityUSImgWX {
                 rid1 = ridTdwr
             }
             val citySize = 18
-            UtilityCanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, rid1, hwLineWidth, citySize, isInteractive)
+            UtilityCanvasMain.addCanvasItems(
+                context,
+                bitmapCanvas,
+                scaleType,
+                rid1,
+                hwLineWidth,
+                citySize,
+                isInteractive
+            )
             bitmapCanvas = UtilityImg.drawTextToBitmapForNexrad(context, bitmapCanvas)
             layers.add(cd)
             layers.add(BitmapDrawable(context.resources, bitmapCanvas))
@@ -107,7 +127,13 @@ object UtilityUSImgWX {
         return UtilityImg.layerDrawableToBitmap(layers)
     }
 
-    fun layeredImgFromFile(context: Context, rid1F: String, prod: String, idxStr: String, isInteractive: Boolean): Bitmap {
+    fun layeredImgFromFile(
+        context: Context,
+        rid1F: String,
+        prod: String,
+        idxStr: String,
+        isInteractive: Boolean
+    ): Bitmap {
         var rid = rid1F
         var tdwr = false
         var ridTdwr = ""
@@ -123,10 +149,23 @@ object UtilityUSImgWX {
         val cd = ColorDrawable(MyApplication.nexradRadarBackgroundColor)
         var bitmapCanvas = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
         if (!prod.contains("L2")) {
-            if (prod.contains("N0R") || prod.contains("N0S") || prod.contains("N0V") || prod.contains("TR")) {
-                UtilityNexradRadial4Bit.decodeAndPlotNexrad(context, bitmapCanvas, "nids$idxStr", prod)
+            if (prod.contains("N0R") || prod.contains("N0S") || prod.contains("N0V") || prod.contains(
+                    "TR"
+                )
+            ) {
+                UtilityNexradRadial4Bit.decodeAndPlotNexrad(
+                    context,
+                    bitmapCanvas,
+                    "nids$idxStr",
+                    prod
+                )
             } else {
-                UtilityNexradRadial8Bit.decodeAndPlotNexradDigital(context, bitmapCanvas, "nids$idxStr", prod)
+                UtilityNexradRadial8Bit.decodeAndPlotNexradDigital(
+                    context,
+                    bitmapCanvas,
+                    "nids$idxStr",
+                    prod
+                )
             }
         } else {
             UtilityNexradL2.decodeAndPlotNexradL2(context, bitmapCanvas, prod)
@@ -135,14 +174,29 @@ object UtilityUSImgWX {
             rid = ridTdwr
         }
         val citySize = 18
-        UtilityCanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, rid, hwLineWidth, citySize, isInteractive)
+        UtilityCanvasMain.addCanvasItems(
+            context,
+            bitmapCanvas,
+            scaleType,
+            rid,
+            hwLineWidth,
+            citySize,
+            isInteractive
+        )
         bitmapCanvas = UtilityImg.drawTextToBitmapForNexrad(context, bitmapCanvas)
         layers.add(cd)
         layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         return UtilityImg.layerDrawableToBitmap(layers)
     }
 
-    fun animationFromFiles(context: Context, rid1F: String, prod: String, frameCntStr: String, idxStr: String, isInteractive: Boolean): AnimationDrawable {
+    fun animationFromFiles(
+        context: Context,
+        rid1F: String,
+        prod: String,
+        frameCntStr: String,
+        idxStr: String,
+        isInteractive: Boolean
+    ): AnimationDrawable {
         var rid1 = rid1F
         val layerCnt = 3
         var scaleType = ProjectionType.WX_RENDER
@@ -172,14 +226,30 @@ object UtilityUSImgWX {
         val bmArr = Array(frameCnt) { UtilityImg.getBlankBitmap() }
         (0 until frameCnt).forEach {
             bmArr[it] = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
-            if (prod.contains("N0R") || prod.contains("N0S") || prod.contains("N0V") || prod.contains("TR")) {
+            if (prod.contains("N0R") || prod.contains("N0S") || prod.contains("N0V") || prod.contains(
+                    "TR"
+                )
+            ) {
                 UtilityNexradRadial4Bit.decodeAndPlotNexrad(context, bmArr[it], nidsArr[it], prod)
             } else {
-                UtilityNexradRadial8Bit.decodeAndPlotNexradDigital(context, bmArr[it], nidsArr[it], prod)
+                UtilityNexradRadial8Bit.decodeAndPlotNexradDigital(
+                    context,
+                    bmArr[it],
+                    nidsArr[it],
+                    prod
+                )
             }
         }
         val citySize = 20
-        UtilityCanvasMain.addCanvasItems(context, bitmapCanvas, scaleType, rid1, hwLineWidth, citySize, isInteractive)
+        UtilityCanvasMain.addCanvasItems(
+            context,
+            bitmapCanvas,
+            scaleType,
+            rid1,
+            hwLineWidth,
+            citySize,
+            isInteractive
+        )
         val delay = UtilityImg.animInterval(context)
         val layers = arrayOfNulls<Drawable>(layerCnt)
         (0 until (frameCntStr.toIntOrNull() ?: 0)).forEach {
@@ -209,7 +279,12 @@ object UtilityUSImgWX {
         }
         try {
             val bitmapCanvas = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
-            UtilityNexradRadial8Bit.decodeAndPlotNexradDigital(context, bitmapCanvas, fileName, prod)
+            UtilityNexradRadial8Bit.decodeAndPlotNexradDigital(
+                context,
+                bitmapCanvas,
+                fileName,
+                prod
+            )
             layers.add(cd)
             layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         } catch (e: Exception) {

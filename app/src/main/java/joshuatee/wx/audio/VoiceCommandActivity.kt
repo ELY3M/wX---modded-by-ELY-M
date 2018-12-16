@@ -54,7 +54,8 @@ class VoiceCommandActivity : Activity() {
         try {
             startActivityForResult(i, requestOk)
         } catch (e: Exception) {
-            Toast.makeText(this, "Error initializing speech to text engine.", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Error initializing speech to text engine.", Toast.LENGTH_LONG)
+                .show()
         }
     }
 
@@ -64,7 +65,14 @@ class VoiceCommandActivity : Activity() {
             val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             UtilityUI.makeSnackBar(mainView, thingsYouSaid[0])
             val addrStrTmp = thingsYouSaid[0]
-            val gotHit = UtilityVoiceCommand.processCommand(this, mainView, addrStrTmp, rid1, nws1Current, nws1StateCurrent)
+            val gotHit = UtilityVoiceCommand.processCommand(
+                this,
+                mainView,
+                addrStrTmp,
+                rid1,
+                nws1Current,
+                nws1StateCurrent
+            )
             if (!gotHit) {
                 finish()
             }

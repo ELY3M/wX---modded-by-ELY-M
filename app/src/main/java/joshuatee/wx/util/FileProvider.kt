@@ -16,7 +16,13 @@ import java.io.File
 
 class FileProvider : androidx.core.content.FileProvider() {
 
-    override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
+    override fun query(
+        uri: Uri,
+        projection: Array<String>?,
+        selection: String?,
+        selectionArgs: Array<String>?,
+        sortOrder: String?
+    ): Cursor? {
         val source = super.query(uri, projection, selection, selectionArgs, sortOrder)
         val columnNames = source!!.columnNames
         val newColumnNames = columnNamesWithData(columnNames)
@@ -31,14 +37,15 @@ class FileProvider : androidx.core.content.FileProvider() {
 
     private fun columnNamesWithData(columnNames: Array<String>): Array<String> {
         columnNames
-                .filter { MediaStore.MediaColumns.DATA == it }
-                .forEach { _ -> return columnNames }
+            .filter { MediaStore.MediaColumns.DATA == it }
+            .forEach { _ -> return columnNames }
         val newColumnNames = Arrays.copyOf(columnNames, columnNames.size + 1)
         newColumnNames[columnNames.size] = MediaStore.MediaColumns.DATA
         return newColumnNames
     }
 
     companion object {
-        fun getUriForFile(context: Context, authority: String, file: File): Uri = androidx.core.content.FileProvider.getUriForFile(context, authority, file)
+        fun getUriForFile(context: Context, authority: String, file: File): Uri =
+            androidx.core.content.FileProvider.getUriForFile(context, authority, file)
     }
 }

@@ -44,7 +44,12 @@ object UtilityCanvasStormInfo {
 
     private const val stiBaseFn = "nids_sti_tab"
 
-    fun drawNexRadStormMotion(context: Context, provider: ProjectionType, bm1: Bitmap, rid: String) {
+    fun drawNexRadStormMotion(
+        context: Context,
+        provider: ProjectionType,
+        bm1: Bitmap,
+        rid: String
+    ) {
         val textSize = 22
         WXGLDownload.getNidsTab(context, "STI", rid.toLowerCase(), stiBaseFn + "")
         val mercato = provider.isMercator
@@ -75,11 +80,11 @@ object UtilityCanvasStormInfo {
             var posnStr = ""
             var motionStr = ""
             posn
-                    .map { it.replace("NEW", "0/ 0").replace("/ ", "/").replace("\\s+".toRegex(), " ") }
-                    .forEach { posnStr += it.replace("/", " ") }
+                .map { it.replace("NEW", "0/ 0").replace("/ ", "/").replace("\\s+".toRegex(), " ") }
+                .forEach { posnStr += it.replace("/", " ") }
             motion
-                    .map { it.replace("NEW", "0/ 0").replace("/ ", "/").replace("\\s+".toRegex(), " ") }
-                    .forEach { motionStr += it.replace("/", " ") }
+                .map { it.replace("NEW", "0/ 0").replace("/ ", "/").replace("\\s+".toRegex(), " ") }
+                .forEach { motionStr += it.replace("/", " ") }
             val posnNumbers = posnStr.parseColumnAll(RegExp.stiPattern3)
             val motNumbers = motionStr.parseColumnAll(RegExp.stiPattern3)
             var degree: Double
@@ -105,34 +110,115 @@ object UtilityCanvasStormInfo {
                     degree2 = motNumbers[s].toDouble()
                     nm2 = motNumbers[s + 1].toDouble()
                     start = ExternalGlobalCoordinates(location)
-                    ec = ecc.calculateEndingGlobalCoordinates(ExternalEllipsoid.WGS84, start, degree, nm * 1852.0, bearing)
+                    ec = ecc.calculateEndingGlobalCoordinates(
+                        ExternalEllipsoid.WGS84,
+                        start,
+                        degree,
+                        nm * 1852.0,
+                        bearing
+                    )
                     tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(ec, pn)
                     stormList.add(tmpCoords[0])
                     stormList.add(tmpCoords[1])
                     start = ExternalGlobalCoordinates(ec)
-                    ec = ecc.calculateEndingGlobalCoordinates(ExternalEllipsoid.WGS84, start, degree2 + degreeShift, nm2 * 1852.0, bearing)
+                    ec = ecc.calculateEndingGlobalCoordinates(
+                        ExternalEllipsoid.WGS84,
+                        start,
+                        degree2 + degreeShift,
+                        nm2 * 1852.0,
+                        bearing
+                    )
                     // mercator expects lat/lon to both be positive as many products have this
-                    tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(ec.latitude, ec.longitude * -1, pn)
+                    tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(
+                        ec.latitude,
+                        ec.longitude * -1,
+                        pn
+                    )
                     ecArr.indices.forEach {
-                        ecArr[it] = ecc.calculateEndingGlobalCoordinates(ExternalEllipsoid.WGS84, start, degree2 + degreeShift, nm2 * 1852.0 * it.toDouble() * 0.25, bearing)
-                        tmpCoordsArr[it] = LatLon(UtilityCanvasProjection.computeMercatorNumbers(ecArr[it], pn))
+                        ecArr[it] = ecc.calculateEndingGlobalCoordinates(
+                            ExternalEllipsoid.WGS84,
+                            start,
+                            degree2 + degreeShift,
+                            nm2 * 1852.0 * it.toDouble() * 0.25,
+                            bearing
+                        )
+                        tmpCoordsArr[it] = LatLon(
+                            UtilityCanvasProjection.computeMercatorNumbers(
+                                ecArr[it],
+                                pn
+                            )
+                        )
                     }
                     stormList.add(tmpCoords[0])
                     stormList.add(tmpCoords[1])
                     endPoint = tmpCoords
                     if (nm2 > 0.01) {
                         start = ExternalGlobalCoordinates(ec)
-                        drawLine(stormList, endPoint, ecc, pn, start, degree2 + arrowBend, arrowLength * 1852.0, bearing)
-                        drawLine(stormList, endPoint, ecc, pn, start, degree2 - arrowBend, arrowLength * 1852.0, bearing)
+                        drawLine(
+                            stormList,
+                            endPoint,
+                            ecc,
+                            pn,
+                            start,
+                            degree2 + arrowBend,
+                            arrowLength * 1852.0,
+                            bearing
+                        )
+                        drawLine(
+                            stormList,
+                            endPoint,
+                            ecc,
+                            pn,
+                            start,
+                            degree2 - arrowBend,
+                            arrowLength * 1852.0,
+                            bearing
+                        )
                         // 15,30,45 min ticks
                         val stormTrackTickMarkAngleOff90 = 45.0
                         tmpCoordsArr.indices.forEach { z ->
                             // first line
-                            drawTickMarks(stormList, tmpCoordsArr[z], ecc, pn, ecArr[z], degree2 - (90.0 + stormTrackTickMarkAngleOff90), arrowLength * 1852.0 * sti15IncrLen, bearing)
-                            drawTickMarks(stormList, tmpCoordsArr[z], ecc, pn, ecArr[z], degree2 + (90.0 - stormTrackTickMarkAngleOff90), arrowLength * 1852.0 * sti15IncrLen, bearing)
+                            drawTickMarks(
+                                stormList,
+                                tmpCoordsArr[z],
+                                ecc,
+                                pn,
+                                ecArr[z],
+                                degree2 - (90.0 + stormTrackTickMarkAngleOff90),
+                                arrowLength * 1852.0 * sti15IncrLen,
+                                bearing
+                            )
+                            drawTickMarks(
+                                stormList,
+                                tmpCoordsArr[z],
+                                ecc,
+                                pn,
+                                ecArr[z],
+                                degree2 + (90.0 - stormTrackTickMarkAngleOff90),
+                                arrowLength * 1852.0 * sti15IncrLen,
+                                bearing
+                            )
                             // 2nd line
-                            drawTickMarks(stormList, tmpCoordsArr[z], ecc, pn, ecArr[z], degree2 - (90.0 - stormTrackTickMarkAngleOff90), arrowLength * 1852.0 * sti15IncrLen, bearing)
-                            drawTickMarks(stormList, tmpCoordsArr[z], ecc, pn, ecArr[z], degree2 + (90.0 + stormTrackTickMarkAngleOff90), arrowLength * 1852.0 * sti15IncrLen, bearing)
+                            drawTickMarks(
+                                stormList,
+                                tmpCoordsArr[z],
+                                ecc,
+                                pn,
+                                ecArr[z],
+                                degree2 - (90.0 - stormTrackTickMarkAngleOff90),
+                                arrowLength * 1852.0 * sti15IncrLen,
+                                bearing
+                            )
+                            drawTickMarks(
+                                stormList,
+                                tmpCoordsArr[z],
+                                ecc,
+                                pn,
+                                ecArr[z],
+                                degree2 + (90.0 + stormTrackTickMarkAngleOff90),
+                                arrowLength * 1852.0 * sti15IncrLen,
+                                bearing
+                            )
                         }
                     }
                     s += 2
@@ -150,11 +236,27 @@ object UtilityCanvasStormInfo {
         var i = 0
         while (i < stormListArr.size) {
             if (mercato) {
-                tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(stormListArr[i].toDouble(), stormListArr[i + 1].toDouble(), pn)
-                tmpCoords2 = UtilityCanvasProjection.computeMercatorNumbers(stormListArr[i + 2].toDouble(), stormListArr[i + 3].toDouble(), pn)
+                tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(
+                    stormListArr[i].toDouble(),
+                    stormListArr[i + 1].toDouble(),
+                    pn
+                )
+                tmpCoords2 = UtilityCanvasProjection.computeMercatorNumbers(
+                    stormListArr[i + 2].toDouble(),
+                    stormListArr[i + 3].toDouble(),
+                    pn
+                )
             } else {
-                tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(stormListArr[i].toDouble(), stormListArr[i + 1].toDouble(), pn)
-                tmpCoords2 = UtilityCanvasProjection.computeMercatorNumbers(stormListArr[i + 2].toDouble(), stormListArr[i + 3].toDouble(), pn)
+                tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(
+                    stormListArr[i].toDouble(),
+                    stormListArr[i + 1].toDouble(),
+                    pn
+                )
+                tmpCoords2 = UtilityCanvasProjection.computeMercatorNumbers(
+                    stormListArr[i + 2].toDouble(),
+                    stormListArr[i + 3].toDouble(),
+                    pn
+                )
             }
             wallpath.reset()
             wallpath.moveTo(tmpCoords[0].toFloat(), tmpCoords[1].toFloat())
@@ -164,21 +266,52 @@ object UtilityCanvasStormInfo {
         }
     }
 
-    private fun drawTickMarks(list: MutableList<Double>, startPoint: LatLon, ecc: ExternalGeodeticCalculator, pn: ProjectionNumbers, ecArr: ExternalGlobalCoordinates, startBearing: Double, distance: Double, bearing: DoubleArray) {
+    private fun drawTickMarks(
+        list: MutableList<Double>,
+        startPoint: LatLon,
+        ecc: ExternalGeodeticCalculator,
+        pn: ProjectionNumbers,
+        ecArr: ExternalGlobalCoordinates,
+        startBearing: Double,
+        distance: Double,
+        bearing: DoubleArray
+    ) {
         list.add(startPoint.lat)
         list.add(startPoint.lon)
         val start = ExternalGlobalCoordinates(ecArr)
-        val ec = ecc.calculateEndingGlobalCoordinates(ExternalEllipsoid.WGS84, start, startBearing, distance, bearing)
+        val ec = ecc.calculateEndingGlobalCoordinates(
+            ExternalEllipsoid.WGS84,
+            start,
+            startBearing,
+            distance,
+            bearing
+        )
         val tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(ec, pn)
         list.add(tmpCoords[0])
         list.add(tmpCoords[1])
     }
 
-    private fun drawLine(list: MutableList<Double>, startPoint: DoubleArray, ecc: ExternalGeodeticCalculator, pn: ProjectionNumbers, start: ExternalGlobalCoordinates, startBearing: Double, distance: Double, bearing: DoubleArray) {
+    private fun drawLine(
+        list: MutableList<Double>,
+        startPoint: DoubleArray,
+        ecc: ExternalGeodeticCalculator,
+        pn: ProjectionNumbers,
+        start: ExternalGlobalCoordinates,
+        startBearing: Double,
+        distance: Double,
+        bearing: DoubleArray
+    ) {
         list.add(startPoint[0])
         list.add(startPoint[1])
-        val ec = ecc.calculateEndingGlobalCoordinates(ExternalEllipsoid.WGS84, start, startBearing, distance, bearing)
-        val tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(ec.latitude, ec.longitude * -1, pn)
+        val ec = ecc.calculateEndingGlobalCoordinates(
+            ExternalEllipsoid.WGS84,
+            start,
+            startBearing,
+            distance,
+            bearing
+        )
+        val tmpCoords =
+            UtilityCanvasProjection.computeMercatorNumbers(ec.latitude, ec.longitude * -1, pn)
         list.add(tmpCoords[0])
         list.add(tmpCoords[1])
     }

@@ -50,7 +50,11 @@ internal object UtilityNotificationTornado {
         return notifUrls
     }
 
-    private fun checkForNotifications(context: Context, htmlF: String, inBlackout: Boolean): String {
+    private fun checkForNotifications(
+        context: Context,
+        htmlF: String,
+        inBlackout: Boolean
+    ): String {
         var html = htmlF
         var notifUrls = ""
         val locLabelStr = "(" + "CONUS Tornado alert" + ") "
@@ -61,20 +65,45 @@ internal object UtilityNotificationTornado {
             if (idAl.size > i) {
                 val url = idAl[i]
                 val ca = CAPAlert.createFromURL(url)
-                if (UtilityNotificationTools.nwsLocalAlertNotFiltered(context, title)) { // placeholder for WFO filter check
+                if (UtilityNotificationTools.nwsLocalAlertNotFiltered(
+                        context,
+                        title
+                    )
+                ) { // placeholder for WFO filter check
                     html = "$html<b>$title</b><br>"
                     html = html + "<b>Counties: " + ca.area + "</b><br>"
                     html = html + ca.summary + "<br><br><br>"
                     val noMain = locLabelStr + title
                     val noBody = title + " " + ca.area + " " + ca.summary
                     val noSummary = title + ": " + ca.area + " " + ca.summary
-                    val objPI = ObjectPendingIntents(context, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(url, ""), arrayOf(url, "sound"))
-                    if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(context, url))) {
-                        val sound = MyApplication.alertNotificationSoundTornadoCurrent && !inBlackout
-                        val notifObj = ObjectNotification(context, sound, noMain,
-                                noBody, objPI.resultPendingIntent,
-                                MyApplication.ICON_TORNADO, noSummary, Notification.PRIORITY_MAX, Color.RED,
-                                MyApplication.ICON_ACTION, objPI.resultPendingIntent2, context.resources.getString(R.string.read_aloud))
+                    val objPI = ObjectPendingIntents(
+                        context,
+                        USAlertsDetailActivity::class.java,
+                        USAlertsDetailActivity.URL,
+                        arrayOf(url, ""),
+                        arrayOf(url, "sound")
+                    )
+                    if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
+                            context,
+                            url
+                        ))
+                    ) {
+                        val sound =
+                            MyApplication.alertNotificationSoundTornadoCurrent && !inBlackout
+                        val notifObj = ObjectNotification(
+                            context,
+                            sound,
+                            noMain,
+                            noBody,
+                            objPI.resultPendingIntent,
+                            MyApplication.ICON_TORNADO,
+                            noSummary,
+                            Notification.PRIORITY_MAX,
+                            Color.RED,
+                            MyApplication.ICON_ACTION,
+                            objPI.resultPendingIntent2,
+                            context.resources.getString(R.string.read_aloud)
+                        )
                         val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
                         notifObj.sendNotification(context, url, 1, noti)
                         //notifier.notify(url, 1, noti)

@@ -45,7 +45,8 @@ import joshuatee.wx.STATE_ARR
 import joshuatee.wx.util.Utility
 import kotlinx.coroutines.*
 
-class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelectedListener, OnMenuItemClickListener {
+class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelectedListener,
+    OnMenuItemClickListener {
 
     // Show state level SPC SWO grapahics for D1-3
     //
@@ -101,7 +102,11 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareBitmap(this, "$nws1StateCurrent SWO D$turlDay", bitmap)
+            R.id.action_share -> UtilityShare.shareBitmap(
+                this,
+                "$nws1StateCurrent SWO D$turlDay",
+                bitmap
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true

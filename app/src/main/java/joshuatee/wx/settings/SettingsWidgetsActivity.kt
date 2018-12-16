@@ -47,20 +47,137 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
         toolbar.subtitle = "Please tap on text for additional help."
         val locNumIntCurrent = Location.numLocations
         val locTruncateLen = 20
-        val locationAl = (1 until locNumIntCurrent + 1).mapTo(mutableListOf()) { it.toString() + ": " + UtilityStringExternal.truncate(Utility.readPref(this, "LOC" + it + "_LABEL", ""), locTruncateLen) }
+        val locationAl = (1 until locNumIntCurrent + 1).mapTo(mutableListOf()) {
+            it.toString() + ": " + UtilityStringExternal.truncate(
+                Utility.readPref(
+                    this,
+                    "LOC" + it + "_LABEL",
+                    ""
+                ),
+                locTruncateLen
+            )
+        }
         val ll: LinearLayout = findViewById(R.id.ll)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Warnings in radar mosaic", "WIDGET_MOSAIC_WARNINGS", R.string.loc1_radar_warnings_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Do not show 7day in CC widget", "WIDGET_CC_DONOTSHOW_7_DAY", R.string.cc_widget_show_sevenday).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Download nexrad radar", WidgetFile.NEXRAD_RADAR.prefString, R.string.loc1_radar_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Download mosaics", WidgetFile.VIS.prefString, R.string.loc1_mosaics_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Download radar mosaic", WidgetFile.MOSAIC_RADAR.prefString, R.string.loc1_mosaics_rad_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Download AFD", WidgetFile.AFD.prefString, R.string.loc1_txt_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Download HWO", WidgetFile.HWO.prefString, R.string.loc1_txt_hwo_label).card)
-        ll.addView(ObjectSettingsSpinner(this, this, "Radar mosaic level", "WIDGET_RADAR_LEVEL", "1km", R.string.widget_nexrad_size_label, zoomStrArr).card)
-        ll.addView(ObjectSettingsSpinner(this, this, "Location", "WIDGET_LOCATION", "", R.string.spinner_location_label, locationAl).card)
-        ll.addView(ObjectSettingsSpinner(this, this, "Nexrad centered at:", "WIDGET_NEXRAD_CENTER", "", R.string.nexrad_center_label, nexradCenterArr).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Widget check interval(m)", "CC_NOTIFICATION_INTERVAL", R.string.cc_interval_np_label, 60, 1, 120).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Widget nexrad size", "WIDGET_NEXRAD_SIZE", R.string.widget_nexrad_size_label, 10, 1, 15).card)
+        ll.addView(
+            ObjectSettingsCheckBox(
+                this,
+                this,
+                "Warnings in radar mosaic",
+                "WIDGET_MOSAIC_WARNINGS",
+                R.string.loc1_radar_warnings_label
+            ).card
+        )
+        ll.addView(
+            ObjectSettingsCheckBox(
+                this,
+                this,
+                "Do not show 7day in CC widget",
+                "WIDGET_CC_DONOTSHOW_7_DAY",
+                R.string.cc_widget_show_sevenday
+            ).card
+        )
+        ll.addView(
+            ObjectSettingsCheckBox(
+                this,
+                this,
+                "Download nexrad radar",
+                WidgetFile.NEXRAD_RADAR.prefString,
+                R.string.loc1_radar_label
+            ).card
+        )
+        ll.addView(
+            ObjectSettingsCheckBox(
+                this,
+                this,
+                "Download mosaics",
+                WidgetFile.VIS.prefString,
+                R.string.loc1_mosaics_label
+            ).card
+        )
+        ll.addView(
+            ObjectSettingsCheckBox(
+                this,
+                this,
+                "Download radar mosaic",
+                WidgetFile.MOSAIC_RADAR.prefString,
+                R.string.loc1_mosaics_rad_label
+            ).card
+        )
+        ll.addView(
+            ObjectSettingsCheckBox(
+                this,
+                this,
+                "Download AFD",
+                WidgetFile.AFD.prefString,
+                R.string.loc1_txt_label
+            ).card
+        )
+        ll.addView(
+            ObjectSettingsCheckBox(
+                this,
+                this,
+                "Download HWO",
+                WidgetFile.HWO.prefString,
+                R.string.loc1_txt_hwo_label
+            ).card
+        )
+        ll.addView(
+            ObjectSettingsSpinner(
+                this,
+                this,
+                "Radar mosaic level",
+                "WIDGET_RADAR_LEVEL",
+                "1km",
+                R.string.widget_nexrad_size_label,
+                zoomStrArr
+            ).card
+        )
+        ll.addView(
+            ObjectSettingsSpinner(
+                this,
+                this,
+                "Location",
+                "WIDGET_LOCATION",
+                "",
+                R.string.spinner_location_label,
+                locationAl
+            ).card
+        )
+        ll.addView(
+            ObjectSettingsSpinner(
+                this,
+                this,
+                "Nexrad centered at:",
+                "WIDGET_NEXRAD_CENTER",
+                "",
+                R.string.nexrad_center_label,
+                nexradCenterArr
+            ).card
+        )
+        ll.addView(
+            ObjectSettingsNumberPicker(
+                this,
+                this,
+                "Widget check interval(m)",
+                "CC_NOTIFICATION_INTERVAL",
+                R.string.cc_interval_np_label,
+                60,
+                1,
+                120
+            ).card
+        )
+        ll.addView(
+            ObjectSettingsNumberPicker(
+                this,
+                this,
+                "Widget nexrad size",
+                "WIDGET_NEXRAD_SIZE",
+                R.string.widget_nexrad_size_label,
+                10,
+                1,
+                15
+            ).card
+        )
         val abSw: SwitchCompat = findViewById(R.id.ab_switch)
         abSw.setOnCheckedChangeListener(this)
         abSw.isChecked = Utility.readPref(this, "WIDGETS_ENABLED", "false").startsWith("t")

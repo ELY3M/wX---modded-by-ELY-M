@@ -56,7 +56,8 @@ class ObjectForecastPackage7Day internal constructor(locNum: Int, html: String) 
         get() = detailedForecastAl
 
     private fun convertExt7DaytoList() {
-        detailedForecastAl = sevenDayExtStr.split(MyApplication.newline + MyApplication.newline).dropLastWhile { it.isEmpty() }.toMutableList()
+        detailedForecastAl = sevenDayExtStr.split(MyApplication.newline + MyApplication.newline)
+            .dropLastWhile { it.isEmpty() }.toMutableList()
     }
 
     private fun getIcons7Day(html: String): String {
@@ -75,7 +76,14 @@ class ObjectForecastPackage7Day internal constructor(locNum: Int, html: String) 
         val shortForecastAl = html.parseColumn("\"shortForecast\": \"(.*?)\",")
         val detailedForecastAl = html.parseColumn("\"detailedForecast\": \"(.*?)\"")
         if ((nameAl.size == temperatureAl.size) && (temperatureAl.size == shortForecastAl.size) && (shortForecastAl.size == detailedForecastAl.size)) {
-            val forecastAl = (0 until nameAl.size).mapTo(mutableListOf()) { ObjectForecast(nameAl[it], temperatureAl[it], shortForecastAl[it], detailedForecastAl[it]) }
+            val forecastAl = (0 until nameAl.size).mapTo(mutableListOf()) {
+                ObjectForecast(
+                    nameAl[it],
+                    temperatureAl[it],
+                    shortForecastAl[it],
+                    detailedForecastAl[it]
+                )
+            }
             val sb = StringBuilder(200)
             sb.append(MyApplication.newline)
             sb.append(MyApplication.newline)
@@ -102,7 +110,14 @@ class ObjectForecastPackage7Day internal constructor(locNum: Int, html: String) 
         val shortForecastAl = html.parseColumn("\"shortForecast\": \"(.*?)\",")
         val detailedForecastAlLocal = html.parseColumn("\"detailedForecast\": \"(.*?)\"")
         if (nameAl.size == temperatureAl.size && temperatureAl.size == shortForecastAl.size && shortForecastAl.size == detailedForecastAlLocal.size) {
-            (0 until nameAl.size).mapTo(forecastAl) { ObjectForecast(nameAl[it], temperatureAl[it], shortForecastAl[it], detailedForecastAlLocal[it]) }
+            (0 until nameAl.size).mapTo(forecastAl) {
+                ObjectForecast(
+                    nameAl[it],
+                    temperatureAl[it],
+                    shortForecastAl[it],
+                    detailedForecastAlLocal[it]
+                )
+            }
         }
         val sb = StringBuilder(200)
         sb.append(MyApplication.newline)

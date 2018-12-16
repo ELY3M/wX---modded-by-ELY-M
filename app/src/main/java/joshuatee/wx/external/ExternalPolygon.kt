@@ -29,7 +29,10 @@ import java.util.ArrayList
  *
  * @author Roman Kushnarenko (sromku@gmail.com)
  */
-class ExternalPolygon private constructor(val sides: List<ExternalLine>, private val _boundingBox: BoundingBox) {
+class ExternalPolygon private constructor(
+    val sides: List<ExternalLine>,
+    private val _boundingBox: BoundingBox
+) {
 
     /**
      * Get the builder of the polygon

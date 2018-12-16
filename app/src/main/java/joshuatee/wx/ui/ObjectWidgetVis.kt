@@ -46,9 +46,25 @@ class ObjectWidgetVis(context: Context) {
         UtilityWidget.setImage(context, remoteViews, VIS.fileName)
         if (!MyApplication.widgetPreventTap) {
             if (Location.isUS(widgetLocNum)) {
-                UtilityWidget.setupIntent(context, remoteViews, GOES16Activity::class.java, R.id.iv, GOES16Activity.RID, arrayOf(""), WidgetFile.VIS.action)
+                UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    GOES16Activity::class.java,
+                    R.id.iv,
+                    GOES16Activity.RID,
+                    arrayOf(""),
+                    WidgetFile.VIS.action
+                )
             } else {
-                UtilityWidget.setupIntent(context, remoteViews, CanadaRadarActivity::class.java, R.id.iv, CanadaRadarActivity.RID, arrayOf(rid1, "vis"), WidgetFile.VIS.action)
+                UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    CanadaRadarActivity::class.java,
+                    R.id.iv,
+                    CanadaRadarActivity.RID,
+                    arrayOf(rid1, "vis"),
+                    WidgetFile.VIS.action
+                )
             }
         }
     }

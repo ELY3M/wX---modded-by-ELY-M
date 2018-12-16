@@ -68,9 +68,17 @@ class WPCRainfallForecastActivity : BaseActivity() {
         bitmaps.forEach { bitmap ->
             card = ObjectCardImage(contextg, bitmap)
             val prodTextUrlLocal = UtilityWPCRainfallForecast.textUrls[bitmaps.indexOf(bitmap)]
-            val prodTitleLocal = UtilityWPCRainfallForecast.productLabels[bitmaps.indexOf(bitmap)] + " - " + getString(UtilityWPCRainfallForecast.activityTitle)
+            val prodTitleLocal =
+                UtilityWPCRainfallForecast.productLabels[bitmaps.indexOf(bitmap)] + " - " + getString(
+                    UtilityWPCRainfallForecast.activityTitle
+                )
             card.setOnClickListener(View.OnClickListener {
-                ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(prodTextUrlLocal, prodTitleLocal))
+                ObjectIntent(
+                    contextg,
+                    TextScreenActivity::class.java,
+                    TextScreenActivity.URL,
+                    arrayOf(prodTextUrlLocal, prodTitleLocal)
+                )
             })
             linearLayout.addView(card.card)
         }
@@ -78,7 +86,12 @@ class WPCRainfallForecastActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, getString(UtilityWPCRainfallForecast.activityTitle), "", bitmaps)
+            R.id.action_share -> UtilityShare.shareText(
+                this,
+                getString(UtilityWPCRainfallForecast.activityTitle),
+                "",
+                bitmaps
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true

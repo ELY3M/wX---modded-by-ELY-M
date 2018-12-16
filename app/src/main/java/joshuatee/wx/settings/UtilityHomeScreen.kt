@@ -136,7 +136,16 @@ internal object UtilityHomeScreen {
             MyApplication.HM_CLASS_ID[it] = WPCImagesActivity.URL
         }
 
-        listOf("FMAP12", "FMAP24", "FMAP36", "FMAP48", "FMAP3D", "FMAP4D", "FMAP5D", "FMAP6D").forEach {
+        listOf(
+            "FMAP12",
+            "FMAP24",
+            "FMAP36",
+            "FMAP48",
+            "FMAP3D",
+            "FMAP4D",
+            "FMAP5D",
+            "FMAP6D"
+        ).forEach {
             MyApplication.HM_CLASS[it] = WPCImagesActivity::class.java
             MyApplication.HM_CLASS_ARGS[it] = arrayOf("")
             MyApplication.HM_CLASS_ID[it] = WPCImagesActivity.URL

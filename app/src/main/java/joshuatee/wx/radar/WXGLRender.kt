@@ -18,6 +18,8 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M. 
+
 
 package joshuatee.wx.radar
 
@@ -481,7 +483,7 @@ class WXGLRender(private val context: Context) : Renderer {
             mSizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
             //var conusbitmap: Bitmap? = OpenGLShader.LoadBitmap(MyApplication.FilesPath + "conus.gif")
 
-            GLES20.glUniform1f(mSizeHandle, 1600f)
+            GLES20.glUniform1f(mSizeHandle, 1000f) //was 1600f
             iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
             //val conusbitmap: Bitmap? = ///UtilityConusRadar.nwsConusRadar(context)
             conusradarId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "conus.gif")
@@ -705,7 +707,7 @@ class WXGLRender(private val context: Context) : Renderer {
         }
         if (!MyApplication.radarUseJni) {
             if (useMercatorProjection) {
-                UtilityWXOGLPerf.genMercato(buffers.geotype.relativeBuffer, buffers.floatBuffer, pn, buffers.count)
+                UtilityWXOGLPerf.genMercator(buffers.geotype.relativeBuffer, buffers.floatBuffer, pn, buffers.count)
             } else {
                 UtilityWXOGLPerf.generate4326Projection(buffers.geotype.relativeBuffer, buffers.floatBuffer, pn, buffers.count)
             }
@@ -937,10 +939,12 @@ class WXGLRender(private val context: Context) : Renderer {
                 8 * conusRadarBuffers.triangleCount,
                 6 * conusRadarBuffers.triangleCount,
                 0)
-        //UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, 40.750220, 99.476964)
 
+
+        //UtilityWXOGLPerf.genMarker(conusRadarBuffers, pn, 35.0, 90.0)
+        //UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, 40.750220, 99.476964)
         //UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, pn.xDbl, pn.yDbl)
-        UtilityWXOGLPerf.genMercato(MyApplication.stateRelativeBuffer, conusRadarBuffers.floatBuffer, pn, conusRadarBuffers.count)
+        //UtilityWXOGLPerf.genMercator(MyApplication.stateRelativeBuffer, conusRadarBuffers.floatBuffer, pn, conusRadarBuffers.count)
 
 
         conusRadarBuffers.isInitialized = true
@@ -964,7 +968,7 @@ class WXGLRender(private val context: Context) : Renderer {
             conusRadarBuffers.isInitialized = true
         }
         if (!MyApplication.radarUseJni) {
-            UtilityWXOGLPerf.genMercato(conusRadarBuffers.geotype.relativeBuffer, conusRadarBuffers.floatBuffer, pn, conusRadarBuffers.count)
+            UtilityWXOGLPerf.genMercator(conusRadarBuffers.geotype.relativeBuffer, conusRadarBuffers.floatBuffer, pn, conusRadarBuffers.count)
         } else {
             JNI.genMercato(conusRadarBuffers.geotype.relativeBuffer, conusRadarBuffers.floatBuffer, pn.xFloat, pn.yFloat, pn.xCenter.toFloat(), pn.yCenter.toFloat(), pn.oneDegreeScaleFactorFloat, conusRadarBuffers.count)
         }
@@ -1043,7 +1047,6 @@ class WXGLRender(private val context: Context) : Renderer {
         tvsBuffers.lenInit = 0f //MyApplication.radarTvsSize.toFloat()
         val stormList = WXGLNexradLevel3TVS.decodeAndPlot(context, rid, idxStr)
         tvsBuffers.setXYList(stormList)
-        //constructTriangles(tvsBuffers)
         constructMarker(tvsBuffers)
 
     }

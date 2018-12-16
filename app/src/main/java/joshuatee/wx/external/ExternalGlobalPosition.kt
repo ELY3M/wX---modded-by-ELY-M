@@ -31,18 +31,20 @@ class ExternalGlobalPosition
  * @param longitude longitude in degrees
  * @param elevation elevation, in meters, above the reference ellipsoid
  */
-private constructor(latitude: Double, longitude: Double,
-        /** Elevation, in meters, above the surface of the ellipsoid.  */
-        /**
-         * Get elevation.
-         *
-         * @return elevation about the ellipsoid in meters.
-         */
-                    /**
-                     * Set the elevation.
-                     *
-                     */
-                    var elevation: Double) : ExternalGlobalCoordinates(latitude, longitude) {
+private constructor(
+    latitude: Double, longitude: Double,
+    /** Elevation, in meters, above the surface of the ellipsoid.  */
+    /**
+     * Get elevation.
+     *
+     * @return elevation about the ellipsoid in meters.
+     */
+    /**
+     * Set the elevation.
+     *
+     */
+    var elevation: Double
+) : ExternalGlobalCoordinates(latitude, longitude) {
 
     /**
      * Creates a new instance of GlobalPosition.

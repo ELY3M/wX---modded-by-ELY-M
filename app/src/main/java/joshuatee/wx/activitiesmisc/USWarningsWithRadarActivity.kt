@@ -131,11 +131,21 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
 
     private fun radarInterface(id: Int) {
         val rid = Utility.readPref(contextg, "NWS_RID_" + objAlertSummary.mapButtonNws[id], "")
-        ObjectIntent(contextg, WXGLRadarActivity::class.java, WXGLRadarActivity.RID, arrayOf(rid, objAlertSummary.mapButtonState[id]!!, "N0Q", ""))
+        ObjectIntent(
+            contextg,
+            WXGLRadarActivity::class.java,
+            WXGLRadarActivity.RID,
+            arrayOf(rid, objAlertSummary.mapButtonState[id]!!, "N0Q", "")
+        )
     }
 
     private fun radarMosaic(id: Int) {
-        ObjectIntent(this, USNWSGOESActivity::class.java, USNWSGOESActivity.RID, arrayOf("nws", objAlertSummary.mapButtonNws[id]!!.toLowerCase(Locale.US), "nws_warn"))
+        ObjectIntent(
+            this,
+            USNWSGOESActivity::class.java,
+            USNWSGOESActivity.RID,
+            arrayOf("nws", objAlertSummary.mapButtonNws[id]!!.toLowerCase(Locale.US), "nws_warn")
+        )
     }
 
     private fun locationAdd(id: Int) {
@@ -216,10 +226,28 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
         when (item.itemId) {
-            R.id.action_warnmap -> ObjectIntent(contextg, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf("http://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map"))
-            R.id.action_warnmapAK -> ObjectIntent(contextg, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf("http://forecast.weather.gov/wwamap/png/ak.png", "AK warning map"))
-            R.id.action_warnmapHI -> ObjectIntent(contextg, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf("http://forecast.weather.gov/wwamap/png/hi.png", "HI warning map"))
-            R.id.action_impact_graphics -> ObjectIntent(contextg, USWarningsImpactActivity::class.java)
+            R.id.action_warnmap -> ObjectIntent(
+                contextg,
+                ImageShowActivity::class.java,
+                ImageShowActivity.URL,
+                arrayOf("http://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map")
+            )
+            R.id.action_warnmapAK -> ObjectIntent(
+                contextg,
+                ImageShowActivity::class.java,
+                ImageShowActivity.URL,
+                arrayOf("http://forecast.weather.gov/wwamap/png/ak.png", "AK warning map")
+            )
+            R.id.action_warnmapHI -> ObjectIntent(
+                contextg,
+                ImageShowActivity::class.java,
+                ImageShowActivity.URL,
+                arrayOf("http://forecast.weather.gov/wwamap/png/hi.png", "HI warning map")
+            )
+            R.id.action_impact_graphics -> ObjectIntent(
+                contextg,
+                USWarningsImpactActivity::class.java
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true

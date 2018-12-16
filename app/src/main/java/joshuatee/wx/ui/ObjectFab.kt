@@ -66,7 +66,8 @@ class ObjectFab {
 
         private fun setupFAB(context: Context, fab: FloatingActionButton) {
             if (UIPreferences.themeIsWhite) {
-                fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+                fab.backgroundTintList =
+                        ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
             }
             if (android.os.Build.VERSION.SDK_INT > 20) {
                 fab.elevation = MyApplication.fabElevation
@@ -77,7 +78,8 @@ class ObjectFab {
         fun fabSetResDrawable(context: Context, fab: RemoteViews, ib: Int, resdraw: Int) {
             val wrappedContext = ContextWrapper(context)
             val d = ContextCompat.getDrawable(wrappedContext, resdraw)!!
-            val b = Bitmap.createBitmap(d.intrinsicWidth, d.intrinsicHeight, Bitmap.Config.ARGB_8888)
+            val b =
+                Bitmap.createBitmap(d.intrinsicWidth, d.intrinsicHeight, Bitmap.Config.ARGB_8888)
             val c = Canvas(b)
             d.setBounds(0, 0, c.width, c.height)
             d.draw(c)
@@ -90,7 +92,11 @@ class ObjectFab {
             } else {
                 //val d = AppCompatDrawableManager.get().getDrawable(context, resdraw)
                 val d = ContextCompat.getDrawable(context, resdraw)!!
-                val b = Bitmap.createBitmap(d.intrinsicWidth, d.intrinsicHeight, Bitmap.Config.ARGB_8888)
+                val b = Bitmap.createBitmap(
+                    d.intrinsicWidth,
+                    d.intrinsicHeight,
+                    Bitmap.Config.ARGB_8888
+                )
                 val c = Canvas(b)
                 d.setBounds(0, 0, c.width, c.height)
                 d.draw(c)
@@ -99,7 +105,8 @@ class ObjectFab {
         }
 
         private fun setupFAB(context: Context, fab: FloatingActionButton, icon: Int) {
-            if (UIPreferences.themeIsWhite) fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+            if (UIPreferences.themeIsWhite) fab.backgroundTintList =
+                    ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
             fabSetResDrawable(context, fab, icon)
             if (android.os.Build.VERSION.SDK_INT > 20) {
                 fab.elevation = MyApplication.fabElevation

@@ -74,7 +74,10 @@ internal object UtilityColorPalette165 {
     fun loadColorMap(context: Context) {
         when (MyApplication.radarColorPalette["165"]) {
             "CODENH" -> UtilityColorPalette165.generate(context, "CODENH")
-            else -> UtilityColorPalette165.generate(context, MyApplication.radarColorPalette["165"]!!)
+            else -> UtilityColorPalette165.generate(
+                context,
+                MyApplication.radarColorPalette["165"]!!
+            )
         }
     }
 }

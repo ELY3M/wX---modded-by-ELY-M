@@ -21,6 +21,12 @@
 
 package joshuatee.wx.activitiesmisc
 
-internal class ObjectHourly(val time: String = "", val temp: String = "", val windSpeed: String = "", val windDir: String = "", val conditions: String = "")
+internal class ObjectHourly(
+    val time: String = "",
+    val temp: String = "",
+    val windSpeed: String = "",
+    val windDir: String = "",
+    val conditions: String = ""
+)
 
 

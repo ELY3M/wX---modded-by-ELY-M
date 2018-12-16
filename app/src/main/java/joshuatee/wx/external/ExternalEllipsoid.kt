@@ -26,30 +26,31 @@ class ExternalEllipsoid
  * @param inverseFlattening
  */
 private constructor(
-        /** Semi major axis (meters).  */
-        /**
-         * Get semi-major axis.
-         * @return semi-major axis (in meters).
-         */
-        val semiMajorAxis: Double,
-        /** Semi minor axis (meters).  */
-        /**
-         * Get semi-minor axis.
-         * @return semi-minor axis (in meters).
-         */
-        val semiMinorAxis: Double,
-        /** Flattening.  */
-        /**
-         * Get flattening
-         * @return
-         */
-        val flattening: Double,
-        /** Inverse flattening.  */
-        /**
-         * Get inverse flattening.
-         * @return
-         */
-        private val inverseFlattening: Double) : Serializable {
+    /** Semi major axis (meters).  */
+    /**
+     * Get semi-major axis.
+     * @return semi-major axis (in meters).
+     */
+    val semiMajorAxis: Double,
+    /** Semi minor axis (meters).  */
+    /**
+     * Get semi-minor axis.
+     * @return semi-minor axis (in meters).
+     */
+    val semiMinorAxis: Double,
+    /** Flattening.  */
+    /**
+     * Get flattening
+     * @return
+     */
+    val flattening: Double,
+    /** Inverse flattening.  */
+    /**
+     * Get inverse flattening.
+     * @return
+     */
+    private val inverseFlattening: Double
+) : Serializable {
     companion object {
 
         /** The WGS84 ellipsoid.  */
@@ -82,7 +83,10 @@ private constructor(
          * @param inverseFlattening
          * @return
          */
-        private fun fromAAndInverseF(semiMajor: Double, inverseFlattening: Double): ExternalEllipsoid {
+        private fun fromAAndInverseF(
+            semiMajor: Double,
+            inverseFlattening: Double
+        ): ExternalEllipsoid {
             val f = 1.0 / inverseFlattening
             val b = (1.0 - f) * semiMajor
 

@@ -2,9 +2,19 @@
 // TODO base velocity legend
 // TODO NWS URLs http to https const myapp
 // TODO refactor nexrad radar to match architecture of wXL23 Metal to remove code duplicity
+// TODO reduce complexity and code cleanup (lint)
+// TODO in various anim code don't use String to represent # of frames, convert to Int
 
-55069 2018_12_09 SPC MESO  _sf, convert to list
+55074 2018_12_15 code cleanup
+                 [BUG] upstream goes16 html change broke most products
+55073 2018_12_13 linting based on official kotlin style guide (this will take some time)
+                 Radar: show default message if no radar status message
+55072 2018_12_13 linting based on official kotlin style guide (this will take some time)
+55071 2018_12_12 linting based on official kotlin style guide (this will take some time)
+55070 2018_12_11 linting based on official kotlin style guide (this will take some time)
+55069 2018_12_11 SPC MESO  _sf, convert to list
                  refactor/rename in models
+                 linting based on official kotlin style guide (this will take some time)
 55068 2018_12_07 refactor/rename in wpc/spc/vis/models
                  modify zoom levels for additional radar elements per Ely's suggestion
                  add rectangular projection code to radar to make easier for Conus radar that Ely is working on

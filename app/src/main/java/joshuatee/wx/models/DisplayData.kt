@@ -32,7 +32,13 @@ import joshuatee.wx.ui.OnSwipeTouchListener
 import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.util.UtilityImg
 
-class DisplayData(context: Context, activity: Activity, cl: View.OnClickListener, numPanes: Int, spTime: ObjectSpinner) {
+class DisplayData(
+    context: Context,
+    activity: Activity,
+    cl: View.OnClickListener,
+    numPanes: Int,
+    spTime: ObjectSpinner
+) {
 
     var animDrawable: MutableList<AnimationDrawable> = mutableListOf()
     var param: MutableList<String> = mutableListOf()

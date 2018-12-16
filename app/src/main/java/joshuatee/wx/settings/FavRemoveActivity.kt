@@ -65,7 +65,12 @@ class FavRemoveActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_threefab, null, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_recyclerview_toolbar_with_threefab,
+            null,
+            false
+        )
         val turl = intent.getStringArrayExtra(TYPE)
         type = turl[0]
         when (type) {
@@ -210,8 +215,10 @@ class FavRemoveActivity : BaseActivity() {
                     "$shortCode: $tmpLoc"
                 }
             }
-            "WFO" -> tmpLoc = shortCode + ": " + Utility.readPref(this, prefTokenLocation + shortCode, "")
-            "RID" -> tmpLoc = shortCode + ": " + Utility.readPref(this, prefTokenLocation + shortCode, "")
+            "WFO" -> tmpLoc = shortCode + ": " +
+                    Utility.readPref(this, prefTokenLocation + shortCode, "")
+            "RID" -> tmpLoc = shortCode + ": " +
+                    Utility.readPref(this, prefTokenLocation + shortCode, "")
             "NWSTEXT" -> tmpLoc = NWS_TXT_ARR[UtilityFavorites.findPositionNWSTEXT(shortCode)]
             "SREF" -> tmpLoc = shortCode
             "RIDCA" -> tmpLoc = findCARIDLabel(shortCode)
@@ -234,7 +241,8 @@ class FavRemoveActivity : BaseActivity() {
         }
     }
 
-    private fun findCARIDLabel(rid: String) = (0 until CA_RID_ARR.size).firstOrNull { CA_RID_ARR[it].contains(rid) }
+    private fun findCARIDLabel(rid: String) =
+        (0 until CA_RID_ARR.size).firstOrNull { CA_RID_ARR[it].contains(rid) }
             ?.let { CA_RID_ARR[it].replace(":", "") }
             ?: rid
 

@@ -31,7 +31,8 @@ import joshuatee.wx.fragments.UtilityNWS
  * This is the service that provides the factory to be bound to the collection service.
  */
 class WeatherWidgetService : RemoteViewsService() {
-    override fun onGetViewFactory(intent: Intent): RemoteViewsService.RemoteViewsFactory = StackRemoteViewsFactory(this.applicationContext)
+    override fun onGetViewFactory(intent: Intent): RemoteViewsService.RemoteViewsFactory =
+        StackRemoteViewsFactory(this.applicationContext)
 }
 
 /**
@@ -40,7 +41,8 @@ class WeatherWidgetService : RemoteViewsService() {
 
 //internal class StackRemoteViewsFactory (private val mContext: Context, intent: Intent) : RemoteViewsService.RemoteViewsFactory {
 // FIXME rename to context
-internal class StackRemoteViewsFactory(private val mContext: Context) : RemoteViewsService.RemoteViewsFactory {
+internal class StackRemoteViewsFactory(private val mContext: Context) :
+    RemoteViewsService.RemoteViewsFactory {
     private var mCursor: Cursor? = null
 
     override fun onCreate() {
@@ -66,7 +68,8 @@ internal class StackRemoteViewsFactory(private val mContext: Context) : RemoteVi
         if (mCursor!!.moveToPosition(position)) {
             val dayColIndex = mCursor!!.getColumnIndex(WeatherDataProvider.Columns.DAY)
             val tempColIndex = mCursor!!.getColumnIndex(
-                    WeatherDataProvider.Columns.TEMPERATURE)
+                WeatherDataProvider.Columns.TEMPERATURE
+            )
             day = mCursor!!.getString(dayColIndex)
             temp = mCursor!!.getInt(tempColIndex)
         }
@@ -75,11 +78,18 @@ internal class StackRemoteViewsFactory(private val mContext: Context) : RemoteVi
         val formatStr = mContext.resources.getString(R.string.item_format_string)
         val itemId = R.layout.widget_item
         val rv = RemoteViews(mContext.packageName, itemId)
-        val preferences = mContext.getSharedPreferences(mContext.packageName + "_preferences", Context.MODE_PRIVATE)
+        val preferences = mContext.getSharedPreferences(
+            mContext.packageName + "_preferences",
+            Context.MODE_PRIVATE
+        )
         if (position != 0) {
             val tempStrArr = MyApplication.colonSpace.split(day)
             if (tempStrArr != null && tempStrArr.size > 1) {
-                t1 = tempStrArr[0].replace(":", " ") + " (" + UtilityLocationFragment.extractTemp(tempStrArr[1]) + MyApplication.DEGREE_SYMBOL + UtilityLocationFragment.extractWindDirection(tempStrArr[1].substring(1)) + UtilityLocationFragment.extract7DayMetrics(tempStrArr[1].substring(1)) + ")"
+                t1 = tempStrArr[0].replace(":", " ") + " (" +
+                        UtilityLocationFragment.extractTemp(tempStrArr[1]) +
+                        MyApplication.DEGREE_SYMBOL +
+                        UtilityLocationFragment.extractWindDirection(tempStrArr[1].substring(1)) +
+                        UtilityLocationFragment.extract7DayMetrics(tempStrArr[1].substring(1)) + ")"
                 t2 = tempStrArr[1]
             }
         } else {
@@ -122,6 +132,12 @@ internal class StackRemoteViewsFactory(private val mContext: Context) : RemoteVi
 
     override fun onDataSetChanged() {
         mCursor?.close()
-        mCursor = mContext.contentResolver.query(WeatherDataProvider.CONTENT_URI, null, null, null, null)
+        mCursor = mContext.contentResolver.query(
+            WeatherDataProvider.CONTENT_URI,
+            null,
+            null,
+            null,
+            null
+        )
     }
 }

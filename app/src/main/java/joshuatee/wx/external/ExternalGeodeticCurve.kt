@@ -25,25 +25,26 @@ internal open class ExternalGeodeticCurve
  * @param azimuth azimuth in degrees
  * @param reverseAzimuth reverse azimuth in degrees
  */
-(
-        /** Ellipsoidal distance (in meters).  */
-        /**
-         * Get the ellipsoidal distance.
-         * @return ellipsoidal distance in meters
-         */
-        val ellipsoidalDistance: Double,
-        /** Azimuth (degrees from north).  */
-        /**
-         * Get the azimuth.
-         * @return azimuth in degrees
-         */
-        val azimuth: Double,
-        /** Reverse azimuth (degrees from north).  */
-        /**
-         * Get the reverse azimuth.
-         * @return reverse azimuth in degrees
-         */
-        val reverseAzimuth: Double) : Serializable {
+    (
+    /** Ellipsoidal distance (in meters).  */
+    /**
+     * Get the ellipsoidal distance.
+     * @return ellipsoidal distance in meters
+     */
+    val ellipsoidalDistance: Double,
+    /** Azimuth (degrees from north).  */
+    /**
+     * Get the azimuth.
+     * @return azimuth in degrees
+     */
+    val azimuth: Double,
+    /** Reverse azimuth (degrees from north).  */
+    /**
+     * Get the reverse azimuth.
+     * @return reverse azimuth in degrees
+     */
+    val reverseAzimuth: Double
+) : Serializable {
 
     /**
      * Get curve as a string.

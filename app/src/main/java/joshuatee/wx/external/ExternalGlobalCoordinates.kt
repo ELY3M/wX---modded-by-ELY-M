@@ -37,11 +37,12 @@ open class ExternalGlobalCoordinates
  * @param mLatitude latitude in degrees
  * @param mLongitude longitude in degrees
  */
-(
-        /** Latitude in degrees. Negative latitude is southern hemisphere.  */
-        private var mLatitude: Double,
-        /** Longitude in degrees. Negative longitude is western hemisphere.  */
-        private var mLongitude: Double) : Comparable<ExternalGlobalCoordinates>, Serializable {
+    (
+    /** Latitude in degrees. Negative latitude is southern hemisphere.  */
+    private var mLatitude: Double,
+    /** Longitude in degrees. Negative longitude is western hemisphere.  */
+    private var mLongitude: Double
+) : Comparable<ExternalGlobalCoordinates>, Serializable {
 
     /**
      * Get latitude.

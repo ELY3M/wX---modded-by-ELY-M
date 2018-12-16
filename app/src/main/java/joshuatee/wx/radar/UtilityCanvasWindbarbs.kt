@@ -40,7 +40,13 @@ import joshuatee.wx.util.ProjectionNumbers
 
 object UtilityCanvasWindbarbs {
 
-    fun drawWindbarbs(context: Context, provider: ProjectionType, bm1: Bitmap, rid1: String, isGust: Boolean) {
+    fun drawWindbarbs(
+        context: Context,
+        provider: ProjectionType,
+        bm1: Bitmap,
+        rid1: String,
+        isGust: Boolean
+    ) {
         val textSize = 22
         UtilityMetar.getStateMetarArrayForWXOGL(context, rid1)
         val wbCircleXArr = UtilityMetar.x
@@ -109,14 +115,34 @@ object UtilityCanvasWindbarbs {
                     degree2 = angle.toDouble()
                     startLength = nm * nmScaleFactor
                     start = ExternalGlobalCoordinates(locXDbl, locYDbl)
-                    ec = ecc.calculateEndingGlobalCoordinates(ExternalEllipsoid.WGS84, start, degree, startLength, bearing)
-                    tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(ec.latitude, ec.longitude * -1, pn)
+                    ec = ecc.calculateEndingGlobalCoordinates(
+                        ExternalEllipsoid.WGS84,
+                        start,
+                        degree,
+                        startLength,
+                        bearing
+                    )
+                    tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(
+                        ec.latitude,
+                        ec.longitude * -1,
+                        pn
+                    )
                     stormList.add(tmpCoords[0])
                     stormList.add(tmpCoords[1])
                     start = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
-                    ec = ecc.calculateEndingGlobalCoordinates(ExternalEllipsoid.WGS84, start, degree2 + degreeShift, barbLength * nmScaleFactor * barbLengthScaleFactor, bearing)
+                    ec = ecc.calculateEndingGlobalCoordinates(
+                        ExternalEllipsoid.WGS84,
+                        start,
+                        degree2 + degreeShift,
+                        barbLength * nmScaleFactor * barbLengthScaleFactor,
+                        bearing
+                    )
                     end = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
-                    tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(ec.latitude, ec.longitude * -1, pn)
+                    tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(
+                        ec.latitude,
+                        ec.longitude * -1,
+                        pn
+                    )
                     stormList.add(tmpCoords[0])
                     stormList.add(tmpCoords[1])
                     val barbCount = length / 10
@@ -130,14 +156,34 @@ object UtilityCanvasWindbarbs {
                     }
                     var j = 0
                     while (j < barbCount) {
-                        ec = ecc.calculateEndingGlobalCoordinates(ExternalEllipsoid.WGS84, end, degree2, barbOffset + startLength + j.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor, bearing)
-                        tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(ec.latitude, ec.longitude * -1, pn)
+                        ec = ecc.calculateEndingGlobalCoordinates(
+                            ExternalEllipsoid.WGS84,
+                            end,
+                            degree2,
+                            barbOffset + startLength + j.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor,
+                            bearing
+                        )
+                        tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(
+                            ec.latitude,
+                            ec.longitude * -1,
+                            pn
+                        )
                         stormList.add(tmpCoords[0])
                         stormList.add(tmpCoords[1])
 
                         start = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
-                        ec = ecc.calculateEndingGlobalCoordinates(ExternalEllipsoid.WGS84, start, degree2 - arrowBend * 2.0, startLength + arrowLength * nmScaleFactor, bearing)
-                        tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(ec.latitude, ec.longitude * -1, pn)
+                        ec = ecc.calculateEndingGlobalCoordinates(
+                            ExternalEllipsoid.WGS84,
+                            start,
+                            degree2 - arrowBend * 2.0,
+                            startLength + arrowLength * nmScaleFactor,
+                            bearing
+                        )
+                        tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(
+                            ec.latitude,
+                            ec.longitude * -1,
+                            pn
+                        )
                         stormList.add(tmpCoords[0])
                         stormList.add(tmpCoords[1])
                         j += 1
@@ -147,14 +193,34 @@ object UtilityCanvasWindbarbs {
                         halfBarbOffsetFudge = nmScaleFactor * 1.0
                     }
                     if (halfBarb) {
-                        ec = ecc.calculateEndingGlobalCoordinates(ExternalEllipsoid.WGS84, end, degree2, barbOffset + halfBarbOffsetFudge + startLength + j.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor, bearing)
-                        tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(ec.latitude, ec.longitude * -1, pn)
+                        ec = ecc.calculateEndingGlobalCoordinates(
+                            ExternalEllipsoid.WGS84,
+                            end,
+                            degree2,
+                            barbOffset + halfBarbOffsetFudge + startLength + j.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor,
+                            bearing
+                        )
+                        tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(
+                            ec.latitude,
+                            ec.longitude * -1,
+                            pn
+                        )
                         stormList.add(tmpCoords[0])
                         stormList.add(tmpCoords[1])
 
                         start = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
-                        ec = ecc.calculateEndingGlobalCoordinates(ExternalEllipsoid.WGS84, start, degree2 - arrowBend * 2.0, startLength + arrowLength / 2.0 * nmScaleFactor, bearing)
-                        tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(ec.latitude, ec.longitude * -1, pn)
+                        ec = ecc.calculateEndingGlobalCoordinates(
+                            ExternalEllipsoid.WGS84,
+                            start,
+                            degree2 - arrowBend * 2.0,
+                            startLength + arrowLength / 2.0 * nmScaleFactor,
+                            bearing
+                        )
+                        tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(
+                            ec.latitude,
+                            ec.longitude * -1,
+                            pn
+                        )
                         stormList.add(tmpCoords[0])
                         stormList.add(tmpCoords[1])
                     }
@@ -171,10 +237,18 @@ object UtilityCanvasWindbarbs {
             if (UtilityMetar.obsArrAviationColor.size > k) {
                 if (mercato) {
                     paint.color = UtilityMetar.obsArrAviationColor[k]
-                    tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(wbCircleXArr[k], wbCircleYArr[k], pn)
+                    tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(
+                        wbCircleXArr[k],
+                        wbCircleYArr[k],
+                        pn
+                    )
                 } else {
                     paint.color = UtilityMetar.obsArrAviationColor[k]
-                    tmpCoords = UtilityCanvasProjection.compute4326Numbers(wbCircleXArr[k], wbCircleYArr[k], pn)
+                    tmpCoords = UtilityCanvasProjection.compute4326Numbers(
+                        wbCircleXArr[k],
+                        wbCircleYArr[k],
+                        pn
+                    )
                 }
                 pixXInit = tmpCoords[0]
                 pixYInit = tmpCoords[1]

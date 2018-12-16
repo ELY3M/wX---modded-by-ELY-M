@@ -55,7 +55,13 @@ abstract class VideoRecordActivity : AppCompatActivity() {
     protected lateinit var toolbar: Toolbar
     protected lateinit var toolbarBottom: Toolbar
 
-    protected fun onCreate(savedInstanceState: Bundle?, layoutResId: Int, menuResId: Int?, iconsEvenlySpaced: Boolean, bottomToolbar: Boolean) {
+    protected fun onCreate(
+        savedInstanceState: Bundle?,
+        layoutResId: Int,
+        menuResId: Int?,
+        iconsEvenlySpaced: Boolean,
+        bottomToolbar: Boolean
+    ) {
         setTheme(UIPreferences.themeInt)
         super.onCreate(savedInstanceState)
         setContentView(layoutResId)
@@ -112,7 +118,10 @@ abstract class VideoRecordActivity : AppCompatActivity() {
             /** check if we already  have permission to draw over other apps  */
             if (!Settings.canDrawOverlays(this)) {
                 /** if not construct intent to request permission  */
-                val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:$packageName"))
+                val intent = Intent(
+                    Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:$packageName")
+                )
                 /** request permission via start activity for result  */
                 startActivityForResult(intent, REQUEST_CODE_PERM)
                 //fireScreenCaptureIntent()
@@ -130,7 +139,11 @@ abstract class VideoRecordActivity : AppCompatActivity() {
                 if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     true
                 } else {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        1
+                    )
                     false
                 }
             } else {
@@ -140,7 +153,11 @@ abstract class VideoRecordActivity : AppCompatActivity() {
 
     // https://developer.android.com/training/permissions/requesting.html
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         when (requestCode) {
             1 -> {
                 // If request is cancelled, the result arrays are empty.

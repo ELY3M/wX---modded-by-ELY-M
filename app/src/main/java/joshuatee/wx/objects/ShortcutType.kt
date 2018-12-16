@@ -26,8 +26,7 @@ enum class ShortcutType {
     AFD,
     GOES16,
     RADAR_MOSAIC,
-    SPC_SWO_SUMMARY,
-
+    SPC_SWO_SUMMARY
 }
 
 

@@ -191,7 +191,10 @@ internal object UtilityNexradRadial4Bit {
                         } else {
                             xy1 = UtilityMath.toRect(binStart, angle)
                             xy2 = UtilityMath.toRect(binStart + binSize * levelCount, angle)
-                            xy3 = UtilityMath.toRect(binStart + binSize * levelCount, angle - angleV)
+                            xy3 = UtilityMath.toRect(
+                                binStart + binSize * levelCount,
+                                angle - angleV
+                            )
                             xy4 = UtilityMath.toRect(binStart, angle - angleV)
                             xy1[0] += centerX.toFloat()
                             xy2[0] += centerX.toFloat()

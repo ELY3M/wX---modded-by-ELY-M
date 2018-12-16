@@ -36,17 +36,27 @@ class ObjectCardVerticalText(context: Context, numColumns: Int) {
     init {
         val ll = LinearLayout(context)
         ll.gravity = Gravity.CENTER
-        ll.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        ll.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
         ll.orientation = LinearLayout.HORIZONTAL
         ll.isBaselineAligned = false
         objCard.addView(ll)
         (0 until numColumns).forEach {
             val llv = LinearLayout(context)
-            llv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
+            llv.layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                1.0f
+            )
             ll.addView(llv)
             tvArr.add(TextView(context))
             tvArr[it].gravity = Gravity.CENTER_HORIZONTAL
-            tvArr[it].layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            tvArr[it].layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
             llv.addView(tvArr[it])
         }
     }

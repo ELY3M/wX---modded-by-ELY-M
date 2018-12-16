@@ -33,9 +33,11 @@ import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.ui.ObjectCard
 
-internal class AdapterUSWarningsImpact(private val mDataset: List<ObjectImpactGraphic>) : RecyclerView.Adapter<AdapterUSWarningsImpact.DataObjectHolder>() {
+internal class AdapterUSWarningsImpact(private val mDataset: List<ObjectImpactGraphic>) :
+    RecyclerView.Adapter<AdapterUSWarningsImpact.DataObjectHolder>() {
 
-    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
 
         val title: TextView = itemView.findViewById(R.id.title)
         val cities: TextView = itemView.findViewById(R.id.cities)
@@ -56,7 +58,8 @@ internal class AdapterUSWarningsImpact(private val mDataset: List<ObjectImpactGr
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.cardview_uswarningsimpact, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.cardview_uswarningsimpact, parent, false)
         return DataObjectHolder(view)
     }
 

@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//modded by ELY M.  
 
 package joshuatee.wx.settings
 
@@ -72,7 +73,12 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_settings_color_palette_editor, R.menu.settings_color_palette_editor, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_settings_color_palette_editor,
+            R.menu.settings_color_palette_editor,
+            true
+        )
         toolbarBottom.setOnMenuItemClickListener(this)
         val fab = ObjectFab(this, this, R.id.fab)
         fab.setOnClickListener(View.OnClickListener { fabSavePAL(this) })
@@ -108,19 +114,32 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             var textToSave = palContent.text.toString()
             textToSave = textToSave.replace(",,".toRegex(), ",")
             palContent.setText(textToSave)
-            Utility.writePref(context, "RADAR_COLOR_PAL_" + turl[0] + "_" + palTitle.text.toString(), textToSave)
+            Utility.writePref(
+                context,
+                "RADAR_COLOR_PAL_" + turl[0] + "_" + palTitle.text.toString(),
+                textToSave
+            )
             if (turl[0] == "94") {
                 if (!MyApplication.radarColorPalette94List.contains(palTitle.text.toString())) {
-                    MyApplication.radarColorPalette94List = MyApplication.radarColorPalette94List + ":" + palTitle.text.toString()
-                    Utility.writePref(context, "RADAR_COLOR_PALETTE_94_LIST", MyApplication.radarColorPalette94List)
+                    MyApplication.radarColorPalette94List = MyApplication.radarColorPalette94List +
+                            ":" + palTitle.text.toString()
+                    Utility.writePref(
+                        context,
+                        "RADAR_COLOR_PALETTE_94_LIST",
+                        MyApplication.radarColorPalette94List
+                    )
                 }
             } else {
                 if (!MyApplication.radarColorPalette99List.contains(palTitle.text.toString())) {
-                    MyApplication.radarColorPalette99List = MyApplication.radarColorPalette99List + ":" + palTitle.text.toString()
-                    Utility.writePref(context, "RADAR_COLOR_PALETTE_99_LIST", MyApplication.radarColorPalette99List)
+                    MyApplication.radarColorPalette99List = MyApplication.radarColorPalette99List +
+                            ":" + palTitle.text.toString()
+                    Utility.writePref(
+                        context,
+                        "RADAR_COLOR_PALETTE_99_LIST",
+                        MyApplication.radarColorPalette99List
+                    )
                 }
             }
-
             savepalfile(palTitle.text.toString()+"_"+turl[0]+".txt", textToSave)
             toolbar.subtitle = "Last saved: $date"
         } else {
@@ -147,23 +166,34 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                 try {
                     if (tmpArr.size > 4) {
                         if (priorVal >= (tmpArr[1].toIntOrNull() ?: 0)) {
-                            errors = errors + "The following lines do not have dbz values in increasing order: " + MyApplication.newline + priorVal + " " + tmpArr[1] + MyApplication.newline
+                            errors = errors +
+                                    "The following lines do not have dbz values in increasing order: " +
+                                    MyApplication.newline + priorVal + " " + tmpArr[1] +
+                                    MyApplication.newline
                         }
                         priorVal = tmpArr[1].toIntOrNull() ?: 0
                         if ((tmpArr[2].toIntOrNull() ?: 0) > 255 || (tmpArr[2].toIntOrNull()
-                                        ?: 0) < 0) {
-                            errors = errors + "Red value must be between 0 and 255: " + MyApplication.newline + s + MyApplication.newline
+                                ?: 0) < 0
+                        ) {
+                            errors = errors + "Red value must be between 0 and 255: " +
+                                    MyApplication.newline + s + MyApplication.newline
                         }
                         if ((tmpArr[3].toIntOrNull() ?: 0) > 255 || (tmpArr[3].toIntOrNull()
-                                        ?: 0) < 0) {
-                            errors = errors + "Green value must be between 0 and 255: " + MyApplication.newline + s + MyApplication.newline
+                                ?: 0) < 0
+                        ) {
+                            errors = errors + "Green value must be between 0 and 255: " +
+                                    MyApplication.newline + s + MyApplication.newline
                         }
                         if ((tmpArr[4].toIntOrNull() ?: 0) > 255 || (tmpArr[4].toIntOrNull()
-                                        ?: 0) < 0) {
-                            errors = errors + "Blue value must be between 0 and 255: " + MyApplication.newline + s + MyApplication.newline
+                                ?: 0) < 0
+                        ) {
+                            errors = errors + "Blue value must be between 0 and 255: " +
+                                    MyApplication.newline + s + MyApplication.newline
                         }
                     } else {
-                        errors = errors + "The following line does not have the correct number of command seperated entries: " + MyApplication.newline + s + MyApplication.newline
+                        errors = errors +
+                                "The following line does not have the correct number of command seperated entries: " +
+                                MyApplication.newline + s + MyApplication.newline
                     }
                 } catch (e: Exception) {
                     errors += "Problem parsing number."
@@ -179,13 +209,32 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_reset -> palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, turl[0], turl[1]))
+            R.id.action_reset -> palContent.setText(
+                UtilityColorPalette.getColorMapStringFromDisk(
+                    this,
+                    turl[0],
+                    turl[1]
+                )
+            )
             R.id.action_clear -> palContent.setText("")
             R.id.action_help -> UtilityAlertDialog.showHelpText("Not implemented yet.", this)
-            R.id.action_share -> UtilityShare.shareTextAsAttachment(this, palTitle.text.toString(), palContent.text.toString(), "wX_colormap_" + palTitle.text.toString() + ".txt")
+            R.id.action_share -> UtilityShare.shareTextAsAttachment(
+                this,
+                palTitle.text.toString(),
+                palContent.text.toString(),
+                "wX_colormap_" + palTitle.text.toString() + ".txt"
+            )
             R.id.action_load -> loadSettings()
-            R.id.action_website -> ObjectIntent(this, Intent.ACTION_VIEW, Uri.parse("http://almanydesigns.com/grx/reflectivity/"))
-            R.id.action_website2 -> ObjectIntent(this, Intent.ACTION_VIEW, Uri.parse("http://www.usawx.com/grradarexamples.htm"))
+            R.id.action_website -> ObjectIntent(
+                this,
+                Intent.ACTION_VIEW,
+                Uri.parse("http://almanydesigns.com/grx/reflectivity/")
+            )
+            R.id.action_website2 -> ObjectIntent(
+                this,
+                Intent.ACTION_VIEW,
+                Uri.parse("http://www.usawx.com/grradarexamples.htm")
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -288,7 +337,8 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
         }
-        val uriArr = uri.lastPathSegment.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val uriArr =
+            uri.lastPathSegment.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         var fileName = "map"
         if (uriArr.isNotEmpty()) {
             fileName = uriArr[uriArr.size - 1]

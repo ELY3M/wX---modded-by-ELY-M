@@ -49,7 +49,8 @@ import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener, OnItemSelectedListener {
+class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener,
+    OnItemSelectedListener {
 
     companion object {
         const val INFO: String = ""
@@ -80,13 +81,35 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         turl = intent.getStringArrayExtra(INFO)
         om = ObjectModel(this, turl[1], turl[0])
         if (om.numPanes == 1) {
-            super.onCreate(savedInstanceState, R.layout.activity_models_generic, R.menu.models_spchrrr, false, true)
+            super.onCreate(
+                savedInstanceState,
+                R.layout.activity_models_generic,
+                R.menu.models_spchrrr,
+                false,
+                true
+            )
         } else {
-            super.onCreate(savedInstanceState, R.layout.activity_models_generic_multipane, R.menu.models_spchrrr, false, true)
+            super.onCreate(
+                savedInstanceState,
+                R.layout.activity_models_generic_multipane,
+                R.menu.models_spchrrr,
+                false,
+                true
+            )
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         title = turl[2]
-        overlayImg.addAll(Arrays.asList(*TextUtils.split(Utility.readPref(this, "SPCHRRR_OVERLAY", ""), ":")))
+        overlayImg.addAll(
+            Arrays.asList(
+                *TextUtils.split(
+                    Utility.readPref(
+                        this,
+                        "SPCHRRR_OVERLAY",
+                        ""
+                    ), ":"
+                )
+            )
+        )
         val m = toolbarBottom.menu
         if (om.numPanes < 2) {
             fab1 = ObjectFab(this, this, R.id.fab1)
@@ -111,7 +134,8 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         om.spTime = ObjectSpinner(this, this, R.id.spinner_time)
         om.displayData = DisplayData(this, this, this, om.numPanes, om.spTime)
         spRun = ObjectSpinner(this, this, R.id.spinner_run)
-        spSector = ObjectSpinner(this, this, R.id.spinner_sector, UtilityModelSPCHRRRInterface.sectors)
+        spSector =
+                ObjectSpinner(this, this, R.id.spinner_sector, UtilityModelSPCHRRRInterface.sectors)
         spSector.setSelection(om.sector)
         om.spTime.setOnItemSelectedListener(this)
         spRun.setOnItemSelectedListener(this)
@@ -121,7 +145,11 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         val spModel = ObjectSpinner(this, this, R.id.spinner_model, om.models)
         spModel.setOnItemSelectedListener(this)
         spModel.setSelection(om.model)
-        drw = ObjectNavDrawer(this, UtilityModelSPCHRRRInterface.labels, UtilityModelSPCHRRRInterface.params)
+        drw = ObjectNavDrawer(
+            this,
+            UtilityModelSPCHRRRInterface.labels,
+            UtilityModelSPCHRRRInterface.params
+        )
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
             drw.drawerLayout.closeDrawer(drw.listView)
@@ -129,7 +157,11 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             om.displayData.paramLabel[om.curImg] = drw.getLabel(position)
             (0 until om.numPanes).forEach {
                 Utility.writePref(this, om.prefParam + it.toString(), om.displayData.param[it])
-                Utility.writePref(this, om.prefParamLabel + it.toString(), om.displayData.paramLabel[it])
+                Utility.writePref(
+                    this,
+                    om.prefParamLabel + it.toString(),
+                    om.displayData.paramLabel[it]
+                )
             }
             getContent()
         }
@@ -151,8 +183,10 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             }
         }
         if (parent.id == R.id.spinner_run) {
-            UtilityModels.updateTime(UtilityString.getLastXChars(spRun.selectedItem.toString(), 2),
-                    om.rtd.mostRecentRun, om.spTime.list, om.spTime.arrayAdapter, "", false)
+            UtilityModels.updateTime(
+                UtilityString.getLastXChars(spRun.selectedItem.toString(), 2),
+                om.rtd.mostRecentRun, om.spTime.list, om.spTime.arrayAdapter, "", false
+            )
         }
     }
 
@@ -167,18 +201,28 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         withContext(Dispatchers.IO) {
             (0 until om.numPanes).forEach {
                 om.currentParam = om.displayData.param[it]
-                om.displayData.bitmap[it] = UtilityModelSPCHRRRInputOutput.getImage(contextg, om, om.time, overlayImg)
+                om.displayData.bitmap[it] =
+                        UtilityModelSPCHRRRInputOutput.getImage(contextg, om, om.time, overlayImg)
             }
         }
         (0 until om.numPanes).forEach {
             if (om.numPanes > 1)
-                UtilityImg.resizeViewSetImgByHeight(om.displayData.bitmap[it], om.displayData.img[it])
+                UtilityImg.resizeViewSetImgByHeight(
+                    om.displayData.bitmap[it],
+                    om.displayData.img[it]
+                )
             else
                 om.displayData.img[it].setImageBitmap(om.displayData.bitmap[it])
         }
         animRan = false
         if (!firstRun) {
-            (0 until om.numPanes).forEach { UtilityImg.imgRestorePosnZoom(contextg, om.displayData.img[it], om.modelProvider + om.numPanes.toString() + it.toString()) }
+            (0 until om.numPanes).forEach {
+                UtilityImg.imgRestorePosnZoom(
+                    contextg,
+                    om.displayData.img[it],
+                    om.modelProvider + om.numPanes.toString() + it.toString()
+                )
+            }
             if (UIPreferences.fabInModels && om.numPanes < 2) {
                 fab1.setVisibility(View.VISIBLE)
                 fab2.setVisibility(View.VISIBLE)
@@ -186,14 +230,19 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             firstRun = true
         }
         if (om.numPanes > 1) {
-            UtilityModels.setSubtitleRestoreIMGXYZOOM(om.displayData.img, toolbar, "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1])
+            UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                om.displayData.img,
+                toolbar,
+                "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
+            )
         } else {
             toolbar.subtitle = om.displayData.paramLabel[0]
         }
         imageLoaded = true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item))
@@ -201,11 +250,19 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         when (item.itemId) {
             R.id.action_img1 -> {
                 om.curImg = 0
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(om.displayData.img, toolbar, "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1])
+                UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                    om.displayData.img,
+                    toolbar,
+                    "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
+                )
             }
             R.id.action_img2 -> {
                 om.curImg = 1
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(om.displayData.img, toolbar, "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1])
+                UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                    om.displayData.img,
+                    toolbar,
+                    "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
+                )
             }
             R.id.action_layer_obs -> overlaySelected("bigsfc")
             R.id.action_layer_topo -> overlaySelected("topo")
@@ -220,7 +277,12 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                 overlayImg.clear()
                 getContent()
             }
-            R.id.action_multipane -> ObjectIntent(this, ModelsSPCHRRRActivity::class.java, ModelsSPCHRRRActivity.INFO, arrayOf("2", turl[1], turl[2]))
+            R.id.action_multipane -> ObjectIntent(
+                this,
+                ModelsSPCHRRRActivity::class.java,
+                ModelsSPCHRRRActivity.INFO,
+                arrayOf("2", turl[1], turl[2])
+            )
             R.id.action_back -> UtilityModels.moveBack(om.spTime)
             R.id.action_forward -> UtilityModels.moveForward(om.spTime)
             R.id.action_animate -> getAnimate()
@@ -234,11 +296,19 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                     }
                 } else {
                     if (animRan)
-                        UtilityShare.shareAnimGif(this, om.model + " " +
-                                om.displayData.paramLabel[om.curImg] + " " + om.spTime.selectedItem.toString(), om.displayData.animDrawable[om.curImg])
+                        UtilityShare.shareAnimGif(
+                            this,
+                            om.model + " " +
+                                    om.displayData.paramLabel[om.curImg] + " " + om.spTime.selectedItem.toString(),
+                            om.displayData.animDrawable[om.curImg]
+                        )
                     else
-                        UtilityShare.shareBitmap(this, om.model + " " +
-                                om.displayData.paramLabel[om.curImg] + " " + om.spTime.selectedItem.toString(), om.displayData.bitmap[om.curImg])
+                        UtilityShare.shareBitmap(
+                            this,
+                            om.model + " " +
+                                    om.displayData.paramLabel[om.curImg] + " " + om.spTime.selectedItem.toString(),
+                            om.displayData.bitmap[om.curImg]
+                        )
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -258,10 +328,16 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         withContext(Dispatchers.IO) {
             (0 until om.numPanes).forEach {
                 om.currentParam = om.displayData.param[it]
-                om.displayData.animDrawable[it] = UtilityModelSPCHRRRInputOutput.getAnimation(contextg, om, overlayImg)
+                om.displayData.animDrawable[it] =
+                        UtilityModelSPCHRRRInputOutput.getAnimation(contextg, om, overlayImg)
             }
         }
-        (0 until om.numPanes).forEach { UtilityImgAnim.startAnimation(om.displayData.animDrawable[it], om.displayData.img[it]) }
+        (0 until om.numPanes).forEach {
+            UtilityImgAnim.startAnimation(
+                om.displayData.animDrawable[it],
+                om.displayData.img[it]
+            )
+        }
         animRan = true
     }
 
@@ -284,9 +360,14 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     private fun setupModel() {
         (0 until om.numPanes).forEach {
             om.displayData.param[it] = om.params[0]
-            om.displayData.param[it] = Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[it])
+            om.displayData.param[it] =
+                    Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[it])
             om.displayData.paramLabel[it] = om.labels[0]
-            om.displayData.paramLabel[it] = Utility.readPref(this, om.prefParamLabel + it.toString(), om.displayData.paramLabel[it])
+            om.displayData.paramLabel[it] = Utility.readPref(
+                this,
+                om.prefParamLabel + it.toString(),
+                om.displayData.paramLabel[it]
+            )
             if (!UtilityModels.parmInArray(om.params, om.displayData.param[it])) {
                 om.displayData.param[it] = om.params[0]
                 om.displayData.paramLabel[it] = om.labels[0]
@@ -295,7 +376,15 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         spRun.setSelection(0)
         om.spTime.setSelection(0)
         om.spTime.clear()
-        (om.startStep until om.endStep).forEach { om.spTime.add(String.format(Locale.US, "%02d", it)) }
+        (om.startStep until om.endStep).forEach {
+            om.spTime.add(
+                String.format(
+                    Locale.US,
+                    "%02d",
+                    it
+                )
+            )
+        }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -317,7 +406,13 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     override fun onStop() {
         if (imageLoaded) {
             Utility.writePref(this, "SPCHRRR_OVERLAY", TextUtils.join(":", overlayImg))
-            (0 until om.numPanes).forEach { UtilityImg.imgSavePosnZoom(this, om.displayData.img[it], om.modelProvider + om.numPanes.toString() + it.toString()) }
+            (0 until om.numPanes).forEach {
+                UtilityImg.imgSavePosnZoom(
+                    this,
+                    om.displayData.img[it],
+                    om.modelProvider + om.numPanes.toString() + it.toString()
+                )
+            }
             Utility.writePref(this, om.prefRunPosn, om.spTime.selectedItemPosition)
         }
         super.onStop()

@@ -43,7 +43,15 @@ import joshuatee.wx.ui.ObjectSpinner
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 
-class ObjectSettingsSpinner(context: Context, private val activity: Activity, label: String, pref: String, prefInit: String, strId: Int, spinnerArr: List<String>) {
+class ObjectSettingsSpinner(
+    context: Context,
+    private val activity: Activity,
+    label: String,
+    pref: String,
+    prefInit: String,
+    strId: Int,
+    spinnerArr: List<String>
+) {
 
     private val objCard = ObjectCard(context)
 
@@ -52,13 +60,25 @@ class ObjectSettingsSpinner(context: Context, private val activity: Activity, la
         ObjectCardText.textViewSetup(tv)
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
         tv.setTextColor(UIPreferences.backgroundColor)
-        tv.setPadding(MyApplication.padding, MyApplication.padding, MyApplication.padding, MyApplication.padding)
-        tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
+        tv.setPadding(
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding
+        )
+        tv.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            1.0f
+        )
         tv.text = label
         tv.gravity = Gravity.CENTER_VERTICAL
         tv.setOnClickListener { showHelpText(context.resources.getString(strId)) }
         val ll = LinearLayout(context)
-        ll.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        ll.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
         ll.orientation = LinearLayout.HORIZONTAL
         ll.gravity = Gravity.CENTER_VERTICAL
         ll.addView(tv)
@@ -90,7 +110,13 @@ class ObjectSettingsSpinner(context: Context, private val activity: Activity, la
         }
         var val1 = Utility.readPref(context, pref, prefInit)
         if (pref == "WIDGET_LOCATION") {
-            val1 += ": " + UtilityStringExternal.truncate(Utility.readPref(context, "LOC" + val1 + "_LABEL", ""), 20)
+            val1 += ": " + UtilityStringExternal.truncate(
+                Utility.readPref(
+                    context,
+                    "LOC" + val1 + "_LABEL",
+                    ""
+                ), 20
+            )
         }
         spinner.setSelection(dataAdapter.getPosition(val1))
         ll.addView(spinner)

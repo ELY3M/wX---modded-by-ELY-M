@@ -515,8 +515,6 @@ class WXGLTextObject(
         }
     }
 
-    //fun setRid(rid1: String) {this.rid1 = rid1}
-
     fun setOGLR(OGLR: WXGLRender) {
         this.OGLR = OGLR
     }

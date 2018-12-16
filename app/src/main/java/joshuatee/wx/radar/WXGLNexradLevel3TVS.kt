@@ -72,7 +72,13 @@ internal object WXGLNexradLevel3TVS {
             degree = tmpStrArr[0].replace(" ", "").toIntOrNull() ?: 0
             nm = tmpStrArr[1].replace(" ", "").toIntOrNull() ?: 0
             start = ExternalGlobalCoordinates(location)
-            ec = ecc.calculateEndingGlobalCoordinates(ExternalEllipsoid.WGS84, start, degree.toDouble(), nm * 1852.0, bearing)
+            ec = ecc.calculateEndingGlobalCoordinates(
+                ExternalEllipsoid.WGS84,
+                start,
+                degree.toDouble(),
+                nm * 1852.0,
+                bearing
+            )
             stormList.add(ec.latitude)
             stormList.add(ec.longitude * -1.0)
         }

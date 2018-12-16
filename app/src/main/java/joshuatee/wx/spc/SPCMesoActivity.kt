@@ -53,7 +53,8 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
-class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener, AdapterView.OnItemSelectedListener {
+class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener,
+    AdapterView.OnItemSelectedListener {
 
     // native interface to the mobile SPC meso website
     //
@@ -72,16 +73,16 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
     private var showTopography = true
     private var sector = "19"
     private val sectorMap = mapOf(
-            "19" to "US",
-            "20" to "MW",
-            "13" to "NC",
-            "14" to "C",
-            "15" to "SC",
-            "16" to "NE",
-            "17" to "CE",
-            "18" to "SE",
-            "12" to "SW",
-            "11" to "NW"
+        "19" to "US",
+        "20" to "MW",
+        "13" to "NC",
+        "14" to "C",
+        "15" to "SC",
+        "16" to "NE",
+        "17" to "CE",
+        "18" to "SE",
+        "12" to "SW",
+        "11" to "NW"
     )
     private lateinit var menuRadar: MenuItem
     private lateinit var menuOutlook: MenuItem
@@ -124,9 +125,21 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
         val numPanesStr = args[1]
         numPanes = numPanesStr.toIntOrNull() ?: 0
         if (numPanes == 1) {
-            super.onCreate(savedInstanceState, R.layout.activity_spcmeso, R.menu.spcmesomultipane, false, true)
+            super.onCreate(
+                savedInstanceState,
+                R.layout.activity_spcmeso,
+                R.menu.spcmesomultipane,
+                false,
+                true
+            )
         } else {
-            super.onCreate(savedInstanceState, R.layout.activity_spcmeso_multipane, R.menu.spcmesomultipane, false, true)
+            super.onCreate(
+                savedInstanceState,
+                R.layout.activity_spcmeso_multipane,
+                R.menu.spcmesomultipane,
+                false,
+                true
+            )
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         prefModel = args[2]
@@ -146,8 +159,13 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
             displayData.paramLabel[0] = tmpArrFav[1]
         } else {
             (0 until numPanes).forEach {
-                displayData.param[it] = Utility.readPref(this, prefParam + it.toString(), displayData.param[it])
-                displayData.paramLabel[it] = Utility.readPref(this, prefParamLabel + it.toString(), displayData.paramLabel[it])
+                displayData.param[it] =
+                        Utility.readPref(this, prefParam + it.toString(), displayData.param[it])
+                displayData.paramLabel[it] = Utility.readPref(
+                    this,
+                    prefParamLabel + it.toString(),
+                    displayData.paramLabel[it]
+                )
             }
         }
         sector = Utility.readPref(this, prefSector, sector)
@@ -190,12 +208,23 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
                 }
             })
         }
-        favListLabel = UtilityFavorites.setupFavMenuSPCMESO(MyApplication.spcmesoLabelFav, displayData.paramLabel[curImg])
-        favListParm = UtilityFavorites.setupFavMenuSPCMESO(MyApplication.spcmesoFav, displayData.param[curImg])
+        favListLabel = UtilityFavorites.setupFavMenuSPCMESO(
+            MyApplication.spcmesoLabelFav,
+            displayData.paramLabel[curImg]
+        )
+        favListParm = UtilityFavorites.setupFavMenuSPCMESO(
+            MyApplication.spcmesoFav,
+            displayData.param[curImg]
+        )
         sp = ObjectSpinner(this, this, R.id.spinner1, favListLabel)
         sp.setOnItemSelectedListener(this)
         UtilitySPCMESO.createData()
-        drw = ObjectNavDrawerCombo(this, UtilitySPCMESO.groups, UtilitySPCMESO.longCodes, UtilitySPCMESO.shortCodes)
+        drw = ObjectNavDrawerCombo(
+            this,
+            UtilitySPCMESO.groups,
+            UtilitySPCMESO.longCodes,
+            UtilitySPCMESO.shortCodes
+        )
         drw.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
             drw.drawerLayout.closeDrawer(drw.listView)
             displayData.param[curImg] = drw.getToken(groupPosition, childPosition)
@@ -208,8 +237,14 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
     }
 
     override fun onRestart() {
-        favListLabel = UtilityFavorites.setupFavMenuSPCMESO(MyApplication.spcmesoLabelFav, displayData.paramLabel[curImg])
-        favListParm = UtilityFavorites.setupFavMenuSPCMESO(MyApplication.spcmesoFav, displayData.param[curImg])
+        favListLabel = UtilityFavorites.setupFavMenuSPCMESO(
+            MyApplication.spcmesoLabelFav,
+            displayData.paramLabel[curImg]
+        )
+        favListParm = UtilityFavorites.setupFavMenuSPCMESO(
+            MyApplication.spcmesoFav,
+            displayData.param[curImg]
+        )
         sp.refreshData(contextg, favListLabel)
         super.onRestart()
     }
@@ -222,7 +257,10 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
 
         withContext(Dispatchers.IO) {
-            (0 until numPanes).forEach { displayData.bitmap[it] = UtilitySPCMESOInputOutput.getImage(contextg, displayData.param[it], sector) }
+            (0 until numPanes).forEach {
+                displayData.bitmap[it] =
+                        UtilitySPCMESOInputOutput.getImage(contextg, displayData.param[it], sector)
+            }
         }
 
         (0 until numPanes).forEach {
@@ -237,17 +275,23 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
         if (!firstRun) {
             (0 until numPanes).forEach {
                 displayData.img[it].setZoom(
-                        Utility.readPref(contextg, prefModel + numPanes + it.toString() + "_ZOOM", 1.0f),
-                        Utility.readPref(contextg, prefModel + numPanes + it.toString() + "_X", 0.5f),
-                        Utility.readPref(contextg, prefModel + numPanes + it.toString() + "_Y", 0.5f)
+                    Utility.readPref(
+                        contextg,
+                        prefModel + numPanes + it.toString() + "_ZOOM",
+                        1.0f
+                    ),
+                    Utility.readPref(contextg, prefModel + numPanes + it.toString() + "_X", 0.5f),
+                    Utility.readPref(contextg, prefModel + numPanes + it.toString() + "_Y", 0.5f)
                 )
             }
             firstRun = true
         }
         imageLoaded = true
         if (numPanes > 1)
-            UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1) + ")"
-                    + displayData.paramLabel[0] + "/" + displayData.paramLabel[1])
+            UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                displayData.img, toolbar, "(" + (curImg + 1) + ")"
+                        + displayData.paramLabel[0] + "/" + displayData.paramLabel[1]
+            )
 
 
     }
@@ -255,7 +299,14 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
     private fun getAnimate(frames: Int) = GlobalScope.launch(uiDispatcher) {
 
         withContext(Dispatchers.IO) {
-            (0 until numPanes).forEach { displayData.animDrawable[it] = UtilitySPCMESOInputOutput.getAnimation(contextg, sector, displayData.param[it], frames) }
+            (0 until numPanes).forEach {
+                displayData.animDrawable[it] = UtilitySPCMESOInputOutput.getAnimation(
+                    contextg,
+                    sector,
+                    displayData.param[it],
+                    frames
+                )
+            }
         }
 
         (0 until numPanes).forEach {
@@ -356,15 +407,28 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
             R.id.action_SW -> setAndLaunchSector("12")
             R.id.action_NW -> setAndLaunchSector("11")
             R.id.action_help -> getHelp()
-            R.id.action_multipane -> ObjectIntent(this, SPCMesoActivity::class.java, SPCMesoActivity.INFO, arrayOf("", "2", prefModel))
+            R.id.action_multipane -> ObjectIntent(
+                this,
+                SPCMesoActivity::class.java,
+                SPCMesoActivity.INFO,
+                arrayOf("", "2", prefModel)
+            )
             R.id.action_fav -> toggleFavorite()
             R.id.action_img1 -> {
                 curImg = 0
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1) + ")" + displayData.paramLabel[0] + "/" + displayData.paramLabel[1])
+                UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                    displayData.img,
+                    toolbar,
+                    "(" + (curImg + 1) + ")" + displayData.paramLabel[0] + "/" + displayData.paramLabel[1]
+                )
             }
             R.id.action_img2 -> {
                 curImg = 1
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(displayData.img, toolbar, "(" + (curImg + 1) + ")" + displayData.paramLabel[0] + "/" + displayData.paramLabel[1])
+                UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                    displayData.img,
+                    toolbar,
+                    "(" + (curImg + 1) + ")" + displayData.paramLabel[0] + "/" + displayData.paramLabel[1]
+                )
             }
             else -> return super.onOptionsItemSelected(item)
         }
@@ -416,7 +480,8 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
 
     private fun getHelp() = GlobalScope.launch(uiDispatcher) {
 
-        var helpText = withContext(Dispatchers.IO) { ("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/help_" + displayData.param[curImg] + ".html").getHtml() }
+        var helpText =
+            withContext(Dispatchers.IO) { ("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/help_" + displayData.param[curImg] + ".html").getHtml() }
 
         if (helpText.contains("Page Not Found"))
             helpText = "Help is not available for this parameter."
@@ -453,15 +518,32 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
 
     override fun onStop() {
         if (imageLoaded) {
-            (0 until numPanes).forEach { UtilityImg.imgSavePosnZoom(this, displayData.img[it], prefModel + numPanes.toString() + it.toString()) }
+            (0 until numPanes).forEach {
+                UtilityImg.imgSavePosnZoom(
+                    this,
+                    displayData.img[it],
+                    prefModel + numPanes.toString() + it.toString()
+                )
+            }
         }
         super.onStop()
     }
 
     private fun toggleFavorite() {
-        UtilityFavorites.toggleFavoriteSPCMESO(this, displayData.param[curImg], displayData.paramLabel[curImg], star)
-        favListLabel = UtilityFavorites.setupFavMenuSPCMESO(MyApplication.spcmesoLabelFav, displayData.paramLabel[curImg])
-        favListParm = UtilityFavorites.setupFavMenuSPCMESO(MyApplication.spcmesoFav, displayData.param[curImg])
+        UtilityFavorites.toggleFavoriteSPCMESO(
+            this,
+            displayData.param[curImg],
+            displayData.paramLabel[curImg],
+            star
+        )
+        favListLabel = UtilityFavorites.setupFavMenuSPCMESO(
+            MyApplication.spcmesoLabelFav,
+            displayData.paramLabel[curImg]
+        )
+        favListParm = UtilityFavorites.setupFavMenuSPCMESO(
+            MyApplication.spcmesoFav,
+            displayData.param[curImg]
+        )
         sp.refreshData(contextg, favListLabel)
     }
 
@@ -469,14 +551,28 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
         when (parent.id) {
             R.id.spinner1 -> {
                 when (pos) {
-                    1 -> ObjectIntent(this, FavAddActivity::class.java, FavAddActivity.TYPE, arrayOf("SPCMESO"))
-                    2 -> ObjectIntent(this, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf("SPCMESO"))
+                    1 -> ObjectIntent(
+                        this,
+                        FavAddActivity::class.java,
+                        FavAddActivity.TYPE,
+                        arrayOf("SPCMESO")
+                    )
+                    2 -> ObjectIntent(
+                        this,
+                        FavRemoveActivity::class.java,
+                        FavRemoveActivity.TYPE,
+                        arrayOf("SPCMESO")
+                    )
                     else -> {
                         if (favListParm.count() > pos && favListLabel.count() > pos) {
                             displayData.param[curImg] = favListParm[pos]
                             displayData.paramLabel[curImg] = favListLabel[pos]
                             Utility.writePref(this, prefParam + curImg, displayData.param[curImg])
-                            Utility.writePref(this, prefParamLabel + curImg, displayData.paramLabel[curImg])
+                            Utility.writePref(
+                                this,
+                                prefParamLabel + curImg,
+                                displayData.paramLabel[curImg]
+                            )
                             getContent()
                         }
                     }
@@ -488,8 +584,14 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
     private fun refreshSpinner() {
-        favListLabel = UtilityFavorites.setupFavMenuSPCMESO(MyApplication.spcmesoLabelFav, displayData.paramLabel[curImg])
-        favListParm = UtilityFavorites.setupFavMenuSPCMESO(MyApplication.spcmesoFav, displayData.param[curImg])
+        favListLabel = UtilityFavorites.setupFavMenuSPCMESO(
+            MyApplication.spcmesoLabelFav,
+            displayData.paramLabel[curImg]
+        )
+        favListParm = UtilityFavorites.setupFavMenuSPCMESO(
+            MyApplication.spcmesoFav,
+            displayData.param[curImg]
+        )
         sp.refreshData(contextg, favListLabel)
     }
 }

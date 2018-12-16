@@ -38,8 +38,20 @@ class ObjectWidgetNHC(context: Context) {
         UtilityWidget.setImage(context, remoteViews, R.id.iv1, NHC.fileName + "0")
         UtilityWidget.setImage(context, remoteViews, R.id.iv2, NHC.fileName + "1")
         if (!MyApplication.widgetPreventTap) {
-            UtilityWidget.setupIntent(context, remoteViews, NHCActivity::class.java, R.id.iv1, WidgetFile.NHC.action + "0")
-            UtilityWidget.setupIntent(context, remoteViews, NHCActivity::class.java, R.id.iv2, WidgetFile.NHC.action + "1")
+            UtilityWidget.setupIntent(
+                context,
+                remoteViews,
+                NHCActivity::class.java,
+                R.id.iv1,
+                WidgetFile.NHC.action + "0"
+            )
+            UtilityWidget.setupIntent(
+                context,
+                remoteViews,
+                NHCActivity::class.java,
+                R.id.iv2,
+                WidgetFile.NHC.action + "1"
+            )
         }
     }
 }

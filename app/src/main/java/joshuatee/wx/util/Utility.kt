@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//modded by ELY M. 
 
 package joshuatee.wx.util
 
@@ -128,7 +129,8 @@ object Utility {
     }
 
     // FIXME deprecate these
-    fun readPref(key: String, value: String): String = MyApplication.preferences.getString(key, value)
+    fun readPref(key: String, value: String): String =
+        MyApplication.preferences.getString(key, value)
 
     fun theme(themeStr: String): Int = when {
         themeStr.startsWith("blue") -> R.style.MyCustomTheme_NOAB
@@ -189,13 +191,15 @@ object Utility {
         return ObjectForecastPackage(objCC)
     }
 
-    fun getCurrentConditionsV2(context: Context, locNum: Int): ObjectForecastPackage = if (Location.isUS(locNum)) {
-        getCurrentConditionsUSV2(context, locNum)
-    } else {
-        getCurrentConditionsCanada(locNum)
-    }
+    fun getCurrentConditionsV2(context: Context, locNum: Int): ObjectForecastPackage =
+        if (Location.isUS(locNum)) {
+            getCurrentConditionsUSV2(context, locNum)
+        } else {
+            getCurrentConditionsCanada(locNum)
+        }
 
-    fun getHazards(url: String): String = url.parse("<!-- AddThis Button END --> {3}<hr /><br />(.*?)</div>")
+    fun getHazards(url: String): String =
+        url.parse("<!-- AddThis Button END --> {3}<hr /><br />(.*?)</div>")
 
     fun fromHtml(source: String): String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY).toString()

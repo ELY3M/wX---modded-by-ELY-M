@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
 
 package joshuatee.wx.fragments
 
@@ -189,14 +190,24 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 radarLocationChangedAl.add(false)
                 glviewArr[z].idx = z
                 rlArr.add(RelativeLayout(activityReference))
-                wxgltextArr.add(WXGLTextObject(activityReference, rlArr[z], glviewArr[z], oglrArr[z], numPanes))
+                wxgltextArr.add(
+                    WXGLTextObject(
+                        activityReference,
+                        rlArr[z],
+                        glviewArr[z],
+                        oglrArr[z],
+                        numPanes
+                    )
+                )
                 glviewArr[z].wxgltextArr = wxgltextArr
                 glviewArr[z].locfrag = true
                 wxgltextArr[z].initTV(activityReference)
                 rlArr[z].addView(glviewArr[z])
                 cardsAl[cardsAl.size - 1].addView(rlArr[z])
-                cardsAl[cardsAl.size - 1].layoutParams = RelativeLayout.LayoutParams(MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt(),
-                        MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt())
+                cardsAl[cardsAl.size - 1].layoutParams = RelativeLayout.LayoutParams(
+                    MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt(),
+                    MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()
+                )
                 ll.addView(cardsAl[cardsAl.size - 1])
                 z += 1
             } else if (tok.contains("TXT-")) {
@@ -219,29 +230,47 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 oldRidArr[z] = ""
                 radarLocationChangedAl.add(false)
                 rlArr.add(RelativeLayout(activityReference))
-                wxgltextArr.add(WXGLTextObject(activityReference, rlArr[z], glviewArr[z], oglrArr[z], numPanes))
+                wxgltextArr.add(
+                    WXGLTextObject(
+                        activityReference,
+                        rlArr[z],
+                        glviewArr[z],
+                        oglrArr[z],
+                        numPanes
+                    )
+                )
                 glviewArr[z].wxgltextArr = wxgltextArr
                 glviewArr[z].locfrag = true
                 wxgltextArr[z].initTV(activityReference)
                 rlArr[z].addView(glviewArr[z])
                 cardsAl[cardsAl.size - 1].addView(rlArr[z])
-                cardsAl[cardsAl.size - 1].layoutParams = RelativeLayout.LayoutParams(MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt(),
-                        MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt())
+                cardsAl[cardsAl.size - 1].layoutParams = RelativeLayout.LayoutParams(
+                    MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt(),
+                    MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()
+                )
                 ll.addView(cardsAl[cardsAl.size - 1])
                 z += 1
             }
         } // end of loop over HM tokens
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         alertDialogStatus()
         alertDialogRadarLongpress()
-        val view: View = if (android.os.Build.VERSION.SDK_INT < 21 && UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB)
-            inflater.inflate(R.layout.fragment_location_white, container, false)
-        else
-            inflater.inflate(R.layout.fragment_location, container, false)
+        val view: View =
+            if (android.os.Build.VERSION.SDK_INT < 21 && UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB)
+                inflater.inflate(R.layout.fragment_location_white, container, false)
+            else
+                inflater.inflate(R.layout.fragment_location, container, false)
         homescreenFavLocal = MyApplication.homescreenFav
-        if (homescreenFavLocal.contains("TXT-CC") || homescreenFavLocal.contains("TXT-HAZ") || homescreenFavLocal.contains("TXT-7DAY"))
+        if (homescreenFavLocal.contains("TXT-CC") || homescreenFavLocal.contains("TXT-HAZ") || homescreenFavLocal.contains(
+                "TXT-7DAY"
+            )
+        )
             needForecastData = true
         spinner1 = view.findViewById(R.id.spinner1)
         if (android.os.Build.VERSION.SDK_INT > 20) {
@@ -256,7 +285,12 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         buttonFor.gravity = Gravity.START
         buttonFor.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
         buttonFor.setTextColor(UIPreferences.backgroundColor)
-        buttonFor.setPadding(MyApplication.padding, MyApplication.padding, MyApplication.padding, MyApplication.padding)
+        buttonFor.setPadding(
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding
+        )
         locationCard = view.findViewById(R.id.cv1)
         cv5 = ObjectCard(activityReference)
         if (homescreenFavLocal.contains("TXT-CC2")) {
@@ -295,7 +329,12 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     if (MyApplication.helpMode) {
                         showHelp(helpCurrentGeneric)
                     } else {
-                        ObjectIntent(activityReference, SPCSoundingsActivity::class.java, SPCSoundingsActivity.URL, arrayOf(Utility.readPref("NWS" + Location.currentLocationStr, ""), ""))
+                        ObjectIntent(
+                            activityReference,
+                            SPCSoundingsActivity::class.java,
+                            SPCSoundingsActivity.URL,
+                            arrayOf(Utility.readPref("NWS" + Location.currentLocationStr, ""), "")
+                        )
                     }
                 }
             }
@@ -320,7 +359,10 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     buttonFor.text = objSevenDay?.sevenDayExtStr +
                             MyApplication.newline +
                             MyApplication.newline +
-                            UtilityDownload.getSunriseSunset(activityReference, Location.currentLocationStr)
+                            UtilityDownload.getSunriseSunset(
+                                activityReference,
+                                Location.currentLocationStr
+                            )
                     sevenDayExtShown = true
                 }
             }
@@ -359,13 +401,22 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     radarLocationChangedAl[oglrIdx] = false
                 if (MyApplication.locDisplayImg && oglrIdx != -1) {
                     glviewArr[oglrIdx].scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
-                    oglrArr[oglrIdx].setViewInitial(MyApplication.wxoglSize.toFloat() / 10.0f, 0.0f, 0.0f)
+                    oglrArr[oglrIdx].setViewInitial(
+                        MyApplication.wxoglSize.toFloat() / 10.0f,
+                        0.0f,
+                        0.0f
+                    )
                 }
                 hsImageAl.forEach { it.resetZoom() }
                 setImageOnClick()
                 refreshDynamicContent()
             } else {
-                ObjectIntent(activityReference, SettingsLocationGenericActivity::class.java, SettingsLocationGenericActivity.LOC_NUM, arrayOf((pos + 1).toString(), ""))
+                ObjectIntent(
+                    activityReference,
+                    SettingsLocationGenericActivity::class.java,
+                    SettingsLocationGenericActivity.LOC_NUM,
+                    arrayOf((pos + 1).toString(), "")
+                )
                 spinner1.setSelection(currentLoc)
             }
         } // end check if current loc is pos
@@ -397,7 +448,8 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         if (glviewInitialized) {
             glviewArr.forEach { it.onResume() }
         }
-        LocalBroadcastManager.getInstance(activityReference).registerReceiver(onBroadcast, IntentFilter("locationadded"))
+        LocalBroadcastManager.getInstance(activityReference)
+            .registerReceiver(onBroadcast, IntentFilter("locationadded"))
         updateSpinner()
         val currentTime = System.currentTimeMillis()
         val currentTimeSec = currentTime / 1000
@@ -470,8 +522,10 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private fun getTextProduct(productString: String) = GlobalScope.launch(uiDispatcher) {
         val productIndex = productString.toIntOrNull() ?: 0
         val longText = withContext(Dispatchers.IO) {
-            UtilityDownload.getTextProduct(MyApplication.appContext,
-                    hsTextAl[productIndex].product).replace("<br>AREA FORECAST DISCUSSION", "AREA FORECAST DISCUSSION")
+            UtilityDownload.getTextProduct(
+                MyApplication.appContext,
+                hsTextAl[productIndex].product
+            ).replace("<br>AREA FORECAST DISCUSSION", "AREA FORECAST DISCUSSION")
         }
         hsTextAl[productIndex].setTextLong(longText)
         val shortText = UtilityStringExternal.truncate(longText, UIPreferences.homescreenTextLength)
@@ -481,7 +535,12 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
     private fun getImageProduct(productString: String) = GlobalScope.launch(uiDispatcher) {
         val productIndex = productString.toIntOrNull() ?: 0
-        val b = withContext(Dispatchers.IO) { UtilityDownload.getImgProduct(MyApplication.appContext, hsImageAl[productIndex].product) }
+        val b = withContext(Dispatchers.IO) {
+            UtilityDownload.getImgProduct(
+                MyApplication.appContext,
+                hsImageAl[productIndex].product
+            )
+        }
         hsImageAl[productIndex].setImage(b)
     }
 
@@ -574,7 +633,10 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         tmpArr = MyApplication.space.split(str)
         if (tmpArr.size > 3)
             ts = tmpArr[3]
-        return oglrArr[j].rid + ": " + ts + " (" + Utility.readPref("RID_LOC_" + oglrArr[j].rid, "") + ")"
+        return oglrArr[j].rid + ": " + ts + " (" + Utility.readPref(
+            "RID_LOC_" + oglrArr[j].rid,
+            ""
+        ) + ")"
     }
 
     private fun initWXOGLGeom(glviewloc: WXGLSurfaceView, OGLRLOC: WXGLRender, z: Int) {
@@ -696,7 +758,11 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
     private fun updateSpinner() {
         lastRefresh = Utility.readPref(activityReference, "LOC_LAST_UPDATE", 0.toLong())
-        dataAdapter = ArrayAdapter(activityReference, android.R.layout.simple_spinner_item, Location.listOf)
+        dataAdapter = ArrayAdapter(
+            activityReference,
+            android.R.layout.simple_spinner_item,
+            Location.listOf
+        )
         dataAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
         // fix for 2 or more loc deleted
         currentLoc = Location.currentLocation
@@ -715,7 +781,10 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     System.arraycopy(argsOrig, 0, args, 0, argsOrig.size)
                     args.indices.forEach { z ->
                         if (args[z] == "WFO_FOR_SND")
-                            args[z] = UtilityLocation.getNearestSnd(activityReference, LatLon(Location.x, Location.y))
+                            args[z] = UtilityLocation.getNearestSnd(
+                                activityReference,
+                                LatLon(Location.x, Location.y)
+                            )
                         if (args[z] == "WFO_FOR_GOES")
                             args[z] = Location.wfo.toLowerCase(Locale.US)
                         if (args[z] == "STATE_LOWER")
@@ -735,7 +804,15 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         startActivity(intent)
                     }
                 } else {
-                    ObjectIntent(activityReference, USNWSGOESActivity::class.java, USNWSGOESActivity.RID, arrayOf("nws", hsImageAl[ii].product.replace("IMG-", "").toLowerCase(Locale.US)))
+                    ObjectIntent(
+                        activityReference,
+                        USNWSGOESActivity::class.java,
+                        USNWSGOESActivity.RID,
+                        arrayOf(
+                            "nws",
+                            hsImageAl[ii].product.replace("IMG-", "").toLowerCase(Locale.US)
+                        )
+                    )
                 }
             })
         }
@@ -759,7 +836,12 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     }
 
     private val radarTimestamps: List<String>
-        get() = (0 until glviewArr.size).mapTo(mutableListOf()) { getRadarTimeStamp(oglrArr[it].radarL3Object.timestamp, it) }
+        get() = (0 until glviewArr.size).mapTo(mutableListOf()) {
+            getRadarTimeStamp(
+                oglrArr[it].radarL3Object.timestamp,
+                it
+            )
+        }
 
     private fun setupHazardCardsCA(hazUrl: String) {
         linearLayoutHazards?.removeAllViews()
@@ -776,12 +858,18 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         hazardsCardAl[0].setOnClickListener(OnClickListener {
             if (!hazardsExpandedAl[expandIndexCa]) {
                 hazardsCardAl[expandIndexCa].setTextColor(UIPreferences.backgroundColor)
-                hazardsCardAl[expandIndexCa].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+                hazardsCardAl[expandIndexCa].setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    MyApplication.textSizeSmall
+                )
                 hazardsCardAl[expandIndexCa].setText(Utility.fromHtml(hazUrlCa))
                 hazardsExpandedAl[expandIndexCa] = true
             } else {
                 hazardsCardAl[expandIndexCa].setTextColor(UIPreferences.textHighlightColor)
-                hazardsCardAl[expandIndexCa].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
+                hazardsCardAl[expandIndexCa].setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    MyApplication.textSizeNormal
+                )
                 hazardsCardAl[expandIndexCa].setText(hazardsSumCa)
                 hazardsExpandedAl[expandIndexCa] = false
                 sv.smoothScrollTo(0, 0)
@@ -792,18 +880,28 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
     private fun alertDialogStatus() {
         alertDialogStatus = AlertDialog.Builder(activityReference)
-        val arrayAdapterRadar = ArrayAdapter(activityReference, R.layout.simple_spinner_item, alertDialogStatusAl)
+        val arrayAdapterRadar =
+            ArrayAdapter(activityReference, R.layout.simple_spinner_item, alertDialogStatusAl)
         arrayAdapterRadar.setDropDownViewResource(MyApplication.spinnerLayout)
 
         alertDialogStatus?.setNegativeButton(
-                "Done"
+            "Done"
         ) { dialog, _ -> dialog.dismiss() }
-        alertDialogStatus?.setSingleChoiceItems(arrayAdapterRadar, checkedItem
+        alertDialogStatus?.setSingleChoiceItems(
+            arrayAdapterRadar, checkedItem
         ) { dialog, which ->
             val strName = alertDialogStatusAl[which]
             when {
-                strName.contains("Edit Location..") -> ObjectIntent(activityReference, SettingsLocationGenericActivity::class.java, SettingsLocationGenericActivity.LOC_NUM, arrayOf(Location.currentLocationStr, ""))
-                strName.contains("Sun/Moon data") -> ObjectIntent(activityReference, SunMoonActivity::class.java)
+                strName.contains("Edit Location..") -> ObjectIntent(
+                    activityReference,
+                    SettingsLocationGenericActivity::class.java,
+                    SettingsLocationGenericActivity.LOC_NUM,
+                    arrayOf(Location.currentLocationStr, "")
+                )
+                strName.contains("Sun/Moon data") -> ObjectIntent(
+                    activityReference,
+                    SunMoonActivity::class.java
+                )
                 strName.contains("Force Data Refresh") -> refreshDynamicContent()
                 strName.contains("Radar type: Reflectivity") -> {
                     oglrArr[0].product = "N0Q"
@@ -818,7 +916,12 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     val ridContext = strName.split(":")[0]
                     var stateContext = Utility.readPref("RID_LOC_$ridContext", "")
                     stateContext = stateContext.split(",")[0]
-                    ObjectIntent(activityReference, WXGLRadarActivity::class.java, WXGLRadarActivity.RID, arrayOf(ridContext, stateContext, oglrArr[0].product, ""))
+                    ObjectIntent(
+                        activityReference,
+                        WXGLRadarActivity::class.java,
+                        WXGLRadarActivity.RID,
+                        arrayOf(ridContext, stateContext, oglrArr[0].product, "")
+                    )
                 }
             }
             dialog.dismiss()
@@ -827,12 +930,17 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
     private fun alertDialogRadarLongpress() {
         alertDialogRadarLongpress = AlertDialog.Builder(activityReference)
-        val arrayAdapterRadar = ArrayAdapter(activityReference, R.layout.simple_spinner_item, alertDialogRadarLongpressAl)
+        val arrayAdapterRadar = ArrayAdapter(
+            activityReference,
+            R.layout.simple_spinner_item,
+            alertDialogRadarLongpressAl
+        )
         arrayAdapterRadar.setDropDownViewResource(MyApplication.spinnerLayout)
         alertDialogRadarLongpress?.setNegativeButton(
-                "Cancel"
+            "Cancel"
         ) { dialog, _ -> dialog.dismiss() }
-        alertDialogRadarLongpress?.setSingleChoiceItems(arrayAdapterRadar, checkedItem
+        alertDialogRadarLongpress?.setSingleChoiceItems(
+            arrayAdapterRadar, checkedItem
         ) { dialog, which ->
             val strName = alertDialogRadarLongpressAl[which]
             if (strName.contains("Radar:")) {
@@ -841,12 +949,23 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 oglrArr[idxIntG].rid = ridNew
                 oglrArr[idxIntG].rid = ridNew
                 if (idxIntG != oglrIdx) {
-                    MyApplication.homescreenFav = MyApplication.homescreenFav.replace("NXRD-$oldRidIdx", "NXRD-" + oglrArr[idxIntG].rid)
-                    Utility.writePref(activityReference, "HOMESCREEN_FAV", MyApplication.homescreenFav)
+                    MyApplication.homescreenFav = MyApplication.homescreenFav.replace(
+                        "NXRD-$oldRidIdx",
+                        "NXRD-" + oglrArr[idxIntG].rid
+                    )
+                    Utility.writePref(
+                        activityReference,
+                        "HOMESCREEN_FAV",
+                        MyApplication.homescreenFav
+                    )
                 }
                 radarLocationChangedAl[idxIntG] = true
                 glviewArr[idxIntG].scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
-                oglrArr[idxIntG].setViewInitial(MyApplication.wxoglSize.toFloat() / 10.0f, 0.0f, 0.0f)
+                oglrArr[idxIntG].setViewInitial(
+                    MyApplication.wxoglSize.toFloat() / 10.0f,
+                    0.0f,
+                    0.0f
+                )
                 getRadar(idxIntG)
             } else if (strName.contains("Show warning text")) {
                 val polygonUrl = UtilityWXOGL.showTextProducts(glviewArr[idxIntG].newY.toDouble(), (glviewArr[idxIntG].newX * -1.0))
@@ -893,7 +1012,15 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     }
 
     private fun getRadarStatus() = GlobalScope.launch(uiDispatcher) {
-        val radarStatus = withContext(Dispatchers.IO) { UtilityDownload.getRadarStatusMessage(activityReference, oglrArr[idxIntG].rid) }
+        var radarStatus = withContext(Dispatchers.IO) {
+            UtilityDownload.getRadarStatusMessage(
+                    activityReference,
+                    oglrArr[idxIntG].rid
+            )
+        }
+        if (radarStatus == "") {
+            radarStatus = "The current radar status for " + oglrArr[idxIntG].rid + " is not available."
+        }
         UtilityAlertDialog.showHelpText(Utility.fromHtml(radarStatus), activityReference)
     }
 
@@ -931,7 +1058,14 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             hazardsCardAl[z].setTextColor(UIPreferences.textHighlightColor)
             hazardsCardAl[z].setText(tmpArr[z].toUpperCase(Locale.US))
             val url = idAl[z]
-            hazardsCardAl[z].setOnClickListener(OnClickListener { ObjectIntent(activityReference, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(url)) })
+            hazardsCardAl[z].setOnClickListener(OnClickListener {
+                ObjectIntent(
+                    activityReference,
+                    USAlertsDetailActivity::class.java,
+                    USAlertsDetailActivity.URL,
+                    arrayOf(url)
+                )
+            })
             linearLayoutHazards?.addView(hazardsCardAl[z].card)
         }
     }
@@ -951,12 +1085,19 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         //
         withContext(Dispatchers.IO) {
             try {
-                objFcst = Utility.getCurrentConditionsV2(activityReference, Location.currentLocation)
+                objFcst =
+                        Utility.getCurrentConditionsV2(activityReference, Location.currentLocation)
                 if (homescreenFavLocal.contains("TXT-CC2")) {
                     bmCc = if (Location.isUS) {
                         UtilityNWS.getIconV2(activityReference, objFcst!!.objCC.iconUrl)
                     } else {
-                        UtilityNWS.getIconV2(activityReference, UtilityCanada.translateIconNameCurrentConditions(objFcst!!.objCC.data1, objFcst!!.objCC.status))
+                        UtilityNWS.getIconV2(
+                            activityReference,
+                            UtilityCanada.translateIconNameCurrentConditions(
+                                objFcst!!.objCC.data1,
+                                objFcst!!.objCC.status
+                            )
+                        )
                     }
                 }
             } catch (e: Exception) {
@@ -974,7 +1115,14 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     if (homescreenFavLocal.contains("TXT-CC2")) {
                         ccTime = objFcst!!.objCC.status
                         if (bmCc != null) {
-                            it.updateContent(bmCc!!, bitmapSize, objFcst!!, Location.isUS, ccTime, radarTime)
+                            it.updateContent(
+                                bmCc!!,
+                                bitmapSize,
+                                objFcst!!,
+                                Location.isUS,
+                                ccTime,
+                                radarTime
+                            )
                         }
                     } else {
                         it.setTopLine(objFcst!!.objCC.data1)
@@ -1005,7 +1153,12 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             try {
                 Utility.writePref(activityReference, "FCST", objSevenDay?.sevenDayExtStr ?: "")
                 if (homescreenFavLocal.contains("TXT-7DAY")) {
-                    objSevenDay!!.iconAl.mapTo(bmArr) { UtilityNWS.getIconV2(activityReference, it) }
+                    objSevenDay!!.iconAl.mapTo(bmArr) {
+                        UtilityNWS.getIconV2(
+                            activityReference,
+                            it
+                        )
+                    }
                 }
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)
@@ -1019,7 +1172,8 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     linearLayoutForecast?.removeAllViewsInLayout()
                     val day7Arr = objSevenDay!!.fcstList
                     bmArr.forEachIndexed { idx, bm ->
-                        val c7day = ObjectCard7Day(activityReference, bm, Location.isUS, idx, day7Arr)
+                        val c7day =
+                            ObjectCard7Day(activityReference, bm, Location.isUS, idx, day7Arr)
                         c7day.setOnClickListener(OnClickListener { sv.smoothScrollTo(0, 0) })
                         linearLayoutForecast?.addView(c7day.card)
                     }
@@ -1030,9 +1184,19 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     cardSunrise.setOnClickListener(OnClickListener { refreshDynamicContent() })
                     try {
                         if (Location.isUS) {
-                            cardSunrise.setText(UtilityDownload.getSunriseSunset(activityReference, Location.currentLocationStr) + MyApplication.newline + UtilityTime.gmtTime())
+                            cardSunrise.setText(
+                                UtilityDownload.getSunriseSunset(
+                                    activityReference,
+                                    Location.currentLocationStr
+                                ) + MyApplication.newline + UtilityTime.gmtTime()
+                            )
                         } else {
-                            cardSunrise.setText(UtilityDownload.getSunriseSunset(activityReference, Location.currentLocationStr) + MyApplication.newline + UtilityTime.gmtTime())
+                            cardSunrise.setText(
+                                UtilityDownload.getSunriseSunset(
+                                    activityReference,
+                                    Location.currentLocationStr
+                                ) + MyApplication.newline + UtilityTime.gmtTime()
+                            )
                         }
                     } catch (e: Exception) {
                         UtilityLog.HandleException(e)

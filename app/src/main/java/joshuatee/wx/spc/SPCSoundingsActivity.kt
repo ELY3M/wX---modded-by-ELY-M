@@ -39,7 +39,8 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedListener, OnMenuItemClickListener {
+class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedListener,
+    OnMenuItemClickListener {
 
     companion object {
         const val URL: String = ""
@@ -64,14 +65,25 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
     private lateinit var contextg: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_spcsoundings, R.menu.spcsoundings, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_spcsoundings,
+            R.menu.spcsoundings,
+            true
+        )
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         img = findViewById(R.id.iv)
         img.setOnClickListener(this)
         contextg = this
         nwsOffice = UtilityLocation.getNearestSnd(this, Location.latLon)
-        locations = UtilityFavorites.setupFavMenu(this, MyApplication.sndFav, nwsOffice, prefTokenLocation, prefToken)
+        locations = UtilityFavorites.setupFavMenu(
+            this,
+            MyApplication.sndFav,
+            nwsOffice,
+            prefTokenLocation,
+            prefToken
+        )
         sp = ObjectSpinner(this, this, R.id.spinner1, locations)
         sp.setOnItemSelectedListener(this)
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img))
@@ -87,7 +99,13 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
     }
 
     override fun onRestart() {
-        locations = UtilityFavorites.setupFavMenu(this, MyApplication.sndFav, nwsOffice, prefTokenLocation, prefToken)
+        locations = UtilityFavorites.setupFavMenu(
+            this,
+            MyApplication.sndFav,
+            nwsOffice,
+            prefTokenLocation,
+            prefToken
+        )
         sp.refreshData(this, locations)
         super.onRestart()
     }
@@ -110,7 +128,10 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
     private fun getContentSPCPlot() = GlobalScope.launch(uiDispatcher) {
         imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/$upperAir"
         withContext(Dispatchers.IO) {
-            val date = UtilityString.getHTMLandParse("${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/", "/obswx/maps/" + upperAir + "_([0-9]{6}_[0-9]{2}).gif")
+            val date = UtilityString.getHTMLandParse(
+                "${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/",
+                "/obswx/maps/" + upperAir + "_([0-9]{6}_[0-9]{2}).gif"
+            )
             bitmap = UtilityImg.getBitmapAddWhiteBG(contextg, imgUrl + "_" + date + ".gif")
         }
         img.visibility = View.VISIBLE
@@ -130,7 +151,15 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
             R.id.action_sfc -> setPlotAndGet("sfc")
             R.id.action_map -> imageMap.toggleMap()
             R.id.action_fav -> toggleFavorite()
-            R.id.action_spc_help -> ObjectIntent(this, WebscreenAB::class.java, WebscreenAB.URL, arrayOf("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/begin.html", nwsOffice))
+            R.id.action_spc_help -> ObjectIntent(
+                this,
+                WebscreenAB::class.java,
+                WebscreenAB.URL,
+                arrayOf(
+                    "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/begin.html",
+                    nwsOffice
+                )
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -144,14 +173,21 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
     private fun mapSwitch(loc: String) {
         nwsOffice = loc
         mapShown = false
-        locations = UtilityFavorites.setupFavMenu(this, MyApplication.sndFav, nwsOffice, prefTokenLocation, prefToken)
+        locations = UtilityFavorites.setupFavMenu(
+            this,
+            MyApplication.sndFav,
+            nwsOffice,
+            prefTokenLocation,
+            prefToken
+        )
         sp.refreshData(this, locations)
         img.resetZoom()
     }
 
     private fun toggleFavorite() {
         val ridFav = UtilityFavorites.toggleFavoriteString(this, nwsOffice, star, prefToken)
-        locations = UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefTokenLocation, prefToken)
+        locations =
+                UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefTokenLocation, prefToken)
         sp.refreshData(this, locations)
     }
 
@@ -162,8 +198,18 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
                 firstTime = false
             }
             when (pos) {
-                1 -> ObjectIntent(this, FavAddActivity::class.java, FavAddActivity.TYPE, arrayOf("SND"))
-                2 -> ObjectIntent(this, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf("SND"))
+                1 -> ObjectIntent(
+                    this,
+                    FavAddActivity::class.java,
+                    FavAddActivity.TYPE,
+                    arrayOf("SND")
+                )
+                2 -> ObjectIntent(
+                    this,
+                    FavRemoveActivity::class.java,
+                    FavRemoveActivity.TYPE,
+                    arrayOf("SND")
+                )
                 else -> {
                     nwsOffice = locations[pos].split(" ").getOrNull(0) ?: ""
                     getContent()

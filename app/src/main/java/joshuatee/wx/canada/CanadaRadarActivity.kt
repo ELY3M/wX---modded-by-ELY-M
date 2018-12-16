@@ -48,7 +48,8 @@ import joshuatee.wx.ui.ObjectImageMap
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelectedListener, OnMenuItemClickListener {
+class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelectedListener,
+    OnMenuItemClickListener {
 
     // Canada Radar
     //
@@ -81,7 +82,13 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_canada_radar, R.menu.canada_radar, true, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_canada_radar,
+            R.menu.canada_radar,
+            true,
+            true
+        )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
@@ -163,7 +170,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                 imageType = "rad"
                 getContent()
             }
-           /* R.id.action_ir -> {
+            /* R.id.action_ir -> {
                 mosaicShown = false
                 imageType = "ir"
                 getContent()
@@ -277,8 +284,18 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
             firstTime = false
         }
         when (pos) {
-            1 -> ObjectIntent(contextg, FavAddActivity::class.java, FavAddActivity.TYPE, arrayOf("RIDCA"))
-            2 -> ObjectIntent(contextg, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf("RIDCA"))
+            1 -> ObjectIntent(
+                contextg,
+                FavAddActivity::class.java,
+                FavAddActivity.TYPE,
+                arrayOf("RIDCA")
+            )
+            2 -> ObjectIntent(
+                contextg,
+                FavRemoveActivity::class.java,
+                FavRemoveActivity.TYPE,
+                arrayOf("RIDCA")
+            )
             else -> {
                 if (ridArrLoc[pos].length > 3) {
                     rad = UtilityStringExternal.truncate(ridArrLoc[pos], 3)

@@ -124,9 +124,9 @@ object UtilityToolbar {
                 val params = ActionMenuView.LayoutParams(itemWidth, LayoutParams.WRAP_CONTENT)
                 // Loop through the children
                 (0 until innerChildCount)
-                        .map { childView.getChildAt(it) }
-                        .filterIsInstance<ActionMenuItemView>()
-                        .forEach { it.layoutParams = params }
+                    .map { childView.getChildAt(it) }
+                    .filterIsInstance<ActionMenuItemView>()
+                    .forEach { it.layoutParams = params }
             }
         }
     }

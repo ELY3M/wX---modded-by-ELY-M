@@ -28,7 +28,14 @@ import joshuatee.wx.util.ImageMap
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.MyApplication
 
-class ObjectImageMap(val activity: Activity, val context: Context, resId: Int, val toolbar: Toolbar, val toolbarBottom: Toolbar, private val viewArr: List<View>) {
+class ObjectImageMap(
+    val activity: Activity,
+    val context: Context,
+    resId: Int,
+    val toolbar: Toolbar,
+    val toolbarBottom: Toolbar,
+    private val viewArr: List<View>
+) {
 
     var map: ImageMap = activity.findViewById(resId)
 
@@ -56,9 +63,15 @@ class ObjectImageMap(val activity: Activity, val context: Context, resId: Int, v
     }
 
     companion object {
-        fun setupImageMap(context: Context, map: ImageMap, toolbar: Toolbar, toolbarBottom: Toolbar) {
+        fun setupImageMap(
+            context: Context,
+            map: ImageMap,
+            toolbar: Toolbar,
+            toolbarBottom: Toolbar
+        ) {
             val paramsIv = map.layoutParams
-            paramsIv.height = MyApplication.dm.heightPixels - toolbar.height - toolbarBottom.height - UtilityUI.statusBarHeight(context)
+            paramsIv.height = MyApplication.dm.heightPixels - toolbar.height -
+                    toolbarBottom.height - UtilityUI.statusBarHeight(context)
             paramsIv.width = MyApplication.dm.widthPixels
             map.layoutParams = paramsIv
         }

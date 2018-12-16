@@ -44,7 +44,7 @@ class ObjectDialogue {
         arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, list)
         arrayAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
         alertDialog.setNegativeButton(
-                "Done"
+            "Done"
         ) { dialog, _ -> dialog.dismiss() }
     }
 
@@ -53,7 +53,7 @@ class ObjectDialogue {
         arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, list)
         arrayAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
         alertDialog.setNegativeButton(
-                "Done"
+            "Done"
         ) { dialog, _ -> dialog.dismiss() }
     }
 
@@ -63,7 +63,7 @@ class ObjectDialogue {
         alertDialog.setMessage(text)
         alertDialog.setCancelable(false)
         alertDialog.setNegativeButton(
-                "Done"
+            "Done"
         ) { dialog, _ -> dialog.dismiss() }
         val ad = alertDialog.create()
         ad.setCanceledOnTouchOutside(true)

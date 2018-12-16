@@ -40,7 +40,11 @@ object UtilityShare {
         if (!dir.mkdirs())
             UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
         val file = File(dir, filename)
-        val imgUri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", file)
+        val imgUri = FileProvider.getUriForFile(
+            context,
+            "${MyApplication.packageNameAsString}.fileprovider",
+            file
+        )
         var fos: FileOutputStream? = null
         try {
             fos = FileOutputStream(file)
@@ -80,7 +84,11 @@ object UtilityShare {
         if (!dir.mkdirs())
             UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
         val file = File(dir, "img1.png")
-        val imgUri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", file)
+        val imgUri = FileProvider.getUriForFile(
+            context,
+            "${MyApplication.packageNameAsString}.fileprovider",
+            file
+        )
         try {
             val fos = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
@@ -107,7 +115,11 @@ object UtilityShare {
                 UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
             }
             val file = File(dir, "img" + i.toString() + ".png")
-            val imgUri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", file)
+            val imgUri = FileProvider.getUriForFile(
+                context,
+                "${MyApplication.packageNameAsString}.fileprovider",
+                file
+            )
             imgUriAl.add(imgUri)
             try {
                 val fos = FileOutputStream(file)
@@ -133,7 +145,11 @@ object UtilityShare {
         if (!dir.mkdirs())
             UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
         val file = File(dir, "img1.png")
-        val imgUri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", file)
+        val imgUri = FileProvider.getUriForFile(
+            context,
+            "${MyApplication.packageNameAsString}.fileprovider",
+            file
+        )
         try {
             val fos = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)

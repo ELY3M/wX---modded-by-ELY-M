@@ -27,13 +27,24 @@ import android.net.Uri
 
 class ObjectIntent() {
 
-    constructor(context: Context, clazz: Class<*>, url: String, stringArray: Array<String>) : this() {
+    constructor(
+        context: Context,
+        clazz: Class<*>,
+        url: String,
+        stringArray: Array<String>
+    ) : this() {
         val intent = Intent(context, clazz)
         intent.putExtra(url, stringArray)
         context.startActivity(intent)
     }
 
-    constructor(context: Context, clazz: Class<*>, url: String, stringArray: String, dummyFlag: Boolean) : this() {
+    constructor(
+        context: Context,
+        clazz: Class<*>,
+        url: String,
+        stringArray: String,
+        dummyFlag: Boolean
+    ) : this() {
         val intent = Intent(context, clazz)
         intent.putExtra(url, stringArray)
         context.startService(intent)

@@ -15,9 +15,11 @@ import joshuatee.wx.util.Utility
 
 // thanks http://www.truiton.com/2015/03/android-cardview-example/
 
-internal class PlayListAdapter(private val mDataset: MutableList<String>) : RecyclerView.Adapter<PlayListAdapter.DataObjectHolder>() {
+internal class PlayListAdapter(private val mDataset: MutableList<String>) :
+    RecyclerView.Adapter<PlayListAdapter.DataObjectHolder>() {
 
-    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
 
         val label: TextView = itemView.findViewById(R.id.singletext)
         val label2: TextView = itemView.findViewById(R.id.text2)
@@ -38,7 +40,8 @@ internal class PlayListAdapter(private val mDataset: MutableList<String>) : Recy
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.cardview_playlist, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.cardview_playlist, parent, false)
         return DataObjectHolder(view)
     }
 

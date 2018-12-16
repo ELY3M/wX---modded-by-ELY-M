@@ -120,7 +120,11 @@ internal class ExternalSolarEventCalculator {
         return getLocalTimeAsCalendar(computeSolarEventTime(solarZenith, date, false), date)
     }
 
-    private fun computeSolarEventTime(solarZenith: ExternalZenith, date: Calendar, isSunrise: Boolean): BigDecimal? {
+    private fun computeSolarEventTime(
+        solarZenith: ExternalZenith,
+        date: Calendar,
+        isSunrise: Boolean
+    ): BigDecimal? {
         date.timeZone = this.timeZone
         val longitudeHour = getLongitudeHour(date, isSunrise)
 
@@ -158,7 +162,8 @@ internal class ExternalSolarEventCalculator {
      * @return the suns mean anomaly, M, in `BigDecimal` form.
      */
     private fun getMeanAnomaly(longitudeHour: BigDecimal): BigDecimal {
-        val meanAnomaly = multiplyBy(BigDecimal("0.9856"), longitudeHour).subtract(BigDecimal("3.289"))
+        val meanAnomaly =
+            multiplyBy(BigDecimal("0.9856"), longitudeHour).subtract(BigDecimal("3.289"))
         return setScale(meanAnomaly)
     }
 
@@ -172,11 +177,16 @@ internal class ExternalSolarEventCalculator {
      */
     private fun getSunTrueLongitude(meanAnomaly: BigDecimal): BigDecimal {
         val sinMeanAnomaly = BigDecimal(Math.sin(convertDegreesToRadians(meanAnomaly).toDouble()))
-        val sinDoubleMeanAnomaly = BigDecimal(Math.sin(multiplyBy(convertDegreesToRadians(meanAnomaly), BigDecimal.valueOf(2))
-                .toDouble()))
+        val sinDoubleMeanAnomaly = BigDecimal(
+            Math.sin(
+                multiplyBy(convertDegreesToRadians(meanAnomaly), BigDecimal.valueOf(2))
+                    .toDouble()
+            )
+        )
 
         val firstPart = meanAnomaly.add(multiplyBy(sinMeanAnomaly, BigDecimal("1.916")))
-        val secondPart = multiplyBy(sinDoubleMeanAnomaly, BigDecimal("0.020")).add(BigDecimal("282.634"))
+        val secondPart =
+            multiplyBy(sinDoubleMeanAnomaly, BigDecimal("0.020")).add(BigDecimal("282.634"))
         var trueLongitude = firstPart.add(secondPart)
 
         if (trueLongitude.toDouble() > 360) {
@@ -223,8 +233,10 @@ internal class ExternalSolarEventCalculator {
 
         val zenithInRads = convertDegreesToRadians(zenith.degrees())
         val cosineZenith = BigDecimal.valueOf(Math.cos(zenithInRads.toDouble()))
-        val sinLatitude = BigDecimal.valueOf(Math.sin(convertDegreesToRadians(location.latitude).toDouble()))
-        val cosLatitude = BigDecimal.valueOf(Math.cos(convertDegreesToRadians(location.latitude).toDouble()))
+        val sinLatitude =
+            BigDecimal.valueOf(Math.sin(convertDegreesToRadians(location.latitude).toDouble()))
+        val cosLatitude =
+            BigDecimal.valueOf(Math.cos(convertDegreesToRadians(location.latitude).toDouble()))
 
         val sinDeclinationTimesSinLat = sinSunDeclination.multiply(sinLatitude)
         val dividend = cosineZenith.subtract(sinDeclinationTimesSinLat)
@@ -234,7 +246,8 @@ internal class ExternalSolarEventCalculator {
     }
 
     private fun getSinOfSunDeclination(sunTrueLong: BigDecimal): BigDecimal {
-        val sinTrueLongitude = BigDecimal.valueOf(Math.sin(convertDegreesToRadians(sunTrueLong).toDouble()))
+        val sinTrueLongitude =
+            BigDecimal.valueOf(Math.sin(convertDegreesToRadians(sunTrueLong).toDouble()))
         val sinOfDeclination = sinTrueLongitude.multiply(BigDecimal("0.39782"))
         return setScale(sinOfDeclination)
     }
@@ -254,7 +267,11 @@ internal class ExternalSolarEventCalculator {
         return divideBy(localHour, BigDecimal.valueOf(15))
     }
 
-    private fun getLocalMeanTime(sunTrueLong: BigDecimal, longitudeHour: BigDecimal, sunLocalHour: BigDecimal): BigDecimal {
+    private fun getLocalMeanTime(
+        sunTrueLong: BigDecimal,
+        longitudeHour: BigDecimal,
+        sunLocalHour: BigDecimal
+    ): BigDecimal {
         val rightAscension = this.getRightAscension(sunTrueLong)
         val innerParens = longitudeHour.multiply(BigDecimal("0.06571"))
         var localMeanTime = sunLocalHour.add(rightAscension).subtract(innerParens)
@@ -301,7 +318,9 @@ internal class ExternalSolarEventCalculator {
         if (localTime.compareTo(BigDecimal.ZERO) == -1) {
             localTime = localTime.add(BigDecimal.valueOf(24.0))
         }
-        val timeComponents = localTime.toPlainString().split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val timeComponents =
+            localTime.toPlainString().split("\\.".toRegex()).dropLastWhile { it.isEmpty() }
+                .toTypedArray()
         var hour = timeComponents[0].toIntOrNull() ?: 0
 
         var minutes = BigDecimal("0." + timeComponents[1])
@@ -314,7 +333,8 @@ internal class ExternalSolarEventCalculator {
             hour = 0
         }
 
-        val minuteString = if (minutes.toInt() < 10) "0" + minutes.toPlainString() else minutes.toPlainString()
+        val minuteString =
+            if (minutes.toInt() < 10) "0" + minutes.toPlainString() else minutes.toPlainString()
         val hourString = if (hour < 10) "0" + hour.toString() else hour.toString()
         return "$hourString:$minuteString"
     }
@@ -339,7 +359,9 @@ internal class ExternalSolarEventCalculator {
             localTime = localTime.add(BigDecimal.valueOf(24.0))
             resultTime.add(Calendar.HOUR_OF_DAY, -24)
         }
-        val timeComponents = localTime.toPlainString().split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val timeComponents =
+            localTime.toPlainString().split("\\.".toRegex()).dropLastWhile { it.isEmpty() }
+                .toTypedArray()
         var hour = timeComponents[0].toIntOrNull() ?: 0
         var minutes = BigDecimal("0." + timeComponents[1])
         minutes = minutes.multiply(BigDecimal.valueOf(60)).setScale(0, RoundingMode.HALF_EVEN)

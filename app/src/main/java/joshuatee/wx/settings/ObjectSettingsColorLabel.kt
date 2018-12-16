@@ -36,7 +36,11 @@ import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
 
-internal class ObjectSettingsColorLabel(val context: Context, label: String, private val pref: String) {
+internal class ObjectSettingsColorLabel(
+    val context: Context,
+    label: String,
+    private val pref: String
+) {
 
     private val objCard = ObjectCard(context, R.color.black)
     private val tv = TextView(context)
@@ -45,13 +49,29 @@ internal class ObjectSettingsColorLabel(val context: Context, label: String, pri
         ObjectCardText.textViewSetup(tv)
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
         refreshColor()
-        tv.setPadding(MyApplication.padding, MyApplication.padding, MyApplication.padding, MyApplication.padding)
-        tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
+        tv.setPadding(
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding
+        )
+        tv.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            1.0f
+        )
         tv.text = label
         tv.gravity = Gravity.CENTER_VERTICAL
         val prefInner = pref
         objCard.addView(tv)
-        objCard.setOnClickListener(View.OnClickListener { ObjectIntent(context, SettingsColorPickerActivity::class.java, SettingsColorPickerActivity.INFO, arrayOf(prefInner, label)) })
+        objCard.setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                context,
+                SettingsColorPickerActivity::class.java,
+                SettingsColorPickerActivity.INFO,
+                arrayOf(prefInner, label)
+            )
+        })
     }
 
     fun refreshColor() {

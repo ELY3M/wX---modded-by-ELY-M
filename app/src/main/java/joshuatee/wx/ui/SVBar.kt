@@ -132,29 +132,41 @@ class SVBar : View {
         init(attrs, 0)
     }
 
-    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
+    constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
+        context,
+        attrs,
+        defStyle
+    ) {
         init(attrs, defStyle)
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        val a = context.obtainStyledAttributes(attrs,
-                R.styleable.ColorBars, defStyle, 0)
+        val a = context.obtainStyledAttributes(
+            attrs,
+            R.styleable.ColorBars, defStyle, 0
+        )
         val b = context.resources
 
         mBarThickness = a.getDimensionPixelSize(
-                R.styleable.ColorBars_bar_thickness,
-                b.getDimensionPixelSize(R.dimen.bar_thickness))
-        mBarLength = a.getDimensionPixelSize(R.styleable.ColorBars_bar_length,
-                b.getDimensionPixelSize(R.dimen.bar_length))
+            R.styleable.ColorBars_bar_thickness,
+            b.getDimensionPixelSize(R.dimen.bar_thickness)
+        )
+        mBarLength = a.getDimensionPixelSize(
+            R.styleable.ColorBars_bar_length,
+            b.getDimensionPixelSize(R.dimen.bar_length)
+        )
         mPreferredBarLength = mBarLength
         mBarPointerRadius = a.getDimensionPixelSize(
-                R.styleable.ColorBars_bar_pointer_radius,
-                b.getDimensionPixelSize(R.dimen.bar_pointer_radius))
+            R.styleable.ColorBars_bar_pointer_radius,
+            b.getDimensionPixelSize(R.dimen.bar_pointer_radius)
+        )
         mBarPointerHaloRadius = a.getDimensionPixelSize(
-                R.styleable.ColorBars_bar_pointer_halo_radius,
-                b.getDimensionPixelSize(R.dimen.bar_pointer_halo_radius))
+            R.styleable.ColorBars_bar_pointer_halo_radius,
+            b.getDimensionPixelSize(R.dimen.bar_pointer_halo_radius)
+        )
         mOrientation = a.getBoolean(
-                R.styleable.ColorBars_bar_orientation_horizontal, ORIENTATION_DEFAULT)
+            R.styleable.ColorBars_bar_orientation_horizontal, ORIENTATION_DEFAULT
+        )
 
         a.recycle()
 
@@ -193,11 +205,15 @@ class SVBar : View {
         val barPointerHaloRadiusx2 = mBarPointerHaloRadius * 2
         mBarLength = length - barPointerHaloRadiusx2
         if (mOrientation == ORIENTATION_VERTICAL) {
-            setMeasuredDimension(barPointerHaloRadiusx2,
-                    mBarLength + barPointerHaloRadiusx2)
+            setMeasuredDimension(
+                barPointerHaloRadiusx2,
+                mBarLength + barPointerHaloRadiusx2
+            )
         } else {
-            setMeasuredDimension(mBarLength + barPointerHaloRadiusx2,
-                    barPointerHaloRadiusx2)
+            setMeasuredDimension(
+                mBarLength + barPointerHaloRadiusx2,
+                barPointerHaloRadiusx2
+            )
         }
     }
 
@@ -211,28 +227,45 @@ class SVBar : View {
             x1 = mBarLength + mBarPointerHaloRadius
             y1 = mBarThickness
             mBarLength = w - mBarPointerHaloRadius * 2
-            mBarRect.set(mBarPointerHaloRadius.toFloat(),
-                    (mBarPointerHaloRadius - mBarThickness / 2).toFloat(),
-                    (mBarLength + mBarPointerHaloRadius).toFloat(),
-                    (mBarPointerHaloRadius + mBarThickness / 2).toFloat())
+            mBarRect.set(
+                mBarPointerHaloRadius.toFloat(),
+                (mBarPointerHaloRadius - mBarThickness / 2).toFloat(),
+                (mBarLength + mBarPointerHaloRadius).toFloat(),
+                (mBarPointerHaloRadius + mBarThickness / 2).toFloat()
+            )
         } else {
             x1 = mBarThickness
             y1 = mBarLength + mBarPointerHaloRadius
             mBarLength = h - mBarPointerHaloRadius * 2
-            mBarRect.set((mBarPointerHaloRadius - mBarThickness / 2).toFloat(),
-                    mBarPointerHaloRadius.toFloat(),
-                    (mBarPointerHaloRadius + mBarThickness / 2).toFloat(),
-                    (mBarLength + mBarPointerHaloRadius).toFloat())
+            mBarRect.set(
+                (mBarPointerHaloRadius - mBarThickness / 2).toFloat(),
+                mBarPointerHaloRadius.toFloat(),
+                (mBarPointerHaloRadius + mBarThickness / 2).toFloat(),
+                (mBarLength + mBarPointerHaloRadius).toFloat()
+            )
         }
 
         // Update variables that depend of mBarLength.
         if (!isInEditMode) {
-            shader = LinearGradient(mBarPointerHaloRadius.toFloat(), 0f,
-                    x1.toFloat(), y1.toFloat(), intArrayOf(0xffffffff.toInt(), Color.HSVToColor(mHSVColor), 0xff000000.toInt()), null, Shader.TileMode.CLAMP)
+            shader = LinearGradient(
+                mBarPointerHaloRadius.toFloat(),
+                0f,
+                x1.toFloat(),
+                y1.toFloat(),
+                intArrayOf(0xffffffff.toInt(), Color.HSVToColor(mHSVColor), 0xff000000.toInt()),
+                null,
+                Shader.TileMode.CLAMP
+            )
         } else {
-            shader = LinearGradient(mBarPointerHaloRadius.toFloat(), 0f,
-                    x1.toFloat(), y1.toFloat(), intArrayOf(0xffffffff.toInt(), 0xff81ff00.toInt(), 0xff000000.toInt()), null,
-                    Shader.TileMode.CLAMP)
+            shader = LinearGradient(
+                mBarPointerHaloRadius.toFloat(),
+                0f,
+                x1.toFloat(),
+                y1.toFloat(),
+                intArrayOf(0xffffffff.toInt(), 0xff81ff00.toInt(), 0xff000000.toInt()),
+                null,
+                Shader.TileMode.CLAMP
+            )
             Color.colorToHSV(0xff81ff00.toInt(), mHSVColor)
         }
 
@@ -267,9 +300,19 @@ class SVBar : View {
         }
 
         // Draw the pointer halo.
-        canvas.drawCircle(cX.toFloat(), cY.toFloat(), mBarPointerHaloRadius.toFloat(), mBarPointerHaloPaint!!)
+        canvas.drawCircle(
+            cX.toFloat(),
+            cY.toFloat(),
+            mBarPointerHaloRadius.toFloat(),
+            mBarPointerHaloPaint!!
+        )
         // Draw the pointer.
-        canvas.drawCircle(cX.toFloat(), cY.toFloat(), mBarPointerRadius.toFloat(), mBarPointerPaint!!)
+        canvas.drawCircle(
+            cX.toFloat(),
+            cY.toFloat(),
+            mBarPointerRadius.toFloat(),
+            mBarPointerPaint!!
+        )
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -353,8 +396,10 @@ class SVBar : View {
      * *            float between 0 > 1
      */
     fun setValue(value: Float) {
-        mBarPointerPosition = Math.round(mSVToPosFactor * (1 - value)
-                + mBarPointerHaloRadius.toFloat() + (mBarLength / 2).toFloat())
+        mBarPointerPosition = Math.round(
+            mSVToPosFactor * (1 - value)
+                    + mBarPointerHaloRadius.toFloat() + (mBarLength / 2).toFloat()
+        )
         calculateColor(mBarPointerPosition)
         mBarPointerPaint!!.color = mColor
         // Check whether the Saturation/Value bar is added to the ColorPicker
@@ -381,9 +426,21 @@ class SVBar : View {
             coord = mBarLength
         }
         if (coord > mBarPointerHaloRadius + mBarLength / 2 && coord < mBarPointerHaloRadius + mBarLength) {
-            mColor = Color.HSVToColor(floatArrayOf(mHSVColor[0], 1f, 1 - mPosToSVFactor * (coord - (mBarPointerHaloRadius + mBarLength / 2))))
+            mColor = Color.HSVToColor(
+                floatArrayOf(
+                    mHSVColor[0],
+                    1f,
+                    1 - mPosToSVFactor * (coord - (mBarPointerHaloRadius + mBarLength / 2))
+                )
+            )
         } else if (coord > mBarPointerHaloRadius && coord < mBarPointerHaloRadius + mBarLength) {
-            mColor = Color.HSVToColor(floatArrayOf(mHSVColor[0], mPosToSVFactor * (coord - mBarPointerHaloRadius), 1f))
+            mColor = Color.HSVToColor(
+                floatArrayOf(
+                    mHSVColor[0],
+                    mPosToSVFactor * (coord - mBarPointerHaloRadius),
+                    1f
+                )
+            )
         } else if (coord == mBarPointerHaloRadius) {
             mColor = Color.WHITE
         } else if (coord == mBarPointerHaloRadius + mBarLength) {
@@ -417,9 +474,15 @@ class SVBar : View {
             }
 
             Color.colorToHSV(color, mHSVColor)
-            shader = LinearGradient(mBarPointerHaloRadius.toFloat(), 0f,
-                    x1.toFloat(), y1.toFloat(), intArrayOf(0xffffffff.toInt(), color, 0xff000000.toInt()), null,
-                    Shader.TileMode.CLAMP)
+            shader = LinearGradient(
+                mBarPointerHaloRadius.toFloat(),
+                0f,
+                x1.toFloat(),
+                y1.toFloat(),
+                intArrayOf(0xffffffff.toInt(), color, 0xff000000.toInt()),
+                null,
+                Shader.TileMode.CLAMP
+            )
             mBarPaint!!.shader = shader
             calculateColor(mBarPointerPosition)
             mBarPointerPaint!!.color = mColor

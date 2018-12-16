@@ -42,7 +42,12 @@ class USWarningsImpactActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_uswarningsimpact_recyclerview, null, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_uswarningsimpact_recyclerview,
+            null,
+            false
+        )
         contextg = this
         title = "NWS Warnings"
         recyclerView = findViewById(R.id.card_list)
@@ -57,7 +62,8 @@ class USWarningsImpactActivity : BaseActivity() {
         warningsList = withContext(Dispatchers.IO) { UtilityWarningsImpact.impactWarningData }
         val ca = AdapterUSWarningsImpact(warningsList)
         recyclerView.adapter = ca
-        title = warningsList.size.toString() + " NWS warnings active " + UtilityTime.gmtTime("HH:mm")
+        title = warningsList.size.toString() + " NWS warnings active " +
+                UtilityTime.gmtTime("HH:mm")
         ca.setOnItemClickListener(object : AdapterUSWarningsImpact.MyClickListener {
             override fun onItemClick(position: Int) {
                 showImage(position)
@@ -66,6 +72,11 @@ class USWarningsImpactActivity : BaseActivity() {
     }
 
     private fun showImage(position: Int) {
-        ObjectIntent(contextg, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf(warningsList[position].imgFile, warningsList[position].title))
+        ObjectIntent(
+            contextg,
+            ImageShowActivity::class.java,
+            ImageShowActivity.URL,
+            arrayOf(warningsList[position].imgFile, warningsList[position].title)
+        )
     }
 } 

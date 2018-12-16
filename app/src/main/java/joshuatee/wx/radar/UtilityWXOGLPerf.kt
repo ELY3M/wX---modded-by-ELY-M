@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M. 
 
 package joshuatee.wx.radar
 
@@ -88,11 +89,12 @@ internal object UtilityWXOGLPerf {
             var angleVCos: Float
             var angleNext = 0f
             var angle0 = 0f
-            while (r < 360) {
+            val numberOfRadials = 360
+            while (r < numberOfRadials) {
                 numberOfRleHalfwords = dis2.readUnsignedShort()
                 angle = 450f - dis2.readUnsignedShort() / 10f
                 dis2.skipBytes(2)
-                if (r < 359) {
+                if (r < numberOfRadials - 1) {
                     dis2.mark(100000)
                     dis2.skipBytes(numberOfRleHalfwords + 2)
                     angleNext = 450f - dis2.readUnsignedShort() / 10f
@@ -102,19 +104,22 @@ internal object UtilityWXOGLPerf {
                 levelCount = 0
                 binStart = radarBuffers.binSize
                 if (r == 0) angle0 = angle
-                angleV = if (r < 359)
+                angleV = if (r < numberOfRadials - 1)
                     angleNext
                 else
                     angle0
                 bin = 0
                 while (bin < numberOfRleHalfwords) {
                     try {
-                        curLevel = (dis2.readUnsignedByte() and 0xFF).toByte() // was dis2!!.readUnsignedByte().toInt()
+                        curLevel =
+                                (dis2.readUnsignedByte() and 0xFF).toByte() // was dis2!!.readUnsignedByte().toInt()
                     } catch (e: Exception) {
                         UtilityLog.HandleException(e)
                     }
-                    if (bin == 0) level = curLevel
-                    if (curLevel == level) levelCount += 1
+                    if (bin == 0)
+                        level = curLevel
+                    if (curLevel == level)
+                        levelCount += 1
                     else {
                         angleVCos = cos((angleV / M_180_div_PI).toDouble()).toFloat()
                         angleVSin = sin((angleV / M_180_div_PI).toDouble()).toFloat()
@@ -122,24 +127,45 @@ internal object UtilityWXOGLPerf {
                         rI += 4
                         radarBuffers.floatBuffer.putFloat(rI, binStart * angleVSin)
                         rI += 4
-                        radarBuffers.floatBuffer.putFloat(rI, (binStart + radarBuffers.binSize * levelCount) * angleVCos)
+                        radarBuffers.floatBuffer.putFloat(
+                            rI,
+                            (binStart + radarBuffers.binSize * levelCount) * angleVCos
+                        )
                         rI += 4
-                        radarBuffers.floatBuffer.putFloat(rI, (binStart + radarBuffers.binSize * levelCount) * angleVSin)
+                        radarBuffers.floatBuffer.putFloat(
+                            rI,
+                            (binStart + radarBuffers.binSize * levelCount) * angleVSin
+                        )
                         rI += 4
                         angleCos = cos((angle / M_180_div_PI).toDouble()).toFloat()
                         angleSin = sin((angle / M_180_div_PI).toDouble()).toFloat()
-                        radarBuffers.floatBuffer.putFloat(rI, (binStart + radarBuffers.binSize * levelCount) * angleCos)
+                        radarBuffers.floatBuffer.putFloat(
+                            rI,
+                            (binStart + radarBuffers.binSize * levelCount) * angleCos
+                        )
                         rI += 4
-                        radarBuffers.floatBuffer.putFloat(rI, (binStart + radarBuffers.binSize * levelCount) * angleSin)
+                        radarBuffers.floatBuffer.putFloat(
+                            rI,
+                            (binStart + radarBuffers.binSize * levelCount) * angleSin
+                        )
                         rI += 4
                         radarBuffers.floatBuffer.putFloat(rI, binStart * angleCos)
                         rI += 4
                         radarBuffers.floatBuffer.putFloat(rI, binStart * angleSin)
                         rI += 4
                         (0..3).forEach { _ ->
-                            radarBuffers.colorBuffer.put(cI++, radarBuffers.colormap.redValues.get(level.toInt() and 0xFF))
-                            radarBuffers.colorBuffer.put(cI++, radarBuffers.colormap.greenValues.get(level.toInt() and 0xFF))
-                            radarBuffers.colorBuffer.put(cI++, radarBuffers.colormap.blueValues.get(level.toInt() and 0xFF))
+                            radarBuffers.colorBuffer.put(
+                                cI++,
+                                radarBuffers.colormap.redValues.get(level.toInt() and 0xFF)
+                            )
+                            radarBuffers.colorBuffer.put(
+                                cI++,
+                                radarBuffers.colormap.greenValues.get(level.toInt() and 0xFF)
+                            )
+                            radarBuffers.colorBuffer.put(
+                                cI++,
+                                radarBuffers.colormap.blueValues.get(level.toInt() and 0xFF)
+                            )
                         }
                         totalBins += 1
                         level = curLevel
@@ -159,7 +185,11 @@ internal object UtilityWXOGLPerf {
         return totalBins
     }
 
-    fun genRadials(radarBuffers: ObjectOglRadarBuffers, binBuff: ByteBuffer, radialStart: ByteBuffer): Int {
+    fun genRadials(
+        radarBuffers: ObjectOglRadarBuffers,
+        binBuff: ByteBuffer,
+        radialStart: ByteBuffer
+    ): Int {
         radarBuffers.colormap.redValues.put(0, Color.red(radarBuffers.bgColor).toByte())
         radarBuffers.colormap.greenValues.put(0, Color.green(radarBuffers.bgColor).toByte())
         radarBuffers.colormap.blueValues.put(0, Color.blue(radarBuffers.bgColor).toByte())
@@ -210,24 +240,45 @@ internal object UtilityWXOGLPerf {
                     rI += 4
                     radarBuffers.floatBuffer.putFloat(rI, binStart * angleVSin)
                     rI += 4
-                    radarBuffers.floatBuffer.putFloat(rI, (binStart + radarBuffers.binSize * levelCount) * angleVCos)
+                    radarBuffers.floatBuffer.putFloat(
+                        rI,
+                        (binStart + radarBuffers.binSize * levelCount) * angleVCos
+                    )
                     rI += 4
-                    radarBuffers.floatBuffer.putFloat(rI, (binStart + radarBuffers.binSize * levelCount) * angleVSin)
+                    radarBuffers.floatBuffer.putFloat(
+                        rI,
+                        (binStart + radarBuffers.binSize * levelCount) * angleVSin
+                    )
                     rI += 4
                     angleCos = cos((angle / M_180_div_PI).toDouble()).toFloat()
                     angleSin = sin((angle / M_180_div_PI).toDouble()).toFloat()
-                    radarBuffers.floatBuffer.putFloat(rI, (binStart + radarBuffers.binSize * levelCount) * angleCos)
+                    radarBuffers.floatBuffer.putFloat(
+                        rI,
+                        (binStart + radarBuffers.binSize * levelCount) * angleCos
+                    )
                     rI += 4
-                    radarBuffers.floatBuffer.putFloat(rI, (binStart + radarBuffers.binSize * levelCount) * angleSin)
+                    radarBuffers.floatBuffer.putFloat(
+                        rI,
+                        (binStart + radarBuffers.binSize * levelCount) * angleSin
+                    )
                     rI += 4
                     radarBuffers.floatBuffer.putFloat(rI, binStart * angleCos)
                     rI += 4
                     radarBuffers.floatBuffer.putFloat(rI, binStart * angleSin)
                     rI += 4
                     (0..3).forEach { _ ->
-                        radarBuffers.colorBuffer.put(cI++, radarBuffers.colormap.redValues.get(level and 0xFF))
-                        radarBuffers.colorBuffer.put(cI++, radarBuffers.colormap.greenValues.get(level and 0xFF))
-                        radarBuffers.colorBuffer.put(cI++, radarBuffers.colormap.blueValues.get(level and 0xFF))
+                        radarBuffers.colorBuffer.put(
+                            cI++,
+                            radarBuffers.colormap.redValues.get(level and 0xFF)
+                        )
+                        radarBuffers.colorBuffer.put(
+                            cI++,
+                            radarBuffers.colormap.greenValues.get(level and 0xFF)
+                        )
+                        radarBuffers.colorBuffer.put(
+                            cI++,
+                            radarBuffers.colormap.blueValues.get(level and 0xFF)
+                        )
                     }
                     totalBins += 1
                     level = curLevel
@@ -241,7 +292,8 @@ internal object UtilityWXOGLPerf {
         return totalBins
     }
 
-    fun genMercato(inBuff: ByteBuffer, outBuff: ByteBuffer, pn: ProjectionNumbers, count: Int) {
+    // FIXME rename 2 char vars to something better
+    fun genMercator(inBuff: ByteBuffer, outBuff: ByteBuffer, pn: ProjectionNumbers, count: Int) {
         val centerX = pn.xFloat
         val centerY = pn.yFloat
         val xImageCenterPixels = pn.xCenter.toFloat()
@@ -250,31 +302,47 @@ internal object UtilityWXOGLPerf {
         var iCount = 0
         if (count * 4 <= outBuff.limit()) {
             while (iCount < count) {
-                outBuff.putFloat(iCount * 4 + 4, -1.0f * (-((M_180_div_PI * log(tan((M_PI_div_4 + inBuff.getFloat(iCount * 4) * M_PI_div_360).toDouble()), E).toFloat() - M_180_div_PI * log(tan((M_PI_div_4 + centerX * M_PI_div_360).toDouble()), E).toFloat()) * oneDegreeScaleFactor) + yImageCenterPixels))
-                outBuff.putFloat(iCount * 4, -((inBuff.getFloat(iCount * 4 + 4) - centerY) * oneDegreeScaleFactor) + xImageCenterPixels)
+                outBuff.putFloat(
+                    iCount * 4 + 4,
+                    -1.0f * (-((M_180_div_PI * log(
+                        tan((M_PI_div_4 + inBuff.getFloat(iCount * 4) * M_PI_div_360).toDouble()),
+                        E
+                    ).toFloat() - M_180_div_PI * log(
+                        tan((M_PI_div_4 + centerX * M_PI_div_360).toDouble()),
+                        E
+                    ).toFloat()) * oneDegreeScaleFactor) + yImageCenterPixels)
+                )
+                outBuff.putFloat(
+                    iCount * 4,
+                    -((inBuff.getFloat(iCount * 4 + 4) - centerY) * oneDegreeScaleFactor) + xImageCenterPixels
+                )
                 iCount += 2
             }
         }
     }
 
-    fun generate4326Projection(inBuff: ByteBuffer, outBuff: ByteBuffer, pn: ProjectionNumbers, count: Int) {
-        //val centerX = pn.xFloat
-        //val centerY = pn.yFloat
-        //val xImageCenterPixels = pn.xCenter.toFloat()
-        //val yImageCenterPixels = pn.yCenter.toFloat()
+    fun generate4326Projection(
+        inBuff: ByteBuffer,
+        outBuff: ByteBuffer,
+        pn: ProjectionNumbers,
+        count: Int
+    ) {
         val pnXFloat = pn.xFloat
         val pnYFloat = pn.yFloat
         val pnXCenter = pn.xCenter
         val pnYCenter = pn.yCenter
-        //val oneDegreeScaleFactor = pn.oneDegreeScaleFactorFloat
         val pnScaleFloat = pn.scaleFloat
         var iCount = 0
         if (count * 4 <= outBuff.limit()) {
             while (iCount < count) {
-                outBuff.putFloat(iCount * 4, (-((inBuff.getFloat(iCount * 4 + 4) - pnYFloat) * pnScaleFloat) + pnXCenter.toFloat()))
-                outBuff.putFloat(iCount * 4 + 4, -(-((inBuff.getFloat(iCount * 4) - pnXFloat) * pnScaleFloat) + pnYCenter.toFloat()))
-                //outBuff.putFloat(iCount * 4 + 4, -1.0f * (-((M_180_div_PI * log(tan((M_PI_div_4 + inBuff.getFloat(iCount * 4) * M_PI_div_360).toDouble()), E).toFloat() - M_180_div_PI * log(tan((M_PI_div_4 + centerX * M_PI_div_360).toDouble()), E).toFloat()) * oneDegreeScaleFactor) + yImageCenterPixels))
-                //outBuff.putFloat(iCount * 4, -((inBuff.getFloat(iCount * 4 + 4) - centerY) * oneDegreeScaleFactor) + xImageCenterPixels)
+                outBuff.putFloat(
+                    iCount * 4,
+                    (-((inBuff.getFloat(iCount * 4 + 4) - pnYFloat) * pnScaleFloat) + pnXCenter.toFloat())
+                )
+                outBuff.putFloat(
+                    iCount * 4 + 4,
+                    -(-((inBuff.getFloat(iCount * 4) - pnXFloat) * pnScaleFloat) + pnYCenter.toFloat())
+                )
                 iCount += 2
             }
         }
@@ -353,7 +421,12 @@ internal object UtilityWXOGLPerf {
         }
     }
 
-    fun genTriangle(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: DoubleArray, y: DoubleArray) {
+    fun genTriangle(
+        buffers: ObjectOglBuffers,
+        pn: ProjectionNumbers,
+        x: DoubleArray,
+        y: DoubleArray
+    ) {
         var pointX: Double
         var pointY: Double
         var pixYD: Float
@@ -389,7 +462,12 @@ internal object UtilityWXOGLPerf {
         }
     }
 
-    fun genTriangleUp(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: DoubleArray, y: DoubleArray) {
+    fun genTriangleUp(
+        buffers: ObjectOglBuffers,
+        pn: ProjectionNumbers,
+        x: DoubleArray,
+        y: DoubleArray
+    ) {
         var pointX: Double
         var pointY: Double
         var pixYD: Float
@@ -425,7 +503,12 @@ internal object UtilityWXOGLPerf {
         }
     }
 
-    fun genCircle(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: DoubleArray, y: DoubleArray) {
+    fun genCircle(
+        buffers: ObjectOglBuffers,
+        pn: ProjectionNumbers,
+        x: DoubleArray,
+        y: DoubleArray
+    ) {
         var pointX: Double
         var pointY: Double
         var pixYD: Float
@@ -451,13 +534,25 @@ internal object UtilityWXOGLPerf {
                 lI += 4
                 buffers.putFloat(lI, -pixYD)
                 lI += 4
-                buffers.putFloat(lI, pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                buffers.putFloat(
+                    lI,
+                    pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat()
+                )
                 lI += 4
-                buffers.putFloat(lI, -pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                buffers.putFloat(
+                    lI,
+                    -pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat()
+                )
                 lI += 4
-                buffers.putFloat(lI, pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                buffers.putFloat(
+                    lI,
+                    pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat()
+                )
                 lI += 4
-                buffers.putFloat(lI, -pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                buffers.putFloat(
+                    lI,
+                    -pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat()
+                )
                 lI += 4
                 buffers.putIndex(iI, ixCount.toShort())
                 iI += 2
@@ -476,7 +571,12 @@ internal object UtilityWXOGLPerf {
         }
     }
 
-    fun genCircleWithColor(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: DoubleArray, y: DoubleArray) {
+    fun genCircleWithColor(
+        buffers: ObjectOglBuffers,
+        pn: ProjectionNumbers,
+        x: DoubleArray,
+        y: DoubleArray
+    ) {
         var pointX: Double
         var pointY: Double
         var pixYD: Float
@@ -508,13 +608,25 @@ internal object UtilityWXOGLPerf {
                     lI += 4
                     buffers.putFloat(lI, -pixYD)
                     lI += 4
-                    buffers.putFloat(lI, pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                    buffers.putFloat(
+                        lI,
+                        pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat()
+                    )
                     lI += 4
-                    buffers.putFloat(lI, -pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                    buffers.putFloat(
+                        lI,
+                        -pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat()
+                    )
                     lI += 4
-                    buffers.putFloat(lI, pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                    buffers.putFloat(
+                        lI,
+                        pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat()
+                    )
                     lI += 4
-                    buffers.putFloat(lI, -pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                    buffers.putFloat(
+                        lI,
+                        -pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat()
+                    )
                     lI += 4
                     buffers.putIndex(iI, ixCount.toShort())
                     iI += 2
@@ -555,56 +667,124 @@ internal object UtilityWXOGLPerf {
         }
     }
 
-    fun genMarker(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: DoubleArray, y: DoubleArray) {
-            var pointX: Double
-            var pointY: Double
-            var pixYD: Float
-            var pixXD: Float
-            var iCount = 0
-            var ixCount = 0
-            var test1: Float
-            var test2: Float
-            val len = 0f //buffers.lenInit * 0.50f
-            val triangleAmount = 1 //buffers.triangleCount
-            var iI = 0
-            var lI = 0
-            buffers.setToPositionZero()
-            while (iCount < buffers.count) {
-                pointX = x[iCount]
-                pointY = y[iCount]
-                test1 = M_180_div_PI * log(tan(M_PI_div_4 + pointX * M_PI_div_360), E).toFloat()
-                test2 = M_180_div_PI * log(tan(M_PI_div_4 + pn.xDbl * M_PI_div_360), E).toFloat()
-                pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
-                pixXD = (-((pointY - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
-                (0 until triangleAmount).forEach {
-                    buffers.putFloat(lI, pixXD)
-                    lI += 4
-                    buffers.putFloat(lI, -pixYD)
-                    lI += 4
-                    buffers.putFloat(lI, pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
-                    lI += 4
-                    buffers.putFloat(lI, -pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
-                    lI += 4
-                    buffers.putFloat(lI, pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
-                    lI += 4
-                    buffers.putFloat(lI, -pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
-                    lI += 4
-                    buffers.putIndex(iI, ixCount.toShort())
-                    iI += 2
-                    buffers.putIndex(iI, (ixCount + 1).toShort())
-                    iI += 2
-                    buffers.putIndex(iI, (ixCount + 2).toShort())
-                    iI += 2
-                    ixCount += 3
-                    (0..2).forEach { _ ->
-                        buffers.putColor(buffers.solidColorRed)
-                        buffers.putColor(buffers.solidColorGreen)
-                        buffers.putColor(buffers.solidColorBlue)
-                    }
-                }
-                iCount += 1
-            }
+    fun genConus(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: Double, y: Double) {
+        buffers.setToPositionZero()
+        val pixYD: Float
+        val pixXD = (-((y - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
+        var ixCount = 0
+        val test1 = M_180_div_PI * log(tan(M_PI_div_4 + x * M_PI_div_360), E).toFloat()
+        val test2 = M_180_div_PI * log(tan(M_PI_div_4 + pn.xDbl * M_PI_div_360), E).toFloat()
+        val len = 1 //buffers.lenInit * 2.0f
+        val triangleAmount = 1 //buffers.triangleCount
+        pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
+        (0 until triangleAmount).forEach {
+            buffers.putFloat(pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+            buffers.putFloat(-pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+            buffers.putFloat(pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+            buffers.putFloat(-pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+            buffers.putIndex(ixCount.toShort())
+            buffers.putIndex((ixCount + 1).toShort())
+            ixCount += 2
         }
+    }
+
+
+    //for single images
+    fun genMarker(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: Double, y: Double) {
+        var pointX: Double
+        var pointY: Double
+        var pixYD: Float
+        var pixXD: Float
+        var iCount = 0
+        var ixCount = 0
+        var test1: Float
+        var test2: Float
+        val len = 0f //buffers.lenInit * 0.50f
+        val triangleAmount = 1 //buffers.triangleCount
+        var iI = 0
+        var lI = 0
+        buffers.setToPositionZero()
+        while (iCount < buffers.count) {
+            pointX = x
+            pointY = y
+            test1 = M_180_div_PI * log(tan(M_PI_div_4 + pointX * M_PI_div_360), E).toFloat()
+            test2 = M_180_div_PI * log(tan(M_PI_div_4 + pn.xDbl * M_PI_div_360), E).toFloat()
+            pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
+            pixXD = (-((pointY - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
+            (0 until triangleAmount).forEach {
+                buffers.putFloat(lI, pixXD)
+                lI += 4
+                buffers.putFloat(lI, -pixYD)
+                lI += 4
+                buffers.putFloat(lI, pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                lI += 4
+                buffers.putFloat(lI, -pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                lI += 4
+                buffers.putFloat(lI, pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                lI += 4
+                buffers.putFloat(lI, -pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                lI += 4
+                buffers.putIndex(iI, ixCount.toShort())
+                iI += 2
+                buffers.putIndex(iI, (ixCount + 1).toShort())
+                iI += 2
+                buffers.putIndex(iI, (ixCount + 2).toShort())
+                iI += 2
+                ixCount += 3
+
+            }
+            iCount += 1
+        }
+    }
+
+    //for tvs / hi imagees
+    fun genMarkerList(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: DoubleArray, y: DoubleArray) {
+        var pointX: Double
+        var pointY: Double
+        var pixYD: Float
+        var pixXD: Float
+        var iCount = 0
+        var ixCount = 0
+        var test1: Float
+        var test2: Float
+        val len = 0f //buffers.lenInit * 0.50f
+        val triangleAmount = 1 //buffers.triangleCount
+        var iI = 0
+        var lI = 0
+        buffers.setToPositionZero()
+        while (iCount < buffers.count) {
+            pointX = x[iCount]
+            pointY = y[iCount]
+            test1 = M_180_div_PI * log(tan(M_PI_div_4 + pointX * M_PI_div_360), E).toFloat()
+            test2 = M_180_div_PI * log(tan(M_PI_div_4 + pn.xDbl * M_PI_div_360), E).toFloat()
+            pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
+            pixXD = (-((pointY - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
+            (0 until triangleAmount).forEach {
+                buffers.putFloat(lI, pixXD)
+                lI += 4
+                buffers.putFloat(lI, -pixYD)
+                lI += 4
+                buffers.putFloat(lI, pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                lI += 4
+                buffers.putFloat(lI, -pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                lI += 4
+                buffers.putFloat(lI, pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                lI += 4
+                buffers.putFloat(lI, -pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                lI += 4
+                buffers.putIndex(iI, ixCount.toShort())
+                iI += 2
+                buffers.putIndex(iI, (ixCount + 1).toShort())
+                iI += 2
+                buffers.putIndex(iI, (ixCount + 2).toShort())
+                iI += 2
+                ixCount += 3
+
+            }
+            iCount += 1
+        }
+    }
+
 
     fun decode8BitWX(context: Context, src: String, radialStartAngle: ByteBuffer, binWord: ByteBuffer): Short {
         var numberOfRangeBins = 0
@@ -671,7 +851,16 @@ internal object UtilityWXOGLPerf {
         return numberOfRangeBins.toShort()
     }
 
-    fun rect8bitwx(rBuff: ByteBuffer, binStart: Float, binSize: Float, levelCount: Int, angle: Float, angleV: Float, centerX: Int, centerY: Int) {
+    fun rect8bitwx(
+        rBuff: ByteBuffer,
+        binStart: Float,
+        binSize: Float,
+        levelCount: Int,
+        angle: Float,
+        angleV: Float,
+        centerX: Int,
+        centerY: Int
+    ) {
         rBuff.position(0)
         rBuff.putFloat(binStart * cos((angle / M_180_div_PI).toDouble()).toFloat() + centerX)
         rBuff.putFloat((binStart * sin((angle / M_180_div_PI).toDouble()).toFloat() - centerY) * -1)

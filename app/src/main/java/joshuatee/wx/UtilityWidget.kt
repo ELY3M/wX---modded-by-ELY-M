@@ -45,12 +45,18 @@ object UtilityWidget {
     private fun uriShareAndGenerate(context: Context, fn: String): Uri {
         val dir = File(context.filesDir.toString() + "/shared")
         val file = File(dir, fn)
-        val imgUri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", file)
+        val imgUri = FileProvider.getUriForFile(
+            context,
+            "${MyApplication.packageNameAsString}.fileprovider",
+            file
+        )
         val localPackageManager = context.packageManager
         val intentHome = Intent("android.intent.action.MAIN")
         intentHome.addCategory("android.intent.category.HOME")
         try {
-            val str = localPackageManager.resolveActivity(intentHome, PackageManager.MATCH_DEFAULT_ONLY).activityInfo.packageName
+            val str =
+                localPackageManager.resolveActivity(intentHome, PackageManager.MATCH_DEFAULT_ONLY)
+                    .activityInfo.packageName
             context.grantUriPermission(str, imgUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
@@ -128,7 +134,12 @@ object UtilityWidget {
         }
     }
 
-    fun widgetDownloadData(context: Context, objFcst: ObjectForecastPackage, objSevenDay: ObjectForecastPackage7Day, objHazards: ObjectForecastPackageHazards) {
+    fun widgetDownloadData(
+        context: Context,
+        objFcst: ObjectForecastPackage,
+        objSevenDay: ObjectForecastPackage7Day,
+        objHazards: ObjectForecastPackageHazards
+    ) {
         val hazardRaw = objHazards.hazards
         Utility.writePref(context, "HAZARD_WIDGET", objHazards.getHazardsShort())
         Utility.writePref(context, "7DAY_WIDGET", objSevenDay.sevenDayShort)
@@ -151,7 +162,18 @@ object UtilityWidget {
         update(context, CCLegacy)
         update(context, CC)
         updateSevenDay(context)
-        listOf(AFD, HWO, NEXRAD_RADAR, MOSAIC_RADAR, VIS, SPCSWO, SPCMESO, CONUSWV, STRPT, WPCIMG).forEach {
+        listOf(
+            AFD,
+            HWO,
+            NEXRAD_RADAR,
+            MOSAIC_RADAR,
+            VIS,
+            SPCSWO,
+            SPCMESO,
+            CONUSWV,
+            STRPT,
+            WPCIMG
+        ).forEach {
             if (Utility.readPref(context, it.prefString, "false").startsWith("t")) {
                 UtilityWidgetDownload.download(context, it)
                 update(context, it)
@@ -160,7 +182,15 @@ object UtilityWidget {
     }
 
     // FIXME create helper objects
-    fun setupIntent(context: Context, remoteViews: RemoteViews, activity: Class<*>, layoutItem: Int, activityFlag: String, activityStringArr: Array<String>, actionString: String) {
+    fun setupIntent(
+        context: Context,
+        remoteViews: RemoteViews,
+        activity: Class<*>,
+        layoutItem: Int,
+        activityFlag: String,
+        activityStringArr: Array<String>,
+        actionString: String
+    ) {
         val requestID = System.currentTimeMillis().toInt()
         val intentAfd = Intent(context, activity)
         intentAfd.putExtra(activityFlag, activityStringArr)
@@ -168,11 +198,20 @@ object UtilityWidget {
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(activity)
         stackBuilder.addNextIntent(intentAfd)
-        val pendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent =
+            stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
         remoteViews.setOnClickPendingIntent(layoutItem, pendingIntent)
     }
 
-    fun setupIntent(context: Context, remoteViews: RemoteViews, activity: Class<*>, layoutItem: Int, activityFlag: String, activityString: String, actionString: String) {
+    fun setupIntent(
+        context: Context,
+        remoteViews: RemoteViews,
+        activity: Class<*>,
+        layoutItem: Int,
+        activityFlag: String,
+        activityString: String,
+        actionString: String
+    ) {
         val requestID = System.currentTimeMillis().toInt()
         val intentAfd = Intent(context, activity)
         intentAfd.putExtra(activityFlag, activityString)
@@ -180,18 +219,26 @@ object UtilityWidget {
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(activity)
         stackBuilder.addNextIntent(intentAfd)
-        val pendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent =
+            stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
         remoteViews.setOnClickPendingIntent(layoutItem, pendingIntent)
     }
 
-    fun setupIntent(context: Context, remoteViews: RemoteViews, activity: Class<*>, layoutItem: Int, actionString: String) {
+    fun setupIntent(
+        context: Context,
+        remoteViews: RemoteViews,
+        activity: Class<*>,
+        layoutItem: Int,
+        actionString: String
+    ) {
         val requestID = System.currentTimeMillis().toInt()
         val intentAfd = Intent(context, activity)
         intentAfd.action = actionString
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(activity)
         stackBuilder.addNextIntent(intentAfd)
-        val pendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent =
+            stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
         remoteViews.setOnClickPendingIntent(layoutItem, pendingIntent)
     }
 
@@ -210,10 +257,16 @@ object UtilityWidget {
         val mgr = AppWidgetManager.getInstance(context)
         val cn = ComponentName(context, WeatherWidgetProvider::class.java)
         if (WeatherWidgetProvider.sWorkerQueue != null) {
-            WeatherWidgetProvider.sDataObserver = WeatherDataProviderObserver(mgr, cn, WeatherWidgetProvider.sWorkerQueue!!)
-            r.registerContentObserver(WeatherDataProvider.CONTENT_URI, true, WeatherWidgetProvider.sDataObserver!!)
+            WeatherWidgetProvider.sDataObserver =
+                    WeatherDataProviderObserver(mgr, cn, WeatherWidgetProvider.sWorkerQueue!!)
+            r.registerContentObserver(
+                WeatherDataProvider.CONTENT_URI,
+                true,
+                WeatherWidgetProvider.sDataObserver!!
+            )
         }
-        val preferences = context.getSharedPreferences(context.packageName + "_preferences", Context.MODE_PRIVATE)
+        val preferences =
+            context.getSharedPreferences(context.packageName + "_preferences", Context.MODE_PRIVATE)
         val sevenDay = preferences.getString("7DAY_EXT_WIDGET", "No data")
         val dayArr = sevenDay.split("\n\n").dropLastWhile { it.isEmpty() }.toMutableList()
         if (dayArr.isNotEmpty()) {
@@ -232,7 +285,8 @@ object UtilityWidget {
         val thisWidget = ComponentName(context, WeatherWidgetProvider::class.java)
         val allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
         allWidgetIds.forEach {
-            val layout = WeatherWidgetProvider.buildLayout(context, it, WeatherWidgetProvider.mIsLargeLayout)
+            val layout =
+                WeatherWidgetProvider.buildLayout(context, it, WeatherWidgetProvider.mIsLargeLayout)
             appWidgetManager.updateAppWidget(it, layout)
         }
     }

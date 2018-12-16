@@ -42,7 +42,8 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
-class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMenuItemClickListener {
+class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
+    Toolbar.OnMenuItemClickListener {
 
     companion object {
         const val URL: String = ""
@@ -65,7 +66,13 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_wpcimages, R.menu.wpcimages, true, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_wpcimages,
+            R.menu.wpcimages,
+            true,
+            true
+        )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         img = findViewById(R.id.iv)
@@ -90,7 +97,12 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         actionBack.isVisible = false
         actionForward.isVisible = false
         UtilityWPCImages.createData()
-        drw = ObjectNavDrawerCombo(this, UtilityWPCImages.groups, UtilityWPCImages.longCodes, UtilityWPCImages.shortCodes)
+        drw = ObjectNavDrawerCombo(
+            this,
+            UtilityWPCImages.groups,
+            UtilityWPCImages.longCodes,
+            UtilityWPCImages.shortCodes
+        )
         drw.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
             drw.drawerLayout.closeDrawer(drw.listView)
             imgUrl = drw.getToken(groupPosition, childPosition)
@@ -105,7 +117,8 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         selectItem(findPosn(imgUrl))
     }
 
-    private fun findPosn(url: String) = (0 until UtilityWPCImages.urls.size).firstOrNull { UtilityWPCImages.urls[it] == url }
+    private fun findPosn(url: String) =
+        (0 until UtilityWPCImages.urls.size).firstOrNull { UtilityWPCImages.urls[it] == url }
             ?: 0
 
     private fun selectItem(position: Int) {
@@ -208,7 +221,8 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onClick(v: View) {
         when (v.id) {

@@ -55,7 +55,12 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_settings_location_recyclerview, null, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_settings_location_recyclerview,
+            null,
+            false
+        )
         val fab = ObjectFab(this, this, R.id.fab_add)
         val fab2 = ObjectFab(this, this, R.id.fab_delete)
         val fabUP = ObjectFab(this, this, R.id.fabUP)
@@ -94,7 +99,11 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
             val locYCurrent = Utility.readPref(this, "LOC" + locNumStr + "_Y", "")
             val locLabelCurrent = Utility.readPref(this, "LOC" + locNumStr + "_LABEL", "")
             val zoneCurrent = Utility.readPref(this, "ZONE$locNumStr", "")
-            val btnStr = (it + 1).toString() + ": \"" + locLabelCurrent + "\" " + "(" + UtilityStringExternal.truncate(locXCurrent, 6) + "," + UtilityStringExternal.truncate(locYCurrent, 6) + ") " + zoneCurrent
+            val btnStr =
+                (it + 1).toString() + ": \"" + locLabelCurrent + "\" " + "(" + UtilityStringExternal.truncate(
+                    locXCurrent,
+                    6
+                ) + "," + UtilityStringExternal.truncate(locYCurrent, 6) + ") " + zoneCurrent
             locArr.add(btnStr)
         }
     }
@@ -120,7 +129,8 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     }
 
     override fun onResume() {
-        LocalBroadcastManager.getInstance(this).registerReceiver(onBroadcast, IntentFilter("locationadded"))
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(onBroadcast, IntentFilter("locationadded"))
         super.onResume()
     }
 

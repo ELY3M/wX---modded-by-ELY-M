@@ -108,7 +108,14 @@ class WXGLNexradLevel3 internal constructor() {
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()
             val d = UtilityTime.radarTime(volumeScanDate, volumeScanTime)
-            val radarInfo = formatRadarString(d, operationalMode.toInt(), productCode.toInt(), heightOfRadar.toInt(), latitudeOfRadar, longitudeOfRadar)
+            val radarInfo = formatRadarString(
+                d,
+                operationalMode.toInt(),
+                productCode.toInt(),
+                heightOfRadar.toInt(),
+                latitudeOfRadar,
+                longitudeOfRadar
+            )
             Utility.writePref(context, "WX_RADAR_CURRENT_INFO$radarStatusStr", radarInfo)
             timestamp = radarInfo
             // Apr 2016
@@ -172,7 +179,14 @@ class WXGLNexradLevel3 internal constructor() {
             //final short        product_generation_date = (short) dis.readUnsignedShort();
             //final int        product_generation_time    = dis.readInt() ;
             dis.skipBytes(6)
-            val radarInfo = formatRadarString(d, operationalMode.toInt(), productCode.toInt(), heightOfRadar.toInt(), latitudeOfRadar, longitudeOfRadar)
+            val radarInfo = formatRadarString(
+                d,
+                operationalMode.toInt(),
+                productCode.toInt(),
+                heightOfRadar.toInt(),
+                latitudeOfRadar,
+                longitudeOfRadar
+            )
             Utility.writePref(context, "WX_RADAR_CURRENT_INFO$radarStatusStr", radarInfo)
             timestamp = radarInfo
             /*final short  p1                        = (short) dis.readUnsignedShort();
@@ -223,14 +237,22 @@ class WXGLNexradLevel3 internal constructor() {
             //final int  index_of_first_range_bin  = dis.readUnsignedShort() ;
             dis.skipBytes(32)
             dis.close()
-            numberOfRangeBins = UtilityWXOGLPerfL3FourBit.decode4Bit(context, fn, radialStart, binWord)
+            numberOfRangeBins =
+                    UtilityWXOGLPerfL3FourBit.decode4Bit(context, fn, radialStart, binWord)
             binSize = WXGLNexrad.getBinSize(productCode.toInt())
         } catch (e: IOException) {
             UtilityLog.HandleException(e)
         }
     }
 
-    private fun formatRadarString(d: Date, operationalMode: Int, productCode: Int, heightOfRadar: Int, latitudeOfRadar: Double, longitudeOfRadar: Double): String {
+    private fun formatRadarString(
+        d: Date,
+        operationalMode: Int,
+        productCode: Int,
+        heightOfRadar: Int,
+        latitudeOfRadar: Double,
+        longitudeOfRadar: Double
+    ): String {
         return try {
             d.toString() + MyApplication.newline +
                     "Radar Mode: " + operationalMode + MyApplication.newline +

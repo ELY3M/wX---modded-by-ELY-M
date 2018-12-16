@@ -45,7 +45,14 @@ class CAPAlert {
 
     constructor()
 
-    constructor(url: String, title: String, event: String, area: String, zones: String, vtec: String) {
+    constructor(
+        url: String,
+        title: String,
+        event: String,
+        area: String,
+        zones: String,
+        vtec: String
+    ) {
         this.url = url
         this.title = title
         this.event = event
@@ -70,8 +77,10 @@ class CAPAlert {
                     obj.text = expireStr
                 } else {
                     obj.title = html.parse("<headline>(.+?)</headline>.*?<description>")
-                    obj.summary = html.parse("</headline>.*?<description>(.*?)</description>.*?<instruction>")
-                    obj.instructions = html.parse("</description>.*?<instruction>(.*?)</instruction>.*?<areaDesc>")
+                    obj.summary =
+                            html.parse("</headline>.*?<description>(.*?)</description>.*?<instruction>")
+                    obj.instructions =
+                            html.parse("</description>.*?<instruction>(.*?)</instruction>.*?<areaDesc>")
                     obj.area = html.parse("</instruction>.*?<areaDesc>(.*?)</areaDesc>.*?")
                     obj.area = obj.area.replace("&apos;", "'")
                     obj.text = "<h4><b>"

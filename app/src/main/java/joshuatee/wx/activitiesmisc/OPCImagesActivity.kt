@@ -43,7 +43,8 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
-class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMenuItemClickListener {
+class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
+    Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
@@ -61,7 +62,13 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer_bottom_toolbar, R.menu.opcimages, true, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_image_show_navdrawer_bottom_toolbar,
+            R.menu.opcimages,
+            true,
+            true
+        )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         img = findViewById(R.id.iv)
@@ -161,7 +168,8 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener, Toolbar.O
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onClick(v: View) {
         when (v.id) {

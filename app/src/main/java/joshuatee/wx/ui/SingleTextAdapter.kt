@@ -8,9 +8,11 @@ import android.widget.TextView
 
 import joshuatee.wx.R
 
-class SingleTextAdapter(private val myDataset: List<String>) : RecyclerView.Adapter<SingleTextAdapter.DataObjectHolder>() {
+class SingleTextAdapter(private val myDataset: List<String>) :
+    RecyclerView.Adapter<SingleTextAdapter.DataObjectHolder>() {
 
-    class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
 
         val label: TextView = itemView.findViewById(R.id.singletext)
 

@@ -68,14 +68,26 @@ class SPCFireOutlookActivity : BaseActivity() {
         bitmaps.forEach { bitmap ->
             card = ObjectCardImage(contextg, bitmap)
             val prod = UtilitySPCFireOutlook.textProducts[bitmaps.indexOf(bitmap)]
-            card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, WPCTextProductsActivity::class.java, WPCTextProductsActivity.URL, arrayOf(prod)) })
+            card.setOnClickListener(View.OnClickListener {
+                ObjectIntent(
+                    contextg,
+                    WPCTextProductsActivity::class.java,
+                    WPCTextProductsActivity.URL,
+                    arrayOf(prod)
+                )
+            })
             linearLayout.addView(card.card)
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, getString(UtilitySPCFireOutlook.activityTitle), "", bitmaps)
+            R.id.action_share -> UtilityShare.shareText(
+                this,
+                getString(UtilitySPCFireOutlook.activityTitle),
+                "",
+                bitmaps
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true

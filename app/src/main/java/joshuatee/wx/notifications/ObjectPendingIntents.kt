@@ -32,7 +32,13 @@ class ObjectPendingIntents {
     var resultPendingIntent: PendingIntent
     var resultPendingIntent2: PendingIntent
 
-    constructor(context: Context, cl: Class<*>, classFlag: String, classArgs1: Array<String>, classArgs2: Array<String>) {
+    constructor(
+        context: Context,
+        cl: Class<*>,
+        classFlag: String,
+        classArgs1: Array<String>,
+        classArgs2: Array<String>
+    ) {
         val resultIntent = Intent(context, cl)
         val resultIntent2 = Intent(context, cl)
         resultIntent.putExtra(classFlag, classArgs1)
@@ -41,8 +47,14 @@ class ObjectPendingIntents {
         stackBuilder.addParentStack(cl)
         stackBuilder.addNextIntent(resultIntent)
         val requestID = System.currentTimeMillis().toInt()
-        resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
-        resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT)
+        resultPendingIntent =
+                stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+        resultPendingIntent2 = PendingIntent.getActivity(
+            context,
+            requestID + 1,
+            resultIntent2,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 
     internal constructor(context: Context, cl: Class<*>) {
@@ -52,8 +64,14 @@ class ObjectPendingIntents {
         stackBuilder.addParentStack(cl)
         stackBuilder.addNextIntent(resultIntent)
         val requestID = System.currentTimeMillis().toInt()
-        resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
-        resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT)
+        resultPendingIntent =
+                stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+        resultPendingIntent2 = PendingIntent.getActivity(
+            context,
+            requestID + 1,
+            resultIntent2,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
     }
 }
 

@@ -65,7 +65,9 @@ object UtilityUI {
 
     fun immersiveMode(activity: Activity) {
         if (Build.VERSION.SDK_INT >= 19 && UIPreferences.radarImmersiveMode) {
-            activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+            activity.window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         }
     }
 
@@ -89,12 +91,19 @@ object UtilityUI {
             ridArr[0] = tmp
         }
         var ridFav = ""
-        ridArr.indices.forEach { ridFav = ridFav + ":" + MyApplication.semicolon.split(ridArr[it])[0] }
+        ridArr.indices.forEach {
+            ridFav = ridFav + ":" + MyApplication.semicolon.split(ridArr[it])[0]
+        }
         Utility.writePref(context, prefToken, ridFav)
         return ridFav
     }
 
-    fun moveDown(context: Context, prefToken: String, ridArr: MutableList<String>, pos: Int): String {
+    fun moveDown(
+        context: Context,
+        prefToken: String,
+        ridArr: MutableList<String>,
+        pos: Int
+    ): String {
         if (pos != ridArr.size - 1) {
             val tmp = ridArr[pos + 1]
             ridArr[pos + 1] = ridArr[pos]
@@ -105,7 +114,9 @@ object UtilityUI {
             ridArr[ridArr.size - 1] = tmp
         }
         var ridFav = ""
-        ridArr.indices.forEach { ridFav = ridFav + ":" + MyApplication.semicolon.split(ridArr[it])[0] }
+        ridArr.indices.forEach {
+            ridFav = ridFav + ":" + MyApplication.semicolon.split(ridArr[it])[0]
+        }
         Utility.writePref(context, prefToken, ridFav)
         return ridFav
     }
@@ -121,7 +132,8 @@ object UtilityUI {
 
     fun navigationBarHeight(context: Context): Int {
         var result = 0
-        val resourceId = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
+        val resourceId =
+            context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
         if (resourceId > 0) {
             result = context.resources.getDimensionPixelSize(resourceId)
         }

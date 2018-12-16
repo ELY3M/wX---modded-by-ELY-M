@@ -35,7 +35,8 @@ import joshuatee.wx.RegExp
 
 object UtilityDownloadNWS {
 
-    private const val USER_AGENT_STR = "Android ${MyApplication.packageNameAsString} ${MyApplication.emailAsString}"
+    private const val USER_AGENT_STR =
+        "Android ${MyApplication.packageNameAsString} ${MyApplication.emailAsString}"
 
     internal fun get7DayJSON(location: LatLon): String {
         var x = location.latString
@@ -52,7 +53,8 @@ object UtilityDownloadNWS {
     fun get7DayURL(x: String, y: String): String = "https://forecast-v3.weather.gov/point/$x,$y"
 
     fun getLatLonForZone(zone: String): List<String> {
-        var html = getNWSStringFromURL("https://api.weather.gov/zones/forecast/" + zone.toUpperCase(Locale.US))
+        var html =
+            getNWSStringFromURL("https://api.weather.gov/zones/forecast/" + zone.toUpperCase(Locale.US))
         html = html.replace("\n", "")
         html = html.replace(" ", "")
         val polygonArr = html.parseColumn(RegExp.warningLatLonPattern)
@@ -75,15 +77,21 @@ object UtilityDownloadNWS {
         getNWSStringFromURLXML("https://api.weather.gov/alerts/active?region_type=land")
     } else {
         //getNWSStringFromURLXML("https://api.weather.gov/alerts/active?state=" + sector.toUpperCase(Locale.US))
-        getNWSStringFromURLXML("https://api.weather.gov/alerts/active/area/" + sector.toUpperCase(Locale.US))
+        getNWSStringFromURLXML(
+            "https://api.weather.gov/alerts/active/area/" + sector.toUpperCase(
+                Locale.US
+            )
+        )
     }
 
     // https://forecast-v3.weather.gov/documentation?redirect=legacy
     // http://www.nws.noaa.gov/os/notification/pns16-35forecastgov.htm
 
-    fun getNWSStringFromURL(url: String): String = getNWSStringFromURLBase(url, "application/vnd.noaa.dwml+xml;version=1")
+    fun getNWSStringFromURL(url: String): String =
+        getNWSStringFromURLBase(url, "application/vnd.noaa.dwml+xml;version=1")
 
-    private fun getNWSStringFromURLJSON(url: String) = getNWSStringFromURLBase(url, "application/geo+json;version=1")
+    private fun getNWSStringFromURLJSON(url: String) =
+        getNWSStringFromURLBase(url, "application/geo+json;version=1")
 
     //private fun getNWSStringFromURLLDJSON(url: String) = getNWSStringFromURLBase(url, "application/ld+json;version=1")
 
@@ -91,10 +99,10 @@ object UtilityDownloadNWS {
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
-                    .url(url)
-                    .header("User-Agent", USER_AGENT_STR)
-                    .addHeader("Accept", header)
-                    .build()
+                .url(url)
+                .header("User-Agent", USER_AGENT_STR)
+                .addHeader("Accept", header)
+                .build()
             val response = MyApplication.httpClient!!.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body()!!.byteStream())
             val br = BufferedReader(InputStreamReader(inputStream))
@@ -115,10 +123,10 @@ object UtilityDownloadNWS {
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
-                    .url(strURL)
-                    .header("User-Agent", USER_AGENT_STR)
-                    .addHeader("Accept", "application/vnd.noaa.dwml+xml;version=1")
-                    .build()
+                .url(strURL)
+                .header("User-Agent", USER_AGENT_STR)
+                .addHeader("Accept", "application/vnd.noaa.dwml+xml;version=1")
+                .build()
             val response = MyApplication.httpClient!!.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body()!!.byteStream())
             val br = BufferedReader(InputStreamReader(inputStream))
@@ -135,5 +143,6 @@ object UtilityDownloadNWS {
         return out.toString().replace(breakStr, "<br>")
     }
 
-    private fun getNWSStringFromURLXML(url: String) = getNWSStringFromURLBase(url, "application/atom+xml")
+    private fun getNWSStringFromURLXML(url: String) =
+        getNWSStringFromURLBase(url, "application/atom+xml")
 }

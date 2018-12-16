@@ -29,22 +29,22 @@ import joshuatee.wx.RegExp
 object UtilityLocationFragment {
 
     private val WIND_DIR = mapOf(
-            "north" to "N",
-            "north northeast" to "NNE",
-            "northeast" to "NE",
-            "east northeast" to "ENE",
-            "east" to "E",
-            "east southeast" to "ESE",
-            "south southeast" to "SSE",
-            "southeast" to "SE",
-            "south" to "S",
-            "south southwest" to "SSW",
-            "southwest" to "SW",
-            "west southwest" to "WSW",
-            "west" to "W",
-            "west northwest" to "WNW",
-            "northwest" to "NW",
-            "north northwest" to "NNW"
+        "north" to "N",
+        "north northeast" to "NNE",
+        "northeast" to "NE",
+        "east northeast" to "ENE",
+        "east" to "E",
+        "east southeast" to "ESE",
+        "south southeast" to "SSE",
+        "southeast" to "SE",
+        "south" to "S",
+        "south southwest" to "SSW",
+        "southwest" to "SW",
+        "west southwest" to "WSW",
+        "west" to "W",
+        "west northwest" to "WNW",
+        "northwest" to "NW",
+        "north northwest" to "NNW"
     )
 
     fun extract7DayMetrics(chunk: String): String {
@@ -93,7 +93,8 @@ object UtilityLocationFragment {
         }
     }
 
-    fun setNWSIconSize(): Int = (MyApplication.dm.widthPixels * (MyApplication.nwsIconSize / 100f)).toInt()
+    fun setNWSIconSize(): Int =
+        (MyApplication.dm.widthPixels * (MyApplication.nwsIconSize / 100f)).toInt()
 
     fun extractWindDirection(chunk: String): String {
         val winddir1 = chunk.parseLastMatch(RegExp.sevenDayWinddir1)

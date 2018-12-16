@@ -15,7 +15,8 @@ import joshuatee.wx.util.UtilityAlertDialog
 
 // thanks http://inducesmile.com/android/android-gridlayoutmanager-with-recyclerview-in-material-design/
 
-internal class RecyclerViewHolders(itemView: View, private val itemList: List<TileObject>) : RecyclerView.ViewHolder(itemView), View.OnClickListener, ItemTouchHelperViewHolder {
+internal class RecyclerViewHolders(itemView: View, private val itemList: List<TileObject>) :
+    RecyclerView.ViewHolder(itemView), View.OnClickListener, ItemTouchHelperViewHolder {
 
     val iv: ImageView
 
@@ -42,7 +43,10 @@ internal class RecyclerViewHolders(itemView: View, private val itemList: List<Ti
             intent.putExtra(itemList[adapterPosition].target, itemList[adapterPosition].argsArr)
             view.context.startActivity(intent)
         } else {
-            UtilityAlertDialog.showHelpText(itemList[adapterPosition].helpStr, view.context as Activity)
+            UtilityAlertDialog.showHelpText(
+                itemList[adapterPosition].helpStr,
+                view.context as Activity
+            )
         }
     }
 }

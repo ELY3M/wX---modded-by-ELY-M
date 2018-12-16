@@ -31,7 +31,12 @@ import joshuatee.wx.util.MyExpandableListAdapter
 import joshuatee.wx.R
 import joshuatee.wx.util.Group
 
-class ObjectNavDrawerCombo(activity: Activity, items: SparseArray<Group>, private val labels: Array<Array<String>>, private val tokens: Array<Array<String>>) {
+class ObjectNavDrawerCombo(
+    activity: Activity,
+    items: SparseArray<Group>,
+    private val labels: Array<Array<String>>,
+    private val tokens: Array<Array<String>>
+) {
 
     val drawerLayout: DrawerLayout = activity.findViewById(R.id.drawer_layout)
     val listView: ExpandableListView = activity.findViewById(R.id.left_drawer)
@@ -39,7 +44,12 @@ class ObjectNavDrawerCombo(activity: Activity, items: SparseArray<Group>, privat
 
     init {
         listView.setAdapter(MyExpandableListAdapter(activity, items))
-        actionBarDrawerToggle = ActionBarDrawerToggle(activity, drawerLayout, R.string.drawer_open, R.string.drawer_close)
+        actionBarDrawerToggle = ActionBarDrawerToggle(
+            activity,
+            drawerLayout,
+            R.string.drawer_open,
+            R.string.drawer_close
+        )
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
     }
 

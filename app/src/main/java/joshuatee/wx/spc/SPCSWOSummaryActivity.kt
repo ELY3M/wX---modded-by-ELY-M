@@ -64,7 +64,13 @@ class SPCSWOSummaryActivity : BaseActivity() {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
-        withContext(Dispatchers.IO) { arrayOf("1", "2", "3", "4-8").forEach { bitmaps.addAll(UtilitySPCSWO.getImageURLs(it, false)) } }
+        withContext(Dispatchers.IO) {
+            arrayOf("1", "2", "3", "4-8").forEach {
+                bitmaps.addAll(
+                    UtilitySPCSWO.getImageURLs(it, false)
+                )
+            }
+        }
 
         var card: ObjectCardImage
         bitmaps.forEach { bitmap ->
@@ -74,7 +80,14 @@ class SPCSWOSummaryActivity : BaseActivity() {
             } else {
                 "4-8"
             }
-            card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCSWOActivity::class.java, SPCSWOActivity.NO, arrayOf(day, "")) })
+            card.setOnClickListener(View.OnClickListener {
+                ObjectIntent(
+                    contextg,
+                    SPCSWOActivity::class.java,
+                    SPCSWOActivity.NO,
+                    arrayOf(day, "")
+                )
+            })
             linearLayout.addView(card.card)
         }
     }
@@ -82,7 +95,12 @@ class SPCSWOSummaryActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.SPC_SWO_SUMMARY)
-            R.id.action_share -> UtilityShare.shareText(this, "Convective Outlook Summary", "", bitmaps)
+            R.id.action_share -> UtilityShare.shareText(
+                this,
+                "Convective Outlook Summary",
+                "",
+                bitmaps
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true

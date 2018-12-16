@@ -43,10 +43,14 @@ internal object UtilityModelSPCHRRRInputOutput {
     val runTime: RunTimeData
         get() {
             val runData = RunTimeData()
-            val htmlRunstatus = "${MyApplication.nwsSPCwebsitePrefix}/exper/hrrr/data/hrrr3/latestHour.php".getHtml()
-            val html = htmlRunstatus.parse(".*?.LatestFile.: .s[0-9]{2}/R([0-9]{10})_F[0-9]{3}_V[0-9]{10}_S[0-9]{2}_.*?.gif..*?")
-            runData.imageCompleteStr = htmlRunstatus.parse(".*?.LatestFile.: .s[0-9]{2}/R[0-9]{10}_F([0-9]{3})_V[0-9]{10}_S[0-9]{2}_.*?.gif..*?")
-            runData.validTime = htmlRunstatus.parse(".*?.LatestFile.: .s[0-9]{2}/R[0-9]{10}_F[0-9]{3}_V([0-9]{10})_S[0-9]{2}_.*?.gif..*?")
+            val htmlRunstatus =
+                "${MyApplication.nwsSPCwebsitePrefix}/exper/hrrr/data/hrrr3/latestHour.php".getHtml()
+            val html =
+                htmlRunstatus.parse(".*?.LatestFile.: .s[0-9]{2}/R([0-9]{10})_F[0-9]{3}_V[0-9]{10}_S[0-9]{2}_.*?.gif..*?")
+            runData.imageCompleteStr =
+                    htmlRunstatus.parse(".*?.LatestFile.: .s[0-9]{2}/R[0-9]{10}_F([0-9]{3})_V[0-9]{10}_S[0-9]{2}_.*?.gif..*?")
+            runData.validTime =
+                    htmlRunstatus.parse(".*?.LatestFile.: .s[0-9]{2}/R[0-9]{10}_F[0-9]{3}_V([0-9]{10})_S[0-9]{2}_.*?.gif..*?")
             runData.listRunClear()
             runData.listRunAdd(html)
             runData.listRunAddAll(UtilityTime.genModelRuns(html, 1))
@@ -54,13 +58,19 @@ internal object UtilityModelSPCHRRRInputOutput {
             return runData
         }
 
-    fun getImage(context: Context, om: ObjectModel, time: String, overlayImg: List<String>): Bitmap {
+    fun getImage(
+        context: Context,
+        om: ObjectModel,
+        time: String,
+        overlayImg: List<String>
+    ): Bitmap {
         val layerUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/"
         var imgUrl: String
         val bitmapAl = mutableListOf<Bitmap>()
         val layersAl = mutableListOf<Drawable>()
         overlayImg.forEach {
-            imgUrl = layerUrl + getSectorCode(om.sector).toLowerCase(Locale.US) + "/" + it + "/" + it + ".gif"
+            imgUrl = layerUrl + getSectorCode(om.sector).toLowerCase(Locale.US) + "/" + it + "/" +
+                    it + ".gif"
             bitmapAl.add(UtilityImg.eraseBG(imgUrl.getImage(), -1))
         }
         imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/hrrr/data/hrrr3/" +
@@ -74,16 +84,26 @@ internal object UtilityModelSPCHRRRInputOutput {
         return UtilityImg.layerDrawableToBitmap(layersAl)
     }
 
-    fun getAnimation(context: Context, om: ObjectModel, overlayImg: List<String>): AnimationDrawable {
+    fun getAnimation(
+        context: Context,
+        om: ObjectModel,
+        overlayImg: List<String>
+    ): AnimationDrawable {
         if (om.spinnerTimeValue == -1) return AnimationDrawable()
         val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) { k ->
-            getImage(context, om, om.spTime.list[k].split(" ").dropLastWhile { it.isEmpty() }.getOrNull(0)
-                    ?: "", overlayImg)
+            getImage(
+                context,
+                om,
+                om.spTime.list[k].split(" ").dropLastWhile { it.isEmpty() }.getOrNull(0)
+                    ?: "",
+                overlayImg
+            )
         }
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
     }
 
-    private fun getSectorCode(sectorName: String) = (0 until UtilityModelSPCHRRRInterface.sectors.size)
+    private fun getSectorCode(sectorName: String) =
+        (0 until UtilityModelSPCHRRRInterface.sectors.size)
             .firstOrNull { sectorName == UtilityModelSPCHRRRInterface.sectors[it] }
             ?.let { UtilityModelSPCHRRRInterface.sectorCodes[it] }
             ?: "S19"

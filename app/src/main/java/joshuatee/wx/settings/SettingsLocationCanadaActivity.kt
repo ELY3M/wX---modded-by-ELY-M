@@ -46,19 +46,19 @@ class SettingsLocationCanadaActivity : BaseActivity() {
     private var cityDisplay = false
     private var provSelected = ""
     private val provArr = listOf(
-            "AB: Alberta",
-            "BC: British Columbia",
-            "MB: Manitoba",
-            "NB: New Brunswick",
-            "NL: Newfoundland and Labrador",
-            "NS: Nova Scotia",
-            "NT: Northwest Territories",
-            "NU: Nunavut",
-            "ON: Ontario",
-            "PE: Prince Edward Island",
-            "QC: Quebec",
-            "SK: Saskatchewan",
-            "YT: Yukon"
+        "AB: Alberta",
+        "BC: British Columbia",
+        "MB: Manitoba",
+        "NB: New Brunswick",
+        "NL: Newfoundland and Labrador",
+        "NS: Nova Scotia",
+        "NT: Northwest Territories",
+        "NU: Nunavut",
+        "ON: Ontario",
+        "PE: Prince Edward Island",
+        "QC: Quebec",
+        "SK: Saskatchewan",
+        "YT: Yukon"
     )
     private lateinit var recyclerView: RecyclerView
     private lateinit var ca: SingleTextAdapter
@@ -106,8 +106,10 @@ class SettingsLocationCanadaActivity : BaseActivity() {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
             val html = UtilityCanada.getProvHTML(provSelected)
-            listIds = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-(.*?)_metric_e.html\">.*?</a></li>")
-            listCity = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-.*?_metric_e.html\">(.*?)</a></li>")
+            listIds =
+                    html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-(.*?)_metric_e.html\">.*?</a></li>")
+            listCity =
+                    html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-.*?_metric_e.html\">(.*?)</a></li>")
         }
         ca = SingleTextAdapter(listCity.distinct())
         recyclerView.adapter = ca

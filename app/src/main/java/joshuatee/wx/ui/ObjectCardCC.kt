@@ -70,9 +70,19 @@ class ObjectCardCC(context: Context, version: Int) {
             textViewTop.gravity = Gravity.START
             tvCc22.gravity = Gravity.START
             textViewBottom.gravity = Gravity.START
-            textViewTop.setPadding(MyApplication.padding, MyApplication.paddingSmall, MyApplication.paddingSmall, 0)
+            textViewTop.setPadding(
+                MyApplication.padding,
+                MyApplication.paddingSmall,
+                MyApplication.paddingSmall,
+                0
+            )
             tvCc22.setPadding(MyApplication.padding, 0, MyApplication.paddingSmall, 0)
-            textViewBottom.setPadding(MyApplication.padding, 0, MyApplication.paddingSmall, MyApplication.paddingSmall)
+            textViewBottom.setPadding(
+                MyApplication.padding,
+                0,
+                MyApplication.paddingSmall,
+                MyApplication.paddingSmall
+            )
             imageView = ImageView(context)
             llCv2V.orientation = LinearLayout.VERTICAL
             llCv2V.gravity = Gravity.CENTER_VERTICAL
@@ -98,7 +108,12 @@ class ObjectCardCC(context: Context, version: Int) {
         paramsIv.height = size
         imageView.layoutParams = paramsIv
         imageView.setImageBitmap(bitmap)
-        imageView.setPadding(MyApplication.paddingSmall, MyApplication.paddingSmall, MyApplication.paddingSmall, MyApplication.paddingSmall)
+        imageView.setPadding(
+            MyApplication.paddingSmall,
+            MyApplication.paddingSmall,
+            MyApplication.paddingSmall,
+            MyApplication.paddingSmall
+        )
     }
 
     val card: CardView get() = objCard.card
@@ -115,7 +130,14 @@ class ObjectCardCC(context: Context, version: Int) {
         tvCc22.text = text
     }
 
-    fun updateContent(bitmap: Bitmap, size: Int, objFcst: ObjectForecastPackage, isUS: Boolean, ccTime: String, radarTime: String) {
+    fun updateContent(
+        bitmap: Bitmap,
+        size: Int,
+        objFcst: ObjectForecastPackage,
+        isUS: Boolean,
+        ccTime: String,
+        radarTime: String
+    ) {
         setImage(bitmap, size)
         val sep = " - "
         val tmpArrCc = objFcst.objCC.data1.split(sep).dropLastWhile { it.isEmpty() }
@@ -123,12 +145,22 @@ class ObjectCardCC(context: Context, version: Int) {
         if (tmpArrCc.size > 4 && isUS) {
             tempArr = tmpArrCc[0].split("/").dropLastWhile { it.isEmpty() }
             setTopLine(tmpArrCc[4].replace("^ ".toRegex(), "") + " " + tempArr[0] + tmpArrCc[2])
-            setMiddleLine(tempArr[1].replace("^ ".toRegex(), "") + sep + tmpArrCc[1] + sep + tmpArrCc[3])
+            setMiddleLine(
+                tempArr[1].replace(
+                    "^ ".toRegex(),
+                    ""
+                ) + sep + tmpArrCc[1] + sep + tmpArrCc[3]
+            )
             setStatus(ccTime + radarTime)
         } else {
             tempArr = tmpArrCc[0].split("/").dropLastWhile { it.isEmpty() }
             setTopLine(tmpArrCc[4] + "" + tempArr[0] + tmpArrCc[2])
-            setMiddleLine(tempArr[1].replace("^ ".toRegex(), "") + sep + tmpArrCc[1] + sep + tmpArrCc[3])
+            setMiddleLine(
+                tempArr[1].replace(
+                    "^ ".toRegex(),
+                    ""
+                ) + sep + tmpArrCc[1] + sep + tmpArrCc[3]
+            )
             setStatus(ccTime.replace("^ ".toRegex(), "") + radarTime)
         }
     }

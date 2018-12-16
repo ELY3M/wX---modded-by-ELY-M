@@ -34,7 +34,12 @@ import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 import android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
 
-internal class OverlayView private constructor(context: Context, private val listener: Listener, showDistanceTool: Boolean, showRecordingTools: Boolean) : FrameLayout(context), View.OnClickListener {
+internal class OverlayView private constructor(
+    context: Context,
+    private val listener: Listener,
+    showDistanceTool: Boolean,
+    showRecordingTools: Boolean
+) : FrameLayout(context), View.OnClickListener {
 
     private val distancetoolView: View
     private val drawtoolView: View
@@ -100,19 +105,30 @@ internal class OverlayView private constructor(context: Context, private val lis
             screenshotView.visibility = View.GONE
             startView.visibility = View.GONE
             distancetoolView.visibility = View.VISIBLE
-            drawtoolView.background = UtilityImg.bitmapToLayerDrawable(context, UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_edit_24dp, Color.YELLOW))
-            distancetoolView.background = UtilityImg.bitmapToLayerDrawable(context, UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_adjust_24dp, Color.YELLOW))
-            cancelView.background = UtilityImg.bitmapToLayerDrawable(context, UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_clear_24dp, Color.YELLOW))
+            drawtoolView.background = UtilityImg.bitmapToLayerDrawable(
+                context,
+                UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_edit_24dp, Color.YELLOW)
+            )
+            distancetoolView.background = UtilityImg.bitmapToLayerDrawable(
+                context,
+                UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_adjust_24dp, Color.YELLOW)
+            )
+            cancelView.background = UtilityImg.bitmapToLayerDrawable(
+                context,
+                UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_clear_24dp, Color.YELLOW)
+            )
         }
         if (getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL) {
-            animationWidth = -animationWidth // Account for animating in from the other side of screen.
+            animationWidth =
+                    -animationWidth // Account for animating in from the other side of screen.
         }
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         translationX = animationWidth.toFloat()
-        animate().translationX(0f).setDuration(DURATION_ENTER_EXIT.toLong()).interpolator = DecelerateInterpolator()
+        animate().translationX(0f).setDuration(DURATION_ENTER_EXIT.toLong()).interpolator =
+                DecelerateInterpolator()
     }
 
     override fun onClick(view: View) {
@@ -128,18 +144,21 @@ internal class OverlayView private constructor(context: Context, private val lis
                     }
                 })
                 reveal.start()
-                postDelayed({
-                    if (MyApplication.telecineSwitchShowCountdown) {
-                        showCountDown()
-                    } else {
-                        countdownComplete()
-                    }
-                }, (if (MyApplication.telecineSwitchShowCountdown) COUNTDOWN_DELAY else NON_COUNTDOWN_DELAY).toLong())
+                postDelayed(
+                    {
+                        if (MyApplication.telecineSwitchShowCountdown) {
+                            showCountDown()
+                        } else {
+                            countdownComplete()
+                        }
+                    },
+                    (if (MyApplication.telecineSwitchShowCountdown) COUNTDOWN_DELAY else NON_COUNTDOWN_DELAY).toLong()
+                )
             }
             R.id.record_overlay_cancel -> animate().translationX(animationWidth.toFloat())
-                    .setDuration(DURATION_ENTER_EXIT.toLong())
-                    .setInterpolator(AccelerateInterpolator())
-                    .withEndAction { listener.onCancel() }
+                .setDuration(DURATION_ENTER_EXIT.toLong())
+                .setInterpolator(AccelerateInterpolator())
+                .withEndAction { listener.onCancel() }
             R.id.record_overlay_screenshot -> listener.onScreenshot()
             R.id.record_overlay_drawtool -> {
                 drawtoolView.isActivated = !drawtoolView.isActivated
@@ -165,7 +184,8 @@ internal class OverlayView private constructor(context: Context, private val lis
     }
 
     private fun countdownComplete() {
-        recordingView.animate().alpha(0f).setDuration(COUNTDOWN_DELAY.toLong()).withEndAction { startRecording() }
+        recordingView.animate().alpha(0f).setDuration(COUNTDOWN_DELAY.toLong())
+            .withEndAction { startRecording() }
     }
 
     private fun countdown(countdownArr: Array<String>, index: Int) {
@@ -185,7 +205,12 @@ internal class OverlayView private constructor(context: Context, private val lis
         private const val NON_COUNTDOWN_DELAY = 500
         private const val DURATION_ENTER_EXIT = 300
 
-        fun create(context: Context, listener: Listener, showDistanceTool: Boolean, showRecordingTools: Boolean): OverlayView = OverlayView(context, listener, showDistanceTool, showRecordingTools)
+        fun create(
+            context: Context,
+            listener: Listener,
+            showDistanceTool: Boolean,
+            showRecordingTools: Boolean
+        ): OverlayView = OverlayView(context, listener, showDistanceTool, showRecordingTools)
 
         fun createLayoutParams(context: Context): WindowManager.LayoutParams {
             val res = context.resources
@@ -200,7 +225,13 @@ internal class OverlayView private constructor(context: Context, private val lis
             } else {
                 WindowManager.LayoutParams.TYPE_SYSTEM_ERROR
             }
-            val params = WindowManager.LayoutParams(width, height, layoutFlag, FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL or FLAG_LAYOUT_NO_LIMITS, TRANSLUCENT)
+            val params = WindowManager.LayoutParams(
+                width,
+                height,
+                layoutFlag,
+                FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL or FLAG_LAYOUT_NO_LIMITS,
+                TRANSLUCENT
+            )
             params.gravity = Gravity.TOP or gravityEndLocaleHack()
             return params
         }

@@ -45,7 +45,9 @@ internal object UtilityModelESRLInputOutput {
             "RAP_NCEP" -> ("$urlBase/RAP/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
             "RAP" -> ("$urlBase/RAP/").getHtml()
             "HRRR_NCEP" -> ("$urlBase/hrrr/HRRR/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
-            else -> ("$urlBase/" + model.toLowerCase(Locale.US) + "/" + model + "/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
+            else -> ("$urlBase/" + model.toLowerCase(Locale.US) + "/" + model + "/Welcome.cgi?dsKey=" + model.toLowerCase(
+                Locale.US
+            ) + "_jet&domain=full").getHtml()
         }
         //UtilityLog.d("wx-model", htmlRunstatus)
         val oldRunTimes: List<String>
@@ -55,14 +57,15 @@ internal object UtilityModelESRLInputOutput {
         var day = sigHtmlTmp.parse(RegExp.eslHrrrPattern4)
         var hour = sigHtmlTmp.parse(RegExp.eslHrrrPattern5)
         var monthStr = sigHtmlTmp.parse(RegExp.eslHrrrPattern6)
-        monthStr = monthStr.replace("Jan", "01").replace("Feb", "02").replace("Mar", "03").replace("Apr", "04")
-                .replace("May", "05").replace("Jun", "06").replace("Jul", "07").replace("Aug", "08")
-                .replace("Sep", "09").replace("Oct", "10").replace("Nov", "11").replace("Dec", "12")
+        monthStr = monthStr.replace("Jan", "01").replace("Feb", "02").replace("Mar", "03")
+            .replace("Apr", "04")
+            .replace("May", "05").replace("Jun", "06").replace("Jul", "07").replace("Aug", "08")
+            .replace("Sep", "09").replace("Oct", "10").replace("Nov", "11").replace("Dec", "12")
         sigHtmlTmp = year + monthStr + day + hour
         runData.listRunAdd(sigHtmlTmp)
         runData.mostRecentRun = sigHtmlTmp
         //runData.imageCompleteInt = UtilityString.parseAndCount(htmlRunstatus, ".(allfields).") - 1
-        runData.imageCompleteInt = UtilityString.parseAndCount(htmlRunstatus, ".(${param}).") - 3
+        runData.imageCompleteInt = UtilityString.parseAndCount(htmlRunstatus, ".($param).") - 3
         runData.imageCompleteStr = runData.imageCompleteInt.toString()
         if (sigHtmlTmp != "") {
             var i = 0
@@ -72,9 +75,12 @@ internal object UtilityModelESRLInputOutput {
                 hour = oldRunTimes[i].parse(RegExp.eslHrrrPattern5)
                 monthStr = oldRunTimes[i].parse(RegExp.eslHrrrPattern6)
 
-                monthStr = monthStr.replace("Jan", "01").replace("Feb", "02").replace("Mar", "03").replace("Apr", "04")
-                        .replace("May", "05").replace("Jun", "06").replace("Jul", "07").replace("Aug", "08")
-                        .replace("Sep", "09").replace("Oct", "10").replace("Nov", "11").replace("Dec", "12")
+                monthStr = monthStr.replace("Jan", "01").replace("Feb", "02").replace("Mar", "03")
+                    .replace("Apr", "04")
+                    .replace("May", "05").replace("Jun", "06").replace("Jul", "07")
+                    .replace("Aug", "08")
+                    .replace("Sep", "09").replace("Oct", "10").replace("Nov", "11")
+                    .replace("Dec", "12")
                 runData.listRunAdd(year + monthStr + day + hour)
                 i += 1
             }
@@ -130,20 +136,26 @@ internal object UtilityModelESRLInputOutput {
         }
         val onDemandUrl: String
         if (parentModel.contains("RAP")) {
-            imgUrl = "$urlBase/" + parentModel + "/for_web/" + om.model.toLowerCase(Locale.US) + "_jet/" + om.run.replace("Z", "") +
+            imgUrl = "$urlBase/" + parentModel + "/for_web/" + om.model.toLowerCase(Locale.US) +
+                    "_jet/" + om.run.replace("Z", "") +
                     "/" + sector.toLowerCase(Locale.US) + "/" + param + "_f" + time + ".png"
             onDemandUrl = "$urlBase/" + parentModel + "/" +
-                    "displayMapLocalDiskDateDomainZip" + zipStr + ".cgi?keys=" + om.model.toLowerCase(Locale.US) + "_jet:&runtime=" + om.run.replace("Z", "") +
-                    "&plot_type=" + param + "&fcst=" + time + "&time_inc=60&num_times=16&model=" + "rr" + "&ptitle=" + om.model +
+                    "displayMapLocalDiskDateDomainZip" + zipStr + ".cgi?keys=" +
+                    om.model.toLowerCase(Locale.US) + "_jet:&runtime=" + om.run.replace("Z", "") +
+                    "&plot_type=" + param + "&fcst=" + time + "&time_inc=60&num_times=16&model=" +
+                    "rr" + "&ptitle=" + om.model +
                     "%20Model%20Fields%20-%20Experimental&maxFcstLen=15&fcstStrLen=-1&domain=" +
                     sector.toLowerCase(Locale.US) + "&adtfn=1"
 
         } else {
-            imgUrl = "$urlBase/hrrr/" + parentModel.toUpperCase(Locale.US) + "/for_web/" + om.model.toLowerCase(Locale.US) + "_jet/" + om.run.replace("Z", "") +
+            imgUrl = "$urlBase/hrrr/" + parentModel.toUpperCase(Locale.US) + "/for_web/" +
+                    om.model.toLowerCase(Locale.US) + "_jet/" + om.run.replace("Z", "") +
                     "/" + sector.toLowerCase(Locale.US) + "/" + param + "_f" + time + ".png"
             onDemandUrl = "$urlBase/hrrr/" + parentModel.toUpperCase(Locale.US) + "/" +
-                    "displayMapLocalDiskDateDomainZip" + zipStr + ".cgi?keys=" + om.model.toLowerCase(Locale.US) + "_jet:&runtime=" + om.run.replace("Z", "") +
-                    "&plot_type=" + param + "&fcst=" + time + "&time_inc=60&num_times=16&model=" + om.model.toLowerCase(Locale.US) + "&ptitle=" + om.model +
+                    "displayMapLocalDiskDateDomainZip" + zipStr + ".cgi?keys=" +
+                    om.model.toLowerCase(Locale.US) + "_jet:&runtime=" + om.run.replace("Z", "") +
+                    "&plot_type=" + param + "&fcst=" + time + "&time_inc=60&num_times=16&model=" +
+                    om.model.toLowerCase(Locale.US) + "&ptitle=" + om.model +
                     "%20Model%20Fields%20-%20Experimental&maxFcstLen=15&fcstStrLen=-1&domain=" +
                     sector.toLowerCase(Locale.US) + "&adtfn=1"
         }

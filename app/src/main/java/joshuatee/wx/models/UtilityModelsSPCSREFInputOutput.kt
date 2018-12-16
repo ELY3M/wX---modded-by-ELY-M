@@ -54,7 +54,10 @@ internal object UtilityModelsSPCSREFInputOutput {
 
     fun getImage(context: Context, om: ObjectModel, time: String): Bitmap {
         val run = om.run.replace("z", "")
-        return UtilityImg.getBitmapAddWhiteBG(context, "${MyApplication.nwsSPCwebsitePrefix}/exper/sref/gifs/$run/${om.currentParam}$time.gif")
+        return UtilityImg.getBitmapAddWhiteBG(
+            context,
+            "${MyApplication.nwsSPCwebsitePrefix}/exper/sref/gifs/$run/${om.currentParam}$time.gif"
+        )
     }
 
     fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {

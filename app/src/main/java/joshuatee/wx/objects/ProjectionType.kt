@@ -21,8 +21,12 @@
 
 package joshuatee.wx.objects
 
-enum class ProjectionType constructor(val isMercator: Boolean, internal val needsBlackPaint: Boolean, internal val needsCanvasShift: Boolean, val isCanvas: Boolean) {
-
+enum class ProjectionType constructor(
+    val isMercator: Boolean,
+    internal val needsBlackPaint: Boolean,
+    internal val needsCanvasShift: Boolean,
+    val isCanvas: Boolean
+) {
     NWS_MOSAIC(false, false, false, true),
     NWS_MOSAIC_SECTOR(false, false, false, true),
     WX_RENDER(true, false, true, true),

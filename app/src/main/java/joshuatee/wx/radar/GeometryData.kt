@@ -23,5 +23,10 @@ package joshuatee.wx.radar
 
 import java.nio.ByteBuffer
 
-class GeometryData(val highways: ByteBuffer, val counties: ByteBuffer, val stateLines: ByteBuffer, val lakes: ByteBuffer)
+class GeometryData(
+    val highways: ByteBuffer,
+    val counties: ByteBuffer,
+    val stateLines: ByteBuffer,
+    val lakes: ByteBuffer
+)
 

@@ -164,11 +164,16 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val c0 = ObjectCardImage(contextg, bitmap)
         ll.addView(c0.card)
         c0.setOnClickListener(View.OnClickListener {
-            val stDatePicker = DatePickerDialog(this@SPCStormReportsActivity,
-                    pDateSetListener,
-                    pYear, pMonth, pDay)
+            val stDatePicker = DatePickerDialog(
+                this@SPCStormReportsActivity,
+                pDateSetListener,
+                pYear, pMonth, pDay
+            )
             val cal = Calendar.getInstance()
-            cal.set(Calendar.YEAR, 2004) // 2011-05-27 was the earliest date for filtered, moved to non-filtered and can go back to 2004-03-23
+            cal.set(
+                Calendar.YEAR,
+                2004
+            ) // 2011-05-27 was the earliest date for filtered, moved to non-filtered and can go back to 2004-03-23
             cal.set(Calendar.MONTH, 2)
             cal.set(Calendar.DAY_OF_MONTH, 23)
             stDatePicker.datePicker.minDate = cal.timeInMillis - 1000
@@ -205,14 +210,26 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 }
                 val xStr = s.lat
                 val yStr = s.lon
-                cTmp.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, WebscreenAB::class.java, WebscreenAB.URL, arrayOf(UtilityMap.genMapURL(xStr, yStr, "10"), "$xStr,$yStr")) })
+                cTmp.setOnClickListener(View.OnClickListener {
+                    ObjectIntent(
+                        contextg,
+                        WebscreenAB::class.java,
+                        WebscreenAB.URL,
+                        arrayOf(UtilityMap.genMapURL(xStr, yStr, "10"), "$xStr,$yStr")
+                    )
+                })
                 if (s.text.contains("(") && s.text.contains(")")) {
 
                 } else {
                     cTmp.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
                     cTmp.setTextColor(UIPreferences.textHighlightColor)
                     cTmp.setText(Utility.fromHtml(s.text.toUpperCase()))
-                    cTmp.setOnClickListener(View.OnClickListener { scrollView.smoothScrollTo(0, 0) })
+                    cTmp.setOnClickListener(View.OnClickListener {
+                        scrollView.smoothScrollTo(
+                            0,
+                            0
+                        )
+                    })
                 }
             }
         }
@@ -236,12 +253,13 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
     }
 
-    private val pDateSetListener = DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-        pYear = year
-        pMonth = monthOfYear
-        pDay = dayOfMonth
-        updateDisplay()
-    }
+    private val pDateSetListener =
+        DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+            pYear = year
+            pMonth = monthOfYear
+            pDay = dayOfMonth
+            updateDisplay()
+        }
 
     private fun updateDisplay() {
         if (cMonth != pMonth || cYear != pYear || cDay != pDay) {
@@ -307,7 +325,12 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             x = "0.0"
             y = "0.0"
         }
-        if (prod == "L2REF" || prod == "L2VEL") ObjectIntent(this, WXGLRadarActivity::class.java, WXGLRadarActivity.RID, arrayOf(rid1, "", prod, "", patternL2, x, y))
+        if (prod == "L2REF" || prod == "L2VEL") ObjectIntent(
+            this,
+            WXGLRadarActivity::class.java,
+            WXGLRadarActivity.RID,
+            arrayOf(rid1, "", prod, "", patternL2, x, y)
+        )
     }
 
     private fun updateIowaMesoData() {
@@ -323,10 +346,24 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
         if (audioPlayMenu(item.itemId, out.toString(), "spcstreports", "spcstreports")) return true
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.shareText(this, "Storm Reports - $no", out.toString(), bitmap)
-            R.id.action_share_text -> UtilityShare.shareText(this, "Storm Reports - $no", out.toString())
+            R.id.action_share_all -> UtilityShare.shareText(
+                this,
+                "Storm Reports - $no",
+                out.toString(),
+                bitmap
+            )
+            R.id.action_share_text -> UtilityShare.shareText(
+                this,
+                "Storm Reports - $no",
+                out.toString()
+            )
             R.id.action_share_image -> UtilityShare.shareBitmap(this, "Storm Reports - $no", bitmap)
-            R.id.action_lsrbywfo -> ObjectIntent(this, LSRbyWFOActivity::class.java, LSRbyWFOActivity.URL, arrayOf(Location.wfo, "LSR"))
+            R.id.action_lsrbywfo -> ObjectIntent(
+                this,
+                LSRbyWFOActivity::class.java,
+                LSRbyWFOActivity.URL,
+                arrayOf(Location.wfo, "LSR")
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true

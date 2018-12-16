@@ -66,7 +66,8 @@ private constructor(din: UCARRandomAccessFile, record: Int, message_offset31: Lo
     private var velocityHROffset: Short = 0
 
     init {
-        messageOffset = (record * RADAR_DATA_SIZE).toLong() + FILE_HEADER_SIZE.toLong() + message_offset31
+        messageOffset = (record * RADAR_DATA_SIZE).toLong() + FILE_HEADER_SIZE.toLong() +
+                message_offset31
         din.seek(messageOffset)
         din.skipBytes(CTM_HEADER_SIZE)
         messageSize = din.readShort() // size in "halfwords" = 2 bytes
@@ -185,7 +186,12 @@ private constructor(din: UCARRandomAccessFile, record: Int, message_offset31: Lo
     }
 
     @Throws(IOException::class)
-    private fun getDataBlockStringValue(raf: UCARRandomAccessFile, offset: Short, skip: Int, size: Int): String {
+    private fun getDataBlockStringValue(
+        raf: UCARRandomAccessFile,
+        offset: Short,
+        skip: Int,
+        size: Int
+    ): String {
         val off = offset.toLong() + messageOffset + MESSAGE_HEADER_SIZE.toLong()
         raf.seek(off)
         raf.skipBytes(skip)
@@ -229,7 +235,8 @@ private constructor(din: UCARRandomAccessFile, record: Int, message_offset31: Lo
 
         @Throws(IOException::class)
         fun factory(din: UCARRandomAccessFile, record: Int, message_offset31: Long): Level2Record? {
-            val offset = (record * RADAR_DATA_SIZE).toLong() + FILE_HEADER_SIZE.toLong() + message_offset31
+            val offset =
+                (record * RADAR_DATA_SIZE).toLong() + FILE_HEADER_SIZE.toLong() + message_offset31
             return if (offset >= din.length())
                 null
             else

@@ -36,24 +36,6 @@ import joshuatee.wx.Extensions.*
 
 object UtilityImgAnim {
 
-    // FIXME deprecate in favor of one using Int
-    fun getURLArray(url: String, pattern: String, count: String): List<String> {
-        val retAl = mutableListOf<String>()
-        try {
-            val radarIndexHtml = url.getHtml()
-            val radarAl = radarIndexHtml.parseColumn(pattern)
-            val frameCnt = count.toIntOrNull() ?: 0
-            if (radarAl.size >= frameCnt) {
-                (radarAl.size - frameCnt until radarAl.size).mapTo(retAl) { radarAl[it] }
-            } else {
-                (0 until radarAl.size).mapTo(retAl) { radarAl[it] }
-            }
-        } catch (e: Exception) {
-            UtilityLog.HandleException(e)
-        }
-        return retAl
-    }
-
     fun getUrlArray(url: String, pattern: String, frameCount: Int): List<String> {
         val retAl = mutableListOf<String>()
         try {
@@ -70,7 +52,11 @@ object UtilityImgAnim {
         return retAl
     }
 
-    fun getAnimationDrawableFromURLList(context: Context, urlAl: List<String>, delayF: Int): AnimationDrawable {
+    fun getAnimationDrawableFromURLList(
+        context: Context,
+        urlAl: List<String>,
+        delayF: Int
+    ): AnimationDrawable {
         var delay = delayF
         val animDrawable = AnimationDrawable()
         val bmAl = urlAl.map { it.getImage() }
@@ -85,7 +71,11 @@ object UtilityImgAnim {
         return animDrawable
     }
 
-    fun getAnimationDrawableFromURLListWhiteBG(context: Context, urlAl: List<String>, delayF: Int): AnimationDrawable {
+    fun getAnimationDrawableFromURLListWhiteBG(
+        context: Context,
+        urlAl: List<String>,
+        delayF: Int
+    ): AnimationDrawable {
         var delay = delayF
         val animDrawable = AnimationDrawable()
         val bmAl = urlAl.mapTo(mutableListOf()) { UtilityImg.getBitmapAddWhiteBG(context, it) }
@@ -100,7 +90,11 @@ object UtilityImgAnim {
         return animDrawable
     }
 
-    fun getAnimationDrawableFromBMList(context: Context, bmAl: List<Bitmap>, delayF: Int): AnimationDrawable {
+    fun getAnimationDrawableFromBMList(
+        context: Context,
+        bmAl: List<Bitmap>,
+        delayF: Int
+    ): AnimationDrawable {
         var delay = delayF
         val animDrawable = AnimationDrawable()
         bmAl.forEachIndexed { i, it ->
@@ -128,7 +122,13 @@ object UtilityImgAnim {
         return animDrawable
     }
 
-    fun getAnimationDrawableFromBMListWithCanvas(context: Context, bmAl: List<Bitmap>, delayF: Int, cd: ColorDrawable, bitmapCanvas: Bitmap): AnimationDrawable {
+    fun getAnimationDrawableFromBMListWithCanvas(
+        context: Context,
+        bmAl: List<Bitmap>,
+        delayF: Int,
+        cd: ColorDrawable,
+        bitmapCanvas: Bitmap
+    ): AnimationDrawable {
         var delay = delayF
         val animDrawable = AnimationDrawable()
         val layers = arrayOfNulls<Drawable>(3)

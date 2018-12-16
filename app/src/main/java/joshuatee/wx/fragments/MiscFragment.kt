@@ -55,14 +55,19 @@ class MiscFragment : Fragment() {
 
     private val hm = mutableMapOf<String, TileObject>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_recyclerview, container, false)
         val rowListItem = allItemList
         val lLayout = GridLayoutManager(activity, UIPreferences.tilesPerRow)
         val rView: RecyclerView = view.findViewById(R.id.recycler_view)
         rView.setHasFixedSize(true)
         rView.layoutManager = lLayout
-        val rcAdapter = TileAdapter(context!!, rowListItem, UIPreferences.tilesPerRow, "FRAGMENT_MISC_ORDER")
+        val rcAdapter =
+            TileAdapter(context!!, rowListItem, UIPreferences.tilesPerRow, "FRAGMENT_MISC_ORDER")
         rView.adapter = rcAdapter
         val callback = SimpleItemTouchHelperCallback(rcAdapter)
         val touchHelper = ItemTouchHelper(callback)
@@ -72,42 +77,178 @@ class MiscFragment : Fragment() {
 
     private val allItemList: MutableList<TileObject>
         get() {
-            hm["model_ncep"] = TileObject(R.drawable.ncep, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "NCEP", "NCEP"), resources.getString(R.string.help_ncep_models), "model_ncep")
+            hm["model_ncep"] = TileObject(
+                R.drawable.ncep,
+                ModelsGenericActivity::class.java,
+                ModelsGenericActivity.INFO,
+                arrayOf("1", "NCEP", "NCEP"),
+                resources.getString(R.string.help_ncep_models),
+                "model_ncep"
+            )
             //hm["model_hrrr"] = TileObject(R.drawable.hrrrviewer, ModelsESRLActivity::class.java, ModelsESRLActivity.INFO, arrayOf("1", "ESRL"), resources.getString(R.string.help_hrrr_viewer), "model_hrrr")
-            hm["model_hrrr"] = TileObject(R.drawable.hrrrviewer, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "ESRL", "ESRL"), resources.getString(R.string.help_hrrr_viewer), "model_hrrr")
+            hm["model_hrrr"] = TileObject(
+                R.drawable.hrrrviewer,
+                ModelsGenericActivity::class.java,
+                ModelsGenericActivity.INFO,
+                arrayOf("1", "ESRL", "ESRL"),
+                resources.getString(R.string.help_hrrr_viewer),
+                "model_hrrr"
+            )
 
-            hm["uswarn"] = TileObject(R.drawable.warn, USWarningsWithRadarActivity::class.java, USWarningsWithRadarActivity.URL, arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Extreme Wind Warning.*?|.*?Flash Flood Warning.*?|.*?Special Marine Warning.*?|.*?Severe Weather Statement.*?|.*?Special Weather Statement.*?", "us"),
-                    resources.getString(R.string.help_uswarn), "uswarn")
-            hm["wpctext"] = TileObject(R.drawable.srfd, WPCTextProductsActivity::class.java, WPCTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"),
-                    resources.getString(R.string.help_wpc_text_products), "wpctext")
-            hm["nhc"] = TileObject(R.drawable.nhc, NHCActivity::class.java, "", arrayOf(), resources.getString(R.string.help_nhc), "nhc")
-            hm["nwsmosaic"] = TileObject(R.drawable.nws_sector, USNWSMosaicActivity::class.java, USNWSMosaicActivity.URL, arrayOf("", ""),
-                    resources.getString(R.string.help_nws_radar_mosaics), "nwsmosaic")
-            hm["goes"] = TileObject(R.drawable.goes, GOES16Activity::class.java, GOES16Activity.RID, arrayOf("CONUS", "09"), resources.getString(R.string.help_goes_viewer), "goes")
-            hm["lightning"] = TileObject(R.drawable.lightning, LightningActivity::class.java, "", arrayOf(), resources.getString(R.string.help_lightning), "lightning")
-            hm["wpcimages"] = TileObject(R.drawable.fmap, WPCImagesActivity::class.java, "", arrayOf(), resources.getString(R.string.help_wpc_images), "wpcimages")
-            hm["twitter_state"] = TileObject(R.drawable.twstate, WebscreenABState::class.java, "", arrayOf(), resources.getString(R.string.help_twitter), "twitter_state")
-            hm["twitter_tornado"] = TileObject(R.drawable.twtornado, WebscreenAB::class.java, WebscreenAB.URL,
-                    arrayOf("<html><meta name=\"viewport\" content=\"width=device-width, user-scalable=no\" /> <body width=\"100%\"><div><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\"://platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script><html><a class=\"twitter-timeline\" data-dnt=\"true\" href=\"https://twitter.com/search?q=%23tornado\" data-widget-id=\"406096257220763648\" data-chrome=\"noscrollbar noheader nofooter noborders \" data-tweet-limit=20>Tweets about \"#tornado\"</a></div></body></html>", "#tornado"),
-                    resources.getString(R.string.help_twitter), "twitter_tornado")
-            hm["opc"] = TileObject(R.drawable.opc, OPCImagesActivity::class.java, "", arrayOf(), resources.getString(R.string.help_opc), "opc")
-            hm["goesfulldisk"] = TileObject(R.drawable.goesfulldisk, NWSGOESFullDiskActivity::class.java, "", arrayOf(), resources.getString(R.string.help_goesfulldisk), "goesfulldisk")
-            hm["nwsobs"] = TileObject(R.drawable.nwsobs, NWSObsSitesActivity::class.java, "", arrayOf(), resources.getString(R.string.help_nws_obs_sites), "nwsobs")
+            hm["uswarn"] = TileObject(
+                R.drawable.warn,
+                USWarningsWithRadarActivity::class.java,
+                USWarningsWithRadarActivity.URL,
+                arrayOf(
+                    ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?",
+                    "us"
+                ),
+                resources.getString(R.string.help_uswarn),
+                "uswarn"
+            )
+            hm["wpctext"] = TileObject(
+                R.drawable.srfd,
+                WPCTextProductsActivity::class.java,
+                WPCTextProductsActivity.URL,
+                arrayOf("pmdspd", "Short Range Forecast Discussion"),
+                resources.getString(R.string.help_wpc_text_products),
+                "wpctext"
+            )
+            hm["nhc"] = TileObject(
+                R.drawable.nhc,
+                NHCActivity::class.java,
+                "",
+                arrayOf(),
+                resources.getString(R.string.help_nhc),
+                "nhc"
+            )
+            hm["nwsmosaic"] = TileObject(
+                R.drawable.nws_sector,
+                USNWSMosaicActivity::class.java,
+                USNWSMosaicActivity.URL,
+                arrayOf("", ""),
+                resources.getString(R.string.help_nws_radar_mosaics),
+                "nwsmosaic"
+            )
+            hm["goes"] = TileObject(
+                R.drawable.goes,
+                GOES16Activity::class.java,
+                GOES16Activity.RID,
+                arrayOf("CONUS", "09"),
+                resources.getString(R.string.help_goes_viewer),
+                "goes"
+            )
+            hm["lightning"] = TileObject(
+                R.drawable.lightning,
+                LightningActivity::class.java,
+                "",
+                arrayOf(),
+                resources.getString(R.string.help_lightning),
+                "lightning"
+            )
+            hm["wpcimages"] = TileObject(
+                R.drawable.fmap,
+                WPCImagesActivity::class.java,
+                "",
+                arrayOf(),
+                resources.getString(R.string.help_wpc_images),
+                "wpcimages"
+            )
+            hm["twitter_state"] = TileObject(
+                R.drawable.twstate,
+                WebscreenABState::class.java,
+                "",
+                arrayOf(),
+                resources.getString(R.string.help_twitter),
+                "twitter_state"
+            )
+            hm["twitter_tornado"] = TileObject(
+                R.drawable.twtornado, WebscreenAB::class.java, WebscreenAB.URL,
+                arrayOf(
+                    "<html><meta name=\"viewport\" content=\"width=device-width, user-scalable=no\" /> <body width=\"100%\"><div><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\"://platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script><html><a class=\"twitter-timeline\" data-dnt=\"true\" href=\"https://twitter.com/search?q=%23tornado\" data-widget-id=\"406096257220763648\" data-chrome=\"noscrollbar noheader nofooter noborders \" data-tweet-limit=20>Tweets about \"#tornado\"</a></div></body></html>",
+                    "#tornado"
+                ),
+                resources.getString(R.string.help_twitter), "twitter_tornado"
+            )
+            hm["opc"] = TileObject(
+                R.drawable.opc,
+                OPCImagesActivity::class.java,
+                "",
+                arrayOf(),
+                resources.getString(R.string.help_opc),
+                "opc"
+            )
+            hm["goesfulldisk"] = TileObject(
+                R.drawable.goesfulldisk,
+                NWSGOESFullDiskActivity::class.java,
+                "",
+                arrayOf(),
+                resources.getString(R.string.help_goesfulldisk),
+                "goesfulldisk"
+            )
+            hm["nwsobs"] = TileObject(
+                R.drawable.nwsobs,
+                NWSObsSitesActivity::class.java,
+                "",
+                arrayOf(),
+                resources.getString(R.string.help_nws_obs_sites),
+                "nwsobs"
+            )
             if (!UIPreferences.dualpaneRadarIcon) {
-                hm["wxogl"] = TileObject(R.drawable.wxogldualpane, WXGLRadarActivityMultiPane::class.java, WXGLRadarActivityMultiPane.RID, arrayOf(Location.rid, "", "2"), "", "wxogl")
+                hm["wxogl"] = TileObject(
+                    R.drawable.wxogldualpane,
+                    WXGLRadarActivityMultiPane::class.java,
+                    WXGLRadarActivityMultiPane.RID,
+                    arrayOf(Location.rid, "", "2"),
+                    "",
+                    "wxogl"
+                )
             } else {
-                hm["wxogl"] = TileObject(R.drawable.wxoglsinglepane, WXGLRadarActivity::class.java, WXGLRadarActivity.RID, arrayOf(Location.rid, ""), "", "wxogl")
+                hm["wxogl"] = TileObject(
+                    R.drawable.wxoglsinglepane,
+                    WXGLRadarActivity::class.java,
+                    WXGLRadarActivity.RID,
+                    arrayOf(Location.rid, ""),
+                    "",
+                    "wxogl"
+                )
             }
             Location.checkCurrentLocationValidity()
             //val locInt = Location.currentLocation
-            hm["wxoglquad"] = TileObject(R.drawable.wxoglquadpane, WXGLRadarActivityMultiPane::class.java, WXGLRadarActivityMultiPane.RID,
-                    arrayOf(Location.rid, "", "4"), "", "wxoglquad")
-            hm["model_nssl_wrf"] = TileObject(R.drawable.nsslwrf, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "NSSL", "NSSL"),
-                    resources.getString(R.string.help_models_nssl_wrf), "model_nssl_wrf")
-            hm["goes16"] = TileObject(R.drawable.goes16, GOES16Activity::class.java, GOES16Activity.RID, arrayOf(""), resources.getString(R.string.help_goes16), "goes16")
-            hm["wpcgefs"] = TileObject(R.drawable.wpcgefs, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "WPCGEFS", "WPC"),
-                    resources.getString(R.string.help_wpcgefs), "wpcgefs")
-            val tileOrder = "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:"
+            hm["wxoglquad"] = TileObject(
+                R.drawable.wxoglquadpane,
+                WXGLRadarActivityMultiPane::class.java,
+                WXGLRadarActivityMultiPane.RID,
+                arrayOf(Location.rid, "", "4"),
+                "",
+                "wxoglquad"
+            )
+            hm["model_nssl_wrf"] = TileObject(
+                R.drawable.nsslwrf,
+                ModelsGenericActivity::class.java,
+                ModelsGenericActivity.INFO,
+                arrayOf("1", "NSSL", "NSSL"),
+                resources.getString(R.string.help_models_nssl_wrf),
+                "model_nssl_wrf"
+            )
+            hm["goes16"] = TileObject(
+                R.drawable.goes16,
+                GOES16Activity::class.java,
+                GOES16Activity.RID,
+                arrayOf(""),
+                resources.getString(R.string.help_goes16),
+                "goes16"
+            )
+            hm["wpcgefs"] = TileObject(
+                R.drawable.wpcgefs,
+                ModelsGenericActivity::class.java,
+                ModelsGenericActivity.INFO,
+                arrayOf("1", "WPCGEFS", "WPC"),
+                resources.getString(R.string.help_wpcgefs),
+                "wpcgefs"
+            )
+            val tileOrder =
+                "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:"
 
             // fixme
             var miscPref: String = Utility.readPref("FRAGMENT_MISC_ORDER", tileOrder)
@@ -137,8 +278,8 @@ class MiscFragment : Fragment() {
             }
             val tileOrderArr = MyApplication.colon.split(miscPref)
             return tileOrderArr
-                    .filterNot { it.contains("model_cod") || it.contains("model_wrf") || it.contains("model_ncar_ensemble") }
-                    .mapTo(mutableListOf()) { hm[it]!! }
+                .filterNot { it.contains("model_cod") || it.contains("model_wrf") || it.contains("model_ncar_ensemble") }
+                .mapTo(mutableListOf()) { hm[it]!! }
         }
 }
 

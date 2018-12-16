@@ -51,16 +51,23 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
     private val pacTitleList = mutableListOf<String>()
     private val bitmaps = mutableListOf<Bitmap>()
     private var cNotif: ObjectCardText? = null
-    private val cardNotifHeaderText = "Currently blocked storm notifications, tap this text to clear all blocks "
+    private val cardNotifHeaderText =
+        "Currently blocked storm notifications, tap this text to clear all blocks "
     var html: String = ""
 
     fun getData() {
-        listOf("${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png", "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png",
-                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png", "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png",
-                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png", "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png").forEach { bitmaps.add(it.getImage()) }
+        listOf(
+            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png",
+            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png",
+            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png",
+            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png",
+            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png",
+            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png"
+        ).forEach { bitmaps.add(it.getImage()) }
         var dataRet: ObjectNHCStormInfo
         (1 until 6).forEach {
-            dataRet = UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_at" + it.toString() + ".xml")
+            dataRet =
+                    UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_at" + it.toString() + ".xml")
             if (dataRet.title != "") {
                 atlSumList.add(dataRet.summary)
                 atlLinkList.add(UtilityString.getNWSPRE(dataRet.url))
@@ -71,7 +78,8 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
             }
         }
         (1 until 6).forEach {
-            dataRet = UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_ep" + it.toString() + ".xml")
+            dataRet =
+                    UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_ep" + it.toString() + ".xml")
             if (dataRet.title != "") {
                 pacSumList.add(dataRet.summary)
                 pacLinkList.add(UtilityString.getNWSPRE(dataRet.url))
@@ -114,7 +122,10 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
                     val wallet = atlWalletList[k]
                     cAtl.setOnClickListener(View.OnClickListener {
                         val i = Intent(context, NHCStormActivity::class.java)
-                        i.putExtra(NHCStormActivity.URL, arrayOf(url, title, "nosound", imgUrl1, imgUrl2, wallet))
+                        i.putExtra(
+                            NHCStormActivity.URL,
+                            arrayOf(url, title, "nosound", imgUrl1, imgUrl2, wallet)
+                        )
                         context.startActivity(i)
                     })
                     dynamicview.addView(cAtl.card)
@@ -138,7 +149,14 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
                     val imgUrl2 = pacImg2List[k]
                     val title = pacTitleList[k]
                     val wallet = pacWalletList[k]
-                    cPac.setOnClickListener(View.OnClickListener { ObjectIntent(context, NHCStormActivity::class.java, NHCStormActivity.URL, arrayOf(url, title, "nosound", imgUrl1, imgUrl2, wallet)) })
+                    cPac.setOnClickListener(View.OnClickListener {
+                        ObjectIntent(
+                            context,
+                            NHCStormActivity::class.java,
+                            NHCStormActivity.URL,
+                            arrayOf(url, title, "nosound", imgUrl1, imgUrl2, wallet)
+                        )
+                    })
                     dynamicview.addView(cPac.card)
                 }
             }

@@ -42,9 +42,12 @@ object UtilitySPCMESOInputOutput {
 
     fun getImage(context: Context, param: String, sector: String): Bitmap {
         val prefModel = "SPCMESO"
-        val showRadar = Utility.readPref(context, prefModel + "_SHOW_RADAR", "false").startsWith("t")
-        val showOutlook = Utility.readPref(context, prefModel + "_SHOW_OUTLOOK", "false").startsWith("t")
-        val showWatwarn = Utility.readPref(context, prefModel + "_SHOW_WATWARN", "false").startsWith("t")
+        val showRadar =
+            Utility.readPref(context, prefModel + "_SHOW_RADAR", "false").startsWith("t")
+        val showOutlook =
+            Utility.readPref(context, prefModel + "_SHOW_OUTLOOK", "false").startsWith("t")
+        val showWatwarn =
+            Utility.readPref(context, prefModel + "_SHOW_WATWARN", "false").startsWith("t")
         val showTopo = Utility.readPref(context, prefModel + "_SHOW_TOPO", "false").startsWith("t")
         val layersAl = mutableListOf<Drawable>()
         val gifUrl = if (UtilitySPCMESO.imgSf.contains(param) && !showRadar) {
@@ -52,15 +55,25 @@ object UtilitySPCMESOInputOutput {
         } else {
             ".gif"
         }
-        val imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/$param/$param$gifUrl"
-        val radImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/rgnlrad/rgnlrad.gif"
-        val outlookImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/otlk/otlk.gif"
-        val watwarnImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/warns/warns.gif"
-        val topoImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/topo/topo.gif"
+        val imgUrl =
+            "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/$param/$param$gifUrl"
+        val radImgUrl =
+            "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/rgnlrad/rgnlrad.gif"
+        val outlookImgUrl =
+            "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/otlk/otlk.gif"
+        val watwarnImgUrl =
+            "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/warns/warns.gif"
+        val topoImgUrl =
+            "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/topo/topo.gif"
         var bitmap = imgUrl.getImage()
         layersAl.add(ColorDrawable(Color.WHITE))
         if (showTopo) {
-            layersAl.add(BitmapDrawable(context.resources, UtilityImg.eraseBG(topoImgUrl.getImage(), -1)))
+            layersAl.add(
+                BitmapDrawable(
+                    context.resources,
+                    UtilityImg.eraseBG(topoImgUrl.getImage(), -1)
+                )
+            )
         }
         if (showRadar) {
             val bitmapradar = radImgUrl.getImage()
@@ -69,21 +82,42 @@ object UtilitySPCMESOInputOutput {
         }
         layersAl.add(BitmapDrawable(context.resources, bitmap))
         if (showOutlook) {
-            layersAl.add(BitmapDrawable(context.resources, UtilityImg.eraseBG(outlookImgUrl.getImage(), -1)))
+            layersAl.add(
+                BitmapDrawable(
+                    context.resources,
+                    UtilityImg.eraseBG(outlookImgUrl.getImage(), -1)
+                )
+            )
         }
         if (showWatwarn) {
-            layersAl.add(BitmapDrawable(context.resources, UtilityImg.eraseBG(watwarnImgUrl.getImage(), -1)))
+            layersAl.add(
+                BitmapDrawable(
+                    context.resources,
+                    UtilityImg.eraseBG(watwarnImgUrl.getImage(), -1)
+                )
+            )
         }
         return UtilityImg.layerDrawableToBitmap(layersAl)
     }
 
-    fun getAnimation(context: Context, sector: String, param: String, frameCnt: Int): AnimationDrawable {
+    fun getAnimation(
+        context: Context,
+        sector: String,
+        param: String,
+        frameCnt: Int
+    ): AnimationDrawable {
         val urlAl = mutableListOf<String>()
-        val timeList = ("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/new/archiveviewer.php?sector=19&parm=pmsl").getHtml().parseColumn("dattim\\[[0-9]{1,2}\\].*?=.*?([0-9]{8})")
+        val timeList =
+            ("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/new/archiveviewer.php?sector=19&parm=pmsl").getHtml()
+                .parseColumn("dattim\\[[0-9]{1,2}\\].*?=.*?([0-9]{8})")
         val delay = UtilityImg.animInterval(context)
         //val frameCnt = frameCntStr.toIntOrNull() ?: 0
         if (timeList.size > frameCnt) {
-            stride(frameCnt - 1, -1, -1).mapTo(urlAl) { "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s" + sector + "/" + param + "/" + param + "_" + timeList[it] + ".gif" }
+            stride(
+                frameCnt - 1,
+                -1,
+                -1
+            ).mapTo(urlAl) { "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s" + sector + "/" + param + "/" + param + "_" + timeList[it] + ".gif" }
         }
         return UtilityImgAnim.getAnimationDrawableFromURLListWhiteBG(context, urlAl, delay)
     }

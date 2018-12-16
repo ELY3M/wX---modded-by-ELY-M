@@ -15,22 +15,22 @@ internal object OpenGLShaderUniform {
      *
      */
     const val vs_SolidColorUnfiform =
-            "uniform    mat4        uMVPMatrix;" +
-                    "attribute  vec4        vPosition;" +
-                    "attribute  vec4        a_Color;" + // was attribute
+        "uniform    mat4        uMVPMatrix;" +
+                "attribute  vec4        vPosition;" +
+                "attribute  vec4        a_Color;" + // was attribute
 
-                    "varying  vec4        v_Color;" +
-                    "void main() {" +
-                    "  gl_Position = uMVPMatrix * vPosition;" +
-                    "  v_Color = a_Color;" +
-                    "}"
+                "varying  vec4        v_Color;" +
+                "void main() {" +
+                "  gl_Position = uMVPMatrix * vPosition;" +
+                "  v_Color = a_Color;" +
+                "}"
 
     const val fs_SolidColorUnfiform =
-            "precision mediump float;" +
-                    "uniform vec4 v_Color;" +
-                    "void main() {" +
-                    "  gl_FragColor = v_Color;" +
-                    "}"
+        "precision mediump float;" +
+                "uniform vec4 v_Color;" +
+                "void main() {" +
+                "  gl_FragColor = v_Color;" +
+                "}"
 
     fun loadShader(type: Int, shaderCode: String): Int {
 

@@ -53,14 +53,23 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.canada_text)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout_bottom_toolbar,
+            R.menu.canada_text
+        )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         sv = findViewById(R.id.sv)
         val linearLayout: LinearLayout = findViewById(R.id.ll)
         c0 = ObjectCardText(this)
         linearLayout.addView(c0.card)
-        c0.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
+        c0.setOnClickListener(View.OnClickListener {
+            UtilityToolbar.showHide(
+                toolbar,
+                toolbarBottom
+            )
+        })
         linearLayout.addView(ObjectCALegal(this, "").card)
         prod = Utility.readPref(this, "CA_TEXT_LASTUSED", prod)
         description = Utility.readPref(this, "CA_TEXT_LASTUSED_TITLE", description)
@@ -71,11 +80,12 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         title = description
         sv.smoothScrollTo(0, 0)
         withContext(Dispatchers.IO) {
-            sigHtmlTmp = if (prod != "https://weather.gc.ca/forecast/public_bulletins_e.html?Bulletin=fpcn48.cwao") {
-                UtilityDownload.getTextProduct(contextg, prod)
-            } else {
-                UtilityString.getHTMLandParseSep(prod, "<pre>(.*?)</pre>")
-            }
+            sigHtmlTmp =
+                    if (prod != "https://weather.gc.ca/forecast/public_bulletins_e.html?Bulletin=fpcn48.cwao") {
+                        UtilityDownload.getTextProduct(contextg, prod)
+                    } else {
+                        UtilityString.getHTMLandParseSep(prod, "<pre>(.*?)</pre>")
+                    }
         }
         c0.setTextAndTranslate(Utility.fromHtml(sigHtmlTmp))
         Utility.writePref(contextg, "CA_TEXT_LASTUSED", prod)
@@ -91,7 +101,10 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 UtilityShare.shareText(this, description, Utility.fromHtml(sigHtmlTmp))
                 return true
             }
-            R.id.action_focn45 -> setProdAndDescription("focn45", "Significant Weather Discussion, PASPC")
+            R.id.action_focn45 -> setProdAndDescription(
+                "focn45",
+                "Significant Weather Discussion, PASPC"
+            )
             R.id.action_fxcn01 -> setProdAndDescription("fxcn01", "FXCN01")
             R.id.action_uv -> setProdAndDescription("fpcn48", "FPCN48")
             R.id.action_s_mb -> setProdAndDescription("awcn11", "Weather Summary S. Manitoba")

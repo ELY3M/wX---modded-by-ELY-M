@@ -68,8 +68,10 @@ internal object UtilityMetar {
             obsStateOld = rid
             val obsList = getObservationSites(context, rid)
             // https://www.aviationweather.gov/metar/data?ids=KDTW%2CKARB&format=raw&date=&hours=0
-            val sigHtmlTmp = "${MyApplication.nwsAWCwebsitePrefix}/adds/metars/index?submit=1&station_ids=$obsList&chk_metars=on".getHtml()
-            val metarArrTmp = sigHtmlTmp.parseColumn("<FONT FACE=\"Monospace,Courier\">(.*?)</FONT><BR>")
+            val sigHtmlTmp =
+                "${MyApplication.nwsAWCwebsitePrefix}/adds/metars/index?submit=1&station_ids=$obsList&chk_metars=on".getHtml()
+            val metarArrTmp =
+                sigHtmlTmp.parseColumn("<FONT FACE=\"Monospace,Courier\">(.*?)</FONT><BR>")
             val metarArr = condenseObs(metarArrTmp)
             if (!initializedObsMap) {
                 val xmlFileInputStream = context.resources.openRawResource(R.raw.us_metar3)
@@ -119,7 +121,8 @@ internal object UtilityMetar {
                     if (windBlob == "") {
                         windBlob = z.parse(RegExp.patternMetarWxogl4)
                     }
-                    conditionsBlob = z.parse(RegExp.patternMetarWxogl5) // "SM (.*?) M{0,1}[0-9]{2}/"
+                    conditionsBlob =
+                            z.parse(RegExp.patternMetarWxogl5) // "SM (.*?) M{0,1}[0-9]{2}/"
                     visBlob = z.parse(" ([0-9].*?SM) ")
                     visBlobArr = MyApplication.space.split(visBlob)
                     visBlobDisplay = visBlobArr[visBlobArr.size - 1]
@@ -168,7 +171,9 @@ internal object UtilityMetar {
                     // IFR 	1 mi or more but less than 3 mi 	and/or 500 ft or more but less than 1,000 ft
                     // Low IFR 	< 1 mi 	and/or < 500 ft
                     if (pressureBlob.length == 4) {
-                        pressureBlob = StringBuilder(pressureBlob).insert(pressureBlob.length - 2, ".").toString()
+                        pressureBlob =
+                                StringBuilder(pressureBlob).insert(pressureBlob.length - 2, ".")
+                                    .toString()
                         pressureBlob = UtilityMath.unitsPressure(pressureBlob)
                     }
                     // 19011G16KT
@@ -178,7 +183,8 @@ internal object UtilityMetar {
                         windDir = windBlob.substring(0, 3)
                         windInKt = windBlob.substring(3, 5)
                         windDirD = windDir.toDoubleOrNull() ?: 0.0
-                        windBlob = windDir + " (" + UtilityMath.convertWindDir(windDirD) + ") " + windInKt + " kt"
+                        windBlob = windDir + " (" + UtilityMath.convertWindDir(windDirD) + ") " +
+                                windInKt + " kt"
                     } else if (windBlob.contains("KT") && windBlob.length == 10) {
                         validWind = true
                         validWindGust = true
@@ -186,7 +192,8 @@ internal object UtilityMetar {
                         windInKt = windBlob.substring(3, 5)
                         windgustInKt = windBlob.substring(6, 8)
                         windDirD = windDir.toDoubleOrNull() ?: 0.0
-                        windBlob = windDir + " (" + UtilityMath.convertWindDir(windDirD) + ") " + windInKt + " G " + windgustInKt + " kt"
+                        windBlob = windDir + " (" + UtilityMath.convertWindDir(windDirD) + ") " +
+                                windInKt + " G " + windgustInKt + " kt"
                     }
                     if (tdArr.size > 1) {
                         t = tdArr[0]
@@ -197,11 +204,13 @@ internal object UtilityMetar {
                         latlon = OBS_LATLON[obsSite] ?: arrayOf("0.0", "0.0")
                         if (latlon[0] != "0.0") {
                             obsAl.add(latlon[0] + ":" + latlon[1] + ":" + t + "/" + d)
-                            obsAlExt.add(latlon[0] + ":" + latlon[1] + ":" + t + "/" + d + " (" + obsSite + ")"
-                                    + MyApplication.newline + pressureBlob + " - " + visBlobDisplay
-                                    + MyApplication.newline + windBlob
-                                    + MyApplication.newline + conditionsBlob
-                                    + MyApplication.newline + timeBlob)
+                            obsAlExt.add(
+                                latlon[0] + ":" + latlon[1] + ":" + t + "/" + d + " (" + obsSite + ")"
+                                        + MyApplication.newline + pressureBlob + " - " + visBlobDisplay
+                                        + MyApplication.newline + windBlob
+                                        + MyApplication.newline + conditionsBlob
+                                        + MyApplication.newline + timeBlob
+                            )
                             try {
                                 if (validWind) {
                                     obsAlWb.add(latlon[0] + ":" + latlon[1] + ":" + windDir + ":" + windInKt)
@@ -261,7 +270,8 @@ internal object UtilityMetar {
         return if (bestRid == -1) {
             "Please select a location in the United States."
         } else {
-            (MyApplication.NWS_RADAR_PUB + "data/observations/metar/decoded/" + metarSites[bestRid].name + ".TXT").getHtmlSep().replace("<br>", MyApplication.newline)
+            (MyApplication.NWS_RADAR_PUB + "data/observations/metar/decoded/" + metarSites[bestRid].name + ".TXT").getHtmlSep()
+                .replace("<br>", MyApplication.newline)
         }
     }
 
@@ -305,7 +315,8 @@ internal object UtilityMetar {
         val obsSiteRange = 200.0
         var currentDistance: Double
         obsSites.indices.forEach {
-            currentDistance = LatLon.distance(radarLocation, obsSites[it].location, DistanceUnit.MILE)
+            currentDistance =
+                    LatLon.distance(radarLocation, obsSites[it].location, DistanceUnit.MILE)
             if (currentDistance < obsSiteRange) {
                 obsListSb.append(obsSites[it].name)
                 obsListSb.append(",")

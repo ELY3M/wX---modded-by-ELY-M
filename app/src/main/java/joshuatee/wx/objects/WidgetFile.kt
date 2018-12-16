@@ -23,14 +23,39 @@ package joshuatee.wx.objects
 
 import joshuatee.wx.*
 
-enum class WidgetFile constructor(val fileName: String, val prefString: String, val action: String, val clazz: Class<*>) {
+enum class WidgetFile constructor(
+    val fileName: String,
+    val prefString: String,
+    val action: String,
+    val clazz: Class<*>
+) {
     NEXRAD_RADAR("nexrad.png", "DOWNLOAD_LOC1_RADAR", "ACTION_WX_NEXRAD", WidgetNexrad::class.java),
-    MOSAIC_RADAR("rad_1km.png", "DOWNLOAD_LOC1_MOSAICS_RAD", "ACTION_WX", WidgetMosaicsRad::class.java),
-    SPCMESO("spc_meso.png", "DOWNLOAD_WIDGET_SPCMESO", "ACTION_WX_SPCMESO", WidgetSPCMESO::class.java),
+    MOSAIC_RADAR(
+        "rad_1km.png",
+        "DOWNLOAD_LOC1_MOSAICS_RAD",
+        "ACTION_WX",
+        WidgetMosaicsRad::class.java
+    ),
+    SPCMESO(
+        "spc_meso.png",
+        "DOWNLOAD_WIDGET_SPCMESO",
+        "ACTION_WX_SPCMESO",
+        WidgetSPCMESO::class.java
+    ),
     SPCSWO("spc_swo.png", "DOWNLOAD_WIDGET_SPCSWO", "ACTION_WX_SPCSWO", WidgetSPCSWO::class.java),
     VIS("vis_1km.png", "DOWNLOAD_LOC1_MOSAICS", "ACTION_WX_VIS", WidgetMosaics::class.java),
-    WPCIMG("widget_wpcimg.png", "DOWNLOAD_WIDGET_WPCIMG", "ACTION_WX_WPCIMG", WidgetWPCIMG::class.java),
-    CONUSWV("widget_conuswv.png", "DOWNLOAD_WIDGET_CONUSWV", "ACTION_WX_CONUSWV", WidgetCONUSWV::class.java),
+    WPCIMG(
+        "widget_wpcimg.png",
+        "DOWNLOAD_WIDGET_WPCIMG",
+        "ACTION_WX_WPCIMG",
+        WidgetWPCIMG::class.java
+    ),
+    CONUSWV(
+        "widget_conuswv.png",
+        "DOWNLOAD_WIDGET_CONUSWV",
+        "ACTION_WX_CONUSWV",
+        WidgetCONUSWV::class.java
+    ),
     STRPT("widget_strpt.png", "DOWNLOAD_WIDGET_STRPT", "ACTION_WX_STRPT", WidgetSTRPT::class.java),
     NHC("widget_nhc.png", "DOWNLOAD_WIDGET_NHC", "ACTION_WX_NHC", WidgetNHC::class.java),
     HWO("", "DOWNLOAD_LOC1_TXT_HWO", "ACTION_TEXTPROD_HWO", WidgetTextHWO::class.java),

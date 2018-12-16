@@ -40,7 +40,15 @@ class ObjectWidgetHWO(context: Context) {
         val hwo = Utility.readPref(context, "HWO_WIDGET", "")
         remoteViews.setTextViewText(R.id.text1, Utility.fromHtml(hwo))
         if (!MyApplication.widgetPreventTap) {
-            UtilityWidget.setupIntent(context, remoteViews, AFDActivity::class.java, R.id.text1, AFDActivity.URL, arrayOf(nws1Current, "HWO"), WidgetFile.HWO.action)
+            UtilityWidget.setupIntent(
+                context,
+                remoteViews,
+                AFDActivity::class.java,
+                R.id.text1,
+                AFDActivity.URL,
+                arrayOf(nws1Current, "HWO"),
+                WidgetFile.HWO.action
+            )
         }
     }
 }
