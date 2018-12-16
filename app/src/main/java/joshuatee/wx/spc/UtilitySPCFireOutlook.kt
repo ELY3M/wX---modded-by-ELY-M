@@ -27,15 +27,15 @@ import joshuatee.wx.R
 internal object UtilitySPCFireOutlook {
 
     val textProducts = listOf(
-            "fwddy1",
-            "fwddy2",
-            "fwddy38"
+        "fwddy1",
+        "fwddy2",
+        "fwddy38"
     )
 
     val imageUrls = listOf(
-            "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/day1otlk_fire.gif",
-            "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/day2otlk_fire.gif",
-            "${MyApplication.nwsSPCwebsitePrefix}/products/exper/fire_wx/imgs/day38otlk_fire.gif"
+        "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/day1otlk_fire.gif",
+        "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/day2otlk_fire.gif",
+        "${MyApplication.nwsSPCwebsitePrefix}/products/exper/fire_wx/imgs/day38otlk_fire.gif"
     )
 
     const val activityTitle = R.string.title_activity_spcfire_outlook

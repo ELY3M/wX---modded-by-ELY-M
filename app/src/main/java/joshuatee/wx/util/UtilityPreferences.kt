@@ -86,8 +86,10 @@ object UtilityPreferences {
                 } else {
                     Utility.writePref(context, lineArr[1], lineArr[2])
                 }
-                "FLOAT" -> Utility.writePref(context, lineArr[1], lineArr[2].toFloatOrNull()
-                        ?: 0.0f)
+                "FLOAT" -> Utility.writePref(
+                    context, lineArr[1], lineArr[2].toFloatOrNull()
+                        ?: 0.0f
+                )
                 "INT" -> Utility.writePref(context, lineArr[1], lineArr[2].toIntOrNull() ?: 0)
             }
         }

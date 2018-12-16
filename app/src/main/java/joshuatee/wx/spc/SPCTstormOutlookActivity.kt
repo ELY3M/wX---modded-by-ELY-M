@@ -64,7 +64,12 @@ class SPCTstormOutlookActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, "SPC Thunderstorm Outlook", "", bitmaps)
+            R.id.action_share -> UtilityShare.shareText(
+                this,
+                "SPC Thunderstorm Outlook",
+                "",
+                bitmaps
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true

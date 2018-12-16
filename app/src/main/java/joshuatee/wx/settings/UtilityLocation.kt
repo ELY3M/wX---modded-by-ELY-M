@@ -67,15 +67,27 @@ object UtilityLocation {
 
     fun getXYFromAddressOSM(addressF: String): List<String> {
         val address = addressF.replace(" ", "+")
-        val url = "http://nominatim.openstreetmap.org/search?q=$address&format=xml&polygon=0&addressdetails=1"
-        return UtilityString.getHTMLandParseMultipeFirstMatch(url, "lat=.(.*?).\\slon=.(.*?).\\s", 2).toList()
+        val url =
+            "http://nominatim.openstreetmap.org/search?q=$address&format=xml&polygon=0&addressdetails=1"
+        return UtilityString.getHTMLandParseMultipeFirstMatch(
+            url,
+            "lat=.(.*?).\\slon=.(.*?).\\s",
+            2
+        ).toList()
     }
 
     fun getGPS(context: Context): DoubleArray {
         val lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val providers = lm.getProviders(true)
         var l: Location? = null
-        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        if (ContextCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        )
             for (i in providers.indices.reversed()) {
                 l = lm.getLastKnownLocation(providers[i])
                 if (l != null) break
@@ -155,21 +167,34 @@ object UtilityLocation {
             addChar = ""
         } // WFO
         val x = Utility.readPref(context, officeType + "_" + site.toUpperCase() + "_X", "0.0")
-        val y = addChar + Utility.readPref(context, officeType + "_" + site.toUpperCase() + "_Y", "0.0")
+        val y =
+            addChar + Utility.readPref(context, officeType + "_" + site.toUpperCase() + "_Y", "0.0")
         return LatLon(x, y)
     }
 
     fun checkRoamingLocation(context: Context, locNum: String, xStr: String, yStr: String) {
         val currentXY = getGPS(context)
-        val roamingLocationDistanceCheck = Utility.readPref(context, "ROAMING_LOCATION_DISTANCE_CHECK", 5)
+        val roamingLocationDistanceCheck =
+            Utility.readPref(context, "ROAMING_LOCATION_DISTANCE_CHECK", 5)
         val locX = xStr.toDoubleOrNull() ?: 0.0
         val locY = yStr.toDoubleOrNull() ?: 0.0
-        val currentDistance = LatLon.distance(LatLon(currentXY[0], currentXY[1]), LatLon(locX, locY), DistanceUnit.NAUTICAL_MILE)
+        val currentDistance = LatLon.distance(
+            LatLon(currentXY[0], currentXY[1]),
+            LatLon(locX, locY),
+            DistanceUnit.NAUTICAL_MILE
+        )
         if (currentDistance > roamingLocationDistanceCheck &&
-                (currentXY[0] > 1.0 || currentXY[0] < -1.0) &&
-                (currentXY[1] > 1.0 || currentXY[1] < -1.0)) {
+            (currentXY[0] > 1.0 || currentXY[0] < -1.0) &&
+            (currentXY[1] > 1.0 || currentXY[1] < -1.0)
+        ) {
             val date = UtilityTime.getDateAsString("MM-dd-yy HH:mm:SS Z")
-            joshuatee.wx.settings.Location.locationSave(context, locNum, currentXY[0].toString(), currentXY[1].toString(), "ROAMING $date")
+            joshuatee.wx.settings.Location.locationSave(
+                context,
+                locNum,
+                currentXY[0].toString(),
+                currentXY[1].toString(),
+                "ROAMING $date"
+            )
         }
     }
 

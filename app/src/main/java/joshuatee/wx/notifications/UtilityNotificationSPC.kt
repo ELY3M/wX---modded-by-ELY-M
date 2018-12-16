@@ -64,19 +64,35 @@ internal object UtilityNotificationSPC {
                     var detailRaw = threatLevel[1].replace("<.*?>".toRegex(), " ")
                     detailRaw = detailRaw.replace("&nbsp".toRegex(), " ")
                     val noBody = detailRaw
-                    val objPI = ObjectPendingIntents(context, SPCSWOActivity::class.java, SPCSWOActivity.NO,
-                            arrayOf((it + 1).toString(), ""), arrayOf((it + 1).toString(), "sound"))
+                    val objPI = ObjectPendingIntents(
+                        context, SPCSWOActivity::class.java, SPCSWOActivity.NO,
+                        arrayOf((it + 1).toString(), ""), arrayOf((it + 1).toString(), "sound")
+                    )
                     val cancelStr = "usspcswo" + it.toString() + threatLevel[0] + validTime
-                    if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
+                    if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
+                            context,
+                            cancelStr
+                        ))
+                    ) {
                         val sound = MyApplication.alertNotificationSoundSpcswo && !inBlackout
                         /*val noti = UtilityNotification.createNotifBigTextWithAction(context, sound, noMain,
                                 noBody, objPI.resultPendingIntent,
                                 MyApplication.ICON_MAP, noBody, Notification.PRIORITY_DEFAULT, Color.YELLOW, // was Notification.PRIORITY_DEFAULT
                                 MyApplication.ICON_ACTION, objPI.resultPendingIntent2, context.resources.getString(R.string.read_aloud))*/
-                        val notifObj = ObjectNotification(context, sound, noMain,
-                                noBody, objPI.resultPendingIntent,
-                                MyApplication.ICON_MAP, noBody, Notification.PRIORITY_DEFAULT, Color.YELLOW, // was Notification.PRIORITY_DEFAULT
-                                MyApplication.ICON_ACTION, objPI.resultPendingIntent2, context.resources.getString(R.string.read_aloud))
+                        val notifObj = ObjectNotification(
+                            context,
+                            sound,
+                            noMain,
+                            noBody,
+                            objPI.resultPendingIntent,
+                            MyApplication.ICON_MAP,
+                            noBody,
+                            Notification.PRIORITY_DEFAULT,
+                            Color.YELLOW, // was Notification.PRIORITY_DEFAULT
+                            MyApplication.ICON_ACTION,
+                            objPI.resultPendingIntent2,
+                            context.resources.getString(R.string.read_aloud)
+                        )
                         val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
                         notifObj.sendNotification(context, cancelStr, 1, noti)
                         //notifier.notify(cancelStr, 1, noti)
@@ -130,7 +146,8 @@ internal object UtilityNotificationSPC {
         threatList.add("MRGL")
         val noDays = 3
         for (day in 1..noDays) {
-            val urlBlob = "${MyApplication.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt"
+            val urlBlob =
+                "${MyApplication.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt"
             val html = urlBlob.getHtmlSep()
             val validTime = html.parse("VALID TIME ([0-9]{6}Z - [0-9]{6}Z)")
             val htmlBlob = html.parse("... CATEGORICAL ...(.*?&)&")
@@ -160,7 +177,10 @@ internal object UtilityNotificationSPC {
                     }
                     retStr += ":"
                     retStr = retStr.replace(" :", ":")
-                    retStr = retStr.replace(" 99.99 99.99 ", " ") // need for the way SPC ConvO seperates on 8 's
+                    retStr = retStr.replace(
+                        " 99.99 99.99 ",
+                        " "
+                    ) // need for the way SPC ConvO seperates on 8 's
                 } // end looping over polygons of one threat level
                 val x = mutableListOf<Double>()
                 val y = mutableListOf<Double>()
@@ -207,10 +227,21 @@ internal object UtilityNotificationSPC {
                                 locYStr = MyApplication.locations[n - 1].y
                                 locXDbl = locXStr.toDoubleOrNull() ?: 0.0
                                 locYDbl = locYStr.toDoubleOrNull() ?: 0.0
-                                val contains = polygon2.contains(ExternalPoint(locXDbl.toFloat(), locYDbl.toFloat()))
+                                val contains = polygon2.contains(
+                                    ExternalPoint(
+                                        locXDbl.toFloat(),
+                                        locYDbl.toFloat()
+                                    )
+                                )
                                 if (contains) {
                                     if (!notifUrls.contains("spcswoloc" + day.toString() + locNum))
-                                        notifUrls += sendSWONotif(context, locNum, day, threatLevelCode, validTime)
+                                        notifUrls += sendSWONotif(
+                                            context,
+                                            locNum,
+                                            day,
+                                            threatLevelCode,
+                                            validTime
+                                        )
                                 }
                             }
                         }
@@ -266,7 +297,8 @@ internal object UtilityNotificationSPC {
                         locYStr = MyApplication.locations[n - 1].y
                         locXDbl = locXStr.toDoubleOrNull() ?: 0.0
                         locYDbl = locYStr.toDoubleOrNull() ?: 0.0
-                        val contains = polygon2.contains(ExternalPoint(locXDbl.toFloat(), locYDbl.toFloat()))
+                        val contains =
+                            polygon2.contains(ExternalPoint(locXDbl.toFloat(), locYDbl.toFloat()))
                         if (contains) {
                             notifUrls += sendMCDNotif(context, locNum, mcdNoArr[z])
                         }
@@ -299,19 +331,42 @@ internal object UtilityNotificationSPC {
         val resultIntent2 = Intent(context, SPCMCDWShowActivity::class.java)
         val polygonType = PolygonType.MCD
         resultIntent.putExtra(SPCMCDWShowActivity.NO, arrayOf(mdNo, "", polygonType.toString()))
-        resultIntent2.putExtra(SPCMCDWShowActivity.NO, arrayOf(mdNo, "sound", polygonType.toString()))
+        resultIntent2.putExtra(
+            SPCMCDWShowActivity.NO,
+            arrayOf(mdNo, "sound", polygonType.toString())
+        )
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(SPCMCDWShowActivity::class.java)
         stackBuilder.addNextIntent(resultIntent)
-        val resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
-        val resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT)
+        val resultPendingIntent =
+            stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+        val resultPendingIntent2 = PendingIntent.getActivity(
+            context,
+            requestID + 1,
+            resultIntent2,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
         val cancelStr = "spcmcdloc$mdNo$locNum"
-        if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
+        if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
+                context,
+                cancelStr
+            ))
+        ) {
             val sound = MyApplication.locations[locNumInt].sound && !inBlackout
-            val notifObj = ObjectNotification(context, sound, noMain,
-                    noBody, resultPendingIntent,
-                    MyApplication.ICON_ALERT, noSummary, Notification.PRIORITY_DEFAULT, Color.YELLOW,
-                    MyApplication.ICON_ACTION, resultPendingIntent2, context.resources.getString(R.string.read_aloud))
+            val notifObj = ObjectNotification(
+                context,
+                sound,
+                noMain,
+                noBody,
+                resultPendingIntent,
+                MyApplication.ICON_ALERT,
+                noSummary,
+                Notification.PRIORITY_DEFAULT,
+                Color.YELLOW,
+                MyApplication.ICON_ACTION,
+                resultPendingIntent2,
+                context.resources.getString(R.string.read_aloud)
+            )
             val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
             notifObj.sendNotification(context, cancelStr, 1, noti)
             //notifier.notify(cancelStr, 1, noti)
@@ -320,7 +375,13 @@ internal object UtilityNotificationSPC {
         return notifUrls
     }
 
-    private fun sendSWONotif(context: Context, locNum: String, day: Int, threatLevel: String, validTime: String): String {
+    private fun sendSWONotif(
+        context: Context,
+        locNum: String,
+        day: Int,
+        threatLevel: String,
+        validTime: String
+    ): String {
         val locNumInt = (locNum.toIntOrNull() ?: 0) - 1
         var notifUrls = ""
         val sep = ","
@@ -347,14 +408,35 @@ internal object UtilityNotificationSPC {
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(SPCSWOActivity::class.java)
         stackBuilder.addNextIntent(resultIntent)
-        val resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
-        val resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT)
+        val resultPendingIntent =
+            stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+        val resultPendingIntent2 = PendingIntent.getActivity(
+            context,
+            requestID + 1,
+            resultIntent2,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
         val cancelStr = "spcswoloc" + day.toString() + locNum + threatLevel + validTime
-        if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
+        if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
+                context,
+                cancelStr
+            ))
+        ) {
             val sound = MyApplication.locations[locNumInt].sound && !inBlackout
-            val notifObj = ObjectNotification(context, sound, noMain, noBody, resultPendingIntent,
-                    MyApplication.ICON_ALERT, noSummary, Notification.PRIORITY_DEFAULT, Color.YELLOW,
-                    MyApplication.ICON_ACTION, resultPendingIntent2, context.resources.getString(R.string.read_aloud))
+            val notifObj = ObjectNotification(
+                context,
+                sound,
+                noMain,
+                noBody,
+                resultPendingIntent,
+                MyApplication.ICON_ALERT,
+                noSummary,
+                Notification.PRIORITY_DEFAULT,
+                Color.YELLOW,
+                MyApplication.ICON_ACTION,
+                resultPendingIntent2,
+                context.resources.getString(R.string.read_aloud)
+            )
             val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
             notifObj.sendNotification(context, cancelStr, 1, noti)
             //notifier.notify(cancelStr, 1, noti)
@@ -369,7 +451,10 @@ internal object UtilityNotificationSPC {
         val threatList = mutableListOf<String>()
         threatList.add("SPC30percent")
         threatList.add("SPC15percent")
-        var urlBlob = UtilityString.getHTMLandParse("${MyApplication.nwsSPCwebsitePrefix}/products/exper/day4-8/", "CLICK TO GET <a href=.(.*?txt).>WUUS48 PTSD48</a>")
+        var urlBlob = UtilityString.getHTMLandParse(
+            "${MyApplication.nwsSPCwebsitePrefix}/products/exper/day4-8/",
+            "CLICK TO GET <a href=.(.*?txt).>WUUS48 PTSD48</a>"
+        )
         urlBlob = "${MyApplication.nwsSPCwebsitePrefix}$urlBlob"
         var html = urlBlob.getHtmlSep()
         val validTime = html.parse("VALID TIME ([0-9]{6}Z - [0-9]{6}Z)")
@@ -377,7 +462,8 @@ internal object UtilityNotificationSPC {
         html = html.replace("0.30", "SPC30percent")
         html = html.replace("0.15", "SPC15percent")
         for (day in 4..8) {
-            val htmlBlob = html.parse("SEVERE WEATHER OUTLOOK POINTS DAY " + day.toString() + "(.*?&)&") // was (.*?)&&
+            val htmlBlob =
+                html.parse("SEVERE WEATHER OUTLOOK POINTS DAY " + day.toString() + "(.*?&)&") // was (.*?)&&
             threatList.forEach {
                 retStr = ""
                 val htmlList = htmlBlob.parseColumn(it.substring(1) + "(.*?)[A-Z&]")
@@ -403,7 +489,10 @@ internal object UtilityNotificationSPC {
                     }
                     retStr += ":"
                     retStr = retStr.replace(" :", ":")
-                    retStr = retStr.replace(" 99.99 99.99 ", " ") // need for the way SPC ConvO seperates on 8 's
+                    retStr = retStr.replace(
+                        " 99.99 99.99 ",
+                        " "
+                    ) // need for the way SPC ConvO seperates on 8 's
                 } // end looping over polygons of one threat level
                 val x = mutableListOf<Double>()
                 val y = mutableListOf<Double>()
@@ -450,10 +539,21 @@ internal object UtilityNotificationSPC {
                                 locYStr = MyApplication.locations[n - 1].y
                                 locXDbl = locXStr.toDoubleOrNull() ?: 0.0
                                 locYDbl = locYStr.toDoubleOrNull() ?: 0.0
-                                val contains = polygon2.contains(ExternalPoint(locXDbl.toFloat(), locYDbl.toFloat()))
+                                val contains = polygon2.contains(
+                                    ExternalPoint(
+                                        locXDbl.toFloat(),
+                                        locYDbl.toFloat()
+                                    )
+                                )
                                 if (contains) {
                                     if (!notifUrls.contains("spcswoloc" + day.toString() + locNum))
-                                        notifUrls += sendSWONotif(context, locNum, day, it, validTime)
+                                        notifUrls += sendSWONotif(
+                                            context,
+                                            locNum,
+                                            day,
+                                            it,
+                                            validTime
+                                        )
                                 }
                             }
                         }

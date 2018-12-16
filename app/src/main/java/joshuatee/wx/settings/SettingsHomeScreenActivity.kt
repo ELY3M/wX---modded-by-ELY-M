@@ -57,21 +57,21 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     private val prefToken = "HOMESCREEN_FAV"
     private var ridArrLabel = mutableListOf<String>()
     private val localChoicesText = listOf(
-            "CC: Current Conditions",
-            "CC2: Current Conditions with image",
-            "HAZ: Hazards", "7DAY: 7 Day Forecast",
-            "7DAY2: 7 Day Forecast with images",
-            "AFDLOC: Area Forecast Discussion",
-            "HWOLOC: Hazardous Weather Outlook",
-            "VFDLOC: Aviation only Area Forecast Discussion",
-            "SUNMOON: Sun/Moon Data",
-            "HOURLY: Hourly Forecast",
-            "CTOF: Celsius to Fahrenheit table"
+        "CC: Current Conditions",
+        "CC2: Current Conditions with image",
+        "HAZ: Hazards", "7DAY: 7 Day Forecast",
+        "7DAY2: 7 Day Forecast with images",
+        "AFDLOC: Area Forecast Discussion",
+        "HWOLOC: Hazardous Weather Outlook",
+        "VFDLOC: Aviation only Area Forecast Discussion",
+        "SUNMOON: Sun/Moon Data",
+        "HOURLY: Hourly Forecast",
+        "CTOF: Celsius to Fahrenheit table"
     )
     private val localChoicesImg = listOf(
-            "RADAR: Local NEXRAD Radar",
-            "CARAIN: Local CA Radar",
-            "WEATHERSTORY: Local NWS Weather Story"
+        "RADAR: Local NEXRAD Radar",
+        "CARAIN: Local CA Radar",
+        "WEATHERSTORY: Local NWS Weather Story"
     )
     private var hmFavOrig = ""
     private lateinit var recyclerView: RecyclerView
@@ -85,7 +85,12 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_homescreen, R.menu.settings_homescreen, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_recyclerview_homescreen,
+            R.menu.settings_homescreen,
+            true
+        )
         toolbarBottom.setOnMenuItemClickListener(this)
         ridFav = MyApplication.homescreenFav
         hmFavOrig = ridFav
@@ -111,15 +116,45 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             }
         })
         diaMain = ObjectDialogue(this, "Select text products:", localChoicesText + NWS_TXT_ARR)
-        diaMain.setSingleChoiceItems(DialogInterface.OnClickListener { _, which -> alertDialogClicked(diaMain, "TXT-", which) })
+        diaMain.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
+            alertDialogClicked(
+                diaMain,
+                "TXT-",
+                which
+            )
+        })
         diaImg = ObjectDialogue(this, "Select image products:", localChoicesImg + NWS_IMG_ARR)
-        diaImg.setSingleChoiceItems(DialogInterface.OnClickListener { _, which -> alertDialogClicked(diaImg, "", which) })
+        diaImg.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
+            alertDialogClicked(
+                diaImg,
+                "",
+                which
+            )
+        })
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", WFO_ARR)
-        diaAfd.setSingleChoiceItems(DialogInterface.OnClickListener { _, which -> alertDialogClicked(diaAfd, "TXT-" + "AFD", which) })
+        diaAfd.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
+            alertDialogClicked(
+                diaAfd,
+                "TXT-" + "AFD",
+                which
+            )
+        })
         diaVis = ObjectDialogue(this, "Select fixed location 1KM Vis products:", WFO_ARR)
-        diaVis.setSingleChoiceItems(DialogInterface.OnClickListener { _, which -> alertDialogClicked(diaVis, "IMG-", which) })
+        diaVis.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
+            alertDialogClicked(
+                diaVis,
+                "IMG-",
+                which
+            )
+        })
         diaRadar = ObjectDialogue(this, "Select fixed location Nexrad products:", RID_ARR)
-        diaRadar.setSingleChoiceItems(DialogInterface.OnClickListener { _, which -> alertDialogClicked(diaRadar, "NXRD-", which) })
+        diaRadar.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
+            alertDialogClicked(
+                diaRadar,
+                "NXRD-",
+                which
+            )
+        })
     }
 
     private fun toggleMode(am: ActionMode) {
@@ -251,14 +286,14 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun findPositionTEXT(key: String) = (0 until NWS_TXT_ARR.size)
-            .firstOrNull { NWS_TXT_ARR[it].startsWith(key.toLowerCase().replace("txt-", "")) }
-            ?.let { NWS_TXT_ARR[it] }
-            ?: ""
+        .firstOrNull { NWS_TXT_ARR[it].startsWith(key.toLowerCase().replace("txt-", "")) }
+        ?.let { NWS_TXT_ARR[it] }
+        ?: ""
 
     private fun findPositionIMG(key: String) = (0 until NWS_IMG_ARR.size)
-            .firstOrNull { NWS_IMG_ARR[it].startsWith(key.replace("IMG-", "")) }
-            ?.let { NWS_IMG_ARR[it] }
-            ?: ""
+        .firstOrNull { NWS_IMG_ARR[it].startsWith(key.replace("IMG-", "")) }
+        ?.let { NWS_IMG_ARR[it] }
+        ?: ""
 
     private fun findPositionIMG2(key: String): String {
         for (l in localChoicesImg) {
@@ -268,7 +303,8 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         return ""
     }
 
-    private fun findPositionTEXTLOCAL(key: String) = localChoicesText.firstOrNull { it.startsWith(key.replace("TXT-", "")) }
+    private fun findPositionTEXTLOCAL(key: String) =
+        localChoicesText.firstOrNull { it.startsWith(key.replace("TXT-", "")) }
             ?: ""
 
     private fun findPositionAFD(key: String): String {
@@ -284,8 +320,8 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun findPositionRadar(key: String) = (0 until RID_ARR.size)
-            .firstOrNull { RID_ARR[it].startsWith(key.replace("NXRD-", "")) }
-            ?.let { RID_ARR[it] + " (NEXRAD)" } ?: ""
+        .firstOrNull { RID_ARR[it].startsWith(key.replace("NXRD-", "")) }
+        ?.let { RID_ARR[it] + " (NEXRAD)" } ?: ""
 
     override fun onBackPressed() {
         if (ridFav != hmFavOrig) {
@@ -325,7 +361,8 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     private fun alertDialogClicked(dialogue: ObjectDialogue, token: String, which: Int) {
         val strName = dialogue.getItem(which)
-        var txtprod = token + strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)
+        var txtprod =
+            token + strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)
         if (token == "") {
             txtprod = if (txtprod != "RADAR") {
                 "IMG-" + txtprod.toUpperCase()

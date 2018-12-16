@@ -40,7 +40,12 @@ class ObjectNavDrawer(activity: Activity, private var labels: List<String>) {
 
     init {
         listView.adapter = ArrayAdapter(activity, R.layout.drawer_list_item, labels)
-        actionBarDrawerToggle = ActionBarDrawerToggle(activity, drawerLayout, R.string.drawer_open, R.string.drawer_close)
+        actionBarDrawerToggle = ActionBarDrawerToggle(
+            activity,
+            drawerLayout,
+            R.string.drawer_open,
+            R.string.drawer_close
+        )
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
     }
 
@@ -60,7 +65,10 @@ class ObjectNavDrawer(activity: Activity, private var labels: List<String>) {
         labels = items
     }
 
-    constructor(activity: Activity, items: List<String>, tokens: List<String>) : this(activity, items) {
+    constructor(activity: Activity, items: List<String>, tokens: List<String>) : this(
+        activity,
+        items
+    ) {
         this.tokens = tokens
     }
 

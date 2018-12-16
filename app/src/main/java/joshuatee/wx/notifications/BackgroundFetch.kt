@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//modded by ELY M. 
 
 package joshuatee.wx.notifications
 
@@ -81,7 +82,10 @@ class BackgroundFetch(val context: Context) {
                 // store data for use by severe dashboard and cod warnings
                 UtilityDownloadRadar.getPolygonVTEC(context)
                 if (MyApplication.alertTornadoNotificationCurrent) {
-                    notifUrls += UtilityNotificationTornado.checkAndSendTornadoNotification(context, MyApplication.severeDashboardTor.valueGet())
+                    notifUrls += UtilityNotificationTornado.checkAndSendTornadoNotification(
+		    context, 
+		    MyApplication.severeDashboardTor.valueGet()
+		    )
                 }
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)

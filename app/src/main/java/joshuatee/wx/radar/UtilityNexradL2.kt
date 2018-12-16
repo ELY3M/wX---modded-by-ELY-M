@@ -67,7 +67,8 @@ internal object UtilityNexradL2 {
         val numberOfRangeBins = 916
         // 1832 vel 1192 vel
         var zeroColor = ContextCompat.getColor(context, R.color.black)
-        if (Utility.readPref(context, "NWS_RADAR_BG_BLACK", "") != "true") zeroColor = ContextCompat.getColor(context, R.color.white)
+        if (Utility.readPref(context, "NWS_RADAR_BG_BLACK", "") != "true") zeroColor =
+                ContextCompat.getColor(context, R.color.white)
         val radialStartAngle = ByteBuffer.allocateDirect(720 * 4)
         radialStartAngle.order(ByteOrder.nativeOrder())
         radialStartAngle.position(0)
@@ -144,7 +145,11 @@ internal object UtilityNexradL2 {
                     if (level == 0)
                         wallpaint.color = zeroColor
                     else
-                        wallpaint.color = Color.rgb(cR.get(level).toInt() and 0xFF, cG.get(level).toInt() and 0xFF, cB.get(level).toInt() and 0xFF)
+                        wallpaint.color = Color.rgb(
+                            cR.get(level).toInt() and 0xFF,
+                            cG.get(level).toInt() and 0xFF,
+                            cB.get(level).toInt() and 0xFF
+                        )
                     wallpath.rewind() // only needed when reusing this path for a new build
                     wallpath.moveTo(xy1[0], xy1[1])
                     wallpath.lineTo(xy2[0], xy2[1])

@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
 
 package joshuatee.wx.activitiesmisc
 
@@ -69,7 +70,12 @@ class SevereDashboardActivity : BaseActivity() {
     }
 
     private fun tvWarnClicked(filter: String) {
-        ObjectIntent(contextg, USWarningsWithRadarActivity::class.java, USWarningsWithRadarActivity.URL, arrayOf(filter, "us"))
+        ObjectIntent(
+            contextg,
+            USWarningsWithRadarActivity::class.java,
+            USWarningsWithRadarActivity.URL,
+            arrayOf(filter, "us")
+        )
     }
 
     private fun refreshDynamicContent() {
@@ -150,7 +156,14 @@ class SevereDashboardActivity : BaseActivity() {
         if (bitmapArrRep.size > 0) {
             bitmapArrRep.indices.forEach { it ->
                 val card = ObjectCardImage(contextg, bitmapArrRep[it])
-                card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCStormReportsActivity::class.java, SPCStormReportsActivity.NO, arrayOf("today")) })
+                card.setOnClickListener(View.OnClickListener {
+                    ObjectIntent(
+                        contextg,
+                        SPCStormReportsActivity::class.java,
+                        SPCStormReportsActivity.NO,
+                        arrayOf("today")
+                    )
+                })
                 linearLayout.addView(card.card)
             }
         }

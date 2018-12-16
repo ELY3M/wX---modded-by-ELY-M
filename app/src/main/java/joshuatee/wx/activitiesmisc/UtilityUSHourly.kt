@@ -34,7 +34,7 @@ import joshuatee.wx.Extensions.*
 
 object UtilityUSHourly {
 
-    internal fun getHourlyStringForActivity(html: String): ObjectHourly {
+    internal fun getStringForActivity(html: String): ObjectHourly {
         val startTimes = html.parseColumn("\"startTime\": \"(.*?)\",")
         val temperatures = html.parseColumn("\"temperature\": (.*?),")
         val windSpeeds = html.parseColumn("\"windSpeed\": \"(.*?)\"")
@@ -73,30 +73,43 @@ object UtilityUSHourly {
             sb4.append(MyApplication.newline)
 
         }
-        return ObjectHourly(sb0.toString(), sb1.toString(), sb2.toString(), sb3.toString(), sb4.toString())
+        return ObjectHourly(
+            sb0.toString(),
+            sb1.toString(),
+            sb2.toString(),
+            sb3.toString(),
+            sb4.toString()
+        )
     }
 
     private fun shortenConditions(str: String) = str.replace("Showers And Thunderstorms", "Sh/Tst")
-            .replace("Chance", "Chc")
-            .replace("Slight", "Slt")
-            .replace("Light", "Lgt")
-            .replace("Scattered", "Sct")
-            .replace("Rain", "Rn")
-            .replace("Showers", "Shwr")
-            .replace("Snow", "Sn")
-            .replace("Rn And Sn", "Rn/Sn")
-            .replace("Freezing", "Frz")
-            .replace("T-storms", "Tst")
+        .replace("Chance", "Chc")
+        .replace("Slight", "Slt")
+        .replace("Light", "Lgt")
+        .replace("Scattered", "Sct")
+        .replace("Rain", "Rn")
+        .replace("Showers", "Shwr")
+        .replace("Snow", "Sn")
+        .replace("Rn And Sn", "Rn/Sn")
+        .replace("Freezing", "Frz")
+        .replace("T-storms", "Tst")
 
-    fun getHourlyString(locNum: Int): List<String> {
+    fun getString(locNum: Int): List<String> {
         val x = UtilityMath.latLonFix(Location.getX(locNum))
         val y = UtilityMath.latLonFix(Location.getY(locNum))
-        val sigHtmlTmp = UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/points/$x,$y/forecast/hourly")
-        val header = String.format("%-16s", "Time") + " " + String.format("%-10s", "Temp") + String.format("%-10s", "WindSpd") + String.format("%-8s", "WindDir") + MyApplication.newline
-        return listOf(header + parseHourly(sigHtmlTmp), sigHtmlTmp)
+        val sigHtmlTmp =
+            UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/points/$x,$y/forecast/hourly")
+        val header = String.format("%-16s", "Time") + " " + String.format(
+            "%-10s",
+            "Temp"
+        ) + String.format("%-10s", "WindSpd") + String.format(
+            "%-8s",
+            "WindDir"
+        ) + MyApplication.newline
+        return listOf(header + parse(sigHtmlTmp), sigHtmlTmp)
     }
 
-    private fun parseHourly(html: String): String {
+    private fun parse(html: String): String {
         val startTime = html.parseColumn("\"startTime\": \"(.*?)\",")
         val temperature = html.parseColumn("\"temperature\": (.*?),")
         val windSpeed = html.parseColumn("\"windSpeed\": \"(.*?)\"")
@@ -106,8 +119,12 @@ object UtilityUSHourly {
         val year = UtilityTime.year()
         val yearStr = year.toString()
         startTime.indices.forEach {
-            sb.append(String.format("%-16s", startTime[it].replace("-0[0-9]:00".toRegex(), "")
-                    .replace(("$yearStr-"), "").replace(":00:00", "").replace("T", " ")))
+            sb.append(
+                String.format(
+                    "%-16s", startTime[it].replace("-0[0-9]:00".toRegex(), "")
+                        .replace(("$yearStr-"), "").replace(":00:00", "").replace("T", " ")
+                )
+            )
             if (temperature.size > it) {
                 sb.append(String.format("%-12s", temperature[it]))
             }

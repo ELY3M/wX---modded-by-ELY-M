@@ -31,9 +31,15 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.ui.ObjectCard
 
-internal class TileAdapterColorPalette(private val itemList: List<TileObjectColorPalette>, private val tilesPerRow: Int) : RecyclerView.Adapter<TileAdapterColorPalette.RecyclerViewHoldersColorPalette>() {
+internal class TileAdapterColorPalette(
+    private val itemList: List<TileObjectColorPalette>,
+    private val tilesPerRow: Int
+) : RecyclerView.Adapter<TileAdapterColorPalette.RecyclerViewHoldersColorPalette>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHoldersColorPalette {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): RecyclerViewHoldersColorPalette {
         val layoutView = LayoutInflater.from(parent.context).inflate(R.layout.cardview_tiles, null)
         return RecyclerViewHoldersColorPalette(layoutView)
     }
@@ -49,7 +55,8 @@ internal class TileAdapterColorPalette(private val itemList: List<TileObjectColo
 
     override fun getItemCount() = this.itemList.size
 
-    internal inner class RecyclerViewHoldersColorPalette(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    internal inner class RecyclerViewHoldersColorPalette(itemView: View) :
+        RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         val iv: ImageView
 

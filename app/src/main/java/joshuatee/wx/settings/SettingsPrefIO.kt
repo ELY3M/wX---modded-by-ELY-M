@@ -67,7 +67,11 @@ class SettingsPrefIO : AppCompatActivity(), OnClickListener, OnMenuItemClickList
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         toolbarBottom = findViewById(R.id.toolbar_bottom)
         if (MyApplication.iconsEvenSpaced)
-            UtilityToolbar.setupEvenlyDistributedToolbar(this, toolbarBottom, R.menu.settings_prefio)
+            UtilityToolbar.setupEvenlyDistributedToolbar(
+                this,
+                toolbarBottom,
+                R.menu.settings_prefio
+            )
         else
             toolbarBottom.inflateMenu(R.menu.settings_prefio)
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -82,7 +86,12 @@ class SettingsPrefIO : AppCompatActivity(), OnClickListener, OnMenuItemClickList
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareTextAsAttachment(this, "wX Settings", settingsTxt, "wX_settings.txt")
+            R.id.action_share -> UtilityShare.shareTextAsAttachment(
+                this,
+                "wX Settings",
+                settingsTxt,
+                "wX_settings.txt"
+            )
             R.id.action_load -> loadSettings()
             R.id.action_apply -> applySettings()
             else -> return super.onOptionsItemSelected(item)

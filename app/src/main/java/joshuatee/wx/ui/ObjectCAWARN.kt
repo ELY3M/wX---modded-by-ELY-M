@@ -37,7 +37,12 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.ObjectIntent
 import kotlinx.coroutines.*
 
-class ObjectCAWARN(private val context: Context, private val activity: Activity, private val ll: LinearLayout, private val toolbar: Toolbar) {
+class ObjectCAWARN(
+    private val context: Context,
+    private val activity: Activity,
+    private val ll: LinearLayout,
+    private val toolbar: Toolbar
+) {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var listLocUrl = mutableListOf<String>()
@@ -65,11 +70,26 @@ class ObjectCAWARN(private val context: Context, private val activity: Activity,
             } else {
                 ("http://weather.gc.ca/warnings/index_e.html?prov=$prov").getHtml()
             }
-            listLocUrl = UtilityString.parseColumnMutable(dataAsString, "<tr><td><a href=\"(.*?)\">.*?</a></td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<tr>")
-            listLocName = UtilityString.parseColumnMutable(dataAsString, "<tr><td><a href=\".*?\">(.*?)</a></td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<tr>")
-            listLocWarning = UtilityString.parseColumnMutable(dataAsString, "<tr><td><a href=\".*?\">.*?</a></td>.*?<td>(.*?)</td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<tr>")
-            listLocWatch = UtilityString.parseColumnMutable(dataAsString, "<tr><td><a href=\".*?\">.*?</a></td>.*?<td>.*?</td>.*?<td>(.*?)</td>.*?<td>.*?</td>.*?<tr>")
-            listLocStatement = UtilityString.parseColumnMutable(dataAsString, "<tr><td><a href=\".*?\">.*?</a></td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<td>(.*?)</td>.*?<tr>")
+            listLocUrl = UtilityString.parseColumnMutable(
+                dataAsString,
+                "<tr><td><a href=\"(.*?)\">.*?</a></td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<tr>"
+            )
+            listLocName = UtilityString.parseColumnMutable(
+                dataAsString,
+                "<tr><td><a href=\".*?\">(.*?)</a></td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<tr>"
+            )
+            listLocWarning = UtilityString.parseColumnMutable(
+                dataAsString,
+                "<tr><td><a href=\".*?\">.*?</a></td>.*?<td>(.*?)</td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<tr>"
+            )
+            listLocWatch = UtilityString.parseColumnMutable(
+                dataAsString,
+                "<tr><td><a href=\".*?\">.*?</a></td>.*?<td>.*?</td>.*?<td>(.*?)</td>.*?<td>.*?</td>.*?<tr>"
+            )
+            listLocStatement = UtilityString.parseColumnMutable(
+                dataAsString,
+                "<tr><td><a href=\".*?\">.*?</a></td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<td>(.*?)</td>.*?<tr>"
+            )
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
         }
@@ -117,32 +137,38 @@ class ObjectCAWARN(private val context: Context, private val activity: Activity,
 
     val title: String get() = PROV_TO_LABEL[prov] + " (" + listLocUrl.size + ")"
 
-    private fun getWarningDetail(urlStr: String, location: String) = GlobalScope.launch(uiDispatcher) {
-        var data = ""
-        withContext(Dispatchers.IO) {
-            data = UtilityCanada.getHazardsFromUrl(urlStr)
+    private fun getWarningDetail(urlStr: String, location: String) =
+        GlobalScope.launch(uiDispatcher) {
+            var data = ""
+            withContext(Dispatchers.IO) {
+                data = UtilityCanada.getHazardsFromUrl(urlStr)
+            }
+            ObjectIntent(
+                context,
+                TextScreenActivity::class.java,
+                TextScreenActivity.URL,
+                arrayOf(data, location)
+            )
         }
-        ObjectIntent(context, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(data, location))
-    }
 
     companion object {
         private val PROV_TO_LABEL = mapOf(
-                "ca" to "Canada",
-                "ab" to "Alberta",
-                "bc" to "British Columbia",
-                "mb" to "Manitoba",
-                "nb" to "New Brunswick",
-                "nl" to "Newfoundland and Labrador",
-                "ns" to "Nova Scotia",
-                "nt" to "Northwest Territories",
-                "nu" to "Nunavut",
-                "son" to "Ontario - South",
-                "non" to "Ontario - North",
-                "pei" to "Prince Edward Island",
-                "sqc" to "Quebec - South",
-                "nqc" to "Quebec - North",
-                "sk" to "Saskatchewan",
-                "yt" to "Yukon"
+            "ca" to "Canada",
+            "ab" to "Alberta",
+            "bc" to "British Columbia",
+            "mb" to "Manitoba",
+            "nb" to "New Brunswick",
+            "nl" to "Newfoundland and Labrador",
+            "ns" to "Nova Scotia",
+            "nt" to "Northwest Territories",
+            "nu" to "Nunavut",
+            "son" to "Ontario - South",
+            "non" to "Ontario - North",
+            "pei" to "Prince Edward Island",
+            "sqc" to "Quebec - South",
+            "nqc" to "Quebec - North",
+            "sk" to "Saskatchewan",
+            "yt" to "Yukon"
         )
     }
 }

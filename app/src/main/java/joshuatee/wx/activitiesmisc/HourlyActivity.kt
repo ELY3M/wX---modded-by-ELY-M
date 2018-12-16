@@ -66,7 +66,8 @@ class HourlyActivity : BaseActivity() {
     private val menuItemSettings: Int = 2
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add(Menu.NONE, menuItemShare, Menu.NONE, "Share").setIcon(R.drawable.ic_share_24dp).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        menu.add(Menu.NONE, menuItemShare, Menu.NONE, "Share").setIcon(R.drawable.ic_share_24dp)
+            .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         menu.add(Menu.NONE, menuItemSettings, Menu.NONE, "Settings")
         return true
     }
@@ -90,13 +91,22 @@ class HourlyActivity : BaseActivity() {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
-        val result1 = async(Dispatchers.IO) { UtilityUSHourly.getHourlyString(locatioNumber) }
+        val result1 = async(Dispatchers.IO) { UtilityUSHourly.getString(locatioNumber) }
         htmlShare = result1.await()
-        val result2 = async(Dispatchers.IO) { UtilityUSHourly.getHourlyStringForActivity(htmlShare[1]) }
+        val result2 =
+            async(Dispatchers.IO) { UtilityUSHourly.getStringForActivity(htmlShare[1]) }
         hourlyData = result2.await()
 
         cv1.setVisibility(View.VISIBLE)
-        c0.setText(listOf(hourlyData.time, hourlyData.temp, hourlyData.windSpeed, hourlyData.windDir, hourlyData.conditions))
+        c0.setText(
+            listOf(
+                hourlyData.time,
+                hourlyData.temp,
+                hourlyData.windSpeed,
+                hourlyData.windDir,
+                hourlyData.conditions
+            )
+        )
         plot1()
     }
 

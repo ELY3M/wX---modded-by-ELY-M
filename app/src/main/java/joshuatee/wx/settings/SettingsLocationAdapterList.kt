@@ -13,13 +13,15 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.ObjectCard
 
-internal class SettingsLocationAdapterList(private val mDataset: MutableList<String>) : RecyclerView.Adapter<SettingsLocationAdapterList.DataObjectHolder>() {
+internal class SettingsLocationAdapterList(private val mDataset: MutableList<String>) :
+    RecyclerView.Adapter<SettingsLocationAdapterList.DataObjectHolder>() {
 
     companion object {
         private var myClickListener: MyClickListener? = null
     }
 
-    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
 
         val text1: TextView = itemView.findViewById(R.id.text1)
         val text2: TextView = itemView.findViewById(R.id.text2)
@@ -40,7 +42,8 @@ internal class SettingsLocationAdapterList(private val mDataset: MutableList<Str
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.cardview_settingslocation, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.cardview_settingslocation, parent, false)
         return DataObjectHolder(view)
     }
 
@@ -66,15 +69,24 @@ internal class SettingsLocationAdapterList(private val mDataset: MutableList<Str
             holder.text1.setTextColor(UIPreferences.backgroundColor)
         }
         if (nonUs)
-            holder.text2.text = """${UtilityStringExternal.truncate(lat, 6)} , ${UtilityStringExternal.truncate(lon, 6)}"""
+            holder.text2.text =
+                    """${UtilityStringExternal.truncate(lat, 6)} , ${UtilityStringExternal.truncate(
+                        lon,
+                        6
+                    )}"""
         else
-            holder.text2.text = "${UtilityStringExternal.truncate(Location.getX(position), 6)} , ${UtilityStringExternal.truncate(Location.getY(position), 6)}"
+            holder.text2.text = "${UtilityStringExternal.truncate(
+                Location.getX(position),
+                6
+            )} , ${UtilityStringExternal.truncate(Location.getY(position), 6)}"
         holder.text2.setTextColor(UIPreferences.backgroundColor)
         holder.text2.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
         if (nonUs) {
-            holder.text3.text = "RID: ${Location.getRid(position)} ${UtilityLocation.hasAlerts(position)}"
+            holder.text3.text =
+                    "RID: ${Location.getRid(position)} ${UtilityLocation.hasAlerts(position)}"
         } else {
-            holder.text3.text = "WFO: ${Location.getWfo(position)}  RID: ${Location.getRid(position)}"
+            holder.text3.text =
+                    "WFO: ${Location.getWfo(position)}  RID: ${Location.getRid(position)}"
         }
         holder.text3.setTextColor(UIPreferences.backgroundColor)
         holder.text3.setTextAppearance(holder.text3.context, UIPreferences.smallTextTheme)

@@ -38,12 +38,18 @@ import joshuatee.wx.util.Utility
 class AlertService : IntentService("AlertService") {
 
     override fun onHandleIntent(intent: Intent?) {
-        val alertNotificationIntervalCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_INTERVAL", -1)
+        val alertNotificationIntervalCurrent =
+            Utility.readPref(this, "ALERT_NOTIFICATION_INTERVAL", -1)
         val service = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val cal = Calendar.getInstance()
         val intent = Intent(this, AlertReceiver::class.java)
         val pending = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
-        service.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.timeInMillis, (alertNotificationIntervalCurrent * 1000 * 60).toLong(), pending)
+        service.setInexactRepeating(
+            AlarmManager.RTC_WAKEUP,
+            cal.timeInMillis,
+            (alertNotificationIntervalCurrent * 1000 * 60).toLong(),
+            pending
+        )
         UtilityPlayListAutoDownload.setAllAlarms(this)
     }
 } 

@@ -52,7 +52,8 @@ object UtilityNHC {
         return ObjectNHCStormInfo(title, summary, url, img1, img2, wallet)
     }
 
-    fun getImage(rid: String, prod: String): Bitmap = ("http://www.ssd.noaa.gov/PS/TROP/floaters/" + rid + "/imagery/" + prod + "0.gif").getImage()
+    fun getImage(rid: String, prod: String): Bitmap =
+        ("http://www.ssd.noaa.gov/PS/TROP/floaters/" + rid + "/imagery/" + prod + "0.gif").getImage()
 }
 
 

@@ -36,15 +36,28 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 
-internal class ObjectSettingsNumberPicker(context: Context, private val activity: Activity, label: String, pref: String, strId: Int, defValue: Int, lowValue: Int, highValue: Int) {
+internal class ObjectSettingsNumberPicker(
+    context: Context,
+    private val activity: Activity,
+    label: String,
+    pref: String,
+    strId: Int,
+    defValue: Int,
+    lowValue: Int,
+    highValue: Int
+) {
 
     private val objCard = ObjectCard(context)
 
     init {
         val initValue = when (pref) {
             "RADAR_TEXT_SIZE" -> (Utility.readPref(context, pref, defValue.toFloat()) * 10).toInt()
-            "UI_ANIM_ICON_FRAMES" -> (Utility.readPref(context, pref, MyApplication.uiAnimIconFrames)).toIntOrNull()
-                    ?: 0
+            "UI_ANIM_ICON_FRAMES" -> (Utility.readPref(
+                context,
+                pref,
+                MyApplication.uiAnimIconFrames
+            )).toIntOrNull()
+                ?: 0
             "CARD_CORNER_RADIUS" -> (Utility.readPref(context, pref, 3))
             else -> Utility.readPref(context, pref, defValue)
         }
@@ -52,13 +65,25 @@ internal class ObjectSettingsNumberPicker(context: Context, private val activity
         ObjectCardText.textViewSetup(tv)
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
         tv.setTextColor(UIPreferences.backgroundColor)
-        tv.setPadding(MyApplication.padding, MyApplication.padding, MyApplication.padding, MyApplication.padding)
-        tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
+        tv.setPadding(
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding
+        )
+        tv.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            1.0f
+        )
         tv.text = label
         tv.gravity = Gravity.TOP
         tv.setOnClickListener { showHelpText(context.resources.getString(strId)) }
         val ll = LinearLayout(context)
-        ll.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        ll.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
         ll.orientation = LinearLayout.HORIZONTAL
         ll.gravity = Gravity.CENTER_VERTICAL
         ll.addView(tv)

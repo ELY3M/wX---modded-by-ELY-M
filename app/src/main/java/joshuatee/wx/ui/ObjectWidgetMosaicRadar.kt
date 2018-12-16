@@ -44,9 +44,25 @@ class ObjectWidgetMosaicRadar(context: Context) {
         UtilityWidget.setImage(context, remoteViews, MOSAIC_RADAR.fileName)
         if (!MyApplication.widgetPreventTap) {
             if (Location.isUS(widgetLocNum)) {
-                UtilityWidget.setupIntent(context, remoteViews, USNWSMosaicActivity::class.java, R.id.iv, USNWSMosaicActivity.URL, arrayOf("widget"), WidgetFile.MOSAIC_RADAR.action)
+                UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    USNWSMosaicActivity::class.java,
+                    R.id.iv,
+                    USNWSMosaicActivity.URL,
+                    arrayOf("widget"),
+                    WidgetFile.MOSAIC_RADAR.action
+                )
             } else {
-                UtilityWidget.setupIntent(context, remoteViews, CanadaRadarActivity::class.java, R.id.iv, CanadaRadarActivity.RID, arrayOf(UtilityCanada.getECSectorFromProv(prov), "rad"), WidgetFile.MOSAIC_RADAR.action)
+                UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    CanadaRadarActivity::class.java,
+                    R.id.iv,
+                    CanadaRadarActivity.RID,
+                    arrayOf(UtilityCanada.getECSectorFromProv(prov), "rad"),
+                    WidgetFile.MOSAIC_RADAR.action
+                )
             }
         }
     }

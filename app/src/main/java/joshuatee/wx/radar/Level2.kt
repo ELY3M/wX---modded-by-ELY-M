@@ -58,10 +58,22 @@ internal object Level2 {
     private var first: Level2Record? = null
     private var vcp = 0
 
-    fun decode(context: Context, fileName: String, binWord: ByteBuffer, radialStartAngle: ByteBuffer, prod: Int, days: ByteBuffer, msecs: ByteBuffer) {
+    fun decode(
+        context: Context,
+        fileName: String,
+        binWord: ByteBuffer,
+        radialStartAngle: ByteBuffer,
+        prod: Int,
+        days: ByteBuffer,
+        msecs: ByteBuffer
+    ) {
         val velocityProd = prod == 154
         try {
-            val dis2 = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName), "r", 1024 * 256 * 10) // was c.getFileStreamPath(fn)
+            val dis2 = UCARRandomAccessFile(
+                UtilityIO.getFilePath(context, fileName),
+                "r",
+                1024 * 256 * 10
+            ) // was c.getFileStreamPath(fn)
             dis2.bigEndian = true
             dis2.let {
                 it.setBufferSize(2621440) // 1024*256*10

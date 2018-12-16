@@ -139,7 +139,8 @@ object UtilityTime {
         return cal.time
     }
 
-    fun getCurrentLocalTimeAsString(): String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())
+    fun getCurrentLocalTimeAsString(): String =
+        SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())
 
     fun year(): Int = Calendar.getInstance().get(Calendar.YEAR)
 
@@ -153,7 +154,8 @@ object UtilityTime {
     fun getSunriseSunsetFromObs(obs: RID): List<Calendar> {
         val location = ExternalSunriseLocation(obs.location.latString, obs.location.lonString)
         val calculator = ExternalSunriseSunsetCalculator(location, TimeZone.getDefault())
-        val officialSunriseCal = calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
+        val officialSunriseCal =
+            calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
         val officialSunsetCal = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance())
         return listOf(officialSunriseCal, officialSunsetCal)
     }

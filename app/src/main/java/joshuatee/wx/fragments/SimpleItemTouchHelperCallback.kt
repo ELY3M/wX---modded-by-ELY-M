@@ -30,16 +30,21 @@ import androidx.recyclerview.widget.ItemTouchHelper
 
  * @author Paul Burke (ipaulpro)
  */
-internal class SimpleItemTouchHelperCallback(private val mAdapter: ItemTouchHelperAdapter) : ItemTouchHelper.Callback() {
+internal class SimpleItemTouchHelperCallback(private val mAdapter: ItemTouchHelperAdapter) :
+    ItemTouchHelper.Callback() {
 
     override fun isLongPressDragEnabled() = true
 
     override fun isItemViewSwipeEnabled() = true
 
-    override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+    override fun getMovementFlags(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder
+    ): Int {
         // Set movement flags based on the layout manager
         return if (recyclerView.layoutManager is GridLayoutManager) {
-            val dragFlags = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+            val dragFlags =
+                ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
             val swipeFlags = 0
             ItemTouchHelper.Callback.makeMovementFlags(dragFlags, swipeFlags)
         } else {
@@ -49,7 +54,11 @@ internal class SimpleItemTouchHelperCallback(private val mAdapter: ItemTouchHelp
         }
     }
 
-    override fun onMove(recyclerView: RecyclerView, source: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+    override fun onMove(
+        recyclerView: RecyclerView,
+        source: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ): Boolean {
         if (source.itemViewType != target.itemViewType) {
             return false
         }
@@ -63,7 +72,15 @@ internal class SimpleItemTouchHelperCallback(private val mAdapter: ItemTouchHelp
         mAdapter.onItemDismiss(viewHolder.adapterPosition)
     }
 
-    override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+    override fun onChildDraw(
+        c: Canvas,
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        dX: Float,
+        dY: Float,
+        actionState: Int,
+        isCurrentlyActive: Boolean
+    ) {
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             // Fade out the view as it is swiped out of the parent's bounds
             val alpha = ALPHA_FULL - Math.abs(dX) / viewHolder.itemView.width.toFloat()

@@ -70,14 +70,27 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.notifications.UtilityNotification
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-internal class RecordingSession(private val context: Context, private val listener: Listener, private val resultCode: Int, private val data: Intent, private var showDistanceTool: Boolean, private var showRecordingTools: Boolean) {
+internal class RecordingSession(
+    private val context: Context,
+    private val listener: Listener,
+    private val resultCode: Int,
+    private val data: Intent,
+    private var showDistanceTool: Boolean,
+    private var showRecordingTools: Boolean
+) {
 
     private val mainThread = Handler(Looper.getMainLooper())
 
     private val videoOutputRoot: File
     private val picturesOutputRoot: File
-    private val videofileFormat = SimpleDateFormat("'${MyApplication.packageNameFileNameAsString}_'yyyy-MM-dd-HH-mm-ss'.mp4'", Locale.US)
-    private val audiofileFormat = SimpleDateFormat("'${MyApplication.packageNameFileNameAsString}_'yyyy-MM-dd-HH-mm-ss'.jpeg'", Locale.US)
+    private val videofileFormat = SimpleDateFormat(
+        "'${MyApplication.packageNameFileNameAsString}_'yyyy-MM-dd-HH-mm-ss'.mp4'",
+        Locale.US
+    )
+    private val audiofileFormat = SimpleDateFormat(
+        "'${MyApplication.packageNameFileNameAsString}_'yyyy-MM-dd-HH-mm-ss'.jpeg'",
+        Locale.US
+    )
 
     private val notificationManager: NotificationManager
     private val windowManager: WindowManager
@@ -111,8 +124,10 @@ internal class RecordingSession(private val context: Context, private val listen
             val cameraHeight = camcorderProfile?.videoFrameHeight ?: -1
             val cameraFrameRate = camcorderProfile?.videoFrameRate ?: 30
             val sizePercentage = MyApplication.telecineVideoSizePercentage
-            return calculateRecordingInfo(displayWidth, displayHeight, displayDensity, isLandscape,
-                    cameraWidth, cameraHeight, cameraFrameRate, sizePercentage)
+            return calculateRecordingInfo(
+                displayWidth, displayHeight, displayDensity, isLandscape,
+                cameraWidth, cameraHeight, cameraFrameRate, sizePercentage
+            )
         }
 
     private val screenshotInfo: RecordingInfo
@@ -146,7 +161,8 @@ internal class RecordingSession(private val context: Context, private val listen
         picturesOutputRoot.mkdirs()
         notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         windowManager = context.getSystemService(WINDOW_SERVICE) as WindowManager
-        if (showRecordingTools) projectionManager = context.getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        if (showRecordingTools) projectionManager =
+                context.getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     }
 
     fun showOverlay() {
@@ -175,7 +191,8 @@ internal class RecordingSession(private val context: Context, private val listen
                 addDistanceTool()
             }
         }
-        overlayView = OverlayView.create(context, overlayListener, showDistanceTool, showRecordingTools)
+        overlayView =
+                OverlayView.create(context, overlayListener, showDistanceTool, showRecordingTools)
         windowManager.addView(overlayView, OverlayView.createLayoutParams(context))
     }
 
@@ -201,7 +218,11 @@ internal class RecordingSession(private val context: Context, private val listen
 
     private fun startRecording() {
         if (!videoOutputRoot.exists() && !videoOutputRoot.mkdirs()) {
-            Toast.makeText(context, "Unable to create output directory.\nCannot record screen.", LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                "Unable to create output directory.\nCannot record screen.",
+                LENGTH_SHORT
+            ).show()
             return
         }
         val recordingInfo = recordingInfo
@@ -223,7 +244,16 @@ internal class RecordingSession(private val context: Context, private val listen
         if (android.os.Build.VERSION.SDK_INT > 20) {
             projection = projectionManager!!.getMediaProjection(resultCode, data)
             val surface = recorder!!.surface
-            display = projection!!.createVirtualDisplay(DISPLAY_NAME, recordingInfo.width, recordingInfo.height, recordingInfo.density, VIRTUAL_DISPLAY_FLAG_PRESENTATION, surface, null, null)
+            display = projection!!.createVirtualDisplay(
+                DISPLAY_NAME,
+                recordingInfo.width,
+                recordingInfo.height,
+                recordingInfo.density,
+                VIRTUAL_DISPLAY_FLAG_PRESENTATION,
+                surface,
+                null,
+                null
+            )
         }
         recorder!!.start()
         running = true
@@ -263,7 +293,8 @@ internal class RecordingSession(private val context: Context, private val listen
             if (recorder != null) recorder!!.release()
             display!!.release()
         }
-        MediaScannerConnection.scanFile(context, arrayOf(outputFile!!), null
+        MediaScannerConnection.scanFile(
+            context, arrayOf(outputFile!!), null
         ) { _, uri ->
             if (uri == null) throw NullPointerException("uri == null")
             mainThread.post { showNotification(uri, null) }
@@ -277,7 +308,13 @@ internal class RecordingSession(private val context: Context, private val listen
             WindowManager.LayoutParams.TYPE_SYSTEM_ERROR
         }
         if (!drawToolActive) {
-            val params = WindowManager.LayoutParams(MyApplication.dm.widthPixels, MyApplication.dm.heightPixels - UtilityUI.statusBarHeight(context), layoutFlag, FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL or FLAG_LAYOUT_NO_LIMITS, TRANSLUCENT)
+            val params = WindowManager.LayoutParams(
+                MyApplication.dm.widthPixels,
+                MyApplication.dm.heightPixels - UtilityUI.statusBarHeight(context),
+                layoutFlag,
+                FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL or FLAG_LAYOUT_NO_LIMITS,
+                TRANSLUCENT
+            )
             params.gravity = Gravity.BOTTOM
             drawObject = DrawView(context)
             windowManager.addView(drawObject, params)
@@ -296,14 +333,22 @@ internal class RecordingSession(private val context: Context, private val listen
             WindowManager.LayoutParams.TYPE_SYSTEM_ERROR
         }
         if (!distanceToolActive) {
-            val params = WindowManager.LayoutParams(MyApplication.dm.widthPixels, MyApplication.dm.heightPixels - UtilityUI.statusBarHeight(context) * 2, layoutFlag, FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL or FLAG_LAYOUT_NO_LIMITS, TRANSLUCENT)
+            val params = WindowManager.LayoutParams(
+                MyApplication.dm.widthPixels,
+                MyApplication.dm.heightPixels - UtilityUI.statusBarHeight(context) * 2,
+                layoutFlag,
+                FLAG_NOT_FOCUSABLE or FLAG_NOT_TOUCH_MODAL or FLAG_LAYOUT_NO_LIMITS,
+                TRANSLUCENT
+            )
             params.gravity = Gravity.BOTTOM
-            distanceToolObject = DrawLineView(context,
-                    WXGLRender.ridGlobal, WXGLSurfaceView.scaleFactorGlobal,
-                    WXGLRender.positionXGlobal,
-                    WXGLRender.positionYGlobal,
-                    WXGLRender.ortIntGlobal.toFloat(),
-                    WXGLRender.oneDegreeScaleFactorGlobal)
+            distanceToolObject = DrawLineView(
+                context,
+                WXGLRender.ridGlobal, WXGLSurfaceView.scaleFactorGlobal,
+                WXGLRender.positionXGlobal,
+                WXGLRender.positionYGlobal,
+                WXGLRender.ortIntGlobal.toFloat(),
+                WXGLRender.oneDegreeScaleFactorGlobal
+            )
             windowManager.addView(distanceToolObject, params)
             distanceToolActive = true
         } else {
@@ -318,9 +363,23 @@ internal class RecordingSession(private val context: Context, private val listen
         val outputName = audiofileFormat.format(Date())
         outputFile = File(picturesOutputRoot, outputName).absolutePath
         projection = projectionManager!!.getMediaProjection(resultCode, data)
-        imageReader = ImageReader.newInstance(recordingInfo.width, recordingInfo.height, PixelFormat.RGBA_8888, 2)
+        imageReader = ImageReader.newInstance(
+            recordingInfo.width,
+            recordingInfo.height,
+            PixelFormat.RGBA_8888,
+            2
+        )
         val surface = imageReader!!.surface
-        display = projection!!.createVirtualDisplay(DISPLAY_NAME, recordingInfo.width, recordingInfo.height, recordingInfo.density, VIRTUAL_DISPLAY_FLAG_PRESENTATION, surface, null, null)
+        display = projection!!.createVirtualDisplay(
+            DISPLAY_NAME,
+            recordingInfo.width,
+            recordingInfo.height,
+            recordingInfo.density,
+            VIRTUAL_DISPLAY_FLAG_PRESENTATION,
+            surface,
+            null,
+            null
+        )
         imageReader!!.setOnImageAvailableListener({
             var image: Image? = null
             var fos: FileOutputStream? = null
@@ -345,16 +404,27 @@ internal class RecordingSession(private val context: Context, private val listen
                     val rowStride = planes[0].rowStride
                     val rowPadding = rowStride - pixelStride * recordingInfo.width
                     // create bitmap
-                    bitmap = Bitmap.createBitmap(recordingInfo.width + rowPadding / pixelStride, recordingInfo.height, Bitmap.Config.ARGB_8888)
+                    bitmap = Bitmap.createBitmap(
+                        recordingInfo.width + rowPadding / pixelStride,
+                        recordingInfo.height,
+                        Bitmap.Config.ARGB_8888
+                    )
                     bitmap!!.copyPixelsFromBuffer(buffer)
                     //Trimming the bitmap to the w/h of the screen. For some reason, image reader adds more pixels to width.
-                    croppedBitmap = Bitmap.createBitmap(bitmap, 0, 0, recordingInfo.width, recordingInfo.height)
+                    croppedBitmap = Bitmap.createBitmap(
+                        bitmap,
+                        0,
+                        0,
+                        recordingInfo.width,
+                        recordingInfo.height
+                    )
                     bitmap.recycle()
                     bitmap = null
                     // write bitmap to a file
                     fos = FileOutputStream(outputFile!!)
                     croppedBitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-                    MediaScannerConnection.scanFile(context, arrayOf(outputFile!!), null
+                    MediaScannerConnection.scanFile(
+                        context, arrayOf(outputFile!!), null
                     ) { _, uri -> mainThread.post { showScreenshotNotification(uri, null) } }
                 }
             } catch (e: Exception) {
@@ -382,41 +452,54 @@ internal class RecordingSession(private val context: Context, private val listen
         UtilityNotification.initChannels(context)
         val requestID = System.currentTimeMillis().toInt()
         val viewIntent = Intent(ACTION_VIEW, uri)
-        val pendingViewIntent = PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT)
+        val pendingViewIntent =
+            PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT)
         var shareIntent = Intent(ACTION_SEND)
         shareIntent.type = MIME_TYPE_RECORDING
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
         shareIntent = Intent.createChooser(shareIntent, null)
-        val pendingShareIntent = PendingIntent.getActivity(context, requestID, shareIntent, FLAG_CANCEL_CURRENT)
+        val pendingShareIntent =
+            PendingIntent.getActivity(context, requestID, shareIntent, FLAG_CANCEL_CURRENT)
         val deleteIntent = Intent(context, DeleteRecordingBroadcastReceiver::class.java)
         deleteIntent.data = uri
-        val pendingDeleteIntent = PendingIntent.getBroadcast(context, requestID, deleteIntent, FLAG_CANCEL_CURRENT)
+        val pendingDeleteIntent =
+            PendingIntent.getBroadcast(context, requestID, deleteIntent, FLAG_CANCEL_CURRENT)
         val title = context.getText(R.string.notification_captured_title)
         val subtitle = context.getText(R.string.notification_captured_subtitle)
         val share = context.getText(R.string.notification_captured_share)
         val delete = context.getText(R.string.notification_captured_delete)
         var builder: NotificationCompat.Builder? = null
         if (android.os.Build.VERSION.SDK_INT > 20) {
-            val actionShare = NotificationCompat.Action.Builder(R.drawable.ic_share_24dp, share, pendingShareIntent).build()
-            val actionDelete = NotificationCompat.Action.Builder(MyApplication.ICON_DELETE, delete, pendingDeleteIntent).build()
+            val actionShare = NotificationCompat.Action.Builder(
+                R.drawable.ic_share_24dp,
+                share,
+                pendingShareIntent
+            ).build()
+            val actionDelete = NotificationCompat.Action.Builder(
+                MyApplication.ICON_DELETE,
+                delete,
+                pendingDeleteIntent
+            ).build()
             builder = NotificationCompat.Builder(context, UtilityNotification.notiChannelStrNoSound)
-                    .setContentTitle(title)
-                    .setContentText(subtitle)
-                    .setWhen(System.currentTimeMillis())
-                    .setShowWhen(true)
-                    .setSmallIcon(R.drawable.ic_videocam_24dp)
-                    .setColor(UIPreferences.colorNotif)
-                    .setContentIntent(pendingViewIntent)
-                    .setAutoCancel(true)
-                    .addAction(actionShare)
-                    .addAction(actionDelete) as NotificationCompat.Builder
+                .setContentTitle(title)
+                .setContentText(subtitle)
+                .setWhen(System.currentTimeMillis())
+                .setShowWhen(true)
+                .setSmallIcon(R.drawable.ic_videocam_24dp)
+                .setColor(UIPreferences.colorNotif)
+                .setContentIntent(pendingViewIntent)
+                .setAutoCancel(true)
+                .addAction(actionShare)
+                .addAction(actionDelete) as NotificationCompat.Builder
         }
         if (bitmap != null) {
             builder!!.setLargeIcon(createSquareBitmap(bitmap))
-                    .setStyle(NotificationCompat.BigPictureStyle()
-                            .setBigContentTitle(title)
-                            .setSummaryText(subtitle)
-                            .bigPicture(bitmap))
+                .setStyle(
+                    NotificationCompat.BigPictureStyle()
+                        .setBigContentTitle(title)
+                        .setSummaryText(subtitle)
+                        .bigPicture(bitmap)
+                )
         }
         notificationManager.notify(uri!!.toString(), NOTIFICATION_ID, builder!!.build())
         if (bitmap != null) {
@@ -444,38 +527,49 @@ internal class RecordingSession(private val context: Context, private val listen
         UtilityNotification.initChannels(context)
         val requestID = System.currentTimeMillis().toInt()
         val viewIntent = Intent(ACTION_VIEW, uri)
-        val pendingViewIntent = PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT)
+        val pendingViewIntent =
+            PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT)
         var shareIntent = Intent(ACTION_SEND)
         shareIntent.type = MIME_TYPE_SCREENSHOT
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
         shareIntent = Intent.createChooser(shareIntent, null)
-        val pendingShareIntent = PendingIntent.getActivity(context, requestID, shareIntent, FLAG_CANCEL_CURRENT)
+        val pendingShareIntent =
+            PendingIntent.getActivity(context, requestID, shareIntent, FLAG_CANCEL_CURRENT)
         val deleteIntent = Intent(context, DeleteRecordingBroadcastReceiver::class.java)
         deleteIntent.data = uri
-        val pendingDeleteIntent = PendingIntent.getBroadcast(context, requestID, deleteIntent, FLAG_CANCEL_CURRENT)
+        val pendingDeleteIntent =
+            PendingIntent.getBroadcast(context, requestID, deleteIntent, FLAG_CANCEL_CURRENT)
         val title = context.getText(R.string.notification_screenshot_captured_title)
         val subtitle = context.getText(R.string.notification_screenshot_captured_subtitle)
         val share = context.getText(R.string.notification_captured_share)
         val delete = context.getText(R.string.notification_captured_delete)
-        val actionShare = NotificationCompat.Action.Builder(R.drawable.ic_share_24dp, share, pendingShareIntent).build()
-        val actionDelete = NotificationCompat.Action.Builder(MyApplication.ICON_DELETE, delete, pendingDeleteIntent).build()
+        val actionShare =
+            NotificationCompat.Action.Builder(R.drawable.ic_share_24dp, share, pendingShareIntent)
+                .build()
+        val actionDelete = NotificationCompat.Action.Builder(
+            MyApplication.ICON_DELETE,
+            delete,
+            pendingDeleteIntent
+        ).build()
         val builder = NotificationCompat.Builder(context, UtilityNotification.notiChannelStrNoSound)
-                .setContentTitle(title)
-                .setContentText(subtitle)
-                .setWhen(System.currentTimeMillis())
-                .setShowWhen(true)
-                .setSmallIcon(R.drawable.ic_photo_camera_24dp)
-                .setColor(UIPreferences.colorNotif)
-                .setContentIntent(pendingViewIntent)
-                .setAutoCancel(true)
-                .addAction(actionShare)
-                .addAction(actionDelete) as NotificationCompat.Builder
+            .setContentTitle(title)
+            .setContentText(subtitle)
+            .setWhen(System.currentTimeMillis())
+            .setShowWhen(true)
+            .setSmallIcon(R.drawable.ic_photo_camera_24dp)
+            .setColor(UIPreferences.colorNotif)
+            .setContentIntent(pendingViewIntent)
+            .setAutoCancel(true)
+            .addAction(actionShare)
+            .addAction(actionDelete) as NotificationCompat.Builder
         if (bitmap != null) {
             builder.setLargeIcon(createSquareBitmap(bitmap))
-                    .setStyle(NotificationCompat.BigPictureStyle()
-                            .setBigContentTitle(title)
-                            .setSummaryText(subtitle)
-                            .bigPicture(bitmap))
+                .setStyle(
+                    NotificationCompat.BigPictureStyle()
+                        .setBigContentTitle(title)
+                        .setSummaryText(subtitle)
+                        .bigPicture(bitmap)
+                )
         }
         notificationManager.notify(uri.toString(), NOTIFICATION_ID_SCREENSHOT, builder.build())
         if (bitmap != null) {
@@ -502,7 +596,12 @@ internal class RecordingSession(private val context: Context, private val listen
         }.execute()
     }
 
-    private class RecordingInfo internal constructor(internal val width: Int, internal val height: Int, internal val frameRate: Int, internal val density: Int)
+    private class RecordingInfo internal constructor(
+        internal val width: Int,
+        internal val height: Int,
+        internal val frameRate: Int,
+        internal val density: Int
+    )
 
     fun destroy() {
         if (running) {
@@ -515,7 +614,8 @@ internal class RecordingSession(private val context: Context, private val listen
         override fun onReceive(context: Context, intent: Intent) {
             val uriData = intent.dataString
             UtilityLog.d("wx", "cancel" + uriData!!)
-            val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(uriData, NOTIFICATION_ID)
             notificationManager.cancel(uriData, NOTIFICATION_ID_SCREENSHOT)
             object : AsyncTask<Void, Void, Void>() {
@@ -533,19 +633,38 @@ internal class RecordingSession(private val context: Context, private val listen
         private const val MIME_TYPE_RECORDING = "video/mp4"
         private const val MIME_TYPE_SCREENSHOT = "image/jpeg"
 
-        private fun calculateRecordingInfo(displayWidth: Int, displayHeight: Int, displayDensity: Int, isLandscapeDevice: Boolean, cameraWidth: Int, cameraHeight: Int, cameraFrameRate: Int, sizePercentage: Int): RecordingInfo {
+        private fun calculateRecordingInfo(
+            displayWidth: Int,
+            displayHeight: Int,
+            displayDensity: Int,
+            isLandscapeDevice: Boolean,
+            cameraWidth: Int,
+            cameraHeight: Int,
+            cameraFrameRate: Int,
+            sizePercentage: Int
+        ): RecordingInfo {
             // Scale the display size before any maximum size calculations.
             val displayWidthLocal = displayWidth * sizePercentage / 100
             val displayHeightLocal = displayHeight * sizePercentage / 100
             if (cameraWidth == -1 && cameraHeight == -1) {
                 // No cameras. Fall back to the display size.
-                return RecordingInfo(displayWidthLocal, displayHeightLocal, cameraFrameRate, displayDensity)
+                return RecordingInfo(
+                    displayWidthLocal,
+                    displayHeightLocal,
+                    cameraFrameRate,
+                    displayDensity
+                )
             }
             var frameWidth = if (isLandscapeDevice) cameraWidth else cameraHeight
             var frameHeight = if (isLandscapeDevice) cameraHeight else cameraWidth
             if (frameWidth >= displayWidthLocal && frameHeight >= displayHeightLocal) {
                 // Frame can hold the entire display. Use exact values.
-                return RecordingInfo(displayWidthLocal, displayHeightLocal, cameraFrameRate, displayDensity)
+                return RecordingInfo(
+                    displayWidthLocal,
+                    displayHeightLocal,
+                    cameraFrameRate,
+                    displayDensity
+                )
             }
             // Calculate new width or height to preserve aspect ratio.
             if (isLandscapeDevice) {

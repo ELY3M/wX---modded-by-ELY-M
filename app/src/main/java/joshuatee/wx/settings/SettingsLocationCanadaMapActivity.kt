@@ -52,7 +52,12 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_settings_location_canada_map, null, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_settings_location_canada_map,
+            null,
+            false
+        )
         val turl = intent.getStringArrayExtra(URL)
         url = turl[0]
         title = url.toUpperCase()
@@ -136,7 +141,11 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
         val cityLoc = getCityFromXML(sector)
         Utility.writePref(this, "LOCATION_CANADA_PROV", url.toUpperCase())
         Utility.writePref(this, "LOCATION_CANADA_CITY", cityLoc)
-        Utility.writePref(this, "LOCATION_CANADA_ID", sector.split("_".toRegex()).dropLastWhile { it.isEmpty() }[1])
+        Utility.writePref(
+            this,
+            "LOCATION_CANADA_ID",
+            sector.split("_".toRegex()).dropLastWhile { it.isEmpty() }[1]
+        )
         toolbar.subtitle = url.toUpperCase() + ", " + cityLoc
     }
 
@@ -147,18 +156,19 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
     }
 
     private fun hideAllMaps() {
-        val mapIds = listOf(R.id.map_ab,
-                R.id.map_bc,
-                R.id.map_mb,
-                R.id.map_nl,
-                R.id.map_ns,
-                R.id.map_nt,
-                R.id.map_nu,
-                R.id.map_on,
-                R.id.map_pe,
-                R.id.map_qc,
-                R.id.map_sk,
-                R.id.map_yt
+        val mapIds = listOf(
+            R.id.map_ab,
+            R.id.map_bc,
+            R.id.map_mb,
+            R.id.map_nl,
+            R.id.map_ns,
+            R.id.map_nt,
+            R.id.map_nu,
+            R.id.map_on,
+            R.id.map_pe,
+            R.id.map_qc,
+            R.id.map_sk,
+            R.id.map_yt
         )
         mapIds.forEach {
             val map: ImageMap = findViewById(it)

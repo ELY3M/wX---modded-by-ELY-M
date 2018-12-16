@@ -28,13 +28,30 @@ import android.app.PendingIntent
 import android.content.Context
 import androidx.core.app.NotificationManagerCompat
 
-class ObjectNotification(val context: Context, val sound: Boolean, val noMain: String, val noBody: String, val resultPendingIntent: PendingIntent,
-                         val iconAlert: Int, val noSummary: String, val prio: Int, val color: Int, val iconAction: Int,
-                         val actionPendingIntent: PendingIntent, val buttonStr: String) {
+class ObjectNotification(
+    val context: Context,
+    val sound: Boolean,
+    val noMain: String,
+    val noBody: String,
+    val resultPendingIntent: PendingIntent,
+    val iconAlert: Int,
+    val noSummary: String,
+    val prio: Int,
+    val color: Int,
+    val iconAction: Int,
+    val actionPendingIntent: PendingIntent,
+    val buttonStr: String
+) {
 
-    fun sendNotification(context: Context, cancelString: String, id: Int, notification: Notification) {
+    fun sendNotification(
+        context: Context,
+        cancelString: String,
+        id: Int,
+        notification: Notification
+    ) {
         if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
-            val notifier = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notifier =
+                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notifier.notify(cancelString, id, notification)
         }
     }

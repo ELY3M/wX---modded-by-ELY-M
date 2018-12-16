@@ -57,7 +57,13 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show_bottom_toolbar, R.menu.observations, true, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_image_show_bottom_toolbar,
+            R.menu.observations,
+            true,
+            true
+        )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         img = findViewById(R.id.iv)

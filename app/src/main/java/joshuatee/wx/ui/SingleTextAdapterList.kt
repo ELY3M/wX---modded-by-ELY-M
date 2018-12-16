@@ -10,9 +10,11 @@ import joshuatee.wx.R
 
 // thanks http://www.truiton.com/2015/03/android-cardview-example/
 
-class SingleTextAdapterList(private val mDataset: MutableList<String>) : RecyclerView.Adapter<SingleTextAdapterList.DataObjectHolder>() {
+class SingleTextAdapterList(private val mDataset: MutableList<String>) :
+    RecyclerView.Adapter<SingleTextAdapterList.DataObjectHolder>() {
 
-    class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
 
         val label: TextView = itemView.findViewById(R.id.singletext)
 

@@ -85,7 +85,11 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_spcmcdwshow_summary, R.menu.spcmcdshowdetail)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_spcmcdwshow_summary,
+            R.menu.spcmcdshowdetail
+        )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         objCard = ObjectCard(this, R.id.cv1)
@@ -104,7 +108,8 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
         number = turl[0]
         if (number.contains("wat")) {
             number = number.replace("w", "")
-            imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + number + "_radar.gif"
+            imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + number +
+                    "_radar.gif"
             textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww$number.html"
             url = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/"
             patternStr = "[om] Watch #([0-9]*?)</a>"
@@ -116,7 +121,8 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
             imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/mcd$number.gif"
             textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/md$number.html"
             url = "${MyApplication.nwsSPCwebsitePrefix}/products/md/"
-            patternStr = "<strong><a href=./products/md/md.....html.>Mesoscale Discussion #(.*?)</a></strong>"
+            patternStr =
+                    "<strong><a href=./products/md/md.....html.>Mesoscale Discussion #(.*?)</a></strong>"
             nothingPresentStr = "No active MCDs"
             activityLabel = "MCDs"
             product = "SPCMCD$number"
@@ -138,7 +144,8 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
                 mcdList.forEach {
                     if (number.contains("at")) {
                         val mcdNo2 = String.format("%4s", it).replace(' ', '0')
-                        imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + mcdNo2 + "_radar.gif"
+                        imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + mcdNo2 +
+                                "_radar.gif"
                         mcdNumbers.add(mcdNo2)
                     } else {
                         imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/mcd$it.gif"
@@ -151,11 +158,13 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
             }
             if (mcdList.size == 1) {
                 if (number.contains("at")) {
-                    textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/w" + mcdNumbers[0] + ".html"
+                    textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/w" +
+                            mcdNumbers[0] + ".html"
                     title = "Watch " + mcdNumbers[0].replace("w", "")
                     product = "SPCWAT" + mcdNumbers[0].replace("w", "")
                 } else {
-                    textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/md" + mcdNumbers[0] + ".html"
+                    textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/md" +
+                            mcdNumbers[0] + ".html"
                     title = "MCD " + mcdNumbers[0]
                     product = "SPCMCD" + mcdNumbers[0]
                 }
@@ -167,7 +176,14 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
             val card = ObjectCardImage(contextg)
             card.setImage(bitmaps[mcdIndex])
             ll.addView(card.card)
-            card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SPCMCDWShowActivity::class.java, SPCMCDWShowActivity.NO, arrayOf(mcdNumbers[mcdIndex], "", polygonType.toString())) })
+            card.setOnClickListener(View.OnClickListener {
+                ObjectIntent(
+                    contextg,
+                    SPCMCDWShowActivity::class.java,
+                    SPCMCDWShowActivity.NO,
+                    arrayOf(mcdNumbers[mcdIndex], "", polygonType.toString())
+                )
+            })
             if (mcdList.size == 1) {
                 registerForContextMenu(card.img)
             }
@@ -176,7 +192,12 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
             val wfoStr = text.parse("ATTN...WFO...(.*?)... ")
             wfos = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
             val card2 = ObjectCardText(contextg)
-            card2.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
+            card2.setOnClickListener(View.OnClickListener {
+                UtilityToolbar.showHide(
+                    toolbar,
+                    toolbarBottom
+                )
+            })
             card2.setText(Utility.fromHtml(text))
             ll.addView(card2.card)
             setTitle(title)
@@ -188,7 +209,12 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
             miUrl.isVisible = true
             miImage.isVisible = true
         } else {
-            setTitle(activityLabel + " " + mcdNumbers.toString().replace("[{}]".toRegex(), "").replace("\\[|\\]".toRegex(), "").replace("w", ""))
+            setTitle(
+                "$activityLabel " + mcdNumbers.toString().replace(
+                    "[{}]".toRegex(),
+                    ""
+                ).replace("\\[|\\]".toRegex(), "").replace("w", "")
+            )
             miAll.isVisible = true
         }
         val tv: TextView = findViewById(R.id.tv)
@@ -204,15 +230,24 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
         (0 until wfos.size - 1).forEach {
-            menu.add(0, v.id, 0, "Add location: " + wfos[it] + " - " + Utility.readPref(this, "NWS_LOCATION_" + wfos[it], ""))
+            menu.add(
+                0,
+                v.id,
+                0,
+                "Add location: " + wfos[it] + " - " + Utility.readPref(
+                    this,
+                    "NWS_LOCATION_" + wfos[it],
+                    ""
+                )
+            )
         }
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         val itemStr = item.title.toString()
         (0 until wfos.size - 1)
-                .filter { itemStr.contains(wfos[it]) }
-                .forEach { saveLocation(wfos[it]) }
+            .filter { itemStr.contains(wfos[it]) }
+            .forEach { saveLocation(wfos[it]) }
         return true
     }
 

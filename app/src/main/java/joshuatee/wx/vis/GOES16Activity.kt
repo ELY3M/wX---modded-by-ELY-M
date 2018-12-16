@@ -43,7 +43,8 @@ import joshuatee.wx.ui.OnSwipeTouchListener
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMenuItemClickListener {
+class GOES16Activity : VideoRecordActivity(), View.OnClickListener,
+    Toolbar.OnMenuItemClickListener {
 
     companion object {
         const val RID: String = ""
@@ -62,14 +63,19 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
     private var productCodes = mutableListOf<String>()
     private var sector = "cgl"
     private var oldSector = "cgl"
-    private var frameCnt = 24
     private var savePrefs = true
     private lateinit var activityArguments: Array<String>
     private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer_bottom_toolbar, R.menu.goes16, true, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_image_show_navdrawer_bottom_toolbar,
+            R.menu.goes16,
+            true,
+            true
+        )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
@@ -98,12 +104,13 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
             imageTitle = drw.getLabel(position)
             productCode = drw.getToken(position)
             imgIdx = position
-            getContent()
+            getContent(sector)
         }
-        getContent()
+        getContent(sector)
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent(sectorF: String) = GlobalScope.launch(uiDispatcher) {
+        sector = sectorF
         writePrefs()
         val urlAndTime = withContext(Dispatchers.IO) { UtilityGOES16.getUrl(productCode, sector) }
         bitmap = withContext(Dispatchers.IO) { urlAndTime[0].getImage() }
@@ -141,7 +148,11 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
 
     private fun readPrefs(context: Context) {
         if (activityArguments.isNotEmpty() && activityArguments[0] == "") {
-            imageTitle = Utility.readPref(context, "GOES16_IMG_FAV_TITLE", UtilityGOES16.labelToCode.keys.sorted()[0])
+            imageTitle = Utility.readPref(
+                context,
+                "GOES16_IMG_FAV_TITLE",
+                UtilityGOES16.labelToCode.keys.sorted()[0]
+            )
             sector = Utility.readPref(context, "GOES16_SECTOR", sector)
             productCode = Utility.readPref(context, "GOES16_PROD", productCode)
             imgIdx = Utility.readPref(context, "GOES16_IMG_FAV_IDX", imgIdx)
@@ -161,102 +172,30 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
             return true
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.GOES16)
-            R.id.action_a24 -> {
-                frameCnt = 24
-                getAnimate()
-            }
-            R.id.action_a36 -> {
-                frameCnt = 36
-                getAnimate()
-            }
-            R.id.action_a48 -> {
-                frameCnt = 48
-                getAnimate()
-            }
-            R.id.action_a60 -> {
-                frameCnt = 60
-                getAnimate()
-            }
-            R.id.action_a72 -> {
-                frameCnt = 72
-                getAnimate()
-            }
-            R.id.action_a84 -> {
-                frameCnt = 84
-                getAnimate()
-            }
-            R.id.action_a96 -> {
-                frameCnt = 96
-                getAnimate()
-            }
-            R.id.action_FD -> {
-                sector = "FD"
-                getContent()
-            }
-            R.id.action_CONUS -> {
-                sector = "CONUS"
-                getContent()
-            }
-            R.id.action_pnw -> {
-                sector = "pnw"
-                getContent()
-            }
-            R.id.action_nr -> {
-                sector = "nr"
-                getContent()
-            }
-            R.id.action_umv -> {
-                sector = "umv"
-                getContent()
-            }
-            R.id.action_cgl -> {
-                sector = "cgl"
-                getContent()
-            }
-            R.id.action_ne -> {
-                sector = "ne"
-                getContent()
-            }
-            R.id.action_psw -> {
-                sector = "psw"
-                getContent()
-            }
-            R.id.action_sr -> {
-                sector = "sr"
-                getContent()
-            }
-            R.id.action_sp -> {
-                sector = "sp"
-                getContent()
-            }
-            R.id.action_smv -> {
-                sector = "smv"
-                getContent()
-            }
-            R.id.action_se -> {
-                sector = "se"
-                getContent()
-            }
-            R.id.action_gm -> {
-                sector = "gm"
-                getContent()
-            }
-            R.id.action_car -> {
-                sector = "car"
-                getContent()
-            }
-            R.id.action_eus -> {
-                sector = "eus"
-                getContent()
-            }
-            R.id.action_pr -> {
-                sector = "pr"
-                getContent()
-            }
-            R.id.action_taw -> {
-                sector = "taw"
-                getContent()
-            }
+            R.id.action_a24 -> getAnimate(24)
+            R.id.action_a36 -> getAnimate(36)
+            R.id.action_a48 -> getAnimate(48)
+            R.id.action_a60 -> getAnimate(60)
+            R.id.action_a72 -> getAnimate(72)
+            R.id.action_a84 -> getAnimate(84)
+            R.id.action_a96 -> getAnimate(96)
+            R.id.action_FD -> getContent("FD")
+            R.id.action_CONUS -> getContent("CONUS")
+            R.id.action_pnw -> getContent("pnw")
+            R.id.action_nr -> getContent("nr")
+            R.id.action_umv -> getContent("umv")
+            R.id.action_cgl -> getContent("cgl")
+            R.id.action_ne -> getContent("ne")
+            R.id.action_psw -> getContent("psw")
+            R.id.action_sr -> getContent("sr")
+            R.id.action_sp -> getContent("sp")
+            R.id.action_smv -> getContent("smv")
+            R.id.action_se -> getContent("se")
+            R.id.action_gm -> getContent("gm")
+            R.id.action_car -> getContent("car")
+            R.id.action_eus -> getContent("eus")
+            R.id.action_pr -> getContent("pr")
+            R.id.action_taw -> getContent("taw")
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     if (isStoragePermissionGranted) {
@@ -274,11 +213,12 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
     }
 
     override fun onRestart() {
-        getContent()
+        getContent(sector)
         super.onRestart()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onClick(v: View) {
         when (v.id) {
@@ -291,8 +231,15 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
         super.onStop()
     }
 
-    private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
-        animDrawable = withContext(Dispatchers.IO) { UtilityGOES16.getAnimation(contextg, productCode, sector, frameCnt) }
+    private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
+        animDrawable = withContext(Dispatchers.IO) {
+            UtilityGOES16.getAnimation(
+                contextg,
+                productCode,
+                sector,
+                frameCount
+            )
+        }
         UtilityImgAnim.startAnimation(animDrawable, img)
     }
 
@@ -303,7 +250,7 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
         }
         imageTitle = UtilityGOES16.labelToCode.keys.sorted()[imgIdx]
         productCode = drw.getToken(imgIdx)
-        getContent()
+        getContent(sector)
     }
 
     private fun showPrevImg() {
@@ -313,6 +260,6 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener, Toolbar.OnMe
         }
         imageTitle = UtilityGOES16.labelToCode.keys.sorted()[imgIdx]
         productCode = drw.getToken(imgIdx)
-        getContent()
+        getContent(sector)
     }
 }

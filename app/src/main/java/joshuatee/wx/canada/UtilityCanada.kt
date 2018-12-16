@@ -33,25 +33,26 @@ import joshuatee.wx.radar.LatLon
 
 object UtilityCanada {
 
-    private val PROV_HASH = mapOf(
-            "AB" to "PAC",
-            "BC" to "PAC",
-            "MB" to "PAC",
-            "NB" to "ERN",
-            "NL" to "ERN",
-            "NS" to "ERN",
-            "NT" to "CAN",
-            "NU" to "CAN",
-            "ON" to "ONT",
-            "PE" to "ERN",
-            "QC" to "ERN",
-            "SK" to "PAC",
-            "YT" to "CAN"
+    private val provToSector = mapOf(
+        "AB" to "PAC",
+        "BC" to "PAC",
+        "MB" to "PAC",
+        "NB" to "ERN",
+        "NL" to "ERN",
+        "NS" to "ERN",
+        "NT" to "CAN",
+        "NU" to "CAN",
+        "ON" to "ONT",
+        "PE" to "ERN",
+        "QC" to "ERN",
+        "SK" to "PAC",
+        "YT" to "CAN"
     )
 
     fun getIcons7Day(html: String): String {
         val sb = StringBuilder(500)
-        val dayAr = html.split((MyApplication.newline + MyApplication.newline)).dropLastWhile { it.isEmpty() }
+        val dayAr = html.split((MyApplication.newline + MyApplication.newline))
+            .dropLastWhile { it.isEmpty() }
         dayAr.forEach {
             sb.append(translateIconName(it))
             sb.append("!")
@@ -60,74 +61,83 @@ object UtilityCanada {
     }
 
     fun getIcons7DayAl(html: String): List<String> {
-        val dayAr = html.split((MyApplication.newline + MyApplication.newline)).dropLastWhile { it.isEmpty() }
+        val dayAr = html.split((MyApplication.newline + MyApplication.newline))
+            .dropLastWhile { it.isEmpty() }
         return dayAr.mapTo(mutableListOf()) { translateIconName(it) }
     }
 
     private fun translateIconName(s: String): String {
         var newName = ""
         if (s.contains("reezing rain or snow")
-                || s.contains("chance of flurries and risk of freezing drizzle")
-                || s.contains("chance of flurries before morning with risk of freezing drizzle")
-                || s.contains("Periods of freezing drizzle or flurries")
-                || s.contains("Flurries or freezing drizzle"))
+            || s.contains("chance of flurries and risk of freezing drizzle")
+            || s.contains("chance of flurries before morning with risk of freezing drizzle")
+            || s.contains("Periods of freezing drizzle or flurries")
+            || s.contains("Flurries or freezing drizzle")
+        )
             newName = "fzra_sn"
         else if (s.contains("eriods of freezing drizzle")
-                || s.contains("reezing Drizzle")
-                || s.contains("reezing drizzle")
-                || s.contains("reezing rain")
-                || s.contains("isk of freezing drizzle"))
+            || s.contains("reezing Drizzle")
+            || s.contains("reezing drizzle")
+            || s.contains("reezing rain")
+            || s.contains("isk of freezing drizzle")
+        )
             newName = "fzra"
         else if (s.contains("Ice Crystals") || s.contains("ice pellets"))
             newName = "ip"
         else if (s.contains("hundershowers") || s.contains("hunderstorm"))
             newName = "scttsra"
         else if (s.contains("hance of rain showers or flurries")
-                || s.contains("lurries or rain showers")
-                || s.contains(" few rain showers or flurries")
-                || s.contains("ain or snow")
-                || s.contains("eriods of rain or snow")
-                || s.contains("now or rain")
-                || s.contains("ain changing to snow")
-                || s.contains("ain showers or flurries")
-                || s.contains("ain changing to periods of snow")
-                || s.contains("now changing to periods of rain")
-                || s.contains("Rain at times heavy changing to snow")
-                || s.contains("Snow changing to periods of drizzle")
-                || s.contains("Rain at times mixed with wet snow"))
+            || s.contains("lurries or rain showers")
+            || s.contains(" few rain showers or flurries")
+            || s.contains("ain or snow")
+            || s.contains("eriods of rain or snow")
+            || s.contains("now or rain")
+            || s.contains("ain changing to snow")
+            || s.contains("ain showers or flurries")
+            || s.contains("ain changing to periods of snow")
+            || s.contains("now changing to periods of rain")
+            || s.contains("Rain at times heavy changing to snow")
+            || s.contains("Snow changing to periods of drizzle")
+            || s.contains("Rain at times mixed with wet snow")
+        )
             newName = "ra_sn"
         else if (s.contains("hance of showers") || s.contains("howers"))
             newName = "shra"
         else if (s.contains("hance of rain")
-                || s.contains("Rain beginning")
-                || s.contains("eriods of drizzle changing to rain at times")
-                || s.contains("Rain at times heavy"))
+            || s.contains("Rain beginning")
+            || s.contains("eriods of drizzle changing to rain at times")
+            || s.contains("Rain at times heavy")
+        )
             newName = "ra"
         else if (s.contains("hance of flurries")
-                || s.contains("hance of snow")
-                || s.contains("eriods of snow")
-                || s.contains(" few flurries")
-                || s.contains("eriods of light snow")
-                || s.contains("Flurries")
-                || s.contains("Snow")
-                || s.contains("then snow")
-                || s.contains("ight snow"))
+            || s.contains("hance of snow")
+            || s.contains("eriods of snow")
+            || s.contains(" few flurries")
+            || s.contains("eriods of light snow")
+            || s.contains("Flurries")
+            || s.contains("Snow")
+            || s.contains("then snow")
+            || s.contains("ight snow")
+        )
             newName = "sn"
         else if (s.contains("A few showers")
-                || s.contains("eriods of rain")
-                || s.contains("drizzle"))
+            || s.contains("eriods of rain")
+            || s.contains("drizzle")
+        )
             newName = "hi_shwrs"
         else if (s.contains("Increasing cloudiness") || s.contains("Cloudy periods"))
             newName = "bkn"
         else if (s.contains("Mainly sunny") || s.contains("A few clouds"))
             newName = "few"
         else if (s.contains("loudy")
-                || s.contains("Mainly cloudy")
-                || s.contains("Overcast"))
+            || s.contains("Mainly cloudy")
+            || s.contains("Overcast")
+        )
             newName = "ovc"
         else if (s.contains("A mix of sun and cloud")
-                || s.contains("Partly cloudy")
-                || s.contains("Clearing"))
+            || s.contains("Partly cloudy")
+            || s.contains("Clearing")
+        )
             newName = "sct"
         else if (s.contains("Clear") || s.contains("Sunny"))
             newName = "skc"
@@ -136,8 +146,9 @@ object UtilityCanada {
         else if (s.contains("Rain"))
             newName = "ra"
         else if (s.contains("Mist")
-                || s.contains("Fog")
-                || s.contains("Light Drizzle"))
+            || s.contains("Fog")
+            || s.contains("Light Drizzle")
+        )
             newName = "fg"
 
         if (s.contains("night")) {
@@ -156,63 +167,72 @@ object UtilityCanada {
     fun translateIconNameCurrentConditions(s: String, day1: String): String {
         var newName = ""
         if (s.contains("eriods of freezing drizzle")
-                || s.contains("Freezing Drizzle")
-                || s.contains("Freezing Rain"))
+            || s.contains("Freezing Drizzle")
+            || s.contains("Freezing Rain")
+        )
             newName = "fzra"
         else if (s.contains("hundershowers") || s.contains("hunderstorm"))
             newName = "scttsra"
         else if (s.contains("Haze"))
             newName = "fg"
         else if (s.contains("hance of rain showers or flurries")
-                || s.contains("lurries or rain showers")
-                || s.contains(" few rain showers or flurries")
-                || s.contains("ain or snow")
-                || s.contains("ain and Snow")
-                || s.contains("eriods of rain or snow")
-                || s.contains("now or rain"))
+            || s.contains("lurries or rain showers")
+            || s.contains(" few rain showers or flurries")
+            || s.contains("ain or snow")
+            || s.contains("ain and Snow")
+            || s.contains("eriods of rain or snow")
+            || s.contains("now or rain")
+        )
             newName = "ra_sn"
         else if (s.contains("hance of showers") || s.contains("Showers"))
             newName = "shra"
         else if (s.contains("hance of rain"))
             newName = "ra"
         else if (s.contains("A few showers") || s.contains("eriods of rain")
-                || s.contains("drizzle"))
+            || s.contains("drizzle")
+        )
             newName = "hi_shwrs"
         else if (s.contains("Blizzard")
-                || s.contains("Blowing Snow")
-                || s.contains("Drifting Snow"))
+            || s.contains("Blowing Snow")
+            || s.contains("Drifting Snow")
+        )
             newName = "blizzard"
         else if (s.contains("hance of flurries")
-                || s.contains("hance of snow")
-                || s.contains("eriods of snow")
-                || s.contains(" few flurries")
-                || s.contains("eriods of light snow")
-                || s.contains("Flurries")
-                || s.contains("Snow")
-                || s.contains("ight snow"))
+            || s.contains("hance of snow")
+            || s.contains("eriods of snow")
+            || s.contains(" few flurries")
+            || s.contains("eriods of light snow")
+            || s.contains("Flurries")
+            || s.contains("Snow")
+            || s.contains("ight snow")
+        )
             newName = "sn"
         else if (s.contains("Increasing cloudiness") || s.contains("Cloudy periods"))
             newName = "bkn"
         else if (s.contains("Mainly sunny")
-                || s.contains("A few clouds")
-                || s.contains("Mainly Sunny")
-                || s.contains("Mainly Clear"))
+            || s.contains("A few clouds")
+            || s.contains("Mainly Sunny")
+            || s.contains("Mainly Clear")
+        )
             newName = "few"
         else if (s.contains("Cloudy")
-                || s.contains("Mainly cloudy")
-                || s.contains("Overcast"))
+            || s.contains("Mainly cloudy")
+            || s.contains("Overcast")
+        )
             newName = "ovc"
         else if (s.contains("A mix of sun and cloud")
-                || s.contains("Partly cloudy")
-                || s.contains("Clearing"))
+            || s.contains("Partly cloudy")
+            || s.contains("Clearing")
+        )
             newName = "sct"
         else if (s.contains("Clear") || s.contains("Sunny"))
             newName = "skc"
         else if (s.contains("Rain"))
             newName = "ra"
         else if (s.contains("Mist")
-                || s.contains("Fog")
-                || s.contains("Light Drizzle"))
+            || s.contains("Fog")
+            || s.contains("Light Drizzle")
+        )
             newName = "fg"
         else if (s.contains("Ice Crystals") || s.contains("Ice Pellets"))
             newName = "ip"
@@ -242,7 +262,8 @@ object UtilityCanada {
         return newName
     }
 
-    fun getProvHTML(prov: String): String = ("http://weather.gc.ca/forecast/canada/index_e.html?id=$prov").getHtmlSep()
+    fun getProvHTML(prov: String): String =
+        ("http://weather.gc.ca/forecast/canada/index_e.html?id=$prov").getHtmlSep()
 
     fun getLocationHtml(location: LatLon): String {
         val prov = location.latString.split(":").dropLastWhile { it.isEmpty() }
@@ -265,18 +286,23 @@ object UtilityCanada {
                 + x.split(":").dropLastWhile { it.isEmpty() }[1].toLowerCase(Locale.US) + "-"
                 + y.split(":").dropLastWhile { it.isEmpty() }[0] + "_metric_e.html")
         val html = url.getHtmlSep()
-        return html.parse("<a href=./radar/index_e.html.id=([a-z]{3})..*?>Weather Radar</a>").toUpperCase(Locale.US)
+        return html.parse("<a href=./radar/index_e.html.id=([a-z]{3})..*?>Weather Radar</a>")
+            .toUpperCase(Locale.US)
     }
 
     fun getConditions(html: String): String {
         val sum = html.parse("<b>Condition:</b> (.*?) <br/>.*?<b>Pressure.*?:</b> .*? kPa.*?<br/>")
-        val pressure = html.parse("<b>Condition:</b> .*? <br/>.*?<b>Pressure.*?:</b> (.*?) kPa.*?<br/>")
+        val pressure =
+            html.parse("<b>Condition:</b> .*? <br/>.*?<b>Pressure.*?:</b> (.*?) kPa.*?<br/>")
         var vis = html.parse("<b>Visibility:</b> (.*?)<br/>")
         vis = vis.replace("<.*?>".toRegex(), "")
         vis = vis.replace("\\s+".toRegex(), "")
-        val temp = html.parse("<b>Temperature:</b> (.*?)&deg;C <br/>.*?<b>Humidity:</b> .*? %<br/>.*?<b>Dewpoint:</b> .*?&deg;C <br/>")
-        val rh = html.parse("<b>Temperature:</b> .*?&deg;C <br/>.*?<b>Humidity:</b> (.*?) %<br/>.*?<b>Dewpoint:</b> .*?&deg;C <br/>")
-        val dew = html.parse("<b>Temperature:</b> .*?&deg;C <br/>.*?<b>Humidity:</b> .*? %<br/>.*?<b>Dewpoint:</b> (.*?)&deg;C <br/>")
+        val temp =
+            html.parse("<b>Temperature:</b> (.*?)&deg;C <br/>.*?<b>Humidity:</b> .*? %<br/>.*?<b>Dewpoint:</b> .*?&deg;C <br/>")
+        val rh =
+            html.parse("<b>Temperature:</b> .*?&deg;C <br/>.*?<b>Humidity:</b> (.*?) %<br/>.*?<b>Dewpoint:</b> .*?&deg;C <br/>")
+        val dew =
+            html.parse("<b>Temperature:</b> .*?&deg;C <br/>.*?<b>Humidity:</b> .*? %<br/>.*?<b>Dewpoint:</b> (.*?)&deg;C <br/>")
         var wind = Utility.fromHtml(html.parse("<b>Wind:</b> (.*?)<br/>"))
         wind = wind.replace(MyApplication.newline, "")
         vis = vis.replace(" miles", "mi")
@@ -284,7 +310,8 @@ object UtilityCanada {
     }
 
     fun get7Day(html: String): String {
-        val stringList = html.parseColumn("<category term=\"Weather Forecasts\"/><br> <summary type=\"html\">(.*?\\.) Forecast.*?</summary>")
+        val stringList =
+            html.parseColumn("<category term=\"Weather Forecasts\"/><br> <summary type=\"html\">(.*?\\.) Forecast.*?</summary>")
         val sb2 = StringBuilder(400)
         val resultListDay = html.parseColumn("<title>(.*?)</title>")
         var j = 0
@@ -313,13 +340,16 @@ object UtilityCanada {
         val watchUrl: String
         val baseUrl = "http://weather.gc.ca"
         val result = mutableListOf("", "")
-        var urlAl = html.parseColumn("<div id=\"statement\" class=\"floatLeft\">.*?<a href=\"(.*?)\">.*?</a>.*?</div>")
-        var titleAl = html.parseColumn("<div id=\"statement\" class=\"floatLeft\">.*?<a href=\".*?\">(.*?)</a>.*?</div>")
+        var urlAl =
+            html.parseColumn("<div id=\"statement\" class=\"floatLeft\">.*?<a href=\"(.*?)\">.*?</a>.*?</div>")
+        var titleAl =
+            html.parseColumn("<div id=\"statement\" class=\"floatLeft\">.*?<a href=\".*?\">(.*?)</a>.*?</div>")
         statementUrl = UtilityArray.joinArrayWithDelim(urlAl, "")
         statement = UtilityArray.joinArrayWithDelim(titleAl, "<BR>")
         var chunk = html.parse("<entry>(.*?)<category term=\"Warnings and Watches\"/>")
         urlAl = chunk.parseColumn("<title>.*?</title>.*?<link type=\"text/html\" href=\"(.*?)\"/>")
-        titleAl = chunk.parseColumn("<title>(.*?)</title>.*?<link type=\"text/html\" href=\".*?\"/>")
+        titleAl =
+                chunk.parseColumn("<title>(.*?)</title>.*?<link type=\"text/html\" href=\".*?\"/>")
         warningUrl = UtilityArray.joinArrayWithDelim(urlAl, ",")
         warning = UtilityArray.joinArrayWithDelim(titleAl, "<BR>")
         chunk = html.parse("<div id=\"watch\" class=\"floatLeft\">(.*?)</div>")
@@ -347,14 +377,21 @@ object UtilityCanada {
                 notFound = false
             }
         }
-        warningData = warningData.replace("<li><img src=./cacheable/images/img/feed-icon-14x14.png. alt=.ATOM feed.> <a href=./rss/battleboard/.*?.>ATOM</a></li>".toRegex(), "")
-        warningData = warningData.replace(" <div class=\"col-xs-12\">", "").replace("<section class=\"followus hidden-print\"><h2>Follow:</h2>", "")
-        warningData = warningData.replace("<a href=\"/rss/battleboard/.*?.xml\"><img src=\"/cacheable/images/img/feed-icon-14x14.png\" alt=\"ATOM feed\" class=\"mrgn-rght-sm\">ATOM</a>", "")
+        warningData = warningData.replace(
+            "<li><img src=./cacheable/images/img/feed-icon-14x14.png. alt=.ATOM feed.> <a href=./rss/battleboard/.*?.>ATOM</a></li>".toRegex(),
+            ""
+        )
+        warningData = warningData.replace(" <div class=\"col-xs-12\">", "")
+            .replace("<section class=\"followus hidden-print\"><h2>Follow:</h2>", "")
+        warningData = warningData.replace(
+            "<a href=\"/rss/battleboard/.*?.xml\"><img src=\"/cacheable/images/img/feed-icon-14x14.png\" alt=\"ATOM feed\" class=\"mrgn-rght-sm\">ATOM</a>",
+            ""
+        )
         warningData = warningData.replace("<div class=\"row\">", "")
         return warningData
     }
 
-    fun getECSectorFromProv(prov: String): String = PROV_HASH[prov] ?: ""
+    fun getECSectorFromProv(prov: String): String = provToSector[prov] ?: ""
 
     fun isLabelPresent(label: String): Boolean {
         if (!UtilityCitiesCA.cityInit) {

@@ -16,7 +16,8 @@ import androidx.appcompat.R
 
 class ArrayAdapterSearchView : SearchView {
 
-    private var mSearchAutoComplete: SearchView.SearchAutoComplete = findViewById(R.id.search_src_text)
+    private var mSearchAutoComplete: SearchView.SearchAutoComplete =
+        findViewById(R.id.search_src_text)
 
     constructor(context: Context) : super(context) {
         initialize()

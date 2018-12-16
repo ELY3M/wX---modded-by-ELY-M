@@ -40,13 +40,16 @@ class TelecineService : Service() {
             val subtitle = context.getString(R.string.notification_recording_subtitle)
             var notification: Notification? = null
             if (android.os.Build.VERSION.SDK_INT > 20) {
-                notification = NotificationCompat.Builder(context, UtilityNotification.notiChannelStrNoSound)
-                        .setContentTitle(title)
-                        .setContentText(subtitle)
-                        .setSmallIcon(R.drawable.ic_videocam_24dp)
-                        .setColor(ContextCompat.getColor(context, R.color.primary_normal))
-                        .setAutoCancel(true)
-                        .build()
+                notification = NotificationCompat.Builder(
+                    context,
+                    UtilityNotification.notiChannelStrNoSound
+                )
+                    .setContentTitle(title)
+                    .setContentText(subtitle)
+                    .setSmallIcon(R.drawable.ic_videocam_24dp)
+                    .setColor(ContextCompat.getColor(context, R.color.primary_normal))
+                    .setAutoCancel(true)
+                    .build()
             }
             startForeground(NOTIFICATION_ID, notification)
         }
@@ -74,9 +77,11 @@ class TelecineService : Service() {
         }
         val showDistanceTool = intent.getStringExtra("show_distance_tool")
         val showRecordingTools = intent.getStringExtra("show_recording_tools")
-        recordingSession = RecordingSession(this, listener, resultCode, data,
-                showDistanceTool == "true",
-                showRecordingTools == "true")
+        recordingSession = RecordingSession(
+            this, listener, resultCode, data,
+            showDistanceTool == "true",
+            showRecordingTools == "true"
+        )
         recordingSession!!.showOverlay()
         return Service.START_NOT_STICKY
     }

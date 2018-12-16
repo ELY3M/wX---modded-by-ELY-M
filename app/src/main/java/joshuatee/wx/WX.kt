@@ -56,7 +56,8 @@ class WX : CommonActionBarFragment() {
         UtilityTheme.setPrimaryColor(this)
         val toolbarBottom: Toolbar = findViewById(R.id.toolbar_bottom)
         view = findViewById(android.R.id.content)
-        if (android.os.Build.VERSION.SDK_INT > 20) toolbarBottom.elevation = MyApplication.elevationPref
+        if (android.os.Build.VERSION.SDK_INT > 20) toolbarBottom.elevation =
+                MyApplication.elevationPref
         if (MyApplication.iconsEvenSpaced) {
             UtilityToolbar.setupEvenlyDistributedToolbar(this, toolbarBottom, R.menu.cab)
         } else {
@@ -95,7 +96,12 @@ class WX : CommonActionBarFragment() {
         if (MyApplication.simpleMode || UIPreferences.hideTopToolbar) {
             mSlidingTabLayout.visibility = View.GONE
         }
-        mSlidingTabLayout.setSelectedTabIndicatorColor(UtilityTheme.getPrimaryColorFromSelectedTheme(this, 0))
+        mSlidingTabLayout.setSelectedTabIndicatorColor(
+            UtilityTheme.getPrimaryColorFromSelectedTheme(
+                this,
+                0
+            )
+        )
         refreshDynamicContent()
         if (android.os.Build.VERSION.SDK_INT < 21) {
             toolbarBottom.bringToFront()
@@ -106,7 +112,10 @@ class WX : CommonActionBarFragment() {
         if (UIPreferences.prefPreventAccidentalExit) {
             if (backButtonCounter < 1) {
                 //UtilityUI.makeToast(this, "Please tap the back button one more time to close wX.")
-                UtilityUI.makeSnackBar(mSlidingTabLayout, "Please tap the back button one more time to close wX.")
+                UtilityUI.makeSnackBar(
+                    mSlidingTabLayout,
+                    "Please tap the back button one more time to close wX."
+                )
                 backButtonCounter += 1
             } else {
                 finish()
@@ -132,7 +141,8 @@ class WX : CommonActionBarFragment() {
     }
 
     override fun onResume() {
-        LocalBroadcastManager.getInstance(this).registerReceiver(onBroadcast, IntentFilter("notifran"))
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(onBroadcast, IntentFilter("notifran"))
         super.onResume()
     }
 

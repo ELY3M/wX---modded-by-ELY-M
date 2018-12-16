@@ -46,7 +46,13 @@ internal object UtilityNotificationSPCFW {
         }
     }
 
-    private fun sendSPCFWNotif(context: Context, locNum: String, day: Int, threatLevel: String, validTime: String): String {
+    private fun sendSPCFWNotif(
+        context: Context,
+        locNum: String,
+        day: Int,
+        threatLevel: String,
+        validTime: String
+    ): String {
         var notifUrls = ""
         val locNumInt = (locNum.toIntOrNull() ?: 0) - 1
         val noMain: String
@@ -63,12 +69,26 @@ internal object UtilityNotificationSPCFW {
         noSummary = noBody
         val objPI = ObjectPendingIntents(context, SPCFireOutlookActivity::class.java)
         val cancelStr = "spcfwloc" + day.toString() + locNum + threatLevel + validTime
-        if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
+        if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
+                context,
+                cancelStr
+            ))
+        ) {
             val sound = MyApplication.locations[locNumInt].sound && !inBlackout
-            val notifObj = ObjectNotification(context, sound, noMain,
-                    noBody, objPI.resultPendingIntent,
-                    MyApplication.ICON_ALERT, noSummary, Notification.PRIORITY_DEFAULT, Color.YELLOW,
-                    MyApplication.ICON_ACTION, objPI.resultPendingIntent2, context.resources.getString(R.string.read_aloud))
+            val notifObj = ObjectNotification(
+                context,
+                sound,
+                noMain,
+                noBody,
+                objPI.resultPendingIntent,
+                MyApplication.ICON_ALERT,
+                noSummary,
+                Notification.PRIORITY_DEFAULT,
+                Color.YELLOW,
+                MyApplication.ICON_ACTION,
+                objPI.resultPendingIntent2,
+                context.resources.getString(R.string.read_aloud)
+            )
             val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
             notifObj.sendNotification(context, cancelStr, 1, noti)
             //notifier.notify(cancelStr, 1, noti)
@@ -88,14 +108,18 @@ internal object UtilityNotificationSPCFW {
         threatList.add("IDRT")
         var urlBlob: String
         for (day in 1..2) {
-            val urlLocal = "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/fwdy" + day.toString() + ".html"
-            urlBlob = UtilityString.getHTMLandParse(urlLocal,
-                    "CLICK FOR <a href=.(.*?txt).>DAY [12] FIREWX AREAL OUTLINE PRODUCT .KWNSPFWFD[12].</a>")
+            val urlLocal =
+                "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/fwdy" + day.toString() + ".html"
+            urlBlob = UtilityString.getHTMLandParse(
+                urlLocal,
+                "CLICK FOR <a href=.(.*?txt).>DAY [12] FIREWX AREAL OUTLINE PRODUCT .KWNSPFWFD[12].</a>"
+            )
             urlBlob = "${MyApplication.nwsSPCwebsitePrefix}$urlBlob"
             var html = urlBlob.getHtmlSep()
             val validTime = html.parse("VALID TIME ([0-9]{6}Z - [0-9]{6}Z)")
             html = html.replace("<br>", " ")
-            val htmlBlob = html.parse("FIRE WEATHER OUTLOOK POINTS DAY " + day.toString() + "(.*?&)&") // was (.*?)&&
+            val htmlBlob =
+                html.parse("FIRE WEATHER OUTLOOK POINTS DAY " + day.toString() + "(.*?&)&") // was (.*?)&&
             for (m in threatList.indices) {
                 retStr = ""
                 val threatLevelCode = threatList[m]
@@ -126,7 +150,10 @@ internal object UtilityNotificationSPCFW {
                     }
                     retStr += ":"
                     retStr = retStr.replace(" :", ":")
-                    retStr = retStr.replace(" 99.99 99.99 ", " ") // need for the way SPC ConvO seperates on 8 's
+                    retStr = retStr.replace(
+                        " 99.99 99.99 ",
+                        " "
+                    ) // need for the way SPC ConvO seperates on 8 's
                 } // end looping over polygons of one threat level
                 val x = mutableListOf<Double>()
                 val y = mutableListOf<Double>()
@@ -169,10 +196,21 @@ internal object UtilityNotificationSPCFW {
                                 // call secondary method to send notif if required
                                 locXDbl = MyApplication.locations[n - 1].x.toDoubleOrNull() ?: 0.0
                                 locYDbl = MyApplication.locations[n - 1].y.toDoubleOrNull() ?: 0.0
-                                val contains = polygon2.contains(ExternalPoint(locXDbl.toFloat(), locYDbl.toFloat()))
+                                val contains = polygon2.contains(
+                                    ExternalPoint(
+                                        locXDbl.toFloat(),
+                                        locYDbl.toFloat()
+                                    )
+                                )
                                 if (contains) {
                                     if (!notifUrls.contains("spcfwloc" + day.toString() + locNum))
-                                        notifUrls += sendSPCFWNotif(context, locNum, day, threatLevelCode, validTime)
+                                        notifUrls += sendSPCFWNotif(
+                                            context,
+                                            locNum,
+                                            day,
+                                            threatLevelCode,
+                                            validTime
+                                        )
                                 }
                             }
                         }

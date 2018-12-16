@@ -95,7 +95,13 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
         else
             turl[1]
         toolbar.title = prod
-        locations = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, nwsOffice, prefTokenLocation, prefToken)
+        locations = UtilityFavorites.setupFavMenu(
+            this,
+            MyApplication.wfoFav,
+            nwsOffice,
+            prefTokenLocation,
+            prefToken
+        )
         sp = ObjectSpinner(this, this, R.id.spinner1, locations)
         sp.setOnItemSelectedListener(this)
         sv = findViewById(R.id.sv)
@@ -113,7 +119,13 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
 
     override fun onRestart() {
         if (ridFavOld != MyApplication.wfoFav) {
-            locations = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, nwsOffice, prefTokenLocation, prefToken)
+            locations = UtilityFavorites.setupFavMenu(
+                this,
+                MyApplication.wfoFav,
+                nwsOffice,
+                prefTokenLocation,
+                prefToken
+            )
             sp.refreshData(contextg, locations)
         }
         super.onRestart()
@@ -125,7 +137,11 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
         when (item.itemId) {
             R.id.action_fav -> toggleFavorite()
             R.id.action_map -> imageMap.toggleMap()
-            R.id.action_share -> UtilityShare.shareText(this, prod + nwsOffice, Utility.fromHtml(wfoProd.toString()))
+            R.id.action_share -> UtilityShare.shareText(
+                this,
+                prod + nwsOffice,
+                Utility.fromHtml(wfoProd.toString())
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -135,21 +151,38 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
         sv.visibility = View.VISIBLE
         nwsOffice = loc
         mapShown = false
-        locations = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, nwsOffice, prefTokenLocation, prefToken)
+        locations = UtilityFavorites.setupFavMenu(
+            this,
+            MyApplication.wfoFav,
+            nwsOffice,
+            prefTokenLocation,
+            prefToken
+        )
         sp.refreshData(contextg, locations)
     }
 
     private fun toggleFavorite() {
         val ridFav = UtilityFavorites.toggleFavoriteString(this, nwsOffice, star, prefToken)
-        locations = UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefTokenLocation, prefToken)
+        locations =
+                UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefTokenLocation, prefToken)
         sp.refreshData(contextg, locations)
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         if (locations.isNotEmpty()) {
             when (pos) {
-                1 -> ObjectIntent(this, FavAddActivity::class.java, FavAddActivity.TYPE, arrayOf("WFO"))
-                2 -> ObjectIntent(this, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf("WFO"))
+                1 -> ObjectIntent(
+                    this,
+                    FavAddActivity::class.java,
+                    FavAddActivity.TYPE,
+                    arrayOf("WFO")
+                )
+                2 -> ObjectIntent(
+                    this,
+                    FavRemoveActivity::class.java,
+                    FavRemoveActivity.TYPE,
+                    arrayOf("WFO")
+                )
                 else -> {
                     nwsOffice = locations[pos].split(" ").getOrNull(0) ?: ""
                     getContent()
@@ -169,14 +202,23 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
         ridFavOld = MyApplication.wfoFav
         wfoProd = withContext(Dispatchers.IO) { lsrFromWFO }
         linearLayout.removeAllViewsInLayout()
-        wfoProd.forEach { linearLayout.addView(ObjectCardText(contextg, Utility.fromHtml(it)).card) }
+        wfoProd.forEach {
+            linearLayout.addView(
+                ObjectCardText(
+                    contextg,
+                    Utility.fromHtml(it)
+                ).card
+            )
+        }
     }
 
     private val lsrFromWFO: List<String>
         get() {
             val lsrArr = mutableListOf<String>()
-            val numberLSR = UtilityString.getHTMLandParseLastMatch("http://forecast.weather.gov/product.php?site=$nwsOffice&issuedby=$nwsOffice&product=LSR&format=txt&version=1&glossary=0",
-                    "product=LSR&format=TXT&version=(.*?)&glossary")
+            val numberLSR = UtilityString.getHTMLandParseLastMatch(
+                "http://forecast.weather.gov/product.php?site=$nwsOffice&issuedby=$nwsOffice&product=LSR&format=txt&version=1&glossary=0",
+                "product=LSR&format=TXT&version=(.*?)&glossary"
+            )
             if (numberLSR == "") {
                 lsrArr.add("None issued by this office recently.")
             } else {
@@ -184,7 +226,12 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
                 if (maxVers > 30) {
                     maxVers = 30
                 }
-                (1..maxVers + 1 step 2).mapTo(lsrArr) { UtilityDownload.getTextProduct("LSR$nwsOffice", it) }
+                (1..maxVers + 1 step 2).mapTo(lsrArr) {
+                    UtilityDownload.getTextProduct(
+                        "LSR$nwsOffice",
+                        it
+                    )
+                }
             }
             return lsrArr
         }

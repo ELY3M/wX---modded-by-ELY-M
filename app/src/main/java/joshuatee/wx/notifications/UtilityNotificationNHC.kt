@@ -62,7 +62,8 @@ object UtilityNotificationNHC {
         var dataRet: ObjectNHCStormInfo
         if (atl) {
             (1 until 6).forEach {
-                dataRet = UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_at" + it.toString() + ".xml")
+                dataRet =
+                        UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_at" + it.toString() + ".xml")
                 if (dataRet.title != "") {
                     atlTitleList.add(dataRet.title.replace("NHC Atlantic Wallet", ""))
                     atlSumList.add(dataRet.summary)
@@ -75,7 +76,8 @@ object UtilityNotificationNHC {
         }
         if (epac) {
             (1 until 6).forEach {
-                dataRet = UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_ep" + it.toString() + ".xml")
+                dataRet =
+                        UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_ep" + it.toString() + ".xml")
                 if (dataRet.title != "") {
                     pacTitleList.add(dataRet.title.replace("NHC Eastern Pacific Wallet", ""))
                     pacSumList.add(dataRet.summary)
@@ -89,9 +91,17 @@ object UtilityNotificationNHC {
         if (atl) {
             (0 until atlSumList.size).forEach {
                 if (!muteStr.contains(atlTitleList[it]))
-                    notifUrls += sendNHCNotif(context, atlLinkList[it],
-                            Utility.fromHtml(atlSumList[it]), atlTitleList[it], MyApplication.ICON_NHC_1,
-                            atlImg1List[it], atlImg2List[it], MyApplication.alertNotificationSoundNhcAtl, atlWalletList[it])
+                    notifUrls += sendNHCNotif(
+                        context,
+                        atlLinkList[it],
+                        Utility.fromHtml(atlSumList[it]),
+                        atlTitleList[it],
+                        MyApplication.ICON_NHC_1,
+                        atlImg1List[it],
+                        atlImg2List[it],
+                        MyApplication.alertNotificationSoundNhcAtl,
+                        atlWalletList[it]
+                    )
                 else {
                     UtilityLog.d("wx", "blocking " + atlTitleList[it])
                 }
@@ -100,9 +110,17 @@ object UtilityNotificationNHC {
         if (epac) {
             (0 until pacSumList.size).forEach {
                 if (!muteStr.contains(pacTitleList[it]))
-                    notifUrls += sendNHCNotif(context, pacLinkList[it],
-                            Utility.fromHtml(pacSumList[it]), pacTitleList[it], MyApplication.ICON_NHC_2,
-                            pacImg1List[it], pacImg2List[it], MyApplication.alertNotificationSoundNhcEpac, pacWalletList[it])
+                    notifUrls += sendNHCNotif(
+                        context,
+                        pacLinkList[it],
+                        Utility.fromHtml(pacSumList[it]),
+                        pacTitleList[it],
+                        MyApplication.ICON_NHC_2,
+                        pacImg1List[it],
+                        pacImg2List[it],
+                        MyApplication.alertNotificationSoundNhcEpac,
+                        pacWalletList[it]
+                    )
                 else {
                     UtilityLog.d("wx", "blocking " + pacTitleList[it])
                 }
@@ -111,22 +129,40 @@ object UtilityNotificationNHC {
         return notifUrls
     }
 
-    private fun sendNHCNotif(context: Context, notifUrl: String, mdNo: String, notifTitle: String, iconAlert: Int,
-                             img1Url: String, img2Url: String, soundPref: Boolean, wallet: String): String {
+    private fun sendNHCNotif(
+        context: Context, notifUrl: String, mdNo: String, notifTitle: String, iconAlert: Int,
+        img1Url: String, img2Url: String, soundPref: Boolean, wallet: String
+    ): String {
         var notifUrls = ""
         val noMain: String = notifTitle
         val noBody: String = mdNo
         val noSummary: String = mdNo
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
-        val objPI = ObjectPendingIntents(context, NHCStormActivity::class.java, NHCStormActivity.URL,
-                arrayOf(notifUrl, notifTitle, "nosound", img1Url, img2Url, wallet),
-                arrayOf(notifUrl, notifTitle, "sound", img1Url, img2Url, wallet)
+        val objPI = ObjectPendingIntents(
+            context, NHCStormActivity::class.java, NHCStormActivity.URL,
+            arrayOf(notifUrl, notifTitle, "nosound", img1Url, img2Url, wallet),
+            arrayOf(notifUrl, notifTitle, "sound", img1Url, img2Url, wallet)
         )
-        if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(context, notifTitle))) {
+        if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
+                context,
+                notifTitle
+            ))
+        ) {
             val sound = soundPref && !inBlackout
-            val notifObj = ObjectNotification(context, sound, noMain, noBody, objPI.resultPendingIntent,
-                    iconAlert, noSummary, Notification.PRIORITY_DEFAULT, Color.YELLOW,
-                    MyApplication.ICON_ACTION, objPI.resultPendingIntent2, context.resources.getString(R.string.read_aloud))
+            val notifObj = ObjectNotification(
+                context,
+                sound,
+                noMain,
+                noBody,
+                objPI.resultPendingIntent,
+                iconAlert,
+                noSummary,
+                Notification.PRIORITY_DEFAULT,
+                Color.YELLOW,
+                MyApplication.ICON_ACTION,
+                objPI.resultPendingIntent2,
+                context.resources.getString(R.string.read_aloud)
+            )
             val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
             notifObj.sendNotification(context, notifTitle, 1, noti)
             //notifier.notify(notifTitle, 1, noti)

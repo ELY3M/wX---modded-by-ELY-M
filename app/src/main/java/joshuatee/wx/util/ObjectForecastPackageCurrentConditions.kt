@@ -127,7 +127,8 @@ class ObjectForecastPackageCurrentConditions {
     private fun getConditions(context: Context, location: LatLon): List<String> {
         val sb = StringBuilder(500)
         val obsClosest = UtilityUSv2.getObsFromLatLon(context, location)
-        val observationData = UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/stations/$obsClosest/observations/current")
+        val observationData =
+            UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/stations/$obsClosest/observations/current")
         val icon = observationData.parse("\"icon\": \"(.*?)\", ")
         var condition = observationData.parse("\"textDescription\": \"(.*?)\", ")
         var temperature = observationData.parse("\"temperature\":.*?\"value\": (.*?),")
@@ -192,13 +193,14 @@ class ObjectForecastPackageCurrentConditions {
         } else {
             "NA"
         }
-        relativeHumidity = if (!relativeHumidity.contains("NA") && !relativeHumidity.contains("null")) {
-            val tempD = relativeHumidity.toDoubleOrNull() ?: 0.0
-            //UtilityMath.roundToString(tempD)
-            tempD.roundToInt().toString()
-        } else {
-            "NA"
-        }
+        relativeHumidity =
+                if (!relativeHumidity.contains("NA") && !relativeHumidity.contains("null")) {
+                    val tempD = relativeHumidity.toDoubleOrNull() ?: 0.0
+                    //UtilityMath.roundToString(tempD)
+                    tempD.roundToInt().toString()
+                } else {
+                    "NA"
+                }
         visibility = if (!visibility.contains("NA") && !visibility.contains("null")) {
             val tempD = visibility.toDoubleOrNull() ?: 0.0
             UtilityMath.metersToMileRounded(tempD)

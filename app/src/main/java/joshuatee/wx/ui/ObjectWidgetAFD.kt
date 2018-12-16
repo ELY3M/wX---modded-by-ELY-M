@@ -44,7 +44,15 @@ class ObjectWidgetAFD(context: Context) {
             prodToGoTo = "VFD"
         }
         if (!MyApplication.widgetPreventTap) {
-            UtilityWidget.setupIntent(context, remoteViews, AFDActivity::class.java, R.id.text1, AFDActivity.URL, arrayOf(nws1Current, prodToGoTo), WidgetFile.AFD.action)
+            UtilityWidget.setupIntent(
+                context,
+                remoteViews,
+                AFDActivity::class.java,
+                R.id.text1,
+                AFDActivity.URL,
+                arrayOf(nws1Current, prodToGoTo),
+                WidgetFile.AFD.action
+            )
         }
     }
 }

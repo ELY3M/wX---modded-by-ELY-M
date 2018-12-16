@@ -21,6 +21,12 @@
 
 package joshuatee.wx.spc
 
-internal class StormReport(val text: String = "", val lat: String = "", val lon: String = "", val time: String = "", val state: String = "")
+internal class StormReport(
+    val text: String = "",
+    val lat: String = "",
+    val lon: String = "",
+    val time: String = "",
+    val state: String = ""
+)
 
 

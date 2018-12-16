@@ -59,7 +59,10 @@ object UtilityFileManagement {
     fun moveFile(context: Context, src: String, target: String, moveSize: Int) {
         val fh = File(context.filesDir, src)
         if (fh.length() > moveSize) {
-            if (!fh.renameTo(File(context.filesDir, target))) UtilityLog.d("wx", "Problem moving file to $target")
+            if (!fh.renameTo(File(context.filesDir, target))) UtilityLog.d(
+                "wx",
+                "Problem moving file to $target"
+            )
         }
     }
 }

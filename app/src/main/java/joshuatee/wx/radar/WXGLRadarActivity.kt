@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//modded by ELY M. 
 
 package joshuatee.wx.radar
 
@@ -175,7 +176,13 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_uswxogl, R.menu.uswxoglradar, true, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_uswxogl,
+            R.menu.uswxoglradar,
+            true,
+            true
+        )
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityUI.immersiveMode(this as Activity)
 
@@ -258,8 +265,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         else
             oglr.rid = activityArguments[0]
         // hack, in rare cases a user will save a location that doesn't pick up RID
-        if (oglr.rid == "") oglr.rid = "TLX"
-        //state = turl[1]
+        if (oglr.rid == "")
+            oglr.rid = "TLX"
         if (activityArguments != null && activityArguments.size > 2) {
             oglr.product = activityArguments[2]
             if (oglr.product == "N0R") {
@@ -279,16 +286,34 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
         if (MyApplication.radarShowLegend) showLegend()
         title = oglr.product
-        ridArrLoc = UtilityFavorites.setupFavMenu(this, MyApplication.ridFav, oglr.rid, prefTokenLocation, prefToken)
+        ridArrLoc = UtilityFavorites.setupFavMenu(
+            this,
+            MyApplication.ridFav,
+            oglr.rid,
+            prefTokenLocation,
+            prefToken
+        )
         sp = ObjectSpinner(this, this, R.id.spinner1, ridArrLoc)
         sp.setOnItemSelectedListener(this)
         if (MyApplication.wxoglRadarAutorefresh) {
             // 180000 is 3 min
             mInterval = 60000 * Utility.readPref(this, "RADAR_REFRESH_INTERVAL", 3)
             locationManager = this.getSystemService(Context.LOCATION_SERVICE) as (LocationManager)
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-                locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 20000.toLong(), 30.toFloat(), locationListener)
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            )
+                locationManager?.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    20000.toLong(),
+                    30.toFloat(),
+                    locationListener
+                )
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             mHandler = Handler()
             startRepeatingTask()
@@ -329,15 +354,33 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         if (glview.toolbarsHidden) {
             getContent()
         } else {
-            ridArrLoc = UtilityFavorites.setupFavMenu(this, MyApplication.ridFav, oglr.rid, prefTokenLocation, prefToken)
+            ridArrLoc = UtilityFavorites.setupFavMenu(
+                this,
+                MyApplication.ridFav,
+                oglr.rid,
+                prefTokenLocation,
+                prefToken
+            )
             sp.refreshData(contextg, ridArrLoc)
         }
         if (MyApplication.wxoglRadarAutorefresh) {
             mInterval = 60000 * Utility.readPref(this, "RADAR_REFRESH_INTERVAL", 3)
             locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-                locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 20000.toLong(), 30.toFloat(), locationListener)
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            )
+                locationManager?.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    20000.toLong(),
+                    30.toFloat(),
+                    locationListener
+                )
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             mHandler = Handler()
             startRepeatingTask()
@@ -357,10 +400,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-
-        //@SuppressLint("StaticFieldLeak")
-        //private inner class GetContent : AsyncTask<String, String, String>() {
-        //override fun onPreExecute() {
         val ridIsTdwr = WXGLNexrad.isRIDTDWR(oglr.rid)
         if (ridIsTdwr) {
             l3Menu.isVisible = false
@@ -369,11 +408,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             l3Menu.isVisible = true
             l2Menu.isVisible = true
         }
-        if ((oglr.product == "N0Q" || oglr.product == "N1Q" || oglr.product == "N2Q" || oglr.product == "N3Q" || oglr.product == "L2REF") && ridIsTdwr) oglr.product = "TZL"
+        if ((oglr.product == "N0Q" || oglr.product == "N1Q" || oglr.product == "N2Q" || oglr.product == "N3Q" || oglr.product == "L2REF") && ridIsTdwr) oglr.product =
+                "TZL"
         if (oglr.product == "TZL" && !ridIsTdwr) oglr.product = "N0Q"
-        if ((oglr.product == "N0U" || oglr.product == "N1U" || oglr.product == "N2U" || oglr.product == "N3U" || oglr.product == "L2VEL") && ridIsTdwr) oglr.product = "TV0"
+        if ((oglr.product == "N0U" || oglr.product == "N1U" || oglr.product == "N2U" || oglr.product == "N3U" || oglr.product == "L2VEL") && ridIsTdwr) oglr.product =
+                "TV0"
         if (oglr.product == "TV0" && !ridIsTdwr) oglr.product = "N0U"
-        //prod = WXGLNexrad.checkTdwrProd(prod, ridIsTdwr)
         title = oglr.product
         if (MyApplication.ridFav.contains(":" + oglr.rid + ":"))
             star.setIcon(MyApplication.STAR_ICON)
@@ -381,9 +421,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         toolbar.subtitle = ""
         if (!oglr.product.startsWith("2")) initWXOGLGeom()
-        //}
 
-        //override fun doInBackground(vararg params: String): String {
         withContext(Dispatchers.IO) {
             oglr.constructPolygons("", urlStr, true)
             if ((PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) && !archiveMode)
@@ -426,10 +464,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             } else {
                 oglr.deconstructSWOLines()
             }
-            //return "Executed"
         }
 
-        //override fun onPostExecute(result: String) {
         if (!oglInView) {
             img.visibility = View.GONE
             glview.visibility = View.VISIBLE
@@ -460,7 +496,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
         oldProd = oglr.product
         val info = Utility.readPref(contextg, "WX_RADAR_CURRENT_INFO", "")
-        //val tmpArr = MyApplication.space.split(info)
         val tmpArr = info.split(" ")
         if (tmpArr.size > 3)
             toolbar.subtitle = tmpArr[3]
@@ -468,7 +503,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             toolbar.subtitle = ""
         animRan = false
         firstRun = false
-        //}
     }
 
     private fun getAnimate(frameCntStr: String) = GlobalScope.launch(uiDispatcher) {
@@ -481,7 +515,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         animRan = true
 
         withContext(Dispatchers.IO) {
-            //val frameCntStr = params[0]
             frameCntStrGlobal = frameCntStr
             var animArray = oglr.rdDownload.getRadarByFTPAnimation(contextg, frameCntStr)
             var fh: File
@@ -505,8 +538,17 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                         animArray.indices.forEach {
                             fh = File(contextg.filesDir, animArray[it])
                             contextg.deleteFile("nexrad_anim" + it.toString())
-                            if (!fh.renameTo(File(contextg.filesDir, "nexrad_anim" + it.toString())))
-                                UtilityLog.d("wx", "Problem moving to " + "nexrad_anim" + it.toString())
+                            if (!fh.renameTo(
+                                    File(
+                                        contextg.filesDir,
+                                        "nexrad_anim" + it.toString()
+                                    )
+                                )
+                            )
+                                UtilityLog.d(
+                                    "wx",
+                                    "Problem moving to " + "nexrad_anim" + it.toString()
+                                )
                         }
                     } catch (e: Exception) {
                         UtilityLog.HandleException(e)
@@ -552,89 +594,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
     }
 
-    /* @SuppressLint("StaticFieldLeak")
-     private inner class AnimateRadarD : AsyncTask<String, String, String>() {
-
-         override fun onPreExecute() {
-             if (!oglInView) {
-                 img.visibility = View.GONE
-                 glview.visibility = View.VISIBLE
-                 oglInView = true
-             }
-             inOglAnim = true
-             animRan = true
-         }
-
-         override fun doInBackground(vararg params: String): String {
-             val frameCntStr = params[0]
-             frameCntStrGlobal = frameCntStr
-             var animArray = oglr.rdDownload.getRadarByFTPAnimation(contextg, frameCntStr)
-             var fh: File
-             var timeMilli: Long
-             var priorTime: Long
-             try {
-                 animArray.indices.forEach {
-                     fh = File(contextg.filesDir, animArray[it])
-                     contextg.deleteFile("nexrad_anim" + it.toString())
-                     if (!fh.renameTo(File(contextg.filesDir, "nexrad_anim" + it.toString())))
-                         UtilityLog.d("wx", "Problem moving to " + "nexrad_anim" + it.toString())
-                 }
-             } catch (e: Exception) {
-                 UtilityLog.HandleException(e)
-             }
-             var loopCnt = 0
-             while (inOglAnim) {
-                 if (animTriggerDownloads) {
-                     animArray = oglr.rdDownload.getRadarByFTPAnimation(contextg, frameCntStr)
-                     try {
-                         animArray.indices.forEach {
-                             fh = File(contextg.filesDir, animArray[it])
-                             contextg.deleteFile("nexrad_anim" + it.toString())
-                             if (!fh.renameTo(File(contextg.filesDir, "nexrad_anim" + it.toString())))
-                                 UtilityLog.d("wx", "Problem moving to " + "nexrad_anim" + it.toString())
-                         }
-                     } catch (e: Exception) {
-                         UtilityLog.HandleException(e)
-                     }
-                     animTriggerDownloads = false
-                 }
-                 for (r in 0 until animArray.size) {
-                     while (inOglAnimPaused) SystemClock.sleep(delay.toLong())
-                     // formerly priorTime was set at the end but that is goofed up with pause
-                     priorTime = System.currentTimeMillis()
-                     // added because if paused and then another icon life vel/ref it won't load correctly, likely timing issue
-                     if (!inOglAnim) break
-                     // if the first pass has completed, for L2 no longer uncompress, use the existing decomp files
-                     if (loopCnt > 0)
-                         oglr.constructPolygons("nexrad_anim" + r.toString(), urlStr, false)
-                     else
-                         oglr.constructPolygons("nexrad_anim" + r.toString(), urlStr, true)
-                     publishProgress((r + 1).toString(), animArray.size.toString())
-                     glview.requestRender()
-                     timeMilli = System.currentTimeMillis()
-                     if ((timeMilli - priorTime) < delay)
-                         SystemClock.sleep(delay - ((timeMilli - priorTime)))
-                     if (!inOglAnim) break
-                     if (r == (animArray.size - 1)) SystemClock.sleep(delay.toLong() * 2)
-                 }
-                 loopCnt += 1
-             }
-             return "Executed"
-         }
-
-         override fun onProgressUpdate(vararg values: String) {
-             if ((values[1].toIntOrNull() ?: 0) > 1) {
-                 val tmpArrAnim = Utility.readPref(contextg, "WX_RADAR_CURRENT_INFO", "").split(" ")
-                 if (tmpArrAnim.size > 3)
-                     toolbar.subtitle = tmpArrAnim[3] + " (" + values[0] + "/" + values[1] + ")"
-                 else
-                     toolbar.subtitle = ""
-             } else {
-                 toolbar.subtitle = "Problem downloading"
-             }
-         }
-     }*/
-
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         UtilityUI.immersiveMode(this)
@@ -658,13 +617,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
 
         when (item.itemId) {
-            R.id.action_help -> UtilityAlertDialog.showHelpText(resources.getString(R.string.help_radar)
-                    + MyApplication.newline + MyApplication.newline
-                    + resources.getString(R.string.help_radar_drawingtools)
-                    + MyApplication.newline + MyApplication.newline
-                    + resources.getString(R.string.help_radar_recording)
-                    + MyApplication.newline + MyApplication.newline
-                    , this)
+            R.id.action_help -> UtilityAlertDialog.showHelpText(
+                resources.getString(R.string.help_radar)
+                        + MyApplication.newline + MyApplication.newline
+                        + resources.getString(R.string.help_radar_drawingtools)
+                        + MyApplication.newline + MyApplication.newline
+                        + resources.getString(R.string.help_radar_recording)
+                        + MyApplication.newline + MyApplication.newline
+                , this
+            )
             R.id.action_jellybean_drawtools -> {
                 val tI = TelecineService.newIntent(this, 1, Intent())
                 tI.putExtra("show_distance_tool", showDistanceTool)
@@ -682,17 +643,67 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     }
                 } else {
                     if (animRan) {
-                        val animDrawable = UtilityUSImgWX.animationFromFiles(this, oglr.rid, oglr.product, frameCntStrGlobal, "", true)
-                        UtilityShare.shareAnimGif(this, oglr.rid + " (" + Utility.readPref(contextg, "RID_LOC_" + oglr.rid, "") + ") " + oglr.product, animDrawable)
+                        val animDrawable = UtilityUSImgWX.animationFromFiles(
+                            this,
+                            oglr.rid,
+                            oglr.product,
+                            frameCntStrGlobal,
+                            "",
+                            true
+                        )
+                        UtilityShare.shareAnimGif(
+                            this,
+                            oglr.rid + " (" + Utility.readPref(
+                                contextg,
+                                "RID_LOC_" + oglr.rid,
+                                ""
+                            ) + ") " + oglr.product,
+                            animDrawable
+                        )
                     } else {
-                        UtilityShare.shareBitmap(this, oglr.rid + " (" + Utility.readPref(contextg, "RID_LOC_" + oglr.rid, "") + ") " + oglr.product, UtilityUSImgWX.layeredImgFromFile(applicationContext, oglr.rid, oglr.product, "0", true))
+                        UtilityShare.shareBitmap(
+                            this,
+                            oglr.rid + " (" + Utility.readPref(
+                                contextg,
+                                "RID_LOC_" + oglr.rid,
+                                ""
+                            ) + ") " + oglr.product,
+                            UtilityUSImgWX.layeredImgFromFile(
+                                applicationContext,
+                                oglr.rid,
+                                oglr.product,
+                                "0",
+                                true
+                            )
+                        )
                     }
                 }
             }
             R.id.action_settings -> startActivity(Intent(this, SettingsRadarActivity::class.java))
-            R.id.action_radar_markers -> ObjectIntent(this, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf("raw:radar_legend", "Radar Markers", "false"))
-            R.id.action_radar_site_status_l3 -> ObjectIntent(this, WebscreenABModels::class.java, WebscreenABModels.URL, arrayOf("http://radar3pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l3)))
-            R.id.action_radar_site_status_l2 -> ObjectIntent(this, WebscreenABModels::class.java, WebscreenABModels.URL, arrayOf("http://radar2pub.ncep.noaa.gov", resources.getString(R.string.action_radar_site_status_l2)))
+            R.id.action_radar_markers -> ObjectIntent(
+                this,
+                ImageShowActivity::class.java,
+                ImageShowActivity.URL,
+                arrayOf("raw:radar_legend", "Radar Markers", "false")
+            )
+            R.id.action_radar_site_status_l3 -> ObjectIntent(
+                this,
+                WebscreenABModels::class.java,
+                WebscreenABModels.URL,
+                arrayOf(
+                    "http://radar3pub.ncep.noaa.gov",
+                    resources.getString(R.string.action_radar_site_status_l3)
+                )
+            )
+            R.id.action_radar_site_status_l2 -> ObjectIntent(
+                this,
+                WebscreenABModels::class.java,
+                WebscreenABModels.URL,
+                arrayOf(
+                    "http://radar2pub.ncep.noaa.gov",
+                    resources.getString(R.string.action_radar_site_status_l2)
+                )
+            )
             R.id.action_n0q -> {
                 if (MyApplication.radarIconsLevel2 && oglr.product.matches("N[0-3]Q".toRegex())) {
                     oglr.product = "L2REF"
@@ -779,7 +790,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private fun animateRadar(frameCnt: String) {
         anim.setIcon(MyApplication.ICON_STOP)
         star.setIcon(MyApplication.ICON_PAUSE)
-        //AnimateRadar().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, frameCnt)
         getAnimate(frameCnt)
     }
 
@@ -798,13 +808,20 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     fun ridMapSwitch(r: String) {
         oglr.rid = r
         mapShown = false
-        ridArrLoc = UtilityFavorites.setupFavMenu(this, MyApplication.ridFav, oglr.rid, prefTokenLocation, prefToken)
+        ridArrLoc = UtilityFavorites.setupFavMenu(
+            this,
+            MyApplication.ridFav,
+            oglr.rid,
+            prefTokenLocation,
+            prefToken
+        )
         sp.refreshData(contextg, ridArrLoc)
     }
 
     private fun toggleFavorite() {
         val ridFav = UtilityFavorites.toggleFavoriteString(this, oglr.rid, star, prefToken)
-        ridArrLoc = UtilityFavorites.setupFavMenu(this, ridFav, oglr.rid, prefTokenLocation, prefToken)
+        ridArrLoc =
+                UtilityFavorites.setupFavMenu(this, ridFav, oglr.rid, prefTokenLocation, prefToken)
         sp.refreshData(contextg, ridArrLoc)
     }
 
@@ -819,8 +836,18 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             inOglAnimPaused = false
             anim.setIcon(MyApplication.ICON_PLAY)
             when (pos) {
-                1 -> ObjectIntent(this, FavAddActivity::class.java, FavAddActivity.TYPE, arrayOf("RID"))
-                2 -> ObjectIntent(this, FavRemoveActivity::class.java, FavRemoveActivity.TYPE, arrayOf("RID"))
+                1 -> ObjectIntent(
+                    this,
+                    FavAddActivity::class.java,
+                    FavAddActivity.TYPE,
+                    arrayOf("RID")
+                )
+                2 -> ObjectIntent(
+                    this,
+                    FavRemoveActivity::class.java,
+                    FavRemoveActivity.TYPE,
+                    arrayOf("RID")
+                )
                 else -> {
                     if (ridArrLoc[pos] == " ") {
                         oglr.rid = joshuatee.wx.settings.Location.rid
@@ -860,8 +887,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         sn_Handler_m?.let { stop_sn_reporting() }
         conus_Handler_m?.let { stop_conusimage() }
         locationManager?.let {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            )
                 it.removeUpdates(locationListener)
         }
     }
@@ -1201,8 +1235,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     }
 
     private fun getRadarStatus() = GlobalScope.launch(uiDispatcher) {
-        var radarStatus = withContext(Dispatchers.IO) { UtilityDownload.getRadarStatusMessage(contextg, oglr.rid) }
-        if (radarStatus == "") { radarStatus = "The current radar status is not available." }
+        var radarStatus = withContext(Dispatchers.IO) {
+            UtilityDownload.getRadarStatusMessage(
+                contextg,
+                oglr.rid
+            )
+        }
+        if (radarStatus == "") {
+            radarStatus = "The current radar status for " + oglr.rid + " is not available."
+        }
         UtilityAlertDialog.showHelpText(Utility.fromHtml(radarStatus), act)
     }
 
@@ -1215,7 +1256,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             velMax = oglr.radarL3Object.halfword48
             velMin = oglr.radarL3Object.halfword47
             legendShown = true
-            val rLParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+            val rLParams = RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+            )
             rLParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1)
             legend = ViewColorLegend(this as Activity, oglr.product)
             rl.addView(legend, rLParams)
@@ -1231,7 +1275,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
 
     private fun updateLegend() {
         rl.removeView(legend)
-        val rLParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT) // change FILL_PARENT
+        val rLParams = RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams.WRAP_CONTENT
+        ) // change FILL_PARENT
         rLParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1)
         legend = ViewColorLegend(this as Activity, oglr.product)
         rl.addView(legend, rLParams)
@@ -1244,7 +1291,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     NavUtils.navigateUpFromSameTask(this)
                 else
                     navigateUp()
-                //true
             }
             else -> {
                 super.onOptionsItemSelected(item)

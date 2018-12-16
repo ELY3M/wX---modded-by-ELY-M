@@ -119,20 +119,26 @@ object UtilityColorPaletteGeneric {
                     it.split(" ")
                 if (tmpArr.size > 4) {
                     if (priorLineHas6) {
-                        dbzAl.add(((tmpArr[1].toDoubleOrNull()
-                                ?: 0.0) * prodScale + prodOffset - 1).toInt())
+                        dbzAl.add(
+                            ((tmpArr[1].toDoubleOrNull()
+                                ?: 0.0) * prodScale + prodOffset - 1).toInt()
+                        )
                         rAl.add(r.toIntOrNull() ?: 0)
                         gAl.add(g.toIntOrNull() ?: 0)
                         bAl.add(b.toIntOrNull() ?: 0)
-                        dbzAl.add(((tmpArr[1].toDoubleOrNull()
-                                ?: 0.0) * prodScale + prodOffset).toInt())
+                        dbzAl.add(
+                            ((tmpArr[1].toDoubleOrNull()
+                                ?: 0.0) * prodScale + prodOffset).toInt()
+                        )
                         rAl.add(tmpArr[2].toIntOrNull() ?: 0)
                         gAl.add(tmpArr[3].toIntOrNull() ?: 0)
                         bAl.add(tmpArr[4].toIntOrNull() ?: 0)
                         priorLineHas6 = false
                     } else {
-                        dbzAl.add(((tmpArr[1].toDoubleOrNull()
-                                ?: 0.0) * prodScale + prodOffset).toInt())
+                        dbzAl.add(
+                            ((tmpArr[1].toDoubleOrNull()
+                                ?: 0.0) * prodScale + prodOffset).toInt()
+                        )
                         rAl.add(tmpArr[2].toIntOrNull() ?: 0)
                         gAl.add(tmpArr[3].toIntOrNull() ?: 0)
                         bAl.add(tmpArr[4].toIntOrNull() ?: 0)
@@ -209,7 +215,11 @@ object UtilityColorPaletteGeneric {
                 }
                 (1 until diff).forEach { j ->
                     if (scale == 1) {
-                        colorInt = UtilityNexradColors.interpolateColor(lowColor, highColor, j.toDouble() / (diff * scale).toDouble())
+                        colorInt = UtilityNexradColors.interpolateColor(
+                            lowColor,
+                            highColor,
+                            j.toDouble() / (diff * scale).toDouble()
+                        )
                         if (colorMapR.hasRemaining()) {
                             colorMapR.put(Color.red(colorInt).toByte())
                         }
@@ -220,8 +230,16 @@ object UtilityColorPaletteGeneric {
                             colorMapB.put(Color.blue(colorInt).toByte())
                         }
                     } else if (scale == 2) {
-                        colorInt = UtilityNexradColors.interpolateColor(lowColor, highColor, (j * scale - 1).toDouble() / (diff * scale).toDouble())
-                        colorInt2 = UtilityNexradColors.interpolateColor(lowColor, highColor, (j * scale).toDouble() / (diff * scale).toDouble())
+                        colorInt = UtilityNexradColors.interpolateColor(
+                            lowColor,
+                            highColor,
+                            (j * scale - 1).toDouble() / (diff * scale).toDouble()
+                        )
+                        colorInt2 = UtilityNexradColors.interpolateColor(
+                            lowColor,
+                            highColor,
+                            (j * scale).toDouble() / (diff * scale).toDouble()
+                        )
                         if (colorMapR.hasRemaining())
                             colorMapR.put(Color.red(colorInt).toByte())
                         if (colorMapG.hasRemaining())
@@ -268,37 +286,69 @@ object UtilityColorPaletteGeneric {
                 "DKenh" -> UtilityColorPaletteGeneric.generate(context, prod, "DKenh")
                 "COD", "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
                 "MENH" -> UtilityColorPaletteGeneric.generate(context, prod, "MENH")
-                else -> UtilityColorPaletteGeneric.generate(context, prod, MyApplication.radarColorPalette[prod]!!)
+                else -> UtilityColorPaletteGeneric.generate(
+                    context,
+                    prod,
+                    MyApplication.radarColorPalette[prod]!!
+                )
             }
             "99" -> when (MyApplication.radarColorPalette[prod]) {
                 "COD", "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
                 "AF" -> UtilityColorPaletteGeneric.generate(context, prod, "AF")
                 "EAK" -> UtilityColorPaletteGeneric.generate(context, prod, "EAK")
-                else -> UtilityColorPaletteGeneric.generate(context, prod, MyApplication.radarColorPalette[prod]!!)
+                else -> UtilityColorPaletteGeneric.generate(
+                    context,
+                    prod,
+                    MyApplication.radarColorPalette[prod]!!
+                )
             }
             "134" -> when (MyApplication.radarColorPalette[prod]) {
                 "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
-                else -> UtilityColorPaletteGeneric.generate(context, prod, MyApplication.radarColorPalette[prod]!!)
+                else -> UtilityColorPaletteGeneric.generate(
+                    context,
+                    prod,
+                    MyApplication.radarColorPalette[prod]!!
+                )
             }
             "135" -> when (MyApplication.radarColorPalette[prod]) {
                 "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
-                else -> UtilityColorPaletteGeneric.generate(context, prod, MyApplication.radarColorPalette[prod]!!)
+                else -> UtilityColorPaletteGeneric.generate(
+                    context,
+                    prod,
+                    MyApplication.radarColorPalette[prod]!!
+                )
             }
             "159" -> when (MyApplication.radarColorPalette[prod]) {
                 "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
-                else -> UtilityColorPaletteGeneric.generate(context, prod, MyApplication.radarColorPalette[prod]!!)
+                else -> UtilityColorPaletteGeneric.generate(
+                    context,
+                    prod,
+                    MyApplication.radarColorPalette[prod]!!
+                )
             }
             "161" -> when (MyApplication.radarColorPalette[prod]) {
                 "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
-                else -> UtilityColorPaletteGeneric.generate(context, prod, MyApplication.radarColorPalette[prod]!!)
+                else -> UtilityColorPaletteGeneric.generate(
+                    context,
+                    prod,
+                    MyApplication.radarColorPalette[prod]!!
+                )
             }
             "163" -> when (MyApplication.radarColorPalette[prod]) {
                 "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
-                else -> UtilityColorPaletteGeneric.generate(context, prod, MyApplication.radarColorPalette[prod]!!)
+                else -> UtilityColorPaletteGeneric.generate(
+                    context,
+                    prod,
+                    MyApplication.radarColorPalette[prod]!!
+                )
             }
             "172" -> when (MyApplication.radarColorPalette[prod]) {
                 "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
-                else -> UtilityColorPaletteGeneric.generate(context, prod, MyApplication.radarColorPalette[prod]!!)
+                else -> UtilityColorPaletteGeneric.generate(
+                    context,
+                    prod,
+                    MyApplication.radarColorPalette[prod]!!
+                )
             }
             else -> {
             }

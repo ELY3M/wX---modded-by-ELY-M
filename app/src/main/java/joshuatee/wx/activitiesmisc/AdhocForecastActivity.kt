@@ -67,7 +67,7 @@ class AdhocForecastActivity : BaseActivity() {
     private var hazardRaw = ""
     private lateinit var cardCC: ObjectCardCC
     private var bitmapSize = 300
-    private lateinit var linearLayoutForecast : LinearLayout
+    private lateinit var linearLayoutForecast: LinearLayout
     private lateinit var linearLayoutHazards: LinearLayout
     private lateinit var linearLayout: LinearLayout
     private val hazardsCardAl = mutableListOf<ObjectCardText>()
@@ -147,7 +147,12 @@ class AdhocForecastActivity : BaseActivity() {
             cardSunrise.center()
             cardSunrise.lightText()
             try {
-                cardSunrise.setText(UtilityDownload.getSunriseSunset(contextg, Location.currentLocationStr) + MyApplication.newline + UtilityTime.gmtTime())
+                cardSunrise.setText(
+                    UtilityDownload.getSunriseSunset(
+                        contextg,
+                        Location.currentLocationStr
+                    ) + MyApplication.newline + UtilityTime.gmtTime()
+                )
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)
             }
@@ -183,7 +188,14 @@ class AdhocForecastActivity : BaseActivity() {
             hazardsCardAl[z].setTextColor(UIPreferences.textHighlightColor)
             hazardsCardAl[z].setText(tmpArr[z].toUpperCase(Locale.US))
             val url = idAl[z]
-            hazardsCardAl[z].setOnClickListener(View.OnClickListener { ObjectIntent(contextg, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(url)) })
+            hazardsCardAl[z].setOnClickListener(View.OnClickListener {
+                ObjectIntent(
+                    contextg,
+                    USAlertsDetailActivity::class.java,
+                    USAlertsDetailActivity.URL,
+                    arrayOf(url)
+                )
+            })
             linearLayoutHazards.addView(hazardsCardAl[z].card)
         }
     }

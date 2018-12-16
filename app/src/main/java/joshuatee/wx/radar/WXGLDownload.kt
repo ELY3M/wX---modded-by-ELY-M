@@ -44,7 +44,14 @@ class WXGLDownload {
     private var rid1 = ""
     private var prod = ""
 
-    fun getRadarFile(context: Context, urlStr: String, rid1: String, prod: String, idxStr: String, TDWR: Boolean): String {
+    fun getRadarFile(
+        context: Context,
+        urlStr: String,
+        rid1: String,
+        prod: String,
+        idxStr: String,
+        TDWR: Boolean
+    ): String {
         val ridPrefix = UtilityWXOGL.getRidPrefix(rid1, TDWR)
         this.rid1 = rid1
         this.prod = prod
@@ -53,12 +60,20 @@ class WXGLDownload {
             // http://weather.noaa.gov is being retired 2016/06/15
             // replace with http://tgftp.nws.noaa.gov
             // FIXME HTTPS
-            val inputStream = UtilityDownload.getInputStreamFromURL(MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +
-                    NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(Locale.US) + "/sn.last")
+            val inputStream = UtilityDownload.getInputStreamFromURL(
+                MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +
+                        NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(Locale.US) + "/sn.last"
+            )
             //val inputStream = UtilityDownload.getInputStreamFromUrlUnsafe(MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +
             //        NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(Locale.US) + "/sn.last")
             val l3BaseFn = "nids"
-            inputStream?.let { UtilityIO.saveInputStream(context, inputStream, l3BaseFn + idxStr + "_d") }
+            inputStream?.let {
+                UtilityIO.saveInputStream(
+                    context,
+                    inputStream,
+                    l3BaseFn + idxStr + "_d"
+                )
+            }
             UtilityFileManagement.moveFile(context, l3BaseFn + idxStr + "_d", l3BaseFn + idxStr)
         } else {
             if (urlStr == "") {
@@ -79,25 +94,46 @@ class WXGLDownload {
         nidsArr = if (!prod.contains("L2")) {
             getNidsArr(context, frameCnt, prod, ridPrefix, rid1.toLowerCase(Locale.US))
         } else {
-            getL2Arr(context, MyApplication.nwsRadarLevel2Pub + ridPrefix.toUpperCase(Locale.US) + rid1.toUpperCase(Locale.US) + "/", frameCnt)
+            getL2Arr(
+                context,
+                MyApplication.nwsRadarLevel2Pub + ridPrefix.toUpperCase(Locale.US) + rid1.toUpperCase(
+                    Locale.US
+                ) + "/",
+                frameCnt
+            )
         }
         return nidsArr
     }
 
-    private fun getNidsArr(context: Context, frameCntStr: String, prod: String, ridPrefix: String, rid1: String): List<String> {
+    private fun getNidsArr(
+        context: Context,
+        frameCntStr: String,
+        prod: String,
+        ridPrefix: String,
+        rid1: String
+    ): List<String> {
         // FIXME HTTPS there are 4 places below you need to add Unsafe
         val frameCnt = frameCntStr.toIntOrNull() ?: 0
         val nidsArr = mutableListOf<String>()
-        var htmlOut = (MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(Locale.US) + "/").getHtml()
+        var htmlOut =
+            (MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(
+                Locale.US
+            ) + "/").getHtml()
         var snFiles = htmlOut.parseColumn(RegExp.utilnxanimPattern1)
         var snDates = htmlOut.parseColumn(RegExp.utilnxanimPattern2)
         if (snDates.isEmpty()) {
-            htmlOut = (MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(Locale.US) + "/").getHtml()
+            htmlOut =
+                    (MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(
+                        Locale.US
+                    ) + "/").getHtml()
             snFiles = htmlOut.parseColumn(RegExp.utilnxanimPattern1)
             snDates = htmlOut.parseColumn(RegExp.utilnxanimPattern2)
         }
         if (snDates.isEmpty()) {
-            htmlOut = (MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(Locale.US) + "/").getHtml()
+            htmlOut =
+                    (MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(
+                        Locale.US
+                    ) + "/").getHtml()
             snFiles = htmlOut.parseColumn(RegExp.utilnxanimPattern1)
             snDates = htmlOut.parseColumn(RegExp.utilnxanimPattern2)
         }
@@ -106,7 +142,8 @@ class WXGLDownload {
         }
         var mostRecentSn = ""
         val mostRecentTime = snDates[snDates.size - 1]
-        (0 until snDates.size - 1).filter { snDates[it] == mostRecentTime }.forEach { mostRecentSn = snFiles[it] }
+        (0 until snDates.size - 1).filter { snDates[it] == mostRecentTime }
+            .forEach { mostRecentSn = snFiles[it] }
         try {
             val seq = mostRecentSn.replace("sn.", "").toIntOrNull() ?: 0
             var j = 0
@@ -122,8 +159,12 @@ class WXGLDownload {
             }
             j = 0
             while (j < nidsArr.size) {
-                val inputStream = UtilityDownload.getInputStreamFromURL(MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +
-                        NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(Locale.US) + "/" + nidsArr[j])
+                val inputStream = UtilityDownload.getInputStreamFromURL(
+                    MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +
+                            NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(
+                        Locale.US
+                    ) + "/" + nidsArr[j]
+                )
                 inputStream?.let { UtilityIO.saveInputStream(context, inputStream, nidsArr[j]) }
                 j += 1
             }
@@ -136,7 +177,8 @@ class WXGLDownload {
     private fun getL2Arr(context: Context, baseUrl: String, frameCnt: String): List<String> {
         val frameCntInt = frameCnt.toIntOrNull() ?: 0
         val l2Arr = mutableListOf<String>()
-        val tmpArr = (baseUrl + "dir.list").getHtmlSep().replace("<br>", " ").split(" ").dropLastWhile { it.isEmpty() }
+        val tmpArr = (baseUrl + "dir.list").getHtmlSep().replace("<br>", " ").split(" ")
+            .dropLastWhile { it.isEmpty() }
         if (tmpArr.isEmpty()) {
             return listOf("")
         }
@@ -161,7 +203,8 @@ class WXGLDownload {
         var fn: String
         val ridPrefix = UtilityWXOGL.getRidPrefix(rid1, false).toUpperCase(Locale.US)
         val baseUrl = MyApplication.nwsRadarLevel2Pub + ridPrefix + rid1 + "/"
-        val tmpArr = (baseUrl + "dir.list").getHtmlSep().replace("<br>", " ").split(" ").dropLastWhile { it.isEmpty() }
+        val tmpArr = (baseUrl + "dir.list").getHtmlSep().replace("<br>", " ").split(" ")
+            .dropLastWhile { it.isEmpty() }
         if (tmpArr.size < 4) {
             return ""
         }
@@ -207,7 +250,8 @@ class WXGLDownload {
     companion object {
         fun getNidsTab(context: Context, product: String, radarSite: String, fileName: String) {
             val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, false)
-            val url = MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[product]!! + "/SI." + ridPrefix + radarSite.toLowerCase() + "/sn.last"
+            val url =
+                MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[product]!! + "/SI." + ridPrefix + radarSite.toLowerCase() + "/sn.last"
             val inputstream = UtilityDownload.getInputStreamFromURL(url)
             inputstream?.let { UtilityIO.saveInputStream(context, it, fileName) }
         }

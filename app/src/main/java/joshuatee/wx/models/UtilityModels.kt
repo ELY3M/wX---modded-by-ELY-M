@@ -95,7 +95,10 @@ object UtilityModels {
         val hourOfDayLocal = calendar.get(Calendar.HOUR_OF_DAY)
         val calendar2 = Calendar.getInstance()
         calendar2.set(Calendar.HOUR_OF_DAY, runInt)
-        calendar2.add(Calendar.HOUR_OF_DAY, timeInt + offsetFromUtc / 60 / 60) // was 2*offsetFromUtc/60/60
+        calendar2.add(
+            Calendar.HOUR_OF_DAY,
+            timeInt + offsetFromUtc / 60 / 60
+        ) // was 2*offsetFromUtc/60/60
         val dayOfMonth = calendar2.get(Calendar.DAY_OF_MONTH)
         val month = 1 + calendar2.get(Calendar.MONTH)
         if (runInt >= 0 && runInt < -offsetFromUtc / 60 / 60 && hourOfDayLocal - offsetFromUtc / 60 / 60 >= 24) {
@@ -120,7 +123,14 @@ object UtilityModels {
         }
     }
 
-    fun updateTime(runF: String, modelCurrentTimeF: String, listTime: MutableList<String>, dataAdapterTime: ArrayAdapter<String>, prefix: String, showDate: Boolean) {
+    fun updateTime(
+        runF: String,
+        modelCurrentTimeF: String,
+        listTime: MutableList<String>,
+        dataAdapterTime: ArrayAdapter<String>,
+        prefix: String,
+        showDate: Boolean
+    ) {
         var run = runF
         var modelCurrentTime = modelCurrentTimeF
         // run is the current run , ie 12Z
@@ -141,13 +151,18 @@ object UtilityModels {
             }
             (0 until listTime.size).forEach {
                 tmpStr = MyApplication.space.split(listTime[it])[0].replace(prefix, "")
-                listTime[it] = prefix + tmpStr + " " + UtilityModels.convertTimeRuntoTimeString(run, tmpStr, showDate)
+                listTime[it] = prefix + tmpStr + " " +
+                        UtilityModels.convertTimeRuntoTimeString(run, tmpStr, showDate)
             }
             dataAdapterTime.notifyDataSetChanged()
         }
     }
 
-    fun setSubtitleRestoreIMGXYZOOM(img: MutableList<TouchImageView2>, toolbar: Toolbar, str: String) {
+    fun setSubtitleRestoreIMGXYZOOM(
+        img: MutableList<TouchImageView2>,
+        toolbar: Toolbar,
+        str: String
+    ) {
         val x = FloatArray(img.size)
         val y = FloatArray(img.size)
         val z = FloatArray(img.size)
@@ -160,7 +175,7 @@ object UtilityModels {
         }
         toolbar.subtitle = str
         (0 until img.size)
-                .filter { !x[it].isNaN() && !y[it].isNaN() }
-                .forEach { img[it].setZoom(z[it], x[it], y[it]) }
+            .filter { !x[it].isNaN() && !y[it].isNaN() }
+            .forEach { img[it].setZoom(z[it], x[it], y[it]) }
     }
 }

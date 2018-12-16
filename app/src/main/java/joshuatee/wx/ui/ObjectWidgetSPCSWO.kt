@@ -40,7 +40,15 @@ class ObjectWidgetSPCSWO(context: Context) {
             val dayAsString = (it + 1).toString()
             UtilityWidget.setImage(context, remoteViews, ivList[it], SPCSWO.fileName + dayAsString)
             if (!MyApplication.widgetPreventTap) {
-                UtilityWidget.setupIntent(context, remoteViews, SPCSWOActivity::class.java, ivList[it], SPCSWOActivity.NO, arrayOf(dayAsString, ""), WidgetFile.SPCSWO.action + dayAsString)
+                UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    SPCSWOActivity::class.java,
+                    ivList[it],
+                    SPCSWOActivity.NO,
+                    arrayOf(dayAsString, ""),
+                    WidgetFile.SPCSWO.action + dayAsString
+                )
             }
         }
     }

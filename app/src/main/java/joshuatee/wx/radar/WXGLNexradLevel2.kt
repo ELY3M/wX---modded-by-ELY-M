@@ -51,7 +51,14 @@ class WXGLNexradLevel2 {
     }
 
     // last argument is true/false on whether or not the DECOMP stage needs to happen
-    fun decocodeAndPlotNexradL2(context: Context, fileName: String, prod: String, radarStatusStr: String, idxStr: String, performDecomp: Boolean) {
+    fun decocodeAndPlotNexradL2(
+        context: Context,
+        fileName: String,
+        prod: String,
+        radarStatusStr: String,
+        idxStr: String,
+        performDecomp: Boolean
+    ) {
         val decompFileName = "$fileName.decomp$idxStr"
         var productCode: Short = 153
         if (prod == "L2VEL") {
@@ -61,17 +68,32 @@ class WXGLNexradLevel2 {
             ibuff.position(0)
             obuff.position(0)
             try {
-                JNI.level2Decompress(UtilityIO.getFilePath(context, fileName), UtilityIO.getFilePath(context, decompFileName), ibuff, obuff, productCode.toInt())
+                JNI.level2Decompress(
+                    UtilityIO.getFilePath(context, fileName),
+                    UtilityIO.getFilePath(context, decompFileName),
+                    ibuff,
+                    obuff,
+                    productCode.toInt()
+                )
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)
             }
         } else {
             if (performDecomp) {
                 try {
-                    val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName), "r", 1024 * 256 * 10)
+                    val dis = UCARRandomAccessFile(
+                        UtilityIO.getFilePath(context, fileName),
+                        "r",
+                        1024 * 256 * 10
+                    )
                     dis.bigEndian = true
                     dis.close()
-                    UtilityWXOGLPerfL2.level2Decompress(context, fileName, decompFileName, productCode.toInt())
+                    UtilityWXOGLPerfL2.level2Decompress(
+                        context,
+                        fileName,
+                        decompFileName,
+                        productCode.toInt()
+                    )
                 } catch (e: Exception) {
                     UtilityLog.HandleException(e)
                 } catch (e: OutOfMemoryError) {
@@ -89,15 +111,44 @@ class WXGLNexradLevel2 {
         msecs.position(0)
         try {
             if (MyApplication.radarUseJni) {
-                JNI.level2Decode(UtilityIO.getFilePath(context, decompFileName), binWord, radialStartAngle, productCode.toInt(), days, msecs)
+                JNI.level2Decode(
+                    UtilityIO.getFilePath(context, decompFileName),
+                    binWord,
+                    radialStartAngle,
+                    productCode.toInt(),
+                    days,
+                    msecs
+                )
             } else {
                 if (performDecomp) {
-                    Level2.decode(context, decompFileName, binWord, radialStartAngle, productCode.toInt(), days, msecs)
+                    Level2.decode(
+                        context,
+                        decompFileName,
+                        binWord,
+                        radialStartAngle,
+                        productCode.toInt(),
+                        days,
+                        msecs
+                    )
                     if (!decompFileName.contains("l2")) {
-                        UtilityWXOGLPerfL2.writeDecodedFile(context, decompFileName + "bb", binWord, radialStartAngle, days, msecs)
+                        UtilityWXOGLPerfL2.writeDecodedFile(
+                            context,
+                            decompFileName + "bb",
+                            binWord,
+                            radialStartAngle,
+                            days,
+                            msecs
+                        )
                     }
                 } else {
-                    UtilityWXOGLPerfL2.readDecodedFile(context, decompFileName + "bb", binWord, radialStartAngle, days, msecs)
+                    UtilityWXOGLPerfL2.readDecodedFile(
+                        context,
+                        decompFileName + "bb",
+                        binWord,
+                        radialStartAngle,
+                        days,
+                        msecs
+                    )
                 }
             }
             msecs.position(0)
@@ -105,7 +156,8 @@ class WXGLNexradLevel2 {
             val days2 = days.short
             val msecs2 = msecs.int
             val d = UtilityTime.radarTimeL2(days2, msecs2)
-            val radarInfo = d.toString() + MyApplication.newline + "Product Code: " + productCode.toInt().toString()
+            val radarInfo =
+                d.toString() + MyApplication.newline + "Product Code: " + productCode.toInt().toString()
             Utility.writePref(context, "WX_RADAR_CURRENT_INFO$radarStatusStr", radarInfo)
             binSize = WXGLNexrad.getBinSize(productCode.toInt())
         } catch (e: Exception) {

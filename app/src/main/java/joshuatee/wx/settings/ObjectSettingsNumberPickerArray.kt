@@ -36,7 +36,15 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 
-internal class ObjectSettingsNumberPickerArray(context: Context, private val a: Activity, label: String, strId: Int, lowValue: Int, highValue: Int, array: Array<String>) {
+internal class ObjectSettingsNumberPickerArray(
+    context: Context,
+    private val a: Activity,
+    label: String,
+    strId: Int,
+    lowValue: Int,
+    highValue: Int,
+    array: Array<String>
+) {
 
     private val objCard = ObjectCard(context)
 
@@ -45,13 +53,25 @@ internal class ObjectSettingsNumberPickerArray(context: Context, private val a: 
         ObjectCardText.textViewSetup(tv)
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
         tv.setTextColor(UIPreferences.backgroundColor)
-        tv.setPadding(MyApplication.padding, MyApplication.padding, MyApplication.padding, MyApplication.padding)
-        tv.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
+        tv.setPadding(
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding
+        )
+        tv.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            1.0f
+        )
         tv.text = label
         tv.gravity = Gravity.TOP
         tv.setOnClickListener { showHelpText(context.resources.getString(strId)) }
         val ll = LinearLayout(context)
-        ll.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        ll.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
         ll.orientation = LinearLayout.HORIZONTAL
         ll.gravity = Gravity.CENTER_VERTICAL
         ll.addView(tv)
@@ -63,8 +83,10 @@ internal class ObjectSettingsNumberPickerArray(context: Context, private val a: 
         nP.descendantFocusability = NumberPicker.FOCUS_BLOCK_DESCENDANTS
         nP.value = UIPreferences.homescreenTextLength / 50 - 1
         nP.setOnValueChangedListener { _, _, newVal ->
-            Utility.writePref(context, "HOMESCREEN_TEXT_LENGTH_PREF", array[newVal].toIntOrNull()
-                    ?: 0)
+            Utility.writePref(
+                context, "HOMESCREEN_TEXT_LENGTH_PREF", array[newVal].toIntOrNull()
+                    ?: 0
+            )
             Utility.writePref(context, "RESTART_NOTIF", "true")
         }
         ll.addView(nP)

@@ -45,7 +45,8 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener, OnItemSelectedListener {
+class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener,
+    OnItemSelectedListener {
 
     // This code provides a native android interface to Weather Models
     //
@@ -84,9 +85,21 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         activityArguments = intent.getStringArrayExtra(INFO)
         om = ObjectModel(this, activityArguments[1], activityArguments[0])
         if (om.numPanes == 1) {
-            super.onCreate(savedInstanceState, R.layout.activity_models_generic, R.menu.models_generic, false, true)
+            super.onCreate(
+                savedInstanceState,
+                R.layout.activity_models_generic,
+                R.menu.models_generic,
+                false,
+                true
+            )
         } else {
-            super.onCreate(savedInstanceState, R.layout.activity_models_generic_multipane, R.menu.models_generic, false, true)
+            super.onCreate(
+                savedInstanceState,
+                R.layout.activity_models_generic_multipane,
+                R.menu.models_generic,
+                false,
+                true
+            )
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         title = activityArguments[2]
@@ -134,7 +147,11 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             om.displayData.paramLabel[om.curImg] = drw.getLabel(position)
             (0 until om.numPanes).forEach {
                 Utility.writePref(this, om.prefParam + it.toString(), om.displayData.param[it])
-                Utility.writePref(this, om.prefParamLabel + it.toString(), om.displayData.paramLabel[it])
+                Utility.writePref(
+                    this,
+                    om.prefParamLabel + it.toString(),
+                    om.displayData.paramLabel[it]
+                )
             }
             getContent()
         }
@@ -160,7 +177,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             //drw.updateLists(this, om.labels, om.params)
             Utility.writePref(this, om.prefModel, om.model)
             getRunStatus()
-        } else if (firstRunTimeSet ) { // && spinnerRunRan && spinnerTimeRan && spinnerSectorRan && spinnerModelRan
+        } else if (firstRunTimeSet) { // && spinnerRunRan && spinnerTimeRan && spinnerSectorRan && spinnerModelRan
             getContent()
         }
 
@@ -184,13 +201,22 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
 
         (0 until om.numPanes).forEach {
             if (om.numPanes > 1)
-                UtilityImg.resizeViewSetImgByHeight(om.displayData.bitmap[it], om.displayData.img[it])
+                UtilityImg.resizeViewSetImgByHeight(
+                    om.displayData.bitmap[it],
+                    om.displayData.img[it]
+                )
             else
                 om.displayData.img[it].setImageBitmap(om.displayData.bitmap[it])
         }
         animRan = false
         if (!firstRun) {
-            (0 until om.numPanes).forEach { UtilityImg.imgRestorePosnZoom(contextg, om.displayData.img[it], om.modelProvider + om.numPanes.toString() + it.toString()) }
+            (0 until om.numPanes).forEach {
+                UtilityImg.imgRestorePosnZoom(
+                    contextg,
+                    om.displayData.img[it],
+                    om.modelProvider + om.numPanes.toString() + it.toString()
+                )
+            }
             if (UIPreferences.fabInModels && om.numPanes < 2) {
                 fab1.setVisibility(View.VISIBLE)
                 fab2.setVisibility(View.VISIBLE)
@@ -198,7 +224,11 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             firstRun = true
         }
         if (om.numPanes > 1) {
-            UtilityModels.setSubtitleRestoreIMGXYZOOM(om.displayData.img, toolbar, "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1])
+            UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                om.displayData.img,
+                toolbar,
+                "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
+            )
             miStatusParam1.title = om.displayData.paramLabel[0]
             miStatusParam2.title = om.displayData.paramLabel[1]
         } else {
@@ -208,7 +238,8 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         imageLoaded = true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item))
@@ -219,13 +250,26 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             R.id.action_animate -> getAnimate()
             R.id.action_img1 -> {
                 om.curImg = 0
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(om.displayData.img, toolbar, "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1])
+                UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                    om.displayData.img,
+                    toolbar,
+                    "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
+                )
             }
             R.id.action_img2 -> {
                 om.curImg = 1
-                UtilityModels.setSubtitleRestoreIMGXYZOOM(om.displayData.img, toolbar, "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1])
+                UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                    om.displayData.img,
+                    toolbar,
+                    "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
+                )
             }
-            R.id.action_multipane -> ObjectIntent(this, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("2", activityArguments[1], activityArguments[2]))
+            R.id.action_multipane -> ObjectIntent(
+                this,
+                ModelsGenericActivity::class.java,
+                ModelsGenericActivity.INFO,
+                arrayOf("2", activityArguments[1], activityArguments[2])
+            )
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     if (isStoragePermissionGranted) {
@@ -236,9 +280,17 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                     }
                 } else {
                     if (animRan)
-                        UtilityShare.shareAnimGif(this, om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.spTime.selectedItem.toString(), om.displayData.animDrawable[0])
+                        UtilityShare.shareAnimGif(
+                            this,
+                            om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.spTime.selectedItem.toString(),
+                            om.displayData.animDrawable[0]
+                        )
                     else
-                        UtilityShare.shareBitmap(this, om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.spTime.selectedItem.toString(), om.displayData.bitmap[0])
+                        UtilityShare.shareBitmap(
+                            this,
+                            om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.spTime.selectedItem.toString(),
+                            om.displayData.bitmap[0]
+                        )
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -250,14 +302,25 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         withContext(Dispatchers.IO) {
             (0 until om.numPanes).forEach { om.displayData.animDrawable[it] = om.getAnimate(it) }
         }
-        (0 until om.numPanes).forEach { UtilityImgAnim.startAnimation(om.displayData.animDrawable[it], om.displayData.img[it]) }
+        (0 until om.numPanes).forEach {
+            UtilityImgAnim.startAnimation(
+                om.displayData.animDrawable[it],
+                om.displayData.img[it]
+            )
+        }
         animRan = true
     }
 
     private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
         // FIXME NCEP should not have different code
         if (om.modelType == ModelType.NCEP) {
-            om.rtd = withContext(Dispatchers.IO) { UtilityModelNCEPInputOutput.getRunTime(om.model, om.displayData.param[0], om.sectors[0]) }
+            om.rtd = withContext(Dispatchers.IO) {
+                UtilityModelNCEPInputOutput.getRunTime(
+                    om.model,
+                    om.displayData.param[0],
+                    om.sectors[0]
+                )
+            }
             om.time = om.rtd.mostRecentRun
             spRun.notifyDataSetChanged()
             spRun.setSelection(om.rtd.mostRecentRun)
@@ -270,7 +333,12 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             var tmpStr: String
             (0 until om.spTime.size()).forEach {
                 tmpStr = MyApplication.space.split(om.spTime[it])[0]
-                om.spTime[it] = tmpStr + " " + UtilityModels.convertTimeRuntoTimeString(om.rtd.mostRecentRun.replace("Z", ""), tmpStr, true)
+                om.spTime[it] = "$tmpStr " + UtilityModels.convertTimeRuntoTimeString(
+                    om.rtd.mostRecentRun.replace(
+                        "Z",
+                        ""
+                    ), tmpStr, true
+                )
             }
             om.spTime.notifyDataSetChanged()
             if (!firstRunTimeSet) {
@@ -287,7 +355,13 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
             spRun.notifyDataSetChanged()
             // FIXME
-            (0 until om.spTime.size()).forEach { om.spTime[it] = om.spTime[it] + " " + UtilityModels.convertTimeRuntoTimeString(om.rtd.timeStrConv.replace("Z", ""), om.spTime[it], false) }
+            (0 until om.spTime.size()).forEach {
+                om.spTime[it] = om.spTime[it] + " " + UtilityModels.convertTimeRuntoTimeString(
+                    om.rtd.timeStrConv.replace("Z", ""),
+                    om.spTime[it],
+                    false
+                )
+            }
             om.spTime.notifyDataSetChanged()
             if (!firstRunTimeSet) {
                 firstRunTimeSet = true
@@ -314,7 +388,13 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
 
     override fun onStop() {
         if (imageLoaded) {
-            (0 until om.numPanes).forEach { UtilityImg.imgSavePosnZoom(this, om.displayData.img[it], om.modelProvider + om.numPanes.toString() + it.toString()) }
+            (0 until om.numPanes).forEach {
+                UtilityImg.imgSavePosnZoom(
+                    this,
+                    om.displayData.img[it],
+                    om.modelProvider + om.numPanes.toString() + it.toString()
+                )
+            }
             Utility.writePref(this, om.prefRunPosn, om.spTime.selectedItemPosition)
         }
         super.onStop()
@@ -323,9 +403,14 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     private fun setupModel() {
         (0 until om.numPanes).forEach {
             om.displayData.param[it] = om.params[0]
-            om.displayData.param[it] = Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[0])
+            om.displayData.param[it] =
+                    Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[0])
             om.displayData.paramLabel[it] = om.params[0]
-            om.displayData.paramLabel[it] = Utility.readPref(this, om.prefParamLabel + it.toString(), om.displayData.paramLabel[0])
+            om.displayData.paramLabel[it] = Utility.readPref(
+                this,
+                om.prefParamLabel + it.toString(),
+                om.displayData.paramLabel[0]
+            )
         }
         if (!UtilityModels.parmInArray(om.params, om.displayData.param[0])) {
             om.displayData.param[0] = om.params[0]
@@ -349,29 +434,97 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         om.spTime.list.clear()
         when (om.modelType) {
             ModelType.GLCFS -> {
-                (om.startStep..om.endStep step om.stepAmount).forEach { om.spTime.list.add(String.format(Locale.US, om.format, it)) }
-                (51..121 step 3).forEach { om.spTime.list.add(String.format(Locale.US, om.format, it)) }
+                (om.startStep..om.endStep step om.stepAmount).forEach {
+                    om.spTime.list.add(
+                        String.format(
+                            Locale.US,
+                            om.format,
+                            it
+                        )
+                    )
+                }
+                (51..121 step 3).forEach {
+                    om.spTime.list.add(
+                        String.format(
+                            Locale.US,
+                            om.format,
+                            it
+                        )
+                    )
+                }
             }
             ModelType.NCEP -> {
                 when (om.model) {
                     "HRRR" -> {
-                        (om.startStep..om.endStep step om.stepAmount).forEach { om.spTime.add(String.format(Locale.US, "%03d" + "00", it)) }
+                        (om.startStep..om.endStep step om.stepAmount).forEach {
+                            om.spTime.add(
+                                String.format(
+                                    Locale.US,
+                                    "%03d" + "00",
+                                    it
+                                )
+                            )
+                        }
                     }
                     "GEFS-SPAG", "GEFS-MEAN-SPRD" -> {
-                        (0..181 step 6).forEach { om.spTime.add(String.format(Locale.US, "%03d", it)) }
-                        (192..385 step 12).forEach { om.spTime.add(String.format(Locale.US, "%03d", it)) }
+                        (0..181 step 6).forEach {
+                            om.spTime.add(
+                                String.format(
+                                    Locale.US,
+                                    "%03d",
+                                    it
+                                )
+                            )
+                        }
+                        (192..385 step 12).forEach {
+                            om.spTime.add(
+                                String.format(
+                                    Locale.US,
+                                    "%03d",
+                                    it
+                                )
+                            )
+                        }
                     }
                     "GFS" -> {
-                        (0..241 step 3).forEach { om.spTime.add(String.format(Locale.US, "%03d", it)) }
-                        (252..385 step 12).forEach { om.spTime.add(String.format(Locale.US, "%03d", it)) }
+                        (0..241 step 3).forEach {
+                            om.spTime.add(
+                                String.format(
+                                    Locale.US,
+                                    "%03d",
+                                    it
+                                )
+                            )
+                        }
+                        (252..385 step 12).forEach {
+                            om.spTime.add(
+                                String.format(
+                                    Locale.US,
+                                    "%03d",
+                                    it
+                                )
+                            )
+                        }
                     }
                     else -> {
-                        (om.startStep..om.endStep step om.stepAmount).forEach { om.spTime.list.add(String.format(Locale.US, om.format, it)) }
+                        (om.startStep..om.endStep step om.stepAmount).forEach {
+                            om.spTime.list.add(
+                                String.format(Locale.US, om.format, it)
+                            )
+                        }
                     }
                 }
             }
             else -> {
-                (om.startStep..om.endStep step om.stepAmount).forEach { om.spTime.list.add(String.format(Locale.US, om.format, it)) }
+                (om.startStep..om.endStep step om.stepAmount).forEach {
+                    om.spTime.list.add(
+                        String.format(
+                            Locale.US,
+                            om.format,
+                            it
+                        )
+                    )
+                }
             }
         }
     }

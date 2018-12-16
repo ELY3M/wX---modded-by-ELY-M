@@ -40,12 +40,20 @@ class CreateAnimatedGifService : IntentService("CreateAnimatedGifService") {
         encoder.setRepeat(0)
         encoder.setDelay(UtilityImg.animInterval(this))
         encoder.start(bos)
-        (0 until UtilityShare.animDrawablePublic!!.numberOfFrames).forEach { encoder.addFrame(UtilityImg.drawableToBitmap(UtilityShare.animDrawablePublic!!.getFrame(it))) }
+        (0 until UtilityShare.animDrawablePublic!!.numberOfFrames).forEach {
+            encoder.addFrame(
+                UtilityImg.drawableToBitmap(UtilityShare.animDrawablePublic!!.getFrame(it))
+            )
+        }
         encoder.finish()
         val dir = File(filesDir.toString() + "/shared")
         if (!dir.mkdirs()) UtilityLog.d("wx", "unable to create: $filesDir/shared")
         val file = File(dir, "${MyApplication.packageNameFileNameAsString}_anim.gif")
-        val contentUri = FileProvider.getUriForFile(this, "${MyApplication.packageNameAsString}.fileprovider", file)
+        val contentUri = FileProvider.getUriForFile(
+            this,
+            "${MyApplication.packageNameAsString}.fileprovider",
+            file
+        )
         val outStream: FileOutputStream
         try {
             outStream = FileOutputStream(file)
@@ -56,7 +64,10 @@ class CreateAnimatedGifService : IntentService("CreateAnimatedGifService") {
         }
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
         val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, UtilityShare.subjectPublic + " Animation" + " " + formattedDate)
+        sharingIntent.putExtra(
+            android.content.Intent.EXTRA_SUBJECT,
+            UtilityShare.subjectPublic + " Animation" + " " + formattedDate
+        )
         sharingIntent.putExtra(android.content.Intent.EXTRA_STREAM, contentUri)
         sharingIntent.type = "image/gif"
         sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)

@@ -36,7 +36,7 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
-class USAlertsDetailActivity: AudioPlayActivity(), OnMenuItemClickListener {
+class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object {
         const val URL: String = ""
@@ -77,7 +77,11 @@ class USAlertsDetailActivity: AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, ca.title + " " + ca.area, Utility.fromHtml(ca.text))
+            R.id.action_share -> UtilityShare.shareText(
+                this,
+                ca.title + " " + ca.area,
+                Utility.fromHtml(ca.text)
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true

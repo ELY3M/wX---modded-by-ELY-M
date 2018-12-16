@@ -102,7 +102,11 @@ class LightningActivity : VideoRecordActivity(), OnClickListener {
                             fireScreenCaptureIntent()
                     }
                 } else {
-                    UtilityShare.shareBitmap(this, "Lightning Strikes $sectorPretty $periodPretty", bitmap)
+                    UtilityShare.shareBitmap(
+                        this,
+                        "Lightning Strikes $sectorPretty $periodPretty",
+                        bitmap
+                    )
                 }
             }
             R.id.action_us -> setSectorGetContent("usa_big", "USA")

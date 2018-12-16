@@ -18,7 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-
+//modded by ELY M.
 package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
@@ -69,9 +69,10 @@ class SettingsColorsActivity : BaseActivity() {
                 "Widget Highlight Text color" to "WIDGET_HIGHLIGHT_TEXT_COLOR",
                 "NWS Forecast Icon Text color" to "NWS_ICON_TEXT_COLOR",
                 "NWS Forecast Icon Bottom color" to "NWS_ICON_BOTTOM_COLOR",
-                "Nexrad Radar Background color" to "NEXRAD_RADAR_BACKGROUND_COLOR")
-
-        mapColorToPref.keys.asSequence().sorted().mapTo(colorObjects) { ObjectSettingsColorLabel(this, it, mapColorToPref[it]!!) }
+                "Nexrad Radar Background color" to "NEXRAD_RADAR_BACKGROUND_COLOR"
+        )
+        mapColorToPref.keys.asSequence().sorted()
+            .mapTo(colorObjects) { ObjectSettingsColorLabel(this, it, mapColorToPref[it]!!) }
         colorObjects.forEach { ll.addView(it.card) }
     }
 

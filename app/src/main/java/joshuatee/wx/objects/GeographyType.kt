@@ -24,15 +24,50 @@ package joshuatee.wx.objects
 import joshuatee.wx.MyApplication
 import java.nio.ByteBuffer
 
-enum class GeographyType constructor(var relativeBuffer: ByteBuffer, var count: Int, var color: Int, var pref: Boolean) {
+enum class GeographyType constructor(
+    var relativeBuffer: ByteBuffer,
+    var count: Int,
+    var color: Int,
+    var pref: Boolean
+) {
 
-    STATE_LINES(MyApplication.stateRelativeBuffer, MyApplication.countState, MyApplication.radarColorState, true),
-    COUNTY_LINES(MyApplication.countyRelativeBuffer, MyApplication.countCounty, MyApplication.radarColorCounty, MyApplication.radarCounty),
-    LAKES(MyApplication.lakesRelativeBuffer, MyApplication.countLakes, MyApplication.radarColorLakes, MyApplication.radarLakes),
-    HIGHWAYS(MyApplication.hwRelativeBuffer, MyApplication.countHw, MyApplication.radarColorHw, MyApplication.radarHw),
-    HIGHWAYS_EXTENDED(MyApplication.hwExtRelativeBuffer, MyApplication.countHwExt, MyApplication.radarColorHwExt, MyApplication.radarHwEnhExt),
+    STATE_LINES(
+        MyApplication.stateRelativeBuffer,
+        MyApplication.countState,
+        MyApplication.radarColorState,
+        true
+    ),
+    COUNTY_LINES(
+        MyApplication.countyRelativeBuffer,
+        MyApplication.countCounty,
+        MyApplication.radarColorCounty,
+        MyApplication.radarCounty
+    ),
+    LAKES(
+        MyApplication.lakesRelativeBuffer,
+        MyApplication.countLakes,
+        MyApplication.radarColorLakes,
+        MyApplication.radarLakes
+    ),
+    HIGHWAYS(
+        MyApplication.hwRelativeBuffer,
+        MyApplication.countHw,
+        MyApplication.radarColorHw,
+        MyApplication.radarHw
+    ),
+    HIGHWAYS_EXTENDED(
+        MyApplication.hwExtRelativeBuffer,
+        MyApplication.countHwExt,
+        MyApplication.radarColorHwExt,
+        MyApplication.radarHwEnhExt
+    ),
     CITIES(ByteBuffer.allocate(0), 0, MyApplication.radarColorCity, MyApplication.radarCities),
-    COUNTY_LABELS(ByteBuffer.allocate(0), 0, MyApplication.radarColorCountyLabels, MyApplication.radarCountyLabels),
+    COUNTY_LABELS(
+        ByteBuffer.allocate(0),
+        0,
+        MyApplication.radarColorCountyLabels,
+        MyApplication.radarCountyLabels
+    ),
     NONE(ByteBuffer.allocateDirect(0), 0, 0, false);
 
     // FIXME refresh rest of values

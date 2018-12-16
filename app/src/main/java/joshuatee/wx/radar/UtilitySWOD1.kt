@@ -62,7 +62,8 @@ internal object UtilitySWOD1 {
 		&&*/
             val threatList = listOf("HIGH", "MDT", "ENH", "SLGT", "MRGL")
             val day = 1
-            val urlBlob = "${MyApplication.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt"
+            val urlBlob =
+                "${MyApplication.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt"
             val html = urlBlob.getHtmlSep()
             val htmlBlob = html.parse("... CATEGORICAL ...(.*?&)&") // was (.*?)&&
             threatList.indices.forEach { it ->

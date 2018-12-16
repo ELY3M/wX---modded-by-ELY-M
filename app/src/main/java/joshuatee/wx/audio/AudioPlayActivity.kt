@@ -82,7 +82,12 @@ abstract class AudioPlayActivity : AppCompatActivity() {
             pause.setIcon(MyApplication.ICON_PAUSE)
     }
 
-    protected fun audioPlayMenu(item: Int, txt: String, prod: String, playlistToken: String): Boolean {
+    protected fun audioPlayMenu(
+        item: Int,
+        txt: String,
+        prod: String,
+        playlistToken: String
+    ): Boolean {
         ttsProd = prod
         ttsTxt = txt
         when (item) {
@@ -125,7 +130,11 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                 if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     true
                 } else {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        1
+                    )
                     false
                 }
             } else {
@@ -133,7 +142,11 @@ abstract class AudioPlayActivity : AppCompatActivity() {
             }
         }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         when (requestCode) {
             1 -> {
                 // If request is cancelled, the result arrays are empty.

@@ -1,3 +1,4 @@
+//modded by ELY M. 
 package joshuatee.wx.radar
 
 import android.graphics.Bitmap
@@ -63,7 +64,6 @@ internal object OpenGLShader {
             "precision mediump float;" +
                     "uniform sampler2D u_texture;" +
                     "void main() {" +
-                    "vec4 color;" +
                     "  gl_FragColor = texture2D(u_texture, gl_PointCoord);" +
                     "}"
 

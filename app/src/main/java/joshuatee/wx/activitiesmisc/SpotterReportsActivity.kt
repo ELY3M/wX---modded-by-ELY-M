@@ -39,7 +39,12 @@ class SpotterReportsActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_spotter_reports_recyclerview, null, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_spotter_reports_recyclerview,
+            null,
+            false
+        )
         title = "Spotter reports"
         val recyclerView: RecyclerView = findViewById(R.id.card_list)
         recyclerView.setHasFixedSize(true)
@@ -48,7 +53,8 @@ class SpotterReportsActivity : BaseActivity() {
         recyclerView.layoutManager = linearLayoutManager
         val ca = AdapterSpotterReports(UtilitySpotter.spotterReports)
         recyclerView.adapter = ca
-        title = UtilitySpotter.spotterReports.size.toString() + " Spotter reports " + UtilityTime.gmtTime("HH:mm")
+        title = UtilitySpotter.spotterReports.size.toString() + " Spotter reports " +
+                UtilityTime.gmtTime("HH:mm")
         ca.setOnItemClickListener(object : AdapterSpotterReports.MyClickListener {
             override fun onItemClick(position: Int) {
                 itemSelected(position)
@@ -57,7 +63,19 @@ class SpotterReportsActivity : BaseActivity() {
     }
 
     private fun itemSelected(position: Int) {
-        val radarSite = UtilityLocation.getNearestOffice(this, "RADAR", LatLon(UtilitySpotter.spotterReports[position].lat, UtilitySpotter.spotterReports[position].lon))
-        ObjectIntent(this, WXGLRadarActivity::class.java, WXGLRadarActivity.RID, arrayOf(radarSite, "", "N0Q", "", UtilitySpotter.spotterReports[position].uniq))
+        val radarSite = UtilityLocation.getNearestOffice(
+            this,
+            "RADAR",
+            LatLon(
+                UtilitySpotter.spotterReports[position].lat,
+                UtilitySpotter.spotterReports[position].lon
+            )
+        )
+        ObjectIntent(
+            this,
+            WXGLRadarActivity::class.java,
+            WXGLRadarActivity.RID,
+            arrayOf(radarSite, "", "N0Q", "", UtilitySpotter.spotterReports[position].uniq)
+        )
     }
 } 

@@ -45,13 +45,38 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
             ll.addView(tvArr[it])
         }
         // setPadding(int left, int top, int right, int bottom)
-        tvArr[0].setPadding(MyApplication.padding, MyApplication.padding, MyApplication.padding, MyApplication.padding)
+        tvArr[0].setPadding(
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding
+        )
         tvArr[1].setPadding(MyApplication.padding, 0, MyApplication.padding, 0)  // wfo
         tvArr[2].setPadding(MyApplication.padding, 0, MyApplication.padding, 0)  // start
-        tvArr[3].setPadding(MyApplication.padding, 0, MyApplication.padding, MyApplication.padding)  // end
-        tvArr[4].setPadding(MyApplication.padding, MyApplication.padding, MyApplication.padding, MyApplication.padding)
-        tvArr[5].setPadding(MyApplication.padding, MyApplication.padding, MyApplication.padding, MyApplication.padding)
-        tvArr[6].setPadding(MyApplication.padding, MyApplication.padding, MyApplication.padding, MyApplication.padding)
+        tvArr[3].setPadding(
+            MyApplication.padding,
+            0,
+            MyApplication.padding,
+            MyApplication.padding
+        )  // end
+        tvArr[4].setPadding(
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding
+        )
+        tvArr[5].setPadding(
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding
+        )
+        tvArr[6].setPadding(
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding
+        )
     }
 
     fun updateContent(ca: CAPAlert, url: String) {
@@ -64,26 +89,36 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
         } else {
             if (!url.contains("NWS-IDP-PROD")) {
                 if (ca.title.contains("until")) {
-                    val tmpArr = UtilityString.parseMultipe(ca.title, "(.*?) issued (.*?) until (.*?) by (.*?)$", 4)
+                    val tmpArr = UtilityString.parseMultipe(
+                        ca.title,
+                        "(.*?) issued (.*?) until (.*?) by (.*?)$",
+                        4
+                    )
                     title = tmpArr[0]
                     startTime = tmpArr[1]
                     endTime = tmpArr[2]
                     wfo = tmpArr[3]
                 } else {
-                    val tmpArr = UtilityString.parseMultipe(ca.title, "(.*?) issued (.*?) by (.*?)$", 3)
+                    val tmpArr =
+                        UtilityString.parseMultipe(ca.title, "(.*?) issued (.*?) by (.*?)$", 3)
                     title = tmpArr[0]
                     startTime = tmpArr[1]
                     wfo = tmpArr[2]
                 }
             } else {
                 if (ca.title.contains("expiring")) {
-                    val tmpArr = UtilityString.parseMultipe(ca.title, "(.*?) issued (.*?) expiring (.*?) by (.*?)$", 4)
+                    val tmpArr = UtilityString.parseMultipe(
+                        ca.title,
+                        "(.*?) issued (.*?) expiring (.*?) by (.*?)$",
+                        4
+                    )
                     title = tmpArr[0]
                     startTime = tmpArr[1]
                     endTime = tmpArr[2]
                     wfo = tmpArr[3]
                 } else {
-                    val tmpArr = UtilityString.parseMultipe(ca.title, "(.*?) issued (.*?) by (.*?)$", 3)
+                    val tmpArr =
+                        UtilityString.parseMultipe(ca.title, "(.*?) issued (.*?) by (.*?)$", 3)
                     title = tmpArr[0]
                     startTime = tmpArr[1]
                     wfo = tmpArr[2]

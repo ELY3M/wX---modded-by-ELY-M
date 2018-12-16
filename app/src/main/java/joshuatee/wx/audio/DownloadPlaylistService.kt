@@ -55,10 +55,11 @@ class DownloadPlaylistService : IntentService("DownloadPlaylistService") {
             stackBuilder.addParentStack(SettingsPlaylistActivity::class.java)
             stackBuilder.addNextIntent(resultIntent)
             val objPI = ObjectPendingIntents(this, SettingsPlaylistActivity::class.java)
-            val notifObj = ObjectNotification(this, false, notifText, result, objPI.resultPendingIntent,
-                    MyApplication.ICON_CURRENT, result, Notification.PRIORITY_DEFAULT, Color.YELLOW,
-                    MyApplication.ICON_ACTION, objPI.resultPendingIntent2, "PLAYLIST")
-
+            val notifObj = ObjectNotification(
+                this, false, notifText, result, objPI.resultPendingIntent,
+                MyApplication.ICON_CURRENT, result, Notification.PRIORITY_DEFAULT, Color.YELLOW,
+                MyApplication.ICON_ACTION, objPI.resultPendingIntent2, "PLAYLIST"
+            )
             val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
             notifObj.sendNotification(this, url, 1, noti)
         }

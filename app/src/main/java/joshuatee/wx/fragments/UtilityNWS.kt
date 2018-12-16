@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded ELY M. 
 
 package joshuatee.wx.fragments
 
@@ -141,7 +142,7 @@ object UtilityNWS {
             "mix.png" to R.drawable.mix,
             "ts.png" to R.drawable.ts,
             "ts_hur_flags.png" to R.drawable.ts_hur_flags,
-            "ts_warn.png" to R.drawable.tropstorm,
+            "ts_warn.png" to R.drawable.tropstorm_noh,
             "nts_warn.png" to R.drawable.tropstorm_noh,
             "minus_ra.png" to R.drawable.minus_ra,
             "nminus_ra.png" to R.drawable.nminus_ra,
@@ -251,7 +252,13 @@ object UtilityNWS {
         val bm2 = Bitmap.createBitmap(bm2Tmp, leftCropB, 0, 41, dimens) // was 42 change to 40
         canvas.drawBitmap(bm2, 45f, 0f, Paint(Paint.FILTER_BITMAP_FLAG)) // was 42 change to 44
         if (num2 != "") {
-            canvas.drawRect(45f, (dimens - numHeight).toFloat(), dimens.toFloat(), dimens.toFloat(), paintStripe)
+            canvas.drawRect(
+                45f,
+                (dimens - numHeight).toFloat(),
+                dimens.toFloat(),
+                dimens.toFloat(),
+                paintStripe
+            )
             canvas.drawText("$num2%", xText.toFloat(), yText.toFloat(), paint)
         }
         return bm
@@ -292,7 +299,13 @@ object UtilityNWS {
         val blue = Color.blue(MyApplication.nwsIconBottomColor)
         paintStripe.color = Color.argb(200, red, green, blue)
         if (num1 != "") {
-            canvas.drawRect(0f, (dimens - numHeight).toFloat(), dimens.toFloat(), dimens.toFloat(), paintStripe)
+            canvas.drawRect(
+                0f,
+                (dimens - numHeight).toFloat(),
+                dimens.toFloat(),
+                dimens.toFloat(),
+                paintStripe
+            )
             canvas.drawText("$num1%", xText.toFloat(), yText.toFloat(), paint)
         }
         return bm

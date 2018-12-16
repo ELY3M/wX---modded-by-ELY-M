@@ -74,7 +74,15 @@ class NWSObsSitesActivity : BaseActivity() {
                             recyclerView.adapter = ca
                             siteDisplay = false
                         }
-                        else -> ObjectIntent(contextg, WebscreenAB::class.java, WebscreenAB.URL, arrayOf("http://www.wrh.noaa.gov/mesowest/timeseries.php?sid=" + listIds[position], listCity[position]))
+                        else -> ObjectIntent(
+                            contextg,
+                            WebscreenAB::class.java,
+                            WebscreenAB.URL,
+                            arrayOf(
+                                "http://www.wrh.noaa.gov/mesowest/timeseries.php?sid=" + listIds[position],
+                                listCity[position]
+                            )
+                        )
                     }
                 }
             }

@@ -104,7 +104,12 @@ class ObjectCardText(private val context: Context) {
 
     companion object {
         fun textViewSetup(tvTmp: TextView) {
-            tvTmp.setPadding(MyApplication.padding, MyApplication.padding, MyApplication.padding, MyApplication.padding)
+            tvTmp.setPadding(
+                MyApplication.padding,
+                MyApplication.padding,
+                MyApplication.padding,
+                MyApplication.padding
+            )
             tvTmp.gravity = Gravity.START
             tvTmp.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
             tvTmp.setTextColor(UIPreferences.backgroundColor)

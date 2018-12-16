@@ -45,7 +45,11 @@ class WidgetNexrad : AppWidgetProvider() {
         super.onEnabled(context)
     }
 
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
         UtilityWidget.update(context, type)
     }
 

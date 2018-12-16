@@ -43,9 +43,25 @@ class ObjectWidgetNexradRadar(context: Context) {
         UtilityWidget.setImage(context, remoteViews, NEXRAD_RADAR.fileName)
         if (!MyApplication.widgetPreventTap) {
             if (Location.isUS(widgetLocNum)) {
-                UtilityWidget.setupIntent(context, remoteViews, WXGLRadarActivity::class.java, R.id.iv, WXGLRadarActivity.RID, arrayOf(rid1, ""), WidgetFile.NEXRAD_RADAR.action)
+                UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    WXGLRadarActivity::class.java,
+                    R.id.iv,
+                    WXGLRadarActivity.RID,
+                    arrayOf(rid1, ""),
+                    WidgetFile.NEXRAD_RADAR.action
+                )
             } else {
-                UtilityWidget.setupIntent(context, remoteViews, CanadaRadarActivity::class.java, R.id.iv, CanadaRadarActivity.RID, arrayOf(rid1, "rad"), WidgetFile.NEXRAD_RADAR.action)
+                UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    CanadaRadarActivity::class.java,
+                    R.id.iv,
+                    CanadaRadarActivity.RID,
+                    arrayOf(rid1, "rad"),
+                    WidgetFile.NEXRAD_RADAR.action
+                )
             }
         }
     }

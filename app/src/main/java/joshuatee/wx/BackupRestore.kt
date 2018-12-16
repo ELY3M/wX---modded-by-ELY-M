@@ -1,3 +1,6 @@
+//modded by ELY M. 
+//done by ELY M. 
+
 package joshuatee.wx
 
 import android.app.AlertDialog.Builder

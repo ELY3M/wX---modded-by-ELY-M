@@ -72,12 +72,23 @@ object UtilityTTS {
             initTTS(context)
         }
         ttobjGlobal!!.setSpeechRate(Utility.readPref(context, "TTS_SPEED_PREF", 10) / 10f)
-        splitInChunks(Utility.fromHtml(TEXT_OLD), 1000).forEach { ttobjGlobal!!.speak(it, TextToSpeech.QUEUE_ADD, null) }
+        splitInChunks(Utility.fromHtml(TEXT_OLD), 1000).forEach {
+            ttobjGlobal!!.speak(
+                it,
+                TextToSpeech.QUEUE_ADD,
+                null
+            )
+        }
     }
 
     private fun splitInChunks(s: String, chunkSize: Int): List<String> {
         val length = s.length
-        return (0..length step chunkSize).mapTo(mutableListOf()) { s.substring(it, Math.min(length, it + chunkSize)) }
+        return (0..length step chunkSize).mapTo(mutableListOf()) {
+            s.substring(
+                it,
+                Math.min(length, it + chunkSize)
+            )
+        }
     }
 
     private fun initMediaPlayer(context: Context) {
@@ -112,7 +123,11 @@ object UtilityTTS {
         if (!mpInit) {
             initMediaPlayer(context)
         }
-        synthesizeText(context, Utility.readPref(context, "PLAYLIST_" + playlistArr[idx], ""), prodg)
+        synthesizeText(
+            context,
+            Utility.readPref(context, "PLAYLIST_" + playlistArr[idx], ""),
+            prodg
+        )
         ttobjGlobal!!.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
             override fun onDone(utteranceId: String) {
                 if (currentFile == 0 && utteranceId.contains(prodg)) {
@@ -143,7 +158,11 @@ object UtilityTTS {
                 initMediaPlayer(context)
             }
             if (mMediaPlayer!!.isPlaying) mMediaPlayer!!.stop()
-            synthesizeText(context, Utility.readPref(context, "PLAYLIST_" + playlistArr[playlistNumber], ""), prodg)
+            synthesizeText(
+                context,
+                Utility.readPref(context, "PLAYLIST_" + playlistArr[playlistNumber], ""),
+                prodg
+            )
             ttobjGlobal!!.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
                 override fun onDone(utteranceId: String) {
                     if (currentFile == 0 && utteranceId.contains(prodg)) {
@@ -174,7 +193,11 @@ object UtilityTTS {
             initMediaPlayer(context)
         }
         if (mMediaPlayer!!.isPlaying) mMediaPlayer!!.stop()
-        synthesizeText(context, Utility.readPref(context, "PLAYLIST_" + playlistArr[playlistNumber], ""), prodg)
+        synthesizeText(
+            context,
+            Utility.readPref(context, "PLAYLIST_" + playlistArr[playlistNumber], ""),
+            prodg
+        )
         ttobjGlobal!!.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
             override fun onDone(utteranceId: String) {
                 if (currentFile == 0 && utteranceId.contains(prodg)) {

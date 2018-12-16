@@ -60,7 +60,8 @@ object UtilityImg {
 
     fun getBlankBitmap(): Bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
 
-    fun getBitmapRemoveBG(imgUrl: String, color: Int): Bitmap = UtilityImg.eraseBG(imgUrl.getImage(), color)
+    fun getBitmapRemoveBG(imgUrl: String, color: Int): Bitmap =
+        UtilityImg.eraseBG(imgUrl.getImage(), color)
 
     fun getBitmapAddWhiteBG(context: Context, imgUrl: String): Bitmap {
         val layers = mutableListOf<Drawable>()
@@ -80,9 +81,11 @@ object UtilityImg {
     }
 
     fun imgRestorePosnZoom(context: Context, img: TouchImageView2, prefStr: String) {
-        img.setZoom(Utility.readPref(context, prefStr + "_ZOOM", 1.0f),
-                Utility.readPref(context, prefStr + "_X", 0.5f),
-                Utility.readPref(context, prefStr + "_Y", 0.5f))
+        img.setZoom(
+            Utility.readPref(context, prefStr + "_ZOOM", 1.0f),
+            Utility.readPref(context, prefStr + "_X", 0.5f),
+            Utility.readPref(context, prefStr + "_Y", 0.5f)
+        )
     }
 
     fun imgSavePosnZoom(context: Context, img: TouchImageView2, prefStr: String) {
@@ -139,7 +142,7 @@ object UtilityImg {
                 BitmapFactory.decodeStream(inputStream)
             else
                 BitmapFactory.decodeStream(inputStream, null, options)
-                        ?: UtilityImg.getBlankBitmap()
+                    ?: UtilityImg.getBlankBitmap()
         } catch (e: OutOfMemoryError) {
             UtilityLog.HandleException(e)
             return getBlankBitmap()
@@ -155,7 +158,8 @@ object UtilityImg {
 
     fun animInterval(context: Context): Int = 50 * Utility.readPref(context, "ANIM_INTERVAL", 15)
 
-    fun bitmapToLayerDrawable(context: Context, bitmap: Bitmap): LayerDrawable = LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
+    fun bitmapToLayerDrawable(context: Context, bitmap: Bitmap): LayerDrawable =
+        LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
 
     fun layerDrawableToBitmap(layers: MutableList<Drawable>): Bitmap {
         val drawable = LayerDrawable(layers.toTypedArray())
@@ -205,8 +209,8 @@ object UtilityImg {
             val pixels = IntArray(size)
             src.getPixels(pixels, 0, width, 0, 0, width, height)
             (0 until size)
-                    .filter { pixels[it] == color }
-                    .forEach { pixels[it] = 0 }
+                .filter { pixels[it] == color }
+                .forEach { pixels[it] = 0 }
             b.setPixels(pixels, 0, width, 0, 0, width, height)
             b
         } catch (e: OutOfMemoryError) {
@@ -217,7 +221,8 @@ object UtilityImg {
     fun resizeViewSetImgInCard(bitmap: Bitmap, iv: ImageView) {
         val paramsIv = iv.layoutParams
         paramsIv.width = MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()
-        paramsIv.height = (MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()) * bitmap.height / bitmap.width
+        paramsIv.height = (MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()) *
+                bitmap.height / bitmap.width
         iv.layoutParams = paramsIv
         iv.setImageBitmap(bitmap)
     }

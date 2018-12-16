@@ -18,10 +18,12 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//modded by ELY M.
 
 package joshuatee.wx.radar
 
 import android.content.Context
+
 import java.io.EOFException
 import java.io.File
 import java.io.IOException
@@ -74,7 +76,11 @@ object UtilityWXOGL {
         val idxStr = "0"
         val ridPrefix = getRidPrefix(rid1, prod)
         val fh: File
-        val inputStream = UtilityDownload.getInputStreamFromURL(MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(Locale.US) + "/sn.last")
+        val inputStream = UtilityDownload.getInputStreamFromURL(
+            MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(
+                Locale.US
+            ) + "/sn.last"
+        )
         if (inputStream != null) {
             UtilityIO.saveInputStream(context, inputStream, l3BaseFn + idxStr + "_d")
         } else {
@@ -110,7 +116,10 @@ object UtilityWXOGL {
                         if (b.toChar() == 'V') {
                             vSpotted = true
                         }
-                        if (Character.isAlphabetic(b.toInt()) || Character.isWhitespace(b.toInt()) || Character.isDigit(b.toInt()) || Character.isISOControl(b.toInt()) || Character.isDefined(b.toInt())) {
+                        if (Character.isAlphabetic(b.toInt()) || Character.isWhitespace(b.toInt()) || Character.isDigit(
+                                b.toInt()
+                            ) || Character.isISOControl(b.toInt()) || Character.isDefined(b.toInt())
+                        ) {
                             if (vSpotted) {
                                 if (b == 0.toByte()) {
                                     sb.append("<br>")
@@ -139,7 +148,8 @@ object UtilityWXOGL {
 
     fun showTextProducts(lat: Double, lon: Double): String {
         var warningHTML = MyApplication.severeDashboardTor.valueGet() + MyApplication.severeDashboardSvr.valueGet() + MyApplication.severeDashboardEww.valueGet() + MyApplication.severeDashboardFfw.valueGet() + MyApplication.severeDashboardSmw.valueGet() + MyApplication.severeDashboardSps.valueGet()
-        val urlList = warningHTML.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
+        val urlList =
+            warningHTML.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
         warningHTML = warningHTML.replace("\n", "")
         warningHTML = warningHTML.replace(" ", "")
         val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
@@ -151,29 +161,39 @@ object UtilityWXOGL {
         var polyCount = -1
         polygonArr.forEach { polys ->
             polyCount += 1
-            if (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith("0.CAN")) {
+            if (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith(
+                    "0.CAN"
+                )
+            ) {
                 val polyTmp = polys.replace("[", "").replace("]", "").replace(",", " ")
                 testArr = polyTmp.split(" ").dropLastWhile { it.isEmpty() }
-                val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }.map {
-                    it.toDoubleOrNull() ?: 0.0
-                }.toList()
-                val x = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 != 0 }.map {
-                    it.toDoubleOrNull() ?: 0.0
-                }.toList()
+                val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }
+                    .map {
+                        it.toDoubleOrNull() ?: 0.0
+                    }.toList()
+                val x = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 != 0 }
+                    .map {
+                        it.toDoubleOrNull() ?: 0.0
+                    }.toList()
                 if (y.size > 3 && x.size > 3 && x.size == y.size) {
                     val poly2 = ExternalPolygon.Builder()
-                    x.indices.forEach { j -> poly2.addVertex(ExternalPoint(x[j].toFloat(), y[j].toFloat())) }
+                    x.indices.forEach { j ->
+                        poly2.addVertex(
+                            ExternalPoint(
+                                x[j].toFloat(),
+                                y[j].toFloat()
+                            )
+                        )
+                    }
                     val polygon2 = poly2.build()
                     val contains = polygon2.contains(ExternalPoint(lat.toFloat(), lon.toFloat()))
                     if (contains && notFound) {
                         retStr = urlList[q]
                         notFound = false
-
                     }
                 }
             }
             q += 1
-
         }
         return retStr
     }

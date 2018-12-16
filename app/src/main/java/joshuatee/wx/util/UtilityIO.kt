@@ -47,7 +47,8 @@ object UtilityIO {
         }
     }
 
-    fun getFilePath(context: Context, fileName: String): String = context.getFileStreamPath(fileName).absolutePath
+    fun getFilePath(context: Context, fileName: String): String =
+        context.getFileStreamPath(fileName).absolutePath
 
     fun readTextFile(inputStream: InputStream): String {
         val outputStream = ByteArrayOutputStream()

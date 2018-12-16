@@ -163,7 +163,11 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
             ModelType.WPCGEFS -> UtilityModelWPCGEFSInputOutput.runTime
             ModelType.ESRL -> UtilityModelESRLInputOutput.getRunTime(model, displayData.param[0])
             ModelType.NSSL -> UtilityModelNSSLWRFInputOutput.runTime
-            ModelType.NCEP -> UtilityModelNCEPInputOutput.getRunTime(model, displayData.param[0], sector)
+            ModelType.NCEP -> UtilityModelNCEPInputOutput.getRunTime(
+                model,
+                displayData.param[0],
+                sector
+            )
             ModelType.SPCSREF -> UtilityModelsSPCSREFInputOutput.runTime
             ModelType.SPCHREF -> UtilityModelSPCHREFInputOutput.runTime
             ModelType.SPCHRRR -> UtilityModelSPCHRRRInputOutput.runTime

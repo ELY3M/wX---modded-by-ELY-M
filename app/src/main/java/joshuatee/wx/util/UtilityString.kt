@@ -48,7 +48,8 @@ object UtilityString {
 
     internal fun shortenTimeV2(longTimeF: String): String {
         var longTime = longTimeF
-        longTime = longTime.replace("-09:00", "").replace("-10:00", "").replace("-05:00", "").replace("T", " ").replace("-04:00", "").replace(":00 ", " ")
+        longTime = longTime.replace("-09:00", "").replace("-10:00", "").replace("-05:00", "")
+            .replace("T", " ").replace("-04:00", "").replace(":00 ", " ")
         return longTime.replace("-06:00", "").replace("-07:00", "")
     }
 
@@ -56,7 +57,8 @@ object UtilityString {
 
     fun getHTMLandParse(url: String, p: Pattern): String = url.getHtml().parse(p)
 
-    fun getHTMLandParseLastMatch(url: String, matchStr: String): String = url.getHtml().parseLastMatch(matchStr)
+    fun getHTMLandParseLastMatch(url: String, matchStr: String): String =
+        url.getHtml().parseLastMatch(matchStr)
 
     fun getHTMLandParseLastMatch(url: String, p: Pattern): String = url.getHtml().parseLastMatch(p)
 
@@ -126,9 +128,17 @@ object UtilityString {
 
     internal fun getHTMLandParseSep(url: String, p: Pattern) = url.getHtmlSep().parse(p)
 
-    fun getHTMLandParseMultipeFirstMatch(url: String, matchStr: String, number: Int): MutableList<String> = parseMultipeFirst(url.getHtml(), matchStr, number)
+    fun getHTMLandParseMultipeFirstMatch(
+        url: String,
+        matchStr: String,
+        number: Int
+    ): MutableList<String> = parseMultipeFirst(url.getHtml(), matchStr, number)
 
-    private fun parseMultipeFirst(data: String, match_str: String, number: Int): MutableList<String> {
+    private fun parseMultipeFirst(
+        data: String,
+        match_str: String,
+        number: Int
+    ): MutableList<String> {
         val result = MutableList(number) { "" }
         try {
             val p = Pattern.compile(match_str)
@@ -270,5 +280,6 @@ object UtilityString {
         else -> s
     }
 
-    fun addPeriodBeforeLastTwoChars(str: String): String = StringBuilder(str).insert(str.length - 2, ".").toString()
+    fun addPeriodBeforeLastTwoChars(str: String): String =
+        StringBuilder(str).insert(str.length - 2, ".").toString()
 }

@@ -37,7 +37,13 @@ class ObjectCALegal(context: Context, url: String) {
     init {
         c1.lightText()
         c1.center()
-        c1.setOnClickListener(View.OnClickListener { ObjectIntent(context, Intent.ACTION_VIEW, Uri.parse(url)) })
+        c1.setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                context,
+                Intent.ACTION_VIEW,
+                Uri.parse(url)
+            )
+        })
         c1.setText(context.resources.getText(R.string.main_screen_ca_disclaimor))
     }
 

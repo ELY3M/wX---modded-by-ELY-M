@@ -21,7 +21,14 @@
 
 package joshuatee.wx.nhc
 
-class ObjectNHCStormInfo internal constructor(val title: String, val summary: String, val url: String, val img1: String, val img2: String, val wallet: String)
+class ObjectNHCStormInfo internal constructor(
+    val title: String,
+    val summary: String,
+    val url: String,
+    val img1: String,
+    val img2: String,
+    val wallet: String
+)
 
 
 

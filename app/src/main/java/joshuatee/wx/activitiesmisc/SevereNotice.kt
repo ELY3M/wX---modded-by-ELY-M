@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
 
 package joshuatee.wx.activitiesmisc
 

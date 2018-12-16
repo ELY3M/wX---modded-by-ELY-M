@@ -149,7 +149,8 @@ class SpottersActivity : BaseActivity() {
 
     private fun checkFav(posn: Int) {
         if (MyApplication.spotterFav.contains(spotterlist[posn].uniq + ":")) {
-            MyApplication.spotterFav = MyApplication.spotterFav.replace(spotterlist[posn].uniq + ":", "")
+            MyApplication.spotterFav =
+                    MyApplication.spotterFav.replace(spotterlist[posn].uniq + ":", "")
             spotterlist[posn].lastName = spotterlist[posn].lastName.replace("0FAV ", "")
         } else {
             MyApplication.spotterFav = MyApplication.spotterFav + spotterlist[posn].uniq + ":"
@@ -162,8 +163,8 @@ class SpottersActivity : BaseActivity() {
 
     private fun markFavorites() {
         spotterlist
-                .filter { MyApplication.spotterFav.contains(it.uniq + ":") && !it.lastName.contains("0FAV ") }
-                .forEach { it.lastName = "0FAV " + it.lastName }
+            .filter { MyApplication.spotterFav.contains(it.uniq + ":") && !it.lastName.contains("0FAV ") }
+            .forEach { it.lastName = "0FAV " + it.lastName }
         sortSpotters()
     }
 
@@ -189,11 +190,31 @@ class SpottersActivity : BaseActivity() {
 
     private fun itemSelected(position: Int) {
         when (actionMode) {
-            ActionMode.MAP -> ObjectIntent(this, WebscreenAB::class.java, WebscreenAB.URL, arrayOf(UtilityMap.genMapURL(spotterlist[position].lat, spotterlist[position].lon, "9"), spotterlist[position].lastName + ", " + spotterlist[position].firstName))
+            ActionMode.MAP -> ObjectIntent(
+                this,
+                WebscreenAB::class.java,
+                WebscreenAB.URL,
+                arrayOf(
+                    UtilityMap.genMapURL(
+                        spotterlist[position].lat,
+                        spotterlist[position].lon,
+                        "9"
+                    ), spotterlist[position].lastName + ", " + spotterlist[position].firstName
+                )
+            )
             ActionMode.FAV -> checkFav(position)
             ActionMode.RADAR -> {
-                val rid = UtilityLocation.getNearestOffice(this, "RADAR", LatLon(spotterlist[position].lat, spotterlist[position].lon))
-                ObjectIntent(this, WXGLRadarActivity::class.java, WXGLRadarActivity.RID, arrayOf(rid, "", "N0Q", "", spotterlist[position].uniq))
+                val rid = UtilityLocation.getNearestOffice(
+                    this,
+                    "RADAR",
+                    LatLon(spotterlist[position].lat, spotterlist[position].lon)
+                )
+                ObjectIntent(
+                    this,
+                    WXGLRadarActivity::class.java,
+                    WXGLRadarActivity.RID,
+                    arrayOf(rid, "", "N0Q", "", spotterlist[position].uniq)
+                )
             }
             else -> {
             }

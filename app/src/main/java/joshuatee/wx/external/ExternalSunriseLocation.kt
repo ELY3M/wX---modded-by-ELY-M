@@ -30,7 +30,7 @@ class ExternalSunriseLocation
  * @param longitude
  * the longitude, in degrees of this location. East longitude is positive, west negative.
  */
-(latitude: String, longitude: String) {
+    (latitude: String, longitude: String) {
     /**
      * Creates a new instance of `Location` with the given parameters.
      *

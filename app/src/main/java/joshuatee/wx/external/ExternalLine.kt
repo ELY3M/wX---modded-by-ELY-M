@@ -26,18 +26,19 @@ https://github.com/sromku/polygon-contains-point
  * @author Roman Kushnarenko (sromku@gmail.com)
  */
 internal class ExternalLine(
-        /**
-         * Get start point
-         *
-         * @return The start point
-         */
-        val start: ExternalPoint,
-        /**
-         * Get end point
-         *
-         * @return The end point
-         */
-        val end: ExternalPoint) {
+    /**
+     * Get start point
+     *
+     * @return The start point
+     */
+    val start: ExternalPoint,
+    /**
+     * Get end point
+     *
+     * @return The end point
+     */
+    val end: ExternalPoint
+) {
     /**
      * y = **A**x + B
      *

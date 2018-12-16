@@ -34,7 +34,7 @@ object UtilitySunMoon {
     http://aa.usno.navy.mil/data/docs/RS_OneDay.php
     http://api.usno.navy.mil/rstt/oneday?date=today&coords=42.26,-83.73&tz=-5*/
 
-    fun getExtendedSunMoonData(currentLoc: Int): String {
+    fun getExtendedData(currentLoc: Int): String {
         val tzOffset: String
         var x = ""
         var y = ""
@@ -71,12 +71,25 @@ object UtilitySunMoon {
         val moonUppertransit = moondataChunk.parse(" \\{\"phen\":\"U\", \"time\":\"(.*?)\"\\}")
         val moonSet = moondataChunk.parse(" \\{\"phen\":\"S\", \"time\":\"(.*?)\"\\}")
         val header = "Sun/Moon Data"
-        content = sunTwilight + " Sun Twilight" + MyApplication.newline + sunRise + " Sunrise" + MyApplication.newline + sunUppertransit + " Sun Upper Transit" + MyApplication.newline + sunSet + " Sunset" + MyApplication.newline + sunEndTwilight + " Sun Twilight End" + MyApplication.newline + MyApplication.newline + moonRise + " Moonrise" + MyApplication.newline + moonUppertransit + " Moon Upper Transit" + MyApplication.newline + moonSet + " Moonset" + MyApplication.newline + MyApplication.newline + moonphaseChunk.replace("\"time\"", "").replace("\"date\"", "").replace("\"", "").replace(":", " ").replace(",", "") + MyApplication.newline + moonFracillum + "% Moon fracillum" + MyApplication.newline + moonCurrentphase + " is the current phase" + MyApplication.newline
+        content = sunTwilight + " Sun Twilight" + MyApplication.newline + sunRise + " Sunrise" +
+                MyApplication.newline + sunUppertransit + " Sun Upper Transit" +
+                MyApplication.newline + sunSet + " Sunset" + MyApplication.newline +
+                sunEndTwilight + " Sun Twilight End" + MyApplication.newline +
+                MyApplication.newline + moonRise + " Moonrise" + MyApplication.newline +
+                moonUppertransit + " Moon Upper Transit" + MyApplication.newline + moonSet +
+                " Moonset" + MyApplication.newline + MyApplication.newline +
+                moonphaseChunk.replace("\"time\"", "").replace("\"date\"", "").replace(
+                    "\"",
+                    ""
+                ).replace(":", " ").replace(",", "") + MyApplication.newline + moonFracillum +
+                "% Moon fracillum" + MyApplication.newline + moonCurrentphase +
+                " is the current phase" + MyApplication.newline
         return Pair(header, content)
     }
 
-    fun getFullMoonDates(): String {
-        val url = "${MyApplication.sunMoonDataUrl}/moon/phase?date=" + UtilityTime.month().toString() + "/" + UtilityTime.day().toString() + "/" + UtilityTime.year().toString() + "&nump=99"
+    fun getFullDates(): String {
+        val url =
+            "${MyApplication.sunMoonDataUrl}/moon/phase?date=" + UtilityTime.month().toString() + "/" + UtilityTime.day().toString() + "/" + UtilityTime.year().toString() + "&nump=99"
         val text = url.getHtmlUnsafe()
         var fullText = ""
         val phaseArr = text.parseColumn("\"phase\":\"(.*?)\"")

@@ -52,17 +52,17 @@ class WebscreenABState : BaseActivity(), OnItemSelectedListener {
     private lateinit var webview: WebView
     private var url = ""
     private val caArr = listOf(
-            "bcstorm: British Columbia",
-            "abstorm: Alberta",
-            "skstorm: Saskatchewan",
-            "mbstorm: Manitoba",
-            "onstorm: Ontario",
-            "meteoqc: Quebec",
-            "nbstorm: New Brunswick",
-            "pestorm: Prince Edward Island",
-            "nsstorm: Nova Scotia",
-            "ntstorm: North West Territories",
-            "nlwx: Newfoundland"
+        "bcstorm: British Columbia",
+        "abstorm: Alberta",
+        "skstorm: Saskatchewan",
+        "mbstorm: Manitoba",
+        "onstorm: Ontario",
+        "meteoqc: Quebec",
+        "nbstorm: New Brunswick",
+        "pestorm: Prince Edward Island",
+        "nsstorm: Nova Scotia",
+        "ntstorm: North West Territories",
+        "nlwx: Newfoundland"
     )
     private var stateArr = listOf<String>()
     private var stateCodeCurrent = ""
@@ -88,7 +88,12 @@ class WebscreenABState : BaseActivity(), OnItemSelectedListener {
         stateArr = STATE_ARR + caArr
         stateCodeCurrent = Utility.readPref(this, "STATE_CODE", "")
         twitterStateId = Utility.readPref(this, "STATE_TW_ID_$stateCodeCurrent", "")
-        url = "<a class=\"twitter-timeline\" data-dnt=\"true\" href=\"https://twitter.com/search?q=%23" + stateCodeCurrent.toLowerCase(Locale.US) + "wx\" data-widget-id=\"" + twitterStateId + "\" data-chrome=\"noscrollbar noheader nofooter noborders  \" data-tweet-limit=20>Tweets about \"#" + stateCodeCurrent.toLowerCase(Locale.US) + "wx\"</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\"://platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script>"
+        url = "<a class=\"twitter-timeline\" data-dnt=\"true\" href=\"https://twitter.com/search?q=%23" +
+                stateCodeCurrent.toLowerCase(Locale.US) + "wx\" data-widget-id=\"" +
+                twitterStateId +
+                "\" data-chrome=\"noscrollbar noheader nofooter noborders  \" data-tweet-limit=20>Tweets about \"#" +
+                stateCodeCurrent.toLowerCase(Locale.US) +
+                "wx\"</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\"://platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script>"
         sp = ObjectSpinner(this, this, R.id.spinner1, stateArr)
         sp.setOnItemSelectedListener(this)
         sp.setSelection(findPosition(stateCodeCurrent.toLowerCase(Locale.US)))
@@ -98,14 +103,20 @@ class WebscreenABState : BaseActivity(), OnItemSelectedListener {
         webview.webViewClient = WebViewClient()
     }
 
-    private fun findPosition(key: String) = (0 until sp.size()).firstOrNull { sp[it].toLowerCase(Locale.US).startsWith("$key:") }
+    private fun findPosition(key: String) =
+        (0 until sp.size()).firstOrNull { sp[it].toLowerCase(Locale.US).startsWith("$key:") }
             ?: 0
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         Utility.writePref(this, "STATE_CODE", MyApplication.colon.split(stateArr[pos])[0])
         stateCodeCurrent = Utility.readPref(this, "STATE_CODE", "")
         twitterStateId = Utility.readPref(this, "STATE_TW_ID_$stateCodeCurrent", "")
-        url = "<a class=\"twitter-timeline\" data-dnt=\"true\" href=\"https://twitter.com/search?q=%23" + stateCodeCurrent.toLowerCase(Locale.US) + "wx\" data-widget-id=\"" + twitterStateId + "\" data-chrome=\"noscrollbar noheader nofooter noborders  \" data-tweet-limit=20>Tweets about \"#" + stateCodeCurrent.toLowerCase(Locale.US) + "wx\"</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\"://platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script>"
+        url = "<a class=\"twitter-timeline\" data-dnt=\"true\" href=\"https://twitter.com/search?q=%23" +
+                stateCodeCurrent.toLowerCase(Locale.US) + "wx\" data-widget-id=\"" +
+                twitterStateId +
+                "\" data-chrome=\"noscrollbar noheader nofooter noborders  \" data-tweet-limit=20>Tweets about \"#" +
+                stateCodeCurrent.toLowerCase(Locale.US) +
+                "wx\"</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\"://platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script>"
         webview.loadDataWithBaseURL("fake://not/needed", url, "text/html", "utf-8", null)
     }
 
@@ -122,7 +133,11 @@ class WebscreenABState : BaseActivity(), OnItemSelectedListener {
                         stateTmp = stateTmp.replace("wx", "")
                     }
                 }
-                ObjectIntent(this, Intent.ACTION_VIEW, Uri.parse("http://twitter.com/hashtag/$stateTmp$tail"))
+                ObjectIntent(
+                    this,
+                    Intent.ACTION_VIEW,
+                    Uri.parse("http://twitter.com/hashtag/$stateTmp$tail")
+                )
                 true
             }
             else -> super.onOptionsItemSelected(item)

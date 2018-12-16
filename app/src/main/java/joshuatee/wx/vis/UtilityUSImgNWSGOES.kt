@@ -42,7 +42,16 @@ import joshuatee.wx.Extensions.*
 
 object UtilityUSImgNWSGOES {
 
-    fun getGOESMosaic(context: Context, satSectorF: String, sector: String, imageTypeNhc: String, mesoImgA: List<String>, overlayImgA: List<String>, wfoChoosen: Boolean, isInteractive: Boolean): Bitmap {
+    fun getGOESMosaic(
+        context: Context,
+        satSectorF: String,
+        sector: String,
+        imageTypeNhc: String,
+        mesoImgA: List<String>,
+        overlayImgA: List<String>,
+        wfoChoosen: Boolean,
+        isInteractive: Boolean
+    ): Bitmap {
         var satSector = satSectorF
         if (wfoChoosen && !satSector.contains("wfo")) {
             satSector += "/wfo"
@@ -56,10 +65,16 @@ object UtilityUSImgNWSGOES {
         try {
             overlayImgA.forEach {
                 var sLocal = it
-                if (it == "FRNT" && (sector == "eaus" || sector == "weus" || sector == "ceus" || sector == "nhem" || sector == "gmex" || sector == "carb" || sector.contains("atl") || sector.contains("pac"))) {
+                if (it == "FRNT" && (sector == "eaus" || sector == "weus" || sector == "ceus" || sector == "nhem" || sector == "gmex" || sector == "carb" || sector.contains(
+                        "atl"
+                    ) || sector.contains("pac"))
+                ) {
                     sLocal = "FRONTS"
                 }
-                bitmapTmp = UtilityImg.getBitmapRemoveBG(urlS + sLocal.toUpperCase(Locale.US) + ".GIF", -16777216)
+                bitmapTmp = UtilityImg.getBitmapRemoveBG(
+                    urlS + sLocal.toUpperCase(Locale.US) + ".GIF",
+                    -16777216
+                )
                 bitmapAl.add(bitmapTmp)
             }
             for (s in mesoImgA) {
@@ -77,32 +92,59 @@ object UtilityUSImgNWSGOES {
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
         }
-        val layersAl = bitmapAl.mapTo(mutableListOf<Drawable>()) { BitmapDrawable(context.resources, it) }
+        val layersAl =
+            bitmapAl.mapTo(mutableListOf<Drawable>()) { BitmapDrawable(context.resources, it) }
         bitmap = UtilityImg.layerDrawableToBitmap(layersAl)
         var citySize = 0
         if (wfoChoosen) {
             citySize = 15
         }
-        UtilityCanvasMain.addCanvasItems(context, bitmap, ProjectionType.NWS_GOES, sector.toUpperCase(Locale.US), 0, citySize, isInteractive)
+        UtilityCanvasMain.addCanvasItems(
+            context,
+            bitmap,
+            ProjectionType.NWS_GOES,
+            sector.toUpperCase(Locale.US),
+            0,
+            citySize,
+            isInteractive
+        )
         return bitmap
     }
 
-    private fun getNWSGOESOverlayImage(satSectorLocal: String, sector: String, imageTypeNhc: String, imageType: String): Bitmap {
+    private fun getNWSGOESOverlayImage(
+        satSectorLocal: String,
+        sector: String,
+        imageTypeNhc: String,
+        imageType: String
+    ): Bitmap {
         // http://www.ssd.noaa.gov/goes/east/gl/txtfiles/vis_names.txt
         val urlS = "http://www.ssd.noaa.gov/goes/$satSectorLocal/$sector/over/"
-        val imgData = ("http://www.ssd.noaa.gov/goes/" + satSectorLocal + "/" + sector + "/txtfiles/" + imageTypeNhc + "_names.txt").getHtml()
-        val imgDataAl = imgData.split(MyApplication.newline).dropLastWhile { it.isEmpty() }.toMutableList()
+        val imgData =
+            ("http://www.ssd.noaa.gov/goes/" + satSectorLocal + "/" + sector + "/txtfiles/" + imageTypeNhc + "_names.txt").getHtml()
+        val imgDataAl =
+            imgData.split(MyApplication.newline).dropLastWhile { it.isEmpty() }.toMutableList()
         while (imgDataAl.remove("")) {
         }
         return if (imgDataAl.size > 0) {
-            val time = imgDataAl[imgDataAl.size - 1].parseLastMatch("img/([0-9]{7}_[0-9]{4})$imageTypeNhc.jpg.*?")
+            val time =
+                imgDataAl[imgDataAl.size - 1].parseLastMatch("img/([0-9]{7}_[0-9]{4})$imageTypeNhc.jpg.*?")
             ("$urlS$time$imageType.gif").getImage()
         } else {
             Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
         }
     }
 
-    internal fun getGOESMosaicNONGOES(context: Context, satSector: String, sector: String, imageTypeNhc: String, imgFormat: String, mesoImgA: List<String>, overlayImgA: List<String>, wfoChoosen: Boolean, isInteractive: Boolean): Bitmap {
+    internal fun getGOESMosaicNONGOES(
+        context: Context,
+        satSector: String,
+        sector: String,
+        imageTypeNhc: String,
+        imgFormat: String,
+        mesoImgA: List<String>,
+        overlayImgA: List<String>,
+        wfoChoosen: Boolean,
+        isInteractive: Boolean
+    ): Bitmap {
         val url = "http://www.ssd.noaa.gov/$satSector/$sector/$imageTypeNhc$imgFormat"
         val urlS = "http://www.ssd.noaa.gov/$satSector/$sector/over/"
         var bitmap: Bitmap = UtilityImg.getBlankBitmap()
@@ -117,7 +159,10 @@ object UtilityUSImgNWSGOES {
             try {
                 overlayImgA.forEach {
                     var sLocal = it
-                    if (it == "FRNT" && (sector == "eaus" || sector == "weus" || sector == "ceus" || sector == "nhem" || sector == "gmex" || sector == "carb" || sector.contains("atl") || sector.contains("pac"))) {
+                    if (it == "FRNT" && (sector == "eaus" || sector == "weus" || sector == "ceus" || sector == "nhem" || sector == "gmex" || sector == "carb" || sector.contains(
+                            "atl"
+                        ) || sector.contains("pac"))
+                    ) {
                         sLocal = "FRONTS"
                     }
                     bitmapTmp2 = (urlS + sLocal.toUpperCase(Locale.US) + ".GIF").getImage()
@@ -127,7 +172,11 @@ object UtilityUSImgNWSGOES {
                     if (s == "radar" && sector.contains("eaus")) // eaus has a radar file but it's outdated
                         continue
                     bitmapTmp2 = if (!satSector.contains("west/wfo") && !sector.contains("eaus")) {
-                        val urlArr = UtilityImgAnim.getURLArray(urlS, "<a href=\"([0-9]{7}_[0-9]{4}$s\\.gif)\">.*?", "1")
+                        val urlArr = UtilityImgAnim.getUrlArray(
+                            urlS,
+                            "<a href=\"([0-9]{7}_[0-9]{4}$s\\.gif)\">.*?",
+                            1
+                        )
                         (urlS + urlArr[0]).getImage()
                     } else {
                         (urlS + s.toUpperCase(Locale.US) + ".GIF").getImage()
@@ -148,21 +197,39 @@ object UtilityUSImgNWSGOES {
         if (wfoChoosen) {
             citySize = 15
         }
-        UtilityCanvasMain.addCanvasItems(context, bitmap, ProjectionType.NWS_GOES, sector.toUpperCase(Locale.US), 0, citySize, isInteractive)
+        UtilityCanvasMain.addCanvasItems(
+            context,
+            bitmap,
+            ProjectionType.NWS_GOES,
+            sector.toUpperCase(Locale.US),
+            0,
+            citySize,
+            isInteractive
+        )
         return bitmap
     }
 
-    internal fun getNWSGOESAnim(context: Context, satSector: String, sector: String, imageTypeAnim: String, frameCntStr: String): AnimationDrawable {
-        val frameCnt = frameCntStr.toIntOrNull() ?: 0
+    internal fun getNWSGOESAnim(
+        context: Context,
+        satSector: String,
+        sector: String,
+        imageTypeAnim: String,
+        frameCount: Int
+    ): AnimationDrawable {
+        //val frameCnt = frameCntStr.toIntOrNull() ?: 0
         val url = "http://www.ssd.noaa.gov/goes/$satSector/$sector/img/"
         val bmAl = mutableListOf<Bitmap>()
         val urlArr: List<String>
         val urlAL = getNWSGOESAnimationURLs(satSector, sector, imageTypeAnim)
-        if (urlAL.size >= frameCnt) {
-            (urlAL.size - frameCnt until urlAL.size).mapTo(bmAl) { urlAL[it].getImage() }
+        if (urlAL.size >= frameCount) {
+            (urlAL.size - frameCount until urlAL.size).mapTo(bmAl) { urlAL[it].getImage() }
         } else {
             try {
-                urlArr = UtilityImgAnim.getURLArray(url, "<a href=\"([0-9]{7}_[0-9]{4}$imageTypeAnim\\.jpg)\">.*?", frameCntStr)
+                urlArr = UtilityImgAnim.getUrlArray(
+                    url,
+                    "<a href=\"([0-9]{7}_[0-9]{4}$imageTypeAnim\\.jpg)\">.*?",
+                    frameCount
+                )
                 urlArr.mapTo(bmAl) { (url + it).getImage() }
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)
@@ -171,7 +238,7 @@ object UtilityUSImgNWSGOES {
         val animDrawable = AnimationDrawable()
         var delay = UtilityImg.animInterval(context)
         (0 until bmAl.size).forEach {
-            if (it == frameCnt - 1) {
+            if (it == frameCount - 1) {
                 delay *= 3
             }
             animDrawable.addFrame(BitmapDrawable(context.resources, bmAl[it]), delay)
@@ -179,7 +246,13 @@ object UtilityUSImgNWSGOES {
         return animDrawable
     }
 
-    internal fun getNWSGOESAnimNONGOES(context: Context, satSector: String, sector: String, imageTypeAnim: String, frameCntStr: String): AnimationDrawable {
+    internal fun getNWSGOESAnimNONGOES(
+        context: Context,
+        satSector: String,
+        sector: String,
+        imageTypeAnim: String,
+        frameCount: Int
+    ): AnimationDrawable {
         val url = "http://www.ssd.noaa.gov/$satSector/$sector/img/"
         var imgFormat = ".gif"
         if (satSector == "eumet") {
@@ -188,7 +261,11 @@ object UtilityUSImgNWSGOES {
         val bmAl = mutableListOf<Bitmap>()
         val urlArr: List<String>
         try {
-            urlArr = UtilityImgAnim.getURLArray(url, "<a href=\"([0-9]{7}_[0-9]{4}$imageTypeAnim\\$imgFormat)\">.*?", frameCntStr)
+            urlArr = UtilityImgAnim.getUrlArray(
+                url,
+                "<a href=\"([0-9]{7}_[0-9]{4}$imageTypeAnim\\$imgFormat)\">.*?",
+                frameCount
+            )
             urlArr.mapTo(bmAl) { (url + it).getImage() }
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
@@ -197,9 +274,14 @@ object UtilityUSImgNWSGOES {
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl, delay)
     }
 
-    private fun getNWSGOESAnimationURLs(satSectorLocal: String, sector: String, imageTypeNhc: String): List<String> {
+    private fun getNWSGOESAnimationURLs(
+        satSectorLocal: String,
+        sector: String,
+        imageTypeNhc: String
+    ): List<String> {
         // http://www.ssd.noaa.gov/goes/east/gl/txtfiles/vis_names.txt
-        val imgData = ("http://www.ssd.noaa.gov/goes/" + satSectorLocal + "/" + sector + "/txtfiles/" + imageTypeNhc + "_names.txt").getHtmlSep()
+        val imgData =
+            ("http://www.ssd.noaa.gov/goes/" + satSectorLocal + "/" + sector + "/txtfiles/" + imageTypeNhc + "_names.txt").getHtmlSep()
         val urlAlTmp = imgData.split("<br>").dropLastWhile { it.isEmpty() }
         val urlAl = mutableListOf<String>()
         val url = "http://www.ssd.noaa.gov/goes/$satSectorLocal/$sector/"

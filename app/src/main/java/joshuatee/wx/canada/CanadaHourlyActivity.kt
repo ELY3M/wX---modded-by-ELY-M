@@ -53,13 +53,18 @@ class CanadaHourlyActivity : BaseActivity() {
         c0 = ObjectCardText(this)
         c0.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar) })
         linearLayout.addView(c0.card)
-        linearLayout.addView(ObjectCALegal(this, UtilityCanadaHourly.getHourlyURL(Location.locationIndex)).card)
+        linearLayout.addView(
+            ObjectCALegal(
+                this,
+                UtilityCanadaHourly.getUrl(Location.locationIndex)
+            ).card
+        )
         title = Location.getName(locNumInt) + " hourly forecast"
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        val html = withContext(Dispatchers.IO) { UtilityCanadaHourly.getHourlyString(locNumInt) }
+        val html = withContext(Dispatchers.IO) { UtilityCanadaHourly.getString(locNumInt) }
         c0.setText(html)
     }
 }

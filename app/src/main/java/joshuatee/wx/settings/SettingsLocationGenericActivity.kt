@@ -62,7 +62,8 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMap
 import kotlinx.coroutines.*
 
-class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener { // OnCheckedChangeListener OnClickListener
+class SettingsLocationGenericActivity : BaseActivity(),
+    OnMenuItemClickListener { // OnCheckedChangeListener OnClickListener
 
     // manual interface for searching and saving a location
     //
@@ -99,7 +100,12 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_settings_location_generic, R.menu.settings_location_generic_bottom, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_settings_location_generic,
+            R.menu.settings_location_generic_bottom,
+            true
+        )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         Utility.writePref(this, "LOCATION_CANADA_PROV", "")
@@ -117,15 +123,24 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         title = "Location $locNum"
         locXStr = Utility.readPref(this, "LOC" + locNum + "_X", "")
         locYStr = Utility.readPref(this, "LOC" + locNum + "_Y", "")
-        var alertNotificationCurrent: String = Utility.readPref(this, "ALERT" + locNum + "_NOTIFICATION", "false")
-        var alertNotificationRadarCurrent: String = Utility.readPref(this, "ALERT_NOTIFICATION_RADAR$locNum", "false")
-        var alertCcNotificationCurrent: String = Utility.readPref(this, "ALERT_CC" + locNum + "_NOTIFICATION", "false")
-        var alert7Day1NotificationCurrent: String = Utility.readPref(this, "ALERT_7DAY_" + locNum + "_NOTIFICATION", "false")
-        var alertNotificationSoundCurrent: String = Utility.readPref(this, "ALERT_NOTIFICATION_SOUND$locNum", "false")
-        var alertNotificationMcdCurrent: String = Utility.readPref(this, "ALERT_NOTIFICATION_MCD$locNum", "false")
-        var alertNotificationSwoCurrent: String = Utility.readPref(this, "ALERT_NOTIFICATION_SWO$locNum", "false")
-        var alertNotificationSpcfwCurrent: String = Utility.readPref(this, "ALERT_NOTIFICATION_SPCFW$locNum", "false")
-        var alertNotificationWpcmpdCurrent: String = Utility.readPref(this, "ALERT_NOTIFICATION_WPCMPD$locNum", "false")
+        var alertNotificationCurrent: String =
+            Utility.readPref(this, "ALERT" + locNum + "_NOTIFICATION", "false")
+        var alertNotificationRadarCurrent: String =
+            Utility.readPref(this, "ALERT_NOTIFICATION_RADAR$locNum", "false")
+        var alertCcNotificationCurrent: String =
+            Utility.readPref(this, "ALERT_CC" + locNum + "_NOTIFICATION", "false")
+        var alert7Day1NotificationCurrent: String =
+            Utility.readPref(this, "ALERT_7DAY_" + locNum + "_NOTIFICATION", "false")
+        var alertNotificationSoundCurrent: String =
+            Utility.readPref(this, "ALERT_NOTIFICATION_SOUND$locNum", "false")
+        var alertNotificationMcdCurrent: String =
+            Utility.readPref(this, "ALERT_NOTIFICATION_MCD$locNum", "false")
+        var alertNotificationSwoCurrent: String =
+            Utility.readPref(this, "ALERT_NOTIFICATION_SWO$locNum", "false")
+        var alertNotificationSpcfwCurrent: String =
+            Utility.readPref(this, "ALERT_NOTIFICATION_SPCFW$locNum", "false")
+        var alertNotificationWpcmpdCurrent: String =
+            Utility.readPref(this, "ALERT_NOTIFICATION_WPCMPD$locNum", "false")
         locLabelCurrent = Utility.readPref(this, "LOC" + locNum + "_LABEL", "")
         val locNumIntCurrent = Location.numLocations
         if (locNumInt == locNumIntCurrent + 1) {
@@ -165,23 +180,77 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
             locYEt.setHintTextColor(Color.GRAY)
         }
 
-        alertSw = ObjectSettingsCheckBox(this, this, "Alert", "ALERT" + locNum + "_NOTIFICATION", R.string.alert_switch_text)
+        alertSw = ObjectSettingsCheckBox(
+            this,
+            this,
+            "Alert",
+            "ALERT" + locNum + "_NOTIFICATION",
+            R.string.alert_switch_text
+        )
         alertSw.isChecked(alertNotificationCurrent == "true")
-        alertCcSw = ObjectSettingsCheckBox(this, this, "Conditions", "ALERT_CC" + locNum + "_NOTIFICATION", R.string.alert_cc_switch_text)
+        alertCcSw = ObjectSettingsCheckBox(
+            this,
+            this,
+            "Conditions",
+            "ALERT_CC" + locNum + "_NOTIFICATION",
+            R.string.alert_cc_switch_text
+        )
         alertCcSw.isChecked(alertCcNotificationCurrent == "true")
-        alert7Day1Sw = ObjectSettingsCheckBox(this, this, "7day", "ALERT_7DAY_" + locNum + "_NOTIFICATION", R.string.alert_7day_1_switch_text)
+        alert7Day1Sw = ObjectSettingsCheckBox(
+            this,
+            this,
+            "7day",
+            "ALERT_7DAY_" + locNum + "_NOTIFICATION",
+            R.string.alert_7day_1_switch_text
+        )
         alert7Day1Sw.isChecked(alert7Day1NotificationCurrent == "true")
-        alertSoundSw = ObjectSettingsCheckBox(this, this, "Sound", "ALERT_NOTIFICATION_SOUND$locNum", R.string.alert_sound_switch_text)
+        alertSoundSw = ObjectSettingsCheckBox(
+            this,
+            this,
+            "Sound",
+            "ALERT_NOTIFICATION_SOUND$locNum",
+            R.string.alert_sound_switch_text
+        )
         alertSoundSw.isChecked(alertNotificationSoundCurrent == "true")
-        alertRadar1Sw = ObjectSettingsCheckBox(this, this, "Radar", "ALERT_NOTIFICATION_RADAR$locNum", R.string.alert_radar1_switch_text)
+        alertRadar1Sw = ObjectSettingsCheckBox(
+            this,
+            this,
+            "Radar",
+            "ALERT_NOTIFICATION_RADAR$locNum",
+            R.string.alert_radar1_switch_text
+        )
         alertRadar1Sw.isChecked(alertNotificationRadarCurrent == "true")
-        alertMcdSw = ObjectSettingsCheckBox(this, this, "SPC MCD", "ALERT_NOTIFICATION_MCD$locNum", R.string.alert_mcd_switch_text)
+        alertMcdSw = ObjectSettingsCheckBox(
+            this,
+            this,
+            "SPC MCD",
+            "ALERT_NOTIFICATION_MCD$locNum",
+            R.string.alert_mcd_switch_text
+        )
         alertMcdSw.isChecked(alertNotificationMcdCurrent == "true")
-        alertSwoSw = ObjectSettingsCheckBox(this, this, "SPC SWO", "ALERT_NOTIFICATION_SWO$locNum", R.string.alert_swo_switch_text)
+        alertSwoSw = ObjectSettingsCheckBox(
+            this,
+            this,
+            "SPC SWO",
+            "ALERT_NOTIFICATION_SWO$locNum",
+            R.string.alert_swo_switch_text
+        )
         alertSwoSw.isChecked(alertNotificationSwoCurrent == "true")
-        alertSpcfwSw = ObjectSettingsCheckBox(this, this, "SPC FW", "ALERT_NOTIFICATION_SPCFW$locNum", R.string.alert_spcfw_switch_text)
+        alertSpcfwSw = ObjectSettingsCheckBox(
+            this,
+            this,
+            "SPC FW",
+            "ALERT_NOTIFICATION_SPCFW$locNum",
+            R.string.alert_spcfw_switch_text
+        )
         alertSpcfwSw.isChecked(alertNotificationSpcfwCurrent == "true")
-        alertWpcmpdSw = ObjectSettingsCheckBox(this, this, "WPC MPD", "ALERT_NOTIFICATION_WPCMPD$locNum", R.string.alert_wpcmpd_switch_text)
+        alertWpcmpdSw = ObjectSettingsCheckBox(
+            this,
+            this,
+            "WPC MPD",
+            "ALERT_NOTIFICATION_WPCMPD$locNum",
+            R.string.alert_wpcmpd_switch_text
+        )
         alertWpcmpdSw.isChecked(alertNotificationWpcmpdCurrent == "true")
 
         linearLayout.addView(alertSw.card)
@@ -226,15 +295,24 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     }
 
     private fun afterDelete() {
-        val alertNotificationCurrent = Utility.readPref(this, "ALERT" + locNum + "_NOTIFICATION", "false")
-        val alertNotificationRadarCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_RADAR$locNum", "false")
-        val alertCcNotificationCurrent = Utility.readPref(this, "ALERT_CC" + locNum + "_NOTIFICATION", "false")
-        val alert7Day1NotificationCurrent = Utility.readPref(this, "ALERT_7DAY_" + locNum + "_NOTIFICATION", "false")
-        val alertNotificationSoundCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_SOUND$locNum", "false")
-        val alertNotificationMcdCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_MCD$locNum", "false")
-        val alertNotificationSwoCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_SWO$locNum", "false")
-        val alertNotificationSpcfwCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_SPCFW$locNum", "false")
-        val alertNotificationWpcmpdCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_WPCMPD$locNum", "false")
+        val alertNotificationCurrent =
+            Utility.readPref(this, "ALERT" + locNum + "_NOTIFICATION", "false")
+        val alertNotificationRadarCurrent =
+            Utility.readPref(this, "ALERT_NOTIFICATION_RADAR$locNum", "false")
+        val alertCcNotificationCurrent =
+            Utility.readPref(this, "ALERT_CC" + locNum + "_NOTIFICATION", "false")
+        val alert7Day1NotificationCurrent =
+            Utility.readPref(this, "ALERT_7DAY_" + locNum + "_NOTIFICATION", "false")
+        val alertNotificationSoundCurrent =
+            Utility.readPref(this, "ALERT_NOTIFICATION_SOUND$locNum", "false")
+        val alertNotificationMcdCurrent =
+            Utility.readPref(this, "ALERT_NOTIFICATION_MCD$locNum", "false")
+        val alertNotificationSwoCurrent =
+            Utility.readPref(this, "ALERT_NOTIFICATION_SWO$locNum", "false")
+        val alertNotificationSpcfwCurrent =
+            Utility.readPref(this, "ALERT_NOTIFICATION_SPCFW$locNum", "false")
+        val alertNotificationWpcmpdCurrent =
+            Utility.readPref(this, "ALERT_NOTIFICATION_WPCMPD$locNum", "false")
         alertRadar1Sw.card.visibility = View.VISIBLE
         alertSoundSw.card.visibility = View.VISIBLE
         alert7Day1Sw.card.visibility = View.VISIBLE
@@ -257,7 +335,13 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     }
 
     // FIXME rename args
-    private fun saveLoc(params0: String, params1: String, params2: String, params3: String, params4: String) = GlobalScope.launch(uiDispatcher) {
+    private fun saveLoc(
+        params0: String,
+        params1: String,
+        params2: String,
+        params3: String,
+        params4: String
+    ) = GlobalScope.launch(uiDispatcher) {
 
         var toastStr = ""
         var xLoc = ""
@@ -280,7 +364,8 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
 
     private fun addressSearch(type: String, address: String) = GlobalScope.launch(uiDispatcher) {
         var xyStr = listOf<String>()
-        if (type == "osm") xyStr = withContext(Dispatchers.IO) { UtilityLocation.getXYFromAddressOSM(address) }
+        if (type == "osm") xyStr =
+                withContext(Dispatchers.IO) { UtilityLocation.getXYFromAddressOSM(address) }
         locXEt.setText(xyStr[0])
         locYEt.setText(xyStr[1])
     }
@@ -366,7 +451,8 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         // thanks David_E http://stackoverflow.com/questions/27156680/change-textcolor-in-searchview-using-android-toolbar
         if (UIPreferences.themeIsWhite) changeSearchViewTextColor(searchView)
         // the SearchView's AutoCompleteTextView drop down. For some reason this wasn't working in styles.xml
-        val autoCompleteTextView: SearchView.SearchAutoComplete = searchView.findViewById(R.id.search_src_text)
+        val autoCompleteTextView: SearchView.SearchAutoComplete =
+            searchView.findViewById(R.id.search_src_text)
         if (UIPreferences.themeIsWhite)
             autoCompleteTextView.setDropDownBackgroundResource(R.drawable.dr_white)
         else
@@ -403,10 +489,20 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                 val yStr = locYEt.text.toString()
                 if (xStr.isNotEmpty() && yStr.isNotEmpty()) {
                     if (Location.us(xStr)) {
-                        ObjectIntent(this, WebscreenAB::class.java, WebscreenAB.URL, arrayOf(UtilityMap.genMapURL(xStr, yStr, "9"), "wX"))
+                        ObjectIntent(
+                            this,
+                            WebscreenAB::class.java,
+                            WebscreenAB.URL,
+                            arrayOf(UtilityMap.genMapURL(xStr, yStr, "9"), "wX")
+                        )
                     } else {
                         val addressForMap = locLabelEt.text.toString()
-                        ObjectIntent(this, WebscreenAB::class.java, WebscreenAB.URL, arrayOf(UtilityMap.genMapURLFromStreetAddress(addressForMap), "wX"))
+                        ObjectIntent(
+                            this,
+                            WebscreenAB::class.java,
+                            WebscreenAB.URL,
+                            arrayOf(UtilityMap.genMapURLFromStreetAddress(addressForMap), "wX")
+                        )
                     }
                 }
             }
@@ -430,7 +526,11 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                 try {
                     startActivityForResult(i, requestOk)
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Error initializing speech to text engine.", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "Error initializing speech to text engine.",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
             R.id.action_help -> showHelpText(resources.getString(R.string.activity_settings_generic_help))
@@ -447,15 +547,27 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
                     locXEt.setText(xy[0].toString())
                     locYEt.setText(xy[1].toString())
                 } else {
-                    if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(
+                            this,
+                            android.Manifest.permission.ACCESS_FINE_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
                         val xy = UtilityLocation.getGPS(this)
                         locXEt.setText(xy[0].toString())
                         locYEt.setText(xy[1].toString())
                     } else {
                         // The ACCESS_FINE_LOCATION is denied, then I request it and manage the result in
                         // onRequestPermissionsResult() using the constant myPermissionAccessFineLocation
-                        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), myPermissionAccessFineLocation)
+                        if (ContextCompat.checkSelfPermission(
+                                this,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            ActivityCompat.requestPermissions(
+                                this,
+                                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                                myPermissionAccessFineLocation
+                            )
                         }
                     }
                 }
@@ -467,7 +579,11 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
 
     private val myPermissionAccessFineLocation = 5001
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         when (requestCode) {
             myPermissionAccessFineLocation -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 val xy = UtilityLocation.getGPS(this)
@@ -490,7 +606,12 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     }
 
     // FIXME rename args
-    private fun addressSearchAndSave(type: String, params1: String, params2: String, params3: String) = GlobalScope.launch(uiDispatcher) {
+    private fun addressSearchAndSave(
+        type: String,
+        params1: String,
+        params2: String,
+        params3: String
+    ) = GlobalScope.launch(uiDispatcher) {
 
         var xyStr = listOf<String>()
         var toastStr = ""
@@ -517,30 +638,31 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     }
 
     // FIXME rename args
-    private fun gpsAndSave(params0: String, params1: String, params2: String) = GlobalScope.launch(uiDispatcher) {
+    private fun gpsAndSave(params0: String, params1: String, params2: String) =
+        GlobalScope.launch(uiDispatcher) {
 
-        var toastStr = ""
-        var goodLocation = false
-        val xy = UtilityLocation.getGPS(contextg)
-        locXEt.setText(xy[0].toString())
-        locYEt.setText(xy[1].toString())
+            var toastStr = ""
+            var goodLocation = false
+            val xy = UtilityLocation.getGPS(contextg)
+            locXEt.setText(xy[0].toString())
+            locYEt.setText(xy[1].toString())
 
-        withContext(Dispatchers.IO) {
-            val xyStr = listOf(xy[0].toString(), xy[1].toString())
-            if (xyStr.size > 1) {
-                toastStr = Location.locationSave(contextg, params1, xyStr[0], xyStr[1], params2)
-                goodLocation = true
+            withContext(Dispatchers.IO) {
+                val xyStr = listOf(xy[0].toString(), xy[1].toString())
+                if (xyStr.size > 1) {
+                    toastStr = Location.locationSave(contextg, params1, xyStr[0], xyStr[1], params2)
+                    goodLocation = true
+                }
             }
-        }
 
-        if (goodLocation) {
-            showMessage(toastStr)
-            Utility.writePref(contextg, "ALERT" + locNum + "_NOTIFICATION", "true")
-            Utility.writePref(contextg, "CURRENT_LOC_FRAGMENT", locNum)
-            Location.currentLocationStr = locNum
+            if (goodLocation) {
+                showMessage(toastStr)
+                Utility.writePref(contextg, "ALERT" + locNum + "_NOTIFICATION", "true")
+                Utility.writePref(contextg, "CURRENT_LOC_FRAGMENT", locNum)
+                Location.currentLocationStr = locNum
+            }
+            finish()
         }
-        finish()
-    }
 
     private fun notifsCA(hide: Boolean) {
         if (hide) {
@@ -564,7 +686,11 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     }
 
     private fun updateSubTitle() {
-        val subStr = Utility.readPref(this, "NWS$locNum", "") + " " + Utility.readPref(this, "RID$locNum", "")
+        val subStr = Utility.readPref(this, "NWS$locNum", "") + " " + Utility.readPref(
+            this,
+            "RID$locNum",
+            ""
+        )
         if (subStr != "   " && updateTitle) toolbar.subtitle = subStr
     }
 
@@ -588,7 +714,12 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
     }
 
     private fun openCAMap(s: String) {
-        ObjectIntent(this, SettingsLocationCanadaMapActivity::class.java, SettingsLocationCanadaMapActivity.URL, arrayOf(s))
+        ObjectIntent(
+            this,
+            SettingsLocationCanadaMapActivity::class.java,
+            SettingsLocationCanadaMapActivity.URL,
+            arrayOf(s)
+        )
     }
 
     private fun showMessage(string: String) {

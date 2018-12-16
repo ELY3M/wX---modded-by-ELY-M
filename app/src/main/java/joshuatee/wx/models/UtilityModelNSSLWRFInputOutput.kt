@@ -40,7 +40,8 @@ internal object UtilityModelNSSLWRFInputOutput {
         get() {
             val runData = RunTimeData()
             val htmlRunstatus = (baseUrl).getHtml()
-            val html = htmlRunstatus.parse("\\{model: \"fv3_nssl\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",)")
+            val html =
+                htmlRunstatus.parse("\\{model: \"fv3_nssl\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",)")
             val day = html.parse("rd:.(.*?),.*?").replace("\"", "")
             val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")
             val mostRecentRun = day + time
@@ -73,11 +74,16 @@ internal object UtilityModelNSSLWRFInputOutput {
         val month = om.run.substring(4, 6)
         val day = om.run.substring(6, 8)
         val hour = om.run.substring(8, 10)
-        val url = baseUrl + "/graphics/models/" + model + modelPostfix + "/" + year + "/" + month + "/" +
-                day + "/" + hour + "00/f" + time + "00/" + om.currentParam + ".spc_" + sector.toLowerCase() + ".f" + time + "00.png"
+        val url =
+            baseUrl + "/graphics/models/" + model + modelPostfix + "/" + year + "/" + month + "/" +
+                    day + "/" + hour + "00/f" + time + "00/" + om.currentParam + ".spc_" + sector.toLowerCase() + ".f" + time + "00.png"
         val baseLayer = baseLayerUrl.getImage()
         val prodLayer = url.getImage()
-        return UtilityImg.addColorBG(context, UtilityImg.mergeImages(context, prodLayer, baseLayer), Color.WHITE)
+        return UtilityImg.addColorBG(
+            context,
+            UtilityImg.mergeImages(context, prodLayer, baseLayer),
+            Color.WHITE
+        )
     }
 
     fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {

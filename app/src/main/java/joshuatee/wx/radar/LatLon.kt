@@ -98,7 +98,10 @@ class LatLon() {
 
         fun distance(location1: LatLon, location2: LatLon, unit: DistanceUnit): Double {
             val theta = location1.lon - location2.lon
-            var dist = sin(UtilityMath.deg2rad(location1.lat)) * sin(UtilityMath.deg2rad(location2.lat)) + cos(UtilityMath.deg2rad(location1.lat)) * cos(UtilityMath.deg2rad(location2.lat)) * cos(UtilityMath.deg2rad(theta))
+            var dist =
+                sin(UtilityMath.deg2rad(location1.lat)) * sin(UtilityMath.deg2rad(location2.lat)) + cos(
+                    UtilityMath.deg2rad(location1.lat)
+                ) * cos(UtilityMath.deg2rad(location2.lat)) * cos(UtilityMath.deg2rad(theta))
             dist = acos(dist)
             dist = UtilityMath.rad2deg(dist)
             dist *= 60.0 * 1.1515

@@ -60,7 +60,13 @@ object UtilityFavorites {
         }
     }
 
-    fun setupFavMenu(context: Context, ridFav: String, nwsOffice: String, prefTokenLocation: String, prefToken: String): List<String> {
+    fun setupFavMenu(
+        context: Context,
+        ridFav: String,
+        nwsOffice: String,
+        prefTokenLocation: String,
+        prefToken: String
+    ): List<String> {
         checkAndCorrectFav(context, ridFav, prefToken)
         var ridArr = MyApplication.colon.split(ridFav)
         ridArr[0] = nwsOffice
@@ -93,7 +99,8 @@ object UtilityFavorites {
         ridArr[2] = MODIFY_STR
         val ridArrLoc = MutableList(ridArr.size) { "" }
         ridArr.indices.forEach { k ->
-            CA_RID_ARR.indices.filter { CA_RID_ARR[it].contains(ridArr[k]) }.forEach { ridArrLoc[k] = CA_RID_ARR[it].replace(":", "") }
+            CA_RID_ARR.indices.filter { CA_RID_ARR[it].contains(ridArr[k]) }
+                .forEach { ridArrLoc[k] = CA_RID_ARR[it].replace(":", "") }
             if (k == 1 || k == 2) {
                 ridArrLoc[k] = ridArr[k]
             }
@@ -122,7 +129,12 @@ object UtilityFavorites {
 
     // mirror of method above save it returns the string
 
-    fun toggleFavoriteString(context: Context, rid: String, star: MenuItem, prefToken: String): String {
+    fun toggleFavoriteString(
+        context: Context,
+        rid: String,
+        star: MenuItem,
+        prefToken: String
+    ): String {
         var ridFav: String = Utility.readPref(context, prefToken, " : : :")
         if (ridFav.contains(rid)) {
             ridFav = ridFav.replace("$rid:", "")
@@ -209,6 +221,7 @@ object UtilityFavorites {
         return ridArrLoc.toList()
     }
 
-    fun findPositionNWSTEXT(key: String): Int = NWS_TXT_ARR.indices.firstOrNull { NWS_TXT_ARR[it].contains(key) }
+    fun findPositionNWSTEXT(key: String): Int =
+        NWS_TXT_ARR.indices.firstOrNull { NWS_TXT_ARR[it].contains(key) }
             ?: 0
 }

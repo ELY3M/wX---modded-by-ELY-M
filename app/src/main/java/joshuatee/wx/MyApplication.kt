@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
 
 package joshuatee.wx
 
@@ -141,6 +142,8 @@ class MyApplication : Application() {
         const val nwsRadarWebsitePrefix: String = "https://radar.weather.gov"
         const val nwsMagNcepWebsitePrefix: String = "https://mag.ncep.noaa.gov"
         const val sunMoonDataUrl: String = "https://api.usno.navy.mil"
+        const val goes16Url: String = "https://cdn.star.nesdis.noaa.gov"
+
 
         const val prefSeperator: String = " : : :"
         var uiAnimIconFrames: String = "rid"

@@ -52,7 +52,10 @@ object UtilityAlertDialog {
             }
 
             @TargetApi(Build.VERSION_CODES.N)
-            override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
+            override fun shouldOverrideUrlLoading(
+                view: WebView,
+                request: WebResourceRequest
+            ): Boolean {
                 view.loadUrl(request.url.toString())
                 return true
             }
@@ -70,12 +73,20 @@ object UtilityAlertDialog {
             UtilityLog.HandleException(e)
         }
         val tmpStr = activity.resources.getString(R.string.about_wx) + MyApplication.newline + vers
-        ObjectDialogue(activity, tmpStr + MyApplication.newline + "Last background update: " + Utility.readPref(context, "JOBSERVICE_TIME_LAST_RAN", ""))
+        ObjectDialogue(
+            activity,
+            tmpStr + MyApplication.newline + "Last background update: " + Utility.readPref(
+                context,
+                "JOBSERVICE_TIME_LAST_RAN",
+                ""
+            )
+        )
     }
 
     fun showDialogueWithContext(str: String, context: Context) {
         val alertDialogBuilder = AlertDialog.Builder(context)
-        alertDialogBuilder.setMessage(str).setCancelable(false).setPositiveButton("OK") { dialog, _ -> dialog.cancel() }
+        alertDialogBuilder.setMessage(str).setCancelable(false)
+            .setPositiveButton("OK") { dialog, _ -> dialog.cancel() }
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
     }

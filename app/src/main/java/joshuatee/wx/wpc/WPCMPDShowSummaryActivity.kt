@@ -105,7 +105,8 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 bitmaps.add(imgUrl.getImage())
             }
             if (mpdList.size == 1) {
-                imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd" + mpdNumbers[0] + ".gif"
+                imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd" +
+                        mpdNumbers[0] + ".gif"
                 title = "MPD " + mpdNumbers[0]
                 product = "WPCMPD" + mpdNumbers[0]
                 text = UtilityDownload.getTextProduct(contextg, product)
@@ -116,7 +117,12 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
             val card = ObjectCardImage(contextg)
             card.setImage(bitmaps[mpdIndex])
             card.setOnClickListener(View.OnClickListener {
-                ObjectIntent(contextg, SPCMCDWShowActivity::class.java, SPCMCDWShowActivity.NO, arrayOf(mpdNumbers[mpdIndex], "", PolygonType.MPD.toString()))
+                ObjectIntent(
+                    contextg,
+                    SPCMCDWShowActivity::class.java,
+                    SPCMCDWShowActivity.NO,
+                    arrayOf(mpdNumbers[mpdIndex], "", PolygonType.MPD.toString())
+                )
             })
             linearLayout.addView(card.card)
             if (mpdList.size == 1) registerForContextMenu(card.img)
@@ -125,7 +131,12 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
             val wfoStr = text.parse("ATTN...WFO...(.*?)...<br>")
             wfos = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
             val card2 = ObjectCardText(contextg)
-            card2.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
+            card2.setOnClickListener(View.OnClickListener {
+                UtilityToolbar.showHide(
+                    toolbar,
+                    toolbarBottom
+                )
+            })
             card2.setText(Utility.fromHtml(text))
             linearLayout.addView(card2.card)
             setTitle(title)
@@ -142,15 +153,24 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo)
         (0 until wfos.size - 1).forEach {
-            menu.add(0, v.id, 0, "Add location: " + wfos[it] + " - " + Utility.readPref(this, "NWS_LOCATION_" + wfos[it], ""))
+            menu.add(
+                0,
+                v.id,
+                0,
+                "Add location: " + wfos[it] + " - " + Utility.readPref(
+                    this,
+                    "NWS_LOCATION_" + wfos[it],
+                    ""
+                )
+            )
         }
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         val itemStr = item.title.toString()
         (0 until wfos.size - 1)
-                .filter { itemStr.contains(wfos[it]) }
-                .forEach { saveLocation(wfos[it]) }
+            .filter { itemStr.contains(wfos[it]) }
+            .forEach { saveLocation(wfos[it]) }
         return true
     }
 

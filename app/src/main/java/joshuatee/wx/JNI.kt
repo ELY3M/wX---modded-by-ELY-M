@@ -34,20 +34,135 @@ object JNI {
         System.loadLibrary("radial")
     }
 
-    external fun level2GenRadials(radar_float_buffer: ByteBuffer, radar_color_buffer: ByteBuffer, bin_word: ByteBuffer, radial_start_ang: ByteBuffer, radials: Int, range_bins: Int, bsize: Float, bg_color: Int, colormap_r: ByteBuffer, colormap_g: ByteBuffer, colormap_b: ByteBuffer, product_code: Int): Int
-    external fun decode8BitAndGenRadials(src: String, seek_start: Long, length: Int, i_buff: ByteBuffer, o_buff: ByteBuffer, rad_buff: ByteBuffer, color_buff: ByteBuffer, bin_size: Float, bg_color_red: Byte, bg_color_green: Byte, bg_color_blue: Byte, c_r: ByteBuffer, c_g: ByteBuffer, c_b: ByteBuffer): Int
+    external fun level2GenRadials(
+        radar_float_buffer: ByteBuffer,
+        radar_color_buffer: ByteBuffer,
+        bin_word: ByteBuffer,
+        radial_start_ang: ByteBuffer,
+        radials: Int,
+        range_bins: Int,
+        bsize: Float,
+        bg_color: Int,
+        colormap_r: ByteBuffer,
+        colormap_g: ByteBuffer,
+        colormap_b: ByteBuffer,
+        product_code: Int
+    ): Int
+
+    external fun decode8BitAndGenRadials(
+        src: String,
+        seek_start: Long,
+        length: Int,
+        i_buff: ByteBuffer,
+        o_buff: ByteBuffer,
+        rad_buff: ByteBuffer,
+        color_buff: ByteBuffer,
+        bin_size: Float,
+        bg_color_red: Byte,
+        bg_color_green: Byte,
+        bg_color_blue: Byte,
+        c_r: ByteBuffer,
+        c_g: ByteBuffer,
+        c_b: ByteBuffer
+    ): Int
+
     // given a portion of a Level 2 radar file , decompress only what is needed for the lowest tilt of 153 ref or 154 vel
-    external fun level2Decompress(src: String, dst: String, a: ByteBuffer, b: ByteBuffer, prod_code: Int)
+    external fun level2Decompress(
+        src: String,
+        dst: String,
+        a: ByteBuffer,
+        b: ByteBuffer,
+        prod_code: Int
+    )
 
     // given a decompressed Level 2 radar file decode the file and return radial / level data
-    external fun level2Decode(src: String, a: ByteBuffer, b: ByteBuffer, prod_code: Int, bb_days: ByteBuffer, bb_msec: ByteBuffer)
+    external fun level2Decode(
+        src: String,
+        a: ByteBuffer,
+        b: ByteBuffer,
+        prod_code: Int,
+        bb_days: ByteBuffer,
+        bb_msec: ByteBuffer
+    )
 
     external fun genIndex(a: ByteBuffer, len: Int, bsize: Int)
     external fun genIndexLine(a: ByteBuffer, len: Int, bsize: Int)
-    external fun genMercato(a: ByteBuffer, b: ByteBuffer, center_x: Float, center_y: Float, x_image_center_pixels: Float, y_image_center_pixels: Float, one_degree_scale_factor: Float, count: Int)
-    external fun genCircle(a: ByteBuffer, b: ByteBuffer, center_x: Float, center_y: Float, x_image_center_pixels: Float, y_image_center_pixels: Float, one_degree_scale_factor: Float, x: DoubleArray, y: DoubleArray, count: Int, len: Float, triangleAmount: Int, c: ByteBuffer, color: ByteArray)
-    external fun genCircleWithColor(a: ByteBuffer, b: ByteBuffer, center_x: Float, center_y: Float, x_image_center_pixels: Float, y_image_center_pixels: Float, one_degree_scale_factor: Float, x: DoubleArray, y: DoubleArray, count: Int, len: Float, triangleAmount: Int, c: ByteBuffer, color_arr: IntArray)
-    external fun genTriangle(a: ByteBuffer, b: ByteBuffer, center_x: Float, center_y: Float, x_image_center_pixels: Float, y_image_center_pixels: Float, one_degree_scale_factor: Float, x: DoubleArray, y: DoubleArray, count: Int, len: Float, c: ByteBuffer, color: ByteArray)
-    external fun genTriangleUp(a: ByteBuffer, b: ByteBuffer, center_x: Float, center_y: Float, x_image_center_pixels: Float, y_image_center_pixels: Float, one_degree_scale_factor: Float, x: DoubleArray, y: DoubleArray, count: Int, len: Float, c: ByteBuffer, color: ByteArray)
+    external fun genMercato(
+        a: ByteBuffer,
+        b: ByteBuffer,
+        center_x: Float,
+        center_y: Float,
+        x_image_center_pixels: Float,
+        y_image_center_pixels: Float,
+        one_degree_scale_factor: Float,
+        count: Int
+    )
+
+    external fun genCircle(
+        a: ByteBuffer,
+        b: ByteBuffer,
+        center_x: Float,
+        center_y: Float,
+        x_image_center_pixels: Float,
+        y_image_center_pixels: Float,
+        one_degree_scale_factor: Float,
+        x: DoubleArray,
+        y: DoubleArray,
+        count: Int,
+        len: Float,
+        triangleAmount: Int,
+        c: ByteBuffer,
+        color: ByteArray
+    )
+
+    external fun genCircleWithColor(
+        a: ByteBuffer,
+        b: ByteBuffer,
+        center_x: Float,
+        center_y: Float,
+        x_image_center_pixels: Float,
+        y_image_center_pixels: Float,
+        one_degree_scale_factor: Float,
+        x: DoubleArray,
+        y: DoubleArray,
+        count: Int,
+        len: Float,
+        triangleAmount: Int,
+        c: ByteBuffer,
+        color_arr: IntArray
+    )
+
+    external fun genTriangle(
+        a: ByteBuffer,
+        b: ByteBuffer,
+        center_x: Float,
+        center_y: Float,
+        x_image_center_pixels: Float,
+        y_image_center_pixels: Float,
+        one_degree_scale_factor: Float,
+        x: DoubleArray,
+        y: DoubleArray,
+        count: Int,
+        len: Float,
+        c: ByteBuffer,
+        color: ByteArray
+    )
+
+    external fun genTriangleUp(
+        a: ByteBuffer,
+        b: ByteBuffer,
+        center_x: Float,
+        center_y: Float,
+        x_image_center_pixels: Float,
+        y_image_center_pixels: Float,
+        one_degree_scale_factor: Float,
+        x: DoubleArray,
+        y: DoubleArray,
+        count: Int,
+        len: Float,
+        c: ByteBuffer,
+        color: ByteArray
+    )
+
     external fun colorGen(a: ByteBuffer, len: Int, col: ByteArray)
 }

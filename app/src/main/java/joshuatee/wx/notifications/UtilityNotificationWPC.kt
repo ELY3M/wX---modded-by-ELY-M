@@ -83,7 +83,8 @@ internal object UtilityNotificationWPC {
                         // call secondary method to send notif if required
                         locXDbl = MyApplication.locations[n - 1].x.toDoubleOrNull() ?: 0.0
                         locYDbl = MyApplication.locations[n - 1].y.toDoubleOrNull() ?: 0.0
-                        val contains = polygon2.contains(ExternalPoint(locXDbl.toFloat(), locYDbl.toFloat()))
+                        val contains =
+                            polygon2.contains(ExternalPoint(locXDbl.toFloat(), locYDbl.toFloat()))
                         if (contains) {
                             notifUrls += sendMPDNotif(context, locNum, mcdNoArr[z])
                         }
@@ -110,15 +111,34 @@ internal object UtilityNotificationWPC {
         noBody = mcdPre
         noSummary = mcdPre
         val polygonType = MPD
-        val objPI = ObjectPendingIntents(context, SPCMCDWShowActivity::class.java, SPCMCDWShowActivity.NO,
-                arrayOf(mdNo, "", polygonType.toString()), arrayOf(mdNo, "sound", polygonType.toString()))
+        val objPI = ObjectPendingIntents(
+            context,
+            SPCMCDWShowActivity::class.java,
+            SPCMCDWShowActivity.NO,
+            arrayOf(mdNo, "", polygonType.toString()),
+            arrayOf(mdNo, "sound", polygonType.toString())
+        )
         val cancelStr = "wpcmpdloc$mdNo$locNum"
-        if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
+        if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
+                context,
+                cancelStr
+            ))
+        ) {
             val sound = MyApplication.locations[locNumInt].sound && !inBlackout
-            val notifObj = ObjectNotification(context, sound, noMain,
-                    noBody, objPI.resultPendingIntent,
-                    MyApplication.ICON_ALERT, noSummary, Notification.PRIORITY_DEFAULT, Color.YELLOW,
-                    MyApplication.ICON_ACTION, objPI.resultPendingIntent2, context.resources.getString(R.string.read_aloud))
+            val notifObj = ObjectNotification(
+                context,
+                sound,
+                noMain,
+                noBody,
+                objPI.resultPendingIntent,
+                MyApplication.ICON_ALERT,
+                noSummary,
+                Notification.PRIORITY_DEFAULT,
+                Color.YELLOW,
+                MyApplication.ICON_ACTION,
+                objPI.resultPendingIntent2,
+                context.resources.getString(R.string.read_aloud)
+            )
             val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
             notifObj.sendNotification(context, cancelStr, 1, noti)
             //notifier.notify(cancelStr, 1, noti)

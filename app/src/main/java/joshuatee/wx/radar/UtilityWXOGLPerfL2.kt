@@ -37,7 +37,14 @@ internal object UtilityWXOGLPerfL2 {
      */
     private const val FILE_HEADER_SIZE = 24
 
-    fun writeDecodedFile(context: Context, fn: String, radialStart: ByteBuffer, binWord: ByteBuffer, days: ByteBuffer, msecs: ByteBuffer) {
+    fun writeDecodedFile(
+        context: Context,
+        fn: String,
+        radialStart: ByteBuffer,
+        binWord: ByteBuffer,
+        days: ByteBuffer,
+        msecs: ByteBuffer
+    ) {
         radialStart.position(0)
         binWord.position(0)
         days.position(0)
@@ -60,7 +67,14 @@ internal object UtilityWXOGLPerfL2 {
         }
     }
 
-    fun readDecodedFile(context: Context, fn: String, radialStart: ByteBuffer, binWord: ByteBuffer, days: ByteBuffer, msecs: ByteBuffer) {
+    fun readDecodedFile(
+        context: Context,
+        fn: String,
+        radialStart: ByteBuffer,
+        binWord: ByteBuffer,
+        days: ByteBuffer,
+        msecs: ByteBuffer
+    ) {
         radialStart.position(0)
         binWord.position(0)
         days.position(0)
@@ -109,7 +123,12 @@ internal object UtilityWXOGLPerfL2 {
      * @throws IOException on read error
      */
     @Throws(IOException::class)
-    private fun uncompress(context: Context, inputRaf: UCARRandomAccessFile, ufilename: String, productCode: Int): UCARRandomAccessFile {
+    private fun uncompress(
+        context: Context,
+        inputRaf: UCARRandomAccessFile,
+        ufilename: String,
+        productCode: Int
+    ): UCARRandomAccessFile {
         val outputRaf = UCARRandomAccessFile(File(context.filesDir, ufilename).absolutePath, "rw")
         outputRaf.bigEndian = true
         val loopCntBreak = if (productCode == 153)
@@ -124,8 +143,10 @@ internal object UtilityWXOGLPerfL2 {
             val header = ByteArray(FILE_HEADER_SIZE)
             val bytesRead = inputRaf.read(header)
             if (bytesRead != header.size) {
-                throw IOException("Error reading NEXRAD2 header -- got " +
-                        bytesRead + " rather than" + header.size)
+                throw IOException(
+                    "Error reading NEXRAD2 header -- got " +
+                            bytesRead + " rather than" + header.size
+                )
             }
             outputRaf.write(header)
             var eof = false

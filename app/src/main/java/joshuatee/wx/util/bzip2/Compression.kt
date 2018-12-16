@@ -55,13 +55,15 @@ private constructor(private val name: String) {
         fun getCompression(magic: ByteArray): Compression {
             return if (magic.size < MAGIC_SIZE) {
                 throw IllegalArgumentException(
-                        "Magic buffer must be at least MAGIC_SIZE=" + MAGIC_SIZE +
-                                " bytes")
+                    "Magic buffer must be at least MAGIC_SIZE=" + MAGIC_SIZE +
+                            " bytes"
+                )
             } else if (magic[0] == 0x1f.toByte() && magic[1] == 0x8b.toByte()) {
                 GZIP
             } else if (magic[0] == 'B'.toByte() &&
-                    magic[1] == 'Z'.toByte() &&
-                    magic[2] == 'h'.toByte()) {
+                magic[1] == 'Z'.toByte() &&
+                magic[2] == 'h'.toByte()
+            ) {
                 BZIP2
             } else if (magic[0] == 0x1f.toByte() && magic[1] == 0x9d.toByte()) {
                 COMPRESS
@@ -138,7 +140,8 @@ private constructor(private val name: String) {
                 /* Eat the first two bytes. */
                 if (raw.read().toChar() != 'B' || raw.read().toChar() != 'Z') {
                     throw IllegalArgumentException(
-                            "Wrong magic number for bzip2 encoding")
+                        "Wrong magic number for bzip2 encoding"
+                    )
                 }
                 return CBZip2InputStream(raw)
             }

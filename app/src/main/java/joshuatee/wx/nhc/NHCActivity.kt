@@ -49,7 +49,11 @@ class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.nhc)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout_bottom_toolbar,
+            R.menu.nhc
+        )
         toolbarBottom.setOnMenuItemClickListener(this)
         linearLayout = findViewById(R.id.ll)
         objNHC = ObjectNHC(this, linearLayout)
@@ -64,11 +68,21 @@ class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun showTextProduct(prod: String) {
-        ObjectIntent(this, WPCTextProductsActivity::class.java, WPCTextProductsActivity.URL, arrayOf(prod.toLowerCase(Locale.US), ""))
+        ObjectIntent(
+            this,
+            WPCTextProductsActivity::class.java,
+            WPCTextProductsActivity.URL,
+            arrayOf(prod.toLowerCase(Locale.US), "")
+        )
     }
 
     private fun showImageProduct(imageUrl: String, title: String, needWhiteBG: String) {
-        ObjectIntent(this, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf(imageUrl, title, needWhiteBG))
+        ObjectIntent(
+            this,
+            ImageShowActivity::class.java,
+            ImageShowActivity.URL,
+            arrayOf(imageUrl, title, needWhiteBG)
+        )
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -83,13 +97,42 @@ class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.id.action_atl_tws -> showTextProduct("MIATWSAT")
             R.id.action_epac_tws -> showTextProduct("MIATWSEP")
             R.id.action_share -> UtilityShare.shareText(this, "", Utility.fromHtml(objNHC.html))
-            R.id.action_epac_daily -> showImageProduct("http://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/PAC/20.jpg", "EPAC Daily Analysis", "false")
-            R.id.action_atl_daily -> showImageProduct("http://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/ATL/20.jpg", "ATL Daily Analysis", "false")
-            R.id.action_epac_7daily -> showImageProduct("${MyApplication.nwsNhcWebsitePrefix}/tafb/pac_anal.gif", "EPAC 7-Day Analysis", "true")
-            R.id.action_atl_7daily -> showImageProduct("${MyApplication.nwsNhcWebsitePrefix}/tafb/atl_anal.gif", "ATL 7-Day Analysis", "true")
-            R.id.action_epac_sst_anomaly -> showImageProduct("${MyApplication.nwsNhcWebsitePrefix}/tafb/pac_anom.gif", "EPAC SST Anomaly", "true")
-            R.id.action_atl_sst_anomaly -> showImageProduct("${MyApplication.nwsNhcWebsitePrefix}/tafb/atl_anom.gif", "ATL SST Anomaly", "true")
-            R.id.action_glcfs -> ObjectIntent(this, ModelsGenericActivity::class.java, ModelsGenericActivity.INFO, arrayOf("1", "GLCFS", "GLCFS"))
+            R.id.action_epac_daily -> showImageProduct(
+                "http://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/PAC/20.jpg",
+                "EPAC Daily Analysis",
+                "false"
+            )
+            R.id.action_atl_daily -> showImageProduct(
+                "http://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/ATL/20.jpg",
+                "ATL Daily Analysis",
+                "false"
+            )
+            R.id.action_epac_7daily -> showImageProduct(
+                "${MyApplication.nwsNhcWebsitePrefix}/tafb/pac_anal.gif",
+                "EPAC 7-Day Analysis",
+                "true"
+            )
+            R.id.action_atl_7daily -> showImageProduct(
+                "${MyApplication.nwsNhcWebsitePrefix}/tafb/atl_anal.gif",
+                "ATL 7-Day Analysis",
+                "true"
+            )
+            R.id.action_epac_sst_anomaly -> showImageProduct(
+                "${MyApplication.nwsNhcWebsitePrefix}/tafb/pac_anom.gif",
+                "EPAC SST Anomaly",
+                "true"
+            )
+            R.id.action_atl_sst_anomaly -> showImageProduct(
+                "${MyApplication.nwsNhcWebsitePrefix}/tafb/atl_anom.gif",
+                "ATL SST Anomaly",
+                "true"
+            )
+            R.id.action_glcfs -> ObjectIntent(
+                this,
+                ModelsGenericActivity::class.java,
+                ModelsGenericActivity.INFO,
+                arrayOf("1", "GLCFS", "GLCFS")
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true

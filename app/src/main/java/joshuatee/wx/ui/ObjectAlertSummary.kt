@@ -41,7 +41,12 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 
-class ObjectAlertSummary(private val activity: Activity, private val context: Context, private val dynamicview: LinearLayout, private val sv: ScrollView) {
+class ObjectAlertSummary(
+    private val activity: Activity,
+    private val context: Context,
+    private val dynamicview: LinearLayout,
+    private val sv: ScrollView
+) {
 
     private var totalAlertsCnt = 0
     var navList: List<String> = listOf()
@@ -96,7 +101,16 @@ class ObjectAlertSummary(private val activity: Activity, private val context: Co
             // FIXME legacy matcher
             while (m.find()) {
                 // url, title, event, area, zones, vtec
-                ca.add(CAPAlert(m.group(1), m.group(2), m.group(4), m.group(5).replace("&apos;", "'"), m.group(6), m.group(7)))
+                ca.add(
+                    CAPAlert(
+                        m.group(1),
+                        m.group(2),
+                        m.group(4),
+                        m.group(5).replace("&apos;", "'"),
+                        m.group(6),
+                        m.group(7)
+                    )
+                )
             }
             //for (cc in ca) {
             ca.forEach { cc ->
@@ -105,7 +119,8 @@ class ObjectAlertSummary(private val activity: Activity, private val context: Co
                 zoneArr = cc.zones.split(" ")
                 if (zoneArr.isNotEmpty()) firstZone = zoneArr[0]
                 totalAlertsCnt += 1
-                val tmpStateList = zoneArr.asSequence().filter { it.length > 1 }.mapTo(mutableListOf()) { it.substring(0, 2) }
+                val tmpStateList = zoneArr.asSequence().filter { it.length > 1 }
+                    .mapTo(mutableListOf()) { it.substring(0, 2) }
                 val uniqueStates = HashSet(tmpStateList)
                 uniqueStates.forEach {
                     val freq3 = mapState[it]
@@ -126,7 +141,8 @@ class ObjectAlertSummary(private val activity: Activity, private val context: Co
                         nwsOffice = ""
                         nwsLoc = ""
                     }
-                    val tmp2StateList = zoneArr.asSequence().filter { it.length > 1 }.mapTo(mutableListOf()) { it.substring(0, 2) }
+                    val tmp2StateList = zoneArr.asSequence().filter { it.length > 1 }
+                        .mapTo(mutableListOf()) { it.substring(0, 2) }
                     val unique2States = HashSet(tmp2StateList)
                     unique2States.forEach { s ->
                         val freq = map[s]
@@ -140,13 +156,21 @@ class ObjectAlertSummary(private val activity: Activity, private val context: Co
                     mapButtonCounty[i] = firstCounty
                     mapButtonZone[i] = firstZone
                     tmpStr = cc.title.replace("issued", MyApplication.newline + "Issued")
-                    buttonTxt = nwsOffice + ": " + nwsLoc + MyApplication.newline + tmpStr + MyApplication.newline + cc.area
+                    buttonTxt = nwsOffice + ": " + nwsLoc + MyApplication.newline + tmpStr +
+                            MyApplication.newline + cc.area
                     cText.setText(buttonTxt)
                     if (cc.title.matches(".*?Tornado.*?".toRegex())) {
                         cText.setTextColor(MyApplication.radarColorTor)
                     } // FIXME use ENUM
                     val urlStr = cc.url
-                    cText.setOnClickListener(View.OnClickListener { ObjectIntent(context, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(urlStr, "")) })
+                    cText.setOnClickListener(View.OnClickListener {
+                        ObjectIntent(
+                            context,
+                            USAlertsDetailActivity::class.java,
+                            USAlertsDetailActivity.URL,
+                            arrayOf(urlStr, "")
+                        )
+                    })
                     dynamicview.addView(cText.card)
                     i += 1
                 }
@@ -161,7 +185,12 @@ class ObjectAlertSummary(private val activity: Activity, private val context: Co
         filter = filter.replace("[|*?.]".toRegex(), " ")
         //filter = filter.replace("\\||\\*|\\?|\\.".toRegex(), " ")
         if (mapOut.isNotEmpty())
-            cardText.setText("Filter: " + filter.replace("\\^".toRegex(), "") + " (" + i + ")" + MyApplication.newline + mapOut)
+            cardText.setText(
+                "Filter: " + filter.replace(
+                    "\\^".toRegex(),
+                    ""
+                ) + " (" + i + ")" + MyApplication.newline + mapOut
+            )
         else
             cardText.setText("Filter: " + filter.replace("\\^".toRegex(), "") + " (" + i + ")")
         if (firstRun) {
@@ -176,5 +205,6 @@ class ObjectAlertSummary(private val activity: Activity, private val context: Co
         }
     }
 
-    fun getTitle(title: String): String = "(" + totalAlertsCnt + ") " + title.toUpperCase(Locale.US) + " Alerts"
+    fun getTitle(title: String): String =
+        "(" + totalAlertsCnt + ") " + title.toUpperCase(Locale.US) + " Alerts"
 }

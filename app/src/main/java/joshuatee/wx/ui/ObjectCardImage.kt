@@ -35,7 +35,10 @@ open class ObjectCardImage {
     private val context: Context
     var img: TouchImageView2
         internal set
-    internal val lparams = TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT)
+    internal val lparams = TableLayout.LayoutParams(
+        TableLayout.LayoutParams.WRAP_CONTENT,
+        TableLayout.LayoutParams.WRAP_CONTENT
+    )
 
     constructor(context: Context, bitmap: Bitmap) {
         this.context = context

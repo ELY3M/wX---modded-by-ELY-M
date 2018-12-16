@@ -41,10 +41,40 @@ class ObjectWidgetGeneric(context: Context, val type: WidgetFile) {
         UtilityWidget.setImage(context, remoteViews, type.fileName)
         if (!MyApplication.widgetPreventTap) {
             when (type) {
-                WPCIMG -> UtilityWidget.setupIntent(context, remoteViews, WPCImagesActivity::class.java, R.id.iv, type.action)
-                SPCMESO -> UtilityWidget.setupIntent(context, remoteViews, SPCMesoActivity::class.java, R.id.iv, SPCMesoActivity.INFO, arrayOf("SPCMESO1", "1", "SPCMESO"), type.action)
-                CONUSWV -> UtilityWidget.setupIntent(context, remoteViews, GOES16Activity::class.java, R.id.iv, GOES16Activity.RID, arrayOf("CONUS", "09"), type.action)
-                STRPT -> UtilityWidget.setupIntent(context, remoteViews, SPCStormReportsActivity::class.java, R.id.iv, SPCStormReportsActivity.NO, arrayOf("today"), type.action)
+                WPCIMG -> UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    WPCImagesActivity::class.java,
+                    R.id.iv,
+                    type.action
+                )
+                SPCMESO -> UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    SPCMesoActivity::class.java,
+                    R.id.iv,
+                    SPCMesoActivity.INFO,
+                    arrayOf("SPCMESO1", "1", "SPCMESO"),
+                    type.action
+                )
+                CONUSWV -> UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    GOES16Activity::class.java,
+                    R.id.iv,
+                    GOES16Activity.RID,
+                    arrayOf("CONUS", "09"),
+                    type.action
+                )
+                STRPT -> UtilityWidget.setupIntent(
+                    context,
+                    remoteViews,
+                    SPCStormReportsActivity::class.java,
+                    R.id.iv,
+                    SPCStormReportsActivity.NO,
+                    arrayOf("today"),
+                    type.action
+                )
                 else -> {
                 }
             }

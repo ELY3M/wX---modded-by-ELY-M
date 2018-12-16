@@ -48,12 +48,22 @@ class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7
         llTmpV.orientation = LinearLayout.VERTICAL
         tv1 = AppCompatTextView(context)
         // L  T R B
-        tv1.setPadding(MyApplication.padding, MyApplication.paddingSmall, MyApplication.paddingSmall, 0)
+        tv1.setPadding(
+            MyApplication.padding,
+            MyApplication.paddingSmall,
+            MyApplication.paddingSmall,
+            0
+        )
         tv1.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
         // FIXME
         //TextViewCompat.setAutoSizeTextTypeWithDefaults(tv1, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
         tv2 = AppCompatTextView(context)
-        tv2.setPadding(MyApplication.padding, 0, MyApplication.paddingSmall, MyApplication.paddingSmall)
+        tv2.setPadding(
+            MyApplication.padding,
+            0,
+            MyApplication.paddingSmall,
+            MyApplication.paddingSmall
+        )
         tv2.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
         tv2.setTextAppearance(context, UIPreferences.smallTextTheme)
         iv = ImageView(context)
@@ -69,16 +79,22 @@ class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7
         }
         if (dayTmpArr.size > 1) {
             if (isUS) {
-                setTv1(dayTmpArr[0].replace(":", " ") + " (" + UtilityLocationFragment.extractTemp(dayTmpArr[1])
-                        + MyApplication.DEGREE_SYMBOL
-                        + UtilityLocationFragment.extractWindDirection(dayTmpArr[1].substring(1))
-                        + UtilityLocationFragment.extract7DayMetrics(dayTmpArr[1].substring(1)) + ")")
+                setTv1(
+                    dayTmpArr[0].replace(":", " ") + " (" + UtilityLocationFragment.extractTemp(
+                        dayTmpArr[1]
+                    )
+                            + MyApplication.DEGREE_SYMBOL
+                            + UtilityLocationFragment.extractWindDirection(dayTmpArr[1].substring(1))
+                            + UtilityLocationFragment.extract7DayMetrics(dayTmpArr[1].substring(1)) + ")"
+                )
             } else {
-                setTv1(dayTmpArr[0].replace(":", " ") + " ("
-                        + UtilityLocationFragment.extractCATemp(dayTmpArr[1])
-                        + MyApplication.DEGREE_SYMBOL
-                        + UtilityLocationFragment.extractCAWindDir(dayTmpArr[1])
-                        + UtilityLocationFragment.extractCAWindSpeed(dayTmpArr[1]) + ")")
+                setTv1(
+                    dayTmpArr[0].replace(":", " ") + " ("
+                            + UtilityLocationFragment.extractCATemp(dayTmpArr[1])
+                            + MyApplication.DEGREE_SYMBOL
+                            + UtilityLocationFragment.extractCAWindDir(dayTmpArr[1])
+                            + UtilityLocationFragment.extractCAWindSpeed(dayTmpArr[1]) + ")"
+                )
             }
             if (isUS) {
                 setTv2(dayTmpArr[1])
@@ -99,7 +115,12 @@ class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7
 
     private fun setImage(bitmap: Bitmap) {
         iv.setImageBitmap(bitmap)
-        iv.setPadding(MyApplication.paddingSmall, MyApplication.paddingSmall, MyApplication.paddingSmall, MyApplication.paddingSmall)
+        iv.setPadding(
+            MyApplication.paddingSmall,
+            MyApplication.paddingSmall,
+            MyApplication.paddingSmall,
+            MyApplication.paddingSmall
+        )
         val p = iv.layoutParams
         val bmCcSize = UtilityLocationFragment.setNWSIconSize()
         p.width = bmCcSize

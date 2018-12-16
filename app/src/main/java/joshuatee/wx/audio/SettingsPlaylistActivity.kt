@@ -69,7 +69,12 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_playlist, R.menu.settings_playlist, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_recyclerview_playlist,
+            R.menu.settings_playlist,
+            true
+        )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         val fab = ObjectFab(this, this, R.id.fab)
@@ -88,7 +93,8 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", WFO_ARR)
         diaAfd.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             val strName = diaAfd.getItem(which)
-            ridFav = ridFav + ":" + "AFD" + strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase()
+            ridFav = ridFav + ":" + "AFD" +
+                    strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase()
             Utility.writePref(this, prefToken, ridFav)
             MyApplication.playlistStr = ridFav
             ridArr.add(getLongString("AFD" + strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase()))
@@ -97,7 +103,8 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         diaMain = ObjectDialogue(this, "Select text products:", NWS_TXT_ARR)
         diaMain.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             val strName = diaMain.getItem(which)
-            ridFav = ridFav + ":" + strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase()
+            ridFav = ridFav + ":" +
+                    strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase()
             Utility.writePref(this, prefToken, ridFav)
             ridArr.add(getLongString(strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase()))
             ca.notifyDataSetChanged()
@@ -135,10 +142,19 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_downloadall -> ObjectIntent(this, DownloadPlaylistService::class.java, DownloadPlaylistService.URL, "false", true)
+            R.id.action_downloadall -> ObjectIntent(
+                this,
+                DownloadPlaylistService::class.java,
+                DownloadPlaylistService.URL,
+                "false",
+                true
+            )
             R.id.action_delete -> toggleMode(ActionMode.DELETE)
             R.id.action_text -> toggleMode(ActionMode.TEXT)
-            R.id.action_autodownload -> ObjectIntent(this, SettingsPlaylistAutodownloadActivity::class.java)
+            R.id.action_autodownload -> ObjectIntent(
+                this,
+                SettingsPlaylistAutodownloadActivity::class.java
+            )
             R.id.action_add -> diaMain.show()
             R.id.action_afd -> diaAfd.show()
             else -> return super.onOptionsItemSelected(item)
@@ -160,7 +176,8 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     override fun onResume() {
-        LocalBroadcastManager.getInstance(this).registerReceiver(onBroadcast, IntentFilter("playlistdownloaded"))
+        LocalBroadcastManager.getInstance(this)
+            .registerReceiver(onBroadcast, IntentFilter("playlistdownloaded"))
         super.onResume()
     }
 
@@ -169,7 +186,11 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         super.onPause()
     }
 
-    private fun getLongString(code: String) = code + ";" + Utility.readPref(contextg, "PLAYLIST_" + code + "_TIME", "unknown") + "  (size: " + Utility.readPref(contextg, "PLAYLIST_$code", "").length + ")"
+    private fun getLongString(code: String) = "$code;" + Utility.readPref(
+        contextg,
+        "PLAYLIST_" + code + "_TIME",
+        "unknown"
+    ) + "  (size: " + Utility.readPref(contextg, "PLAYLIST_$code", "").length + ")"
 
     private val isStoragePermissionGranted: Boolean
         get() {
@@ -177,7 +198,11 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
                 if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     true
                 } else {
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        1
+                    )
                     false
                 }
             } else {
@@ -185,7 +210,11 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             }
         }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         when (requestCode) {
             1 -> {
                 // If request is cancelled, the result arrays are empty.
@@ -236,9 +265,13 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         when (actionMode) {
             ActionMode.DELETE -> {
                 ridFav = Utility.readPref(this, prefToken, "")
-                ridFav = ridFav.replace(":" + MyApplication.semicolon.split(ridArr[position])[0], "")
+                ridFav =
+                        ridFav.replace(":" + MyApplication.semicolon.split(ridArr[position])[0], "")
                 Utility.writePref(this, prefToken, ridFav)
-                Utility.removePref(this, "PLAYLIST_" + MyApplication.semicolon.split(ridArr[position])[0])
+                Utility.removePref(
+                    this,
+                    "PLAYLIST_" + MyApplication.semicolon.split(ridArr[position])[0]
+                )
                 ca.deleteItem(position)
                 MyApplication.playlistStr = ridFav
             }
@@ -250,7 +283,18 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
                 MyApplication.playlistStr = UtilityUI.moveDown(this, prefToken, ridArr, position)
                 ca.notifyDataSetChanged()
             }
-            ActionMode.TEXT -> ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(Utility.readPref(contextg, "PLAYLIST_" + MyApplication.semicolon.split(ridArr[position])[0], ""), ridArr[position]))
+            ActionMode.TEXT -> ObjectIntent(
+                contextg,
+                TextScreenActivity::class.java,
+                TextScreenActivity.URL,
+                arrayOf(
+                    Utility.readPref(
+                        contextg,
+                        "PLAYLIST_" + MyApplication.semicolon.split(ridArr[position])[0],
+                        ""
+                    ), ridArr[position]
+                )
+            )
             else -> UtilityTTS.synthesizeTextAndPlayPlaylist(contextg, position + 1)
         }
     }

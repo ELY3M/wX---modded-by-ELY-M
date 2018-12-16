@@ -112,7 +112,8 @@ internal object UtilityWidgetDownload {
         val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
         var nws1Current = Utility.readPref(context, "NWS$widgetLocNum", "").toUpperCase(Locale.US)
         if (Utility.readPref(context, "WFO_REMEMBER_LOCATION", "") == "true") {
-            nws1Current = Utility.readPref(context, "WFO_LAST_USED", nws1Current).toUpperCase(Locale.US)
+            nws1Current =
+                    Utility.readPref(context, "WFO_LAST_USED", nws1Current).toUpperCase(Locale.US)
         }
         var hwoText = UtilityDownload.getTextProduct(context, "HWO$nws1Current")
         hwoText = hwoText.replaceFirst("<BR>[A-Z][A-Z]Z.*?[0-9]{4}<BR>".toRegex(), "")
@@ -130,12 +131,21 @@ internal object UtilityWidgetDownload {
         val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
         var nws1Current = Utility.readPref(context, "NWS$widgetLocNum", "").toUpperCase(Locale.US)
         if (Utility.readPref(context, "WFO_REMEMBER_LOCATION", "") == "true") {
-            nws1Current = Utility.readPref(context, "WFO_LAST_USED", nws1Current).toUpperCase(Locale.US)
+            nws1Current =
+                    Utility.readPref(context, "WFO_LAST_USED", nws1Current).toUpperCase(Locale.US)
         }
         if (Utility.readPref(context, "WFO_TEXT_FAV", "").startsWith("VFD")) {
-            Utility.writePref(context, "AFD_WIDGET", UtilityDownload.getTextProduct(context, "VFD$nws1Current"))
+            Utility.writePref(
+                context,
+                "AFD_WIDGET",
+                UtilityDownload.getTextProduct(context, "VFD$nws1Current")
+            )
         } else {
-            Utility.writePref(context, "AFD_WIDGET", UtilityDownload.getTextProduct(context, "AFD$nws1Current"))
+            Utility.writePref(
+                context,
+                "AFD_WIDGET",
+                UtilityDownload.getTextProduct(context, "AFD$nws1Current")
+            )
         }
     }
 
@@ -153,13 +163,20 @@ internal object UtilityWidgetDownload {
             }
             val bitmap = if (Location.isUS(widgetLocNum)) {
                 if (k == "usa") {
-                    UtilityUSImgNWSMosaic.nwsMosaic(context, "latest", false)
+                    UtilityUSImgNWSMosaic.get(context, "latest", false)
                 } else {
-                    UtilityUSImgNWSMosaic.nwsMosaic(context, UtilityUSImgNWSMosaic.getNWSSectorFromState(state), false)
+                    UtilityUSImgNWSMosaic.get(
+                        context,
+                        UtilityUSImgNWSMosaic.getSectorFromState(state),
+                        false
+                    )
                 }
             } else {
                 val prov = Utility.readPref(context, "NWS" + widgetLocNum + "_STATE", "")
-                UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(context, UtilityCanada.getECSectorFromProv(prov))
+                UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(
+                    context,
+                    UtilityCanada.getECSectorFromProv(prov)
+                )
             }
             saveImage(context, bitmap, MOSAIC_RADAR.fileName)
         } catch (e: Exception) {

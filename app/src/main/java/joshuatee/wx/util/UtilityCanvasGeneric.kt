@@ -34,7 +34,15 @@ import java.nio.ByteBuffer
 
 internal object UtilityCanvasGeneric {
 
-    fun draw(context: Context, provider: ProjectionType, bitmap: Bitmap, rid: String, lineWidth: Int, type: GeographyType, genericByteBuffer: ByteBuffer) {
+    fun draw(
+        context: Context,
+        provider: ProjectionType,
+        bitmap: Bitmap,
+        rid: String,
+        lineWidth: Int,
+        type: GeographyType,
+        genericByteBuffer: ByteBuffer
+    ) {
         val mercato = provider.isMercator
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -44,7 +52,6 @@ internal object UtilityCanvasGeneric {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         }
         paint.color = type.color
-        //val genericByteBuffer = type.relativeBuffer
         val wallpath = Path()
         wallpath.reset()
         val pn = ProjectionNumbers(context, rid, provider)
@@ -52,9 +59,17 @@ internal object UtilityCanvasGeneric {
         try {
             val tmpBuffer = ByteBuffer.allocateDirect(genericByteBuffer.capacity())
             if (mercato) {
-                UtilityCanvasProjection.computeMercatorFloatToBuffer(genericByteBuffer, tmpBuffer, pn)
+                UtilityCanvasProjection.computeMercatorFloatToBuffer(
+                    genericByteBuffer,
+                    tmpBuffer,
+                    pn
+                )
             } else {
-                UtilityCanvasProjection.compute4326NumbersFloatToBuffer(genericByteBuffer, tmpBuffer, pn)
+                UtilityCanvasProjection.compute4326NumbersFloatToBuffer(
+                    genericByteBuffer,
+                    tmpBuffer,
+                    pn
+                )
             }
             tmpBuffer.position(0)
             while (tmpBuffer.position() < tmpBuffer.capacity()) {
