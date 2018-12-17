@@ -52,12 +52,9 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
     private var bitmap = UtilityImg.getBlankBitmap()
     private var firstRun = false
     private var imageLoaded = false
-    private var imgUrl = ""
     private lateinit var img: TouchImageView2
-    private var title = ""
     private lateinit var actionAnimate: MenuItem
     private var animDrawable = AnimationDrawable()
-    private var imgIdx = 0
     private lateinit var drw: ObjectNavDrawer
     private lateinit var contextg: Context
 
@@ -76,45 +73,37 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
         img.setOnClickListener(this)
         img.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeLeft() {
-                if (img.currentZoom < 1.01f) showNextImg()
+                if (img.currentZoom < 1.01f) UtilityImg.showNextImg(drw, ::getContentFixThis)
             }
 
             override fun onSwipeRight() {
-                if (img.currentZoom < 1.01f) showPrevImg()
+                if (img.currentZoom < 1.01f) UtilityImg.showPrevImg(drw, ::getContentFixThis)
             }
         })
-        title = Utility.readPref(
-            this,
-            "GOESFULLDISK_IMG_FAV_TITLE",
-            UtilityNWSGOESFullDisk.labels[0]
-        )
-        imgUrl = Utility.readPref(this, "GOESFULLDISK_IMG_FAV_URL", UtilityNWSGOESFullDisk.urls[0])
-        imgIdx = Utility.readPref(this, "GOESFULLDISK_IMG_FAV_IDX", imgIdx)
-        setTitle(title)
         val menu = toolbarBottom.menu
         actionAnimate = menu.findItem(R.id.action_animate)
         actionAnimate.isVisible = false
         drw = ObjectNavDrawer(this, UtilityNWSGOESFullDisk.labels, UtilityNWSGOESFullDisk.urls)
+        drw.index = Utility.readPref(this, "GOESFULLDISK_IMG_FAV_IDX", 0)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, true)
             drw.drawerLayout.closeDrawer(drw.listView)
             title = drw.getLabel(position)
-            imgUrl = drw.getToken(position)
-            imgIdx = position
+            drw.index = position
             getContent()
         }
         getContent()
     }
 
+    private fun getContentFixThis() {
+        getContent()
+    }
+
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        setTitle(title)
-        actionAnimate.isVisible = imgUrl.contains("jma")
-        Utility.writePref(contextg, "GOESFULLDISK_IMG_FAV_TITLE", title)
-        Utility.writePref(contextg, "GOESFULLDISK_IMG_FAV_URL", imgUrl)
-        Utility.writePref(contextg, "GOESFULLDISK_IMG_FAV_IDX", imgIdx)
-
-        bitmap = withContext(Dispatchers.IO) { imgUrl.getImage() }
-
+        title = drw.getLabel()
+        actionAnimate.isVisible = drw.getUrl().contains("jma")
+        Utility.writePref(contextg, "GOESFULLDISK_IMG_FAV_IDX", drw.index)
+        bitmap = withContext(Dispatchers.IO) { drw.getUrl().getImage() }
         img.setImageBitmap(bitmap)
         firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "GOESFULLDISKIMG")
         imageLoaded = true
@@ -144,7 +133,7 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
                             fireScreenCaptureIntent()
                     }
                 } else
-                    UtilityShare.shareText(this, title, "", bitmap)
+                    UtilityShare.shareText(this, drw.getLabel(), "", bitmap)
             }
             else -> return super.onOptionsItemSelected(item)
         }
@@ -161,7 +150,8 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
     }
 
     override fun onStop() {
-        if (imageLoaded) UtilityImg.imgSavePosnZoom(this, img, "GOESFULLDISKIMG")
+        if (imageLoaded) 
+            UtilityImg.imgSavePosnZoom(this, img, "GOESFULLDISKIMG")
         super.onStop()
     }
 
@@ -169,29 +159,9 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
         animDrawable = withContext(Dispatchers.IO) {
             UtilityNWSGOESFullDisk.getAnimation(
                 contextg,
-                imgUrl
+                drw.getUrl()
             )
         }
         UtilityImgAnim.startAnimation(animDrawable, img)
-    }
-
-    private fun showNextImg() {
-        imgIdx += 1
-        if (imgIdx == UtilityNWSGOESFullDisk.urls.size) {
-            imgIdx = 0
-        }
-        title = UtilityNWSGOESFullDisk.labels[imgIdx]
-        imgUrl = UtilityNWSGOESFullDisk.urls[imgIdx]
-        getContent()
-    }
-
-    private fun showPrevImg() {
-        imgIdx -= 1
-        if (imgIdx == -1) {
-            imgIdx = UtilityNWSGOESFullDisk.urls.size - 1
-        }
-        title = UtilityNWSGOESFullDisk.labels[imgIdx]
-        imgUrl = UtilityNWSGOESFullDisk.urls[imgIdx]
-        getContent()
     }
 }

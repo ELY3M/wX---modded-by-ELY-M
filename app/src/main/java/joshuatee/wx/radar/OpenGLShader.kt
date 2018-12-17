@@ -1,25 +1,26 @@
 //modded by ELY M. 
+
 package joshuatee.wx.radar
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Matrix
+import android.graphics.*
 import android.opengl.GLES20
 import android.opengl.GLUtils
-import android.util.Log
+import joshuatee.wx.util.UtilityLog
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
+import java.nio.FloatBuffer
+import java.nio.ShortBuffer
 import javax.microedition.khronos.opengles.GL10
-
-
 
 // thanks! http://androidblog.reindustries.com/a-real-open-gl-es-2-0-2d-tutorial-part-1/
 
 internal object OpenGLShader {
 
-    var TAG: String = "joshuatee OpenGLShader"
-
     // Program variables
     var sp_SolidColor: Int = 0
     var sp_loadimage: Int = 0
+    var sp_loadconus: Int = 0
+    var sp_conus: Int = 0
 
     /* SHADER Solid
      *
@@ -69,6 +70,45 @@ internal object OpenGLShader {
 
 
 
+
+
+    val vs_loadconus = "uniform    mat4        uMVPMatrix;" +
+            "attribute  vec4 vPosition;" +
+            "attribute  vec2 a_texCoords;" +
+            "varying vec2 v_texCoords;" +
+            "void main() {" +
+            "gl_Position = uMVPMatrix * vPosition;" +
+            "v_texCoords = a_texCoords;" +
+            "}"
+
+    val fs_loadconus = "precision mediump float;" +
+            "varying vec2 v_texCoords;" +
+            "uniform sampler2D u_texture;" +
+            "void main() {" +
+            "vec2 f_texCoords = vec2(v_texCoords.x, 1.0 - v_texCoords.y);" +
+            "  gl_FragColor = texture2D(u_texture, f_texCoords);" +
+            "}"
+
+
+
+    val vs_conus = "uniform mat4 uMVPMatrix;" +
+         "attribute vec4 vPosition;" +
+         "attribute vec2 a_texCoords;" +
+         "varying vec2 v_texCoords;" +
+         "void main() {" +
+         "  gl_Position = uMVPMatrix * vPosition;" +
+         "  v_texCoords = a_texCoords;" +
+         "}"
+
+    val fs_conus = (
+        "precision mediump float;" +
+        "varying vec2 v_texCoords;" +
+        "uniform sampler2D u_texture;" +
+        "void main() {" +
+        "  gl_FragColor = texture2D(u_texture, v_texCoords);" +
+        "}")
+
+
     fun loadShader(type: Int, shaderCode: String): Int {
 
         // create a vertex shader type (GLES20.GL_VERTEX_SHADER)
@@ -85,7 +125,6 @@ internal object OpenGLShader {
 
 
     fun LoadTexture(imagefile: String): Int {
-        Log.i(TAG, "Loadtexture: "+imagefile)
         var img: Bitmap? = null
         val textures = IntArray(1)
         try {
@@ -97,23 +136,24 @@ internal object OpenGLShader {
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0])
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST.toFloat())
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST.toFloat())
+            //GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D , GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE.toFloat())
+            //GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D , GLES20.GL_TEXTURE_WRAP_T , GLES20.GL_CLAMP_TO_EDGE.toFloat())
             GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, img, 0)
-            Log.i(TAG, "Loaded texture" + ":H:" + img!!.height + ":W:" + img.width)
+            UtilityLog.d("wx", "Loaded texture" + ":H:" + img!!.height + ":W:" + img.width)
         } catch (e: Exception) {
-            Log.i(TAG, e.toString() + ":" + e.message + ":" + e.localizedMessage)
+            UtilityLog.HandleException(e)
         }
 
         try {
             img!!.recycle()
         } catch (e: NullPointerException) {
-            Log.i(TAG, e.toString() + ":" + e.message + ":" + e.localizedMessage)
+            UtilityLog.HandleException(e)
         }
 
         return textures[0]
     }
 
     fun LoadBitmap(imagefile: String): Bitmap? {
-        Log.i(TAG, "LoadBitmap: " + imagefile)
         var img: Bitmap? = null
         try {
             val options = BitmapFactory.Options()
@@ -122,7 +162,7 @@ internal object OpenGLShader {
             img = BitmapFactory.decodeFile(imagefile, options)
 
         } catch (e: NullPointerException) {
-            Log.i(TAG, e.toString() + ":" + e.message + ":" + e.localizedMessage)
+            UtilityLog.HandleException(e)
         }
         return img
     }
@@ -131,15 +171,11 @@ internal object OpenGLShader {
         val bitmap: Bitmap? = LoadBitmap(imagefile)
         val newWidth: Double = (bitmap!!.getWidth() * (size / 100))
         val newHeight: Double = (bitmap!!.getHeight() * (size / 100))
-        Log.i(TAG, "old size: "+bitmap.getWidth()+" x "+bitmap.getHeight())
-        Log.i(TAG, "new size: "+(size / 100))
-        Log.i(TAG, "new size: "+newWidth+" x "+newHeight)
-        Log.i(TAG, "new size int: "+newWidth.toInt()+" x "+newHeight.toInt())
         return Bitmap.createScaledBitmap(bitmap, newWidth.toInt(), newHeight.toInt(), true)
     }
 
     fun RotateBitmap(imagefile: String, d: Double): Bitmap {
-        Log.i(TAG, "rotating bitmap: "+ imagefile + " to: "+d)
+        UtilityLog.d("wx", "rotating bitmap: "+ imagefile + " to: "+d)
         val bitmap: Bitmap? = LoadBitmap(imagefile)
         val matrix = Matrix()
         matrix.setRotate(d.toFloat())
@@ -148,23 +184,24 @@ internal object OpenGLShader {
     }
 
     fun LoadBitmapTexture(img: Bitmap): Int {
-        Log.i(TAG, "Loadtexture")
         val textures = IntArray(1)
         try {
             GLES20.glGenTextures(1, textures, 0)
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textures[0])
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST.toFloat())
             GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST.toFloat())
+            //GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D , GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE.toFloat())
+            //GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D , GLES20.GL_TEXTURE_WRAP_T , GLES20.GL_CLAMP_TO_EDGE.toFloat())
             GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, img, 0)
-            Log.i(TAG, "Loaded texture" + ":H:" + img.height + ":W:" + img.width)
+            UtilityLog.d("wx","Loaded texture" + ":H:" + img.height + ":W:" + img.width)
         } catch (e: Exception) {
-            Log.i(TAG, e.toString() + ":" + e.message + ":" + e.localizedMessage)
+            UtilityLog.HandleException(e)
         }
 
         try {
             img.recycle()
         } catch (e: NullPointerException) {
-            Log.i(TAG, e.toString() + ":" + e.message + ":" + e.localizedMessage)
+            UtilityLog.HandleException(e)
         }
 
         return textures[0]

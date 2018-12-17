@@ -4,7 +4,9 @@
 // TODO refactor nexrad radar to match architecture of wXL23 Metal to remove code duplicity
 // TODO reduce complexity and code cleanup (lint)
 // TODO in various anim code don't use String to represent # of frames, convert to Int
+// TODO move observations to navDrawer
 
+55075 2018_12_16
 55074 2018_12_15 code cleanup
                  [BUG] upstream goes16 html change broke most products
 55073 2018_12_13 linting based on official kotlin style guide (this will take some time)

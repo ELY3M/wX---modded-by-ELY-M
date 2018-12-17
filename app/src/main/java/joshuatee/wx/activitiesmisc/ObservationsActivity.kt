@@ -49,8 +49,8 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private var bitmap = UtilityImg.getBlankBitmap()
     private var firstRun = false
     private var imageLoaded = false
-    private var imgUrl = UtilityObservations.urls[0]
-    private val prefToken = "SFC_OBS_IMG"
+    //private var imgUrl = UtilityObservations.urls[0]
+    //private val prefToken = "SFC_OBS_IMG"
     private val prefTokenIdx = "SFC_OBS_IMG_IDX"
     private var imgIdx = 0
     private lateinit var contextg: Context
@@ -76,15 +76,15 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 if (img.currentZoom < 1.01f) showPrevImg()
             }
         })
-        imgUrl = Utility.readPref(this, prefToken, imgUrl)
+        //imgUrl = Utility.readPref(this, prefToken, imgUrl)
         imgIdx = Utility.readPref(this, prefTokenIdx, 0)
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         title = "Observations"
-        bitmap = withContext(Dispatchers.IO) { imgUrl.getImage() }
-        if (imgUrl.contains("large_latestsfc.gif")) {
+        bitmap = withContext(Dispatchers.IO) { UtilityObservations.urls[imgIdx].getImage() }
+        if (UtilityObservations.urls[imgIdx].contains("large_latestsfc.gif")) {
             img.setMaxZoom(16f)
         } else {
             img.setMaxZoom(4f)
@@ -93,13 +93,13 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
         img.resetZoom()
         firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "OBS")
         imageLoaded = true
-        Utility.writePref(contextg, prefToken, imgUrl)
+        //Utility.writePref(contextg, prefToken, imgUrl)
         Utility.writePref(contextg, prefTokenIdx, imgIdx)
         toolbar.subtitle = UtilityObservations.labels[imgIdx]
     }
 
     private fun getContent(idx: Int) {
-        imgUrl = UtilityObservations.urls[idx]
+        //imgUrl = UtilityObservations.urls[idx]
         imgIdx = idx
         getContent()
     }
@@ -147,7 +147,7 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
         if (imgIdx == UtilityObservations.urls.size) {
             imgIdx = 0
         }
-        imgUrl = UtilityObservations.urls[imgIdx]
+        //imgUrl = UtilityObservations.urls[imgIdx]
         getContent()
     }
 
@@ -156,7 +156,7 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
         if (imgIdx == -1) {
             imgIdx = UtilityObservations.urls.size - 1
         }
-        imgUrl = UtilityObservations.urls[imgIdx]
+        //imgUrl = UtilityObservations.urls[imgIdx]
         getContent()
     }
 }
