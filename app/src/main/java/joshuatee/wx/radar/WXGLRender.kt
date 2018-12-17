@@ -474,6 +474,7 @@ class WXGLRender(private val context: Context) : Renderer {
     }
 
 
+//point sprite blah//
     private fun drawConusRadar(buffers: ObjectOglBuffers) {
         if (buffers.isInitialized) {
             buffers.setToPositionZero()
@@ -941,7 +942,7 @@ class WXGLRender(private val context: Context) : Renderer {
                 0)
 
 
-        //UtilityWXOGLPerf.genMarker(conusRadarBuffers, pn, 35.0, 90.0)
+        UtilityWXOGLPerf.genMarker(conusRadarBuffers, pn, 40.0, 99.0)
         //UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, 40.750220, 99.476964)
         //UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, pn.xDbl, pn.yDbl)
         //UtilityWXOGLPerf.genMercator(MyApplication.stateRelativeBuffer, conusRadarBuffers.floatBuffer, pn, conusRadarBuffers.count)

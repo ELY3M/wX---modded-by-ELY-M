@@ -40,9 +40,26 @@ import androidx.core.content.ContextCompat
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.MyApplication
+import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.TouchImageView2
 
 object UtilityImg {
+
+    fun showNextImg(drw: ObjectNavDrawer, fn: () -> Unit) {
+        drw.index += 1
+        if (drw.index == drw.getUrlCount()) {
+            drw.index = 0
+        }
+        fn()
+    }
+
+    fun showPrevImg(drw: ObjectNavDrawer, fn: () -> Unit) {
+        drw.index -= 1
+        if (drw.index == -1) {
+            drw.index = drw.getUrlCount() - 1
+        }
+        fn()
+    }
 
     fun mergeImages(context: Context, imageA: Bitmap, imageB: Bitmap): Bitmap {
         val layers = mutableListOf<Drawable>()
