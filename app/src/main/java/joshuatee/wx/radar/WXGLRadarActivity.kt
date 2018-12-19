@@ -172,7 +172,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private var wxgltextArr = mutableListOf<WXGLTextObject>()
     private lateinit var act: Activity
     private lateinit var sp: ObjectSpinner
-    private var diaStatus: ObjectDialogue? = null
+    private var alertDialogRadarLongPress: ObjectDialogue? = null
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -216,7 +216,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 archiveMode = false
         }
         contextg = this
-        alertDialogStatus()
+        setupAlertDialogRadarLongPress()
         UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
         if (archiveMode && !spotterShowSelected) toolbarBottom.visibility = View.GONE
         val latLonArrD = UtilityLocation.getGPS(this)
@@ -904,36 +904,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
 
         override fun onProgressChanged(progress: Int, idx: Int, idxInt: Int) {
             if (progress != 50000) {
-                alertDialogStatusAl.clear()
-                val locX = locXCurrent.toDoubleOrNull() ?: 0.0
-                val locY = locYCurrent.toDoubleOrNull() ?: 0.0
-                val pointX = glview.newY.toDouble()
-                val pointY = glview.newX * -1.0
-                val dist = LatLon.distance(LatLon(locX, locY), LatLon(pointX, pointY), DistanceUnit.MILE)
-                val ridX = (Utility.readPref(contextg, "RID_" + oglr.rid + "_X", "0.0")).toDouble()
-                val ridY = -1.0 * (Utility.readPref(contextg, "RID_" + oglr.rid + "_Y", "0.0")).toDouble()
-                val distRid = LatLon.distance(LatLon(ridX, ridY), LatLon(pointX, pointY), DistanceUnit.MILE)
-                diaStatus!!.setTitle(UtilityStringExternal.truncate(glview.newY.toString(), 6)
-                        + ",-" + UtilityStringExternal.truncate(glview.newX.toString(), 6))
-                alertDialogStatusAl.add(UtilityStringExternal.truncate(dist.toString(), 6) + " miles from location")
-                alertDialogStatusAl.add(UtilityStringExternal.truncate(distRid.toString(), 6) + " miles from " + oglr.rid)
-                oglr.ridNewList.mapTo(alertDialogStatusAl) { "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.readPref(contextg, "RID_LOC_" + it.name, "") }
-                alertDialogStatusAl.add("Show warning text")
-                if (MyApplication.radarWatMcd) {
-                    alertDialogStatusAl.add("Show Watch text")
-                    alertDialogStatusAl.add("Show MCD text")
-                }
-                if (MyApplication.radarMpd) {
-                    alertDialogStatusAl.add("Show MPD text")
-                }
-                alertDialogStatusAl.add("Show nearest observation")
-                alertDialogStatusAl.add("Show nearest forecast")
-                alertDialogStatusAl.add("Show nearest meteogram")
-                if (MyApplication.radarSpotters || MyApplication.radarSpottersLabel) {
-                    alertDialogStatusAl.add("Show Spotter Info")
-                }
-                alertDialogStatusAl.add("Show radar status message")
-                diaStatus!!.show()
+                UtilityRadarUI.addItemsToLongPress(
+                    alertDialogStatusAl,
+                    locXCurrent,
+                    locYCurrent,
+                    contextg,
+                    glview,
+                    oglr,
+                    alertDialogRadarLongPress!!
+                )
             } else {
                 numPanesArr.forEach {
                     wxgltextArr[it].addTV()
@@ -998,7 +977,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 } else
                     oglr.deconstructHWEXTLines()
             }).start()
-            //wxgltextArr[0].setRid(rid1)
             wxgltextArr[0].addTV()
             oldRid = oglr.rid
         }
@@ -1175,42 +1153,47 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         latlonArr[1] = lonD.toString()
     }
 
-    private fun alertDialogStatus() {
-        diaStatus = ObjectDialogue(contextg, alertDialogStatusAl)
-        diaStatus!!.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
+    private fun setupAlertDialogRadarLongPress() {
+        alertDialogRadarLongPress = ObjectDialogue(contextg, alertDialogStatusAl)
+        alertDialogRadarLongPress!!.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
             dialog.dismiss()
             UtilityUI.immersiveMode(act)
         })
-        diaStatus!!.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        alertDialogRadarLongPress!!.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             val strName = alertDialogStatusAl[which]
-            if (strName.contains("Radar:")) {
-                val ridNew = strName.parse("\\) ([A-Z]{3,4}) ")
-                oglr.rid = ridNew
-                ridChanged = true
-                ridMapSwitch(oglr.rid)
-            } else if (strName.contains("Show warning text")) {
-                val polygonUrl = UtilityWXOGL.showTextProducts(glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
-                if (polygonUrl != "") ObjectIntent(this, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(polygonUrl, ""))
-            } else if (strName.contains("Show Watch text")) {
-                getWatch()
-            } else if (strName.contains("Show MCD text")) {
-                getMCD()
-            } else if (strName.contains("Show MPD text")) {
-                getMPD()
-            } else if (strName.contains("Show nearest observation")) {
-                getMetar()
-            } else if (strName.contains("Show nearest meteogram")) {
-                // http://www.nws.noaa.gov/mdl/gfslamp/meteoform.php
-                // http://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=KTEW
-
-                val obsSite = UtilityMetar.findClosestObservation(contextg, LatLon(glview.newY.toDouble(), glview.newX * -1.0))
-                ObjectIntent(this, ImageShowActivity::class.java, ImageShowActivity.URL, arrayOf(UtilityWXOGL.getMeteogramUrl(obsSite.name), obsSite.name + " Meteogram"))
-            } else if (strName.contains("Show Spotter Info")) {
-                getSpotterInfo()
-            } else if (strName.contains("Show radar status message")) {
-                getRadarStatus()
-            } else if (strName.contains("Show nearest forecast")) {
-                ObjectIntent(this, AdhocForecastActivity::class.java, AdhocForecastActivity.URL, arrayOf(glview.newY.toString(), "-" + glview.newX.toString()))
+            when {
+                strName.contains("Show warning text") -> {
+                    UtilityRadarUI.showNearestWarning(contextg, glview)
+                }
+                strName.contains("Show watch text") -> {
+                    UtilityRadarUI.showNearestWatch(contextg, act, glview, uiDispatcher)
+                }
+                strName.contains("Show MCD text") -> {
+                    UtilityRadarUI.showNearestMcd(contextg, act, glview, uiDispatcher)
+                }
+                strName.contains("Show MPD text") -> {
+                    UtilityRadarUI.showNearestMpd(contextg, act, glview, uiDispatcher)
+                }
+                strName.contains("Show nearest observation") -> {
+                    UtilityRadarUI.getMetar(glview, act, contextg, uiDispatcher)
+                }
+                strName.contains("Show nearest meteogram") -> {
+                    UtilityRadarUI.showNearestMeteogram(contextg, glview)
+                }
+                strName.contains("Show radar status message") -> {
+                    UtilityRadarUI.getRadarStatus(act, contextg, uiDispatcher, oglr)
+                }
+                strName.contains("Show nearest forecast") -> {
+                    UtilityRadarUI.showNearestForecast(contextg, glview)
+                }
+                strName.contains("Show Spotter Info") -> {
+                    UtilityRadarUI.showSpotterInfo(act, glview, uiDispatcher)
+                }
+                else -> {
+                    oglr.rid = strName.parse(UtilityRadarUI.longPressRadarSiteRegex)
+                    ridChanged = true
+                    ridMapSwitch(oglr.rid)
+                }
             }
             dialog.dismiss()
         })
@@ -1232,19 +1215,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             dialog.dismiss()
         })
         diaTdwr.show()
-    }
-
-    private fun getRadarStatus() = GlobalScope.launch(uiDispatcher) {
-        var radarStatus = withContext(Dispatchers.IO) {
-            UtilityDownload.getRadarStatusMessage(
-                contextg,
-                oglr.rid
-            )
-        }
-        if (radarStatus == "") {
-            radarStatus = "The current radar status for " + oglr.rid + " is not available."
-        }
-        UtilityAlertDialog.showHelpText(Utility.fromHtml(radarStatus), act)
     }
 
     private var legend: ViewColorLegend? = null
@@ -1309,10 +1279,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
     }
 
+/*
     private fun getMetar() = GlobalScope.launch(uiDispatcher) {
         val txt = withContext(Dispatchers.IO) { UtilityMetar.findClosestMetar(contextg, LatLon(glview.newY.toDouble(), glview.newX.toDouble() * -1.0)) }
         UtilityAlertDialog.showHelpText(txt, act)
     }
+*/    
     private fun getContentVWP() = GlobalScope.launch(uiDispatcher) {
         //val txt = withContext(Dispatchers.IO) { UtilityWXOGL.getVWP(contextg, oglr.rid) }
         //ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(txt, oglr.rid + " VAD Wind Profile"))
@@ -1320,7 +1292,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         ObjectIntent(contextg, WebscreenABModels::class.java, WebscreenABModels.URL, arrayOf(vmpurl, oglr.rid + " VAD Wind Profile"))
 
     }
-    
+
+    /*
     private fun getSpotterInfo() = GlobalScope.launch(uiDispatcher) {
         var txt = withContext(Dispatchers.IO) { UtilitySpotter.findClosestSpotter(LatLon(glview.newY.toDouble(), glview.newX.toDouble() * -1.0)) }
         UtilityAlertDialog.showHelpText(txt, act)
@@ -1345,6 +1318,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             UtilityAlertDialog.showHelpText(txt, act)
         }
     }
+    */
 
 
 }

@@ -99,6 +99,7 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
             drw.drawerLayout.closeDrawer(drw.listView)
+            // FIXME put this in a new method
             if (objAlertSummary.filterArray[position].length != 2) {
                 turlLocal[0] = "^" + objAlertSummary.filterArray[position]
                 turlLocal[1] = "us"

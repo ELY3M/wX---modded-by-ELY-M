@@ -25,6 +25,8 @@ package joshuatee.wx.radar
 import android.content.Context
 import joshuatee.wx.Extensions.getHtmlSep
 import joshuatee.wx.objects.DistanceUnit
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
 
 //import java.util.Collections
 //import java.util.Comparator
@@ -191,12 +193,10 @@ object UtilitySpotter {
         var bestSpotter = -1
 
         spotterinfo.indices.forEach {
-            //Log.i(TAG, "checking dist for: " + spotterinfo[it].firstName + " " + spotterinfo[it].lastName)
             currentDistance = LatLon.distance(location, LatLon(spotterinfo[it].lat, spotterinfo[it].lon), DistanceUnit.MILE)
             if (currentDistance < shortestDistance) {
                 shortestDistance = currentDistance
                 bestSpotter = it
-
                 SpotterInfoString =
                         "Name: "+spotterinfo[it].firstName +" "+spotterinfo[it].lastName+"\nLocation: "+spotterinfo[it].lat+" "+spotterinfo[it].lon+"\nReport at: "+spotterinfo[it].reportAt+"\nEmail: "+spotterinfo[it].email+"\nPhone: "+spotterinfo[it].phone+"\nCallsign: "+spotterinfo[it].callsign+"\nFreq: "+spotterinfo[it].freq+"\nNote: "+spotterinfo[it].note+"\n============================\n"
 
@@ -204,6 +204,7 @@ object UtilitySpotter {
 
             }
         }
+        UtilityLog.d("wx", "Spotter Info: "+SpotterInfoString)
         return if (bestSpotter == -1) {
             "Spotter Info not available!"
         } else {
