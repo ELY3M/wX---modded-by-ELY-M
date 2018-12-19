@@ -42,9 +42,13 @@ import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.TouchImageView2
+import kotlinx.coroutines.Job
+import kotlin.reflect.KFunction
 
 object UtilityImg {
 
+    //fun showNextImg(drw: ObjectNavDrawer, fn: () -> Unit) {
+    // FIXME
     fun showNextImg(drw: ObjectNavDrawer, fn: () -> Unit) {
         drw.index += 1
         if (drw.index == drw.getUrlCount()) {

@@ -1,6 +1,3 @@
-
-
-
 //modded by ELY M.  
 
 package joshuatee.wx

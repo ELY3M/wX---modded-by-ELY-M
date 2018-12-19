@@ -53,8 +53,10 @@ internal class ObjectWatchProduct(type: PolygonType, productNumber: String) {
         when (type) {
             PolygonType.WATCH_TOR, PolygonType.WATCH_SVR -> {
                 this.productNumber = productNumber.replace("w".toRegex(), "")
-                imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + productNumber + "_radar.gif"
-                textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww$productNumber.html"
+                imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + productNumber +
+                        "_radar.gif"
+                textUrl =
+                        "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww$productNumber.html"
                 title = "Watch $productNumber"
                 prod = "SPCWAT$productNumber"
             }
@@ -65,7 +67,8 @@ internal class ObjectWatchProduct(type: PolygonType, productNumber: String) {
                 prod = "SPCMCD$productNumber"
             }
             PolygonType.MPD -> {
-                imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$productNumber.gif"
+                imgUrl =
+                        "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$productNumber.gif"
                 title = "MPD $productNumber"
                 prod = "WPCMPD$productNumber"
             }

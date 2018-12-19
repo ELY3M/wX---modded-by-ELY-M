@@ -372,6 +372,9 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
         }
     }
 
+    val latLon: LatLon
+        get() = LatLon(newY.toDouble(), newX.toDouble() * -1.0)
+
     var scaleFactor: Float
         get() = mScaleFactor
         set(mScaleFactor) {

@@ -88,7 +88,6 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, true)
             drw.drawerLayout.closeDrawer(drw.listView)
-            title = drw.getLabel(position)
             drw.index = position
             getContent()
         }
@@ -150,7 +149,7 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
     }
 
     override fun onStop() {
-        if (imageLoaded) 
+        if (imageLoaded)
             UtilityImg.imgSavePosnZoom(this, img, "GOESFULLDISKIMG")
         super.onStop()
     }

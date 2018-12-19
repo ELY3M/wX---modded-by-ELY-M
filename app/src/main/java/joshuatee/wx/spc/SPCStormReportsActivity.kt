@@ -187,7 +187,6 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         c1.setVisibility(View.GONE)
         c1.setOnClickListener(View.OnClickListener {
             filter = "All"
-            //GetContent().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
             displayData()
         })
         storms = UtilitySPCStormReports.processData(textArr.toList())

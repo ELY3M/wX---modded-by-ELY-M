@@ -34,17 +34,19 @@ object UtilityGOES16 {
 
     const val size: String = "600x600"
 
-    private val sizeMap = mapOf(
+    /* private val sizeMap = mapOf(
         "CONUS" to "2500x1500",
         "FD" to "1808x1808",
         "gm" to "1000x1000",
         "car" to "1000x1000",
         "eus" to "1000x1000",
         "taw" to "1800x1080"
-    )
+    )*/
 
-    private fun getImageSize(sector: String) = sizeMap[sector] ?: "1200x1200"
+    //private fun getImageSize(sector: String) = sizeMap[sector] ?: "1200x1200"
 
+    // FIXME change return value from List to String
+    // FIXME cleanup
     fun getUrl(product: String, sector: String): List<String> {
         /*val url = when (sector) {
             "FD" -> "https://www.star.nesdis.noaa.gov/GOES/GOES16_FullDisk.php"
@@ -63,7 +65,8 @@ object UtilityGOES16 {
         //val imgUrl = html.parse(parseString)
         //val timeStamp = imgUrl.parse("$product/([0-9]{11})_GOES16-ABI-$sector")
 
-        val latestUrl = MyApplication.goes16Url + "/GOES16/ABI/" + sectorLocal + "/" + product + "/latest.jpg"
+        val latestUrl =
+            MyApplication.goes16Url + "/GOES16/ABI/" + sectorLocal + "/" + product + "/latest.jpg"
         return listOf(latestUrl, "")
         //return listOf(imgUrl, timeStamp)
     }

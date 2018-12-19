@@ -37,6 +37,8 @@ object UtilityLightning {
         return url.getImage()
     }
 
+
+    // FIXME convert methods below to maps
     fun getSectorPretty(sector: String): String = when (sector) {
         "usa_big" -> "USA"
         "florida_big" -> "FL"

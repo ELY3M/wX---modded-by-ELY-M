@@ -48,15 +48,9 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
-    private var timePeriod = 1
     private var firstRun = false
     private var imageLoaded = false
-    private var imgUrl = ""
     private lateinit var img: TouchImageView2
-    private var title = "OPC"
-    private lateinit var actionBack: MenuItem
-    private lateinit var actionForward: MenuItem
-    private var imgIdx = 0
     private lateinit var drw: ObjectNavDrawer
     private lateinit var contextg: Context
 
@@ -75,54 +69,34 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
         img.setOnClickListener(this)
         img.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeLeft() {
-                if (img.currentZoom < 1.01f) showNextImg()
+                if (img.currentZoom < 1.01f) UtilityImg.showNextImg(drw, ::getContentFixThis)
             }
 
             override fun onSwipeRight() {
-                if (img.currentZoom < 1.01f) showPrevImg()
+                if (img.currentZoom < 1.01f) UtilityImg.showPrevImg(drw, ::getContentFixThis)
             }
         })
-        setTitle(title)
-        title = Utility.readPref(this, "OPC_IMG_FAV_TITLE", UtilityOPCImages.labels[0])
-        imgUrl = Utility.readPref(this, "OPC_IMG_FAV_URL", UtilityOPCImages.urls[0])
-        imgIdx = Utility.readPref(this, "OPC_IMG_FAV_IDX", 0)
-        toolbar.subtitle = title
-        val menu = toolbarBottom.menu
-        actionBack = menu.findItem(R.id.action_back)
-        actionForward = menu.findItem(R.id.action_forward)
-        actionBack.isVisible = false
-        actionForward.isVisible = false
+        title = "OPC"
         drw = ObjectNavDrawer(this, UtilityOPCImages.labels, UtilityOPCImages.urls)
+        drw.index = Utility.readPref(this, "OPC_IMG_FAV_IDX", 0)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
             drw.drawerLayout.closeDrawer(drw.listView)
-            title = drw.getLabel(position)
-            imgUrl = drw.getToken(position)
-            imgIdx = position
+            drw.index = position
             getContent()
         }
         getContent()
     }
 
+    private fun getContentFixThis() {
+        getContent()
+    }
+
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        val getUrl: String
-        toolbar.subtitle = title
-        if (imgUrl.contains("http://graphical.weather.gov/images/conus/")) {
-            getUrl = imgUrl + timePeriod.toString() + "_conus.png"
-            actionBack.isVisible = true
-            actionForward.isVisible = true
-        } else {
-            actionBack.isVisible = false
-            actionForward.isVisible = false
-            getUrl = imgUrl
-        }
-        Utility.writePref(contextg, "OPC_IMG_FAV_TITLE", title)
-        Utility.writePref(contextg, "OPC_IMG_FAV_URL", imgUrl)
-        Utility.writePref(contextg, "OPC_IMG_FAV_IDX", imgIdx)
-
-        val result = async(Dispatchers.IO) { getUrl.getImage() }
+        toolbar.subtitle = drw.getLabel()
+        Utility.writePref(contextg, "OPC_IMG_FAV_IDX", drw.index)
+        val result = async(Dispatchers.IO) { drw.getUrl().getImage() }
         bitmap = result.await()
-
         img.setImageBitmap(bitmap)
         firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "OPCIMG")
         imageLoaded = true
@@ -143,14 +117,6 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
             return true
         }
         when (item.itemId) {
-            R.id.action_forward -> {
-                timePeriod += 1
-                getContent()
-            }
-            R.id.action_back -> {
-                timePeriod -= 1
-                getContent()
-            }
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     if (isStoragePermissionGranted) {
@@ -182,25 +148,5 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
             UtilityImg.imgSavePosnZoom(this, img, "OPCIMG")
         }
         super.onStop()
-    }
-
-    private fun showNextImg() {
-        imgIdx += 1
-        if (imgIdx == UtilityOPCImages.urls.size) {
-            imgIdx = 0
-        }
-        title = UtilityOPCImages.labels[imgIdx]
-        imgUrl = UtilityOPCImages.urls[imgIdx]
-        getContent()
-    }
-
-    private fun showPrevImg() {
-        imgIdx -= 1
-        if (imgIdx == -1) {
-            imgIdx = UtilityOPCImages.urls.size - 1
-        }
-        title = UtilityOPCImages.labels[imgIdx]
-        imgUrl = UtilityOPCImages.urls[imgIdx]
-        getContent()
     }
 }
