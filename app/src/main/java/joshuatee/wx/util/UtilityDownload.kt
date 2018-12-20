@@ -611,7 +611,7 @@ object UtilityDownload {
         return out.toString().replace(breakStr, "<br>")
     }
 
-    fun getStringFromURLSepSUnsafe(strURL: String): String {
+    /*fun getStringFromURLSepSUnsafe(strURL: String): String {
         val breakStr = "ABC123_456ZZ"
         val out = StringBuilder(5000)
         try {
@@ -630,7 +630,7 @@ object UtilityDownload {
             UtilityLog.HandleException(e)
         }
         return out.toString().replace(breakStr, "<br>")
-    }
+    }*/
 
     fun getBitmapFromURLS(url: String): Bitmap {
         return try {
@@ -668,7 +668,7 @@ object UtilityDownload {
         }
     }
 
-   /* fun getInputStreamFromUrlUnsafe(strURL: String): InputStream? {
+    /* fun getInputStreamFromUrlUnsafe(strURL: String): InputStream? {
         return try {
             val request = Request.Builder().url(strURL).build()
             val response = MyApplication.httpClientUnsafe!!.newCall(request).execute()

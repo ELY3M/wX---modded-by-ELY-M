@@ -1,0 +1,144 @@
+{
+    "@context": [
+        "https://raw.githubusercontent.com/geojson/geojson-ld/master/contexts/geojson-base.jsonld",
+        {
+            "wx": "https://api.weather.gov/ontology#",
+            "@vocab": "https://api.weather.gov/ontology#"
+        }
+    ],
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3129995",
+            "type": "Feature",
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -77.900000000000006,
+                            36.509999999999998
+                        ],
+                        [
+                            -77.650000000000006,
+                            36.479999899999996
+                        ],
+                        [
+                            -77.569999899999999,
+                            36.419999999999995
+                        ],
+                        [
+                            -77.840000000000003,
+                            36.209999999999994
+                        ],
+                        [
+                            -78.13000000000001,
+                            36.229999899999996
+                        ],
+                        [
+                            -78.170000000000016,
+                            36.259999999999998
+                        ],
+                        [
+                            -78.29000000000002,
+                            36.269999999999996
+                        ],
+                        [
+                            -78.340000000000018,
+                            36.239999999999995
+                        ],
+                        [
+                            -78.880000000000024,
+                            36.269999999999996
+                        ],
+                        [
+                            -79.15000000000002,
+                            36.389999999999993
+                        ],
+                        [
+                            -79.140000000000015,
+                            36.539999999999992
+                        ],
+                        [
+                            -77.90000000000002,
+                            36.539999999999992
+                        ],
+                        [
+                            -77.900000000000006,
+                            36.509999999999998
+                        ]
+                    ]
+                ]
+            },
+            "properties": {
+                "@id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3129995",
+                "@type": "wx:Alert",
+                "id": "NWS-IDP-PROD-3129995",
+                "areaDesc": "Person; Granville; Halifax; Vance; Warren",
+                "geocode": {
+                    "UGC": [
+                        "NCZ007",
+                        "NCZ008",
+                        "NCZ011",
+                        "NCZ009",
+                        "NCZ010"
+                    ],
+                    "SAME": [
+                        "037145",
+                        "037077",
+                        "037083",
+                        "037181",
+                        "037185"
+                    ]
+                },
+                "affectedZones": [
+                    "https://api.weather.gov/zones/forecast/NCZ007",
+                    "https://api.weather.gov/zones/forecast/NCZ008",
+                    "https://api.weather.gov/zones/forecast/NCZ011",
+                    "https://api.weather.gov/zones/forecast/NCZ009",
+                    "https://api.weather.gov/zones/forecast/NCZ010"
+                ],
+                "references": [],
+                "sent": "2018-09-22T22:46:00-04:00",
+                "effective": "2018-09-22T22:46:00-04:00",
+                "onset": "2018-09-22T22:46:00-04:00",
+                "expires": "2018-09-23T00:15:00-04:00",
+                "ends": null,
+                "status": "Actual",
+                "messageType": "Alert",
+                "category": "Met",
+                "severity": "Moderate",
+                "certainty": "Observed",
+                "urgency": "Expected",
+                "event": "Special Weather Statement",
+                "sender": "w-nws.webmaster@noaa.gov",
+                "senderName": "NWS Raleigh NC",
+                "headline": "Special Weather Statement issued September 22 at 10:46PM EDT by NWS Raleigh NC",
+                "description": "At 1042 PM EDT, radar indicated thunderstorms extending from near\nRoxboro east to Oxford, Henderson, and Warrenton. These storms were\nmoving to the north at 10 mph. Very heavy rain was falling with\nrainfall rates around 2 inches per hour over northern Person County.\n\nLocations impacted include...\nRoanoke Rapids, Henderson, Oxford, Roxboro, Warrenton, Norlina,\nLittleton, Concord, Weldon and Stovall.",
+                "instruction": "Minor flooding of creeks, streams, and areas of poor drainage.\nDrivers are urged to slow down and use extra caution to avoid\nhydroplaning, especially in urban areas where prolonged heavy rain\ncan quickly lead to flooding.",
+                "response": "Execute",
+                "parameters": {
+                    "eventMotionDescription": [
+                        "2018-09-22T22:42:00.000-04:00...storm...235DEG...26KT...36.41,-78.95"
+                    ],
+                    "NWSheadline": [
+                        "THUNDERSTORMS WITH VERY HEAVY RAIN FROM ROXBORO TO HENDERSON TO WARRENTON"
+                    ],
+                    "EAS-ORG": [
+                        "WXR"
+                    ],
+                    "PIL": [
+                        "RAHSPSRAH"
+                    ],
+                    "BLOCKCHANNEL": [
+                        "CMAS",
+                        "EAS",
+                        "NWEM"
+                    ]
+                }
+            }
+        }
+    ],
+    "title": "Current Special Weather Statement events",
+    "updated": "2018-09-23T02:47:14+00:00"
+}

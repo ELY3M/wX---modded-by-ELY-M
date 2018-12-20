@@ -106,7 +106,7 @@ internal object UtilityRadarUI {
             arrayOf(polygonUrl, "")
         )
     }
-    
+
     fun addItemsToLongPress(
         alertDialogRadarLongpressAl: MutableList<String>,
         lat: String,
@@ -132,10 +132,10 @@ internal object UtilityRadarUI {
             LatLon.distance(LatLon(ridX, ridY), LatLon(pointX, pointY), DistanceUnit.MILE)
 
         // FIXME look at iOS version and try to match in data provided and improve formatting
-        alertDialogRadarLongPress.setTitle(
-            UtilityStringExternal.truncate(glview.newY.toString(), 6)
-                    + ",-" + UtilityStringExternal.truncate(glview.newX.toString(), 6)
-        )
+        val latLonTitle = UtilityStringExternal.truncate(glview.newY.toString(), 6) +
+                ", -" +
+                UtilityStringExternal.truncate(glview.newX.toString(), 6)
+        alertDialogRadarLongPress.setTitle(latLonTitle)
         alertDialogRadarLongpressAl.add(
             UtilityStringExternal.truncate(
                 dist.toString(),
@@ -155,8 +155,10 @@ internal object UtilityRadarUI {
                 ""
             )
         }
-
-        // FIXME show site/office in initial long press for obs / meteogram and radar status
+        val obsSite = UtilityMetar.findClosestObservation(
+            context,
+            glview.latLon
+        )
         alertDialogRadarLongpressAl.add("Show warning text")
         if (MyApplication.radarWatMcd) {
             alertDialogRadarLongpressAl.add("Show watch text")
@@ -165,14 +167,54 @@ internal object UtilityRadarUI {
         if (MyApplication.radarMpd) {
             alertDialogRadarLongpressAl.add("Show MPD text")
         }
-        alertDialogRadarLongpressAl.add("Show nearest observation")
-        alertDialogRadarLongpressAl.add("Show nearest forecast")
-        alertDialogRadarLongpressAl.add("Show nearest meteogram")
+        alertDialogRadarLongpressAl.add("Show nearest observation: " + obsSite.name)
+        alertDialogRadarLongpressAl.add("Show nearest forecast: $latLonTitle")
+        alertDialogRadarLongpressAl.add("Show nearest meteogram: " + obsSite.name)
         if (MyApplication.radarSpotters || MyApplication.radarSpottersLabel) {
             alertDialogRadarLongpressAl.add("Show Spotter Info")
         }
-        alertDialogRadarLongpressAl.add("Show radar status message")
+        alertDialogRadarLongpressAl.add("Show radar status message: " + oglr.rid)
         alertDialogRadarLongPress.show()
+    }
+    
+        fun doLongPressAction(
+        strName: String,
+        context: Context,
+        act: Activity,
+        glview: WXGLSurfaceView,
+        oglr: WXGLRender,
+        uiDispatcher: CoroutineDispatcher,
+        fn: (strName: String) -> Unit){
+        when {
+            strName.contains("Show warning text") -> {
+                UtilityRadarUI.showNearestWarning(context, glview)
+            }
+            strName.contains("Show watch text") -> {
+                UtilityRadarUI.showNearestWatch(context, act, glview, uiDispatcher)
+            }
+            strName.contains("Show MCD text") -> {
+                UtilityRadarUI.showNearestMcd(context, act, glview, uiDispatcher)
+            }
+            strName.contains("Show MPD text") -> {
+                UtilityRadarUI.showNearestMpd(context, act, glview, uiDispatcher)
+            }
+            strName.contains("Show nearest observation") -> {
+                UtilityRadarUI.getMetar(glview, act, context, uiDispatcher)
+            }
+            strName.contains("Show nearest meteogram") -> {
+                UtilityRadarUI.showNearestMeteogram(context, glview)
+            }
+            strName.contains("Show radar status message") -> {
+                UtilityRadarUI.getRadarStatus(act, context, uiDispatcher, oglr)
+            }
+            strName.contains("Show nearest forecast") -> {
+                UtilityRadarUI.showNearestForecast(context, glview)
+            }
+            strName.contains("Show Spotter Info") -> {
+                UtilityRadarUI.showSpotterInfo(act, glview, uiDispatcher)
+            }
+            else -> fn(strName)
+        }
     }
 
 
@@ -226,117 +268,7 @@ internal object UtilityRadarUI {
 
 
 
-    //from single pane
-    /*
 
-
-        private fun getContentVWP() = GlobalScope.launch(uiDispatcher) {
-        //val txt = withContext(Dispatchers.IO) { UtilityWXOGL.getVWP(contextg, oglr.rid) }
-        //ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(txt, oglr.rid + " VAD Wind Profile"))
-        var vmpurl = "https://weather.cod.edu/satrad/nexrad/index.php?type="+oglr.rid+"-NVW"
-        ObjectIntent(contextg, WebscreenABModels::class.java, WebscreenABModels.URL, arrayOf(vmpurl, oglr.rid + " VAD Wind Profile"))
-
-    }
-
-    private fun getSpotterInfo() = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) { UtilitySpotter.findClosestSpotter(LatLon(glview.newY.toDouble(), glview.newX.toDouble() * -1.0)) }
-        UtilityAlertDialog.showHelpText(txt, act)
-    }
-
-    private fun getWatch() = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) {  UtilityWat.showWatchProducts(contextg, glview.newY.toDouble(), glview.newX.toDouble() * -1.0) }
-        if (txt != "") {
-            UtilityAlertDialog.showHelpText(txt, act)
-        }
-    }
-
-    private fun getMCD() = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) {  UtilityWat.showMCDProducts(contextg, glview.newY.toDouble(), glview.newX.toDouble() * -1.0) }
-        if (txt != "") {
-            UtilityAlertDialog.showHelpText(txt, act)
-        }
-    }
-    private fun getMPD() = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) {  UtilityWat.showMPDProducts(contextg, glview.newY.toDouble(), glview.newX.toDouble() * -1.0) }
-        if (txt != "") {
-            UtilityAlertDialog.showHelpText(txt, act)
-        }
-
-
-     */
-
-
-
-    //from multipane
-    /*
-
-
-    private fun getMetar() = GlobalScope.launch(uiDispatcher) {
-    val txt = withContext(Dispatchers.IO) { UtilityMetar.findClosestMetar(contextg, LatLon(glviewArr[idxIntG].newY.toDouble(), (glviewArr[idxIntG].newX * -1).toDouble())) }
-    UtilityAlertDialog.showHelpText(txt, act)
-    }
-
-
-    private fun getSpotterInfo() = GlobalScope.launch(uiDispatcher) {
-    var txt = withContext(Dispatchers.IO) { UtilitySpotter.findClosestSpotter(LatLon(glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0)) }
-    UtilityAlertDialog.showHelpText(txt, act)
-    }
-
-    private fun getWatch() = GlobalScope.launch(uiDispatcher) {
-    var txt = withContext(Dispatchers.IO) {  UtilityWat.showWatchProducts(contextg, glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0) }
-    if (txt != "") {
-    UtilityAlertDialog.showHelpText(txt, act)
-    }
-    }
-
-    private fun getMCD() = GlobalScope.launch(uiDispatcher) {
-    var txt = withContext(Dispatchers.IO) {  UtilityWat.showMCDProducts(contextg, glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0) }
-    if (txt != "") {
-    UtilityAlertDialog.showHelpText(txt, act)
-    }
-    }
-    private fun getMPD() = GlobalScope.launch(uiDispatcher) {
-    var txt = withContext(Dispatchers.IO) {  UtilityWat.showMPDProducts(contextg, glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0) }
-    if (txt != "") {
-    UtilityAlertDialog.showHelpText(txt, act)
-    }
-    }
-
-
-     */
-
-
-    //locfrag
-    /*
-
-
-    private fun getSpotterInfo() = GlobalScope.launch(uiDispatcher) {
-         var txt = withContext(Dispatchers.IO) { UtilitySpotter.findClosestSpotter(LatLon(glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0)) }
-         UtilityAlertDialog.showHelpText(txt, activityReference)
-    }
-
-    private fun getWatch() = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) {  UtilityWat.showWatchProducts(MyApplication.appContext, glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0) }
-        if (txt != "") {
-            UtilityAlertDialog.showHelpText(txt, activityReference)
-        }
-    }
-
-    private fun getMCD() = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) {  UtilityWat.showMCDProducts(MyApplication.appContext, glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0) }
-        if (txt != "") {
-            UtilityAlertDialog.showHelpText(txt, activityReference)
-        }
-    }
-
-    private fun getMPD() = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) {  UtilityWat.showMPDProducts(MyApplication.appContext, glviewArr[idxIntG].newY.toDouble(), glviewArr[idxIntG].newX.toDouble() * -1.0) }
-        if (txt != "") {
-            UtilityAlertDialog.showHelpText(txt, activityReference)
-        }
-    }
-
-     */
 
 
 }

@@ -1,0 +1,19 @@
+   
+
+
+
+
+
+
+
+     if (this.radarRenderer.CONUSVIEWENABLED) {
+            double toRadians = Math.toRadians(this.radarloc.getLongitude() - this.pancenter.getLongitude()) / 2.0d;
+            d = Math.toRadians(this.radarloc.getLatitude() - this.pancenter.getLatitude()) / 2.0d;
+            d4 = toRadians + d;
+            atan2 -= d4;
+            d5 = toRadians;
+        } else {
+            d = 0.0d;
+            d4 = d;
+            d5 = d4;
+        }

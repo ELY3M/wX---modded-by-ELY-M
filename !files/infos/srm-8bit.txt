@@ -1,0 +1,12 @@
+    private int radialMultiplier = 4;
+    private double srmdir;
+    private double srmspd;
+
+
+    private byte AdjustSRM(DecodeL3Header l3h, int data, float radial, float nswind, float ewwind, float minlevel, float increment) {
+        this.srmspd = Math.sqrt((double) ((ewwind * ewwind) + (nswind * nswind)));
+        this.srmdir = Math.atan2((double) ewwind, (double) nswind);
+        l3h.setMeanDirection(Math.toDegrees(this.srmdir + 3.141592653589793d));
+        l3h.setMeanSpeed(this.srmspd);
+        return (byte) ((int) (((((double) ((((float) data) * increment) + minlevel)) - (Math.cos(Math.toRadians((double) radial) - Math.toRadians(this.srmdir)) * this.srmspd)) - ((double) minlevel)) / ((double) increment)));
+    }

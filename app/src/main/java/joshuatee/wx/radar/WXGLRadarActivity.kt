@@ -1161,7 +1161,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         })
         alertDialogRadarLongPress!!.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             val strName = alertDialogStatusAl[which]
-            when {
+            UtilityRadarUI.doLongPressAction(
+                strName,
+                contextg,
+                act,
+                glview,
+                oglr,
+                uiDispatcher,
+                ::longPressRadarSiteSwitch)
+            /*when {
                 strName.contains("Show warning text") -> {
                     UtilityRadarUI.showNearestWarning(contextg, glview)
                 }
@@ -1188,15 +1196,16 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 }
                 strName.contains("Show Spotter Info") -> {
                     UtilityRadarUI.showSpotterInfo(act, glview, uiDispatcher)
-                }
-                else -> {
-                    oglr.rid = strName.parse(UtilityRadarUI.longPressRadarSiteRegex)
-                    ridChanged = true
-                    ridMapSwitch(oglr.rid)
-                }
-            }
+    }*/
             dialog.dismiss()
         })
+    }
+    
+
+    private fun longPressRadarSiteSwitch(strName: String) {
+        oglr.rid = strName.parse(UtilityRadarUI.longPressRadarSiteRegex)
+        ridChanged = true
+        ridMapSwitch(oglr.rid)
     }
 
     private fun alertDialogTDWR() {
