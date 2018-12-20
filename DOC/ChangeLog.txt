@@ -5,7 +5,9 @@
 // TODO reduce complexity and code cleanup (lint)
 // TODO in various anim code don't use String to represent # of frames, convert to Int
 // TODO convert to new NavDrawer: USWarningsWith, ModelGeneric, ModelSPCHRRR, SPCCompmap, SPCStormreports, GOES16
+// TODO look for AlertDiaglog not converted to object ( settingsNotif )
 
+55079 2018_12_20 code cleanup, continue moving semi-common code to UtilityRadarUI
 55078 2018_12_19 enhance UtilityRadarUI and add more verbiage in longpress
 55077 2018_12_19 enhance UtilityRadarUI
 55076 2018_12_18 add UtilityRadarUI and move status message there
