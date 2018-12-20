@@ -42,8 +42,6 @@ import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.TouchImageView2
-import kotlinx.coroutines.Job
-import kotlin.reflect.KFunction
 
 object UtilityImg {
 

@@ -1127,7 +1127,16 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         })
         alertDialogRadarLongPress!!.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             val strName = alertDialogStatusAl[which]
-            when {
+            UtilityRadarUI.doLongPressAction(
+                strName,
+                contextg,
+                act,
+                glviewArr[idxIntAl],
+                oglrArr[idxIntAl],
+                uiDispatcher,
+                ::longPressRadarSiteSwitch)
+
+            /*when {
                 strName.contains("Show warning text") -> {
                     UtilityRadarUI.showNearestWarning(contextg, glviewArr[idxIntAl])
                 }
@@ -1154,25 +1163,25 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 }
                 strName.contains("Show Spotter Info") -> {
                     UtilityRadarUI.showSpotterInfo(act, glviewArr[idxIntAl], uiDispatcher)
-                }
-                else -> {
-                    val ridNew = strName.parse(UtilityRadarUI.longPressRadarSiteRegex)
-                    if (MyApplication.dualpaneshareposn) {
-                        numPanesArr.forEach {
-                            oglrArr[it].rid = ridNew
-                            oglrArr[it].rid = ridNew
-                        }
-                        ridChanged = true
-                        ridMapSwitch(oglrArr[curRadar].rid)
-                    } else {
-                        oglrArr[idxIntAl].rid = ridNew
-                        ridChanged = true
-                        ridMapSwitch(oglrArr[idxIntAl].rid)
-                    }
-                }
+            }*/
+	    dialog.dismiss()
+	})
+    }
+
+    private fun longPressRadarSiteSwitch(strName: String) {
+        val ridNew = strName.parse(UtilityRadarUI.longPressRadarSiteRegex)
+        if (MyApplication.dualpaneshareposn) {
+            numPanesArr.forEach {
+                oglrArr[it].rid = ridNew
+                oglrArr[it].rid = ridNew
             }
-            dialog.dismiss()
-        })
+            ridChanged = true
+            ridMapSwitch(oglrArr[curRadar].rid)
+        } else {
+            oglrArr[idxIntAl].rid = ridNew
+            ridChanged = true
+            ridMapSwitch(oglrArr[idxIntAl].rid)
+        }
     }
 
     private fun alertDialogTDWR() {

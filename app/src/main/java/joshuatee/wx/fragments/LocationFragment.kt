@@ -905,7 +905,16 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         })
         alertDialogRadarLongPress!!.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             val strName = alertDialogRadarLongpressAl[which]
-            when {
+            UtilityRadarUI.doLongPressAction(
+                strName,
+                activityReference,
+                activityReference,
+                glviewArr[idxIntG],
+                oglrArr[idxIntG],
+                uiDispatcher,
+                ::longPressRadarSiteSwitch)
+
+            /*when {
                 strName.contains("Show warning text") -> {
                     UtilityRadarUI.showNearestWarning(activityReference, glviewArr[idxIntG])
                 }
@@ -943,36 +952,37 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 }
                 strName.contains("Show Spotter Info") -> {
                     UtilityRadarUI.showSpotterInfo(activityReference, glviewArr[idxIntG], uiDispatcher)
-                }
-                else -> {
-                    val ridNew = strName.parse(UtilityRadarUI.longPressRadarSiteRegex)
-                    val oldRidIdx = oglrArr[idxIntG].rid
-                    oglrArr[idxIntG].rid = ridNew
-                    if (idxIntG != oglrIdx) {
-                        MyApplication.homescreenFav = MyApplication.homescreenFav.replace(
-                            "NXRD-$oldRidIdx",
-                            "NXRD-" + oglrArr[idxIntG].rid
-                        )
-                        Utility.writePref(
-                            activityReference,
-                            "HOMESCREEN_FAV",
-                            MyApplication.homescreenFav
-                        )
-                    }
-                    radarLocationChangedAl[idxIntG] = true
-                    // FIXME need method
-                    glviewArr[idxIntG].scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
-                    oglrArr[idxIntG].setViewInitial(
-                        MyApplication.wxoglSize.toFloat() / 10.0f,
-                        0.0f,
-                        0.0f
-                    )
-                    // FIXME need ridMapSwitch
-                    getRadar(idxIntG)
-                }
-            }
+		    }
+		    */
             dialog.dismiss()
         })
+    }
+
+    private fun longPressRadarSiteSwitch(strName: String) {
+        val ridNew = strName.parse(UtilityRadarUI.longPressRadarSiteRegex)
+        val oldRidIdx = oglrArr[idxIntG].rid
+        oglrArr[idxIntG].rid = ridNew
+        if (idxIntG != oglrIdx) {
+            MyApplication.homescreenFav = MyApplication.homescreenFav.replace(
+                "NXRD-$oldRidIdx",
+                "NXRD-" + oglrArr[idxIntG].rid
+            )
+            Utility.writePref(
+                activityReference,
+                "HOMESCREEN_FAV",
+                MyApplication.homescreenFav
+            )
+        }
+        radarLocationChangedAl[idxIntG] = true
+        // FIXME need method
+        glviewArr[idxIntG].scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
+        oglrArr[idxIntG].setViewInitial(
+            MyApplication.wxoglSize.toFloat() / 10.0f,
+            0.0f,
+            0.0f
+        )
+        // FIXME need ridMapSwitch
+        getRadar(idxIntG)
     }
 
     private var mActivity: FragmentActivity? = null
