@@ -33,7 +33,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.opengl.GLSurfaceView
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -69,7 +68,6 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
 
 import joshuatee.wx.TDWR_RIDS
-import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.radar.SpotterNetworkPositionReport.SendPosition
@@ -264,7 +262,18 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 params.width = MyApplication.dm.widthPixels
             }
         }
-        numPanesArr.forEach { initGLVIEW(glviewArr[it], oglrArr[it]) }
+        numPanesArr.forEach {
+            UtilityRadarUI.initGlview(
+                glviewArr[it],
+                glviewArr,
+                oglrArr[it],
+                oglrArr,
+                act,
+                toolbar,
+                toolbarBottom,
+                changeListener
+            )
+        }
         imageMap = ObjectImageMap(
             this,
             this,
@@ -450,35 +459,29 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     "N0U"
             toolbar.subtitle = ""
             setToolbarTitle()
-            initWXOGLGeom(glv, ogl, z)
+            //initWXOGLGeom(glv, ogl, z)
+            UtilityRadarUI.initWxoglGeom(
+                glv,
+                ogl,
+                z,
+                oldRidArr,
+                oglrArr,
+                wxgltextArr,
+                numPanesArr,
+                imageMap,
+                glviewArr,
+                ::getGPSFromDouble,
+                ::getLatLon
+            )
             withContext(Dispatchers.IO) {
-                ogl.constructPolygons("", "", true)
-                if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) {
-                    ogl.constructSpotters()
-                } else {
-                    ogl.deconstructSpotters()
-                }
-                if (PolygonType.STI.pref)
-                    ogl.constructSTILines()
-                else
-                    ogl.deconstructSTILines()
-                if (PolygonType.HI.pref)
-                    ogl.constructHI()
-                else
-                    ogl.deconstructHI()
-                if (PolygonType.TVS.pref)
-                    ogl.constructTVS()
-                else
-                    ogl.deconstructTVS()
-                if (MyApplication.locdotFollowsGps) {
-                    getGPSFromDouble()
-                    locXCurrent = latlonArr[0]
-                    locYCurrent = latlonArr[1]
-                }
-                if (PolygonType.LOCDOT.pref || MyApplication.locdotFollowsGps)
-                    ogl.constructLocationDot(locXCurrent, locYCurrent, false)
-                else
-                    ogl.deconstructLocationDot()
+                UtilityRadarUI.plotRadar(
+                    ogl,
+                    "",
+                    contextg,
+                    ::getGPSFromDouble,
+                    ::getLatLon,
+                    false
+                )
             }
             if (!oglInView) {
                 glviewShow()
@@ -902,19 +905,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         }
     }
 
-    private fun initGLVIEW(glv: WXGLSurfaceView, ogl: WXGLRender) {
-        glv.setEGLContextClientVersion(2)
-        //glv.setEGLConfigChooser(8, 8, 8, 8, 16, 0) // a test to see if android emulator will now work
-        glv.setRenderer(ogl)
-        glv.setRenderVar(ogl, oglrArr, glviewArr, act)
-        glv.fullScreen = false
-        glv.setOnProgressChangeListener(changeListener)
-        glv.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
-        glv.toolbar = toolbar
-        glv.toolbarBottom = toolbarBottom
-    }
-
-    private fun initWXOGLGeom(glv: WXGLSurfaceView, ogl: WXGLRender, z: Int) {
+    /*private fun initWXOGLGeom(glv: WXGLSurfaceView, ogl: WXGLRender, z: Int) {
         ogl.initGEOM()
         if (oldRidArr[z] != oglrArr[z].rid) {
             ogl.setChunkCount(0)
@@ -1004,18 +995,20 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         }).start()
         if (MyApplication.locdotFollowsGps) {
             getGPSFromDouble()
-            locXCurrent = latlonArr[0]
-            locYCurrent = latlonArr[1]
+            //locXCurrent = latlonArr[0]
+            //locYCurrent = latlonArr[1]
         }
-        if (PolygonType.LOCDOT.pref || MyApplication.locdotFollowsGps)
+        if (PolygonType.LOCDOT.pref || MyApplication.locdotFollowsGps) {
+            UtilityLog.d("wx", "LAT: " + locXCurrent)
+            UtilityLog.d("wx", "LON: " + locYCurrent)
             ogl.constructLocationDot(locXCurrent, locYCurrent, false)
-        else
+        } else
             ogl.deconstructLocationDot()
         if (imageMap.map.visibility != View.VISIBLE) {
             numPanesArr.forEach { glviewArr[it].visibility = View.VISIBLE }
         }
     }
-
+*/
     private val handler = Handler()
 
     private val mStatusChecker: Runnable? = object : Runnable {
@@ -1102,8 +1095,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         latD = location.latitude
         lonD = location.longitude
         getGPSFromDouble()
-        locXCurrent = latlonArr[0]
-        locYCurrent = latlonArr[1]
+        //locXCurrent = latlonArr[0]
+        //locYCurrent = latlonArr[1]
         numPanesArr.forEach {
             oglrArr[it].constructLocationDot(locXCurrent, locYCurrent, false)
             glviewArr[it].requestRender()
@@ -1114,10 +1107,14 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         try {
             latlonArr[0] = latD.toString()
             latlonArr[1] = lonD.toString()
+            locXCurrent = latlonArr[0]
+            locYCurrent = latlonArr[1]
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
         }
     }
+
+    private fun getLatLon() = LatLon(locXCurrent, locYCurrent)
 
     private fun setupAlertDialogRadarLongPress() {
         alertDialogRadarLongPress = ObjectDialogue(contextg, alertDialogStatusAl)
@@ -1134,38 +1131,10 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 glviewArr[idxIntAl],
                 oglrArr[idxIntAl],
                 uiDispatcher,
-                ::longPressRadarSiteSwitch)
-
-            /*when {
-                strName.contains("Show warning text") -> {
-                    UtilityRadarUI.showNearestWarning(contextg, glviewArr[idxIntAl])
-                }
-                strName.contains("Show watch text") -> {
-                    UtilityRadarUI.showNearestWatch(contextg, act, glviewArr[idxIntAl], uiDispatcher)
-                }
-                strName.contains("Show MCD text") -> {
-                    UtilityRadarUI.showNearestMcd(contextg, act, glviewArr[idxIntAl], uiDispatcher)
-                }
-                strName.contains("Show MPD text") -> {
-                    UtilityRadarUI.showNearestMpd(contextg, act, glviewArr[idxIntAl], uiDispatcher)
-                }
-                strName.contains("Show nearest observation") -> {
-                    UtilityRadarUI.getMetar(glviewArr[idxIntAl], act, contextg, uiDispatcher)
-                }
-                strName.contains("Show nearest meteogram") -> {
-                    UtilityRadarUI.showNearestMeteogram(contextg, glviewArr[idxIntAl])
-                }
-                strName.contains("Show radar status message") -> {
-                    UtilityRadarUI.getRadarStatus(act, contextg, uiDispatcher, oglrArr[idxIntAl])
-                }
-                strName.contains("Show nearest forecast") -> {
-                    UtilityRadarUI.showNearestForecast(contextg, glviewArr[idxIntAl])
-                }
-                strName.contains("Show Spotter Info") -> {
-                    UtilityRadarUI.showSpotterInfo(act, glviewArr[idxIntAl], uiDispatcher)
-            }*/
-	    dialog.dismiss()
-	})
+                ::longPressRadarSiteSwitch
+            )
+            dialog.dismiss()
+        })
     }
 
     private fun longPressRadarSiteSwitch(strName: String) {

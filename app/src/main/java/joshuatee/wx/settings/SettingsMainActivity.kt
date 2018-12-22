@@ -27,8 +27,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
-import joshuatee.wx.BackupRestore
-
 import joshuatee.wx.R
 import joshuatee.wx.audio.SettingsPlaylistActivity
 import joshuatee.wx.MyApplication
@@ -53,7 +51,7 @@ class SettingsMainActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         UtilityTheme.setPrimaryColor(this)
         contextg = this
-        var backuprestore: BackupRestore = BackupRestore()
+        var backuprestore = UtilityBackupRestore()
         var vers = ""
         try {
             vers = packageManager.getPackageInfo(packageName, 0).versionName

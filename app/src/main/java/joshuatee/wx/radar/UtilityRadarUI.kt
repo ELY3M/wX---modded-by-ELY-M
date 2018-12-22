@@ -24,14 +24,20 @@ package joshuatee.wx.radar
 
 import android.app.Activity
 import android.content.Context
+import android.opengl.GLSurfaceView
+import android.view.View
+import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.MyApplication
 import joshuatee.wx.activitiesmisc.AdhocForecastActivity
 import joshuatee.wx.activitiesmisc.ImageShowActivity
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.objects.DistanceUnit
+import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.ObjectImageMap
 
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
@@ -40,7 +46,7 @@ internal object UtilityRadarUI {
 
     const val longPressRadarSiteRegex = "\\) ([A-Z]{3,4}) "
 
-    fun getRadarStatus(
+    private fun getRadarStatus(
         act: Activity,
         context: Context,
         uiDispatcher: CoroutineDispatcher,
@@ -58,7 +64,7 @@ internal object UtilityRadarUI {
         UtilityAlertDialog.showHelpText(Utility.fromHtml(radarStatus), act)
     }
 
-    fun getMetar(
+    private fun getMetar(
         glview: WXGLSurfaceView,
         act: Activity,
         context: Context,
@@ -70,7 +76,7 @@ internal object UtilityRadarUI {
         UtilityAlertDialog.showHelpText(txt, act)
     }
 
-    fun showNearestForecast(context: Context, glview: WXGLSurfaceView) {
+    private fun showNearestForecast(context: Context, glview: WXGLSurfaceView) {
         ObjectIntent(
             context,
             AdhocForecastActivity::class.java,
@@ -79,7 +85,7 @@ internal object UtilityRadarUI {
         )
     }
 
-    fun showNearestMeteogram(context: Context, glview: WXGLSurfaceView) {
+    private fun showNearestMeteogram(context: Context, glview: WXGLSurfaceView) {
         // http://www.nws.noaa.gov/mdl/gfslamp/meteoform.php
         // http://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=KTEW
         val obsSite = UtilityMetar.findClosestObservation(
@@ -94,7 +100,7 @@ internal object UtilityRadarUI {
         )
     }
 
-    fun showNearestWarning(context: Context, glview: WXGLSurfaceView) {
+    private fun showNearestWarning(context: Context, glview: WXGLSurfaceView) {
         val polygonUrl = UtilityWXOGL.showTextProducts(
             glview.newY.toDouble(),
             glview.newX.toDouble() * -1.0
@@ -105,6 +111,55 @@ internal object UtilityRadarUI {
             USAlertsDetailActivity.URL,
             arrayOf(polygonUrl, "")
         )
+    }
+    
+    
+    private fun showNearestWatch(
+            context: Context,
+            act: Activity,
+            glview: WXGLSurfaceView,
+            uiDispatcher: CoroutineDispatcher
+    ) = GlobalScope.launch(uiDispatcher) {
+        val txt = withContext(Dispatchers.IO) {
+            UtilityWat.showWatchProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
+        }
+        UtilityAlertDialog.showHelpText(txt, act)
+    }
+
+    private fun showNearestMcd(
+            context: Context,
+            act: Activity,
+            glview: WXGLSurfaceView,
+            uiDispatcher: CoroutineDispatcher
+    ) = GlobalScope.launch(uiDispatcher) {
+        val txt = withContext(Dispatchers.IO) {
+            UtilityWat.showMCDProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
+        }
+        UtilityAlertDialog.showHelpText(txt, act)
+    }
+
+
+    private fun showNearestMpd(
+            context: Context,
+            act: Activity,
+            glview: WXGLSurfaceView,
+            uiDispatcher: CoroutineDispatcher
+    ) = GlobalScope.launch(uiDispatcher) {
+        val txt = withContext(Dispatchers.IO) {
+            UtilityWat.showMPDProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
+        }
+        UtilityAlertDialog.showHelpText(txt, act)
+    }
+
+    private fun showSpotterInfo(
+            act: Activity,
+            glview: WXGLSurfaceView,
+            uiDispatcher: CoroutineDispatcher
+    ) = GlobalScope.launch(uiDispatcher) {
+        val txt = withContext(Dispatchers.IO) {
+            UtilitySpotter.findClosestSpotter(glview.latLon)
+        }
+        UtilityAlertDialog.showHelpText(txt, act)
     }
 
     fun addItemsToLongPress(
@@ -184,7 +239,8 @@ internal object UtilityRadarUI {
         glview: WXGLSurfaceView,
         oglr: WXGLRender,
         uiDispatcher: CoroutineDispatcher,
-        fn: (strName: String) -> Unit){
+        fn: (strName: String) -> Unit
+    ) {
         when {
             strName.contains("Show warning text") -> {
                 UtilityRadarUI.showNearestWarning(context, glview)
@@ -217,58 +273,240 @@ internal object UtilityRadarUI {
         }
     }
 
-
-    fun showNearestWatch(
-            context: Context,
-            act: Activity,
-            glview: WXGLSurfaceView,
-            uiDispatcher: CoroutineDispatcher
-    ) = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) {
-            UtilityWat.showWatchProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
-        }
-        UtilityAlertDialog.showHelpText(txt, act)
+    fun initGlviewFragment(
+        glviewloc: WXGLSurfaceView,
+        z: Int,
+        oglrArr: MutableList<WXGLRender>,
+        glviewArr: MutableList<WXGLSurfaceView>,
+        wxgltextArr: MutableList<WXGLTextObject>,
+        changeListener: WXGLSurfaceView.OnProgressChangeListener
+    ): Boolean {
+        glviewloc.setEGLContextClientVersion(2)
+        wxgltextArr[z].setOGLR(oglrArr[z])
+        oglrArr[z].idxStr = z.toString()
+        glviewloc.setRenderer(oglrArr[z])
+        glviewloc.setRenderVar(oglrArr[z], oglrArr, glviewArr)
+        glviewloc.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
+        glviewloc.setOnProgressChangeListener(changeListener)
+        oglrArr[z].zoom = MyApplication.wxoglSize.toFloat() / 10.0f
+        glviewloc.scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
+        return true
     }
 
-    fun showNearestMcd(
-            context: Context,
-            act: Activity,
-            glview: WXGLSurfaceView,
-            uiDispatcher: CoroutineDispatcher
-    ) = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) {
-            UtilityWat.showMCDProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
-        }
-        UtilityAlertDialog.showHelpText(txt, act)
+    fun initGlview(
+        glview: WXGLSurfaceView,
+        glviewArr: MutableList<WXGLSurfaceView>,
+        oglr: WXGLRender,
+        oglrArr: MutableList<WXGLRender>,
+        act: Activity,
+        toolbar: Toolbar,
+        toolbarBottom: Toolbar,
+        changeListener: WXGLSurfaceView.OnProgressChangeListener,
+        archiveMode: Boolean = false
+    ) {
+        glview.setEGLContextClientVersion(2)
+        glview.setRenderer(oglr)
+        glview.setRenderVar(oglr, oglrArr, glviewArr, act)
+        glview.fullScreen = true
+        glview.setOnProgressChangeListener(changeListener)
+        glview.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
+        glview.toolbar = toolbar
+        glview.toolbarBottom = toolbarBottom
+        glview.archiveMode = archiveMode
     }
 
-
-    fun showNearestMpd(
-            context: Context,
-            act: Activity,
-            glview: WXGLSurfaceView,
-            uiDispatcher: CoroutineDispatcher
-    ) = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) {
-            UtilityWat.showMPDProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
+    fun initWxoglGeom(
+        glv: WXGLSurfaceView,
+        ogl: WXGLRender,
+        z: Int,
+        oldRidArr: Array<String>,
+        oglrArr: MutableList<WXGLRender>,
+        wxgltextArr: MutableList<WXGLTextObject>,
+        numPanesArr: List<Int>,
+        imageMap: ObjectImageMap?,
+        glviewArr: MutableList<WXGLSurfaceView>,
+        fnGps: () -> Unit,
+        fnGetLatLon: () -> LatLon,
+        archiveMode: Boolean = false
+    ) {
+        ogl.initGEOM()
+        if (oldRidArr[z] != oglrArr[z].rid) {
+            ogl.setChunkCount(0)
+            ogl.setChunkCountSti(0)
+            ogl.setHiInit(false)
+            ogl.setTvsInit(false)
+            Thread(Runnable {
+                ogl.constructStateLines()
+                glv.requestRender()
+            }).start()
+            Thread(Runnable {
+                if (GeographyType.LAKES.pref)
+                    ogl.constructLakes()
+                else
+                    ogl.deconstructLakes()
+            }).start()
+            Thread(Runnable {
+                if (GeographyType.COUNTY_LINES.pref) {
+                    ogl.constructCounty()
+                    glv.requestRender()
+                } else
+                    ogl.deconstructCounty()
+            }).start()
+            Thread(Runnable {
+                if (GeographyType.HIGHWAYS.pref) {
+                    ogl.constructHWLines()
+                    glv.requestRender()
+                } else
+                    ogl.deconstructHWLines()
+            }).start()
+            Thread(Runnable {
+                if (MyApplication.radarHwEnhExt) {
+                    ogl.constructHWEXTLines()
+                    glv.requestRender()
+                } else
+                    ogl.deconstructHWEXTLines()
+            }).start()
+            wxgltextArr[z].addTV()
+            oldRidArr[z] = oglrArr[z].rid
         }
-        UtilityAlertDialog.showHelpText(txt, act)
+
+        //conus radar
+        Thread(Runnable {
+            if (MyApplication.radarConusRadar && !archiveMode) {
+                ogl.constructConusRadar()
+                glv.requestRender()
+            } else {
+                ogl.deconstructConusRadar()
+            }
+        }).start()
+
+        Thread(Runnable {
+
+            if (PolygonType.TOR.pref && !archiveMode)
+                ogl.constructTorWarningLines()
+            else
+                ogl.deconstructTorWarningLines()
+
+            if (PolygonType.SVR.pref && !archiveMode)
+                ogl.constructSvrWarningLines()
+            else
+                ogl.deconstructSvrWarningLines()
+
+            if (PolygonType.EWW.pref && !archiveMode)
+                ogl.constructEwwWarningLines()
+            else
+                ogl.deconstructEwwWarningLines()
+
+            if (PolygonType.FFW.pref && !archiveMode)
+                ogl.constructFfwWarningLines()
+            else
+                ogl.deconstructFfwWarningLines()
+
+            if (PolygonType.SMW.pref && !archiveMode)
+                ogl.constructSmwWarningLines()
+            else
+                ogl.deconstructSmwWarningLines()
+
+            if (PolygonType.SVS.pref && !archiveMode)
+                ogl.constructSvsWarningLines()
+            else
+                ogl.deconstructSvsWarningLines()
+
+            if (PolygonType.SPS.pref && !archiveMode)
+                ogl.constructSpsWarningLines()
+            else
+                ogl.deconstructSpsWarningLines()
+
+            if (PolygonType.MCD.pref && !archiveMode)
+                ogl.constructWATMCDLines()
+            else
+                ogl.deconstructWATMCDLines()
+
+            if (PolygonType.MPD.pref && !archiveMode)
+                ogl.constructMPDLines()
+            else
+                ogl.deconstructMPDLines()
+            glv.requestRender()
+        }).start()
+        if (MyApplication.locdotFollowsGps) {
+            fnGps()
+            //locXCurrent = latlonArr[0]
+            //locYCurrent = latlonArr[1]
+        }
+        if (PolygonType.LOCDOT.pref || MyApplication.locdotFollowsGps) {
+            val latLon = fnGetLatLon()
+            UtilityLog.d("wx", "LAT: " + latLon.latString)
+            UtilityLog.d("wx", "LON: " + latLon.lonString)
+            ogl.constructLocationDot(latLon.latString, latLon.lonString, archiveMode)
+        } else {
+            ogl.deconstructLocationDot()
+        }
+        if (imageMap != null && imageMap.map.visibility != View.VISIBLE) {
+            numPanesArr.forEach { glviewArr[it].visibility = View.VISIBLE }
+        }
     }
 
-    fun showSpotterInfo(
-            act: Activity,
-            glview: WXGLSurfaceView,
-            uiDispatcher: CoroutineDispatcher
-    ) = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) {
-            UtilitySpotter.findClosestSpotter(glview.latLon)
+    fun plotRadar(
+        oglr: WXGLRender,
+        urlStr: String,
+        context: Context,
+        fnGps: () -> Unit,
+        fnGetLatLon: () -> LatLon,
+            //TODO why?!?!? showExtras is only in this file....
+            //TODO not needed
+        //showExtras: Boolean,
+        archiveMode: Boolean = false
+    ) {
+        oglr.constructPolygons("", urlStr, true)
+
+        if ((PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) && !archiveMode)
+            oglr.constructSpotters()
+        else
+            oglr.deconstructSpotters()
+
+        if (PolygonType.STI.pref && !archiveMode)
+            oglr.constructSTILines()
+        else
+            oglr.deconstructSTILines()
+
+        if (PolygonType.HI.pref && !archiveMode)
+            oglr.constructHI()
+        else
+            oglr.deconstructHI()
+
+        if (PolygonType.TVS.pref && !archiveMode)
+            oglr.constructTVS()
+        else
+            oglr.deconstructTVS()
+
+        if (MyApplication.locdotFollowsGps && !archiveMode) {
+            fnGps()
         }
-        UtilityAlertDialog.showHelpText(txt, act)
+        if (PolygonType.LOCDOT.pref || archiveMode || MyApplication.locdotFollowsGps) {
+            val latLon = fnGetLatLon()
+            UtilityLog.d("wx", "LAT: " + latLon.latString)
+            UtilityLog.d("wx", "LON: " + latLon.lonString)
+            oglr.constructLocationDot(latLon.latString, latLon.lonString, archiveMode)
+            //oglr.constructLocationDot(locXCurrent, locYCurrent, archiveMode)
+        } else {
+            oglr.deconstructLocationDot()
+        }
+
+        //if (showExtras) {
+            if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && !archiveMode) {
+                UtilityMetar.getStateMetarArrayForWXOGL(context, oglr.rid)
+            }
+            if (PolygonType.WIND_BARB.pref && !archiveMode) {
+                oglr.constructWBLines()
+            } else {
+                oglr.deconstructWBLines()
+            }
+            if (PolygonType.SWO.pref && !archiveMode) {
+                UtilitySWOD1.getSWO()
+                oglr.constructSWOLines()
+            } else {
+                oglr.deconstructSWOLines()
+            }
+        //} //showExtras
     }
-
-
-
-
-
-
 }

@@ -34,7 +34,6 @@ import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.opengl.GLSurfaceView
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -49,22 +48,17 @@ import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.os.Handler
-import android.view.Window
-import android.util.Log
 
 import joshuatee.wx.R
 import joshuatee.wx.activitiesmisc.ImageShowActivity
-import joshuatee.wx.activitiesmisc.AdhocForecastActivity
 import joshuatee.wx.activitiesmisc.TextScreenActivity
-import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.activitiesmisc.WebscreenABModels
-import joshuatee.wx.external.UtilityStringExternal
+import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.telecine.TelecineService
 import joshuatee.wx.util.ImageMap
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
-import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityFavorites
 import joshuatee.wx.util.UtilityFileManagement
 import joshuatee.wx.util.UtilityImageMap
@@ -78,8 +72,6 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
 
 import joshuatee.wx.TDWR_RIDS
-import joshuatee.wx.objects.DistanceUnit
-import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 
@@ -119,7 +111,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private lateinit var oglr: WXGLRender
     private var oldProd = ""
     private var firstRun = true
-    private var oldRid = ""
+    private var oldRidArr = Array(1) { "" }
     private var mHandler: Handler? = null
     private var mInterval = 180000 // 180 seconds by default
     private var sn_Handler_m: Handler? = null
@@ -257,7 +249,20 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         rl = findViewById(R.id.rl)
         rl.addView(glview)
         val rlArr = arrayOf(rl)
-        initGLVIEW()
+        oglr = WXGLRender(this)
+        oglrArr.add(oglr)
+        glviewArr.add(glview)
+        UtilityRadarUI.initGlview(
+            glview,
+            glviewArr,
+            oglr,
+            oglrArr,
+            act,
+            toolbar,
+            toolbarBottom,
+            changeListener,
+            archiveMode
+            )
         oglr.product = "N0Q"
         oglInView = true
         if (activityArguments == null)
@@ -320,7 +325,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
 	
         if (MyApplication.sn_locationreport) {
-            Log.i(TAG, "starting location report")
+            UtilityLog.d("wx", "starting location report")
             sn_Handler_m = Handler()
             start_sn_reporting()
         }
@@ -387,7 +392,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
 	
         if (MyApplication.sn_locationreport) {
-            Log.i(TAG, "starting location report")
+            UtilityLog.d("wx", "starting location report")
             sn_Handler_m = Handler()
             start_sn_reporting()
         }
@@ -420,50 +425,33 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         else
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         toolbar.subtitle = ""
-        if (!oglr.product.startsWith("2")) initWXOGLGeom()
+        if (!oglr.product.startsWith("2")) {
+            //initWXOGLGeom(0)
+            UtilityRadarUI.initWxoglGeom(
+                glview,
+                oglr,
+                0,
+                oldRidArr,
+                oglrArr,
+                wxgltextArr,
+                numPanesArr,
+                imageMap,
+                glviewArr,
+                ::getGPSFromDouble,
+                ::getLatLon,
+                archiveMode
+            )
+        }
 
         withContext(Dispatchers.IO) {
-            oglr.constructPolygons("", urlStr, true)
-            if ((PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) && !archiveMode)
-                oglr.constructSpotters()
-            else
-                oglr.deconstructSpotters()
-            if (PolygonType.STI.pref && !archiveMode)
-                oglr.constructSTILines()
-            else
-                oglr.deconstructSTILines()
-            if (PolygonType.HI.pref && !archiveMode)
-                oglr.constructHI()
-            else
-                oglr.deconstructHI()
-            if (PolygonType.TVS.pref && !archiveMode)
-                oglr.constructTVS()
-            else
-                oglr.deconstructTVS()
-            if (MyApplication.locdotFollowsGps && !archiveMode) {
-                getGPSFromDouble()
-                locXCurrent = latlonArr[0]
-                locYCurrent = latlonArr[1]
-            }
-            if (PolygonType.LOCDOT.pref || archiveMode || MyApplication.locdotFollowsGps) {
-                oglr.constructLocationDot(locXCurrent, locYCurrent, archiveMode)
-            } else {
-                oglr.deconstructLocationDot()
-            }
-            if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && !archiveMode) {
-                UtilityMetar.getStateMetarArrayForWXOGL(contextg, oglr.rid)
-            }
-            if (PolygonType.WIND_BARB.pref && !archiveMode) {
-                oglr.constructWBLines()
-            } else {
-                oglr.deconstructWBLines()
-            }
-            if (PolygonType.SWO.pref && !archiveMode) {
-                UtilitySWOD1.getSWO()
-                oglr.constructSWOLines()
-            } else {
-                oglr.deconstructSWOLines()
-            }
+            UtilityRadarUI.plotRadar(
+                oglr,
+                urlStr,
+                contextg,
+                ::getGPSFromDouble,
+                ::getLatLon,
+                archiveMode
+            )
         }
 
         if (!oglInView) {
@@ -921,27 +909,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
     }
 
-    private fun initGLVIEW() {
-        glview.setEGLContextClientVersion(2)
-        oglr = WXGLRender(this as Activity)
-        oglrArr.clear()
-        oglrArr.add(oglr)
-        glviewArr.clear()
-        glviewArr.add(glview)
-        //glview.setEGLConfigChooser(8, 8, 8, 8, 16, 0) // a test to see if android emulator will now work
-        glview.setRenderer(oglr)
-        glview.setRenderVar(oglr, oglrArr, glviewArr, act)
-        glview.fullScreen = true
-        glview.setOnProgressChangeListener(changeListener)
-        glview.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
-        glview.toolbar = toolbar
-        glview.toolbarBottom = toolbarBottom
-        glview.archiveMode = archiveMode
-    }
-
-    private fun initWXOGLGeom() {
+    /*private fun initWXOGLGeom(z: Int) {
         oglr.initGEOM()
-        if (oldRid != oglr.rid) {
+        if (oldRidArr[z] != oglrArr[z].rid) {  //  oldRid != oglr.rid
             oglr.setChunkCount(0)
             oglr.setChunkCountSti(0)
             oglr.setHiInit(false)
@@ -977,10 +947,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 } else
                     oglr.deconstructHWEXTLines()
             }).start()
-            wxgltextArr[0].addTV()
-            oldRid = oglr.rid
+            wxgltextArr[z].addTV()
+            //oldRid = oglr.rid
+            oldRidArr[z] = oglrArr[z].rid
         }
-
         Thread(Runnable {
             if (MyApplication.radarConusRadar && !archiveMode)
                 oglr.constructConusRadar()
@@ -1038,8 +1008,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }).start()
         if (MyApplication.locdotFollowsGps && !archiveMode) {
             getGPSFromDouble()
-            locXCurrent = latlonArr[0]
-            locYCurrent = latlonArr[1]
+            //locXCurrent = latlonArr[0]
+            //locYCurrent = latlonArr[1]
         }
         if (PolygonType.LOCDOT.pref || MyApplication.locdotFollowsGps) // added locdot gps apr 2016
             oglr.constructLocationDot(locXCurrent, locYCurrent, archiveMode)
@@ -1048,7 +1018,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         img.visibility = View.GONE
         glview.visibility = View.VISIBLE
     }
-
+*/
     private val handler = Handler()
 
     private val mStatusChecker: Runnable = object : Runnable {
@@ -1077,7 +1047,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private val sn_reporter: Runnable = object : Runnable {
         override fun run() {
 
-            Log.i(TAG, "SendPosition(contextg) on lat: "+latD+" lon: "+lonD)
+            UtilityLog.d("wx", "SendPosition(contextg) on lat: "+latD+" lon: "+lonD)
             SendPosition(contextg)
 
             sn_handler.postDelayed(this, sn_Interval.toLong())
@@ -1097,7 +1067,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private val conus_handler = Handler()
     private val conus_image: Runnable = object : Runnable {
         override fun run() {
-            Log.i(TAG, "downloading new conus image")
+            UtilityLog.d("wx", "downloading new conus image")
             UtilityConusRadar.getConusImage()
             conus_handler.postDelayed(this, conus_Interval.toLong())
         }
@@ -1138,12 +1108,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         lonD = location.longitude
         bearingCurrent = location.bearing
         speedCurrent = location.speed
-        Log.i(TAG, "bearing: "+bearingCurrent)
-        Log.i(TAG, "speed: "+speedCurrent)
-        Log.i(TAG, "speed in mph: "+(speedCurrent * 3.6 * 0.62137119))
+        UtilityLog.d("wx", "bearing: "+bearingCurrent)
+        UtilityLog.d("wx", "speed: "+speedCurrent)
+        UtilityLog.d("wx", "speed in mph: "+(speedCurrent * 3.6 * 0.62137119))
         getGPSFromDouble()
-        locXCurrent = latlonArr[0]
-        locYCurrent = latlonArr[1]
+        //locXCurrent = latlonArr[0]
+        //locYCurrent = latlonArr[1]
         oglr.constructLocationDot(locXCurrent, locYCurrent, archiveMode)
         glview.requestRender()
     }
@@ -1151,7 +1121,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private fun getGPSFromDouble() {
         latlonArr[0] = latD.toString()
         latlonArr[1] = lonD.toString()
+        locXCurrent = latlonArr[0]
+        locYCurrent = latlonArr[1]
     }
+
+    private fun getLatLon() = LatLon(locXCurrent, locYCurrent)
 
     private fun setupAlertDialogRadarLongPress() {
         alertDialogRadarLongPress = ObjectDialogue(contextg, alertDialogStatusAl)
@@ -1168,39 +1142,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 glview,
                 oglr,
                 uiDispatcher,
-                ::longPressRadarSiteSwitch)
-            /*when {
-                strName.contains("Show warning text") -> {
-                    UtilityRadarUI.showNearestWarning(contextg, glview)
-                }
-                strName.contains("Show watch text") -> {
-                    UtilityRadarUI.showNearestWatch(contextg, act, glview, uiDispatcher)
-                }
-                strName.contains("Show MCD text") -> {
-                    UtilityRadarUI.showNearestMcd(contextg, act, glview, uiDispatcher)
-                }
-                strName.contains("Show MPD text") -> {
-                    UtilityRadarUI.showNearestMpd(contextg, act, glview, uiDispatcher)
-                }
-                strName.contains("Show nearest observation") -> {
-                    UtilityRadarUI.getMetar(glview, act, contextg, uiDispatcher)
-                }
-                strName.contains("Show nearest meteogram") -> {
-                    UtilityRadarUI.showNearestMeteogram(contextg, glview)
-                }
-                strName.contains("Show radar status message") -> {
-                    UtilityRadarUI.getRadarStatus(act, contextg, uiDispatcher, oglr)
-                }
-                strName.contains("Show nearest forecast") -> {
-                    UtilityRadarUI.showNearestForecast(contextg, glview)
-                }
-                strName.contains("Show Spotter Info") -> {
-                    UtilityRadarUI.showSpotterInfo(act, glview, uiDispatcher)
-    }*/
+                ::longPressRadarSiteSwitch
+            )
             dialog.dismiss()
         })
     }
-    
 
     private fun longPressRadarSiteSwitch(strName: String) {
         oglr.rid = strName.parse(UtilityRadarUI.longPressRadarSiteRegex)
@@ -1287,13 +1233,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             NavUtils.navigateUpTo(this, upIntent)
         }
     }
-
-/*
-    private fun getMetar() = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) { UtilityMetar.findClosestMetar(contextg, LatLon(glview.newY.toDouble(), glview.newX.toDouble() * -1.0)) }
-        UtilityAlertDialog.showHelpText(txt, act)
-    }
-*/    
+  
     private fun getContentVWP() = GlobalScope.launch(uiDispatcher) {
         //val txt = withContext(Dispatchers.IO) { UtilityWXOGL.getVWP(contextg, oglr.rid) }
         //ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(txt, oglr.rid + " VAD Wind Profile"))
@@ -1301,33 +1241,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         ObjectIntent(contextg, WebscreenABModels::class.java, WebscreenABModels.URL, arrayOf(vmpurl, oglr.rid + " VAD Wind Profile"))
 
     }
-
-    /*
-    private fun getSpotterInfo() = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) { UtilitySpotter.findClosestSpotter(LatLon(glview.newY.toDouble(), glview.newX.toDouble() * -1.0)) }
-        UtilityAlertDialog.showHelpText(txt, act)
-    }
-
-    private fun getWatch() = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) {  UtilityWat.showWatchProducts(contextg, glview.newY.toDouble(), glview.newX.toDouble() * -1.0) }
-        if (txt != "") {
-            UtilityAlertDialog.showHelpText(txt, act)
-        }
-    }
-
-    private fun getMCD() = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) {  UtilityWat.showMCDProducts(contextg, glview.newY.toDouble(), glview.newX.toDouble() * -1.0) }
-        if (txt != "") {
-            UtilityAlertDialog.showHelpText(txt, act)
-        }
-    }
-    private fun getMPD() = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) {  UtilityWat.showMPDProducts(contextg, glview.newY.toDouble(), glview.newX.toDouble() * -1.0) }
-        if (txt != "") {
-            UtilityAlertDialog.showHelpText(txt, act)
-        }
-    }
-    */
 
 
 }

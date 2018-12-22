@@ -26,11 +26,9 @@ import android.content.*
 import java.util.Locale
 
 import android.graphics.Bitmap
-import android.opengl.GLSurfaceView
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.appcompat.app.AlertDialog
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -50,7 +48,6 @@ import androidx.cardview.widget.CardView
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.SunMoonActivity
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.settings.Location
@@ -63,7 +60,6 @@ import joshuatee.wx.vis.USNWSGOESActivity
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.radar.*
@@ -107,8 +103,9 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private val hsImageAl = mutableListOf<ObjectCardHSImage>()
     private var oglrArr = mutableListOf<WXGLRender>()
     private var glviewArr = mutableListOf<WXGLSurfaceView>()
+    private var wxgltextArr = mutableListOf<WXGLTextObject>()
     private var numRadars = 0
-    private var oldRidArr = MutableList(2) { "" }
+    private var oldRidArr = Array(2) { "" }
     private val radarLocationChangedAl = mutableListOf<Boolean>()
     // used to track the wxogl # for the wxogl that is tied to current location
     private var oglrIdx = -1
@@ -122,25 +119,24 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private val hazardsCardAl = mutableListOf<ObjectCardText>()
     private val hazardsExpandedAl = mutableListOf<Boolean>()
     private var dataNotInitialized = true
-    private var alertDialogStatus: AlertDialog.Builder? = null
-    private val checkedItem = -1
+    private var alertDialogStatus: ObjectDialogue? = null
     private val alertDialogStatusAl = mutableListOf<String>()
     private var idxIntG = 0
     private var alertDialogRadarLongPress: ObjectDialogue? = null
     private val alertDialogRadarLongpressAl = mutableListOf<String>()
-    private var wxgltextArr = mutableListOf<WXGLTextObject>()
     private var objFcst: ObjectForecastPackage? = null
     private var objHazards: ObjectForecastPackageHazards? = null
     private var objSevenDay: ObjectForecastPackage7Day? = null
     private var locationChangedSevenDay = false
     private var locationChangedHazards = false
+    private var numPanesArr = listOf<Int>()
 
     private fun addDynamicCards() {
         var ccAdded = false
         var day7Added = false
         val tmpArr = MyApplication.colon.split(homescreenFavLocal)
         numRadars = tmpArr.count { it == "OGL-RADAR" || it.contains("NXRD-") }
-        oldRidArr = MutableList(numRadars) { "" }
+        oldRidArr = Array(numRadars) { "" }
         val rlArr = mutableListOf<RelativeLayout>()
         glviewArr.clear()
         wxgltextArr.clear()
@@ -240,6 +236,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 z += 1
             }
         } // end of loop over HM tokens
+        numPanesArr = (0 until glviewArr.size).toList()
     }
 
     override fun onCreateView(
@@ -247,7 +244,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        alertDialogStatus()
+        setupAlertDialogStatus()
         setupAlertDialogRadarLongPress()
         val view: View =
             if (android.os.Build.VERSION.SDK_INT < 21 && UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB)
@@ -356,7 +353,17 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             }
         }
         if (MyApplication.locDisplayImg) {
-            glviewArr.indices.forEach { initGLVIEW(glviewArr[it], it) }
+            glviewArr.indices.forEach {
+                //initGLVIEW(glviewArr[it], it)
+                glviewInitialized = UtilityRadarUI.initGlviewFragment(
+                    glviewArr[it],
+                    it,
+                    oglrArr,
+                    glviewArr,
+                    wxgltextArr,
+                    changeListener
+                )
+            }
         }
         sv = view.findViewById(R.id.sv)
         spinner1.adapter = dataAdapter
@@ -432,7 +439,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        //sv.smoothScrollTo(0, 0)
         if (glviewInitialized) {
             glviewArr.forEach { it.onResume() }
         }
@@ -446,7 +452,17 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         val yOld = y
         if (MyApplication.locDisplayImg) {
             if (!glviewInitialized) {
-                glviewArr.indices.forEach { initGLVIEW(glviewArr[it], it) }
+                glviewArr.indices.forEach {
+                    //initGLVIEW(glviewArr[it], it)
+                    glviewInitialized = UtilityRadarUI.initGlviewFragment(
+                        glviewArr[it],
+                        it,
+                        oglrArr,
+                        glviewArr,
+                        wxgltextArr,
+                        changeListener
+                    )
+                }
             }
         }
         if (UIPreferences.refreshLocMin != 0 || dataNotInitialized) {
@@ -473,27 +489,52 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             oglrArr[idx].product = "TV0"
         if (oglrArr[idx].product == "TV0" && !WXGLNexrad.isRIDTDWR(oglrArr[idx].rid))
             oglrArr[idx].product = "N0U"
-        initWXOGLGeom(glviewArr[idx], oglrArr[idx], idx)
+        //initWXOGLGeom(glviewArr[idx], oglrArr[idx], idx)
+        // numPanesArr = (0 until numPanes).toList()
+        UtilityRadarUI.initWxoglGeom(
+            glviewArr[idx],
+            oglrArr[idx],
+            idx,
+            oldRidArr,
+            oglrArr,
+            wxgltextArr,
+            numPanesArr,
+            null,
+            glviewArr,
+            ::getGPSFromDouble,
+            ::getLatLon
+        )
 
         withContext(Dispatchers.IO) {
-            if (Location.isUS)
-                oglrArr[idx].constructPolygons("", "", true)
-            if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref)
-                oglrArr[idx].constructSpotters()
-            else
-                oglrArr[idx].deconstructSpotters()
-            if (PolygonType.STI.pref)
-                oglrArr[idx].constructSTILines()
-            else
-                oglrArr[idx].deconstructSTILines()
-            if (PolygonType.HI.pref)
-                oglrArr[idx].constructHI()
-            else
-                oglrArr[idx].deconstructHI()
-            if (PolygonType.TVS.pref)
-                oglrArr[idx].constructTVS()
-            else
-                oglrArr[idx].deconstructTVS()
+            if (Location.isUS) {
+
+                UtilityRadarUI.plotRadar(
+                    oglrArr[idx],
+                    "",
+                    activityReference,
+                    ::getGPSFromDouble,
+                    ::getLatLon,
+                    false
+                )
+
+                /*oglrArr[idx].constructPolygons("", "", true)
+                if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref)
+                    oglrArr[idx].constructSpotters()
+                else
+                    oglrArr[idx].deconstructSpotters()
+                if (PolygonType.STI.pref)
+                    oglrArr[idx].constructSTILines()
+                else
+                    oglrArr[idx].deconstructSTILines()
+                if (PolygonType.HI.pref)
+                    oglrArr[idx].constructHI()
+                else
+                    oglrArr[idx].deconstructHI()
+                if (PolygonType.TVS.pref)
+                    oglrArr[idx].constructTVS()
+                else
+                    oglrArr[idx].deconstructTVS()*/
+            }
         }
 
         if (Location.isUS) {
@@ -564,24 +605,11 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         }
     }
 
+    // FIXME migrate
     private fun resetGLVIEW(glviewloc: WXGLSurfaceView, OGLRLOC: WXGLRender) {
         glviewloc.scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
         OGLRLOC.setViewInitial(MyApplication.wxoglSize.toFloat() / 10.0f, 0.0f, 0.0f)
         glviewloc.requestRender()
-    }
-
-    private fun initGLVIEW(glviewloc: WXGLSurfaceView, z: Int) {
-        glviewloc.setEGLContextClientVersion(2)
-        wxgltextArr[z].setOGLR(oglrArr[z])
-        oglrArr[z].idxStr = z.toString()
-        //glviewloc.setEGLConfigChooser(8, 8, 8, 8, 16, 0); // a test to see if android emulator will now work
-        glviewloc.setRenderer(oglrArr[z])
-        glviewloc.setRenderVar(oglrArr[z], oglrArr, glviewArr)
-        glviewloc.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
-        glviewloc.setOnProgressChangeListener(changeListener)
-        glviewInitialized = true
-        oglrArr[z].zoom = MyApplication.wxoglSize.toFloat() / 10.0f
-        glviewloc.scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
     }
 
     private val radarTimeStamp: String
@@ -609,108 +637,10 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         ) + ")"
     }
 
-    private fun initWXOGLGeom(glviewloc: WXGLSurfaceView, OGLRLOC: WXGLRender, z: Int) {
-        OGLRLOC.initGEOM()
-        if (oldRidArr[z] != oglrArr[z].rid) {
-            OGLRLOC.setChunkCount(0)
-            OGLRLOC.setChunkCountSti(0)
-            OGLRLOC.setHiInit(false)
-            OGLRLOC.setTvsInit(false)
-            Thread(Runnable {
-                OGLRLOC.constructStateLines()
-                glviewloc.requestRender()
-            }).start()
-            Thread(Runnable {
-                if (GeographyType.LAKES.pref)
-                    OGLRLOC.constructLakes()
-                else
-                    OGLRLOC.deconstructLakes()
-            }).start()
-            Thread(Runnable {
-                if (GeographyType.COUNTY_LINES.pref) {
-                    OGLRLOC.constructCounty()
-                    glviewloc.requestRender()
-                } else
-                    OGLRLOC.deconstructCounty()
-            }).start()
-            Thread(Runnable {
-                if (GeographyType.HIGHWAYS.pref) {
-                    OGLRLOC.constructHWLines()
-                    glviewloc.requestRender()
-                } else
-                    OGLRLOC.deconstructHWLines()
-            }).start()
-            Thread(Runnable {
-                if (GeographyType.HIGHWAYS_EXTENDED.pref) {
-                    OGLRLOC.constructHWEXTLines()
-                    glviewloc.requestRender()
-                } else
-                    OGLRLOC.deconstructHWEXTLines()
-            }).start()
-            wxgltextArr[z].addTV()
-            oldRidArr[z] = oglrArr[z].rid
-        }
-        Thread(Runnable {
-            if (PolygonType.TOR.pref)
-                OGLRLOC.constructTorWarningLines()
-            else
-                OGLRLOC.deconstructTorWarningLines()
-
-            if (PolygonType.SVR.pref)
-                OGLRLOC.constructSvrWarningLines()
-            else
-                OGLRLOC.deconstructSvrWarningLines()
-
-            if (PolygonType.EWW.pref)
-                OGLRLOC.constructEwwWarningLines()
-            else
-                OGLRLOC.deconstructEwwWarningLines()
-
-            if (PolygonType.FFW.pref)
-                OGLRLOC.constructFfwWarningLines()
-            else
-                OGLRLOC.deconstructFfwWarningLines()
-
-            if (PolygonType.SMW.pref)
-                OGLRLOC.constructSmwWarningLines()
-            else
-                OGLRLOC.deconstructSmwWarningLines()
-
-            if (PolygonType.SVS.pref)
-                OGLRLOC.constructSvsWarningLines()
-            else
-                OGLRLOC.deconstructSvsWarningLines()
-
-            if (PolygonType.SPS.pref)
-                OGLRLOC.constructSpsWarningLines()
-            else
-                OGLRLOC.deconstructSpsWarningLines()
-
-            if (PolygonType.MCD.pref)
-                OGLRLOC.constructWATMCDLines()
-            else
-                OGLRLOC.deconstructWATMCDLines()
-
-            if (PolygonType.MPD.pref)
-                OGLRLOC.constructMPDLines()
-            else
-                OGLRLOC.deconstructMPDLines()
-
-            if (PolygonType.SWO.pref) {
-                UtilitySWOD1.getSWO()
-                OGLRLOC.constructSWOLines()
-            } else {
-                OGLRLOC.deconstructSWOLines()
-            }
-            glviewloc.requestRender()
-        }).start()
-        if (PolygonType.LOCDOT.pref) {
-            OGLRLOC.constructLocationDot(Location.x, Location.y, false)
-        } else {
-            OGLRLOC.deconstructLocationDot()
-        }
-        glviewloc.requestRender()
+    private fun getGPSFromDouble() {
     }
+
+    private fun getLatLon() = LatLon(Location.x, Location.y)
 
     override fun onPause() {
         if (glviewInitialized) {
@@ -848,54 +778,23 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         linearLayoutHazards?.addView(hazardsCardAl[0].card)
     }
 
-    private fun alertDialogStatus() {
-        alertDialogStatus = AlertDialog.Builder(activityReference)
-        val arrayAdapterRadar =
-            ArrayAdapter(activityReference, R.layout.simple_spinner_item, alertDialogStatusAl)
-        arrayAdapterRadar.setDropDownViewResource(MyApplication.spinnerLayout)
-
-        alertDialogStatus?.setNegativeButton(
-            "Done"
-        ) { dialog, _ -> dialog.dismiss() }
-        alertDialogStatus?.setSingleChoiceItems(
-            arrayAdapterRadar, checkedItem
-        ) { dialog, which ->
-            val strName = alertDialogStatusAl[which]
-            when {
-                strName.contains("Edit Location..") -> ObjectIntent(
-                    activityReference,
-                    SettingsLocationGenericActivity::class.java,
-                    SettingsLocationGenericActivity.LOC_NUM,
-                    arrayOf(Location.currentLocationStr, "")
-                )
-                strName.contains("Sun/Moon data") -> ObjectIntent(
-                    activityReference,
-                    SunMoonActivity::class.java
-                )
-                strName.contains("Force Data Refresh") -> refreshDynamicContent()
-                strName.contains("Radar type: Reflectivity") -> {
-                    oglrArr[0].product = "N0Q"
-                    getAllRadars()
-                }
-                strName.contains("Radar type: Velocity") -> {
-                    oglrArr[0].product = "N0U"
-                    getAllRadars()
-                }
-                strName.contains("Reset zoom and center") -> resetAllGLView()
-                else -> {
-                    val ridContext = strName.split(":")[0]
-                    var stateContext = Utility.readPref("RID_LOC_$ridContext", "")
-                    stateContext = stateContext.split(",")[0]
-                    ObjectIntent(
-                        activityReference,
-                        WXGLRadarActivity::class.java,
-                        WXGLRadarActivity.RID,
-                        arrayOf(ridContext, stateContext, oglrArr[0].product, "")
-                    )
-                }
-            }
+    private fun setupAlertDialogStatus() {
+        alertDialogStatus = ObjectDialogue(activityReference, alertDialogStatusAl)
+        alertDialogStatus!!.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
             dialog.dismiss()
-        }
+        })
+        alertDialogStatus!!.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+            val strName = alertDialogStatusAl[which]
+            UtilityLocationFragment.handleIconTap(
+                strName,
+                oglrArr[0],
+                activityReference,
+                ::refreshDynamicContent,
+                ::resetAllGLView,
+                ::getAllRadars
+            )
+            dialog.dismiss()
+        })
     }
 
     private fun setupAlertDialogRadarLongPress() {
@@ -912,48 +811,8 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 glviewArr[idxIntG],
                 oglrArr[idxIntG],
                 uiDispatcher,
-                ::longPressRadarSiteSwitch)
-
-            /*when {
-                strName.contains("Show warning text") -> {
-                    UtilityRadarUI.showNearestWarning(activityReference, glviewArr[idxIntG])
-                }
-                strName.contains("Show watch text") -> {
-                    UtilityRadarUI.showNearestWatch(activityReference, activityReference, glviewArr[idxIntG], uiDispatcher)
-                }
-                strName.contains("Show MCD text") -> {
-                    UtilityRadarUI.showNearestMcd(activityReference, activityReference, glviewArr[idxIntG], uiDispatcher)
-                }
-                strName.contains("Show MPD text") -> {
-                    UtilityRadarUI.showNearestMpd(activityReference, activityReference, glviewArr[idxIntG], uiDispatcher)
-                }
-
-                strName.contains("Show radar status message") -> {
-                    UtilityRadarUI.getRadarStatus(
-                        activityReference,
-                        activityReference,
-                        uiDispatcher,
-                        oglrArr[idxIntG]
-                    )
-                }
-                strName.contains("Show nearest observation") -> {
-                    UtilityRadarUI.getMetar(
-                        glviewArr[idxIntG],
-                        activityReference,
-                        activityReference,
-                        uiDispatcher
-                    )
-                }
-                strName.contains("Show nearest meteogram") -> {
-                    UtilityRadarUI.showNearestMeteogram(activityReference, glviewArr[idxIntG])
-                }
-                strName.contains("Show nearest forecast") -> {
-                    UtilityRadarUI.showNearestForecast(activityReference, glviewArr[idxIntG])
-                }
-                strName.contains("Show Spotter Info") -> {
-                    UtilityRadarUI.showSpotterInfo(activityReference, glviewArr[idxIntG], uiDispatcher)
-		    }
-		    */
+                ::longPressRadarSiteSwitch
+            )
             dialog.dismiss()
         })
     }

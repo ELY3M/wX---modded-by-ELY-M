@@ -96,7 +96,7 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         val activityArguments = intent.getStringArrayExtra(URL)
         if (activityArguments == null) {
             nwsRadarMosaicSectorLabelCurrent =
-                    Utility.readPref(this, "NWS_RADAR_MOSAIC_SECTOR_CURRENT", "Central Great Lakes")
+                    Utility.readPref(this, "NWS_RADAR_MOSAIC_SECTOR_CURRENT", "CONUS")
         } else {
             if (activityArguments.isNotEmpty() && activityArguments[0] == "location") {
                 val rid1 = Location.rid

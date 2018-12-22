@@ -103,9 +103,9 @@ internal class ExternalSolarEventCalculator {
      * @return the sunset time, in HH:MM format (24-hour clock), 00:00 if the sun does not set on the given
      * date.
      */
-    fun computeSunsetTime(solarZenith: ExternalZenith, date: Calendar): String {
+    /*fun computeSunsetTime(solarZenith: ExternalZenith, date: Calendar): String {
         return getLocalTimeAsString(computeSolarEventTime(solarZenith, date, false))
-    }
+    }*/
 
     /**
      * Computes the sunset time for the given zenith at the given date.

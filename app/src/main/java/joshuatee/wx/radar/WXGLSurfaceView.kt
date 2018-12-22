@@ -197,7 +197,8 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     override fun onLongPress(event: MotionEvent) {
         if (fullScreen) {
             toolbar!!.visibility = View.VISIBLE
-            if (!archiveMode) toolbarBottom!!.visibility = View.VISIBLE
+            if (!archiveMode)
+                toolbarBottom!!.visibility = View.VISIBLE
         }
         density = (oglrCurrent.ortInt * 2).toFloat() / width
         xPos = event.x
@@ -301,7 +302,8 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
         if (fullScreen || numPanes > 1) {
             toolbar!!.visibility = View.VISIBLE
             toolbarsHidden = false
-            if (!archiveMode) toolbarBottom!!.visibility = View.VISIBLE
+            if (!archiveMode)
+                toolbarBottom!!.visibility = View.VISIBLE
         }
         listener?.onProgressChanged(50000, idx, idxInt)
         return true
@@ -327,7 +329,8 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
         if (fullScreen || numPanes > 1) {
             toolbar!!.visibility = View.VISIBLE
             toolbarsHidden = false
-            if (!archiveMode) toolbarBottom!!.visibility = View.VISIBLE
+            if (!archiveMode)
+                toolbarBottom!!.visibility = View.VISIBLE
         }
         listener?.onProgressChanged(50000, idx, idxInt)
         return true

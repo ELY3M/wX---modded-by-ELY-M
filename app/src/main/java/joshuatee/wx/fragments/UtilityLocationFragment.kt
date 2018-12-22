@@ -21,10 +21,18 @@
 
 package joshuatee.wx.fragments
 
+import android.content.Context
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityString
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
+import joshuatee.wx.activitiesmisc.SunMoonActivity
+import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.radar.WXGLRadarActivity
+import joshuatee.wx.radar.WXGLRender
+import joshuatee.wx.settings.Location
+import joshuatee.wx.settings.SettingsLocationGenericActivity
+import joshuatee.wx.util.Utility
 
 object UtilityLocationFragment {
 
@@ -243,6 +251,49 @@ object UtilityLocationFragment {
             ""
         } else {
             "$wspd$gust km/h"
+        }
+    }
+
+    fun handleIconTap(
+        strName: String,
+        oglr: WXGLRender,
+        activityReference: Context,
+        fnRefresh: () -> Unit,
+        fnResetRadarView: () -> Unit,
+        fnGetRadars: () -> Unit
+    ) {
+        when {
+            strName.contains("Edit Location..") -> ObjectIntent(
+                activityReference,
+                SettingsLocationGenericActivity::class.java,
+                SettingsLocationGenericActivity.LOC_NUM,
+                arrayOf(Location.currentLocationStr, "")
+            )
+            strName.contains("Sun/Moon data") -> ObjectIntent(
+                activityReference,
+                SunMoonActivity::class.java
+            )
+            strName.contains("Force Data Refresh") -> fnRefresh()
+            strName.contains("Radar type: Reflectivity") -> {
+                oglr.product = "N0Q"
+                fnGetRadars()
+            }
+            strName.contains("Radar type: Velocity") -> {
+                oglr.product = "N0U"
+                fnGetRadars()
+            }
+            strName.contains("Reset zoom and center") -> fnResetRadarView()
+            else -> {
+                val ridContext = strName.split(":")[0]
+                var stateContext = Utility.readPref("RID_LOC_$ridContext", "")
+                stateContext = stateContext.split(",")[0]
+                ObjectIntent(
+                    activityReference,
+                    WXGLRadarActivity::class.java,
+                    WXGLRadarActivity.RID,
+                    arrayOf(ridContext, stateContext, oglr.product, "")
+                )
+            }
         }
     }
 }

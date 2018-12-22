@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//modded by ELY M. 
 
 package joshuatee.wx.util
 
@@ -33,6 +34,10 @@ import joshuatee.wx.ui.ObjectDialogue
 import android.webkit.WebResourceRequest
 import android.os.Build
 import android.annotation.TargetApi
+import android.text.Html
+import android.text.Spanned
+
+
 
 object UtilityAlertDialog {
 
@@ -90,6 +95,15 @@ object UtilityAlertDialog {
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
     }
+
+    fun showDialogBox(title: String, icon: Int, message :String, context: Context) {
+        val alert = AlertDialog.Builder(context)
+        alert.setTitle(title)
+        alert.setIcon(icon)
+        alert.setMessage(message).setCancelable(true).setPositiveButton("OK") { dialog, id -> dialog.cancel() }
+        alert.create().show()
+    }
+
 
     fun restart() {
         System.exit(0)

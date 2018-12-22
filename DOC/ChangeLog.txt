@@ -7,6 +7,8 @@
 // TODO convert to new NavDrawer: USWarningsWith, ModelGeneric, ModelSPCHRRR, SPCCompmap, SPCStormreports, GOES16
 // TODO look for AlertDiaglog not converted to object ( settingsNotif )
 
+55081 2018_12_21
+55080 2018_12_21 code cleanup, continue moving semi-common code to UtilityRadarUI
 55079 2018_12_20 code cleanup, continue moving semi-common code to UtilityRadarUI
 55078 2018_12_19 enhance UtilityRadarUI and add more verbiage in longpress
 55077 2018_12_19 enhance UtilityRadarUI

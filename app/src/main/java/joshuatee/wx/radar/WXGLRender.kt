@@ -79,7 +79,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private var lineIndexBuffer: ByteBuffer = ByteBuffer.allocate(0)
     private var gpsX = 0.toDouble()
     private var gpsY = 0.toDouble()
-    private val zoomToHideMiscFeatures = 0.5f
+    private val zoomToHideMiscFeatures = 0.5f //was 0.5f
     private val radarBuffers = ObjectOglRadarBuffers(context, MyApplication.nexradRadarBackgroundColor)
     private val spotterBuffers = ObjectOglBuffers(PolygonType.SPOTTER, zoomToHideMiscFeatures)
     private val stateLineBuffers = ObjectOglBuffers(GeographyType.STATE_LINES, 0.0f)
@@ -363,7 +363,6 @@ class WXGLRender(private val context: Context) : Renderer {
     }
 
     override fun onDrawFrame(gl: GL10) {
-        Log.i(TAG, "displayHold: "+displayHold)
         GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
         GLES20.glClearColor(bgColorFRed, bgColorFGreen, bgColorFBlue, 1f)
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
@@ -1005,15 +1004,17 @@ class WXGLRender(private val context: Context) : Renderer {
         buffers.count = buffers.xList.size
         when (buffers.type) {
             PolygonType.LOCDOT, PolygonType.SPOTTER -> buffers.initialize(
-                    24 * buffers.count * buffers.triangleCount,
-                    12 * buffers.count * buffers.triangleCount,
-                    9 * buffers.count * buffers.triangleCount,
-                    buffers.type.color)
+                24 * buffers.count * buffers.triangleCount,
+                12 * buffers.count * buffers.triangleCount,
+                9 * buffers.count * buffers.triangleCount,
+                buffers.type.color
+            )
             else -> buffers.initialize(
-                    4 * 6 * buffers.count,
-                    4 * 3 * buffers.count,
-                    9 * buffers.count,
-                    buffers.type.color)
+                4 * 6 * buffers.count,
+                4 * 3 * buffers.count,
+                9 * buffers.count,
+                buffers.type.color
+            )
         }
         buffers.lenInit = scaleLength(buffers.lenInit)
         buffers.draw(pn)
