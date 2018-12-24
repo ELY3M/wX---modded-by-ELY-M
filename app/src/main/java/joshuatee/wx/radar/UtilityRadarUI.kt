@@ -58,6 +58,7 @@ internal object UtilityRadarUI {
                 oglr.rid
             )
         }
+        UtilityLog.d("wx", "UtilityRadarUI radarStatus: "+radarStatus)
         if (radarStatus == "") {
             radarStatus = "The current radar status for " + oglr.rid + " is not available."
         }
@@ -243,31 +244,31 @@ internal object UtilityRadarUI {
     ) {
         when {
             strName.contains("Show warning text") -> {
-                UtilityRadarUI.showNearestWarning(context, glview)
+                showNearestWarning(context, glview)
             }
             strName.contains("Show watch text") -> {
-                UtilityRadarUI.showNearestWatch(context, act, glview, uiDispatcher)
+                showNearestWatch(context, act, glview, uiDispatcher)
             }
             strName.contains("Show MCD text") -> {
-                UtilityRadarUI.showNearestMcd(context, act, glview, uiDispatcher)
+                showNearestMcd(context, act, glview, uiDispatcher)
             }
             strName.contains("Show MPD text") -> {
-                UtilityRadarUI.showNearestMpd(context, act, glview, uiDispatcher)
+                showNearestMpd(context, act, glview, uiDispatcher)
             }
             strName.contains("Show nearest observation") -> {
-                UtilityRadarUI.getMetar(glview, act, context, uiDispatcher)
+                getMetar(glview, act, context, uiDispatcher)
             }
             strName.contains("Show nearest meteogram") -> {
-                UtilityRadarUI.showNearestMeteogram(context, glview)
+                showNearestMeteogram(context, glview)
             }
             strName.contains("Show radar status message") -> {
-                UtilityRadarUI.getRadarStatus(act, context, uiDispatcher, oglr)
+                getRadarStatus(act, context, uiDispatcher, oglr)
             }
             strName.contains("Show nearest forecast") -> {
-                UtilityRadarUI.showNearestForecast(context, glview)
+                showNearestForecast(context, glview)
             }
             strName.contains("Show Spotter Info") -> {
-                UtilityRadarUI.showSpotterInfo(act, glview, uiDispatcher)
+                showSpotterInfo(act, glview, uiDispatcher)
             }
             else -> fn(strName)
         }

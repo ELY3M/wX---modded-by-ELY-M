@@ -48,22 +48,22 @@ internal object UtilityCanvas {
         val wallpath = Path()
         wallpath.reset()
         val paintList = listOf(
-	MyApplication.radarColorTor, 
-	MyApplication.radarColorSvr, 
-	MyApplication.radarColorEww, 
-	MyApplication.radarColorFfw, 
-	MyApplication.radarColorSmw, 
-	MyApplication.radarColorSvr, 
-	MyApplication.radarColorSps
+    	MyApplication.radarColorTor,
+	    MyApplication.radarColorSvr,
+	    MyApplication.radarColorEww,
+	    MyApplication.radarColorFfw,
+	    MyApplication.radarColorSmw,
+	    MyApplication.radarColorSvr,
+	    MyApplication.radarColorSps
 	)
         val warningDataList = listOf(
-	MyApplication.severeDashboardTor.valueGet(), 
-	MyApplication.severeDashboardSvr.valueGet(), 
-	MyApplication.severeDashboardEww.valueGet(), 
-	MyApplication.severeDashboardFfw.valueGet(), 
-	MyApplication.severeDashboardSmw.valueGet(), 
-	MyApplication.severeDashboardSvs.valueGet(), 
-	MyApplication.severeDashboardSps.valueGet()
+	    MyApplication.severeDashboardTor.valueGet(),
+    	MyApplication.severeDashboardSvr.valueGet(),
+	    MyApplication.severeDashboardEww.valueGet(),
+	    MyApplication.severeDashboardFfw.valueGet(),
+	    MyApplication.severeDashboardSmw.valueGet(),
+	    MyApplication.severeDashboardSvs.valueGet(),
+	    MyApplication.severeDashboardSps.valueGet()
 	)
         if (provider.needsCanvasShift) {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
@@ -161,19 +161,26 @@ internal object UtilityCanvas {
         val x = locXCurrent.toDoubleOrNull() ?: 0.0
         val y = locYCurrent.toDoubleOrNull() ?: 0.0
         val tmpCoords: DoubleArray
+        UtilityLog.d("wx", "mercato in addLocationDotForCurrentLocation: "+mercato)
         tmpCoords = if (mercato) {
             UtilityCanvasProjection.computeMercatorNumbers(x, y, pn)
         } else {
             UtilityCanvasProjection.compute4326Numbers(x, y, pn)
         }
+        //tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x, y, pn)
         val pixXInit = tmpCoords[0]
         val pixYInit = tmpCoords[1]
         paint.color = MyApplication.radarColorLocdot
-	//custom locationdot//
-        val locationicon: Bitmap = BitmapFactory.decodeFile(MyApplication.FilesPath+"location.png");
-        val locationiconresized: Bitmap = Bitmap.createScaledBitmap(locationicon, 63, 63, false)
-        canvas.drawBitmap(locationiconresized, pixXInit.toFloat(), pixYInit.toFloat(), paint)
-        ///canvas.drawCircle(pixXInit.toFloat(), pixYInit.toFloat(), 2f, paint)
+
+        //custom locationdot//
+        if (MyApplication.locdotFollowsGps) {
+            val locationicon: Bitmap = BitmapFactory.decodeFile(MyApplication.FilesPath + "location.png");
+            val locationiconresized: Bitmap = Bitmap.createScaledBitmap(locationicon, MyApplication.radarLocIconSize, MyApplication.radarLocIconSize, false)
+            canvas.drawBitmap(locationiconresized, pixXInit.toFloat(), pixYInit.toFloat(), null)
+        } else {
+            canvas.drawCircle(pixXInit.toFloat(), pixYInit.toFloat(), 2f, paint)
+
+        }
 
     }
 

@@ -4,16 +4,15 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-import android.graphics.Bitmap
+import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import joshuatee.wx.MyApplication
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.util.*
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Matrix
 import android.graphics.drawable.LayerDrawable
+import joshuatee.wx.objects.ProjectionType
 import java.io.File
 import kotlinx.coroutines.*
 import java.io.FileOutputStream
@@ -25,14 +24,6 @@ import java.io.FileOutputStream
 *  Credit to Pykl3 and Joe Jurecka for this idea!
 *
 * */
-
-
-/*
-2018-10-24 14:26:30.532 5282-5351/? D/RadarSites: SELECT id,  ((69.1 * (lat - 52.929176))*(69.1 * (lat - 52.929176)) +  ((69.1 * (-92.875999 - lon))*(69.1 * (-92.875999 - lon)))*0.363370) AS distance FROM RDAINFO WHERE type <> 1  ORDER BY distance LIMIT 1;
-2018-10-24 14:26:30.534 5282-5351/? D/RadarSites: SELECT id,  ((69.1 * (lat - 52.929176))*(69.1 * (lat - 52.929176)) +  ((69.1 * (-92.875999 - lon))*(69.1 * (-92.875999 - lon)))*0.363370) AS distance FROM RDAINFO WHERE type <> 1  ORDER BY distance LIMIT 1;
-*/
-
-
 
 
 /*
@@ -382,10 +373,11 @@ internal object UtilityConusRadar {
     }
 
 
-    private fun getFileOutputStream(context: Context, fileName: String): FileOutputStream? {
+    private fun getFileOutputStream(fileName: String): FileOutputStream? {
         var fos: FileOutputStream? = null
         try {
-            val dir = File(context.filesDir.toString())
+            //val dir = File(context.filesDir.toString())
+            val dir = File(MyApplication.FilesPath)
             //if (!dir.mkdirs())
             //    UtilityLog.d("wx", "failed to mkdir: " + context.filesDir)
             val file = File(dir, fileName)
@@ -397,8 +389,8 @@ internal object UtilityConusRadar {
     }
 
     // save image
-    private fun saveImage(context: Context, bitmap: Bitmap, fileName: String) {
-        val fos = getFileOutputStream(context, fileName)
+    private fun saveImage(bitmap: Bitmap) {
+        val fos = getFileOutputStream("conus.gif")
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
         fos?.close()
     }
@@ -419,7 +411,7 @@ internal object UtilityConusRadar {
                 return UtilityImg.getBlankBitmap()
             }
             val canvas = Canvas(bitmap)
-            drawable.setBounds(0, 0, 3400, 1600)
+            drawable.setBounds(0, 800, 3400, 2450)
             drawable.draw(canvas)
         } else {
             bitmap = UtilityImg.getBlankBitmap()
@@ -460,25 +452,40 @@ internal object UtilityConusRadar {
         layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         //val finalbitmap: Bitmap = UtilityImg.layerDrawableToBitmap(layers)
         val finalbitmap: Bitmap = layerDrawableToBitmapConus(layers)
-        saveImage(context, finalbitmap, "conus.gif")
+        saveImage(finalbitmap)
     }
 
-
-    private fun ReadImageFile(imagefile: String) {
-        val options = BitmapFactory.Options()
-        options.inScaled = false
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888
-        val decodeFile = BitmapFactory.decodeFile(imagefile, options)
-        if (decodeFile != null) {
-            //south = north + decodeFile.height.toDouble() * degreesPerPixellat
-            //east = west + decodeFile.width.toDouble() * degreesPerPixellon
-            //calculateVertices()
-            var createScaledBitmap = Bitmap.createScaledBitmap(decodeFile, 1024, 1024, false)
-
+    //TODO Hack job! need to use real plotting with nwsConusRadar(context: Context)
+    fun nwsConusRadarWithMap(context: Context) {
+        val imgUrl =
+                "${MyApplication.nwsRadarWebsitePrefix}/Conus/RadarImg/latest_radaronly.gif"
+        val layers = mutableListOf<Drawable>()
+        val cd = if (MyApplication.blackBg) {
+            ColorDrawable(Color.BLACK)
+        } else {
+            ColorDrawable(Color.WHITE)
         }
+        var scaleType = ProjectionType.NWS_MOSAIC
+        var bitmap = imgUrl.getImage()
+        var bitmapCanvas = UtilityImg.getBlankBitmap()
+        //if (MyApplication.blackBg) {
+        //    bitmap = UtilityImg.eraseBG(bitmap, -1)
+        //}
+        if (bitmap.height > 10) {
+            bitmapCanvas = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+            UtilityCanvasMain.addCanvasConus(
+                    context,
+                    bitmapCanvas,
+                    scaleType,
+                    "latest"
+            )
+        }
+        layers.add(cd)
+        layers.add(BitmapDrawable(context.resources, bitmap))
+        layers.add(BitmapDrawable(context.resources, bitmapCanvas))
+        val finalbitmap: Bitmap = UtilityImg.layerDrawableToBitmap(layers)
+        saveImage(finalbitmap)
     }
-
-
 
 
     fun nwsConusRadar(context: Context) {
@@ -487,12 +494,12 @@ internal object UtilityConusRadar {
         var bitmap = imgUrl.getImage()
         bitmap = UtilityImg.eraseBG(bitmap, -1)
         layers.add(BitmapDrawable(context.resources, bitmap))
-        saveImage(context, bitmap, "conus.gif")
+        saveImage(bitmap)
     }
 
     fun getConusImage() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
-            nwsConusRadar(MyApplication.appContext)
+            nwsConusRadarWithMap(MyApplication.appContext)
         }
     }
 

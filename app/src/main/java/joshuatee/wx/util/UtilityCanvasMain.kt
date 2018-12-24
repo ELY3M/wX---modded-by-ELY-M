@@ -200,6 +200,67 @@ object UtilityCanvasMain {
         }
     }
 
+    fun addCanvasConus(
+            context: Context,
+            bitmapCanvas: Bitmap,
+            scaleType: ProjectionType,
+            rid: String
+    ) {
+
+        val stateLinesProvider = scaleType.isCanvas
+
+
+        // if a widget or notification load the GEOM data in real-time
+        val geometryData = getLocalGeometryData(context)
+
+        if (PolygonType.TOR.pref) {
+            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+        }
+        if (PolygonType.SVR.pref) {
+            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+        }
+        if (PolygonType.FFW.pref) {
+            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+        }
+        if (PolygonType.SMW.pref) {
+            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+        }
+        if (PolygonType.SVS.pref) {
+            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+        }
+        if (PolygonType.SPS.pref) {
+            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+        }
+
+        if (stateLinesProvider) {
+            UtilityCanvasGeneric.draw(
+                    context,
+                    scaleType,
+                    bitmapCanvas,
+                    rid,
+                    1,
+                    GeographyType.STATE_LINES,
+                    geometryData.stateLines
+            )
+
+        }
+
+        if (PolygonType.LOCDOT.pref) {
+            UtilityCanvas.addLocationDotForCurrentLocation(context, scaleType, bitmapCanvas, rid)
+        }
+
+        if (PolygonType.MCD.pref) {
+            arrayOf(
+                    PolygonType.MCD,
+                    PolygonType.WATCH_SVR,
+                    PolygonType.WATCH_TOR
+            ).forEach { UtilityCanvas.addMCD(context, scaleType, bitmapCanvas, rid, it) }
+        }
+        if (PolygonType.MPD.pref) {
+            UtilityCanvas.addMCD(context, scaleType, bitmapCanvas, rid, PolygonType.MPD)
+        }
+    }
+
     private fun getLocalGeometryData(context: Context): GeometryData {
 
         val caResid = R.raw.ca

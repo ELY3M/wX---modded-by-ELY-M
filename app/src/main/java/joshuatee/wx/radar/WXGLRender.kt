@@ -408,14 +408,16 @@ class WXGLRender(private val context: Context) : Renderer {
         // to be checked. Will do this later when I have more time
         if (!displayHold) {
 
-
-            Log.i(TAG, "zoom: "+zoom)
+            //FIXME use real plotting....
+         /*
+            Log.i(TAG, "zoom: " + zoom)
             if (MyApplication.radarConusRadar) {
-            if (zoom < 0.093f) {
-                Log.i(TAG, "zoom out to conusradar")
-                drawConusRadar(conusRadarBuffers)
+                if (zoom < 0.093f) {
+                    Log.i(TAG, "zoom out to conusradar")
+                    drawConusRadar(conusRadarBuffers)
             }
         }
+         */
 
             // TODO do custom icons for hail//
         listOf(spotterBuffers, hiBuffers).forEach {
@@ -469,6 +471,18 @@ class WXGLRender(private val context: Context) : Renderer {
         listOf(warningSpsBuffers, warningSvsBuffers, warningSmwBuffers, warningSvrBuffers, warningEwwBuffers, warningFfwBuffers, warningTorBuffers).forEach { drawPolygons(it, 8) }
         GLES20.glLineWidth(watmcdLineWidth)
         listOf(mpdBuffers, mcdBuffers, watchSvrBuffers, watchTorBuffers, swoBuffers).forEach { drawPolygons(it, 8) }
+
+        //TODO try to use real plotting without adding usa map....
+        //hack job!!!
+        if (!displayHold) {
+            Log.i(TAG, "zoom: " + zoom)
+            if (MyApplication.radarConusRadar) {
+                if (zoom < 0.093f) {
+                    Log.i(TAG, "zoom out to conusradar")
+                    drawConusRadar(conusRadarBuffers)
+                }
+            }
+        }
 
     }
 
@@ -940,8 +954,10 @@ class WXGLRender(private val context: Context) : Renderer {
                 6 * conusRadarBuffers.triangleCount,
                 0)
 
+        //editor.putString("RID_latest_X", "36.105") // nws conus
+        //editor.putString("RID_latest_Y", "97.141")
 
-        UtilityWXOGLPerf.genMarker(conusRadarBuffers, pn, 40.0, 99.0)
+        UtilityWXOGLPerf.genMarker(conusRadarBuffers, pn, 36.105, 97.141)
         //UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, 40.750220, 99.476964)
         //UtilityWXOGLPerf.genLocdot(conusRadarBuffers, pn, pn.xDbl, pn.yDbl)
         //UtilityWXOGLPerf.genMercator(MyApplication.stateRelativeBuffer, conusRadarBuffers.floatBuffer, pn, conusRadarBuffers.count)
