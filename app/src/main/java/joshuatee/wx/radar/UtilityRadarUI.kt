@@ -36,6 +36,7 @@ import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectImageMap
 
@@ -64,6 +65,31 @@ internal object UtilityRadarUI {
         }
         UtilityAlertDialog.showHelpText(Utility.fromHtml(radarStatus), act)
     }
+    var getrid: String = ""
+    private fun showNearestRadarStatus(
+            context: Context,
+            act: Activity,
+            glview: WXGLSurfaceView,
+            uiDispatcher: CoroutineDispatcher
+    ) = GlobalScope.launch(uiDispatcher) {
+        var radarStatus = withContext(Dispatchers.IO) {
+            val pointX = glview.newY.toDouble()
+            val pointY = glview.newX * -1.0
+            getrid = UtilityLocation.getNearestRadarSite(context, LatLon(pointX.toString(), pointY.toString())
+            )
+            UtilityLog.d("wx", "point: x: "+pointX+ "y: "+pointY)
+            UtilityLog.d("wx", "radar status on point: "+getrid)
+
+            UtilityDownload.getRadarStatusMessage(context, getrid)
+        }
+        UtilityLog.d("wx", "UtilityRadarUI radarStatus: "+radarStatus)
+        if (radarStatus == "") {
+            radarStatus = "The current radar status for " + getrid + " is not available."
+        }
+        UtilityAlertDialog.showHelpText(Utility.fromHtml(radarStatus), act)
+
+    }
+
 
     private fun getMetar(
         glview: WXGLSurfaceView,
@@ -177,6 +203,9 @@ internal object UtilityRadarUI {
 
         val locX = lat.toDoubleOrNull() ?: 0.0
         val locY = lon.toDoubleOrNull() ?: 0.0
+        //TODO not sure why its switched around
+        //val pointX = glview.newY.toDouble()
+        //val pointY = glview.newX * -1.0
         val pointX = glview.newY.toDouble()
         val pointY = glview.newX * -1.0
         val dist =
@@ -229,7 +258,9 @@ internal object UtilityRadarUI {
         if (MyApplication.radarSpotters || MyApplication.radarSpottersLabel) {
             alertDialogRadarLongpressAl.add("Show Spotter Info")
         }
-        alertDialogRadarLongpressAl.add("Show radar status message: " + oglr.rid)
+        alertDialogRadarLongpressAl.add("Show current radar status message: " + oglr.rid)
+        var getridpoint: String = UtilityLocation.getNearestRadarSite(context, LatLon(pointX.toString(), pointY.toString()))
+        alertDialogRadarLongpressAl.add("Show nearest radar status message: " + getridpoint)
         alertDialogRadarLongPress.show()
     }
     
@@ -261,8 +292,11 @@ internal object UtilityRadarUI {
             strName.contains("Show nearest meteogram") -> {
                 showNearestMeteogram(context, glview)
             }
-            strName.contains("Show radar status message") -> {
+            strName.contains("Show current radar status message") -> {
                 getRadarStatus(act, context, uiDispatcher, oglr)
+            }
+            strName.contains("Show nearest radar status message") -> {
+                showNearestRadarStatus(context, act, glview, uiDispatcher)
             }
             strName.contains("Show nearest forecast") -> {
                 showNearestForecast(context, glview)

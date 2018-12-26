@@ -5,6 +5,8 @@
 1. conus radar overlay when you zoom out like on pykl3 
 2. get special weather statements working - not working due because they do not have vtec like all other warnings.  
 would have to do the latlon method that is used for watches/mcds/mpds  
+https://w1.weather.gov/data/LOT/SPSLOT
+
 3. add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs   
 4. allow custom icons! esp hail and cities dots - tvs/location image is done!.    
 5. add warning list within radar
@@ -19,6 +21,8 @@ would have to do the latlon method that is used for watches/mcds/mpds
 14. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor. 
 15. make VAD Wind Profile more better and friendly  like the one at cod.edu    
 16. color tables for SRM and Spectrum Width   
+17. fix radarstatus to get message from this url like this https://w1.weather.gov/data/LOT/FTMLOT  
+
 
 
 #

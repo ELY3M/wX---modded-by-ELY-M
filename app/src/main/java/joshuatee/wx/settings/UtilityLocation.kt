@@ -144,6 +144,56 @@ object UtilityLocation {
         return radarSites.subList(0, cnt)
     }
 
+    fun getNearestRadarSite(context: Context, location: LatLon): String {
+        val radarSites = mutableListOf<RID>()
+        RID_ARR.forEach {
+            val labels = it.split(":")
+            radarSites.add(RID(labels[0], getSiteLocation(context, labels[0])))
+        }
+        TDWR_RIDS.forEach {
+            val labels = it.split(" ")
+            radarSites.add(RID(labels[0], getSiteLocation(context, labels[0])))
+        }
+        var shortestDistance = 10000.00
+        var currentDistance: Double
+        var bestRid = -1
+        radarSites.indices.forEach {
+            currentDistance = LatLon.distance(location, radarSites[it].location, DistanceUnit.MILE)
+            //it.distance = currentDistance.toInt()
+            if (currentDistance < shortestDistance) {
+                shortestDistance = currentDistance
+                bestRid = it
+            }
+        }
+        if (bestRid == -1) return "NOTFOUND"
+        return radarSites[bestRid].name
+    }
+
+    //used for longpress...
+    fun getNearestRadarSitebad(context: Context, location: LatLon): String {
+        val radarSites = mutableListOf<RID>()
+        RID_ARR.forEach {
+            val labels = it.split(":")
+            radarSites.add(RID(labels[0], getSiteLocation(context, labels[0])))
+        }
+        TDWR_RIDS.forEach {
+            val labels = it.split(" ")
+            radarSites.add(RID(labels[0], getSiteLocation(context, labels[0])))
+        }
+        var shortestDistance = 30.00
+        var currentDistance: Double
+        var bestRid = -1
+        radarSites.indices.forEach {
+            currentDistance = LatLon.distance(location, radarSites[it].location, DistanceUnit.MILE)
+            if (currentDistance < shortestDistance) {
+                shortestDistance = currentDistance
+                bestRid = it
+            }
+        }
+        if (bestRid == -1) return "BLAH"
+        return radarSites[bestRid].name
+    }
+
     fun getNearestSnd(context: Context, location: LatLon): String {
         val sites = SND_ARR.map { RID(it, getSiteLocation(context, it, "SND")) }
         var shortestDistance = 1000.00
