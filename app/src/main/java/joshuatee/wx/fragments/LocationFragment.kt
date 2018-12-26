@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M.
 
 package joshuatee.wx.fragments
 
@@ -354,7 +353,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         }
         if (MyApplication.locDisplayImg) {
             glviewArr.indices.forEach {
-                //initGLVIEW(glviewArr[it], it)
                 glviewInitialized = UtilityRadarUI.initGlviewFragment(
                     glviewArr[it],
                     it,
@@ -453,7 +451,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         if (MyApplication.locDisplayImg) {
             if (!glviewInitialized) {
                 glviewArr.indices.forEach {
-                    //initGLVIEW(glviewArr[it], it)
                     glviewInitialized = UtilityRadarUI.initGlviewFragment(
                         glviewArr[it],
                         it,
@@ -489,8 +486,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             oglrArr[idx].product = "TV0"
         if (oglrArr[idx].product == "TV0" && !WXGLNexrad.isRIDTDWR(oglrArr[idx].rid))
             oglrArr[idx].product = "N0U"
-        //initWXOGLGeom(glviewArr[idx], oglrArr[idx], idx)
-        // numPanesArr = (0 until numPanes).toList()
         UtilityRadarUI.initWxoglGeom(
             glviewArr[idx],
             oglrArr[idx],
@@ -507,7 +502,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
         withContext(Dispatchers.IO) {
             if (Location.isUS) {
-
                 UtilityRadarUI.plotRadar(
                     oglrArr[idx],
                     "",
@@ -516,24 +510,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     ::getLatLon,
                     false
                 )
-
-                /*oglrArr[idx].constructPolygons("", "", true)
-                if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref)
-                    oglrArr[idx].constructSpotters()
-                else
-                    oglrArr[idx].deconstructSpotters()
-                if (PolygonType.STI.pref)
-                    oglrArr[idx].constructSTILines()
-                else
-                    oglrArr[idx].deconstructSTILines()
-                if (PolygonType.HI.pref)
-                    oglrArr[idx].constructHI()
-                else
-                    oglrArr[idx].deconstructHI()
-                if (PolygonType.TVS.pref)
-                    oglrArr[idx].constructTVS()
-                else
-                    oglrArr[idx].deconstructTVS()*/
             }
         }
 
@@ -909,9 +885,9 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         Utility.getCurrentConditionsV2(activityReference, Location.currentLocation)
                 if (homescreenFavLocal.contains("TXT-CC2")) {
                     bmCc = if (Location.isUS) {
-                        UtilityNWS.getIconV2(activityReference, objFcst!!.objCC.iconUrl)
+                        UtilityNWS.getIcon(activityReference, objFcst!!.objCC.iconUrl)
                     } else {
-                        UtilityNWS.getIconV2(
+                        UtilityNWS.getIcon(
                             activityReference,
                             UtilityCanada.translateIconNameCurrentConditions(
                                 objFcst!!.objCC.data1,
@@ -974,7 +950,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 Utility.writePref(activityReference, "FCST", objSevenDay?.sevenDayExtStr ?: "")
                 if (homescreenFavLocal.contains("TXT-7DAY")) {
                     objSevenDay!!.iconAl.mapTo(bmArr) {
-                        UtilityNWS.getIconV2(
+                        UtilityNWS.getIcon(
                             activityReference,
                             it
                         )

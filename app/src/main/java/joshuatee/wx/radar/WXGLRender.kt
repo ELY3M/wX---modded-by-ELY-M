@@ -1084,7 +1084,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private fun constructGenericLines(buffers: ObjectOglBuffers) {
         var fList = listOf<Double>()
         when (buffers.type) {
-            PolygonType.MCD, PolygonType.MPD, PolygonType.WATCH_SVR, PolygonType.WATCH_TOR -> fList = UtilityWat.addWat(context, provider, rid, buffers.type).toList()
+            PolygonType.MCD, PolygonType.MPD, PolygonType.WATCH_SVR, PolygonType.WATCH_TOR -> fList = UtilityWatch.addWat(context, provider, rid, buffers.type).toList()
             PolygonType.TOR, PolygonType.SVR, PolygonType.EWW, PolygonType.FFW, PolygonType.SMW, PolygonType.SVS, PolygonType.SPS -> fList = WXGLPolygonWarnings.addWarnings(context, provider, rid, buffers.type).toList()
             PolygonType.STI -> fList = WXGLNexradLevel3StormInfo.decodeAndPlot(context, idxStr, rid, provider).toList()
             else -> {
@@ -1102,7 +1102,12 @@ class WXGLRender(private val context: Context) : Renderer {
             remainder = totalBinsGeneric - buffers.breakSize * buffers.chunkCount
             buffers.chunkCount = buffers.chunkCount + 1
         }
-        buffers.initialize(4 * 4 * totalBinsGeneric, 0, 3 * 4 * totalBinsGeneric, buffers.type.color)
+        buffers.initialize(
+            4 * 4 * totalBinsGeneric,
+            0,
+            3 * 4 * totalBinsGeneric,
+            buffers.type.color
+        )
         if (MyApplication.radarUseJni) {
             JNI.colorGen(buffers.colorBuffer, 4 * totalBinsGeneric, buffers.colorArray)
         } else {
@@ -1161,9 +1166,10 @@ class WXGLRender(private val context: Context) : Renderer {
         wbCircleBuffers.count = wbCircleBuffers.xList.size
         wbCircleBuffers.triangleCount = 6
         wbCircleBuffers.initialize(
-                24 * wbCircleBuffers.count * wbCircleBuffers.triangleCount,
-                12 * wbCircleBuffers.count * wbCircleBuffers.triangleCount,
-                9 * wbCircleBuffers.count * wbCircleBuffers.triangleCount)
+            24 * wbCircleBuffers.count * wbCircleBuffers.triangleCount,
+            12 * wbCircleBuffers.count * wbCircleBuffers.triangleCount,
+            9 * wbCircleBuffers.count * wbCircleBuffers.triangleCount
+        )
         wbCircleBuffers.lenInit = scaleLength(wbCircleBuffers.lenInit)
         wbCircleBuffers.draw(pn)
         wbCircleBuffers.isInitialized = true
@@ -1203,10 +1209,18 @@ class WXGLRender(private val context: Context) : Renderer {
                     swoBuffers.putColor(Color.red(colorSwo[it]).toByte())
                     swoBuffers.putColor(Color.green(colorSwo[it]).toByte())
                     swoBuffers.putColor(Color.blue(colorSwo[it]).toByte())
-                    tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(hashSWO[it]!![j], (hashSWO[it]!![j + 1] * -1.0f), pn)
+                    tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(
+                        hashSWO[it]!![j],
+                        (hashSWO[it]!![j + 1] * -1.0f),
+                        pn
+                    )
                     swoBuffers.putFloat(tmpCoords[0].toFloat())
                     swoBuffers.putFloat(tmpCoords[1].toFloat() * -1.0f)
-                    tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(hashSWO[it]!![j + 2], (hashSWO[it]!![j + 3] * -1.0f), pn)
+                    tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(
+                        hashSWO[it]!![j + 2],
+                        (hashSWO[it]!![j + 3] * -1.0f),
+                        pn
+                    )
                     swoBuffers.putFloat(tmpCoords[0].toFloat())
                     swoBuffers.putFloat(tmpCoords[1].toFloat() * -1.0f)
                     j += 4

@@ -110,7 +110,7 @@ internal class StackRemoteViewsFactory(private val mContext: Context) :
         val iconArr = iconStr.split("!")
         if (position < iconArr.size) {
             rv.setImageViewUri(R.id.iv, Uri.parse(""))
-            rv.setImageViewBitmap(R.id.iv, UtilityNWS.getIconV2(mContext, iconArr[position]))
+            rv.setImageViewBitmap(R.id.iv, UtilityNWS.getIcon(mContext, iconArr[position]))
         }
         val fillInIntent = Intent()
         val extras = Bundle()

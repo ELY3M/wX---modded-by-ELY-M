@@ -107,11 +107,11 @@ class AdhocForecastActivity : BaseActivity() {
             objHazards = Utility.getCurrentHazards(latlon)
             objSevenDay = Utility.getCurrentSevenDay(latlon)
             hazardRaw = objHazards!!.hazards.getHtmlSep()
-            bmCc = UtilityNWS.getIconV2(contextg, objFcst!!.objCC.iconUrl)
+            bmCc = UtilityNWS.getIcon(contextg, objFcst!!.objCC.iconUrl)
             //
             // 7day
             //
-            objSevenDay!!.iconAl.mapTo(bmArr) { UtilityNWS.getIconV2(contextg, it) }
+            objSevenDay!!.iconAl.mapTo(bmArr) { UtilityNWS.getIcon(contextg, it) }
             //
             // hazards
             //

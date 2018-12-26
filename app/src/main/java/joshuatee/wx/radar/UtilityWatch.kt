@@ -22,35 +22,21 @@
 
 package joshuatee.wx.radar
 
-import android.app.Notification
-import android.app.PendingIntent
-import android.app.TaskStackBuilder
 import android.content.Context
-import android.content.Intent
-import android.graphics.Color
 import android.util.Log
-import android.view.Gravity
-import joshuatee.wx.Extensions.parseColumn
 import joshuatee.wx.MyApplication
-import joshuatee.wx.R
-import joshuatee.wx.RegExp
-import joshuatee.wx.activitiesmisc.SevereDashboardActivity
 import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.external.ExternalPolygon
-import joshuatee.wx.notifications.ObjectNotification
-import joshuatee.wx.notifications.UtilityNotification
-import joshuatee.wx.notifications.UtilityNotificationUtils
-import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
-import joshuatee.wx.spc.SPCMCDWShowActivity
 import joshuatee.wx.util.UtilityCanvasProjection
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 
-internal object UtilityWat {
+internal object UtilityWatch {
     var TAG: String = "joshuatee UtilityWat"
+    
     fun addWat(context: Context, provider: ProjectionType, rid1: String, type: PolygonType): List<Double> {
         var testArr: Array<String>
         val warningList = mutableListOf<Double>()

@@ -94,20 +94,20 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
             }
         })
         val activityArguments = intent.getStringArrayExtra(URL)
-        UtilityLog.d("wx", "nws mosaic activityArguments: "+activityArguments[0])
         if (activityArguments == null) {
-            UtilityLog.d("wx", "readpref: "+nwsRadarMosaicSectorLabelCurrent)
             nwsRadarMosaicSectorLabelCurrent =
-                    Utility.readPref(this, "NWS_RADAR_MOSAIC_SECTOR_CURRENT", "CONUS")
+                    Utility.readPref(this, "NWS_RADAR_MOSAIC_SECTOR_CURRENT", "Central Great Lakes")
         } else {
             if (activityArguments.isNotEmpty() && activityArguments[0] == "location") {
                 val rid1 = Location.rid
                 val ridLoc = Utility.readPref(this, "RID_LOC_$rid1", "")
                 val nwsLocationArr = ridLoc.split(",").dropLastWhile { it.isEmpty() }
                 val state = nwsLocationArr.getOrNull(0) ?: ""
-                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNWSMosaic.getSectorFromState(state)
-                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNWSMosaic.getSectorLabelFromCode(nwsRadarMosaicSectorLabelCurrent)
-                UtilityLog.d("wx", "location: "+nwsRadarMosaicSectorLabelCurrent)
+                nwsRadarMosaicSectorLabelCurrent =
+                        UtilityUSImgNWSMosaic.getSectorFromState(state)
+                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNWSMosaic.getSectorLabelFromCode(
+                    nwsRadarMosaicSectorLabelCurrent
+                )
                 doNotSavePref = true
             } else if (activityArguments.isNotEmpty() && activityArguments[0] == "widget") {
                 val widgetLocNum = Utility.readPref(this, "WIDGET_LOCATION", "1")
@@ -115,14 +115,16 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                 val ridLoc = Utility.readPref(this, "RID_LOC_$rid1", "")
                 val nwsLocationArr = ridLoc.split(",").dropLastWhile { it.isEmpty() }
                 val state = Utility.readPref(this, "STATE_CODE_" + nwsLocationArr.getOrNull(0), "")
-                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNWSMosaic.getSectorFromState(state)
-                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNWSMosaic.getSectorLabelFromCode(nwsRadarMosaicSectorLabelCurrent)
-                UtilityLog.d("wx", "widget: "+nwsRadarMosaicSectorLabelCurrent)
+                nwsRadarMosaicSectorLabelCurrent =
+                        UtilityUSImgNWSMosaic.getSectorFromState(state)
+                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNWSMosaic.getSectorLabelFromCode(
+                    nwsRadarMosaicSectorLabelCurrent
+                )
             } else {
                 nwsRadarMosaicSectorLabelCurrent = Utility.readPref(
                     this,
                     "NWS_RADAR_MOSAIC_SECTOR_CURRENT",
-                    "CONUS"
+                    "Central Great Lakes"
                 )
             }
         }
@@ -154,9 +156,8 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                 true
             )
         }
-        //FIXME bug in API 28 after changing
+        // FIXME bug in API 28 after changing
         if (!doNotSavePref) {
-            UtilityLog.d("wx", "trying to save "+nwsRadarMosaicSectorLabelCurrent+" to prefs")
             Utility.writePref(
                 contextg,
                 "NWS_RADAR_MOSAIC_SECTOR_CURRENT",

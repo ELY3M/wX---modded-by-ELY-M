@@ -36,7 +36,7 @@ import joshuatee.wx.util.Utility
 
 object UtilityLocationFragment {
 
-    private val WIND_DIR = mapOf(
+    private val windDirectionMap = mapOf(
         "north" to "N",
         "north northeast" to "NNE",
         "northeast" to "NE",
@@ -125,7 +125,7 @@ object UtilityLocationFragment {
         return if (retStr == "") {
             ""
         } else {
-            val ret = WIND_DIR[retStr.toLowerCase()]
+            val ret = windDirectionMap[retStr.toLowerCase()]
             if (ret != null) {
                 " $ret"
             } else {
@@ -233,7 +233,7 @@ object UtilityLocationFragment {
     fun extractCAWindDir(fcst: String): String {
         var wdir = fcst.parse(RegExp.ca7DayWinddir1)
         if (wdir == "") wdir = fcst.parse(RegExp.ca7DayWinddir2)
-        if (wdir != "") wdir = " " + WIND_DIR[wdir]
+        if (wdir != "") wdir = " " + windDirectionMap[wdir]
         return wdir
     }
 

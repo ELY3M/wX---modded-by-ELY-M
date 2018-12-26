@@ -50,7 +50,7 @@ class ObjectWidgetCC(context: Context) {
         val sevenDay = Utility.readPref(context, "7DAY_EXT_WIDGET", "No data")
         var bmCc = UtilityImg.getBlankBitmap()
         if (Location.isUS(widgetLocNumInt)) {
-            bmCc = UtilityNWS.getIconV2(context, iconUrl)
+            bmCc = UtilityNWS.getIcon(context, iconUrl)
         }
         val sep = " - "
         val tmpArrCc = cc.split(sep).dropLastWhile { it.isEmpty() }

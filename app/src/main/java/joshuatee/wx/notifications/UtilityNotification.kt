@@ -298,9 +298,9 @@ object UtilityNotification {
                         }
                     }
                     val bmc = if (Location.isUS(locNumInt)) {
-                        UtilityNWS.getIconV2(context, objFcst.objCC.iconUrl)
+                        UtilityNWS.getIcon(context, objFcst.objCC.iconUrl)
                     } else {
-                        UtilityNWS.getIconV2(
+                        UtilityNWS.getIcon(
                             context,
                             UtilityCanada.translateIconNameCurrentConditions(
                                 objFcst.objCC.data1,

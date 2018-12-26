@@ -115,7 +115,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private lateinit var star: MenuItem
     private lateinit var anim: MenuItem
     private var delay = 0
-    private var frameCntStrGlobal = ""
+    private var frameCountGlobal = 0
     private var locXCurrent = ""
     private var locYCurrent = ""
     private var infoAnim = Array(2) { "" }
@@ -459,7 +459,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     "N0U"
             toolbar.subtitle = ""
             setToolbarTitle()
-            //initWXOGLGeom(glv, ogl, z)
             UtilityRadarUI.initWxoglGeom(
                 glv,
                 ogl,
@@ -501,7 +500,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             animRan = false
         }
 
-    private fun getAnimate(frameCntStr: String) = GlobalScope.launch(uiDispatcher) {
+    private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
         if (!oglInView) {
             glviewShow()
             oglInView = true
@@ -512,10 +511,10 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             var fh: File
             var timeMilli: Long
             var priorTime: Long
-            frameCntStrGlobal = frameCntStr
-            val animArray = Array(numPanes) { Array(frameCntStr.toIntOrNull() ?: 0) { "" } }
+            frameCountGlobal = frameCount
+            val animArray = Array(numPanes) { Array(frameCount) { "" } }
             numPanesArr.forEach { z ->
-                animArray[z] = oglrArr[z].rdDownload.getRadarByFTPAnimation(contextg, frameCntStr)
+                animArray[z] = oglrArr[z].rdDownload.getRadarFilesForAnimation(contextg, frameCount)
                     .toTypedArray()
                 try {
                     (0 until animArray[z].size).forEach { r ->
@@ -542,7 +541,10 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 if (animTriggerDownloads) {
                     numPanesArr.forEach { z ->
                         animArray[z] =
-                                oglrArr[z].rdDownload.getRadarByFTPAnimation(contextg, frameCntStr)
+                                oglrArr[z].rdDownload.getRadarFilesForAnimation(
+                                    contextg,
+                                    frameCount
+                                )
                                     .toTypedArray()
                         try {
                             (0 until animArray[z].size).forEach { r ->
@@ -659,7 +661,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                             this,
                             oglrArr[curRadar].rid,
                             oglrArr[curRadar].product,
-                            frameCntStrGlobal,
+                            frameCountGlobal,
                             (curRadar + 1).toString(),
                             true
                         )
@@ -760,14 +762,14 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             R.id.action_tilt2 -> changeTilt("1")
             R.id.action_tilt3 -> changeTilt("2")
             R.id.action_tilt4 -> changeTilt("3")
-            R.id.action_a12 -> animateRadar("12")
-            R.id.action_a18 -> animateRadar("18")
-            R.id.action_a6_sm -> animateRadar("6")
-            R.id.action_a -> animateRadar(MyApplication.uiAnimIconFrames)
-            R.id.action_a36 -> animateRadar("36")
-            R.id.action_a72 -> animateRadar("72")
-            R.id.action_a144 -> animateRadar("144")
-            R.id.action_a3 -> animateRadar("3")
+            R.id.action_a12 -> animateRadar(12)
+            R.id.action_a18 -> animateRadar(18)
+            R.id.action_a6_sm -> animateRadar(6)
+            R.id.action_a -> animateRadar(MyApplication.uiAnimIconFrames.toIntOrNull() ?: 0)
+            R.id.action_a36 -> animateRadar(36)
+            R.id.action_a72 -> animateRadar(72)
+            R.id.action_a144 -> animateRadar(144)
+            R.id.action_a3 -> animateRadar(3)
             R.id.action_fav -> {
                 if (inOglAnim) {
                     inOglAnimPaused = if (!inOglAnimPaused) {
@@ -795,10 +797,10 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         return true
     }
 
-    private fun animateRadar(frameCnt: String) {
+    private fun animateRadar(frameCount: Int) {
         anim.setIcon(MyApplication.ICON_STOP)
         star.setIcon(MyApplication.ICON_PAUSE)
-        getAnimate(frameCnt)
+        getAnimate(frameCount)
     }
 
     private fun changeTilt(tiltStr: String) {
@@ -905,110 +907,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         }
     }
 
-    /*private fun initWXOGLGeom(glv: WXGLSurfaceView, ogl: WXGLRender, z: Int) {
-        ogl.initGEOM()
-        if (oldRidArr[z] != oglrArr[z].rid) {
-            ogl.setChunkCount(0)
-            ogl.setChunkCountSti(0)
-            ogl.setHiInit(false)
-            ogl.setTvsInit(false)
-            Thread(Runnable {
-                ogl.constructStateLines()
-                glv.requestRender()
-            }).start()
-            Thread(Runnable {
-                if (GeographyType.LAKES.pref)
-                    ogl.constructLakes()
-                else
-                    ogl.deconstructLakes()
-            }).start()
-            Thread(Runnable {
-                if (GeographyType.COUNTY_LINES.pref) {
-                    ogl.constructCounty()
-                    glv.requestRender()
-                } else
-                    ogl.deconstructCounty()
-            }).start()
-            Thread(Runnable {
-                if (GeographyType.HIGHWAYS.pref) {
-                    ogl.constructHWLines()
-                    glv.requestRender()
-                } else
-                    ogl.deconstructHWLines()
-            }).start()
-            Thread(Runnable {
-                if (MyApplication.radarHwEnhExt) {
-                    ogl.constructHWEXTLines()
-                    glv.requestRender()
-                } else
-                    ogl.deconstructHWEXTLines()
-            }).start()
-            wxgltextArr[z].addTV()
-            oldRidArr[z] = oglrArr[z].rid
-        }
-
-        Thread(Runnable {
-            if (PolygonType.TOR.pref)
-                ogl.constructTorWarningLines()
-            else
-                ogl.deconstructTorWarningLines()
-
-            if (PolygonType.SVR.pref)
-                ogl.constructSvrWarningLines()
-            else
-                ogl.deconstructSvrWarningLines()
-
-            if (PolygonType.EWW.pref)
-                ogl.constructEwwWarningLines()
-            else
-                ogl.deconstructEwwWarningLines()
-
-            if (PolygonType.FFW.pref)
-                ogl.constructFfwWarningLines()
-            else
-                ogl.deconstructFfwWarningLines()
-
-            if (PolygonType.SMW.pref)
-                ogl.constructSmwWarningLines()
-            else
-                ogl.deconstructSmwWarningLines()
-
-            if (PolygonType.SVS.pref)
-                ogl.constructSvsWarningLines()
-            else
-                ogl.deconstructSvsWarningLines()
-
-            if (PolygonType.SPS.pref)
-                ogl.constructSpsWarningLines()
-            else
-                ogl.deconstructSpsWarningLines()
-
-            if (PolygonType.MCD.pref)
-                ogl.constructWATMCDLines()
-            else
-                ogl.deconstructWATMCDLines()
-            if (PolygonType.MPD.pref)
-                ogl.constructMPDLines()
-            else
-                ogl.deconstructMPDLines()
-            glv.requestRender()
-        }).start()
-        if (MyApplication.locdotFollowsGps) {
-            getGPSFromDouble()
-            //locXCurrent = latlonArr[0]
-            //locYCurrent = latlonArr[1]
-        }
-        if (PolygonType.LOCDOT.pref || MyApplication.locdotFollowsGps) {
-            UtilityLog.d("wx", "LAT: " + locXCurrent)
-            UtilityLog.d("wx", "LON: " + locYCurrent)
-            ogl.constructLocationDot(locXCurrent, locYCurrent, false)
-        } else
-            ogl.deconstructLocationDot()
-        if (imageMap.map.visibility != View.VISIBLE) {
-            numPanesArr.forEach { glviewArr[it].visibility = View.VISIBLE }
-        }
-    }
-*/
     private val handler = Handler()
 
     private val mStatusChecker: Runnable? = object : Runnable {
@@ -1095,8 +993,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         latD = location.latitude
         lonD = location.longitude
         getGPSFromDouble()
-        //locXCurrent = latlonArr[0]
-        //locYCurrent = latlonArr[1]
         numPanesArr.forEach {
             oglrArr[it].constructLocationDot(locXCurrent, locYCurrent, false)
             glviewArr[it].requestRender()

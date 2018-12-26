@@ -88,32 +88,43 @@ class WXGLDownload {
         return ridPrefix
     }
 
-    fun getRadarByFTPAnimation(context: Context, frameCnt: String): List<String> {
+    // Download a list of files and return the list as a list of Strings
+    // Determines of Level 2 or Level 3 and calls appropriate method
+    fun getRadarFilesForAnimation(context: Context, frameCount: Int): List<String> {
         val nidsArr: List<String>
         val ridPrefix = UtilityWXOGL.getRidPrefix(rid1, prod)
         nidsArr = if (!prod.contains("L2")) {
-            getNidsArr(context, frameCnt, prod, ridPrefix, rid1.toLowerCase(Locale.US))
+            getLevel3FilesForAnimation(
+                context,
+                frameCount,
+                prod,
+                ridPrefix,
+                rid1.toLowerCase(Locale.US)
+            )
         } else {
-            getL2Arr(
+            getLevel2FilesForAnimation(
                 context,
                 MyApplication.nwsRadarLevel2Pub + ridPrefix.toUpperCase(Locale.US) + rid1.toUpperCase(
                     Locale.US
                 ) + "/",
-                frameCnt
+                frameCount
             )
         }
         return nidsArr
     }
 
-    private fun getNidsArr(
+    // getRadarFilesForAnimation  getLevel3FilesForAnimation  getLevel2FilesForAnimation
+    // listOfFiles
+    // Download a list of files and return the list as a list of Strings
+    // Determines of Level 2 or Level 3 and calls appropriate method
+    private fun getLevel3FilesForAnimation(
         context: Context,
-        frameCntStr: String,
+        frameCount: Int,
         prod: String,
         ridPrefix: String,
         rid1: String
     ): List<String> {
         // FIXME HTTPS there are 4 places below you need to add Unsafe
-        val frameCnt = frameCntStr.toIntOrNull() ?: 0
         val nidsArr = mutableListOf<String>()
         var htmlOut =
             (MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(
@@ -147,8 +158,8 @@ class WXGLDownload {
         try {
             val seq = mostRecentSn.replace("sn.", "").toIntOrNull() ?: 0
             var j = 0
-            var k = seq - frameCnt + 1
-            while (j < frameCnt) {
+            var k = seq - frameCount + 1
+            while (j < frameCount) {
                 // files range from 0000 to 0250, if num is negative add 251
                 var tmpK = k
                 if (tmpK < 0)
@@ -174,8 +185,12 @@ class WXGLDownload {
         return nidsArr
     }
 
-    private fun getL2Arr(context: Context, baseUrl: String, frameCnt: String): List<String> {
-        val frameCntInt = frameCnt.toIntOrNull() ?: 0
+    // Level 2: Download a list of files and return the list as a list of Strings
+    private fun getLevel2FilesForAnimation(
+        context: Context,
+        baseUrl: String,
+        frameCount: Int
+    ): List<String> {
         val l2Arr = mutableListOf<String>()
         val tmpArr = (baseUrl + "dir.list").getHtmlSep().replace("<br>", " ").split(" ")
             .dropLastWhile { it.isEmpty() }
@@ -188,8 +203,8 @@ class WXGLDownload {
         val fnPrevSize = tmpArr[tmpArr.size - 4].toIntOrNull() ?: 1
         val ratio = fnSize.toFloat() / fnPrevSize.toFloat()
         if (ratio < 0.75) additionalAdd = 1
-        (0 until frameCntInt).forEach { count ->
-            val token = tmpArr.getOrNull(arrLength - (frameCntInt - count + additionalAdd) * 2 + 1)
+        (0 until frameCount).forEach { count ->
+            val token = tmpArr.getOrNull(arrLength - (frameCount - count + additionalAdd) * 2 + 1)
             if (token != null) {
                 l2Arr.add(token)
                 val inputStream = UtilityDownload.getInputStreamFromURL(baseUrl + token)

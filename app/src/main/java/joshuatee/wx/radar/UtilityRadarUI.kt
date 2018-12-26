@@ -148,7 +148,7 @@ internal object UtilityRadarUI {
             uiDispatcher: CoroutineDispatcher
     ) = GlobalScope.launch(uiDispatcher) {
         val txt = withContext(Dispatchers.IO) {
-            UtilityWat.showWatchProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
+            UtilityWatch.showWatchProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
         }
         UtilityAlertDialog.showHelpText(txt, act)
     }
@@ -160,7 +160,7 @@ internal object UtilityRadarUI {
             uiDispatcher: CoroutineDispatcher
     ) = GlobalScope.launch(uiDispatcher) {
         val txt = withContext(Dispatchers.IO) {
-            UtilityWat.showMCDProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
+            UtilityWatch.showMCDProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
         }
         UtilityAlertDialog.showHelpText(txt, act)
     }
@@ -173,7 +173,7 @@ internal object UtilityRadarUI {
             uiDispatcher: CoroutineDispatcher
     ) = GlobalScope.launch(uiDispatcher) {
         val txt = withContext(Dispatchers.IO) {
-            UtilityWat.showMPDProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
+            UtilityWatch.showMPDProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
         }
         UtilityAlertDialog.showHelpText(txt, act)
     }
@@ -203,9 +203,6 @@ internal object UtilityRadarUI {
 
         val locX = lat.toDoubleOrNull() ?: 0.0
         val locY = lon.toDoubleOrNull() ?: 0.0
-        //TODO not sure why its switched around
-        //val pointX = glview.newY.toDouble()
-        //val pointY = glview.newX * -1.0
         val pointX = glview.newY.toDouble()
         val pointY = glview.newX * -1.0
         val dist =
