@@ -2,28 +2,26 @@
 
 ## TO DO List: 
 
-1. conus radar overlay when you zoom out like on pykl3 
-2. get special weather statements working - not working due because they do not have vtec like all other warnings.  
+1\. conus radar overlay when you zoom out like on pykl3   
+2\. get special weather statements working - not working due because they do not have vtec like all other warnings.  
 would have to do the latlon method that is used for watches/mcds/mpds  
-https://w1.weather.gov/data/LOT/SPSLOT
+https://w1.weather.gov/data/LOT/SPSLOT  
+3\. add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs   
+4\. allow custom icons! esp cities dots - hail/tvs/location image is done!.    
+5\. add warning list within radar
+6\. add LSR reports from SN spotters/option to turn on/off LSR reports
+7\. as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
+8\. might 4th radar icon for cc 
+9\. move show color legend to bottom as a option.  there will be option to choose which side.     
+10\. rename application id and change icon color so someone can run both versions of wX   
+11\. 8-bit SRM like in pykl3  
+12\. fix up the ability to change products in the multi-pane radar. it seem wont change products for me  
+13\. android wear support. I own android wear watches and love them.      
+14\. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor.  
+15\. make VAD Wind Profile more better and friendly  like the one at cod.edu    
+16\. color tables for SRM and Spectrum Width 
 
-3. add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs   
-4. allow custom icons! esp hail and cities dots - tvs/location image is done!.    
-5. add warning list within radar
-6. add LSR reports from SN spotters/option to turn on/off LSR reports
-7. as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
-8. might 4th radar icon for cc 
-9. move show color legend to bottom as a option.  there will be option to choose which side.     
-10. rename application id and change icon color so someone can run both versions of wX   
-11. 8-bit SRM like in pykl3  
-12. fix up the ability to change products in the multi-pane radar. it seem wont change products for me  
-13. android wear support. I own android wear watches and love them.      
-14. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor. 
-15. make VAD Wind Profile more better and friendly  like the one at cod.edu    
-16. color tables for SRM and Spectrum Width   
 
-
-#
 #
 ## DONE!
 ====================================  
