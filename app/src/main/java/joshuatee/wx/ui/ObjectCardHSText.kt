@@ -69,7 +69,6 @@ class ObjectCardHSText(context: Context, val product: String) {
     }
 
     val card: CardView get() = objCard.card
-
 }
 
 

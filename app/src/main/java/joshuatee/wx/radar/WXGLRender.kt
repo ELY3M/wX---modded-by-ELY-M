@@ -61,6 +61,8 @@ class WXGLRender(private val context: Context) : Renderer {
         const val ortIntGlobal: Int = 400
         var oneDegreeScaleFactorGlobal: Float = 0.0f
             private set
+        var hailSizeIcon: String = "hail0.png"
+        var hailSize: Double = 0.toDouble()
     }
 
     val TAG: String = "joshuatee WXGLRender"
@@ -126,6 +128,8 @@ class WXGLRender(private val context: Context) : Renderer {
     private var locationId = -1
     private var locationBugId = -1
     private var tvsId = -1
+    private var hiId = -1
+
 
 
     var zoom: Float = 1.0f
@@ -420,12 +424,15 @@ class WXGLRender(private val context: Context) : Renderer {
          */
 
             // TODO do custom icons for hail//
-        listOf(spotterBuffers, hiBuffers).forEach {
+        listOf(spotterBuffers).forEach {
             if (zoom > it.scaleCutOff) {
                 drawTriangles(it)
             }
         }
 
+        if (zoom > hiBuffers.scaleCutOff) {
+            drawHI(hiBuffers)
+        }
 
         if (zoom > tvsBuffers.scaleCutOff) {
             drawTVS(tvsBuffers)
@@ -584,6 +591,32 @@ class WXGLRender(private val context: Context) : Renderer {
                 //GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
                 GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
                 GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
+
+
+        }
+    }
+
+    //FIXME need to pick a icon based on hail size//
+    private fun drawHI(buffers: ObjectOglBuffers) {
+        if (buffers.isInitialized) {
+            buffers.setToPositionZero()
+            GLES20.glUseProgram(OpenGLShader.sp_loadimage)
+            mPositionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
+            GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
+            mSizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
+            GLES20.glUniform1f(mSizeHandle, MyApplication.radarHiSize.toFloat())
+            iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
+            hiId = OpenGLShader.LoadTexture(MyApplication.FilesPath + hailSizeIcon)
+            GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
+            GLES20.glEnableVertexAttribArray(mPositionHandle)
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, hiId)
+            GLES20.glUniform1i(iTexture, 0)
+            GLES20.glEnable(GLES20.GL_BLEND)
+            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
+            //GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+            GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+            GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
 
 
         }
@@ -1010,10 +1043,14 @@ class WXGLRender(private val context: Context) : Renderer {
     }
 
     fun constructHI() {
-        hiBuffers.lenInit = MyApplication.radarHiSize.toFloat()
+        hiBuffers.lenInit = 0f //MyApplication.radarHiSize.toFloat()
         val stormList = WXGLNexradLevel3HailIndex.decodeAndPlot(context, rid, idxStr)
         hiBuffers.setXYList(stormList)
-        constructTriangles(hiBuffers)
+        constructMarker(hiBuffers)
+    }
+
+    fun deconstructHI() {
+        hiBuffers.isInitialized = false
     }
 
     private fun constructTriangles(buffers: ObjectOglBuffers) {
@@ -1049,16 +1086,11 @@ class WXGLRender(private val context: Context) : Renderer {
             buffers.initialize(
                     24 * buffers.count * buffers.triangleCount,
                     12 * buffers.count * buffers.triangleCount,
-                    9 * buffers.count * buffers.triangleCount,
-                    buffers.type.color)
+                    9 * buffers.count * buffers.triangleCount, 0)
             buffers.lenInit = 0f //scaleLength(buffers.lenInit)
             buffers.draw(pn)
             buffers.isInitialized = true
         }
-    }
-
-    fun deconstructHI() {
-        hiBuffers.isInitialized = false
     }
 
     fun constructTVS() {

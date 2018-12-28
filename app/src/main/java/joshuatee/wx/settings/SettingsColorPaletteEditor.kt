@@ -80,8 +80,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             true
         )
         toolbarBottom.setOnMenuItemClickListener(this)
-        val fab = ObjectFab(this, this, R.id.fab)
-        fab.setOnClickListener(View.OnClickListener { fabSavePAL(this) })
+        ObjectFab(this, this, R.id.fab, View.OnClickListener { fabSavePAL(this) })
         ObjectCard(this, R.id.cv1)
         palTitle = findViewById(R.id.pal_title)
         palContent = findViewById(R.id.pal_content)

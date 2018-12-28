@@ -22,8 +22,9 @@
 package joshuatee.wx.audio
 
 import android.annotation.SuppressLint
-import java.util.Calendar
 import android.app.TimePickerDialog
+import java.util.Calendar
+//import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,10 +67,18 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
         contextg = this
         toolbar.subtitle = modifyModeString
         globalc = this
-        val fab1 = ObjectFab(this, this, R.id.fab1, R.drawable.ic_alarm_add_24dp)
-        fab1.setOnClickListener(View.OnClickListener { pickTimeFAB() })
-        val fab2 = ObjectFab(this, this, R.id.fab2, MyApplication.ICON_DELETE)
-        fab2.setOnClickListener(View.OnClickListener { deleteFAB() })
+        ObjectFab(
+            this,
+            this,
+            R.id.fab1,
+            R.drawable.ic_alarm_add_24dp,
+            View.OnClickListener { pickTimeFAB() })
+        ObjectFab(
+            this,
+            this,
+            R.id.fab2,
+            MyApplication.ICON_DELETE,
+            View.OnClickListener { deleteFAB() })
         ridFav = Utility.readPref(this, prefToken, "")
         val c = Calendar.getInstance()
         hour = c.get(Calendar.HOUR_OF_DAY)

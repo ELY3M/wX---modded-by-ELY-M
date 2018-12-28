@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
 
 package joshuatee.wx.radar
 
@@ -33,16 +34,55 @@ import joshuatee.wx.RegExp
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
+import java.io.File
 
-internal object WXGLNexradLevel3HailIndex {
+object WXGLNexradLevel3HailIndex {
 
     private const val hiBaseFn = "nids_hi_tab"
     private const val markerSize = 0.015
+    var hailList = mutableListOf<Hail>()
+
+
+    private var initialized = false
+    private var lastRefresh = 0.toLong()
+    private const val REFRESH_LOC_MIN = 5
+
+/*
+    val hailData: MutableList<Hail>
+        get() {
+            var currentTime = System.currentTimeMillis()
+            val currentTimeSec = currentTime / 1000
+            val refreshIntervalSec = (REFRESH_LOC_MIN * 60).toLong()
+            if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
+                hailList = mutableListOf()
+
+
+                hailList.add(
+                        Spotter(
+                                tmpArr[0],
+                                tmpArr[1],
+                                tmpArr[2],
+                                tmpArr[3],
+                                )
+                )
+
+            }
+
+            initialized = true
+            currentTime = System.currentTimeMillis()
+            lastRefresh = currentTime / 1000
+
+            return hailList
+        }
+*/
 
     fun decodeAndPlot(context: Context, rid: String, fnSuffix: String): List<Double> {
         val stormList = mutableListOf<Double>()
         val retStr: String
         val location = UtilityLocation.getSiteLocation(context, rid)
+        //make sure we clear the list or we get duplicate texts
+        hailList.clear()
+        //File("/sdcard/wX/hail").copyTo(File("/data/user/0/joshuatee.wx/files/nids_hi_tab0"), true);
         WXGLDownload.getNidsTab(context, "HI", rid, hiBaseFn + fnSuffix)
         val dis: UCARRandomAccessFile
         val posn: List<String>
@@ -67,7 +107,8 @@ internal object WXGLNexradLevel3HailIndex {
         hailPercentStr = hailPercentStr.replace("UNKNOWN", " 0 0 ")
         hailSize.forEach { hailSizeStr += it.replace("/", " ") }
         hailSizeStr = hailSizeStr.replace("UNKNOWN", " 0.00 ")
-        hailSizeStr = hailSizeStr.replace("<0.50", " 0.49 ")
+        hailSizeStr = hailSizeStr.replace("<0.25", " 0.25 ")
+        hailSizeStr = hailSizeStr.replace("<0.50", " 0.50 ")
         val posnNumbers = posnStr.parseColumnAll(RegExp.stiPattern3)
         val hailPercentNumbers = hailPercentStr.parseColumnAll(RegExp.stiPattern3)
         val hailSizeNumbers = hailSizeStr.parseColumnAll(RegExp.hiPattern4)
@@ -78,13 +119,15 @@ internal object WXGLNexradLevel3HailIndex {
             var start: ExternalGlobalCoordinates
             var ec: ExternalGlobalCoordinates
             var hailSizeDbl: Double
+            var hailSizeText: String = "unknown"
             var k = 0 // k is used to track hail size which is /2 of other 2 arrays
             var s = 0
             while (s < posnNumbers.size) {
                 hailSizeDbl = hailSizeNumbers[k].toDoubleOrNull() ?: 0.0
-                if (hailSizeDbl > 0.49 && ((hailPercentNumbers[s].toIntOrNull()
-                        ?: 0) > 60 || (hailPercentNumbers[s + 1].toDoubleOrNull()
-                        ?: 0.0) > 60)
+                UtilityLog.d("wx", "hailSizeNumbers: "+hailSizeDbl)
+                if (hailSizeDbl > 0.24 && ((hailPercentNumbers[s].toIntOrNull() //was 49
+                        ?: 0) > 30 || (hailPercentNumbers[s + 1].toDoubleOrNull() //was 60
+                        ?: 0.0) > 30) //was 60
                 ) {
                     val ecc = ExternalGeodeticCalculator()
                     degree = posnNumbers[s].toDoubleOrNull() ?: 0.0
@@ -99,6 +142,10 @@ internal object WXGLNexradLevel3HailIndex {
                     )
                     stormList.add(ec.latitude)
                     stormList.add(ec.longitude * -1.0)
+
+                    //FIXME make this pick a icon!
+
+                    /*
                     if (hailSizeDbl > 0.99) {
                         stormList.add(ec.latitude + markerSize)
                         stormList.add(ec.longitude * -1.0)
@@ -111,11 +158,91 @@ internal object WXGLNexradLevel3HailIndex {
                         stormList.add(ec.latitude + markerSize * 3.0)
                         stormList.add(ec.longitude * -1.0)
                     }
+                    if (hailSizeDbl > 3.99) {
+                        stormList.add(ec.latitude + markerSize * 4.0)
+                        stormList.add(ec.longitude * -1.0)
+                    }
+                    */
+
+
+                    if (hailSizeDbl > 0.24) {
+                        hailSizeText = "0.25"
+                        WXGLRender.hailSizeIcon = "hail05.png"
+                    }
+
+                    if (hailSizeDbl > 0.49) {
+                        hailSizeText = "0.50"
+                        WXGLRender.hailSizeIcon = "hail0.png"
+                    }
+                    if (hailSizeDbl > 0.74) {
+                        hailSizeText = "0.75"
+                        WXGLRender.hailSizeIcon = "hail0.png"
+                    }
+                    if (hailSizeDbl > 0.99) {
+                        hailSizeText = "1.00"
+                        WXGLRender.hailSizeIcon = "hail1.png"
+                    }
+                    if (hailSizeDbl > 1.49) {
+                        hailSizeText = "1.50"
+                        WXGLRender.hailSizeIcon = "hail1.png"
+                    }
+                    if (hailSizeDbl > 1.99) {
+                        hailSizeText = "2.00"
+                        WXGLRender.hailSizeIcon = "hail2.png"
+                    }
+                    if (hailSizeDbl > 2.49) {
+                        hailSizeText = "2.50"
+                        WXGLRender.hailSizeIcon = "hail2.png"
+                    }
+                    if (hailSizeDbl > 2.99) {
+                        hailSizeText = "3.00"
+                        WXGLRender.hailSizeIcon = "hail3.png"
+                    }
+                    if (hailSizeDbl > 3.49) {
+                        hailSizeText = "3.50"
+                        WXGLRender.hailSizeIcon = "hail3.png"
+                    }
+                    if (hailSizeDbl > 3.99) {
+                        hailSizeText = "4.00"
+                        WXGLRender.hailSizeIcon = "hail4.png"
+                    }
+                    if (hailSizeDbl > 4.49) {
+                        hailSizeText = "4.50"
+                        WXGLRender.hailSizeIcon = "hail4.png"
+                    }
+                    //TODO add big hail --- only use 1 icon for any hail over 5 inch
+                    if (hailSizeDbl > 4.99) {
+                        hailSizeText = "Big Hail!"
+                        WXGLRender.hailSizeIcon = "hailbig.png"
+                    }
+
+
+
+
+                    hailList.add(
+                            Hail(WXGLRender.hailSizeIcon,
+                                    hailSizeText,
+                                    ec.latitude,
+                                    ec.longitude * -1.0))
+
+
+
+
+                    UtilityLog.d("wx", "hailSizeIcon: "+WXGLRender.hailSizeIcon)
+                    UtilityLog.d("wx", "hailSizeText: "+hailSizeText)
+                    UtilityLog.d("wx", "hailSizeDbl: "+hailSizeDbl)
+
+
+
                 }
                 k += 1
                 s += 2
             }
         }
+
         return stormList
     }
+
+
+
 }

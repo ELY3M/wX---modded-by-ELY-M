@@ -40,6 +40,8 @@ class ObjectSpinner {
     private val spinner1: Spinner
     val list: MutableList<String>
 
+    // FIXME rename spinner1 to spinner
+
     constructor(
         activity: Activity,
         context: Context,
@@ -49,7 +51,7 @@ class ObjectSpinner {
     ) {
         list = dataArray.toMutableList()
         spinner1 = activity.findViewById(spinnerRedId)
-        setupSpinner(spinner1, true)
+        setupSpinner(true)
         arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, dataArray)
         arrayAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
         spinner1.adapter = arrayAdapter
@@ -60,7 +62,7 @@ class ObjectSpinner {
     constructor(activity: Activity, context: Context, spinnerRedId: Int, dataArray: List<String>) {
         list = dataArray.toMutableList()
         spinner1 = activity.findViewById(spinnerRedId)
-        setupSpinner(spinner1, true)
+        setupSpinner(true)
         arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, dataArray)
         arrayAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
         spinner1.adapter = arrayAdapter
@@ -70,7 +72,7 @@ class ObjectSpinner {
     constructor(activity: Activity, context: Context, spinnerRedId: Int) {
         list = mutableListOf()
         spinner1 = activity.findViewById(spinnerRedId)
-        setupSpinner(spinner1, true)
+        setupSpinner(true)
         arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, list)
         arrayAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
         spinner1.adapter = arrayAdapter
@@ -117,17 +119,6 @@ class ObjectSpinner {
     val selectedItem: Any
         get() = spinner1.selectedItem ?: 0
 
-    /*val selectedString: String
-        get() {
-            return if (spinner1.selectedItem != null) {
-                spinner1.selectedItem.toString()
-            } else {
-                ""
-            }
-        }
-
-    val selectedItemId: Long get() = spinner1.selectedItemId*/
-
     fun addAll(tmpList: List<String>) {
         list.clear()
         list.addAll(tmpList)
@@ -149,25 +140,20 @@ class ObjectSpinner {
 
     fun size(): Int = arrayAdapter.count
 
-    /*fun getItemAtPosition(k: Int): Any {
-        return spinner1.getItemAtPosition(k) ?: return ""
-    }*/
-
     operator fun get(idx: Int): String = list[idx]
 
     operator fun set(idx: Int, value: String) {
         list[idx] = value
     }
 
-    companion object {
-        fun setupSpinner(spinner1: Spinner, light: Boolean) {
-            var tint = ColorStateList.valueOf(UIPreferences.colorBlack)
-            if (light) {
-                tint = ColorStateList.valueOf(UIPreferences.colorOffwhiteToolbar)
-            }
-            if (android.os.Build.VERSION.SDK_INT > 20) {
-                spinner1.backgroundTintList = tint
-            }
+    // FIXME always seems to be false, remove?
+    private fun setupSpinner(light: Boolean) {
+        var tint = ColorStateList.valueOf(UIPreferences.colorBlack)
+        if (light) {
+            tint = ColorStateList.valueOf(UIPreferences.colorOffwhiteToolbar)
+        }
+        if (android.os.Build.VERSION.SDK_INT > 20) {
+            spinner1.backgroundTintList = tint
         }
     }
 }

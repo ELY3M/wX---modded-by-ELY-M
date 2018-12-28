@@ -28,8 +28,6 @@ import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 
-//import java.util.Collections
-//import java.util.Comparator
 
 object UtilitySpotter {
     internal var spotterList = mutableListOf<Spotter>()

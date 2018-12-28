@@ -107,13 +107,19 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         miStatusParam1 = m.findItem(R.id.action_status_param1)
         miStatusParam2 = m.findItem(R.id.action_status_param2)
         if (om.numPanes < 2) {
-            fab1 = ObjectFab(this, this, R.id.fab1)
-            fab2 = ObjectFab(this, this, R.id.fab2)
+            fab1 = ObjectFab(
+                this,
+                this,
+                R.id.fab1,
+                View.OnClickListener { UtilityModels.moveBack(om.spTime) })
+            fab2 = ObjectFab(
+                this,
+                this,
+                R.id.fab2,
+                View.OnClickListener { UtilityModels.moveForward(om.spTime) })
             m.findItem(R.id.action_img1).isVisible = false
             m.findItem(R.id.action_img2).isVisible = false
             if (UIPreferences.fabInModels) {
-                fab1.setOnClickListener(View.OnClickListener { UtilityModels.moveBack(om.spTime) })
-                fab2.setOnClickListener(View.OnClickListener { UtilityModels.moveForward(om.spTime) })
                 val leftArrow = m.findItem(R.id.action_back)
                 val rightArrow = m.findItem(R.id.action_forward)
                 leftArrow.isVisible = false

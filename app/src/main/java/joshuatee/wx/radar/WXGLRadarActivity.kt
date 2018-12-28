@@ -102,6 +102,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         var velMin: Short = -120
         var spotterId: String = ""
         var spotterShowSelected: Boolean = false
+        //var hailShowSelected: Boolean = false
         var bearingCurrent = 0.0f
         var speedCurrent = 0.0f
     }
@@ -183,6 +184,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.statusBarColor = Color.TRANSPARENT
         }
+
+        //if (MyApplication.radarHailSizeLabel) {
+        //    hailShowSelected = true
+        //}
 
         act = this
         spotterShowSelected = false

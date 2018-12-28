@@ -48,6 +48,7 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
     STI(MyApplication.radarColorSti, "STI", MyApplication.radarSti, 0.0f),
     TVS(MyApplication.radarColorTor, "TVS", MyApplication.radarTvs, MyApplication.radarTvsSize.toFloat()),
     HI(MyApplication.radarColorHi, "HI", MyApplication.radarHi, MyApplication.radarHiSize.toFloat()),
+    HAIL_LABELS(MyApplication.radarColorHi, "HAILSIZE_LABELS", MyApplication.radarHailSizeLabel, 0.0f),
     OBS(MyApplication.radarColorObs, "OBS", MyApplication.radarObs, 0.0f),
     SWO(MyApplication.radarColorHi, "SWO", MyApplication.radarSwo, 0.0f),
     NONE(0, "", false, 0.0f);

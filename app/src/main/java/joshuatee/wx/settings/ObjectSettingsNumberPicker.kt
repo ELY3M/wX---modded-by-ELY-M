@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
 
 package joshuatee.wx.settings
 
@@ -52,6 +53,7 @@ internal class ObjectSettingsNumberPicker(
     init {
         val initValue = when (pref) {
             "RADAR_TEXT_SIZE" -> (Utility.readPref(context, pref, defValue.toFloat()) * 10).toInt()
+            "RADAR_HI_TEXT_SIZE" -> (Utility.readPref(context, pref, defValue.toFloat()) * 10).toInt()
             "UI_ANIM_ICON_FRAMES" -> (Utility.readPref(
                 context,
                 pref,
@@ -96,6 +98,7 @@ internal class ObjectSettingsNumberPicker(
         nP.setOnValueChangedListener { _, _, newVal ->
             when (pref) {
                 "RADAR_TEXT_SIZE" -> Utility.writePref(context, pref, newVal / 10.0f)
+                "RADAR_HI_TEXT_SIZE" -> Utility.writePref(context, pref, newVal / 10.0f)
                 "UI_ANIM_ICON_FRAMES" -> Utility.writePref(context, pref, newVal.toString())
                 else -> Utility.writePref(context, pref, newVal)
             }

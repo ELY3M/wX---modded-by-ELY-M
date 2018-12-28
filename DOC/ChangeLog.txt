@@ -2,10 +2,11 @@
 // TODO base velocity legend
 // TODO NWS URLs http to https const myapp
 // TODO refactor nexrad radar to match architecture of wXL23 Metal to remove code duplicity
-// TODO reduce complexity and code cleanup (lint)
-// TODO in various anim code don't use String to represent # of frames, convert to Int
 // TODO convert to new NavDrawer: USWarningsWith, ModelGeneric, ModelSPCHRRR, SPCCompmap, SPCStormreports, GOES16
+// TODO in general reduce static methods ( object methods ) in favor of instance methods
 
+55083 2018_12_25 ObjectFab - rationalize
+55082 2018_12_25 ObjectFab - rationalize
 55081 2018_12_25 [BUG] AWC forecast URLs changed in WPC IMG
                  refactor NWS Icon and Metar stuff
 55080 2018_12_21 code cleanup, continue moving semi-common code to UtilityRadarUI

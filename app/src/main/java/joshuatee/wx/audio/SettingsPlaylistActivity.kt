@@ -62,7 +62,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     private val prefToken = "PLAYLIST"
     private var actionMode = ActionMode.PLAY
     private lateinit var ca: PlayListAdapter
-    private lateinit var fab3: ObjectFab
+    private lateinit var fabPause: ObjectFab
     private lateinit var diaMain: ObjectDialogue
     private lateinit var diaAfd: ObjectDialogue
     private lateinit var contextg: Context
@@ -77,19 +77,25 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        val fab = ObjectFab(this, this, R.id.fab)
-        fab3 = ObjectFab(this, this, R.id.fab3)
+        ObjectFab(this, this, R.id.fab, View.OnClickListener { playAll() })
+        fabPause = ObjectFab(this, this, R.id.fab3, View.OnClickListener { playItemFAB() })
         if (UtilityTTS.mMediaPlayer != null && !UtilityTTS.mMediaPlayer!!.isPlaying) {
-            ObjectFab.fabSetResDrawable(contextg, fab3.fab, MyApplication.ICON_PAUSE_PRESSED)
+            fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE_PRESSED)
         } else {
-            ObjectFab.fabSetResDrawable(contextg, fab3.fab, MyApplication.ICON_PAUSE)
+            fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE)
         }
-        fab.setOnClickListener(View.OnClickListener { playAll() })
-        val fab1 = ObjectFab(this, this, R.id.fab1, MyApplication.ICON_ARROW_UP)
-        fab1.setOnClickListener(View.OnClickListener { toggleMode(ActionMode.UP) })
-        val fab2 = ObjectFab(this, this, R.id.fab2, MyApplication.ICON_ARROW_DOWN)
-        fab2.setOnClickListener(View.OnClickListener { toggleMode(ActionMode.DOWN) })
-        fab3.setOnClickListener(View.OnClickListener { playItemFAB() })
+        ObjectFab(
+            this,
+            this,
+            R.id.fab1,
+            MyApplication.ICON_ARROW_UP,
+            View.OnClickListener { toggleMode(ActionMode.UP) })
+        ObjectFab(
+            this,
+            this,
+            R.id.fab2,
+            MyApplication.ICON_ARROW_DOWN,
+            View.OnClickListener { toggleMode(ActionMode.DOWN) })
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", WFO_ARR)
         diaAfd.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             val strName = diaAfd.getItem(which)
@@ -238,9 +244,9 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             UtilityTTS.playMediaPlayer(1)
         }
         if (UtilityTTS.mMediaPlayer != null && !UtilityTTS.mMediaPlayer!!.isPlaying) {
-            ObjectFab.fabSetResDrawable(contextg, fab3.fab, MyApplication.ICON_PAUSE_PRESSED)
+            fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE_PRESSED)
         } else {
-            ObjectFab.fabSetResDrawable(contextg, fab3.fab, MyApplication.ICON_PAUSE)
+            fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE)
         }
         if (UtilityTTS.mMediaPlayer != null && UtilityTTS.mMediaPlayer!!.isPlaying) {
             if (UIPreferences.mediaControlNotif) {
@@ -250,7 +256,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun playAll() {
-        ObjectFab.fabSetResDrawable(contextg, fab3.fab, MyApplication.ICON_PAUSE)
+        fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE)
         if (isStoragePermissionGranted) {
             UtilityTTS.synthesizeTextAndPlayPlaylist(contextg, 1)
         }

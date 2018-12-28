@@ -534,6 +534,7 @@ class MyApplication : Application() {
         var radarColorCounty: Int = 0
         var radarColorSti: Int = 0
         var radarColorHi: Int = 0
+        var radarColorHiText: Int = 0
         var radarColorObs: Int = 0
         var radarColorObsWindbarbs: Int = 0
         var radarColorCountyLabels: Int = 0
@@ -561,6 +562,7 @@ class MyApplication : Application() {
             radarColorCounty = getInitialPreference("RADAR_COLOR_COUNTY", Color.rgb(75, 75, 75))
             radarColorSti = getInitialPreference("RADAR_COLOR_STI", Color.WHITE)
             radarColorHi = getInitialPreference("RADAR_COLOR_HI", Color.GREEN)
+            radarColorHiText = getInitialPreference("RADAR_COLOR_HI_TEXT", Color.GREEN)
             radarColorObs = getInitialPreference("RADAR_COLOR_OBS", Color.rgb(255, 255, 255))
             radarColorObsWindbarbs = getInitialPreference("RADAR_COLOR_OBS_WINDBARBS", Color.WHITE)
             radarColorCountyLabels = getInitialPreference("RADAR_COLOR_COUNTY_LABELS", Color.rgb(75, 75, 75))
@@ -668,6 +670,7 @@ class MyApplication : Application() {
         var dualpaneshareposn: Boolean = false
         var radarSpotters: Boolean = false
         var radarSpottersLabel: Boolean = false
+        var radarHailSizeLabel: Boolean = false
         var radarObs: Boolean = false
         var radarObsWindbarbs: Boolean = false
         var radarSwo: Boolean = false
@@ -696,6 +699,7 @@ class MyApplication : Application() {
         var radarLocIconSize: Int = 0
         var radarLocBugSize: Int = 0
         var radarHiSize: Int = 0
+        var radarHiTextSize: Float = 0f
         var radarTvsSize: Int = 0
         var radarDefaultLinesize: Int = 0
         var radarWarnLinesize: Int = 0
@@ -720,6 +724,7 @@ class MyApplication : Application() {
             dualpaneshareposn = getInitialPreference("DUALPANE_SHARE_POSN", "true")
             radarSpotters = getInitialPreference("WXOGL_SPOTTERS", "false")
             radarSpottersLabel = getInitialPreference("WXOGL_SPOTTERS_LABEL", "false")
+            radarHailSizeLabel = getInitialPreference("WXOGL_HAIL_LABEL", "false")
             radarObs = getInitialPreference("WXOGL_OBS", "false")
             radarObsWindbarbs = getInitialPreference("WXOGL_OBS_WINDBARBS", "false")
             radarSwo = getInitialPreference("RADAR_SHOW_SWO", "false")
@@ -750,8 +755,9 @@ class MyApplication : Application() {
             radarLocdotSize = getInitialPreference("RADAR_LOCDOT_SIZE", 10)
             radarLocIconSize = getInitialPreference("RADAR_LOCICON_SIZE", 100)
             radarLocBugSize = getInitialPreference("RADAR_LOCBUG_SIZE", 100)
-            radarHiSize = getInitialPreference("RADAR_HI_SIZE", 8)
-            radarTvsSize = getInitialPreference("RADAR_TVS_SIZE", 100)
+            radarHiSize = getInitialPreference("RADAR_HI_SIZE", 75)
+            radarHiTextSize = getInitialPreference("RADAR_HI_TEXT_SIZE", 1.0f)
+            radarTvsSize = getInitialPreference("RADAR_TVS_SIZE", 75)
             radarDefaultLinesize = getInitialPreference("RADAR_DEFAULT_LINESIZE", 1)
             radarWarnLinesize = getInitialPreference("RADAR_WARN_LINESIZE", 4)
             radarWatmcdLinesize = getInitialPreference("RADAR_WATMCD_LINESIZE", 2)

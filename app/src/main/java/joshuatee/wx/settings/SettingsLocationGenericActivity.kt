@@ -111,8 +111,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
         Utility.writePref(this, "LOCATION_CANADA_PROV", "")
         Utility.writePref(this, "LOCATION_CANADA_CITY", "")
         Utility.writePref(this, "LOCATION_CANADA_ID", "")
-        val fab = ObjectFab(this, this, R.id.fab)
-        fab.setOnClickListener(OnClickListener { fabSaveLocation() })
+        ObjectFab(this, this, R.id.fab, OnClickListener { fabSaveLocation() })
         val me = toolbarBottom.menu
         listOf(R.id.cv1).forEach { ObjectCard(this, it) }
         rl = findViewById(R.id.rl)

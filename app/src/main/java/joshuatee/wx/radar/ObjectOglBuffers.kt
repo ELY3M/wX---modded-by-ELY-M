@@ -174,6 +174,7 @@ open class ObjectOglBuffers() {
         }
     }
 
+    //FIXME //add point sprite in JNI
     companion object {
         // TVS
         private fun redrawTriangle(buffers: ObjectOglBuffers, pn: ProjectionNumbers) {
@@ -187,7 +188,7 @@ open class ObjectOglBuffers() {
         // HI
         private fun redrawTriangleUp(buffers: ObjectOglBuffers, pn: ProjectionNumbers) {
             if (!MyApplication.radarUseJni)
-                UtilityWXOGLPerf.genTriangleUp(buffers, pn, buffers.xList, buffers.yList)
+                UtilityWXOGLPerf.genMarkerList(buffers, pn, buffers.xList, buffers.yList)
             else
                 JNI.genTriangleUp(buffers.floatBuffer, buffers.indexBuffer, pn.xFloat, pn.yFloat, pn.xCenter.toFloat(), pn.yCenter.toFloat(),
                         pn.oneDegreeScaleFactorFloat, buffers.xList, buffers.yList, buffers.count, buffers.lenInit, buffers.colorBuffer, buffers.colorArray)

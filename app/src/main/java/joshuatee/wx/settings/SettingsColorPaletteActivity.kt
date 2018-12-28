@@ -88,10 +88,18 @@ class SettingsColorPaletteActivity : BaseActivity() {
             toolbar.subtitle = MyApplication.radarColorPalette[type]
             prefToken = "RADAR_COLOR_PALETTE_$type"
         }
-        fab1 = ObjectFab(this, this, R.id.fab1, R.drawable.ic_reorder_24dp)
-        fab1.setOnClickListener(View.OnClickListener { addPalFAB() })
-        fab2 = ObjectFab(this, this, R.id.fab2, MyApplication.ICON_DELETE)
-        fab2.setOnClickListener(View.OnClickListener { editPalFAB(this) })
+        fab1 = ObjectFab(
+            this,
+            this,
+            R.id.fab1,
+            R.drawable.ic_reorder_24dp,
+            View.OnClickListener { addPalFAB() })
+        fab2 = ObjectFab(
+            this,
+            this,
+            R.id.fab2,
+            MyApplication.ICON_DELETE,
+            View.OnClickListener { editPalFAB(this) })
         rowListItem = allItemList
         val lLayout = GridLayoutManager(this, UIPreferences.tilesPerRow)
         rView = findViewById(R.id.card_list)

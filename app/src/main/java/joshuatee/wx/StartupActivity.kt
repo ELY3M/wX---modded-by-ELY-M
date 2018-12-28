@@ -66,6 +66,14 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
                 checkfiles(R.drawable.location, "location.png")
                 checkfiles(R.drawable.tvs, "tvs.png")
 
+                checkfiles(R.drawable.hail05, "hail05.png")
+                checkfiles(R.drawable.hail0, "hail0.png")
+                checkfiles(R.drawable.hail1, "hail1.png")
+                checkfiles(R.drawable.hail2, "hail2.png")
+                checkfiles(R.drawable.hail3, "hail3.png")
+                checkfiles(R.drawable.hail4, "hail4.png")
+                checkfiles(R.drawable.hailbig, "hailbig.png")
+
                 checkpalfiles(R.raw.colormap134cod, "colormap134cod.txt")
                 checkpalfiles(R.raw.colormap135cod, "colormap135cod.txt")
                 checkpalfiles(R.raw.colormap159cod, "colormap159cod.txt")
@@ -138,54 +146,6 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
 
     }
 
-fun checkperms() {
-
-
-    //storage permission so we can run checkfiles for custom icons//
-    val storagepermissionManager = PermissionManager.getInstance(this)
-    storagepermissionManager.checkPermissions(singleton(Manifest.permission.WRITE_EXTERNAL_STORAGE), object : PermissionManager.PermissionRequestListener {
-        override fun onPermissionGranted() {
-            Log.i(TAG, "Storage Permissions Granted")
-            checkfiles(R.drawable.headingbug, "headingbug.png")
-            checkfiles(R.drawable.tinyfly, "tinyfly.png")
-            checkfiles(R.drawable.pixelfly, "pixelfly.png")
-            checkfiles(R.drawable.star_cyan, "star_cyan.png")
-            checkfiles(R.drawable.location, "location.png")
-
-            checkpalfiles(R.raw.colormap134cod, "colormap134cod.txt")
-            checkpalfiles(R.raw.colormap135cod, "colormap135cod.txt")
-            checkpalfiles(R.raw.colormap159cod, "colormap159cod.txt")
-            checkpalfiles(R.raw.colormap161cod, "colormap161cod.txt")
-            checkpalfiles(R.raw.colormap163cod, "colormap163cod.txt")
-            checkpalfiles(R.raw.colormap165cod, "colormap165cod.txt")
-            checkpalfiles(R.raw.colormap172cod, "colormap172cod.txt")
-            checkpalfiles(R.raw.colormapbvaf, "colormapbvaf.txt")
-            checkpalfiles(R.raw.colormapbvcod, "colormapbvcod.txt")
-            checkpalfiles(R.raw.colormapbveak, "colormapbveak.txt")
-            checkpalfiles(R.raw.colormaprefaf, "colormaprefaf.txt")
-            checkpalfiles(R.raw.colormaprefcode, "colormaprefcode.txt")
-            checkpalfiles(R.raw.colormaprefcodenh, "colormaprefcodenh.txt")
-            checkpalfiles(R.raw.colormaprefdkenh, "colormaprefdkenh.txt")
-            checkpalfiles(R.raw.colormaprefeak, "colormaprefeak.txt")
-            checkpalfiles(R.raw.colormaprefmenh, "colormaprefmenh.txt")
-            checkpalfiles(R.raw.colormaprefnssl, "colormaprefnssl.txt")
-            checkpalfiles(R.raw.colormaprefnwsd, "colormaprefnwsd.txt")
-            //elys custom color tables
-            checkpalfiles(R.raw.colormapownref, "colormapownref.txt")
-            checkpalfiles(R.raw.colormapownvel, "colormapownvel.txt")
-            checkpalfiles(R.raw.colormapownenhvel, "colormapownenhvel.txt")
-
-            ColorPalettes.init(applicationContext)
-
-
-        }
-
-        override fun onPermissionDenied() {
-            Log.i(TAG, "Storage Permissions Denied")
-        }
-    })
-
-}
 
 
     fun checkfiles(drawable: Int, filename: String) {

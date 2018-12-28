@@ -21,8 +21,6 @@ https://w1.weather.gov/data/LOT/SPSLOT
 14. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor. 
 15. make VAD Wind Profile more better and friendly  like the one at cod.edu    
 16. color tables for SRM and Spectrum Width   
-17. fix radarstatus to get message from this url like this https://w1.weather.gov/data/LOT/FTMLOT  
-
 
 
 #

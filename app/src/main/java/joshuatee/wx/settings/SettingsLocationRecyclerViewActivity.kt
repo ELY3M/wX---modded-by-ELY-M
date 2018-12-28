@@ -61,19 +61,24 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
             null,
             false
         )
-        val fab = ObjectFab(this, this, R.id.fab_add)
-        val fab2 = ObjectFab(this, this, R.id.fab_delete)
-        val fabUP = ObjectFab(this, this, R.id.fabUP)
-        val fabDOWN = ObjectFab(this, this, R.id.fabDOWN)
+        ObjectFab(this, this, R.id.fab_add, View.OnClickListener { addItemFAB() })
+        ObjectFab(
+            this,
+            this,
+            R.id.fab_delete,
+            View.OnClickListener { toggleMode(ActionMode.DELETE) })
+        val fabUP =
+            ObjectFab(this, this, R.id.fabUP, View.OnClickListener { toggleMode(ActionMode.UP) })
+        val fabDOWN = ObjectFab(
+            this,
+            this,
+            R.id.fabDOWN,
+            View.OnClickListener { toggleMode(ActionMode.DOWN) })
         if (Location.numLocations == 1) {
             fabUP.setVisibility(View.INVISIBLE)
             fabDOWN.setVisibility(View.INVISIBLE)
         }
         toolbar.subtitle = selectStr
-        fab.setOnClickListener(View.OnClickListener { addItemFAB() })
-        fab2.setOnClickListener(View.OnClickListener { toggleMode(ActionMode.DELETE) })
-        fabUP.setOnClickListener(View.OnClickListener { toggleMode(ActionMode.UP) })
-        fabDOWN.setOnClickListener(View.OnClickListener { toggleMode(ActionMode.DOWN) })
         updateList()
         recyclerView = findViewById(R.id.card_list)
         recyclerView.setHasFixedSize(true)

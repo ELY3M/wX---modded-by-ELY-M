@@ -40,6 +40,7 @@ import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.ui.ObjectSpinner
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 
@@ -85,7 +86,7 @@ class ObjectSettingsSpinner(
         val spinner = Spinner(context)
         if (android.os.Build.VERSION.SDK_INT > 20) {
             if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
-                ObjectSpinner.setupSpinner(spinner, false)
+                UtilityUI.setupSpinner(spinner, false)
             }
         }
         val dataAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, spinnerArr)

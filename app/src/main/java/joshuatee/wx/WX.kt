@@ -75,8 +75,12 @@ class WX : CommonActionBarFragment() {
         miVr = menu.findItem(R.id.action_vr)
         miVr.isVisible = MyApplication.vrButton
         if (MyApplication.helpMode) helpMi.title = helpStr
-        val fab = ObjectFab(this, this, R.id.fab, MyApplication.ICON_RADAR)
-        fab.setOnClickListener(OnClickListener { openNexradRadar(this, 0) })
+        val fab = ObjectFab(
+            this,
+            this,
+            R.id.fab,
+            MyApplication.ICON_RADAR,
+            OnClickListener { openNexradRadar(this, 0) })
         if (UIPreferences.mainScreenRadarFab) {
             val radarMi = menu.findItem(R.id.action_radar)
             radarMi.isVisible = false

@@ -23,14 +23,17 @@ package joshuatee.wx.ui
 
 import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
+import android.content.res.ColorStateList
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Build
 import com.google.android.material.snackbar.Snackbar
 import androidx.cardview.widget.CardView
 import android.view.View
-import android.widget.TextView
-import android.widget.Toast
-import android.widget.LinearLayout
+import android.widget.*
+import androidx.core.content.ContextCompat
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
@@ -38,6 +41,29 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.util.Utility
 
 object UtilityUI {
+
+    // called from LOCFRAG and ObjectSettingsSpinner
+    // FIXME
+    fun setupSpinner(spinner: Spinner, light: Boolean) {
+        var tint = ColorStateList.valueOf(UIPreferences.colorBlack)
+        if (light) {
+            tint = ColorStateList.valueOf(UIPreferences.colorOffwhiteToolbar)
+        }
+        if (android.os.Build.VERSION.SDK_INT > 20) {
+            spinner.backgroundTintList = tint
+        }
+    }
+
+    fun setResDrawable(context: Context, fab: RemoteViews, ib: Int, resdraw: Int) {
+        val wrappedContext = ContextWrapper(context)
+        val d = ContextCompat.getDrawable(wrappedContext, resdraw)!!
+        val b =
+            Bitmap.createBitmap(d.intrinsicWidth, d.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val c = Canvas(b)
+        d.setBounds(0, 0, c.width, c.height)
+        d.draw(c)
+        fab.setImageViewBitmap(ib, b)
+    }
 
     fun makeToastLegacy(context: Context, msg: String) {
         val view = View.inflate(context, R.layout.toast, null)

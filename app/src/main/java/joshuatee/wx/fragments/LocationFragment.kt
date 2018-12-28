@@ -259,7 +259,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         spinner1 = view.findViewById(R.id.spinner1)
         if (android.os.Build.VERSION.SDK_INT > 20) {
             if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
-                ObjectSpinner.setupSpinner(spinner1, false)
+                UtilityUI.setupSpinner(spinner1, false)
             }
         }
         dataAdapter = ArrayAdapter(activityReference, R.layout.simple_spinner_item, Location.listOf)

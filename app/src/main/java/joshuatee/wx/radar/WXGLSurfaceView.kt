@@ -86,6 +86,8 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     var obsAl: MutableList<TextView> = mutableListOf()
     var spottersLabelAl: MutableList<TextView> = mutableListOf()
     var spotterTv: MutableList<TextView> = mutableListOf()
+    var hailLabelAl: MutableList<TextView> = mutableListOf()
+    var hailTv: MutableList<TextView> = mutableListOf()
     var wxgltextArr: MutableList<WXGLTextObject> = mutableListOf()
     var locfrag: Boolean = false
     private var act: Activity? = null

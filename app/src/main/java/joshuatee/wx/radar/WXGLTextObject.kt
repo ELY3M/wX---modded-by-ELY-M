@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//modded by ELY M.
 
 package joshuatee.wx.radar
 
@@ -33,7 +34,9 @@ import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.util.ProjectionNumbers
+import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityCanvasProjection
+import joshuatee.wx.util.UtilityLog
 
 import kotlin.math.*
 
@@ -53,6 +56,13 @@ class WXGLTextObject(
     private val spotterSingleLabelTvArrInit = false
     private var spotterLat = 0.toDouble()
     private var spotterLon = 0.toDouble()
+
+
+    private var hailLabelsTvArrInit = false
+    private val hailSingleLabelTvArrInit = false
+    private var hailLat = 0.toDouble()
+    private var hailLon = 0.toDouble()
+
     private var maxCitiesPerGlview = 16
     private var ii = 0
     private val glviewWidth: Int
@@ -213,6 +223,123 @@ class WXGLTextObject(
             hideSpottersLabels()
         }
     }
+
+    fun initTVHailLabels() {
+        if (PolygonType.HAIL_LABELS.pref) hailLabelsTvArrInit = true
+    }
+
+    fun addTVHailLabels() {
+        if (PolygonType.HAIL_LABELS.pref && hailLabelsTvArrInit) {
+            pn = ProjectionNumbers(context, OGLR.rid, ProjectionType.WX_OGL)
+            hailLat = 0.0
+            hailLon = 0.0
+            hideHailLabels()
+            glview.hailLabelAl = mutableListOf()
+            scale = getScale()
+            oglrZoom = 1.0f
+            if (OGLR.zoom < 1.00f) {
+                oglrZoom = OGLR.zoom * 0.8f
+            }
+            textSize = MyApplication.textSizeSmall * oglrZoom * MyApplication.radarHiTextSize * 0.75f
+            if (OGLR.zoom > 0.5) {
+                // FIXME make copy first
+                WXGLNexradLevel3HailIndex.hailList.indices.forEach {
+                    checkAndDrawText(
+                            glview.hailLabelAl,
+                            WXGLNexradLevel3HailIndex.hailList[it].lat - 0.130 / OGLR.zoom, //move down to under HI icon
+                            WXGLNexradLevel3HailIndex.hailList[it].lon,
+                            WXGLNexradLevel3HailIndex.hailList[it].hailsize,
+                            MyApplication.radarColorHiText
+                    )
+                }
+            } else {
+                hideHailLabels()
+            }
+        } else {
+            hideHailLabels()
+        }
+    }
+
+    private fun hideHailLabels() {
+        glview.hailLabelAl.indices.forEach {
+            glview.hailLabelAl[it].visibility = View.GONE
+            rl.removeView(glview.hailLabelAl[it])
+        }
+    }
+
+    private fun addTVHail() {
+            pn = ProjectionNumbers(context, OGLR.rid, ProjectionType.WX_OGL)
+            var foundhail: Boolean = false
+            var hailLat: Double
+            var hailLon: Double
+            glview.hailTv = mutableListOf()
+            var aa = 0
+
+            UtilityLog.d("wx", "hailList.size: "+WXGLNexradLevel3HailIndex.hailList.size)
+
+            if (WXGLNexradLevel3HailIndex.hailList.size < 0) {
+                UtilityLog.d("wx", "haillist < 0")
+                foundhail = true
+            }
+
+            while (aa < WXGLNexradLevel3HailIndex.hailList.size) {
+                aa += 1
+            }
+
+                if (foundhail) {
+                    UtilityLog.d("wx", "hail found")
+                    hailLat = WXGLNexradLevel3HailIndex.hailList[aa].lat //move down abit
+                    hailLon = WXGLNexradLevel3HailIndex.hailList[aa].lon
+
+                    scale = getScale()
+                    oglrZoom = 1.0f
+                    if (OGLR.zoom < 1.0f) {
+                        oglrZoom = OGLR.zoom * 0.8f
+                    }
+                    if (OGLR.zoom > 0.5) {
+                        showHail()
+                        for (c in 0 until 1) {
+                            val drawText = checkButDoNotDrawText(
+                                    glview.hailTv,
+                                    hailLat,
+                                    hailLon, //move down abit so can read
+                                    MyApplication.radarColorHiText,
+                                    MyApplication.textSizeSmall * oglrZoom * 1.5f * MyApplication.radarHiTextSize
+                            )
+                            if (drawText) {
+                                glview.hailTv[c].text = WXGLNexradLevel3HailIndex.hailList[aa].hailsize
+
+                            }
+                        }
+                    } else {
+                        hideHail()
+                    }
+
+                } //foundhail
+
+    }
+
+    private fun showHail() {
+            if (glview.hailTv.size > 0) {
+                var c = 0
+                while (c < 1) {
+                    glview.hailTv[c].visibility = View.VISIBLE
+                    c += 1
+                }
+            }
+    }
+
+    private fun hideHail() {
+            if (hailSingleLabelTvArrInit)
+            if (glview.hailTv.size > 0) {
+                var c = 0
+                while (c < glview.hailTv.size) {
+                    glview.hailTv[c].visibility = View.GONE
+                    c += 1
+                }
+            }
+    }
+
 
     private fun checkAndDrawText(
         tvList: MutableList<TextView>,
@@ -425,6 +552,7 @@ class WXGLTextObject(
         initTVCitiesExt(context)
         initTVCountyLabels(context)
         initTVSpottersLabels()
+        initTVHailLabels()
     }
 
     fun addTV() {
@@ -437,6 +565,10 @@ class WXGLTextObject(
         if (numPanes == 1 && WXGLRadarActivity.spotterShowSelected) {
             addTVSpotter()
         }
+        addTVHailLabels()
+        if (numPanes == 1) {
+            addTVHail()
+        }
     }
 
     fun hideTV() {
@@ -444,8 +576,12 @@ class WXGLTextObject(
         hideCountyLabels()
         if (numPanes == 1) hideObs()
         hideSpottersLabels()
+        hideHailLabels()
         if (numPanes == 1 && WXGLRadarActivity.spotterShowSelected) {
             hideSpotter()
+        }
+        if (numPanes == 1) {
+            hideHail()
         }
     }
 

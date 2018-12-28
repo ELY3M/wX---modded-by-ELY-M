@@ -96,12 +96,24 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         hmFavOrig = ridFav
         toolbar.subtitle = actionMode.getDescription()
         UtilityToolbar.fullScreenMode(toolbar, false)
-        val fab = ObjectFab(this, this, R.id.fab, MyApplication.ICON_ADD)
-        fab.setOnClickListener(View.OnClickListener { diaMain.show() })
-        val fab1 = ObjectFab(this, this, R.id.fab1, MyApplication.ICON_ARROW_UP)
-        fab1.setOnClickListener(View.OnClickListener { toggleMode(ActionMode.UP) })
-        val fab2 = ObjectFab(this, this, R.id.fab2, MyApplication.ICON_ARROW_DOWN)
-        fab2.setOnClickListener(View.OnClickListener { toggleMode(ActionMode.DOWN) })
+        ObjectFab(
+            this,
+            this,
+            R.id.fab,
+            MyApplication.ICON_ADD,
+            View.OnClickListener { diaMain.show() })
+        ObjectFab(
+            this,
+            this,
+            R.id.fab1,
+            MyApplication.ICON_ARROW_UP,
+            View.OnClickListener { toggleMode(ActionMode.UP) })
+        ObjectFab(
+            this,
+            this,
+            R.id.fab2,
+            MyApplication.ICON_ARROW_DOWN,
+            View.OnClickListener { toggleMode(ActionMode.DOWN) })
         updateList(true)
         recyclerView = findViewById(R.id.card_list)
         recyclerView.setHasFixedSize(true)

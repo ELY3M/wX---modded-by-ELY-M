@@ -19,6 +19,7 @@
 
  */
 //modded by ELY M.
+
 package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
@@ -62,6 +63,7 @@ class SettingsColorsActivity : BaseActivity() {
                 "County labels color" to "RADAR_COLOR_COUNTY_LABELS",
                 "Storm tracks color" to "RADAR_COLOR_STI",
                 "Hail marker color" to "RADAR_COLOR_HI",
+                "Hail Text color" to "RADAR_COLOR_HI_TEXT",
                 "Observations color" to "RADAR_COLOR_OBS",
                 "Windbarb color" to "RADAR_COLOR_OBS_WINDBARBS",
                 "Draw tool color" to "DRAW_TOOL_COLOR",

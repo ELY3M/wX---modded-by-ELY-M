@@ -98,12 +98,24 @@ class FavRemoveActivity : BaseActivity() {
         ridFav = Utility.readPref(this, prefToken, " : : :")
         title = "Modify $type"
         toolbar.subtitle = actionMode.getDescription()
-        val fab = ObjectFab(this, this, R.id.fab, MyApplication.ICON_DELETE)
-        fab.setOnClickListener(View.OnClickListener { toggleMode(ActionMode.DELETE) })
-        val fab1 = ObjectFab(this, this, R.id.fab1, MyApplication.ICON_ARROW_UP)
-        fab1.setOnClickListener(View.OnClickListener { toggleMode(ActionMode.UP) })
-        val fab2 = ObjectFab(this, this, R.id.fab2, MyApplication.ICON_ARROW_DOWN)
-        fab2.setOnClickListener(View.OnClickListener { toggleMode(ActionMode.DOWN) })
+        ObjectFab(
+            this,
+            this,
+            R.id.fab,
+            MyApplication.ICON_DELETE,
+            View.OnClickListener { toggleMode(ActionMode.DELETE) })
+        ObjectFab(
+            this,
+            this,
+            R.id.fab1,
+            MyApplication.ICON_ARROW_UP,
+            View.OnClickListener { toggleMode(ActionMode.UP) })
+        ObjectFab(
+            this,
+            this,
+            R.id.fab2,
+            MyApplication.ICON_ARROW_DOWN,
+            View.OnClickListener { toggleMode(ActionMode.DOWN) })
         updateList()
         val recyclerView: RecyclerView = findViewById(R.id.card_list)
         recyclerView.setHasFixedSize(true)

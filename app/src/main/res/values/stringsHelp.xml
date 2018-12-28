@@ -729,17 +729,23 @@ If enabled the WXOGL activity will attempt to prevent the screen from turning of
 If enabled the WXOGL radar will show storm tracks ( predicted future path / speed ).</string>
 
      <string name="show_hi_label">
-If enabled the WXOGL radar will hail signatures with hail size at or greater then 0.50 inch at 50% or higher probability as shown via upside down green triangle.
-     For estimate hail from 1-2 inches 2 markers will be shown and 3 markers for hail from 2-3 inches.</string>
+If enabled the WXOGL radar will hail signatures with hail size at or greater then 0.50 inch at 50% or higher probability.</string>
+
+    <string name="show_hi_label_label">
+If enabled the WXOGL radar will hail signatures will show text of hail sizes</string>
+
 
      <string name="show_tvs_label">
 If enabled the WXOGL radar will show tornado vortext signature as shown via upside down triangle with color matching tornado warning/watch polygons.</string>
 
         <string name="hi_size_np">
-Allows one to change the size of the Hail markers. Default value is 8.</string>
+Allows one to change the size of the Hail markers. Default value is 75.</string>
+
+    <string name="hi_textsize_np">
+Allows one to change the size of the Hail Text. Default value is 8.</string>
 
     <string name="tvs_size_np">
-Allows one to change the size of the TVS markers. Default value is 8.</string>
+Allows one to change the size of the TVS markers. Default value is 75.</string>
 
         <string name="rememberloc_label">
 WXOGL will use the last location and zoom level instead of the radar site for the current location in the main tab.</string>

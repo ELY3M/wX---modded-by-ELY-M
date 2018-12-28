@@ -96,7 +96,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
                 R.id.b_dash
             )
             img.indices.forEach {
-                ObjectFab.fabSetResDrawable(
+                UtilityUI.setResDrawable(
                     context,
                     remoteViews,
                     btn[it],

@@ -54,7 +54,7 @@ class ObjectImageMap(
 
     private fun setupMap() {
         viewArr.forEach { it.visibility = View.GONE }
-        setupImageMap(context, map, toolbar, toolbarBottom)
+        setupImageMap(context, toolbar, toolbarBottom)
         map.visibility = View.VISIBLE
     }
 
@@ -62,19 +62,16 @@ class ObjectImageMap(
         map.addOnImageMapClickedHandler(h)
     }
 
-    companion object {
-        fun setupImageMap(
-            context: Context,
-            map: ImageMap,
-            toolbar: Toolbar,
-            toolbarBottom: Toolbar
-        ) {
-            val paramsIv = map.layoutParams
-            paramsIv.height = MyApplication.dm.heightPixels - toolbar.height -
-                    toolbarBottom.height - UtilityUI.statusBarHeight(context)
-            paramsIv.width = MyApplication.dm.widthPixels
-            map.layoutParams = paramsIv
-        }
+    private fun setupImageMap(
+        context: Context,
+        toolbar: Toolbar,
+        toolbarBottom: Toolbar
+    ) {
+        val paramsIv = map.layoutParams
+        paramsIv.height = MyApplication.dm.heightPixels - toolbar.height -
+                toolbarBottom.height - UtilityUI.statusBarHeight(context)
+        paramsIv.width = MyApplication.dm.widthPixels
+        map.layoutParams = paramsIv
     }
 }
 
