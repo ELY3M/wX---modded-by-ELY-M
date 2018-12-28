@@ -426,8 +426,10 @@ object UtilityDownload {
             val prodHtml =
                 UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/products/$urlProd")
             text = UtilityString.parseAcrossLines(prodHtml, "\"productText\": \"(.*?)\\}")
-            text = text.replace("\\n\\n", "<BR>")
-            text = text.replace("\\n", " ")
+            //text = text.replace("\\n\\n", "<BR>")
+            //text = text.replace("\\n", " ")
+            text = text.replace("\\n\\n", "<BR><BR>")
+            text = text.replace("\\n", "<BR>")
         }
         UtilityPlayList.checkAndSave(context, prod, text)
         return text
