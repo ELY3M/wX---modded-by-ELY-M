@@ -44,7 +44,7 @@ https://w1.weather.gov/data/LOT/SPSLOT
 #
 #
 ## DONE!
-==================================== 
+====================================  
 added hail icons and text for showing hail sizes on radar, still testing  
 added backup urls in getRadarStatus function.  
 show MPD text within text is done and working.   
