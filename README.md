@@ -26,10 +26,10 @@ would have to do the latlon method that is used for watches/mcds/mpds
 https://w1.weather.gov/data/LOT/SPSLOT  
 3\. add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs   
 4\. allow custom icons! esp cities dots - hail/tvs/location image is done!.    
-5\. add warning list within radar
-6\. add LSR reports from SN spotters/option to turn on/off LSR reports
+5\. add warning list within radar  
+6\. add LSR reports from SN spotters/option to turn on/off LSR reports  
 7\. as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
-8\. might 4th radar icon for cc 
+8\. might 4th radar icon for cc  
 9\. move show color legend to bottom as a option.  there will be option to choose which side.     
 10\. rename application id and change icon color so someone can run both versions of wX   
 11\. 8-bit SRM like in pykl3  
