@@ -36,11 +36,8 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.ui.UtilityTheme
-import joshuatee.wx.util.UtilityFileManagement
-import joshuatee.wx.util.UtilityLog
-import joshuatee.wx.util.UtilityMath
 import joshuatee.wx.ui.UtilityUI
-import joshuatee.wx.util.Utility
+import joshuatee.wx.util.*
 
 class SettingsMainActivity : BaseActivity() {
 
@@ -60,6 +57,7 @@ class SettingsMainActivity : BaseActivity() {
         }
         toolbar.subtitle = "version: $vers, Please tap on text for additional help."
         val linearLayout: LinearLayout = findViewById(R.id.ll)
+        val cardAbout = ObjectCardText(this, "About wX", MyApplication.textSizeNormal)
         val cardLocations = ObjectCardText(this, "Locations", MyApplication.textSizeNormal)
         val cardsn = ObjectCardText(this, "Spotter Network Settings", MyApplication.textSizeNormal)
         val cardNotif = ObjectCardText(this, "Notifications", MyApplication.textSizeNormal)
@@ -75,17 +73,74 @@ class SettingsMainActivity : BaseActivity() {
         val cardrestorepref = ObjectCardText(this, "Restore Settings", MyApplication.textSizeNormal)
         cardLocations.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SettingsLocationRecyclerViewActivity::class.java) })
         cardsn.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SettingsSpotterNetwork::class.java) })
-        cardNotif.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SettingsNotificationsActivity::class.java) })
-        cardWidgets.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SettingsWidgetsActivity::class.java) })
-        cardColors.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SettingsColorsActivity::class.java) })
-        cardPL.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SettingsPlaylistActivity::class.java) })
-        cardRadar.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SettingsRadarActivity::class.java) })
-        cardHS.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SettingsHomeScreenActivity::class.java) })
-        cardUI.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, SettingsUIActivity::class.java) })
-        cardCtoF.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(UtilityMath.cToFTable(), "Celsius to Fahrenheit table")) })
-        cardDeleteFiles.setOnClickListener(View.OnClickListener { UtilityUI.makeSnackBar(linearLayout, "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(contextg)) })
+        cardNotif.setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                contextg,
+                SettingsNotificationsActivity::class.java
+            )
+        })
+        cardWidgets.setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                contextg,
+                SettingsWidgetsActivity::class.java
+            )
+        })
+        cardColors.setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                contextg,
+                SettingsColorsActivity::class.java
+            )
+        })
+        cardPL.setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                contextg,
+                SettingsPlaylistActivity::class.java
+            )
+        })
+        cardRadar.setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                contextg,
+                SettingsRadarActivity::class.java
+            )
+        })
+        cardHS.setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                contextg,
+                SettingsHomeScreenActivity::class.java
+            )
+        })
+        cardUI.setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                contextg,
+                SettingsUIActivity::class.java
+            )
+        })
+        cardCtoF.setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                contextg,
+                TextScreenActivity::class.java,
+                TextScreenActivity.URL,
+                arrayOf(UtilityMath.cToFTable(), "Celsius to Fahrenheit table")
+            )
+        })
+
         cardbackuppref.setOnClickListener(View.OnClickListener { backuprestore.backupPrefs(contextg) })
         cardrestorepref.setOnClickListener(View.OnClickListener { backuprestore.restorePrefs(contextg) })
+        cardDeleteFiles.setOnClickListener(View.OnClickListener {
+            UtilityUI.makeSnackBar(
+                linearLayout,
+                "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(contextg)
+            )
+        })
+        cardAbout.setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                contextg,
+                TextScreenActivity::class.java,
+                TextScreenActivity.URL,
+                arrayOf(UtilityAlertDialog.showVersion(this, this), "About wX")
+            )
+        })
+        linearLayout.addView(cardAbout.card)
         linearLayout.addView(cardLocations.card)
         linearLayout.addView(cardsn.card)
         linearLayout.addView(cardNotif.card)

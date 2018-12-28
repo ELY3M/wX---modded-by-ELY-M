@@ -53,6 +53,7 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
     private lateinit var img: TouchImageView2
     private lateinit var drw: ObjectNavDrawer
     private lateinit var contextg: Context
+    private val prefTokenIdx = "OPC_IMG_FAV_IDX"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,7 +79,7 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
         })
         title = "OPC"
         drw = ObjectNavDrawer(this, UtilityOPCImages.labels, UtilityOPCImages.urls)
-        drw.index = Utility.readPref(this, "OPC_IMG_FAV_IDX", 0)
+        drw.index = Utility.readPref(this, prefTokenIdx, 0)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
             drw.drawerLayout.closeDrawer(drw.listView)
@@ -94,7 +95,7 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         toolbar.subtitle = drw.getLabel()
-        Utility.writePref(contextg, "OPC_IMG_FAV_IDX", drw.index)
+        Utility.writePref(contextg, prefTokenIdx, drw.index)
         val result = async(Dispatchers.IO) { drw.getUrl().getImage() }
         bitmap = result.await()
         img.setImageBitmap(bitmap)

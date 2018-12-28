@@ -54,13 +54,9 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener,
     private var bitmap = UtilityImg.getBlankBitmap()
     private var firstRun = false
     private var imageLoaded = false
-    private var productCode = "GEOCOLOR"
     private lateinit var img: TouchImageView2
-    private var imageTitle = ""
     private var animDrawable = AnimationDrawable()
-    private var imgIdx = 0
     private lateinit var drw: ObjectNavDrawer
-    private var productCodes = mutableListOf<String>()
     private var sector = "cgl"
     private var oldSector = "cgl"
     private var savePrefs = true
@@ -84,43 +80,42 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener,
         img.setOnClickListener(this)
         img.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeLeft() {
-                if (img.currentZoom < 1.01f) showNextImg()
+                if (img.currentZoom < 1.01f) UtilityImg.showNextImg(drw, ::getContentFixThis)
             }
 
             override fun onSwipeRight() {
-                if (img.currentZoom < 1.01f) showPrevImg()
+                if (img.currentZoom < 1.01f) UtilityImg.showPrevImg(drw, ::getContentFixThis)
             }
         })
         activityArguments = intent.getStringArrayExtra(RID)
+        drw = ObjectNavDrawer(this, UtilityGOES16.labels, UtilityGOES16.codes)
         readPrefs(this)
-        toolbar.subtitle = imageTitle
-        UtilityGOES16.labelToCode.keys.sorted().forEach {
-            productCodes.add(UtilityGOES16.labelToCode[it] ?: "")
-        }
-        drw = ObjectNavDrawer(this, UtilityGOES16.labelToCode.keys.sorted(), productCodes)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, true)
             drw.drawerLayout.closeDrawer(drw.listView)
-            imageTitle = drw.getLabel(position)
-            productCode = drw.getToken(position)
-            imgIdx = position
+            drw.index = position
             getContent(sector)
         }
+        getContent(sector)
+    }
+
+    // FIXME
+    private fun getContentFixThis() {
         getContent(sector)
     }
 
     private fun getContent(sectorF: String) = GlobalScope.launch(uiDispatcher) {
         sector = sectorF
         writePrefs()
-        val urlAndTime = withContext(Dispatchers.IO) { UtilityGOES16.getUrl(productCode, sector) }
-        bitmap = withContext(Dispatchers.IO) { urlAndTime[0].getImage() }
+        toolbar.subtitle = drw.getLabel()
+        val url = withContext(Dispatchers.IO) { UtilityGOES16.getUrl(drw.getUrl(), sector) }
+        bitmap = withContext(Dispatchers.IO) { url.getImage() }
         img.setImageBitmap(bitmap)
         if (!firstRun) {
             img.setZoom("GOES16_IMG")
             firstRun = true
         }
         imageLoaded = true
-        toolbar.subtitle = imageTitle
         if (oldSector != sector) {
             img.setZoom(1.0f)
             oldSector = sector
@@ -139,29 +134,20 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener,
 
     private fun writePrefs() {
         if (savePrefs) {
-            Utility.writePref(this, "GOES16_IMG_FAV_TITLE", imageTitle)
             Utility.writePref(this, "GOES16_SECTOR", sector)
-            Utility.writePref(this, "GOES16_PROD", productCode)
-            Utility.writePref(this, "GOES16_IMG_FAV_IDX", imgIdx)
+            Utility.writePref(this, "GOES16_IMG_FAV_IDX", drw.index)
         }
     }
 
     private fun readPrefs(context: Context) {
         if (activityArguments.isNotEmpty() && activityArguments[0] == "") {
-            imageTitle = Utility.readPref(
-                context,
-                "GOES16_IMG_FAV_TITLE",
-                UtilityGOES16.labelToCode.keys.sorted()[0]
-            )
             sector = Utility.readPref(context, "GOES16_SECTOR", sector)
-            productCode = Utility.readPref(context, "GOES16_PROD", productCode)
-            imgIdx = Utility.readPref(context, "GOES16_IMG_FAV_IDX", imgIdx)
+            drw.index = Utility.readPref(context, "GOES16_IMG_FAV_IDX", 0)
         } else {
             if (activityArguments.size > 1) {
                 sector = activityArguments[0]
-                productCode = activityArguments[1]
+                drw.index = 9
                 savePrefs = false
-                imageTitle = "06.9 um (Band 9) Mid-Level Water Vapor - IR"
             }
         }
         oldSector = sector
@@ -205,7 +191,7 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener,
                             fireScreenCaptureIntent()
                     }
                 } else
-                    UtilityShare.shareText(this, imageTitle, "", bitmap)
+                    UtilityShare.shareText(this, drw.getLabel(), "", bitmap)
             }
             else -> return super.onOptionsItemSelected(item)
         }
@@ -235,31 +221,11 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener,
         animDrawable = withContext(Dispatchers.IO) {
             UtilityGOES16.getAnimation(
                 contextg,
-                productCode,
+                drw.getUrl(),
                 sector,
                 frameCount
             )
         }
         UtilityImgAnim.startAnimation(animDrawable, img)
-    }
-
-    private fun showNextImg() {
-        imgIdx += 1
-        if (imgIdx == UtilityGOES16.labelToCode.size) {
-            imgIdx = 0
-        }
-        imageTitle = UtilityGOES16.labelToCode.keys.sorted()[imgIdx]
-        productCode = drw.getToken(imgIdx)
-        getContent(sector)
-    }
-
-    private fun showPrevImg() {
-        imgIdx -= 1
-        if (imgIdx == -1) {
-            imgIdx = UtilityGOES16.labelToCode.size - 1
-        }
-        imageTitle = UtilityGOES16.labelToCode.keys.sorted()[imgIdx]
-        productCode = drw.getToken(imgIdx)
-        getContent(sector)
     }
 }

@@ -23,6 +23,8 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 1. conus radar overlay when you zoom out like on pykl3 
 2. get special weather statements working - not working due because they do not have vtec like all other warnings.  
 would have to do the latlon method that is used for watches/mcds/mpds  
+https://w1.weather.gov/data/LOT/SPSLOT
+
 3. add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs   
 4. allow custom icons! esp hail and cities dots - tvs/location image is done!.    
 5. add warning list within radar
@@ -42,8 +44,10 @@ would have to do the latlon method that is used for watches/mcds/mpds
 #
 #
 ## DONE!
-====================================  
-show MPD text within text is done and working.  
+==================================== 
+added hail icons and text for showing hail sizes on radar, still testing  
+added backup urls in getRadarStatus function.  
+show MPD text within text is done and working.   
 Conus Radar is being worked on... right now, It is not being plotted right  so keep it off in the radar settings  
 added base spectrum width - thanks to Joshua Tee for doing it first before me!  
 reading Watch texts within radar is working properly now.  

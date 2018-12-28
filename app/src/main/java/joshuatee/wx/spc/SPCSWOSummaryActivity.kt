@@ -63,7 +63,6 @@ class SPCSWOSummaryActivity : BaseActivity() {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-
         withContext(Dispatchers.IO) {
             arrayOf("1", "2", "3", "4-8").forEach {
                 bitmaps.addAll(
@@ -71,7 +70,6 @@ class SPCSWOSummaryActivity : BaseActivity() {
                 )
             }
         }
-
         var card: ObjectCardImage
         bitmaps.forEach { bitmap ->
             card = ObjectCardImage(contextg, bitmap)

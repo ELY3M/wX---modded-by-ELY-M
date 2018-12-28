@@ -53,7 +53,7 @@ object UtilityUSImgNWSMosaic {
         "uppermissvly",
         "centgrtlakes",
         "northeast",
-        "conus"
+        "latest"
     )
 
     internal val labels = listOf(

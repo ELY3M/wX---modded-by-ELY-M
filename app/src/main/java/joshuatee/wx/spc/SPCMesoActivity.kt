@@ -96,7 +96,6 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
     private var curImg = 0
     private var imageLoaded = false
     private var firstRun = false
-    //private lateinit var turl: Array<String>
     private var numPanes = 0
     private var favListLabel = listOf<String>()
     private var favListParm = listOf<String>()
@@ -250,7 +249,6 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-
         if (MyApplication.spcmesoFav.contains(":" + displayData.param[curImg] + ":"))
             star.setIcon(MyApplication.STAR_ICON)
         else
@@ -262,7 +260,6 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
                         UtilitySPCMESOInputOutput.getImage(contextg, displayData.param[it], sector)
             }
         }
-
         (0 until numPanes).forEach {
             if (numPanes > 1) {
                 UtilityImg.resizeViewSetImgByHeight(displayData.bitmap[it], displayData.img[it])
@@ -287,17 +284,15 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
             firstRun = true
         }
         imageLoaded = true
-        if (numPanes > 1)
+        if (numPanes > 1) {
             UtilityModels.setSubtitleRestoreIMGXYZOOM(
                 displayData.img, toolbar, "(" + (curImg + 1) + ")"
                         + displayData.paramLabel[0] + "/" + displayData.paramLabel[1]
             )
-
-
+        }
     }
 
     private fun getAnimate(frames: Int) = GlobalScope.launch(uiDispatcher) {
-
         withContext(Dispatchers.IO) {
             (0 until numPanes).forEach {
                 displayData.animDrawable[it] = UtilitySPCMESOInputOutput.getAnimation(
@@ -308,7 +303,6 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
                 )
             }
         }
-
         (0 until numPanes).forEach {
             displayData.img[it].setImageDrawable(displayData.animDrawable[it])
             displayData.animDrawable[it].isOneShot = false
@@ -322,6 +316,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
             return true
         }
         when (item.itemId) {
+            // FIXME consolidate code below
             R.id.action_toggleRadar -> {
                 if (showRadar) {
                     Utility.writePref(this, prefModel + "_SHOW_RADAR", "false")
@@ -414,6 +409,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
                 arrayOf("", "2", prefModel)
             )
             R.id.action_fav -> toggleFavorite()
+            // FIXME consolidate code below
             R.id.action_img1 -> {
                 curImg = 0
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(
@@ -479,14 +475,13 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
     }
 
     private fun getHelp() = GlobalScope.launch(uiDispatcher) {
-
-        var helpText =
-            withContext(Dispatchers.IO) { ("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/help_" + displayData.param[curImg] + ".html").getHtml() }
-
-        if (helpText.contains("Page Not Found"))
+        var helpText = withContext(Dispatchers.IO) {
+            ("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/help_" + displayData.param[curImg] + ".html").getHtml()
+        }
+        if (helpText.contains("Page Not Found")) {
             helpText = "Help is not available for this parameter."
+        }
         showHelpTextDialog(Utility.fromHtml(helpText))
-
     }
 
     private fun showHelpTextDialog(help_str: String) {

@@ -51,7 +51,7 @@ class ObjectSpinner {
     ) {
         list = dataArray.toMutableList()
         spinner1 = activity.findViewById(spinnerRedId)
-        setupSpinner(true)
+        setupSpinner()
         arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, dataArray)
         arrayAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
         spinner1.adapter = arrayAdapter
@@ -62,7 +62,7 @@ class ObjectSpinner {
     constructor(activity: Activity, context: Context, spinnerRedId: Int, dataArray: List<String>) {
         list = dataArray.toMutableList()
         spinner1 = activity.findViewById(spinnerRedId)
-        setupSpinner(true)
+        setupSpinner()
         arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, dataArray)
         arrayAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
         spinner1.adapter = arrayAdapter
@@ -72,7 +72,7 @@ class ObjectSpinner {
     constructor(activity: Activity, context: Context, spinnerRedId: Int) {
         list = mutableListOf()
         spinner1 = activity.findViewById(spinnerRedId)
-        setupSpinner(true)
+        setupSpinner()
         arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, list)
         arrayAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
         spinner1.adapter = arrayAdapter
@@ -147,11 +147,11 @@ class ObjectSpinner {
     }
 
     // FIXME always seems to be false, remove?
-    private fun setupSpinner(light: Boolean) {
-        var tint = ColorStateList.valueOf(UIPreferences.colorBlack)
-        if (light) {
-            tint = ColorStateList.valueOf(UIPreferences.colorOffwhiteToolbar)
-        }
+    private fun setupSpinner() {
+        //var tint = ColorStateList.valueOf(UIPreferences.colorBlack)
+        //if (light) {
+        val tint = ColorStateList.valueOf(UIPreferences.colorOffwhiteToolbar)
+        //}
         if (android.os.Build.VERSION.SDK_INT > 20) {
             spinner1.backgroundTintList = tint
         }

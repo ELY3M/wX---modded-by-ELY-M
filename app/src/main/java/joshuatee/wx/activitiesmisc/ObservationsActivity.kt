@@ -23,22 +23,28 @@ package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.MenuItem
-import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
+import android.view.View
+import android.widget.AdapterView
+import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.OnSwipeTouchListener
 import joshuatee.wx.ui.TouchImageView2
+import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
-class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
+class ObservationsActivity : VideoRecordActivity(), View.OnClickListener,
+    Toolbar.OnMenuItemClickListener {
 
     companion object {
         const val LOC: String = ""
@@ -49,17 +55,15 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private var bitmap = UtilityImg.getBlankBitmap()
     private var firstRun = false
     private var imageLoaded = false
-    //private var imgUrl = UtilityObservations.urls[0]
-    //private val prefToken = "SFC_OBS_IMG"
     private val prefTokenIdx = "SFC_OBS_IMG_IDX"
-    private var imgIdx = 0
     private lateinit var contextg: Context
+    private lateinit var drw: ObjectNavDrawer
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
             savedInstanceState,
-            R.layout.activity_image_show_bottom_toolbar,
+            R.layout.activity_image_show_navdrawer_bottom_toolbar,
             R.menu.observations,
             true,
             true
@@ -69,22 +73,33 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
         img = findViewById(R.id.iv)
         img.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeLeft() {
-                if (img.currentZoom < 1.01f) showNextImg()
+                if (img.currentZoom < 1.01f) UtilityImg.showNextImg(drw, ::getContentFixThis)
             }
 
             override fun onSwipeRight() {
-                if (img.currentZoom < 1.01f) showPrevImg()
+                if (img.currentZoom < 1.01f) UtilityImg.showPrevImg(drw, ::getContentFixThis)
             }
         })
-        //imgUrl = Utility.readPref(this, prefToken, imgUrl)
-        imgIdx = Utility.readPref(this, prefTokenIdx, 0)
+        drw = ObjectNavDrawer(this, UtilityObservations.labels, UtilityObservations.urls)
+        drw.index = Utility.readPref(this, prefTokenIdx, 0)
+        drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            drw.listView.setItemChecked(position, false)
+            drw.drawerLayout.closeDrawer(drw.listView)
+            drw.index = position
+            getContent()
+        }
+        getContent()
+    }
+
+    private fun getContentFixThis() {
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         title = "Observations"
-        bitmap = withContext(Dispatchers.IO) { UtilityObservations.urls[imgIdx].getImage() }
-        if (UtilityObservations.urls[imgIdx].contains("large_latestsfc.gif")) {
+        toolbar.subtitle = drw.getLabel()
+        bitmap = withContext(Dispatchers.IO) { drw.getUrl().getImage() }
+        if (drw.getUrl().contains("large_latestsfc.gif")) {
             img.setMaxZoom(16f)
         } else {
             img.setMaxZoom(4f)
@@ -93,18 +108,23 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
         img.resetZoom()
         firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "OBS")
         imageLoaded = true
-        //Utility.writePref(contextg, prefToken, imgUrl)
-        Utility.writePref(contextg, prefTokenIdx, imgIdx)
-        toolbar.subtitle = UtilityObservations.labels[imgIdx]
+        Utility.writePref(contextg, prefTokenIdx, drw.index)
     }
 
-    private fun getContent(idx: Int) {
-        //imgUrl = UtilityObservations.urls[idx]
-        imgIdx = idx
-        getContent()
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        drw.actionBarDrawerToggle.syncState()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
@@ -118,21 +138,18 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     UtilityShare.shareBitmap(this, "observations", bitmap)
                 }
             }
-            R.id.action_conus -> getContent(0)
-            R.id.action_sw -> getContent(1)
-            R.id.action_sc -> getContent(2)
-            R.id.action_se -> getContent(3)
-            R.id.action_cw -> getContent(4)
-            R.id.action_c -> getContent(5)
-            R.id.action_ce -> getContent(6)
-            R.id.action_nw -> getContent(7)
-            R.id.action_nc -> getContent(8)
-            R.id.action_ne -> getContent(9)
-            R.id.action_ak -> getContent(10)
-            R.id.action_gulf_ak -> getContent(11)
             else -> return super.onOptionsItemSelected(item)
         }
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
+        }
     }
 
     override fun onStop() {
@@ -140,24 +157,6 @@ class ObservationsActivity : VideoRecordActivity(), OnMenuItemClickListener {
             UtilityImg.imgSavePosnZoom(this, img, "OBS")
         }
         super.onStop()
-    }
-
-    private fun showNextImg() {
-        imgIdx += 1
-        if (imgIdx == UtilityObservations.urls.size) {
-            imgIdx = 0
-        }
-        //imgUrl = UtilityObservations.urls[imgIdx]
-        getContent()
-    }
-
-    private fun showPrevImg() {
-        imgIdx -= 1
-        if (imgIdx == -1) {
-            imgIdx = UtilityObservations.urls.size - 1
-        }
-        //imgUrl = UtilityObservations.urls[imgIdx]
-        getContent()
     }
 }
 

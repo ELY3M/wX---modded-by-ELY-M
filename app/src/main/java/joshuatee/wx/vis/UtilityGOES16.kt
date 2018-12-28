@@ -34,54 +34,25 @@ object UtilityGOES16 {
 
     const val size: String = "600x600"
 
-    /* private val sizeMap = mapOf(
-        "CONUS" to "2500x1500",
-        "FD" to "1808x1808",
-        "gm" to "1000x1000",
-        "car" to "1000x1000",
-        "eus" to "1000x1000",
-        "taw" to "1800x1080"
-    )*/
-
-    //private fun getImageSize(sector: String) = sizeMap[sector] ?: "1200x1200"
-
-    // FIXME change return value from List to String
-    // FIXME cleanup
-    fun getUrl(product: String, sector: String): List<String> {
-        /*val url = when (sector) {
-            "FD" -> "https://www.star.nesdis.noaa.gov/GOES/GOES16_FullDisk.php"
-            "CONUS" -> "https://www.star.nesdis.noaa.gov/GOES/GOES16_CONUS.php"
-            else -> "https://www.star.nesdis.noaa.gov/GOES/GOES16_sectors.php?sector=$sector"
-        }*/
+    fun getUrl(product: String, sector: String): String {
         var sectorLocal = "SECTOR/$sector"
         if (sector == "FD" || sector == "CONUS") {
             sectorLocal = sector
         }
-        //val html = url.getHtml()
-        //val parseString =
-        //    "href=.(https://cdn.star.nesdis.noaa.gov/GOES16/ABI/$sectorLocal/$product/[0-9]{11}_GOES16-ABI-$sector-$product-" + getImageSize(
-        //        sector
-        //    ) + ".jpg).>"
-        //val imgUrl = html.parse(parseString)
-        //val timeStamp = imgUrl.parse("$product/([0-9]{11})_GOES16-ABI-$sector")
-
-        val latestUrl =
-            MyApplication.goes16Url + "/GOES16/ABI/" + sectorLocal + "/" + product + "/latest.jpg"
-        return listOf(latestUrl, "")
-        //return listOf(imgUrl, timeStamp)
+        return MyApplication.goes16Url + "/GOES16/ABI/" + sectorLocal + "/" + product + "/latest.jpg"
     }
 
     fun getAnimation(
         context: Context,
         product: String,
         sector: String,
-        frameCnt: Int
+        frameCount: Int
     ): AnimationDrawable {
-        val frameCount = frameCnt.toString()
+        val frameCountString = frameCount.toString()
         val url = when (sector) {
-            "FD" -> "https://www.star.nesdis.noaa.gov/GOES/GOES16_FullDisk_Band.php?band=$product&length=$frameCount"
-            "CONUS" -> "https://www.star.nesdis.noaa.gov/GOES/GOES16_CONUS_Band.php?band=$product&length=$frameCount"
-            else -> "https://www.star.nesdis.noaa.gov/GOES/GOES16_sector_band.php?sector=$sector&band=$product&length=$frameCount"
+            "FD" -> "https://www.star.nesdis.noaa.gov/GOES/GOES16_FullDisk_Band.php?band=$product&length=$frameCountString"
+            "CONUS" -> "https://www.star.nesdis.noaa.gov/GOES/GOES16_CONUS_Band.php?band=$product&length=$frameCountString"
+            else -> "https://www.star.nesdis.noaa.gov/GOES/GOES16_sector_band.php?sector=$sector&band=$product&length=$frameCountString"
         }
         val html = url.getHtml().replace("\n", "").replace("\r", "")
         val imageHtml = html.parse("animationImages = \\[(.*?)\\];")
@@ -94,24 +65,44 @@ object UtilityGOES16 {
         )
     }
 
-    val labelToCode: Map<String, String> = mapOf(
-        "00 True color daytime, multispectral IR at night" to "GEOCOLOR",
-        "00.47 um (Band 1) Blue - Visible" to "01",
-        "00.64 um (Band 2) Red - Visible" to "02",
-        "00.86 um (Band 3) Veggie - Near IR" to "03",
-        "01.37 um (Band 4) Cirrus - Near IR" to "04",
-        "01.6 um (Band 5) Snow/Ice - Near IR" to "05",
-        "02.2 um (Band 6) Cloud Particle - Near IR" to "06",
-        "03.9 um (Band 7) Shortwave Window - IR" to "07",
-        "06.2 um (Band 8) Upper-Level Water Vapor - IR" to "08",
-        "06.9 um (Band 9) Mid-Level Water Vapor - IR" to "09",
-        "07.3 um (Band 10) Lower-level Water Vapor - IR" to "10",
-        "08.4 um (Band 11) Cloud Top - IR" to "11",
-        "09.6 um (Band 12) Ozone - IR" to "12",
-        "10.3 um (Band 13) Clean Longwave Window - IR" to "13",
-        "11.2 um (Band 14) Longwave Window - IR" to "14",
-        "12.3 um (Band 15) Dirty Longwave Window - IR" to "15",
-        "13.3 um (Band 16) CO2 Longwave - IR" to "16"
+    val labels: List<String> = listOf(
+        "00 True color daytime, multispectral IR at night",
+        "00.47 um (Band 1) Blue - Visible",
+        "00.64 um (Band 2) Red - Visible",
+        "00.86 um (Band 3) Veggie - Near IR",
+        "01.37 um (Band 4) Cirrus - Near IR",
+        "01.6 um (Band 5) Snow/Ice - Near IR",
+        "02.2 um (Band 6) Cloud Particle - Near IR",
+        "03.9 um (Band 7) Shortwave Window - IR",
+        "06.2 um (Band 8) Upper-Level Water Vapor - IR",
+        "06.9 um (Band 9) Mid-Level Water Vapor - IR",
+        "07.3 um (Band 10) Lower-level Water Vapor - IR",
+        "08.4 um (Band 11) Cloud Top - IR",
+        "09.6 um (Band 12) Ozone - IR",
+        "10.3 um (Band 13) Clean Longwave Window - IR",
+        "11.2 um (Band 14) Longwave Window - IR",
+        "12.3 um (Band 15) Dirty Longwave Window - IR",
+        "13.3 um (Band 16) CO2 Longwave - IR"
+    )
+
+    val codes: List<String> = listOf(
+        "GEOCOLOR",
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16"
     )
 }
 

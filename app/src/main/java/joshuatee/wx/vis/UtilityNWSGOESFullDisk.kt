@@ -67,10 +67,10 @@ internal object UtilityNWSGOESFullDisk {
     fun getAnimation(context: Context, urlF: String): AnimationDrawable {
         val url = urlF.replace("10.gif", "")
         val frameCntInt = 10
-        val urlAl = (1 until frameCntInt + 1).mapTo(mutableListOf()) { "$url$it.gif" }
+        val urls = (1 until frameCntInt + 1).mapTo(mutableListOf()) { "$url$it.gif" }
         return UtilityImgAnim.getAnimationDrawableFromURLList(
             context,
-            urlAl,
+            urls,
             UtilityImg.animInterval(context)
         )
     }

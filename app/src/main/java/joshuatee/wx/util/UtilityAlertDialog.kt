@@ -70,21 +70,19 @@ object UtilityAlertDialog {
         alert.show()
     }
 
-    fun showVersion(context: Context, activity: Activity) {
-        var vers = ""
+    fun showVersion(context: Context, activity: Activity): String {
+        var version = ""
         try {
-            vers = activity.packageManager.getPackageInfo(activity.packageName, 0).versionName
+            version = activity.packageManager.getPackageInfo(activity.packageName, 0).versionName
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
         }
-        val tmpStr = activity.resources.getString(R.string.about_wx) + MyApplication.newline + vers
-        ObjectDialogue(
-            activity,
-            tmpStr + MyApplication.newline + "Last background update: " + Utility.readPref(
-                context,
-                "JOBSERVICE_TIME_LAST_RAN",
-                ""
-            )
+        val tmpStr =
+            activity.resources.getString(R.string.about_wx) + MyApplication.newline + version
+        return tmpStr + MyApplication.newline + "Last background update: " + Utility.readPref(
+            context,
+            "JOBSERVICE_TIME_LAST_RAN",
+            ""
         )
     }
 

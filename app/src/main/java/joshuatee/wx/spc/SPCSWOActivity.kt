@@ -95,10 +95,11 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val ll: LinearLayout = findViewById(R.id.ll)
         ll.addView(c1.card)
         ll.addView(c2.card)
-        ll.addView(c3.card)
-        ll.addView(c4.card)
-        ll.addView(c5.card)
-        ll.addView(c6.card)
+        listOf(c3, c4, c5, c6).forEach { ll.addView(it.card) }
+        //ll.addView(c3.card)
+        //ll.addView(c4.card)
+        //ll.addView(c5.card)
+        //ll.addView(c6.card)
         activityArguments = intent.getStringArrayExtra(NO)
         turlDay = activityArguments[0]
         title = "Day $turlDay Convective Outlook"
@@ -145,17 +146,14 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-
         var textUrl = "SWODY$turlDay"
         if (turlDay == "4-8") {
             textUrl = "SWOD48"
         }
-
         withContext(Dispatchers.IO) {
             html = UtilityDownload.getTextProduct(contextg, textUrl)
             bitmaps = UtilitySPCSWO.getImageURLs(turlDay, true)
         }
-
         c2.setText(Utility.fromHtml(html))
         toolbar.subtitle = html.parse("(Valid.*?)<")
         if (activityArguments[1] == "sound") {

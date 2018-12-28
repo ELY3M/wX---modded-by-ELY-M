@@ -93,6 +93,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                     helpMi.title = helpStr
                 }
             }
+	    //not removing this - ELY M. 
             R.id.action_forecast_webpage -> ObjectIntent(
                 this,
                 WebscreenABModels::class.java,
@@ -238,7 +239,6 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                     }
                 }
             }
-            R.id.action_about -> UtilityAlertDialog.showVersion(this, this)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

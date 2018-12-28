@@ -23,27 +23,24 @@ package joshuatee.wx.radar
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.settings.Location
-import joshuatee.wx.ui.ObjectSpinner
-import joshuatee.wx.ui.OnSwipeTouchListener
-import joshuatee.wx.ui.TouchImageView2
-import joshuatee.wx.ui.UtilityToolbar
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelectedListener,
+class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener,
     Toolbar.OnMenuItemClickListener {
 
     // Provides native interface to NWS radar mosaics along with animations
@@ -59,15 +56,13 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
     private var animRan = false
     private var animDrawable = AnimationDrawable()
     private lateinit var img: TouchImageView2
-    private var firstTime = true
-    private var nwsRadarMosaicSectorCurrent = ""
     private var nwsRadarMosaicSectorLabelCurrent = ""
     private var bitmap = UtilityImg.getBlankBitmap()
     private var imageLoaded = false
-    private var imgIdx = 0
-    private lateinit var sp: ObjectSpinner
     private var doNotSavePref = false
     private lateinit var contextg: Context
+    private lateinit var drw: ObjectNavDrawer
+    private var firstRun = false
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -86,11 +81,11 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         img.setMaxZoom(8.0f)
         img.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeLeft() {
-                if (img.currentZoom < 1.01f) showNextImg()
+                if (img.currentZoom < 1.01f) UtilityImg.showNextImg(drw, ::getContentFixThis)
             }
 
             override fun onSwipeRight() {
-                if (img.currentZoom < 1.01f) showPrevImg()
+                if (img.currentZoom < 1.01f) UtilityImg.showPrevImg(drw, ::getContentFixThis)
             }
         })
         val activityArguments = intent.getStringArrayExtra(URL)
@@ -128,10 +123,20 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                 )
             }
         }
-        sp = ObjectSpinner(this, this, R.id.spinner1, UtilityUSImgNWSMosaic.labels)
-        sp.setOnItemSelectedListener(this)
-        imgIdx = findPosition(nwsRadarMosaicSectorLabelCurrent)
-        sp.setSelection(imgIdx)
+        drw = ObjectNavDrawer(this, UtilityUSImgNWSMosaic.labels, UtilityUSImgNWSMosaic.sectors)
+        drw.index = findPosition(nwsRadarMosaicSectorLabelCurrent)
+        drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            drw.listView.setItemChecked(position, false)
+            drw.drawerLayout.closeDrawer(drw.listView)
+            drw.index = position
+            img.setZoom(1.0f)
+            getContent()
+        }
+        getContent()
+    }
+
+    private fun getContentFixThis() {
+        getContent()
     }
 
     private fun findPosition(keyF: String): Int {
@@ -149,10 +154,11 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        toolbar.subtitle = drw.getLabel()
         bitmap = withContext(Dispatchers.IO) {
             UtilityUSImgNWSMosaic.get(
                 contextg,
-                nwsRadarMosaicSectorCurrent,
+                drw.getUrl(),
                 true
             )
         }
@@ -161,12 +167,15 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
             Utility.writePref(
                 contextg,
                 "NWS_RADAR_MOSAIC_SECTOR_CURRENT",
-                nwsRadarMosaicSectorLabelCurrent
+                drw.getLabel()
             )
         }
         img.setImageBitmap(bitmap)
         animRan = false
-        img.setZoom("NWSRADMOS")
+        if (!firstRun) {
+            img.setZoom("NWSRADMOS")
+            firstRun = true
+        }
         imageLoaded = true
     }
 
@@ -174,7 +183,7 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         animDrawable = withContext(Dispatchers.IO) {
             UtilityUSImgNWSMosaic.getAnimation(
                 contextg,
-                nwsRadarMosaicSectorCurrent,
+                drw.getUrl(),
                 frameCount,
                 true
             )
@@ -182,7 +191,20 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         animRan = UtilityImgAnim.startAnimation(animDrawable, img)
     }
 
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        drw.actionBarDrawerToggle.syncState()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+    }
+
     override fun onMenuItemClick(item: MenuItem): Boolean {
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.RADAR_MOSAIC)
             R.id.action_a12 -> getAnimate(12)
@@ -201,13 +223,13 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                     if (animRan) {
                         UtilityShare.shareAnimGif(
                             this,
-                            "NWS mosaic: $nwsRadarMosaicSectorLabelCurrent",
+                            "NWS mosaic",
                             animDrawable
                         )
                     } else {
                         UtilityShare.shareBitmap(
                             this,
-                            "NWS mosaic: $nwsRadarMosaicSectorLabelCurrent",
+                            "NWS mosaic",
                             bitmap
                         )
                     }
@@ -218,24 +240,8 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         return true
     }
 
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        if (firstTime) {
-            UtilityToolbar.fullScreenMode(toolbar)
-            firstTime = false
-        }
-        if (pos == UtilityUSImgNWSMosaic.sectors.size - 1) {
-            nwsRadarMosaicSectorCurrent = "latest"
-            nwsRadarMosaicSectorLabelCurrent = "CONUS"
-        } else {
-            nwsRadarMosaicSectorCurrent = UtilityUSImgNWSMosaic.sectors[pos]
-            nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNWSMosaic.labels[pos]
-        }
-        img.resetZoom()
-        imgIdx = pos
-        getContent()
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>) {}
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onClick(v: View) {
         when (v.id) {
@@ -248,26 +254,6 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
             UtilityImg.imgSavePosnZoom(this, img, "NWSRADMOS")
         }
         super.onStop()
-    }
-
-    private fun showNextImg() {
-        imgIdx += 1
-        if (imgIdx == UtilityUSImgNWSMosaic.sectors.size) {
-            imgIdx = 0
-        }
-        nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNWSMosaic.labels[imgIdx]
-        nwsRadarMosaicSectorCurrent = UtilityUSImgNWSMosaic.sectors[imgIdx]
-        sp.setSelection(imgIdx)
-    }
-
-    private fun showPrevImg() {
-        imgIdx -= 1
-        if (imgIdx == -1) {
-            imgIdx = UtilityUSImgNWSMosaic.sectors.size - 1
-        }
-        nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNWSMosaic.labels[imgIdx]
-        nwsRadarMosaicSectorCurrent = UtilityUSImgNWSMosaic.sectors[imgIdx]
-        sp.setSelection(imgIdx)
     }
 }
 

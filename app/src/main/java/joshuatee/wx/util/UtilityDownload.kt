@@ -67,11 +67,12 @@ object UtilityDownload {
         when (product) {
             "GOES16" -> {
                 needsBitmap = false
+                val index = Utility.readPref(context, "GOES16_IMG_FAV_IDX", 0)
                 val urlGoes16 = UtilityGOES16.getUrl(
-                    Utility.readPref(context, "GOES16_PROD", "02"),
+                    UtilityGOES16.codes[index],
                     Utility.readPref(context, "GOES16_SECTOR", "cgl")
                 )
-                bm = urlGoes16[0].getImage()
+                bm = urlGoes16.getImage()
             }
             "VIS_1KM", "VIS_MAIN" -> {
                 needsBitmap = false
@@ -95,7 +96,7 @@ object UtilityDownload {
             }
             "VIS_CONUS" -> {
                 needsBitmap = false
-                bm = UtilityGOES16.getUrl("02", "CONUS")[0].getImage()
+                bm = UtilityGOES16.getUrl("02", "CONUS").getImage()
             }
             "FMAP" -> url = "${MyApplication.nwsWPCwebsitePrefix}/noaa/noaa.gif"
             "FMAP12" -> url = "${MyApplication.nwsWPCwebsitePrefix}/basicwx/92fwbg.gif"
@@ -228,7 +229,7 @@ object UtilityDownload {
             }
             "CONUSWV" -> {
                 needsBitmap = false
-                bm = UtilityGOES16.getUrl("09", "CONUS")[0].getImage()
+                bm = UtilityGOES16.getUrl("09", "CONUS").getImage()
             }
             "LTG" -> {
                 needsBitmap = false
@@ -680,6 +681,7 @@ object UtilityDownload {
         }
     }*/
 
+    //check api.weather.gov first//
     //https://w1.weather.gov/data/LOT/FTMLOT
     //text = ("${MyApplication.nwsWeatherGov}/data/"+Location.wfo.toUpperCase(Locale.US)+"/FTM"+Location.wfo.toUpperCase(Locale.US)).getHtmlSep()
     //https://forecast.weather.gov/product.php?site=NWS&issuedby=ARX&product=FTM&format=TXT
@@ -691,7 +693,11 @@ object UtilityDownload {
         } else {
             rid
         }
-        var text: String = ("${MyApplication.nwsWeatherGov}/data/"+ridSmall.toUpperCase(Locale.US)+"/FTM"+ridSmall.toUpperCase(Locale.US)).getHtmlSep()
+        var text: String = getTextProduct(context, "FTM" + ridSmall.toUpperCase(Locale.US))
+        UtilityLog.d("wx", "getRadarStatus api text: " + text)
+        if (text == "") {
+            text = ("${MyApplication.nwsWeatherGov}/data/" + ridSmall.toUpperCase(Locale.US) + "/FTM" + ridSmall.toUpperCase(Locale.US)).getHtmlSep()
+        }
         if (text.contains("<!DOCTYPE html PUBLIC") || text.contains("Forbidden")) {
             UtilityLog.d("wx", "getRadarStatus testtext: " + text)
             //try another url...

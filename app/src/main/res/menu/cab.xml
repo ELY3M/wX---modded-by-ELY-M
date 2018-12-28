@@ -20,42 +20,35 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto" >
-
     <item android:id="@+id/action_radar"
           android:title="@string/action_radar"
           android:icon="@drawable/ic_flash_on_24dp"
           app:showAsAction="always"
         />
-
     <item android:id="@+id/action_cloud"
           android:title="@string/action_cloud"
           android:icon="@drawable/ic_cloud_24dp"
           app:showAsAction="always"
         />
-
     <item
         android:id="@+id/action_afd"
         android:icon="@drawable/ic_info_outline_24dp"
         app:showAsAction="always"
         android:title="@string/action_afd"/>
-
     <item
         android:id="@+id/action_dashboard"
         android:icon="@drawable/ic_report_24dp"
         app:showAsAction="always"
         android:title="@string/label_severe_dashboard"/>
-
     <item
         android:id="@+id/action_vr"
         android:icon="@drawable/ic_mic_24dp"
         app:showAsAction="always"
         android:title="@string/label_voice_command"/>
-
     <item
         android:id="@+id/action_forecast"
         app:showAsAction="never"
         android:title="@string/action_forecast"/>
-
     <item
         android:id="@+id/action_radar_mosaic"
         app:showAsAction="never"
@@ -64,27 +57,22 @@
     <item android:id="@+id/action_alert"
           android:title="@string/action_alert"
           app:showAsAction="never" />
-
     <item
         android:id="@+id/action_observations"
         app:showAsAction="never"
         android:title="@string/label_observations"/>
-
     <item
         android:id="@+id/action_soundings"
         app:showAsAction="never"
         android:title="@string/label_soundings"/>
-
     <item
         android:id="@+id/action_playlist"
         app:showAsAction="never"
         android:title="@string/label_playlist_cab"/>
-
     <item
         android:id="@+id/action_spotters"
         app:showAsAction="never"
         android:title="@string/label_spotters"/>
-
     <item
         android:id="@+id/action_forecast_webpage"
         app:showAsAction="never"
@@ -101,11 +89,4 @@
         android:orderInCategory="99"
         app:showAsAction="never"
         android:title="@string/help_menu_item"/>
-
-    <item
-        android:id="@+id/action_about"
-        android:orderInCategory="100"
-        app:showAsAction="never"
-        android:title="@string/action_about"/>
-
 </menu>
