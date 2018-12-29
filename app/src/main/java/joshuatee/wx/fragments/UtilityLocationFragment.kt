@@ -256,7 +256,7 @@ object UtilityLocationFragment {
 
     fun handleIconTap(
         strName: String,
-        oglr: WXGLRender,
+        oglr: WXGLRender?,
         activityReference: Context,
         fnRefresh: () -> Unit,
         fnResetRadarView: () -> Unit,
@@ -275,11 +275,11 @@ object UtilityLocationFragment {
             )
             strName.contains("Force Data Refresh") -> fnRefresh()
             strName.contains("Radar type: Reflectivity") -> {
-                oglr.product = "N0Q"
+                oglr?.product = "N0Q"
                 fnGetRadars()
             }
             strName.contains("Radar type: Velocity") -> {
-                oglr.product = "N0U"
+                oglr?.product = "N0U"
                 fnGetRadars()
             }
             strName.contains("Reset zoom and center") -> fnResetRadarView()
@@ -291,7 +291,7 @@ object UtilityLocationFragment {
                     activityReference,
                     WXGLRadarActivity::class.java,
                     WXGLRadarActivity.RID,
-                    arrayOf(ridContext, stateContext, oglr.product, "")
+                    arrayOf(ridContext, stateContext, oglr!!.product, "")
                 )
             }
         }

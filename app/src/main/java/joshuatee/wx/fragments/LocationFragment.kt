@@ -761,14 +761,25 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         })
         alertDialogStatus!!.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             val strName = alertDialogStatusAl[which]
-            UtilityLocationFragment.handleIconTap(
-                strName,
-                oglrArr[0],
-                activityReference,
-                ::refreshDynamicContent,
-                ::resetAllGLView,
-                ::getAllRadars
-            )
+            if (oglrArr.size > 0){
+                UtilityLocationFragment.handleIconTap(
+                    strName,
+                    oglrArr[0],
+                    activityReference,
+                    ::refreshDynamicContent,
+                    ::resetAllGLView,
+                    ::getAllRadars
+                )
+            } else {
+                UtilityLocationFragment.handleIconTap(
+                    strName,
+                    null,
+                    activityReference,
+                    ::refreshDynamicContent,
+                    ::resetAllGLView,
+                    ::getAllRadars
+                )
+            }
             dialog.dismiss()
         })
     }

@@ -5,6 +5,7 @@
 // TODO convert to new NavDrawer: USWarningsWith, ModelGeneric, ModelSPCHRRR, SPCCompmap, SPCStormreports, GOES16
 // TODO in general reduce static methods ( object methods ) in favor of instance methods
 
+55086 2018_12_28 [BUG] crash on main screen conditions icon
 55085 2018_12_27 convert observations,mosaic to use nav drawer
                  remove local forecast item from main menu
                  remove about from main menu and move to settings
