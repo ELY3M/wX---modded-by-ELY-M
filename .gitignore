@@ -1,6 +1,8 @@
 !files
 /!files
 /!files/
+gradle/
+/gradle/
 app/build
 app/src/main/libs
 build
