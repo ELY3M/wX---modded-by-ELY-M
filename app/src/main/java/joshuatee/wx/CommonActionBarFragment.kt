@@ -239,6 +239,13 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                     }
                 }
             }
+            //not removing about - ELY M.
+            R.id.action_about -> ObjectIntent(
+                    this,
+                    TextScreenActivity::class.java,
+                    TextScreenActivity.URL,
+                    arrayOf(UtilityAlertDialog.showVersion(this, this), "About wX")
+            )
             else -> return super.onOptionsItemSelected(item)
         }
         return true
