@@ -23,8 +23,6 @@ package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 
 import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
@@ -33,6 +31,7 @@ import joshuatee.wx.radar.LatLon
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.ObjectRecyclerViewGeneric
 import joshuatee.wx.util.UtilityTime
 
 class SpotterReportsActivity : BaseActivity() {
@@ -45,14 +44,9 @@ class SpotterReportsActivity : BaseActivity() {
             null,
             false
         )
-        title = "Spotter reports"
-        val recyclerView: RecyclerView = findViewById(R.id.card_list)
-        recyclerView.setHasFixedSize(true)
-        val linearLayoutManager = LinearLayoutManager(this)
-        linearLayoutManager.orientation = RecyclerView.VERTICAL
-        recyclerView.layoutManager = linearLayoutManager
+        val recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
         val ca = AdapterSpotterReports(UtilitySpotter.spotterReports)
-        recyclerView.adapter = ca
+        recyclerView.recyclerView.adapter = ca
         title = UtilitySpotter.spotterReports.size.toString() + " Spotter reports " +
                 UtilityTime.gmtTime("HH:mm")
         ca.setOnItemClickListener(object : AdapterSpotterReports.MyClickListener {

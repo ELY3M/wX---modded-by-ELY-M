@@ -32,7 +32,7 @@ import android.view.View.OnClickListener
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.radar.VideoRecordActivity
-import joshuatee.wx.ui.TouchImageView2
+import joshuatee.wx.ui.ObjectTouchImageView
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
@@ -52,9 +52,7 @@ class LightningActivity : VideoRecordActivity(), OnClickListener {
     private var sectorPretty = "USA"
     private var period = "0.25"
     private var periodPretty = "15 MIN"
-    private lateinit var img: TouchImageView2
-    private var firstRun = false
-    private var imageLoaded = false
+    private lateinit var img: ObjectTouchImageView
     private lateinit var contextg: Context
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -67,13 +65,12 @@ class LightningActivity : VideoRecordActivity(), OnClickListener {
         super.onCreate(savedInstanceState, R.layout.activity_image_show, null, true, false)
         contextg = this
         toolbar.setOnClickListener { toolbar.showOverflowMenu() }
-        img = findViewById(R.id.iv)
+        img = ObjectTouchImageView(this, this, R.id.iv)
         img.setOnClickListener(this)
         sector = Utility.readPref(this, "LIGHTNING_SECTOR", sector)
         period = Utility.readPref(this, "LIGHTNING_PERIOD", period)
         sectorPretty = UtilityLightning.getSectorPretty(sector)
         periodPretty = UtilityLightning.getTimePretty(period)
-        title = "Lightning Strikes"
         getContent()
     }
 
@@ -81,14 +78,10 @@ class LightningActivity : VideoRecordActivity(), OnClickListener {
         title = "Lightning $sectorPretty"
         toolbar.subtitle = periodPretty
         bitmap = withContext(Dispatchers.IO) { UtilityLightning.getImage(sector, period) }
-        img.setImageBitmap(bitmap)
-        if (!firstRun) {
-            img.setZoom("LIGHTNING")
-            firstRun = true
-        }
+        img.setBitmap(bitmap)
+        img.firstRunSetZoomPosn("LIGHTNING")
         Utility.writePref(contextg, "LIGHTNING_SECTOR", sector)
         Utility.writePref(contextg, "LIGHTNING_PERIOD", period)
-        imageLoaded = true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -146,9 +139,7 @@ class LightningActivity : VideoRecordActivity(), OnClickListener {
     }
 
     override fun onStop() {
-        if (imageLoaded) {
-            UtilityImg.imgSavePosnZoom(this, img, "LIGHTNING")
-        }
+        img.imgSavePosnZoom(this, "LIGHTNING")
         super.onStop()
     }
 }

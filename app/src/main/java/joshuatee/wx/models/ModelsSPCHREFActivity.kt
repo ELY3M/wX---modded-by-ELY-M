@@ -141,7 +141,9 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             this,
             UtilityModelSPCHREFInterface.groups,
             UtilityModelSPCHREFInterface.longCodes,
-            UtilityModelSPCHREFInterface.shortCodes
+            UtilityModelSPCHREFInterface.shortCodes,
+            this,
+            ""
         )
         drw.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
             drw.drawerLayout.closeDrawer(drw.listView)

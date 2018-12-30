@@ -222,7 +222,9 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
             this,
             UtilitySPCMESO.groups,
             UtilitySPCMESO.longCodes,
-            UtilitySPCMESO.shortCodes
+            UtilitySPCMESO.shortCodes,
+            this,
+            ""
         )
         drw.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
             drw.drawerLayout.closeDrawer(drw.listView)
@@ -505,7 +507,8 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
 
     private fun setAndLaunchSector(sectorNo: String) {
         displayData.img[0].resetZoom()
-        if (numPanes > 1) displayData.img[1].resetZoom()
+        if (numPanes > 1)
+            displayData.img[1].resetZoom()
         sector = sectorNo
         Utility.writePref(this, prefSector, sector)
         getContent()

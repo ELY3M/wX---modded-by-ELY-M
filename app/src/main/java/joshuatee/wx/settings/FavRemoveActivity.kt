@@ -23,8 +23,6 @@ package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 
 import joshuatee.wx.MyApplication
@@ -32,12 +30,12 @@ import joshuatee.wx.R
 import joshuatee.wx.objects.ActionMode
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectFab
-import joshuatee.wx.ui.SingleTextAdapterList
 import joshuatee.wx.util.UtilityFavorites
 
 import joshuatee.wx.CA_RID_ARR
 import joshuatee.wx.NWS_TXT_ARR
 import joshuatee.wx.spc.UtilitySPCMESO
+import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
 
 class FavRemoveActivity : BaseActivity() {
@@ -59,7 +57,7 @@ class FavRemoveActivity : BaseActivity() {
     private var prefTokenLabel = ""
     private var prefTokenLocation = ""
     private var ridArrLabel = mutableListOf<String>()
-    private lateinit var ca: SingleTextAdapterList
+    private lateinit var recyclerView: ObjectRecyclerView
     private var type = ""
     private var actionMode = ActionMode.DELETE
 
@@ -117,18 +115,7 @@ class FavRemoveActivity : BaseActivity() {
             MyApplication.ICON_ARROW_DOWN,
             View.OnClickListener { toggleMode(ActionMode.DOWN) })
         updateList()
-        val recyclerView: RecyclerView = findViewById(R.id.card_list)
-        recyclerView.setHasFixedSize(true)
-        val llm = LinearLayoutManager(this)
-        llm.orientation = RecyclerView.VERTICAL
-        recyclerView.layoutManager = llm
-        ca = SingleTextAdapterList(ridArrLabel)
-        recyclerView.adapter = ca
-        ca.setOnItemClickListener(object : SingleTextAdapterList.MyClickListener {
-            override fun onItemClick(position: Int) {
-                itemClicked(position)
-            }
-        })
+        recyclerView = ObjectRecyclerView(this, this, R.id.card_list, ridArrLabel, ::itemClicked)
     }
 
     private fun updateList() {
@@ -156,16 +143,16 @@ class FavRemoveActivity : BaseActivity() {
             val tmp = ridArr[pos - 1]
             val tmp2 = ridArr[pos]
             ridArr[pos - 1] = tmp2
-            ca.setItem(pos - 1, ca.getItem(pos))
+            recyclerView.setItem(pos - 1, recyclerView.getItem(pos))
             ridArr[pos] = tmp
-            ca.setItem(pos, getFullString(tmp))
+            recyclerView.setItem(pos, getFullString(tmp))
         } else {
             val tmp = ridArr[ridArr.size - 1]
             val tmp2 = ridArr[pos]
             ridArr[ridArr.size - 1] = tmp2
-            ca.setItem(ridArr.size - 1, ca.getItem(pos))
+            recyclerView.setItem(ridArr.size - 1, recyclerView.getItem(pos))
             ridArr[0] = tmp
-            ca.setItem(0, getFullString(tmp))
+            recyclerView.setItem(0, getFullString(tmp))
         }
         when (type) {
             "SPCMESO" -> {
@@ -174,7 +161,7 @@ class FavRemoveActivity : BaseActivity() {
                 // FIXME why does this need a trailing semi-colon
                 Utility.writePref(this, prefToken, "$ridFav:")
                 ridFavLabel = " : : "
-                ridFavLabel += ca.toString()
+                ridFavLabel += recyclerView.toString()
                 Utility.writePref(this, prefTokenLabel, ridFavLabel)
             }
             else -> {
@@ -194,15 +181,15 @@ class FavRemoveActivity : BaseActivity() {
             val tmp = ridArr[pos + 1]
             val tmp2 = ridArr[pos]
             ridArr[pos + 1] = tmp2
-            ca.setItem(pos + 1, ca.getItem(pos))
+            recyclerView.setItem(pos + 1, recyclerView.getItem(pos))
             ridArr[pos] = tmp
-            ca.setItem(pos, getFullString(tmp))
+            recyclerView.setItem(pos, getFullString(tmp))
         } else {
             val tmp = ridArr[0]
             ridArr[0] = ridArr[pos]
-            ca.setItem(0, ca.getItem(pos))
+            recyclerView.setItem(0, recyclerView.getItem(pos))
             ridArr[ridArr.size - 1] = tmp
-            ca.setItem(ridArr.size - 1, getFullString(tmp))
+            recyclerView.setItem(ridArr.size - 1, getFullString(tmp))
         }
         ridFav = " : : "
         ridArr.indices.forEach { ridFav = ridFav + ":" + ridArr[it] }
@@ -210,7 +197,7 @@ class FavRemoveActivity : BaseActivity() {
         when (type) {
             "SPCMESO" -> {
                 ridFavLabel = " : : "
-                ridFavLabel += ca.toString()
+                ridFavLabel += recyclerView.toString()
                 Utility.writePref(this, prefTokenLabel, ridFavLabel)
             }
         }
@@ -271,9 +258,9 @@ class FavRemoveActivity : BaseActivity() {
                     "SPCMESO" -> {
                         ridFav = Utility.readPref(this, prefToken, " : :")
                         ridFav = ridFav.replace(ridArr[position] + ":", "")
-                        ca.deleteItem(position)
+                        recyclerView.deleteItem(position)
                         ridFavLabel = " : : "
-                        ridFavLabel += ca.toString()
+                        ridFavLabel += recyclerView.toString()
                         Utility.writePref(this, prefToken, ridFav)
                         Utility.writePref(this, prefTokenLabel, ridFavLabel)
                         saveMyApp(ridFav, ridFavLabel)
@@ -281,7 +268,7 @@ class FavRemoveActivity : BaseActivity() {
                     else -> {
                         ridFav = Utility.readPref(this, prefToken, " : :")
                         ridFav = ridFav.replace(ridArr[position] + ":", "")
-                        ca.deleteItem(position)
+                        recyclerView.deleteItem(position)
                         Utility.writePref(this, prefToken, ridFav)
                         saveMyApp(ridFav, ridFavLabel)
                     }

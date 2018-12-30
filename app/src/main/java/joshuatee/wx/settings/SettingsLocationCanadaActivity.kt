@@ -25,16 +25,14 @@ import android.annotation.SuppressLint
 import java.util.Locale
 
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 
 import joshuatee.wx.R
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.SingleTextAdapter
 import joshuatee.wx.canada.UtilityCanada
 
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
 import kotlinx.coroutines.*
 
@@ -60,8 +58,7 @@ class SettingsLocationCanadaActivity : BaseActivity() {
         "SK: Saskatchewan",
         "YT: Yukon"
     )
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var ca: SingleTextAdapter
+    private lateinit var recyclerView: ObjectRecyclerView
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,18 +66,13 @@ class SettingsLocationCanadaActivity : BaseActivity() {
         title = "Canadian Locations"
         toolbar.subtitle = "Select a location and then use the back arrow to save."
         cityDisplay = false
-        recyclerView = findViewById(R.id.card_list)
-        recyclerView.setHasFixedSize(true)
-        val llm = LinearLayoutManager(this)
-        llm.orientation = RecyclerView.VERTICAL
-        recyclerView.layoutManager = llm
-        ca = SingleTextAdapter(provArr)
-        recyclerView.adapter = ca
-        ca.setOnItemClickListener(object : SingleTextAdapter.MyClickListener {
-            override fun onItemClick(position: Int) {
-                provClicked(position)
-            }
-        })
+        recyclerView = ObjectRecyclerView(
+            this,
+            this,
+            R.id.card_list,
+            provArr.toMutableList(),
+            ::provClicked
+        )
     }
 
     private fun provClicked(position: Int) {
@@ -111,8 +103,7 @@ class SettingsLocationCanadaActivity : BaseActivity() {
             listCity =
                     html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-.*?_metric_e.html\">(.*?)</a></li>")
         }
-        ca = SingleTextAdapter(listCity.distinct())
-        recyclerView.adapter = ca
+        recyclerView.refreshList(listCity.distinct().toMutableList())
         cityDisplay = true
     }
 } 

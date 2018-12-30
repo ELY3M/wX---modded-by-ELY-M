@@ -24,19 +24,18 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 
 import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.ObjectRecyclerViewGeneric
 import joshuatee.wx.util.UtilityTime
 import kotlinx.coroutines.*
 
 class USWarningsImpactActivity : BaseActivity() {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: ObjectRecyclerViewGeneric
     private var warningsList = listOf<ObjectImpactGraphic>()
     private lateinit var contextg: Context
 
@@ -49,19 +48,14 @@ class USWarningsImpactActivity : BaseActivity() {
             false
         )
         contextg = this
-        title = "NWS Warnings"
-        recyclerView = findViewById(R.id.card_list)
-        recyclerView.setHasFixedSize(true)
-        val llm = LinearLayoutManager(this)
-        llm.orientation = RecyclerView.VERTICAL
-        recyclerView.layoutManager = llm
+        recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         warningsList = withContext(Dispatchers.IO) { UtilityWarningsImpact.impactWarningData }
         val ca = AdapterUSWarningsImpact(warningsList)
-        recyclerView.adapter = ca
+        recyclerView.recyclerView.adapter = ca
         title = warningsList.size.toString() + " NWS warnings active " +
                 UtilityTime.gmtTime("HH:mm")
         ca.setOnItemClickListener(object : AdapterUSWarningsImpact.MyClickListener {

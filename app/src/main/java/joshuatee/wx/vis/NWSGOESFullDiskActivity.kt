@@ -29,16 +29,12 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.radar.VideoRecordActivity
-import joshuatee.wx.ui.ObjectNavDrawer
-import joshuatee.wx.ui.OnSwipeTouchListener
-import joshuatee.wx.ui.TouchImageView2
-import joshuatee.wx.ui.UtilityToolbar
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
@@ -50,13 +46,12 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
-    private var firstRun = false
-    private var imageLoaded = false
-    private lateinit var img: TouchImageView2
+    private lateinit var img: ObjectTouchImageView
     private lateinit var actionAnimate: MenuItem
     private var animDrawable = AnimationDrawable()
     private lateinit var drw: ObjectNavDrawer
     private lateinit var contextg: Context
+    private val prefTokenIdx = "GOESFULLDISK_IMG_FAV_IDX"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,28 +64,14 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        img = findViewById(R.id.iv)
-        img.setOnClickListener(this)
-        img.setOnTouchListener(object : OnSwipeTouchListener(this) {
-            override fun onSwipeLeft() {
-                if (img.currentZoom < 1.01f) UtilityImg.showNextImg(drw, ::getContentFixThis)
-            }
-
-            override fun onSwipeRight() {
-                if (img.currentZoom < 1.01f) UtilityImg.showPrevImg(drw, ::getContentFixThis)
-            }
-        })
         val menu = toolbarBottom.menu
         actionAnimate = menu.findItem(R.id.action_animate)
         actionAnimate.isVisible = false
         drw = ObjectNavDrawer(this, UtilityNWSGOESFullDisk.labels, UtilityNWSGOESFullDisk.urls)
-        drw.index = Utility.readPref(this, "GOESFULLDISK_IMG_FAV_IDX", 0)
-        drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            drw.listView.setItemChecked(position, true)
-            drw.drawerLayout.closeDrawer(drw.listView)
-            drw.index = position
-            getContent()
-        }
+        img = ObjectTouchImageView(this, this, R.id.iv, drw, prefTokenIdx)
+        img.setListener(this, drw, ::getContentFixThis)
+        drw.index = Utility.readPref(this, prefTokenIdx, 0)
+        drw.setListener(::getContentFixThis)
         getContent()
     }
 
@@ -103,9 +84,8 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
         actionAnimate.isVisible = drw.getUrl().contains("jma")
         Utility.writePref(contextg, "GOESFULLDISK_IMG_FAV_IDX", drw.index)
         bitmap = withContext(Dispatchers.IO) { drw.getUrl().getImage() }
-        img.setImageBitmap(bitmap)
-        firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "GOESFULLDISKIMG")
-        imageLoaded = true
+        img.setBitmap(bitmap)
+        img.firstRunSetZoomPosn("OBS")
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -149,8 +129,8 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
     }
 
     override fun onStop() {
-        if (imageLoaded)
-            UtilityImg.imgSavePosnZoom(this, img, "GOESFULLDISKIMG")
+        // FIXME use prefString
+        img.imgSavePosnZoom(this, "GOESFULLDISKIMG")
         super.onStop()
     }
 

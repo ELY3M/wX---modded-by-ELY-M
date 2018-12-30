@@ -24,8 +24,6 @@ package joshuatee.wx.settings
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
@@ -35,12 +33,6 @@ import java.util.Locale
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ActionMode
-import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectDialogue
-import joshuatee.wx.ui.ObjectFab
-import joshuatee.wx.ui.SingleTextAdapterList
-import joshuatee.wx.ui.UtilityToolbar
-import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.UtilityAlertDialog
 
 import joshuatee.wx.WFO_ARR
@@ -48,6 +40,7 @@ import joshuatee.wx.RID_ARR
 import joshuatee.wx.NWS_IMG_ARR
 
 import joshuatee.wx.NWS_TXT_ARR
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 
 class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
@@ -74,8 +67,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         "WEATHERSTORY: Local NWS Weather Story"
     )
     private var hmFavOrig = ""
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var ca: SingleTextAdapterList
+    private lateinit var recyclerView: ObjectRecyclerView
     private lateinit var diaMain: ObjectDialogue
     private lateinit var diaImg: ObjectDialogue
     private lateinit var diaAfd: ObjectDialogue
@@ -115,18 +107,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             MyApplication.ICON_ARROW_DOWN,
             View.OnClickListener { toggleMode(ActionMode.DOWN) })
         updateList(true)
-        recyclerView = findViewById(R.id.card_list)
-        recyclerView.setHasFixedSize(true)
-        val llm = LinearLayoutManager(this)
-        llm.orientation = RecyclerView.VERTICAL
-        recyclerView.layoutManager = llm
-        ca = SingleTextAdapterList(ridArrLabel)
-        recyclerView.adapter = ca
-        ca.setOnItemClickListener(object : SingleTextAdapterList.MyClickListener {
-            override fun onItemClick(position: Int) {
-                prodClicked(position)
-            }
-        })
+        recyclerView = ObjectRecyclerView(this, this, R.id.card_list, ridArrLabel, ::prodClicked)
         diaMain = ObjectDialogue(this, "Select text products:", localChoicesText + NWS_TXT_ARR)
         diaMain.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
@@ -220,7 +201,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             }
         }
         if (!firstTime) {
-            ca.notifyDataSetChanged()
+            recyclerView.notifyDataSetChanged()
         }
     }
 
@@ -237,16 +218,14 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                 Utility.writePref(this, prefToken, MyApplication.homescreenFav)
                 ridFav = MyApplication.homescreenFav
                 updateList(true)
-                ca = SingleTextAdapterList(ridArrLabel)
-                recyclerView.adapter = ca
+                recyclerView.refreshList(ridArrLabel)
             }
             R.id.action_reset_ca -> {
                 MyApplication.homescreenFav = MyApplication.HOMESCREEN_FAV_DEFAULT_CA
                 Utility.writePref(this, prefToken, MyApplication.homescreenFav)
                 ridFav = MyApplication.homescreenFav
                 updateList(true)
-                ca = SingleTextAdapterList(ridArrLabel)
-                recyclerView.adapter = ca
+                recyclerView.refreshList(ridArrLabel)
             }
             else -> return super.onOptionsItemSelected(item)
         }
@@ -353,8 +332,8 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                     ridFav = ridFav.replace(":$".toRegex(), "")
                     Utility.writePref(this, prefToken, ridFav)
                     MyApplication.homescreenFav = ridFav
-                    ca.deleteItem(position)
-                    ca.notifyDataSetChanged()
+                    recyclerView.deleteItem(position)
+                    recyclerView.notifyDataSetChanged()
                 }
             }
             ActionMode.UP -> {
@@ -389,9 +368,9 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             MyApplication.homescreenFav = ridFav
             ridArrLabel.add(txtprod)
             updateList()
-            ca.notifyDataSetChanged()
+            recyclerView.notifyDataSetChanged()
         } else {
-            UtilityUI.makeSnackBar(recyclerView, "$txtprod is already in homescreen.")
+            UtilityUI.makeSnackBar(recyclerView.recyclerView, "$txtprod is already in homescreen.")
         }
     }
 } 

@@ -60,6 +60,7 @@ internal object UtilityColor {
         "RADAR_COLOR_COUNTY" -> Color.rgb(75, 75, 75)
         "RADAR_COLOR_STI" -> Color.rgb(255, 255, 255)
         "RADAR_COLOR_HI" -> Color.GREEN
+        "RADAR_COLOR_HI_TEXT" -> Color.WHITE
         "RADAR_COLOR_OBS" -> Color.WHITE
         "RADAR_COLOR_OBS_WINDBARBS" -> Color.WHITE
         "RADAR_COLOR_COUNTY_LABELS" -> Color.rgb(75, 75, 75)

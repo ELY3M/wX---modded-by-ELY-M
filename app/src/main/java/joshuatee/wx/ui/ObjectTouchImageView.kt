@@ -1,0 +1,156 @@
+/*
+
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+
+    This file is part of wX.
+
+    wX is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    wX is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with wX.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+
+package joshuatee.wx.ui
+
+import android.app.Activity
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.drawable.AnimationDrawable
+import android.view.View
+import joshuatee.wx.MyApplication
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityImg
+
+class ObjectTouchImageView {
+
+    var img: TouchImageView2
+    private val context: Context
+    var imageLoaded: Boolean = false
+    var firstRun: Boolean = false
+    var prefTokenIdx = ""
+    var drw: ObjectNavDrawer? = null
+
+    constructor(
+        activity: Activity,
+        context: Context,
+        resid: Int
+    ) {
+        img = activity.findViewById(resid)
+        this.context = context
+    }
+
+    constructor(
+        activity: Activity,
+        context: Context,
+        resid: Int,
+        drw: ObjectNavDrawer,
+        prefTokenIdx: String
+    ) {
+        img = activity.findViewById(resid)
+        this.context = context
+        this.drw = drw
+        this.prefTokenIdx = prefTokenIdx
+    }
+
+    fun setBitmap(bitmap: Bitmap) {
+        img.setImageBitmap(bitmap)
+        imageLoaded = true
+        if (prefTokenIdx != "" && drw != null) {
+            Utility.writePref(context, prefTokenIdx, drw!!.index)
+        }
+        // FIXME implement
+        // firstRunSetZoomPosn()
+    }
+
+    fun setOnClickListener(listener: View.OnClickListener) {
+        img.setOnClickListener(listener)
+    }
+
+    fun setImageDrawable(animDrawable: AnimationDrawable) {
+        img.setImageDrawable(animDrawable)
+    }
+
+    fun resetZoom() {
+        img.resetZoom()
+    }
+
+    fun setMaxZoom(zoom: Float) {
+        img.setMaxZoom(zoom)
+    }
+
+    fun setZoom(zoom: Float) {
+        img.setZoom(zoom)
+    }
+
+    fun setListener(context: Context, drw: ObjectNavDrawer, fn: () -> Unit) {
+        img.setOnTouchListener(object : OnSwipeTouchListener(context) {
+            override fun onSwipeLeft() {
+                if (img.currentZoom < 1.01f) UtilityImg.showNextImg(drw, fn)
+            }
+
+            override fun onSwipeRight() {
+                if (img.currentZoom < 1.01f) UtilityImg.showPrevImg(drw, fn)
+            }
+        })
+    }
+
+    fun firstRunSetZoomPosn(pref: String) {
+        if (!firstRun) {
+            img.setZoom(pref)
+            firstRun = true
+        }
+    }
+
+    fun imgSavePosnZoom(context: Context, prefStr: String) {
+        if (imageLoaded) {
+            val poi = img.scrollPosition
+            var z = img.currentZoom
+            if (poi != null) {
+                var x = poi.x
+                var y = poi.y
+                if (x.isNaN()) x = 1.0f
+                if (y.isNaN()) y = 1.0f
+                if (z.isNaN()) z = 1.0f
+                Utility.writePref(context, prefStr + "_X", x)
+                Utility.writePref(context, prefStr + "_Y", y)
+                Utility.writePref(context, prefStr + "_ZOOM", z)
+                when (prefStr) {
+                    "SPCHRRR" -> {
+                        MyApplication.spchrrrZoom = z
+                        MyApplication.spchrrrX = x
+                        MyApplication.spchrrrY = y
+                    }
+                    "SPCSSEO" -> {
+                        MyApplication.spcsseoZoom = z
+                        MyApplication.spcsseoX = x
+                        MyApplication.spcsseoY = y
+                    }
+                    "GOESVIS" -> {
+                        MyApplication.goesVisZoom = z
+                        MyApplication.goesVisX = x
+                        MyApplication.goesVisY = y
+                    }
+                    // FIXME
+                    "WPCGEFS1" -> {
+                        MyApplication.wpcgefsZoom = z
+                        MyApplication.wpcgefsX = x
+                        MyApplication.wpcgefsY = y
+                    }
+                    else -> {
+                    }
+                }
+            }
+        }
+    }
+}
+
+

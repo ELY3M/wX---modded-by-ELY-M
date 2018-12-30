@@ -194,7 +194,13 @@ class SevereDashboardActivity : BaseActivity() {
                         }
                         val cl = cla
                         val clStr = claStr
-                        card.setOnClickListener(View.OnClickListener { ObjectIntent(contextg, cl!!, clStr, arrayOf(claArgStr, "", severeNotice.toString())) })
+                        card.setOnClickListener(View.OnClickListener { 
+			ObjectIntent(
+			contextg, cl!!, 
+			clStr, 
+			arrayOf(claArgStr, "", severeNotice.toString())
+			) 
+			})
                         linearLayout.addView(card.card)
                     }
                 }

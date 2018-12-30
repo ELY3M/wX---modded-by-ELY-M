@@ -21,6 +21,7 @@
 
 package joshuatee.wx.spc
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
@@ -48,7 +49,7 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var imgUrl = ""
-    private lateinit var img: TouchImageView2
+    private lateinit var img: ObjectTouchImageView
     private lateinit var imageMap: ObjectImageMap
     private var sector = ""
     private var nwsOffice = ""
@@ -59,11 +60,11 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
     private val prefTokenLocation = "NWS_LOCATION_"
     private val prefToken = "SND_FAV"
     private var upperAir = ""
-    private var imageLoaded = false
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var sp: ObjectSpinner
     private lateinit var contextg: Context
 
+    @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
             savedInstanceState,
@@ -73,7 +74,7 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
-        img = findViewById(R.id.iv)
+        img = ObjectTouchImageView(this, this, R.id.iv)
         img.setOnClickListener(this)
         contextg = this
         nwsOffice = UtilityLocation.getNearestSnd(this, Location.latLon)
@@ -86,7 +87,8 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
         )
         sp = ObjectSpinner(this, this, R.id.spinner1, locations)
         sp.setOnItemSelectedListener(this)
-        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img))
+        imageMap =
+                ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
         imageMap.addOnImageMapClickedHandler(object : ImageMap.OnImageMapClickedHandler {
             override fun onImageMapClicked(id: Int, im2: ImageMap) {
                 im2.visibility = View.GONE
@@ -118,11 +120,12 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
         withContext(Dispatchers.IO) {
             bitmap = UtilitySPCSoundings.getImage(contextg, nwsOffice)
         }
-        img.visibility = View.VISIBLE
-        img.setImageBitmap(bitmap)
+        // FIXME should this be in object
+        img.img.visibility = View.VISIBLE
+        img.setBitmap(bitmap)
         img.setMaxZoom(4f)
-        img.setZoom("SOUNDING")
-        imageLoaded = true
+        img.firstRunSetZoomPosn("SOUNDING")
+        Utility.writePref(contextg, "SOUNDING_SECTOR", nwsOffice)
     }
 
     private fun getContentSPCPlot() = GlobalScope.launch(uiDispatcher) {
@@ -134,8 +137,8 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
             )
             bitmap = UtilityImg.getBitmapAddWhiteBG(contextg, imgUrl + "_" + date + ".gif")
         }
-        img.visibility = View.VISIBLE
-        img.setImageBitmap(bitmap)
+        img.img.visibility = View.VISIBLE
+        img.setBitmap(bitmap)
         img.setMaxZoom(4f)
     }
 
@@ -227,10 +230,10 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
     }
 
     override fun onStop() {
-        if (imageLoaded) {
-            UtilityImg.imgSavePosnZoom(this, img, "SOUNDING")
-            Utility.writePref(this, "SOUNDING_SECTOR", nwsOffice)
-        }
+        //if (imageLoaded) {
+        //    Utility.writePref(this, "SOUNDING_SECTOR", nwsOffice)
+        //}
+        img.imgSavePosnZoom(this, "SOUNDING")
         super.onStop()
     }
 }

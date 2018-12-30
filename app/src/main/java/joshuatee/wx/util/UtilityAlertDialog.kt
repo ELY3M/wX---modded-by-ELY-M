@@ -34,10 +34,6 @@ import joshuatee.wx.ui.ObjectDialogue
 import android.webkit.WebResourceRequest
 import android.os.Build
 import android.annotation.TargetApi
-import android.text.Html
-import android.text.Spanned
-
-
 
 object UtilityAlertDialog {
 

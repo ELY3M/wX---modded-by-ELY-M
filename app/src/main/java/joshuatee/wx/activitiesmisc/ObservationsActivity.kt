@@ -27,17 +27,13 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.ui.ObjectNavDrawer
-import joshuatee.wx.ui.OnSwipeTouchListener
-import joshuatee.wx.ui.TouchImageView2
-import joshuatee.wx.ui.UtilityToolbar
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
@@ -51,10 +47,8 @@ class ObservationsActivity : VideoRecordActivity(), View.OnClickListener,
     }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private lateinit var img: TouchImageView2
+    private lateinit var img: ObjectTouchImageView
     private var bitmap = UtilityImg.getBlankBitmap()
-    private var firstRun = false
-    private var imageLoaded = false
     private val prefTokenIdx = "SFC_OBS_IMG_IDX"
     private lateinit var contextg: Context
     private lateinit var drw: ObjectNavDrawer
@@ -69,25 +63,13 @@ class ObservationsActivity : VideoRecordActivity(), View.OnClickListener,
             true
         )
         contextg = this
+        title = "Observations"
         toolbarBottom.setOnMenuItemClickListener(this)
-        img = findViewById(R.id.iv)
-        img.setOnTouchListener(object : OnSwipeTouchListener(this) {
-            override fun onSwipeLeft() {
-                if (img.currentZoom < 1.01f) UtilityImg.showNextImg(drw, ::getContentFixThis)
-            }
-
-            override fun onSwipeRight() {
-                if (img.currentZoom < 1.01f) UtilityImg.showPrevImg(drw, ::getContentFixThis)
-            }
-        })
         drw = ObjectNavDrawer(this, UtilityObservations.labels, UtilityObservations.urls)
+        img = ObjectTouchImageView(this, this, R.id.iv, drw, prefTokenIdx)
+        img.setListener(this, drw, ::getContentFixThis)
         drw.index = Utility.readPref(this, prefTokenIdx, 0)
-        drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            drw.listView.setItemChecked(position, false)
-            drw.drawerLayout.closeDrawer(drw.listView)
-            drw.index = position
-            getContent()
-        }
+        drw.setListener(::getContentFixThis)
         getContent()
     }
 
@@ -96,7 +78,6 @@ class ObservationsActivity : VideoRecordActivity(), View.OnClickListener,
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        title = "Observations"
         toolbar.subtitle = drw.getLabel()
         bitmap = withContext(Dispatchers.IO) { drw.getUrl().getImage() }
         if (drw.getUrl().contains("large_latestsfc.gif")) {
@@ -104,11 +85,9 @@ class ObservationsActivity : VideoRecordActivity(), View.OnClickListener,
         } else {
             img.setMaxZoom(4f)
         }
-        img.setImageBitmap(bitmap)
+        img.setBitmap(bitmap)
         img.resetZoom()
-        firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "OBS")
-        imageLoaded = true
-        Utility.writePref(contextg, prefTokenIdx, drw.index)
+        img.firstRunSetZoomPosn("OBS")
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -153,9 +132,7 @@ class ObservationsActivity : VideoRecordActivity(), View.OnClickListener,
     }
 
     override fun onStop() {
-        if (imageLoaded) {
-            UtilityImg.imgSavePosnZoom(this, img, "OBS")
-        }
+        img.imgSavePosnZoom(this, "OBS")
         super.onStop()
     }
 }

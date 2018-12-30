@@ -28,16 +28,12 @@ import android.content.res.Configuration
 import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.radar.VideoRecordActivity
-import joshuatee.wx.ui.ObjectNavDrawer
-import joshuatee.wx.ui.OnSwipeTouchListener
-import joshuatee.wx.ui.TouchImageView2
-import joshuatee.wx.ui.UtilityToolbar
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
@@ -48,9 +44,7 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
-    private var firstRun = false
-    private var imageLoaded = false
-    private lateinit var img: TouchImageView2
+    private lateinit var img: ObjectTouchImageView
     private lateinit var drw: ObjectNavDrawer
     private lateinit var contextg: Context
     private val prefTokenIdx = "OPC_IMG_FAV_IDX"
@@ -66,26 +60,12 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        img = findViewById(R.id.iv)
-        img.setOnClickListener(this)
-        img.setOnTouchListener(object : OnSwipeTouchListener(this) {
-            override fun onSwipeLeft() {
-                if (img.currentZoom < 1.01f) UtilityImg.showNextImg(drw, ::getContentFixThis)
-            }
-
-            override fun onSwipeRight() {
-                if (img.currentZoom < 1.01f) UtilityImg.showPrevImg(drw, ::getContentFixThis)
-            }
-        })
         title = "OPC"
         drw = ObjectNavDrawer(this, UtilityOPCImages.labels, UtilityOPCImages.urls)
+        img = ObjectTouchImageView(this, this, R.id.iv, drw, prefTokenIdx)
+        img.setListener(this, drw, ::getContentFixThis)
         drw.index = Utility.readPref(this, prefTokenIdx, 0)
-        drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            drw.listView.setItemChecked(position, false)
-            drw.drawerLayout.closeDrawer(drw.listView)
-            drw.index = position
-            getContent()
-        }
+        drw.setListener(::getContentFixThis)
         getContent()
     }
 
@@ -95,12 +75,10 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         toolbar.subtitle = drw.getLabel()
-        Utility.writePref(contextg, prefTokenIdx, drw.index)
         val result = async(Dispatchers.IO) { drw.getUrl().getImage() }
         bitmap = result.await()
-        img.setImageBitmap(bitmap)
-        firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "OPCIMG")
-        imageLoaded = true
+        img.setBitmap(bitmap)
+        img.firstRunSetZoomPosn("OPCIMG")
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -145,9 +123,7 @@ class OPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
     }
 
     override fun onStop() {
-        if (imageLoaded) {
-            UtilityImg.imgSavePosnZoom(this, img, "OPCIMG")
-        }
+        img.imgSavePosnZoom(this, "OPCIMG")
         super.onStop()
     }
 }

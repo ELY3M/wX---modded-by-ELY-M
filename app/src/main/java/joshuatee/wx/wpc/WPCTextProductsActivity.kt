@@ -121,15 +121,11 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
             this,
             UtilityWPCText.groups,
             UtilityWPCText.longCodes,
-            UtilityWPCText.shortCodes
+            UtilityWPCText.shortCodes,
+            this,
+            ""
         )
-        drw.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
-            drw.drawerLayout.closeDrawer(drw.listView)
-            prod = drw.getToken(groupPosition, childPosition)
-            changeProduct()
-            true
-        }
-
+        drw.setListener(::changeProduct)
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
@@ -141,9 +137,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         }
         ridFavOld = MyApplication.nwsTextFav
-
         html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(contextg, prod) }
-
         c0.setTextAndTranslate(Utility.fromHtml(html))
         if (turl.size > 2) {
             if (turl[2] == "sound") {
@@ -198,7 +192,6 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
             R.id.action_share -> UtilityShare.shareText(this, prod, Utility.fromHtml(html))
             else -> return super.onOptionsItemSelected(item)
         }
-        changeProduct()
         return true
     }
 
@@ -247,6 +240,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     }
 
     private fun changeProduct() {
+        prod = drw.getUrl()
         products = UtilityFavorites.setupFavMenuNWSTEXT(
             MyApplication.nwsTextFav,
             NWS_TXT_ARR[findPosition(prod)]

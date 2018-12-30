@@ -39,7 +39,6 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.ui.ObjectSpinner
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog

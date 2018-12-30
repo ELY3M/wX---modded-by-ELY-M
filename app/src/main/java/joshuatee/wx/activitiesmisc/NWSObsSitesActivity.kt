@@ -25,18 +25,16 @@ import android.annotation.SuppressLint
 import android.content.Context
 
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 
 import joshuatee.wx.R
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.SingleTextAdapter
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityIO
 
 import joshuatee.wx.STATE_ARR
 import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.ui.ObjectRecyclerView
 
 class NWSObsSitesActivity : BaseActivity() {
 
@@ -45,8 +43,7 @@ class NWSObsSitesActivity : BaseActivity() {
     private val listSort = mutableListOf<String>()
     private var siteDisplay = false
     private var provSelected = ""
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var ca: SingleTextAdapter
+    private lateinit var recyclerView: ObjectRecyclerView
     private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
@@ -54,39 +51,37 @@ class NWSObsSitesActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
         contextg = this
         siteDisplay = false
-        recyclerView = findViewById(R.id.card_list)
-        recyclerView.setHasFixedSize(true)
-        val llm = LinearLayoutManager(this)
-        llm.orientation = RecyclerView.VERTICAL
-        recyclerView.layoutManager = llm
-        ca = SingleTextAdapter(STATE_ARR)
-        recyclerView.adapter = ca
-        ca.setOnItemClickListener(object : SingleTextAdapter.MyClickListener {
-            override fun onItemClick(position: Int) {
-                if (!siteDisplay) {
-                    provSelected = UtilityStringExternal.truncate(STATE_ARR[position], 2)
-                    title = "Observation sites ($provSelected)"
-                    provSelected()
-                } else {
-                    when (position) {
-                        0 -> {
-                            ca = SingleTextAdapter(STATE_ARR)
-                            recyclerView.adapter = ca
-                            siteDisplay = false
-                        }
-                        else -> ObjectIntent(
-                            contextg,
-                            WebscreenAB::class.java,
-                            WebscreenAB.URL,
-                            arrayOf(
-                                "http://www.wrh.noaa.gov/mesowest/timeseries.php?sid=" + listIds[position],
-                                listCity[position]
-                            )
-                        )
-                    }
+        recyclerView = ObjectRecyclerView(
+            this,
+            this,
+            R.id.card_list,
+            STATE_ARR.toMutableList(),
+            ::itemClicked
+        )
+    }
+
+    private fun itemClicked(position: Int) {
+        if (!siteDisplay) {
+            provSelected = UtilityStringExternal.truncate(STATE_ARR[position], 2)
+            title = "Observation sites ($provSelected)"
+            provSelected()
+        } else {
+            when (position) {
+                0 -> {
+                    recyclerView.refreshList(STATE_ARR.toMutableList())
+                    siteDisplay = false
                 }
+                else -> ObjectIntent(
+                    contextg,
+                    WebscreenAB::class.java,
+                    WebscreenAB.URL,
+                    arrayOf(
+                        "http://www.wrh.noaa.gov/mesowest/timeseries.php?sid=" + listIds[position],
+                        listCity[position]
+                    )
+                )
             }
-        })
+        }
     }
 
     private fun provSelected() {
@@ -113,8 +108,7 @@ class NWSObsSitesActivity : BaseActivity() {
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
         }
-        ca = SingleTextAdapter(listCity)
-        recyclerView.adapter = ca
+        recyclerView.refreshList(listCity)
         siteDisplay = true
     }
 } 

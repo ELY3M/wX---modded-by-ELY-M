@@ -54,13 +54,9 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
     private var timePeriod = 1
     private var firstRun = false
     private var imageLoaded = false
-    private var imgUrl = ""
     private lateinit var img: TouchImageView2
-    private var title = ""
     private lateinit var actionBack: MenuItem
     private lateinit var actionForward: MenuItem
-    private var imgIdx = 0
-    private var imgGroupIdx = 0
     private lateinit var drw: ObjectNavDrawerCombo
     private lateinit var contextg: Context
 
@@ -86,11 +82,6 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
                 if (img.currentZoom < 1.01f) showPrevImg()
             }
         })
-        title = Utility.readPref(this, "WPG_IMG_FAV_TITLE", UtilityWPCImages.labels[0])
-        imgUrl = Utility.readPref(this, "WPG_IMG_FAV_URL", UtilityWPCImages.urls[0])
-        imgIdx = Utility.readPref(this, "WPG_IMG_IDX", 0)
-        imgGroupIdx = Utility.readPref(this, "WPG_IMG_GROUPIDX", 0)
-        setTitle(title)
         val menu = toolbarBottom.menu
         actionBack = menu.findItem(R.id.action_back)
         actionForward = menu.findItem(R.id.action_forward)
@@ -101,63 +92,44 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
             this,
             UtilityWPCImages.groups,
             UtilityWPCImages.longCodes,
-            UtilityWPCImages.shortCodes
+            UtilityWPCImages.shortCodes,
+            this,
+            "WPG_IMG"
         )
-        drw.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
-            drw.drawerLayout.closeDrawer(drw.listView)
-            imgUrl = drw.getToken(groupPosition, childPosition)
-            title = drw.getLabel(groupPosition, childPosition)
-            imgIdx = childPosition
-            imgGroupIdx = groupPosition
-            getContent()
-            true
-        }
+        drw.setListener(::getContentFixThis)
         toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
         toolbarBottom.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
-        selectItem(findPosn(imgUrl))
+        getContent()
     }
 
-    private fun findPosn(url: String) =
-        (0 until UtilityWPCImages.urls.size).firstOrNull { UtilityWPCImages.urls[it] == url }
-            ?: 0
-
-    private fun selectItem(position: Int) {
-        drw.listView.setItemChecked(position, false)
-        drw.drawerLayout.closeDrawer(drw.listView)
-        title = UtilityWPCImages.labels[position]
-        imgUrl = UtilityWPCImages.urls[position]
+    private fun getContentFixThis() {
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-
         val getUrl: String
-
-        setTitle(title)
+        title = drw.getLabel()
         when {
-            imgUrl.contains("http://graphical.weather.gov/images/conus/") -> {
-                getUrl = imgUrl + timePeriod + "_conus.png"
+            drw.getUrl().contains("http://graphical.weather.gov/images/conus/") -> {
+                getUrl = drw.getUrl() + timePeriod + "_conus.png"
                 actionBack.isVisible = true
                 actionForward.isVisible = true
             }
-            imgUrl.contains("aviationweather") -> {
+            drw.getUrl().contains("aviationweather") -> {
                 actionBack.isVisible = true
                 actionForward.isVisible = true
-                getUrl = imgUrl
+                getUrl = drw.getUrl()
             }
             else -> {
                 actionBack.isVisible = false
                 actionForward.isVisible = false
-                getUrl = imgUrl
+                getUrl = drw.getUrl()
             }
         }
-        Utility.writePref(contextg, "WPG_IMG_FAV_TITLE", title)
-        Utility.writePref(contextg, "WPG_IMG_FAV_URL", imgUrl)
-        Utility.writePref(contextg, "WPG_IMG_IDX", imgIdx)
-        Utility.writePref(contextg, "WPG_IMG_GROUPIDX", imgGroupIdx)
-
+        Utility.writePref(contextg, "WPG_IMG_FAV_URL", drw.getUrl())
+        Utility.writePref(contextg, "WPG_IMG_IDX", drw.imgIdx)
+        Utility.writePref(contextg, "WPG_IMG_GROUPIDX", drw.imgGroupIdx)
         bitmap = withContext(Dispatchers.IO) { getUrl.getImage() }
-
         img.setImageBitmap(bitmap)
         if (!firstRun) {
             img.setZoom("WPCIMG")
@@ -182,25 +154,21 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
         when (item.itemId) {
             R.id.action_forward -> {
                 timePeriod += 1
-                imgIdx += 1
-                if (imgUrl.contains("aviationweather")) {
-                    if (imgIdx >= numAviationImg) {
-                        imgIdx = 0
+                drw.imgIdx += 1
+                if (drw.getUrl().contains("aviationweather")) {
+                    if (drw.imgIdx >= numAviationImg) {
+                        drw.imgIdx = 0
                     }
-                    imgUrl = UtilityWPCImages.shortCodes[imgGroupIdx][imgIdx]
-                    title = UtilityWPCImages.longCodes[imgGroupIdx][imgIdx]
                 }
                 getContent()
             }
             R.id.action_back -> {
                 timePeriod--
-                imgIdx--
-                if (imgUrl.contains("aviationweather")) {
-                    if (imgIdx < 0) {
-                        imgIdx = numAviationImg - 1
+                drw.imgIdx--
+                if (drw.getUrl().contains("aviationweather")) {
+                    if (drw.imgIdx < 0) {
+                        drw.imgIdx = numAviationImg - 1
                     }
-                    imgUrl = UtilityWPCImages.shortCodes[imgGroupIdx][imgIdx]
-                    title = UtilityWPCImages.longCodes[imgGroupIdx][imgIdx]
                 }
                 getContent()
             }
@@ -214,7 +182,7 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
                             fireScreenCaptureIntent()
                     }
                 } else
-                    UtilityShare.shareText(this, title, "", bitmap)
+                    UtilityShare.shareText(this, drw.getLabel(), "", bitmap)
             }
             else -> return super.onOptionsItemSelected(item)
         }
@@ -238,27 +206,23 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
     }
 
     private fun showNextImg() {
-        imgIdx += 1
-        if (UtilityWPCImages.shortCodes[imgGroupIdx][imgIdx] == "") {
-            imgIdx = 0
+        drw.imgIdx += 1
+        if (UtilityWPCImages.shortCodes[drw.imgGroupIdx][drw.imgIdx] == "") {
+            drw.imgIdx = 0
         }
-        imgUrl = UtilityWPCImages.shortCodes[imgGroupIdx][imgIdx]
-        title = UtilityWPCImages.longCodes[imgGroupIdx][imgIdx]
         getContent()
     }
 
     private fun showPrevImg() {
-        imgIdx -= 1
-        if (imgIdx == -1) {
-            for (j in 0 until UtilityWPCImages.shortCodes[imgGroupIdx].size) {
-                if (UtilityWPCImages.shortCodes[imgGroupIdx][j] == "") {
-                    imgIdx = j - 1
+        drw.imgIdx -= 1
+        if (drw.imgIdx == -1) {
+            for (j in 0 until UtilityWPCImages.shortCodes[drw.imgGroupIdx].size) {
+                if (UtilityWPCImages.shortCodes[drw.imgGroupIdx][j] == "") {
+                    drw.imgIdx = j - 1
                     break
                 }
             }
         }
-        imgUrl = UtilityWPCImages.shortCodes[imgGroupIdx][imgIdx]
-        title = UtilityWPCImages.longCodes[imgGroupIdx][imgIdx]
         getContent()
     }
 }

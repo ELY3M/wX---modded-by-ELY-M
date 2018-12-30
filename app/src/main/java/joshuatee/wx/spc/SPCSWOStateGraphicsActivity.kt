@@ -32,16 +32,13 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
-import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectSpinner
-import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.Location
-import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 
 import joshuatee.wx.STATE_ARR
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 import kotlinx.coroutines.*
 
@@ -60,12 +57,10 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var turlDay = ""
     private var imgUrl = ""
-    private lateinit var img: TouchImageView2
+    private lateinit var img: ObjectTouchImageView
     private var nws1StateCurrent = ""
     private var bitmap = UtilityImg.getBlankBitmap()
     private var firstTime = true
-    private var firstRun = false
-    private var imageLoaded = false
     private val imgPrefToken = "SWO_STATE"
 
     @SuppressLint("MissingSuperCall")
@@ -76,7 +71,7 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
         turlDay = turl[0]
         val nws1Current = Location.wfo
         nws1StateCurrent = Utility.readPref(this, "NWS_LOCATION_$nws1Current", "").split(",")[0]
-        img = findViewById(R.id.iv)
+        img = ObjectTouchImageView(this, this, R.id.iv)
         img.setOnClickListener(this)
         val spinner1 = ObjectSpinner(this, this, R.id.spinner1, STATE_ARR, nws1StateCurrent)
         spinner1.setOnItemSelectedListener(this)
@@ -91,13 +86,9 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
         title = "$nws1StateCurrent SWO D$turlDay"
         imgUrl = UtilitySPCSWO.getSWOStateURL(nws1StateCurrent, turlDay)
         bitmap = withContext(Dispatchers.IO) { imgUrl.getImage() }
-        img.visibility = View.VISIBLE
-        img.setImageBitmap(bitmap)
-        if (!firstRun) {
-            img.setZoom(imgPrefToken)
-            firstRun = true
-        }
-        imageLoaded = true
+        img.img.visibility = View.VISIBLE
+        img.setBitmap(bitmap)
+        img.firstRunSetZoomPosn(imgPrefToken)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -118,6 +109,7 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
             firstTime = false
         }
         img.setMaxZoom(3.0f)
+        img.setZoom(1.0f)
         nws1StateCurrent = MyApplication.colon.split(STATE_ARR[pos])[0]
         getContent()
     }
@@ -131,9 +123,7 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
     }
 
     override fun onStop() {
-        if (imageLoaded) {
-            UtilityImg.imgSavePosnZoom(this, img, imgPrefToken)
-        }
+        img.imgSavePosnZoom(this, imgPrefToken)
         super.onStop()
     }
 }

@@ -23,15 +23,13 @@ package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import joshuatee.wx.*
 
 import joshuatee.wx.models.UtilityModelsSPCSREFInterface
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.SingleTextAdapter
 
 import joshuatee.wx.spc.UtilitySPCMESO
+import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
 
 class FavAddActivity : BaseActivity() {
@@ -91,18 +89,7 @@ class FavAddActivity : BaseActivity() {
                 dataTokens = UtilitySPCMESO.params
             }
         }
-        val recyclerView: RecyclerView = findViewById(R.id.card_list)
-        recyclerView.setHasFixedSize(true)
-        val llm = LinearLayoutManager(this)
-        llm.orientation = RecyclerView.VERTICAL
-        recyclerView.layoutManager = llm
-        val ca = SingleTextAdapter(data)
-        recyclerView.adapter = ca
-        ca.setOnItemClickListener(object : SingleTextAdapter.MyClickListener {
-            override fun onItemClick(position: Int) {
-                itemClicked(position)
-            }
-        })
+        ObjectRecyclerView(this, this, R.id.card_list, data.toMutableList(), ::itemClicked)
     }
 
     private fun itemClicked(position: Int) {

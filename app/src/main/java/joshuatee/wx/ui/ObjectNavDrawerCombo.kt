@@ -22,6 +22,7 @@
 package joshuatee.wx.ui
 
 import android.app.Activity
+import android.content.Context
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import android.util.SparseArray
@@ -30,17 +31,22 @@ import joshuatee.wx.util.MyExpandableListAdapter
 
 import joshuatee.wx.R
 import joshuatee.wx.util.Group
+import joshuatee.wx.util.Utility
 
 class ObjectNavDrawerCombo(
     activity: Activity,
     items: SparseArray<Group>,
     private val labels: Array<Array<String>>,
-    private val tokens: Array<Array<String>>
+    private val tokens: Array<Array<String>>,
+    context: Context,
+    prefPrefix: String
 ) {
 
     val drawerLayout: DrawerLayout = activity.findViewById(R.id.drawer_layout)
     val listView: ExpandableListView = activity.findViewById(R.id.left_drawer)
     val actionBarDrawerToggle: ActionBarDrawerToggle
+    var imgIdx: Int
+    var imgGroupIdx: Int
 
     init {
         listView.setAdapter(MyExpandableListAdapter(activity, items))
@@ -51,11 +57,32 @@ class ObjectNavDrawerCombo(
             R.string.drawer_close
         )
         drawerLayout.addDrawerListener(actionBarDrawerToggle)
+        if (prefPrefix != "") {
+            imgIdx = Utility.readPref(context, "${prefPrefix}_IDX", 0)
+            imgGroupIdx = Utility.readPref(context, "${prefPrefix}_GROUPIDX", 0)
+        } else {
+            imgIdx = 0
+            imgGroupIdx = 0
+        }
     }
 
     fun getLabel(grp: Int, ch: Int): String = labels[grp][ch]
 
     fun getToken(grp: Int, ch: Int): String = tokens[grp][ch]
+
+    fun getUrl(): String = getToken(imgGroupIdx, imgIdx)
+
+    fun getLabel(): String = getLabel(imgGroupIdx, imgIdx)
+
+    fun setListener(fn: () -> Unit) {
+        listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
+            drawerLayout.closeDrawer(listView)
+            imgIdx = childPosition
+            imgGroupIdx = groupPosition
+            fn()
+            true
+        }
+    }
 }
 
 

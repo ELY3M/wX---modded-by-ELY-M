@@ -1046,6 +1046,7 @@ class WXGLRender(private val context: Context) : Renderer {
         hiBuffers.lenInit = 0f //MyApplication.radarHiSize.toFloat()
         val stormList = WXGLNexradLevel3HailIndex.decodeAndPlot(context, rid, idxStr)
         hiBuffers.setXYList(stormList)
+        WXGLNexradLevel3HailIndex.hailList
         constructMarker(hiBuffers)
     }
 

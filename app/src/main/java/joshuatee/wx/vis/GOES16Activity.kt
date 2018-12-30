@@ -29,17 +29,13 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.radar.VideoRecordActivity
-import joshuatee.wx.ui.ObjectNavDrawer
-import joshuatee.wx.ui.TouchImageView2
-import joshuatee.wx.ui.UtilityToolbar
-import joshuatee.wx.ui.OnSwipeTouchListener
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
@@ -52,9 +48,7 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener,
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
-    private var firstRun = false
-    private var imageLoaded = false
-    private lateinit var img: TouchImageView2
+    private lateinit var img: ObjectTouchImageView
     private var animDrawable = AnimationDrawable()
     private lateinit var drw: ObjectNavDrawer
     private var sector = "cgl"
@@ -75,27 +69,14 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener,
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
-        img = findViewById(R.id.iv)
-        img.setMaxZoom(8f)
-        img.setOnClickListener(this)
-        img.setOnTouchListener(object : OnSwipeTouchListener(this) {
-            override fun onSwipeLeft() {
-                if (img.currentZoom < 1.01f) UtilityImg.showNextImg(drw, ::getContentFixThis)
-            }
-
-            override fun onSwipeRight() {
-                if (img.currentZoom < 1.01f) UtilityImg.showPrevImg(drw, ::getContentFixThis)
-            }
-        })
         activityArguments = intent.getStringArrayExtra(RID)
         drw = ObjectNavDrawer(this, UtilityGOES16.labels, UtilityGOES16.codes)
+        img = ObjectTouchImageView(this, this, R.id.iv, drw, "")
+        img.setOnClickListener(this)
+        img.setMaxZoom(8f)
+        img.setListener(this, drw, ::getContentFixThis)
         readPrefs(this)
-        drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            drw.listView.setItemChecked(position, true)
-            drw.drawerLayout.closeDrawer(drw.listView)
-            drw.index = position
-            getContent(sector)
-        }
+        drw.setListener(::getContentFixThis)
         getContent(sector)
     }
 
@@ -110,12 +91,8 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener,
         toolbar.subtitle = drw.getLabel()
         val url = withContext(Dispatchers.IO) { UtilityGOES16.getUrl(drw.getUrl(), sector) }
         bitmap = withContext(Dispatchers.IO) { url.getImage() }
-        img.setImageBitmap(bitmap)
-        if (!firstRun) {
-            img.setZoom("GOES16_IMG")
-            firstRun = true
-        }
-        imageLoaded = true
+        img.setBitmap(bitmap)
+        img.firstRunSetZoomPosn("GOES16_IMG")
         if (oldSector != sector) {
             img.setZoom(1.0f)
             oldSector = sector
@@ -213,7 +190,7 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener,
     }
 
     override fun onStop() {
-        if (imageLoaded) UtilityImg.imgSavePosnZoom(this, img, "GOES16_IMG")
+        img.imgSavePosnZoom(this, "GOES16_IMG")
         super.onStop()
     }
 

@@ -24,8 +24,6 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.SearchView
 import android.view.Menu
 import android.view.View
@@ -47,6 +45,7 @@ import joshuatee.wx.radar.LatLon
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectFab
+import joshuatee.wx.ui.ObjectRecyclerViewGeneric
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMap
 import joshuatee.wx.util.UtilityTime
@@ -58,7 +57,7 @@ class SpottersActivity : BaseActivity() {
     private lateinit var ca: AdapterSpotter
     private var spotterlist = mutableListOf<Spotter>()
     private var spotterlist2 = mutableListOf<Spotter>()
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: ObjectRecyclerViewGeneric
     private var actionMode = ActionMode.RADAR
     private var firstTime = true
 
@@ -91,11 +90,7 @@ class SpottersActivity : BaseActivity() {
         ObjectFab(this, this, R.id.fab_map, View.OnClickListener { toggleMode(ActionMode.MAP) })
         ObjectFab(this, this, R.id.fab_radar, View.OnClickListener { toggleMode(ActionMode.RADAR) })
         ObjectFab(this, this, R.id.fab_reports, View.OnClickListener { reportFAB() })
-        recyclerView = findViewById(R.id.card_list)
-        recyclerView.setHasFixedSize(true)
-        val linearLayoutManager = LinearLayoutManager(this)
-        linearLayoutManager.orientation = RecyclerView.VERTICAL
-        recyclerView.layoutManager = linearLayoutManager
+        recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
         getContent()
     }
 
@@ -112,7 +107,7 @@ class SpottersActivity : BaseActivity() {
         spotterlist = withContext(Dispatchers.IO) { UtilitySpotter.spotterData }
         markFavorites()
         ca = AdapterSpotter(spotterlist)
-        recyclerView.adapter = ca
+        recyclerView.recyclerView.adapter = ca
         title = spotterlist.size.toString() + " spotters active " + UtilityTime.gmtTime("HH:mm")
         ca.setOnItemClickListener(object : AdapterSpotter.MyClickListener {
             override fun onItemClick(position: Int) {

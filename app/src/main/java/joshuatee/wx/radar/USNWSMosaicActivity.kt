@@ -29,7 +29,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.view.View.OnClickListener
-import android.widget.AdapterView
 import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
@@ -55,14 +54,12 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener,
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var animRan = false
     private var animDrawable = AnimationDrawable()
-    private lateinit var img: TouchImageView2
+    private lateinit var img: ObjectTouchImageView
     private var nwsRadarMosaicSectorLabelCurrent = ""
     private var bitmap = UtilityImg.getBlankBitmap()
-    private var imageLoaded = false
     private var doNotSavePref = false
     private lateinit var contextg: Context
     private lateinit var drw: ObjectNavDrawer
-    private var firstRun = false
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,18 +73,6 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener,
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
-        img = findViewById(R.id.iv)
-        img.setOnClickListener(this)
-        img.setMaxZoom(8.0f)
-        img.setOnTouchListener(object : OnSwipeTouchListener(this) {
-            override fun onSwipeLeft() {
-                if (img.currentZoom < 1.01f) UtilityImg.showNextImg(drw, ::getContentFixThis)
-            }
-
-            override fun onSwipeRight() {
-                if (img.currentZoom < 1.01f) UtilityImg.showPrevImg(drw, ::getContentFixThis)
-            }
-        })
         val activityArguments = intent.getStringArrayExtra(URL)
         if (activityArguments == null) {
             nwsRadarMosaicSectorLabelCurrent =
@@ -124,15 +109,14 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener,
             }
         }
         drw = ObjectNavDrawer(this, UtilityUSImgNWSMosaic.labels, UtilityUSImgNWSMosaic.sectors)
+        img = ObjectTouchImageView(this, this, R.id.iv, drw, "")
+        img.setMaxZoom(8.0f)
+        img.setOnClickListener(this)
+        img.setListener(this, drw, ::getContentFixThis)
         drw.index = findPosition(nwsRadarMosaicSectorLabelCurrent)
-        drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            drw.listView.setItemChecked(position, false)
-            drw.drawerLayout.closeDrawer(drw.listView)
-            drw.index = position
-            img.setZoom(1.0f)
-            getContent()
-        }
+        drw.setListener(::getContentFixThis)
         getContent()
+        // FIXME how to handle this on sector change img.setZoom(1.0f)
     }
 
     private fun getContentFixThis() {
@@ -170,13 +154,9 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener,
                 drw.getLabel()
             )
         }
-        img.setImageBitmap(bitmap)
+        img.setBitmap(bitmap)
         animRan = false
-        if (!firstRun) {
-            img.setZoom("NWSRADMOS")
-            firstRun = true
-        }
-        imageLoaded = true
+        img.firstRunSetZoomPosn("OBS")
     }
 
     private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
@@ -250,9 +230,7 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener,
     }
 
     override fun onStop() {
-        if (imageLoaded) {
-            UtilityImg.imgSavePosnZoom(this, img, "NWSRADMOS")
-        }
+        img.imgSavePosnZoom(this, "NWSRADMOS")
         super.onStop()
     }
 }

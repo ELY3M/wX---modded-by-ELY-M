@@ -82,7 +82,7 @@ object WXGLNexradLevel3HailIndex {
         val location = UtilityLocation.getSiteLocation(context, rid)
         //make sure we clear the list or we get duplicate texts
         hailList.clear()
-        //File("/sdcard/wX/hail").copyTo(File("/data/user/0/joshuatee.wx/files/nids_hi_tab0"), true);
+        //File("/sdcard/wX/hail2").copyTo(File("/data/user/0/joshuatee.wx/files/nids_hi_tab0"), true);
         WXGLDownload.getNidsTab(context, "HI", rid, hiBaseFn + fnSuffix)
         val dis: UCARRandomAccessFile
         val posn: List<String>

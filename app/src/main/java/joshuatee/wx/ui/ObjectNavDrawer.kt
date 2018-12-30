@@ -23,6 +23,7 @@ package joshuatee.wx.ui
 
 import android.app.Activity
 import android.content.Context
+import android.widget.AdapterView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import android.widget.ArrayAdapter
@@ -82,6 +83,15 @@ class ObjectNavDrawer(activity: Activity, private var labels: List<String>) {
     fun getUrlCount(): Int = tokens.size
 
     fun getLabel(): String = labels[index]
+
+    fun setListener(fn: () -> Unit) {
+        listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            listView.setItemChecked(position, false)
+            drawerLayout.closeDrawer(listView)
+            index = position
+            fn()
+        }
+    }
 }
 
 

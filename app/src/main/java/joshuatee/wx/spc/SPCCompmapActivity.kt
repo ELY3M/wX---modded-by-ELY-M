@@ -33,7 +33,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectNavDrawer
-import joshuatee.wx.ui.TouchImageView2
+import joshuatee.wx.ui.ObjectTouchImageView
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
@@ -43,9 +43,7 @@ class SPCCompmapActivity : BaseActivity() {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var layerStr = ""
-    private var firstRun = false
-    private var imageLoaded = false
-    private lateinit var img: TouchImageView2
+    private lateinit var img: ObjectTouchImageView
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var drw: ObjectNavDrawer
     private var paramList = mutableListOf<String>()
@@ -77,7 +75,7 @@ class SPCCompmapActivity : BaseActivity() {
             }
         }
         toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
-        img = findViewById(R.id.iv)
+        img = ObjectTouchImageView(this, this, R.id.iv)
         layerStr = Utility.readPref(this, "SPCCOMPMAP_LAYERSTR", "a7:a19:") // mslp, hpc fronts
         setupInitLayerString()
         getContent()
@@ -105,10 +103,10 @@ class SPCCompmapActivity : BaseActivity() {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         bitmap = withContext(Dispatchers.IO) { UtilitySPCCompmap.getImage(contextg, layerStr) }
-        img.setImageBitmap(bitmap)
+        img.setBitmap(bitmap)
         img.setMaxZoom(4f)
-        firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "SPCCOMPMAP")
-        imageLoaded = true
+        img.firstRunSetZoomPosn("SPCCOMPMAP")
+        Utility.writePref(contextg, "SPCCOMPMAP_LAYERSTR", layerStr)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -133,10 +131,7 @@ class SPCCompmapActivity : BaseActivity() {
     }
 
     override fun onStop() {
-        if (imageLoaded) {
-            UtilityImg.imgSavePosnZoom(this, img, "SPCCOMPMAP")
-            Utility.writePref(this, "SPCCOMPMAP_LAYERSTR", layerStr)
-        }
+        img.imgSavePosnZoom(this, "SPCCOMPMAP")
         super.onStop()
     }
 }

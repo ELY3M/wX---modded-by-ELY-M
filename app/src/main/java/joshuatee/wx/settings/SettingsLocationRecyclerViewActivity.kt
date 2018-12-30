@@ -29,8 +29,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 
 import joshuatee.wx.R
@@ -39,6 +37,7 @@ import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.ActionMode
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectFab
+import joshuatee.wx.ui.ObjectRecyclerViewGeneric
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 
@@ -48,7 +47,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     //
 
     private val locArr = mutableListOf<String>()
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: ObjectRecyclerViewGeneric
     private lateinit var ca: SettingsLocationAdapterList
     private var actionMode = ActionMode.SELECT
     private val selectStr = "Select mode"
@@ -80,13 +79,9 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         }
         toolbar.subtitle = selectStr
         updateList()
-        recyclerView = findViewById(R.id.card_list)
-        recyclerView.setHasFixedSize(true)
-        val llm = LinearLayoutManager(this)
-        llm.orientation = RecyclerView.VERTICAL
-        recyclerView.layoutManager = llm
+        recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
         ca = SettingsLocationAdapterList(locArr)
-        recyclerView.adapter = ca
+        recyclerView.recyclerView.adapter = ca
         updateTitle()
         ca.setOnItemClickListener(object : SettingsLocationAdapterList.MyClickListener {
             override fun onItemClick(position: Int) {
@@ -116,7 +111,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     override fun onRestart() {
         updateList()
         ca = SettingsLocationAdapterList(locArr)
-        recyclerView.adapter = ca
+        recyclerView.recyclerView.adapter = ca
         updateTitle()
         Location.refreshLocationData(this)
         super.onRestart()
@@ -169,7 +164,10 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
                     updateTitle()
                     UtilityWXJobService.startService(this)
                 } else {
-                    UtilityUI.makeSnackBar(recyclerView, "Must have at least one location.")
+                    UtilityUI.makeSnackBar(
+                        recyclerView.recyclerView,
+                        "Must have at least one location."
+                    )
                 }
             }
             ActionMode.UP -> {

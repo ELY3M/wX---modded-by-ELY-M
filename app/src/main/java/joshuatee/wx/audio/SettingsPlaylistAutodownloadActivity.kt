@@ -24,26 +24,22 @@ package joshuatee.wx.audio
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import java.util.Calendar
-//import android.app.TimePickerDialog
 import android.content.Context
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectFab
-import joshuatee.wx.ui.SingleTextAdapter
+import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
 
 class SettingsPlaylistAutodownloadActivity : BaseActivity() {
 
     private var currHr: Int = 0
     private var currMin: Int = 0
-    private lateinit var globalc: Context
-    private var ridArr = listOf<String>()
+    private var ridArr = mutableListOf<String>()
     private var ridFav = ""
     private val tokenSep = "T"
     private val prefToken = "PLAYLIST_AUTODOWNLOAD_TIMES"
@@ -52,8 +48,7 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
     private var minute = 0
     private var gposition = 0
     private val modifyModeString = "Modify mode"
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var ca: SingleTextAdapter
+    private lateinit var recyclerView: ObjectRecyclerView
     private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
@@ -66,7 +61,6 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
         )
         contextg = this
         toolbar.subtitle = modifyModeString
-        globalc = this
         ObjectFab(
             this,
             this,
@@ -84,22 +78,11 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
         hour = c.get(Calendar.HOUR_OF_DAY)
         minute = c.get(Calendar.MINUTE)
         updateList()
-        recyclerView = findViewById(R.id.card_list)
-        recyclerView.setHasFixedSize(true)
-        val llm = LinearLayoutManager(this)
-        llm.orientation = RecyclerView.VERTICAL
-        recyclerView.layoutManager = llm
-        ca = SingleTextAdapter(ridArr)
-        recyclerView.adapter = ca
-        ca.setOnItemClickListener(object : SingleTextAdapter.MyClickListener {
-            override fun onItemClick(position: Int) {
-                pickItem(position)
-            }
-        })
+        recyclerView = ObjectRecyclerView(this, this, R.id.card_list, ridArr, ::pickItem)
     }
 
     private fun updateList() {
-        ridArr = ridFav.split(tokenSep.toRegex()).dropLastWhile { it.isEmpty() }
+        ridArr = ridFav.split(tokenSep.toRegex()).dropLastWhile { it.isEmpty() }.toMutableList()
     }
 
     private fun deleteFAB() {
@@ -115,7 +98,7 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
     private fun pickTimeFAB() {
         val mTimePicker: TimePickerDialog
         mTimePicker = TimePickerDialog(
-            globalc,
+            contextg,
             TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
                 if (!ridFav.contains(
                         selectedHour.toString() + ":" + String.format(
@@ -129,8 +112,7 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
                             tokenSep
                     Utility.writePref(this, prefToken, ridFav)
                     updateList()
-                    ca = SingleTextAdapter(ridArr)
-                    recyclerView.adapter = ca
+                    recyclerView.refreshList(ridArr)
                     UtilityPlayListAutoDownload.setAlarm(
                         contextg,
                         ridArr.size - 1,
@@ -156,8 +138,7 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
             ridFav = ridFav.replace(ridArr[position] + tokenSep, "")
             Utility.writePref(this, prefToken, ridFav)
             updateList()
-            ca = SingleTextAdapter(ridArr)
-            recyclerView.adapter = ca
+            recyclerView.refreshList(ridArr)
             UtilityPlayListAutoDownload.setAllAlarms(contextg)
         } else {
             val timeArr = ridArr[position].split(":").dropLastWhile { it.isEmpty() }
@@ -165,7 +146,7 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
             currMin = timeArr[1].toIntOrNull() ?: 0
             val mTimePicker: TimePickerDialog
             mTimePicker = TimePickerDialog(
-                globalc,
+                contextg,
                 TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
                     if (!ridFav.contains(
                             selectedHour.toString() + ":" + String.format(
@@ -192,8 +173,7 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
                         )
                         Utility.writePref(this, prefToken, ridFav)
                         updateList()
-                        ca = SingleTextAdapter(ridArr)
-                        recyclerView.adapter = ca
+                        recyclerView.refreshList(ridArr)
                     }
                 },
                 hour,
@@ -207,8 +187,7 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
             mTimePicker.show()
         }
         updateList()
-        ca = SingleTextAdapter(ridArr)
-        recyclerView.adapter = ca
+        recyclerView.refreshList(ridArr)
     }
 } 
 

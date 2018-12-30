@@ -154,10 +154,8 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun saveLocFromZone(id: Int) = GlobalScope.launch(uiDispatcher) {
-
         var toastStr = ""
         var coord = listOf<String>()
-
         // FIXME remove what does not depend on IO
         withContext(Dispatchers.IO) {
             var locNumIntCurrent = Location.numLocations
@@ -188,7 +186,6 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-
         // FIXME remove what does not depending on IO
         withContext(Dispatchers.IO) {
             bitmap = "http://forecast.weather.gov/wwamap/png/US.png".getImage()

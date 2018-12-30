@@ -33,8 +33,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import android.view.View
@@ -45,14 +43,11 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.activitiesmisc.TextScreenActivity
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.ActionMode
-import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectDialogue
-import joshuatee.wx.ui.ObjectFab
-import joshuatee.wx.ui.UtilityUI
 
 import joshuatee.wx.WFO_ARR
 import joshuatee.wx.NWS_TXT_ARR
 import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 
 class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
@@ -119,18 +114,15 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         toolbar.subtitle = actionMode.getDescription()
         ridFav = Utility.readPref(this, prefToken, "")
         updateList()
-        val recyclerView: RecyclerView = findViewById(R.id.card_list)
-        recyclerView.setHasFixedSize(true)
-        val llm = LinearLayoutManager(this)
-        llm.orientation = RecyclerView.VERTICAL
-        recyclerView.layoutManager = llm
+        val recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
         ca = PlayListAdapter(ridArr)
-        recyclerView.adapter = ca
+        recyclerView.recyclerView.adapter = ca
         ca.setOnItemClickListener(object : PlayListAdapter.MyClickListener {
             override fun onItemClick(position: Int) {
                 prodClicked(position)
             }
         })
+
     }
 
     private fun updateList() {

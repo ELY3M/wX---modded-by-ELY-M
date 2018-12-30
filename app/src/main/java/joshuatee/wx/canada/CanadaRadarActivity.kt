@@ -37,14 +37,11 @@ import joshuatee.wx.R
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.settings.FavAddActivity
 import joshuatee.wx.settings.FavRemoveActivity
-import joshuatee.wx.ui.ObjectSpinner
-import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.radar.VideoRecordActivity
-import joshuatee.wx.ui.ObjectImageMap
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
@@ -64,14 +61,13 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
     private var animDrawable: AnimationDrawable = AnimationDrawable()
     private var firstTime = true
     private var animRan = false
-    private lateinit var img: TouchImageView2
+    private lateinit var img: ObjectTouchImageView
     private var rad = ""
     private var rid1 = ""
     private var mosaicShown = false
     private var mosaicShownId = ""
     private var imageType = "rad"
     private var ridFav = ""
-    private var firstRun = false
     private lateinit var imageMap: ObjectImageMap
     private var ridArrLoc = listOf<String>()
     private lateinit var star: MenuItem
@@ -92,7 +88,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
-        img = findViewById(R.id.iv)
+        img = ObjectTouchImageView(this, this, R.id.iv)
         img.setOnClickListener(this)
         val args = intent.getStringArrayExtra(RID)
         rid1 = args[0]
@@ -107,7 +103,8 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
             }
         }
         title = "Canada"
-        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img))
+        imageMap =
+                ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
         imageMap.addOnImageMapClickedHandler(object : ImageMap.OnImageMapClickedHandler {
             override fun onImageMapClicked(id: Int, im2: ImageMap) {
                 im2.visibility = View.GONE
@@ -142,9 +139,9 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                 url.getImage()
             }
         }
-        img.visibility = View.VISIBLE
-        img.setImageBitmap(bitmap)
-        firstRun = UtilityImg.firstRunSetZoomPosn(firstRun, img, "CA_LAST_RID")
+        img.img.visibility = View.VISIBLE
+        img.setBitmap(bitmap)
+        img.firstRunSetZoomPosn("CA_LAST_RID")
         animRan = false
     }
 
@@ -153,7 +150,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
             mosaicShownId = sector
             bitmap = UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(contextg, sector)
         }
-        img.setImageBitmap(bitmap)
+        img.setBitmap(bitmap)
         animRan = false
     }
 
@@ -170,11 +167,6 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                 imageType = "rad"
                 getContent()
             }
-            /* R.id.action_ir -> {
-                mosaicShown = false
-                imageType = "ir"
-                getContent()
-            }*/
             R.id.action_wv -> {
                 mosaicShown = false
                 imageType = "wv"
@@ -331,7 +323,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
 
     override fun onStop() {
         UtilityPreferences.writePrefs(this, listOf("CA_LAST_RID", rid1, "CA_LAST_RID_URL", url))
-        UtilityImg.imgSavePosnZoom(this, img, "CA_LAST_RID")
+        img.imgSavePosnZoom(this, "CA_LAST_RID")
         super.onStop()
     }
 }

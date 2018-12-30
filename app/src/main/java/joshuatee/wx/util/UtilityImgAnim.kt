@@ -33,6 +33,7 @@ import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.ui.TouchImageView2
 
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.ui.ObjectTouchImageView
 
 object UtilityImgAnim {
 
@@ -147,6 +148,13 @@ object UtilityImgAnim {
     }
 
     fun startAnimation(animDrawable: AnimationDrawable, img: TouchImageView2): Boolean {
+        img.setImageDrawable(animDrawable)
+        animDrawable.isOneShot = false
+        animDrawable.start()
+        return true
+    }
+
+    fun startAnimation(animDrawable: AnimationDrawable, img: ObjectTouchImageView): Boolean {
         img.setImageDrawable(animDrawable)
         animDrawable.isOneShot = false
         animDrawable.start()
