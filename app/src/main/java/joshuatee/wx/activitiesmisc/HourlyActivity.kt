@@ -35,7 +35,6 @@ import joshuatee.wx.settings.SettingsMainActivity
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectCardVerticalText
-import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.UtilityShare
 
 import com.jjoe64.graphview.series.DataPoint
@@ -81,22 +80,18 @@ class HourlyActivity : BaseActivity() {
         cv1 = ObjectCard(this, color, R.id.cv1)
         cv1.setVisibility(View.GONE)
         val linearLayout: LinearLayout = findViewById(R.id.ll)
-        c0 = ObjectCardVerticalText(this, 5)
-        linearLayout.addView(c0.card)
-        c0.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar) })
+        c0 = ObjectCardVerticalText(this, 5, linearLayout, toolbar)
         title = "Hourly"
         toolbar.subtitle = Location.getName(locatioNumber)
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-
         val result1 = async(Dispatchers.IO) { UtilityUSHourly.getString(locatioNumber) }
         htmlShare = result1.await()
         val result2 =
             async(Dispatchers.IO) { UtilityUSHourly.getStringForActivity(htmlShare[1]) }
         hourlyData = result2.await()
-
         cv1.setVisibility(View.VISIBLE)
         c0.setText(
             listOf(

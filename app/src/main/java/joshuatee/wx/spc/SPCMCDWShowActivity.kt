@@ -36,12 +36,9 @@ import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTTS
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.ui.UtilityToolbar
-import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
@@ -77,24 +74,16 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        c0 = ObjectCardImage(this)
-        c1 = ObjectCardText(this)
         linearLayout = findViewById(R.id.ll)
-        linearLayout.addView(c0.card)
-        linearLayout.addView(c1.card)
-        c1.setOnClickListener(View.OnClickListener {
-            UtilityToolbar.showHide(
-                toolbar,
-                toolbarBottom
-            )
-        })
+        c0 = ObjectCardImage(this, linearLayout)
+        c1 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         activityArguments = intent.getStringArrayExtra(NO)
         number = activityArguments[0]
         when (activityArguments[2]) {
             "MCD" -> objWatch = ObjectWatchProduct(PolygonType.MCD, number)
             
 	    //FIXME Do we need WATCH?  
-	    "WATCH" -> objWatch = ObjectWatchProduct(PolygonType.WATCH, number)
+	    //"WATCH" -> objWatch = ObjectWatchProduct(PolygonType.WATCH, number)
             "WATCH_TOR" -> objWatch = ObjectWatchProduct(PolygonType.WATCH_TOR, number)
             "WATCH_SVR" -> objWatch = ObjectWatchProduct(PolygonType.WATCH_SVR, number)
             "MPD" -> objWatch = ObjectWatchProduct(PolygonType.MPD, number)
@@ -138,23 +127,15 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val itemStr = item.title.toString()
         (0 until objWatch.wfoArr.size - 1)
             .filter { itemStr.contains(objWatch.wfoArr[it]) }
-            .forEach { saveLocation(objWatch.wfoArr[it]) }
+            .forEach {
+                UtilityLocation.saveLocationForMcd(
+                    objWatch.wfoArr[it],
+                    contextg,
+                    linearLayout,
+                    uiDispatcher
+                )
+            }
         return true
-    }
-
-    private fun saveLocation(location: String) = GlobalScope.launch(uiDispatcher) {
-        // FIXME not everything needs to be in IO
-        var toastStr = ""
-        withContext(Dispatchers.IO) {
-            var locNumIntCurrent = Location.numLocations
-            locNumIntCurrent += 1
-            val locNumToSaveStr = locNumIntCurrent.toString()
-            val loc = Utility.readPref(contextg, "NWS_LOCATION_$location", "")
-            val addrSend = loc.replace(" ", "+")
-            val xyStr = UtilityLocation.getXYFromAddressOSM(addrSend)
-            toastStr = Location.locationSave(contextg, locNumToSaveStr, xyStr[0], xyStr[1], loc)
-        }
-        UtilityUI.makeSnackBar(linearLayout, toastStr)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

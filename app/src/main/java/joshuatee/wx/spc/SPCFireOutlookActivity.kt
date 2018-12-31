@@ -55,7 +55,6 @@ class SPCFireOutlookActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         contextg = this
-        title = getString(UtilitySPCFireOutlook.activityTitle)
         linearLayout = findViewById(R.id.ll)
         title = "SPC"
         toolbar.subtitle = "Fire Weather Outlook"
@@ -64,9 +63,8 @@ class SPCFireOutlookActivity : BaseActivity() {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) { UtilitySPCFireOutlook.imageUrls.mapTo(bitmaps) { it.getImage() } }
-        var card: ObjectCardImage
         bitmaps.forEach { bitmap ->
-            card = ObjectCardImage(contextg, bitmap)
+            val card = ObjectCardImage(contextg, linearLayout, bitmap)
             val prod = UtilitySPCFireOutlook.textProducts[bitmaps.indexOf(bitmap)]
             card.setOnClickListener(View.OnClickListener {
                 ObjectIntent(
@@ -76,7 +74,6 @@ class SPCFireOutlookActivity : BaseActivity() {
                     arrayOf(prod)
                 )
             })
-            linearLayout.addView(card.card)
         }
     }
 

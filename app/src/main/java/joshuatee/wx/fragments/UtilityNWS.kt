@@ -24,11 +24,10 @@ package joshuatee.wx.fragments
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
-import android.graphics.Typeface
 
-import joshuatee.wx.MyApplication
+import joshuatee.wx.ui.ObjectPaint
+import joshuatee.wx.ui.ObjectPaintStripe
 import joshuatee.wx.ui.UtilityTheme
 import joshuatee.wx.util.UtilityImg
 
@@ -40,14 +39,14 @@ object UtilityNWS {
             return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
         }
         var fn = url.replace("?size=medium", "")
-        fn = fn.replace("?size=small", "")
-        fn = fn.replace("https://api.weather.gov/icons/land/", "")
-        fn = fn.replace("http://api.weather.gov/icons/land/", "")
-        fn = fn.replace("http://nids-wapiapp.bldr.ncep.noaa.gov:9000/icons/land/", "")
-        fn = fn.replace("day/", "")
+            .replace("?size=small", "")
+            .replace("https://api.weather.gov/icons/land/", "")
+            .replace("http://api.weather.gov/icons/land/", "")
+            .replace("http://nids-wapiapp.bldr.ncep.noaa.gov:9000/icons/land/", "")
+            .replace("day/", "")
         if (fn.contains("night")) {
             fn = fn.replace("night/", "n")
-            fn = fn.replace("/", "/n")
+                .replace("/", "/n")
         }
         val fnResId = UtilityNwsIcon.iconMap["$fn.png"]
         bm = if (fnResId == null || fn.contains(",")) {
@@ -112,25 +111,23 @@ object UtilityNWS {
         val bm1Tmp = UtilityImg.loadBM(context, fnResId1, false)
         val bm1 = Bitmap.createBitmap(bm1Tmp, leftCropA, 0, 41, dimens)
         canvas.drawBitmap(bm1, 0f, 0f, Paint(Paint.FILTER_BITMAP_FLAG))
-        val paint = Paint()
-        paint.color = MyApplication.nwsIconTextColor
-        paint.textSize = 14f
-        paint.typeface = Typeface.DEFAULT_BOLD
-        paint.isAntiAlias = true
+        val paint = ObjectPaint()
         var xText = 58
         val yText = 84
         val xTextLeft = 2
         if (num2 == "100") {
             xText = 50
         }
-        val paintStripe = Paint()
-        val red = Color.red(MyApplication.nwsIconBottomColor)
-        val green = Color.green(MyApplication.nwsIconBottomColor)
-        val blue = Color.blue(MyApplication.nwsIconBottomColor)
-        paintStripe.color = Color.argb(200, red, green, blue)
+        val paintStripe = ObjectPaintStripe()
         if (num1 != "") {
-            canvas.drawRect(0f, (dimens - numHeight).toFloat(), 41f, dimens.toFloat(), paintStripe)
-            canvas.drawText("$num1%", xTextLeft.toFloat(), yText.toFloat(), paint)
+            canvas.drawRect(
+                0f,
+                (dimens - numHeight).toFloat(),
+                41f,
+                dimens.toFloat(),
+                paintStripe.paint
+            )
+            canvas.drawText("$num1%", xTextLeft.toFloat(), yText.toFloat(), paint.paint)
         }
         val bm2Tmp = UtilityImg.loadBM(context, fnResId2, false)
         val bm2 = Bitmap.createBitmap(bm2Tmp, leftCropB, 0, 41, dimens) // was 42 change to 40
@@ -141,9 +138,9 @@ object UtilityNWS {
                 (dimens - numHeight).toFloat(),
                 dimens.toFloat(),
                 dimens.toFloat(),
-                paintStripe
+                paintStripe.paint
             )
-            canvas.drawText("$num2%", xText.toFloat(), yText.toFloat(), paint)
+            canvas.drawText("$num2%", xText.toFloat(), yText.toFloat(), paint.paint)
         }
         return bm
     }
@@ -167,30 +164,22 @@ object UtilityNWS {
         val bm1Tmp = UtilityImg.loadBM(context, fnResId1, false)
         val bm1 = Bitmap.createBitmap(bm1Tmp, 0, 0, dimens, dimens) // was 41,dimens
         canvas.drawBitmap(bm1, 0f, 0f, Paint(Paint.FILTER_BITMAP_FLAG))
-        val paint = Paint()
-        paint.color = MyApplication.nwsIconTextColor
-        paint.textSize = 14f
-        paint.typeface = Typeface.DEFAULT_BOLD
-        paint.isAntiAlias = true
+        val paint = ObjectPaint()
         var xText = 58
         val yText = 84
         if (num1 == "100") {
             xText = 50
         }
-        val paintStripe = Paint()
-        val red = Color.red(MyApplication.nwsIconBottomColor)
-        val green = Color.green(MyApplication.nwsIconBottomColor)
-        val blue = Color.blue(MyApplication.nwsIconBottomColor)
-        paintStripe.color = Color.argb(200, red, green, blue)
+        val paintStripe = ObjectPaintStripe()
         if (num1 != "") {
             canvas.drawRect(
                 0f,
                 (dimens - numHeight).toFloat(),
                 dimens.toFloat(),
                 dimens.toFloat(),
-                paintStripe
+                paintStripe.paint
             )
-            canvas.drawText("$num1%", xText.toFloat(), yText.toFloat(), paint)
+            canvas.drawText("$num1%", xText.toFloat(), yText.toFloat(), paint.paint)
         }
         return bm
     }

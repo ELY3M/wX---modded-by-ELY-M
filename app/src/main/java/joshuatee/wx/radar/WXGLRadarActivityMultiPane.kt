@@ -495,6 +495,10 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 numPanes,
                 wxgltextArr
             )
+            if (PolygonType.HAIL_LABELS.pref) UtilityWXGLTextObject.updateHailLabels(
+                    numPanes,
+                    wxgltextArr
+            )
             glv.requestRender()
             setSubTitle()
             animRan = false

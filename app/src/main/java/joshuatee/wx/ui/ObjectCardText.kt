@@ -25,7 +25,9 @@ import android.content.Context
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 
 import joshuatee.wx.MyApplication
@@ -44,9 +46,67 @@ class ObjectCardText(private val context: Context) {
         objCard.addView(tv)
     }
 
+    constructor(
+        context: Context,
+        linearLayout: LinearLayout
+    ) : this(context) {
+        linearLayout.addView(card)
+    }
+
+    constructor(
+        context: Context,
+        linearLayout: LinearLayout,
+        toolbar: Toolbar,
+        toolbarBottom: Toolbar
+    ) : this(context) {
+        linearLayout.addView(card)
+        setOnClickListener(View.OnClickListener {
+            UtilityToolbar.showHide(
+                toolbar,
+                toolbarBottom
+            )
+        })
+    }
+
+    constructor(
+        context: Context,
+        linearLayout: LinearLayout,
+        toolbar: Toolbar,
+        toolbarBottom: Toolbar,
+        text: String
+    ) : this(context) {
+        linearLayout.addView(card)
+        setOnClickListener(View.OnClickListener {
+            UtilityToolbar.showHide(
+                toolbar,
+                toolbarBottom
+            )
+        })
+        setText(text)
+    }
+
+    constructor(
+        context: Context,
+        linearLayout: LinearLayout,
+        toolbar: Toolbar
+    ) : this(context) {
+        linearLayout.addView(card)
+        setOnClickListener(View.OnClickListener {
+            UtilityToolbar.showHide(
+                toolbar
+            )
+        })
+    }
+
     constructor(context: Context, text: String) : this(context) {
         tv.text = text
         tv.isFocusable = false
+    }
+
+    constructor(context: Context, linearLayout: LinearLayout, text: String) : this(context) {
+        tv.text = text
+        tv.isFocusable = false
+        linearLayout.addView(card)
     }
 
     constructor(context: Context, text: String, textSize: Float) : this(context, text) {

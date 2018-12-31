@@ -22,24 +22,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
     >
-
     <include layout="@layout/widget_toolbar_bottom"/>
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@id/toolbar_bottom"
         >
-
         <include layout="@layout/widget_toolbar_top"/>
-
         <ScrollView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:scrollbars="none"
             >
-
             <LinearLayout
                 android:stretchColumns="*"
                 android:orientation="vertical"
@@ -47,14 +42,12 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/padding_ll"
                 >
-
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cv1"
                     android:layout_gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     >
-
                     <LinearLayout
                         android:id="@+id/ll"
                         android:orientation="vertical"
@@ -62,69 +55,7 @@
                         android:layout_height="fill_parent"
                         android:layout_above="@id/toolbar_bottom"
                         >
-
-                  <!--     <TextView
-                            android:id="@+id/title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textIsSelectable="true"
-                            android:paddingLeft="@dimen/padding"
-                            android:paddingTop="@dimen/padding"
-                            android:paddingRight="@dimen/padding"
-                            />
-                        <TextView
-                            android:id="@+id/wfo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textIsSelectable="true"
-                            android:paddingLeft="@dimen/padding"
-                            android:paddingRight="@dimen/padding"
-                            />
-                        <TextView
-                            android:id="@+id/starttime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textIsSelectable="true"
-                            android:paddingLeft="@dimen/padding"
-                            android:paddingRight="@dimen/padding"
-                            />
-                        <TextView
-                            android:id="@+id/endtime"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textIsSelectable="true"
-                            android:paddingLeft="@dimen/padding"
-                            android:paddingRight="@dimen/padding"
-                            android:paddingBottom="@dimen/padding"
-                            />
-
-                        <TextView
-                            android:id="@+id/area"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textIsSelectable="true"
-                            android:padding="@dimen/padding"
-                            />
-
-                        <TextView
-                            android:id="@+id/summary"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textIsSelectable="true"
-                            android:padding="@dimen/padding"
-                            />
-
-                        <TextView
-                            android:id="@+id/instructions"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textIsSelectable="true"
-                            android:padding="@dimen/padding"
-                            /> -->
-
                     </LinearLayout>
-
-
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
         </ScrollView>

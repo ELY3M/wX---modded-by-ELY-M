@@ -39,7 +39,7 @@ internal object UtilityModelSPCHREFInterface {
         ObjectMenuTitle("Winter", 18),
         ObjectMenuTitle("Fire", 11),
         ObjectMenuTitle("Precipitation", 16),
-        ObjectMenuTitle("Storm Attributes", 24)
+        ObjectMenuTitle("Storm Attributes", 26)
     )
     // FIXME should be 4 more params in storm attributes
     var shortCodes = Array(13) { Array(30) { "" } }
@@ -172,22 +172,30 @@ internal object UtilityModelSPCHREFInterface {
         "cref_members namnest",
         "cref_pb40_members",
         "cref_ps",
+
         "ref1km_004hmax_nh40",
         "ref1km_004hmax_pb40_members",
+        "ref1kmmucape_004hmax_nh40_fill",
+
         "ref1km_024hmax_nh40",
         "ref1km_024hmax_pb40_members",
+        "ref1kmmucape_024hmax_nh40_fill",
+
         "uh25_004hmax_max",
         "uh25_004hmax_nh075_fill",
         "uh25_004hmax_nh150_fill",
         "uh25_004hmax_pb075_members,uh25_003hmax_nh075",
         "uh25_004hmax_pb150_members,uh25_003hmax_nh150",
+
         "uh25_024hmax_max,uh25_024hmax_nh075",
         "uh25_024hmax_nh075_fill",
         "uh25_024hmax_nh150_fill",
         "uh25_024hmax_pb075_members,uh25_024hmax_nh075",
         "uh25_024hmax_pb150_members,uh25_024hmax_nh150",
+
         "wspd_004hmax_max",
         "wspd_004hmax_pb30_members",
+
         "wspd_024hmax_max",
         "wspd_024hmax_pb30_members"
     )
@@ -272,28 +280,40 @@ internal object UtilityModelSPCHREFInterface {
         "Reflectivity: namnest",
         "Reflectivity: PB[>40]",
         "Reflectivity: stamps",
+
         "4-hr max Reflectivity: max",
         "4-hr max Reflectivity: PB[>40]",
+        "4-hr max Reflectivity: NP[>40, MUCAPE>50]",
+
         "24-hr max Reflectivity: max",
         "24-hr max Reflectivity: PB[>40]",
+        "24-hr max Reflectivity: NP[>40, MUCAPE>50]",
+
+
         "4-hr max Updraft Helicity (2-5 km): max",
         "4-hr max Updraft Helicity (2-5 km): NP[>75]",
         "4-hr max Updraft Helicity (2-5 km): NP[>150]",
         "4-hr max Updraft Helicity (2-5 km): PB[>75]",
         "4-hr max Updraft Helicity (2-5 km): PB[>150]",
+
         "24-hr max Updraft Helicity (2-5 km): max",
         "24-hr max Updraft Helicity (2-5 km): NP[>75]",
         "24-hr max Updraft Helicity (2-5 km): NP[>150]",
         "24-hr max Updraft Helicity (2-5 km): PB[>75]",
         "24-hr max Updraft Helicity (2-5 km): PB[>150]",
+
         "4-hr max Updraft: max",
         "4-hr max Updraft: PB[>20]",
+
         "24-hr max Updraft: max",
         "24-hr max Updraft: PB[>20]",
+
         "4-hr max Wind Speed: max",
         "4-hr max Wind Speed: PB[>30]",
+
         "24-hr max Wind Speed: max",
         "24-hr max Wind Speed: PB[>30]",
+
         "10m 3-hr max Wind Speed: max PB[>30]",
         "10m 3-hr max Wind Speed: PB[>30]",
         "10m 24-hr max Wind Speed: max",

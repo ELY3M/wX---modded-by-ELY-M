@@ -70,9 +70,8 @@ class SPCSWOSummaryActivity : BaseActivity() {
                 )
             }
         }
-        var card: ObjectCardImage
         bitmaps.forEach { bitmap ->
-            card = ObjectCardImage(contextg, bitmap)
+            val card = ObjectCardImage(contextg, linearLayout, bitmap)
             val day = if (bitmaps.indexOf(bitmap) < 3) {
                 (bitmaps.indexOf(bitmap) + 1).toString()
             } else {
@@ -86,7 +85,6 @@ class SPCSWOSummaryActivity : BaseActivity() {
                     arrayOf(day, "")
                 )
             })
-            linearLayout.addView(card.card)
         }
     }
 

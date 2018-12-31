@@ -31,7 +31,6 @@ import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityString
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
-import joshuatee.wx.util.UtilityLog
 
 internal object UtilityModelESRLInputOutput {
 
@@ -49,32 +48,29 @@ internal object UtilityModelESRLInputOutput {
                 Locale.US
             ) + "_jet&domain=full").getHtml()
         }
-        //UtilityLog.d("wx-model", htmlRunstatus)
         val oldRunTimes: List<String>
-        var sigHtmlTmp = htmlRunstatus.parse(RegExp.eslHrrrPattern1)
+        var html = htmlRunstatus.parse(RegExp.eslHrrrPattern1)
         oldRunTimes = htmlRunstatus.parseColumn(RegExp.eslHrrrPattern2)
-        var year = sigHtmlTmp.parse(RegExp.eslHrrrPattern3)
-        var day = sigHtmlTmp.parse(RegExp.eslHrrrPattern4)
-        var hour = sigHtmlTmp.parse(RegExp.eslHrrrPattern5)
-        var monthStr = sigHtmlTmp.parse(RegExp.eslHrrrPattern6)
+        var year = html.parse(RegExp.eslHrrrPattern3)
+        var day = html.parse(RegExp.eslHrrrPattern4)
+        var hour = html.parse(RegExp.eslHrrrPattern5)
+        var monthStr = html.parse(RegExp.eslHrrrPattern6)
         monthStr = monthStr.replace("Jan", "01").replace("Feb", "02").replace("Mar", "03")
             .replace("Apr", "04")
             .replace("May", "05").replace("Jun", "06").replace("Jul", "07").replace("Aug", "08")
             .replace("Sep", "09").replace("Oct", "10").replace("Nov", "11").replace("Dec", "12")
-        sigHtmlTmp = year + monthStr + day + hour
-        runData.listRunAdd(sigHtmlTmp)
-        runData.mostRecentRun = sigHtmlTmp
-        //runData.imageCompleteInt = UtilityString.parseAndCount(htmlRunstatus, ".(allfields).") - 1
+        html = year + monthStr + day + hour
+        runData.listRunAdd(html)
+        runData.mostRecentRun = html
         runData.imageCompleteInt = UtilityString.parseAndCount(htmlRunstatus, ".($param).") - 3
         runData.imageCompleteStr = runData.imageCompleteInt.toString()
-        if (sigHtmlTmp != "") {
+        if (html != "") {
             var i = 0
             while (i < 12 && i < oldRunTimes.size) {
                 year = oldRunTimes[i].parse(RegExp.eslHrrrPattern3)
                 day = oldRunTimes[i].parse(RegExp.eslHrrrPattern4)
                 hour = oldRunTimes[i].parse(RegExp.eslHrrrPattern5)
                 monthStr = oldRunTimes[i].parse(RegExp.eslHrrrPattern6)
-
                 monthStr = monthStr.replace("Jan", "01").replace("Feb", "02").replace("Mar", "03")
                     .replace("Apr", "04")
                     .replace("May", "05").replace("Jun", "06").replace("Jul", "07")
@@ -84,7 +80,7 @@ internal object UtilityModelESRLInputOutput {
                 runData.listRunAdd(year + monthStr + day + hour)
                 i += 1
             }
-            runData.timeStrConv = sigHtmlTmp.parse("([0-9]{2})$")
+            runData.timeStrConv = html.parse("([0-9]{2})$")
         }
         return runData
     }
@@ -159,10 +155,6 @@ internal object UtilityModelESRLInputOutput {
                     "%20Model%20Fields%20-%20Experimental&maxFcstLen=15&fcstStrLen=-1&domain=" +
                     sector.toLowerCase(Locale.US) + "&adtfn=1"
         }
-
-        UtilityLog.d("wx-model", onDemandUrl)
-        UtilityLog.d("wx-model", imgUrl)
-
         onDemandUrl.getHtml()
         return imgUrl.getImage()
     }

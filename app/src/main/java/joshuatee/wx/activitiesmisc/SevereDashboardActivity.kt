@@ -26,7 +26,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -46,11 +45,12 @@ import joshuatee.wx.spc.SPCStormReportsActivity
 import joshuatee.wx.spc.UtilitySPC
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityShortcut
+
 import kotlinx.coroutines.*
+
 class SevereDashboardActivity : BaseActivity() {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    var TAG = "SevereDashboardActivity"
     private val bitmaps = mutableListOf<Bitmap>()
     private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
@@ -66,7 +66,7 @@ class SevereDashboardActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         linearLayout = findViewById(R.id.ll)
         contextg = this
-        refreshDynamicContent()
+        getContent()
     }
 
     private fun tvWarnClicked(filter: String) {
@@ -78,14 +78,10 @@ class SevereDashboardActivity : BaseActivity() {
         )
     }
 
-    private fun refreshDynamicContent() {
-        getContent()
-    }
-
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
 
         val bitmapArrRep = mutableListOf<Bitmap>()
-        val snWatch = SevereNotice(PolygonType.WATCH)
+        //val snWatch = SevereNotice(PolygonType.WATCH)
         val snWatchTor = SevereNotice(PolygonType.WATCH_TOR)
         val snWatchSvr = SevereNotice(PolygonType.WATCH_SVR)
         val snMcd = SevereNotice(PolygonType.MCD)
@@ -98,64 +94,57 @@ class SevereDashboardActivity : BaseActivity() {
             val wFfw = SevereWarning(PolygonType.FFW)
             val wSmw = SevereWarning(PolygonType.SMW)
             val wSvs = SevereWarning(PolygonType.SVS)
-            val wSps = SpecialWeather(PolygonType.SPS)
+            //val wSps = SpecialWeather(PolygonType.SPS)
             wTor.generateString(contextg, MyApplication.severeDashboardTor.valueGet())
             wSvr.generateString(contextg, MyApplication.severeDashboardSvr.valueGet())
             wEww.generateString(contextg, MyApplication.severeDashboardEww.valueGet())
             wFfw.generateString(contextg, MyApplication.severeDashboardFfw.valueGet())
             wSmw.generateString(contextg, MyApplication.severeDashboardSmw.valueGet())
             wSvs.generateString(contextg, MyApplication.severeDashboardSvs.valueGet())
-            wSps.generateString(contextg, MyApplication.severeDashboardSps.valueGet())
-            Log.i(TAG, "spscount: "+wSps.count)
+            //wSps.generateString(contextg, MyApplication.severeDashboardSps.valueGet())
             if (wTor.count > 0) {
-                val objTor = ObjectCardText(contextg, wTor.text)
+            val objTor = ObjectCardText(contextg, linearLayout, wTor.text)
                 objTor.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Tornado Warning.*?") })
-                linearLayout.addView(objTor.card)
             }
             if (wSvr.count > 0) {
-                val objSvr = ObjectCardText(contextg, wSvr.text)
+                val objSvr = ObjectCardText(contextg, linearLayout, wSvr.text)
                 objSvr.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Severe Thunderstorm Warning.*?") })
-                linearLayout.addView(objSvr.card)
             }
             if (wEww.count > 0) {
-                val objEww = ObjectCardText(contextg, wEww.text)
+                val objEww = ObjectCardText(contextg, linearLayout, wEww.text)
                 objEww.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Extreme Wind Warning.*?") })
-                linearLayout.addView(objEww.card)
             }
             if (wFfw.count > 0) {
-                val objFfw = ObjectCardText(contextg, wFfw.text)
+                val objFfw = ObjectCardText(contextg, linearLayout, wFfw.text)
                 objFfw.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Flash Flood Warning.*?") })
-                linearLayout.addView(objFfw.card)
             }
             if (wSmw.count > 0) {
-                val objSmw = ObjectCardText(contextg, wSmw.text)
+                val objSmw = ObjectCardText(contextg, linearLayout, wSmw.text)
                 objSmw.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Special Marine Warning.*?") })
-                linearLayout.addView(objSmw.card)
             }
             if (wSvs.count > 0) {
-                val objSvs = ObjectCardText(contextg, wSvs.text)
+                val objSvs = ObjectCardText(contextg, linearLayout, wSvs.text)
                 objSvs.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Severe Weather Statement.*?") })
-                linearLayout.addView(objSvs.card)
             }
+            /*
             if (wSps.count > 0) {
-                val objSps = ObjectCardText(contextg, wSps.text)
+                val objSps = ObjectCardText(contextg, linearLayout, wSps.text)
                 objSps.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Special Weather Statement.*?") })
-                linearLayout.addView(objSps.card)
             }
+            */
         
 	withContext(Dispatchers.IO) {
 
             snMcd.getBitmaps(MyApplication.severeDashboardMcd.valueGet())
-            snWatch.getBitmaps(MyApplication.severeDashboardWat.valueGet())
+            //snWatch.getBitmaps(MyApplication.severeDashboardWat.valueGet())
             snWatchTor.getBitmaps(MyApplication.severeDashboardWat.valueGet())
             snWatchSvr.getBitmaps(MyApplication.severeDashboardWat.valueGet())
             snMpd.getBitmaps(MyApplication.severeDashboardMpd.valueGet())
             bitmapArrRep.add((UtilitySPC.getStormReportsTodayUrl()).getImage())
         }
-
         if (bitmapArrRep.size > 0) {
             bitmapArrRep.indices.forEach { it ->
-                val card = ObjectCardImage(contextg, bitmapArrRep[it])
+                val card = ObjectCardImage(contextg, linearLayout, bitmapArrRep[it])
                 card.setOnClickListener(View.OnClickListener {
                     ObjectIntent(
                         contextg,
@@ -164,47 +153,46 @@ class SevereDashboardActivity : BaseActivity() {
                         arrayOf("today")
                     )
                 })
-                linearLayout.addView(card.card)
             }
         }
         listOf(snWatchTor, snWatchSvr, snMcd, snMpd)
-                .asSequence()
-                .filter { it.bitmaps.size > 0 }
-                .forEach { severeNotice ->
-                    severeNotice.bitmaps.indices.forEach { j ->
-                        val card = ObjectCardImage(contextg, severeNotice.bitmaps[j])
-                        var cla: Class<*>? = null
-                        var claStr = ""
-                        val claArgStr = severeNotice.strList[j]
-                        when (severeNotice.type) {
-                            PolygonType.MCD -> {
-                                cla = SPCMCDWShowActivity::class.java
-                                claStr = SPCMCDWShowActivity.NO
-                            }
-                            PolygonType.WATCH, PolygonType.WATCH_TOR, PolygonType.WATCH_SVR -> {
-                                cla = SPCMCDWShowActivity::class.java
-                                claStr = SPCMCDWShowActivity.NO
-                            }
-                            PolygonType.MPD -> {
-                                cla = SPCMCDWShowActivity::class.java
-                                claStr = SPCMCDWShowActivity.NO
-                            }
-                            else -> {
-                            }
+            .asSequence()
+            .filter { it.bitmaps.size > 0 }
+            .forEach { severeNotice ->
+                severeNotice.bitmaps.indices.forEach { j ->
+                    val card = ObjectCardImage(contextg, linearLayout, severeNotice.bitmaps[j])
+                    var cla: Class<*>? = null
+                    var claStr = ""
+                    val claArgStr = severeNotice.strList[j]
+                    when (severeNotice.type) {
+                        PolygonType.MCD -> {
+                            cla = SPCMCDWShowActivity::class.java
+                            claStr = SPCMCDWShowActivity.NO
                         }
-                        val cl = cla
-                        val clStr = claStr
-                        card.setOnClickListener(View.OnClickListener { 
-			ObjectIntent(
-			contextg, cl!!, 
-			clStr, 
-			arrayOf(claArgStr, "", severeNotice.toString())
-			) 
-			})
-                        linearLayout.addView(card.card)
+                        PolygonType.WATCH_TOR, PolygonType.WATCH_SVR -> {
+                            cla = SPCMCDWShowActivity::class.java
+                            claStr = SPCMCDWShowActivity.NO
+                        }
+                        PolygonType.MPD -> {
+                            cla = SPCMCDWShowActivity::class.java
+                            claStr = SPCMCDWShowActivity.NO
+                        }
+                        else -> {
+                        }
                     }
+                    val cl = cla
+                    val clStr = claStr
+                    card.setOnClickListener(View.OnClickListener {
+                        ObjectIntent(
+                            contextg,
+                            cl!!,
+                            clStr,
+                            arrayOf(claArgStr, "", severeNotice.toString())
+                        )
+                    })
                 }
-        bitmaps.addAll(snWatch.bitmaps)
+            }
+        //bitmaps.addAll(snWatch.bitmaps)
         bitmaps.addAll(snWatchTor.bitmaps)
         bitmaps.addAll(snWatchSvr.bitmaps)
         bitmaps.addAll(snMcd.bitmaps)

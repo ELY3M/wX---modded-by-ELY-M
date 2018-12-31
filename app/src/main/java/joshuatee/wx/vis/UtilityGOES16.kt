@@ -22,6 +22,7 @@
 package joshuatee.wx.vis
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 
 import joshuatee.wx.util.UtilityImg
@@ -32,14 +33,12 @@ import joshuatee.wx.MyApplication
 
 object UtilityGOES16 {
 
-    const val size: String = "600x600"
-
-    fun getUrl(product: String, sector: String): String {
+    fun getImage(product: String, sector: String): Bitmap {
         var sectorLocal = "SECTOR/$sector"
         if (sector == "FD" || sector == "CONUS") {
             sectorLocal = sector
         }
-        return MyApplication.goes16Url + "/GOES16/ABI/" + sectorLocal + "/" + product + "/latest.jpg"
+        return (MyApplication.goes16Url + "/GOES16/ABI/" + sectorLocal + "/" + product + "/latest.jpg").getImage()
     }
 
     fun getAnimation(
@@ -50,9 +49,9 @@ object UtilityGOES16 {
     ): AnimationDrawable {
         val frameCountString = frameCount.toString()
         val url = when (sector) {
-            "FD" -> "https://www.star.nesdis.noaa.gov/GOES/GOES16_FullDisk_Band.php?band=$product&length=$frameCountString"
-            "CONUS" -> "https://www.star.nesdis.noaa.gov/GOES/GOES16_CONUS_Band.php?band=$product&length=$frameCountString"
-            else -> "https://www.star.nesdis.noaa.gov/GOES/GOES16_sector_band.php?sector=$sector&band=$product&length=$frameCountString"
+            "FD" -> MyApplication.goes16AnimUrl + "/GOES/GOES16_FullDisk_Band.php?band=$product&length=$frameCountString"
+            "CONUS" -> MyApplication.goes16AnimUrl + "/GOES/GOES16_CONUS_Band.php?band=$product&length=$frameCountString"
+            else -> MyApplication.goes16AnimUrl + "/GOES/GOES16_sector_band.php?sector=$sector&band=$product&length=$frameCountString"
         }
         val html = url.getHtml().replace("\n", "").replace("\r", "")
         val imageHtml = html.parse("animationImages = \\[(.*?)\\];")

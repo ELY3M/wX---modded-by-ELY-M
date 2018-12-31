@@ -52,6 +52,7 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
     private lateinit var drw: ObjectNavDrawer
     private lateinit var contextg: Context
     private val prefTokenIdx = "GOESFULLDISK_IMG_FAV_IDX"
+    private val prefImagePosition = "GOESFULLDISKIMG"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +86,7 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
         Utility.writePref(contextg, "GOESFULLDISK_IMG_FAV_IDX", drw.index)
         bitmap = withContext(Dispatchers.IO) { drw.getUrl().getImage() }
         img.setBitmap(bitmap)
-        img.firstRunSetZoomPosn("OBS")
+        img.firstRunSetZoomPosn(prefImagePosition)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -130,7 +131,7 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
 
     override fun onStop() {
         // FIXME use prefString
-        img.imgSavePosnZoom(this, "GOESFULLDISKIMG")
+        img.imgSavePosnZoom(this, prefImagePosition)
         super.onStop()
     }
 

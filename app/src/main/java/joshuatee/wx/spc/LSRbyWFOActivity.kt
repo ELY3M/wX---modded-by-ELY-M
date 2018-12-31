@@ -89,7 +89,8 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         val turl = intent.getStringArrayExtra(URL)
         nwsOffice = turl[0]
-        if (nwsOffice == "") nwsOffice = "OUN"
+        if (nwsOffice == "")
+            nwsOffice = "OUN"
         prod = if (turl[1] == "")
             MyApplication.wfoTextFav
         else
@@ -202,14 +203,7 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
         ridFavOld = MyApplication.wfoFav
         wfoProd = withContext(Dispatchers.IO) { lsrFromWFO }
         linearLayout.removeAllViewsInLayout()
-        wfoProd.forEach {
-            linearLayout.addView(
-                ObjectCardText(
-                    contextg,
-                    Utility.fromHtml(it)
-                ).card
-            )
-        }
+        wfoProd.forEach { ObjectCardText(contextg, linearLayout, Utility.fromHtml(it)) }
     }
 
     private val lsrFromWFO: List<String>

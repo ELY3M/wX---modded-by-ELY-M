@@ -102,7 +102,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         var velMin: Short = -120
         var spotterId: String = ""
         var spotterShowSelected: Boolean = false
-        //var hailShowSelected: Boolean = false
         var bearingCurrent = 0.0f
         var speedCurrent = 0.0f
     }
@@ -472,6 +471,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
         if (PolygonType.SPOTTER_LABELS.pref && !archiveMode) {
             UtilityWXGLTextObject.updateSpotterLabels(numPanes, wxgltextArr)
+        }
+        if (PolygonType.HAIL_LABELS.pref && !archiveMode) {
+            UtilityWXGLTextObject.updateHailLabels(numPanes, wxgltextArr)
         }
         if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && !archiveMode) {
             UtilityWXGLTextObject.updateObs(numPanes, wxgltextArr)

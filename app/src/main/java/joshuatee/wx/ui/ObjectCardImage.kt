@@ -24,6 +24,7 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TableLayout
 import androidx.cardview.widget.CardView
 
@@ -49,10 +50,27 @@ open class ObjectCardImage {
         objCard.addView(img)
     }
 
+    constructor(context: Context, linearLayout: LinearLayout, bitmap: Bitmap) {
+        this.context = context
+        objCard = ObjectCard(context)
+        img = TouchImageView2(context)
+        img.layoutParams = lparams
+        UtilityImg.resizeViewSetImgInCard(bitmap, img)
+        objCard.addView(img)
+        linearLayout.addView(card)
+    }
+
     constructor(context: Context) {
         this.context = context
         img = TouchImageView2(context)
         objCard = ObjectCard(context)
+    }
+
+    constructor(context: Context, linearLayout: LinearLayout) {
+        this.context = context
+        img = TouchImageView2(context)
+        objCard = ObjectCard(context)
+        linearLayout.addView(card)
     }
 
     open fun setImage(bitmap: Bitmap) {

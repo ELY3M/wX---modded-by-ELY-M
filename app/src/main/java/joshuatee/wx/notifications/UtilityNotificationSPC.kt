@@ -75,10 +75,6 @@ internal object UtilityNotificationSPC {
                         ))
                     ) {
                         val sound = MyApplication.alertNotificationSoundSpcswo && !inBlackout
-                        /*val noti = UtilityNotification.createNotifBigTextWithAction(context, sound, noMain,
-                                noBody, objPI.resultPendingIntent,
-                                MyApplication.ICON_MAP, noBody, Notification.PRIORITY_DEFAULT, Color.YELLOW, // was Notification.PRIORITY_DEFAULT
-                                MyApplication.ICON_ACTION, objPI.resultPendingIntent2, context.resources.getString(R.string.read_aloud))*/
                         val notifObj = ObjectNotification(
                             context,
                             sound,
@@ -95,7 +91,6 @@ internal object UtilityNotificationSPC {
                         )
                         val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
                         notifObj.sendNotification(context, cancelStr, 1, noti)
-                        //notifier.notify(cancelStr, 1, noti)
                     }
                     notifUrls += cancelStr + MyApplication.notificationStrSep
                 } // end if to check if null string
@@ -116,8 +111,6 @@ internal object UtilityNotificationSPC {
             MyApplication.locations.getOrNull(it)?.notificationSwo ?: false
         }
     }
-
-    //fun locationNeedsSWO(): Boolean = (0 until Location.numLocations).any { MyApplication.locations[it].notificationSwo }
 
     fun sendSWOLocationNotifs(context: Context): String {
         var notifUrls = ""
@@ -369,7 +362,6 @@ internal object UtilityNotificationSPC {
             )
             val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
             notifObj.sendNotification(context, cancelStr, 1, noti)
-            //notifier.notify(cancelStr, 1, noti)
         }
         notifUrls += cancelStr + sep
         return notifUrls
@@ -439,7 +431,6 @@ internal object UtilityNotificationSPC {
             )
             val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
             notifObj.sendNotification(context, cancelStr, 1, noti)
-            //notifier.notify(cancelStr, 1, noti)
         }
         notifUrls += cancelStr + sep
         return notifUrls

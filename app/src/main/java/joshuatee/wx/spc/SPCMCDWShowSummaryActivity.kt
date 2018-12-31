@@ -36,16 +36,13 @@ import android.widget.TextView
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityLog
-import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.UtilityShare
 
 import joshuatee.wx.Extensions.*
@@ -68,7 +65,7 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
     private var nothingPresentStr = ""
     private var activityLabel = ""
     private var text = ""
-    private var title = ""
+    private var titleString = ""
     private var product = ""
     private var wfos = listOf<String>()
     private val bitmaps = mutableListOf<Bitmap>()
@@ -79,7 +76,7 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
     private lateinit var miImage: MenuItem
     private lateinit var miTest: MenuItem
     private lateinit var objCard: ObjectCard
-    private lateinit var ll: LinearLayout
+    private lateinit var linearLayout: LinearLayout
     private lateinit var polygonType: PolygonType
     private lateinit var contextg: Context
 
@@ -93,7 +90,7 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         objCard = ObjectCard(this, R.id.cv1)
-        ll = findViewById(R.id.ll)
+        linearLayout = findViewById(R.id.ll)
         val menu = toolbarBottom.menu
         miAll = menu.findItem(R.id.action_share_all)
         miText = menu.findItem(R.id.action_share_text)
@@ -128,19 +125,15 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
             product = "SPCMCD$number"
             polygonType = PolygonType.MCD
         }
-        setTitle(activityLabel)
+        title = activityLabel
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-
-        var sigHtmlTmp: String
         var mcdList = listOf<String>()
-
         withContext(Dispatchers.IO) {
             try {
-                sigHtmlTmp = url.getHtml()
-                mcdList = sigHtmlTmp.parseColumn(patternStr)
+                mcdList = url.getHtml().parseColumn(patternStr)
                 mcdList.forEach {
                     if (number.contains("at")) {
                         val mcdNo2 = String.format("%4s", it).replace(' ', '0')
@@ -160,22 +153,19 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
                 if (number.contains("at")) {
                     textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/w" +
                             mcdNumbers[0] + ".html"
-                    title = "Watch " + mcdNumbers[0].replace("w", "")
+                    titleString = "Watch " + mcdNumbers[0].replace("w", "")
                     product = "SPCWAT" + mcdNumbers[0].replace("w", "")
                 } else {
                     textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/md" +
                             mcdNumbers[0] + ".html"
-                    title = "MCD " + mcdNumbers[0]
+                    titleString = "MCD " + mcdNumbers[0]
                     product = "SPCMCD" + mcdNumbers[0]
                 }
                 text = UtilityDownload.getTextProduct(contextg, product)
             }
         }
-
         mcdList.indices.forEach { mcdIndex ->
-            val card = ObjectCardImage(contextg)
-            card.setImage(bitmaps[mcdIndex])
-            ll.addView(card.card)
+            val card = ObjectCardImage(contextg, linearLayout, bitmaps[mcdIndex])
             card.setOnClickListener(View.OnClickListener {
                 ObjectIntent(
                     contextg,
@@ -191,16 +181,8 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
         if (mcdList.size == 1) {
             val wfoStr = text.parse("ATTN...WFO...(.*?)... ")
             wfos = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
-            val card2 = ObjectCardText(contextg)
-            card2.setOnClickListener(View.OnClickListener {
-                UtilityToolbar.showHide(
-                    toolbar,
-                    toolbarBottom
-                )
-            })
-            card2.setText(Utility.fromHtml(text))
-            ll.addView(card2.card)
-            setTitle(title)
+            ObjectCardText(contextg, linearLayout, toolbar, toolbarBottom, Utility.fromHtml(text))
+            title = titleString
             if (!number.contains("at")) {
                 toolbar.subtitle = text.parse("Areas affected...(.*?)<BR>")
             }
@@ -209,13 +191,13 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
             miUrl.isVisible = true
             miImage.isVisible = true
         } else {
-            setTitle(
-                "$activityLabel " + mcdNumbers.toString().replace(
-                    "[{}]".toRegex(),
-                    ""
-                ).replace("\\[|\\]".toRegex(), "").replace("w", "")
-            )
+            titleString =
+                    "$activityLabel " + mcdNumbers.toString().replace(
+                "[{}]".toRegex(),
+                ""
+            ).replace("\\[|\\]".toRegex(), "").replace("w", "")
             miAll.isVisible = true
+            title = titleString
         }
         val tv: TextView = findViewById(R.id.tv)
         if (mcdList.isEmpty()) {
@@ -247,22 +229,15 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
         val itemStr = item.title.toString()
         (0 until wfos.size - 1)
             .filter { itemStr.contains(wfos[it]) }
-            .forEach { saveLocation(wfos[it]) }
+            .forEach {
+                UtilityLocation.saveLocationForMcd(
+                    wfos[it],
+                    contextg,
+                    linearLayout,
+                    uiDispatcher
+                )
+            }
         return true
-    }
-
-    private fun saveLocation(nwsOffice: String) = GlobalScope.launch(uiDispatcher) {
-        var toastStr = ""
-        // FIXME not everything needs to be on IO
-        withContext(Dispatchers.IO) {
-            val locNumIntCurrent = Location.numLocations + 1
-            val locNumToSaveStr = locNumIntCurrent.toString()
-            val loc = Utility.readPref(contextg, "NWS_LOCATION_$nwsOffice", "")
-            val addrSend = loc.replace(" ", "+")
-            val xyStr = UtilityLocation.getXYFromAddressOSM(addrSend)
-            toastStr = Location.locationSave(contextg, locNumToSaveStr, xyStr[0], xyStr[1], loc)
-        }
-        UtilityUI.makeSnackBar(ll, toastStr)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -272,13 +247,17 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
         when (item.itemId) {
             R.id.action_share_all -> {
                 if (bitmaps.size > 1)
-                    UtilityShare.shareText(this, title, "", bitmaps)
+                    UtilityShare.shareText(this, titleString, "", bitmaps)
                 else if (bitmaps.size == 1)
-                    UtilityShare.shareText(this, title, Utility.fromHtml(text), bitmaps[0])
+                    UtilityShare.shareText(this, titleString, Utility.fromHtml(text), bitmaps[0])
             }
-            R.id.action_share_text -> UtilityShare.shareText(this, title, Utility.fromHtml(text))
-            R.id.action_share_url -> UtilityShare.shareText(this, title, textUrl)
-            R.id.action_share_image -> UtilityShare.shareBitmap(this, title, bitmaps[0])
+            R.id.action_share_text -> UtilityShare.shareText(
+                this,
+                titleString,
+                Utility.fromHtml(text)
+            )
+            R.id.action_share_url -> UtilityShare.shareText(this, titleString, textUrl)
+            R.id.action_share_image -> UtilityShare.shareBitmap(this, titleString, bitmaps[0])
             else -> return super.onOptionsItemSelected(item)
         }
         return true

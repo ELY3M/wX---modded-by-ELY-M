@@ -37,14 +37,11 @@ import android.widget.TextView
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.spc.SPCMCDWShowActivity
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.ui.UtilityToolbar
-import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShare
@@ -68,14 +65,15 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var imgUrl = ""
     private var url = ""
     private var text = ""
-    private var title = ""
     private var wfos = listOf<String>()
     private var product = ""
     private val bitmaps = mutableListOf<Bitmap>()
     private val mpdNumbers = mutableListOf<String>()
+    // FIXME remove
     private lateinit var objCard: ObjectCard
     private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
+    private var titleString = "MPDs"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,18 +85,14 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val no = intent.getStringExtra(NO)
         imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$no.gif"
         url = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd.php"
-        setTitle("MPDs")
+        title = titleString
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-
-        var sigHtmlTmp: String
         var mpdList = listOf<String>()
-
         withContext(Dispatchers.IO) {
-            sigHtmlTmp = url.getHtml()
-            mpdList = sigHtmlTmp.parseColumn(RegExp.mpdPattern)
+            mpdList = url.getHtml().parseColumn(RegExp.mpdPattern)
             mpdList.forEach {
                 imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$it.gif"
                 mpdNumbers.add(it)
@@ -107,15 +101,13 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
             if (mpdList.size == 1) {
                 imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd" +
                         mpdNumbers[0] + ".gif"
-                title = "MPD " + mpdNumbers[0]
+                titleString = "MPD " + mpdNumbers[0]
                 product = "WPCMPD" + mpdNumbers[0]
                 text = UtilityDownload.getTextProduct(contextg, product)
             }
         }
-
         mpdList.indices.forEach { mpdIndex ->
-            val card = ObjectCardImage(contextg)
-            card.setImage(bitmaps[mpdIndex])
+            val card = ObjectCardImage(contextg, linearLayout, bitmaps[mpdIndex])
             card.setOnClickListener(View.OnClickListener {
                 ObjectIntent(
                     contextg,
@@ -124,22 +116,15 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     arrayOf(mpdNumbers[mpdIndex], "", PolygonType.MPD.toString())
                 )
             })
-            linearLayout.addView(card.card)
-            if (mpdList.size == 1) registerForContextMenu(card.img)
+            if (mpdList.size == 1) {
+                registerForContextMenu(card.img)
+            }
         }
         if (mpdList.size == 1) {
             val wfoStr = text.parse("ATTN...WFO...(.*?)...<br>")
             wfos = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
-            val card2 = ObjectCardText(contextg)
-            card2.setOnClickListener(View.OnClickListener {
-                UtilityToolbar.showHide(
-                    toolbar,
-                    toolbarBottom
-                )
-            })
-            card2.setText(Utility.fromHtml(text))
-            linearLayout.addView(card2.card)
-            setTitle(title)
+            ObjectCardText(contextg, linearLayout, toolbar, toolbarBottom, Utility.fromHtml(text))
+            title = titleString
             toolbar.subtitle = text.parse("AREAS AFFECTED...(.*?)CONCERNING").replace("<BR>", "")
         }
         val tv: TextView = findViewById(R.id.tv)
@@ -170,32 +155,26 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val itemStr = item.title.toString()
         (0 until wfos.size - 1)
             .filter { itemStr.contains(wfos[it]) }
-            .forEach { saveLocation(wfos[it]) }
+            .forEach {
+                UtilityLocation.saveLocationForMcd(
+                    wfos[it],
+                    contextg,
+                    linearLayout,
+                    uiDispatcher
+                )
+            }
         return true
     }
 
-    private fun saveLocation(nwsOffice: String) = GlobalScope.launch(uiDispatcher) {
-        var toastStr = ""
-        withContext(Dispatchers.IO) {
-            var locNumIntCurrent = Location.numLocations
-            locNumIntCurrent += 1
-            val locNumToSaveStr = locNumIntCurrent.toString()
-            val loc = Utility.readPref(contextg, "NWS_LOCATION_$nwsOffice", "")
-            val addrSend = loc.replace(" ", "+")
-            val xyStr = UtilityLocation.getXYFromAddressOSM(addrSend)
-            toastStr = Location.locationSave(contextg, locNumToSaveStr, xyStr[0], xyStr[1], loc)
-        }
-        UtilityUI.makeSnackBar(linearLayout, toastStr)
-    }
-
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, text, product, product)) return true
+        if (audioPlayMenu(item.itemId, text, product, product))
+            return true
         return when (item.itemId) {
             R.id.action_share -> {
                 if (bitmaps.size > 1)
-                    UtilityShare.shareText(this, title, "", bitmaps)
+                    UtilityShare.shareText(this, titleString, "", bitmaps)
                 else if (bitmaps.size == 1)
-                    UtilityShare.shareText(this, title, Utility.fromHtml(text), bitmaps[0])
+                    UtilityShare.shareText(this, titleString, Utility.fromHtml(text), bitmaps[0])
                 true
             }
             else -> super.onOptionsItemSelected(item)

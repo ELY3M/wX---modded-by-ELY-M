@@ -36,7 +36,7 @@ import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.TouchImageView2
+import joshuatee.wx.ui.ObjectTouchImageView
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.UtilityImg
@@ -68,7 +68,7 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
     private var bitmap = UtilityImg.getBlankBitmap()
     private var shareTitle = ""
     private var needsWhitebg = false
-    private lateinit var img: TouchImageView2
+    private lateinit var img: ObjectTouchImageView
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.image_show_activity, menu)
@@ -78,7 +78,7 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show, null, false)
-        img = findViewById(R.id.iv)
+        img = ObjectTouchImageView(this, this, R.id.iv)
         img.setOnClickListener(this)
         val activityArguments = intent.getStringArrayExtra(URL)
         url = activityArguments[0]
@@ -102,7 +102,7 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
 
     private fun loadRawBitmap() {
         bitmap = UtilityImg.loadBM(this, R.drawable.radar_legend, false)
-        img.setImageBitmap(bitmap)
+        img.setBitmap(bitmap)
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
@@ -113,14 +113,14 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
             layers.add(BitmapDrawable(resources, bitmap))
             bitmap = UtilityImg.layerDrawableToBitmap(layers)
         }
-        img.setImageBitmap(bitmap)
+        img.setBitmap(bitmap)
     }
 
     private fun getContentFromStorage() {
         try {
             val inputStream = openFileInput(urls[1])
             val bm = BitmapFactory.decodeStream(inputStream)
-            img.setImageBitmap(bm)
+            img.setBitmap(bm)
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
         }

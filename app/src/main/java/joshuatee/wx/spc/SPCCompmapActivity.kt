@@ -82,7 +82,7 @@ class SPCCompmapActivity : BaseActivity() {
     }
 
     private fun setupInitLayerString() {
-        val tmpArr = MyApplication.colon.split(layerStr)
+        val tmpArr = layerStr.split(":").dropLastWhile { it.isEmpty() }
         tmpArr.forEach { selectItemNoGet(it.replace("a", "").toIntOrNull() ?: 0) }
     }
 

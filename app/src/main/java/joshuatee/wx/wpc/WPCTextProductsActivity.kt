@@ -44,7 +44,6 @@ import joshuatee.wx.activitiesmisc.ImageShowActivity
 import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.ui.ObjectSpinner
-import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityFavorites
@@ -105,14 +104,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         }
         scrollView = findViewById(R.id.sv)
         linearLayout = findViewById(R.id.ll)
-        c0 = ObjectCardText(this)
-        linearLayout.addView(c0.card)
-        c0.setOnClickListener(View.OnClickListener {
-            UtilityToolbar.showHide(
-                toolbar,
-                toolbarBottom
-            )
-        })
+        c0 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         products = UtilityFavorites.setupFavMenuNWSTEXT(MyApplication.nwsTextFav, prod)
         sp = ObjectSpinner(this, this, R.id.spinner1, products)
         sp.setOnItemSelectedListener(this)

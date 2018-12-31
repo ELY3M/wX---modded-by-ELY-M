@@ -49,7 +49,6 @@ import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownloadNWS
 import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.vis.USNWSGOESActivity
 import kotlinx.coroutines.*
 
@@ -156,7 +155,6 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
     private fun saveLocFromZone(id: Int) = GlobalScope.launch(uiDispatcher) {
         var toastStr = ""
         var coord = listOf<String>()
-        // FIXME remove what does not depend on IO
         withContext(Dispatchers.IO) {
             var locNumIntCurrent = Location.numLocations
             locNumIntCurrent += 1
@@ -176,7 +174,6 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
             val y = coord[1]
             toastStr = Location.locationSave(contextg, locNumToSaveStr, x, y, state + "_" + county)
         }
-
         UtilityUI.makeSnackBar(linearLayout, toastStr)
     }
 
@@ -186,21 +183,16 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        // FIXME remove what does not depending on IO
         withContext(Dispatchers.IO) {
             bitmap = "http://forecast.weather.gov/wwamap/png/US.png".getImage()
-            try {
-                if (turlLocal[1] == "us" && usDownloaded) {
-                    html = usDataStr
-                } else {
-                    html = UtilityDownloadNWS.getCAP(turlLocal[1])
-                    if (turlLocal[1] == "us") {
-                        usDataStr = html
-                        usDownloaded = true
-                    }
+            if (turlLocal[1] == "us" && usDownloaded) {
+                html = usDataStr
+            } else {
+                html = UtilityDownloadNWS.getCAP(turlLocal[1])
+                if (turlLocal[1] == "us") {
+                    usDataStr = html
+                    usDownloaded = true
                 }
-            } catch (e: Exception) {
-                UtilityLog.HandleException(e)
             }
         }
         objAlertSummary.updateContent(bitmap, html, turlLocal[0], firstRun)

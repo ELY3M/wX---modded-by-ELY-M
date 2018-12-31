@@ -23,7 +23,6 @@
 package joshuatee.wx.activitiesmisc
 
 import android.content.Context
-import android.util.Log
 import joshuatee.wx.MyApplication
 import joshuatee.wx.external.ExternalDuplicateRemover
 import joshuatee.wx.objects.PolygonType
@@ -32,11 +31,10 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
 import joshuatee.wx.util.Utility
 
-// encapsulates VTEC data and count for tst, tor, ffw, smw or sps
+// encapsulates VTEC data and count for tst, tor, ffw, smw
 
 internal class SevereWarning(private val type: PolygonType) {
 
-    var TAG = "SevereWarning"
     var text = ""
         private set
     var count = 0
@@ -56,17 +54,12 @@ internal class SevereWarning(private val type: PolygonType) {
             PolygonType.SVS -> label = "Severe Weather Statement"
             //PolygonType.SPS -> label = "Special Weather Statement"
             else -> {
-                Log.i(TAG, "no label\n")
             }
         }
-
-        //FIXME not all warnings/statments have vtec//
         val warningAl = textTor.parseColumn(RegExp.warningVtecPattern)
-        Log.i(TAG, textTor+"\n");
         count = warningAl.size
         warningAl.forEach {
             text += it
-            Log.i(TAG, it+"\n");
             nwsOfficeArr = it.split(".")
             if (nwsOfficeArr.size > 1) {
                 nwsOffice = nwsOfficeArr[2]
@@ -74,10 +67,6 @@ internal class SevereWarning(private val type: PolygonType) {
                 nwsLoc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "")
             }
             text += "  " + nwsLoc + MyApplication.newline
-            Log.i(TAG, "nwsOfficeArr: "+nwsOfficeArr)
-            Log.i(TAG, "nwsOffice: "+nwsOfficeArr[2])
-            Log.i(TAG, "nwsLoc: "+nwsLoc)
-
         }
         val remover = ExternalDuplicateRemover()
         text = remover.stripDuplicates(text)

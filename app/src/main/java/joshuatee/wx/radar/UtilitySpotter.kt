@@ -96,14 +96,6 @@ object UtilitySpotter {
                         lonAl.add(tmpArr[5])
                     }
                 }
-                /*Collections.sort(spotterList, Comparator<Spotter> { p1, p2 ->
-                    val res = p1.lastName.compareTo(p2.lastName, ignoreCase = true)
-                    if (res != 0) {
-                        return@Comparator res
-                    }
-                    p1.firstName.compareTo(p2.firstName, ignoreCase = true)
-                })*/
-                // if we need this use Kotlin instead: var sortedList = list.sortedWith(compareBy({ it.customProperty }))
                 if (latAl.size == lonAl.size) {
                     x = DoubleArray(latAl.size)
                     y = DoubleArray(latAl.size)

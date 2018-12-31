@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//modded by ELY M.
 
 package joshuatee.wx.radar
 
@@ -33,6 +34,13 @@ object UtilityWXGLTextObject {
         (0 until numPanes).forEach {
             wxgltextArr[it].initTVSpottersLabels()
             wxgltextArr[it].addTVSpottersLabels()
+        }
+    }
+
+    fun updateHailLabels(numPanes: Int, wxgltextArr: MutableList<WXGLTextObject>) {
+        (0 until numPanes).forEach {
+            wxgltextArr[it].initTVHailLabels()
+            wxgltextArr[it].addTVHailLabels()
         }
     }
 

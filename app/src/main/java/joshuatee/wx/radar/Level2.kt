@@ -73,7 +73,7 @@ internal object Level2 {
                 UtilityIO.getFilePath(context, fileName),
                 "r",
                 1024 * 256 * 10
-            ) // was c.getFileStreamPath(fn)
+            )
             dis2.bigEndian = true
             dis2.let {
                 it.setBufferSize(2621440) // 1024*256*10

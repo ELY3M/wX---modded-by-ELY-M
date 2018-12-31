@@ -40,23 +40,25 @@ internal object UtilityModelNCEPInputOutput {
     fun getRunTime(model: String, param: String, spinnerSectorCurrent: String): RunTimeData {
         val runData = RunTimeData()
         val runCompletionDataStr = StringBuilder(100)
-        var sigHtmlTmp = UtilityString.getHTMLandParse(
+        var html = UtilityString.getHTMLandParse(
             "${MyApplication.nwsMagNcepWebsitePrefix}/model-guidance-model-parameter.php?group=Model%20Guidance&model="
                     + model.toUpperCase(Locale.US) + "&area=" + spinnerSectorCurrent + "&ps=area",
             RegExp.ncepPattern2
         )
-        sigHtmlTmp = sigHtmlTmp.replace("UTC selected_cell", "Z")
-        runCompletionDataStr.append(sigHtmlTmp.replace("Z", " UTC"))
+        html = html.replace("UTC selected_cell", "Z")
+        runCompletionDataStr.append(html.replace("Z", " UTC"))
         if (runCompletionDataStr.length > 8) {
             runCompletionDataStr.insert(8, " ")
         }
         val timeCompleteUrl =
             "${MyApplication.nwsMagNcepWebsitePrefix}/model-fhrs.php?group=Model%20Guidance&model=" + model.toLowerCase(
                 Locale.US
-            ) + "&fhr_mode=image&loop_start=-1&loop_end=-1&area=" + spinnerSectorCurrent + "&fourpan=no&imageSize=&preselected_formatted_cycle_date=" + runCompletionDataStr + "&cycle=" + runCompletionDataStr + "&param=" + param + "&ps=area"
+            ) + "&fhr_mode=image&loop_start=-1&loop_end=-1&area=" +
+                    spinnerSectorCurrent + "&fourpan=no&imageSize=&preselected_formatted_cycle_date=" +
+                    runCompletionDataStr + "&cycle=" + runCompletionDataStr + "&param=" + param + "&ps=area"
         val timeCompleteHTML = (timeCompleteUrl.replace(" ", "%20")).getHtml()
         runData.imageCompleteStr = timeCompleteHTML.parseLastMatch("SubmitImageForm.(.*?).\"")
-        runData.mostRecentRun = sigHtmlTmp.parseLastMatch(RegExp.ncepPattern1)
+        runData.mostRecentRun = html.parseLastMatch(RegExp.ncepPattern1)
         return runData
     }
 

@@ -24,14 +24,12 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.Location
@@ -55,17 +53,9 @@ class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         val menu = toolbarBottom.menu
-        val playlistMenuItem = menu.findItem(R.id.action_playlist)
-        playlistMenuItem.isVisible = false
+        menu.findItem(R.id.action_playlist).isVisible = false
         val linearLayout: LinearLayout = findViewById(R.id.ll)
-        card0 = ObjectCardText(this)
-        linearLayout.addView(card0.card)
-        card0.setOnClickListener(View.OnClickListener {
-            UtilityToolbar.showHide(
-                toolbar,
-                toolbarBottom
-            )
-        })
+        card0 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         getContent()
     }
 

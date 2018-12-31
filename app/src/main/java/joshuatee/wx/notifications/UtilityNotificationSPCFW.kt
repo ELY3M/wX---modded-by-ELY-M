@@ -38,8 +38,6 @@ import joshuatee.wx.Extensions.*
 
 internal object UtilityNotificationSPCFW {
 
-    //fun locationNeedsSPCFW() = (0 until Location.numLocations).any { MyApplication.locations[it].notificationSpcfw }
-
     fun locationNeedsSPCFW(): Boolean {
         return (0 until Location.numLocations).any {
             MyApplication.locations.getOrNull(it)?.notificationSpcfw ?: false
@@ -91,7 +89,6 @@ internal object UtilityNotificationSPCFW {
             )
             val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
             notifObj.sendNotification(context, cancelStr, 1, noti)
-            //notifier.notify(cancelStr, 1, noti)
         }
         notifUrls += cancelStr + MyApplication.notificationStrSep
         return notifUrls

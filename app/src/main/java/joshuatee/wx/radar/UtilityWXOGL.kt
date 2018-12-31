@@ -149,7 +149,7 @@ object UtilityWXOGL {
     // FIXME convert to LatLon as single arg
     fun showTextProducts(lat: Double, lon: Double): String {
         var warningHTML = 
-	MyApplication.severeDashboardTor.valueGet() + MyApplication.severeDashboardSvr.valueGet() + MyApplication.severeDashboardEww.valueGet() + MyApplication.severeDashboardFfw.valueGet() + MyApplication.severeDashboardSmw.valueGet() + MyApplication.severeDashboardSps.valueGet()
+	MyApplication.severeDashboardTor.valueGet() + MyApplication.severeDashboardSvr.valueGet() + MyApplication.severeDashboardEww.valueGet() + MyApplication.severeDashboardFfw.valueGet() + MyApplication.severeDashboardSmw.valueGet()
         val urlList =
             warningHTML.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
         warningHTML = warningHTML.replace("\n", "")
@@ -195,6 +195,56 @@ object UtilityWXOGL {
                     }
                 }
             }
+            q += 1
+        }
+        return retStr
+    }
+
+
+    fun showSpsProducts(lat: Double, lon: Double): String {
+        var warningHTML =
+                MyApplication.severeDashboardSps.valueGet()
+        val urlList =
+                warningHTML.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
+        warningHTML = warningHTML.replace("\n", "")
+        warningHTML = warningHTML.replace(" ", "")
+        val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
+        var retStr = ""
+        var testArr: List<String>
+        var q = 0
+        var notFound = true
+        var polyCount = -1
+        polygonArr.forEach { polys ->
+            polyCount += 1
+            //if (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith("0.CAN")) {
+                val polyTmp = polys.replace("[", "").replace("]", "").replace(",", " ")
+                testArr = polyTmp.split(" ").dropLastWhile { it.isEmpty() }
+                val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }
+                        .map {
+                            it.toDoubleOrNull() ?: 0.0
+                        }.toList()
+                val x = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 != 0 }
+                        .map {
+                            it.toDoubleOrNull() ?: 0.0
+                        }.toList()
+                if (y.size > 3 && x.size > 3 && x.size == y.size) {
+                    val poly2 = ExternalPolygon.Builder()
+                    x.indices.forEach { j ->
+                        poly2.addVertex(
+                                ExternalPoint(
+                                        x[j].toFloat(),
+                                        y[j].toFloat()
+                                )
+                        )
+                    }
+                    val polygon2 = poly2.build()
+                    val contains = polygon2.contains(ExternalPoint(lat.toFloat(), lon.toFloat()))
+                    if (contains && notFound) {
+                        retStr = urlList[q]
+                        notFound = false
+                    }
+                }
+            //}
             q += 1
         }
         return retStr

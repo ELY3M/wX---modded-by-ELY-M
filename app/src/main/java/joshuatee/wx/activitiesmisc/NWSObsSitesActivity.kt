@@ -29,7 +29,6 @@ import android.os.Bundle
 import joshuatee.wx.R
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityIO
 
 import joshuatee.wx.STATE_ARR
@@ -89,24 +88,20 @@ class NWSObsSitesActivity : BaseActivity() {
     }
 
     private fun getContent() {
-        try {
-            val xmlFileInputStream = resources.openRawResource(R.raw.stations_us4)
-            val text = UtilityIO.readTextFile(xmlFileInputStream)
-            val lines = text.split("\n")
-            listCity.clear()
-            listIds.clear()
-            listSort.clear()
-            listCity.add("..Back to state list")
-            listIds.add("..Back to state list")
-            lines.filterTo(listSort) { it.startsWith(provSelected.toUpperCase()) }
-            listSort.sort()
-            listSort.forEach {
-                val tmpArr = it.split(",")
-                listCity.add(tmpArr[2] + ": " + tmpArr[1])
-                listIds.add(tmpArr[2])
-            }
-        } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+        val xmlFileInputStream = resources.openRawResource(R.raw.stations_us4)
+        val text = UtilityIO.readTextFile(xmlFileInputStream)
+        val lines = text.split("\n")
+        listCity.clear()
+        listIds.clear()
+        listSort.clear()
+        listCity.add("..Back to state list")
+        listIds.add("..Back to state list")
+        lines.filterTo(listSort) { it.startsWith(provSelected.toUpperCase()) }
+        listSort.sort()
+        listSort.forEach {
+            val tmpArr = it.split(",")
+            listCity.add(tmpArr[2] + ": " + tmpArr[1])
+            listIds.add(tmpArr[2])
         }
         recyclerView.refreshList(listCity)
         siteDisplay = true

@@ -247,7 +247,8 @@ class FavRemoveActivity : BaseActivity() {
 
     private fun findSPCMesoLabel(rid: String): String {
         val index = UtilitySPCMESO.params.indexOf(rid)
-        if (index == -1) return UtilitySPCMESO.labels[0]
+        if (index == -1)
+            return UtilitySPCMESO.labels[0]
         return UtilitySPCMESO.labels[index]
     }
 

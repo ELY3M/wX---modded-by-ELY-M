@@ -24,7 +24,6 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
@@ -32,7 +31,6 @@ import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTTS
 import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
 
@@ -75,14 +73,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         url = activityArguments[0]
         title = activityArguments[1]
         val linearLayout: LinearLayout = findViewById(R.id.ll)
-        c0 = ObjectCardText(this)
-        linearLayout.addView(c0.card)
-        c0.setOnClickListener(View.OnClickListener {
-            UtilityToolbar.showHide(
-                toolbar,
-                toolbarBottom
-            )
-        })
+        c0 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         if (!url.startsWith("http")) {
             if (url.contains("<")) {
                 c0.setText(Utility.fromHtml(url))

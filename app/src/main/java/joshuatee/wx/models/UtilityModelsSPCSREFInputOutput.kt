@@ -37,9 +37,9 @@ internal object UtilityModelsSPCSREFInputOutput {
     val runTime: RunTimeData
         get() {
             val runData = RunTimeData()
-            val tmpHtml = "${MyApplication.nwsSPCwebsitePrefix}/exper/sref/".getHtml()
-            val tmpTxt = tmpHtml.parse(RegExp.srefPattern2)
-            val result = tmpHtml.parseColumn(RegExp.srefPattern3)
+            val html = "${MyApplication.nwsSPCwebsitePrefix}/exper/sref/".getHtml()
+            val tmpTxt = html.parse(RegExp.srefPattern2)
+            val result = html.parseColumn(RegExp.srefPattern3)
             val latestRunAl = tmpTxt.split("</a>").dropLastWhile { it.isEmpty() }
             if (latestRunAl.isNotEmpty()) {
                 runData.listRunAdd(latestRunAl[0])

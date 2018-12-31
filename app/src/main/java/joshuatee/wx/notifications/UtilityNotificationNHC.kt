@@ -165,7 +165,6 @@ object UtilityNotificationNHC {
             )
             val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
             notifObj.sendNotification(context, notifTitle, 1, noti)
-            //notifier.notify(notifTitle, 1, noti)
         }
         notifUrls += notifTitle + MyApplication.notificationStrSep
         return notifUrls

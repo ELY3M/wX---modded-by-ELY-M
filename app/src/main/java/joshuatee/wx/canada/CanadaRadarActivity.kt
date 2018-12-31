@@ -172,60 +172,28 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                 imageType = "wv"
                 getContent()
             }
-            R.id.action_vis_west -> {
-                mosaicShown = false
-                imageType = "vis"
-                url = "https://weather.gc.ca/data/satellite/goes_wcan_visible_100.jpg"
-                getContent()
-            }
-            R.id.action_vis_east -> {
-                mosaicShown = false
-                imageType = "vis"
-                url = "https://weather.gc.ca/data/satellite/goes_ecan_visible_100.jpg"
-                getContent()
-            }
-            R.id.action_ir_west -> {
-                mosaicShown = false
-                imageType = "ir"
-                url = "https://weather.gc.ca/data/satellite/goes_wcan_1070_100.jpg"
-                getContent()
-            }
-            R.id.action_ir_east -> {
-                mosaicShown = false
-                imageType = "ir"
-                url = "https://weather.gc.ca/data/satellite/goes_ecan_1070_100.jpg"
-                getContent()
-            }
-            R.id.action_can -> {
-                mosaicShown = true
-                imageType = "rad"
-                getMosaic("CAN")
-            }
-            R.id.action_pac -> {
-                mosaicShown = true
-                imageType = "rad"
-                getMosaic("PAC")
-            }
-            R.id.action_wrn -> {
-                mosaicShown = true
-                imageType = "rad"
-                getMosaic("WRN")
-            }
-            R.id.action_ont -> {
-                mosaicShown = true
-                imageType = "rad"
-                getMosaic("ONT")
-            }
-            R.id.action_que -> {
-                mosaicShown = true
-                imageType = "rad"
-                getMosaic("QUE")
-            }
-            R.id.action_ern -> {
-                mosaicShown = true
-                imageType = "rad"
-                getMosaic("ERN")
-            }
+            R.id.action_vis_west -> getVisOrIr(
+                "vis",
+                "https://weather.gc.ca/data/satellite/goes_wcan_visible_100.jpg"
+            )
+            R.id.action_vis_east -> getVisOrIr(
+                "vis",
+                "https://weather.gc.ca/data/satellite/goes_ecan_visible_100.jpg"
+            )
+            R.id.action_ir_west -> getVisOrIr(
+                "ir",
+                "https://weather.gc.ca/data/satellite/goes_wcan_1070_100.jpg"
+            )
+            R.id.action_ir_east -> getVisOrIr(
+                "ir",
+                "https://weather.gc.ca/data/satellite/goes_ecan_1070_100.jpg"
+            )
+            R.id.action_can -> getRadarMosiac("CAN")
+            R.id.action_pac -> getRadarMosiac("PAC")
+            R.id.action_wrn -> getRadarMosiac("WRN")
+            R.id.action_ont -> getRadarMosiac("ONT")
+            R.id.action_que -> getRadarMosiac("QUE")
+            R.id.action_ern -> getRadarMosiac("ERN")
             R.id.action_fav -> toggleFavorite()
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
@@ -246,6 +214,18 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
             else -> return super.onOptionsItemSelected(item)
         }
         return true
+    }
+
+    private fun getRadarMosiac(sector: String) {
+        this.mosaicShown = true
+        this.imageType = "rad"
+        getMosaic(sector)
+    }
+
+    private fun getVisOrIr(imageType: String, url: String) {
+        this.imageType = imageType
+        this.url = url
+        getContent()
     }
 
     private fun ridMapSwitch(r: String) {

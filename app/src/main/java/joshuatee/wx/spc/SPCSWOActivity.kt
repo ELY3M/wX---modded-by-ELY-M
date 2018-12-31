@@ -37,7 +37,6 @@ import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTTS
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShare
@@ -80,26 +79,13 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         scrollView = findViewById(R.id.sv)
-        c1 = ObjectCardImage(this)
-        c2 = ObjectCardText(this)
-        c3 = ObjectCardImage(this)
-        c4 = ObjectCardImage(this)
-        c5 = ObjectCardImage(this)
-        c6 = ObjectCardImage(this)
-        c2.setOnClickListener(View.OnClickListener {
-            UtilityToolbar.showHide(
-                toolbar,
-                toolbarBottom
-            )
-        })
         val ll: LinearLayout = findViewById(R.id.ll)
-        ll.addView(c1.card)
-        ll.addView(c2.card)
-        listOf(c3, c4, c5, c6).forEach { ll.addView(it.card) }
-        //ll.addView(c3.card)
-        //ll.addView(c4.card)
-        //ll.addView(c5.card)
-        //ll.addView(c6.card)
+        c1 = ObjectCardImage(this, ll)
+        c2 = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        c3 = ObjectCardImage(this, ll)
+        c4 = ObjectCardImage(this, ll)
+        c5 = ObjectCardImage(this, ll)
+        c6 = ObjectCardImage(this, ll)
         activityArguments = intent.getStringArrayExtra(NO)
         turlDay = activityArguments[0]
         title = "Day $turlDay Convective Outlook"

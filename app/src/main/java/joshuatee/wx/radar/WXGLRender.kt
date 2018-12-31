@@ -1118,7 +1118,8 @@ class WXGLRender(private val context: Context) : Renderer {
         var fList = listOf<Double>()
         when (buffers.type) {
             PolygonType.MCD, PolygonType.MPD, PolygonType.WATCH_SVR, PolygonType.WATCH_TOR -> fList = UtilityWatch.addWat(context, provider, rid, buffers.type).toList()
-            PolygonType.TOR, PolygonType.SVR, PolygonType.EWW, PolygonType.FFW, PolygonType.SMW, PolygonType.SVS, PolygonType.SPS -> fList = WXGLPolygonWarnings.addWarnings(context, provider, rid, buffers.type).toList()
+            PolygonType.TOR, PolygonType.SVR, PolygonType.EWW, PolygonType.FFW, PolygonType.SMW, PolygonType.SVS -> fList = WXGLPolygonWarnings.addWarnings(context, provider, rid, buffers.type).toList()
+            PolygonType.SPS -> fList = WXGLPolygonWarnings.addSPS(context, provider, rid, buffers.type).toList()
             PolygonType.STI -> fList = WXGLNexradLevel3StormInfo.decodeAndPlot(context, idxStr, rid, provider).toList()
             else -> {
             }

@@ -26,7 +26,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -40,7 +39,6 @@ import joshuatee.wx.notifications.UtilityNotificationNHC
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.audio.AudioPlayActivity
-import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
@@ -110,14 +108,7 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (goesId.length < 2) {
             goesId = "0$goesId"
         }
-        cTextProd = ObjectCardText(this)
-        cTextProd.setOnClickListener(View.OnClickListener {
-            UtilityToolbar.showHide(
-                toolbar,
-                toolbarBottom
-            )
-        })
-        linearLayout.addView(cTextProd.card)
+        cTextProd = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         product = "MIATCP$stormId"
         getContent()
     }
@@ -143,7 +134,7 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         html = url
         scrollView.smoothScrollTo(0, 0)
         bitmaps.filter { it.width > 100 }
-            .forEach { linearLayout.addView(ObjectCardImage(contextg, it).card) }
+            .forEach { ObjectCardImage(contextg, linearLayout, it) }
         if (activityArguments.size > 2) {
             if (activityArguments[2] == "sound") UtilityTTS.synthesizeTextAndPlay(
                 applicationContext,

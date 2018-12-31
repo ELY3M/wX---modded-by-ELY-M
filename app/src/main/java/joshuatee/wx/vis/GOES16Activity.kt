@@ -29,7 +29,6 @@ import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
@@ -89,8 +88,7 @@ class GOES16Activity : VideoRecordActivity(), View.OnClickListener,
         sector = sectorF
         writePrefs()
         toolbar.subtitle = drw.getLabel()
-        val url = withContext(Dispatchers.IO) { UtilityGOES16.getUrl(drw.getUrl(), sector) }
-        bitmap = withContext(Dispatchers.IO) { url.getImage() }
+        bitmap = withContext(Dispatchers.IO) { UtilityGOES16.getImage(drw.getUrl(), sector) }
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn("GOES16_IMG")
         if (oldSector != sector) {

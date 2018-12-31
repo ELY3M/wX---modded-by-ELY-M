@@ -159,10 +159,9 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         mapState.clear()
         title = "Storm Reports"
         toolbar.subtitle = no
-        val ll: LinearLayout = findViewById(R.id.ll)
-        ll.removeAllViews()
-        val c0 = ObjectCardImage(contextg, bitmap)
-        ll.addView(c0.card)
+        val linearLayout: LinearLayout = findViewById(R.id.ll)
+        linearLayout.removeAllViews()
+        val c0 = ObjectCardImage(contextg, linearLayout, bitmap)
         c0.setOnClickListener(View.OnClickListener {
             val stDatePicker = DatePickerDialog(
                 this@SPCStormReportsActivity,
@@ -182,8 +181,7 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             stDatePicker.show()
         })
         c0.resetZoom()
-        val c1 = ObjectCardText(contextg)
-        ll.addView(c1.card)
+        val c1 = ObjectCardText(contextg, linearLayout)
         c1.setVisibility(View.GONE)
         c1.setOnClickListener(View.OnClickListener {
             filter = "All"
@@ -198,9 +196,7 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     val freq3 = mapState[s.state]
                     mapState[s.state] = if (freq3 == null) 1 else freq3 + 1
                 }
-                val cTmp = ObjectCardText(contextg)
-                ll.addView(cTmp.card)
-                cTmp.setText(Utility.fromHtml(s.text))
+                val cTmp = ObjectCardText(contextg, linearLayout, Utility.fromHtml(s.text))
                 cTmp.setId(k)
                 out.append(MyApplication.newline)
                 out.append(Utility.fromHtml(s.text))

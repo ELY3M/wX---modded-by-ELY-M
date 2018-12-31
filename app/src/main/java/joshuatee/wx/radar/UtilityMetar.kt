@@ -238,8 +238,6 @@ internal object UtilityMetar {
             y = DoubleArray(obsAlY.size)
             obsAlY.indices.forEach { y[it] = obsAlY[it] }
             obsArrWbGust = obsAlWbGust.toList()
-            //obsArrAviationColor = IntArray(obsAlAviationColor.size)
-            //obsAlAviationColor.indices.forEach { obsArrAviationColor[it] = obsAlAviationColor[it] }
             obsArrAviationColor = obsAlAviationColor.toList()
             initialized = true
             val currentTime = System.currentTimeMillis()

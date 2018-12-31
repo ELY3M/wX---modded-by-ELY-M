@@ -68,11 +68,10 @@ object UtilityDownload {
             "GOES16" -> {
                 needsBitmap = false
                 val index = Utility.readPref(context, "GOES16_IMG_FAV_IDX", 0)
-                val urlGoes16 = UtilityGOES16.getUrl(
+                bm = UtilityGOES16.getImage(
                     UtilityGOES16.codes[index],
                     Utility.readPref(context, "GOES16_SECTOR", "cgl")
                 )
-                bm = urlGoes16.getImage()
             }
             "VIS_1KM", "VIS_MAIN" -> {
                 needsBitmap = false
@@ -96,7 +95,7 @@ object UtilityDownload {
             }
             "VIS_CONUS" -> {
                 needsBitmap = false
-                bm = UtilityGOES16.getUrl("02", "CONUS").getImage()
+                bm = UtilityGOES16.getImage("02", "CONUS")
             }
             "FMAP" -> url = "${MyApplication.nwsWPCwebsitePrefix}/noaa/noaa.gif"
             "FMAP12" -> url = "${MyApplication.nwsWPCwebsitePrefix}/basicwx/92fwbg.gif"
@@ -229,7 +228,7 @@ object UtilityDownload {
             }
             "CONUSWV" -> {
                 needsBitmap = false
-                bm = UtilityGOES16.getUrl("09", "CONUS").getImage()
+                bm = UtilityGOES16.getImage("09", "CONUS")
             }
             "LTG" -> {
                 needsBitmap = false

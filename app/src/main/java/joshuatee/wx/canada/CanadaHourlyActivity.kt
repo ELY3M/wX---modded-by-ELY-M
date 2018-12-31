@@ -23,7 +23,6 @@ package joshuatee.wx.canada
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
 import android.widget.LinearLayout
 
 import joshuatee.wx.R
@@ -31,7 +30,6 @@ import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCALegal
 import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.ui.UtilityToolbar
 import kotlinx.coroutines.*
 
 class CanadaHourlyActivity : BaseActivity() {
@@ -50,9 +48,7 @@ class CanadaHourlyActivity : BaseActivity() {
         val locNum = intent.getStringExtra(LOC_NUM)
         locNumInt = (locNum.toIntOrNull() ?: 0) - 1
         val linearLayout: LinearLayout = findViewById(R.id.ll)
-        c0 = ObjectCardText(this)
-        c0.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar) })
-        linearLayout.addView(c0.card)
+        c0 = ObjectCardText(this, linearLayout, toolbar)
         linearLayout.addView(
             ObjectCALegal(
                 this,

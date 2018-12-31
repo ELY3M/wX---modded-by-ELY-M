@@ -59,7 +59,7 @@ class SPCTstormOutlookActivity : BaseActivity() {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         bitmaps = withContext(Dispatchers.IO) { UtilitySPC.tstormOutlookImages }
         val linearLayout: LinearLayout = findViewById(R.id.ll)
-        bitmaps.forEach { linearLayout.addView(ObjectCardImage(contextg, it).card) }
+        bitmaps.forEach { ObjectCardImage(contextg, linearLayout, it) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

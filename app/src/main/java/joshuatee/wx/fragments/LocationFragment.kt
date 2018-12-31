@@ -18,6 +18,8 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
+//hail size texts / why remove sounding?
 
 package joshuatee.wx.fragments
 
@@ -522,6 +524,17 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 cardCC?.setStatus(ccTime + radarTime)
             }
         }
+
+        //update hail size texts
+        if (PolygonType.HAIL_LABELS.pref) {
+            UtilityWXGLTextObject.updateHailLabels(numRadars, wxgltextArr)
+            glviewArr[idx].requestRender()
+            if (idx == oglrIdx) {
+                radarTime = radarTimeStamp
+                cardCC?.setStatus(ccTime + radarTime)
+            }
+        }
+
     }
 
     private fun getTextProduct(productString: String) = GlobalScope.launch(uiDispatcher) {
@@ -761,7 +774,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         })
         alertDialogStatus!!.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             val strName = alertDialogStatusAl[which]
-            if (oglrArr.size > 0){
+            if (oglrArr.size > 0) {
                 UtilityLocationFragment.handleIconTap(
                     strName,
                     oglrArr[0],
@@ -884,9 +897,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     }
 
     private fun getLocationForecast() = GlobalScope.launch(uiDispatcher) {
-
         var bmCc: Bitmap? = null
-
         //
         // Current Conditions
         //
@@ -942,14 +953,11 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     }
 
     private fun getLocationForecastSevenDay() = GlobalScope.launch(uiDispatcher) {
-
         val bmArr = mutableListOf<Bitmap>()
-
         if (locationChangedSevenDay) {
             linearLayoutForecast?.removeAllViewsInLayout()
             locationChangedSevenDay = false
         }
-
         withContext(Dispatchers.IO) {
             try {
                 objSevenDay = Utility.getCurrentSevenDay(Location.currentLocation)
@@ -971,7 +979,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 UtilityLog.HandleException(e)
             }
         }
-
         if (isAdded) {
             bitmapSize = UtilityLocationFragment.setNWSIconSize()
             objSevenDay?.let { _ ->
@@ -1029,13 +1036,11 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     }
 
     private fun getLocationHazards() = GlobalScope.launch(uiDispatcher) {
-
         if (locationChangedHazards) {
             linearLayoutHazards?.removeAllViewsInLayout()
             linearLayoutHazards?.visibility = View.GONE
             locationChangedHazards = false
         }
-
         withContext(Dispatchers.IO) {
             try {
                 objHazards = Utility.getCurrentHazards(Location.currentLocation)
@@ -1044,7 +1049,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 UtilityLog.HandleException(e)
             }
         }
-
         if (isAdded) {
             if (Location.isUS) {
                 var hazardSumAsync = ""

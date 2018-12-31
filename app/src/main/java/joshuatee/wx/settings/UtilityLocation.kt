@@ -27,6 +27,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
+import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import joshuatee.wx.*
 import joshuatee.wx.radar.LatLon
@@ -36,7 +37,9 @@ import joshuatee.wx.util.UtilityString
 import joshuatee.wx.util.UtilityTime
 
 import joshuatee.wx.objects.DistanceUnit
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
+import kotlinx.coroutines.*
 
 object UtilityLocation {
 
@@ -222,6 +225,30 @@ object UtilityLocation {
                 "ROAMING $date"
             )
         }
+    }
+
+    fun saveLocationForMcd(
+        nwsOffice: String,
+        context: Context,
+        linearLayout: LinearLayout,
+        uiDispatcher: CoroutineDispatcher
+    ) = GlobalScope.launch(uiDispatcher) {
+        var toastStr = ""
+        withContext(Dispatchers.IO) {
+            val locNumIntCurrent = joshuatee.wx.settings.Location.numLocations + 1
+            val locNumToSaveStr = locNumIntCurrent.toString()
+            val loc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "")
+            val addrSend = loc.replace(" ", "+")
+            val xyStr = getXYFromAddressOSM(addrSend)
+            toastStr = joshuatee.wx.settings.Location.locationSave(
+                context,
+                locNumToSaveStr,
+                xyStr[0],
+                xyStr[1],
+                loc
+            )
+        }
+        UtilityUI.makeSnackBar(linearLayout, toastStr)
     }
 
     fun hasAlerts(locNum: Int): Boolean = MyApplication.locations[locNum].notification

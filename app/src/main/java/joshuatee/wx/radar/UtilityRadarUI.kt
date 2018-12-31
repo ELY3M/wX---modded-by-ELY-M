@@ -139,6 +139,19 @@ internal object UtilityRadarUI {
             arrayOf(polygonUrl, "")
         )
     }
+
+    private fun showNearestSps(context: Context, glview: WXGLSurfaceView) {
+        val polygonUrl = UtilityWXOGL.showSpsProducts(
+                glview.newY.toDouble(),
+                glview.newX.toDouble() * -1.0
+        )
+        if (polygonUrl != "") ObjectIntent(
+                context,
+                USAlertsDetailActivity::class.java,
+                USAlertsDetailActivity.URL,
+                arrayOf(polygonUrl, "")
+        )
+    }
     
     
     private fun showNearestWatch(
@@ -242,6 +255,9 @@ internal object UtilityRadarUI {
             glview.latLon
         )
         alertDialogRadarLongpressAl.add("Show warning text")
+        if (MyApplication.radarSpsWarnings) {
+            alertDialogRadarLongpressAl.add("Show special weather text")
+        }
         if (MyApplication.radarWatMcd) {
             alertDialogRadarLongpressAl.add("Show watch text")
             alertDialogRadarLongpressAl.add("Show MCD text")
@@ -273,6 +289,9 @@ internal object UtilityRadarUI {
         when {
             strName.contains("Show warning text") -> {
                 showNearestWarning(context, glview)
+            }
+            strName.contains("Show special weather text") -> {
+                showNearestSps(context, glview)
             }
             strName.contains("Show watch text") -> {
                 showNearestWatch(context, act, glview, uiDispatcher)

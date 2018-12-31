@@ -230,9 +230,6 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
     }
 
     override fun onStop() {
-        //if (imageLoaded) {
-        //    Utility.writePref(this, "SOUNDING_SECTOR", nwsOffice)
-        //}
         img.imgSavePosnZoom(this, "SOUNDING")
         super.onStop()
     }

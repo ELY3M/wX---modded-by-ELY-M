@@ -32,7 +32,6 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
-import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
@@ -58,7 +57,7 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
     private var turlDay = ""
     private var imgUrl = ""
     private lateinit var img: ObjectTouchImageView
-    private var nws1StateCurrent = ""
+    private var state = ""
     private var bitmap = UtilityImg.getBlankBitmap()
     private var firstTime = true
     private val imgPrefToken = "SWO_STATE"
@@ -70,10 +69,10 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
         val turl = intent.getStringArrayExtra(NO)
         turlDay = turl[0]
         val nws1Current = Location.wfo
-        nws1StateCurrent = Utility.readPref(this, "NWS_LOCATION_$nws1Current", "").split(",")[0]
+        state = Utility.readPref(this, "NWS_LOCATION_$nws1Current", "").split(",")[0]
         img = ObjectTouchImageView(this, this, R.id.iv)
         img.setOnClickListener(this)
-        val spinner1 = ObjectSpinner(this, this, R.id.spinner1, STATE_ARR, nws1StateCurrent)
+        val spinner1 = ObjectSpinner(this, this, R.id.spinner1, STATE_ARR, state)
         spinner1.setOnItemSelectedListener(this)
     }
 
@@ -83,8 +82,8 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        title = "$nws1StateCurrent SWO D$turlDay"
-        imgUrl = UtilitySPCSWO.getSWOStateURL(nws1StateCurrent, turlDay)
+        title = "$state SWO D$turlDay"
+        imgUrl = UtilitySPCSWO.getSWOStateURL(state, turlDay)
         bitmap = withContext(Dispatchers.IO) { imgUrl.getImage() }
         img.img.visibility = View.VISIBLE
         img.setBitmap(bitmap)
@@ -95,7 +94,7 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
         when (item.itemId) {
             R.id.action_share -> UtilityShare.shareBitmap(
                 this,
-                "$nws1StateCurrent SWO D$turlDay",
+                "$state SWO D$turlDay",
                 bitmap
             )
             else -> return super.onOptionsItemSelected(item)
@@ -108,9 +107,8 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
             UtilityToolbar.fullScreenMode(toolbar, toolbarBottom)
             firstTime = false
         }
-        img.setMaxZoom(3.0f)
         img.setZoom(1.0f)
-        nws1StateCurrent = MyApplication.colon.split(STATE_ARR[pos])[0]
+        state = STATE_ARR[pos].split(":")[0]
         getContent()
     }
 

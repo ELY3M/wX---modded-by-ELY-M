@@ -26,6 +26,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 
 class ObjectCardVerticalText(context: Context, numColumns: Int) {
@@ -59,6 +60,20 @@ class ObjectCardVerticalText(context: Context, numColumns: Int) {
             )
             llv.addView(tvArr[it])
         }
+    }
+
+    constructor(
+        context: Context,
+        numColumns: Int,
+        linearLayout: LinearLayout,
+        toolbar: Toolbar
+    ) : this(context, numColumns) {
+        linearLayout.addView(card)
+        setOnClickListener(View.OnClickListener {
+            UtilityToolbar.showHide(
+                toolbar
+            )
+        })
     }
 
     fun setText(textArr: List<String>) {

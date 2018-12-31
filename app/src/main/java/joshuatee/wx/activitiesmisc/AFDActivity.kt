@@ -102,14 +102,7 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
         linearLayout = findViewById(R.id.ll)
-        c0 = ObjectCardText(this)
-        linearLayout.addView(c0.card)
-        c0.setOnClickListener(View.OnClickListener {
-            UtilityToolbar.showHide(
-                toolbar,
-                toolbarBottom
-            )
-        })
+        c0 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         notifToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
         activityArguments = intent.getStringArrayExtra(URL)

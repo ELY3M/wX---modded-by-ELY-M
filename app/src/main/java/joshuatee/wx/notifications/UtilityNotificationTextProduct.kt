@@ -112,6 +112,5 @@ object UtilityNotificationTextProduct {
         )
         val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
         notifObj.sendNotification(context, firstLine, 1, noti)
-        //notifier.notify(firstLine, 1, noti)
     }
 }

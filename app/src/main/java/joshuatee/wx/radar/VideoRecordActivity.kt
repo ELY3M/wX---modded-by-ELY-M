@@ -105,7 +105,6 @@ abstract class VideoRecordActivity : AppCompatActivity() {
             }
         }
         if (requestCode == CREATE_SCREEN_CAPTURE && resultCode == Activity.RESULT_OK) {
-            //val ti = TelecineService.newIntent(this, resultCode, data)
             val ti = TelecineService.newIntent(applicationContext, resultCode, data)
             ti.putExtra("show_distance_tool", showDistanceTool)
             ti.putExtra("show_recording_tools", "true")

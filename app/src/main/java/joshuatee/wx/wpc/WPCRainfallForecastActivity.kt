@@ -66,7 +66,7 @@ class WPCRainfallForecastActivity : BaseActivity() {
         }
         var card: ObjectCardImage
         bitmaps.forEach { bitmap ->
-            card = ObjectCardImage(contextg, bitmap)
+            card = ObjectCardImage(contextg, linearLayout, bitmap)
             val prodTextUrlLocal = UtilityWPCRainfallForecast.textUrls[bitmaps.indexOf(bitmap)]
             val prodTitleLocal =
                 UtilityWPCRainfallForecast.productLabels[bitmaps.indexOf(bitmap)] + " - " + getString(
@@ -80,7 +80,6 @@ class WPCRainfallForecastActivity : BaseActivity() {
                     arrayOf(prodTextUrlLocal, prodTitleLocal)
                 )
             })
-            linearLayout.addView(card.card)
         }
     }
 

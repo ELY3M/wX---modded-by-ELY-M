@@ -22,19 +22,61 @@
 package joshuatee.wx.activitiesmisc
 
 import android.content.Context
-import android.util.Log
-import androidx.appcompat.app.AppCompatDelegate
 import joshuatee.wx.Extensions.parseColumn
 import joshuatee.wx.MyApplication
 import joshuatee.wx.RegExp
 import joshuatee.wx.external.ExternalDuplicateRemover
-import joshuatee.wx.external.ExternalPoint
-import joshuatee.wx.external.ExternalPolygon
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
 
 //parses specical weather statements
 
+
+internal class SpecialWeather(private val type: PolygonType) {
+
+    var text = ""
+        private set
+    var count = 0
+        private set
+
+    fun generateString(context: Context, textTor: String) {
+        var nwsOfficeArr: List<String>
+        var nwsOffice: String
+        var nwsLoc = ""
+        var label = ""
+        when (type) {
+            PolygonType.SPS -> label = "Special Weather Statement"
+            else -> {
+            }
+        }
+        val warningAl = textTor.parseColumn(RegExp.warningLatLonPattern)
+        count = warningAl.size
+        warningAl.forEach {
+            text += it
+            nwsOfficeArr = it.split(".")
+            if (nwsOfficeArr.size > 1) {
+                nwsOffice = nwsOfficeArr[2]
+                nwsOffice = nwsOffice.replace("^[KP]".toRegex(), "")
+                nwsLoc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "")
+            }
+            text += "  " + nwsLoc + MyApplication.newline
+        }
+        val remover = ExternalDuplicateRemover()
+        text = remover.stripDuplicates(text)
+        text = "(" + text.split(MyApplication.newline).dropLastWhile { it.isEmpty() }.size +
+                ") " + label + MyApplication.newline +
+                text.replace((MyApplication.newline + "$").toRegex(), "")
+    }
+}
+
+
+
+
+
+
+
+/*
 internal class SpecialWeather(private val type: PolygonType) {
 
     var TAG = "SpecialWeather"
@@ -52,7 +94,7 @@ internal class SpecialWeather(private val type: PolygonType) {
         }
 
 
-        Log.i(TAG, "Trying to parse SPS......\n")
+        UtilityLog.d(TAG, "Trying to parse SPS......\n")
     }
 
 
@@ -65,7 +107,7 @@ internal class SpecialWeather(private val type: PolygonType) {
         }
 
 
-        Log.i(TAG, "textsps: "+textSps+"\n");
+        UtilityLog.d(TAG, "textsps: "+textSps+"\n");
         //"eventMotionDescription": [
         // "2018-09-23T17:19:00.000-04:00...storm...249DEG...13KT...37.13,-81.47"
         //"id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3217762"
@@ -78,21 +120,21 @@ internal class SpecialWeather(private val type: PolygonType) {
         SPSText = SPSText.replace(" ", "")
         val polygonArr = SPSText.parseColumn(RegExp.warningLatLonPattern)
 
-        Log.i(TAG, "urllist: "+urlList)
-        //val warningAl = textSps.parseColumn(RegExp.warningLatLonPattern)
+        UtilityLog.d(TAG, "urllist: "+urlList)
+        val warningAl = textSps.parseColumn(RegExp.warningLatLonPattern)
         //Log.i(TAG, "warningAl: "+warningAl)
 
         count = polygonArr.size
 
         urlList.forEach {
-            Log.i(TAG, "foreach it: "+it)
+            UtilityLog.d(TAG, "foreach it: "+it)
             //text += it
-            Log.i(TAG, "for each text: "+text)
+            UtilityLog.d(TAG, "for each text: "+text)
 
         }
 
         polygonArr.forEach {
-            Log.i(TAG, "polygonArr it: "+it)
+            UtilityLog.d(TAG, "polygonArr it: "+it)
             //text += it
             MyApplication.SPSLatlon.valueSet(context, it)
         }
@@ -103,55 +145,16 @@ internal class SpecialWeather(private val type: PolygonType) {
 
 
         count++
-        Log.i(TAG, "spscount: "+count+"\n");
+        UtilityLog.d(TAG, "spscount: "+count+"\n");
         val remover = ExternalDuplicateRemover()
         text = remover.stripDuplicates(text)
         text = "(" + text.split(MyApplication.newline).dropLastWhile { it.isEmpty() }.size + ") " + label + MyApplication.newline + text.replace((MyApplication.newline + "$").toRegex(), "")
-        Log.i(TAG, "text: "+text+"\n");
+        UtilityLog.d(TAG, "text: "+text+"\n");
 
 
     }
-
-
-    fun showspsProducts(lat: Double, lon: Double): String {
-        var SPSText = MyApplication.severeDashboardSps.valueGet()
-        val urlList = SPSText.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
-        SPSText = SPSText.replace("\n", "")
-        SPSText = SPSText.replace(" ", "")
-        val polygonArr = SPSText.parseColumn(RegExp.warningLatLonPattern)
-        val vtecAl = SPSText.parseColumn(RegExp.warningVtecPattern)
-        var retStr = ""
-        var testArr: List<String>
-        var q = 0
-        var notFound = true
-        var polyCount = -1
-        polygonArr.forEach { polys ->
-            polyCount += 1
-            if (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith("0.CAN")) {
-                val polyTmp = polys.replace("[", "").replace("]", "").replace(",", " ")
-                testArr = polyTmp.split(" ").dropLastWhile { it.isEmpty() }
-                val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }.map {
-                    it.toDoubleOrNull() ?: 0.0
-                }.toList()
-                val x = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 != 0 }.map {
-                    it.toDoubleOrNull() ?: 0.0
-                }.toList()
-                if (y.size > 3 && x.size > 3 && x.size == y.size) {
-                    val poly2 = ExternalPolygon.Builder()
-                    x.indices.forEach { j -> poly2.addVertex(ExternalPoint(x[j].toFloat(), y[j].toFloat())) }
-                    val polygon2 = poly2.build()
-                    val contains = polygon2.contains(ExternalPoint(lat.toFloat(), lon.toFloat()))
-                    if (contains && notFound) {
-                        retStr = urlList[q]
-                        notFound = false
-                    }
-                }
-            }
-            q += 1
-        }
-        return retStr
-    }
-
 
 }
+
+*/
 

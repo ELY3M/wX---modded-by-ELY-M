@@ -338,10 +338,6 @@ object UtilityNotification {
                         stackBuilder2.getPendingIntent(i + y, PendingIntent.FLAG_UPDATE_CURRENT)
                     val objPI = ObjectPendingIntents(context, TextScreenActivity::class.java)
                     objPI.resultPendingIntent = resultPendingIntent2
-
-                    //noti2 = createNotifBigText(context, false, noMain, noBody, resultPendingIntent2, MyApplication.ICON_FORECAST, noSummary, Notification.PRIORITY_MIN)
-                    //notifier2.notify(url + "7day", 1, noti2)
-
                     val notifObj = ObjectNotification(
                         context,
                         false,
@@ -358,7 +354,6 @@ object UtilityNotification {
                     )
                     val noti2 = UtilityNotification.createNotifBigTextWithAction(notifObj)
                     notifObj.sendNotification(context, url + "7day", 1, noti2)
-
                 } // end 7 day
             } // end if current time
         } // end if alert on cc1
@@ -380,7 +375,6 @@ object UtilityNotification {
                 .build()
         )
         notificationManager.createNotificationChannel(channel)
-
         val channelNoSound = NotificationChannel(
             notiChannelStrNoSound,
             "wX No Sound",
@@ -389,7 +383,6 @@ object UtilityNotification {
         channelNoSound.description = "wX weather no sound"
         channelNoSound.setSound(null, null)
         notificationManager.createNotificationChannel(channelNoSound)
-
         notiChannelInitialized = true
     }
 

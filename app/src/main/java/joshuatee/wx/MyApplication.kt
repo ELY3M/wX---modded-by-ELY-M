@@ -143,6 +143,7 @@ class MyApplication : Application() {
         const val nwsMagNcepWebsitePrefix: String = "https://mag.ncep.noaa.gov"
         const val sunMoonDataUrl: String = "https://api.usno.navy.mil"
         const val goes16Url: String = "https://cdn.star.nesdis.noaa.gov"
+	const val goes16AnimUrl: String = "https://www.star.nesdis.noaa.gov"
         const val nwsWeatherGov: String = "https://w1.weather.gov"
 
 

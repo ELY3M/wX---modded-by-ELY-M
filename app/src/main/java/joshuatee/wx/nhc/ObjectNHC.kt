@@ -22,7 +22,6 @@
 package joshuatee.wx.nhc
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.view.View
 import android.widget.LinearLayout
@@ -104,16 +103,13 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
             cNotif?.setVisibility(View.GONE)
         }
         if (atlSumList.size < 1) {
-            val cAtl = ObjectCardText(context)
             val noAtl = "There are no tropical cyclones in the Atlantic at this time."
-            cAtl.setText(noAtl)
-            dynamicview.addView(cAtl.card)
+            ObjectCardText(context, dynamicview, noAtl)
             html = noAtl
         } else {
             atlSumList.indices.forEach { k ->
                 if (atlImg1List[k] != "") {
-                    val cAtl = ObjectCardText(context)
-                    cAtl.setText(Utility.fromHtml(atlSumList[k]))
+                    val cAtl = ObjectCardText(context, dynamicview, Utility.fromHtml(atlSumList[k]))
                     html += atlSumList[k]
                     val url = atlLinkList[k]
                     val imgUrl1 = atlImg1List[k]
@@ -121,28 +117,24 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
                     val title = atlTitleList[k]
                     val wallet = atlWalletList[k]
                     cAtl.setOnClickListener(View.OnClickListener {
-                        val i = Intent(context, NHCStormActivity::class.java)
-                        i.putExtra(
+                        ObjectIntent(
+                            context,
+                            NHCStormActivity::class.java,
                             NHCStormActivity.URL,
                             arrayOf(url, title, "nosound", imgUrl1, imgUrl2, wallet)
                         )
-                        context.startActivity(i)
                     })
-                    dynamicview.addView(cAtl.card)
                 }
             }
         }
         if (pacSumList.size < 1) {
-            val cPac = ObjectCardText(context)
             val noPac = "There are no tropical cyclones in the Eastern Pacific at this time."
-            cPac.setText(noPac)
+            ObjectCardText(context, dynamicview, noPac)
             html += noPac
-            dynamicview.addView(cPac.card)
         } else {
             pacSumList.indices.forEach { k ->
                 if (pacImg1List[k] != "") {
-                    val cPac = ObjectCardText(context)
-                    cPac.setText(Utility.fromHtml(pacSumList[k]))
+                    val cPac = ObjectCardText(context, dynamicview, Utility.fromHtml(pacSumList[k]))
                     html += pacSumList[k]
                     val url = pacLinkList[k]
                     val imgUrl1 = pacImg1List[k]
@@ -157,7 +149,6 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
                             arrayOf(url, title, "nosound", imgUrl1, imgUrl2, wallet)
                         )
                     })
-                    dynamicview.addView(cPac.card)
                 }
             }
         }
@@ -165,7 +156,7 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
     }
 
     private fun showTwoBitmaps() {
-        bitmaps.forEach { dynamicview.addView(ObjectCardImage(context, it).card) }
+        bitmaps.forEach { ObjectCardImage(context, dynamicview, it) }
     }
 
     private fun clearNHCNotifBlock() {
