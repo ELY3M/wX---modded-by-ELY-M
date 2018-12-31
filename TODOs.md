@@ -25,7 +25,7 @@ https://w1.weather.gov/data/LOT/SPSLOT
 #
 ## DONE!
 ====================================  
-Special Weather Statements Polygons are working but you cant see the texts from SPS polygons.  
+Special Weather Statements Polygons are working but the texts do not match up with the polygons for ex: you will see text for WY on polygon in LA.    
 added hail icons and text for showing hail sizes on radar, still testing  
 added backup urls in getRadarStatus function.  
 show MPD text within text is done and working.   
