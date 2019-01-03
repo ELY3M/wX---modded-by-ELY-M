@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -50,7 +50,7 @@ class ObjectCardCC(context: Context, version: Int) {
         textViewTop.gravity = Gravity.CENTER
         textViewTop.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
         textViewTop.setPadding(MyApplication.padding, 2, MyApplication.padding, 0)
-        // FIXME
+        // FIXME  - need to see why this was disabled. shrinks text to fit on one line like wXL23
         //TextViewCompat.setAutoSizeTextTypeWithDefaults(textViewTop, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
         textViewBottom = AppCompatTextView(context)
         textViewBottom.gravity = Gravity.CENTER

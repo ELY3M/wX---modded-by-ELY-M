@@ -4,8 +4,12 @@
 // TODO refactor nexrad radar to match architecture of wXL23 Metal to remove code duplicity
 // TODO convert to new NavDrawer: USWarningsWith, ModelGeneric, ModelSPCHRRR, SPCCompmap, SPCStormreports, GOES16
 // TODO in general reduce static methods ( object methods ) in favor of instance methods
-//
+// TODO convert other imageMaps to use new clickHandler
 
+55093 2019_01_03 misc code refactor
+55093 2019_01_03 [BUG] no vtec nws office for sps in uswarn
+                 minor enhancement in ObjectSpinner to handle listener setup in constructors
+55092 2019_01_01 misc code cleanup, update license for 2019
 55091 2018_12_31 misc code refactor
 55090 2018_12_30 misc code refactor
 55089 2018_12_30 misc code refactor

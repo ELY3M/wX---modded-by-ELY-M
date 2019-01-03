@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -86,6 +86,14 @@ abstract class VideoRecordActivity : AppCompatActivity() {
         UtilityToolbar.fullScreenMode(toolbar, false)
     }
 
+    protected fun checkOverlayPerms() {
+        if (isStoragePermissionGranted) {
+            if (android.os.Build.VERSION.SDK_INT > 22)
+                checkDrawOverlayPermission()
+            else
+                fireScreenCaptureIntent()
+        }
+    }
 
     protected fun fireScreenCaptureIntent() {
         val manager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager

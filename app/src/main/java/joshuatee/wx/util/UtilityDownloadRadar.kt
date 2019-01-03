@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -37,6 +37,7 @@ object UtilityDownloadRadar {
         MyApplication.severeDashboardSmw.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Special%20Marine%20Warning"))
         MyApplication.severeDashboardSvs.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Severe%20Weather%20Statement"))
         MyApplication.severeDashboardSps.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Special%20Weather%20Statement"))
+        //MyApplication.severeDashboardSps.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("http://192.168.1.113/nws/SPS-12-31-18-5.09pm.txt"))
 
     }
 }

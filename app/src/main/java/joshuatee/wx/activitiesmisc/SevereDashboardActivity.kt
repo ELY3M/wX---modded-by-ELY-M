@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -94,14 +94,14 @@ class SevereDashboardActivity : BaseActivity() {
             val wFfw = SevereWarning(PolygonType.FFW)
             val wSmw = SevereWarning(PolygonType.SMW)
             val wSvs = SevereWarning(PolygonType.SVS)
-            //val wSps = SpecialWeather(PolygonType.SPS)
+            val wSps = SpecialWeather(PolygonType.SPS)
             wTor.generateString(contextg, MyApplication.severeDashboardTor.valueGet())
             wSvr.generateString(contextg, MyApplication.severeDashboardSvr.valueGet())
             wEww.generateString(contextg, MyApplication.severeDashboardEww.valueGet())
             wFfw.generateString(contextg, MyApplication.severeDashboardFfw.valueGet())
             wSmw.generateString(contextg, MyApplication.severeDashboardSmw.valueGet())
             wSvs.generateString(contextg, MyApplication.severeDashboardSvs.valueGet())
-            //wSps.generateString(contextg, MyApplication.severeDashboardSps.valueGet())
+            wSps.generateSpsString(contextg, MyApplication.severeDashboardSps.valueGet())
             if (wTor.count > 0) {
             val objTor = ObjectCardText(contextg, linearLayout, wTor.text)
                 objTor.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Tornado Warning.*?") })
@@ -126,12 +126,11 @@ class SevereDashboardActivity : BaseActivity() {
                 val objSvs = ObjectCardText(contextg, linearLayout, wSvs.text)
                 objSvs.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Severe Weather Statement.*?") })
             }
-            /*
             if (wSps.count > 0) {
                 val objSps = ObjectCardText(contextg, linearLayout, wSps.text)
                 objSps.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Special Weather Statement.*?") })
             }
-            */
+
         
 	withContext(Dispatchers.IO) {
 

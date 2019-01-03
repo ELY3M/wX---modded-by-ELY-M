@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -20,6 +20,8 @@
 */
 //modded by ELY M.
 //hail size texts / why remove sounding?
+//OBS text fix
+//spotter - us location removed
 
 package joshuatee.wx.fragments
 
@@ -515,9 +517,20 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             }
         }
 
-        if (Location.isUS) {
+        //hmmm not all spotters are in us//
+        //if (Location.isUS) {
             if (PolygonType.SPOTTER_LABELS.pref)
                 UtilityWXGLTextObject.updateSpotterLabels(numRadars, wxgltextArr)
+            glviewArr[idx].requestRender()
+            if (idx == oglrIdx) {
+                radarTime = radarTimeStamp
+                cardCC?.setStatus(ccTime + radarTime)
+            }
+        //}
+
+        //update OBS texts
+        if (PolygonType.OBS.pref) {
+            UtilityWXGLTextObject.updateObs(numRadars, wxgltextArr)
             glviewArr[idx].requestRender()
             if (idx == oglrIdx) {
                 radarTime = radarTimeStamp
@@ -577,7 +590,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private val changeListener = object : WXGLSurfaceView.OnProgressChangeListener {
         override fun onProgressChanged(progress: Int, idx: Int, idxInt: Int) {
             if (progress != 50000) {
-                // FIXME needed?
                 idxIntG = idx
                 UtilityRadarUI.addItemsToLongPress(
                     alertDialogRadarLongpressAl,
@@ -833,14 +845,12 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             )
         }
         radarLocationChangedAl[idxIntG] = true
-        // FIXME need method
         glviewArr[idxIntG].scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
         oglrArr[idxIntG].setViewInitial(
             MyApplication.wxoglSize.toFloat() / 10.0f,
             0.0f,
             0.0f
         )
-        // FIXME need ridMapSwitch
         getRadar(idxIntG)
     }
 
@@ -1021,15 +1031,15 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 }
             }
             //
-            // CA Legal card
-            //
-            //
             // Canada legal card
             //
             if (!Location.isUS) {
-                val canLegal = ObjectCALegal(activityReference, UtilityCanada.getLocationUrl(x, y))
                 if (homescreenFavLocal.contains("TXT-7DAY2")) {
-                    linearLayoutForecast?.addView(canLegal.card)
+                    ObjectCALegal(
+                        activityReference,
+                        linearLayoutForecast!!,
+                        UtilityCanada.getLocationUrl(x, y)
+                    )
                 }
             }
         }

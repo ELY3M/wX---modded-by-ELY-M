@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -134,11 +134,10 @@ class USNWSGOESActivity : VideoRecordActivity(), OnClickListener, OnItemSelected
             actType = turl[2]
         }
         sp = if (rid == "nhc") {
-            ObjectSpinner(this, this, R.id.spinner1, UtilityGOES.RADS)
+            ObjectSpinner(this, this, this, R.id.spinner1, UtilityGOES.RADS)
         } else {
-            ObjectSpinner(this, this, R.id.spinner1, radsNws)
+            ObjectSpinner(this, this, this, R.id.spinner1, radsNws)
         }
-        sp.setOnItemSelectedListener(this)
         sp.setSelection(findPosition(nwsOffice.toUpperCase(Locale.US)))
     }
 

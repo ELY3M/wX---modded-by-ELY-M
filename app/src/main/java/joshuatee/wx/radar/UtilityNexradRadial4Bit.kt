@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -41,10 +41,6 @@ import joshuatee.wx.util.UtilityMath
 import joshuatee.wx.util.UtilityTime
 
 internal object UtilityNexradRadial4Bit {
-
-    // big thanks to gottipati, harpchad
-    // http://sourceforge.net/projects/nexrad-perl/files/nexrad-perl/
-    // below is mostly a java port of this code
 
     fun decodeAndPlotNexrad(context: Context, bm1: Bitmap, fn: String, prod: String) {
         val canvas = Canvas(bm1)
@@ -228,7 +224,7 @@ internal object UtilityNexradRadial4Bit {
                     }
                     g += 1
                 }
-            } // end dis null check
+            }
         } catch (e: IOException) {
             UtilityLog.HandleException(e)
         }

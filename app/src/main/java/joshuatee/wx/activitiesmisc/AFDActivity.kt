@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -71,7 +71,6 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     private lateinit var activityArguments: Array<String>
     private var product = ""
     private var nwsOffice = ""
-    private var sector = ""
     private lateinit var imageMap: ObjectImageMap
     private lateinit var scrollView: ScrollView
     private var html = ""
@@ -92,9 +91,6 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     private lateinit var spinner1: ObjectSpinner
     private lateinit var contextg: Context
 
-    /**
-     *
-     */
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_afd, R.menu.afd)
@@ -129,8 +125,7 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
             prefTokenLocation,
             prefToken
         )
-        spinner1 = ObjectSpinner(this, this, R.id.spinner1, ridArrLoc)
-        spinner1.setOnItemSelectedListener(this)
+        spinner1 = ObjectSpinner(this, this, this, R.id.spinner1, ridArrLoc)
         scrollView = findViewById(R.id.sv)
         imageMap = ObjectImageMap(
             this,
@@ -140,15 +135,7 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
             toolbarBottom,
             listOf<View>(c0.card, scrollView)
         )
-        imageMap.addOnImageMapClickedHandler(object : ImageMap.OnImageMapClickedHandler {
-            override fun onImageMapClicked(id: Int, im2: ImageMap) {
-                sector = UtilityImageMap.maptoWFO(id)
-                im2.visibility = View.GONE
-                mapSwitch(sector.toUpperCase(Locale.US))
-            }
-
-            override fun onBubbleClicked(id: Int) {}
-        })
+        imageMap.addClickHandler(::mapSwitch, UtilityImageMap::maptoWFO)
     }
 
     override fun onRestart() {
@@ -286,7 +273,7 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     }
 
     private fun mapSwitch(loc: String) {
-        nwsOffice = loc
+        nwsOffice = loc.toUpperCase(Locale.US)
         mapShown = false
         ridArrLoc = UtilityFavorites.setupFavMenu(
             this,

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -61,7 +61,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var animRan = false
     var firstRun: Boolean = false
-    var imageLoaded: Boolean = false
+    private var imageLoaded: Boolean = false
     private lateinit var fab1: ObjectFab
     private lateinit var fab2: ObjectFab
     private var spinnerRunRan = false
@@ -134,17 +134,13 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         miStatus = m.findItem(R.id.action_status)
         miStatus.title = "in through"
         m.findItem(R.id.action_map).isVisible = false
-        om.spTime = ObjectSpinner(this, this, R.id.spinner_time)
-        om.spTime.setOnItemSelectedListener(this)
+        om.spTime = ObjectSpinner(this, this, this, R.id.spinner_time)
         om.displayData = DisplayData(this, this, this, om.numPanes, om.spTime)
-        spRun = ObjectSpinner(this, this, R.id.spinner_run)
-        spRun.setOnItemSelectedListener(this)
-        spSector = ObjectSpinner(this, this, R.id.spinner_sector, om.sectors)
-        spSector.setOnItemSelectedListener(this)
+        spRun = ObjectSpinner(this, this, this, R.id.spinner_run)
+        spSector = ObjectSpinner(this, this, this, R.id.spinner_sector, om.sectors)
+        // FIXME use constructor with init value at end
         spSector.setSelection(om.sector)
-        val spModel = ObjectSpinner(this, this, R.id.spinner_model, om.models)
-        spModel.setOnItemSelectedListener(this)
-        spModel.setSelection(om.model)
+        ObjectSpinner(this, this, this, R.id.spinner_model, om.models, om.model)
         drw = ObjectNavDrawer(this, om.labels, om.params)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
@@ -278,12 +274,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             )
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
-                    if (isStoragePermissionGranted) {
-                        if (android.os.Build.VERSION.SDK_INT > 22)
-                            checkDrawOverlayPermission()
-                        else
-                            fireScreenCaptureIntent()
-                    }
+                    checkOverlayPerms()
                 } else {
                     if (animRan)
                         UtilityShare.shareAnimGif(
@@ -333,8 +324,6 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             if (om.model == "CFS" && 0 == spRun.selectedItemPosition) {
                 getContent()
             }
-            //title = om.rtd.imageCompleteStr
-            //miStatus.title = "in through " + om.rtd.imageCompleteStr
             miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
             var tmpStr: String
             (0 until om.spTime.size()).forEach {
@@ -351,13 +340,11 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                 firstRunTimeSet = true
                 om.spTime.setSelection(Utility.readPref(contextg, om.prefRunPosn, 1))
             }
-            //om.spTime.notifyDataSetChanged()
         } else {
             om.rtd = withContext(Dispatchers.IO) { om.getRunTime() }
             spRun.clear()
             spRun.addAll(om.rtd.listRun)
             miStatus.isVisible = true
-            //miStatus.title = "in through " + om.rtd.imageCompleteStr
             miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
             spRun.notifyDataSetChanged()
             // FIXME
@@ -559,7 +546,5 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         }
         spRun.notifyDataSetChanged()
     }
-
-
 }
 

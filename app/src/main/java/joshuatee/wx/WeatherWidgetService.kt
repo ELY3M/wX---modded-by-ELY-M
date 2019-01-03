@@ -39,9 +39,7 @@ class WeatherWidgetService : RemoteViewsService() {
  * This is the factory that will provide data to the collection widget.
  */
 
-//internal class StackRemoteViewsFactory (private val mContext: Context, intent: Intent) : RemoteViewsService.RemoteViewsFactory {
-// FIXME rename to context
-internal class StackRemoteViewsFactory(private val mContext: Context) :
+internal class StackRemoteViewsFactory(private val context: Context) :
     RemoteViewsService.RemoteViewsFactory {
     private var mCursor: Cursor? = null
 
@@ -75,11 +73,11 @@ internal class StackRemoteViewsFactory(private val mContext: Context) :
         }
         var t1 = ""
         var t2 = ""
-        val formatStr = mContext.resources.getString(R.string.item_format_string)
+        val formatStr = context.resources.getString(R.string.item_format_string)
         val itemId = R.layout.widget_item
-        val rv = RemoteViews(mContext.packageName, itemId)
-        val preferences = mContext.getSharedPreferences(
-            mContext.packageName + "_preferences",
+        val rv = RemoteViews(context.packageName, itemId)
+        val preferences = context.getSharedPreferences(
+            context.packageName + "_preferences",
             Context.MODE_PRIVATE
         )
         if (position != 0) {
@@ -110,7 +108,7 @@ internal class StackRemoteViewsFactory(private val mContext: Context) :
         val iconArr = iconStr.split("!")
         if (position < iconArr.size) {
             rv.setImageViewUri(R.id.iv, Uri.parse(""))
-            rv.setImageViewBitmap(R.id.iv, UtilityNWS.getIcon(mContext, iconArr[position]))
+            rv.setImageViewBitmap(R.id.iv, UtilityNWS.getIcon(context, iconArr[position]))
         }
         val fillInIntent = Intent()
         val extras = Bundle()
@@ -132,7 +130,7 @@ internal class StackRemoteViewsFactory(private val mContext: Context) :
 
     override fun onDataSetChanged() {
         mCursor?.close()
-        mCursor = mContext.contentResolver.query(
+        mCursor = context.contentResolver.query(
             WeatherDataProvider.CONTENT_URI,
             null,
             null,

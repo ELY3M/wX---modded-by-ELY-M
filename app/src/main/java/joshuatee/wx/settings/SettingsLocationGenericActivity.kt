@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -266,7 +266,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
         if (locNumArr[1] != "") {
             if (locNumArr[1] == " roaming") {
                 locLabelEt.setText(locNumArr[1].toUpperCase(Locale.US))
-                gpsAndSave("osm", locNum, locNumArr[1].toUpperCase(Locale.US))
+                gpsAndSave(locNum, locNumArr[1].toUpperCase(Locale.US))
             } else {
                 val addrSend = locNumArr[1].replace(" ", "+")
                 locLabelEt.setText(locNumArr[1])
@@ -333,25 +333,21 @@ class SettingsLocationGenericActivity : BaseActivity(),
         hideNONUSNotifs()
     }
 
-    // FIXME rename args
     private fun saveLoc(
-        params0: String,
-        params1: String,
-        params2: String,
-        params3: String,
-        params4: String
+        mapType: String,
+        locNum: String,
+        xStr: String,
+        yStr: String,
+        labelStr: String
     ) = GlobalScope.launch(uiDispatcher) {
-
         var toastStr = ""
         var xLoc = ""
-
         withContext(Dispatchers.IO) {
-            if (params0 == "osm") {
-                toastStr = Location.locationSave(contextg, params1, params2, params3, params4)
-                xLoc = params2
+            if (mapType == "osm") {
+                toastStr = Location.locationSave(contextg, locNum, xStr, yStr, labelStr)
+                xLoc = xStr
             }
         }
-
         showMessage(toastStr)
         updateSubTitle()
         if (xLoc.startsWith("CANADA:")) {
@@ -604,28 +600,24 @@ class SettingsLocationGenericActivity : BaseActivity(),
         }
     }
 
-    // FIXME rename args
     private fun addressSearchAndSave(
         type: String,
-        params1: String,
-        params2: String,
-        params3: String
+        locNum: String,
+        address: String,
+        labelStr: String
     ) = GlobalScope.launch(uiDispatcher) {
-
         var xyStr = listOf<String>()
         var toastStr = ""
         var goodLocation = false
-
         withContext(Dispatchers.IO) {
             if (type == "osm") {
-                xyStr = UtilityLocation.getXYFromAddressOSM(params2)
+                xyStr = UtilityLocation.getXYFromAddressOSM(address)
                 if (xyStr.size > 1) {
-                    toastStr = Location.locationSave(contextg, params1, xyStr[0], xyStr[1], params3)
+                    toastStr = Location.locationSave(contextg, locNum, xyStr[0], xyStr[1], labelStr)
                     goodLocation = true
                 }
             }
         }
-
         locXEt.setText(xyStr[0])
         locYEt.setText(xyStr[1])
         if (goodLocation) {
@@ -636,24 +628,20 @@ class SettingsLocationGenericActivity : BaseActivity(),
         finish()
     }
 
-    // FIXME rename args
-    private fun gpsAndSave(params0: String, params1: String, params2: String) =
+    private fun gpsAndSave(locNum: String, labelStr: String) =
         GlobalScope.launch(uiDispatcher) {
-
             var toastStr = ""
             var goodLocation = false
             val xy = UtilityLocation.getGPS(contextg)
             locXEt.setText(xy[0].toString())
             locYEt.setText(xy[1].toString())
-
             withContext(Dispatchers.IO) {
                 val xyStr = listOf(xy[0].toString(), xy[1].toString())
                 if (xyStr.size > 1) {
-                    toastStr = Location.locationSave(contextg, params1, xyStr[0], xyStr[1], params2)
+                    toastStr = Location.locationSave(contextg, locNum, xyStr[0], xyStr[1], labelStr)
                     goodLocation = true
                 }
             }
-
             if (goodLocation) {
                 showMessage(toastStr)
                 Utility.writePref(contextg, "ALERT" + locNum + "_NOTIFICATION", "true")

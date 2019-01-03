@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,7 +26,6 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.Extensions.getImage
 
@@ -39,8 +38,7 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
-class ObservationsActivity : VideoRecordActivity(), View.OnClickListener,
-    Toolbar.OnMenuItemClickListener {
+class ObservationsActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
 
     companion object {
         const val LOC: String = ""
@@ -66,7 +64,7 @@ class ObservationsActivity : VideoRecordActivity(), View.OnClickListener,
         title = "Observations"
         toolbarBottom.setOnMenuItemClickListener(this)
         drw = ObjectNavDrawer(this, UtilityObservations.labels, UtilityObservations.urls)
-        img = ObjectTouchImageView(this, this, R.id.iv, drw, prefTokenIdx)
+        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, prefTokenIdx)
         img.setListener(this, drw, ::getContentFixThis)
         drw.index = Utility.readPref(this, prefTokenIdx, 0)
         drw.setListener(::getContentFixThis)
@@ -124,12 +122,6 @@ class ObservationsActivity : VideoRecordActivity(), View.OnClickListener,
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
-
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
-        }
-    }
 
     override fun onStop() {
         img.imgSavePosnZoom(this, "OBS")

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -81,9 +81,6 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         number = activityArguments[0]
         when (activityArguments[2]) {
             "MCD" -> objWatch = ObjectWatchProduct(PolygonType.MCD, number)
-            
-	    //FIXME Do we need WATCH?  
-	    //"WATCH" -> objWatch = ObjectWatchProduct(PolygonType.WATCH, number)
             "WATCH_TOR" -> objWatch = ObjectWatchProduct(PolygonType.WATCH_TOR, number)
             "WATCH_SVR" -> objWatch = ObjectWatchProduct(PolygonType.WATCH_SVR, number)
             "MPD" -> objWatch = ObjectWatchProduct(PolygonType.MPD, number)

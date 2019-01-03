@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,7 +28,6 @@ import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
-import android.view.View
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
@@ -41,8 +40,7 @@ import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
-class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
-    Toolbar.OnMenuItemClickListener {
+class NWSGOESFullDiskActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
@@ -69,7 +67,7 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
         actionAnimate = menu.findItem(R.id.action_animate)
         actionAnimate.isVisible = false
         drw = ObjectNavDrawer(this, UtilityNWSGOESFullDisk.labels, UtilityNWSGOESFullDisk.urls)
-        img = ObjectTouchImageView(this, this, R.id.iv, drw, prefTokenIdx)
+        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, prefTokenIdx)
         img.setListener(this, drw, ::getContentFixThis)
         drw.index = Utility.readPref(this, prefTokenIdx, 0)
         drw.setListener(::getContentFixThis)
@@ -106,12 +104,13 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
             R.id.action_animate -> getAnimate()
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
-                    if (isStoragePermissionGranted) {
+                    /*if (isStoragePermissionGranted) {
                         if (android.os.Build.VERSION.SDK_INT > 22)
                             checkDrawOverlayPermission()
                         else
                             fireScreenCaptureIntent()
-                    }
+                    }*/
+                    checkOverlayPerms()
                 } else
                     UtilityShare.shareText(this, drw.getLabel(), "", bitmap)
             }
@@ -123,14 +122,7 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), View.OnClickListener,
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
-        }
-    }
-
     override fun onStop() {
-        // FIXME use prefString
         img.imgSavePosnZoom(this, prefImagePosition)
         super.onStop()
     }

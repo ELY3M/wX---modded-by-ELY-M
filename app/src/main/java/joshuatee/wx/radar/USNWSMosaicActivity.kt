@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,8 +27,6 @@ import android.content.res.Configuration
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
-import android.view.View.OnClickListener
 import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
@@ -39,8 +37,7 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener,
-    Toolbar.OnMenuItemClickListener {
+class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
 
     // Provides native interface to NWS radar mosaics along with animations
     //
@@ -109,9 +106,8 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener,
             }
         }
         drw = ObjectNavDrawer(this, UtilityUSImgNWSMosaic.labels, UtilityUSImgNWSMosaic.sectors)
-        img = ObjectTouchImageView(this, this, R.id.iv, drw, "")
+        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, "")
         img.setMaxZoom(8.0f)
-        img.setOnClickListener(this)
         img.setListener(this, drw, ::getContentFixThis)
         drw.index = findPosition(nwsRadarMosaicSectorLabelCurrent)
         drw.setListener(::getContentFixThis)
@@ -193,12 +189,7 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener,
             R.id.action_stop -> animDrawable.stop()
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
-                    if (isStoragePermissionGranted) {
-                        if (android.os.Build.VERSION.SDK_INT > 22)
-                            checkDrawOverlayPermission()
-                        else
-                            fireScreenCaptureIntent()
-                    }
+                    checkOverlayPerms()
                 } else {
                     if (animRan) {
                         UtilityShare.shareAnimGif(
@@ -222,12 +213,6 @@ class USNWSMosaicActivity : VideoRecordActivity(), OnClickListener,
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
-
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
-        }
-    }
 
     override fun onStop() {
         img.imgSavePosnZoom(this, "NWSRADMOS")

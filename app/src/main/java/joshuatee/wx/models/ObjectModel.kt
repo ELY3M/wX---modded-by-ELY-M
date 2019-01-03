@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -107,7 +107,6 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
             }
             "SPCHRRR" -> {
                 modelType = ModelType.SPCHRRR
-                // FIXME remove 3 lines below and test
                 models = UtilityModelSPCHRRRInterface.models
                 params = UtilityModelSPCHRRRInterface.params
                 labels = UtilityModelSPCHRRRInterface.labels

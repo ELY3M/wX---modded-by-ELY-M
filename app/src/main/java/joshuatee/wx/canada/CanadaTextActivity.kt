@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -61,7 +61,7 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         sv = findViewById(R.id.sv)
         val linearLayout: LinearLayout = findViewById(R.id.ll)
         c0 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        linearLayout.addView(ObjectCALegal(this, "").card)
+        ObjectCALegal(this, linearLayout, "")
         prod = Utility.readPref(this, "CA_TEXT_LASTUSED", prod)
         description = Utility.readPref(this, "CA_TEXT_LASTUSED_TITLE", description)
         getContent()

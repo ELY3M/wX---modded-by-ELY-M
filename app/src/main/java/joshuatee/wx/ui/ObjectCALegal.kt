@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,12 +25,12 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.View
-import androidx.cardview.widget.CardView
+import android.widget.LinearLayout
 
 import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
 
-class ObjectCALegal(context: Context, url: String) {
+class ObjectCALegal(context: Context, linearLayout: LinearLayout, url: String) {
 
     private val c1 = ObjectCardText(context)
 
@@ -45,9 +45,8 @@ class ObjectCALegal(context: Context, url: String) {
             )
         })
         c1.setText(context.resources.getText(R.string.main_screen_ca_disclaimor))
+        linearLayout.addView(c1.card)
     }
-
-    val card: CardView get() = c1.card
 }
 
 

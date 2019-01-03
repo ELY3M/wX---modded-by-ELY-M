@@ -50,10 +50,10 @@ internal class ExternalSolarEventCalculator {
      * time zone identifier of the timezone of the location parameter. For example,
      * "America/New_York".
      */
-    constructor(location: ExternalSunriseLocation, timeZoneIdentifier: String) {
+    /*constructor(location: ExternalSunriseLocation, timeZoneIdentifier: String) {
         this.location = location
         this.timeZone = TimeZone.getTimeZone(timeZoneIdentifier)
-    }
+    }*/
 
     /**
      * Constructs a new `SolarEventCalculator` using the given parameters.
@@ -309,35 +309,35 @@ internal class ExternalSolarEventCalculator {
      * `BigDecimal` representation of the local rise/set time.
      * @return `String` representation of the local rise/set time in HH:MM format.
      */
-    private fun getLocalTimeAsString(localTimeParam: BigDecimal?): String {
-        if (localTimeParam == null) {
-            return "99:99"
-        }
+    /*  private fun getLocalTimeAsString(localTimeParam: BigDecimal?): String {
+          if (localTimeParam == null) {
+              return "99:99"
+          }
 
-        var localTime: BigDecimal = localTimeParam
-        if (localTime.compareTo(BigDecimal.ZERO) == -1) {
-            localTime = localTime.add(BigDecimal.valueOf(24.0))
-        }
-        val timeComponents =
-            localTime.toPlainString().split("\\.".toRegex()).dropLastWhile { it.isEmpty() }
-                .toTypedArray()
-        var hour = timeComponents[0].toIntOrNull() ?: 0
+          var localTime: BigDecimal = localTimeParam
+          if (localTime.compareTo(BigDecimal.ZERO) == -1) {
+              localTime = localTime.add(BigDecimal.valueOf(24.0))
+          }
+          val timeComponents =
+              localTime.toPlainString().split("\\.".toRegex()).dropLastWhile { it.isEmpty() }
+                  .toTypedArray()
+          var hour = timeComponents[0].toIntOrNull() ?: 0
 
-        var minutes = BigDecimal("0." + timeComponents[1])
-        minutes = minutes.multiply(BigDecimal.valueOf(60)).setScale(0, RoundingMode.HALF_EVEN)
-        if (minutes.toInt() == 60) {
-            minutes = BigDecimal.ZERO
-            hour += 1
-        }
-        if (hour == 24) {
-            hour = 0
-        }
+          var minutes = BigDecimal("0." + timeComponents[1])
+          minutes = minutes.multiply(BigDecimal.valueOf(60)).setScale(0, RoundingMode.HALF_EVEN)
+          if (minutes.toInt() == 60) {
+              minutes = BigDecimal.ZERO
+              hour += 1
+          }
+          if (hour == 24) {
+              hour = 0
+          }
 
-        val minuteString =
-            if (minutes.toInt() < 10) "0" + minutes.toPlainString() else minutes.toPlainString()
-        val hourString = if (hour < 10) "0" + hour.toString() else hour.toString()
-        return "$hourString:$minuteString"
-    }
+          val minuteString =
+              if (minutes.toInt() < 10) "0" + minutes.toPlainString() else minutes.toPlainString()
+          val hourString = if (hour < 10) "0" + hour.toString() else hour.toString()
+          return "$hourString:$minuteString"
+      }*/
 
     /**
      * Returns the local rise/set time in the form HH:MM.

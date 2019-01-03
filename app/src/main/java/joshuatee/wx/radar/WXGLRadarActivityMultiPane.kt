@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -51,7 +51,6 @@ import joshuatee.wx.activitiesmisc.WebscreenABModels
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.UtilityToolbar
-import joshuatee.wx.util.ImageMap
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
@@ -282,14 +281,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             toolbarBottom,
             rlArr.toList() as List<View> + glviewArr.toList() as List<View>
         )
-        imageMap.addOnImageMapClickedHandler(object : ImageMap.OnImageMapClickedHandler {
-            override fun onImageMapClicked(id: Int, im2: ImageMap) {
-                im2.visibility = View.GONE
-                ridMapSwitch(UtilityImageMap.maptoRid(id))
-            }
-
-            override fun onBubbleClicked(id: Int) {}
-        })
+        imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::maptoRid)
         oglInView = true
         numPanesArr.forEach {
             oglrArr[it].rid = Utility.readPref(
@@ -653,12 +645,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             )
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20) {
-                    if (isStoragePermissionGranted) {
-                        if (android.os.Build.VERSION.SDK_INT > 22)
-                            checkDrawOverlayPermission()
-                        else
-                            fireScreenCaptureIntent()
-                    }
+                    checkOverlayPerms()
                 } else {
                     if (animRan) {
                         val animDrawable = UtilityUSImgWX.animationFromFiles(

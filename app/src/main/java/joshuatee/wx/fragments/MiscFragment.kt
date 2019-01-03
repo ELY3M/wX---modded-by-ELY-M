@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -250,7 +250,6 @@ class MiscFragment : Fragment() {
             val tileOrder =
                 "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:"
 
-            // fixme
             var miscPref: String = Utility.readPref("FRAGMENT_MISC_ORDER", tileOrder)
             if (!miscPref.contains("wxoglquad")) {
                 miscPref += "wxoglquad:"

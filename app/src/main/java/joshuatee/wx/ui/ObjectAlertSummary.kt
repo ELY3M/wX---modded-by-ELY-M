@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -134,7 +134,7 @@ class ObjectAlertSummary(
                     html += cc.vtec + "<br><br>"
                     val nwsOffice: String
                     val nwsLoc: String
-                    if (cc.vtec.length > 15) {
+                    if (cc.vtec.length > 15 && cc.event != "Special Weather Statement") {
                         nwsOffice = cc.vtec.substring(8, 11)
                         nwsLoc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "MI")
                     } else {

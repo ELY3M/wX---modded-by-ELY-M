@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -54,6 +54,7 @@ object UtilityMetarConditions {
 
         "Snow" to "snow",
         "Light Snow" to "snow",
+        "Light Snow, Mist" to "snow",
         "Heavy Snow" to "snow",
         "Snow Showers" to "snow",
         "Light Snow Showers" to "snow",

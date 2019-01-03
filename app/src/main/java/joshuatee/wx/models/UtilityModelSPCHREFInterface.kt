@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -41,7 +41,7 @@ internal object UtilityModelSPCHREFInterface {
         ObjectMenuTitle("Precipitation", 16),
         ObjectMenuTitle("Storm Attributes", 26)
     )
-    // FIXME should be 4 more params in storm attributes
+
     var shortCodes = Array(13) { Array(30) { "" } }
     var longCodes = Array(13) { Array(30) { "" } }
     val groups = SparseArray<Group>()

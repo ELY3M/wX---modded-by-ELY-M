@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -199,7 +199,6 @@ class Location(val context: Context, locNumInt: Int) {
 
         val y: String get() = MyApplication.locations.getOrNull(currentLocation)?.y ?: "-0.0"
 
-        //val latLon: LatLon get() = joshuatee.wx.radar.LatLon(MyApplication.locations[currentLocation].x, MyApplication.locations[currentLocation].y)
         val latLon: LatLon get() = joshuatee.wx.radar.LatLon(x, y)
 
         val name: String get() = MyApplication.locations.getOrNull(currentLocation)?.name ?: ""
@@ -213,10 +212,6 @@ class Location(val context: Context, locNumInt: Int) {
         fun getRid(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.rid ?: "DTX"
 
         fun getWfo(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.wfo ?: "DTX"
-
-        //fun getLatLon(locNum: Int): LatLon = joshuatee.wx.radar.LatLon(MyApplication.locations.getOrNull(locNum)?.x
-        //        ?: "0.0",
-        //        MyApplication.locations.getOrNull(locNum)?.y ?: "-0.0")
 
         fun getLatLon(locNum: Int): LatLon = joshuatee.wx.radar.LatLon(getX(locNum), getY(locNum))
 

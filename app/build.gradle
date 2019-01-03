@@ -76,6 +76,9 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation 'com.jjoe64:graphview:4.2.2'
     implementation 'com.intentfilter:android-permissions:0.1.7'
+    implementation 'com.beust:klaxon:5.0.1'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'org.apache.commons:commons-lang3:3.8.1'
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"

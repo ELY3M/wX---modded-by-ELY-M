@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,23 +22,17 @@
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
-import android.graphics.BitmapFactory
+import android.content.Context
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.view.View.OnClickListener
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectTouchImageView
-import joshuatee.wx.util.UtilityLog
-import joshuatee.wx.ui.UtilityToolbar
+import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 
@@ -50,7 +44,7 @@ import kotlinx.coroutines.*
  *
  */
 
-class ImageShowActivity : BaseActivity(), OnClickListener {
+class ImageShowActivity : BaseActivity() {
 
     //
     // Arguments
@@ -69,6 +63,7 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
     private var shareTitle = ""
     private var needsWhitebg = false
     private lateinit var img: ObjectTouchImageView
+    private lateinit var contextg: Context
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.image_show_activity, menu)
@@ -78,8 +73,8 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show, null, false)
-        img = ObjectTouchImageView(this, this, R.id.iv)
-        img.setOnClickListener(this)
+        contextg = this
+        img = ObjectTouchImageView(this, this, toolbar, R.id.iv)
         val activityArguments = intent.getStringArrayExtra(URL)
         url = activityArguments[0]
         title = activityArguments[1]
@@ -108,22 +103,13 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         bitmap = withContext(Dispatchers.IO) { url.getImage() }
         if (needsWhitebg) {
-            val layers = mutableListOf<Drawable>()
-            layers.add(ColorDrawable(Color.WHITE))
-            layers.add(BitmapDrawable(resources, bitmap))
-            bitmap = UtilityImg.layerDrawableToBitmap(layers)
+            bitmap = UtilityImg.addColorBG(contextg, bitmap, Color.WHITE)
         }
         img.setBitmap(bitmap)
     }
 
     private fun getContentFromStorage() {
-        try {
-            val inputStream = openFileInput(urls[1])
-            val bm = BitmapFactory.decodeStream(inputStream)
-            img.setBitmap(bm)
-        } catch (e: Exception) {
-            UtilityLog.HandleException(e)
-        }
+        img.setBitmap(UtilityIO.bitmapFromInternalStorage(contextg, urls[1]))
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -132,11 +118,5 @@ class ImageShowActivity : BaseActivity(), OnClickListener {
             else -> return super.onOptionsItemSelected(item)
         }
         return true
-    }
-
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.iv -> UtilityToolbar.showHide(toolbar)
-        }
     }
 }

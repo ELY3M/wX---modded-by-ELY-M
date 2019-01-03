@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -55,7 +55,7 @@ class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7
             0
         )
         tv1.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-        // FIXME
+        // FIXME - need to see why this was disabled. shrinks text to fit on one line like wXL23
         //TextViewCompat.setAutoSizeTextTypeWithDefaults(tv1, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
         tv2 = AppCompatTextView(context)
         tv2.setPadding(

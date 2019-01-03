@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -40,7 +40,7 @@ import kotlinx.coroutines.*
 class ObjectCAWARN(
     private val context: Context,
     private val activity: Activity,
-    private val ll: LinearLayout,
+    private val linearLayout: LinearLayout,
     private val toolbar: Toolbar
 ) {
 
@@ -96,10 +96,8 @@ class ObjectCAWARN(
     }
 
     fun showData() {
-        ll.removeAllViews()
-        val c0 = ObjectCardImage(context, ll, bitmap)
-        // FIXME add constructor to handle
-        c0.setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar) })
+        linearLayout.removeAllViews()
+        ObjectCardImage(context, linearLayout, toolbar, bitmap)
         var locWarning: String
         var locWatch: String
         var locStatement: String
@@ -124,14 +122,13 @@ class ObjectCAWARN(
                 locStatement = locStatement.replace("<.*?>".toRegex(), "")
             }
             provL = listLocUrl[it].parse("report_e.html.([a-z]{2}).*?")
-            val cText = ObjectCardText(context, ll)
+            val cText = ObjectCardText(context, linearLayout)
             cText.setText(Utility.fromHtml(provL.toUpperCase(Locale.US) + ": " + listLocName[it] + " " + locWarning + " " + locWatch + " " + locStatement))
             val urlStr = "http://weather.gc.ca" + listLocUrl[it]
             val location = listLocName[it]
             cText.setOnClickListener(View.OnClickListener { getWarningDetail(urlStr, location) })
         }
-        val cBanner = ObjectCALegal(activity, "http://weather.gc.ca/warnings/index_e.html")
-        ll.addView(cBanner.card)
+        ObjectCALegal(activity, linearLayout, "http://weather.gc.ca/warnings/index_e.html")
     }
 
     val title: String get() = PROV_TO_LABEL[prov] + " (" + listLocUrl.size + ")"

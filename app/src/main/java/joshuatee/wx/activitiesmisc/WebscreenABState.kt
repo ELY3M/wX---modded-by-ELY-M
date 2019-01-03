@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -94,8 +94,8 @@ class WebscreenABState : BaseActivity(), OnItemSelectedListener {
                 "\" data-chrome=\"noscrollbar noheader nofooter noborders  \" data-tweet-limit=20>Tweets about \"#" +
                 stateCodeCurrent.toLowerCase(Locale.US) +
                 "wx\"</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\"://platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script>"
-        sp = ObjectSpinner(this, this, R.id.spinner1, stateArr)
-        sp.setOnItemSelectedListener(this)
+        sp = ObjectSpinner(this, this, this, R.id.spinner1, stateArr)
+        // FIXME add to constructor
         sp.setSelection(findPosition(stateCodeCurrent.toLowerCase(Locale.US)))
         webview = findViewById(R.id.webview)
         val webSettings = webview.settings

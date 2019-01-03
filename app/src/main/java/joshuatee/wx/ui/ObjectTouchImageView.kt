@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,6 +26,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import android.view.View
+import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
@@ -34,9 +35,9 @@ class ObjectTouchImageView {
 
     var img: TouchImageView2
     private val context: Context
-    var imageLoaded: Boolean = false
+    private var imageLoaded: Boolean = false
     var firstRun: Boolean = false
-    var prefTokenIdx = ""
+    private var prefTokenIdx = ""
     var drw: ObjectNavDrawer? = null
 
     constructor(
@@ -51,6 +52,29 @@ class ObjectTouchImageView {
     constructor(
         activity: Activity,
         context: Context,
+        toolbar: Toolbar,
+        resid: Int
+    ) : this(activity, context, resid) {
+        setOnClickListener(View.OnClickListener {
+            UtilityToolbar.showHide(toolbar)
+        })
+    }
+
+    constructor(
+        activity: Activity,
+        context: Context,
+        toolbar: Toolbar,
+        toolbarBottom: Toolbar,
+        resid: Int
+    ) : this(activity, context, resid) {
+        setOnClickListener(View.OnClickListener {
+            UtilityToolbar.showHide(toolbar, toolbarBottom)
+        })
+    }
+
+    constructor(
+        activity: Activity,
+        context: Context,
         resid: Int,
         drw: ObjectNavDrawer,
         prefTokenIdx: String
@@ -59,6 +83,36 @@ class ObjectTouchImageView {
         this.context = context
         this.drw = drw
         this.prefTokenIdx = prefTokenIdx
+    }
+
+    constructor(
+        activity: Activity,
+        context: Context,
+        toolbar: Toolbar,
+        toolbarBottom: Toolbar,
+        resid: Int,
+        drw: ObjectNavDrawer,
+        prefTokenIdx: String
+    ) : this(activity, context, resid, drw, prefTokenIdx) {
+        setOnClickListener(View.OnClickListener {
+            UtilityToolbar.showHide(
+                toolbar,
+                toolbarBottom
+            )
+        })
+    }
+
+    constructor(
+        activity: Activity,
+        context: Context,
+        toolbar: Toolbar,
+        resid: Int,
+        drw: ObjectNavDrawer,
+        prefTokenIdx: String
+    ) : this(activity, context, resid, drw, prefTokenIdx) {
+        setOnClickListener(View.OnClickListener {
+            UtilityToolbar.showHide(toolbar)
+        })
     }
 
     fun setBitmap(bitmap: Bitmap) {

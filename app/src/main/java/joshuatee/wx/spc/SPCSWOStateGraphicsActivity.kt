@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,7 +25,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.view.View.OnClickListener
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -37,11 +36,12 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 
 import joshuatee.wx.STATE_ARR
+import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 import kotlinx.coroutines.*
 
-class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelectedListener,
+class SPCSWOStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListener,
     OnMenuItemClickListener {
 
     // Show state level SPC SWO grapahics for D1-3
@@ -64,16 +64,18 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_spcswostate, R.menu.spcswostate, true)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_spcswostate,
+            R.menu.spcswostate,
+            true,
+            true
+        )
         toolbarBottom.setOnMenuItemClickListener(this)
-        val turl = intent.getStringArrayExtra(NO)
-        turlDay = turl[0]
-        val nws1Current = Location.wfo
-        state = Utility.readPref(this, "NWS_LOCATION_$nws1Current", "").split(",")[0]
-        img = ObjectTouchImageView(this, this, R.id.iv)
-        img.setOnClickListener(this)
-        val spinner1 = ObjectSpinner(this, this, R.id.spinner1, STATE_ARR, state)
-        spinner1.setOnItemSelectedListener(this)
+        turlDay = intent.getStringArrayExtra(NO)[0]
+        state = Utility.readPref(this, "NWS_LOCATION_${Location.wfo}", "").split(",")[0]
+        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv)
+        ObjectSpinner(this, this, this, R.id.spinner1, STATE_ARR, state)
     }
 
     override fun onRestart() {
@@ -82,7 +84,7 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        title = "$state SWO D$turlDay"
+        title = "SWO D$turlDay"
         imgUrl = UtilitySPCSWO.getSWOStateURL(state, turlDay)
         bitmap = withContext(Dispatchers.IO) { imgUrl.getImage() }
         img.img.visibility = View.VISIBLE
@@ -113,12 +115,6 @@ class SPCSWOStateGraphicsActivity : BaseActivity(), OnClickListener, OnItemSelec
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {}
-
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
-        }
-    }
 
     override fun onStop() {
         img.imgSavePosnZoom(this, imgPrefToken)

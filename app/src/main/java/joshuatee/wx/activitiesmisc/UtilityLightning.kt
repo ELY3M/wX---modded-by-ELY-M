@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -37,8 +37,6 @@ object UtilityLightning {
         return url.getImage()
     }
 
-
-    // FIXME convert methods below to maps
     fun getSectorPretty(sector: String): String = when (sector) {
         "usa_big" -> "USA"
         "florida_big" -> "FL"

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -232,8 +232,10 @@ object UtilityLocationFragment {
 
     fun extractCAWindDir(fcst: String): String {
         var wdir = fcst.parse(RegExp.ca7DayWinddir1)
-        if (wdir == "") wdir = fcst.parse(RegExp.ca7DayWinddir2)
-        if (wdir != "") wdir = " " + windDirectionMap[wdir]
+        if (wdir == "")
+            wdir = fcst.parse(RegExp.ca7DayWinddir2)
+        if (wdir != "")
+            wdir = " " + windDirectionMap[wdir]
         return wdir
     }
 

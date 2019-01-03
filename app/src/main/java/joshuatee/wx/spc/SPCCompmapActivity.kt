@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,7 +29,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.AdapterView
 
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectNavDrawer

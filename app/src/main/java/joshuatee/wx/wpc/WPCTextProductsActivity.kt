@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -106,8 +106,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         linearLayout = findViewById(R.id.ll)
         c0 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         products = UtilityFavorites.setupFavMenuNWSTEXT(MyApplication.nwsTextFav, prod)
-        sp = ObjectSpinner(this, this, R.id.spinner1, products)
-        sp.setOnItemSelectedListener(this)
+        sp = ObjectSpinner(this, this, this, R.id.spinner1, products)
         UtilityWPCText.createData()
         drw = ObjectNavDrawerCombo(
             this,

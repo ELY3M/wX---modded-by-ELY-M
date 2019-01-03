@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,7 +23,6 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-
 import java.io.EOFException
 import java.io.File
 import java.io.IOException
@@ -32,15 +31,14 @@ import java.util.Locale
 import joshuatee.wx.MyApplication
 import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.external.ExternalPolygon
-import joshuatee.wx.util.UCARRandomAccessFile
-import joshuatee.wx.util.UtilityDownload
-import joshuatee.wx.util.UtilityIO
-import joshuatee.wx.util.UtilityLog
 
 import joshuatee.wx.Extensions.*
 
 import joshuatee.wx.NEXRAD_PRODUCT_STRING
 import joshuatee.wx.RegExp
+import joshuatee.wx.external.ExternalDuplicateRemover
+import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.util.*
 
 object UtilityWXOGL {
 
@@ -201,14 +199,59 @@ object UtilityWXOGL {
     }
 
 
+
+    var text = ""
+        private set
+    //var count = 0
+    //    private set
+
+    fun generateSpsString(context: Context, spsText: String) {
+        var nwsOfficeArr: List<String>
+        var nwsOffice: String
+        var nwsLoc = ""
+        var label = ""
+        val warningAl = spsText.parseColumn(RegExp.warningLatLonPattern)
+        warningAl.forEach {
+            text += it
+            nwsOfficeArr = it.split(".")
+            if (nwsOfficeArr.size > 1) {
+                nwsOffice = nwsOfficeArr[2]
+                nwsOffice = nwsOffice.replace("^[KP]".toRegex(), "")
+                nwsLoc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "")
+            }
+            text += "  " + nwsLoc + MyApplication.newline
+        }
+        val remover = ExternalDuplicateRemover()
+        text = remover.stripDuplicates(text)
+        text = "(" + text.split(MyApplication.newline).dropLastWhile { it.isEmpty() }.size +
+                ") " + label + MyApplication.newline +
+                text.replace((MyApplication.newline + "$").toRegex(), "")
+    }
+
+    //FIXME try to get text product for SPS that match up with SPS
     fun showSpsProducts(lat: Double, lon: Double): String {
-        var warningHTML =
-                MyApplication.severeDashboardSps.valueGet()
-        val urlList =
-                warningHTML.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
+        var warningHTML = MyApplication.severeDashboardSps.valueGet()
+        //UtilityLog.d("SpecialWeather", "warningHTML: "+warningHTML)
+        val urlList = warningHTML.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
+        UtilityLog.d("SpecialWeather", "urllist: "+urlList)
+
+        //check each url NWS-IDP-.*? urls for latlons and get text and latlons
+
+        /*
+        val getTextBeforeLatLon = warningHTML.split("LAT...LON")
+        val getSpsText = getTextBeforeLatLon[0]
+        val getSpsLatLon = getTextBeforeLatLon[1]
+        UtilityLog.d("SpecialWeather", "getSpsText: "+getSpsText)
+        UtilityLog.d("SpecialWeather", "getSpsLatLon: "+getSpsLatLon)
+        */
+
+
         warningHTML = warningHTML.replace("\n", "")
         warningHTML = warningHTML.replace(" ", "")
+        //val textArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
+
         val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
+        UtilityLog.d("SpecialWeather", "polygonArr: "+polygonArr)
         var retStr = ""
         var testArr: List<String>
         var q = 0
@@ -241,6 +284,7 @@ object UtilityWXOGL {
                     val contains = polygon2.contains(ExternalPoint(lat.toFloat(), lon.toFloat()))
                     if (contains && notFound) {
                         retStr = urlList[q]
+                        UtilityLog.d("SpecialWeather", "urlList[q]: "+urlList[q])
                         notFound = false
                     }
                 }

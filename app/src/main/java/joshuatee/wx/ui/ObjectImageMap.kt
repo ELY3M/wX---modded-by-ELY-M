@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -60,6 +60,17 @@ class ObjectImageMap(
 
     fun addOnImageMapClickedHandler(h: ImageMap.OnImageMapClickedHandler) {
         map.addOnImageMapClickedHandler(h)
+    }
+
+    fun addClickHandler(fn: (String) -> Unit, mapFn: (Int) -> String) {
+        addOnImageMapClickedHandler(object : ImageMap.OnImageMapClickedHandler {
+            override fun onImageMapClicked(id: Int, im2: ImageMap) {
+                im2.visibility = View.GONE
+                fn(mapFn(id))
+            }
+
+            override fun onBubbleClicked(id: Int) {}
+        })
     }
 
     private fun setupImageMap(

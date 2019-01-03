@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -129,5 +129,33 @@ object RegExp {
     val txtfile: Pattern = Pattern.compile("(.*?).txt$")
     val palfile94: Pattern = Pattern.compile("(.*?)_94.txt(.*?)")
     val palfile99: Pattern = Pattern.compile("(.*?)_99.txt(.*?)")
+
+    //SPS Stuff//
+
+    /*
+                 "senderName": "NWS Huntsville AL",
+                "headline": "Special Weather Statement issued December 31 at 4:40PM CST by NWS Huntsville AL",
+                "description": "At 440 PM CST, Doppler radar was tracking strong thunderstorms along\na line extending from near Woodville to near Arab. Movement was east\nat 25 mph.\n\nWinds in excess of 40 mph will be possible with these storms.\n\nLocations impacted include...\nAlbertville, Boaz, Guntersville, Arab, Grant, Douglas, Union Grove,\nHigh Point, Horton and Columbus City.",
+                "instruction": "Strong gusty winds will be capable of knocking down small tree limbs\nalong with other small unsecured items. Seek safe shelter until this\nline of storms has passed.\n\nVery heavy rainfall is also occurring with these storms, and may lead\nto localized flooding. Do not drive your vehicle through flooded\nroadways.",
+                "response": "Execute",
+                "parameters": {
+                    "eventMotionDescription": [
+                        "2018-12-31T16:40:00.000-06:00...storm...271DEG...23KT...34.58,-86.26 34.28,-86.53"
+                    ],
+                    "NWSheadline": [
+                        "SIGNIFICANT WEATHER ADVISORY FOR MARSHALL COUNTY UNTIL 515 PM CST"
+                    ],
+
+
+
+     */
+
+    val spsLatLonPattern: Pattern = Pattern.compile("\"coordinates\": \\[\\[(.*?)\\]\\]\\}")
+    val spsSenderName: Pattern = Pattern.compile("\"senderName\": \"(.*?)\",")
+    val spsHeadLine: Pattern = Pattern.compile("\"headline\": \"(.*?)\",")
+    val spsDescription: Pattern = Pattern.compile("\"description\": \"(.*?)\",")
+    val spsInstruction: Pattern = Pattern.compile("\"instruction\": \"(.*?)\",")
+    val spsNwsHeadLine: Pattern = Pattern.compile("\"NWSheadline\":\\[(.*?)\\],")
+
 }
 

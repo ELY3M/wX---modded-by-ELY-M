@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -141,18 +141,15 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         }
         miStatus = m.findItem(R.id.action_status)
         miStatus.title = "in through"
-        om.spTime = ObjectSpinner(this, this, R.id.spinner_time)
-        om.spTime.setOnItemSelectedListener(this)
+        om.spTime = ObjectSpinner(this, this, this, R.id.spinner_time)
         om.displayData = DisplayData(this, this, this, om.numPanes, om.spTime)
         setupModel()
-        spRun = ObjectSpinner(this, this, R.id.spinner_run)
-        spRun.setOnItemSelectedListener(this)
+        spRun = ObjectSpinner(this, this, this, R.id.spinner_run)
         favList = UtilityFavorites.setupFavMenuSREF(
             MyApplication.srefFav,
             om.displayData.param[om.curImg]
         )
-        spFav = ObjectSpinner(this, this, R.id.spinner1, favList)
-        spFav.setOnItemSelectedListener(this)
+        spFav = ObjectSpinner(this, this, this, R.id.spinner1, favList)
         UtilityModelsSPCSREFInterface.createData()
         drw = ObjectNavDrawerCombo(
             this,
@@ -312,12 +309,7 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             R.id.action_fav -> toggleFavorite()
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
-                    if (isStoragePermissionGranted) {
-                        if (android.os.Build.VERSION.SDK_INT > 22)
-                            checkDrawOverlayPermission()
-                        else
-                            fireScreenCaptureIntent()
-                    }
+                    checkOverlayPerms()
                 } else {
                     val title = "SREF" + " " + om.displayData.param[0]
                     if (animRan)

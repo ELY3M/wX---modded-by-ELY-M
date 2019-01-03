@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -35,7 +35,6 @@ import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
 import joshuatee.wx.R
-import joshuatee.wx.util.ImageMap
 import joshuatee.wx.MyApplication
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.objects.ObjectIntent
@@ -66,7 +65,6 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
     private var firstTime = true
     private var prod = ""
     private var nwsOffice = ""
-    private var sector = ""
     private lateinit var imageMap: ObjectImageMap
     private lateinit var sv: ScrollView
     private var mapShown = false
@@ -103,19 +101,10 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
             prefTokenLocation,
             prefToken
         )
-        sp = ObjectSpinner(this, this, R.id.spinner1, locations)
-        sp.setOnItemSelectedListener(this)
+        sp = ObjectSpinner(this, this, this, R.id.spinner1, locations)
         sv = findViewById(R.id.sv)
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(sv))
-        imageMap.addOnImageMapClickedHandler(object : ImageMap.OnImageMapClickedHandler {
-            override fun onImageMapClicked(id: Int, im2: ImageMap) {
-                im2.visibility = View.GONE
-                sector = UtilityImageMap.maptoWFO(id)
-                mapSwitch(sector.toUpperCase(Locale.US))
-            }
-
-            override fun onBubbleClicked(id: Int) {}
-        })
+        imageMap.addClickHandler(::mapSwitch, UtilityImageMap::maptoWFO)
     }
 
     override fun onRestart() {
@@ -150,7 +139,7 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
 
     private fun mapSwitch(loc: String) {
         sv.visibility = View.VISIBLE
-        nwsOffice = loc
+        nwsOffice = loc.toUpperCase(Locale.US)
         mapShown = false
         locations = UtilityFavorites.setupFavMenu(
             this,

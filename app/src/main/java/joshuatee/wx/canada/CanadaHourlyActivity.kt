@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -49,12 +49,7 @@ class CanadaHourlyActivity : BaseActivity() {
         locNumInt = (locNum.toIntOrNull() ?: 0) - 1
         val linearLayout: LinearLayout = findViewById(R.id.ll)
         c0 = ObjectCardText(this, linearLayout, toolbar)
-        linearLayout.addView(
-            ObjectCALegal(
-                this,
-                UtilityCanadaHourly.getUrl(Location.locationIndex)
-            ).card
-        )
+        ObjectCALegal(this, linearLayout, UtilityCanadaHourly.getUrl(Location.locationIndex))
         title = Location.getName(locNumInt) + " hourly forecast"
         getContent()
     }

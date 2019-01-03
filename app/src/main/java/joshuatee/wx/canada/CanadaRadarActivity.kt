@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -105,18 +105,10 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         title = "Canada"
         imageMap =
                 ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
-        imageMap.addOnImageMapClickedHandler(object : ImageMap.OnImageMapClickedHandler {
-            override fun onImageMapClicked(id: Int, im2: ImageMap) {
-                im2.visibility = View.GONE
-                ridMapSwitch(UtilityImageMap.maptoCARid(id))
-            }
-
-            override fun onBubbleClicked(id: Int) {}
-        })
+        imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::maptoCARid)
         ridFav = Utility.readPref(this, "RID_CA_FAV", " : : :")
         ridArrLoc = UtilityFavorites.setupFavMenuCA(ridFav, rid1)
-        sp = ObjectSpinner(this, this, R.id.spinner1, ridArrLoc)
-        sp.setOnItemSelectedListener(this)
+        sp = ObjectSpinner(this, this, this, R.id.spinner1, ridArrLoc)
     }
 
     override fun onRestart() {
@@ -188,21 +180,16 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                 "ir",
                 "https://weather.gc.ca/data/satellite/goes_ecan_1070_100.jpg"
             )
-            R.id.action_can -> getRadarMosiac("CAN")
-            R.id.action_pac -> getRadarMosiac("PAC")
-            R.id.action_wrn -> getRadarMosiac("WRN")
-            R.id.action_ont -> getRadarMosiac("ONT")
-            R.id.action_que -> getRadarMosiac("QUE")
-            R.id.action_ern -> getRadarMosiac("ERN")
+            R.id.action_can -> getRadarMosaic("CAN")
+            R.id.action_pac -> getRadarMosaic("PAC")
+            R.id.action_wrn -> getRadarMosaic("WRN")
+            R.id.action_ont -> getRadarMosaic("ONT")
+            R.id.action_que -> getRadarMosaic("QUE")
+            R.id.action_ern -> getRadarMosaic("ERN")
             R.id.action_fav -> toggleFavorite()
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
-                    if (isStoragePermissionGranted) {
-                        if (android.os.Build.VERSION.SDK_INT > 22)
-                            checkDrawOverlayPermission()
-                        else
-                            fireScreenCaptureIntent()
-                    }
+                    checkOverlayPerms()
                 } else {
                     if (animRan)
                         UtilityShare.shareAnimGif(this, "", animDrawable)
@@ -216,7 +203,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         return true
     }
 
-    private fun getRadarMosiac(sector: String) {
+    private fun getRadarMosaic(sector: String) {
         this.mosaicShown = true
         this.imageType = "rad"
         getMosaic(sector)
