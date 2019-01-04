@@ -52,6 +52,7 @@ class WXGLTextObject(
     private var cityextTvArrInit = false
     private var countyLabelsTvArrInit = false
     private var obsTvArrInit = false
+
     private var spottersLabelsTvArrInit = false
     private val spotterSingleLabelTvArrInit = false
     private var spotterLat = 0.toDouble()

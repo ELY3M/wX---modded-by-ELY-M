@@ -487,6 +487,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 numPanes,
                 wxgltextArr
             )
+            //FIXME make obs texts work proper on multi-pane
+            if (PolygonType.OBS.pref) UtilityWXGLTextObject.updateObs(
+                    numPanes,
+                    wxgltextArr
+            )
             if (PolygonType.HAIL_LABELS.pref) UtilityWXGLTextObject.updateHailLabels(
                     numPanes,
                     wxgltextArr

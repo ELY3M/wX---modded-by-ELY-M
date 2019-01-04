@@ -528,6 +528,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             }
         //}
 
+        //FIXME - make obs texts work on multi radars on home screen and multi-pane
         //update OBS texts
         if (PolygonType.OBS.pref) {
             UtilityWXGLTextObject.updateObs(numRadars, wxgltextArr)
