@@ -31,7 +31,6 @@ import java.util.Locale
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import android.view.View
-import android.view.View.OnClickListener
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 
@@ -44,7 +43,7 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener,
+class ModelsSPCHREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
     OnItemSelectedListener {
 
     companion object {
@@ -64,6 +63,8 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     private lateinit var fab1: ObjectFab
     private lateinit var fab2: ObjectFab
     private lateinit var miStatus: MenuItem
+    private lateinit var miStatusParam1: MenuItem
+    private lateinit var miStatusParam2: MenuItem
     private lateinit var drw: ObjectNavDrawerCombo
     private lateinit var contextg: Context
     private lateinit var om: ObjectModel
@@ -94,6 +95,8 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         toolbarBottom.setOnMenuItemClickListener(this)
         title = activityArguments[2]
         val m = toolbarBottom.menu
+        miStatusParam1 = m.findItem(R.id.action_status_param1)
+        miStatusParam2 = m.findItem(R.id.action_status_param2)
         if (om.numPanes < 2) {
             fab1 = ObjectFab(
                 this,
@@ -108,33 +111,29 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             m.findItem(R.id.action_img1).isVisible = false
             m.findItem(R.id.action_img2).isVisible = false
             if (UIPreferences.fabInModels) {
-                val leftArrow = m.findItem(R.id.action_back)
-                val rightArrow = m.findItem(R.id.action_forward)
-                leftArrow.isVisible = false
-                rightArrow.isVisible = false
+                m.findItem(R.id.action_back).isVisible = false
+                m.findItem(R.id.action_forward).isVisible = false
             }
             fab1.setVisibility(View.GONE)
             fab2.setVisibility(View.GONE)
+            miStatusParam2.isVisible = false
         } else {
             m.findItem(R.id.action_multipane).isVisible = false
         }
         miStatus = m.findItem(R.id.action_status)
         miStatus.title = "in through"
         om.spTime = ObjectSpinner(this, this, this, R.id.spinner_time)
-        om.displayData = DisplayData(this, this, this, om.numPanes, om.spTime)
+        om.displayData = DisplayData(this, this, om.numPanes, om.spTime)
         spRun = ObjectSpinner(this, this, this, R.id.spinner_run)
+        om.sector = Utility.readPref(this, om.prefSector, "S19")
         spSector = ObjectSpinner(
             this,
             this,
             this,
             R.id.spinner_sector,
-            UtilityModelSPCHREFInterface.sectorsLong
+            UtilityModelSPCHREFInterface.sectorsLong,
+            om.sector
         )
-        om.sector = Utility.readPref(this, om.prefSector, "S19")
-        // FIXME use constructor with init value at end
-        spSector.setSelection(om.sector)
-        spRun.setSelection(0)
-        om.spTime.setSelection(0)
         UtilityModelSPCHREFInterface.createData()
         drw = ObjectNavDrawerCombo(
             this,
@@ -148,14 +147,6 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             drw.drawerLayout.closeDrawer(drw.listView)
             om.displayData.param[om.curImg] = drw.getToken(groupPosition, childPosition)
             om.displayData.paramLabel[om.curImg] = drw.getLabel(groupPosition, childPosition)
-            (0 until om.numPanes).forEach {
-                Utility.writePref(this, om.prefParam + it.toString(), om.displayData.param[it])
-                Utility.writePref(
-                    this,
-                    om.prefParamLabel + it.toString(),
-                    om.displayData.paramLabel[it]
-                )
-            }
             getContent()
             true
         }
@@ -191,7 +182,7 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         om.time = om.spTime.selectedItem.toString()
         om.sector = spSector.selectedItem.toString()
         om.time = UtilityStringExternal.truncate(om.time, 2)
-        Utility.writePref(contextg, om.prefSector, om.sector)
+        UtilityModels.writePrefs(contextg, om)
         withContext(Dispatchers.IO) {
             (0 until om.numPanes).forEach { om.displayData.bitmap[it] = om.getImage(it) }
         }
@@ -219,15 +210,7 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             }
             firstRun = true
         }
-        if (om.numPanes > 1) {
-            UtilityModels.setSubtitleRestoreIMGXYZOOM(
-                om.displayData.img,
-                toolbar,
-                "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
-            )
-        } else {
-            toolbar.subtitle = om.displayData.paramLabel[0]
-        }
+        UtilityModels.updateToolbarLabels(toolbar, miStatusParam1, miStatusParam2, om)
         imageLoaded = true
     }
 
@@ -267,18 +250,7 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    if (animRan)
-                        UtilityShare.shareAnimGif(
-                            this,
-                            om.model + " " + om.displayData.paramLabel[om.curImg] + " " + om.spTime.selectedItem.toString(),
-                            om.displayData.animDrawable[om.curImg]
-                        )
-                    else
-                        UtilityShare.shareBitmap(
-                            this,
-                            om.model + " " + om.displayData.paramLabel[om.curImg] + " " + om.spTime.selectedItem.toString(),
-                            om.displayData.bitmap[om.curImg]
-                        )
+                    UtilityModels.legacyShare(contextg, animRan, om)
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -305,7 +277,6 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         spRun.addAll(om.rtd.listRun)
         spRun.notifyDataSetChanged()
         miStatus.title = "in through " + om.rtd.imageCompleteStr
-        toolbar.title = om.rtd.imageCompleteStr
         spRun.setSelection(0)
         om.spTime.setSelection(0)
         if (!firstRunTimeSet) {
@@ -350,12 +321,6 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
-    }
-
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
-        }
     }
 
     override fun onStop() {

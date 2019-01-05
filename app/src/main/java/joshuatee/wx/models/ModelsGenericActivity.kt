@@ -31,7 +31,6 @@ import java.util.Locale
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import android.view.View
-import android.view.View.OnClickListener
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import joshuatee.wx.MyApplication
@@ -45,7 +44,7 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener,
+class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
     OnItemSelectedListener {
 
     // This code provides a native android interface to Weather Models
@@ -135,7 +134,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         miStatus.title = "in through"
         m.findItem(R.id.action_map).isVisible = false
         om.spTime = ObjectSpinner(this, this, this, R.id.spinner_time)
-        om.displayData = DisplayData(this, this, this, om.numPanes, om.spTime)
+        om.displayData = DisplayData(this, this, om.numPanes, om.spTime)
         spRun = ObjectSpinner(this, this, this, R.id.spinner_run)
         spSector = ObjectSpinner(this, this, this, R.id.spinner_sector, om.sectors)
         // FIXME use constructor with init value at end
@@ -147,14 +146,6 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             drw.drawerLayout.closeDrawer(drw.listView)
             om.displayData.param[om.curImg] = drw.getToken(position)
             om.displayData.paramLabel[om.curImg] = drw.getLabel(position)
-            (0 until om.numPanes).forEach {
-                Utility.writePref(this, om.prefParam + it.toString(), om.displayData.param[it])
-                Utility.writePref(
-                    this,
-                    om.prefParamLabel + it.toString(),
-                    om.displayData.paramLabel[it]
-                )
-            }
             getContent()
         }
     }
@@ -176,7 +167,6 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             spinnerModelRan = true
             om.setParams(parent.selectedItemPosition)
             setupModel()
-            //drw.updateLists(this, om.labels, om.params)
             Utility.writePref(this, om.prefModel, om.model)
             getRunStatus()
         } else if (firstRunTimeSet) { // && spinnerRunRan && spinnerTimeRan && spinnerSectorRan && spinnerModelRan
@@ -195,8 +185,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
         if (om.truncateTime) {
             om.time = UtilityStringExternal.truncate(om.time, om.timeTruncate)
         }
-        Utility.writePref(contextg, om.prefSector, om.sector)
-
+        UtilityModels.writePrefs(contextg, om)
         withContext(Dispatchers.IO) {
             (0 until om.numPanes).forEach { om.displayData.bitmap[it] = om.getImage(it) }
         }
@@ -225,18 +214,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
             }
             firstRun = true
         }
-        if (om.numPanes > 1) {
-            UtilityModels.setSubtitleRestoreIMGXYZOOM(
-                om.displayData.img,
-                toolbar,
-                "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
-            )
-            miStatusParam1.title = om.displayData.paramLabel[0]
-            miStatusParam2.title = om.displayData.paramLabel[1]
-        } else {
-            toolbar.subtitle = om.displayData.paramLabel[0]
-            miStatusParam1.title = om.displayData.paramLabel[0]
-        }
+        UtilityModels.updateToolbarLabels(toolbar, miStatusParam1, miStatusParam2, om)
         imageLoaded = true
     }
 
@@ -276,18 +254,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    if (animRan)
-                        UtilityShare.shareAnimGif(
-                            this,
-                            om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.spTime.selectedItem.toString(),
-                            om.displayData.animDrawable[0]
-                        )
-                    else
-                        UtilityShare.shareBitmap(
-                            this,
-                            om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.spTime.selectedItem.toString(),
-                            om.displayData.bitmap[0]
-                        )
+                    UtilityModels.legacyShare(contextg, animRan, om)
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -371,12 +338,6 @@ class ModelsGenericActivity : VideoRecordActivity(), OnClickListener, OnMenuItem
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
-    }
-
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
-        }
     }
 
     override fun onStop() {

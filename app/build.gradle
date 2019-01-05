@@ -13,6 +13,7 @@ android {
         // Stops the Gradle plugin’s automatic rasterization of vectors (2016_02_25 add 23.2 )
         //generatedDensities = []
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
     }
 
     sourceSets {
@@ -77,8 +78,7 @@ dependencies {
     implementation 'com.jjoe64:graphview:4.2.2'
     implementation 'com.intentfilter:android-permissions:0.1.7'
     implementation 'com.beust:klaxon:5.0.1'
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'org.apache.commons:commons-lang3:3.8.1'
+    implementation 'com.jayway.jsonpath:json-path:2.4.0'
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"

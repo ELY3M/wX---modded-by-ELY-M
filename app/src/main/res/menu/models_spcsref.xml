@@ -68,6 +68,12 @@
     <item android:id="@+id/action_status"
           android:title=""
           app:showAsAction="never"  />
+    <item android:id="@+id/action_status_param1"
+        android:title=""
+        app:showAsAction="never"  />
+    <item android:id="@+id/action_status_param2"
+        android:title=""
+        app:showAsAction="never"  />
 
 </menu>
 

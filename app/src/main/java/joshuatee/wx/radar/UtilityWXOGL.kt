@@ -39,6 +39,8 @@ import joshuatee.wx.RegExp
 import joshuatee.wx.external.ExternalDuplicateRemover
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 object UtilityWXOGL {
 
@@ -148,8 +150,7 @@ object UtilityWXOGL {
     fun showTextProducts(lat: Double, lon: Double): String {
         var warningHTML = 
 	MyApplication.severeDashboardTor.valueGet() + MyApplication.severeDashboardSvr.valueGet() + MyApplication.severeDashboardEww.valueGet() + MyApplication.severeDashboardFfw.valueGet() + MyApplication.severeDashboardSmw.valueGet()
-        val urlList =
-            warningHTML.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
+        val urlList = warningHTML.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
         warningHTML = warningHTML.replace("\n", "")
         warningHTML = warningHTML.replace(" ", "")
         val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
@@ -200,67 +201,18 @@ object UtilityWXOGL {
 
 
 
-    var text = ""
-        private set
-    //var count = 0
-    //    private set
-
-    fun generateSpsString(context: Context, spsText: String) {
-        var nwsOfficeArr: List<String>
-        var nwsOffice: String
-        var nwsLoc = ""
-        var label = ""
-        val warningAl = spsText.parseColumn(RegExp.warningLatLonPattern)
-        warningAl.forEach {
-            text += it
-            nwsOfficeArr = it.split(".")
-            if (nwsOfficeArr.size > 1) {
-                nwsOffice = nwsOfficeArr[2]
-                nwsOffice = nwsOffice.replace("^[KP]".toRegex(), "")
-                nwsLoc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "")
-            }
-            text += "  " + nwsLoc + MyApplication.newline
-        }
-        val remover = ExternalDuplicateRemover()
-        text = remover.stripDuplicates(text)
-        text = "(" + text.split(MyApplication.newline).dropLastWhile { it.isEmpty() }.size +
-                ") " + label + MyApplication.newline +
-                text.replace((MyApplication.newline + "$").toRegex(), "")
-    }
-
-    //FIXME try to get text product for SPS that match up with SPS
     fun showSpsProducts(lat: Double, lon: Double): String {
-        var warningHTML = MyApplication.severeDashboardSps.valueGet()
-        //UtilityLog.d("SpecialWeather", "warningHTML: "+warningHTML)
-        val urlList = warningHTML.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
-        UtilityLog.d("SpecialWeather", "urllist: "+urlList)
 
-        //check each url NWS-IDP-.*? urls for latlons and get text and latlons
-
-        /*
-        val getTextBeforeLatLon = warningHTML.split("LAT...LON")
-        val getSpsText = getTextBeforeLatLon[0]
-        val getSpsLatLon = getTextBeforeLatLon[1]
-        UtilityLog.d("SpecialWeather", "getSpsText: "+getSpsText)
-        UtilityLog.d("SpecialWeather", "getSpsLatLon: "+getSpsLatLon)
-        */
-
-
-        warningHTML = warningHTML.replace("\n", "")
-        warningHTML = warningHTML.replace(" ", "")
-        //val textArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
-
-        val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
-        UtilityLog.d("SpecialWeather", "polygonArr: "+polygonArr)
-        var retStr = ""
-        var testArr: List<String>
-        var q = 0
+        var getspslist = WXGLPolygonWarnings.specialWeatherList
         var notFound = true
-        var polyCount = -1
-        polygonArr.forEach { polys ->
-            polyCount += 1
-            //if (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith("0.CAN")) {
-                val polyTmp = polys.replace("[", "").replace("]", "").replace(",", " ")
+        var retStr = ""
+        getspslist.forEach {
+            val polygon = it.coordinates
+            var testArr: List<String>
+            var q = 0
+            var polyCount = -1
+                polyCount += 1
+                val polyTmp = polygon.replace("[", "").replace("]", "").replace(",", " ")
                 testArr = polyTmp.split(" ").dropLastWhile { it.isEmpty() }
                 val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }
                         .map {
@@ -283,13 +235,12 @@ object UtilityWXOGL {
                     val polygon2 = poly2.build()
                     val contains = polygon2.contains(ExternalPoint(lat.toFloat(), lon.toFloat()))
                     if (contains && notFound) {
-                        retStr = urlList[q]
-                        UtilityLog.d("SpecialWeather", "urlList[q]: "+urlList[q])
+                        UtilityLog.d("SpecialWeather", "found: "+it.id)
+                        retStr = it.id
                         notFound = false
                     }
                 }
-            //}
-            q += 1
+                q += 1
         }
         return retStr
     }

@@ -540,6 +540,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         }
 
         //update hail size texts
+	//TODO test this with multi radars and panes!
         if (PolygonType.HAIL_LABELS.pref) {
             UtilityWXGLTextObject.updateHailLabels(numRadars, wxgltextArr)
             glviewArr[idx].requestRender()

@@ -184,11 +184,7 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
             html = "None issued by this office recently."
         }
         c0.setTextAndTranslate(Utility.fromHtml(html))
-        if (activityArguments.size > 2) {
-            if (activityArguments[2] == "sound") {
-                UtilityTTS.synthesizeTextAndPlay(applicationContext, html, product)
-            }
-        }
+        UtilityTTS.conditionalPlay(activityArguments, 2, applicationContext, html, product)
         if (activityArguments[1] == "") {
             Utility.writePref(contextg, "WFO_TEXT_FAV", product)
             MyApplication.wfoTextFav = product

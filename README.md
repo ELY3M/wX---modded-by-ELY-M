@@ -21,9 +21,7 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 ## TO DO List: 
 
 1\. conus radar overlay when you zoom out like on pykl3   
-2\. get special weather statements working - not working due because they do not have vtec like all other warnings.  
-would have to do the latlon method that is used for watches/mcds/mpds  
-https://w1.weather.gov/data/LOT/SPSLOT  
+2\. add in MSL and AGL radar beam heights in longpress - requested by Mike T.  
 3\. add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs   
 4\. allow custom icons! esp cities dots - hail/tvs/location image is done!.    
 5\. add warning list within radar  
@@ -43,7 +41,7 @@ https://w1.weather.gov/data/LOT/SPSLOT
 #
 ## DONE!
 ====================================  
-Special Weather Statements Polygons are working but the texts do not match up with the polygons for ex: you will see text for WY on polygon in LA.    
+Special Weather Statements Polygons are working!  I had to create a list for SPS same way as how spotters are done in wX.  you should see matching texts for sps polygons now.      
 added hail icons and text for showing hail sizes on radar, still testing  
 added backup urls in getRadarStatus function.  
 show MPD text within text is done and working.   

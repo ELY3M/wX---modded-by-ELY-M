@@ -57,7 +57,6 @@ class HourlyActivity : BaseActivity() {
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var htmlShare = listOf<String>()
     private lateinit var cv1: ObjectCard
-    private var color = 0
     private lateinit var c0: ObjectCardVerticalText
     private var hourlyData = ObjectHourly()
     private var locatioNumber = 0
@@ -74,10 +73,8 @@ class HourlyActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_hourly, null, false)
-        val activityArguments = intent.getStringExtra(LOC_NUM)
-        locatioNumber = (activityArguments.toIntOrNull() ?: 0) - 1
-        color = R.color.black
-        cv1 = ObjectCard(this, color, R.id.cv1)
+        locatioNumber = (intent.getStringExtra(LOC_NUM).toIntOrNull() ?: 0) - 1
+        cv1 = ObjectCard(this, R.color.black, R.id.cv1)
         cv1.setVisibility(View.GONE)
         val linearLayout: LinearLayout = findViewById(R.id.ll)
         c0 = ObjectCardVerticalText(this, 5, linearLayout, toolbar)

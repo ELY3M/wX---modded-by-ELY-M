@@ -35,7 +35,6 @@ import joshuatee.wx.util.UtilityImg
 class DisplayData(
     context: Context,
     activity: Activity,
-    cl: View.OnClickListener,
     numPanes: Int,
     spTime: ObjectSpinner
 ) {
@@ -57,7 +56,6 @@ class DisplayData(
         val resId = listOf(R.id.iv1, R.id.iv2)
         (0 until numPanes).forEach {
             img[it] = activity.findViewById(resId[it])
-            img[it].setOnClickListener(cl)
         }
         if (numPanes > 1) {
             img[0].setOnTouchImageViewListener { img[1].setZoom(img[0]) }

@@ -51,7 +51,13 @@ class WXGLTextObject(
     private var lp: RelativeLayout.LayoutParams
     private var cityextTvArrInit = false
     private var countyLabelsTvArrInit = false
+
+
     private var obsTvArrInit = false
+    //private val obsSingleLabelTvArrInit = false
+    private var obsLat = 0.toDouble()
+    private var obsLon = 0.toDouble()
+
 
     private var spottersLabelsTvArrInit = false
     private val spotterSingleLabelTvArrInit = false
@@ -560,7 +566,7 @@ class WXGLTextObject(
         addTVCitiesExt()
         addTVCountyLabels()
         if (numPanes == 1) {
-            addTVObs()
+        addTVObs()
         }
         addTVSpottersLabels()
         if (numPanes == 1 && WXGLRadarActivity.spotterShowSelected) {
@@ -575,7 +581,9 @@ class WXGLTextObject(
     fun hideTV() {
         hideCitiesExt()
         hideCountyLabels()
-        if (numPanes == 1) hideObs()
+        if (numPanes == 1) {
+        hideObs()
+        }
         hideSpottersLabels()
         hideHailLabels()
         if (numPanes == 1 && WXGLRadarActivity.spotterShowSelected) {
@@ -596,8 +604,8 @@ class WXGLTextObject(
         if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && obsTvArrInit) {
             val obsExtZoom = MyApplication.radarObsExtZoom.toDouble()
             pn = ProjectionNumbers(context, OGLR.rid, ProjectionType.WX_OGL)
-            spotterLat = 0.0
-            spotterLon = 0.0
+            obsLat = 0.0
+            obsLon = 0.0
             val fontScaleFactorObs = 0.65f
             hideObs()
             glview.obsAl = mutableListOf()
@@ -618,13 +626,13 @@ class WXGLTextObject(
                         tmpArrObs = MyApplication.colon.split(obsArr[it])
                         tmpArrObsExt = MyApplication.colon.split(obsArrExt[it])
                         if (tmpArrObs.size > 1) {
-                            spotterLat = tmpArrObs[0].toDoubleOrNull() ?: 0.0
-                            spotterLon = tmpArrObs[1].toDoubleOrNull() ?: 0.0
+                            obsLat = tmpArrObs[0].toDoubleOrNull() ?: 0.0
+                            obsLon = tmpArrObs[1].toDoubleOrNull() ?: 0.0
                         }
                         val drawText = checkButDoNotDrawText(
                             glview.obsAl,
-                            spotterLat,
-                            spotterLon * -1,
+                            obsLat,
+                            obsLon * -1,
                             MyApplication.radarColorObs,
                             textSize
                         )
@@ -646,11 +654,11 @@ class WXGLTextObject(
     }
 
     private fun hideObs() {
-        glview.obsAl.indices.forEach {
-            glview.obsAl[it].visibility = View.GONE
-            rl.removeView(glview.obsAl[it])
+            glview.obsAl.indices.forEach {
+                glview.obsAl[it].visibility = View.GONE
+                rl.removeView(glview.obsAl[it])
+            }
         }
-    }
 
     fun setOGLR(OGLR: WXGLRender) {
         this.OGLR = OGLR

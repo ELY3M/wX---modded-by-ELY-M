@@ -30,7 +30,6 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.View.OnClickListener
 import android.widget.AdapterView
 import joshuatee.wx.Extensions.getHtml
 
@@ -45,7 +44,6 @@ import joshuatee.wx.ui.OnSwipeTouchListener
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.settings.FavAddActivity
 import joshuatee.wx.settings.FavRemoveActivity
-import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 import joshuatee.wx.util.UtilityFavorites
@@ -53,7 +51,7 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
-class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickListener,
+class SPCMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
     AdapterView.OnItemSelectedListener {
 
     // native interface to the mobile SPC meso website
@@ -145,7 +143,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
         prefSector = prefModel + numPanesStr + "_SECTOR_LAST_USED"
         prefParam = prefModel + numPanesStr + "_PARAM_LAST_USED"
         prefParamLabel = prefModel + numPanesStr + "_PARAM_LAST_USED_LABEL"
-        displayData = DisplayData(this, this, this, numPanes, ObjectSpinner(this as Context))
+        displayData = DisplayData(this, this, numPanes, ObjectSpinner(this as Context))
         displayData.param[0] = "pmsl"
         displayData.paramLabel[0] = "MSL Pressure/Wind"
         if (numPanes > 1) {
@@ -482,12 +480,6 @@ class SPCMesoActivity : VideoRecordActivity(), OnClickListener, OnMenuItemClickL
 
     private fun showHelpTextDialog(help_str: String) {
         UtilityAlertDialog.showHelpText(help_str, this)
-    }
-
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
-        }
     }
 
     private fun setAndLaunchParam(paramStr: String, a: Int, b: Int) {

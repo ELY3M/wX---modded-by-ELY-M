@@ -96,11 +96,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         html = withContext(Dispatchers.IO) { url.getHtml() }
         c0.setTextAndTranslate(Utility.fromHtml(html))
-        if (activityArguments.size > 2) {
-            if (activityArguments[2] == "sound") {
-                UtilityTTS.synthesizeTextAndPlay(applicationContext, html, "textscreen")
-            }
-        }
+        UtilityTTS.conditionalPlay(activityArguments, 2, applicationContext, html, "textscreen")
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

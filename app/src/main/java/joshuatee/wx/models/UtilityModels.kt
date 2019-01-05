@@ -21,7 +21,9 @@
 
 package joshuatee.wx.models
 
+import android.content.Context
 import android.graphics.PointF
+import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
 import android.widget.ArrayAdapter
 
@@ -33,8 +35,57 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.ObjectSpinner
 import joshuatee.wx.ui.TouchImageView2
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityShare
 
 object UtilityModels {
+
+    fun updateToolbarLabels(
+        toolbar: Toolbar,
+        miStatusParam1: MenuItem,
+        miStatusParam2: MenuItem,
+        om: ObjectModel
+    ) {
+        if (om.numPanes > 1) {
+            UtilityModels.setSubtitleRestoreIMGXYZOOM(
+                om.displayData.img,
+                toolbar,
+                "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
+            )
+            miStatusParam1.title = om.displayData.paramLabel[0]
+            miStatusParam2.title = om.displayData.paramLabel[1]
+        } else {
+            toolbar.subtitle = om.displayData.paramLabel[0]
+            miStatusParam1.title = om.displayData.paramLabel[0]
+        }
+    }
+
+    fun writePrefs(context: Context, om: ObjectModel) {
+        Utility.writePref(context, om.prefSector, om.sector)
+        (0 until om.numPanes).forEach {
+            Utility.writePref(context, om.prefParam + it.toString(), om.displayData.param[it])
+            Utility.writePref(
+                context,
+                om.prefParamLabel + it.toString(),
+                om.displayData.paramLabel[it]
+            )
+        }
+    }
+
+    fun legacyShare(context: Context, animRan: Boolean, om: ObjectModel) {
+        if (animRan)
+            UtilityShare.shareAnimGif(
+                context,
+                om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.spTime.selectedItem.toString(),
+                om.displayData.animDrawable[0]
+            )
+        else
+            UtilityShare.shareBitmap(
+                context,
+                om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.spTime.selectedItem.toString(),
+                om.displayData.bitmap[0]
+            )
+    }
 
     fun moveForward(spinnerTime: ObjectSpinner) {
         var timeTmp = spinnerTime.selectedItemPosition

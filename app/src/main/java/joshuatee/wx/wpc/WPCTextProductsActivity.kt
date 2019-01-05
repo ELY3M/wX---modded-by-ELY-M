@@ -130,11 +130,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         ridFavOld = MyApplication.nwsTextFav
         html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(contextg, prod) }
         c0.setTextAndTranslate(Utility.fromHtml(html))
-        if (turl.size > 2) {
-            if (turl[2] == "sound") {
-                UtilityTTS.synthesizeTextAndPlay(applicationContext, html, "wpctext")
-            }
-        }
+        UtilityTTS.conditionalPlay(turl, 2, applicationContext, html, "wpctext")
         if (initProd != prod) {
             Utility.writePref(contextg, "WPC_TEXT_FAV", prod)
             MyApplication.wpcTextFav = prod
