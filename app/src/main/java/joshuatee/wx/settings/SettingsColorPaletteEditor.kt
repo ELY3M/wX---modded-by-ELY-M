@@ -85,10 +85,10 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         palTitle = findViewById(R.id.pal_title)
         palContent = findViewById(R.id.pal_content)
         if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
-            palTitle.setTextColor(Color.BLACK)
-            palContent.setTextColor(Color.BLACK)
-            palTitle.setHintTextColor(Color.GRAY)
-            palContent.setHintTextColor(Color.GRAY)
+            listOf(palTitle, palContent).forEach {
+                it.setTextColor(Color.BLACK)
+                it.setHintTextColor(Color.GRAY)
+            }
         }
         showLoadFromFileMenuItem()
         turl = intent.getStringArrayExtra(URL)
@@ -224,15 +224,13 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                 "wX_colormap_" + palTitle.text.toString() + ".txt"
             )
             R.id.action_load -> loadSettings()
-            R.id.action_website -> ObjectIntent(
+            R.id.action_website -> ObjectIntent.showWeb(
                 this,
-                Intent.ACTION_VIEW,
-                Uri.parse("http://almanydesigns.com/grx/reflectivity/")
+                "http://almanydesigns.com/grx/reflectivity/"
             )
-            R.id.action_website2 -> ObjectIntent(
+            R.id.action_website2 -> ObjectIntent.showWeb(
                 this,
-                Intent.ACTION_VIEW,
-                Uri.parse("http://www.usawx.com/grradarexamples.htm")
+                "http://www.usawx.com/grradarexamples.htm"
             )
             else -> return super.onOptionsItemSelected(item)
         }
@@ -322,15 +320,18 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         }
     }
 
+    // FIXME move to utilIO
     private fun readTextFromUri(uri: Uri): String {
-        val stringBuilder = StringBuilder()
+        //val stringBuilder = StringBuilder()
+        var content = ""
         try {
             val inputStream = contentResolver.openInputStream(uri)
             val reader = BufferedReader(InputStreamReader(inputStream!!))
             var line = reader.readLine()
             while (line != null) {
-                stringBuilder.append(line)
-                stringBuilder.append(MyApplication.newline)
+                //stringBuilder.append(line)
+                //stringBuilder.append(MyApplication.newline)
+                content += line + MyApplication.newline
                 line = reader.readLine()
             }
         } catch (e: Exception) {
@@ -346,7 +347,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         fileName = fileName.replace(".pal", "")
         name = fileName + "_" + formattedDate
         palTitle.setText(name)
-        return convertPal(stringBuilder.toString())
+        return convertPal(content)
     }
 
 

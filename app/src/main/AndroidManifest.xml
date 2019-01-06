@@ -21,8 +21,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55095"
-    android:versionName="55095"
+    android:versionCode="55096"
+    android:versionName="55096"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -180,23 +180,13 @@
       android:parentActivityName="WX" >
   </activity>
   <activity
-      android:name=".activitiesmisc.OPCImagesActivity"
+      android:name=".activitiesmisc.ImageCollectionActivity"
       android:label="@string/title_activity_hourly"
       android:parentActivityName="WX" >
   </activity>
   <activity
       android:name=".activitiesmisc.NWSObsSitesActivity"
       android:label="NWS Observation Sites"
-      android:parentActivityName="WX" >
-  </activity>
-  <activity
-      android:name=".activitiesmisc.ObservationsActivity"
-      android:label="Observations"
-      android:parentActivityName="WX" >
-  </activity>
-  <activity
-      android:name=".vis.NWSGOESFullDiskActivity"
-      android:label="@string/title_activity_hourly"
       android:parentActivityName="WX" >
   </activity>
   <activity

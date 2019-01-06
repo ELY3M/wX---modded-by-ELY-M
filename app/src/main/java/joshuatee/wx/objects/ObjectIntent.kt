@@ -65,5 +65,15 @@ class ObjectIntent() {
         val intent = Intent(context, clazz)
         context.startActivity(intent)
     }
+
+    companion object {
+        fun showWeb(context: Context, url: String) {
+            ObjectIntent(
+                context,
+                Intent.ACTION_VIEW,
+                Uri.parse(url)
+            )
+        }
+    }
 }
 
