@@ -81,7 +81,7 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         title = drw.getLabel()
         actionAnimate.isVisible = drw.getUrl().contains("jma")
-        Utility.writePref(contextg, "GOESFULLDISK_IMG_FAV_IDX", drw.index)
+        Utility.writePref(contextg, prefTokenIdx, drw.index)
         bitmap = withContext(Dispatchers.IO) { drw.getUrl().getImage() }
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn(prefImagePosition)
@@ -104,12 +104,6 @@ class NWSGOESFullDiskActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
             R.id.action_animate -> getAnimate()
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
-                    /*if (isStoragePermissionGranted) {
-                        if (android.os.Build.VERSION.SDK_INT > 22)
-                            checkDrawOverlayPermission()
-                        else
-                            fireScreenCaptureIntent()
-                    }*/
                     checkOverlayPerms()
                 } else
                     UtilityShare.shareText(this, drw.getLabel(), "", bitmap)

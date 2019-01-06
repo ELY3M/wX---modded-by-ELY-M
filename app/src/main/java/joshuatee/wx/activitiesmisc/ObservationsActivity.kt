@@ -50,6 +50,7 @@ class ObservationsActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListe
     private val prefTokenIdx = "SFC_OBS_IMG_IDX"
     private lateinit var contextg: Context
     private lateinit var drw: ObjectNavDrawer
+    private val prefImagePosition = "OBS"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -85,7 +86,7 @@ class ObservationsActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListe
         }
         img.setBitmap(bitmap)
         img.resetZoom()
-        img.firstRunSetZoomPosn("OBS")
+        img.firstRunSetZoomPosn(prefImagePosition)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -124,7 +125,7 @@ class ObservationsActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListe
         drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onStop() {
-        img.imgSavePosnZoom(this, "OBS")
+        img.imgSavePosnZoom(this, prefImagePosition)
         super.onStop()
     }
 }

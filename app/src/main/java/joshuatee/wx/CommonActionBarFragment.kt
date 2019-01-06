@@ -24,7 +24,6 @@ package joshuatee.wx
 
 import android.app.Activity
 import android.content.Context
-import java.util.Locale
 import android.speech.RecognizerIntent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -129,9 +128,9 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                     if (Location.isUS) {
                         ObjectIntent(
                             this,
-                            ObservationsActivity::class.java,
-                            ObservationsActivity.LOC,
-                            arrayOf(Location.state.toLowerCase(Locale.US))
+                            ImageCollectionActivity::class.java,
+                            ImageCollectionActivity.TYPE,
+                            arrayOf("OBSERVATIONS")
                         )
                     } else {
                         ObjectIntent(

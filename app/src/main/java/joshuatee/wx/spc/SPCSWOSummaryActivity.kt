@@ -66,7 +66,7 @@ class SPCSWOSummaryActivity : BaseActivity() {
         withContext(Dispatchers.IO) {
             arrayOf("1", "2", "3", "4-8").forEach {
                 bitmaps.addAll(
-                    UtilitySPCSWO.getImageURLs(it, false)
+                    UtilitySPCSWO.getImageUrls(it, false)
                 )
             }
         }

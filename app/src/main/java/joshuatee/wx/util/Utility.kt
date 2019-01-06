@@ -37,6 +37,16 @@ import joshuatee.wx.radar.LatLon
 
 object Utility {
 
+    fun getVersion(context: Context): String {
+        var vers = ""
+        try {
+            vers = context.packageManager.getPackageInfo(context.packageName, 0).versionName
+        } catch (e: Exception) {
+            UtilityLog.HandleException(e)
+        }
+        return vers
+    }
+
     fun commitPref(context: Context) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = preferences.edit()

@@ -67,7 +67,13 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
         objAlerts.updateContent(ca, activityArguments[0])
         toolbar.subtitle = ca.area
         title = objAlerts.title
-        UtilityTTS.conditionalPlay(activityArguments, 1, applicationContext, Utility.fromHtml(ca.text), "alert")
+        UtilityTTS.conditionalPlay(
+            activityArguments,
+            1,
+            applicationContext,
+            Utility.fromHtml(ca.text),
+            "alert"
+        )
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

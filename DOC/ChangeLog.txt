@@ -5,9 +5,12 @@
 // TODO convert to new NavDrawer: USWarningsWith, ModelGeneric, ModelSPCHRRR, SPCCompmap, SPCStormreports, GOES16
 // TODO in general reduce static methods ( object methods ) in favor of instance methods
 // TODO convert other imageMaps to use new clickHandler
-// TODO for HREF/HRRR/SREF add miStatusParam1/2
+// TODO consolidate OPC,NWSGOES, NWS Mosaic, Observations into one activity using class to store pref/lists, etc
+// TODO convert lightning to nav drawer
 
-55095 2019_01_04
+55095 2019_01_05 misc code refactor
+                 [BUG] NWS Radar mosaic was not saving posn correctly
+                 add ObjectImagesCollection and migrate OPC
 55094 2019_01_04 misc code refactor
                  enable additional radar content in locfrag
 55093 2019_01_03 [BUG] no vtec nws office for sps in uswarn

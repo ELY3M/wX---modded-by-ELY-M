@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
 
 package joshuatee.wx.radar
 
@@ -63,6 +64,10 @@ class WXGLNexradLevel3 internal constructor() {
     var iBuff: ByteBuffer = ByteBuffer.allocate(0)
     var oBuff: ByteBuffer = ByteBuffer.allocate(0)
 
+    companion object {
+        var RadarHeight: Int = 0
+    }
+
     init {
         try {
             if (MyApplication.radarUseJni) {
@@ -99,6 +104,7 @@ class WXGLNexradLevel3 internal constructor() {
             val latitudeOfRadar = dis.readInt() / 1000.0
             val longitudeOfRadar = dis.readInt() / 1000.0
             val heightOfRadar = dis.readUnsignedShort().toShort()
+            RadarHeight = heightOfRadar.toInt()
             productCode = dis.readUnsignedShort().toShort()
             val operationalMode = dis.readUnsignedShort().toShort()
             //final short        volume_scan_pattern =  (short) dis.readUnsignedShort();
@@ -170,6 +176,7 @@ class WXGLNexradLevel3 internal constructor() {
             val latitudeOfRadar = dis.readInt() / 1000.0
             val longitudeOfRadar = dis.readInt() / 1000.0
             val heightOfRadar = dis.readUnsignedShort().toShort()
+            RadarHeight = heightOfRadar.toInt()
             productCode = dis.readUnsignedShort().toShort()
             val operationalMode = dis.readUnsignedShort().toShort()
             dis.skipBytes(6)
@@ -264,6 +271,8 @@ class WXGLNexradLevel3 internal constructor() {
             ""
         }
     }
+
+
 }
 
 

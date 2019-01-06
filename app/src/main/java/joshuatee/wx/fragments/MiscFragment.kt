@@ -31,20 +31,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 
 import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.LightningActivity
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.activitiesmisc.*
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NHCActivity
 import joshuatee.wx.settings.Location
-import joshuatee.wx.vis.NWSGOESFullDiskActivity
-import joshuatee.wx.activitiesmisc.NWSObsSitesActivity
-import joshuatee.wx.activitiesmisc.OPCImagesActivity
 import joshuatee.wx.vis.GOES16Activity
 import joshuatee.wx.radar.USNWSMosaicActivity
-import joshuatee.wx.activitiesmisc.USWarningsWithRadarActivity
-import joshuatee.wx.activitiesmisc.WebscreenAB
-import joshuatee.wx.activitiesmisc.WebscreenABState
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.radar.WXGLRadarActivityMultiPane
 import joshuatee.wx.util.Utility
@@ -172,17 +166,17 @@ class MiscFragment : Fragment() {
             )
             hm["opc"] = TileObject(
                 R.drawable.opc,
-                OPCImagesActivity::class.java,
-                "",
-                arrayOf(),
+                ImageCollectionActivity::class.java,
+                ImageCollectionActivity.TYPE,
+                arrayOf("OPC"),
                 resources.getString(R.string.help_opc),
                 "opc"
             )
             hm["goesfulldisk"] = TileObject(
                 R.drawable.goesfulldisk,
-                NWSGOESFullDiskActivity::class.java,
-                "",
-                arrayOf(),
+                ImageCollectionActivity::class.java,
+                ImageCollectionActivity.TYPE,
+                arrayOf("GOESFD"),
                 resources.getString(R.string.help_goesfulldisk),
                 "goesfulldisk"
             )

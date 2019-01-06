@@ -33,6 +33,7 @@ import androidx.cardview.widget.CardView
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.audio.UtilityTTSTranslations
+import joshuatee.wx.objects.ObjectIntent
 
 class ObjectCardText(private val context: Context) {
 
@@ -113,6 +114,50 @@ class ObjectCardText(private val context: Context) {
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
+    }
+
+    constructor(context: Context, linearLayout: LinearLayout, text: String, textSize: Float) : this(
+        context,
+        text,
+        textSize
+    ) {
+        tv.text = text
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+        tv.isFocusable = false
+        linearLayout.addView(card)
+    }
+
+    constructor(context: Context, text: String, textSize: Float, clazz: Class<*>) : this(
+        context,
+        text
+    ) {
+        tv.text = text
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+        tv.isFocusable = false
+        setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                context,
+                clazz
+            )
+        })
+    }
+
+    constructor(context: Context, linearLayout: LinearLayout, text: String, textSize: Float, clazz: Class<*>) : this(
+        context,
+        text,
+        textSize,
+        clazz
+    ) {
+        tv.text = text
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+        tv.isFocusable = false
+        linearLayout.addView(card)
+        setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                context,
+                clazz
+            )
+        })
     }
 
     fun setTextAndTranslate(text: String) {

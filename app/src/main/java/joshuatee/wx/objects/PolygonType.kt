@@ -51,6 +51,7 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
     HAIL_LABELS(MyApplication.radarColorHi, "HAILSIZE_LABELS", MyApplication.radarHailSizeLabel, 0.0f),
     OBS(MyApplication.radarColorObs, "OBS", MyApplication.radarObs, 0.0f),
     SWO(MyApplication.radarColorHi, "SWO", MyApplication.radarSwo, 0.0f),
+    CONUS(0, "CONUS", MyApplication.radarConusRadar, 0.0f),
     NONE(0, "", false, 0.0f);
 
     override fun toString(): String = typeAsString
@@ -81,6 +82,7 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
             HI.pref = MyApplication.radarHi
             OBS.pref = MyApplication.radarObs
             SWO.pref = MyApplication.radarSwo
+            CONUS.pref = MyApplication.radarConusRadar
             MCD.color = MyApplication.radarColorMcd
             MPD.color = MyApplication.radarColorMpd
             WATCH_SVR.color = MyApplication.radarColorSvrWatch

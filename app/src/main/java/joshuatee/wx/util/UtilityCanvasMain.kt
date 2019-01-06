@@ -374,7 +374,9 @@ object UtilityCanvasMain {
         try {
             val inputStream = res.openRawResource(fileID)
             val dis = DataInputStream(BufferedInputStream(inputStream))
-            (0 until count).forEach { _ -> bb.putFloat(dis.readFloat()) }
+            for (it in 0 until count) {
+                bb.putFloat(dis.readFloat())
+            }
             dis.close()
             inputStream.close()
         } catch (e: IOException) {

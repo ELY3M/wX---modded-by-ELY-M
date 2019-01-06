@@ -518,7 +518,7 @@ object UtilityNotification {
         val notifCurrent = "true"
         val txt: String
         txt = if (notifCurrent.startsWith("t")) {
-            val tabStr = UtilitySPC.checkSPC(context)
+            val tabStr = UtilitySPC.checkSpc(context)
             "" + tabStr[0] + " " + tabStr[1].replace("MISC", "")
         } else {
             ""

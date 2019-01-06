@@ -315,7 +315,13 @@ object UtilityTTS {
         }
     }
 
-    fun conditionalPlay(activityArguments: Array<String>, index: Int, context: Context, html: String, label: String) {
+    fun conditionalPlay(
+        activityArguments: Array<String>,
+        index: Int,
+        context: Context,
+        html: String,
+        label: String
+    ) {
         if (activityArguments.size > index) {
             if (activityArguments[index] == "sound") {
                 UtilityTTS.synthesizeTextAndPlay(context, html, label)

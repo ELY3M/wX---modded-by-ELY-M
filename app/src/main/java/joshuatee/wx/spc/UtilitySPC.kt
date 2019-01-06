@@ -45,7 +45,7 @@ object UtilitySPC {
             return tstArr.map { "$url/imgs/enh_$it.gif".getImage() }
         }
 
-    fun checkSPCDayX(context: Context, prod: String): List<String> {
+    fun checkSpcDayX(context: Context, prod: String): List<String> {
         val highStr = "THERE IS A HIGH RISK OF"
         val modtStr = "THERE IS A MODERATE RISK OF"
         val slightStr = "THERE IS A SLIGHT RISK"
@@ -69,14 +69,14 @@ object UtilitySPC {
             returnStr = "high"
         }
         html = html.replace("ACUS[0-9]{2} KWNS [0-9]{6}".toRegex(), "")
-        html = html.replace("SWOD[Y4][1-3]".toRegex(), "")
-        html = html.replace("SPC AC [0-9]{6}".toRegex(), "")
-        html = html.replace("NWS STORM PREDICTION CENTER NORMAN OK", "")
-        html = html.replace("CONVECTIVE OUTLOOK", "")
+            .replace("SWOD[Y4][1-3]".toRegex(), "")
+            .replace("SPC AC [0-9]{6}".toRegex(), "")
+            .replace("NWS STORM PREDICTION CENTER NORMAN OK", "")
+            .replace("CONVECTIVE OUTLOOK", "")
         return listOf(returnStr, html)
     }
 
-    fun checkSPC(context: Context): List<String> {
+    fun checkSpc(context: Context): List<String> {
         var tabStr = ""
         val tabStrSpc: String
         var mdPresent = false

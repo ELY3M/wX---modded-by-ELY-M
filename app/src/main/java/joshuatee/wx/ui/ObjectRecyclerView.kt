@@ -26,19 +26,18 @@ import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class ObjectRecyclerView {
+class ObjectRecyclerView(
+    context: Context,
+    activity: Activity,
+    resid: Int,
+    list: MutableList<String>,
+    fn: (Int) -> Unit
+) {
 
-    var recyclerView: RecyclerView
+    var recyclerView: RecyclerView = activity.findViewById(resid)
     var ca: SingleTextAdapterList
 
-    constructor(
-        context: Context,
-        activity: Activity,
-        resid: Int,
-        list: MutableList<String>,
-        fn: (Int) -> Unit
-    ) {
-        recyclerView = activity.findViewById(resid)
+    init {
         recyclerView.setHasFixedSize(true)
         val llm = LinearLayoutManager(context)
         llm.orientation = RecyclerView.VERTICAL
@@ -50,7 +49,6 @@ class ObjectRecyclerView {
                 fn(position)
             }
         })
-
     }
 
     fun refreshList(list: MutableList<String>) {

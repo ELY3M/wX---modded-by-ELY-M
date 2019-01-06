@@ -138,7 +138,7 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         withContext(Dispatchers.IO) {
             html = UtilityDownload.getTextProduct(contextg, textUrl)
-            bitmaps = UtilitySPCSWO.getImageURLs(turlDay, true)
+            bitmaps = UtilitySPCSWO.getImageUrls(turlDay, true)
         }
         c2.setText(Utility.fromHtml(html))
         toolbar.subtitle = html.parse("(Valid.*?)<")

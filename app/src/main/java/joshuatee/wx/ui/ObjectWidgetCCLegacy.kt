@@ -279,7 +279,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         val pendingIntentWidgetTime =
             PendingIntent.getBroadcast(context, 0, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         remoteViews.setOnClickPendingIntent(R.id.widget_time, pendingIntentWidgetTime)
-        val tabStr = UtilitySPC.checkSPC(context)
+        val tabStr = UtilitySPC.checkSpc(context)
         remoteViews.setViewVisibility(R.id.tab, View.VISIBLE)
         remoteViews.setTextViewText(R.id.tab, tabStr[0] + "   " + tabStr[1])
     }

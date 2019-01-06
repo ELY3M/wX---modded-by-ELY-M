@@ -25,7 +25,6 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
-import android.view.View
 import joshuatee.wx.R
 import joshuatee.wx.ui.ObjectSpinner
 import joshuatee.wx.ui.OnSwipeTouchListener
@@ -46,7 +45,7 @@ class DisplayData(
     var bitmap: MutableList<Bitmap> = mutableListOf()
 
     init {
-        (0 until numPanes).forEach { _ ->
+        for (it in 0 until numPanes) {
             img.add(TouchImageView2(context))
             bitmap.add(UtilityImg.getBlankBitmap())
             param.add("")

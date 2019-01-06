@@ -26,21 +26,15 @@ import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class ObjectRecyclerViewGeneric {
+class ObjectRecyclerViewGeneric(context: Context, activity: Activity, resid: Int) {
 
-    var recyclerView: RecyclerView
+    var recyclerView: RecyclerView = activity.findViewById(resid)
 
-    constructor(
-        context: Context,
-        activity: Activity,
-        resid: Int
-    ) {
-        recyclerView = activity.findViewById(resid)
+    init {
         recyclerView.setHasFixedSize(true)
         val linearLayoutManager = LinearLayoutManager(context)
         linearLayoutManager.orientation = RecyclerView.VERTICAL
         recyclerView.layoutManager = linearLayoutManager
-
     }
 
     fun scrollToPosition(position: Int) {

@@ -53,6 +53,7 @@ class GOES16Activity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
     private var savePrefs = true
     private lateinit var activityArguments: Array<String>
     private lateinit var contextg: Context
+    private val prefImagePosition = "GOES16_IMG"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,7 +88,7 @@ class GOES16Activity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
         toolbar.subtitle = drw.getLabel()
         bitmap = withContext(Dispatchers.IO) { UtilityGOES16.getImage(drw.getUrl(), sector) }
         img.setBitmap(bitmap)
-        img.firstRunSetZoomPosn("GOES16_IMG")
+        img.firstRunSetZoomPosn(prefImagePosition)
         if (oldSector != sector) {
             img.setZoom(1.0f)
             oldSector = sector
@@ -174,7 +175,7 @@ class GOES16Activity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
         drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onStop() {
-        img.imgSavePosnZoom(this, "GOES16_IMG")
+        img.imgSavePosnZoom(this, prefImagePosition)
         super.onStop()
     }
 

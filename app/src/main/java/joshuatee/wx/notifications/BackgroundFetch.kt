@@ -366,7 +366,7 @@ class BackgroundFetch(val context: Context) {
         Utility.writePref(context, "NOTIF_STR", notifStr)
     }
 
-    fun getContent() = GlobalScope.launch(uiDispatcher) {
+    public fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) { doNotifs() }
     }
 }

@@ -117,7 +117,7 @@ object UtilityDownload {
             "QPF1-7" -> url = "${MyApplication.nwsWPCwebsitePrefix}/qpf/p168i.gif"
             "SWOD1" -> {
                 needsBitmap = false
-                bm = UtilitySPCSWO.getImageURLs("1", false)[0]
+                bm = UtilitySPCSWO.getImageUrls("1", false)[0]
             }
             "WEATHERSTORY" -> {
                 needsBitmap = false
@@ -126,15 +126,15 @@ object UtilityDownload {
             }
             "SWOD2" -> {
                 needsBitmap = false
-                bm = UtilitySPCSWO.getImageURLs("2", false)[0]
+                bm = UtilitySPCSWO.getImageUrls("2", false)[0]
             }
             "SWOD3" -> {
                 needsBitmap = false
-                bm = UtilitySPCSWO.getImageURLs("3", false)[0]
+                bm = UtilitySPCSWO.getImageUrls("3", false)[0]
             }
             "SWOD4" -> {
                 needsBitmap = false
-                bm = UtilitySPCSWO.getImageURLs("4", false)[0]
+                bm = UtilitySPCSWO.getImageUrls("4", false)[0]
             }
             "SPCMESO1" -> {
                 var param = "500mb"

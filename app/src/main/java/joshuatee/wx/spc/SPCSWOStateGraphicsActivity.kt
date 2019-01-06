@@ -85,7 +85,7 @@ class SPCSWOStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListene
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         title = "SWO D$turlDay"
-        imgUrl = UtilitySPCSWO.getSWOStateURL(state, turlDay)
+        imgUrl = UtilitySPCSWO.getSwoStateUrl(state, turlDay)
         bitmap = withContext(Dispatchers.IO) { imgUrl.getImage() }
         img.img.visibility = View.VISIBLE
         img.setBitmap(bitmap)

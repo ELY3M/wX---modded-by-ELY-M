@@ -51,7 +51,7 @@ internal object UtilityNotificationSPC {
             val urls = arrayOf("SWODY1", "SWODY2", "SWODY3")
             var test: Boolean
             (0 until urls.size).forEach {
-                val threatLevel = UtilitySPC.checkSPCDayX(context, urls[it])
+                val threatLevel = UtilitySPC.checkSpcDayX(context, urls[it])
                 test = if (MyApplication.alertSpcswoSlightNotificationCurrent) {
                     threatLevel[0] == "high" || threatLevel[0] == "modt" || threatLevel[0] == "enh" || threatLevel[0] == "slight"
                 } else {

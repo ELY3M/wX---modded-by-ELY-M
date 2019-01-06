@@ -25,9 +25,11 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.content.res.Configuration
+import android.graphics.drawable.AnimationDrawable
 import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
@@ -35,34 +37,56 @@ import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityShare
+import joshuatee.wx.vis.UtilityNWSGOESFullDisk
 import kotlinx.coroutines.*
 
-class OPCImagesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
+class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
+
+    companion object {
+        const val TYPE: String = ""
+    }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var img: ObjectTouchImageView
     private lateinit var drw: ObjectNavDrawer
     private lateinit var contextg: Context
-    private val prefTokenIdx = "OPC_IMG_FAV_IDX"
+    private lateinit var actionAnimate: MenuItem
+    private lateinit var imageCollection: ObjectImagesCollection
+    private lateinit var activityArguments: Array<String>
+    private var animDrawable = AnimationDrawable()
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
             savedInstanceState,
             R.layout.activity_image_show_navdrawer_bottom_toolbar,
-            R.menu.opcimages,
+            R.menu.imagecollection,
             true,
             true
         )
+        activityArguments = intent.getStringArrayExtra(TYPE)
+        imageCollection = MyApplication.imageCollectionMap[activityArguments[0]]!!
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = "OPC"
-        drw = ObjectNavDrawer(this, UtilityOPCImages.labels, UtilityOPCImages.urls)
-        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, prefTokenIdx)
+        val menu = toolbarBottom.menu
+        actionAnimate = menu.findItem(R.id.action_animate)
+        actionAnimate.isVisible = false
+        title = imageCollection.title
+        drw = ObjectNavDrawer(this, imageCollection.labels, imageCollection.urls)
+        img = ObjectTouchImageView(
+            this,
+            this,
+            toolbar,
+            toolbarBottom,
+            R.id.iv,
+            drw,
+            imageCollection.prefTokenIdx
+        )
         img.setListener(this, drw, ::getContentFixThis)
-        drw.index = Utility.readPref(this, prefTokenIdx, 0)
+        drw.index = Utility.readPref(this, imageCollection.prefTokenIdx, 0)
         drw.setListener(::getContentFixThis)
         getContent()
     }
@@ -73,10 +97,18 @@ class OPCImagesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         toolbar.subtitle = drw.getLabel()
+        if (drw.getUrl().contains("jma") && imageCollection.title == "GOESFD") {
+            actionAnimate.isVisible = true
+        }
         val result = async(Dispatchers.IO) { drw.getUrl().getImage() }
         bitmap = result.await()
+        if (drw.getUrl().contains("large_latestsfc.gif")) {
+            img.setMaxZoom(16f)
+        } else {
+            img.setMaxZoom(4f)
+        }
         img.setBitmap(bitmap)
-        img.firstRunSetZoomPosn("OPCIMG")
+        img.firstRunSetZoomPosn(imageCollection.prefImagePosition)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -94,11 +126,12 @@ class OPCImagesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
             return true
         }
         when (item.itemId) {
+            R.id.action_animate -> getAnimate()
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityShare.shareBitmap(this, "OPC", bitmap)
+                    UtilityShare.shareBitmap(this, imageCollection.title, bitmap)
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -110,7 +143,17 @@ class OPCImagesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
         drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onStop() {
-        img.imgSavePosnZoom(this, "OPCIMG")
+        img.imgSavePosnZoom(this, imageCollection.prefImagePosition)
         super.onStop()
+    }
+
+    private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
+        animDrawable = withContext(Dispatchers.IO) {
+            UtilityNWSGOESFullDisk.getAnimation(
+                contextg,
+                drw.getUrl()
+            )
+        }
+        UtilityImgAnim.startAnimation(animDrawable, img)
     }
 }

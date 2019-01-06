@@ -132,7 +132,7 @@ class WX : CommonActionBarFragment() {
 
     private fun refreshDynamicContent() {
         if (!MyApplication.simpleMode) {
-            val tabStr = UtilitySPC.checkSPC(this)
+            val tabStr = UtilitySPC.checkSpc(this)
             vpa.setTabTitles(1, tabStr[0])
             vpa.setTabTitles(2, tabStr[1])
             if (mSlidingTabLayout.tabCount > 3) {

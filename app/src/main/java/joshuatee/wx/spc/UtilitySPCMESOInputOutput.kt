@@ -111,7 +111,6 @@ object UtilitySPCMESOInputOutput {
             ("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/new/archiveviewer.php?sector=19&parm=pmsl").getHtml()
                 .parseColumn("dattim\\[[0-9]{1,2}\\].*?=.*?([0-9]{8})")
         val delay = UtilityImg.animInterval(context)
-        //val frameCnt = frameCntStr.toIntOrNull() ?: 0
         if (timeList.size > frameCnt) {
             stride(
                 frameCnt - 1,

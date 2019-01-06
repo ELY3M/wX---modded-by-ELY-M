@@ -43,6 +43,7 @@ import joshuatee.wx.ui.ObjectImageMap
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
+
 internal object UtilityRadarUI {
 
     const val longPressRadarSiteRegex = "\\) ([A-Z]{3,4}) "
@@ -243,6 +244,33 @@ internal object UtilityRadarUI {
                 6
             ) + " miles from " + oglr.rid
         )
+        //TODO get msl and AGL here
+        var radarheight = WXGLNexradLevel3.RadarHeight
+        var distance = UtilityStringExternal.truncate(distRid.toString(), 4).toDouble()
+        var degree = 0.5
+        if (oglr.product.contains("0")) {
+            degree = 0.5
+        }
+        if (oglr.product.contains("1")) {
+            degree = 0.9
+        }
+        if (oglr.product.contains("2")) {
+            degree = 1.5
+        }
+        if (oglr.product.contains("3")) {
+            degree = 1.8
+        }
+        UtilityLog.d("wx", "radarHeight: "+radarheight)
+        UtilityLog.d("wx", "degree: "+degree)
+
+
+        val heightAGL = 3.281 * (Math.sin(Math.toRadians(degree)) * distance + distance * distance / 15417.82) * 1000.0
+        val heightMSL = (radarheight + heightAGL)
+
+        alertDialogRadarLongpressAl.add(
+        "Beam Height MSL: "+UtilityStringExternal.truncate(heightMSL.toString(), 6)+" AGL: "+UtilityStringExternal.truncate(heightAGL.toString(), 6)
+        )
+
         oglr.ridNewList.mapTo(alertDialogRadarLongpressAl) {
             "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.readPref(
                 context,

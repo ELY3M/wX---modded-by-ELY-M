@@ -57,6 +57,7 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
     private var doNotSavePref = false
     private lateinit var contextg: Context
     private lateinit var drw: ObjectNavDrawer
+    private val prefImagePosition = "NWSRADMOS"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -152,7 +153,7 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
         }
         img.setBitmap(bitmap)
         animRan = false
-        img.firstRunSetZoomPosn("OBS")
+        img.firstRunSetZoomPosn(prefImagePosition)
     }
 
     private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
@@ -215,7 +216,7 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
         drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onStop() {
-        img.imgSavePosnZoom(this, "NWSRADMOS")
+        img.imgSavePosnZoom(this, prefImagePosition)
         super.onStop()
     }
 }
