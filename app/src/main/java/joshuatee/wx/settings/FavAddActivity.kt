@@ -121,7 +121,6 @@ class FavAddActivity : BaseActivity() {
                 }
             }
         }
-
         if (!ridFav.contains(tmpArr[0])) {
             when (type) {
                 "SPCMESO" -> {

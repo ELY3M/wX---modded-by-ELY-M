@@ -54,7 +54,13 @@ class SettingsRadarActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         toolbar.subtitle = "Please tap on text for additional help."
         val ll: LinearLayout = findViewById(R.id.ll)
-        ObjectCardText(this, ll, "Colors", MyApplication.textSizeNormal, SettingsColorsActivity::class.java)
+        ObjectCardText(
+            this,
+            ll,
+            "Colors",
+            MyApplication.textSizeNormal,
+            SettingsColorsActivity::class.java
+        )
         cardPal94 = ObjectCardText(
             this,
             ll,
@@ -67,7 +73,13 @@ class SettingsRadarActivity : BaseActivity() {
             resources.getString(R.string.label_settings_color_palette_99) + ": " + MyApplication.radarColorPalette["99"],
             MyApplication.textSizeNormal
         )
-        ObjectCardText(this, ll, "Screen Recorder", MyApplication.textSizeNormal, SettingsTelecineActivity::class.java)
+        ObjectCardText(
+            this,
+            ll,
+            "Screen Recorder",
+            MyApplication.textSizeNormal,
+            SettingsTelecineActivity::class.java
+        )
         cardPal94.setOnClickListener(View.OnClickListener {
             ObjectIntent(
                 this,

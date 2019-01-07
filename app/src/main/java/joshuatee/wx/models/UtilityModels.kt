@@ -24,6 +24,7 @@ package joshuatee.wx.models
 import android.content.Context
 import android.graphics.PointF
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.widget.Toolbar
 import android.widget.ArrayAdapter
 
@@ -32,13 +33,76 @@ import java.util.Calendar
 import java.util.TimeZone
 
 import joshuatee.wx.MyApplication
+import joshuatee.wx.UIPreferences
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.ObjectSpinner
 import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityShare
+import kotlinx.coroutines.*
 
 object UtilityModels {
+
+    fun getContent(context: Context, om: ObjectModel, overlayImg: List<String>, uiDispatcher: CoroutineDispatcher) =
+        GlobalScope.launch(uiDispatcher) {
+            om.run = om.spRun.selectedItem.toString()
+            om.time = om.spTime.selectedItem.toString()
+            om.sector = om.spSector.selectedItem.toString()
+            om.sectorInt = om.spSector.selectedItemPosition
+            if (om.truncateTime) {
+                om.time = UtilityStringExternal.truncate(om.time, om.timeTruncate)
+            }
+            UtilityModels.writePrefs(context, om)
+            withContext(Dispatchers.IO) {
+                (0 until om.numPanes).forEach { om.displayData.bitmap[it] = om.getImage(it, overlayImg) }
+            }
+
+            (0 until om.numPanes).forEach {
+                if (om.numPanes > 1)
+                    UtilityImg.resizeViewSetImgByHeight(
+                        om.displayData.bitmap[it],
+                        om.displayData.img[it]
+                    )
+                else
+                    om.displayData.img[it].setImageBitmap(om.displayData.bitmap[it])
+            }
+            om.animRan = false
+            if (!om.firstRun) {
+                (0 until om.numPanes).forEach {
+                    UtilityImg.imgRestorePosnZoom(
+                        context,
+                        om.displayData.img[it],
+                        om.modelProvider + om.numPanes.toString() + it.toString()
+                    )
+                }
+                if (UIPreferences.fabInModels && om.numPanes < 2) {
+                    om.fab1.setVisibility(View.VISIBLE)
+                    om.fab2.setVisibility(View.VISIBLE)
+                }
+                om.firstRun = true
+            }
+            // FIXME change to just take OM
+            UtilityModels.updateToolbarLabels(om.toolbar, om.miStatusParam1, om.miStatusParam2, om)
+            om.imageLoaded = true
+        }
+
+    fun getAnimate(om: ObjectModel, overlayImg: List<String>, uiDispatcher: CoroutineDispatcher) =
+        GlobalScope.launch(uiDispatcher) {
+            withContext(Dispatchers.IO) {
+                (0 until om.numPanes).forEach {
+                    om.displayData.animDrawable[it] = om.getAnimate(it, overlayImg)
+                }
+            }
+            (0 until om.numPanes).forEach {
+                UtilityImgAnim.startAnimation(
+                    om.displayData.animDrawable[it],
+                    om.displayData.img[it]
+                )
+            }
+            om.animRan = true
+        }
 
     fun updateToolbarLabels(
         toolbar: Toolbar,

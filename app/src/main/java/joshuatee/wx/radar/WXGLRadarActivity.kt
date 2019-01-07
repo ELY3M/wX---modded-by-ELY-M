@@ -176,13 +176,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityUI.immersiveMode(this as Activity)
-
-
         if (UIPreferences.radarStatusBarTransparent && Build.VERSION.SDK_INT >= 21) {
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.statusBarColor = Color.TRANSPARENT
         }
-
         act = this
         spotterShowSelected = false
         locXCurrent = joshuatee.wx.settings.Location.x
@@ -291,43 +288,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             prefToken
         )
         sp = ObjectSpinner(this, this, this, R.id.spinner1, ridArrLoc)
-        if (MyApplication.wxoglRadarAutorefresh) {
-            // 180000 is 3 min
-            mInterval = 60000 * Utility.readPref(this, "RADAR_REFRESH_INTERVAL", 3)
-            locationManager = this.getSystemService(Context.LOCATION_SERVICE) as (LocationManager)
-            if (ContextCompat.checkSelfPermission(
-                    this,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(
-                    this,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-            )
-                locationManager?.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    20000.toLong(),
-                    30.toFloat(),
-                    locationListener
-                )
-            window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            mHandler = Handler()
-            startRepeatingTask()
-        }
-	
-        if (MyApplication.sn_locationreport) {
-            UtilityLog.d("wx", "starting location report")
-            sn_Handler_m = Handler()
-            start_sn_reporting()
-        }
-
-        if (MyApplication.radarConusRadar) {
-            conus_Handler_m = Handler()
-            start_conusimage()
-        }
-
-
-
+        checkForAutoRefresh()
     }
 
     override fun onRestart() {
@@ -359,6 +320,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             )
             sp.refreshData(contextg, ridArrLoc)
         }
+        checkForAutoRefresh()
+        super.onRestart()
+    }
+
+    private fun checkForAutoRefresh() {
         if (MyApplication.wxoglRadarAutorefresh) {
             mInterval = 60000 * Utility.readPref(this, "RADAR_REFRESH_INTERVAL", 3)
             locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -392,7 +358,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             conus_Handler_m = Handler()
             start_conusimage()
         }
-        super.onRestart()
+        //super.onRestart()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
@@ -432,7 +398,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 archiveMode
             )
         }
-
         withContext(Dispatchers.IO) {
             UtilityRadarUI.plotRadar(
                 oglr,
@@ -443,7 +408,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 archiveMode
             )
         }
-
         if (!oglInView) {
             img.visibility = View.GONE
             glview.visibility = View.VISIBLE
@@ -476,12 +440,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             updateLegend()
         }
         oldProd = oglr.product
-        val info = Utility.readPref(contextg, "WX_RADAR_CURRENT_INFO", "")
-        val tmpArr = info.split(" ")
-        if (tmpArr.size > 3)
-            toolbar.subtitle = tmpArr[3]
-        else
-            toolbar.subtitle = ""
+        setSubTitle()
         animRan = false
         firstRun = false
     }
@@ -494,7 +453,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
         inOglAnim = true
         animRan = true
-
         withContext(Dispatchers.IO) {
             frameCountGlobal = frameCount
             var animArray = oglr.rdDownload.getRadarFilesForAnimation(contextg, frameCount)
@@ -555,8 +513,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     timeMilli = System.currentTimeMillis()
                     if ((timeMilli - priorTime) < delay)
                         SystemClock.sleep(delay - ((timeMilli - priorTime)))
-                    if (!inOglAnim) break
-                    if (r == (animArray.size - 1)) SystemClock.sleep(delay.toLong() * 2)
+                    if (!inOglAnim)
+                        break
+                    if (r == (animArray.size - 1))
+                        SystemClock.sleep(delay.toLong() * 2)
                 }
                 loopCnt += 1
             }
@@ -573,6 +533,16 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         } else {
             toolbar.subtitle = "Problem downloading"
         }
+    }
+
+    // FIXME use code similar to multipane for this and above method
+    private fun setSubTitle() {
+        val info = Utility.readPref(contextg, "WX_RADAR_CURRENT_INFO", "")
+        val tmpArr = info.split(" ")
+        if (tmpArr.size > 3)
+            toolbar.subtitle = tmpArr[3]
+        else
+            toolbar.subtitle = ""
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -877,7 +847,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     }
 
     private val changeListener = object : WXGLSurfaceView.OnProgressChangeListener {
-
         override fun onProgressChanged(progress: Int, idx: Int, idxInt: Int) {
             if (progress != 50000) {
                 UtilityRadarUI.addItemsToLongPress(
@@ -1100,7 +1069,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         return super.onOptionsItemSelected(item)
     }
 
-    // thanks http://stackoverflow.com/questions/19999619/navutils-navigateupto-does-not-start-any-activity user882209
     private fun navigateUp() {
         val upIntent = NavUtils.getParentActivityIntent(this)
         if (NavUtils.shouldUpRecreateTask(this, upIntent!!) || isTaskRoot) {

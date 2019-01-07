@@ -56,17 +56,12 @@ class WX : CommonActionBarFragment() {
         UtilityTheme.setPrimaryColor(this)
         val toolbarBottom: Toolbar = findViewById(R.id.toolbar_bottom)
         view = findViewById(android.R.id.content)
-        if (android.os.Build.VERSION.SDK_INT > 20) toolbarBottom.elevation =
-                MyApplication.elevationPref
+        if (android.os.Build.VERSION.SDK_INT > 20)
+            toolbarBottom.elevation = MyApplication.elevationPref
         if (MyApplication.iconsEvenSpaced) {
             UtilityToolbar.setupEvenlyDistributedToolbar(this, toolbarBottom, R.menu.cab)
         } else {
-            //toolbarBottom.setContentInsetsAbsolute(0,0)
-            //toolbarBottom.setContentInsetEndWithActions(0)
-            //toolbarBottom.setContentInsetStartWithNavigation(0)
-            //UtilityToolbar.setupSmallToolbar(this, toolbarBottom, R.menu.cab)
             toolbarBottom.inflateMenu(R.menu.cab)
-            //toolbarBottom.visibility = View.GONE
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         toolbarBottom.setOnClickListener { toolbarBottom.showOverflowMenu() }
@@ -115,7 +110,6 @@ class WX : CommonActionBarFragment() {
     override fun onBackPressed() {
         if (UIPreferences.prefPreventAccidentalExit) {
             if (backButtonCounter < 1) {
-                //UtilityUI.makeToast(this, "Please tap the back button one more time to close wX.")
                 UtilityUI.makeSnackBar(
                     mSlidingTabLayout,
                     "Please tap the back button one more time to close wX."
@@ -123,7 +117,6 @@ class WX : CommonActionBarFragment() {
                 backButtonCounter += 1
             } else {
                 finish()
-                //super.onBackPressed()
             }
         } else {
             super.onBackPressed()

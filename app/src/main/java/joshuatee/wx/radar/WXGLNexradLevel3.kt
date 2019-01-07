@@ -66,6 +66,7 @@ class WXGLNexradLevel3 internal constructor() {
 
     companion object {
         var RadarHeight: Int = 0
+        var RadarElevation: Int = 0
     }
 
     init {

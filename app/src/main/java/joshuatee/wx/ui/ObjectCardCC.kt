@@ -32,6 +32,7 @@ import androidx.cardview.widget.CardView
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.settings.Location
 import joshuatee.wx.util.ObjectForecastPackage
 
 class ObjectCardCC(context: Context, version: Int) {
@@ -128,6 +129,32 @@ class ObjectCardCC(context: Context, version: Int) {
 
     private fun setMiddleLine(text: String) {
         tvCc22.text = text
+    }
+
+    fun setListener(
+        alertDialogStatus: ObjectDialogue?,
+        alertDialogStatusAl: MutableList<String>,
+        radarTimestamps: () -> List<String>,
+        helpCurrentGeneric: Int,
+        fn: (Int) -> Unit
+    ) {
+        imageView.setOnClickListener {
+            if (MyApplication.helpMode) {
+                fn(helpCurrentGeneric)
+            } else {
+                alertDialogStatusAl.clear()
+                alertDialogStatusAl.add("Edit Location...")
+                alertDialogStatusAl.add("Sun/Moon data...")
+                alertDialogStatusAl.add("Force Data Refresh...")
+                if (MyApplication.locDisplayImg && Location.isUS) {
+                    alertDialogStatusAl.add("Radar type: Reflectivity")
+                    alertDialogStatusAl.add("Radar type: Velocity")
+                    alertDialogStatusAl.add("Reset zoom and center")
+                    alertDialogStatusAl += radarTimestamps()
+                }
+                alertDialogStatus?.show()
+            }
+        }
     }
 
     fun updateContent(

@@ -93,9 +93,9 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     var locfrag: Boolean = false
     private var act: Activity? = null
 
-    constructor(context: Context, wd: Int, np: Int) : super(context) {
-        this.widthDivider = wd
-        this.numPanes = np
+    constructor(context: Context, widthDivider: Int, numPanes: Int) : super(context) {
+        this.widthDivider = widthDivider
+        this.numPanes = numPanes
         mGestureDetector = GestureDetector(context, this)
         mScaleDetector = ScaleGestureDetector(context, ScaleListener())
     }

@@ -36,35 +36,20 @@ import joshuatee.wx.wpc.WPCImagesActivity
 internal object UtilityHomeScreen {
 
     fun setupMap() {
-        MyApplication.HM_CLASS["SWOD1"] = SPCSWOActivity::class.java
-        MyApplication.HM_CLASS_ARGS["SWOD1"] = arrayOf("1", "")
-        MyApplication.HM_CLASS_ID["SWOD1"] = SPCSWOActivity.NO
-        MyApplication.HM_CLASS["SWOD2"] = SPCSWOActivity::class.java
-        MyApplication.HM_CLASS_ARGS["SWOD2"] = arrayOf("2", "")
-        MyApplication.HM_CLASS_ID["SWOD2"] = SPCSWOActivity.NO
-        MyApplication.HM_CLASS["SWOD3"] = SPCSWOActivity::class.java
-        MyApplication.HM_CLASS_ARGS["SWOD3"] = arrayOf("3", "")
-        MyApplication.HM_CLASS_ID["SWOD3"] = SPCSWOActivity.NO
-
-        MyApplication.HM_CLASS["SPCMESO1"] = SPCMesoActivity::class.java
-        MyApplication.HM_CLASS_ARGS["SPCMESO1"] = arrayOf("SPCMESO1", "1", "SPCMESO")
-        MyApplication.HM_CLASS_ID["SPCMESO1"] = SPCMesoActivity.INFO
-        MyApplication.HM_CLASS["SPCMESO2"] = SPCMesoActivity::class.java
-        MyApplication.HM_CLASS_ARGS["SPCMESO2"] = arrayOf("SPCMESO2", "1", "SPCMESO")
-        MyApplication.HM_CLASS_ID["SPCMESO2"] = SPCMesoActivity.INFO
-        MyApplication.HM_CLASS["SPCMESO3"] = SPCMesoActivity::class.java
-        MyApplication.HM_CLASS_ARGS["SPCMESO3"] = arrayOf("SPCMESO3", "1", "SPCMESO")
-        MyApplication.HM_CLASS_ID["SPCMESO3"] = SPCMesoActivity.INFO
-
-        MyApplication.HM_CLASS["SPCMESO4"] = SPCMesoActivity::class.java
-        MyApplication.HM_CLASS_ARGS["SPCMESO4"] = arrayOf("SPCMESO4", "1", "SPCMESO")
-        MyApplication.HM_CLASS_ID["SPCMESO4"] = SPCMesoActivity.INFO
-        MyApplication.HM_CLASS["SPCMESO5"] = SPCMesoActivity::class.java
-        MyApplication.HM_CLASS_ARGS["SPCMESO5"] = arrayOf("SPCMESO5", "1", "SPCMESO")
-        MyApplication.HM_CLASS_ID["SPCMESO5"] = SPCMesoActivity.INFO
-        MyApplication.HM_CLASS["SPCMESO6"] = SPCMesoActivity::class.java
-        MyApplication.HM_CLASS_ARGS["SPCMESO6"] = arrayOf("SPCMESO6", "1", "SPCMESO")
-        MyApplication.HM_CLASS_ID["SPCMESO6"] = SPCMesoActivity.INFO
+        (1..3).forEach {
+            val number = it.toString()
+            val token = "SWOD$number"
+            MyApplication.HM_CLASS[token] = SPCSWOActivity::class.java
+            MyApplication.HM_CLASS_ARGS[token] = arrayOf(number, "")
+            MyApplication.HM_CLASS_ID[token] = SPCSWOActivity.NO
+        }
+        (1..6).forEach {
+            val number = it.toString()
+            val token = "SPCMESO$number"
+            MyApplication.HM_CLASS[token] = SPCMesoActivity::class.java
+            MyApplication.HM_CLASS_ARGS[token] = arrayOf(token, number, "SPCMESO")
+            MyApplication.HM_CLASS_ID[token] = SPCMesoActivity.INFO
+        }
 
         MyApplication.HM_CLASS["STRPT"] = SPCStormReportsActivity::class.java
         MyApplication.HM_CLASS_ARGS["STRPT"] = arrayOf("today")

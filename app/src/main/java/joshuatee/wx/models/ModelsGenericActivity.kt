@@ -37,7 +37,6 @@ import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.*
@@ -58,9 +57,6 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
     }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private var animRan = false
-    var firstRun: Boolean = false
-    private var imageLoaded: Boolean = false
     private lateinit var fab1: ObjectFab
     private lateinit var fab2: ObjectFab
     private var spinnerRunRan = false
@@ -141,12 +137,13 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
         spSector.setSelection(om.sector)
         ObjectSpinner(this, this, this, R.id.spinner_model, om.models, om.model)
         drw = ObjectNavDrawer(this, om.labels, om.params)
+        om.setUIElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, spRun, spSector)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
             drw.drawerLayout.closeDrawer(drw.listView)
             om.displayData.param[om.curImg] = drw.getToken(position)
             om.displayData.paramLabel[om.curImg] = drw.getLabel(position)
-            getContent()
+            UtilityModels.getContent(this, om, listOf(""), uiDispatcher)
         }
     }
 
@@ -170,53 +167,12 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             Utility.writePref(this, om.prefModel, om.model)
             getRunStatus()
         } else if (firstRunTimeSet) { // && spinnerRunRan && spinnerTimeRan && spinnerSectorRan && spinnerModelRan
-            getContent()
+            UtilityModels.getContent(this, om, listOf(""), uiDispatcher)
         }
 
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {}
-
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        om.run = spRun.selectedItem.toString()
-        om.time = om.spTime.selectedItem.toString()
-        om.sector = spSector.selectedItem.toString()
-        om.sectorInt = spSector.selectedItemPosition
-        if (om.truncateTime) {
-            om.time = UtilityStringExternal.truncate(om.time, om.timeTruncate)
-        }
-        UtilityModels.writePrefs(contextg, om)
-        withContext(Dispatchers.IO) {
-            (0 until om.numPanes).forEach { om.displayData.bitmap[it] = om.getImage(it) }
-        }
-
-        (0 until om.numPanes).forEach {
-            if (om.numPanes > 1)
-                UtilityImg.resizeViewSetImgByHeight(
-                    om.displayData.bitmap[it],
-                    om.displayData.img[it]
-                )
-            else
-                om.displayData.img[it].setImageBitmap(om.displayData.bitmap[it])
-        }
-        animRan = false
-        if (!firstRun) {
-            (0 until om.numPanes).forEach {
-                UtilityImg.imgRestorePosnZoom(
-                    contextg,
-                    om.displayData.img[it],
-                    om.modelProvider + om.numPanes.toString() + it.toString()
-                )
-            }
-            if (UIPreferences.fabInModels && om.numPanes < 2) {
-                fab1.setVisibility(View.VISIBLE)
-                fab2.setVisibility(View.VISIBLE)
-            }
-            firstRun = true
-        }
-        UtilityModels.updateToolbarLabels(toolbar, miStatusParam1, miStatusParam2, om)
-        imageLoaded = true
-    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
         drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
@@ -227,7 +183,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
         when (item.itemId) {
             R.id.action_back -> UtilityModels.moveBack(om.spTime)
             R.id.action_forward -> UtilityModels.moveForward(om.spTime)
-            R.id.action_animate -> getAnimate()
+            R.id.action_animate -> UtilityModels.getAnimate(om, listOf(""), uiDispatcher)
             R.id.action_img1 -> {
                 om.curImg = 0
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(
@@ -254,25 +210,12 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityModels.legacyShare(contextg, animRan, om)
+                    UtilityModels.legacyShare(contextg, om.animRan, om)
                 }
             }
             else -> return super.onOptionsItemSelected(item)
         }
         return true
-    }
-
-    private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
-        withContext(Dispatchers.IO) {
-            (0 until om.numPanes).forEach { om.displayData.animDrawable[it] = om.getAnimate(it) }
-        }
-        (0 until om.numPanes).forEach {
-            UtilityImgAnim.startAnimation(
-                om.displayData.animDrawable[it],
-                om.displayData.img[it]
-            )
-        }
-        animRan = true
     }
 
     private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
@@ -289,7 +232,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             spRun.notifyDataSetChanged()
             spRun.setSelection(om.rtd.mostRecentRun)
             if (om.model == "CFS" && 0 == spRun.selectedItemPosition) {
-                getContent()
+                UtilityModels.getContent(contextg, om, listOf(""), uiDispatcher)
             }
             miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
             var tmpStr: String
@@ -341,7 +284,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
     }
 
     override fun onStop() {
-        if (imageLoaded) {
+        if (om.imageLoaded) {
             (0 until om.numPanes).forEach {
                 UtilityImg.imgSavePosnZoom(
                     this,

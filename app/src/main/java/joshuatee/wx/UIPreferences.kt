@@ -82,7 +82,6 @@ object UIPreferences {
         radarImmersiveMode =
                 Utility.readPref(context, "RADAR_IMMERSIVE_MODE", "false").startsWith("t")
         tilesPerRow = Utility.readPref(context, "UI_TILES_PER_ROW", tilesPerRow)
-        //themeStr = Utility.readPref(context, "THEME_BLUE", "blue")
         themeStr = Utility.readPref(context, "THEME_BLUE", "whiteNew")
         themeInt = Utility.theme(themeStr)
         if (themeInt == R.style.MyCustomTheme_white_NOAB || themeInt == R.style.MyCustomTheme_whiter_NOAB) {

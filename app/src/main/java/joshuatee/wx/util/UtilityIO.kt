@@ -27,6 +27,10 @@ import java.io.InputStream
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
+import joshuatee.wx.MyApplication
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 object UtilityIO {
 
@@ -109,5 +113,21 @@ object UtilityIO {
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
         }
+    }
+
+    fun readTextFromUri(context: Context, uri: Uri): String {
+        var content = ""
+        try {
+            val inputStream = context.contentResolver.openInputStream(uri)
+            val reader = BufferedReader(InputStreamReader(inputStream!!))
+            var line = reader.readLine()
+            while (line != null) {
+                content += line + MyApplication.newline
+                line = reader.readLine()
+            }
+        } catch (e: Exception) {
+            UtilityLog.HandleException(e)
+        }
+        return content
     }
 }

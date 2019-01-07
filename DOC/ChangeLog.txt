@@ -8,7 +8,9 @@
 // TODO consolidate NWSGOES, NWS Mosaic into one activity using class to store pref/lists, etc
 // TODO convert lightning to nav drawer
 
-55096 2019_01_05
+55097 2019_01_06
+55096 2019_01_06 misc code refactor esp in models
+                 remove cv5/buttonFor in locfrag, it would appear this really isn't needed anymore
 55095 2019_01_05 misc code refactor
                  [BUG] NWS Radar mosaic was not saving posn correctly
                  add ObjectImagesCollection and migrate OPC
