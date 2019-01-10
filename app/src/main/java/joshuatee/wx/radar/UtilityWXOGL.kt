@@ -89,8 +89,7 @@ object UtilityWXOGL {
         fh = File(context.filesDir, l3BaseFn + idxStr + "_d")
         if (!fh.renameTo(File(context.filesDir, l3BaseFn + idxStr)))
             UtilityLog.d("wx", "Problem moving file to $l3BaseFn$idxStr")
-        // process textual product
-        val sb = StringBuilder(1500)
+        var output = ""
         try {
             val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, l3BaseFn + idxStr))
             dis.bigEndian = true
@@ -108,7 +107,7 @@ object UtilityWXOGL {
             }
             var b: Byte?
             var vSpotted = false
-            sb.append("<font face=monospace><small>")
+            output += "<font face=monospace><small>"
             try {
                 while (!dis.isAtEndOfFile) {
                     b = dis.readByte()
@@ -122,9 +121,9 @@ object UtilityWXOGL {
                         ) {
                             if (vSpotted) {
                                 if (b == 0.toByte()) {
-                                    sb.append("<br>")
+                                    output += "<br>"
                                 } else {
-                                    sb.append(String(byteArrayOf(b)))
+                                    output += String(byteArrayOf(b))
                                 }
                             }
                         }
@@ -142,8 +141,8 @@ object UtilityWXOGL {
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
         }
-        sb.append("</small></font>")
-        return sb.toString()
+        output += "</small></font>"
+        return output
     }
 
     // FIXME convert to LatLon as single arg
