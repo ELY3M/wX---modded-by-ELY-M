@@ -18,42 +18,37 @@
 
  -->
 
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:ctc="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-    >
+    xmlns:ctc="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <include layout="@layout/widget_toolbar_bottom"/>
+    <include layout="@layout/widget_toolbar_bottom" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@id/toolbar_bottom"
-        >
+        android:orientation="vertical">
 
-        <include layout="@layout/widget_toolbar_top_with_spinner"/>
+        <include layout="@layout/widget_toolbar_top_with_spinner" />
 
         <TableLayout
-            android:stretchColumns="*"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="0dip"
             android:divider="@color/dividerColor"
             android:dividerPadding="0px"
             android:gravity="center"
-            >
+            android:orientation="vertical"
+            android:padding="0dip"
+            android:stretchColumns="*">
 
             <joshuatee.wx.ui.TouchImageView2
                 android:id="@+id/iv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:scaleType="fitCenter"
-                />
+                android:scaleType="fitCenter" />
 
 
             <joshuatee.wx.util.ImageMap
@@ -61,7 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/caradarsitesmap"
-                ctc:map="caradarmap"/>
+                ctc:map="caradarmap" />
 
         </TableLayout>
     </LinearLayout>

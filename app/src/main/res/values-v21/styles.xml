@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<?xml version="1.0" encoding="utf-8"?><!--
     Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
@@ -18,9 +17,11 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  -->
+<!-- mooded by ELY M. -->
 
 <resources>
-    <style name="MyCustomTheme_NOAB"  parent="Theme.MaterialComponents.NoActionBar">
+
+    <style name="MyCustomTheme_NOAB" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/primary_blue</item>
         <item name="android:buttonTint">@color/primary_blue</item>
         <item name="colorPrimaryDark">@color/primary_dark_blue</item>
@@ -35,7 +36,7 @@
         <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
     </style>
 
-    <style name="MyCustomTheme_white_NOAB"  parent="Theme.MaterialComponents.NoActionBar">
+    <style name="MyCustomTheme_white_NOAB" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/primary_blue</item>
         <item name="android:buttonTint">@color/primary_blue</item>
         <item name="colorPrimaryDark">@color/white</item>
@@ -53,7 +54,7 @@
         <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
     </style>
 
-    <style name="MyCustomTheme_whiter_NOAB"  parent="Theme.MaterialComponents.NoActionBar">
+    <style name="MyCustomTheme_whiter_NOAB" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/light_blue</item>
         <item name="android:buttonTint">@color/light_blue</item>
         <item name="colorPrimaryDark">@color/white</item>
@@ -83,7 +84,7 @@
         <item name="colorAccent">@color/black</item>
     </style>
 
-    <style name="AppCompatAlertDialogStyle"  parent="Theme.MaterialComponents.Dialog.Alert">
+    <style name="AppCompatAlertDialogStyle" parent="Theme.MaterialComponents.Dialog.Alert">
         <item name="colorAccent">@color/yellow</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
@@ -91,7 +92,7 @@
         <item name="android:background">@color/primary_blue</item>
     </style>
 
-    <style name="AppCompatAlertDialogStyleBlack"  parent="Theme.MaterialComponents.Light.Dialog.Alert">
+    <style name="AppCompatAlertDialogStyleBlack" parent="Theme.MaterialComponents.Light.Dialog.Alert">
         <item name="colorAccent">@color/white</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
@@ -99,7 +100,7 @@
         <item name="android:background">@color/gray_dark</item>
     </style>
 
-    <style name="MyCustomTheme_mixedBlue_NOAB"  parent="Theme.MaterialComponents.NoActionBar">
+    <style name="MyCustomTheme_mixedBlue_NOAB" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/bg_blue</item>
         <item name="android:buttonTint">@color/bg_blue</item>
         <item name="colorPrimaryDark">@color/primary_dark_blue</item>
@@ -115,7 +116,7 @@
         <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
     </style>
 
-    <style name="MyCustomTheme_DarkBlue_NOAB"  parent="Theme.MaterialComponents.NoActionBar">
+    <style name="MyCustomTheme_DarkBlue_NOAB" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/bg_blue</item>
         <item name="android:buttonTint">@color/bg_blue</item>
         <item name="colorPrimaryDark">@color/black</item>
@@ -145,7 +146,7 @@
         <item name="android:timePickerDialogTheme">@style/PickerDialogThemeDark</item>
     </style>
 
-    <style name="MyCustomTheme_orange_NOAB"  parent="Theme.MaterialComponents.NoActionBar">
+    <style name="MyCustomTheme_orange_NOAB" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/bg_orange</item>
         <item name="android:buttonTint">@color/bg_orange</item>
         <item name="colorPrimaryDark">@color/dark_orange</item>
@@ -170,11 +171,11 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
-    <style name="MyDropDownNav2" parent="Widget.AppCompat.Spinner.DropDown.ActionBar"  >
+    <style name="MyDropDownNav2" parent="Widget.AppCompat.Spinner.DropDown.ActionBar">
         <item name="android:popupBackground">@color/primary_dark_blue</item>
     </style>
 
-    <style name="ABOverflow" parent="Base.Widget.AppCompat.PopupMenu.Overflow"  >
+    <style name="ABOverflow" parent="Base.Widget.AppCompat.PopupMenu.Overflow">
         <item name="android:popupBackground">@color/primary_dark_blue</item>
     </style>
 

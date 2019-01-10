@@ -62,12 +62,9 @@ class ObjectForecastPackage7Day internal constructor(locNum: Int, html: String) 
 
     private fun getIcons7Day(html: String): String {
         val iconAl = html.parseColumn("\"icon\": \"(.*?)\",")
-        val sb = StringBuilder(500)
-        iconAl.forEach {
-            sb.append(it)
-            sb.append("!")
-        }
-        return sb.toString()
+        var iconList = ""
+        iconAl.forEach { iconList += "$it!" }
+        return iconList
     }
 
     private fun get7DayShort(html: String): String {
@@ -84,19 +81,12 @@ class ObjectForecastPackage7Day internal constructor(locNum: Int, html: String) 
                     detailedForecastAl[it]
                 )
             }
-            val sb = StringBuilder(200)
-            sb.append(MyApplication.newline)
-            sb.append(MyApplication.newline)
+            var forecast = MyApplication.newline + MyApplication.newline
             forecastAl.forEach {
-                sb.append(it.name)
-                sb.append("(")
-                sb.append(it.temperature)
-                sb.append("): ")
-                sb.append(it.shortForecast)
-                sb.append(MyApplication.newline)
-                sb.append(MyApplication.newline)
+                forecast += it.name + "(" + it.temperature + "): " + it.shortForecast
+                forecast += MyApplication.newline + MyApplication.newline
             }
-            return sb.toString()
+            return forecast
         } else {
             return ""
         }
@@ -119,18 +109,13 @@ class ObjectForecastPackage7Day internal constructor(locNum: Int, html: String) 
                 )
             }
         }
-        val sb = StringBuilder(200)
-        sb.append(MyApplication.newline)
-        sb.append(MyApplication.newline)
+        var forecast = MyApplication.newline + MyApplication.newline
         forecastAl.forEach {
-            sb.append(it.name)
-            sb.append(": ")
-            sb.append(it.detailedForecast)
-            sb.append(MyApplication.newline)
-            sb.append(MyApplication.newline)
+            forecast += it.name + ": " + it.detailedForecast
+            forecast += MyApplication.newline + MyApplication.newline
             detailedForecastAl.add(it.name + ": " + it.detailedForecast)
         }
-        return sb.toString()
+        return forecast
     }
 }
 

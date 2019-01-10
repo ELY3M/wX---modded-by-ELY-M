@@ -19,26 +19,22 @@
  -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto" >
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_back"
         android:icon="@drawable/ic_keyboard_arrow_left_24dp"
-        app:showAsAction="always"
-        android:title="@string/back_arrow"/>
+        android:title="@string/back_arrow"
+        app:showAsAction="always" />
     <item
         android:id="@+id/action_forward"
         android:icon="@drawable/ic_keyboard_arrow_right_24dp"
-        app:showAsAction="always"
-        android:title="@string/forward_arrow"/>
-
-
-    <item android:id="@+id/action_share"
-          android:title="@string/label_share"
-          android:icon="@drawable/ic_share_24dp"
-          app:showAsAction="always"
-        />
-
+        android:title="@string/forward_arrow"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share_24dp"
+        android:title="@string/label_share"
+        app:showAsAction="always" />
 </menu>
 
 

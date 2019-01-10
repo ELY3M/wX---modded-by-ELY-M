@@ -20,20 +20,14 @@
 
  -->
 
-<appwidget-provider
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:widgetCategory="keyguard|home_screen"
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/widget_generic_layout"
-    android:minHeight="300dp"
     android:minWidth="300dp"
-    android:minResizeHeight="100dp"
+    android:minHeight="300dp"
     android:minResizeWidth="100dp"
-    android:updatePeriodMillis="0"
-    android:resizeMode="horizontal|vertical"
+    android:minResizeHeight="100dp"
     android:previewImage="@drawable/goes16"
-    >
-
-</appwidget-provider>
-
-    <!--   android:updatePeriodMillis="11800000" android:previewImage="@drawable/widget_mosaics_1km_vis" -->
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="keyguard|home_screen" />
 

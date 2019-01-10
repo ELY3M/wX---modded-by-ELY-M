@@ -45,11 +45,11 @@ import kotlinx.coroutines.*
 
 class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
-    // show a specific MCD or WAT, long press on image to save location
+    // show a specific MCD, Watch, or MPD - long press on image to save location
     //
     // Arugments
     //
-    // 1: number of MCD or WAT such as 0403
+    // 1: number of MCD, WAT, or MPD such as 0403
     //
 
     companion object {
@@ -99,9 +99,13 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         c0.setImage(objWatch.bitmap)
         registerForContextMenu(c0.img)
-        if (activityArguments[1] == "sound") {
-            UtilityTTS.synthesizeTextAndPlay(applicationContext, objWatch.text, objWatch.prod)
-        }
+        UtilityTTS.conditionalPlay(
+            activityArguments,
+            1,
+            applicationContext,
+            objWatch.text,
+            objWatch.prod
+        )
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {

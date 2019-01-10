@@ -19,38 +19,35 @@
  -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:ctc="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-    >
+    xmlns:ctc="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <include layout="@layout/widget_toolbar_bottom"
-             android:id="@+id/toolbar_bottom" />
+    <include
+        android:id="@+id/toolbar_bottom"
+        layout="@layout/widget_toolbar_bottom" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@id/toolbar_bottom"
-        >
+        android:orientation="vertical">
 
-        <include layout="@layout/widget_toolbar_top_with_spinner"/>
+        <include layout="@layout/widget_toolbar_top_with_spinner" />
 
         <ScrollView
+            android:id="@+id/sv"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/sv"
-            android:scrollbars="none"
-            >
+            android:scrollbars="none">
 
             <LinearLayout
                 android:id="@+id/ll"
-                android:stretchColumns="*"
-                android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:padding="@dimen/padding_ll"
-                >
+                android:stretchColumns="*">
 
             </LinearLayout>
         </ScrollView>
@@ -60,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/cwa"
-            ctc:map="cwamap"/>
+            ctc:map="cwamap" />
 
     </LinearLayout>
 </RelativeLayout>

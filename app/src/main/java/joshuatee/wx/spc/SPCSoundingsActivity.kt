@@ -26,7 +26,6 @@ import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.view.View.OnClickListener
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -40,7 +39,7 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedListener,
+class SPCSoundingsActivity : BaseActivity(), OnItemSelectedListener,
     OnMenuItemClickListener {
 
     companion object {
@@ -73,8 +72,7 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
-        img = ObjectTouchImageView(this, this, R.id.iv)
-        img.setOnClickListener(this)
+        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv)
         contextg = this
         nwsOffice = UtilityLocation.getNearestSnd(this, Location.latLon)
         locations = UtilityFavorites.setupFavMenu(
@@ -212,12 +210,6 @@ class SPCSoundingsActivity : BaseActivity(), OnClickListener, OnItemSelectedList
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {}
-
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
-        }
-    }
 
     override fun onStop() {
         img.imgSavePosnZoom(this, "SOUNDING")

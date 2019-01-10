@@ -18,72 +18,67 @@
 
  -->
 
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    android:id="@+id/main_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/rl"
-        >
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/rl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <include layout="@layout/widget_toolbar_bottom"/>
+        <include layout="@layout/widget_toolbar_bottom" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_above="@id/toolbar_bottom"
-            >
+            android:orientation="vertical">
 
-            <include layout="@layout/widget_toolbar_top"/>
+            <include layout="@layout/widget_toolbar_top" />
 
             <ScrollView
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:scrollbars="none"
-                >
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:id="@+id/ll"
-                    android:stretchColumns="*"
-                    android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:padding="@dimen/padding_ll"
-                    >
+                    android:stretchColumns="*">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/cv1"
-                        android:layout_gravity="center"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        >
+                        android:layout_gravity="center">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="vertical"
-                            >
+                            android:orientation="vertical">
+
                             <EditText
                                 android:id="@+id/pal_title"
-                                android:hint="Name"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:textSize="18sp"
-                                android:inputType="text" />
+                                android:hint="Name"
+                                android:inputType="text"
+                                android:textSize="18sp" />
+
                             <EditText
                                 android:id="@+id/pal_content"
-                                android:hint="Color Palette"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:textSize="@dimen/listitem_text"
+                                android:hint="Color Palette"
                                 android:inputType="textMultiLine"
-                                />
+                                android:textSize="@dimen/listitem_text" />
 
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
@@ -97,11 +92,10 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:elevation="@dimen/fab_elevation"
-        app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-        app:srcCompat="@drawable/ic_done_24dp"
         android:layout_margin="28dp"
+        app:elevation="@dimen/fab_elevation"
         app:layout_anchor="@id/rl"
         app:layout_anchorGravity="bottom|center"
-        />
+        app:pressedTranslationZ="@dimen/fab_elevation_pressed"
+        app:srcCompat="@drawable/ic_done_24dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

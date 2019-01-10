@@ -65,22 +65,14 @@ object UtilityCanadaImg {
             durationPatMatch = "<p>Long .3hr.:</p>(.*?)</div>"
         }
         val radarHtml1Hr = radHtml.parse(durationPatMatch)
-        val sb = StringBuilder()
+        var urlList = ""
         var tmpAl = radarHtml1Hr.parseColumn("display='(.*?)'&amp;")
         tmpAl.forEach {
-            sb.append(":")
-            sb.append("/data/radar/detailed/temp_image/")
-            sb.append(rid)
-            sb.append("/")
-            sb.append(it)
-            sb.append(".GIF")
+            urlList += ":/data/radar/detailed/temp_image/$rid/$it.GIF"
         }
         tmpAl = radHtml.parseColumn("src=.(/data/radar/.*?GIF)\"")
-        tmpAl.forEach {
-            sb.append(":")
-            sb.append(it)
-        }
-        return sb.toString()
+        tmpAl.forEach { urlList += ":$it" }
+        return urlList
     }
 
     internal fun getRadarAnimOptionsApplied(
@@ -215,22 +207,14 @@ object UtilityCanadaImg {
             durationPatMatch = "<p>Long .3hr.:</p>(.*?)</div>"
         }
         val radarHtml1Hr = radHtml.parse(durationPatMatch)
-        val sb = StringBuilder()
+        var urlList = ""
         var tmpAl = radarHtml1Hr.parseColumn("display='(.*?)'&amp;")
         tmpAl.forEach {
-            sb.append(":")
-            sb.append("/data/radar/detailed/temp_image/COMPOSITE_")
-            sb.append(sector)
-            sb.append("/")
-            sb.append(it)
-            sb.append(".GIF")
+            urlList += ":/data/radar/detailed/temp_image/COMPOSITE_$sector/$it.GIF"
         }
         tmpAl = radHtml.parseColumn("src=.(/data/radar/.*?GIF)\"")
-        tmpAl.forEach {
-            sb.append(":")
-            sb.append(it)
-        }
-        val urlArr = sb.toString().split(":").dropLastWhile { it.isEmpty() }
+        tmpAl.forEach { urlList += ":$it" }
+        val urlArr = urlList.split(":").dropLastWhile { it.isEmpty() }
         val urlAl =
             urlArr.mapTo(mutableListOf()) { "http://weather.gc.ca" + it.replace("detailed/", "") }
         urlAl.reverse()

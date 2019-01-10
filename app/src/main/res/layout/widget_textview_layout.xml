@@ -19,21 +19,19 @@
  -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/layout"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_margin="4dip"
-              android:background="@color/bg_blue"
-    >
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="4dip"
+    android:background="@color/bg_blue"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/text1"
         style="@android:style/TextAppearance.Small"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="start"
         android:layout_margin="@dimen/padding_widget"
-        android:textColor="@color/white"
-        />
+        android:gravity="start"
+        android:textColor="@color/white" />
 </LinearLayout>

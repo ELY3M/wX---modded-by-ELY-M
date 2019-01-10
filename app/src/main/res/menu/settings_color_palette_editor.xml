@@ -19,44 +19,43 @@
  -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_share"
-          android:title="@string/label_share"
-          android:icon="@drawable/ic_share_24dp"
-          app:showAsAction="always"
-        />
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share_24dp"
+        android:title="@string/label_share"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_clear"
-        app:showAsAction="never"
-        android:title="@string/label_clear_all"/>
+        android:title="@string/label_clear_all"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_reset"
-        app:showAsAction="never"
-        android:title="@string/label_reset"/>
+        android:title="@string/label_reset"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_load"
-        app:showAsAction="never"
-        android:title="Load from file"/>
+        android:title="Load from file"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_website"
-        app:showAsAction="never"
-        android:title="AlmanyDesigns Website with color palettes"/>
+        android:title="AlmanyDesigns Website with color palettes"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_website2"
-        app:showAsAction="never"
-        android:title="usawx.com Website with color palettes"/>
+        android:title="usawx.com Website with color palettes"
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_help"
-        app:showAsAction="never"
-        android:title="@string/help_menu_item"/>
+        android:title="@string/help_menu_item"
+        app:showAsAction="never" />
 
 </menu>
 

@@ -18,111 +18,106 @@
 
  -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ctc="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:layout_above="@id/toolbar_bottom"
-    >
+    android:orientation="vertical">
 
-    <include layout="@layout/widget_toolbar_top"/>
+    <include layout="@layout/widget_toolbar_top" />
 
     <ScrollView
+        android:id="@+id/sv"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/sv"
-        android:scrollbars="none"
-        >
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/ll"
-            android:stretchColumns="*"
-            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:padding="0dp"
-            >
+            android:stretchColumns="*">
 
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map_ab"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                ctc:map="AB"
-                />
+                ctc:map="AB" />
+
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map_bc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                ctc:map="BC"
-                />
+                ctc:map="BC" />
+
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map_mb"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                ctc:map="MB"
-                />
+                ctc:map="MB" />
+
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map_nb"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                ctc:map="NB"
-                />
+                ctc:map="NB" />
+
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map_nl"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                ctc:map="NL"
-                />
+                ctc:map="NL" />
+
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map_ns"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                ctc:map="NS"
-                />
+                ctc:map="NS" />
+
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map_nt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                ctc:map="NT"
-                />
+                ctc:map="NT" />
+
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map_nu"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                ctc:map="NU"
-                />
+                ctc:map="NU" />
+
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map_on"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                ctc:map="ON"
-                />
+                ctc:map="ON" />
+
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map_pe"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                ctc:map="PE"
-                />
+                ctc:map="PE" />
+
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map_qc"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                ctc:map="QC"
-                />
+                ctc:map="QC" />
+
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map_sk"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                ctc:map="SK"
-                />
+                ctc:map="SK" />
+
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map_yt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                ctc:map="YT"
-                />
+                ctc:map="YT" />
 
         </LinearLayout>
     </ScrollView>

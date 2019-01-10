@@ -25,10 +25,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
+import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
@@ -39,22 +39,24 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityShortcut
 import kotlinx.coroutines.*
 
-class SPCSWOSummaryActivity : BaseActivity() {
+class SPCSWOSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val bitmaps = mutableListOf<Bitmap>()
     private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.spc_swo_summary, menu)
-        UtilityShortcut.hidePinIfNeeded(menu)
-        return true
-    }
-
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout_bottom_toolbar,
+            R.menu.spc_swo_summary,
+            true
+        )
+        toolbarBottom.setOnMenuItemClickListener(this)
+        val menu = toolbarBottom.menu
+        UtilityShortcut.hidePinIfNeeded(menu)
         contextg = this
         linearLayout = findViewById(R.id.ll)
         title = "SPC"
@@ -88,7 +90,7 @@ class SPCSWOSummaryActivity : BaseActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.SPC_SWO_SUMMARY)
             R.id.action_share -> UtilityShare.shareText(

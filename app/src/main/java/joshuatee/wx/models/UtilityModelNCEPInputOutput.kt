@@ -39,6 +39,7 @@ internal object UtilityModelNCEPInputOutput {
 
     fun getRunTime(model: String, param: String, spinnerSectorCurrent: String): RunTimeData {
         val runData = RunTimeData()
+        // FIXME get rid of StringBuilder but deal with insert below
         val runCompletionDataStr = StringBuilder(100)
         var html = UtilityString.getHTMLandParse(
             "${MyApplication.nwsMagNcepWebsitePrefix}/model-guidance-model-parameter.php?group=Model%20Guidance&model="

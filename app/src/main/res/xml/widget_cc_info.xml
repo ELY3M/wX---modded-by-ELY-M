@@ -20,15 +20,11 @@
 
  -->
 
-<appwidget-provider
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:widgetCategory="keyguard|home_screen"
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/widget_cc_layout"
-    android:minHeight="40dp"
     android:minWidth="250dp"
-    android:updatePeriodMillis="11800000"
-    android:resizeMode="horizontal|vertical"
+    android:minHeight="40dp"
     android:previewImage="@drawable/widget_cc"
-    >
-
-</appwidget-provider> 
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="11800000"
+    android:widgetCategory="keyguard|home_screen" />

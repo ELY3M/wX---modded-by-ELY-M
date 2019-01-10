@@ -68,11 +68,11 @@ internal class AdapterUSWarningsImpact(private val mDataset: List<ObjectImpactGr
         holder.title.setTextColor(UIPreferences.textHighlightColor)
         holder.title.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
         holder.cities.text = mDataset[position].cities
-        holder.cities.setTextColor(UIPreferences.backgroundColor)
-        holder.cities.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
         holder.population.text = mDataset[position].population
-        holder.population.setTextColor(UIPreferences.backgroundColor)
-        holder.population.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+        listOf(holder.cities, holder.population).forEach {
+            it.setTextColor(UIPreferences.backgroundColor)
+            it.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+        }
     }
 
     override fun getItemCount() = mDataset.size

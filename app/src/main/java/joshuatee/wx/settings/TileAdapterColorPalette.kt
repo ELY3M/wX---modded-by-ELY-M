@@ -72,17 +72,13 @@ internal class TileAdapterColorPalette(
         }
     }
 
-    fun setOnItemClickListener(myClickListenerloc: MyClickListener) {
-        myClickListener = myClickListenerloc
-    }
-
-    /*fun setListener(fn: (Int) -> Unit) {
-        object : TileAdapterColorPalette.MyClickListener {
+    fun setListener(fn: (Int) -> Unit) {
+        myClickListener = object : MyClickListener {
             override fun onItemClick(position: Int) {
                 fn(position)
             }
         }
-    }*/
+    }
 
     interface MyClickListener {
         fun onItemClick(position: Int)

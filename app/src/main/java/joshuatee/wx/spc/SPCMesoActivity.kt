@@ -70,6 +70,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
     private var showWatwarn = true
     private var showTopography = true
     private var sector = "19"
+    // FIXME move to util
     private val sectorMap = mapOf(
         "19" to "US",
         "20" to "MW",

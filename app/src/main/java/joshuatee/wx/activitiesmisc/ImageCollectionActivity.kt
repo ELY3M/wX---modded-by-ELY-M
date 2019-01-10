@@ -88,6 +88,8 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
         img.setListener(this, drw, ::getContentFixThis)
         drw.index = Utility.readPref(this, imageCollection.prefTokenIdx, 0)
         drw.setListener(::getContentFixThis)
+        toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
+        toolbarBottom.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
         getContent()
     }
 

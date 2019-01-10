@@ -18,17 +18,16 @@
 
  -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
-    <include layout="@layout/widget_toolbar_top"/>
+    android:orientation="vertical">
+
+    <include layout="@layout/widget_toolbar_top" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/card_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/padding"
-        />
+        android:padding="@dimen/padding" />
 </LinearLayout>

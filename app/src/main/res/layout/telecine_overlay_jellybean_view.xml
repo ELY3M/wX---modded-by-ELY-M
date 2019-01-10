@@ -16,70 +16,68 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
+
         <ImageButton
             android:id="@+id/record_overlay_cancel"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/gray_dark"
-            android:contentDescription="@string/clear"
             android:clickable="true"
-            />
+            android:contentDescription="@string/clear" />
+
         <ImageButton
             android:id="@+id/record_overlay_distancetool"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/gray_dark"
-            android:contentDescription="@string/clear"
             android:clickable="true"
-            />
+            android:contentDescription="@string/clear" />
+
         <ImageButton
             android:id="@+id/record_overlay_drawtool"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/gray_dark"
-            android:contentDescription="@string/clear"
-            />
+            android:contentDescription="@string/clear" />
+
         <ImageButton
             android:id="@+id/record_overlay_screenshot"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/gray_dark"
-            android:contentDescription="@string/clear"
-            />
+            android:contentDescription="@string/clear" />
+
         <ImageButton
             android:id="@+id/record_overlay_start"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/gray_dark"
-            android:contentDescription="@string/record"
-            />
+            android:contentDescription="@string/record" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/record_overlay_recording"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/gray_dark"
         android:gravity="center"
         android:text="@string/record"
+        android:textAllCaps="true"
         android:textColor="#fff"
         android:textStyle="bold"
-        android:textAllCaps="true"
-        android:background="@color/gray_dark"
-        android:visibility="invisible"
-        />
+        android:visibility="invisible" />
+
     <View
         android:id="@+id/record_overlay_stop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"
-        />
+        android:visibility="invisible" />
 
 
 </merge>

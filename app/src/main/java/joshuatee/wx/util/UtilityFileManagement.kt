@@ -28,16 +28,15 @@ import java.io.File
 object UtilityFileManagement {
 
     fun deleteCacheFiles(context: Context): String {
-        val sb = StringBuilder(100)
+        var fileList = ""
         val files = context.fileList()
         files.forEach {
             if (!it.contains("colormap") && !it.contains("shared")) {
-                sb.append(it)
-                sb.append(" ")
+                fileList += "$it "
                 context.deleteFile(it)
             }
         }
-        return sb.toString()
+        return fileList
     }
 
     fun deleteFile(context: Context, fn: String) {

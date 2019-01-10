@@ -45,7 +45,7 @@ internal object UtilityCanadaHourly {
         ) + "-" + MyApplication.colon.split(Location.getY(locNumInt))[0] + "_metric_e.html"
 
     private fun parse(htmlF: String): String {
-        val sb = StringBuilder(500)
+        var hourly = ""
         val html = htmlF.parse("<tbody>(.*?)</tbody>")
         val timeAl =
             html.parseColumn("<tr>.*?<td.*?>(.*?)</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
@@ -66,21 +66,10 @@ internal object UtilityCanadaHourly {
         timeAl.indices.forEach {
             humindex = humindexAl[it].replace("<abbr.*?>".toRegex(), "")
             humindex = humindex.replace("</abbr>", "")
-            sb.append(MyApplication.newline)
-            sb.append(timeAl[it])
-            sb.append(space)
-            sb.append(tempAl[it])
-            sb.append(space)
-            sb.append(currCondAl[it])
-            sb.append(space)
-            sb.append(popsAl[it])
-            sb.append(space)
-            sb.append(windDirAl[it])
-            sb.append(windSpeedAl[it])
-            sb.append(space)
-            sb.append(humindex)
+            hourly += MyApplication.newline + timeAl[it] + space + tempAl[it] + space + currCondAl[it]
+            hourly += space + popsAl[it] + space + windDirAl[it] + windSpeedAl[it] + space + humindex
         }
-        return sb.toString()
+        return hourly
     }
 }
 

@@ -360,10 +360,9 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         c0.setVisibility(View.GONE)
         cardList.clear()
         wfoProd.forEach {
-            val cTmp = ObjectCardText(contextg)
+            val cTmp = ObjectCardText(contextg, linearLayout)
             cTmp.setTextAndTranslate(Utility.fromHtml(it))
             cardList.add(cTmp.card)
-            linearLayout.addView(cTmp.card)
         }
     }
 }

@@ -27,16 +27,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.content.ContextCompat
-import com.intentfilter.androidpermissions.PermissionManager
 import joshuatee.wx.MyApplication
-
-import joshuatee.wx.R
 import joshuatee.wx.RegExp
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityIO
 import java.io.*
-import java.nio.charset.Charset
-import java.util.*
 
 object UtilityColorPalette {
 

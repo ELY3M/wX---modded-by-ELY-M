@@ -82,6 +82,7 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
         toolbarBottom.setOnMenuItemClickListener(this)
         objCard = ObjectCard(this, R.id.cv1)
         linearLayout = findViewById(R.id.ll)
+        // FIXME make number = intent.getStringArrayExtra(NO)[0]
         val no = intent.getStringExtra(NO)
         imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$no.gif"
         url = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd.php"
@@ -128,11 +129,12 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
             toolbar.subtitle = text.parse("AREAS AFFECTED...(.*?)CONCERNING").replace("<BR>", "")
         }
         val tv: TextView = findViewById(R.id.tv)
-        if (mpdList.isEmpty())
+        if (mpdList.isEmpty()) {
             tv.text = resources.getString(R.string.wpc_mpd_noactive)
-        else
+        } else {
             tv.visibility = View.GONE
-        objCard.setVisibility(View.GONE)
+            objCard.setVisibility(View.GONE)
+        }
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo) {

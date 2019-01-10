@@ -19,49 +19,45 @@
  -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <include layout="@layout/widget_toolbar_bottom"/>
+    <include layout="@layout/widget_toolbar_bottom" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@id/toolbar_bottom"
-        >
+        android:orientation="vertical">
 
-        <include layout="@layout/widget_toolbar_top"/>
+        <include layout="@layout/widget_toolbar_top" />
 
         <ScrollView
+            android:id="@+id/sv"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/sv"
-            android:scrollbars="none"
-            >
+            android:scrollbars="none">
 
             <LinearLayout
                 android:id="@+id/ll"
-                android:stretchColumns="*"
-                android:orientation="vertical"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 android:padding="@dimen/padding_ll"
-                >
+                android:stretchColumns="*">
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cv"
-                    android:layout_gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    >
+                    android:layout_gravity="center">
+
                     <TextView
                         android:id="@+id/tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding"
-                        android:textIsSelectable="true"
-                        />
+                        android:textIsSelectable="true" />
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
         </ScrollView>

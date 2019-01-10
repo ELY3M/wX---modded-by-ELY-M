@@ -52,6 +52,11 @@ import kotlinx.coroutines.*
 
 class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
+    // show a summary of  MCD or a specific MCD, long press on image to save location
+    //
+    // Arugments
+    //
+
     companion object {
         const val NO: String = ""
     }
@@ -101,8 +106,7 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
         miText.isVisible = false
         miUrl.isVisible = false
         miImage.isVisible = false
-        val turl = intent.getStringArrayExtra(NO)
-        number = turl[0]
+        number = intent.getStringArrayExtra(NO)[0]
         if (number.contains("wat")) {
             number = number.replace("w", "")
             imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + number +

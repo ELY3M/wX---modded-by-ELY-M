@@ -23,15 +23,14 @@ package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
+import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
 import joshuatee.wx.settings.Location
-import joshuatee.wx.settings.SettingsMainActivity
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectCardVerticalText
@@ -41,10 +40,9 @@ import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.DefaultLabelFormatter
-import joshuatee.wx.objects.ObjectIntent
 import kotlinx.coroutines.*
 
-class HourlyActivity : BaseActivity() {
+class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     // This activity is accessible from the action bar and provides hourly forecast for the current location
     // Possible improvements: better text formatting ( possibly color ), proper handling of "nil", graphs
@@ -60,19 +58,16 @@ class HourlyActivity : BaseActivity() {
     private lateinit var c0: ObjectCardVerticalText
     private var hourlyData = ObjectHourly()
     private var locatioNumber = 0
-    private val menuItemShare: Int = 1
-    private val menuItemSettings: Int = 2
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menu.add(Menu.NONE, menuItemShare, Menu.NONE, "Share").setIcon(R.drawable.ic_share_24dp)
-            .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-        menu.add(Menu.NONE, menuItemSettings, Menu.NONE, "Settings")
-        return true
-    }
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_hourly, null, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_hourly,
+            R.menu.shared_multigraphics,
+            true
+        )
+        toolbarBottom.setOnMenuItemClickListener(this)
         locatioNumber = (intent.getStringExtra(LOC_NUM).toIntOrNull() ?: 0) - 1
         cv1 = ObjectCard(this, R.color.black, R.id.cv1)
         cv1.setVisibility(View.GONE)
@@ -102,10 +97,9 @@ class HourlyActivity : BaseActivity() {
         plot1()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            menuItemSettings -> ObjectIntent(this, SettingsMainActivity::class.java)
-            menuItemShare -> if (htmlShare.size > 1) {
+            R.id.action_share -> if (htmlShare.size > 1) {
                 UtilityShare.shareText(this, "Hourly", htmlShare[1])
             }
             else -> return super.onOptionsItemSelected(item)
@@ -137,16 +131,12 @@ class HourlyActivity : BaseActivity() {
                     } else {
                         ""
                     }
-                    //UtilityLog.d("wx", value.toString())
                 } else {
                     // show currency for y values
                     super.formatLabel(value, isValueX)
                 }
             }
         }
-        // enable scaling and scrolling
-        //graph.getViewport().setScalable(true)
-        //graph.getViewport().setScalableY(true)
         graph.addSeries(series)
     }
 }

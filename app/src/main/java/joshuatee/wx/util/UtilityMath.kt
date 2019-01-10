@@ -94,17 +94,13 @@ object UtilityMath {
     }
 
     fun cToFTable(): String {
-        val sb = StringBuilder(100)
+        var table = ""
         val cInit = -40
-        var f: String
         for (z in 40 downTo cInit) {
-            f = cToFInt(z)
-            sb.append(z.toString())
-            sb.append("  ")
-            sb.append(f)
-            sb.append(MyApplication.newline)
+            val f = cToFInt(z)
+            table += z.toString() + "  " + f + MyApplication.newline
         }
-        return sb.toString()
+        return table
     }
 
     internal fun roundToString(valueD: Double) = round(valueD.toFloat()).toInt().toString()

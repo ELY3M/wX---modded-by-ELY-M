@@ -423,7 +423,6 @@ class WXGLRender(private val context: Context) : Renderer {
         }
          */
 
-            // TODO do custom icons for hail//
         listOf(spotterBuffers).forEach {
             if (zoom > it.scaleCutOff) {
                 drawTriangles(it)
@@ -504,7 +503,7 @@ class WXGLRender(private val context: Context) : Renderer {
             mSizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
             //var conusbitmap: Bitmap? = OpenGLShader.LoadBitmap(MyApplication.FilesPath + "conus.gif")
 
-            GLES20.glUniform1f(mSizeHandle, 1000f) //was 1600f
+            GLES20.glUniform1f(mSizeHandle, 600f) //was 1600f
             iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
             //val conusbitmap: Bitmap? = ///UtilityConusRadar.nwsConusRadar(context)
             conusradarId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "conus.gif")

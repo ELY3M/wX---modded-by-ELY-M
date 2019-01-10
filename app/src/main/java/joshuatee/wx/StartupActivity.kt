@@ -7,8 +7,6 @@ import android.os.Bundle
 import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
-
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.ObjectIntent
@@ -17,6 +15,7 @@ import joshuatee.wx.settings.*
 import joshuatee.wx.util.Utility
 import androidx.core.app.ActivityCompat
 import com.intentfilter.androidpermissions.PermissionManager
+import joshuatee.wx.util.UtilityLog
 import java.util.Collections.singleton
 import java.io.*
 import java.nio.charset.Charset
@@ -30,7 +29,6 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
     // and display the version in the title.
     //
 
-    var TAG = "joshuatee-StartupActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -60,72 +58,28 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         val storagepermissionManager = PermissionManager.getInstance(this)
         storagepermissionManager.checkPermissions(singleton(Manifest.permission.WRITE_EXTERNAL_STORAGE), object : PermissionManager.PermissionRequestListener {
             override fun onPermissionGranted() {
-                Log.i(TAG, "Storage Permissions Granted")
-                checkfiles(R.drawable.headingbug, "headingbug.png")
-                checkfiles(R.drawable.star_cyan, "star_cyan.png")
-                checkfiles(R.drawable.location, "location.png")
-                checkfiles(R.drawable.tvs, "tvs.png")
-
-                checkfiles(R.drawable.hail05, "hail05.png")
-                checkfiles(R.drawable.hail0, "hail0.png")
-                checkfiles(R.drawable.hail1, "hail1.png")
-                checkfiles(R.drawable.hail2, "hail2.png")
-                checkfiles(R.drawable.hail3, "hail3.png")
-                checkfiles(R.drawable.hail4, "hail4.png")
-                checkfiles(R.drawable.hailbig, "hailbig.png")
-
-                checkpalfiles(R.raw.colormap134cod, "colormap134cod.txt")
-                checkpalfiles(R.raw.colormap135cod, "colormap135cod.txt")
-                checkpalfiles(R.raw.colormap159cod, "colormap159cod.txt")
-                checkpalfiles(R.raw.colormap161cod, "colormap161cod.txt")
-                checkpalfiles(R.raw.colormap163cod, "colormap163cod.txt")
-                checkpalfiles(R.raw.colormap165cod, "colormap165cod.txt")
-                checkpalfiles(R.raw.colormap172cod, "colormap172cod.txt")
-                checkpalfiles(R.raw.colormapbvaf, "colormapbvaf.txt")
-                checkpalfiles(R.raw.colormapbvcod, "colormapbvcod.txt")
-                checkpalfiles(R.raw.colormapbveak, "colormapbveak.txt")
-                checkpalfiles(R.raw.colormaprefaf, "colormaprefaf.txt")
-                checkpalfiles(R.raw.colormaprefcode, "colormaprefcode.txt")
-                checkpalfiles(R.raw.colormaprefcodenh, "colormaprefcodenh.txt")
-                checkpalfiles(R.raw.colormaprefdkenh, "colormaprefdkenh.txt")
-                checkpalfiles(R.raw.colormaprefeak, "colormaprefeak.txt")
-                checkpalfiles(R.raw.colormaprefmenh, "colormaprefmenh.txt")
-                checkpalfiles(R.raw.colormaprefnssl, "colormaprefnssl.txt")
-                checkpalfiles(R.raw.colormaprefnwsd, "colormaprefnwsd.txt")
-                //elys custom color tables
-                checkpalfiles(R.raw.colormapownref, "colormapownref.txt")
-                checkpalfiles(R.raw.colormapownvel, "colormapownvel.txt")
-                checkpalfiles(R.raw.colormapownenhvel, "colormapownenhvel.txt")
-                //need to run it again
-                ColorPalettes.init(applicationContext)
-
                 runme()
-
-
 
             }
 
             override fun onPermissionDenied() {
-                Log.i(TAG, "Storage Permissions Denied")
+                UtilityLog.d("wx", "Storage Permissions Denied")
             }
         })
-
-
-
-
 
 
         //location permission//  this is needed!
         val locationpermissionManager = PermissionManager.getInstance(this)
         locationpermissionManager.checkPermissions(singleton(Manifest.permission.ACCESS_FINE_LOCATION), object : PermissionManager.PermissionRequestListener {
             override fun onPermissionGranted() {
-                Log.i(TAG, "Location Permissions Granted")
+                UtilityLog.d("wx", "Location Permissions Granted")
             }
 
             override fun onPermissionDenied() {
-                Log.i(TAG, "Location Permissions Denied")
+                UtilityLog.d("wx", "Location Permissions Denied")
             }
         })
+
 
 
         finish()
@@ -133,6 +87,45 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
 
 
     fun runme() {
+
+        UtilityLog.d("wx", "Storage Permissions Granted")
+        checkfiles(R.drawable.headingbug, "headingbug.png")
+        checkfiles(R.drawable.star_cyan, "star_cyan.png")
+        checkfiles(R.drawable.location, "location.png")
+        checkfiles(R.drawable.tvs, "tvs.png")
+
+        checkfiles(R.drawable.hail05, "hail05.png")
+        checkfiles(R.drawable.hail0, "hail0.png")
+        checkfiles(R.drawable.hail1, "hail1.png")
+        checkfiles(R.drawable.hail2, "hail2.png")
+        checkfiles(R.drawable.hail3, "hail3.png")
+        checkfiles(R.drawable.hail4, "hail4.png")
+        checkfiles(R.drawable.hailbig, "hailbig.png")
+
+        checkpalfiles(R.raw.colormap134cod, "colormap134cod.txt")
+        checkpalfiles(R.raw.colormap135cod, "colormap135cod.txt")
+        checkpalfiles(R.raw.colormap159cod, "colormap159cod.txt")
+        checkpalfiles(R.raw.colormap161cod, "colormap161cod.txt")
+        checkpalfiles(R.raw.colormap163cod, "colormap163cod.txt")
+        checkpalfiles(R.raw.colormap165cod, "colormap165cod.txt")
+        checkpalfiles(R.raw.colormap172cod, "colormap172cod.txt")
+        checkpalfiles(R.raw.colormapbvaf, "colormapbvaf.txt")
+        checkpalfiles(R.raw.colormapbvcod, "colormapbvcod.txt")
+        checkpalfiles(R.raw.colormapbveak, "colormapbveak.txt")
+        checkpalfiles(R.raw.colormaprefaf, "colormaprefaf.txt")
+        checkpalfiles(R.raw.colormaprefcode, "colormaprefcode.txt")
+        checkpalfiles(R.raw.colormaprefcodenh, "colormaprefcodenh.txt")
+        checkpalfiles(R.raw.colormaprefdkenh, "colormaprefdkenh.txt")
+        checkpalfiles(R.raw.colormaprefeak, "colormaprefeak.txt")
+        checkpalfiles(R.raw.colormaprefmenh, "colormaprefmenh.txt")
+        checkpalfiles(R.raw.colormaprefnssl, "colormaprefnssl.txt")
+        checkpalfiles(R.raw.colormaprefnwsd, "colormaprefnwsd.txt")
+        //elys custom color tables
+        checkpalfiles(R.raw.colormapownref, "colormapownref.txt")
+        checkpalfiles(R.raw.colormapownvel, "colormapownvel.txt")
+        checkpalfiles(R.raw.colormapownenhvel, "colormapownenhvel.txt")
+        //need to run it again
+        ColorPalettes.init(applicationContext)
 
         if (Utility.readPref(this, "LAUNCH_TO_RADAR", "false") == "false") {
             ObjectIntent(this, WX::class.java)
@@ -149,10 +142,10 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
 
 
     fun checkfiles(drawable: Int, filename: String) {
-        Log.i(TAG, "running files check on "+MyApplication.FilesPath)
+        UtilityLog.d("wx", "running files check on "+MyApplication.FilesPath)
         val dir = File(MyApplication.FilesPath)
         if (!dir.exists()) {
-            Log.i(TAG, "making dir")
+            UtilityLog.d("wx", "making dir")
             dir.mkdirs()
         }
 
@@ -161,12 +154,12 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         if(!fileExists)
         {
             //need to copy files!
-            Log.i(TAG, filename+" does not exist.")
+            UtilityLog.d("wx", filename+" does not exist.")
             var bitmap: Bitmap = BitmapFactory.decodeResource(resources, drawable)
             saveBitmapToFile(filename, bitmap)
 
         } else {
-            Log.i(TAG, filename+" are there!")
+            UtilityLog.d("wx", filename+" are there!")
         }
     }
 
@@ -177,9 +170,9 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
             bm.compress(Bitmap.CompressFormat.PNG, 100, out)
             out.flush()
             out.close()
-            Log.i(TAG, fileName+" copied!")
+            UtilityLog.d("wx", fileName+" copied!")
         } catch (e: Exception) {
-            Log.i(TAG, "checkfiles Exception!")
+            UtilityLog.d("wx", "checkfiles Exception!")
             e.printStackTrace()
         }
 
@@ -188,10 +181,10 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
 
     //check colortable files and copy if any missing//
     fun checkpalfiles(resourceId: Int, filename: String) {
-        Log.i(TAG, "running files check on "+MyApplication.PalFilesPath)
+        UtilityLog.d("wx", "running files check on "+MyApplication.PalFilesPath)
         val dir = File(MyApplication.PalFilesPath)
         if (!dir.exists()) {
-            Log.i(TAG, "making dir")
+            UtilityLog.d("wx", "making dir")
             dir.mkdirs()
         }
 
@@ -200,10 +193,10 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         if(!fileExists)
         {
             //need to copy files!
-            Log.i(TAG, filename+" does not exist.")
+            UtilityLog.d("wx", filename+" does not exist.")
             saveRawToFile(filename, resourceId)
         } else {
-            Log.i(TAG, filename+" are there!")
+            UtilityLog.d("wx", filename+" are there!")
         }
     }
 
@@ -211,11 +204,16 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         val dir = MyApplication.PalFilesPath
         var ins:InputStream = resources.openRawResource(resourceId)
         var content = ins.readBytes().toString(Charset.defaultCharset())
-        //println(content)
         File("$dir/$fileName").printWriter().use {
             it.println(content)
         }
     }
+
+
+
+
+
+
 
 
 

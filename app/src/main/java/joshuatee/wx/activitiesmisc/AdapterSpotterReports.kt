@@ -70,18 +70,14 @@ internal class AdapterSpotterReports(private val mDataset: List<SpotterReports>)
         holder.name.text = mDataset[position].type
         holder.name.setTextColor(UIPreferences.textHighlightColor)
         holder.time.text = mDataset[position].time
-        holder.time.setTextColor(UIPreferences.backgroundColor)
-        holder.time.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
         holder.email.text = mDataset[position].city.replace(MyApplication.newline, " ")
-        holder.email.setTextColor(UIPreferences.backgroundColor)
-        holder.email.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
         holder.phone.text = mDataset[position].lastName + ", " + mDataset[position].firstName
-        holder.phone.setTextColor(UIPreferences.backgroundColor)
-        holder.phone.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
         holder.summary.text = mDataset[position].narrative
-        holder.summary.setTextColor(UIPreferences.backgroundColor)
         holder.summary.setTextAppearance(holder.summary.context, UIPreferences.smallTextTheme)
-        holder.summary.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+        listOf(holder.time, holder.email, holder.phone, holder.summary).forEach {
+            it.setTextColor(UIPreferences.backgroundColor)
+            it.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+        }
     }
 
     override fun getItemCount() = mDataset.size

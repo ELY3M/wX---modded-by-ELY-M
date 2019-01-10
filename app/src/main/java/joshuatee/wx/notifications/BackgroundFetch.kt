@@ -54,7 +54,7 @@ class BackgroundFetch(val context: Context) {
     private fun doNotifs() {
         var notifUrls = ""
         var watchNoList = ""
-        //var watchLatlonList = ""
+        var watchLatlonList = ""
         var watchLatlonSvr = ""
         var watchLatlonTor = ""
         var mcdLatlon = ""
@@ -247,7 +247,7 @@ class BackgroundFetch(val context: Context) {
                         var mcdPre = UtilityDownload.getTextProduct(context, "SPCWAT$mdNo")
                         watchNoList = "$watchNoList$mdNo:"
                         val mcdPre2 = UtilityString.getHTMLandParseLastMatch("${MyApplication.nwsSPCwebsitePrefix}/products/watch/wou$mdNo.html", RegExp.pre2Pattern)
-                        //watchLatlonList += UtilityNotification.storeWatMCDLATLON(mcdPre2)
+                        watchLatlonList += UtilityNotification.storeWatMCDLATLON(mcdPre2)
                         if (PolygonType.MCD.pref) {
                             if (mcdPre.contains("Severe Thunderstorm Watch")) {
                                 watchLatlonSvr += UtilityNotification.storeWatMCDLATLON(mcdPre2)
@@ -342,7 +342,7 @@ class BackgroundFetch(val context: Context) {
         }
         if (PolygonType.MCD.pref || locationNeedsMcd) {
             MyApplication.watchNoList.valueSet(context, watchNoList)
-            //MyApplication.watchLatlonList.valueSet(context, watchLatlonList)
+            MyApplication.watchLatlonList.valueSet(context, watchLatlonList)
             MyApplication.watchLatlonSvr.valueSet(context, watchLatlonSvr)
             MyApplication.watchLatlonTor.valueSet(context, watchLatlonTor)
             MyApplication.mcdLatlon.valueSet(context, mcdLatlon)

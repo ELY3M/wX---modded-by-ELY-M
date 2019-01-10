@@ -19,203 +19,247 @@
  -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto" >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_sfc"
-          android:title="@string/label_short_sfc"
-          app:showAsAction="always"
-        >
+    <item
+        android:id="@+id/action_sfc"
+        android:title="@string/label_short_sfc"
+        app:showAsAction="always">
         <menu>
-            <item android:id="@+id/action_bigsfc"
-                  android:title="@string/label_sfc_obs"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_1kmv"
-                  android:title="@string/label_vis_sat"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_rgnlrad"
-                  android:title="@string/label_base_ref"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_thea"
-                  android:title="@string/label_thetae"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_ttd"
-                  android:title="@string/label_ttd"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_mslp"
-                  android:title="@string/label_mslp"
-                  app:showAsAction="never"  />
+            <item
+                android:id="@+id/action_bigsfc"
+                android:title="@string/label_sfc_obs"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_1kmv"
+                android:title="@string/label_vis_sat"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_rgnlrad"
+                android:title="@string/label_base_ref"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_thea"
+                android:title="@string/label_thetae"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_ttd"
+                android:title="@string/label_ttd"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_mslp"
+                android:title="@string/label_mslp"
+                app:showAsAction="never" />
         </menu>
     </item>
 
-    <item android:id="@+id/action_ua"
-          android:title="@string/label_short_ua"
-          app:showAsAction="always"
-        >
+    <item
+        android:id="@+id/action_ua"
+        android:title="@string/label_short_ua"
+        app:showAsAction="always">
         <menu>
-            <item android:id="@+id/action_925mb"
-                  android:title="@string/label_925mb"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_850mb"
-                  android:title="@string/label_850mb"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_700mb"
-                  android:title="@string/label_700mb"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_500mb"
-                  android:title="@string/label_500mb"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_300mb"
-                  android:title="@string/label_300mb"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_pwtr"
-                  android:title="@string/label_pwtr"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_muli"
-                  android:title="@string/label_li"
-                  app:showAsAction="never"  />
+            <item
+                android:id="@+id/action_925mb"
+                android:title="@string/label_925mb"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_850mb"
+                android:title="@string/label_850mb"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_700mb"
+                android:title="@string/label_700mb"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_500mb"
+                android:title="@string/label_500mb"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_300mb"
+                android:title="@string/label_300mb"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_pwtr"
+                android:title="@string/label_pwtr"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_muli"
+                android:title="@string/label_li"
+                app:showAsAction="never" />
         </menu>
     </item>
 
-    <item android:id="@+id/action_cape"
-          android:title="@string/label_short_cpe"
-          app:showAsAction="always"
-        >
+    <item
+        android:id="@+id/action_cape"
+        android:title="@string/label_short_cpe"
+        app:showAsAction="always">
         <menu>
-            <item android:id="@+id/action_laps"
-                  android:title="@string/label_laps"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_lllr"
-                  android:title="@string/label_lllr"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_lclh"
-                  android:title="@string/label_lclh"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_sbcp"
-                  android:title="@string/label_sbcape"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_mlcp"
-                  android:title="@string/label_mlcape"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_mucp"
-                  android:title="@string/label_mucape"
-                  app:showAsAction="never"  />
+            <item
+                android:id="@+id/action_laps"
+                android:title="@string/label_laps"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_lllr"
+                android:title="@string/label_lllr"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_lclh"
+                android:title="@string/label_lclh"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_sbcp"
+                android:title="@string/label_sbcape"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_mlcp"
+                android:title="@string/label_mlcape"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_mucp"
+                android:title="@string/label_mucape"
+                app:showAsAction="never" />
         </menu>
     </item>
 
-    <item android:id="@+id/action_comp"
-          android:title="@string/label_short_cmp"
-          app:showAsAction="always"
-        >
+    <item
+        android:id="@+id/action_comp"
+        android:title="@string/label_short_cmp"
+        app:showAsAction="always">
         <menu>
-            <item android:id="@+id/action_sigh"
-                  android:title="@string/label_sigh"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_stpc"
-                  android:title="@string/label_stpc"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_scp"
-                  android:title="@string/label_scp"
-                  app:showAsAction="never"  />
+            <item
+                android:id="@+id/action_sigh"
+                android:title="@string/label_sigh"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_stpc"
+                android:title="@string/label_stpc"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_scp"
+                android:title="@string/label_scp"
+                app:showAsAction="never" />
         </menu>
     </item>
 
-    <item android:id="@+id/action_shr"
-          android:title="@string/label_short_shr"
-          app:showAsAction="always"
-        >
+    <item
+        android:id="@+id/action_shr"
+        android:title="@string/label_short_shr"
+        app:showAsAction="always">
         <menu>
-            <item android:id="@+id/action_srh1"
-                  android:title="@string/label_srh1"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_srh3"
-                  android:title="@string/label_srh3"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_shr6"
-                  android:title="@string/label_shr6"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_eshr"
-                  android:title="@string/label_eshr"
-                  app:showAsAction="never"  />
+            <item
+                android:id="@+id/action_srh1"
+                android:title="@string/label_srh1"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_srh3"
+                android:title="@string/label_srh3"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_shr6"
+                android:title="@string/label_shr6"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_eshr"
+                android:title="@string/label_eshr"
+                app:showAsAction="never" />
         </menu>
     </item>
 
-    <item android:id="@+id/action_fav"
-          android:title="@string/label_toggle_favorite"
-          android:icon="@drawable/ic_star_outline_24dp"
-          app:showAsAction="always"
-        />
+    <item
+        android:id="@+id/action_fav"
+        android:icon="@drawable/ic_star_outline_24dp"
+        android:title="@string/label_toggle_favorite"
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/action_img1"
-        app:showAsAction="never"
-        android:title="@string/label_sel_img1"/>
+        android:title="@string/label_sel_img1"
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_img2"
-        app:showAsAction="never"
-        android:title="@string/label_sel_img2"/>
+        android:title="@string/label_sel_img2"
+        app:showAsAction="never" />
 
-    <item android:id="@+id/action_layers"
-          android:title="Layers"
-          app:showAsAction="never"  >
+    <item
+        android:id="@+id/action_layers"
+        android:title="Layers"
+        app:showAsAction="never">
         <menu>
-            <item android:id="@+id/action_toggleRadar"
-                  android:title="@string/action_radar"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_toggleSPCOutlook"
-                  android:title="@string/label_spc_day1"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_toggleWatWarn"
-                  android:title="@string/label_wat_warn"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_toggleTopography"
-                  android:title="Topography"
-                  app:showAsAction="never"  />
+            <item
+                android:id="@+id/action_toggleRadar"
+                android:title="@string/action_radar"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_toggleSPCOutlook"
+                android:title="@string/label_spc_day1"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_toggleWatWarn"
+                android:title="@string/label_wat_warn"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_toggleTopography"
+                android:title="Topography"
+                app:showAsAction="never" />
         </menu>
     </item>
 
-    <item android:id="@+id/action_regions"
-          android:title="@string/menu_regions"
-          app:showAsAction="never"  >
+    <item
+        android:id="@+id/action_regions"
+        android:title="@string/menu_regions"
+        app:showAsAction="never">
         <menu>
-            <item android:id="@+id/action_US"
-                  android:title="@string/label_NAT"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_MW"
-                  android:title="@string/label_MW"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_NC"
-                  android:title="@string/label_NC"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_C"
-                  android:title="@string/label_C"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_SC"
-                  android:title="@string/label_SC"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_SE"
-                  android:title="@string/label_SE"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_CE"
-                  android:title="@string/label_EC"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_NE"
-                  android:title="@string/label_NE"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_SW"
-                  android:title="@string/label_SW"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_NW"
-                  android:title="@string/label_NW"
-                  app:showAsAction="never"  />
+            <item
+                android:id="@+id/action_US"
+                android:title="@string/label_NAT"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_MW"
+                android:title="@string/label_MW"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_NC"
+                android:title="@string/label_NC"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_C"
+                android:title="@string/label_C"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_SC"
+                android:title="@string/label_SC"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_SE"
+                android:title="@string/label_SE"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_CE"
+                android:title="@string/label_EC"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_NE"
+                android:title="@string/label_NE"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_SW"
+                android:title="@string/label_SW"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_NW"
+                android:title="@string/label_NW"
+                app:showAsAction="never" />
         </menu>
     </item>
 
-    <item android:id="@+id/action_multipane"
-          android:title="@string/label_multi_pane"
-          app:showAsAction="never"  />
+    <item
+        android:id="@+id/action_multipane"
+        android:title="@string/label_multi_pane"
+        app:showAsAction="never" />
 
-    <item android:id="@+id/action_help"
-          android:title="@string/help_menu_item"
-          app:showAsAction="never"  />
+    <item
+        android:id="@+id/action_help"
+        android:title="@string/help_menu_item"
+        app:showAsAction="never" />
 
 </menu>

@@ -40,45 +40,29 @@ object UtilityUSHourly {
         val windSpeeds = html.parseColumn("\"windSpeed\": \"(.*?)\"")
         val windDirections = html.parseColumn("\"windDirection\": \"(.*?)\"")
         val shortForecasts = html.parseColumn("\"shortForecast\": \"(.*?)\"")
-        val sb0 = StringBuilder()
-        val sb1 = StringBuilder()
-        val sb2 = StringBuilder()
-        val sb3 = StringBuilder()
-        val sb4 = StringBuilder()
-        sb0.append("Time")
-        sb0.append(MyApplication.newline)
-        sb1.append("Temp")
-        sb1.append(MyApplication.newline)
-        sb2.append("WindSpd")
-        sb2.append(MyApplication.newline)
-        sb3.append("WindDir")
-        sb3.append(MyApplication.newline)
-        sb4.append("Condition")
-        sb4.append(MyApplication.newline)
+        var timeData = "Time" + MyApplication.newline
+        var tempData = "Temp" + MyApplication.newline
+        var windSpeedData = "WindSpd" + MyApplication.newline
+        var windDirData = "WindDir" + MyApplication.newline
+        var conditionData = "Condition" + MyApplication.newline
         startTimes.indices.forEach {
             val time = translateTime(startTimes[it])
             val temperature = Utility.safeGet(temperatures, it)
             val windSpeed = Utility.safeGet(windSpeeds, it).replace(" to ", "-")
             val windDirection = Utility.safeGet(windDirections, it)
             val shortForecast = Utility.safeGet(shortForecasts, it)
-            sb0.append(time)
-            sb0.append(MyApplication.newline)
-            sb1.append(temperature)
-            sb1.append(MyApplication.newline)
-            sb2.append(windSpeed)
-            sb2.append(MyApplication.newline)
-            sb3.append(windDirection)
-            sb3.append(MyApplication.newline)
-            sb4.append(shortenConditions(shortForecast))
-            sb4.append(MyApplication.newline)
-
+            timeData += time + MyApplication.newline
+            tempData += temperature + MyApplication.newline
+            windSpeedData += windSpeed + MyApplication.newline
+            windDirData += windDirection + MyApplication.newline
+            conditionData += shortenConditions(shortForecast) + MyApplication.newline
         }
         return ObjectHourly(
-            sb0.toString(),
-            sb1.toString(),
-            sb2.toString(),
-            sb3.toString(),
-            sb4.toString()
+            timeData,
+            tempData,
+            windSpeedData,
+            windDirData,
+            conditionData
         )
     }
 
@@ -115,31 +99,31 @@ object UtilityUSHourly {
         val windSpeed = html.parseColumn("\"windSpeed\": \"(.*?)\"")
         val windDirection = html.parseColumn("\"windDirection\": \"(.*?)\"")
         val shortForecast = html.parseColumn("\"shortForecast\": \"(.*?)\"")
-        val sb = StringBuilder()
+        var content = ""
         val year = UtilityTime.year()
         val yearStr = year.toString()
         startTime.indices.forEach {
-            sb.append(
-                String.format(
-                    "%-16s", startTime[it].replace("-0[0-9]:00".toRegex(), "")
-                        .replace(("$yearStr-"), "").replace(":00:00", "").replace("T", " ")
-                )
-            )
+            content +=
+                    String.format(
+                        "%-16s", startTime[it].replace("-0[0-9]:00".toRegex(), "")
+                            .replace(("$yearStr-"), "").replace(":00:00", "").replace("T", " ")
+
+                    )
             if (temperature.size > it) {
-                sb.append(String.format("%-12s", temperature[it]))
+                content += String.format("%-12s", temperature[it])
             }
             if (windSpeed.size > it) {
-                sb.append(String.format("%-12s", windSpeed[it]))
+                content += String.format("%-12s", windSpeed[it])
             }
             if (windDirection.size > it) {
-                sb.append(String.format("%-8s", windDirection[it]))
+                content += String.format("%-8s", windDirection[it])
             }
             if (shortForecast.size > it) {
-                sb.append(String.format("%-12s", shortenConditions(shortForecast[it])))
+                content += String.format("%-12s", shortenConditions(shortForecast[it]))
             }
-            sb.append(MyApplication.newline)
+            content += MyApplication.newline
         }
-        return sb.toString()
+        return content
     }
 
     private fun translateTime(originalTime: String): String {

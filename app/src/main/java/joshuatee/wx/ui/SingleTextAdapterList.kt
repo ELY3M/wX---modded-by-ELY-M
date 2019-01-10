@@ -32,6 +32,14 @@ class SingleTextAdapterList(private val mDataset: MutableList<String>) :
         myClickListener = myClickListenerloc
     }
 
+    /*fun setListener(fn: (Int) -> Unit) {
+        myClickListener = object : MyClickListener {
+            override fun onItemClick(position: Int) {
+                fn(position)
+            }
+        }
+    }*/
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.textview, parent, false)
         return DataObjectHolder(view)

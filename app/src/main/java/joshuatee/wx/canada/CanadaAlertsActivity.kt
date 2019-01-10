@@ -25,10 +25,10 @@ package joshuatee.wx.canada
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
@@ -37,22 +37,23 @@ import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import kotlinx.coroutines.*
 
-class CanadaAlertsActivity : BaseActivity() {
+class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var firstTime = true
     private lateinit var objWarn: ObjectCAWARN
     private lateinit var contextg: Context
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.caalerts, menu)
-        return true
-    }
-
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout_bottom_toolbar,
+            R.menu.caalerts,
+            true
+        )
         contextg = this
+        toolbarBottom.setOnMenuItemClickListener(this)
         val linearLayout: LinearLayout = findViewById(R.id.ll)
         objWarn = ObjectCAWARN(this, this, linearLayout, toolbar)
         objWarn.prov = Utility.readPref(this, "CA_ALERTS_PROV", objWarn.prov)
@@ -73,7 +74,7 @@ class CanadaAlertsActivity : BaseActivity() {
         toolbar.subtitle = objWarn.title
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_ca -> objWarn.prov = "ca"
             R.id.action_ab -> objWarn.prov = "ab"

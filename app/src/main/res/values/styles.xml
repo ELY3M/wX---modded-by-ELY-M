@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- 
+<?xml version="1.0" encoding="utf-8"?><!--
     Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
@@ -17,9 +16,11 @@
     You should have received a copy of the GNU General Public License
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
  -->
+<!-- mooded by ELY M. -->
 
 <resources>
-    <style name="AppCompatAlertDialogStyle"  parent="Theme.AppCompat.Light.Dialog.Alert">
+
+    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/yellow</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
@@ -171,19 +172,19 @@
         <item name="android:windowCloseOnTouchOutside">true</item>
     </style>
 
-    <style name="MyDropDownNav2" parent="Widget.AppCompat.Spinner.DropDown.ActionBar"  >
+    <style name="MyDropDownNav2" parent="Widget.AppCompat.Spinner.DropDown.ActionBar">
         <item name="android:popupBackground">@color/primary_dark_blue</item>
     </style>
 
-    <style name="MyDropDownNav2White" parent="Widget.AppCompat.Spinner.DropDown.ActionBar"  >
+    <style name="MyDropDownNav2White" parent="Widget.AppCompat.Spinner.DropDown.ActionBar">
         <item name="android:popupBackground">@color/white</item>
     </style>
 
-    <style name="ABOverflow" parent="Base.Widget.AppCompat.PopupMenu.Overflow"  >
+    <style name="ABOverflow" parent="Base.Widget.AppCompat.PopupMenu.Overflow">
         <item name="android:popupBackground">@color/primary_dark_blue</item>
     </style>
 
-    <style name="ABOverflowWhite" parent="Base.Widget.AppCompat.PopupMenu.Overflow"  >
+    <style name="ABOverflowWhite" parent="Base.Widget.AppCompat.PopupMenu.Overflow">
         <item name="android:popupBackground">@color/white</item>
     </style>
 

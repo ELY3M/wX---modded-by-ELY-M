@@ -125,7 +125,7 @@ class ObjectForecastPackageCurrentConditions {
     }
 
     private fun getConditions(context: Context, location: LatLon): List<String> {
-        val sb = StringBuilder(500)
+        var conditions = ""
         val obsClosest = UtilityUSv2.getObsFromLatLon(context, location)
         val observationData =
             UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/stations/$obsClosest/observations/current")
@@ -228,41 +228,19 @@ class ObjectForecastPackageCurrentConditions {
         if (condition == "") {
             condition = " "
         }
-        sb.append(temperature)
-        sb.append(MyApplication.DEGREE_SYMBOL)
+        conditions += temperature + MyApplication.DEGREE_SYMBOL
         if (windChill != "NA") {
-            sb.append("(")
-            sb.append(windChill)
-            sb.append(MyApplication.DEGREE_SYMBOL)
-            sb.append(")")
+            conditions += "(" + windChill + MyApplication.DEGREE_SYMBOL + ")"
         } else if (heatIndex != "NA") {
-            sb.append("(")
-            sb.append(heatIndex)
-            sb.append(MyApplication.DEGREE_SYMBOL)
-            sb.append(")")
+            conditions += "(" + heatIndex + MyApplication.DEGREE_SYMBOL + ")"
         }
-        sb.append(" / ")
-        sb.append(dewpoint)
-        sb.append(MyApplication.DEGREE_SYMBOL)
-        sb.append("(")
-        sb.append(relativeHumidity)
-        sb.append("%)")
-        sb.append(" - ")
-        sb.append(seaLevelPressure)
-        sb.append(" - ")
-        sb.append(windDirection)
-        sb.append(" ")
-        sb.append(windSpeed)
+        conditions += " / " + dewpoint + MyApplication.DEGREE_SYMBOL + "(" + relativeHumidity
+        conditions += "%) - $seaLevelPressure - $windDirection $windSpeed"
         if (windGust != "") {
-            sb.append(" ")
+            conditions += " "
         }
-        sb.append(windGust)
-        sb.append(" mph")
-        sb.append(" - ")
-        sb.append(visibility)
-        sb.append(" mi - ")
-        sb.append(condition)
-        return listOf(sb.toString(), icon)
+        conditions += "$windGust mph - $visibility mi - $condition"
+        return listOf(conditions, icon)
     }
 }
 

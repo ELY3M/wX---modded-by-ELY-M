@@ -19,61 +19,32 @@
  -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto" >
-
-    <item android:id="@+id/action_share"
-          android:title="@string/label_share"
-          android:icon="@drawable/ic_share_24dp"
-          app:showAsAction="always"
-        />
-
-    <item android:id="@+id/action_us"
-          android:title="@string/label_US"
-          app:showAsAction="never"  />
-    <item android:id="@+id/action_fl"
-          android:title="@string/label_FL"
-          app:showAsAction="never"  />
-    <item android:id="@+id/action_tx"
-          android:title="@string/label_TX"
-          app:showAsAction="never"  />
-    <item android:id="@+id/action_ok_ks"
-          android:title="@string/label_OK_KS"
-          app:showAsAction="never"  />
-    <item android:id="@+id/action_na"
-          android:title="@string/label_long_NA"
-          app:showAsAction="never"  />
-    <item android:id="@+id/action_sa"
-          android:title="@string/label_long_SA"
-          app:showAsAction="never"  />
-    <item android:id="@+id/action_au"
-          android:title="@string/label_AU"
-          app:showAsAction="never"  />
-    <item android:id="@+id/action_nz"
-          android:title="@string/label_NZ"
-          app:showAsAction="never"  />
-
-    <item android:id="@+id/action_time"
-          android:title="@string/label_time_period"
-          app:showAsAction="never"  >
-        <menu>
-            <item android:id="@+id/action_15min"
-                  android:title="@string/label_min_15"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_2hr"
-                  android:title="@string/label_hr_2"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_12hr"
-                  android:title="@string/label_hr_12"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_24hr"
-                  android:title="@string/label_hr_24"
-                  app:showAsAction="never"  />
-            <item android:id="@+id/action_48hr"
-                  android:title="@string/label_hr_48"
-                  app:showAsAction="never"  />
-
-        </menu>
-    </item>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share_24dp"
+        android:title="@string/label_share"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_15min"
+        android:title="@string/label_min_15"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_2hr"
+        android:title="@string/label_hr_2"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_12hr"
+        android:title="@string/label_hr_12"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_24hr"
+        android:title="@string/label_hr_24"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_48hr"
+        android:title="@string/label_hr_48"
+        app:showAsAction="never" />
 </menu>
 
 

@@ -19,39 +19,36 @@
  -->
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:scrollbars="none"
-            android:id="@+id/sv"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/sv"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:scrollbars="none">
 
     <LinearLayout
         android:id="@+id/ll"
-        android:stretchColumns="*"
-        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:padding="@dimen/padding_ll"
-        >
+        android:stretchColumns="*">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv1"
-            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
+            android:layout_gravity="center">
+
             <Spinner
                 android:id="@+id/spinner1"
-                android:layout_marginTop="5dip"
-                android:layout_marginBottom="5dip"
-                android:layout_marginLeft="@dimen/padding"
-                android:layout_marginRight="@dimen/padding"
-                android:textSize="19sp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                app:theme="@style/SpinnerThemeOverlay"
-                />
+                android:layout_marginLeft="@dimen/padding"
+                android:layout_marginTop="5dip"
+                android:layout_marginRight="@dimen/padding"
+                android:layout_marginBottom="5dip"
+                android:textSize="19sp"
+                app:theme="@style/SpinnerThemeOverlay" />
         </androidx.cardview.widget.CardView>
     </LinearLayout>
 </ScrollView>

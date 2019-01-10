@@ -19,66 +19,56 @@
  -->
 
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
+    android:orientation="vertical">
 
-    <include layout="@layout/widget_toolbar_top"/>
+    <include layout="@layout/widget_toolbar_top" />
 
     <LinearLayout
         android:id="@+id/LinearLayout2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".Main" >
+        tools:context=".Main">
 
 
         <joshuatee.wx.ui.ColorPicker
             android:id="@+id/picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center" />
 
         <joshuatee.wx.ui.ValueBar
             android:id="@+id/vbar"
             android:layout_width="322dp"
             android:layout_height="112dp"
             android:layout_gravity="center"
-            android:layout_margin="8dip"/>
+            android:layout_margin="8dip" />
 
         <joshuatee.wx.ui.SaturationBar
             android:id="@+id/sbar"
             android:layout_width="322dp"
             android:layout_height="112dp"
             android:layout_gravity="center"
-            android:layout_margin="8dip"/>
+            android:layout_margin="8dip" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="1" >
-
-            <!--<Button
-                android:id="@+id/button1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="?android:attr/borderlessButtonStyle"
-                android:text="Change Color"
-                android:layout_weight="1" />-->
+            android:weightSum="1">
 
             <Button
                 android:id="@+id/button_default"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="center"
-                style="?android:attr/borderlessButtonStyle"
-                android:text="Set to default"
-                android:layout_weight="1" />
+                android:text="Set to default" />
 
         </LinearLayout>
     </LinearLayout>

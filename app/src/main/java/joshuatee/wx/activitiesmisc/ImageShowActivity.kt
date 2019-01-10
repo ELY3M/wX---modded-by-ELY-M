@@ -25,8 +25,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
@@ -44,7 +44,7 @@ import kotlinx.coroutines.*
  *
  */
 
-class ImageShowActivity : BaseActivity() {
+class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     //
     // Arguments
@@ -65,15 +65,16 @@ class ImageShowActivity : BaseActivity() {
     private lateinit var img: ObjectTouchImageView
     private lateinit var contextg: Context
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.image_show_activity, menu)
-        return true
-    }
-
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show, null, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_image_show_bottom_toolbar,
+            R.menu.image_show_activity,
+            true
+        )
         contextg = this
+        toolbarBottom.setOnMenuItemClickListener(this)
         img = ObjectTouchImageView(this, this, toolbar, R.id.iv)
         val activityArguments = intent.getStringArrayExtra(URL)
         url = activityArguments[0]
@@ -112,7 +113,7 @@ class ImageShowActivity : BaseActivity() {
         img.setBitmap(UtilityIO.bitmapFromInternalStorage(contextg, urls[1]))
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> UtilityShare.shareBitmap(this, shareTitle, bitmap)
             else -> return super.onOptionsItemSelected(item)

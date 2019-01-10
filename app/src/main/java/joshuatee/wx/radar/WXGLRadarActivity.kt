@@ -206,7 +206,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         contextg = this
         setupAlertDialogRadarLongPress()
         UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
-        if (archiveMode && !spotterShowSelected) toolbarBottom.visibility = View.GONE
+        if (archiveMode && !spotterShowSelected)
+            toolbarBottom.visibility = View.GONE
         val latLonArrD = UtilityLocation.getGPS(this)
         latD = latLonArrD[0]
         lonD = latLonArrD[1]

@@ -2,13 +2,23 @@
 // TODO base velocity legend
 // TODO NWS URLs http to https const myapp
 // TODO refactor nexrad radar to match architecture of wXL23 Metal to remove code duplicity
-// TODO convert to new NavDrawer: USWarningsWith, ModelGeneric, ModelSPCHRRR, SPCCompmap, SPCStormreports, GOES16
-// TODO in general reduce static methods ( object methods ) in favor of instance methods
-// TODO convert other imageMaps to use new clickHandler
 // TODO consolidate NWSGOES, NWS Mosaic into one activity using class to store pref/lists, etc
-// TODO convert lightning to nav drawer
+// TODO look into transparent top toolbar
+// TODO reformat menu/layout
+// TODO in settings main show notification count in notification label
+// TODO white space cleanup in menu
+// TODO reformat layout
+// TODO white space cleanup in layout
+// TODO publish Android 4 deprecation date
+// TODO camelCase GlobalArrays ( consult wXL23 )
+// TODO add Ely's MCD/MPD/WAT radar long press code
+// TODO NWS HTTPS migration https://www.nco.ncep.noaa.gov/pmb/changes/URL_http_https.shtml
 
-55097 2019_01_06
+55100 2019_01_09 xml layout reformat
+55099 2019_01_09 misc code cleanup and bugfix
+55098 2019_01_08 add bottom toolbar to uswarn/spc compmap/hourly/lightning
+                 reduce number of string builders
+55097 2019_01_07 misc code refactor, add bottom toolbar to fire/tstorm/swo summary
 55096 2019_01_06 misc code refactor esp in models
                  remove cv5/buttonFor in locfrag, it would appear this really isn't needed anymore
 55095 2019_01_05 misc code refactor

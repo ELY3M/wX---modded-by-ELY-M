@@ -114,9 +114,12 @@ object UtilitySPC {
         }
         var label = MyApplication.tabHeaders[1]
         if (watchPresent || mdPresent || mpdPresent) {
-            if (watchPresent) label = "$label W($watchCount)"
-            if (mdPresent) label = "$label M($mdCount)"
-            if (mpdPresent) label = "$label P($mpdCount)"
+            if (watchPresent)
+                label = "$label W($watchCount)"
+            if (mdPresent)
+                label = "$label M($mdCount)"
+            if (mpdPresent)
+                label = "$label P($mpdCount)"
             tabStrSpc = label
         } else {
             tabStrSpc = MyApplication.tabHeaders[1]

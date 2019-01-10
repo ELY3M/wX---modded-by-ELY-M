@@ -1,5 +1,4 @@
-
-<!-- 
+<!--
     Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
@@ -19,19 +18,16 @@
 
  -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
+    android:orientation="vertical">
 
-    <include layout="@layout/widget_toolbar_top_with_spinner"/>
+    <include layout="@layout/widget_toolbar_top_with_spinner" />
 
     <WebView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/webview"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>
 

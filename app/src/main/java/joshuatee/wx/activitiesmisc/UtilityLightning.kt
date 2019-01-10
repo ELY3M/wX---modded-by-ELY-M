@@ -37,22 +37,27 @@ object UtilityLightning {
         return url.getImage()
     }
 
-    fun getSectorPretty(sector: String): String = when (sector) {
-        "usa_big" -> "USA"
-        "florida_big" -> "FL"
-        "texas_big" -> "TX"
-        "oklahoma_kansas_big" -> "OK,KS"
-        "north_middle_america" -> "North America"
-        "south_america" -> "South America"
-        "australia_big" -> "Australia"
-        "new_zealand_big" -> "New Zealand"
-        "goes16_conus" -> "GOES-16 CONUS (Experimental)"
-        "goes16_fulldisk" -> "GOES-16 FULLDISK (Experimental)"
-        "goes16_seus" -> "GOES-16 SEUS (Experimental)"
-        "goes16_carib" -> "GOES-16 CARIB (Experimental)"
-        "goes16_southamer" -> "GOES-16 SOUTHAMER (Experimental)"
-        else -> ""
-    }
+    val labels: List<String> = listOf(
+        "USA",
+        "FL",
+        "TX",
+        "OK,KS",
+        "North America",
+        "South America",
+        "Australia",
+        "New Zealand"
+    )
+
+    val urls: List<String> = listOf(
+        "usa_big",
+        "florida_big",
+        "texas_big",
+        "oklahoma_kansas_big",
+        "north_middle_america",
+        "south_america",
+        "australia_big",
+        "new_zealand_big"
+    )
 
     fun getTimePretty(period: String): String = when (period) {
         "0.25" -> "15 MIN"

@@ -396,7 +396,7 @@ internal object UtilityConusRadar {
     }
 
 
-    fun layerDrawableToBitmapConus(layers: MutableList<Drawable>): Bitmap {
+    fun layerDrawableToBitmapConusSquare(layers: MutableList<Drawable>): Bitmap {
         val drawable = LayerDrawable(layers.toTypedArray())
         val bitmap: Bitmap
         val width = 3400
@@ -430,17 +430,6 @@ internal object UtilityConusRadar {
         //}
         if (bitmap.height > 10) {
             bitmapCanvas = Bitmap.createBitmap(3400, 3400, Bitmap.Config.ARGB_8888)
-            /*
-            UtilityCanvasMain.addCanvasItems(
-                    context,
-                    bitmapCanvas,
-                    ProjectionType.NWS_MOSAIC,
-                    "CONUS",
-                    1,
-                    13,
-                    false
-            )
-            */
 
         }
 
@@ -451,7 +440,7 @@ internal object UtilityConusRadar {
         layers.add(BitmapDrawable(context.resources, bitmap))
         layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         //val finalbitmap: Bitmap = UtilityImg.layerDrawableToBitmap(layers)
-        val finalbitmap: Bitmap = layerDrawableToBitmapConus(layers)
+        val finalbitmap: Bitmap = layerDrawableToBitmapConusSquare(layers)
         saveImage(finalbitmap)
     }
 
@@ -486,6 +475,37 @@ internal object UtilityConusRadar {
         val finalbitmap: Bitmap = UtilityImg.layerDrawableToBitmap(layers)
         saveImage(finalbitmap)
     }
+    //TODO Hack job! need to use real plotting with nwsConusRadar(context: Context)
+    fun nwsConusRadarWithMapSquare(context: Context) {
+        val imgUrl =
+                "${MyApplication.nwsRadarWebsitePrefix}/Conus/RadarImg/latest_radaronly.gif"
+        val layers = mutableListOf<Drawable>()
+        val cd = if (MyApplication.blackBg) {
+            ColorDrawable(Color.BLACK)
+        } else {
+            ColorDrawable(Color.WHITE)
+        }
+        var scaleType = ProjectionType.NWS_MOSAIC
+        var bitmap = imgUrl.getImage()
+        var bitmapCanvas = UtilityImg.getBlankBitmap()
+        //if (MyApplication.blackBg) {
+        //    bitmap = UtilityImg.eraseBG(bitmap, -1)
+        //}
+        if (bitmap.height > 10) {
+            bitmapCanvas = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+            UtilityCanvasMain.addCanvasConus(
+                    context,
+                    bitmapCanvas,
+                    scaleType,
+                    "latest"
+            )
+        }
+        layers.add(cd)
+        layers.add(BitmapDrawable(context.resources, bitmap))
+        layers.add(BitmapDrawable(context.resources, bitmapCanvas))
+        val finalbitmap: Bitmap = layerDrawableToBitmapConusSquare(layers)
+        saveImage(finalbitmap)
+    }
 
 
     fun nwsConusRadar(context: Context) {
@@ -499,7 +519,7 @@ internal object UtilityConusRadar {
 
     fun getConusImage() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
-            nwsConusRadarWithMap(MyApplication.appContext)
+            nwsConusRadarWithMapSquare(MyApplication.appContext)
         }
     }
 

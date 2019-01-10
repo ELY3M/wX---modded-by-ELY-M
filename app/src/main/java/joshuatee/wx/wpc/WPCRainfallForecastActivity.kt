@@ -25,10 +25,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
+import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
@@ -39,22 +39,23 @@ import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
-class WPCRainfallForecastActivity : BaseActivity() {
+class WPCRainfallForecastActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val bitmaps = mutableListOf<Bitmap>()
     private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.shared_multigraphics, menu)
-        return true
-    }
-
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout_bottom_toolbar,
+            R.menu.shared_multigraphics,
+            true
+        )
         contextg = this
+        toolbarBottom.setOnMenuItemClickListener(this)
         title = getString(UtilityWPCRainfallForecast.activityTitle)
         linearLayout = findViewById(R.id.ll)
         getContent()
@@ -64,9 +65,8 @@ class WPCRainfallForecastActivity : BaseActivity() {
         withContext(Dispatchers.IO) {
             UtilityWPCRainfallForecast.imageUrls.forEach { bitmaps.add(it.getImage()) }
         }
-        var card: ObjectCardImage
         bitmaps.forEach { bitmap ->
-            card = ObjectCardImage(contextg, linearLayout, bitmap)
+            val card = ObjectCardImage(contextg, linearLayout, bitmap)
             val prodTextUrlLocal = UtilityWPCRainfallForecast.textUrls[bitmaps.indexOf(bitmap)]
             val prodTitleLocal =
                 UtilityWPCRainfallForecast.productLabels[bitmaps.indexOf(bitmap)] + " - " + getString(
@@ -83,7 +83,7 @@ class WPCRainfallForecastActivity : BaseActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> UtilityShare.shareText(
                 this,

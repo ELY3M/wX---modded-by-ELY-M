@@ -112,6 +112,7 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
         img.setListener(this, drw, ::getContentFixThis)
         drw.index = findPosition(nwsRadarMosaicSectorLabelCurrent)
         drw.setListener(::getContentFixThis)
+        toolbarBottom.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
         getContent()
         // FIXME how to handle this on sector change img.setZoom(1.0f)
     }

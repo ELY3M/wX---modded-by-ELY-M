@@ -23,13 +23,15 @@ package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.radar.VideoRecordActivity
+import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.ObjectTouchImageView
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
@@ -37,7 +39,7 @@ import joshuatee.wx.util.UtilityShare
 
 import kotlinx.coroutines.*
 
-class LightningActivity : VideoRecordActivity() {
+class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
 
     companion object {
         const val URL: String = ""
@@ -45,42 +47,65 @@ class LightningActivity : VideoRecordActivity() {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
-    private var sector = "usa_big"
-    private var sectorPretty = "USA"
     private var period = "0.25"
     private var periodPretty = "15 MIN"
     private lateinit var img: ObjectTouchImageView
+    private lateinit var drw: ObjectNavDrawer
     private lateinit var contextg: Context
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.lightning_activity, menu)
-        return true
-    }
+    private val prefTokenIdx = "LIGHTNING_SECTOR_IDX"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show, null, true, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_image_show_navdrawer_bottom_toolbar,
+            R.menu.lightning_activity,
+            true,
+            true
+        )
         contextg = this
+        toolbarBottom.setOnMenuItemClickListener(this)
         toolbar.setOnClickListener { toolbar.showOverflowMenu() }
-        img = ObjectTouchImageView(this, this, toolbar, R.id.iv)
-        sector = Utility.readPref(this, "LIGHTNING_SECTOR", sector)
+        drw = ObjectNavDrawer(this, UtilityLightning.labels, UtilityLightning.urls)
+        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, prefTokenIdx)
+        drw.index = Utility.readPref(this, prefTokenIdx, 0)
+        drw.setListener(::getContentFixThis)
         period = Utility.readPref(this, "LIGHTNING_PERIOD", period)
-        sectorPretty = UtilityLightning.getSectorPretty(sector)
         periodPretty = UtilityLightning.getTimePretty(period)
+        toolbarBottom.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
+        getContent()
+    }
+
+    private fun getContentFixThis() {
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        title = "Lightning $sectorPretty"
+        title = "Lightning " +  drw.getLabel()
         toolbar.subtitle = periodPretty
-        bitmap = withContext(Dispatchers.IO) { UtilityLightning.getImage(sector, period) }
+        bitmap = withContext(Dispatchers.IO) { UtilityLightning.getImage(drw.getUrl(), period) }
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn("LIGHTNING")
-        Utility.writePref(contextg, "LIGHTNING_SECTOR", sector)
         Utility.writePref(contextg, "LIGHTNING_PERIOD", period)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        drw.actionBarDrawerToggle.syncState()
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+
+    override fun onMenuItemClick(item: MenuItem): Boolean {
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
@@ -88,19 +113,11 @@ class LightningActivity : VideoRecordActivity() {
                 } else {
                     UtilityShare.shareBitmap(
                         this,
-                        "Lightning Strikes $sectorPretty $periodPretty",
+                        "Lightning Strikes " + drw.getLabel() + " $periodPretty",
                         bitmap
                     )
                 }
             }
-            R.id.action_us -> setSectorGetContent("usa_big", "USA")
-            R.id.action_fl -> setSectorGetContent("florida_big", "FL")
-            R.id.action_tx -> setSectorGetContent("texas_big", "TX")
-            R.id.action_ok_ks -> setSectorGetContent("oklahoma_kansas_big", "OK,KS")
-            R.id.action_na -> setSectorGetContent("north_middle_america", "North America")
-            R.id.action_sa -> setSectorGetContent("south_america", "South America")
-            R.id.action_au -> setSectorGetContent("australia_big", "Australia")
-            R.id.action_nz -> setSectorGetContent("new_zealand_big", "New Zealand")
             R.id.action_15min -> setPeriodGetContent("0.25", "15 MIN")
             R.id.action_2hr -> setPeriodGetContent("2", "2 HR")
             R.id.action_12hr -> setPeriodGetContent("12", "12 HR")
@@ -109,12 +126,6 @@ class LightningActivity : VideoRecordActivity() {
             else -> return super.onOptionsItemSelected(item)
         }
         return true
-    }
-
-    private fun setSectorGetContent(sector: String, sectorPretty: String) {
-        this.sector = sector
-        this.sectorPretty = sectorPretty
-        getContent()
     }
 
     private fun setPeriodGetContent(period: String, periodPretty: String) {

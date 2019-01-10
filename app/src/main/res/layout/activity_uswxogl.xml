@@ -1,5 +1,4 @@
-
-<!-- 
+<!--
     Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
@@ -20,54 +19,54 @@
  -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:ctc="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-    >
+    xmlns:ctc="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/rl"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:orientation="vertical"
+            android:id="@+id/drawing_screen_drawlocation"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:id="@+id/drawing_screen_drawlocation"
             android:layout_alignParentTop="true"
-            android:layout_marginBottom="50dip">
+            android:layout_marginBottom="50dip"
+            android:orientation="vertical">
 
         </LinearLayout>
 
         <TableLayout
-            android:stretchColumns="*"
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="0dip"
             android:divider="@color/dividerColor"
             android:dividerPadding="0px"
             android:gravity="center"
-            >
+            android:orientation="vertical"
+            android:padding="0dip"
+            android:stretchColumns="*">
+
             <joshuatee.wx.ui.TouchImageView2
                 android:id="@+id/iv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:scaleType="fitCenter"
-                />
+                android:scaleType="fitCenter" />
+
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/ncar_nexrad_sites"
-                ctc:map="ncar_nexrad_sites"
-                />
+                ctc:map="ncar_nexrad_sites" />
         </TableLayout>
     </RelativeLayout>
-    <include layout="@layout/widget_toolbar_top_with_spinner_wxogl"/>
-    <include layout="@layout/widget_toolbar_bottom"/>
+
+    <include layout="@layout/widget_toolbar_top_with_spinner_wxogl" />
+
+    <include layout="@layout/widget_toolbar_bottom" />
 </RelativeLayout>
     
 

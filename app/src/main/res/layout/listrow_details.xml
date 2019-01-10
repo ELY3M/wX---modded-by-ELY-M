@@ -1,29 +1,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="40dp"
-              android:clickable="false"
-              android:orientation="vertical"
-              android:paddingStart="40dp"
-              android:background="@color/primary_dark_blue" >
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:background="@color/primary_dark_blue"
+    android:clickable="false"
+    android:orientation="vertical"
+    android:paddingStart="40dp">
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/primary_dark_blue"
         android:drawablePadding="5dp"
+        android:focusable="false"
         android:gravity="center_vertical"
         android:text=""
-        android:textSize="@dimen/normal_text"
-        android:focusable="false"
         android:textColor="#fff"
-        android:background="@color/primary_dark_blue"
-        >
-    </TextView>
+        android:textSize="@dimen/normal_text" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:focusable="false"
-        android:background="@color/primary_dark_blue" />
+        android:background="@color/primary_dark_blue"
+        android:focusable="false" />
 
 </LinearLayout> 

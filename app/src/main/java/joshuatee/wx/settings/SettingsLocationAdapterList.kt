@@ -37,8 +37,12 @@ internal class SettingsLocationAdapterList(private val mDataset: MutableList<Str
         }
     }
 
-    fun setOnItemClickListener(myClickListenerloc: MyClickListener) {
-        myClickListener = myClickListenerloc
+    fun setListener(fn: (Int) -> Unit) {
+        myClickListener = object : MyClickListener {
+            override fun onItemClick(position: Int) {
+                fn(position)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {

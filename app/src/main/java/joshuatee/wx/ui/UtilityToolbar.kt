@@ -23,12 +23,14 @@ package joshuatee.wx.ui
 
 import android.app.ActionBar.LayoutParams
 import android.app.Activity
+import android.content.Context
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.appcompat.widget.ActionMenuView
 import androidx.appcompat.widget.Toolbar
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
@@ -39,6 +41,14 @@ object UtilityToolbar {
         if (UIPreferences.radarToolbarTransparent) {
             toolbar.background.mutate().alpha = 0
             toolbarBottom.background.mutate().alpha = 0
+        }
+    }
+
+    fun transparentToolbars(context: Context, toolbar: Toolbar) {
+        if (UIPreferences.radarToolbarTransparent) {
+            toolbar.background.mutate().alpha = 0
+            toolbar.background.alpha = 0
+            toolbar.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent));
         }
     }
 

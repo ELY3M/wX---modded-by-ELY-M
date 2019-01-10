@@ -117,12 +117,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         val recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
         ca = PlayListAdapter(ridArr)
         recyclerView.recyclerView.adapter = ca
-        ca.setOnItemClickListener(object : PlayListAdapter.MyClickListener {
-            override fun onItemClick(position: Int) {
-                prodClicked(position)
-            }
-        })
-
+        ca.setListener(::itemSelected)
     }
 
     private fun updateList() {
@@ -259,7 +254,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         }
     }
 
-    private fun prodClicked(position: Int) {
+    private fun itemSelected(position: Int) {
         when (actionMode) {
             ActionMode.DELETE -> {
                 ridFav = Utility.readPref(this, prefToken, "")

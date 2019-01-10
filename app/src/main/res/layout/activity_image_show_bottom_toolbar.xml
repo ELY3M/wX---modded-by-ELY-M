@@ -30,7 +30,7 @@
         android:layout_above="@id/toolbar_bottom"
         android:orientation="vertical">
 
-        <include layout="@layout/widget_toolbar_top_with_spinner" />
+        <include layout="@layout/widget_toolbar_top" />
 
         <TableLayout
             android:layout_width="match_parent"
@@ -52,3 +52,7 @@
         </TableLayout>
     </LinearLayout>
 </RelativeLayout>
+
+
+
+    

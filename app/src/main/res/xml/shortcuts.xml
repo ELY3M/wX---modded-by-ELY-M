@@ -1,73 +1,73 @@
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
-        android:shortcutId="Radar"
         android:enabled="true"
         android:icon="@drawable/wxoglsinglepane"
-        android:shortcutShortLabel="@string/radar_shortcut"
+        android:shortcutDisabledMessage="@string/radar_shortcut"
+        android:shortcutId="Radar"
         android:shortcutLongLabel="@string/radar_shortcut"
-        android:shortcutDisabledMessage="@string/radar_shortcut">
+        android:shortcutShortLabel="@string/radar_shortcut">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="joshuatee.wx"
-            android:targetClass="joshuatee.wx.WX" />
+            android:targetClass="joshuatee.wx.WX"
+            android:targetPackage="joshuatee.wx" />
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="joshuatee.wx"
-            android:targetClass="joshuatee.wx.radar.WXGLRadarActivity" />
+            android:targetClass="joshuatee.wx.radar.WXGLRadarActivity"
+            android:targetPackage="joshuatee.wx" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
 
     <shortcut
-        android:shortcutId="SPC Mesoanalysis"
         android:enabled="true"
         android:icon="@drawable/meso"
-        android:shortcutShortLabel="@string/spcmesoanalysis_shortcut"
+        android:shortcutDisabledMessage="@string/spcmesoanalysis_shortcut"
+        android:shortcutId="SPC Mesoanalysis"
         android:shortcutLongLabel="@string/spcmesoanalysis_shortcut"
-        android:shortcutDisabledMessage="@string/spcmesoanalysis_shortcut">
+        android:shortcutShortLabel="@string/spcmesoanalysis_shortcut">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="joshuatee.wx"
-            android:targetClass="joshuatee.wx.WX" />
+            android:targetClass="joshuatee.wx.WX"
+            android:targetPackage="joshuatee.wx" />
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="joshuatee.wx"
-            android:targetClass="joshuatee.wx.spc.SPCMesoActivity" />
+            android:targetClass="joshuatee.wx.spc.SPCMesoActivity"
+            android:targetPackage="joshuatee.wx" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
 
     <shortcut
-        android:shortcutId="NCEP Models"
         android:enabled="true"
         android:icon="@drawable/ncep"
-        android:shortcutShortLabel="@string/ncepModels_shortcut"
+        android:shortcutDisabledMessage="@string/ncepModels_shortcut"
+        android:shortcutId="NCEP Models"
         android:shortcutLongLabel="@string/ncepModels_shortcut"
-        android:shortcutDisabledMessage="@string/ncepModels_shortcut">
+        android:shortcutShortLabel="@string/ncepModels_shortcut">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="joshuatee.wx"
-            android:targetClass="joshuatee.wx.WX" />
+            android:targetClass="joshuatee.wx.WX"
+            android:targetPackage="joshuatee.wx" />
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="joshuatee.wx"
-            android:targetClass="joshuatee.wx.models.ModelsNCEPActivity" />
+            android:targetClass="joshuatee.wx.models.ModelsNCEPActivity"
+            android:targetPackage="joshuatee.wx" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
 
     <shortcut
-        android:shortcutId="SPC HREF"
         android:enabled="true"
         android:icon="@drawable/spchref"
-        android:shortcutShortLabel="@string/spchref_shortcut"
+        android:shortcutDisabledMessage="@string/spchref_shortcut"
+        android:shortcutId="SPC HREF"
         android:shortcutLongLabel="@string/spchref_shortcut"
-        android:shortcutDisabledMessage="@string/spchref_shortcut">
+        android:shortcutShortLabel="@string/spchref_shortcut">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="joshuatee.wx"
-            android:targetClass="joshuatee.wx.WX" />
+            android:targetClass="joshuatee.wx.WX"
+            android:targetPackage="joshuatee.wx" />
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetPackage="joshuatee.wx"
-            android:targetClass="joshuatee.wx.models.ModelsSPCHREFActivity" />
+            android:targetClass="joshuatee.wx.models.ModelsSPCHREFActivity"
+            android:targetPackage="joshuatee.wx" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
 </shortcuts>

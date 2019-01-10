@@ -18,54 +18,47 @@
 
  -->
 
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/cv1"
-    android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    >
+    android:layout_gravity="center">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/toolbar_bottom"
-        >
+        android:orientation="vertical">
 
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:id="@+id/text1"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:paddingLeft="@dimen/padding"
-                  android:paddingTop="@dimen/padding"
-                  android:paddingRight="@dimen/padding"
-                  android:textSize="@dimen/normal_text"
+            android:id="@+id/text1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/padding"
+            android:paddingTop="@dimen/padding"
+            android:paddingRight="@dimen/padding"
+            android:textSize="@dimen/normal_text"
 
             />
 
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:id="@+id/text2"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:paddingRight="@dimen/padding"
-                  android:paddingLeft="@dimen/padding"
-            />
+            android:id="@+id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/padding"
+            android:paddingRight="@dimen/padding" />
 
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-                  android:id="@+id/text3"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  android:paddingLeft="@dimen/padding"
-                  android:paddingRight="@dimen/padding"
-                  android:paddingBottom="@dimen/padding"
-                  android:maxLines="3"
-                  android:minLines="1"
+            android:id="@+id/text3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:minLines="1"
+            android:paddingLeft="@dimen/padding"
+            android:paddingRight="@dimen/padding"
+            android:paddingBottom="@dimen/padding"
 
             />
-
-        <!--style="@android:style/TextAppearance.Small"-->
-
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

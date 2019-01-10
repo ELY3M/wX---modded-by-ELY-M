@@ -19,51 +19,53 @@
  -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto" >
-
-    <item android:id="@+id/action_map"
-          android:title="@string/label_rid_map"
-          android:icon="@drawable/ic_public_24dp"
-          app:showAsAction="always"
-        />
-
-    <item android:id="@+id/action_fav"
-          android:title="@string/label_toggle_favorite"
-          android:icon="@drawable/ic_star_outline_24dp"
-          app:showAsAction="always"
-        />
-
-    <item android:id="@+id/action_share"
-          android:title="@string/label_share"
-          android:icon="@drawable/ic_share_24dp"
-          app:showAsAction="always"
-        />
-
-    <item android:id="@+id/action_250mb"
-          android:title="@string/label_250mb"
-          app:showAsAction="never"  />
-    <item android:id="@+id/action_300mb"
-          android:title="@string/label_300mb"
-          app:showAsAction="never"  />
-    <item android:id="@+id/action_500mb"
-          android:title="@string/label_500mb"
-          app:showAsAction="never"  />
-    <item android:id="@+id/action_700mb"
-          android:title="@string/label_700mb"
-          app:showAsAction="never"  />
-    <item android:id="@+id/action_850mb"
-          android:title="@string/label_850mb"
-          app:showAsAction="never"  />
-    <item android:id="@+id/action_925mb"
-          android:title="@string/label_925mb"
-          app:showAsAction="never"  />
-    <item android:id="@+id/action_sfc"
-          android:title="Surface"
-          app:showAsAction="never"  />
-
-    <item android:id="@+id/action_spc_help"
-          android:title="SPC Help"
-          app:showAsAction="never"  />
-
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_map"
+        android:icon="@drawable/ic_public_24dp"
+        android:title="@string/label_rid_map"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_fav"
+        android:icon="@drawable/ic_star_outline_24dp"
+        android:title="@string/label_toggle_favorite"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_share"
+        android:icon="@drawable/ic_share_24dp"
+        android:title="@string/label_share"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_250mb"
+        android:title="@string/label_250mb"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_300mb"
+        android:title="@string/label_300mb"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_500mb"
+        android:title="@string/label_500mb"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_700mb"
+        android:title="@string/label_700mb"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_850mb"
+        android:title="@string/label_850mb"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_925mb"
+        android:title="@string/label_925mb"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_sfc"
+        android:title="Surface"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_spc_help"
+        android:title="SPC Help"
+        app:showAsAction="never" />
 </menu>
 

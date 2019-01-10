@@ -19,43 +19,43 @@
  -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto" >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_cloud"
-          android:title="@string/action_cloud"
-          android:icon="@drawable/ic_cloud_24dp"
-          app:showAsAction="always"
-        />
-    <item android:id="@+id/action_radar"
-          android:title="@string/action_radar"
-          android:icon="@drawable/ic_flash_on_24dp"
-          app:showAsAction="always"
-        />
-    <item android:id="@+id/action_afd"
-          android:title="Add afd"
-          android:icon="@drawable/ic_info_outline_24dp"
-          app:showAsAction="always"
-        />
-    <item android:id="@+id/action_img"
-          android:title="Add img"
-          android:icon="@drawable/ic_public_24dp"
-          app:showAsAction="always"
-        />
-    <item android:id="@+id/action_delete"
-          android:title="@string/label_mode_delete"
-          android:icon="@drawable/ic_delete_24dp"
-          app:showAsAction="always"
-        />
-    <item android:id="@+id/action_help"
-          android:title="@string/help_menu_item"
-          app:showAsAction="never"
-        />
-    <item android:id="@+id/action_reset"
-          android:title="Set to default"
-          app:showAsAction="never"
-        />
-    <item android:id="@+id/action_reset_ca"
-          android:title="Set to default (Canada)"
-          app:showAsAction="never"
-        />
+    <item
+        android:id="@+id/action_cloud"
+        android:icon="@drawable/ic_cloud_24dp"
+        android:title="@string/action_cloud"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_radar"
+        android:icon="@drawable/ic_flash_on_24dp"
+        android:title="@string/action_radar"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_afd"
+        android:icon="@drawable/ic_info_outline_24dp"
+        android:title="Add afd"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_img"
+        android:icon="@drawable/ic_public_24dp"
+        android:title="Add img"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_delete_24dp"
+        android:title="@string/label_mode_delete"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_help"
+        android:title="@string/help_menu_item"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_reset"
+        android:title="Set to default"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_reset_ca"
+        android:title="Set to default (Canada)"
+        app:showAsAction="never" />
 </menu>

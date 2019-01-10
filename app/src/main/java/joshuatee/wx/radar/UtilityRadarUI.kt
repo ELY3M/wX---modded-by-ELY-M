@@ -161,9 +161,10 @@ internal object UtilityRadarUI {
             glview: WXGLSurfaceView,
             uiDispatcher: CoroutineDispatcher
     ) = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) {
+        var txt = withContext(Dispatchers.IO) {
             UtilityWatch.showWatchProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
         }
+        if (txt == "") { txt = "No active watch"}
         UtilityAlertDialog.showHelpText(txt, act)
     }
 
@@ -173,9 +174,10 @@ internal object UtilityRadarUI {
             glview: WXGLSurfaceView,
             uiDispatcher: CoroutineDispatcher
     ) = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) {
+        var txt = withContext(Dispatchers.IO) {
             UtilityWatch.showMCDProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
         }
+        if (txt == "") { txt = "No active MCD"}
         UtilityAlertDialog.showHelpText(txt, act)
     }
 
@@ -186,9 +188,10 @@ internal object UtilityRadarUI {
             glview: WXGLSurfaceView,
             uiDispatcher: CoroutineDispatcher
     ) = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) {
+        var txt = withContext(Dispatchers.IO) {
             UtilityWatch.showMPDProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
         }
+	if (txt == "") { txt = "No active MPD"}
         UtilityAlertDialog.showHelpText(txt, act)
     }
 
@@ -245,26 +248,33 @@ internal object UtilityRadarUI {
             ) + " miles from " + oglr.rid
         )
         //TODO get msl and AGL here
-        var radarheight = WXGLNexradLevel3.RadarHeight
+        var radarheight = WXGLNexradLevel3.radarHeight
         var distance = UtilityStringExternal.truncate(distRid.toString(), 4).toDouble()
-        var degree = 0.5
+        //var degree = WXGLNexradLevel3.radarElevation
+        //var degree = WXGLNexradLevel3.getproductSpecific / 10.0f
+        var degree: Double = 0.0
         if (oglr.product.contains("0")) {
             degree = 0.5
         }
         if (oglr.product.contains("1")) {
-            degree = 0.9
-        }
-        if (oglr.product.contains("2")) {
             degree = 1.5
         }
-        if (oglr.product.contains("3")) {
-            degree = 1.8
+        if (oglr.product.contains("2")) {
+            degree = 2.4
         }
+        if (oglr.product.contains("3")) {
+            degree = 3.4
+        }
+
+        if (degree == 0.0) {
+            degree = 0.5
+        }
+
         UtilityLog.d("wx", "radarHeight: "+radarheight)
         UtilityLog.d("wx", "degree: "+degree)
 
 
-        val heightAGL = 3.281 * (Math.sin(Math.toRadians(degree)) * distance + distance * distance / 15417.82) * 1000.0
+        val heightAGL = 3.281 * (Math.sin(Math.toRadians(degree.toDouble())) * distance + distance * distance / 15417.82) * 1000.0
         val heightMSL = (radarheight + heightAGL)
 
         alertDialogRadarLongpressAl.add(

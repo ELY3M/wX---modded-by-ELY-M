@@ -44,11 +44,13 @@ class NWSObsSitesActivity : BaseActivity() {
     private var provSelected = ""
     private lateinit var recyclerView: ObjectRecyclerView
     private lateinit var contextg: Context
+    private val titleString = "Observation sites"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
         contextg = this
+        title = titleString
         siteDisplay = false
         recyclerView = ObjectRecyclerView(
             this,
@@ -62,13 +64,14 @@ class NWSObsSitesActivity : BaseActivity() {
     private fun itemClicked(position: Int) {
         if (!siteDisplay) {
             provSelected = UtilityStringExternal.truncate(STATE_ARR[position], 2)
-            title = "Observation sites ($provSelected)"
+            title = "$titleString ($provSelected)"
             provSelected()
         } else {
             when (position) {
                 0 -> {
                     recyclerView.refreshList(STATE_ARR.toMutableList())
                     siteDisplay = false
+                    title = titleString
                 }
                 else -> ObjectIntent(
                     contextg,
@@ -91,9 +94,7 @@ class NWSObsSitesActivity : BaseActivity() {
         val xmlFileInputStream = resources.openRawResource(R.raw.stations_us4)
         val text = UtilityIO.readTextFile(xmlFileInputStream)
         val lines = text.split("\n")
-        listCity.clear()
-        listIds.clear()
-        listSort.clear()
+        listOf(listCity, listIds, listSort).forEach { it.clear() }
         listCity.add("..Back to state list")
         listIds.add("..Back to state list")
         lines.filterTo(listSort) { it.startsWith(provSelected.toUpperCase()) }

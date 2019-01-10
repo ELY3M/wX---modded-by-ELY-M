@@ -83,11 +83,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         ca = SettingsLocationAdapterList(locArr)
         recyclerView.recyclerView.adapter = ca
         updateTitle()
-        ca.setOnItemClickListener(object : SettingsLocationAdapterList.MyClickListener {
-            override fun onItemClick(position: Int) {
-                pickItem(position)
-            }
-        })
+        ca.setListener(::itemSelected)
     }
 
     private fun updateList() {
@@ -95,15 +91,15 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         locArr.clear()
         (0 until locNumIntCurrent).forEach {
             val locNumStr = (it + 1).toString()
-            val locXCurrent = Utility.readPref(this, "LOC" + locNumStr + "_X", "")
-            val locYCurrent = Utility.readPref(this, "LOC" + locNumStr + "_Y", "")
-            val locLabelCurrent = Utility.readPref(this, "LOC" + locNumStr + "_LABEL", "")
-            val zoneCurrent = Utility.readPref(this, "ZONE$locNumStr", "")
+            val locX = Utility.readPref(this, "LOC" + locNumStr + "_X", "")
+            val locY = Utility.readPref(this, "LOC" + locNumStr + "_Y", "")
+            val locLabel = Utility.readPref(this, "LOC" + locNumStr + "_LABEL", "")
+            val zone = Utility.readPref(this, "ZONE$locNumStr", "")
             val btnStr =
-                (it + 1).toString() + ": \"" + locLabelCurrent + "\" " + "(" + UtilityStringExternal.truncate(
-                    locXCurrent,
+                (it + 1).toString() + ": \"" + locLabel + "\" " + "(" + UtilityStringExternal.truncate(
+                    locX,
                     6
-                ) + "," + UtilityStringExternal.truncate(locYCurrent, 6) + ") " + zoneCurrent
+                ) + "," + UtilityStringExternal.truncate(locY, 6) + ") " + zone
             locArr.add(btnStr)
         }
     }
@@ -147,7 +143,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         toolbar.subtitle = actionMode.getDescription()
     }
 
-    private fun pickItem(position: Int) {
+    private fun itemSelected(position: Int) {
         when (actionMode) {
             ActionMode.SELECT -> {
                 val locStrPass = (position + 1).toString()

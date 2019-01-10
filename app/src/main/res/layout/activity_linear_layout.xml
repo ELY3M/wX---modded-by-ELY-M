@@ -18,27 +18,25 @@
 
  -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
-    <include layout="@layout/widget_toolbar_top"/>
+    android:orientation="vertical">
+
+    <include layout="@layout/widget_toolbar_top" />
+
     <ScrollView
+        android:id="@+id/sv"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:id="@+id/sv"
-        android:scrollbars="none"
-        >
+        android:scrollbars="none">
+
         <LinearLayout
             android:id="@+id/ll"
-            android:stretchColumns="*"
-            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:padding="@dimen/padding_ll"
-            >
-        </LinearLayout>
+            android:stretchColumns="*" />
     </ScrollView>
 </LinearLayout>

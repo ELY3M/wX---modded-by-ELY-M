@@ -109,11 +109,12 @@ class SpottersActivity : BaseActivity() {
         ca = AdapterSpotter(spotterlist)
         recyclerView.recyclerView.adapter = ca
         title = spotterlist.size.toString() + " spotters active " + UtilityTime.gmtTime("HH:mm")
-        ca.setOnItemClickListener(object : AdapterSpotter.MyClickListener {
+        /* ca.setOnItemClickListener(object : AdapterSpotter.MyClickListener {
             override fun onItemClick(position: Int) {
                 itemSelected(position)
             }
-        })
+        })*/
+        ca.setListener(::itemSelected)
     }
 
     private fun changeSearchViewTextColor(view: View?) {

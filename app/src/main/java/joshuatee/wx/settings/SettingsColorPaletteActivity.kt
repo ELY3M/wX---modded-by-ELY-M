@@ -103,12 +103,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
         rView.layoutManager = lLayout
         rcAdapter = TileAdapterColorPalette(rowListItem, UIPreferences.tilesPerRow)
         rView.adapter = rcAdapter
-        rcAdapter.setOnItemClickListener(object : TileAdapterColorPalette.MyClickListener {
-            override fun onItemClick(position: Int) {
-                itemClicked(position)
-            }
-        })
-        //rcAdapter.setListener(::itemClicked)
+        rcAdapter.setListener(::itemClicked)
     }
 
     private val allItemList: List<TileObjectColorPalette>

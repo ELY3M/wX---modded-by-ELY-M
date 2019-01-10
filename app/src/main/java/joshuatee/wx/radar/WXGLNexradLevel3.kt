@@ -64,9 +64,12 @@ class WXGLNexradLevel3 internal constructor() {
     var iBuff: ByteBuffer = ByteBuffer.allocate(0)
     var oBuff: ByteBuffer = ByteBuffer.allocate(0)
 
+    val productSpecific = IntArray(10)
     companion object {
-        var RadarHeight: Int = 0
-        var RadarElevation: Int = 0
+        var volumeScanPattern: Int = 0
+        var radarHeight: Int = 0
+        var radarElevation: Int = 0
+        var getproductSpecific: Int = 0
     }
 
     init {
@@ -105,21 +108,39 @@ class WXGLNexradLevel3 internal constructor() {
             val latitudeOfRadar = dis.readInt() / 1000.0
             val longitudeOfRadar = dis.readInt() / 1000.0
             val heightOfRadar = dis.readUnsignedShort().toShort()
-            RadarHeight = heightOfRadar.toInt()
+            radarHeight = heightOfRadar.toInt()
             productCode = dis.readUnsignedShort().toShort()
             val operationalMode = dis.readUnsignedShort().toShort()
-            //final short        volume_scan_pattern =  (short) dis.readUnsignedShort();
-            //final short        sequence_number     = (short) dis.readUnsignedShort();
-            //final short        volume_scan_number  = (short) dis.readUnsignedShort();
-            dis.skipBytes(6)
+            volumeScanPattern =  dis.readUnsignedShort()
+            UtilityLog.d("wx", "VCP: "+ volumeScanPattern)
+            val seqnumber = dis.readUnsignedShort()
+            val scannumber = dis.readUnsignedShort()
+            //val volscandate = dis.readUnsignedShort()
+            //val volscantime = dis.readInt()
+            //dis.skipBytes(6)
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()
+            val gendate = dis.readUnsignedShort()
+            val gentime = dis.readInt()
+            // Get first 2 product specific codes (halfwords 27 and 28)
+            for (i in 0..1) {
+                productSpecific[i] = dis.readUnsignedShort()
+                UtilityLog.d("wx", "productSpecific["+i+"]: "+productSpecific[i])
+            }
+            // Get elevation number
+            radarElevation = dis.readUnsignedShort()
+            UtilityLog.d("wx", "RadarElevation: "+ radarElevation)
+            productSpecific[2] = dis.readUnsignedShort()
+            UtilityLog.d("wx", "productSpecific[2]: "+productSpecific[2])
+            getproductSpecific = productSpecific[2]
             val d = UtilityTime.radarTime(volumeScanDate, volumeScanTime)
             val radarInfo = formatRadarString(
                 d,
                 operationalMode.toInt(),
+                volumeScanPattern,
                 productCode.toInt(),
                 heightOfRadar.toInt(),
+                radarElevation,
                 latitudeOfRadar,
                 longitudeOfRadar
             )
@@ -177,12 +198,30 @@ class WXGLNexradLevel3 internal constructor() {
             val latitudeOfRadar = dis.readInt() / 1000.0
             val longitudeOfRadar = dis.readInt() / 1000.0
             val heightOfRadar = dis.readUnsignedShort().toShort()
-            RadarHeight = heightOfRadar.toInt()
+            radarHeight = heightOfRadar.toInt()
             productCode = dis.readUnsignedShort().toShort()
             val operationalMode = dis.readUnsignedShort().toShort()
-            dis.skipBytes(6)
+            volumeScanPattern =  dis.readUnsignedShort()
+            UtilityLog.d("wx", "4-bit VCP: "+ volumeScanPattern)
+            val seqnumber = dis.readUnsignedShort()
+            val scannumber = dis.readUnsignedShort()
+            //val volscandate = dis.readUnsignedShort()
+            //val volscantime = dis.readInt()
+            //dis.skipBytes(6)
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()
+            // Get first 2 product specific codes (halfwords 27 and 28)
+            for (i in 0..1) {
+                productSpecific[i] = dis.readUnsignedShort()
+                UtilityLog.d("wx", "4-bit productSpecific["+i+"]: "+productSpecific[i])
+            }
+            // Get elevation number
+            radarElevation = dis.readUnsignedShort()
+            UtilityLog.d("wx", "4-bit RadarElevation: "+ radarElevation)
+            productSpecific[2] = dis.readUnsignedShort()
+            UtilityLog.d("wx", "productSpecific[2]: "+productSpecific[2])
+            getproductSpecific = productSpecific[2]
+
             val d = UtilityTime.radarTime(volumeScanDate, volumeScanTime)
             //final short        product_generation_date = (short) dis.readUnsignedShort();
             //final int        product_generation_time    = dis.readInt() ;
@@ -190,8 +229,10 @@ class WXGLNexradLevel3 internal constructor() {
             val radarInfo = formatRadarString(
                 d,
                 operationalMode.toInt(),
+                volumeScanPattern,
                 productCode.toInt(),
                 heightOfRadar.toInt(),
+                radarElevation,
                 latitudeOfRadar,
                 longitudeOfRadar
             )
@@ -256,16 +297,20 @@ class WXGLNexradLevel3 internal constructor() {
     private fun formatRadarString(
         d: Date,
         operationalMode: Int,
+        volumeScanPattern: Int,
         productCode: Int,
         heightOfRadar: Int,
+        radarElevation: Int,
         latitudeOfRadar: Double,
         longitudeOfRadar: Double
     ): String {
         return try {
             d.toString() + MyApplication.newline +
                     "Radar Mode: " + operationalMode + MyApplication.newline +
+                    "VCP: " + volumeScanPattern + MyApplication.newline +
                     "Product Code: " + productCode + MyApplication.newline +
                     "Radar height: " + heightOfRadar + MyApplication.newline +
+                    "Elevation Num: " + radarElevation + MyApplication.newline +
                     "Radar Lat: " + latitudeOfRadar + MyApplication.newline +
                     "Radar Lon: " + longitudeOfRadar
         } catch (e: AssertionError) {

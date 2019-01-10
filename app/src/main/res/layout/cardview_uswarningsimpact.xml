@@ -18,62 +18,58 @@
 
  -->
 
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/cv1"
-    android:layout_gravity="center"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    >
+    android:layout_gravity="center">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@id/toolbar_bottom"
-        >
+        android:orientation="vertical">
+
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-                      android:id="@+id/title"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:paddingLeft="@dimen/padding_half"
-                      android:paddingRight="@dimen/padding_half"
-                      android:textSize="@dimen/normal_text"
-                />
-
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding_half"
+                android:paddingRight="@dimen/padding_half"
+                android:textSize="@dimen/normal_text" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <TextView  xmlns:android="http://schemas.android.com/apk/res/android"
-                       android:id="@+id/cities"
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:paddingLeft="@dimen/padding_half"
-                       android:paddingRight="@dimen/padding_half"
-                />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/cities"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/padding_half"
+                android:paddingRight="@dimen/padding_half" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
             <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-                      android:id="@+id/population"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:paddingStart="@dimen/padding_half"
-                      android:paddingEnd="@dimen/padding_half"
-                />
+                android:id="@+id/population"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/padding_half"
+                android:paddingEnd="@dimen/padding_half" />
         </LinearLayout>
 
     </LinearLayout>

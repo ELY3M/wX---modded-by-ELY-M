@@ -50,14 +50,11 @@ object UtilityCanada {
     )
 
     fun getIcons7Day(html: String): String {
-        val sb = StringBuilder(500)
+        var iconList = ""
         val dayAr = html.split((MyApplication.newline + MyApplication.newline))
             .dropLastWhile { it.isEmpty() }
-        dayAr.forEach {
-            sb.append(translateIconName(it))
-            sb.append("!")
-        }
-        return sb.toString()
+        dayAr.forEach { iconList += translateIconName(it) + "!" }
+        return iconList
     }
 
     fun getIcons7DayAl(html: String): List<String> {
@@ -312,7 +309,7 @@ object UtilityCanada {
     fun get7Day(html: String): String {
         val stringList =
             html.parseColumn("<category term=\"Weather Forecasts\"/><br> <summary type=\"html\">(.*?\\.) Forecast.*?</summary>")
-        val sb2 = StringBuilder(400)
+        var sevenDayForecast = ""
         val resultListDay = html.parseColumn("<title>(.*?)</title>")
         var j = 0
         for (i in 2 until resultListDay.size) {
@@ -323,12 +320,10 @@ object UtilityCanada {
                 continue
             }
             val tmpStr = resultListDay[i].split(":")[0] + ": " + stringList[j]
-            sb2.append(tmpStr)
-            sb2.append(MyApplication.newline)
-            sb2.append(MyApplication.newline)
+            sevenDayForecast += tmpStr + MyApplication.newline + MyApplication.newline
             j += 1
         }
-        return sb2.toString()
+        return sevenDayForecast
     }
 
     fun getHazards(html: String): List<String> {

@@ -18,55 +18,51 @@
 
  -->
 
-<androidx.drawerlayout.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <include layout="@layout/widget_toolbar_bottom"/>
+        <include layout="@layout/widget_toolbar_bottom" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_above="@id/toolbar_bottom"
-            >
+            android:orientation="vertical">
 
-            <include layout="@layout/widget_toolbar_top"/>
+            <include layout="@layout/widget_toolbar_top" />
 
             <ScrollView
+                android:id="@+id/sv"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:id="@+id/sv"
-                android:scrollbars="none"
-                >
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:id="@+id/ll"
-                    android:stretchColumns="*"
-                    android:orientation="vertical"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     android:padding="5dip"
-                    >
+                    android:stretchColumns="*">
 
                 </LinearLayout>
             </ScrollView>
         </LinearLayout>
     </RelativeLayout>
 
-    <ListView android:id="@+id/left_drawer"
-              android:layout_width="360dp"
-              android:layout_height="match_parent"
-              android:layout_gravity="start"
-              android:choiceMode="singleChoice"
-              android:divider="@android:color/transparent"
-              android:dividerHeight="0dp"
-              android:background="@color/primary_dark_blue"/>
+    <ListView
+        android:id="@+id/left_drawer"
+        android:layout_width="360dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/primary_dark_blue"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp" />
 </androidx.drawerlayout.widget.DrawerLayout>

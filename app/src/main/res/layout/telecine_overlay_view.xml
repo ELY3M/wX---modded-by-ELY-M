@@ -16,75 +16,73 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="end"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
+
         <ImageButton
             android:id="@+id/record_overlay_cancel"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/ic_clear_24dp"
             android:background="@drawable/gray_background"
-            android:contentDescription="@string/clear"
             android:clickable="true"
-            />
+            android:contentDescription="@string/clear"
+            android:src="@drawable/ic_clear_24dp" />
+
         <ImageButton
             android:id="@+id/record_overlay_distancetool"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/ic_adjust_24dp"
             android:background="@drawable/gray_background"
-            android:contentDescription="@string/clear"
             android:clickable="true"
-            />
+            android:contentDescription="@string/clear"
+            android:src="@drawable/ic_adjust_24dp" />
+
         <ImageButton
             android:id="@+id/record_overlay_drawtool"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/ic_edit_24dp"
             android:background="@drawable/gray_background"
             android:contentDescription="@string/clear"
-            />
+            android:src="@drawable/ic_edit_24dp" />
+
         <ImageButton
             android:id="@+id/record_overlay_screenshot"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/ic_photo_camera_24dp"
             android:background="@drawable/gray_background"
             android:contentDescription="@string/clear"
-            />
+            android:src="@drawable/ic_photo_camera_24dp" />
+
         <ImageButton
             android:id="@+id/record_overlay_start"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/ic_videocam_24dp"
             android:background="@drawable/gray_background"
             android:contentDescription="@string/record"
-            />
+            android:src="@drawable/ic_videocam_24dp" />
     </LinearLayout>
 
     <TextView
         android:id="@+id/record_overlay_recording"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/accent_pressed"
         android:gravity="center"
         android:text="@string/record"
+        android:textAllCaps="true"
         android:textColor="#fff"
         android:textStyle="bold"
-        android:textAllCaps="true"
-        android:background="@color/accent_pressed"
-        android:visibility="invisible"
-        />
+        android:visibility="invisible" />
+
     <View
         android:id="@+id/record_overlay_stop"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible"
-        />
+        android:visibility="invisible" />
 
 
 </merge>

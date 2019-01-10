@@ -19,136 +19,139 @@
  -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:id="@+id/layout"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_margin="@dimen/padding_widget"
-              android:background="@color/bg_blue">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/padding_widget"
+    android:background="@color/bg_blue"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/layout2"
-        android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/padding_widget"
-        >
+        android:orientation="horizontal">
+
         <ImageView
             android:id="@+id/b_wx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="wX Logo"
             android:src="@drawable/wx" />
+
         <ImageView
             android:id="@+id/b_radar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_margin="3dip"
             android:contentDescription="@string/action_radar"
+            android:gravity="center"
             app:srcCompat="@drawable/ic_flash_on_24dp" />
+
         <ImageView
             android:id="@+id/b_cloud"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_margin="3dip"
             android:contentDescription="Visible Sat"
+            android:gravity="center"
             app:srcCompat="@drawable/ic_cloud_24dp" />
 
         <ImageView
             android:id="@+id/b_afd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_margin="3dip"
             android:contentDescription="Area Forecast Discussion"
+            android:gravity="center"
             app:srcCompat="@drawable/ic_info_outline_24dp" />
+
         <ImageView
             android:id="@+id/b_hourly"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_margin="3dip"
             android:contentDescription="Hourly Forecast"
+            android:gravity="center"
             app:srcCompat="@drawable/ic_place_24dp" />
+
         <ImageView
             android:id="@+id/b_alert"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_margin="3dip"
             android:contentDescription="Alerts"
+            android:gravity="center"
             app:srcCompat="@drawable/ic_warning_24dp" />
+
         <ImageView
             android:id="@+id/b_dash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_margin="3dip"
             android:contentDescription="Severe Dashboard"
+            android:gravity="center"
             app:srcCompat="@drawable/ic_report_24dp" />
     </LinearLayout>
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="2dp"
-        android:background="#c0c0c0"/>
+        android:background="#c0c0c0" />
 
     <TextView
         android:id="@+id/tab"
         style="@android:style/TextAppearance.Small"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_margin="0dip"
-        android:textColor="@color/white"
-        />
+        android:gravity="center"
+        android:textColor="@color/white" />
 
     <TextView
         android:id="@+id/cc"
         style="@android:style/TextAppearance.Medium"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_margin="2dip"
-        android:textColor="@color/white"
-        />
+        android:gravity="center"
+        android:textColor="@color/white" />
+
     <TextView
         android:id="@+id/updtime"
         style="@android:style/TextAppearance.Small"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_margin="2dip"
-        android:textColor="@color/white"
-        />
+        android:gravity="center"
+        android:textColor="@color/white" />
+
     <TextView
         android:id="@+id/hazard"
         style="@android:style/TextAppearance.Medium"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/yellow"
-        android:gravity="start"
         android:layout_margin="2dip"
-        />
+        android:gravity="start"
+        android:textColor="@color/yellow" />
+
     <TextView
         android:id="@+id/forecast"
         style="@android:style/TextAppearance.Small"
-        android:textColor="@color/white"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="start"
         android:layout_margin="2dip"
-        />
+        android:gravity="start"
+        android:textColor="@color/white" />
+
     <TextView
         android:id="@+id/widget_time"
         style="@android:style/TextAppearance.Small"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|start"
-        android:gravity="start"
         android:layout_margin="2dip"
-        />
+        android:gravity="start" />
 </LinearLayout> 

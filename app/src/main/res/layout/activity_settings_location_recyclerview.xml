@@ -18,20 +18,17 @@
 
  -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
+    android:orientation="vertical">
 
-    <include layout="@layout/widget_toolbar_top"/>
+    <include layout="@layout/widget_toolbar_top" />
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:id="@+id/main_content"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -39,66 +36,61 @@
             android:id="@+id/card_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/padding"
-            />
+            android:padding="@dimen/padding" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:elevation="@dimen/fab_elevation"
-            app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-            app:srcCompat="@drawable/ic_delete_24dp"
             android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/fab_margin_mini_2"
+            android:layout_marginBottom="@dimen/fab_margin_bottom_mini"
+            app:elevation="@dimen/fab_elevation"
+            app:fabSize="mini"
             app:layout_anchor="@id/card_list"
             app:layout_anchorGravity="bottom|right"
-            android:layout_marginBottom="@dimen/fab_margin_bottom_mini"
-            android:layout_marginEnd="@dimen/fab_margin_mini_2"
-            app:fabSize="mini"
-            />
+            app:pressedTranslationZ="@dimen/fab_elevation_pressed"
+            app:srcCompat="@drawable/ic_delete_24dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:elevation="@dimen/fab_elevation"
-            app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-            app:srcCompat="@drawable/ic_add_box_24dp"
             android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:elevation="@dimen/fab_elevation"
             app:layout_anchor="@id/card_list"
             app:layout_anchorGravity="bottom|right"
-            android:layout_margin="@dimen/fab_margin"
-            />
+            app:pressedTranslationZ="@dimen/fab_elevation_pressed"
+            app:srcCompat="@drawable/ic_add_box_24dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabUP"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:elevation="@dimen/fab_elevation"
-            app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-            app:srcCompat="@drawable/ic_keyboard_arrow_up_24dp"
             android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/fab_margin_right_mini"
+            android:layout_marginBottom="@dimen/fab_margin_mini_1"
+            app:elevation="@dimen/fab_elevation"
+            app:fabSize="mini"
             app:layout_anchor="@id/card_list"
             app:layout_anchorGravity="bottom|right"
-            android:layout_marginBottom="@dimen/fab_margin_mini_1"
-            android:layout_marginEnd="@dimen/fab_margin_right_mini"
-            app:fabSize="mini"
-            />
+            app:pressedTranslationZ="@dimen/fab_elevation_pressed"
+            app:srcCompat="@drawable/ic_keyboard_arrow_up_24dp" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabDOWN"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:elevation="@dimen/fab_elevation"
-            app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-            app:srcCompat="@drawable/ic_keyboard_arrow_down_24dp"
             android:layout_gravity="bottom|end"
+            android:layout_marginEnd="@dimen/fab_margin_right_mini"
+            android:layout_marginBottom="@dimen/fab_margin_mini_2"
+            app:elevation="@dimen/fab_elevation"
+            app:fabSize="mini"
             app:layout_anchor="@id/card_list"
             app:layout_anchorGravity="bottom|right"
-            android:layout_marginBottom="@dimen/fab_margin_mini_2"
-            android:layout_marginEnd="@dimen/fab_margin_right_mini"
-            app:fabSize="mini"
-            />
+            app:pressedTranslationZ="@dimen/fab_elevation_pressed"
+            app:srcCompat="@drawable/ic_keyboard_arrow_down_24dp" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </LinearLayout>

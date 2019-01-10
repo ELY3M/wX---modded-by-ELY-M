@@ -25,10 +25,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
+import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
@@ -39,22 +39,23 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.wpc.WPCTextProductsActivity
 import kotlinx.coroutines.*
 
-class SPCFireOutlookActivity : BaseActivity() {
+class SPCFireOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val bitmaps = mutableListOf<Bitmap>()
     private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.shared_multigraphics, menu)
-        return true
-    }
-
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_linear_layout_bottom_toolbar,
+            R.menu.shared_multigraphics,
+            true
+        )
         contextg = this
+        toolbarBottom.setOnMenuItemClickListener(this)
         linearLayout = findViewById(R.id.ll)
         title = "SPC"
         toolbar.subtitle = "Fire Weather Outlook"
@@ -77,7 +78,7 @@ class SPCFireOutlookActivity : BaseActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> UtilityShare.shareText(
                 this,

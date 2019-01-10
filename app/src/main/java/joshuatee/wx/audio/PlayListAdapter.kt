@@ -35,8 +35,12 @@ internal class PlayListAdapter(private val mDataset: MutableList<String>) :
         }
     }
 
-    fun setOnItemClickListener(myClickListenerloc: MyClickListener) {
-        myClickListener = myClickListenerloc
+    fun setListener(fn: (Int) -> Unit) {
+        myClickListener = object : PlayListAdapter.MyClickListener {
+            override fun onItemClick(position: Int) {
+                fn(position)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {

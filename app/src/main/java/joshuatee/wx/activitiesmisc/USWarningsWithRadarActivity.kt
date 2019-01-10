@@ -25,16 +25,15 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.Menu
 import android.view.View
 import android.widget.AdapterView
 import android.widget.LinearLayout
 import android.widget.ScrollView
-import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import java.util.Locale
 import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.ContextMenu.ContextMenuInfo
+import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
@@ -52,7 +51,7 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.vis.USNWSGOESActivity
 import kotlinx.coroutines.*
 
-class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
+class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     // US weather alert interface
     //
@@ -77,16 +76,16 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
     private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.uswarn, menu)
-        return true
-    }
-
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_uswarnings_with_radar, null, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_uswarnings_with_radar,
+            R.menu.uswarn,
+            true
+        )
         contextg = this
+        toolbarBottom.setOnMenuItemClickListener(this)
         toolbar.setOnClickListener { toolbar.showOverflowMenu() }
         val actvityArguments = intent.getStringArrayExtra(URL)
         turlLocal[0] = actvityArguments[0]
@@ -108,6 +107,7 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
             }
             getContent()
         }
+        toolbarBottom.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
         getContent()
     }
 
@@ -177,11 +177,6 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
         UtilityUI.makeSnackBar(linearLayout, toastStr)
     }
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
-        return super.onOptionsItemSelected(item)
-    }
-
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
             bitmap = "http://forecast.weather.gov/wwamap/png/US.png".getImage()
@@ -213,8 +208,13 @@ class USWarningsWithRadarActivity : BaseActivity(), OnMenuItemClickListener {
         drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+    override fun onOptionsItemSelected(item: MenuItem): Boolean =
+        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+
+    override fun onMenuItemClick(item: MenuItem): Boolean {
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_warnmap -> ObjectIntent(
                 contextg,

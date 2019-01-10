@@ -18,24 +18,21 @@
 
  -->
 
-<androidx.appcompat.widget.Toolbar
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar_top"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="?attr/actionBarSize"
     android:background="?attr/colorPrimary"
-    app:popupTheme="@style/MyDarkToolbarStyle"
-    >
+    android:minHeight="?attr/actionBarSize"
+    app:popupTheme="@style/MyDarkToolbarStyle">
 
     <Spinner
         android:id="@+id/spinner1"
-        android:layout_weight="1"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:background="@android:color/transparent"
-        />
+        android:layout_weight="1"
+        android:background="@android:color/transparent" />
 
 </androidx.appcompat.widget.Toolbar>

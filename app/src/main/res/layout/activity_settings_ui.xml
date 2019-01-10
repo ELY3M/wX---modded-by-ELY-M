@@ -18,139 +18,139 @@
 
  -->
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    >
+    android:orientation="vertical">
 
-    <include layout="@layout/widget_toolbar_top"/>
+    <include layout="@layout/widget_toolbar_top" />
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:scrollbars="none"
-        >
+        android:scrollbars="none">
 
         <LinearLayout
             android:id="@+id/ll"
-            android:stretchColumns="*"
-            android:orientation="vertical"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:padding="@dimen/padding_ll"
-            >
+            android:stretchColumns="*">
+
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_tab_labels"
-                android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                >
+                android:layout_gravity="center">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        android:weightSum="1.0" >
+                        android:weightSum="1.0">
+
                         <TextView
-                            android:text="Tab 1"
-                            android:textSize="@dimen/normal_text"
                             android:id="@+id/tab1_et_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:gravity="start"
-                            android:padding="@dimen/padding"
                             android:labelFor="@+id/tab1_et"
-                            />
+                            android:padding="@dimen/padding"
+                            android:text="Tab 1"
+                            android:textSize="@dimen/normal_text" />
+
                         <EditText
                             android:id="@+id/tab1_et"
-                            android:layout_weight="0.5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:inputType="text"
+                            android:layout_weight="0.5"
                             android:hint="LOCAL"
-                            />
+                            android:inputType="text" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        android:weightSum="1.0" >
+                        android:weightSum="1.0">
+
                         <TextView
-                            android:text="Tab 2"
-                            android:textSize="@dimen/normal_text"
                             android:id="@+id/tab2_et_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:gravity="start"
-                            android:padding="@dimen/padding"
                             android:labelFor="@+id/tab2_et"
-                            />
+                            android:padding="@dimen/padding"
+                            android:text="Tab 2"
+                            android:textSize="@dimen/normal_text" />
+
                         <EditText
                             android:id="@+id/tab2_et"
-                            android:layout_weight="0.5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:inputType="text"
+                            android:layout_weight="0.5"
                             android:hint="SPC"
-                            />
+                            android:inputType="text" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        android:weightSum="1.0" >
+                        android:weightSum="1.0">
+
                         <TextView
-                            android:text="Tab 3"
-                            android:textSize="@dimen/normal_text"
                             android:id="@+id/tab3_et_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:gravity="start"
-                            android:padding="@dimen/padding"
                             android:labelFor="@+id/tab3_et"
-                            />
+                            android:padding="@dimen/padding"
+                            android:text="Tab 3"
+                            android:textSize="@dimen/normal_text" />
+
                         <EditText
                             android:id="@+id/tab3_et"
-                            android:layout_weight="0.5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:inputType="text"
+                            android:layout_weight="0.5"
                             android:hint="MISC"
-                            />
+                            android:inputType="text" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        android:weightSum="1.0" >
+                        android:weightSum="1.0">
+
                         <TextView
-                            android:text="Tab 4"
-                            android:textSize="@dimen/normal_text"
                             android:id="@+id/tab4_et_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:gravity="start"
-                            android:padding="@dimen/padding"
                             android:labelFor="@+id/tab4_et"
-                            />
+                            android:padding="@dimen/padding"
+                            android:text="Tab 4"
+                            android:textSize="@dimen/normal_text" />
+
                         <EditText
                             android:id="@+id/tab4_et"
-                            android:layout_weight="0.5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:inputType="text"
+                            android:layout_weight="0.5"
                             android:hint="IMAGES"
-                            />
+                            android:inputType="text" />
                     </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

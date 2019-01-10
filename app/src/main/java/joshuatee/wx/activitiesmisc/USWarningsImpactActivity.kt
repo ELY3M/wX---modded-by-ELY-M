@@ -58,6 +58,7 @@ class USWarningsImpactActivity : BaseActivity() {
         recyclerView.recyclerView.adapter = ca
         title = warningsList.size.toString() + " NWS warnings active " +
                 UtilityTime.gmtTime("HH:mm")
+        // FIXME
         ca.setOnItemClickListener(object : AdapterUSWarningsImpact.MyClickListener {
             override fun onItemClick(position: Int) {
                 showImage(position)

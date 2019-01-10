@@ -46,7 +46,6 @@ internal object UtilityWatch {
             PolygonType.WATCH_SVR -> prefToken = MyApplication.watchLatlonSvr.valueGet()
             PolygonType.WATCH_TOR -> prefToken = MyApplication.watchLatlonTor.valueGet()
             PolygonType.MPD -> prefToken = MyApplication.mpdLatlon.valueGet()
-            PolygonType.SPS -> prefToken = MyApplication.SPSLatlon.valueGet()
             else -> {
             }
         }
