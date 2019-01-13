@@ -19,7 +19,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.shredzone.commons.suncalc.param.LocationParameter;
 import org.shredzone.commons.suncalc.param.TimeParameter;
@@ -33,7 +32,7 @@ import org.shredzone.commons.suncalc.param.TimeResultParameter;
  * @param <T>
  *            Type of the final builder
  */
-@ParametersAreNonnullByDefault
+
 @SuppressWarnings("unchecked")
 public class BaseBuilder<T> implements LocationParameter<T>, TimeParameter<T>, TimeResultParameter<T> {
 
