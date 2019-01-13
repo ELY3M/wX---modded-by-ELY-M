@@ -18,8 +18,9 @@ import static org.shredzone.commons.suncalc.util.ExtendedMath.*;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Objects;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+import javax.annotation.concurrent.Immutable;
 
 import org.shredzone.commons.suncalc.param.TimeResultParameter.Unit;
 
@@ -28,7 +29,8 @@ import org.shredzone.commons.suncalc.param.TimeResultParameter.Unit;
  * <p>
  * Objects are immutable and threadsafe.
  */
-
+@ParametersAreNonnullByDefault
+@Immutable
 public class JulianDate {
 
     private final Calendar cal;
@@ -104,7 +106,9 @@ public class JulianDate {
      * @since 2.3
      */
     public Date getDateTruncated(Unit unit) {
-        Objects.requireNonNull(unit);
+        if (unit == null) {
+            throw new NullPointerException();
+        }
 
         Calendar clone = getCalendar();
         clone.set(Calendar.MILLISECOND, 0);
