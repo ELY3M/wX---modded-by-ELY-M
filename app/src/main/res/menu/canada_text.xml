@@ -20,7 +20,6 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:id="@+id/action_read_aloud"
         android:icon="@drawable/ic_play_arrow_24dp"

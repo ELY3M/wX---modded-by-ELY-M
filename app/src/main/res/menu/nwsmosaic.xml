@@ -20,37 +20,30 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:id="@+id/action_test"
         android:icon="@drawable/ic_play_arrow_24dp"
         android:title="@string/label_animate"
         app:showAsAction="always">
         <menu>
-
-
             <item
                 android:id="@+id/action_a6"
                 android:title="@string/label_a6"
                 app:showAsAction="never" />
-
             <item
                 android:id="@+id/action_a12"
                 android:title="@string/label_a12"
                 app:showAsAction="never" />
-
             <item
                 android:id="@+id/action_a18"
                 android:title="@string/label_a18"
                 app:showAsAction="never" />
-
             <item
                 android:id="@+id/action_stop"
                 android:title="@string/menu_stopanimation"
                 app:showAsAction="never" />
         </menu>
     </item>
-
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
@@ -61,6 +54,5 @@
         android:icon="@drawable/ic_touch_app_24dp"
         android:title="@string/label_pin"
         app:showAsAction="always" />
-
 </menu>
 

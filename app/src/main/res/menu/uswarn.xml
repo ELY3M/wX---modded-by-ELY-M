@@ -20,25 +20,20 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:id="@+id/action_warnmap"
         android:title="CONUS warning map"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_warnmapAK"
         android:title="AK warning map"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_warnmapHI"
         android:title="HI warning map"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_impact_graphics"
         android:title="Impact Graphics (NWS Experimental)"
         app:showAsAction="never" />
-
 </menu>

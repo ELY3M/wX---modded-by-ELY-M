@@ -20,13 +20,11 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:id="@+id/action_fav"
         android:icon="@drawable/ic_star_outline_24dp"
         android:title="@string/label_toggle_favorite"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/action_back"
         android:icon="@drawable/ic_keyboard_arrow_left_24dp"
@@ -37,7 +35,6 @@
         android:icon="@drawable/ic_keyboard_arrow_right_24dp"
         android:title="@string/forward_arrow"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/action_img1"
         android:title="@string/label_sel_img1"
@@ -46,28 +43,23 @@
         android:id="@+id/action_img2"
         android:title="@string/label_sel_img2"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_animate"
         android:icon="@drawable/ic_play_arrow_24dp"
         android:title="@string/animate_icon"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_help"
         android:title="@string/help_menu_item"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_share"
         android:title="@string/label_share"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_multipane"
         android:title="@string/label_multi_pane"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_status"
         android:title=""
@@ -80,7 +72,6 @@
         android:id="@+id/action_status_param2"
         android:title=""
         app:showAsAction="never" />
-
 </menu>
 
 

@@ -20,20 +20,16 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:id="@+id/action_ridmap"
         android:icon="@drawable/ic_public_24dp"
         android:title="@string/label_rid_map"
         app:showAsAction="always" />
-
-
     <item
         android:id="@+id/action_local"
         android:icon="@drawable/ic_flash_on_24dp"
         android:title="@string/label_br"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/action_vis"
         android:icon="@drawable/ic_cloud_24dp"
@@ -58,36 +54,29 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-
     <item
         android:id="@+id/action_animate"
         android:icon="@drawable/ic_play_arrow_24dp"
         android:title="Animate - Short (1hr)"
         app:showAsAction="always" />
-
-
     <item
         android:id="@+id/action_fav"
         android:icon="@drawable/ic_star_outline_24dp"
         android:title="@string/label_toggle_favorite"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_animate_long"
         android:title="Animate - Long (3hr)"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_animate_stop"
         android:title="@string/menu_stopanimation"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_mosaics"
         android:title="@string/menu_mosaics"
@@ -119,5 +108,4 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-
 </menu>

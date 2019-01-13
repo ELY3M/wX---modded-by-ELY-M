@@ -20,43 +20,35 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/action_clear"
         android:title="@string/label_clear_all"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_reset"
         android:title="@string/label_reset"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_load"
         android:title="Load from file"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_website"
         android:title="AlmanyDesigns Website with color palettes"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_website2"
         android:title="usawx.com Website with color palettes"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_help"
         android:title="@string/help_menu_item"
         app:showAsAction="never" />
-
 </menu>
 
 

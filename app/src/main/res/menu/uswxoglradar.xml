@@ -21,19 +21,16 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:id="@+id/action_ridmap"
         android:icon="@drawable/ic_public_24dp"
         android:title="@string/label_rid_map"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/action_n0q"
         android:icon="@drawable/br"
         android:title="@string/label_br"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/action_n0u"
         android:icon="@drawable/bv"
@@ -50,13 +47,11 @@
         android:icon="@drawable/ic_play_arrow_24dp"
         android:title="@string/label_a"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/action_fav"
         android:icon="@drawable/ic_star_outline_24dp"
         android:title="@string/label_toggle_favorite"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
@@ -66,7 +61,6 @@
         android:id="@+id/action_jellybean_drawtools"
         android:title="@string/label_radar_jellybean_drawtools"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_l3"
         android:title="@string/label_other"
@@ -122,7 +116,6 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-
     <item
         android:id="@+id/action_l2"
         android:title="@string/label_l2"
@@ -142,7 +135,6 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-
     <item
         android:id="@+id/action_animate"
         android:title="@string/label_animate"
@@ -182,7 +174,6 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-
     <item
         android:id="@+id/action_tilt"
         android:title="@string/label_change_tilt"
@@ -210,18 +201,15 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-
     <item
         android:id="@+id/action_TDWR"
         android:title="@string/label_tdwr_sites"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_tools"
         android:title="@string/menu_tools"
         app:showAsAction="never">
         <menu>
-
             <item
                 android:id="@+id/action_legend"
                 android:title="Show/Hide Legend"
@@ -254,15 +242,12 @@
                 android:id="@+id/action_tools_blank"
                 android:title="@string/label_blank"
                 app:showAsAction="never" />
-
         </menu>
     </item>
-
     <item
         android:id="@+id/action_blank"
         android:title="@string/label_blank"
         app:showAsAction="never" />
-
 </menu>
 
 

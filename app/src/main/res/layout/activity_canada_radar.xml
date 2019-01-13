@@ -50,7 +50,6 @@
                 android:layout_gravity="center"
                 android:scaleType="fitCenter" />
 
-
             <joshuatee.wx.util.ImageMap
                 android:id="@+id/map"
                 android:layout_width="match_parent"

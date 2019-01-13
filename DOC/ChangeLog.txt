@@ -14,6 +14,7 @@
 // TODO add Ely's MCD/MPD/WAT radar long press code
 // TODO NWS HTTPS migration https://www.nco.ncep.noaa.gov/pmb/changes/URL_http_https.shtml
 
+55101 2019_01_10 xml menu cleanup
 55100 2019_01_09 xml layout reformat
 55099 2019_01_09 misc code cleanup and bugfix
 55098 2019_01_08 add bottom toolbar to uswarn/spc compmap/hourly/lightning

@@ -20,7 +20,6 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:id="@+id/action_back"
         android:icon="@drawable/ic_keyboard_arrow_left_24dp"
@@ -48,17 +47,10 @@
         android:id="@+id/action_share"
         android:title="@string/label_share"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_multipane"
         android:title="@string/label_multi_pane"
         app:showAsAction="never" />
-
-    <!--   <item
-           android:id="@+id/action_clear_params"
-           android:title="@string/label_clear_all"
-           app:showAsAction="never"  />-->
-
     <item
         android:id="@+id/action_layers"
         android:title="@string/label_layers"

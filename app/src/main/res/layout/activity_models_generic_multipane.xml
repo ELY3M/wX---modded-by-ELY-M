@@ -98,7 +98,6 @@
                 android:orientation="vertical"
                 android:stretchColumns="*">
 
-
                 <joshuatee.wx.ui.TouchImageView2
                     android:id="@+id/iv1"
                     android:layout_width="0px"
@@ -106,7 +105,6 @@
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
                     android:gravity="center_horizontal" />
-
 
                 <joshuatee.wx.ui.TouchImageView2
                     android:id="@+id/iv2"

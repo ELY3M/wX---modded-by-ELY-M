@@ -20,71 +20,55 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:id="@+id/action_read_aloud"
         android:icon="@drawable/ic_play_arrow_24dp"
         android:title="@string/read_aloud"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/action_stop"
         android:icon="@drawable/ic_stop_24dp"
         android:title="@string/stop_audio"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/action_playlist"
         android:icon="@drawable/ic_queue_24dp"
         android:title="@string/label_playlist"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/action_test"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
         app:showAsAction="always">
         <menu>
-
-
             <item
                 android:id="@+id/action_share_all"
                 android:title="@string/label_all"
                 app:showAsAction="never" />
-
             <item
                 android:id="@+id/action_share_text"
                 android:title="@string/label_text"
                 app:showAsAction="never" />
-
             <item
                 android:id="@+id/action_share_tornado"
                 android:title="Tornado"
                 app:showAsAction="never" />
-
-
             <item
                 android:id="@+id/action_share_hail"
                 android:title="Hail"
                 app:showAsAction="never" />
-
-
             <item
                 android:id="@+id/action_share_wind"
                 android:title="Wind"
                 app:showAsAction="never" />
-
             <item
                 android:id="@+id/action_share_categorical"
                 android:title="Categorical"
                 app:showAsAction="never" />
-
             <item
                 android:id="@+id/action_share_probabilistic"
                 android:title="Probabilistic"
                 app:showAsAction="never" />
-
-
             <item
                 android:id="@+id/action_share_d4"
                 android:title="Day 4 Image"
@@ -105,18 +89,12 @@
                 android:id="@+id/action_share_d8"
                 android:title="Day 8 Image"
                 app:showAsAction="never" />
-
-
         </menu>
     </item>
-
-
     <item
         android:id="@+id/action_state_graphics"
         android:title="State graphics"
         app:showAsAction="never" />
-
-
 </menu>
 
 

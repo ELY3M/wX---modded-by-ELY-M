@@ -20,23 +20,19 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:id="@+id/action_load"
         android:title="Load"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/action_apply"
         android:title="Apply"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
         app:showAsAction="always" />
-
 </menu>
 
 

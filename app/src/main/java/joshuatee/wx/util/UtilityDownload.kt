@@ -267,9 +267,7 @@ object UtilityDownload {
         } else if (prod == "VFDLOC") {
             text = getTextProduct(context, "vfd" + Location.wfo.toLowerCase(Locale.US))
         } else if (prod == "SUNMOON") {
-            text = UtilitySunMoon.getExtendedData(Location.locationIndex)
-            val (_, B) = UtilitySunMoon.parseData(text)
-            text = B
+            text = UtilitySunMoon.getData(Location.locationIndex)
         } else if (prod == "HOURLY") {
             val textArr = UtilityUSHourly.getString(Location.currentLocation)
             text = textArr[0]

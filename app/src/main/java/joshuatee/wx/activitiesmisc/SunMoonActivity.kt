@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
 
 package joshuatee.wx.activitiesmisc
 
@@ -56,22 +57,24 @@ class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
         menu.findItem(R.id.action_playlist).isVisible = false
         val linearLayout: LinearLayout = findViewById(R.id.ll)
         card0 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        getContent()
+        //getContent()
+        contentFull = UtilitySunMoon.getData(Location.locationIndex)
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
-            content = UtilitySunMoon.getExtendedData(Location.locationIndex)
-            contentFull = UtilitySunMoon.getFullDates()
+            //content = UtilitySunMoon.getExtendedData(Location.locationIndex)
+            contentFull = UtilitySunMoon.getData(Location.locationIndex)
         }
-        val (A, B) = UtilitySunMoon.parseData(content)
-        dataA = A
-        dataB = B
+        //val (A, B) = UtilitySunMoon.parseData(content)
+        //dataA = A
+        //dataB = B
         title = dataA
         toolbar.subtitle = Location.name
-        card0.setText(dataB + MyApplication.newline + MyApplication.newline + contentFull)
+        card0.setText(contentFull)
     }
 
+    //FIXME matchup texts.
     override fun onMenuItemClick(item: MenuItem): Boolean {
         if (audioPlayMenu(item.itemId, dataB, "sunmoon", "sunmoon")) return true
         when (item.itemId) {

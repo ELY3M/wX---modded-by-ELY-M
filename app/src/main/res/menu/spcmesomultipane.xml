@@ -20,7 +20,6 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:id="@+id/action_sfc"
         android:title="@string/label_short_sfc"
@@ -52,7 +51,6 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-
     <item
         android:id="@+id/action_ua"
         android:title="@string/label_short_ua"
@@ -88,7 +86,6 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-
     <item
         android:id="@+id/action_cape"
         android:title="@string/label_short_cpe"
@@ -120,7 +117,6 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-
     <item
         android:id="@+id/action_comp"
         android:title="@string/label_short_cmp"
@@ -140,7 +136,6 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-
     <item
         android:id="@+id/action_shr"
         android:title="@string/label_short_shr"
@@ -164,13 +159,11 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-
     <item
         android:id="@+id/action_fav"
         android:icon="@drawable/ic_star_outline_24dp"
         android:title="@string/label_toggle_favorite"
         app:showAsAction="always" />
-
     <item
         android:id="@+id/action_img1"
         android:title="@string/label_sel_img1"
@@ -179,7 +172,6 @@
         android:id="@+id/action_img2"
         android:title="@string/label_sel_img2"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_layers"
         android:title="Layers"
@@ -203,7 +195,6 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-
     <item
         android:id="@+id/action_regions"
         android:title="@string/menu_regions"
@@ -251,15 +242,12 @@
                 app:showAsAction="never" />
         </menu>
     </item>
-
     <item
         android:id="@+id/action_multipane"
         android:title="@string/label_multi_pane"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_help"
         android:title="@string/help_menu_item"
         app:showAsAction="never" />
-
 </menu>

@@ -99,7 +99,6 @@
                 android:padding="0dip"
                 android:stretchColumns="*">
 
-
                 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/main_content"
@@ -142,7 +141,6 @@
                         app:srcCompat="@drawable/ic_keyboard_arrow_left_24dp" />
 
                 </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 
             </TableLayout>
         </LinearLayout>

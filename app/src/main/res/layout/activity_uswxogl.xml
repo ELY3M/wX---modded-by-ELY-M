@@ -34,9 +34,7 @@
             android:layout_height="fill_parent"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="50dip"
-            android:orientation="vertical">
-
-        </LinearLayout>
+            android:orientation="vertical" />
 
         <TableLayout
             android:layout_width="match_parent"

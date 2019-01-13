@@ -54,7 +54,6 @@
         android:id="@+id/action_radar_mosaic"
         android:title="@string/label_radar_mosaic"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_alert"
         android:title="@string/action_alert"
@@ -84,7 +83,6 @@
         android:orderInCategory="99"
         android:title="@string/action_settings"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_help"
         android:orderInCategory="99"
