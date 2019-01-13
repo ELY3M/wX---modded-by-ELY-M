@@ -79,6 +79,7 @@ dependencies {
     implementation 'com.intentfilter:android-permissions:0.1.7'
     implementation 'com.beust:klaxon:5.0.1'
     implementation 'com.jayway.jsonpath:json-path:2.4.0'
+    implementation 'org.shredzone.commons:commons-suncalc:2.4'
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"
