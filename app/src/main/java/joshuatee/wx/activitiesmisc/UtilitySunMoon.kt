@@ -23,9 +23,8 @@
 package joshuatee.wx.activitiesmisc
 
 import joshuatee.wx.MyApplication
+import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.settings.Location
-import joshuatee.wx.util.*
-import joshuatee.wx.Extensions.*
 
 import org.shredzone.commons.suncalc.MoonTimes
 import org.shredzone.commons.suncalc.SunTimes
@@ -73,23 +72,19 @@ object UtilitySunMoon {
         val civil = SunTimes.compute().twilight(SunTimes.Twilight.CIVIL).on(now).at(x, y).execute()
 
 
-
         //moon rise/set
 
         val moontimes: MoonTimes = MoonTimes.compute()
                 .on(now)       // set a date
-                .at(x,y)   // set a location
+                .at(x, y)   // set a location
                 .execute();     // get the results
-
-        val moonrise = moontimes.rise
-        val moonset = moontimes.set
 
         //The phase angle is the angle sun-moon-earth,
         //0 = full phase, 180 = new.
 
         val illumination = MoonIllumination.compute().on(now).timezone(TimeZone.getDefault()).execute()
         val phase = illumination.phase
-        val moonfraction = illumination.fraction
+        val moonFracillum = illumination.fraction * 100
         val moonangle = illumination.angle
         val normalized = phase + 180.0
         val moonage = 29.0 * (normalized / 360.0) + 1.0
@@ -99,32 +94,31 @@ object UtilitySunMoon {
         val test = moonphase.time
 
 
-        val header = "Sun/Moon Data"+MyApplication.newline
-        var content = "Astronomical Rise: " +astronomical.rise+MyApplication.newline
-        content += "Nautical Rise: " +nautical.rise+MyApplication.newline
-        content += "Civil Rise: " +civil.rise+MyApplication.newline
-        content += "SunRise: " +suntimes.rise+MyApplication.newline
-        content += "Sun Upper Transit: " +suntimes.noon+MyApplication.newline
-        content += "SunSet: " +suntimes.set+MyApplication.newline
-        content += "Civil Set: " +civil.set+MyApplication.newline
-        content += "Nautical Set: " +nautical.set+MyApplication.newline
-        content += "Astronomical Set: " +astronomical.set+MyApplication.newline
+        val header = "Sun/Moon Data" + MyApplication.newline
+        var content = "Astronomical Rise: " + astronomical.rise + MyApplication.newline
+        content += "Nautical Rise: " + nautical.rise + MyApplication.newline
+        content += "Civil Rise: " + civil.rise + MyApplication.newline
+        content += "SunRise: " + suntimes.rise + MyApplication.newline
+        content += "Sun Upper Transit: " + suntimes.noon + MyApplication.newline
+        content += "SunSet: " + suntimes.set + MyApplication.newline
+        content += "Civil Set: " + civil.set + MyApplication.newline
+        content += "Nautical Set: " + nautical.set + MyApplication.newline
+        content += "Astronomical Set: " + astronomical.set + MyApplication.newline
 
-        content += "MoonRise: " +moontimes.rise+MyApplication.newline
+        content += "MoonRise: " + moontimes.rise + MyApplication.newline
         //FIXME find out if can get moon upper transit
-        content += "MoonSet: " +moontimes.set+MyApplication.newline
+        content += "MoonSet: " + moontimes.set + MyApplication.newline
 
-        content += "Moon Age: " +moonage+MyApplication.newline
-        //FIXME fixup moons fraction
-        content += "Moon Fraction: " +illumination.fraction+MyApplication.newline
+        content += "Moon Age: " + UtilityStringExternal.truncate(moonage.toString(), 5) + MyApplication.newline
+        content += "Moon Illumination: " + UtilityStringExternal.truncate(moonFracillum.toString(),5) + "%" + MyApplication.newline
 
         //get current moon phase
         val getCurrentPhase = getPhase(moonage)
-        content += getCurrentPhase+" is the current phase"+MyApplication.newline
+        content += getCurrentPhase + " is the current phase" + MyApplication.newline
 
 
 
-       return content
+        return content
 
     }
 
@@ -147,9 +141,6 @@ object UtilitySunMoon {
         } else "Unknown"
 
     }
-
-
-
 
 
     private fun getPhaseTest(age: Double): String {
@@ -188,28 +179,4 @@ object UtilitySunMoon {
     }
 
 
-
-
-
-
-
-    fun getFullDates(): String {
-        val url =
-            "https://api.usno.navy.mil/moon/phase?date=" + UtilityTime.month().toString() + "/" + UtilityTime.day().toString() + "/" + UtilityTime.year().toString() + "&nump=99"
-        val text = url.getHtmlUnsafe()
-        var fullText = ""
-        val phaseArr = text.parseColumn("\"phase\":\"(.*?)\"")
-        val dateArr = text.parseColumn("\"date\":\"(.*?)\"")
-        val timeArr = text.parseColumn("\"time\":\"(.*?)\"")
-        var idx = 0
-        phaseArr.forEach { _ ->
-            fullText += if (phaseArr[idx].contains("Full Moon")) {
-                dateArr[idx] + " " + timeArr[idx] + " " + phaseArr[idx] + "  <-----" + MyApplication.newline
-            } else {
-                dateArr[idx] + " " + timeArr[idx] + " " + phaseArr[idx] + MyApplication.newline
-            }
-            idx += 1
-        }
-        return fullText
-    }
 }
