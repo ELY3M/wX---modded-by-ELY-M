@@ -41,6 +41,7 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 #
 ## DONE!
 ====================================  
+Sun/Moon data are calculated from SunCalc library now - No More loading/parsing from website with broken SSL.   
 Special Weather Statements Polygons are working!  I had to create a list for SPS same way as how spotters are done in wX.  you should see matching texts for sps polygons now.      
 added hail icons and text for showing hail sizes on radar, still testing  
 added backup urls in getRadarStatus function.  
