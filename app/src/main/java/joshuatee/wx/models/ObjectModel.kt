@@ -70,16 +70,16 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
 
     lateinit var miStatusParam1: MenuItem
     lateinit var miStatusParam2: MenuItem
-    lateinit var fab1: ObjectFab
-    lateinit var fab2: ObjectFab
+    var fab1: ObjectFab? = null
+    var fab2: ObjectFab? = null
     lateinit var toolbar: Toolbar
     lateinit var spRun: ObjectSpinner
     lateinit var spSector: ObjectSpinner
 
     fun setUIElements(
         toolbar: Toolbar,
-        fab1: ObjectFab,
-        fab2: ObjectFab,
+        fab1: ObjectFab?,
+        fab2: ObjectFab?,
         miStatusParam1: MenuItem,
         miStatusParam2: MenuItem,
         spRun: ObjectSpinner,

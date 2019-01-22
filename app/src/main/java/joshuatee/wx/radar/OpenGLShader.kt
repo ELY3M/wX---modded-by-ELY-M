@@ -69,27 +69,28 @@ internal object OpenGLShader {
                     "}"
 
 
+/*
 
 
+    val vs_conus = "uniform mat4 uMVPMatrix;" +
+         "attribute vec4 vPosition;" +
+         "attribute vec2 a_texCoords;" +
+         "varying vec2 v_texCoords;" +
+         "void main() {" +
+         "  gl_Position = uMVPMatrix * vPosition;" +
+         "  v_texCoords = a_texCoords;" +
+         "}"
 
-    val vs_loadconus = "uniform    mat4        uMVPMatrix;" +
-            "attribute  vec4 vPosition;" +
-            "attribute  vec2 a_texCoords;" +
-            "varying vec2 v_texCoords;" +
-            "void main() {" +
-            "gl_Position = uMVPMatrix * vPosition;" +
-            "v_texCoords = a_texCoords;" +
-            "}"
-
-    val fs_loadconus = "precision mediump float;" +
-            "varying vec2 v_texCoords;" +
-            "uniform sampler2D u_texture;" +
-            "void main() {" +
-            "vec2 f_texCoords = vec2(v_texCoords.x, 1.0 - v_texCoords.y);" +
-            "  gl_FragColor = texture2D(u_texture, f_texCoords);" +
-            "}"
+    val fs_conus = (
+        "precision mediump float;" +
+        "varying vec2 v_texCoords;" +
+        "uniform sampler2D u_texture;" +
+        "void main() {" +
+        "  gl_FragColor = texture2D(u_texture, v_texCoords);" +
+        "}")
 
 
+ */
 
     val vs_conus = "uniform mat4 uMVPMatrix;" +
          "attribute vec4 vPosition;" +
@@ -121,6 +122,31 @@ internal object OpenGLShader {
 
         // return the shader
         return shader
+    }
+
+
+    fun LoadImage(imagefile: String) {
+        val texturenames = IntArray(1)
+        GLES20.glGenTextures(1, texturenames, 0)
+        val options = BitmapFactory.Options()
+        options.inScaled = false
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888
+        val bmp = BitmapFactory.decodeFile(imagefile, options)
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, texturenames[0])
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_NEAREST)
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_NEAREST)
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE.toFloat())
+        GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE.toFloat())
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0)
+        UtilityLog.d("wx", "Loaded texture" + ":H:" + bmp.height + ":W:" + bmp.width)
+
+        try {
+            bmp.recycle()
+        } catch (e: NullPointerException) {
+            UtilityLog.HandleException(e)
+        }
+
     }
 
 

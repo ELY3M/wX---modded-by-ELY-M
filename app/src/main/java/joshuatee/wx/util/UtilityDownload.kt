@@ -374,14 +374,14 @@ object UtilityDownload {
                 text = text.replace("<br><br>", "<BR><BR>")
                 text = text.replace("<br>", " ")
             }
-        } else if (prod.startsWith("AWCN"))
+        } else if (prod.startsWith("AWCN")) {
             text =
                     ("${MyApplication.NWS_RADAR_PUB}/data/raw/aw/" + prod.toLowerCase(Locale.US) + ".cwwg..txt").getHtmlSep()
-        else if (prod.contains("NFD"))
+        } else if (prod.contains("NFD")) {
             text = ("http://www.opc.ncep.noaa.gov/mobile/mobile_product.php?id=" + prod.toUpperCase(
                 Locale.US
             )).getHtml()
-        else if (prod.contains("FWDDY38")) {
+        } else if (prod.contains("FWDDY38")) {
             text = UtilityString.getHTMLandParseSep(
                 "${MyApplication.nwsSPCwebsitePrefix}/products/exper/fire_wx/",
                 "<pre>(.*?)</pre>"
@@ -393,9 +393,9 @@ object UtilityDownload {
                 text = text.replace("<br><br>", "<BR><BR>")
                 text = text.replace("<br>", " ")
             }
-        } else if (prod.contains("FXCN01"))
+        } else if (prod.contains("FXCN01")) {
             text = ("${MyApplication.NWS_RADAR_PUB}/data/raw/fx/fxcn01.cwao..txt").getHtmlSep()
-        else if (prod.startsWith("VFD")) {
+        } else if (prod.startsWith("VFD")) {
             val t2 = prod.substring(3)
             text = ("http://www.aviationweather.gov/fcstdisc/data?cwa=K$t2").getHtmlSep()
             text = text.parse("<!-- raw data starts -->(.*?)<!-- raw data ends -->")
@@ -404,9 +404,13 @@ object UtilityDownload {
                 text = text.replace("<br> {4}<br> {4}".toRegex(), "<BR><BR>")
                 text = text.replace("<br>", " ")
             }
-        } else if (prod.contains("FPCN48"))
+        } else if (prod.contains("FPCN48")) {
             text = "${MyApplication.NWS_RADAR_PUB}/data/raw/fp/fpcn48.cwao..txt".getHtmlSep()
-        else if (prod.contains("PMDTHR")) {
+        } else if (prod.contains("QPFPFD")) {
+            val textUrl = MyApplication.nwsWPCwebsitePrefix + "/discussions/hpcdiscussions.php?disc=qpfpfd"
+            text = textUrl.getHtmlSep()
+            text = text.parse(RegExp.pre2Pattern)
+        } else if (prod.contains("PMDTHR")) {
             text = UtilityString.getHTMLandParseSep(
                 "http://www.cpc.noaa.gov/products/predictions/threats/threats.php",
                 "<div id=\"discDiv\">(.*?)</div>"

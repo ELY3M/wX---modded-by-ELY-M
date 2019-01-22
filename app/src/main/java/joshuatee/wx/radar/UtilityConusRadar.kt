@@ -319,56 +319,62 @@ Line 6: y-coordinate of center of upper left pixel
 
 
 
+object UtilityConusRadar {
 
-internal object UtilityConusRadar {
-
-    var TAG = "UtilityConusRadar"
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     var conusbitmap: Bitmap? = null
     var conusgif = "conus.gif"
     var IMAGEFILE = MyApplication.FilesPath + "conus.gif"
 
-    var gfw1 = ""
-    var gfw2 = ""
-    var gfw3 = ""
-    var gfw4 = ""
-    var gfw5 = ""
-    var gfw6 = ""
 
-    private var initialized = false
-    private var lastRefresh = 0.toLong()
-    private const val REFRESH_LOC_MIN = 5
+        var gfw1 = ""
+        var gfw2 = ""
+        var gfw3 = ""
+        var gfw4 = ""
+        var gfw5 = ""
+        var gfw6 = ""
 
 
-    fun getConusgfw(): String {
-        val currentTime1 = System.currentTimeMillis()
-        val currentTimeSec = currentTime1 / 1000
-        val refreshIntervalSec = (REFRESH_LOC_MIN * 60).toLong()
-        if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
+        private var initialized = false
+        private var lastRefresh = 0.toLong()
+        private val REFRESH_LOC_MIN = 5
 
-            val urlgfw = "${MyApplication.nwsRadarWebsitePrefix}/Conus/RadarImg/latest_radaronly.gfw"
 
-            //READ and parase GFW file....
-            var gfw = (urlgfw).getHtmlSep()
-            val gfwArr = gfw.split("<br>").dropLastWhile { it.isEmpty() }
-            //var tmpArr: List<String>
-            gfwArr.forEach {
-                gfw1 = gfwArr[0]
-                gfw2 = gfwArr[1]
-                gfw3 = gfwArr[2]
-                gfw4 = gfwArr[3]
-                gfw5 = gfwArr[4]
-                gfw6 = gfwArr[5]
+    fun getConusGfw() = GlobalScope.launch(uiDispatcher) {
+        withContext(Dispatchers.IO) {
+            val currentTime1 = System.currentTimeMillis()
+            val currentTimeSec = currentTime1 / 1000
+            val refreshIntervalSec = (REFRESH_LOC_MIN * 60).toLong()
+            if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
+
+                //val urlgfw = "https://radar.weather.gov/Conus/RadarImg/latest_radaronly.gfw"
+                val urlgfw = "${MyApplication.nwsRadarWebsitePrefix}/Conus/RadarImg/latest_radaronly.gfw"
+
+                //READ and parase GFW file....
+                var gfw = (urlgfw).getHtmlSep()
+                UtilityLog.d("wx", "gfw: " + gfw)
+                val gfwArr = gfw.split("<br>").dropLastWhile { it.isEmpty() }
+                //var tmpArr: List<String>
+                gfwArr.forEach {
+                    gfw1 = gfwArr[0]
+                    gfw2 = gfwArr[1]
+                    gfw3 = gfwArr[2]
+                    gfw4 = gfwArr[3]
+                    gfw5 = gfwArr[4]
+                    gfw6 = gfwArr[5]
+                }
             }
+
+            initialized = true
+            val currentTime = System.currentTimeMillis()
+            lastRefresh = currentTime / 1000
+
+            //TODO TESTING
+            var teststr = gfw1 + "\n" + gfw2 + "\n" + gfw3 + "\n" + gfw4 + "\n" + gfw5 + "\n" + gfw6 + "\n"
+            UtilityLog.d("wx", "conus gfw: " + teststr)
+
+
         }
-
-        initialized = true
-        val currentTime = System.currentTimeMillis()
-        lastRefresh = currentTime / 1000
-
-        //TODO TESTING
-        var teststr = gfw1 + "\n" + gfw2 + "\n" + gfw3 + "\n" + gfw4 + "\n" + gfw5 + "\n" + gfw6 + "\n"
-        return teststr
 
     }
 
@@ -401,9 +407,6 @@ internal object UtilityConusRadar {
         val bitmap: Bitmap
         val width = 3400
         val height = 3400
-        //val options = BitmapFactory.Options()
-        //options.inScaled = false
-        //options.inPreferredConfig = Bitmap.Config.ARGB_8888
         if (width > 0 && height > 0) {
             try {
                 bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
@@ -432,8 +435,6 @@ internal object UtilityConusRadar {
             bitmapCanvas = Bitmap.createBitmap(3400, 3400, Bitmap.Config.ARGB_8888)
 
         }
-
-        val m = Matrix()
 
         UtilityLog.d("wx", "bitmap size: "+bitmap.width +" "+bitmap.height)
         UtilityLog.d("wx", "bitmapcanvas size: "+bitmapCanvas.width +" "+bitmapCanvas.height)

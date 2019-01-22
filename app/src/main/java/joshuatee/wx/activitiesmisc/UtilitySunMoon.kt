@@ -30,6 +30,7 @@ import org.shredzone.commons.suncalc.MoonTimes
 import org.shredzone.commons.suncalc.SunTimes
 import org.shredzone.commons.suncalc.MoonIllumination
 import org.shredzone.commons.suncalc.MoonPhase
+import java.text.DecimalFormat
 import java.util.*
 
 
@@ -116,44 +117,91 @@ object UtilitySunMoon {
         val getCurrentPhase = getPhase(moonage)
         content += getCurrentPhase + " is the current phase" + MyApplication.newline
 
-
-
         return content
 
     }
 
 
-    private fun getPhase(age: Double): String {
-        if (age > 27 || age < 3) {
-            return "New Moon"
+    //FIXME redo moon's phase.
+
+
+
+    /*
+
+
+
+ */
+
+    fun roundTo(value: Double, places: Int): Double {
+        val scale = Math.pow(10.0, places.toDouble())
+        return Math.round(value * scale) / scale
+    }
+
+    /*
+         NEW_MOON(0.0),
+        /**
+         * Waxing half moon.
+         */
+        FIRST_QUARTER(90.0),
+
+        /**
+         * Full moon.
+         */
+        FULL_MOON(180.0),
+
+        /**
+         * Waning half moon.
+         */
+        LAST_QUARTER(270.0);
+     */
+
+    private fun getPhasefromDegree(illumination: Double): String {
+        var illum = roundTo(illumination , 3)
+        var phaseString = "unknown"
+        if (illum   >= 0.0 && illum   < 0.02) {
+            phaseString = "New Moon"
+        }
+        if (illum   >= 0.02 && illum   < 0.23) {
+            phaseString = "Waxing Crescent"
+        }
+        if (illum   >= 0.23 && illum   < 0.27) {
+            phaseString = "First Quarter"
+        }
+        if (illum   >= 0.27 && illum   < 0.47) {
+            phaseString = "Waxing Gibbous"
+        }
+        if (illum   >= 180 && illum   < 180) {
+            phaseString = "Full Moon"
+        }
+        if (illum   >= 0.52 && illum   < 0.73) {
+            phaseString = "Waning Gibbous"
+        }
+        if (illum   >= 0.270 && illum   < 0.77) {
+            phaseString = "Last Quarter"
+        }
+        if (illum   >= 0.77 && illum   < 1.01) {
+            phaseString = "Waning Crescent"
         }
 
-        if (age > 4 && age < 10) {
-            return "Waxing Crescent"
-        }
-
-        if (age > 11 && age < 17) {
-            return "Full Moon"
-        }
-
-        return if (age > 19 && age < 25) {
-            "Waning Crescent"
-        } else "Unknown"
+    return phaseString + " ("+illum+") "
 
     }
 
 
-    private fun getPhaseTest(age: Double): String {
-        if (age >= 29 || age <= 1) {
-            return "New"
-        }
 
+    private fun getPhase(age: Double): String {
+        if (age >= 29 || age <= 1) {
+            return "New Moon"
+        }
+        if (age > 4 && age < 10) {
+            return "Waxing Crescent"
+        }
         if (age >= 7 && age <= 8) {
             return "First Quarter"
         }
 
         if (age >= 14 && age <= 15) {
-            return "Full"
+            return "Full Moon"
         }
 
         if (age >= 21 && age <= 22) {
@@ -165,11 +213,11 @@ object UtilitySunMoon {
         }
 
         if (age > 8 && age < 14) {
-            return "Crescente Gibosa"
+            return "Crescent Gibbous"
         }
 
         if (age > 15 && age < 21) {
-            return "Minguante Gibosa"
+            return "Waning Gibbous"
         }
 
         return if (age > 22 && age < 29) {

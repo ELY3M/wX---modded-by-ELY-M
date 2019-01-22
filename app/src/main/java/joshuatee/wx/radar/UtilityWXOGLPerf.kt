@@ -454,6 +454,7 @@ internal object UtilityWXOGLPerf {
             buffers.putIndex((ixCount + 2).toShort())
             ixCount += 3
             (0..2).forEach { _ ->
+                // TODO use class method
                 buffers.putColor(buffers.solidColorRed)
                 buffers.putColor(buffers.solidColorGreen)
                 buffers.putColor(buffers.solidColorBlue)
@@ -495,6 +496,7 @@ internal object UtilityWXOGLPerf {
             buffers.putIndex((ixCount + 2).toShort())
             ixCount += 3
             (0..2).forEach { _ ->
+                // TODO use class method
                 buffers.putColor(buffers.solidColorRed)
                 buffers.putColor(buffers.solidColorGreen)
                 buffers.putColor(buffers.solidColorBlue)
@@ -594,6 +596,7 @@ internal object UtilityWXOGLPerf {
         if (buffers.colorIntArray.size == buffers.count) {
             iCount = 0
             while (iCount < buffers.count && iCount < x.size && iCount < y.size) {
+                // TODO set the object colors to these values
                 col[0] = Color.red(buffers.colorIntArray[iCount]).toByte()
                 col[1] = Color.green(buffers.colorIntArray[iCount]).toByte()
                 col[2] = Color.blue(buffers.colorIntArray[iCount]).toByte()
@@ -636,6 +639,7 @@ internal object UtilityWXOGLPerf {
                     iI += 2
                     ixCount += 3
                     (0..2).forEach { _ ->
+                        // TODO use class method
                         buffers.putColor(col[0])
                         buffers.putColor(col[1])
                         buffers.putColor(col[2])

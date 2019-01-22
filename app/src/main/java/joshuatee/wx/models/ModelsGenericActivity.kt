@@ -57,8 +57,8 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
     }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private lateinit var fab1: ObjectFab
-    private lateinit var fab2: ObjectFab
+    private var fab1: ObjectFab? = null
+    private var fab2: ObjectFab? = null
     private var spinnerRunRan = false
     private var spinnerTimeRan = false
     private var spinnerSectorRan = false
@@ -120,8 +120,8 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 leftArrow.isVisible = false
                 rightArrow.isVisible = false
             }
-            fab1.setVisibility(View.GONE)
-            fab2.setVisibility(View.GONE)
+            fab1?.setVisibility(View.GONE)
+            fab2?.setVisibility(View.GONE)
             miStatusParam2.isVisible = false
         } else {
             m.findItem(R.id.action_multipane).isVisible = false

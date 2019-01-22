@@ -29,6 +29,7 @@ import android.graphics.PointF;
 
 //import android.graphics.RectF;
 import joshuatee.wx.MyApplication;
+import joshuatee.wx.util.UtilityLog;
 
 import android.graphics.drawable.Drawable;
 
@@ -299,7 +300,14 @@ public class TouchImageView2 extends ImageView {
 			setZoom(delayedZoomVariables.scale, delayedZoomVariables.focusX, delayedZoomVariables.focusY, delayedZoomVariables.scaleType);
 			delayedZoomVariables = null;
 		}
-		super.onDraw(canvas);
+		// Added to prevent large images from crashing app
+		try {
+			super.onDraw(canvas);
+		} catch (OutOfMemoryError e) {
+			UtilityLog.INSTANCE.HandleException(e);
+		} catch (Exception e) {
+			UtilityLog.INSTANCE.HandleException(e);
+		}
 	}
 
 	@Override
@@ -432,7 +440,7 @@ public class TouchImageView2 extends ImageView {
 	/**
 	 * Set zoom parameters equal to another TouchImageView. Including scale, position,
 	 * and ScaleType.
-	 * @param TouchImageView2
+	 *
 	 */
 
 	public void setZoom(TouchImageView2 img) {

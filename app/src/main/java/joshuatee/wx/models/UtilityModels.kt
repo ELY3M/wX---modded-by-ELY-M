@@ -45,7 +45,12 @@ import kotlinx.coroutines.*
 
 object UtilityModels {
 
-    fun getContent(context: Context, om: ObjectModel, overlayImg: List<String>, uiDispatcher: CoroutineDispatcher) =
+    fun getContent(
+        context: Context,
+        om: ObjectModel,
+        overlayImg: List<String>,
+        uiDispatcher: CoroutineDispatcher
+    ): Job =
         GlobalScope.launch(uiDispatcher) {
             om.run = om.spRun.selectedItem.toString()
             om.time = om.spTime.selectedItem.toString()
@@ -56,7 +61,9 @@ object UtilityModels {
             }
             UtilityModels.writePrefs(context, om)
             withContext(Dispatchers.IO) {
-                (0 until om.numPanes).forEach { om.displayData.bitmap[it] = om.getImage(it, overlayImg) }
+                (0 until om.numPanes).forEach {
+                    om.displayData.bitmap[it] = om.getImage(it, overlayImg)
+                }
             }
 
             (0 until om.numPanes).forEach {
@@ -78,8 +85,8 @@ object UtilityModels {
                     )
                 }
                 if (UIPreferences.fabInModels && om.numPanes < 2) {
-                    om.fab1.setVisibility(View.VISIBLE)
-                    om.fab2.setVisibility(View.VISIBLE)
+                    om.fab1?.setVisibility(View.VISIBLE)
+                    om.fab2?.setVisibility(View.VISIBLE)
                 }
                 om.firstRun = true
             }
@@ -88,7 +95,11 @@ object UtilityModels {
             om.imageLoaded = true
         }
 
-    fun getAnimate(om: ObjectModel, overlayImg: List<String>, uiDispatcher: CoroutineDispatcher) =
+    fun getAnimate(
+        om: ObjectModel,
+        overlayImg: List<String>,
+        uiDispatcher: CoroutineDispatcher
+    ): Job =
         GlobalScope.launch(uiDispatcher) {
             withContext(Dispatchers.IO) {
                 (0 until om.numPanes).forEach {
@@ -104,7 +115,7 @@ object UtilityModels {
             om.animRan = true
         }
 
-    fun updateToolbarLabels(
+    private fun updateToolbarLabels(
         toolbar: Toolbar,
         miStatusParam1: MenuItem,
         miStatusParam2: MenuItem,
@@ -124,7 +135,7 @@ object UtilityModels {
         }
     }
 
-    fun writePrefs(context: Context, om: ObjectModel) {
+    private fun writePrefs(context: Context, om: ObjectModel) {
         Utility.writePref(context, om.prefSector, om.sector)
         (0 until om.numPanes).forEach {
             Utility.writePref(context, om.prefParam + it.toString(), om.displayData.param[it])

@@ -67,8 +67,8 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
     private var initSpinnerSetup = false
     private var favList = listOf<String>()
     private lateinit var star: MenuItem
-    private lateinit var fab1: ObjectFab
-    private lateinit var fab2: ObjectFab
+    private var fab1: ObjectFab? = null
+    private var fab2: ObjectFab? = null
     private lateinit var activityArguments: Array<String>
     private lateinit var miStatus: MenuItem
     private lateinit var miStatusParam1: MenuItem
@@ -129,8 +129,8 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 m.findItem(R.id.action_back).isVisible = false
                 m.findItem(R.id.action_forward).isVisible = false
             }
-            fab1.setVisibility(View.GONE)
-            fab2.setVisibility(View.GONE)
+            fab1?.setVisibility(View.GONE)
+            fab2?.setVisibility(View.GONE)
             miStatusParam2.isVisible = false
         } else {
             m.findItem(R.id.action_multipane).isVisible = false

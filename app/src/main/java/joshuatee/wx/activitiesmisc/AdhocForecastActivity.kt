@@ -132,7 +132,7 @@ class AdhocForecastActivity : BaseActivity() {
         //
         // 7day
         //
-        objFcst?.let { _ ->
+        objFcst?.let {
             linearLayoutForecast.removeAllViewsInLayout()
             val day7Arr = objSevenDay!!.fcstList
             bmArr.forEachIndexed { idx, bm ->
