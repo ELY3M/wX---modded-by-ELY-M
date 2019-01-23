@@ -3,26 +3,26 @@
 ## TO DO List: 
 
 1\. conus radar overlay when you zoom out like on pykl3   
-2\. add in MSL and AGL radar beam heights in longpress - requested by Mike T.  
-3\. add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs   
-4\. allow custom icons! esp cities dots - hail/tvs/location image is done!.    
-5\. add warning list within radar  
-6\. add LSR reports from SN spotters/option to turn on/off LSR reports  
-7\. as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
-8\. might 4th radar icon for cc  
-9\. move show color legend to bottom as a option.  there will be option to choose which side.     
-10\. rename application id and change icon color so someone can run both versions of wX   
-11\. 8-bit SRM like in pykl3  
-12\. fix up the ability to change products in the multi-pane radar. it seem wont change products for me  
-13\. android wear support. I own android wear watches and love them.      
-14\. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor.  
-15\. make VAD Wind Profile more better and friendly  like the one at cod.edu    
-16\. color tables for SRM and Spectrum Width 
+2\. add rda and tdwrs icon/names and add in options to enable/disable showing rdas/tdwrs   
+3\. allow custom icons! esp cities dots - hail/tvs/location image is done!.    
+4\. add warning list within radar  
+5\. add LSR reports from SN spotters/option to turn on/off LSR reports  
+6\. as for LSR reports.  I want to do same LSR reports as in the grlevel with the placefile to see how much snow the area gets.    
+7\. might 4th radar icon for cc  
+8\. move show color legend to bottom as a option.  there will be option to choose which side.     
+9\. rename application id and change icon color so someone can run both versions of wX   
+10\. 8-bit SRM like in pykl3  
+11\. fix up the ability to change products in the multi-pane radar. it seem wont change products for me  
+12\. android wear support. I own android wear watches and love them.      
+13\. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor.  
+14\. make VAD Wind Profile more better and friendly  like the one at cod.edu    
+15\. color tables for SRM and Spectrum Width  
 
 
 #
 ## DONE!
 ====================================  
+get MSL and AGL Beam Heights are available in long press now.  
 Sun/Moon data are calculated from SunCalc library now - No More loading/parsing from website with broken SSL.   
 Special Weather Statements Polygons are working!  I had to create a list for SPS same way as how spotters are done in wX.  you should see matching texts for sps polygons now.      
 added hail icons and text for showing hail sizes on radar, still testing  

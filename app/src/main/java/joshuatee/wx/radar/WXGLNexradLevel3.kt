@@ -34,7 +34,7 @@ import android.content.Context
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.*
 
-class WXGLNexradLevel3 internal constructor() {
+class WXGLNexradLevel3 {
 
     // https://www.roc.noaa.gov/WSR88D/BuildInfo/Files.aspx
     // https://www.roc.noaa.gov/wsr88d/PublicDocs/ICDs/2620001X.pdf
@@ -69,7 +69,8 @@ class WXGLNexradLevel3 internal constructor() {
         var volumeScanPattern: Int = 0
         var radarHeight: Int = 0
         var radarElevation: Int = 0
-        var getproductSpecific: Int = 0
+        var getElevation: Float = 0f
+        var productSpecific2: Int = 0
     }
 
     init {
@@ -132,7 +133,8 @@ class WXGLNexradLevel3 internal constructor() {
             UtilityLog.d("wx", "RadarElevation: "+ radarElevation)
             productSpecific[2] = dis.readUnsignedShort()
             UtilityLog.d("wx", "productSpecific[2]: "+productSpecific[2])
-            getproductSpecific = productSpecific[2]
+            productSpecific2 = productSpecific[2]
+            getElevation = (productSpecific[2] / 10.0f)
             val d = UtilityTime.radarTime(volumeScanDate, volumeScanTime)
             val radarInfo = formatRadarString(
                 d,
@@ -141,6 +143,8 @@ class WXGLNexradLevel3 internal constructor() {
                 productCode.toInt(),
                 heightOfRadar.toInt(),
                 radarElevation,
+                productSpecific2,
+                getElevation.toInt(),
                 latitudeOfRadar,
                 longitudeOfRadar
             )
@@ -179,7 +183,7 @@ class WXGLNexradLevel3 internal constructor() {
         }
     }
 
-    // Used for Legacy 4bit radar - only SRM
+    // Used for Legacy 4bit radar - only SRM and Spectrum Width
     fun decocodeAndPlotNexradLevel3FourBit(context: Context, fn: String, radarStatusStr: String) {
         initData4Bit()
         try {
@@ -220,7 +224,8 @@ class WXGLNexradLevel3 internal constructor() {
             UtilityLog.d("wx", "4-bit RadarElevation: "+ radarElevation)
             productSpecific[2] = dis.readUnsignedShort()
             UtilityLog.d("wx", "productSpecific[2]: "+productSpecific[2])
-            getproductSpecific = productSpecific[2]
+            productSpecific2 = productSpecific[2]
+            getElevation = (productSpecific[2] / 10.0f)
 
             val d = UtilityTime.radarTime(volumeScanDate, volumeScanTime)
             //final short        product_generation_date = (short) dis.readUnsignedShort();
@@ -233,6 +238,8 @@ class WXGLNexradLevel3 internal constructor() {
                 productCode.toInt(),
                 heightOfRadar.toInt(),
                 radarElevation,
+                productSpecific2,
+                getElevation.toInt(),
                 latitudeOfRadar,
                 longitudeOfRadar
             )
@@ -301,6 +308,8 @@ class WXGLNexradLevel3 internal constructor() {
         productCode: Int,
         heightOfRadar: Int,
         radarElevation: Int,
+        productSpecific2: Int,
+        getElevation: Int,
         latitudeOfRadar: Double,
         longitudeOfRadar: Double
     ): String {
@@ -311,13 +320,14 @@ class WXGLNexradLevel3 internal constructor() {
                     "Product Code: " + productCode + MyApplication.newline +
                     "Radar height: " + heightOfRadar + MyApplication.newline +
                     "Elevation Num: " + radarElevation + MyApplication.newline +
+                    "productSpecific[2]: " + productSpecific2 + MyApplication.newline +
+                    "getElevation: " + getElevation + MyApplication.newline +
                     "Radar Lat: " + latitudeOfRadar + MyApplication.newline +
                     "Radar Lon: " + longitudeOfRadar
         } catch (e: AssertionError) {
             ""
         }
     }
-
 
 }
 

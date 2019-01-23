@@ -49,7 +49,7 @@ class SettingsMainActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         UtilityTheme.setPrimaryColor(this)
         contextg = this
-        var backuprestore = UtilityBackupRestore()
+        val backuprestore = UtilityBackupRestore()
         val version = Utility.getVersion(this)
         toolbar.subtitle = "version: $version, Please tap on text for additional help."
         val linearLayout: LinearLayout = findViewById(R.id.ll)

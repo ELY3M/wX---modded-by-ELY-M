@@ -230,6 +230,9 @@ internal object UtilityRadarUI {
         val distRid =
             LatLon.distance(LatLon(ridX, ridY), LatLon(pointX, pointY), DistanceUnit.MILE)
 
+        val distRidKm =
+                LatLon.distance(LatLon(ridX, ridY), LatLon(pointX, pointY), DistanceUnit.KM)
+
         // FIXME look at iOS version and try to match in data provided and improve formatting
         val latLonTitle = UtilityStringExternal.truncate(glview.newY.toString(), 6) +
                 ", -" +
@@ -247,11 +250,16 @@ internal object UtilityRadarUI {
                 6
             ) + " miles from " + oglr.rid
         )
-        //TODO get msl and AGL here
-        var radarheight = WXGLNexradLevel3.radarHeight
-        var distance = UtilityStringExternal.truncate(distRid.toString(), 4).toDouble()
+
+        //get msl and AGL here
+        val radarheight = WXGLNexradLevel3.radarHeight
+        val distance = UtilityStringExternal.truncate(distRidKm.toString(), 4).toDouble()
+        //val distancekm = distance * 1.60934
         //var degree = WXGLNexradLevel3.radarElevation
         //var degree = WXGLNexradLevel3.getproductSpecific / 10.0f
+        val degree = WXGLNexradLevel3.getElevation
+
+        /*
         var degree: Double = 0.0
         if (oglr.product.contains("0")) {
             degree = 0.5
@@ -269,6 +277,7 @@ internal object UtilityRadarUI {
         if (degree == 0.0) {
             degree = 0.5
         }
+        */
 
         UtilityLog.d("wx", "radarHeight: "+radarheight)
         UtilityLog.d("wx", "degree: "+degree)
