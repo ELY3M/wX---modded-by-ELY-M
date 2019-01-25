@@ -56,6 +56,7 @@ class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7
         )
         tv1.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
         // FIXME - need to see why this was disabled. shrinks text to fit on one line like wXL23
+        // FIXME use better variable names
         //TextViewCompat.setAutoSizeTextTypeWithDefaults(tv1, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
         tv2 = AppCompatTextView(context)
         tv2.setPadding(
@@ -70,7 +71,9 @@ class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7
         llTmpV.addView(tv1)
         llTmpV.addView(tv2)
         objCard = ObjectCard(context)
-        llTmp.addView(iv)
+        if (!UIPreferences.locfragDontShowIcons) {
+            llTmp.addView(iv)
+        }
         llTmp.addView(llTmpV)
         objCard.addView(llTmp)
         var dayTmpArr = listOf<String>()
@@ -102,7 +105,9 @@ class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7
                 setTv2(dayTmpArr[1])
             }
         }
-        setImage(bm)
+        if (!UIPreferences.locfragDontShowIcons) {
+            setImage(bm)
+        }
     }
 
     private fun setTv1(text: String) {

@@ -55,7 +55,8 @@ internal object WXGLPolygonWarnings {
             PolygonType.FFW -> MyApplication.severeDashboardFfw.valueGet()
             PolygonType.SMW -> MyApplication.severeDashboardSmw.valueGet()
             ///PolygonType.SPS -> MyApplication.severeDashboardSps.valueGet()
-            else -> MyApplication.severeDashboardSvr.valueGet()
+            //else -> MyApplication.severeDashboardSvr.valueGet()
+            else -> "" //bug fix when svr warnings are struck and not expiring as it should have.
         }
         val pn = ProjectionNumbers(context, rid1, provider)
         var j: Int
@@ -110,6 +111,8 @@ internal object WXGLPolygonWarnings {
                 }
             }
         }
+        UtilityLog.d("wx", "warningHTML: "+warningHTML)
+        UtilityLog.d("wx", "warningList: "+warningList)
         return warningList
     }
 
@@ -125,7 +128,9 @@ internal object WXGLPolygonWarnings {
         val spsList = mutableListOf<Double>()
         val prefToken = when (type) {
             PolygonType.SPS -> MyApplication.severeDashboardSps.valueGet()
-            else -> MyApplication.severeDashboardSps.valueGet()
+                //else -> MyApplication.severeDashboardSps.valueGet()
+                else -> "" //bug fix to avoid "struck" polygons
+
         }
 
         //make sure we clear sps list first before

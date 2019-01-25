@@ -55,20 +55,23 @@ object UIPreferences {
     var themeIsWhite: Boolean = true
     var hideTopToolbar: Boolean = false
     var mainScreenRadarFab: Boolean = false
+    var locfragDontShowIcons: Boolean = false
 
     fun initPreferences(context: Context) {
+        locfragDontShowIcons =
+            Utility.readPref(context, "UI_LOCFRAG_NO_ICONS", "false").startsWith("t")
         mainScreenRadarFab =
                 Utility.readPref(context, "UI_MAIN_SCREEN_RADAR_FAB", "false").startsWith("t")
         homescreenTextLength = Utility.readPref(context, "HOMESCREEN_TEXT_LENGTH_PREF", 500)
         refreshLocMin = Utility.readPref(context, "REFRESH_LOC_MIN", 10)
         translateText = Utility.readPref(context, "TRANSLATE_TEXT", "").startsWith("t")
         nwsTextRemovelinebreaks =
-                Utility.readPref(context, "NWS_TEXT_REMOVELINEBREAKS", "true").startsWith("t")
+            Utility.readPref(context, "NWS_TEXT_REMOVELINEBREAKS", "true").startsWith("t")
         recordScreenShare = Utility.readPref(context, "RECORD_SCREEN_SHARE", "true").startsWith("t")
         prefPreventAccidentalExit =
-                Utility.readPref(context, "PREF_PREVENT_ACCIDENTAL_EXIT", "true").startsWith("t")
+            Utility.readPref(context, "PREF_PREVENT_ACCIDENTAL_EXIT", "true").startsWith("t")
         dualpaneRadarIcon =
-                Utility.readPref(context, "DUALPANE_RADAR_ICON", "false").startsWith("t")
+            Utility.readPref(context, "DUALPANE_RADAR_ICON", "false").startsWith("t")
         fabInModels = Utility.readPref(context, "FAB_IN_MODELS", "true").startsWith("t")
         hideTopToolbar = Utility.readPref(context, "HIDE_TOP_TOOLBAR", "false").startsWith("t")
         colorNotif = ContextCompat.getColor(context, R.color.primary_dark_blue)
@@ -76,11 +79,11 @@ object UIPreferences {
         colorOffwhiteToolbar = ContextCompat.getColor(context, R.color.offwhite_toolbar)
         mediaControlNotif = Utility.readPref(context, "MEDIA_CONTROL_NOTIF", "").startsWith("t")
         radarToolbarTransparent =
-                Utility.readPref(context, "RADAR_TOOLBAR_TRANSPARENT", "true").startsWith("t")
+            Utility.readPref(context, "RADAR_TOOLBAR_TRANSPARENT", "true").startsWith("t")
         radarStatusBarTransparent =
-                Utility.readPref(context, "RADAR_STATUSBAR_TRANSPARENT", "false").startsWith("t")
+            Utility.readPref(context, "RADAR_STATUSBAR_TRANSPARENT", "false").startsWith("t")
         radarImmersiveMode =
-                Utility.readPref(context, "RADAR_IMMERSIVE_MODE", "false").startsWith("t")
+            Utility.readPref(context, "RADAR_IMMERSIVE_MODE", "false").startsWith("t")
         tilesPerRow = Utility.readPref(context, "UI_TILES_PER_ROW", tilesPerRow)
         themeStr = Utility.readPref(context, "THEME_BLUE", "whiteNew")
         themeInt = Utility.theme(themeStr)

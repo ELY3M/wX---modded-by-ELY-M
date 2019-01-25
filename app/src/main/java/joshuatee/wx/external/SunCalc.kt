@@ -12,11 +12,17 @@ import java.util.*
 import kotlin.math.*
 
 
-class AzimuthCoordinate(azimuth: Double, altitude: Double)
-class EclipticCoordinate(rightAscension: Double, declination: Double)
-class MoonPosition(azimuth: Double, altitude: Double, distance: Double, parallacticAngle: Double)
-class MoonCoordinate(rightAscension: Double, declination: Double, distance: Double)
-class MoonIllumination(fraction: Double, phase: Double, angle: Double)
+class AzimuthCoordinate(val azimuth: Double, val altitude: Double)
+class EclipticCoordinate(val rightAscension: Double, val declination: Double)
+class MoonPosition(
+    val azimuth: Double,
+    val altitude: Double,
+    val distance: Double,
+    val parallacticAngle: Double
+)
+
+class MoonCoordinate(val rightAscension: Double, val declination: Double, val distance: Double)
+class MoonIllumination(val fraction: Double, val phase: Double, val angle: Double)
 
 class Location(var latitude: Double, var longitude: Double)
 
@@ -157,22 +163,58 @@ public class SunCalc {
         return MoonCoordinate(rightAscension(altL, b), declination(altL, b), dt)
     }
 
-    /*public fun sunPosition(date: Date, location: Location): AzimuthCoordinate {
+    public fun sunPosition(date: Date, location: Location): AzimuthCoordinate {
         val lw = SunCalc.radPerDegree * location.longitude * -1.0
         val phi = SunCalc.radPerDegree * location.latitude
         val d = SunCalc.daysSince2000()
         val c = sunCoordinates(d)
         val h = siderealTime(d, lw) - c.rightAscension
         return AzimuthCoordinate(azimuth(h, phi, c.declination), altitude(h, phi, c.declination))
-        
-    }*/
+    }
 
-    /*private fun hourAngle(h: Double, phi: Double, d: Double) throws: Double {
+    public fun moonPosition(date: Date, location: Location): MoonPosition {
+        val lw = SunCalc.radPerDegree * location.longitude * -1.0
+        val phi = SunCalc.radPerDegree * location.latitude
+        val d = SunCalc.daysSince2000()
+        val c = moonCoordinates(d)
+        val h = siderealTime(d, lw) - c.rightAscension
+        var h1 = altitude(h, phi, c.declination)
+        val pa = atan2(sin(h), tan(phi) * cos(c.declination) - sin(c.declination) * cos(h))
+        h1 += astroRefraction(h1)
+        return MoonPosition(azimuth(h, phi, c.declination), h1, c.distance, pa)
+    }
+
+    public fun moonIllumination(date: Date = Date()): MoonIllumination {
+        val d = SunCalc.daysSince2000()
+        val s = sunCoordinates(d)
+        val m = moonCoordinates(d)
+        val sDist = 149598000.0 // Distance from earth to sun
+        val phi = acos(
+            sin(s.declination)
+                    * sin(m.declination)
+                    + cos(s.declination) * cos(m.declination) * cos(s.rightAscension - m.rightAscension)
+        )
+        val inc = atan2(sDist * sin(phi), m.distance - sDist * cos(phi))
+        val angle = atan2(
+            cos(s.declination) * sin(s.rightAscension - m.rightAscension),
+            sin(s.declination)
+                    * cos(m.declination)
+                    - cos(s.declination) * sin(m.declination) * cos(s.rightAscension - m.rightAscension)
+        )
+        val retVal = if (angle < 0.0) {
+            -1.0
+        } else {
+            1.0
+        }
+        return MoonIllumination((1.0 + cos(inc)) / 2.0, 0.5 + 0.5 * inc * retVal / PI, angle)
+    }
+
+  /*  private fun hourAngle(h: Double, phi: Double, d: Double): Double {
         val cosH = (sin(h) - sin(phi) * sin(d)) / (cos(phi) * cos(d))
-        if cosH > 1 {
+        if (cosH > 1) {
             throw SolarEventError.sunNeverRise
         }
-        if cosH < -1 {
+        if (cosH < -1) {
             throw SolarEventError.sunNeverSet
         }
         return acos(cosH)
@@ -186,59 +228,25 @@ public class SunCalc {
         n: Double,
         m: Double,
         l: Double
-    ) throws: Double {
-        val w = try hourAngle(h: h, phi: phi, d: dec)
-        val a = approximateTransit(hT: w, lw: lw, n: n)
-        return solarTransitJ(ds: a, m: m, l: l)
+    ): Double {
+        val w = hourAngle(h, phi, dec)
+        val a = approximateTransit(w, lw, n)
+        return solarTransitJ(a, m, l)
     }
 
-
-
-    public fun moonPosition(date: Date, location: Location) -> MoonPosition {
-        val lw = Double.radPerDegree * location.longitude * -1.0
-        val phi = Double.radPerDegree * location.latitude
-        val d = date.daysSince2000
-        val c = moonCoordinates(d)
-        val h = siderealTime(d: d, lw: lw) - c.rightAscension
-        var h1 = altitude(h: h, phi: phi, dec: c.declination)
-        val pa = atan2(sin(h), tan(phi) * cos(c.declination) - sin(c.declination) * cos(h))
-        h1 += astroRefraction(h1)
-        return (azimuth(h: h, phi: phi, dec: c.declination), h1, c.distance, pa)
-    }
-
-    public fun moonIllumination(date: Date = Date()) -> MoonIllumination {
-        val d = date.daysSince2000
-        val s = sunCoordinates(d)
-        val m = moonCoordinates(d)
-        val sDist = 149598000.0 // Distance from earth to sun
-        val phi = acos(
-            sin(s.declination)
-                * sin(m.declination)
-                + cos(s.declination) * cos(m.declination) * cos(s.rightAscension - m.rightAscension)
-        )
-        val inc = atan2(sDist * sin(phi), m.distance - sDist * cos(phi))
-        val angle = atan2(
-            cos(s.declination) * sin(s.rightAscension - m.rightAscension),
-            sin(s.declination)
-                * cos(m.declination)
-                - cos(s.declination) * sin(m.declination) * cos(s.rightAscension - m.rightAscension)
-        )
-        return ((1.0 + cos(inc)) / 2.0, 0.5 + 0.5 * inc * (angle < 0.0 ? -1.0 : 1.0) / Double.pi, angle)
-    }
-
-    public fun time(ofDate date: Date, forSolarEvent event: SolarEvent, atLocation location: Location) throws -> Date {
-        val lw = Double.radPerDegree * location.longitude * -1.0
-        val phi = Double.radPerDegree * location.latitude
-        val d = date.daysSince2000
-        val n = julianCycle(d: d, lw: lw)
-        val ds = approximateTransit(hT: 0.0, lw: lw, n: n)
+    public fun time(date: Date, event: SolarEvent, atLocation location: Location): Date {
+        val lw = SunCalc.radPerDegree * location.longitude * -1.0
+        val phi = SunCalc.radPerDegree * location.latitude
+        val d = SunCalc.daysSince2000()
+        val n = julianCycle(d, lw)
+        val ds = approximateTransit(0.0, lw, n)
         val m = solarMeanAnomaly(ds)
         val l = eclipticLongitude(m)
-        val dec = declination(l: l, b: 0.0)
-        val jNoon = solarTransitJ(ds: ds, m: m, l: l)
-        val noon = Date(julianDays: jNoon)
+        val dec = declination(l, 0.0)
+        val jNoon = solarTransitJ(ds, m,  l)
+        val noon = Date(jNoon)
         val angle = event.solarAngle
-        val jSet = try getSetJ(h: angle * Double.radPerDegree, lw: lw, phi: phi, dec: dec, n: n, m: m, l: l)
+        val jSet = getSetJ(angle * SunCalc.radPerDegree, lw, phi, dec, n, m,  l)
         switch event {
         case .noon: return noon
         case .nadir:
@@ -254,51 +262,54 @@ public class SunCalc {
         }
     }
 
-    public fun moonTimes(date: Date, location: Location) throws -> (moonRiseTime: Date, moonSetTime: Date) {
+    //public fun moonTimes(date: Date, location: Location) throws -> (moonRiseTime: Date, moonSetTime: Date) {
+    public fun moonTimes(date: Date, location: Location) {
         val date = date.beginning()
-        val hc = 0.133 * Double.radPerDegree
-        var h0 = moonPosition(date: date, location: location).altitude - hc
+        val hc = 0.133 * SunCalc.radPerDegree
+        var h0 = moonPosition(date, location).altitude - hc
         var riseHour: Double?
         var setHour: Double?
         var ye: Double = 0.0
-        for i in 1...24 {
-            if i % 2 == 0 { continue }
-            val h1 = moonPosition(date: date.hoursLater(Double(i)), location: location).altitude - hc
-            val h2 = moonPosition(date: date.hoursLater(Double(i) + 1.0), location: location).altitude - hc
+        for (i in 1..24) {
+            if (i % 2 == 0) {
+                continue
+            }
+            val h1 = moonPosition(date.hoursLater(i.toDouble()), location).altitude - hc
+            val h2 = moonPosition(date.hoursLater(i.toDouble() + 1.0), location).altitude - hc
             val a = (h0 + h2) / 2.0 - h1
             val b = (h2 - h0) / 2.0
             val xe = -b / (2.0 * a)
             ye = (a * xe + b) * xe + h1
             val d = b * b - 4.0 * a * h1
-            if d >= 0 {
-                val dx = sqrt(d) / (fabs(a) * 2.0)
+            if (d >= 0) {
+                val dx = sqrt(d) / (a.absoluteValue * 2.0)
                 var roots = 0
                 var x1 = xe - dx
                 val x2 = xe + dx
-                if fabs(x1) < 1.0 { roots += 1 }
-                if fabs(x2) < 1.0 { roots += 1 }
-                if x1 < -1.0 { x1 = x2 }
-                if roots == 1 {
-                    if h0 < 0.0 {
-                        riseHour = Double(i) + x1
+                if (x1.absoluteValue < 1.0) { roots += 1 }
+                if (x2.absoluteValue < 1.0) { roots += 1 }
+                if (x1 < -1.0) { x1 = x2 }
+                if (roots == 1) {
+                    if (h0 < 0.0) {
+                        riseHour = i.toDouble() + x1
                     } else {
-                        setHour = Double(i) + x1
+                        setHour = i.toDouble() + x1
                     }
-                } else if roots == 2 {
-                    riseHour = Double(i) + (ye < 0 ? x2 : x1)
-                    setHour = Double(i) + (ye < 0 ? x1 : x2)
+                } else if (roots == 2) {
+                    riseHour = i.toDouble() + (ye < 0 ? x2 : x1)
+                    setHour = i.toDouble() + (ye < 0 ? x1 : x2)
                 }
 
-                if riseHour != nil && setHour != nil {
+                if (riseHour != null && setHour != null ) {
                     break
                 }
             }
             h0 = h2
         }
         if val riseHour = riseHour, val setHour = setHour {
-            return (moonRiseTime: date.hoursLater(riseHour), moonSetTime: date.hoursLater(setHour))
+            return (date.hoursLater(riseHour), date.hoursLater(setHour))
         } else {
-            if ye > 0 {
+            if (ye > 0) {
                 val rise = (riseHour == nil) ? nil : date.hoursLater(riseHour!)
                 throw LunarEventError.moonNeverSet(rise)
             } else {

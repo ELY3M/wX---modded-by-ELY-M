@@ -17,9 +17,13 @@
     You should have received a copy of the GNU General Public License
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<!-- modded by ELY M. -->
 
 <resources>
+
+     <string name="ui_logfrag_no_icons">
+         Don\'t show icons on main screen.
+</string>
+
     <string name="widget_prevent_tap">
 Prevent tapping on a widget from opening the app. Please note that after changing this setting you must then delete and re-add any widget that you want this to take effect for.
 </string>
