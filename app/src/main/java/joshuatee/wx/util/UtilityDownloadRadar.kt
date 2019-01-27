@@ -29,15 +29,19 @@ object UtilityDownloadRadar {
 
     // FIXME make URLs global static
 
+//was getNWSStringFromURL
+//getNWSStringFromURLJSON
+//fix for "struck" warning
+
     fun getPolygonVTEC(context: Context) {
-        MyApplication.severeDashboardTor.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Tornado%20Warning"))
-        MyApplication.severeDashboardSvr.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Severe%20Thunderstorm%20Warning"))
-        MyApplication.severeDashboardEww.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Extreme%20Wind%20Warning"))
-        MyApplication.severeDashboardFfw.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Flash%20Flood%20Warning"))
-        MyApplication.severeDashboardSmw.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Special%20Marine%20Warning"))
-        MyApplication.severeDashboardSvs.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Severe%20Weather%20Statement"))
-        MyApplication.severeDashboardSps.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/alerts/active?event=Special%20Weather%20Statement"))
-        //MyApplication.severeDashboardSps.valueSet(context, UtilityDownloadNWS.getNWSStringFromURL("http://192.168.1.113/nws/SPS-12-31-18-5.09pm.txt"))
+        MyApplication.severeDashboardTor.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Tornado%20Warning"))
+        MyApplication.severeDashboardSvr.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Severe%20Thunderstorm%20Warning"))
+        MyApplication.severeDashboardEww.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Extreme%20Wind%20Warning"))
+        MyApplication.severeDashboardFfw.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Flash%20Flood%20Warning"))
+        MyApplication.severeDashboardSmw.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Special%20Marine%20Warning"))
+        MyApplication.severeDashboardSvs.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Severe%20Weather%20Statement"))
+        MyApplication.severeDashboardSps.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Special%20Weather%20Statement"))
+        //MyApplication.severeDashboardSps.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("http://192.168.1.113/nws/SPS-12-31-18-5.09pm.txt"))
 
     }
 }

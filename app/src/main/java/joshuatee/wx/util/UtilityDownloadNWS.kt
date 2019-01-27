@@ -90,8 +90,11 @@ object UtilityDownloadNWS {
     fun getNWSStringFromURL(url: String): String =
         getNWSStringFromURLBase(url, "application/vnd.noaa.dwml+xml;version=1")
 
-    private fun getNWSStringFromURLJSON(url: String) =
+    fun getNWSStringFromURLJSON(url: String) =
         getNWSStringFromURLBase(url, "application/geo+json;version=1")
+
+    fun getNWSStringFromURLNoHeader(url: String) =
+        getNWSStringFromURLBaseNoHeader(url)
 
     //private fun getNWSStringFromURLLDJSON(url: String) = getNWSStringFromURLBase(url, "application/ld+json;version=1")
 
@@ -102,6 +105,28 @@ object UtilityDownloadNWS {
                 .url(url)
                 .header("User-Agent", USER_AGENT_STR)
                 .addHeader("Accept", header)
+                .build()
+            val response = MyApplication.httpClient!!.newCall(request).execute()
+            val inputStream = BufferedInputStream(response.body()!!.byteStream())
+            val br = BufferedReader(InputStreamReader(inputStream))
+            var line: String? = br.readLine()
+            while (line != null) {
+                out.append(line)
+                line = br.readLine()
+            }
+            br.close()
+        } catch (e: Exception) {
+            UtilityLog.HandleException(e)
+        }
+        return out.toString()
+    }
+
+    private fun getNWSStringFromURLBaseNoHeader(url: String): String {
+        val out = StringBuilder(5000)
+        try {
+            val request = Request.Builder()
+                .url(url)
+                .header("User-Agent", USER_AGENT_STR)
                 .build()
             val response = MyApplication.httpClient!!.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body()!!.byteStream())
