@@ -1,19 +1,17 @@
 package joshuatee.wx.audio
 
 import androidx.recyclerview.widget.RecyclerView
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.objects.TextSize
 import joshuatee.wx.ui.ObjectCard
+import joshuatee.wx.ui.ObjectTextView
 import joshuatee.wx.util.Utility
-
-// thanks http://www.truiton.com/2015/03/android-cardview-example/
 
 internal class PlayListAdapter(private val mDataset: MutableList<String>) :
     RecyclerView.Adapter<PlayListAdapter.DataObjectHolder>() {
@@ -21,9 +19,9 @@ internal class PlayListAdapter(private val mDataset: MutableList<String>) :
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
-        val label: TextView = itemView.findViewById(R.id.singletext)
-        val label2: TextView = itemView.findViewById(R.id.text2)
-        val timeandsize: TextView = itemView.findViewById(R.id.timeandsize)
+        val label = ObjectTextView(itemView, R.id.singletext, UIPreferences.textHighlightColor)
+        val contentPreview = ObjectTextView(itemView, R.id.text2)
+        val timeAndSize = ObjectTextView(itemView, R.id.timeandsize, TextSize.SMALL)
 
         init {
             ObjectCard(itemView, R.id.cv1)
@@ -50,18 +48,12 @@ internal class PlayListAdapter(private val mDataset: MutableList<String>) :
     }
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
-        val tmpArr = MyApplication.semicolon.split(mDataset[position])
+        val tmpArr = mDataset[position].split(";")
         holder.label.text = tmpArr[0]
-        holder.label.setTextColor(UIPreferences.textHighlightColor)
-        holder.timeandsize.text = tmpArr[1]
-        holder.timeandsize.setTextColor(UIPreferences.backgroundColor)
-        holder.timeandsize.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+        holder.timeAndSize.text = tmpArr[1]
         val tmpStr = Utility.fromHtml(Utility.readPref("PLAYLIST_" + tmpArr[0], ""))
-        holder.label2.text = tmpStr.replace(MyApplication.newline, " ")
-        holder.label2.setTextColor(UIPreferences.backgroundColor)
-        // FIXME deprecation
-        holder.label2.setTextAppearance(holder.label2.context, UIPreferences.smallTextTheme)
-        holder.label2.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+        holder.contentPreview.text = tmpStr.replace(MyApplication.newline, " ")
+        holder.contentPreview.setAsBackgroundText()
     }
 
     fun deleteItem(index: Int) {

@@ -29,6 +29,7 @@ import android.view.Gravity
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
+import androidx.core.widget.TextViewCompat
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
@@ -51,8 +52,11 @@ class ObjectCardCC(context: Context, version: Int) {
         textViewTop.gravity = Gravity.CENTER
         textViewTop.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
         textViewTop.setPadding(MyApplication.padding, 2, MyApplication.padding, 0)
-        // FIXME  - need to see why this was disabled. shrinks text to fit on one line like wXL23
-        //TextViewCompat.setAutoSizeTextTypeWithDefaults(textViewTop, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
+        TextViewCompat.setAutoSizeTextTypeWithDefaults(
+            textViewTop,
+            TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM
+        )
+        textViewTop.maxLines = 1
         textViewBottom = AppCompatTextView(context)
         textViewBottom.gravity = Gravity.CENTER
         textViewBottom.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)

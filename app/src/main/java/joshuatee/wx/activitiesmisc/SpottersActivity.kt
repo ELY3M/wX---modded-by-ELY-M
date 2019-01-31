@@ -104,16 +104,11 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        spotterlist = withContext(Dispatchers.IO) { UtilitySpotter.spotterData }
+        spotterlist = withContext(Dispatchers.IO) { UtilitySpotter.spotterData }.toMutableList()
         markFavorites()
         ca = AdapterSpotter(spotterlist)
         recyclerView.recyclerView.adapter = ca
         title = spotterlist.size.toString() + " spotters active " + UtilityTime.gmtTime("HH:mm")
-        /* ca.setOnItemClickListener(object : AdapterSpotter.MyClickListener {
-            override fun onItemClick(position: Int) {
-                itemSelected(position)
-            }
-        })*/
         ca.setListener(::itemSelected)
     }
 
@@ -142,7 +137,7 @@ class SpottersActivity : BaseActivity() {
     private fun checkFav(posn: Int) {
         if (MyApplication.spotterFav.contains(spotterlist[posn].uniq + ":")) {
             MyApplication.spotterFav =
-                    MyApplication.spotterFav.replace(spotterlist[posn].uniq + ":", "")
+                MyApplication.spotterFav.replace(spotterlist[posn].uniq + ":", "")
             spotterlist[posn].lastName = spotterlist[posn].lastName.replace("0FAV ", "")
         } else {
             MyApplication.spotterFav = MyApplication.spotterFav + spotterlist[posn].uniq + ":"

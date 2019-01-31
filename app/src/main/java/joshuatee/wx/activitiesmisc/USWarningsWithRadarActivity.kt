@@ -139,6 +139,7 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
         )
     }
 
+    // FIXME convert to US NWS Radar mosaics
     private fun radarMosaic(id: Int) {
         ObjectIntent(
             this,

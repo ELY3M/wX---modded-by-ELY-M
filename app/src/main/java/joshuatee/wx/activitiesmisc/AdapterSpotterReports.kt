@@ -26,13 +26,13 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.radar.SpotterReports
 import joshuatee.wx.ui.ObjectCard
+import joshuatee.wx.ui.ObjectTextView
 
 internal class AdapterSpotterReports(private val mDataset: List<SpotterReports>) :
     RecyclerView.Adapter<AdapterSpotterReports.DataObjectHolder>() {
@@ -40,11 +40,11 @@ internal class AdapterSpotterReports(private val mDataset: List<SpotterReports>)
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
-        val name: TextView = itemView.findViewById(R.id.name)
-        val email: TextView = itemView.findViewById(R.id.email)
-        val time: TextView = itemView.findViewById(R.id.time)
-        val phone: TextView = itemView.findViewById(R.id.phone)
-        val summary: TextView = itemView.findViewById(R.id.summary)
+        val name = ObjectTextView(itemView, R.id.name, UIPreferences.textHighlightColor)
+        val email = ObjectTextView(itemView, R.id.email)
+        val time = ObjectTextView(itemView, R.id.time)
+        val phone = ObjectTextView(itemView, R.id.phone)
+        val summary = ObjectTextView(itemView, R.id.summary)
 
         init {
             ObjectCard(itemView, R.id.cv1)
@@ -68,12 +68,11 @@ internal class AdapterSpotterReports(private val mDataset: List<SpotterReports>)
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
         holder.name.text = mDataset[position].type
-        holder.name.setTextColor(UIPreferences.textHighlightColor)
         holder.time.text = mDataset[position].time
         holder.email.text = mDataset[position].city.replace(MyApplication.newline, " ")
         holder.phone.text = mDataset[position].lastName + ", " + mDataset[position].firstName
         holder.summary.text = mDataset[position].narrative
-        holder.summary.setTextAppearance(holder.summary.context, UIPreferences.smallTextTheme)
+        holder.summary.setAsBackgroundText()
         listOf(holder.time, holder.email, holder.phone, holder.summary).forEach {
             it.setTextColor(UIPreferences.backgroundColor)
             it.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)

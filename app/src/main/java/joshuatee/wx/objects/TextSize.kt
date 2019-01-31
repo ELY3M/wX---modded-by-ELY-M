@@ -19,19 +19,12 @@
 
 */
 
-package joshuatee.wx.spc
+package joshuatee.wx.objects
 
-class StormReport(
-    val text: String = "",
-    val lat: String = "",
-    val lon: String = "",
-    val time: String = "",
-    val magnitude: String = "",
-    val address: String = "",
-    val city: String = "",
-    val state: String = "",
-    val damageReport: String = "",
-    val damageHeader: String = ""
-)
+enum class TextSize {
+    SMALL,
+    MEDIUM,
+    LARGE,
+}
 
 

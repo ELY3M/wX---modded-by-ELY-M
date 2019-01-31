@@ -26,12 +26,12 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.ui.ObjectCard
+import joshuatee.wx.ui.ObjectTextView
 
 internal class AdapterUSWarningsImpact(private val mDataset: List<ObjectImpactGraphic>) :
     RecyclerView.Adapter<AdapterUSWarningsImpact.DataObjectHolder>() {
@@ -39,9 +39,9 @@ internal class AdapterUSWarningsImpact(private val mDataset: List<ObjectImpactGr
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
-        val title: TextView = itemView.findViewById(R.id.title)
-        val cities: TextView = itemView.findViewById(R.id.cities)
-        val population: TextView = itemView.findViewById(R.id.population)
+        val title = ObjectTextView(itemView, R.id.title)
+        val cities = ObjectTextView(itemView, R.id.cities)
+        val population = ObjectTextView(itemView, R.id.population)
 
         init {
             ObjectCard(itemView, R.id.cv1)
@@ -69,10 +69,7 @@ internal class AdapterUSWarningsImpact(private val mDataset: List<ObjectImpactGr
         holder.title.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
         holder.cities.text = mDataset[position].cities
         holder.population.text = mDataset[position].population
-        listOf(holder.cities, holder.population).forEach {
-            it.setTextColor(UIPreferences.backgroundColor)
-            it.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
-        }
+        listOf(holder.cities, holder.population).forEach { it.setAsSmallText() }
     }
 
     override fun getItemCount() = mDataset.size

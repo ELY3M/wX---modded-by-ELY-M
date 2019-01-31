@@ -60,6 +60,7 @@ import joshuatee.wx.activitiesmisc.WebscreenAB
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.Location
+import joshuatee.wx.ui.ObjectCardStormReportItem
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
@@ -196,16 +197,16 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     val freq3 = mapState[s.state]
                     mapState[s.state] = if (freq3 == null) 1 else freq3 + 1
                 }
-                val cTmp = ObjectCardText(contextg, linearLayout, Utility.fromHtml(s.text))
-                cTmp.setId(k)
-                out.append(MyApplication.newline)
-                out.append(Utility.fromHtml(s.text))
+                val stormCard = ObjectCardStormReportItem(contextg)
+                stormCard.setId(k)
+                linearLayout.addView(stormCard.card)
+                stormCard.setTextFields(s)
                 if (!s.text.contains("<H2>")) {
-                    registerForContextMenu(cTmp.tv)
+                    registerForContextMenu(stormCard.card)
                 }
                 val xStr = s.lat
                 val yStr = s.lon
-                cTmp.setOnClickListener(View.OnClickListener {
+                stormCard.setListener(View.OnClickListener {
                     ObjectIntent(
                         contextg,
                         WebscreenAB::class.java,
@@ -216,10 +217,8 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 if (s.text.contains("(") && s.text.contains(")")) {
 
                 } else {
-                    cTmp.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-                    cTmp.setTextColor(UIPreferences.textHighlightColor)
-                    cTmp.setText(Utility.fromHtml(s.text.toUpperCase()))
-                    cTmp.setOnClickListener(View.OnClickListener {
+                    stormCard.setTextHeader(s)
+                    stormCard.setListener(View.OnClickListener {
                         scrollView.smoothScrollTo(
                             0,
                             0

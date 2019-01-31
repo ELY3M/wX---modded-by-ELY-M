@@ -29,6 +29,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
+import androidx.core.widget.TextViewCompat
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
@@ -55,9 +56,12 @@ class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7
             0
         )
         tv1.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-        // FIXME - need to see why this was disabled. shrinks text to fit on one line like wXL23
-        // FIXME use better variable names
-        //TextViewCompat.setAutoSizeTextTypeWithDefaults(tv1, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM)
+        // FIXME better variable names
+        TextViewCompat.setAutoSizeTextTypeWithDefaults(
+            tv1,
+            TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM
+        )
+        tv1.maxLines = 1
         tv2 = AppCompatTextView(context)
         tv2.setPadding(
             MyApplication.padding,

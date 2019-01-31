@@ -28,16 +28,26 @@ internal object UtilitySPCStormReports {
     fun processData(textArr: List<String>): MutableList<StormReport> {
         val output = StringBuilder()
         val outAl = mutableListOf<StormReport>()
-        var lineArr: List<String>
-        var x: String
-        var y: String
+        var lineChunks: List<String>
+        var lat: String
+        var lon: String
         var state: String
         var time: String
+        var address: String
+        var damageReport: String
+        var magnitude: String
+        var city: String
+        var damageHeader: String
         textArr.forEach {
-            x = ""
-            y = ""
+            lat = ""
+            lon = ""
             state = ""
             time = ""
+            address = ""
+            damageReport = ""
+            magnitude = ""
+            city = ""
+            damageHeader = ""
             output.setLength(0)
             if (it.contains(",F_Scale,")) {
                 output.append("Tornado Reports")
@@ -46,26 +56,26 @@ internal object UtilitySPCStormReports {
             } else if (it.contains(",Size,")) {
                 output.append("Hail Reports")
             } else {
-                lineArr = it.split(",")
-                if (lineArr.size > 7) {
-                    output.append(lineArr[0])
+                lineChunks = it.split(",")
+                if (lineChunks.size > 7) {
+                    output.append(lineChunks[0])
                     output.append(" ")
-                    output.append(lineArr[1])
+                    output.append(lineChunks[1])
                     output.append(" ")
-                    output.append(lineArr[2])
+                    output.append(lineChunks[2])
                     output.append("<font color=")
                     output.append(UIPreferences.highlightColorStr)
                     output.append("> ")
-                    output.append(lineArr[3])
+                    output.append(lineChunks[3])
                     output.append(" ")
-                    output.append(lineArr[4])
+                    output.append(lineChunks[4])
                     output.append("</font>  ")
-                    output.append(lineArr[5])
+                    output.append(lineChunks[5])
                     output.append(" ")
-                    output.append(lineArr[6])
+                    output.append(lineChunks[6])
                     output.append("<br>")
                     output.append("<i>")
-                    output.append(lineArr[7])
+                    output.append(lineChunks[7])
                     output.append("</i>")
 
                     // 0 - GMT time
@@ -77,13 +87,36 @@ internal object UtilitySPCStormReports {
                     // 6 - Y
                     // 7 - description (WFO)
 
-                    x = lineArr[5]
-                    y = lineArr[6]
-                    time = lineArr[0]
-                    state = lineArr[4]
+                    //x = lineArr[5]
+                    //y = lineArr[6]
+                    //time = lineArr[0]
+                    //state = lineArr[4]
+
+                    time = lineChunks[0]
+                    magnitude = lineChunks[1]
+                    address = lineChunks[2]
+                    city = lineChunks[3]
+                    state = lineChunks[4]
+                    lat = lineChunks[5]
+                    lon = lineChunks[6]
+                    damageReport = lineChunks[7]
                 }
             }
-            outAl.add(StormReport(output.toString(), x, y, time, state))
+            //outAl.add(StormReport(output.toString(), lat, lon, time, state))
+            outAl.add(
+                StormReport(
+                    output.toString(),
+                    lat,
+                    lon,
+                    time,
+                    magnitude,
+                    address,
+                    city,
+                    state,
+                    damageReport,
+                    damageHeader
+                )
+            )
         }
         return outAl
     }

@@ -17,11 +17,18 @@
 // TODO migrate away from US govt website for Sun/Moon data do to cert issues
 // TODO look into ( believe it's good ): https://android-developers.googleblog.com/2019/01/get-your-apps-ready-for-64-bit.html
 // TODO add to homescreen regional mosaic radar
-// TODO add last used to NWS Obs site
 
-55105 2019_01_25 update NDR to r19 and kotlin plugin to 1.3.20
+55107 2019_01_30 make better use of ObjectTextView
+                 for 7day card, use text autosize so top line shrinks
+                 [BUG] if search in spotters activity there is no way save app restart or refresh to get back to full spotter list
+55106 2019_01_28 enhance us warning cards in misc uswarn
+                 add ObjectTextView
+                 add ObjectCardStormReportItem
+55105 2019_01_27 update NDR to r19 and kotlin plugin to 1.3.20
                  add one more condition to UtilityMetarConditions
                  add option to not show icons on mainscreen 7day
+                 [BUG] switch warning download to JSON after NWS feed stopped working overshutdown
+                 NWS Obs site - add last used
 55104 2019_01_19 TEXT: fixed qpfpfd
 55103 2019_01_16 [BUG] add exception handling in TouchImageView to catch large images such as GOES16 wide atlantic
 55102 2019_01_16 android studio 3.3 ( Gradle Plugin 3.3 and Gradle 4.10.1 )

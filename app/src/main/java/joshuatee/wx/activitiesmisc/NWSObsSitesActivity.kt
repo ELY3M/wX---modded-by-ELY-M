@@ -25,6 +25,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 
 import android.os.Bundle
+import android.view.MenuItem
+import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
 import joshuatee.wx.external.UtilityStringExternal
@@ -34,8 +36,9 @@ import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.STATE_ARR
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectRecyclerView
+import joshuatee.wx.util.Utility
 
-class NWSObsSitesActivity : BaseActivity() {
+class NWSObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val listIds = mutableListOf<String>()
     private val listCity = mutableListOf<String>()
@@ -45,12 +48,21 @@ class NWSObsSitesActivity : BaseActivity() {
     private lateinit var recyclerView: ObjectRecyclerView
     private lateinit var contextg: Context
     private val titleString = "Observation sites"
+    val prefToken: String = "NWS_OBSSITE_LAST_USED"
+    private lateinit var lastUsedMenuItem: MenuItem
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
+        super.onCreate(
+            savedInstanceState,
+            R.layout.activity_recyclerview_bottom_toolbar,
+            R.menu.nwsobssites,
+            true
+        )
         contextg = this
+        toolbarBottom.setOnMenuItemClickListener(this)
         title = titleString
+        updateButton()
         siteDisplay = false
         recyclerView = ObjectRecyclerView(
             this,
@@ -59,6 +71,12 @@ class NWSObsSitesActivity : BaseActivity() {
             STATE_ARR.toMutableList(),
             ::itemClicked
         )
+    }
+
+    private fun updateButton() {
+        val menu = toolbarBottom.menu
+        lastUsedMenuItem = menu.findItem(R.id.action_lastused)
+        lastUsedMenuItem.title = "Last Used: " + Utility.readPref(prefToken, "")
     }
 
     private fun itemClicked(position: Int) {
@@ -73,17 +91,23 @@ class NWSObsSitesActivity : BaseActivity() {
                     siteDisplay = false
                     title = titleString
                 }
-                else -> ObjectIntent(
-                    contextg,
-                    WebscreenAB::class.java,
-                    WebscreenAB.URL,
-                    arrayOf(
-                        "http://www.wrh.noaa.gov/mesowest/timeseries.php?sid=" + listIds[position],
-                        listCity[position]
-                    )
-                )
+                else -> showObsSite(listIds[position])
             }
         }
+    }
+
+    private fun showObsSite(obsSite: String) {
+        Utility.writePref(prefToken, obsSite)
+        updateButton()
+        ObjectIntent(
+            contextg,
+            WebscreenAB::class.java,
+            WebscreenAB.URL,
+            arrayOf(
+                "http://www.wrh.noaa.gov/mesowest/timeseries.php?sid=$obsSite",
+                obsSite
+            )
+        )
     }
 
     private fun provSelected() {
@@ -106,5 +130,13 @@ class NWSObsSitesActivity : BaseActivity() {
         }
         recyclerView.refreshList(listCity)
         siteDisplay = true
+    }
+
+    override fun onMenuItemClick(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_lastused -> showObsSite(Utility.readPref(prefToken, ""))
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
     }
 } 

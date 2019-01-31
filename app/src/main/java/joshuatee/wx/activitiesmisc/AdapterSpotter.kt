@@ -26,17 +26,16 @@ import android.content.Intent
 import android.net.Uri
 import androidx.recyclerview.widget.RecyclerView
 import android.telephony.TelephonyManager
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.radar.Spotter
 import joshuatee.wx.ui.ObjectCard
+import joshuatee.wx.ui.ObjectTextView
 
 internal class AdapterSpotter(private val mDataset: MutableList<Spotter>) :
     RecyclerView.Adapter<AdapterSpotter.DataObjectHolder>() {
@@ -44,10 +43,10 @@ internal class AdapterSpotter(private val mDataset: MutableList<Spotter>) :
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
-        val name: TextView = itemView.findViewById(R.id.name)
-        val email: TextView = itemView.findViewById(R.id.email)
-        val time: TextView = itemView.findViewById(R.id.time)
-        val phone: TextView = itemView.findViewById(R.id.phone)
+        val name = ObjectTextView(itemView, R.id.name, UIPreferences.textHighlightColor)
+        val email = ObjectTextView(itemView, R.id.email)
+        val time = ObjectTextView(itemView, R.id.time)
+        val phone = ObjectTextView(itemView, R.id.phone)
         val objCard = ObjectCard(itemView, R.id.cv1)
 
         init {
@@ -75,33 +74,28 @@ internal class AdapterSpotter(private val mDataset: MutableList<Spotter>) :
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
         holder.name.text = mDataset[position].lastName + ", " + mDataset[position].firstName
-        holder.name.setTextColor(UIPreferences.textHighlightColor)
         holder.time.text = mDataset[position].reportAt
         holder.email.text = mDataset[position].email.replace(MyApplication.newline, " ")
         val he = holder.email
         val emailAddress = holder.email.text
-        holder.email.setOnClickListener {
+        holder.email.setOnClickListener (View.OnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:")
             intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailAddress))
             intent.putExtra(Intent.EXTRA_SUBJECT, "")
             he.context.startActivity(Intent.createChooser(intent, "Send Email"))
-        }
+        })
         holder.phone.text = mDataset[position].phone.replace(MyApplication.newline, " ")
-        listOf(holder.time, holder.email, holder.phone).forEach {
-            it.setTextColor(UIPreferences.backgroundColor)
-            it.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
-            it.setTextAppearance(it.context, UIPreferences.smallTextTheme)
-        }
+        listOf(holder.time, holder.email, holder.phone).forEach { it.setAsBackgroundText() }
         val hp = holder.phone
-        holder.phone.setOnClickListener {
+        holder.phone.setOnClickListener (View.OnClickListener {
             val tm = hp.context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
             if (tm.phoneType != TelephonyManager.PHONE_TYPE_NONE) {
                 val intent = Intent(Intent.ACTION_DIAL)
                 intent.data = Uri.parse("tel:" + mDataset[position].phone)
                 hp.context.startActivity(intent)
             }
-        }
+        })
     }
 
     override fun getItemCount() = mDataset.size

@@ -84,8 +84,6 @@ class ObjectAlertSummary(
             var zoneArr: List<String>
             var firstCounty = ""
             var firstZone = ""
-            var buttonTxt: String
-            var tmpStr: String
             val ca = mutableListOf<CAPAlert>()
             //val uswarnPattern: Pattern = Pattern.compile("<entry>.*?<id>(.+?)</id>.*?<title>(.+?)</title>.*?<summary>(.*?)</summary>.*?<cap:event>(.*?)</cap:event>.*?<cap:areaDesc>(.*?)</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>(.*?)</value>.*?<valueName>VTEC</valueName>.*?<value>(.*?)</value>.*?</entry>.*?")
             //val idList = UtilityString.parseColumnMutable(data, "<entry>.*?<id>(.+?)</id>.*?<title>.+?</title>.*?<summary>.*?</summary>.*?<cap:event>.*?</cap:event>.*?<cap:areaDesc>.*?</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>.*?</value>.*?<valueName>VTEC</valueName>.*?<value>.*?</value>.*?</entry>.*?")
@@ -112,7 +110,6 @@ class ObjectAlertSummary(
                     )
                 )
             }
-            //for (cc in ca) {
             ca.forEach { cc ->
                 countyArr = cc.area.split(";")
                 if (countyArr.isNotEmpty()) firstCounty = countyArr[0]
@@ -149,21 +146,15 @@ class ObjectAlertSummary(
                         map[s] = if (freq == null) 1 else freq + 1
                         mapButtonState[i] = s
                     }
-                    val cText = ObjectCardText(context)
+                    val cText = ObjectCardAlertSummaryItem(context)
                     cText.setId(i)
-                    activity.registerForContextMenu(cText.tv)
+                    activity.registerForContextMenu(cText.card)
                     mapButtonNws[i] = nwsOffice
                     mapButtonCounty[i] = firstCounty
                     mapButtonZone[i] = firstZone
-                    tmpStr = cc.title.replace("issued", MyApplication.newline + "Issued")
-                    buttonTxt = nwsOffice + ": " + nwsLoc + MyApplication.newline + tmpStr +
-                            MyApplication.newline + cc.area
-                    cText.setText(buttonTxt)
-                    if (cc.title.matches(".*?Tornado.*?".toRegex())) {
-                        cText.setTextColor(MyApplication.radarColorTor)
-                    } // FIXME use ENUM
+                    cText.setTextFields(nwsOffice, nwsLoc, cc)
                     val urlStr = cc.url
-                    cText.setOnClickListener(View.OnClickListener {
+                    cText.setListener(View.OnClickListener {
                         ObjectIntent(
                             context,
                             USAlertsDetailActivity::class.java,
