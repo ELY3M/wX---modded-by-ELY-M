@@ -4,7 +4,7 @@ buildscript {
     //ext.supportLibraryVersion = "27.1.1"
     //ext.supportLibraryVersion = "28.0.0-beta1"
     ext.okHttpVersion = "3.12.0"
-    ext.androidxVersion = "1.0.0"
+    //ext.androidxVersion = "1.0.1"
     ext.kotlinCoroutinesVersion = "1.0.0"
 
     repositories {
