@@ -39,7 +39,8 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 
 #
 ## DONE!
-====================================  
+====================================   
+added in internet check on start with option to turn on and off internet check.   
 get MSL and AGL Beam Heights are available in long press now.  
 Sun/Moon data are calculated from SunCalc library now - No More loading/parsing from website with broken SSL.   
 Special Weather Statements Polygons are working!  I had to create a list for SPS same way as how spotters are done in wX.  you should see matching texts for sps polygons now.      
