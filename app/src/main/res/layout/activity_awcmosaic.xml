@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<!--
     Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
@@ -23,32 +23,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:orientation="vertical">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <include layout="@layout/widget_toolbar_top" />
+        <include layout="@layout/widget_toolbar_bottom" />
 
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@color/dividerColor"
-            android:dividerPadding="0px"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="0dip"
-            android:stretchColumns="*">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@id/toolbar_bottom"
+            android:orientation="vertical">
 
-            <joshuatee.wx.ui.TouchImageView2
-                android:id="@+id/iv"
+            <include layout="@layout/widget_toolbar_top" />
+
+            <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:scaleType="fitCenter" />
+                android:divider="@color/dividerColor"
+                android:dividerPadding="0px"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="0dip"
+                android:stretchColumns="*">
 
-        </TableLayout>
-    </LinearLayout>
+                <joshuatee.wx.ui.TouchImageView2
+                    android:id="@+id/iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:scaleType="fitCenter" />
+            </TableLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/left_drawer"
@@ -60,3 +67,6 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp" />
 </androidx.drawerlayout.widget.DrawerLayout>
+    
+ 
+  

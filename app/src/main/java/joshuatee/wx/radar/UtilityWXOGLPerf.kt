@@ -112,7 +112,7 @@ internal object UtilityWXOGLPerf {
                 while (bin < numberOfRleHalfwords) {
                     try {
                         curLevel =
-                                (dis2.readUnsignedByte() and 0xFF).toByte() // was dis2!!.readUnsignedByte().toInt()
+                            (dis2.readUnsignedByte() and 0xFF).toByte() // was dis2!!.readUnsignedByte().toInt()
                     } catch (e: Exception) {
                         UtilityLog.HandleException(e)
                     }

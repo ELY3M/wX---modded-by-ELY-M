@@ -122,7 +122,7 @@ internal object UtilityMetar {
                         windBlob = z.parse(RegExp.patternMetarWxogl4)
                     }
                     conditionsBlob =
-                            z.parse(RegExp.patternMetarWxogl5) // "SM (.*?) M{0,1}[0-9]{2}/"
+                        z.parse(RegExp.patternMetarWxogl5) // "SM (.*?) M{0,1}[0-9]{2}/"
                     visBlob = z.parse(" ([0-9].*?SM) ")
                     visBlobArr = MyApplication.space.split(visBlob)
                     visBlobDisplay = visBlobArr[visBlobArr.size - 1]
@@ -172,8 +172,8 @@ internal object UtilityMetar {
                     // Low IFR 	< 1 mi 	and/or < 500 ft
                     if (pressureBlob.length == 4) {
                         pressureBlob =
-                                StringBuilder(pressureBlob).insert(pressureBlob.length - 2, ".")
-                                    .toString()
+                            StringBuilder(pressureBlob).insert(pressureBlob.length - 2, ".")
+                                .toString()
                         pressureBlob = UtilityMath.unitsPressure(pressureBlob)
                     }
                     // 19011G16KT
@@ -314,7 +314,7 @@ internal object UtilityMetar {
         var currentDistance: Double
         obsSites.indices.forEach {
             currentDistance =
-                    LatLon.distance(radarLocation, obsSites[it].location, DistanceUnit.MILE)
+                LatLon.distance(radarLocation, obsSites[it].location, DistanceUnit.MILE)
             if (currentDistance < obsSiteRange) {
                 obsListSb.append(obsSites[it].name)
                 obsListSb.append(",")

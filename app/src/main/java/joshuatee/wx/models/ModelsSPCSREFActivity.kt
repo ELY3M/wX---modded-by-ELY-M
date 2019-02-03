@@ -92,16 +92,16 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 savedInstanceState,
                 R.layout.activity_models_spcsref,
                 R.menu.models_spcsref,
-                false,
-                true
+                iconsEvenlySpaced = false,
+                bottomToolbar = true
             )
         } else {
             super.onCreate(
                 savedInstanceState,
                 R.layout.activity_models_spcsrefmultipane,
                 R.menu.models_spcsref,
-                false,
-                true
+                iconsEvenlySpaced = false,
+                bottomToolbar = true
             )
         }
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -366,7 +366,7 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
         om.spTime.notifyDataSetChanged()
         (0 until om.numPanes).forEach {
             om.displayData.param[it] =
-                    Utility.readPref(this, om.prefParam + it.toString(), "SREF_H5__")
+                Utility.readPref(this, om.prefParam + it.toString(), "SREF_H5__")
             om.displayData.paramLabel[it] = Utility.readPref(
                 this,
                 om.prefParamLabel + it.toString(),

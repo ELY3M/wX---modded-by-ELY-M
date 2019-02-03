@@ -143,10 +143,10 @@ object UtilityGOES {
             ""
         ).split(",")[0]
         satSectorl =
-                if (state == "AZ" || state == "MT" || state == "ID" || state == "NV" || state == "CA" || state == "OR" || state == "UT" || state == "WA" || state == "AK" || state == "HI")
-                    "west"
-                else
-                    "east"
+            if (state == "AZ" || state == "MT" || state == "ID" || state == "NV" || state == "CA" || state == "OR" || state == "UT" || state == "WA" || state == "AK" || state == "HI")
+                "west"
+            else
+                "east"
         return satSectorl
     }
 }

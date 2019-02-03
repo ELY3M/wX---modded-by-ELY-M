@@ -41,6 +41,18 @@ class ObjectTextView(val context: Context) {
             tv.text = value
         }
 
+    var gravity: Int
+        get() = tv.gravity
+        set(value) {
+            tv.gravity = value
+        }
+
+    var maxLines: Int
+        get() = tv.maxLines
+        set(value) {
+            tv.maxLines = value
+        }
+
     init {
         tv = AppCompatTextView(context)
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
@@ -105,6 +117,10 @@ class ObjectTextView(val context: Context) {
 
     fun setOnClickListener(fn: View.OnClickListener) {
         tv.setOnClickListener(fn)
+    }
+
+    fun setPadding(left: Int, top: Int, right: Int, bottom: Int) {
+        tv.setPadding(left, top, right, bottom)
     }
 }
 

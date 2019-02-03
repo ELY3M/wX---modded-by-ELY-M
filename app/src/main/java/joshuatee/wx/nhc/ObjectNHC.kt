@@ -66,7 +66,7 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
         var dataRet: ObjectNHCStormInfo
         (1 until 6).forEach {
             dataRet =
-                    UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_at" + it.toString() + ".xml")
+                UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_at" + it.toString() + ".xml")
             if (dataRet.title != "") {
                 atlSumList.add(dataRet.summary)
                 atlLinkList.add(UtilityString.getNWSPRE(dataRet.url))
@@ -78,7 +78,7 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
         }
         (1 until 6).forEach {
             dataRet =
-                    UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_ep" + it.toString() + ".xml")
+                UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_ep" + it.toString() + ".xml")
             if (dataRet.title != "") {
                 pacSumList.add(dataRet.summary)
                 pacLinkList.add(UtilityString.getNWSPRE(dataRet.url))

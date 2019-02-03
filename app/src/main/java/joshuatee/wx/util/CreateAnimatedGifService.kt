@@ -46,7 +46,7 @@ class CreateAnimatedGifService : IntentService("CreateAnimatedGifService") {
             )
         }
         encoder.finish()
-        val dir = File(filesDir.toString() + "/shared")
+        val dir = File("$filesDir/shared")
         if (!dir.mkdirs()) UtilityLog.d("wx", "unable to create: $filesDir/shared")
         val file = File(dir, "${MyApplication.packageNameFileNameAsString}_anim.gif")
         val contentUri = FileProvider.getUriForFile(

@@ -20,8 +20,8 @@
 
 <resources>
 
-     <string name="ui_logfrag_no_icons">
-         Don\'t show icons on main screen.
+     <string name="ui_awc_radar_mosaic">
+         Use the AWC Radar mosaic images instead of the main NWS images.
 </string>
 
     <string name="widget_prevent_tap">
@@ -628,6 +628,9 @@ to download warning data.
  Check for WPC MPD at the selected interval.
 The text in the tab headings is then modified. This also requires a periodic job run at the notification interval
 to download warning data.
+    </string>
+    <string name="checkinternet_switch_label">
+ Check for internet connection on your device.
     </string>
     <string name="checktor_switch_label">
 Check for Severe Thunderstorm, Flash Flood,  Special Marine warnings, Special Weather Statements and Tornado warnings at the selected interval.

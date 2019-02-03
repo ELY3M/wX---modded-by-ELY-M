@@ -33,6 +33,7 @@ object UtilityDownloadRadar {
 //getNWSStringFromURLJSON
 //fix for "struck" warning
 
+
     fun getPolygonVTEC(context: Context) {
         MyApplication.severeDashboardTor.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Tornado%20Warning"))
         MyApplication.severeDashboardSvr.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Severe%20Thunderstorm%20Warning"))

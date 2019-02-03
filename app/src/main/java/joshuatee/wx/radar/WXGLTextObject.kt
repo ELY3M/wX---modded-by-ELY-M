@@ -520,7 +520,7 @@ class WXGLTextObject(
                     if (drawText) {
                         if (!report) {
                             glview.spotterTv[c].text =
-                                    UtilitySpotter.spotterList[aa].lastName.replace("0FAV ", "")
+                                UtilitySpotter.spotterList[aa].lastName.replace("0FAV ", "")
                         } else {
                             glview.spotterTv[c].text = UtilitySpotter.spotterReports[bb].type
                         }

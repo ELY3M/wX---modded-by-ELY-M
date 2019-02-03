@@ -214,10 +214,10 @@ class SettingsColorPaletteActivity : BaseActivity() {
         if (rowListItem[globalPosition].prefToken == "RADAR_COLOR_PALETTE_$type") {
             if (!rowListItem[globalPosition].builtin) {
                 MyApplication.radarColorPalette94List =
-                        MyApplication.radarColorPalette94List.replace(
-                            ":" + rowListItem[globalPosition].colorMapLabel,
-                            ""
-                        )
+                    MyApplication.radarColorPalette94List.replace(
+                        ":" + rowListItem[globalPosition].colorMapLabel,
+                        ""
+                    )
                 Utility.writePref(
                     context,
                     "RADAR_COLOR_PALETTE_" + type + "_LIST",
@@ -248,10 +248,10 @@ class SettingsColorPaletteActivity : BaseActivity() {
         } else {
             if (!rowListItem[globalPosition].builtin) {
                 MyApplication.radarColorPalette99List =
-                        MyApplication.radarColorPalette99List.replace(
-                            ":" + rowListItem[globalPosition].colorMapLabel,
-                            ""
-                        )
+                    MyApplication.radarColorPalette99List.replace(
+                        ":" + rowListItem[globalPosition].colorMapLabel,
+                        ""
+                    )
                 Utility.writePref(
                     context,
                     "RADAR_COLOR_PALETTE_" + type + "_LIST",

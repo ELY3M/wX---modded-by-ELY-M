@@ -41,6 +41,7 @@ import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.ui.UtilityTheme
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.util.Utility
 
 class WX : CommonActionBarFragment() {
 
@@ -62,6 +63,9 @@ class WX : CommonActionBarFragment() {
             UtilityToolbar.setupEvenlyDistributedToolbar(this, toolbarBottom, R.menu.cab)
         } else {
             toolbarBottom.inflateMenu(R.menu.cab)
+        }
+        if (MyApplication.checkinternet) {
+            Utility.checkInternet(this)
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         toolbarBottom.setOnClickListener { toolbarBottom.showOverflowMenu() }

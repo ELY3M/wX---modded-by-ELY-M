@@ -68,7 +68,7 @@ internal object UtilityNexradL2 {
         // 1832 vel 1192 vel
         var zeroColor = ContextCompat.getColor(context, R.color.black)
         if (Utility.readPref(context, "NWS_RADAR_BG_BLACK", "") != "true") zeroColor =
-                ContextCompat.getColor(context, R.color.white)
+            ContextCompat.getColor(context, R.color.white)
         val radialStartAngle = ByteBuffer.allocateDirect(720 * 4)
         radialStartAngle.order(ByteOrder.nativeOrder())
         radialStartAngle.position(0)

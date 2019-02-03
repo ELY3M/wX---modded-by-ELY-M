@@ -71,11 +71,11 @@ class ObjectOglRadarBuffers(val context: Context, var bgColor: Int) : ObjectOglB
         try {
             if (floatBuffer.capacity() < 32 * numberOfRadials * numRangeBins) {
                 floatBuffer =
-                        ByteBuffer.allocateDirect(32 * numberOfRadials * numRangeBins) // was 4*8
+                    ByteBuffer.allocateDirect(32 * numberOfRadials * numRangeBins) // was 4*8
             }
             if (colorBuffer.capacity() < 12 * numberOfRadials * numRangeBins) {
                 colorBuffer =
-                        ByteBuffer.allocateDirect(12 * numberOfRadials * numRangeBins)  // was 16
+                    ByteBuffer.allocateDirect(12 * numberOfRadials * numRangeBins)  // was 16
             }
         } catch (e: OutOfMemoryError) {
             UtilityLog.HandleException(e)

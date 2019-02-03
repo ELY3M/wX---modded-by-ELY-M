@@ -344,7 +344,7 @@ object UtilityCanada {
         var chunk = html.parse("<entry>(.*?)<category term=\"Warnings and Watches\"/>")
         urlAl = chunk.parseColumn("<title>.*?</title>.*?<link type=\"text/html\" href=\"(.*?)\"/>")
         titleAl =
-                chunk.parseColumn("<title>(.*?)</title>.*?<link type=\"text/html\" href=\".*?\"/>")
+            chunk.parseColumn("<title>(.*?)</title>.*?<link type=\"text/html\" href=\".*?\"/>")
         warningUrl = UtilityArray.joinArrayWithDelim(urlAl, ",")
         warning = UtilityArray.joinArrayWithDelim(titleAl, "<BR>")
         chunk = html.parse("<div id=\"watch\" class=\"floatLeft\">(.*?)</div>")

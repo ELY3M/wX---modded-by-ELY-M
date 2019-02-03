@@ -61,8 +61,8 @@ class GOES16Activity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
             savedInstanceState,
             R.layout.activity_image_show_navdrawer_bottom_toolbar,
             R.menu.goes16,
-            true,
-            true
+            iconsEvenlySpaced = true,
+            bottomToolbar = true
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)

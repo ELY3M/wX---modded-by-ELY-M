@@ -360,7 +360,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
     private fun addressSearch(type: String, address: String) = GlobalScope.launch(uiDispatcher) {
         var xyStr = listOf<String>()
         if (type == "osm") xyStr =
-                withContext(Dispatchers.IO) { UtilityLocation.getXYFromAddressOSM(address) }
+            withContext(Dispatchers.IO) { UtilityLocation.getXYFromAddressOSM(address) }
         locXEt.setText(xyStr[0])
         locYEt.setText(xyStr[1])
     }

@@ -58,8 +58,7 @@ public enum SolarEvent {
     }
 } */
 
-public class SunCalc {
-
+class SunCalc {
 
     /*public enum SolarEventError: Error {
         case sunNeverRise
@@ -72,15 +71,14 @@ public class SunCalc {
     }*/
 
     companion object {
-        val radPerDegree = PI / 180
-        private val e = 23.4397 * radPerDegree
-        val j0: Double = 0.0009
-        val j1970: Double = 2440588.0
-        val j2000: Double = 2451545.0
-        val secondsPerDay: Double = 86400.0
+        const val radPerDegree: Double = PI / 180
+        private const val e = 23.4397 * radPerDegree
+        const val j0: Double = 0.0009
+        private const val j1970: Double = 2440588.0
+        const val j2000: Double = 2451545.0
+        const val secondsPerDay: Double = 86400.0
 
-
-        fun julianDays(): Double {
+        private fun julianDays(): Double {
             //return timeIntervalSince1970 / Date.secondsPerDay - 0.5 + j1970
             return (System.currentTimeMillis() / 1000) / DateUtils.DAY_IN_MILLIS / DateUtils.SECOND_IN_MILLIS - 0.5 + j1970
         }
@@ -163,7 +161,7 @@ public class SunCalc {
         return MoonCoordinate(rightAscension(altL, b), declination(altL, b), dt)
     }
 
-    public fun sunPosition(date: Date, location: Location): AzimuthCoordinate {
+    fun sunPosition(date: Date, location: Location): AzimuthCoordinate {
         val lw = SunCalc.radPerDegree * location.longitude * -1.0
         val phi = SunCalc.radPerDegree * location.latitude
         val d = SunCalc.daysSince2000()
@@ -172,7 +170,7 @@ public class SunCalc {
         return AzimuthCoordinate(azimuth(h, phi, c.declination), altitude(h, phi, c.declination))
     }
 
-    public fun moonPosition(date: Date, location: Location): MoonPosition {
+    fun moonPosition(date: Date, location: Location): MoonPosition {
         val lw = SunCalc.radPerDegree * location.longitude * -1.0
         val phi = SunCalc.radPerDegree * location.latitude
         val d = SunCalc.daysSince2000()
@@ -184,7 +182,7 @@ public class SunCalc {
         return MoonPosition(azimuth(h, phi, c.declination), h1, c.distance, pa)
     }
 
-    public fun moonIllumination(date: Date = Date()): MoonIllumination {
+    fun moonIllumination(date: Date = Date()): MoonIllumination {
         val d = SunCalc.daysSince2000()
         val s = sunCoordinates(d)
         val m = moonCoordinates(d)
@@ -209,7 +207,7 @@ public class SunCalc {
         return MoonIllumination((1.0 + cos(inc)) / 2.0, 0.5 + 0.5 * inc * retVal / PI, angle)
     }
 
-  /*  private fun hourAngle(h: Double, phi: Double, d: Double): Double {
+    /*  private fun hourAngle(h: Double, phi: Double, d: Double): Double {
         val cosH = (sin(h) - sin(phi) * sin(d)) / (cos(phi) * cos(d))
         if (cosH > 1) {
             throw SolarEventError.sunNeverRise

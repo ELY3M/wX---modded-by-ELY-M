@@ -72,11 +72,11 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         sv.smoothScrollTo(0, 0)
         withContext(Dispatchers.IO) {
             sigHtmlTmp =
-                    if (prod != "https://weather.gc.ca/forecast/public_bulletins_e.html?Bulletin=fpcn48.cwao") {
-                        UtilityDownload.getTextProduct(contextg, prod)
-                    } else {
-                        UtilityString.getHTMLandParseSep(prod, "<pre>(.*?)</pre>")
-                    }
+                if (prod != "https://weather.gc.ca/forecast/public_bulletins_e.html?Bulletin=fpcn48.cwao") {
+                    UtilityDownload.getTextProduct(contextg, prod)
+                } else {
+                    UtilityString.getHTMLandParseSep(prod, "<pre>(.*?)</pre>")
+                }
         }
         c0.setTextAndTranslate(Utility.fromHtml(sigHtmlTmp))
         Utility.writePref(contextg, "CA_TEXT_LASTUSED", prod)

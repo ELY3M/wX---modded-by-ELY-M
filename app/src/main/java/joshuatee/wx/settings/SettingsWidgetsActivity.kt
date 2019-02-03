@@ -48,7 +48,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
         val locNumIntCurrent = Location.numLocations
         val locTruncateLen = 20
         val locationAl = (1 until locNumIntCurrent + 1).mapTo(mutableListOf()) {
-            it.toString() + ": " + UtilityStringExternal.truncate(
+            "$it: " + UtilityStringExternal.truncate(
                 Utility.readPref(
                     this,
                     "LOC" + it + "_LABEL",

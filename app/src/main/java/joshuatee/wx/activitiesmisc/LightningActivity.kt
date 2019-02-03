@@ -60,8 +60,8 @@ class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
             savedInstanceState,
             R.layout.activity_image_show_navdrawer_bottom_toolbar,
             R.menu.lightning_activity,
-            true,
-            true
+            iconsEvenlySpaced = true,
+            bottomToolbar = true
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -81,7 +81,7 @@ class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        title = "Lightning " +  drw.getLabel()
+        title = "Lightning " + drw.getLabel()
         toolbar.subtitle = periodPretty
         bitmap = withContext(Dispatchers.IO) { UtilityLightning.getImage(drw.getUrl(), period) }
         img.setBitmap(bitmap)

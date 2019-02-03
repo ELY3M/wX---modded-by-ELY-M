@@ -120,7 +120,7 @@ internal class OverlayView private constructor(
         }
         if (getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL) {
             animationWidth =
-                    -animationWidth // Account for animating in from the other side of screen.
+                -animationWidth // Account for animating in from the other side of screen.
         }
     }
 
@@ -128,7 +128,7 @@ internal class OverlayView private constructor(
         super.onAttachedToWindow()
         translationX = animationWidth.toFloat()
         animate().translationX(0f).setDuration(DURATION_ENTER_EXIT.toLong()).interpolator =
-                DecelerateInterpolator()
+            DecelerateInterpolator()
     }
 
     override fun onClick(view: View) {

@@ -140,7 +140,7 @@ internal class Point {
     constructor()
 
     //overwrote toString to represent the points coordinates
-    override fun toString() = x.toString() + "," + y
+    override fun toString() = "$x,$y"
 }
 
 internal class Segment {

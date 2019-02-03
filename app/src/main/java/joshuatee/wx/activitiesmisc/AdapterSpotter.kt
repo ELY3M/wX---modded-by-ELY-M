@@ -78,7 +78,7 @@ internal class AdapterSpotter(private val mDataset: MutableList<Spotter>) :
         holder.email.text = mDataset[position].email.replace(MyApplication.newline, " ")
         val he = holder.email
         val emailAddress = holder.email.text
-        holder.email.setOnClickListener (View.OnClickListener {
+        holder.email.setOnClickListener(View.OnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:")
             intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailAddress))
@@ -88,7 +88,7 @@ internal class AdapterSpotter(private val mDataset: MutableList<Spotter>) :
         holder.phone.text = mDataset[position].phone.replace(MyApplication.newline, " ")
         listOf(holder.time, holder.email, holder.phone).forEach { it.setAsBackgroundText() }
         val hp = holder.phone
-        holder.phone.setOnClickListener (View.OnClickListener {
+        holder.phone.setOnClickListener(View.OnClickListener {
             val tm = hp.context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
             if (tm.phoneType != TelephonyManager.PHONE_TYPE_NONE) {
                 val intent = Intent(Intent.ACTION_DIAL)

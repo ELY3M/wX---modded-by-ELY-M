@@ -243,9 +243,9 @@ object UtilityModels {
             }
         }
         return if (showDate) {
-            futureDay + "  " + hourOfDay.toString() + amPm + " (" + month.toString() + "/" + dayOfMonth.toString() + ")"
+            "$futureDay  $hourOfDay$amPm ($month/$dayOfMonth)"
         } else {
-            futureDay + "  " + hourOfDay.toString() + amPm
+            "$futureDay  $hourOfDay$amPm"
         }
     }
 

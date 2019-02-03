@@ -32,14 +32,14 @@ import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.ShortcutType
-import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.produce
 
-class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
+class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
 
-    // Provides native interface to NWS radar mosaics along with animations
+    // Provides native interface to AWC radar mosaics along with animations
     //
     // arg1: "widget" (optional) - if this arg is specified it will show mosaic for widget location
     //       "location" for current location
@@ -52,119 +52,64 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
     private var animRan = false
     private var animDrawable = AnimationDrawable()
     private lateinit var img: ObjectTouchImageView
-    private var nwsRadarMosaicSectorLabelCurrent = ""
     private var bitmap = UtilityImg.getBlankBitmap()
-    private var doNotSavePref = false
     private lateinit var contextg: Context
     private lateinit var drw: ObjectNavDrawer
-    private val prefImagePosition = "NWSRADMOS"
+    private val prefImagePosition = "AWCRADARMOSAIC"
+    private var product = "rad_rala"
+    private val prefTokenSector = "AWCMOSAIC_SECTOR_LAST_USED"
+    private val prefTokenProduct = "AWCMOSAIC_PRODUCT_LAST_USED"
+    private var sector = "us"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
             savedInstanceState,
-            R.layout.activity_nwsmosaic,
-            R.menu.nwsmosaic,
+            R.layout.activity_awcmosaic,
+            R.menu.awcmosaic,
             iconsEvenlySpaced = true,
             bottomToolbar = true
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
-        val activityArguments = intent.getStringArrayExtra(URL)
-        if (activityArguments == null) {
-            nwsRadarMosaicSectorLabelCurrent =
-                Utility.readPref(this, "NWS_RADAR_MOSAIC_SECTOR_CURRENT", "Central Great Lakes")
-        } else {
-            if (activityArguments.isNotEmpty() && activityArguments[0] == "location") {
-                val rid1 = Location.rid
-                val ridLoc = Utility.readPref(this, "RID_LOC_$rid1", "")
-                val nwsLocationArr = ridLoc.split(",").dropLastWhile { it.isEmpty() }
-                val state = nwsLocationArr.getOrNull(0) ?: ""
-                nwsRadarMosaicSectorLabelCurrent =
-                    UtilityUSImgNWSMosaic.getSectorFromState(state)
-                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNWSMosaic.getSectorLabelFromCode(
-                    nwsRadarMosaicSectorLabelCurrent
-                )
-                doNotSavePref = true
-            } else if (activityArguments.isNotEmpty() && activityArguments[0] == "widget") {
-                val widgetLocNum = Utility.readPref(this, "WIDGET_LOCATION", "1")
-                val rid1 = Location.getRid(this, widgetLocNum)
-                val ridLoc = Utility.readPref(this, "RID_LOC_$rid1", "")
-                val nwsLocationArr = ridLoc.split(",").dropLastWhile { it.isEmpty() }
-                val state = Utility.readPref(this, "STATE_CODE_" + nwsLocationArr.getOrNull(0), "")
-                nwsRadarMosaicSectorLabelCurrent =
-                    UtilityUSImgNWSMosaic.getSectorFromState(state)
-                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNWSMosaic.getSectorLabelFromCode(
-                    nwsRadarMosaicSectorLabelCurrent
-                )
-            } else {
-                nwsRadarMosaicSectorLabelCurrent = Utility.readPref(
-                    this,
-                    "NWS_RADAR_MOSAIC_SECTOR_CURRENT",
-                    "Central Great Lakes"
-                )
-            }
-        }
-        drw = ObjectNavDrawer(this, UtilityUSImgNWSMosaic.labels, UtilityUSImgNWSMosaic.sectors)
+        drw = ObjectNavDrawer(this, UtilityAwcRadarMosaic.labels, UtilityAwcRadarMosaic.sectors)
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, "")
         img.setMaxZoom(8.0f)
         img.setListener(this, drw, ::getContentFixThis)
-        drw.index = findPosition(nwsRadarMosaicSectorLabelCurrent)
+        sector = Utility.readPref(prefTokenSector, sector)
+        product = Utility.readPref(prefTokenProduct, product)
+        drw.index = UtilityAwcRadarMosaic.sectors.indexOf(sector)
         drw.setListener(::getContentFixThis)
         toolbarBottom.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
-        getContent()
-        // FIXME how to handle this on sector change img.setZoom(1.0f)
+        getContent(product)
     }
 
     private fun getContentFixThis() {
-        getContent()
-    }
-
-    private fun findPosition(keyF: String): Int {
-        var key = keyF
-        if (key == "latest") {
-            key = "CONUS"
-        }
-        return UtilityUSImgNWSMosaic.labels.indices.firstOrNull { key == UtilityUSImgNWSMosaic.labels[it] }
-            ?: 0
+        getContent(product)
     }
 
     override fun onRestart() {
-        getContent()
+        getContent(product)
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent(productLocal: String) = GlobalScope.launch(uiDispatcher) {
+        product = productLocal
         toolbar.subtitle = drw.getLabel()
         bitmap = withContext(Dispatchers.IO) {
-            UtilityUSImgNWSMosaic.get(
-                contextg,
-                drw.getUrl(),
-                true
-            )
-        }
-        // FIXME bug in API 28 after changing
-        if (!doNotSavePref) {
-            Utility.writePref(
-                contextg,
-                "NWS_RADAR_MOSAIC_SECTOR_CURRENT",
-                drw.getLabel()
-            )
+            UtilityAwcRadarMosaic.get(drw.getUrl(), product)
         }
         img.setBitmap(bitmap)
         animRan = false
         img.firstRunSetZoomPosn(prefImagePosition)
+        Utility.writePref(contextg, prefTokenSector, drw.getUrl())
+        Utility.writePref(contextg, prefTokenProduct, product)
     }
 
-    private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
+    private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
         animDrawable = withContext(Dispatchers.IO) {
-            UtilityUSImgNWSMosaic.getAnimation(
-                contextg,
-                drw.getUrl(),
-                frameCount,
-                true
-            )
+            UtilityAwcRadarMosaic.getAnimation(contextg, drw.getUrl(), product)
         }
         animRan = UtilityImgAnim.startAnimation(animDrawable, img)
     }
@@ -185,10 +130,17 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
         }
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.RADAR_MOSAIC)
-            R.id.action_a12 -> getAnimate(12)
-            R.id.action_a18 -> getAnimate(18)
-            R.id.action_a6 -> getAnimate(6)
+            R.id.action_animate -> getAnimate()
             R.id.action_stop -> animDrawable.stop()
+            R.id.action_stop -> animDrawable.stop()
+            R.id.action_rad_rala -> getContent("rad_rala")
+            R.id.action_rad_cref -> getContent("rad_cref")
+            R.id.action_rad_tops18 -> getContent("rad_tops-18")
+            R.id.action_sat_irbw -> getContent("sat_irbw")
+            R.id.action_sat_ircol -> getContent("sat_ircol")
+            R.id.action_sat_irnws -> getContent("sat_irnws")
+            R.id.action_sat_vis -> getContent("sat_vis")
+            R.id.action_sat_wv -> getContent("sat_wv")
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     checkOverlayPerms()

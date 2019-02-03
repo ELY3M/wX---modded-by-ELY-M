@@ -101,7 +101,7 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
             contextg,
             TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
                 if (!ridFav.contains(
-                        selectedHour.toString() + ":" + String.format(
+                        "$selectedHour:" + String.format(
                             "%2s",
                             selectedMinute.toString()
                         ).replace(' ', '0')
@@ -149,18 +149,18 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
                 contextg,
                 TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
                     if (!ridFav.contains(
-                            selectedHour.toString() + ":" + String.format(
+                            "$selectedHour:" + String.format(
                                 "%2s",
                                 selectedMinute.toString()
                             ).replace(' ', '0')
                         )
                     ) {
                         ridFav = ridFav.replace(
-                            currHr.toString() + ":" + String.format("%2s", currMin).replace(
+                            "$currHr:" + String.format("%2s", currMin).replace(
                                 ' ',
                                 '0'
                             ),
-                            selectedHour.toString() + ":" + String.format(
+                            "$selectedHour:" + String.format(
                                 "%2s",
                                 selectedMinute.toString()
                             ).replace(' ', '0')

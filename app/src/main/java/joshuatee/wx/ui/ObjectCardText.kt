@@ -209,10 +209,6 @@ class ObjectCardText(private val context: Context) {
         tv.setOnClickListener(fn)
     }
 
-    fun setId(id: Int) {
-        tv.id = id
-    }
-
     companion object {
         fun textViewSetup(tvTmp: TextView) {
             tvTmp.setPadding(

@@ -87,7 +87,7 @@ class ObjectFab {
 
     private fun setupFAB(context: Context, icon: Int) {
         if (UIPreferences.themeIsWhite) fab.backgroundTintList =
-                ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+            ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
         fabSetResDrawable(context, icon)
         if (android.os.Build.VERSION.SDK_INT > 20) {
             fab.elevation = MyApplication.fabElevation
@@ -98,7 +98,7 @@ class ObjectFab {
     private fun setupFAB(context: Context) {
         if (UIPreferences.themeIsWhite) {
             fab.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+                ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
         }
         if (android.os.Build.VERSION.SDK_INT > 20) {
             fab.elevation = MyApplication.fabElevation

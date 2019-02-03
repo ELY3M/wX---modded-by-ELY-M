@@ -51,7 +51,7 @@ object UtilityUSv2 {
             }
         }
         conditionsTimeStr =
-                UtilityTime.convertFromUTC(UtilityString.shortenTimeV2(conditionsTimeStr))
+            UtilityTime.convertFromUTC(UtilityString.shortenTimeV2(conditionsTimeStr))
         return conditionsTimeStr.replace(":00 ", " ") + " " + UtilityString.capitalizeString(
             locationName
         ).trim { it <= ' ' } + " (" + obsClosestClass + ") "  // strip off seconds that is always 00, need to do this here

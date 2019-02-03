@@ -259,7 +259,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             ActionMode.DELETE -> {
                 ridFav = Utility.readPref(this, prefToken, "")
                 ridFav =
-                        ridFav.replace(":" + MyApplication.semicolon.split(ridArr[position])[0], "")
+                    ridFav.replace(":" + MyApplication.semicolon.split(ridArr[position])[0], "")
                 Utility.writePref(this, prefToken, ridFav)
                 Utility.removePref(
                     this,

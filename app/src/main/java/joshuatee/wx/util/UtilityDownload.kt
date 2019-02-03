@@ -51,6 +51,9 @@ import okhttp3.Request
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.canada.UtilityCanada
+import joshuatee.wx.radar.UtilityAwcRadarMosaic
+import joshuatee.wx.radar.UtilityUSImgNWSMosaic
 import joshuatee.wx.vis.UtilityGOES16
 
 object UtilityDownload {
@@ -58,6 +61,57 @@ object UtilityDownload {
     private fun get1KMURL() = UtilityImg.getBlankBitmap()
 
     private fun get2KMURL() = UtilityImg.getBlankBitmap()
+
+    fun getRadarMosiac(context: Context): Bitmap {
+        //val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
+        val location = Location.currentLocationStr
+        val rid1 = Location.getRid(context, location)
+        var bitmap: Bitmap = UtilityImg.getBlankBitmap()
+        try {
+            if (!UIPreferences.useAwcRadarMosaic) {
+                val ridLoc = Utility.readPref(context, "RID_LOC_$rid1", "")
+                val nwsLocationArr = ridLoc.split(",").dropLastWhile { it.isEmpty() }
+                val state = nwsLocationArr[0]
+                var k = Utility.readPref(context, "WIDGET_RADAR_LEVEL", "1km")
+                when (k) {
+                    "regional" -> k = "regional"
+                    "usa" -> k = "usa"
+                }
+                bitmap = if (Location.isUS(location)) {
+                    if (k == "usa") {
+                        UtilityUSImgNWSMosaic.get(context, "latest", false)
+                    } else {
+                        UtilityUSImgNWSMosaic.get(
+                            context,
+                            UtilityUSImgNWSMosaic.getSectorFromState(state),
+                            false
+                        )
+                    }
+                } else {
+                    val prov = Utility.readPref(context, "NWS" + location + "_STATE", "")
+                    UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(
+                        context,
+                        UtilityCanada.getECSectorFromProv(prov)
+                    )
+                }
+            } else {
+                //val prefToken = "AWCMOSAIC_PARAM_LAST_USED"
+                //val index = Utility.readPref(context, prefToken, 0)
+                //bitmap = UtilityAwcRadarMosaic.get(UtilityAwcRadarMosaic.sectors[index])
+
+                var product = "rad_rala"
+                val prefTokenSector = "AWCMOSAIC_SECTOR_LAST_USED"
+                val prefTokenProduct = "AWCMOSAIC_PRODUCT_LAST_USED"
+                var sector = "us"
+                sector = Utility.readPref(prefTokenSector, sector)
+                product = Utility.readPref(prefTokenProduct, product)
+                bitmap = UtilityAwcRadarMosaic.get(sector, product)
+            }
+        } catch (e: Exception) {
+            UtilityLog.HandleException(e)
+        }
+        return bitmap
+    }
 
     fun getImgProduct(context: Context, product: String): Bitmap {
         var url = ""
@@ -82,14 +136,18 @@ object UtilityDownload {
                 var rid = Location.rid
                 if (rid == "NAT") rid = "CAN"
                 bm =
-                        if (rid == "CAN" || rid == "PAC" || rid == "WRN" || rid == "ONT" || rid == "QUE" || rid == "ERN")
-                            UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(context, rid)
-                        else
-                            UtilityCanadaImg.getRadarBitmapOptionsApplied(context, rid, "")
+                    if (rid == "CAN" || rid == "PAC" || rid == "WRN" || rid == "ONT" || rid == "QUE" || rid == "ERN")
+                        UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(context, rid)
+                    else
+                        UtilityCanadaImg.getRadarBitmapOptionsApplied(context, rid, "")
             }
             "RAD_1KM" -> {
             }
-            "IR_2KM", "WV_2KM", "VIS_2KM", "RAD_2KM" -> {
+            "RAD_2KM" -> {
+                needsBitmap = false
+                bm = getRadarMosiac(context)
+            }
+            "IR_2KM", "WV_2KM", "VIS_2KM" -> {
                 needsBitmap = false
                 bm = get2KMURL()
             }
@@ -122,7 +180,7 @@ object UtilityDownload {
             "WEATHERSTORY" -> {
                 needsBitmap = false
                 bm =
-                        ("http://www.weather.gov/images/" + Location.wfo.toLowerCase() + "/wxstory/Tab2FileL.png").getImage()
+                    ("http://www.weather.gov/images/" + Location.wfo.toLowerCase() + "/wxstory/Tab2FileL.png").getImage()
             }
             "SWOD2" -> {
                 needsBitmap = false
@@ -376,7 +434,7 @@ object UtilityDownload {
             }
         } else if (prod.startsWith("AWCN")) {
             text =
-                    ("${MyApplication.NWS_RADAR_PUB}/data/raw/aw/" + prod.toLowerCase(Locale.US) + ".cwwg..txt").getHtmlSep()
+                ("${MyApplication.NWS_RADAR_PUB}/data/raw/aw/" + prod.toLowerCase(Locale.US) + ".cwwg..txt").getHtmlSep()
         } else if (prod.contains("NFD")) {
             text = ("http://www.opc.ncep.noaa.gov/mobile/mobile_product.php?id=" + prod.toUpperCase(
                 Locale.US
@@ -407,7 +465,8 @@ object UtilityDownload {
         } else if (prod.contains("FPCN48")) {
             text = "${MyApplication.NWS_RADAR_PUB}/data/raw/fp/fpcn48.cwao..txt".getHtmlSep()
         } else if (prod.contains("QPFPFD")) {
-            val textUrl = MyApplication.nwsWPCwebsitePrefix + "/discussions/hpcdiscussions.php?disc=qpfpfd"
+            val textUrl =
+                MyApplication.nwsWPCwebsitePrefix + "/discussions/hpcdiscussions.php?disc=qpfpfd"
             text = textUrl.getHtmlSep()
             text = text.parse(RegExp.pre2Pattern)
         } else if (prod.contains("PMDTHR")) {

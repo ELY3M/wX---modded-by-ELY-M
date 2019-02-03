@@ -432,9 +432,9 @@ class ColorPicker : View {
         )
 
         mColorCenterRadius =
-                (mPreferredColorCenterRadius.toFloat() * (mColorWheelRadius.toFloat() / mPreferredColorWheelRadius.toFloat())).toInt()
+            (mPreferredColorCenterRadius.toFloat() * (mColorWheelRadius.toFloat() / mPreferredColorWheelRadius.toFloat())).toInt()
         mColorCenterHaloRadius =
-                (mPreferredColorCenterHaloRadius.toFloat() * (mColorWheelRadius.toFloat() / mPreferredColorWheelRadius.toFloat())).toInt()
+            (mPreferredColorCenterHaloRadius.toFloat() * (mColorWheelRadius.toFloat() / mPreferredColorWheelRadius.toFloat())).toInt()
         mCenterRectangle.set(
             (-mColorCenterRadius).toFloat(), (-mColorCenterRadius).toFloat(),
             mColorCenterRadius.toFloat(), mColorCenterRadius.toFloat()

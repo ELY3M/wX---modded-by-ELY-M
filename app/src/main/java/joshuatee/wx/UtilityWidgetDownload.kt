@@ -29,16 +29,11 @@ import android.content.Context
 import android.graphics.Bitmap
 import joshuatee.wx.Extensions.getImage
 
-import joshuatee.wx.radar.UtilityUSImgNWSMosaic
-import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.canada.UtilityCanadaImg
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
 import joshuatee.wx.settings.Location
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityDownload
-import joshuatee.wx.util.UtilityLog
-import joshuatee.wx.util.UtilityUSImg
+import joshuatee.wx.util.*
 import joshuatee.wx.wpc.UtilityWPCImages
 
 internal object UtilityWidgetDownload {
@@ -113,7 +108,7 @@ internal object UtilityWidgetDownload {
         var nws1Current = Utility.readPref(context, "NWS$widgetLocNum", "").toUpperCase(Locale.US)
         if (Utility.readPref(context, "WFO_REMEMBER_LOCATION", "") == "true") {
             nws1Current =
-                    Utility.readPref(context, "WFO_LAST_USED", nws1Current).toUpperCase(Locale.US)
+                Utility.readPref(context, "WFO_LAST_USED", nws1Current).toUpperCase(Locale.US)
         }
         var hwoText = UtilityDownload.getTextProduct(context, "HWO$nws1Current")
         hwoText = hwoText.replaceFirst("<BR>[A-Z][A-Z]Z.*?[0-9]{4}<BR>".toRegex(), "")
@@ -132,7 +127,7 @@ internal object UtilityWidgetDownload {
         var nws1Current = Utility.readPref(context, "NWS$widgetLocNum", "").toUpperCase(Locale.US)
         if (Utility.readPref(context, "WFO_REMEMBER_LOCATION", "") == "true") {
             nws1Current =
-                    Utility.readPref(context, "WFO_LAST_USED", nws1Current).toUpperCase(Locale.US)
+                Utility.readPref(context, "WFO_LAST_USED", nws1Current).toUpperCase(Locale.US)
         }
         if (Utility.readPref(context, "WFO_TEXT_FAV", "").startsWith("VFD")) {
             Utility.writePref(
@@ -150,35 +145,8 @@ internal object UtilityWidgetDownload {
     }
 
     private fun downloadRadMosaic(context: Context) {
-        val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
-        val rid1 = Location.getRid(context, widgetLocNum)
         try {
-            val ridLoc = Utility.readPref(context, "RID_LOC_$rid1", "")
-            val nwsLocationArr = ridLoc.split(",").dropLastWhile { it.isEmpty() }
-            val state = nwsLocationArr[0]
-            var k = Utility.readPref(context, "WIDGET_RADAR_LEVEL", "1km")
-            when (k) {
-                "regional" -> k = "regional"
-                "usa" -> k = "usa"
-            }
-            val bitmap = if (Location.isUS(widgetLocNum)) {
-                if (k == "usa") {
-                    UtilityUSImgNWSMosaic.get(context, "latest", false)
-                } else {
-                    UtilityUSImgNWSMosaic.get(
-                        context,
-                        UtilityUSImgNWSMosaic.getSectorFromState(state),
-                        false
-                    )
-                }
-            } else {
-                val prov = Utility.readPref(context, "NWS" + widgetLocNum + "_STATE", "")
-                UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(
-                    context,
-                    UtilityCanada.getECSectorFromProv(prov)
-                )
-            }
-            saveImage(context, bitmap, MOSAIC_RADAR.fileName)
+            saveImage(context, UtilityDownload.getRadarMosiac(context), MOSAIC_RADAR.fileName)
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
         }

@@ -114,7 +114,7 @@ object UtilityShare {
             if (!dir.mkdirs()) {
                 UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
             }
-            val file = File(dir, "img" + i.toString() + ".png")
+            val file = File(dir, "img$i.png")
             val imgUri = FileProvider.getUriForFile(
                 context,
                 "${MyApplication.packageNameAsString}.fileprovider",

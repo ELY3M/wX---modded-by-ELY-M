@@ -66,7 +66,7 @@ internal object UtilityNotificationSPCFW {
         noBody = detailRaw
         noSummary = noBody
         val objPI = ObjectPendingIntents(context, SPCFireOutlookActivity::class.java)
-        val cancelStr = "spcfwloc" + day.toString() + locNum + threatLevel + validTime
+        val cancelStr = "spcfwloc$day$locNum$threatLevel$validTime"
         if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
                 context,
                 cancelStr
@@ -116,7 +116,7 @@ internal object UtilityNotificationSPCFW {
             val validTime = html.parse("VALID TIME ([0-9]{6}Z - [0-9]{6}Z)")
             html = html.replace("<br>", " ")
             val htmlBlob =
-                html.parse("FIRE WEATHER OUTLOOK POINTS DAY " + day.toString() + "(.*?&)&") // was (.*?)&&
+                html.parse("FIRE WEATHER OUTLOOK POINTS DAY $day(.*?&)&") // was (.*?)&&
             for (m in threatList.indices) {
                 retStr = ""
                 val threatLevelCode = threatList[m]
@@ -200,7 +200,7 @@ internal object UtilityNotificationSPCFW {
                                     )
                                 )
                                 if (contains) {
-                                    if (!notifUrls.contains("spcfwloc" + day.toString() + locNum))
+                                    if (!notifUrls.contains("spcfwloc$day$locNum"))
                                         notifUrls += sendSPCFWNotif(
                                             context,
                                             locNum,

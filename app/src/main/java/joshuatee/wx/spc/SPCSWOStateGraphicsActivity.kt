@@ -68,8 +68,8 @@ class SPCSWOStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListene
             savedInstanceState,
             R.layout.activity_spcswostate,
             R.menu.spcswostate,
-            true,
-            true
+            iconsEvenlySpaced = true,
+            bottomToolbar = true
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         turlDay = intent.getStringArrayExtra(NO)[0]

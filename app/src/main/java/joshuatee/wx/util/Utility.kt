@@ -26,6 +26,7 @@ import android.os.Build
 import android.preference.PreferenceManager
 import android.text.Html
 import android.content.Context
+import android.net.ConnectivityManager
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
@@ -34,8 +35,24 @@ import joshuatee.wx.settings.Location
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.radar.LatLon
+import joshuatee.wx.util.UtilityAlertDialog.showDialogueWithContext
 
 object Utility {
+
+    fun checkInternet(context: Context) {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = cm.activeNetworkInfo
+        if (netInfo != null && netInfo.isConnected) {
+            UtilityLog.d("wx", "network state = true")
+
+        } else {
+            UtilityLog.d("wx", "network state = false")
+            showDialogueWithContext("No Network Connection.\nCheck your internet on your device!", context)
+            ///UtilityAlertDialog.showDialogBox("No Network Connection", R.drawable.wx, "Check your internet on your device!", context)
+        }
+
+    }
+
 
     fun getVersion(context: Context): String {
         var vers = ""

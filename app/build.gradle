@@ -70,10 +70,10 @@ android {
 }
 
 dependencies {
-    implementation "com.google.android.material:material:$androidxVersion"
-    implementation "androidx.cardview:cardview:$androidxVersion"
-    implementation "androidx.recyclerview:recyclerview:$androidxVersion"
-    implementation "androidx.media:media:$androidxVersion"
+    implementation "com.google.android.material:material:1.0.0"
+    implementation "androidx.cardview:cardview:1.0.0"
+    implementation "androidx.recyclerview:recyclerview:1.0.0"
+    implementation "androidx.media:media:1.0.1"
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation 'com.jjoe64:graphview:4.2.2'
     implementation 'com.intentfilter:android-permissions:0.1.7'

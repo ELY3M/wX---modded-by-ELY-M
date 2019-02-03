@@ -258,7 +258,7 @@ object UtilityWidget {
         val cn = ComponentName(context, WeatherWidgetProvider::class.java)
         if (WeatherWidgetProvider.sWorkerQueue != null) {
             WeatherWidgetProvider.sDataObserver =
-                    WeatherDataProviderObserver(mgr, cn, WeatherWidgetProvider.sWorkerQueue!!)
+                WeatherDataProviderObserver(mgr, cn, WeatherWidgetProvider.sWorkerQueue!!)
             r.registerContentObserver(
                 WeatherDataProvider.CONTENT_URI,
                 true,

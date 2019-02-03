@@ -150,7 +150,7 @@ internal class ObjectMetar(context: Context, location: LatLon) {
         windDirection = metarData.parse("Wind: from the (.*?) \\(.*? degrees\\) at .*? MPH ")
         windSpeed = metarData.parse("Wind: from the .*? \\(.*? degrees\\) at (.*?) MPH ")
         windGust =
-                metarData.parse("Wind: from the .*? \\(.*? degrees\\) at .*? MPH \\(.*? KT\\) gusting to (.*?) MPH")
+            metarData.parse("Wind: from the .*? \\(.*? degrees\\) at .*? MPH \\(.*? KT\\) gusting to (.*?) MPH")
         seaLevelPressure = metarData.parse("Pressure \\(altimeter\\): .*? in. Hg \\((.*?) hPa\\)")
         visibility = metarData.parse("Visibility: (.*?) mile")
         relativeHumidity = metarData.parse("Relative Humidity: (.*?)%")
@@ -177,7 +177,7 @@ internal class ObjectMetar(context: Context, location: LatLon) {
             val localStatus = metarDataList[1].split("/")
             if (localStatus.size > 1) {
                 conditionsTimeStr =
-                        UtilityTime.convertFromUTCForMetar(localStatus[1].replace(" UTC", ""))
+                    UtilityTime.convertFromUTCForMetar(localStatus[1].replace(" UTC", ""))
             }
         }
         seaLevelPressure = changePressureUnits(seaLevelPressure)

@@ -23,13 +23,11 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.graphics.Color
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 
-import joshuatee.wx.MyApplication
 import joshuatee.wx.activitiesmisc.CAPAlert
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.util.UtilityString

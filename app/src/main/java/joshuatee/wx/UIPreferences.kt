@@ -56,8 +56,11 @@ object UIPreferences {
     var hideTopToolbar: Boolean = false
     var mainScreenRadarFab: Boolean = false
     var locfragDontShowIcons: Boolean = false
+    var useAwcRadarMosaic: Boolean = false
 
     fun initPreferences(context: Context) {
+        useAwcRadarMosaic =
+            Utility.readPref(context, "USE_AWC_RADAR_MOSAIC", "false").startsWith("t")
         locfragDontShowIcons =
             Utility.readPref(context, "UI_LOCFRAG_NO_ICONS", "false").startsWith("t")
         mainScreenRadarFab =

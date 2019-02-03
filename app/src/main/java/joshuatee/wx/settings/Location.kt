@@ -75,23 +75,23 @@ class Location(val context: Context, locNumInt: Int) {
         rid = Utility.readPref(context, "RID$jStr", "")
         nwsStateCurrent = Utility.readPref(context, "NWS" + jStr + "_STATE", "")
         alertNotificationCurrent =
-                Utility.readPref(context, "ALERT" + jStr + "_NOTIFICATION", "false")
+            Utility.readPref(context, "ALERT" + jStr + "_NOTIFICATION", "false")
         alertNotificationRadarCurrent =
-                Utility.readPref(context, "ALERT_NOTIFICATION_RADAR$jStr", "false")
+            Utility.readPref(context, "ALERT_NOTIFICATION_RADAR$jStr", "false")
         alertCcNotificationCurrent =
-                Utility.readPref(context, "ALERT_CC" + jStr + "_NOTIFICATION", "false")
+            Utility.readPref(context, "ALERT_CC" + jStr + "_NOTIFICATION", "false")
         alertSevenDayNotificationCurrent =
-                Utility.readPref(context, "ALERT_7DAY_" + jStr + "_NOTIFICATION", "false")
+            Utility.readPref(context, "ALERT_7DAY_" + jStr + "_NOTIFICATION", "false")
         alertNotificationSoundCurrent =
-                Utility.readPref(context, "ALERT_NOTIFICATION_SOUND$jStr", "false")
+            Utility.readPref(context, "ALERT_NOTIFICATION_SOUND$jStr", "false")
         alertNotificationMcdCurrent =
-                Utility.readPref(context, "ALERT_NOTIFICATION_MCD$jStr", "false")
+            Utility.readPref(context, "ALERT_NOTIFICATION_MCD$jStr", "false")
         alertNotificationSwoCurrent =
-                Utility.readPref(context, "ALERT_NOTIFICATION_SWO$jStr", "false")
+            Utility.readPref(context, "ALERT_NOTIFICATION_SWO$jStr", "false")
         alertNotificationSpcfwCurrent =
-                Utility.readPref(context, "ALERT_NOTIFICATION_SPCFW$jStr", "false")
+            Utility.readPref(context, "ALERT_NOTIFICATION_SPCFW$jStr", "false")
         alertNotificationWpcmpdCurrent =
-                Utility.readPref(context, "ALERT_NOTIFICATION_WPCMPD$jStr", "false")
+            Utility.readPref(context, "ALERT_NOTIFICATION_WPCMPD$jStr", "false")
         raw = Utility.readPref(context, "LOC" + jStr + "_TIMERAW", "")
         dst = Utility.readPref(context, "LOC" + jStr + "_TIMEDST", "")
         state = Utility.readPref(context, "NWS_LOCATION_$wfo", "").split(",")[0]
@@ -265,8 +265,8 @@ class Location(val context: Context, locNumInt: Int) {
                 setNumLocations(context, locNumToSave)
                 try {
                     nwsOfficeShortLower =
-                            UtilityLocation.getNearestOffice(context, "WFO", LatLon(xStr, yStr))
-                                .toLowerCase(Locale.US)
+                        UtilityLocation.getNearestOffice(context, "WFO", LatLon(xStr, yStr))
+                            .toLowerCase(Locale.US)
                     rid = UtilityLocation.getNearestOffice(context, "RADAR", LatLon(xStr, yStr))
                     // CT shows mosaic not nexrad so the old way is needed
                     if (rid == "") {

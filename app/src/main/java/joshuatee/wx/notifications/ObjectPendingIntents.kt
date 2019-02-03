@@ -48,7 +48,7 @@ class ObjectPendingIntents {
         stackBuilder.addNextIntent(resultIntent)
         val requestID = System.currentTimeMillis().toInt()
         resultPendingIntent =
-                stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+            stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
         resultPendingIntent2 = PendingIntent.getActivity(
             context,
             requestID + 1,
@@ -65,7 +65,7 @@ class ObjectPendingIntents {
         stackBuilder.addNextIntent(resultIntent)
         val requestID = System.currentTimeMillis().toInt()
         resultPendingIntent =
-                stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+            stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
         resultPendingIntent2 = PendingIntent.getActivity(
             context,
             requestID + 1,

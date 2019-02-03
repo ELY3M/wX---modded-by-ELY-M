@@ -78,9 +78,9 @@ class CAPAlert {
                 } else {
                     obj.title = html.parse("<headline>(.+?)</headline>.*?<description>")
                     obj.summary =
-                            html.parse("</headline>.*?<description>(.*?)</description>.*?<instruction>")
+                        html.parse("</headline>.*?<description>(.*?)</description>.*?<instruction>")
                     obj.instructions =
-                            html.parse("</description>.*?<instruction>(.*?)</instruction>.*?<areaDesc>")
+                        html.parse("</description>.*?<instruction>(.*?)</instruction>.*?<areaDesc>")
                     obj.area = html.parse("</instruction>.*?<areaDesc>(.*?)</areaDesc>.*?")
                     obj.area = obj.area.replace("&apos;", "'")
                     obj.text = "<h4><b>"

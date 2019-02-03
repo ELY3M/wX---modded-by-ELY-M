@@ -231,6 +231,15 @@ class SettingsMainActivity : BaseActivity() {
             ).card
         )
         linearLayout.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Check for Internet on startup",
+                        "CHECKINTERNET",
+                        R.string.checkinternet_switch_label
+                ).card
+        )
+        linearLayout.addView(
             ObjectSettingsNumberPicker(
                 this,
                 this,

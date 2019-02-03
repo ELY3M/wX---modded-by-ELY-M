@@ -19,6 +19,14 @@ import joshuatee.wx.util.UtilityLog
 import java.util.Collections.singleton
 import java.io.*
 import java.nio.charset.Charset
+import android.content.Context
+import android.net.ConnectivityManager
+import joshuatee.wx.ui.ObjectAlertDetail
+import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.ui.UtilityUI.makeToastLegacy
+import joshuatee.wx.util.UtilityAlertDialog.showDialogBox
+import joshuatee.wx.util.UtilityAlertDialog.showDialogueWithContext
+import joshuatee.wx.util.UtilityAlertDialog.showHelpText
 
 
 class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCallback {
@@ -208,7 +216,6 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
             it.println(content)
         }
     }
-
 
 
 

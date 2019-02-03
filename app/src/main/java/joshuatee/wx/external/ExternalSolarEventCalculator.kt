@@ -28,9 +28,15 @@ import java.util.TimeZone
 /**
  * Parent class of the Sunrise and Sunset calculator classes.
  */
-internal class ExternalSolarEventCalculator {
-    private val location: ExternalSunriseLocation
-    private val timeZone: TimeZone
+internal class ExternalSolarEventCalculator
+/**
+ * Constructs a new `SolarEventCalculator` using the given parameters.
+ *
+ * @param location
+ * `Location` of the place where the solar event should be calculated from.
+ * @param timeZone
+ * timezone of the location parameter.
+ */(private val location: ExternalSunriseLocation, private val timeZone: TimeZone) {
 
     /**
      * Computes the base longitude hour, lngHour in the algorithm.
@@ -54,19 +60,6 @@ internal class ExternalSolarEventCalculator {
         this.location = location
         this.timeZone = TimeZone.getTimeZone(timeZoneIdentifier)
     }*/
-
-    /**
-     * Constructs a new `SolarEventCalculator` using the given parameters.
-     *
-     * @param location
-     * `Location` of the place where the solar event should be calculated from.
-     * @param timeZone
-     * timezone of the location parameter.
-     */
-    constructor(location: ExternalSunriseLocation, timeZone: TimeZone) {
-        this.location = location
-        this.timeZone = timeZone
-    }
 
     /**
      * Computes the sunrise time for the given zenith at the given date.

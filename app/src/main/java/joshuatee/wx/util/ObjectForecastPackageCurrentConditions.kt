@@ -194,13 +194,13 @@ class ObjectForecastPackageCurrentConditions {
             "NA"
         }
         relativeHumidity =
-                if (!relativeHumidity.contains("NA") && !relativeHumidity.contains("null")) {
-                    val tempD = relativeHumidity.toDoubleOrNull() ?: 0.0
-                    //UtilityMath.roundToString(tempD)
-                    tempD.roundToInt().toString()
-                } else {
-                    "NA"
-                }
+            if (!relativeHumidity.contains("NA") && !relativeHumidity.contains("null")) {
+                val tempD = relativeHumidity.toDoubleOrNull() ?: 0.0
+                //UtilityMath.roundToString(tempD)
+                tempD.roundToInt().toString()
+            } else {
+                "NA"
+            }
         visibility = if (!visibility.contains("NA") && !visibility.contains("null")) {
             val tempD = visibility.toDoubleOrNull() ?: 0.0
             UtilityMath.metersToMileRounded(tempD)

@@ -33,7 +33,6 @@ import android.app.DatePickerDialog
 import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-import android.util.TypedValue
 import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
@@ -47,7 +46,6 @@ import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.MyApplication
-import joshuatee.wx.UIPreferences
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.settings.UtilityLocation
@@ -238,7 +236,7 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             if (stateArrayLabel.size > 0) drw.updateLists(activity, stateArrayLabel)
             firstRun = false
         }
-        title = "(" + stormCnt.toString() + ") Storm Reports"
+        title = "($stormCnt) Storm Reports"
         toolbar.subtitle = no
         if (stormCnt > 0) {
             c1.setVisibility(View.VISIBLE)

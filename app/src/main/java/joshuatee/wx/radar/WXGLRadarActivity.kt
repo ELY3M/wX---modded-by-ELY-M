@@ -171,8 +171,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             savedInstanceState,
             R.layout.activity_uswxogl,
             R.menu.uswxoglradar,
-            true,
-            true
+            iconsEvenlySpaced = true,
+            bottomToolbar = true
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityUI.immersiveMode(this as Activity)
@@ -204,6 +204,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 archiveMode = false
         }
         contextg = this
+        if (MyApplication.checkinternet) {
+            Utility.checkInternet(contextg)
+        }
         setupAlertDialogRadarLongPress()
         UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
         if (archiveMode && !spotterShowSelected)
@@ -372,10 +375,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             l2Menu.isVisible = true
         }
         if ((oglr.product == "N0Q" || oglr.product == "N1Q" || oglr.product == "N2Q" || oglr.product == "N3Q" || oglr.product == "L2REF") && ridIsTdwr) oglr.product =
-                "TZL"
+            "TZL"
         if (oglr.product == "TZL" && !ridIsTdwr) oglr.product = "N0Q"
         if ((oglr.product == "N0U" || oglr.product == "N1U" || oglr.product == "N2U" || oglr.product == "N3U" || oglr.product == "L2VEL") && ridIsTdwr) oglr.product =
-                "TV0"
+            "TV0"
         if (oglr.product == "TV0" && !ridIsTdwr) oglr.product = "N0U"
         title = oglr.product
         if (MyApplication.ridFav.contains(":" + oglr.rid + ":"))
@@ -463,9 +466,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             try {
                 animArray.indices.forEach {
                     fh = File(contextg.filesDir, animArray[it])
-                    contextg.deleteFile("nexrad_anim" + it.toString())
-                    if (!fh.renameTo(File(contextg.filesDir, "nexrad_anim" + it.toString())))
-                        UtilityLog.d("wx", "Problem moving to " + "nexrad_anim" + it.toString())
+                    contextg.deleteFile("nexrad_anim$it")
+                    if (!fh.renameTo(File(contextg.filesDir, "nexrad_anim$it")))
+                        UtilityLog.d("wx", "Problem moving to nexrad_anim$it")
                 }
             } catch (e: Exception) {
                 UtilityLog.HandleException(e)
@@ -477,17 +480,17 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     try {
                         animArray.indices.forEach {
                             fh = File(contextg.filesDir, animArray[it])
-                            contextg.deleteFile("nexrad_anim" + it.toString())
+                            contextg.deleteFile("nexrad_anim$it")
                             if (!fh.renameTo(
                                     File(
                                         contextg.filesDir,
-                                        "nexrad_anim" + it.toString()
+                                        "nexrad_anim$it"
                                     )
                                 )
                             )
                                 UtilityLog.d(
                                     "wx",
-                                    "Problem moving to " + "nexrad_anim" + it.toString()
+                                    "Problem moving to nexrad_anim$it"
                                 )
                         }
                     } catch (e: Exception) {
@@ -503,9 +506,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     if (!inOglAnim) break
                     // if the first pass has completed, for L2 no longer uncompress, use the existing decomp files
                     if (loopCnt > 0)
-                        oglr.constructPolygons("nexrad_anim" + r.toString(), urlStr, false)
+                        oglr.constructPolygons("nexrad_anim$r", urlStr, false)
                     else
-                        oglr.constructPolygons("nexrad_anim" + r.toString(), urlStr, true)
+                        oglr.constructPolygons("nexrad_anim$r", urlStr, true)
                     //publishProgress((r + 1).toString(), animArray.size.toString())
                     launch(uiDispatcher) {
                         progressUpdate((r + 1).toString(), animArray.size.toString())
@@ -768,7 +771,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private fun toggleFavorite() {
         val ridFav = UtilityFavorites.toggleFavoriteString(this, oglr.rid, star, prefToken)
         ridArrLoc =
-                UtilityFavorites.setupFavMenu(this, ridFav, oglr.rid, prefTokenLocation, prefToken)
+            UtilityFavorites.setupFavMenu(this, ridFav, oglr.rid, prefTokenLocation, prefToken)
         sp.refreshData(contextg, ridArrLoc)
     }
 

@@ -23,10 +23,7 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.appcompat.widget.AppCompatTextView
-import android.util.TypedValue
 import android.view.View
-import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 import androidx.core.widget.TextViewCompat
@@ -34,52 +31,48 @@ import androidx.core.widget.TextViewCompat
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.fragments.UtilityLocationFragment
+import joshuatee.wx.objects.TextSize
 
 class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7Arr: List<String>) {
 
     private val objCard: ObjectCard
-    private val iv: ImageView
-    private val tv1: AppCompatTextView
-    private val tv2: AppCompatTextView
+    private val imageView = ObjectImageView(context)
+    private val topLineText: ObjectTextView
+    private val bottomLineText: ObjectTextView
 
     init {
-        val llTmp = LinearLayout(context)
-        llTmp.orientation = LinearLayout.HORIZONTAL
-        val llTmpV = LinearLayout(context)
-        llTmpV.orientation = LinearLayout.VERTICAL
-        tv1 = AppCompatTextView(context)
-        // L  T R B
-        tv1.setPadding(
-            MyApplication.padding,
-            MyApplication.paddingSmall,
-            MyApplication.paddingSmall,
-            0
-        )
-        tv1.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-        // FIXME better variable names
-        TextViewCompat.setAutoSizeTextTypeWithDefaults(
-            tv1,
-            TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM
-        )
-        tv1.maxLines = 1
-        tv2 = AppCompatTextView(context)
-        tv2.setPadding(
+        val horizontalContainer = LinearLayout(context)
+        horizontalContainer.orientation = LinearLayout.HORIZONTAL
+        val verticalContainer = LinearLayout(context)
+        verticalContainer.orientation = LinearLayout.VERTICAL
+        topLineText = ObjectTextView(context, TextSize.MEDIUM)
+        topLineText.setPadding(
             MyApplication.padding,
             0,
             MyApplication.paddingSmall,
-            MyApplication.paddingSmall
+            0
         )
-        tv2.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
-        tv2.setTextAppearance(context, UIPreferences.smallTextTheme)
-        iv = ImageView(context)
-        llTmpV.addView(tv1)
-        llTmpV.addView(tv2)
+        TextViewCompat.setAutoSizeTextTypeWithDefaults(
+            topLineText.tv,
+            TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM
+        )
+        topLineText.maxLines = 1
+        bottomLineText = ObjectTextView(context)
+        bottomLineText.setPadding(
+            MyApplication.padding,
+            0,
+            MyApplication.paddingSmall,
+            0
+        )
+        bottomLineText.setAsBackgroundText()
+        verticalContainer.addView(topLineText.tv)
+        verticalContainer.addView(bottomLineText.tv)
         objCard = ObjectCard(context)
         if (!UIPreferences.locfragDontShowIcons) {
-            llTmp.addView(iv)
+            horizontalContainer.addView(imageView.image)
         }
-        llTmp.addView(llTmpV)
-        objCard.addView(llTmp)
+        horizontalContainer.addView(verticalContainer)
+        objCard.addView(horizontalContainer)
         var dayTmpArr = listOf<String>()
         if (day7Arr.size > day) {
             dayTmpArr = day7Arr[day].split(": ")
@@ -110,31 +103,16 @@ class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7
             }
         }
         if (!UIPreferences.locfragDontShowIcons) {
-            setImage(bm)
+            imageView.setImage(bm)
         }
     }
 
     private fun setTv1(text: String) {
-        tv1.text = text
+        topLineText.text = text
     }
 
     private fun setTv2(text: String) {
-        tv2.text = text
-    }
-
-    private fun setImage(bitmap: Bitmap) {
-        iv.setImageBitmap(bitmap)
-        iv.setPadding(
-            MyApplication.paddingSmall,
-            MyApplication.paddingSmall,
-            MyApplication.paddingSmall,
-            MyApplication.paddingSmall
-        )
-        val p = iv.layoutParams
-        val bmCcSize = UtilityLocationFragment.setNWSIconSize()
-        p.width = bmCcSize
-        p.height = bmCcSize
-        iv.layoutParams = p
+        bottomLineText.text = text
     }
 
     fun setOnClickListener(fn: View.OnClickListener) {

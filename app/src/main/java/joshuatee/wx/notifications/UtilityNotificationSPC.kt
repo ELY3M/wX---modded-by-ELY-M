@@ -227,7 +227,7 @@ internal object UtilityNotificationSPC {
                                     )
                                 )
                                 if (contains) {
-                                    if (!notifUrls.contains("spcswoloc" + day.toString() + locNum))
+                                    if (!notifUrls.contains("spcswoloc$day$locNum"))
                                         notifUrls += sendSWONotif(
                                             context,
                                             locNum,
@@ -385,7 +385,7 @@ internal object UtilityNotificationSPC {
         val requestID = System.currentTimeMillis().toInt()
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         locLabelStr = "($locLabel) "
-        val dayStr = "SWODY" + day.toString()
+        val dayStr = "SWODY$day"
         noMain = "$locLabelStr$dayStr $threatLevel"
         var detailRaw = threatLevel.replace("<.*?>".toRegex(), " ")
         detailRaw = detailRaw.replace("&nbsp".toRegex(), " ")
@@ -408,7 +408,7 @@ internal object UtilityNotificationSPC {
             resultIntent2,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-        val cancelStr = "spcswoloc" + day.toString() + locNum + threatLevel + validTime
+        val cancelStr = "spcswoloc$day$locNum$threatLevel$validTime"
         if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
                 context,
                 cancelStr
@@ -454,7 +454,7 @@ internal object UtilityNotificationSPC {
         html = html.replace("0.15", "SPC15percent")
         for (day in 4..8) {
             val htmlBlob =
-                html.parse("SEVERE WEATHER OUTLOOK POINTS DAY " + day.toString() + "(.*?&)&") // was (.*?)&&
+                html.parse("SEVERE WEATHER OUTLOOK POINTS DAY $day(.*?&)&") // was (.*?)&&
             threatList.forEach {
                 retStr = ""
                 val htmlList = htmlBlob.parseColumn(it.substring(1) + "(.*?)[A-Z&]")
@@ -537,7 +537,7 @@ internal object UtilityNotificationSPC {
                                     )
                                 )
                                 if (contains) {
-                                    if (!notifUrls.contains("spcswoloc" + day.toString() + locNum))
+                                    if (!notifUrls.contains("spcswoloc$day$locNum"))
                                         notifUrls += sendSWONotif(
                                             context,
                                             locNum,

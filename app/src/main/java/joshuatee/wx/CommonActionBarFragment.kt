@@ -48,6 +48,7 @@ import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.SettingsMainActivity
 import joshuatee.wx.audio.SettingsPlaylistActivity
 import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.radar.AwcRadarMosaicActivity
 import joshuatee.wx.spc.SPCSoundingsActivity
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
@@ -197,12 +198,21 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                     showHelpCAB(item.itemId)
                 } else {
                     if (Location.isUS) {
-                        ObjectIntent(
-                            this,
-                            USNWSMosaicActivity::class.java,
-                            USNWSMosaicActivity.URL,
-                            arrayOf("location")
-                        )
+                        if (!UIPreferences.useAwcRadarMosaic) {
+                            ObjectIntent(
+                                this,
+                                USNWSMosaicActivity::class.java,
+                                USNWSMosaicActivity.URL,
+                                arrayOf("location")
+                            )
+                        } else {
+                            ObjectIntent(
+                                this,
+                                AwcRadarMosaicActivity::class.java,
+                                AwcRadarMosaicActivity.URL,
+                                arrayOf("")
+                            )
+                        }
                     } else {
                         val prov = Utility.readPref(
                             this,

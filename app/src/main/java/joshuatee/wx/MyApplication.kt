@@ -114,10 +114,10 @@ class MyApplication : Application() {
             response
         }
         httpClient = OkHttpClient.Builder()
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(15, TimeUnit.SECONDS)
-                .addInterceptor(okhttp3Interceptor)
-                .build()
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
+            .addInterceptor(okhttp3Interceptor)
+            .build()
         UtilityTTS.initTTS(applicationContext)
         UtilityCities.initCitiesArray()
         if (!loadedBuffers) {
@@ -201,6 +201,7 @@ class MyApplication : Application() {
         var checkspc: Boolean = false
         var checkwpc: Boolean = false
         var checktor: Boolean = false
+        var checkinternet: Boolean = false
         var vrButton: Boolean = false
         var radarUseJni: Boolean = false
         var contentResolverLocal: ContentResolver? = null
@@ -369,6 +370,7 @@ class MyApplication : Application() {
             checkspc = getInitialPreference("CHECKSPC", "false")
             checkwpc = getInitialPreference("CHECKWPC", "false")
             checktor = getInitialPreference("CHECKTOR", "false")
+            checkinternet = getInitialPreference("CHECKINTERNET", "false")
             nwsIconSize = preferences.getInt("NWS_ICON_SIZE_PREF", 20) // was 24 10-27-2018
             uiAnimIconFrames = getInitialPreferenceString("UI_ANIM_ICON_FRAMES", "6")
             blackBg = getInitialPreference("NWS_RADAR_BG_BLACK", "")
@@ -381,14 +383,14 @@ class MyApplication : Application() {
             drawToolColor = getInitialPreference("DRAW_TOOL_COLOR", Color.rgb(255, 0, 0))
             widgetTextColor = getInitialPreference("WIDGET_TEXT_COLOR", Color.WHITE)
             widgetHighlightTextColor =
-                    getInitialPreference("WIDGET_HIGHLIGHT_TEXT_COLOR", Color.YELLOW)
+                getInitialPreference("WIDGET_HIGHLIGHT_TEXT_COLOR", Color.YELLOW)
             widgetNexradSize = getInitialPreference("WIDGET_NEXRAD_SIZE", 10)
             widgetCCShow7Day = getInitialPreference("WIDGET_CC_DONOTSHOW_7_DAY", "true")
             nwsIconTextColor = getInitialPreference("NWS_ICON_TEXT_COLOR", Color.rgb(38, 97, 139))
             nwsIconBottomColor =
-                    getInitialPreference("NWS_ICON_BOTTOM_COLOR", Color.rgb(255, 255, 255))
+                getInitialPreference("NWS_ICON_BOTTOM_COLOR", Color.rgb(255, 255, 255))
             nexradRadarBackgroundColor =
-                    getInitialPreference("NEXRAD_RADAR_BACKGROUND_COLOR", Color.rgb(0, 0, 0))
+                getInitialPreference("NEXRAD_RADAR_BACKGROUND_COLOR", Color.rgb(0, 0, 0))
             wxoglSize = getInitialPreference("WXOGL_SIZE", 8)
             wxoglRememberLocation = getInitialPreference("WXOGL_REMEMBER_LOCATION", "false")
             wxoglRadarAutorefresh = getInitialPreference("RADAR_AUTOREFRESH", "false")
@@ -409,21 +411,21 @@ class MyApplication : Application() {
             homescreenFav = getInitialPreferenceString("HOMESCREEN_FAV", HOMESCREEN_FAV_DEFAULT)
             locDisplayImg = homescreenFav.contains("OGL-RADAR") || homescreenFav.contains("NXRD")
             alertNotificationSoundTornadoCurrent =
-                    getInitialPreference("ALERT_NOTIFICATION_SOUND_TORNADO", "")
+                getInitialPreference("ALERT_NOTIFICATION_SOUND_TORNADO", "")
             alertNotificationSoundSpcmcd =
-                    getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCMCD", "")
+                getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCMCD", "")
             alertNotificationSoundWpcmpd =
-                    getInitialPreference("ALERT_NOTIFICATION_SOUND_WPCMPD", "")
+                getInitialPreference("ALERT_NOTIFICATION_SOUND_WPCMPD", "")
             alertNotificationSoundNhcEpac =
-                    getInitialPreference("ALERT_NOTIFICATION_SOUND_NHC_EPAC", "")
+                getInitialPreference("ALERT_NOTIFICATION_SOUND_NHC_EPAC", "")
             alertNotificationSoundNhcAtl =
-                    getInitialPreference("ALERT_NOTIFICATION_SOUND_NHC_ATL", "")
+                getInitialPreference("ALERT_NOTIFICATION_SOUND_NHC_ATL", "")
             alertNotificationSoundSpcwat =
-                    getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCWAT", "")
+                getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCWAT", "")
             alertNotificationSoundSpcswo =
-                    getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCSWO", "")
+                getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCSWO", "")
             alertNotificationSoundTextProd =
-                    getInitialPreference("ALERT_NOTIFICATION_SOUND_TEXT_PROD", "")
+                getInitialPreference("ALERT_NOTIFICATION_SOUND_TEXT_PROD", "")
             notifSoundRepeat = getInitialPreference("NOTIF_SOUND_REPEAT", "")
             notifTts = getInitialPreference("NOTIF_TTS", "")
             alertBlackoutAmCurrent = getInitialPreference("ALERT_BLACKOUT_AM", -1)
@@ -433,17 +435,17 @@ class MyApplication : Application() {
             alertSpcwatNotificationCurrent = getInitialPreference("ALERT_SPCWAT_NOTIFICATION", "")
             alertSpcswoNotificationCurrent = getInitialPreference("ALERT_SPCSWO_NOTIFICATION", "")
             alertSpcswoSlightNotificationCurrent =
-                    getInitialPreference("ALERT_SPCSWO_SLIGHT_NOTIFICATION", "")
+                getInitialPreference("ALERT_SPCSWO_SLIGHT_NOTIFICATION", "")
             alertWpcmpdNotificationCurrent = getInitialPreference("ALERT_WPCMPD_NOTIFICATION", "")
             alertBlackoutTornadoCurrent = getInitialPreference("ALERT_BLACKOUT_TORNADO", "")
             alertNhcEpacNotificationCurrent =
-                    getInitialPreference("ALERT_NHC_EPAC_NOTIFICATION", "")
+                getInitialPreference("ALERT_NHC_EPAC_NOTIFICATION", "")
             alertNhcAtlNotificationCurrent = getInitialPreference("ALERT_NHC_ATL_NOTIFICATION", "")
             alertAutocancel = getInitialPreference("ALERT_AUTOCANCEL", "false")
             alertBlackout = getInitialPreference("ALERT_BLACKOUT", "")
             playlistStr = getInitialPreferenceString("PLAYLIST", "")
             notifTextProdStr =
-                    getInitialPreferenceString(UtilityNotificationTextProduct.PREF_TOKEN, "")
+                getInitialPreferenceString(UtilityNotificationTextProduct.PREF_TOKEN, "")
             radarColorPalette94List = getInitialPreferenceString("RADAR_COLOR_PALETTE_94_LIST", "")
             radarColorPalette99List = getInitialPreferenceString("RADAR_COLOR_PALETTE_99_LIST", "")
             wxoglZoom = preferences.getFloat("WXOGL_ZOOM", wxoglSize.toFloat() / 10.0f)
@@ -487,7 +489,7 @@ class MyApplication : Application() {
             goesVisSector = getInitialPreferenceString("GOESVIS_SECTOR", "")
             elevationPref = getInitialPreference("ELEVATION_PREF", 0).toFloat()
             elevationPref =
-                    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, elevationPref, dm)
+                TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, elevationPref, dm)
             cardElevation = elevationPref
             fabElevation = elevationPref
             fabElevationDepressed = elevationPref * 2

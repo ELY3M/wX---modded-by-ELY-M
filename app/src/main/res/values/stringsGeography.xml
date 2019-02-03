@@ -41,16 +41,6 @@
     <string name="label_AK">AK</string>
     <string name="label_HI">HI</string>
 
-    <string name="label_FL">Florida</string>
-    <string name="label_TX">Texas</string>
-    <string name="label_OK_KS">OK / KS</string>
-
-    <string name="label_long_NA">North America</string>
-    <string name="label_long_SA">South America</string>
-    <string name="label_AU">Australia</string>
-    <string name="label_NZ">New Zealand</string>
-
-
     <string name="label_E">East</string>
     <string name="label_W">West</string>
 

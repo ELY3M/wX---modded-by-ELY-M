@@ -127,6 +127,7 @@ val NWS_TXT_ARR: List<String> = listOf(
 )
 
 val NWS_IMG_ARR: List<String> = listOf(
+    "RAD_2KM: Radar Mosaic",
     "GOES16: GOES16 product last viewed",
     "VIS_CONUS: Visible CONUS",
     "CONUSWV: US Water Vapor",

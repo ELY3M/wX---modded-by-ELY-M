@@ -21,18 +21,30 @@
 
 package joshuatee.wx.ui
 
-import android.graphics.Color
-import android.graphics.Paint
+import android.content.Context
+import android.graphics.Bitmap
+import android.widget.ImageView
 import joshuatee.wx.MyApplication
+import joshuatee.wx.fragments.UtilityLocationFragment
 
-class ObjectPaintStripe {
+class ObjectImageView(context: Context) {
 
-    val paint: Paint = Paint()
+    val image: ImageView = ImageView(context)
 
-    init {
-        val red = Color.red(MyApplication.nwsIconBottomColor)
-        val green = Color.green(MyApplication.nwsIconBottomColor)
-        val blue = Color.blue(MyApplication.nwsIconBottomColor)
-        paint.color = Color.argb(200, red, green, blue)
+    fun setImage(bitmap: Bitmap) {
+        image.setImageBitmap(bitmap)
+        image.setPadding(
+            MyApplication.paddingSmall,
+            MyApplication.paddingSmall,
+            MyApplication.paddingSmall,
+            MyApplication.paddingSmall
+        )
+        val p = image.layoutParams
+        val imageSize = UtilityLocationFragment.setNWSIconSize()
+        p.width = imageSize
+        p.height = imageSize
+        image.layoutParams = p
     }
 }
+
+

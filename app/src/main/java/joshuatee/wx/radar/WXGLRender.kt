@@ -313,32 +313,63 @@ class WXGLRender(private val context: Context) : Renderer {
         }
         radarBuffers.initialize()
         radarBuffers.setToPositionZero()
-        val objColPal: ObjectColorPalette = if (MyApplication.colorMap.containsKey(radarBuffers.productCode.toInt())) {
-            MyApplication.colorMap[radarBuffers.productCode.toInt()]!!
-        } else {
-            MyApplication.colorMap[94]!!
-        }
+        val objColPal: ObjectColorPalette =
+            if (MyApplication.colorMap.containsKey(radarBuffers.productCode.toInt())) {
+                MyApplication.colorMap[radarBuffers.productCode.toInt()]!!
+            } else {
+                MyApplication.colorMap[94]!!
+            }
         val cR = objColPal.redValues
         val cG = objColPal.greenValues
         val cB = objColPal.blueValues
         try {
             if (!product.contains("L2")) {
-                totalBins = if (radarBuffers.productCode != 56.toShort() && radarBuffers.productCode != 30.toShort()) {
-                    if (!MyApplication.radarUseJni)
-                        UtilityWXOGLPerf.decode8BitAndGenRadials(context, radarBuffers)
-                    else {
-                        JNI.decode8BitAndGenRadials(UtilityIO.getFilePath(context, radarBuffers.fn), radarL3Object.seekStart,
-                                radarL3Object.compressedFileSize, radarL3Object.iBuff, radarL3Object.oBuff, radarBuffers.floatBuffer, radarBuffers.colorBuffer,
-                                radarBuffers.binSize, Color.red(radarBuffers.bgColor).toByte(), Color.green(radarBuffers.bgColor).toByte(), Color.blue(radarBuffers.bgColor).toByte(), cR, cG, cB)
+                totalBins =
+                    if (radarBuffers.productCode != 56.toShort() && radarBuffers.productCode != 30.toShort()) {
+                        if (!MyApplication.radarUseJni)
+                            UtilityWXOGLPerf.decode8BitAndGenRadials(context, radarBuffers)
+                        else {
+                            JNI.decode8BitAndGenRadials(
+                                UtilityIO.getFilePath(context, radarBuffers.fn),
+                                radarL3Object.seekStart,
+                                radarL3Object.compressedFileSize,
+                                radarL3Object.iBuff,
+                                radarL3Object.oBuff,
+                                radarBuffers.floatBuffer,
+                                radarBuffers.colorBuffer,
+                                radarBuffers.binSize,
+                                Color.red(radarBuffers.bgColor).toByte(),
+                                Color.green(radarBuffers.bgColor).toByte(),
+                                Color.blue(radarBuffers.bgColor).toByte(),
+                                cR,
+                                cG,
+                                cB
+                            )
+                        }
+                    } else {
+                        UtilityWXOGLPerf.genRadials(
+                            radarBuffers,
+                            radarL3Object.binWord,
+                            radarL3Object.radialStart
+                        )
                     }
-                } else {
-                    UtilityWXOGLPerf.genRadials(radarBuffers, radarL3Object.binWord, radarL3Object.radialStart)
-                }
             } else {
                 rdL2.binWord.position(0)
                 totalBins = if (MyApplication.radarUseJni)
-                    JNI.level2GenRadials(radarBuffers.floatBuffer, radarBuffers.colorBuffer, rdL2.binWord, rdL2.radialStartAngle,
-                            radarBuffers.numberOfRadials, radarBuffers.numRangeBins, radarBuffers.binSize, radarBuffers.bgColor, cR, cG, cB, radarBuffers.productCode.toInt())
+                    JNI.level2GenRadials(
+                        radarBuffers.floatBuffer,
+                        radarBuffers.colorBuffer,
+                        rdL2.binWord,
+                        rdL2.radialStartAngle,
+                        radarBuffers.numberOfRadials,
+                        radarBuffers.numRangeBins,
+                        radarBuffers.binSize,
+                        radarBuffers.bgColor,
+                        cR,
+                        cG,
+                        cB,
+                        radarBuffers.productCode.toInt()
+                    )
                 else
                     UtilityWXOGLPerf.genRadials(radarBuffers, rdL2.binWord, rdL2.radialStartAngle)
             } // level 2 , level 3 check

@@ -23,54 +23,47 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.graphics.Bitmap
-import androidx.appcompat.widget.AppCompatTextView
-import android.util.TypedValue
 import android.view.Gravity
-import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 import androidx.core.widget.TextViewCompat
 
 import joshuatee.wx.MyApplication
-import joshuatee.wx.UIPreferences
+import joshuatee.wx.objects.TextSize
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.ObjectForecastPackage
 
 class ObjectCardCC(context: Context, version: Int) {
 
     private val objCard: ObjectCard
-    var imageView: ImageView
-        private set
-    val textViewTop: AppCompatTextView
-    val textViewBottom: AppCompatTextView
-    private val tvCc22: AppCompatTextView
+    private var imageView = ObjectImageView(context)
+    val textViewTop: ObjectTextView
+    val textViewBottom: ObjectTextView
+    private val tvCc22: ObjectTextView
 
     init {
+        // FIXME better variable names
         val llCv2 = LinearLayout(context)
         val llCv2V = LinearLayout(context)
-        textViewTop = AppCompatTextView(context)
+        textViewTop = ObjectTextView(context, TextSize.MEDIUM)
         textViewTop.gravity = Gravity.CENTER
-        textViewTop.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-        textViewTop.setPadding(MyApplication.padding, 2, MyApplication.padding, 0)
-        TextViewCompat.setAutoSizeTextTypeWithDefaults(
-            textViewTop,
-            TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM
-        )
-        textViewTop.maxLines = 1
-        textViewBottom = AppCompatTextView(context)
+        textViewTop.setPadding(MyApplication.padding, 0, MyApplication.padding, 0)
+        if (android.os.Build.VERSION.SDK_INT > 20) {
+            TextViewCompat.setAutoSizeTextTypeWithDefaults(
+                textViewTop.tv,
+                TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM
+            )
+            textViewTop.maxLines = 1
+        }
+        textViewBottom = ObjectTextView(context)
         textViewBottom.gravity = Gravity.CENTER
-        textViewBottom.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
-        textViewBottom.setTextColor(UIPreferences.backgroundColor)
-        textViewBottom.setTextAppearance(context, UIPreferences.smallTextTheme)
+        textViewBottom.setAsBackgroundText()
         textViewBottom.setPadding(MyApplication.padding, 0, MyApplication.padding, 2)
-        tvCc22 = AppCompatTextView(context)
+        tvCc22 = ObjectTextView(context)
         tvCc22.gravity = Gravity.CENTER
-        tvCc22.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
-        tvCc22.setTextColor(UIPreferences.backgroundColor)
-        tvCc22.setTextAppearance(context, UIPreferences.smallTextTheme)
-        tvCc22.setPadding(MyApplication.padding, 0, MyApplication.padding, 2)
+        tvCc22.setAsBackgroundText()
+        tvCc22.setPadding(MyApplication.padding, 0, MyApplication.padding, 0)
         if (version == 2) {
-            // specific to 2
             llCv2.orientation = LinearLayout.HORIZONTAL
             textViewTop.gravity = Gravity.START
             tvCc22.gravity = Gravity.START
@@ -88,37 +81,21 @@ class ObjectCardCC(context: Context, version: Int) {
                 MyApplication.paddingSmall,
                 MyApplication.paddingSmall
             )
-            imageView = ImageView(context)
             llCv2V.orientation = LinearLayout.VERTICAL
             llCv2V.gravity = Gravity.CENTER_VERTICAL
-            llCv2V.addView(textViewTop)
-            llCv2V.addView(tvCc22)
-            llCv2V.addView(textViewBottom)
-            llCv2.addView(imageView)
+            llCv2V.addView(textViewTop.tv)
+            llCv2V.addView(tvCc22.tv)
+            llCv2V.addView(textViewBottom.tv)
+            llCv2.addView(imageView.image)
             llCv2.addView(llCv2V)
         } else {
             // legeacy code
             llCv2.orientation = LinearLayout.VERTICAL
-            llCv2.addView(textViewTop)
-            llCv2.addView(textViewBottom)
-            imageView = ImageView(context)
+            llCv2.addView(textViewTop.tv)
+            llCv2.addView(textViewBottom.tv)
         }
         objCard = ObjectCard(context)
         objCard.addView(llCv2)
-    }
-
-    private fun setImage(bitmap: Bitmap, size: Int) {
-        val paramsIv = imageView.layoutParams
-        paramsIv.width = size
-        paramsIv.height = size
-        imageView.layoutParams = paramsIv
-        imageView.setImageBitmap(bitmap)
-        imageView.setPadding(
-            MyApplication.paddingSmall,
-            MyApplication.paddingSmall,
-            MyApplication.paddingSmall,
-            MyApplication.paddingSmall
-        )
     }
 
     val card: CardView get() = objCard.card
@@ -142,7 +119,7 @@ class ObjectCardCC(context: Context, version: Int) {
         helpCurrentGeneric: Int,
         fn: (Int) -> Unit
     ) {
-        imageView.setOnClickListener {
+        imageView.image.setOnClickListener {
             if (MyApplication.helpMode) {
                 fn(helpCurrentGeneric)
             } else {
@@ -163,13 +140,12 @@ class ObjectCardCC(context: Context, version: Int) {
 
     fun updateContent(
         bitmap: Bitmap,
-        size: Int,
         objFcst: ObjectForecastPackage,
         isUS: Boolean,
         ccTime: String,
         radarTime: String
     ) {
-        setImage(bitmap, size)
+        imageView.setImage(bitmap)
         val sep = " - "
         val tmpArrCc = objFcst.objCC.data1.split(sep).dropLastWhile { it.isEmpty() }
         val tempArr: List<String>

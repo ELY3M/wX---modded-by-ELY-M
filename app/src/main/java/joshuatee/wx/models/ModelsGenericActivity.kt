@@ -84,16 +84,16 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 savedInstanceState,
                 R.layout.activity_models_generic,
                 R.menu.models_generic,
-                false,
-                true
+                iconsEvenlySpaced = false,
+                bottomToolbar = true
             )
         } else {
             super.onCreate(
                 savedInstanceState,
                 R.layout.activity_models_generic_multipane,
                 R.menu.models_generic,
-                false,
-                true
+                iconsEvenlySpaced = false,
+                bottomToolbar = true
             )
         }
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -301,7 +301,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
         (0 until om.numPanes).forEach {
             om.displayData.param[it] = om.params[0]
             om.displayData.param[it] =
-                    Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[0])
+                Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[0])
             om.displayData.paramLabel[it] = om.params[0]
             om.displayData.paramLabel[it] = Utility.readPref(
                 this,

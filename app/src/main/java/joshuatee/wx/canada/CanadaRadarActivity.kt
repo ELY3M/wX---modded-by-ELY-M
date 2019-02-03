@@ -82,8 +82,8 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
             savedInstanceState,
             R.layout.activity_canada_radar,
             R.menu.canada_radar,
-            true,
-            true
+            iconsEvenlySpaced = true,
+            bottomToolbar = true
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -104,7 +104,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         }
         title = "Canada"
         imageMap =
-                ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
+            ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
         imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::maptoCARid)
         ridFav = Utility.readPref(this, "RID_CA_FAV", " : : :")
         ridArrLoc = UtilityFavorites.setupFavMenuCA(ridFav, rid1)

@@ -31,10 +31,7 @@ import androidx.cardview.widget.CardView
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.activitiesmisc.CAPAlert
-import joshuatee.wx.objects.TextSize
 import joshuatee.wx.spc.StormReport
-import joshuatee.wx.util.UtilityString
 
 class ObjectCardStormReportItem(context: Context) {
 

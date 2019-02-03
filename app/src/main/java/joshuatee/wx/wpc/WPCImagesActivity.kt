@@ -66,8 +66,8 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
             savedInstanceState,
             R.layout.activity_wpcimages,
             R.menu.wpcimages,
-            true,
-            true
+            iconsEvenlySpaced = true,
+            bottomToolbar = true
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)

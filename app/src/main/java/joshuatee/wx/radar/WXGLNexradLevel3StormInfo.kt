@@ -122,7 +122,7 @@ internal object WXGLNexradLevel3StormInfo {
                         bearing
                     ) // was z+1, now z
                     tmpCoordsArr[z] =
-                            LatLon(UtilityCanvasProjection.computeMercatorNumbers(ecArr[z], pn))
+                        LatLon(UtilityCanvasProjection.computeMercatorNumbers(ecArr[z], pn))
                 }
                 stormList.add(tmpCoords[0])
                 stormList.add(tmpCoords[1])

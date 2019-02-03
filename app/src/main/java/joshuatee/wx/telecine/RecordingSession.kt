@@ -162,7 +162,7 @@ internal class RecordingSession(
         notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         windowManager = context.getSystemService(WINDOW_SERVICE) as WindowManager
         if (showRecordingTools) projectionManager =
-                context.getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+            context.getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     }
 
     fun showOverlay() {
@@ -192,7 +192,7 @@ internal class RecordingSession(
             }
         }
         overlayView =
-                OverlayView.create(context, overlayListener, showDistanceTool, showRecordingTools)
+            OverlayView.create(context, overlayListener, showDistanceTool, showRecordingTools)
         windowManager.addView(overlayView, OverlayView.createLayoutParams(context))
     }
 

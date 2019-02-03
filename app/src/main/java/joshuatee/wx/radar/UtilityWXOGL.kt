@@ -120,10 +120,10 @@ object UtilityWXOGL {
                             ) || Character.isISOControl(b.toInt()) || Character.isDefined(b.toInt())
                         ) {
                             if (vSpotted) {
-                                if (b == 0.toByte()) {
-                                    output += "<br>"
+                                output += if (b == 0.toByte()) {
+                                    "<br>"
                                 } else {
-                                    output += String(byteArrayOf(b))
+                                    String(byteArrayOf(b))
                                 }
                             }
                         }

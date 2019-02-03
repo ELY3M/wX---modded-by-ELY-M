@@ -123,7 +123,7 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
             textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/md$number.html"
             url = "${MyApplication.nwsSPCwebsitePrefix}/products/md/"
             patternStr =
-                    "<strong><a href=./products/md/md.....html.>Mesoscale Discussion #(.*?)</a></strong>"
+                "<strong><a href=./products/md/md.....html.>Mesoscale Discussion #(.*?)</a></strong>"
             nothingPresentStr = "No active MCDs"
             activityLabel = "MCDs"
             product = "SPCMCD$number"
@@ -196,10 +196,10 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
             miImage.isVisible = true
         } else {
             titleString =
-                    "$activityLabel " + mcdNumbers.toString().replace(
-                "[{}]".toRegex(),
-                ""
-            ).replace("\\[|\\]".toRegex(), "").replace("w", "")
+                "$activityLabel " + mcdNumbers.toString().replace(
+                    "[{}]".toRegex(),
+                    ""
+                ).replace("\\[|\\]".toRegex(), "").replace("w", "")
             miAll.isVisible = true
             title = titleString
         }

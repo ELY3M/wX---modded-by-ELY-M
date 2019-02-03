@@ -27,22 +27,20 @@ internal class TileAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerViewHolders, position: Int) {
-        val bm = if (!MyApplication.tileDownsize) {
+        val bitmap = if (!MyApplication.tileDownsize) {
             UtilityImg.loadBM(context, itemList[position].photo, false)
         } else {
             UtilityImg.loadBM(context, itemList[position].photo, true)
         }
         val paramsIv = holder.iv.layoutParams
         paramsIv.width = MyApplication.dm.widthPixels / tilesPerRow
-        paramsIv.height = paramsIv.width * bm.height / bm.width
+        paramsIv.height = paramsIv.width * bitmap.height / bitmap.width
         holder.iv.layoutParams = paramsIv
-        holder.iv.setImageBitmap(bm)
+        holder.iv.setImageBitmap(bitmap)
     }
 
     override fun getItemCount() = this.itemList.size
-
-    // thanks https://medium.com/@ipaulpro/drag-and-swipe-with-recyclerview-b9456d2b1aaf#.sc0gfnb2b
-
+    
     override fun onItemDismiss(position: Int) {
         itemList.removeAt(position)
         notifyItemRemoved(position)

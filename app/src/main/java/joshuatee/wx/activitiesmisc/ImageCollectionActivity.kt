@@ -64,8 +64,8 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
             savedInstanceState,
             R.layout.activity_image_show_navdrawer_bottom_toolbar,
             R.menu.imagecollection,
-            true,
-            true
+            iconsEvenlySpaced = true,
+            bottomToolbar = true
         )
         activityArguments = intent.getStringArrayExtra(TYPE)
         imageCollection = MyApplication.imageCollectionMap[activityArguments[0]]!!

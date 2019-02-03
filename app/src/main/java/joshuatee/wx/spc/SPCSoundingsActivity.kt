@@ -84,7 +84,7 @@ class SPCSoundingsActivity : BaseActivity(), OnItemSelectedListener,
         )
         sp = ObjectSpinner(this, this, this, R.id.spinner1, locations)
         imageMap =
-                ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
+            ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
         imageMap.addClickHandler(::mapSwitch, UtilityImageMap::maptoSND)
     }
 
@@ -178,7 +178,7 @@ class SPCSoundingsActivity : BaseActivity(), OnItemSelectedListener,
     private fun toggleFavorite() {
         val ridFav = UtilityFavorites.toggleFavoriteString(this, nwsOffice, star, prefToken)
         locations =
-                UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefTokenLocation, prefToken)
+            UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefTokenLocation, prefToken)
         sp.refreshData(this, locations)
     }
 

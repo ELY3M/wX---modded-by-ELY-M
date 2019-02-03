@@ -219,7 +219,7 @@ object UtilityUSImgWX {
         val nidsArr = Array(frameCount) { "" }
         (0 until frameCount).forEach {
             if (idxStr == "") {
-                nidsArr[it] = "nexrad_anim" + it.toString()
+                nidsArr[it] = "nexrad_anim$it"
             } else {
                 nidsArr[it] = idxStr + prod + "nexrad_anim" + it.toString()
             }

@@ -104,11 +104,11 @@ object UtilityUSHourly {
         val yearStr = year.toString()
         startTime.indices.forEach {
             content +=
-                    String.format(
-                        "%-16s", startTime[it].replace("-0[0-9]:00".toRegex(), "")
-                            .replace(("$yearStr-"), "").replace(":00:00", "").replace("T", " ")
+                String.format(
+                    "%-16s", startTime[it].replace("-0[0-9]:00".toRegex(), "")
+                        .replace(("$yearStr-"), "").replace(":00:00", "").replace("T", " ")
 
-                    )
+                )
             if (temperature.size > it) {
                 content += String.format("%-12s", temperature[it])
             }

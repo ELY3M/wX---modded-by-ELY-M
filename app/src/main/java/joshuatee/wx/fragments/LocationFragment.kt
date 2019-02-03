@@ -112,7 +112,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     // total # of wxogl
     private var oglrCnt = 0
     private var needForecastData = false
-    private var bitmapSize = 300
     private var linearLayoutForecast: LinearLayout? = null
     // hazards
     private var linearLayoutHazards: LinearLayout? = null
@@ -280,18 +279,18 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         }
         addDynamicCards()
         cardCC?.let { objectCardCC ->
-            objectCardCC.textViewTop.setOnClickListener {
+            objectCardCC.textViewTop.setOnClickListener(View.OnClickListener {
                 if (Location.isUS) {
                     if (MyApplication.helpMode) {
                         showHelp(helpCurrentGeneric)
                     }
                 }
-            }
-            objectCardCC.textViewBottom.setOnClickListener {
+            })
+            objectCardCC.textViewBottom.setOnClickListener(View.OnClickListener {
                 if (MyApplication.helpMode) {
                     showHelp(helpForecastGenericStatus)
                 }
-            }
+            })
         }
         refreshDynamicContent()
         if (MyApplication.locDisplayImg) {
@@ -320,7 +319,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             currentLoc = Location.numLocations - 1
         else
             currentLoc -= 1
-        bitmapSize = UtilityLocationFragment.setNWSIconSize()
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
@@ -849,7 +847,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         withContext(Dispatchers.IO) {
             try {
                 objFcst =
-                        Utility.getCurrentConditionsV2(activityReference, Location.currentLocation)
+                    Utility.getCurrentConditionsV2(activityReference, Location.currentLocation)
                 if (homescreenFavLocal.contains("TXT-CC2")) {
                     bmCc = if (Location.isUS) {
                         UtilityNWS.getIcon(activityReference, objFcst!!.objCC.iconUrl)
@@ -871,7 +869,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             //
             // Current Conditions
             //
-            bitmapSize = UtilityLocationFragment.setNWSIconSize()
             objFcst?.let { _ ->
                 cardCC?.let {
                     if (homescreenFavLocal.contains("TXT-CC2")) {
@@ -879,7 +876,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         if (bmCc != null) {
                             it.updateContent(
                                 bmCc!!,
-                                bitmapSize,
                                 objFcst!!,
                                 Location.isUS,
                                 ccTime,
@@ -924,7 +920,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             }
         }
         if (isAdded) {
-            bitmapSize = UtilityLocationFragment.setNWSIconSize()
             objSevenDay?.let { _ ->
                 if (homescreenFavLocal.contains("TXT-7DAY")) {
                     linearLayoutForecast?.removeAllViewsInLayout()

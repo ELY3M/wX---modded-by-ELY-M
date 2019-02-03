@@ -271,13 +271,13 @@ object UtilityUSImgNWSGOESMercator {
             "MPX", "ARX", "ABR" -> scaleFactor = 135.00
             "GGW" -> scaleFactor = 140.00
             "MFL", "TBW", "MLB", "EYW", "LUB", "BMX", "TAE", "MOB", "LIX", "LCH", "SHV", "FWD", "SJT", "EWX", "TWC", "PSR", "SGX" -> scaleFactor =
-                    110.00
+                110.00
             "FFC", "CHS", "CAE", "GSP", "ILM", "MHX", "HUN", "MEG", "LZK", "PUB", "LOX" -> scaleFactor =
-                    115.00
+                115.00
             "RAH" -> scaleFactor = 118.00
             "SGF", "PAH", "LMK", "JKL", "RNK", "AKQ", "DDC", "ICT" -> scaleFactor = 120.00
             "PHI", "LWX", "RLX", "ILN", "IND", "ILX", "CTP", "PBZ", "LSXa", "EAX", "TOP", "GLD", "BOU" -> scaleFactor =
-                    125.00
+                125.00
         }
         return ProjectionNumbers(scaleFactor, xStr, yStr, xImageCenterPixels, yImageCenterPixels)
     }

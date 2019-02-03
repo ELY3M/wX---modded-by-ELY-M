@@ -359,10 +359,10 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
             }
         } else {
             width =
-                    if (Build.VERSION.SDK_INT >= 19 && (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent))
-                        MyApplication.dm.widthPixels / widthDivider
-                    else
-                        MyApplication.dm.widthPixels / widthDivider
+                if (Build.VERSION.SDK_INT >= 19 && (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent))
+                    MyApplication.dm.widthPixels / widthDivider
+                else
+                    MyApplication.dm.widthPixels / widthDivider
             if (Build.VERSION.SDK_INT >= 19 && (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent)) {
                 height = MyApplication.dm.heightPixels / 2 + UtilityUI.statusBarHeight(context)
                 if (numPanes == 2) {

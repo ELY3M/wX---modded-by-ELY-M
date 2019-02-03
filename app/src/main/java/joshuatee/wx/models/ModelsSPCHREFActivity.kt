@@ -76,16 +76,16 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 savedInstanceState,
                 R.layout.activity_modelsspchref,
                 R.menu.models_spchref,
-                false,
-                true
+                iconsEvenlySpaced = false,
+                bottomToolbar = true
             )
         } else {
             super.onCreate(
                 savedInstanceState,
                 R.layout.activity_models_spchrefmultipane,
                 R.menu.models_spchref,
-                false,
-                true
+                iconsEvenlySpaced = false,
+                bottomToolbar = true
             )
         }
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -238,7 +238,7 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
         (0 until om.numPanes).forEach {
             om.displayData.param[it] = "500w_mean,500h_mean"
             om.displayData.param[it] =
-                    Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[it])
+                Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[it])
             om.displayData.paramLabel[it] = "500 mb Height/Wind"
             om.displayData.paramLabel[it] = Utility.readPref(
                 this,
