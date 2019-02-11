@@ -1,21 +1,24 @@
 // TODO base velocity legend
 // TODO NWS URLs http to https const myapp
-// TODO refactor nexrad radar to match architecture of wXL23 Metal to remove code duplicity
-// TODO consolidate NWSGOES, NWS Mosaic into one activity using class to store pref/lists, etc
-// TODO look into transparent top toolbar
-// TODO reformat menu/layout
 // TODO in settings main show notification count in notification label
-// TODO white space cleanup in menu
-// TODO reformat layout
-// TODO white space cleanup in layout
 // TODO publish Android 4 deprecation date
 // TODO camelCase GlobalArrays ( consult wXL23 )
 // TODO add Ely's MCD/MPD/WAT radar long press code
 // TODO NWS HTTPS migration https://www.nco.ncep.noaa.gov/pmb/changes/URL_http_https.shtml
 // TODO migrate away from US govt website for Sun/Moon data do to cert issues
-// TODO look into ( believe it's good ): https://android-developers.googleblog.com/2019/01/get-your-apps-ready-for-64-bit.html
 // TODO change code so that widget location simply follows current location selected
 
+55113 2019_02_10 update to studio 3.3.1 including gradle update and kotlin plugin update
+                [BUG] settings->colors didn't have black bg
+		sunrise/sunset card - text to black and tap scrolls to top
+55112 2019_02_06 [BUG] Level2 radar and CPC was no longer working after NWS turned off HTTP
+                proactively change Level3 radar to https
+                [BUG] index for AVC was off in WPC Img
+55111 2019_02_06 turn GlobalArrays into object class
+55110 2019_02_06 additions to UtilityMetarConditions
+                 [BUG] misc tab was not reflecting awc mosaic setting
+                 camelCase vars in GlobalArrays to match wXL23
+                 convert OPC access to HTTPS
 55109 2019_02_02 code cleanup
                  convert external code to \n
                  add product types to AWC Radar

@@ -39,7 +39,7 @@ import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectSpinner
 
-import joshuatee.wx.STATE_ARR
+import joshuatee.wx.GlobalArrays
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.util.Utility
 
@@ -85,7 +85,7 @@ class WebscreenABState : BaseActivity(), OnItemSelectedListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_webview_toolbar_state, null, false)
         title = "twitter"
-        stateArr = STATE_ARR + caArr
+        stateArr = GlobalArrays.states + caArr
         stateCodeCurrent = Utility.readPref(this, "STATE_CODE", "")
         twitterStateId = Utility.readPref(this, "STATE_TW_ID_$stateCodeCurrent", "")
         url =

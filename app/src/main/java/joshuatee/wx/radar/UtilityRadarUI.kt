@@ -206,6 +206,19 @@ internal object UtilityRadarUI {
         UtilityAlertDialog.showHelpText(txt, act)
     }
 
+
+    private fun addUserPoint(act: Activity, context: Context, glview: WXGLSurfaceView) {
+        UtilityUserPoints.addUserPoint(context, glview.latLon)
+        UtilityAlertDialog.showHelpText("added userpoint", act)
+    }
+
+
+    private fun deleteUserPoint(act: Activity, glview: WXGLSurfaceView) {
+        UtilityUserPoints.deleteUserPoint(glview.latLon)
+        UtilityAlertDialog.showHelpText("deleted userpoint", act)
+    }
+
+
     fun addItemsToLongPress(
         alertDialogRadarLongpressAl: MutableList<String>,
         lat: String,
@@ -320,7 +333,8 @@ internal object UtilityRadarUI {
         }
         alertDialogRadarLongpressAl.add("Show current radar status message: " + oglr.rid)
         var getridpoint: String = UtilityLocation.getNearestRadarSite(context, LatLon(pointX.toString(), pointY.toString()))
-        alertDialogRadarLongpressAl.add("Show nearest radar status message: " + getridpoint)
+        alertDialogRadarLongpressAl.add("Add userpoint for: " + latLonTitle)
+        alertDialogRadarLongpressAl.add("Delete userpoint for: " + latLonTitle)
         alertDialogRadarLongPress.show()
     }
     
@@ -366,6 +380,14 @@ internal object UtilityRadarUI {
             }
             strName.contains("Show Spotter Info") -> {
                 showSpotterInfo(act, glview, uiDispatcher)
+            }
+            strName.contains("Add userpoint for") -> {
+                addUserPoint(act, context, glview)
+
+            }
+            strName.contains("Delete userpoint for") -> {
+                deleteUserPoint(act, glview)
+
             }
             else -> fn(strName)
         }

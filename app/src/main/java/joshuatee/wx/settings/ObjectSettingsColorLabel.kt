@@ -28,6 +28,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
@@ -61,6 +62,8 @@ internal class ObjectSettingsColorLabel(
             1.0f
         )
         tv.text = label
+        tv.setBackgroundColor(ContextCompat.getColor(context, R.color.black))
+        objCard.card.setCardBackgroundColor(ContextCompat.getColor(context, R.color.black))
         tv.gravity = Gravity.CENTER_VERTICAL
         val prefInner = pref
         objCard.addView(tv)

@@ -78,7 +78,7 @@ object UtilityUSImgWX {
             inputStream?.let { UtilityIO.saveInputStream(context, it, "nids") }
         } else {
             val wd = WXGLDownload()
-            val remoteFile = wd.iowaMesoL2(rid1)
+            val remoteFile = wd.getLevel2Url(rid1)
             inputStream = UtilityDownload.getInputStreamFromURL(remoteFile)
             inputStream?.let { UtilityIO.saveInputStream(context, it, "l2") }
             try {

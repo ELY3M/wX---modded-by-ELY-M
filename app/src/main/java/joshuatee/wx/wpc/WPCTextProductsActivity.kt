@@ -49,7 +49,7 @@ import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityFavorites
 import joshuatee.wx.util.UtilityShare
 
-import joshuatee.wx.NWS_TXT_ARR
+import joshuatee.wx.GlobalArrays
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectNavDrawerCombo
 import kotlinx.coroutines.*
@@ -69,7 +69,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private lateinit var turl: Array<String>
+    private lateinit var activityArguments: Array<String>
     private var prod = ""
     private var html = ""
     private lateinit var scrollView: ScrollView
@@ -95,11 +95,11 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         notifToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
-        turl = intent.getStringArrayExtra(URL)
-        if (turl[0] == "pmdspd") {
+        activityArguments = intent.getStringArrayExtra(URL)
+        if (activityArguments[0] == "pmdspd") {
             prod = MyApplication.wpcTextFav
         } else {
-            prod = turl[0]
+            prod = activityArguments[0]
             initProd = prod
         }
         scrollView = findViewById(R.id.sv)
@@ -130,7 +130,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         ridFavOld = MyApplication.nwsTextFav
         html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(contextg, prod) }
         c0.setTextAndTranslate(Utility.fromHtml(html))
-        UtilityTTS.conditionalPlay(turl, 2, applicationContext, html, "wpctext")
+        UtilityTTS.conditionalPlay(activityArguments, 2, applicationContext, html, "wpctext")
         if (initProd != prod) {
             Utility.writePref(contextg, "WPC_TEXT_FAV", prod)
             MyApplication.wpcTextFav = prod
@@ -206,14 +206,18 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
     private fun findPosition(key: String) =
-        (0 until NWS_TXT_ARR.size).firstOrNull { NWS_TXT_ARR[it].contains(key) }
+        (0 until GlobalArrays.nwsTextProducts.size).firstOrNull {
+            GlobalArrays.nwsTextProducts[it].contains(
+                key
+            )
+        }
             ?: 0
 
     override fun onRestart() {
         if (ridFavOld != MyApplication.nwsTextFav) {
             products = UtilityFavorites.setupFavMenuNWSTEXT(
                 MyApplication.nwsTextFav,
-                NWS_TXT_ARR[findPosition(prod)]
+                GlobalArrays.nwsTextProducts[findPosition(prod)]
             )
             sp.refreshData(this, products)
         }
@@ -230,7 +234,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         prod = drw.getUrl()
         products = UtilityFavorites.setupFavMenuNWSTEXT(
             MyApplication.nwsTextFav,
-            NWS_TXT_ARR[findPosition(prod)]
+            GlobalArrays.nwsTextProducts[findPosition(prod)]
         )
         sp.refreshData(this, products)
     }

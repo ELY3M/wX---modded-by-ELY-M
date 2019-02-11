@@ -52,8 +52,8 @@ abstract class VideoRecordActivity : AppCompatActivity() {
     }
 
     protected var showDistanceTool: String = "false"
-    protected lateinit var toolbar: Toolbar
-    protected lateinit var toolbarBottom: Toolbar
+    lateinit var toolbar: Toolbar
+    lateinit var toolbarBottom: Toolbar
 
     protected fun onCreate(
         savedInstanceState: Bundle?,

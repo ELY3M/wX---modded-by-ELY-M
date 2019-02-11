@@ -199,8 +199,22 @@ open class ObjectOglBuffers() {
             if (!MyApplication.radarUseJni)
                 UtilityWXOGLPerf.genCircle(buffers, pn, buffers.xList, buffers.yList)
             else
-                JNI.genCircle(buffers.floatBuffer, buffers.indexBuffer, pn.xFloat, pn.yFloat, pn.xCenter.toFloat(), pn.yCenter.toFloat(), pn.oneDegreeScaleFactorFloat,
-                        buffers.xList, buffers.yList, buffers.count, buffers.lenInit, buffers.triangleCount, buffers.colorBuffer, buffers.colorArray)
+                JNI.genCircle(
+                    buffers.floatBuffer,
+                    buffers.indexBuffer,
+                    pn.xFloat,
+                    pn.yFloat,
+                    pn.xCenter.toFloat(),
+                    pn.yCenter.toFloat(),
+                    pn.oneDegreeScaleFactorFloat,
+                    buffers.xList,
+                    buffers.yList,
+                    buffers.count,
+                    buffers.lenInit,
+                    buffers.triangleCount,
+                    buffers.colorBuffer,
+                    buffers.colorArray
+                )
         }
 
         // WIND BARB CIRCLE
@@ -208,9 +222,22 @@ open class ObjectOglBuffers() {
             if (!MyApplication.radarUseJni)
                 UtilityWXOGLPerf.genCircleWithColor(buffers, pn, buffers.xList, buffers.yList)
             else
-                JNI.genCircleWithColor(buffers.floatBuffer, buffers.indexBuffer, pn.xFloat, pn.yFloat, pn.xCenter.toFloat(),
-                        pn.yCenter.toFloat(), pn.oneDegreeScaleFactorFloat, buffers.xList, buffers.yList, buffers.count, buffers.lenInit,
-                        buffers.triangleCount, buffers.colorBuffer, buffers.colorIntArray.toIntArray())
+                JNI.genCircleWithColor(
+                    buffers.floatBuffer,
+                    buffers.indexBuffer,
+                    pn.xFloat,
+                    pn.yFloat,
+                    pn.xCenter.toFloat(),
+                    pn.yCenter.toFloat(),
+                    pn.oneDegreeScaleFactorFloat,
+                    buffers.xList,
+                    buffers.yList,
+                    buffers.count,
+                    buffers.lenInit,
+                    buffers.triangleCount,
+                    buffers.colorBuffer,
+                    buffers.colorIntArray.toIntArray()
+                )
         }
     }
 }

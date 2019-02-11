@@ -35,12 +35,15 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 13\. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor.  
 14\. make VAD Wind Profile more better and friendly  like the one at cod.edu    
 15\. color tables for SRM and Spectrum Width  
+16\. Userpoints system - request by Mike T.   
+
 
 
 #
 ## DONE!
 ====================================   
-added in internet check on start with option to turn on and off internet check.   
+Userpoints system is work in the progress!  not done yet!   
+added in internet check on start with option to turn on and off internet check.    
 get MSL and AGL Beam Heights are available in long press now.  
 Sun/Moon data are calculated from SunCalc library now - No More loading/parsing from website with broken SSL.   
 Special Weather Statements Polygons are working!  I had to create a list for SPS same way as how spotters are done in wX.  you should see matching texts for sps polygons now.      

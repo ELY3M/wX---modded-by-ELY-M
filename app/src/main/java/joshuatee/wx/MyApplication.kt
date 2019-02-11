@@ -753,6 +753,7 @@ class MyApplication : Application() {
         var radarSpotterSize: Int = 0
         var radarAviationSize: Int = 0
         var radarTextSize: Float = 0f
+        var radarUserPointSize: Int = 0
         var radarLocdotSize: Int = 0
         var radarLocIconSize: Int = 0
         var radarLocBugSize: Int = 0
@@ -810,6 +811,7 @@ class MyApplication : Application() {
             radarSpotterSize = getInitialPreference("RADAR_SPOTTER_SIZE", 4)
             radarAviationSize = getInitialPreference("RADAR_AVIATION_SIZE", 7)
             radarTextSize = getInitialPreference("RADAR_TEXT_SIZE", 1.0f)
+            radarUserPointSize = getInitialPreference("RADAR_USERPOINT_SIZE", 100)
             radarLocdotSize = getInitialPreference("RADAR_LOCDOT_SIZE", 10)
             radarLocIconSize = getInitialPreference("RADAR_LOCICON_SIZE", 100)
             radarLocBugSize = getInitialPreference("RADAR_LOCBUG_SIZE", 100)

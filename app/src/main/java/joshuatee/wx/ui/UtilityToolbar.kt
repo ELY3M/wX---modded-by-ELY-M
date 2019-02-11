@@ -32,6 +32,7 @@ import android.view.ViewGroup
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.radar.VideoRecordActivity
 
 object UtilityToolbar {
 
@@ -60,6 +61,10 @@ object UtilityToolbar {
             toolbar.visibility = View.GONE
             toolbarBottom.visibility = View.GONE
         }
+    }
+
+    fun fullScreenMode(activity: VideoRecordActivity) {
+        fullScreenMode(activity.toolbar, activity.toolbarBottom)
     }
 
     fun fullScreenMode(toolbar: Toolbar) {

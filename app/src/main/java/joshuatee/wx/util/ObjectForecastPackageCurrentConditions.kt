@@ -74,7 +74,6 @@ class ObjectForecastPackageCurrentConditions {
     }
 
     internal constructor(context: Context, location: LatLon) {
-
         if (MyApplication.currentConditionsViaMetar) {
             val tmpArr = getConditionsViaMetar(context, location)
             data1 = tmpArr[0]
@@ -92,11 +91,9 @@ class ObjectForecastPackageCurrentConditions {
     }
 
     private fun getConditionsViaMetar(context: Context, location: LatLon): List<String> {
-
         var sb = ""
         val objMetar = ObjectMetar(context, location)
         conditionsTimeStr = objMetar.conditionsTimeStr
-
         val temperature = objMetar.temperature + MyApplication.DEGREE_SYMBOL
         val windChill = objMetar.windChill + MyApplication.DEGREE_SYMBOL
         val heatIndex = objMetar.heatIndex + MyApplication.DEGREE_SYMBOL

@@ -77,7 +77,7 @@ class WXGLDownload {
             UtilityFileManagement.moveFile(context, l3BaseFn + idxStr + "_d", l3BaseFn + idxStr)
         } else {
             if (urlStr == "") {
-                val inputStream = getInputStreamFromURLL2(iowaMesoL2(rid1), prod)
+                val inputStream = getInputStreamFromURLL2(getLevel2Url(rid1), prod)
                 inputStream?.let { UtilityIO.saveInputStream(context, it, "l2_d$idxStr") }
             } else {
                 val inputStream = getInputStreamFromURLL2(iowaMesoL2ARCHIVE(rid1, urlStr), prod)
@@ -214,7 +214,7 @@ class WXGLDownload {
         return l2Arr
     }
 
-    fun iowaMesoL2(rid1: String): String {
+    fun getLevel2Url(rid1: String): String {
         var fn: String
         val ridPrefix = UtilityWXOGL.getRidPrefix(rid1, false).toUpperCase(Locale.US)
         val baseUrl = MyApplication.nwsRadarLevel2Pub + ridPrefix + rid1 + "/"

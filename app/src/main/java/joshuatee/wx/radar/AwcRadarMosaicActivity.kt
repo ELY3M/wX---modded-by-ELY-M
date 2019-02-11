@@ -35,7 +35,6 @@ import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.produce
 
 class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
 
@@ -131,7 +130,6 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.RADAR_MOSAIC)
             R.id.action_animate -> getAnimate()
-            R.id.action_stop -> animDrawable.stop()
             R.id.action_stop -> animDrawable.stop()
             R.id.action_rad_rala -> getContent("rad_rala")
             R.id.action_rad_cref -> getContent("rad_cref")

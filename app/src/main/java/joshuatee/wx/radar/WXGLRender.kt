@@ -138,6 +138,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private var iTexture: Int = 0
 
     private var conusradarId = -1
+    private var UserPointId = -1
     private var locationId = -1
     private var locationBugId = -1
     private var tvsId = -1
@@ -759,6 +760,28 @@ class WXGLRender(private val context: Context) : Renderer {
         }
     }
 
+    private fun drawUserPoints(buffers: ObjectOglBuffers) {
+        if (buffers.isInitialized) {
+            buffers.setToPositionZero()
+            GLES20.glUseProgram(OpenGLShader.sp_loadimage)
+            mPositionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
+            GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
+            mSizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
+            GLES20.glUniform1f(mSizeHandle, MyApplication.radarLocIconSize.toFloat())
+            iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
+            UserPointId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "userpoint.png")
+            GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
+            GLES20.glEnableVertexAttribArray(mPositionHandle)
+            GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, locationId)
+            GLES20.glUniform1i(iTexture, 0)
+            GLES20.glEnable(GLES20.GL_BLEND);
+            GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
+            GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+            //GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+            GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
+        }
+    }
 
     private fun drawLocation(buffers: ObjectOglBuffers) {
         if (buffers.isInitialized) {

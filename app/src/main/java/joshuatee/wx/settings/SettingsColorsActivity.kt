@@ -39,7 +39,7 @@ class SettingsColorsActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        val ll: LinearLayout = findViewById(R.id.ll)
+        val linearLayout: LinearLayout = findViewById(R.id.ll)
         val mapColorToPref = mapOf(
                 "Highway color" to "RADAR_COLOR_HW",
                 "Secondary Highway color" to "RADAR_COLOR_HW_EXT",
@@ -75,7 +75,7 @@ class SettingsColorsActivity : BaseActivity() {
         )
         mapColorToPref.keys.asSequence().sorted()
             .mapTo(colorObjects) { ObjectSettingsColorLabel(this, it, mapColorToPref[it]!!) }
-        colorObjects.forEach { ll.addView(it.card) }
+        colorObjects.forEach { linearLayout.addView(it.card) }
     }
 
     override fun onRestart() {

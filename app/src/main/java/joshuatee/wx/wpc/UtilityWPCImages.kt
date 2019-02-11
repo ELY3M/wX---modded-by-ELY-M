@@ -37,7 +37,7 @@ internal object UtilityWPCImages {
         ObjectMenuTitle("Snow / Ice", 21),
         ObjectMenuTitle("National Digital Forecast Database", 15),
         ObjectMenuTitle("CPC Outlooks", 22),
-        ObjectMenuTitle("Aviation", 14),
+        ObjectMenuTitle("Aviation", 16),
         ObjectMenuTitle("Space Weather", 3)
     )
 

@@ -37,7 +37,7 @@ class ObjectOglRadarBuffers(val context: Context, var bgColor: Int) : ObjectOglB
     var numRangeBins: Int = 0
     var productCode: Short = 94.toShort()
 
-    var colormap: ObjectColorPalette = ObjectColorPalette(context, "94")
+    val colormap: ObjectColorPalette
         get() = MyApplication.colorMap[productCode.toInt()]!!
 
     fun extractL3Data(rd: WXGLNexradLevel3) {

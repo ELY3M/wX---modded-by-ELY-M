@@ -22,9 +22,9 @@
 package joshuatee.wx.radar
 
 import android.content.Context
+import joshuatee.wx.GlobalArrays
 import joshuatee.wx.MyApplication
 
-import joshuatee.wx.TDWR_RIDS
 import joshuatee.wx.util.Utility
 
 object WXGLNexrad {
@@ -113,8 +113,11 @@ object WXGLNexrad {
         else -> binSize54
     }
 
-    fun isRIDTDWR(rid: String): Boolean = TDWR_RIDS.any { rid == MyApplication.space.split(it)[0] }
+    // FIXME rename and use different split
+    fun isRIDTDWR(rid: String): Boolean =
+        GlobalArrays.tdwrRadars.any { rid == MyApplication.space.split(it)[0] }
 
+    // FIXME rename method and COD_HASH
     fun getTDWRFromRID(rid: String): String = COD_HASH[rid] ?: ""
 
     fun savePrefs(context: Context, prefPrefix: String, oglr: WXGLRender) {

@@ -938,8 +938,8 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     // sunrise card
                     val cardSunrise = ObjectCardText(activityReference)
                     cardSunrise.center()
-                    cardSunrise.lightText()
-                    cardSunrise.setOnClickListener(OnClickListener { refreshDynamicContent() })
+                    //cardSunrise.lightText()
+                    cardSunrise.setOnClickListener(OnClickListener { scrollView.smoothScrollTo(0,0) })
                     try {
                         if (Location.isUS) {
                             cardSunrise.setText(

@@ -35,11 +35,8 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ActionMode
 import joshuatee.wx.util.UtilityAlertDialog
 
-import joshuatee.wx.WFO_ARR
-import joshuatee.wx.RID_ARR
-import joshuatee.wx.NWS_IMG_ARR
+import joshuatee.wx.GlobalArrays
 
-import joshuatee.wx.NWS_TXT_ARR
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 
@@ -108,7 +105,11 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             View.OnClickListener { toggleMode(ActionMode.DOWN) })
         updateList(true)
         recyclerView = ObjectRecyclerView(this, this, R.id.card_list, ridArrLabel, ::prodClicked)
-        diaMain = ObjectDialogue(this, "Select text products:", localChoicesText + NWS_TXT_ARR)
+        diaMain = ObjectDialogue(
+            this,
+            "Select text products:",
+            localChoicesText + GlobalArrays.nwsTextProducts
+        )
         diaMain.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
                 diaMain,
@@ -116,7 +117,11 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                 which
             )
         })
-        diaImg = ObjectDialogue(this, "Select image products:", localChoicesImg + NWS_IMG_ARR)
+        diaImg = ObjectDialogue(
+            this,
+            "Select image products:",
+            localChoicesImg + GlobalArrays.nwsImageProducts
+        )
         diaImg.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
                 diaImg,
@@ -124,7 +129,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                 which
             )
         })
-        diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", WFO_ARR)
+        diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
         diaAfd.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
                 diaAfd,
@@ -132,7 +137,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                 which
             )
         })
-        diaVis = ObjectDialogue(this, "Select fixed location 1KM Vis products:", WFO_ARR)
+        diaVis = ObjectDialogue(this, "Select fixed location 1KM Vis products:", GlobalArrays.wfos)
         diaVis.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
                 diaVis,
@@ -140,7 +145,8 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                 which
             )
         })
-        diaRadar = ObjectDialogue(this, "Select fixed location Nexrad products:", RID_ARR)
+        diaRadar =
+            ObjectDialogue(this, "Select fixed location Nexrad products:", GlobalArrays.radars)
         diaRadar.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
                 diaRadar,
@@ -276,14 +282,21 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         Utility.writePref(this, prefToken, ridFav)
     }
 
-    private fun findPositionTEXT(key: String) = (0 until NWS_TXT_ARR.size)
-        .firstOrNull { NWS_TXT_ARR[it].startsWith(key.toLowerCase().replace("txt-", "")) }
-        ?.let { NWS_TXT_ARR[it] }
+    private fun findPositionTEXT(key: String) = (0 until GlobalArrays.nwsTextProducts.size)
+        .firstOrNull {
+            GlobalArrays.nwsTextProducts[it].startsWith(
+                key.toLowerCase().replace(
+                    "txt-",
+                    ""
+                )
+            )
+        }
+        ?.let { GlobalArrays.nwsTextProducts[it] }
         ?: ""
 
-    private fun findPositionIMG(key: String) = (0 until NWS_IMG_ARR.size)
-        .firstOrNull { NWS_IMG_ARR[it].startsWith(key.replace("IMG-", "")) }
-        ?.let { NWS_IMG_ARR[it] }
+    private fun findPositionIMG(key: String) = (0 until GlobalArrays.nwsImageProducts.size)
+        .firstOrNull { GlobalArrays.nwsImageProducts[it].startsWith(key.replace("IMG-", "")) }
+        ?.let { GlobalArrays.nwsImageProducts[it] }
         ?: ""
 
     private fun findPositionIMG2(key: String): String {
@@ -299,20 +312,20 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             ?: ""
 
     private fun findPositionAFD(key: String): String {
-        (0 until WFO_ARR.size).forEach {
-            if (WFO_ARR[it].startsWith(key.replace("TXT-AFD", ""))) {
-                return "AFD " + WFO_ARR[it]
+        (0 until GlobalArrays.wfos.size).forEach {
+            if (GlobalArrays.wfos[it].startsWith(key.replace("TXT-AFD", ""))) {
+                return "AFD " + GlobalArrays.wfos[it]
             }
-            if (WFO_ARR[it].startsWith(key.replace("IMG-", ""))) {
-                return "VIS " + WFO_ARR[it]
+            if (GlobalArrays.wfos[it].startsWith(key.replace("IMG-", ""))) {
+                return "VIS " + GlobalArrays.wfos[it]
             }
         }
         return ""
     }
 
-    private fun findPositionRadar(key: String) = (0 until RID_ARR.size)
-        .firstOrNull { RID_ARR[it].startsWith(key.replace("NXRD-", "")) }
-        ?.let { RID_ARR[it] + " (NEXRAD)" } ?: ""
+    private fun findPositionRadar(key: String) = (0 until GlobalArrays.radars.size)
+        .firstOrNull { GlobalArrays.radars[it].startsWith(key.replace("NXRD-", "")) }
+        ?.let { GlobalArrays.radars[it] + " (NEXRAD)" } ?: ""
 
     override fun onBackPressed() {
         if (ridFav != hmFavOrig) {

@@ -36,6 +36,7 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.activitiesmisc.*
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NHCActivity
+import joshuatee.wx.radar.AwcRadarMosaicActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.vis.GOES16Activity
 import joshuatee.wx.radar.USNWSMosaicActivity
@@ -116,14 +117,25 @@ class MiscFragment : Fragment() {
                 resources.getString(R.string.help_nhc),
                 "nhc"
             )
-            hm["nwsmosaic"] = TileObject(
-                R.drawable.nws_sector,
-                USNWSMosaicActivity::class.java,
-                USNWSMosaicActivity.URL,
-                arrayOf("", ""),
-                resources.getString(R.string.help_nws_radar_mosaics),
-                "nwsmosaic"
-            )
+            if (!UIPreferences.useAwcRadarMosaic) {
+                hm["nwsmosaic"] = TileObject(
+                    R.drawable.nws_sector,
+                    USNWSMosaicActivity::class.java,
+                    USNWSMosaicActivity.URL,
+                    arrayOf("", ""),
+                    resources.getString(R.string.help_nws_radar_mosaics),
+                    "nwsmosaic"
+                )
+            } else {
+                hm["nwsmosaic"] = TileObject(
+                    R.drawable.nws_sector,
+                    AwcRadarMosaicActivity::class.java,
+                    AwcRadarMosaicActivity.URL,
+                    arrayOf(""),
+                    resources.getString(R.string.help_nws_radar_mosaics),
+                    "nwsmosaic"
+                )
+            }
             hm["goes"] = TileObject(
                 R.drawable.goes,
                 GOES16Activity::class.java,

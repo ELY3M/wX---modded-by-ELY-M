@@ -33,7 +33,7 @@ import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.util.UtilityIO
 
-import joshuatee.wx.STATE_ARR
+import joshuatee.wx.GlobalArrays
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
@@ -68,7 +68,7 @@ class NWSObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             this,
             this,
             R.id.card_list,
-            STATE_ARR.toMutableList(),
+            GlobalArrays.states.toMutableList(),
             ::itemClicked
         )
     }
@@ -81,13 +81,13 @@ class NWSObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private fun itemClicked(position: Int) {
         if (!siteDisplay) {
-            provSelected = UtilityStringExternal.truncate(STATE_ARR[position], 2)
+            provSelected = UtilityStringExternal.truncate(GlobalArrays.states[position], 2)
             title = "$titleString ($provSelected)"
             provSelected()
         } else {
             when (position) {
                 0 -> {
-                    recyclerView.refreshList(STATE_ARR.toMutableList())
+                    recyclerView.refreshList(GlobalArrays.states.toMutableList())
                     siteDisplay = false
                     title = titleString
                 }

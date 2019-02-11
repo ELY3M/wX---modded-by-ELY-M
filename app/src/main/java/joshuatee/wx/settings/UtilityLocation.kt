@@ -105,10 +105,10 @@ object UtilityLocation {
     }
 
     fun getNearestOffice(context: Context, officeType: String, location: LatLon): String {
-        var officeArray = RID_ARR
+        var officeArray = GlobalArrays.radars
         var prefToken = "RID"
         if (officeType == "WFO") {
-            officeArray = WFO_ARR
+            officeArray = GlobalArrays.wfos
             prefToken = "NWS"
         }
         val sites = mutableListOf<RID>()
@@ -131,11 +131,11 @@ object UtilityLocation {
 
     fun getNearestRid(context: Context, location: LatLon, cnt: Int): List<RID> {
         val radarSites = mutableListOf<RID>()
-        RID_ARR.forEach {
+        GlobalArrays.radars.forEach {
             val labels = it.split(":")
             radarSites.add(RID(labels[0], getSiteLocation(context, labels[0])))
         }
-        TDWR_RIDS.forEach {
+        GlobalArrays.tdwrRadars.forEach {
             val labels = it.split(" ")
             radarSites.add(RID(labels[0], getSiteLocation(context, labels[0])))
         }
@@ -150,11 +150,11 @@ object UtilityLocation {
 
     fun getNearestRadarSite(context: Context, location: LatLon): String {
         val radarSites = mutableListOf<RID>()
-        RID_ARR.forEach {
+        GlobalArrays.radars.forEach {
             val labels = it.split(":")
             radarSites.add(RID(labels[0], getSiteLocation(context, labels[0])))
         }
-        TDWR_RIDS.forEach {
+        GlobalArrays.tdwrRadars.forEach {
             val labels = it.split(" ")
             radarSites.add(RID(labels[0], getSiteLocation(context, labels[0])))
         }
@@ -174,11 +174,11 @@ object UtilityLocation {
     }
 
     fun getNearestSnd(context: Context, location: LatLon): String {
-        val sites = SND_ARR.map { RID(it, getSiteLocation(context, it, "SND")) }
+        val sites = GlobalArrays.soundingSites.map { RID(it, getSiteLocation(context, it, "SND")) }
         var shortestDistance = 1000.00
         var currentDistance: Double
         var bestRid = -1
-        SND_ARR.indices.forEach {
+        GlobalArrays.soundingSites.indices.forEach {
             currentDistance = LatLon.distance(location, sites[it].location, DistanceUnit.KM)
             if (currentDistance < shortestDistance) {
                 shortestDistance = currentDistance
@@ -227,7 +227,7 @@ object UtilityLocation {
         }
     }
 
-    fun saveLocationForMcd(
+    public fun saveLocationForMcd(
         nwsOffice: String,
         context: Context,
         linearLayout: LinearLayout,

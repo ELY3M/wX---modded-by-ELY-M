@@ -54,6 +54,7 @@ object UtilityMetarConditions {
 
         "Snow" to "snow",
         "Light Snow" to "snow",
+        "Light Snow With Thunder" to "snow", // new add 2019_02_05
         "Light Snow, Mist" to "snow",
         "Heavy Snow" to "snow",
         "Snow Showers" to "snow",
@@ -134,6 +135,7 @@ object UtilityMetarConditions {
         "Freezing Rain in Vicinity" to "fzra",
         "Freezing Drizzle in Vicinity" to "fzra",
         "Light Freezing Drizzle, Snow" to "fzra",  // NEW ADD 2019_01_25
+        "Freezing Rain, Ice Pellets" to "fzra",  // NEW ADD 2019_02_05
 
         "Freezing Rain Rain" to "ra_fzra",
         "Light Freezing Rain Rain" to "ra_fzra",
@@ -161,6 +163,8 @@ object UtilityMetarConditions {
         "Light Snow Freezing Drizzle" to "fzra_sn",
         "Heavy Snow Freezing Drizzle" to "fzra_sn",
 
+        "Light Snow Pellets" to "ip", // new add 2019_02_05
+        "Light Snow, Ice Pellets" to "ip", // new add 2019_02_05
         "Ice Pellets" to "ip",
         "Light Ice Pellets" to "ip",
         "Heavy Ice Pellets" to "ip",

@@ -35,7 +35,7 @@ import joshuatee.wx.settings.Location
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 
-import joshuatee.wx.STATE_ARR
+import joshuatee.wx.GlobalArrays
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
@@ -54,7 +54,7 @@ class SPCSWOStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListene
     }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private var turlDay = ""
+    private var day = ""
     private var imgUrl = ""
     private lateinit var img: ObjectTouchImageView
     private var state = ""
@@ -72,10 +72,10 @@ class SPCSWOStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListene
             bottomToolbar = true
         )
         toolbarBottom.setOnMenuItemClickListener(this)
-        turlDay = intent.getStringArrayExtra(NO)[0]
+        day = intent.getStringArrayExtra(NO)[0]
         state = Utility.readPref(this, "NWS_LOCATION_${Location.wfo}", "").split(",")[0]
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv)
-        ObjectSpinner(this, this, this, R.id.spinner1, STATE_ARR, state)
+        ObjectSpinner(this, this, this, R.id.spinner1, GlobalArrays.states, state)
     }
 
     override fun onRestart() {
@@ -84,8 +84,8 @@ class SPCSWOStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListene
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        title = "SWO D$turlDay"
-        imgUrl = UtilitySPCSWO.getSwoStateUrl(state, turlDay)
+        title = "SWO D$day"
+        imgUrl = UtilitySPCSWO.getSwoStateUrl(state, day)
         bitmap = withContext(Dispatchers.IO) { imgUrl.getImage() }
         img.img.visibility = View.VISIBLE
         img.setBitmap(bitmap)
@@ -96,7 +96,7 @@ class SPCSWOStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListene
         when (item.itemId) {
             R.id.action_share -> UtilityShare.shareBitmap(
                 this,
-                "$state SWO D$turlDay",
+                "$state SWO D$day",
                 bitmap
             )
             else -> return super.onOptionsItemSelected(item)
@@ -106,11 +106,11 @@ class SPCSWOStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListene
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         if (firstTime) {
-            UtilityToolbar.fullScreenMode(toolbar, toolbarBottom)
+            UtilityToolbar.fullScreenMode(this)
             firstTime = false
         }
         img.setZoom(1.0f)
-        state = STATE_ARR[pos].split(":")[0]
+        state = GlobalArrays.states[pos].split(":")[0]
         getContent()
     }
 

@@ -26,8 +26,7 @@ import android.view.MenuItem
 
 import joshuatee.wx.MyApplication
 
-import joshuatee.wx.CA_RID_ARR
-import joshuatee.wx.NWS_TXT_ARR
+import joshuatee.wx.GlobalArrays
 
 object UtilityFavorites {
 
@@ -99,8 +98,8 @@ object UtilityFavorites {
         ridArr[2] = MODIFY_STR
         val ridArrLoc = MutableList(ridArr.size) { "" }
         ridArr.indices.forEach { k ->
-            CA_RID_ARR.indices.filter { CA_RID_ARR[it].contains(ridArr[k]) }
-                .forEach { ridArrLoc[k] = CA_RID_ARR[it].replace(":", "") }
+            GlobalArrays.canadaRadars.indices.filter { GlobalArrays.canadaRadars[it].contains(ridArr[k]) }
+                .forEach { ridArrLoc[k] = GlobalArrays.canadaRadars[it].replace(":", "") }
             if (k == 1 || k == 2) {
                 ridArrLoc[k] = ridArr[k]
             }
@@ -216,12 +215,16 @@ object UtilityFavorites {
             if (it == 1 || it == 2)
                 ridArrLoc[it] = ridArr[it]
             else
-                ridArrLoc[it] = NWS_TXT_ARR[findPositionNWSTEXT(ridArr[it])]
+                ridArrLoc[it] = GlobalArrays.nwsTextProducts[findPositionNWSTEXT(ridArr[it])]
         }
         return ridArrLoc.toList()
     }
 
     fun findPositionNWSTEXT(key: String): Int =
-        NWS_TXT_ARR.indices.firstOrNull { NWS_TXT_ARR[it].contains(key) }
+        GlobalArrays.nwsTextProducts.indices.firstOrNull {
+            GlobalArrays.nwsTextProducts[it].contains(
+                key
+            )
+        }
             ?: 0
 }
