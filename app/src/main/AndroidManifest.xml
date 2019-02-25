@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55113"
-    android:versionName="55113"
+    android:versionCode="55116"
+    android:versionName="55116"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -188,6 +188,11 @@
   <activity
       android:name=".activitiesmisc.NWSObsSitesActivity"
       android:label="NWS Observation Sites"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".radar.AwcRadarMosaicActivity"
+      android:label="AWC Radar Mosaics"
       android:parentActivityName="WX" >
   </activity>
   <activity

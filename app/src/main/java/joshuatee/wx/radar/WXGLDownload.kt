@@ -56,16 +56,10 @@ class WXGLDownload {
         this.rid1 = rid1
         this.prod = prod
         if (!prod.contains("L2")) {
-            // per http://www.nws.noaa.gov/om/notification/scn16-16wng.htm
-            // http://weather.noaa.gov is being retired 2016/06/15
-            // replace with http://tgftp.nws.noaa.gov
-            // FIXME HTTPS
             val inputStream = UtilityDownload.getInputStreamFromURL(
                 MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +
                         NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(Locale.US) + "/sn.last"
             )
-            //val inputStream = UtilityDownload.getInputStreamFromUrlUnsafe(MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +
-            //        NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(Locale.US) + "/sn.last")
             val l3BaseFn = "nids"
             inputStream?.let {
                 UtilityIO.saveInputStream(

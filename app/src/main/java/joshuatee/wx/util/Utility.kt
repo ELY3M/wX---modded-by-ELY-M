@@ -127,7 +127,7 @@ object Utility {
 
     fun readPref(context: Context, key: String, value: String): String {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        return preferences.getString(key, value)
+        return preferences.getString(key, value)!!
     }
 
     fun readPref(context: Context, key: String, value: Int): Int {
@@ -180,7 +180,7 @@ object Utility {
         return ObjectForecastPackage(objCC)
     }
 
-    private fun getCurrentConditionsUSV2(context: Context, locNum: Int): ObjectForecastPackage {
+    private fun getCurrentConditionsUS(context: Context, locNum: Int): ObjectForecastPackage {
         val objCC = ObjectForecastPackageCurrentConditions(context, locNum)
         return ObjectForecastPackage(objCC)
     }
@@ -213,14 +213,14 @@ object Utility {
         return ObjectForecastPackageHazards(location)
     }
 
-    fun getCurrentConditionsV2byLatLon(context: Context, location: LatLon): ObjectForecastPackage {
+    fun getCurrentConditionsByLatLon(context: Context, location: LatLon): ObjectForecastPackage {
         val objCC = ObjectForecastPackageCurrentConditions(context, location)
         return ObjectForecastPackage(objCC)
     }
 
-    fun getCurrentConditionsV2(context: Context, locNum: Int): ObjectForecastPackage =
+    fun getCurrentConditions(context: Context, locNum: Int): ObjectForecastPackage =
         if (Location.isUS(locNum)) {
-            getCurrentConditionsUSV2(context, locNum)
+            getCurrentConditionsUS(context, locNum)
         } else {
             getCurrentConditionsCanada(locNum)
         }

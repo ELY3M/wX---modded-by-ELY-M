@@ -131,6 +131,7 @@ class GOES16Activity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
             return true
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.GOES16)
+            R.id.action_a12 -> getAnimate(12)
             R.id.action_a24 -> getAnimate(24)
             R.id.action_a36 -> getAnimate(36)
             R.id.action_a48 -> getAnimate(48)
@@ -140,6 +141,7 @@ class GOES16Activity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
             R.id.action_a96 -> getAnimate(96)
             R.id.action_FD -> getContent("FD")
             R.id.action_CONUS -> getContent("CONUS")
+            R.id.action_CONUS_G17 -> getContent("CONUS-G17")
             R.id.action_pnw -> getContent("pnw")
             R.id.action_nr -> getContent("nr")
             R.id.action_umv -> getContent("umv")
@@ -150,11 +152,16 @@ class GOES16Activity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
             R.id.action_sp -> getContent("sp")
             R.id.action_smv -> getContent("smv")
             R.id.action_se -> getContent("se")
+            R.id.action_ak -> getContent("ak")
+            R.id.action_hi -> getContent("hi")
             R.id.action_gm -> getContent("gm")
             R.id.action_car -> getContent("car")
             R.id.action_eus -> getContent("eus")
             R.id.action_pr -> getContent("pr")
             R.id.action_taw -> getContent("taw")
+            R.id.action_tpw -> getContent("tpw")
+            R.id.action_wus -> getContent("taw")
+            R.id.action_eep -> getContent("eep")
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     checkOverlayPerms()

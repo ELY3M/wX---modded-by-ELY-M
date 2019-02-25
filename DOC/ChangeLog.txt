@@ -7,7 +7,19 @@
 // TODO NWS HTTPS migration https://www.nco.ncep.noaa.gov/pmb/changes/URL_http_https.shtml
 // TODO migrate away from US govt website for Sun/Moon data do to cert issues
 // TODO change code so that widget location simply follows current location selected
+// TODO https://www.weather.gov/media/notification/scn18-93cps_wpc_days3-7aab.pdf
+// TODO Fix long press warning open radar mosaic
+// TODO OkHttp 3.13 Requires Android 5+ – Square Corner Blog – Medium  
+// https://medium.com/square-corner-blog/okhttp-3-13-requires-android-5-818bb78d07ce
+// TODO document or fix changing radar settings and impact on main screen radars
+// TODO UtilityMetar in radar has optimization related to text file loading
+// TODO bug dark blue theme does not work with checkbox
 
+55116 2019_02_24 update OPC URL
+                [BUG] test changing dark blue theme colors to impact checkbox border (buttonTint)
+55115 2019_02_13 GOES17 and disable Image tab
+55114 2019_02_11 code cleanup
+                 tag release to fdroid
 55113 2019_02_10 update to studio 3.3.1 including gradle update and kotlin plugin update
                 [BUG] settings->colors didn't have black bg
 		sunrise/sunset card - text to black and tap scrolls to top

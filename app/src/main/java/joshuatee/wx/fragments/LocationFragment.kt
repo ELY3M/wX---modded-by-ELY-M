@@ -847,7 +847,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         withContext(Dispatchers.IO) {
             try {
                 objFcst =
-                    Utility.getCurrentConditionsV2(activityReference, Location.currentLocation)
+                    Utility.getCurrentConditions(activityReference, Location.currentLocation)
                 if (homescreenFavLocal.contains("TXT-CC2")) {
                     bmCc = if (Location.isUS) {
                         UtilityNWS.getIcon(activityReference, objFcst!!.objCC.iconUrl)
@@ -938,8 +938,12 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     // sunrise card
                     val cardSunrise = ObjectCardText(activityReference)
                     cardSunrise.center()
-                    //cardSunrise.lightText()
-                    cardSunrise.setOnClickListener(OnClickListener { scrollView.smoothScrollTo(0,0) })
+                    cardSunrise.setOnClickListener(OnClickListener {
+                        scrollView.smoothScrollTo(
+                            0,
+                            0
+                        )
+                    })
                     try {
                         if (Location.isUS) {
                             cardSunrise.setText(

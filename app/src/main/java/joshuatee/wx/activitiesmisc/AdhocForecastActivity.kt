@@ -101,7 +101,7 @@ class AdhocForecastActivity : BaseActivity() {
             //
             // CC
             //
-            objFcst = Utility.getCurrentConditionsV2byLatLon(contextg, latlon)
+            objFcst = Utility.getCurrentConditionsByLatLon(contextg, latlon)
             objHazards = Utility.getCurrentHazards(latlon)
             objSevenDay = Utility.getCurrentSevenDay(latlon)
             hazardRaw = objHazards!!.hazards.getHtmlSep()

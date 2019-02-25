@@ -144,10 +144,11 @@ class MyApplication : Application() {
         const val nwsSPCwebsitePrefix: String = "https://www.spc.noaa.gov"
         const val nwsWPCwebsitePrefix: String = "https://www.wpc.ncep.noaa.gov"
         const val nwsAWCwebsitePrefix: String = "https://www.aviationweather.gov"
-        const val nwsGraphicalWebsitePrefix: String = "http://graphical.weather.gov"
-        const val nwsCPCNcepWebsitePrefix: String = "http://www.cpc.ncep.noaa.gov"
+        const val nwsGraphicalWebsitePrefix: String = "https://graphical.weather.gov"
+        const val nwsCPCNcepWebsitePrefix: String = "https://www.cpc.ncep.noaa.gov"
         const val nwsGoesWebsitePrefix: String = "https://www.goes.noaa.gov"
-        const val nwsOpcWebsitePrefix: String = "http://www.opc.ncep.noaa.gov"
+        //const val nwsOpcWebsitePrefix: String = "https://www.opc.ncep.noaa.gov"
+        const val nwsOpcWebsitePrefix: String = "https://ocean.weather.gov"
         const val nwsNhcWebsitePrefix: String = "https://www.nhc.noaa.gov"
         const val nwsRadarWebsitePrefix: String = "https://radar.weather.gov"
         const val nwsMagNcepWebsitePrefix: String = "https://mag.ncep.noaa.gov"
@@ -350,7 +351,8 @@ class MyApplication : Application() {
         var nwsIconSize: Int = 0
         var padding: Int = 0
         var paddingSmall: Int = 0
-        var tabHeaders: Array<String> = arrayOf("", "", "", "")
+        //var tabHeaders: Array<String> = arrayOf("", "", "", "")
+        var tabHeaders: Array<String> = arrayOf("", "", "")
 
         fun initPreferences(context: Context) {
             initRadarPreferences()
@@ -496,7 +498,7 @@ class MyApplication : Application() {
             tabHeaders[0] = getInitialPreferenceString("TAB1_HEADER", "LOCAL")
             tabHeaders[1] = getInitialPreferenceString("TAB2_HEADER", "SPC")
             tabHeaders[2] = getInitialPreferenceString("TAB3_HEADER", "MISC")
-            tabHeaders[3] = getInitialPreferenceString("TAB4_HEADER", "IMAGES")
+            //tabHeaders[3] = getInitialPreferenceString("TAB4_HEADER", "IMAGES")
         }
 
         val locations: MutableList<Location> = mutableListOf()

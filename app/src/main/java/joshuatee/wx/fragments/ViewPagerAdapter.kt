@@ -8,13 +8,14 @@ import joshuatee.wx.MyApplication
 
 class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
-    val tabTitles: Array<String> = arrayOf("LOCAL", "SPC", "MISC", "IMAGE")
+    //val tabTitles: Array<String> = arrayOf("LOCAL", "SPC", "MISC", "IMAGE")
+    val tabTitles: Array<String> = arrayOf("LOCAL", "SPC", "MISC")
 
     override fun getCount(): Int {
         if (MyApplication.simpleMode) {
             return 1
         }
-        return 4
+        return tabTitles.size
     }
 
     override fun getItem(position: Int): Fragment? {
@@ -25,7 +26,7 @@ class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
                 0 -> return LocationFragment()
                 1 -> return SPCFragment()
                 2 -> return MiscFragment()
-                3 -> return ImagesFragmentGOES()
+                //3 -> return ImagesFragmentGOES()
             }
         }
         return null
@@ -33,7 +34,7 @@ class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
 
     override fun getPageTitle(position: Int): CharSequence {
         tabTitles[0] = MyApplication.tabHeaders[0]
-        tabTitles[3] = MyApplication.tabHeaders[3]
+        //tabTitles[3] = MyApplication.tabHeaders[3]
         return tabTitles[position]
     }
 

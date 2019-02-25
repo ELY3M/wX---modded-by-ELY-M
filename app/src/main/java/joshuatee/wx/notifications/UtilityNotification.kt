@@ -253,7 +253,7 @@ object UtilityNotification {
                 notifUrls += url + "7day" + MyApplication.notificationStrSep
             }
             if (currentUpdateTime > lastUpdateTime + 1000 * 60 * ccUpdateInterval) {
-                val objFcst = Utility.getCurrentConditionsV2(context, locNumInt)
+                val objFcst = Utility.getCurrentConditions(context, locNumInt)
                 val objHazards = Utility.getCurrentHazards(locNumInt)
                 val objSevenDay = Utility.getCurrentSevenDay(locNumInt)
                 val updateTime = System.currentTimeMillis()

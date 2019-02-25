@@ -27,6 +27,10 @@
         app:showAsAction="always">
         <menu>
             <item
+                android:id="@+id/action_a12"
+                android:title="@string/label_a12"
+                app:showAsAction="never" />
+            <item
                 android:id="@+id/action_a24"
                 android:title="@string/label_a24"
                 app:showAsAction="never" />
@@ -72,7 +76,11 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/action_CONUS"
-        android:title="US"
+        android:title="GOES-EAST US"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_CONUS_G17"
+        android:title="GOES-WEST US"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_regionalSectors"
@@ -119,11 +127,19 @@
                 android:id="@+id/action_se"
                 android:title="Southeast"
                 app:showAsAction="never" />
+            <item
+                android:id="@+id/action_ak"
+                android:title="Alaska"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_hi"
+                android:title="Hawaii"
+                app:showAsAction="never" />
         </menu>
     </item>
     <item
         android:id="@+id/action_ca"
-        android:title="Caribbean / Atlantic"
+        android:title="Caribbean / Atlantic / Pacific"
         app:showAsAction="never">
         <menu>
             <item
@@ -145,6 +161,18 @@
             <item
                 android:id="@+id/action_taw"
                 android:title="Tropical Atlantic: wide view"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_tpw"
+                android:title="US Pacific Coast"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_wus"
+                android:title="Tropical Pacific"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_eep"
+                android:title="Eastern Pacific"
                 app:showAsAction="never" />
         </menu>
     </item>

@@ -292,13 +292,13 @@ internal object UtilityWPCImages {
         "${MyApplication.nwsCPCNcepWebsitePrefix}/products/predictions/30day/off15_prcp.gif",
         "${MyApplication.nwsCPCNcepWebsitePrefix}/products/expert_assessment/month_drought.png",
         "${MyApplication.nwsCPCNcepWebsitePrefix}/products/expert_assessment/sdohomeweb.png",
-        "http://droughtmonitor.unl.edu/data/png/current/current_usdm.png",
+        "https://droughtmonitor.unl.edu/data/png/current/current_usdm.png",
         "${MyApplication.nwsCPCNcepWebsitePrefix}/products/stratosphere/uv_index/gif_files/uvi_usa_f1_wmo.gif",
         "${MyApplication.nwsCPCNcepWebsitePrefix}/products/stratosphere/uv_index/gif_files/uvi_usa_f2_wmo.gif",
         "${MyApplication.nwsCPCNcepWebsitePrefix}/products/stratosphere/uv_index/gif_files/uvi_usa_f3_wmo.gif",
         "${MyApplication.nwsCPCNcepWebsitePrefix}/products/stratosphere/uv_index/gif_files/uvi_usa_f4_wmo.gif",
-        "http://www.cpc.noaa.gov/products/predictions/threats/hazards_d3_7_contours.png",
-        "http://www.cpc.noaa.gov/products/predictions/threats/hazards_d8_14_contours.png",
+        "https://www.cpc.noaa.gov/products/predictions/threats/hazards_d3_7_contours.png",
+        "https://www.cpc.noaa.gov/products/predictions/threats/hazards_d8_14_contours.png",
         "${MyApplication.nwsCPCNcepWebsitePrefix}/products/precip/CWlink/ghazards/images/gth_full_update.png",
 
         "${MyApplication.nwsAWCwebsitePrefix}/adds/data/airmets/airmets_CB.gif",
@@ -318,9 +318,9 @@ internal object UtilityWPCImages {
         "${MyApplication.nwsAWCwebsitePrefix}/data/products/progs/F144_wpc_prog.gif",
         "${MyApplication.nwsAWCwebsitePrefix}/data/products/progs/F168_wpc_prog.gif",
 
-        "http://services.swpc.noaa.gov/images/animations/ovation-north/latest.jpg",
-        "http://services.swpc.noaa.gov/images/animations/ovation-south/latest.jpg",
-        "http://services.swpc.noaa.gov/images/planetary-k-index.gif"
+        "https://services.swpc.noaa.gov/images/animations/ovation-north/latest.jpg",
+        "https://services.swpc.noaa.gov/images/animations/ovation-south/latest.jpg",
+        "https://services.swpc.noaa.gov/images/planetary-k-index.gif"
     )
 
     val groups = SparseArray<Group>()

@@ -127,7 +127,7 @@
                             android:inputType="text" />
                     </LinearLayout>
 
-                    <LinearLayout
+                   <!-- <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
@@ -151,7 +151,8 @@
                             android:layout_weight="0.5"
                             android:hint="IMAGES"
                             android:inputType="text" />
-                    </LinearLayout>
+                    </LinearLayout>-->
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 

@@ -26,7 +26,6 @@ import java.util.Locale
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.LatLonStr
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityArray
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.radar.LatLon
@@ -335,23 +334,23 @@ object UtilityCanada {
         val watchUrl: String
         val baseUrl = "http://weather.gc.ca"
         val result = mutableListOf("", "")
-        var urlAl =
+        var urls =
             html.parseColumn("<div id=\"statement\" class=\"floatLeft\">.*?<a href=\"(.*?)\">.*?</a>.*?</div>")
-        var titleAl =
+        var titles =
             html.parseColumn("<div id=\"statement\" class=\"floatLeft\">.*?<a href=\".*?\">(.*?)</a>.*?</div>")
-        statementUrl = UtilityArray.joinArrayWithDelim(urlAl, "")
-        statement = UtilityArray.joinArrayWithDelim(titleAl, "<BR>")
+        statementUrl = urls.joinToString("")
+        statement = titles.joinToString("<BR>")
         var chunk = html.parse("<entry>(.*?)<category term=\"Warnings and Watches\"/>")
-        urlAl = chunk.parseColumn("<title>.*?</title>.*?<link type=\"text/html\" href=\"(.*?)\"/>")
-        titleAl =
+        urls = chunk.parseColumn("<title>.*?</title>.*?<link type=\"text/html\" href=\"(.*?)\"/>")
+        titles =
             chunk.parseColumn("<title>(.*?)</title>.*?<link type=\"text/html\" href=\".*?\"/>")
-        warningUrl = UtilityArray.joinArrayWithDelim(urlAl, ",")
-        warning = UtilityArray.joinArrayWithDelim(titleAl, "<BR>")
+        warningUrl = urls.joinToString(",")
+        warning = titles.joinToString("<BR>")
         chunk = html.parse("<div id=\"watch\" class=\"floatLeft\">(.*?)</div>")
-        urlAl = chunk.parseColumn("<a href=\"(.*?)\">.*?</a>")
-        titleAl = chunk.parseColumn("<a href=\".*?\">(.*?)</a>")
-        watchUrl = UtilityArray.joinArrayWithDelim(urlAl, ",$baseUrl")
-        watch = UtilityArray.joinArrayWithDelim(titleAl, "<BR>")
+        urls = chunk.parseColumn("<a href=\"(.*?)\">.*?</a>")
+        titles = chunk.parseColumn("<a href=\".*?\">(.*?)</a>")
+        watchUrl = urls.joinToString(",$baseUrl")
+        watch = titles.joinToString("<BR>")
         result[0] = warning + statement + watch
         result[1] = "$warningUrl,$statementUrl,$watchUrl"
         if (!result[0].contains("No watches or warnings in effect")) {

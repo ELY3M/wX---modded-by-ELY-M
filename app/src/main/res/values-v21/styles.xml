@@ -118,7 +118,7 @@
 
     <style name="MyCustomTheme_DarkBlue_NOAB" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/bg_blue</item>
-        <item name="android:buttonTint">@color/bg_blue</item>
+        <item name="android:buttonTint">@color/off_white</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/blue_accent</item>
         <item name="android:statusBarColor">@color/primary_dark_blue</item>
