@@ -119,6 +119,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private val watchTorBuffers = ObjectOglBuffers(PolygonType.WATCH_TOR)
     private val mcdBuffers = ObjectOglBuffers(PolygonType.MCD, 0.0f)
     private val swoBuffers = ObjectOglBuffers()
+    private val userPointsBuffers = ObjectOglBuffers(PolygonType.USERPOINTS, zoomToHideMiscFeatures)
     private val locdotBuffers = ObjectOglBuffers(PolygonType.LOCDOT, 0.0f)
     private val locIconBuffers = ObjectOglBuffers()
     private val locBugBuffers = ObjectOglBuffers()
@@ -138,7 +139,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private var iTexture: Int = 0
 
     private var conusradarId = -1
-    private var UserPointId = -1
+    private var userPointId = -1
     private var locationId = -1
     private var locationBugId = -1
     private var tvsId = -1
@@ -504,6 +505,14 @@ class WXGLRender(private val context: Context) : Renderer {
         //drawTriangles(locdotBuffers)
         //drawLocation(locdotBuffers)
 
+
+            if (MyApplication.radarUserPoints) {
+                if (zoom > userPointsBuffers.scaleCutOff) {
+                    drawUserPoints(userPointsBuffers)
+                }
+            }
+
+
             if (MyApplication.locdotFollowsGps) {
                 locIconBuffers.chunkCount = 1
                 drawLocation(locIconBuffers)
@@ -769,11 +778,11 @@ class WXGLRender(private val context: Context) : Renderer {
             mSizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
             GLES20.glUniform1f(mSizeHandle, MyApplication.radarLocIconSize.toFloat())
             iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
-            UserPointId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "userpoint.png")
+            userPointId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "userpoint.png")
             GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
             GLES20.glEnableVertexAttribArray(mPositionHandle)
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
-            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, locationId)
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, userPointId)
             GLES20.glUniform1i(iTexture, 0)
             GLES20.glEnable(GLES20.GL_BLEND);
             GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
@@ -1290,6 +1299,20 @@ class WXGLRender(private val context: Context) : Renderer {
 
     fun deconstructHI() {
         hiBuffers.isInitialized = false
+    }
+
+
+    fun constructUserPoints() {
+        userPointsBuffers.lenInit = 0f
+        userPointsBuffers.triangleCount = 6
+        UtilityUserPoints.getUserPoints(context)
+        //userPointsBuffers.xList = UtilityUserPoints.x
+        //userPointsBuffers.yList = UtilityUserPoints.y
+        constructMarker(userPointsBuffers)
+    }
+
+    fun deconstructUserPoints() {
+        userPointsBuffers.isInitialized = false
     }
 
     private fun constructTriangles(buffers: ObjectOglBuffers) {

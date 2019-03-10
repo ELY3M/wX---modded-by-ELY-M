@@ -734,6 +734,7 @@ class MyApplication : Application() {
         var radarObs: Boolean = false
         var radarObsWindbarbs: Boolean = false
         var radarSwo: Boolean = false
+        var radarUserPoints: Boolean = false
         var radarCities: Boolean = false
         var radarHw: Boolean = false
         var radarLocDot: Boolean = false
@@ -789,6 +790,7 @@ class MyApplication : Application() {
             radarObs = getInitialPreference("WXOGL_OBS", "false")
             radarObsWindbarbs = getInitialPreference("WXOGL_OBS_WINDBARBS", "false")
             radarSwo = getInitialPreference("RADAR_SHOW_SWO", "false")
+            radarUserPoints = getInitialPreference("RADAR_USERPOINTS", "false")
             radarCities = getInitialPreference("COD_CITIES_DEFAULT", "")
             radarHw = getInitialPreference("COD_HW_DEFAULT", "true")
             radarLocDot = getInitialPreference("COD_LOCDOT_DEFAULT", "true")

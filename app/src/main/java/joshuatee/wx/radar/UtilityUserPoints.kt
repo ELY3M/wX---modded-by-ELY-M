@@ -23,21 +23,55 @@
 package joshuatee.wx.radar
 
 import android.content.Context
+import android.preference.PreferenceManager
+import com.beust.klaxon.PathMatcher
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
+import java.util.regex.Pattern
 
 
 object UtilityUserPoints {
+    internal var userPointsList = mutableListOf<Userpoints>()
     internal var name = ""
-    internal var x = DoubleArray(1)
-    internal var y = DoubleArray(1)
+    internal var x: Double = 0.0
+    internal var y: Double = 0.0
 
+
+
+    fun getUserPoints(context: Context) {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        //return preferences.getString(key, value)!!
+        preferences?.all?.forEach {
+            val pattern = Pattern.compile("USERPOINTS_.*?")
+            val m = pattern.matcher(it.key)
+            if (m.find()) {
+                //System.out.println("TAG " + m.group())
+                UtilityLog.d("wx","Found Userpoint values: "+ it.key + ": " + it.value)
+                //val getLatLon = it.value
+                //val getLatLon = listOf<String>()
+                val getLatLon: String = it.value.toString()
+                //we need to split up the it.value//
+                val latlonArr = getLatLon.split("_")
+                x = latlonArr[0].toDouble()
+                y = latlonArr[1].toDouble()
+                userPointsList.add(Userpoints(it.key, x, y * -1.0))
+                UtilityLog.d("wx","Added Userpoint to list: "+ it.key + ": x: " + x + " y: "+y)
+
+            } else {
+                //UtilityLog.d("wx","Userpoint Not found!!!")
+            }
+
+
+
+
+        }
+
+    }
 
 
     fun addUserPoint(context: Context, location: LatLon) {
-        val userpointData = mutableListOf<Userpoints>()
-
+        //val userpointData = mutableListOf<Userpoints>()
         //LatLon.distance(location, LatLon(spotterinfo[it].lat, spotterinfo[it].lon), DistanceUnit.MILE)
         Utility.writePref(context, "USERPOINTS_"+location.lat + "_" + location.lon, ""+location.lat + "_" + location.lon)
 
@@ -49,9 +83,9 @@ object UtilityUserPoints {
 
 
     fun deleteUserPoint(location: LatLon) {
+
         val userpointData = mutableListOf<Userpoints>()
         var tmpArr: List<String>
-
 
         //LatLon.distance(location, LatLon(spotterinfo[it].lat, spotterinfo[it].lon), DistanceUnit.MILE)
         var shortestDistance = 13.0
@@ -64,6 +98,7 @@ object UtilityUserPoints {
             UtilityLog.d("wx", "UserPoint deleted: lat: "+location.lat+" lon: "+location.lon)
 
         }
+
 
 
     }

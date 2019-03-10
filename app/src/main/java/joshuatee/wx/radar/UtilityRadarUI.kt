@@ -335,9 +335,10 @@ internal object UtilityRadarUI {
             alertDialogRadarLongpressAl.add("Show Spotter Info")
         }
         alertDialogRadarLongpressAl.add("Show current radar status message: " + oglr.rid)
-        var getridpoint: String = UtilityLocation.getNearestRadarSite(context, LatLon(pointX.toString(), pointY.toString()))
+        ///var getridpoint: String = UtilityLocation.getNearestRadarSite(context, LatLon(pointX.toString(), pointY.toString()))
         alertDialogRadarLongpressAl.add("Add userpoint for: " + latLonTitle)
         alertDialogRadarLongpressAl.add("Delete userpoint for: " + latLonTitle)
+        alertDialogRadarLongpressAl.add("test getuserpoint: " + latLonTitle)
         alertDialogRadarLongPress.show()
     }
     
@@ -390,6 +391,10 @@ internal object UtilityRadarUI {
             }
             strName.contains("Delete userpoint for") -> {
                 deleteUserPoint(act, glview)
+
+            }
+            strName.contains("test getuserpoint") -> {
+                UtilityUserPoints.getUserPoints(act)
 
             }
             else -> fn(strName)

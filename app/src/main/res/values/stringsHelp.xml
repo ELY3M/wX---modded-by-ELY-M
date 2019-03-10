@@ -629,6 +629,9 @@ to download warning data.
 The text in the tab headings is then modified. This also requires a periodic job run at the notification interval
 to download warning data.
     </string>
+    <string name="radar_userpoints">
+ Enable and show Userpoints on the radar to mark your custom locations.
+    </string>
     <string name="checkinternet_switch_label">
  Check for internet connection on your device.
     </string>
@@ -750,6 +753,9 @@ Allows one to change the size of the Hail Text. Default value is 8.</string>
 
     <string name="tvs_size_np">
 Allows one to change the size of the TVS markers. Default value is 75.</string>
+
+    <string name="userpoints_size_np">
+Allows one to change the size of the Userpoints markers. Default value is 75.</string>
 
     <string name="rememberloc_label">
 WXOGL will use the last location and zoom level instead of the radar site for the current location in the main tab.</string>
