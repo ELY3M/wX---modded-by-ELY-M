@@ -303,6 +303,9 @@ internal object UtilityRadarUI {
         "Beam Height MSL: "+UtilityStringExternal.truncate(heightMSL.toString(), 6)+" AGL: "+UtilityStringExternal.truncate(heightAGL.toString(), 6)
         )
 
+
+
+
         oglr.ridNewList.mapTo(alertDialogRadarLongpressAl) {
             "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.readPref(
                 context,
