@@ -221,7 +221,7 @@ class SettingsNotificationsActivity : BaseActivity() {
             ObjectSettingsCheckBox(
                 this,
                 this,
-                "Notif text to speach",
+                "Notif text to speech",
                 "NOTIF_TTS",
                 R.string.tv_notif_tts_label
             ).card

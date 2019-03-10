@@ -14,7 +14,11 @@
 // TODO document or fix changing radar settings and impact on main screen radars
 // TODO UtilityMetar in radar has optimization related to text file loading
 // TODO bug dark blue theme does not work with checkbox
+// TODO update Hourly activity to move location to subtitle
+// TODO BUG - storm reports show radar doesn't show location dot for report
 
+
+55117 2019_03_XX 
 55116 2019_02_24 update OPC URL
                 [BUG] test changing dark blue theme colors to impact checkbox border (buttonTint)
 55115 2019_02_13 GOES17 and disable Image tab

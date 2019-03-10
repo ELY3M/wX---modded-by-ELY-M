@@ -17,7 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 -->
-
+<!-- modded by ELY M. -->
 <resources>
 
      <string name="ui_awc_radar_mosaic">
@@ -616,7 +616,7 @@ Ignore blackout if it is a local Tornado warning.</string>
      </string>
 
     <string name="tv_notif_tts_label">
- If enabled notifications title will be audibly read via Android text to speach engine. Feature is considered beta.
+ If enabled notifications title will be audibly read via Android text to speech engine. Feature is considered beta.
      </string>
 
     <string name="checkspc_switch_label">

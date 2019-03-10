@@ -36,7 +36,7 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 14\. make VAD Wind Profile more better and friendly  like the one at cod.edu    
 15\. color tables for SRM and Spectrum Width  
 16\. Userpoints system - request by Mike T.   
-
+17\. get dbz and wind speed from point via long press - request by Mike T.   
 
 
 #
