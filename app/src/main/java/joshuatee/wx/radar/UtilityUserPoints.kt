@@ -51,6 +51,8 @@ object UtilityUserPoints {
         get() {
             var currentTime = System.currentTimeMillis()
             val currentTimeSec = currentTime / 1000
+            //val refreshIntervalSec = (REFRESH_LOC_MIN * 60).toLong()
+            //val currentTimeSec = currentTime / 1000
             val refreshIntervalSec = (REFRESH_LOC_MIN * 60).toLong()
             if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
                 userPointsList = mutableListOf()
@@ -78,7 +80,7 @@ object UtilityUserPoints {
                                 lonAl.add(tmpArr[1])
                                     }
                                 }
-                        
+
 
                                 if (latAl.size == lonAl.size) {
                                     x = DoubleArray(latAl.size)
@@ -108,15 +110,20 @@ object UtilityUserPoints {
 
 
 
-    fun addUserPoint(context: Context, location: LatLon) {
+    fun addUserPoint(context: Context, oglr: WXGLRender, glv: WXGLSurfaceView, location: LatLon) {
         Utility.writePref(context, "USERPOINTS_"+location.lat + "_" + location.lon, ""+location.lat + "_" + location.lon)
         UtilityLog.d("userpoint", "UserPoint Added: lat: "+location.lat+" lon: "+location.lon)
+        //oglr.constructUserPoints()
+        //glv.requestRender()
+        //val get = WXGLRadarActivity()
+        //get.getContent()
+
 
     }
 
 
 
-    fun deleteUserPoint(context: Context, location: LatLon): String {
+    fun deleteUserPoint(context: Context, oglr: WXGLRender, glv: WXGLSurfaceView, location: LatLon): String {
         var userPointInfoString = ""
         var keyString = ""
         val userPointInfo = mutableListOf<Userpoints>()
@@ -157,8 +164,10 @@ object UtilityUserPoints {
 
                 userPointInfoString = "UserPoint Deleted:\nlat: "+userPointInfo[it].lat+"\n lon: "+userPointInfo[it].lon+"\n"
                 Utility.removePref(context, keyString)
-
-
+                //oglr.constructUserPoints()
+                //glv.requestRender()
+                //val get = WXGLRadarActivity()
+                //get.getContent()
 
 
             }

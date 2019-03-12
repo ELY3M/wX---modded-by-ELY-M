@@ -207,8 +207,8 @@ internal object UtilityRadarUI {
     }
 
 
-    private fun addUserPoint(act: Activity, context: Context, glview: WXGLSurfaceView) {
-        UtilityUserPoints.addUserPoint(context, glview.latLon)
+    private fun addUserPoint(act: Activity, context: Context, oglr: WXGLRender, glview: WXGLSurfaceView) {
+        UtilityUserPoints.addUserPoint(context, oglr, glview, glview.latLon)
         UtilityAlertDialog.showHelpText("added userpoint", act)
     }
 
@@ -222,12 +222,13 @@ internal object UtilityRadarUI {
     private fun deleteUserPoint(
             act: Activity,
             context: Context,
+            oglr: WXGLRender,
             glview: WXGLSurfaceView,
             uiDispatcher: CoroutineDispatcher
     ) = GlobalScope.launch(uiDispatcher) {
         val txt = withContext(Dispatchers.IO) {
             UtilityUserPoints.deleteUserPoint(
-                    context, glview.latLon)
+                    context, oglr, glview, glview.latLon)
         }
         UtilityAlertDialog.showHelpText(txt, act)
     }
@@ -415,11 +416,11 @@ internal object UtilityRadarUI {
 
             }
             strName.contains("Add userpoint for") -> {
-                addUserPoint(act, context, glview)
+                addUserPoint(act, context, oglr, glview)
 
             }
             strName.contains("Delete userpoint for") -> {
-                deleteUserPoint(act, context, glview, uiDispatcher)
+                deleteUserPoint(act, context, oglr, glview, uiDispatcher)
 
             }
 
@@ -595,6 +596,12 @@ internal object UtilityRadarUI {
         } else {
             ogl.deconstructLocationDot()
         }
+
+        if (PolygonType.USERPOINTS.pref && !archiveMode)
+            ogl.constructUserPoints()
+        else
+            ogl.deconstructUserPoints()
+
         if (imageMap != null && imageMap.map.visibility != View.VISIBLE) {
             numPanesArr.forEach { glviewArr[it].visibility = View.VISIBLE }
         }
@@ -633,10 +640,12 @@ internal object UtilityRadarUI {
         else
             oglr.deconstructTVS()
 
+        /*
         if (PolygonType.USERPOINTS.pref && !archiveMode)
             oglr.constructUserPoints()
         else
             oglr.deconstructUserPoints()
+        */
 
         if (MyApplication.locdotFollowsGps && !archiveMode) {
             fnGps()

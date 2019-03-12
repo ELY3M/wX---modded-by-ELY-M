@@ -365,7 +365,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         //super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    fun getContent() = GlobalScope.launch(uiDispatcher) {
         val ridIsTdwr = WXGLNexrad.isRIDTDWR(oglr.rid)
         if (ridIsTdwr) {
             l3Menu.isVisible = false
