@@ -519,7 +519,6 @@ class WXGLRender(private val context: Context) : Renderer {
             } else {
                 drawTriangles(locdotBuffers)
             }
-        } //displayhold
 
 
         if (MyApplication.locdotBug) {
@@ -531,6 +530,9 @@ class WXGLRender(private val context: Context) : Renderer {
                 drawLocationBug(locBugBuffers)
             }
         }
+
+
+        } //displayhold
 
 
         GLES20.glLineWidth(warnLineWidth)
@@ -549,6 +551,9 @@ class WXGLRender(private val context: Context) : Renderer {
                 }
             }
         }
+
+
+
 
     }
 

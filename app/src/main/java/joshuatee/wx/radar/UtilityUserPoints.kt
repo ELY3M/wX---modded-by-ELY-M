@@ -60,18 +60,20 @@ object UtilityUserPoints {
                 val lonAl = mutableListOf<String>()
                 val preferences = PreferenceManager.getDefaultSharedPreferences(MyApplication.appContext)
                 preferences?.all?.forEach {
-                    val pattern = Pattern.compile("USERPOINTS_.*?")
+                    val pattern = Pattern.compile("USERPOINTS=.*?")
                     val m = pattern.matcher(it.key)
+                    val keyString = it.key
                     if (m.find()) {
-                        UtilityLog.d("userpoint", "Found Userpoint values: " + it.key + ": " + it.value)
+                        //UtilityLog.d("userpoint", "Found Userpoint values: " + it.key + ": " + it.value)
                         val getLatLon: String = it.value.toString()
                         var tmpArr: List<String>
                         getLatLon.forEach { line ->
                             tmpArr = getLatLon.split("_").dropLastWhile { it.isEmpty() }
-                            UtilityLog.d("userpoint", "tmpArr[0]: " + tmpArr[0] + " tmpArr[1]: " + tmpArr[1])
                             if (tmpArr.size > tmpsize) {
+                                UtilityLog.d("userpoint", "Got Userpoint values: " + keyString + ": " + it.value)
                                 userPointsList.add(
                                         Userpoints(
+                                                keyString,
                                                 tmpArr[0],
                                                 tmpArr[1]
                                         )
@@ -111,7 +113,7 @@ object UtilityUserPoints {
 
 
     fun addUserPoint(context: Context, oglr: WXGLRender, glv: WXGLSurfaceView, location: LatLon) {
-        Utility.writePref(context, "USERPOINTS_"+location.lat + "_" + location.lon, ""+location.lat + "_" + location.lon)
+        Utility.writePref(context, "USERPOINTS="+location.lat + "=" + location.lon, ""+location.lat + "_" + location.lon)
         UtilityLog.d("userpoint", "UserPoint Added: lat: "+location.lat+" lon: "+location.lon)
         //oglr.constructUserPoints()
         //glv.requestRender()
@@ -125,23 +127,24 @@ object UtilityUserPoints {
 
     fun deleteUserPoint(context: Context, oglr: WXGLRender, glv: WXGLSurfaceView, location: LatLon): String {
         var userPointInfoString = ""
-        var keyString = ""
         val userPointInfo = mutableListOf<Userpoints>()
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         preferences?.all?.forEach {
-            val pattern = Pattern.compile("USERPOINTS_.*?")
+            val pattern = Pattern.compile("USERPOINTS=.*?")
             val m = pattern.matcher(it.key)
             if (m.find()) {
-                UtilityLog.d("userpoint", "Found Userpoint values: " + it.key + ": " + it.value)
-                keyString = it.key
+                //UtilityLog.d("userpoint", "Found Userpoint values: " + it.key + ": " + it.value)
+                val keyString = it.key
                 val getLatLon: String = it.value.toString()
                 var tmpArr: List<String>
                 getLatLon.forEach { line ->
                     tmpArr = getLatLon.split("_").dropLastWhile { it.isEmpty() }
                     if (tmpArr.size > tmpsize) {
+                        UtilityLog.d("userpoint", "Got Userpoint values: " + keyString + ": " + it.value)
                         userPointInfo.add(
                                 Userpoints(
+                                        keyString,
                                         tmpArr[0],
                                         tmpArr[1]
                                 )
@@ -162,8 +165,8 @@ object UtilityUserPoints {
                 shortestDistance = currentDistance
                 bestSpotter = it
 
-                userPointInfoString = "UserPoint Deleted:\nlat: "+userPointInfo[it].lat+"\n lon: "+userPointInfo[it].lon+"\n"
-                Utility.removePref(context, keyString)
+                userPointInfoString = "UserPoint Deleted: \nkey: "+userPointInfo[it].key+"\nlat: "+userPointInfo[it].lat+"\n lon: "+userPointInfo[it].lon+"\n"
+                Utility.removePref(context, userPointInfo[it].key)
                 //oglr.constructUserPoints()
                 //glv.requestRender()
                 //val get = WXGLRadarActivity()
@@ -185,17 +188,13 @@ object UtilityUserPoints {
 
 
     fun deleteAllUserPoints(context: Context) {
-        var userPointInfoString = ""
-        var keyString = ""
-        val userPointInfo = mutableListOf<Userpoints>()
-
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         preferences?.all?.forEach {
-            val pattern = Pattern.compile("USERPOINTS_.*?")
+            val pattern = Pattern.compile("USERPOINTS=.*?")
             val m = pattern.matcher(it.key)
             if (m.find()) {
-                UtilityLog.d("userpoint", "DEleted Userpoint: " + it.key + ": " + it.value)
-                Utility.removePref(context, keyString)
+                UtilityLog.d("userpoint", "Deleted Userpoint (all): " + it.key + ": " + it.value)
+                Utility.removePref(context, it.key)
 
 
             }
@@ -210,17 +209,20 @@ object UtilityUserPoints {
 
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         preferences?.all?.forEach {
-            val pattern = Pattern.compile("USERPOINTS_.*?")
+            val pattern = Pattern.compile("USERPOINTS=.*?")
             val m = pattern.matcher(it.key)
+            val keyString = it.key
             if (m.find()) {
-                UtilityLog.d("userpoint", "Found Userpoint values: " + it.key + ": " + it.value)
+                //UtilityLog.d("userpoint", "Found Userpoint values: " + it.key + ": " + it.value)
                 val getLatLon: String = it.value.toString()
                 var tmpArr: List<String>
                 getLatLon.forEach { line ->
                     tmpArr = getLatLon.split("_").dropLastWhile { it.isEmpty() }
                     if (tmpArr.size > tmpsize) {
+                        UtilityLog.d("userpoint", "Got Userpoint values: " + keyString + ": " + it.value)
                         userPointInfo.add(
                                 Userpoints(
+                                        keyString,
                                         tmpArr[0],
                                         tmpArr[1]
                                 )
