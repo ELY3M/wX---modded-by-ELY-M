@@ -206,17 +206,22 @@ internal object UtilityRadarUI {
         UtilityAlertDialog.showHelpText(txt, act)
     }
 
+    private fun showUserPointInfo(
+            act: Activity,
+            context: Context,
+            glview: WXGLSurfaceView,
+            uiDispatcher: CoroutineDispatcher
+    ) = GlobalScope.launch(uiDispatcher) {
+        val txt = withContext(Dispatchers.IO) {
+            UtilityUserPoints.findClosestUserPoint(context, glview.latLon)
+        }
+        UtilityAlertDialog.showHelpText(txt, act)
+    }
 
     private fun addUserPoint(act: Activity, context: Context, oglr: WXGLRender, glview: WXGLSurfaceView) {
         UtilityUserPoints.addUserPoint(context, oglr, glview, glview.latLon)
         UtilityAlertDialog.showHelpText("added userpoint", act)
     }
-
-
-    //private fun deleteUserPoint(act: Activity, context: Context, glview: WXGLSurfaceView) {
-    //    UtilityUserPoints.deleteUserPoint(context, glview.latLon)
-    //    UtilityAlertDialog.showHelpText("deleted userpoint", act)
-    //}
 
 
     private fun deleteUserPoint(
@@ -233,17 +238,15 @@ internal object UtilityRadarUI {
         UtilityAlertDialog.showHelpText(txt, act)
     }
 
-    private fun showUserPointInfo(
+    private fun deleteAllUserPoints(
             act: Activity,
             context: Context,
-            glview: WXGLSurfaceView,
             uiDispatcher: CoroutineDispatcher
     ) = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) {
-            UtilityUserPoints.findClosestUserPoint(context, glview.latLon)
-        }
-        UtilityAlertDialog.showHelpText(txt, act)
+        UtilityUserPoints.deleteAllUserPoints(context)
+        UtilityAlertDialog.showHelpText("Deleted all userpoints", act)
     }
+
 
     fun addItemsToLongPress(
         alertDialogRadarLongpressAl: MutableList<String>,
@@ -365,6 +368,7 @@ internal object UtilityRadarUI {
         alertDialogRadarLongpressAl.add("userpoint info: " + latLonTitle)
         alertDialogRadarLongpressAl.add("Add userpoint for: " + latLonTitle)
         alertDialogRadarLongpressAl.add("Delete userpoint for: " + latLonTitle)
+        alertDialogRadarLongpressAl.add("Delete all userpoints")
         alertDialogRadarLongPress.show()
     }
     
@@ -421,6 +425,10 @@ internal object UtilityRadarUI {
             }
             strName.contains("Delete userpoint for") -> {
                 deleteUserPoint(act, context, oglr, glview, uiDispatcher)
+
+            }
+            strName.contains("Delete all userpoints") -> {
+                deleteAllUserPoints(act, context, uiDispatcher)
 
             }
 

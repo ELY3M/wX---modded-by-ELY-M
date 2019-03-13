@@ -776,7 +776,7 @@ class WXGLRender(private val context: Context) : Renderer {
             mPositionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_loadimage, "vPosition")
             GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
             mSizeHandle = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "imagesize")
-            GLES20.glUniform1f(mSizeHandle, MyApplication.radarLocIconSize.toFloat())
+            GLES20.glUniform1f(mSizeHandle, MyApplication.radarUserPointSize.toFloat())
             iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
             userPointId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "userpoint.png")
             GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())

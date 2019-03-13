@@ -268,7 +268,7 @@ class SettingsRadarActivity : BaseActivity() {
         ll.addView(ObjectSettingsNumberPicker(this, this, "Location dot size", "RADAR_LOCDOT_SIZE", R.string.locdot_size_np, 10, 1, 75).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Location icon size", "RADAR_LOCICON_SIZE", R.string.locicon_size_np, 75, 1, 530).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Location Bug size", "RADAR_LOCBUG_SIZE", R.string.locbug_size_np, 75, 1, 530).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Userpoints icon size", "RADAR_USERPOINTS_SIZE", R.string.userpoints_size_np, 75, 1, 530).card)
+        ll.addView(ObjectSettingsNumberPicker(this, this, "Userpoints icon size", "RADAR_USERPOINT_SIZE", R.string.userpoints_size_np, 75, 1, 530).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Hail marker size", "RADAR_HI_SIZE", R.string.hi_size_np, 75, 1, 530).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "Hail Text size", "RADAR_HI_TEXT_SIZE", R.string.hi_textsize_np, (MyApplication.radarTextSize * 10).toInt(), 1, 20).card)
         ll.addView(ObjectSettingsNumberPicker(this, this, "TVS icon size", "RADAR_TVS_SIZE", R.string.tvs_size_np, 75, 1, 530).card)

@@ -184,6 +184,26 @@ object UtilityUserPoints {
     }
 
 
+    fun deleteAllUserPoints(context: Context) {
+        var userPointInfoString = ""
+        var keyString = ""
+        val userPointInfo = mutableListOf<Userpoints>()
+
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        preferences?.all?.forEach {
+            val pattern = Pattern.compile("USERPOINTS_.*?")
+            val m = pattern.matcher(it.key)
+            if (m.find()) {
+                UtilityLog.d("userpoint", "DEleted Userpoint: " + it.key + ": " + it.value)
+                Utility.removePref(context, keyString)
+
+
+            }
+        }
+
+    }
+
+
     fun findClosestUserPoint(context: Context, location: LatLon): String {
         var userPointInfoString = ""
         val userPointInfo = mutableListOf<Userpoints>()
