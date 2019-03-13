@@ -24,7 +24,7 @@
 #
 ## DONE!
 ====================================   
-Userpoints system is working but userpoints update is not done asap as you delete/add them.  you have to wait few mins or close the app to see updated userpoints.     
+Userpoints system is working but userpoints update/refresh is not done asap as you delete/add them.  you have to wait few mins or close the app to see updated userpoints.     
 added in internet check on start with option to turn on and off internet check.    
 get MSL and AGL Beam Heights are available in long press now.  
 Sun/Moon data are calculated from SunCalc library now - No More loading/parsing from website with broken SSL.   
