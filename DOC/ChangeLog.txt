@@ -18,7 +18,8 @@
 // TODO BUG - storm reports show radar doesn't show location dot for report
 
 
-55117 2019_03_XX 
+55120 2019_03_14 various tooling updates after updating android studio
+                [BUG] GIES16 FD was to large to display
 55116 2019_02_24 update OPC URL
                 [BUG] test changing dark blue theme colors to impact checkbox border (buttonTint)
 55115 2019_02_13 GOES17 and disable Image tab

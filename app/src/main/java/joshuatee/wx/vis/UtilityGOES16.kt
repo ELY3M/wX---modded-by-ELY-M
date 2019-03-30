@@ -50,9 +50,13 @@ object UtilityGOES16 {
         // https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/cgl/12/latest.jpg
         // https://cdn.star.nesdis.noaa.gov/GOES17/ABI/CONUS/GEOCOLOR/1250x750.jpg
         // https://cdn.star.nesdis.noaa.gov/GOES16/ABI/CONUS/GEOCOLOR/1250x750.jpg
+        var fileName = "latest.jpg"
+        if (sectorLocal == "FD") {
+            fileName = "1808x1808.jpg"
+        }
         val url =
-            MyApplication.goes16Url + "/" + satellite + "/ABI/" + sectorLocal + "/" + product + "/latest.jpg"
-        UtilityLog.d("wx", url)
+            MyApplication.goes16Url + "/" + satellite + "/ABI/" + sectorLocal + "/" + product + "/" + fileName
+        UtilityLog.d("wx", url + " " + sectorLocal)
         return url.getImage()
     }
 
