@@ -279,6 +279,7 @@ object GlobalArrays {
         "WAL",
         "DTX",
         "ILN",
+        "LIX",
         "VBG",
         "1Y7",
         "76405",

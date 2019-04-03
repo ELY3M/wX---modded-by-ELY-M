@@ -53,7 +53,12 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
             UtilityPref.prefInitTwitterCA(this)
             UtilityPref4.prefInitSoundingSites(this)
         }
-        if (Utility.readPrefWithNull(this, "SND_AOT_X", null) == null) UtilityPref4.prefInitSoundingSitesLoc(this)
+        if (Utility.readPrefWithNull(
+                this,
+                "SND_LIX_X",
+                null
+            ) == null
+        ) UtilityPref4.prefInitSoundingSitesLoc(this)
         MyApplication.initPreferences(this)
         Location.refreshLocationData(this)
         UtilityWXJobService.startService(this)

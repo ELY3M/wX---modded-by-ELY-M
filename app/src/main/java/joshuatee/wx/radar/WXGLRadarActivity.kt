@@ -307,8 +307,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         restarted = true
         restartedZoom = true
         numPanesArr.forEach {
-            wxgltextArr[it].initTV(this)
-            wxgltextArr[it].addTV()
+            if (imageMap.map.visibility == View.GONE) {
+                wxgltextArr[it].initTV(this)
+                wxgltextArr[it].addTV()
+            }
         }
         // if the top toolbar is not showing then neither are showing and the only restart
         // is from an app switch or resume from sleep, therefore get content directly

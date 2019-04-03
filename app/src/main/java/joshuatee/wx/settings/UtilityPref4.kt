@@ -29,7 +29,7 @@ object UtilityPref4 {
     fun prefInitSoundingSitesLoc(context: Context) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = preferences.edit()
-        val value = preferences.getString("SND_AOT_X", null)
+        val value = preferences.getString("SND_LIX_X", null)
         if (value == null) {
             // thanks http://web.stcloudstate.edu/raweisman/courses/upperair.txt
             // http://www.esrl.noaa.gov/raobs/intl/intl2000.wmo
@@ -220,6 +220,9 @@ object UtilityPref4 {
 
             editor.putString("SND_AOT_X", "66.87")
             editor.putString("SND_AOT_Y", "162.63")
+
+            editor.putString("SND_LIX_X", "30.33667")
+            editor.putString("SND_LIX_Y", "89.82528")
             editor.apply()
         }
     }

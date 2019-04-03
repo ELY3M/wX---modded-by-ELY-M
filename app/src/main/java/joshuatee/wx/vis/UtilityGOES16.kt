@@ -54,6 +54,22 @@ object UtilityGOES16 {
         if (sectorLocal == "FD") {
             fileName = "1808x1808.jpg"
         }
+
+        UtilityLog.d("wx", sectorLocal);
+        if (sectorLocal == "SECTOR/eep" || sectorLocal == "SECTOR/wus") {
+            fileName = "1000x1000.jpg";
+        }
+        if (sectorLocal == "SECTOR/tpw" || sectorLocal == "SECTOR/taw") {
+            fileName = "1800x1080.jpg";
+        }
+        if (sectorLocal == "can") {
+            fileName = "1125x560.jpg";
+        }
+        if (sectorLocal == "mex") {
+            fileName = "1000x1000.jpg";
+        }
+
+
         val url =
             MyApplication.goes16Url + "/" + satellite + "/ABI/" + sectorLocal + "/" + product + "/" + fileName
         UtilityLog.d("wx", url + " " + sectorLocal)
@@ -137,8 +153,7 @@ object UtilityGOES16 {
         "pnw",
         "psw",
         "tpw",
-        "wus",
-        "eep"
+        "wus"
     )
 }
 

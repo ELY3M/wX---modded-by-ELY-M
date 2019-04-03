@@ -68,7 +68,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     private lateinit var diaMain: ObjectDialogue
     private lateinit var diaImg: ObjectDialogue
     private lateinit var diaAfd: ObjectDialogue
-    private lateinit var diaVis: ObjectDialogue
+    //private lateinit var diaVis: ObjectDialogue
     private lateinit var diaRadar: ObjectDialogue
     private var actionMode = ActionMode.DELETE
 
@@ -137,14 +137,14 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                 which
             )
         })
-        diaVis = ObjectDialogue(this, "Select fixed location 1KM Vis products:", GlobalArrays.wfos)
+        /*diaVis = ObjectDialogue(this, "Select fixed location 1KM Vis products:", GlobalArrays.wfos)
         diaVis.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
                 diaVis,
                 "IMG-",
                 which
             )
-        })
+        })*/
         diaRadar =
             ObjectDialogue(this, "Select fixed location Nexrad products:", GlobalArrays.radars)
         diaRadar.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
@@ -216,7 +216,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             R.id.action_delete -> toggleMode(ActionMode.DELETE)
             R.id.action_img -> diaImg.show()
             R.id.action_afd -> diaAfd.show()
-            R.id.action_cloud -> diaVis.show()
+           // R.id.action_cloud -> diaVis.show()
             R.id.action_radar -> diaRadar.show()
             R.id.action_help -> showHelpText(resources.getString(R.string.homescreen_help_label))
             R.id.action_reset -> {

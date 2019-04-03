@@ -302,7 +302,7 @@ Nws mosaic viewer: View nws radar mosaics by region and with animation. wX custo
 
 
     <string name="help_goes_viewer">
-GOES product viewer: This is same activity used by the cloud icon in the action bar with a different default view: CONUS water vapor. Numerous products, geographical view, and overlays are available. Animations are supported as are severe weather polygons controlled by global settings. SPC MCD and watch overlays are also available.
+GOES product viewer: This is same activity used by the cloud icon in the action bar with a different default view: CONUS water vapor. Numerous products and geographical views are available. Animations are supported.
 </string>
 
 

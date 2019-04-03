@@ -32,7 +32,7 @@ internal object UtilityWPCText {
     private val titles = Arrays.asList(
         ObjectMenuTitle("General", 3),
         ObjectMenuTitle("General Forecast Discussions", 8),
-        ObjectMenuTitle("Precipitation Discussions", 3),
+        ObjectMenuTitle("Precipitation Discussions", 2),
         ObjectMenuTitle("Hazards", 6),
         ObjectMenuTitle("Ocean Weather", 38),
         ObjectMenuTitle("Misc North American Weather", 5),
@@ -58,7 +58,7 @@ internal object UtilityWPCText {
         "pmd90d: Prognostic disc for long-lead Seasonal Outlooks",
         "pmdhco: Prognostic disc for long-lead Hawaiian Outlooks",
 
-        "qpfpfd: QPF Discussion",
+        //"qpfpfd: QPF Discussion",
         "qpferd: Excessive Rainfall Discussion",
         "qpfhsd: Heavy Snow and Icing Discussion",
 
