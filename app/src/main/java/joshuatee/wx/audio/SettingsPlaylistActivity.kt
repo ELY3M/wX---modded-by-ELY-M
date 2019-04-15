@@ -42,10 +42,10 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.activitiesmisc.TextScreenActivity
 import joshuatee.wx.notifications.UtilityNotification
-import joshuatee.wx.objects.ActionMode
 
 import joshuatee.wx.GlobalArrays
 import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.settings.BottomSheetFragment
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 
@@ -54,7 +54,6 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     private val ridArr = mutableListOf<String>()
     private var ridFav = ""
     private val prefToken = "PLAYLIST"
-    private var actionMode = ActionMode.PLAY
     private lateinit var ca: PlayListAdapter
     private lateinit var fabPause: ObjectFab
     private lateinit var diaMain: ObjectDialogue
@@ -78,18 +77,6 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         } else {
             fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE)
         }
-        ObjectFab(
-            this,
-            this,
-            R.id.fab1,
-            MyApplication.ICON_ARROW_UP,
-            View.OnClickListener { toggleMode(ActionMode.UP) })
-        ObjectFab(
-            this,
-            this,
-            R.id.fab2,
-            MyApplication.ICON_ARROW_DOWN,
-            View.OnClickListener { toggleMode(ActionMode.DOWN) })
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
         diaAfd.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             val strName = diaAfd.getItem(which)
@@ -110,7 +97,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             ca.notifyDataSetChanged()
             MyApplication.playlistStr = ridFav
         })
-        toolbar.subtitle = actionMode.getDescription()
+        toolbar.subtitle = "Tap item to play, view, delete or move."
         ridFav = Utility.readPref(this, prefToken, "")
         updateList()
         val recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
@@ -141,8 +128,6 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
                 "false",
                 true
             )
-            R.id.action_delete -> toggleMode(ActionMode.DELETE)
-            R.id.action_text -> toggleMode(ActionMode.TEXT)
             R.id.action_autodownload -> ObjectIntent(
                 this,
                 SettingsPlaylistAutodownloadActivity::class.java
@@ -216,15 +201,6 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         }
     }
 
-    private fun toggleMode(am: ActionMode) {
-        actionMode = if (actionMode == am) {
-            ActionMode.PLAY
-        } else {
-            am
-        }
-        toolbar.subtitle = actionMode.getDescription()
-    }
-
     private fun playItemFAB() {
         if (UtilityTTS.mMediaPlayer != null) {
             UtilityTTS.playMediaPlayer(1)
@@ -254,40 +230,55 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun itemSelected(position: Int) {
-        when (actionMode) {
-            ActionMode.DELETE -> {
-                ridFav = Utility.readPref(this, prefToken, "")
-                ridFav =
-                    ridFav.replace(":" + MyApplication.semicolon.split(ridArr[position])[0], "")
-                Utility.writePref(this, prefToken, ridFav)
-                Utility.removePref(
-                    this,
-                    "PLAYLIST_" + MyApplication.semicolon.split(ridArr[position])[0]
-                )
-                ca.deleteItem(position)
-                MyApplication.playlistStr = ridFav
-            }
-            ActionMode.UP -> {
-                MyApplication.playlistStr = UtilityUI.moveUp(this, prefToken, ridArr, position)
-                ca.notifyDataSetChanged()
-            }
-            ActionMode.DOWN -> {
-                MyApplication.playlistStr = UtilityUI.moveDown(this, prefToken, ridArr, position)
-                ca.notifyDataSetChanged()
-            }
-            ActionMode.TEXT -> ObjectIntent(
+        val bottomSheetFragment = BottomSheetFragment()
+        bottomSheetFragment.position = position
+        bottomSheetFragment.usedForLocation = true
+        bottomSheetFragment.fnList = listOf(::playItem, ::viewItem, ::deleteItem, ::moveUpItem, ::moveDownItem)
+        bottomSheetFragment.labelList = listOf("Play Item", "View Item", "Delete Item", "Move Up", "Move Down")
+        bottomSheetFragment.actContext = this
+        bottomSheetFragment.topLabel = ""
+        bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+    }
+
+    private fun deleteItem(position: Int) {
+        ridFav = Utility.readPref(this, prefToken, "")
+        ridFav =
+                ridFav.replace(":" + MyApplication.semicolon.split(ridArr[position])[0], "")
+        Utility.writePref(this, prefToken, ridFav)
+        Utility.removePref(
+                this,
+                "PLAYLIST_" + MyApplication.semicolon.split(ridArr[position])[0]
+        )
+        ca.deleteItem(position)
+        MyApplication.playlistStr = ridFav
+    }
+
+    private fun moveDownItem(position: Int) {
+        MyApplication.playlistStr = UtilityUI.moveDown(this, prefToken, ridArr, position)
+        ca.notifyDataSetChanged()
+    }
+
+    private fun moveUpItem(position: Int) {
+        MyApplication.playlistStr = UtilityUI.moveUp(this, prefToken, ridArr, position)
+        ca.notifyDataSetChanged()
+    }
+
+    private fun viewItem(position: Int) {
+        ObjectIntent(
                 contextg,
                 TextScreenActivity::class.java,
                 TextScreenActivity.URL,
                 arrayOf(
-                    Utility.readPref(
-                        contextg,
-                        "PLAYLIST_" + MyApplication.semicolon.split(ridArr[position])[0],
-                        ""
-                    ), ridArr[position]
+                        Utility.readPref(
+                                contextg,
+                                "PLAYLIST_" + MyApplication.semicolon.split(ridArr[position])[0],
+                                ""
+                        ), ridArr[position]
                 )
-            )
-            else -> UtilityTTS.synthesizeTextAndPlayPlaylist(contextg, position + 1)
-        }
+        )
+    }
+
+    private fun playItem(position: Int) {
+        UtilityTTS.synthesizeTextAndPlayPlaylist(contextg, position + 1)
     }
 } 

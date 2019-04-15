@@ -42,10 +42,10 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 
 class ObjectAlertSummary(
-    private val activity: Activity,
-    private val context: Context,
-    private val dynamicview: LinearLayout,
-    private val sv: ScrollView
+        private val activity: Activity,
+        private val context: Context,
+        private val dynamicview: LinearLayout,
+        private val sv: ScrollView
 ) {
 
     private var totalAlertsCnt = 0
@@ -97,74 +97,78 @@ class ObjectAlertSummary(
             //    ca.add(CAPAlert(idList[z], titleList[z], eventList[z], areaList[z].replace("&apos;", "'"), ugcList[z], vtecList[z]))
             //}
             // FIXME legacy matcher
+            //UtilityLog.d("wx", data);
             while (m.find()) {
                 // url, title, event, area, zones, vtec
                 ca.add(
-                    CAPAlert(
-                        m.group(1),
-                        m.group(2),
-                        m.group(4),
-                        m.group(5).replace("&apos;", "'"),
-                        m.group(6),
-                        m.group(7)
-                    )
+                        CAPAlert(
+                                m.group(1),
+                                m.group(2),
+                                m.group(4),
+                                m.group(5).replace("&apos;", "'"),
+                                m.group(6),
+                                m.group(7)
+                        )
                 )
             }
             ca.forEach { cc ->
-                countyArr = cc.area.split(";")
-                if (countyArr.isNotEmpty()) firstCounty = countyArr[0]
-                zoneArr = cc.zones.split(" ")
-                if (zoneArr.isNotEmpty()) firstZone = zoneArr[0]
-                totalAlertsCnt += 1
-                val tmpStateList = zoneArr.asSequence().filter { it.length > 1 }
-                    .mapTo(mutableListOf()) { it.substring(0, 2) }
-                val uniqueStates = HashSet(tmpStateList)
-                uniqueStates.forEach {
-                    val freq3 = mapState[it]
-                    mapState[it] = if (freq3 == null) 1 else freq3 + 1
-                }
-                val freq2: Int? = mapEvent[cc.event]
-                mapEvent[cc.event] = if (freq2 == null) 1 else freq2 + 1
-                if (cc.event.matches(filterEventStr.toRegex())) {
-                    html += "<b>" + cc.title + "</b><br>"
-                    html += "<b>Counties: " + cc.area + "</b><br>"
-                    html += cc.vtec + "<br><br>"
-                    val nwsOffice: String
-                    val nwsLoc: String
-                    if (cc.vtec.length > 15 && cc.event != "Special Weather Statement") {
-                        nwsOffice = cc.vtec.substring(8, 11)
-                        nwsLoc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "MI")
-                    } else {
-                        nwsOffice = ""
-                        nwsLoc = ""
+                //if (!cc.url.contains("KEEPALIVE")) {
+                    countyArr = cc.area.split(";")
+                    if (countyArr.isNotEmpty()) firstCounty = countyArr[0]
+                    zoneArr = cc.zones.split(" ")
+                    if (zoneArr.isNotEmpty()) firstZone = zoneArr[0]
+                    totalAlertsCnt += 1
+                    val tmpStateList = zoneArr.asSequence().filter { it.length > 1 }
+                            .mapTo(mutableListOf()) { it.substring(0, 2) }
+                    val uniqueStates = HashSet(tmpStateList)
+                    uniqueStates.forEach {
+                        val freq3 = mapState[it]
+                        mapState[it] = if (freq3 == null) 1 else freq3 + 1
                     }
-                    val tmp2StateList = zoneArr.asSequence().filter { it.length > 1 }
-                        .mapTo(mutableListOf()) { it.substring(0, 2) }
-                    val unique2States = HashSet(tmp2StateList)
-                    unique2States.forEach { s ->
-                        val freq = map[s]
-                        map[s] = if (freq == null) 1 else freq + 1
-                        mapButtonState[i] = s
+                    val freq2: Int? = mapEvent[cc.event]
+                    mapEvent[cc.event] = if (freq2 == null) 1 else freq2 + 1
+                    if (cc.event.matches(filterEventStr.toRegex())) {
+                        html += "<b>" + cc.title + "</b><br>"
+                        html += "<b>Counties: " + cc.area + "</b><br>"
+                        html += cc.vtec + "<br><br>"
+                        val nwsOffice: String
+                        val nwsLoc: String
+                        if (cc.vtec.length > 15 && cc.event != "Special Weather Statement") {
+                            nwsOffice = cc.vtec.substring(8, 11)
+                            nwsLoc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "MI")
+                        } else {
+                            nwsOffice = ""
+                            nwsLoc = ""
+                        }
+                        val tmp2StateList = zoneArr.asSequence().filter { it.length > 1 }
+                                .mapTo(mutableListOf()) { it.substring(0, 2) }
+                        val unique2States = HashSet(tmp2StateList)
+                        unique2States.forEach { s ->
+                            val freq = map[s]
+                            map[s] = if (freq == null) 1 else freq + 1
+                            mapButtonState[i] = s
+                        }
+                        val cText = ObjectCardAlertSummaryItem(context)
+                        cText.setId(i)
+                        activity.registerForContextMenu(cText.card)
+                        mapButtonNws[i] = nwsOffice
+                        mapButtonCounty[i] = firstCounty
+                        mapButtonZone[i] = firstZone
+                        cText.setTextFields(nwsOffice, nwsLoc, cc)
+                        val urlStr = cc.url
+                        //UtilityLog.d("wx", "URL: " + urlStr)
+                        cText.setListener(View.OnClickListener {
+                            ObjectIntent(
+                                    context,
+                                    USAlertsDetailActivity::class.java,
+                                    USAlertsDetailActivity.URL,
+                                    arrayOf(urlStr, "")
+                            )
+                        })
+                        dynamicview.addView(cText.card)
+                        i += 1
                     }
-                    val cText = ObjectCardAlertSummaryItem(context)
-                    cText.setId(i)
-                    activity.registerForContextMenu(cText.card)
-                    mapButtonNws[i] = nwsOffice
-                    mapButtonCounty[i] = firstCounty
-                    mapButtonZone[i] = firstZone
-                    cText.setTextFields(nwsOffice, nwsLoc, cc)
-                    val urlStr = cc.url
-                    cText.setListener(View.OnClickListener {
-                        ObjectIntent(
-                            context,
-                            USAlertsDetailActivity::class.java,
-                            USAlertsDetailActivity.URL,
-                            arrayOf(urlStr, "")
-                        )
-                    })
-                    dynamicview.addView(cText.card)
-                    i += 1
-                }
+                //}
             }
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
@@ -177,10 +181,10 @@ class ObjectAlertSummary(
         //filter = filter.replace("\\||\\*|\\?|\\.".toRegex(), " ")
         if (mapOut.isNotEmpty())
             cardText.setText(
-                "Filter: " + filter.replace(
-                    "\\^".toRegex(),
-                    ""
-                ) + " (" + i + ")" + MyApplication.newline + mapOut
+                    "Filter: " + filter.replace(
+                            "\\^".toRegex(),
+                            ""
+                    ) + " (" + i + ")" + MyApplication.newline + mapOut
             )
         else
             cardText.setText("Filter: " + filter.replace("\\^".toRegex(), "") + " (" + i + ")")
@@ -197,5 +201,5 @@ class ObjectAlertSummary(
     }
 
     fun getTitle(title: String): String =
-        "(" + totalAlertsCnt + ") " + title.toUpperCase(Locale.US) + " Alerts"
+            "(" + totalAlertsCnt + ") " + title.toUpperCase(Locale.US) + " Alerts"
 }

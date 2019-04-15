@@ -43,6 +43,7 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.spc.SPCMCDWShowActivity
 import joshuatee.wx.spc.SPCStormReportsActivity
 import joshuatee.wx.spc.UtilitySPC
+import joshuatee.wx.util.UtilityDownloadRadar
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityShortcut
 
@@ -95,6 +96,7 @@ class SevereDashboardActivity : BaseActivity() {
             val wSmw = SevereWarning(PolygonType.SMW)
             val wSvs = SevereWarning(PolygonType.SVS)
             val wSps = SpecialWeather(PolygonType.SPS)
+	    /*
             wTor.generateString(contextg, MyApplication.severeDashboardTor.valueGet())
             wSvr.generateString(contextg, MyApplication.severeDashboardSvr.valueGet())
             wEww.generateString(contextg, MyApplication.severeDashboardEww.valueGet())
@@ -102,6 +104,18 @@ class SevereDashboardActivity : BaseActivity() {
             wSmw.generateString(contextg, MyApplication.severeDashboardSmw.valueGet())
             wSvs.generateString(contextg, MyApplication.severeDashboardSvs.valueGet())
             wSps.generateSpsString(contextg, MyApplication.severeDashboardSps.valueGet())
+	    */
+	    
+	    withContext(Dispatchers.IO) {
+            wTor.generateString(contextg, UtilityDownloadRadar.getVtecTor())
+            wSvr.generateString(contextg, UtilityDownloadRadar.getVtecSvr())
+            wFfw.generateString(contextg, UtilityDownloadRadar.getVtecFfw())
+	        wEww.generateString(contextg, UtilityDownloadRadar.getVtecEww())
+	        wSmw.generateString(contextg, UtilityDownloadRadar.getVtecSmw())
+	        wSvs.generateString(contextg, UtilityDownloadRadar.getVtecSvs())
+	        //wSps.generateSpsString(contextg, MyApplication.severeDashboardSps.valueGet())
+            wSps.generateSpsString(contextg, UtilityDownloadRadar.getSps())
+            }
             if (wTor.count > 0) {
             val objTor = ObjectCardText(contextg, linearLayout, wTor.text)
                 objTor.setOnClickListener(View.OnClickListener { tvWarnClicked(".*?Tornado Warning.*?") })
@@ -133,12 +147,18 @@ class SevereDashboardActivity : BaseActivity() {
 
         
 	withContext(Dispatchers.IO) {
-
+	    /*
             snMcd.getBitmaps(MyApplication.severeDashboardMcd.valueGet())
             //snWatch.getBitmaps(MyApplication.severeDashboardWat.valueGet())
             snWatchTor.getBitmaps(MyApplication.severeDashboardWat.valueGet())
             snWatchSvr.getBitmaps(MyApplication.severeDashboardWat.valueGet())
             snMpd.getBitmaps(MyApplication.severeDashboardMpd.valueGet())
+	    */
+	        snMcd.getBitmaps(UtilityDownloadRadar.getMcd())
+            //snWat.getBitmaps(UtilityDownloadRadar.getWatch())
+	        snWatchTor.getBitmaps(UtilityDownloadRadar.getWatch())
+            snWatchSvr.getBitmaps(UtilityDownloadRadar.getWatch())
+            snMpd.getBitmaps(UtilityDownloadRadar.getMpd())
             bitmapArrRep.add((UtilitySPC.getStormReportsTodayUrl()).getImage())
         }
         if (bitmapArrRep.size > 0) {

@@ -264,11 +264,12 @@ internal object UtilityRadarUI {
         val locY = lon.toDoubleOrNull() ?: 0.0
         val pointX = glview.newY.toDouble()
         val pointY = glview.newX * -1.0
-        val dist =
-            LatLon.distance(LatLon(locX, locY), LatLon(pointX, pointY), DistanceUnit.MILE)
-        val ridX = (Utility.readPref(context, "RID_" + oglr.rid + "_X", "0.0")).toDouble()
-        val ridY =
-            -1.0 * (Utility.readPref(context, "RID_" + oglr.rid + "_Y", "0.0")).toDouble()
+        val dist = LatLon.distance(LatLon(locX, locY), LatLon(pointX, pointY), DistanceUnit.MILE)
+        //val ridX = (Utility.readPref(context, "RID_" + oglr.rid + "_X", "0.0")).toDouble()
+        //val ridY = -1.0 * (Utility.readPref(context, "RID_" + oglr.rid + "_Y", "0.0")).toDouble()
+        val ridX = Utility.getRadarSiteX(oglr.rid).toDouble()
+        val ridY = -1.0 * Utility.getRadarSiteY(oglr.rid).toDouble()	    
+	    
         val distRid =
             LatLon.distance(LatLon(ridX, ridY), LatLon(pointX, pointY), DistanceUnit.MILE)
 
@@ -336,11 +337,7 @@ internal object UtilityRadarUI {
 
 
         oglr.ridNewList.mapTo(alertDialogRadarLongpressAl) {
-            "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.readPref(
-                context,
-                "RID_LOC_" + it.name,
-                ""
-            )
+            "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.getRadarSiteName(it.name)
         }
         val obsSite = UtilityMetar.findClosestObservation(
             context,

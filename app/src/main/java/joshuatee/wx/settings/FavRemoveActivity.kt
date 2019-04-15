@@ -23,13 +23,10 @@ package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.objects.ActionMode
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.util.UtilityFavorites
 
 import joshuatee.wx.GlobalArrays
@@ -58,13 +55,12 @@ class FavRemoveActivity : BaseActivity() {
     private var ridArrLabel = mutableListOf<String>()
     private lateinit var recyclerView: ObjectRecyclerView
     private var type = ""
-    private var actionMode = ActionMode.DELETE
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
             savedInstanceState,
-            R.layout.activity_recyclerview_toolbar_with_threefab,
+            R.layout.activity_recyclerview_toolbar,
             null,
             false
         )
@@ -94,25 +90,7 @@ class FavRemoveActivity : BaseActivity() {
         }
         ridFav = Utility.readPref(this, prefToken, " : : :")
         title = "Modify $type"
-        toolbar.subtitle = actionMode.getDescription()
-        ObjectFab(
-            this,
-            this,
-            R.id.fab,
-            MyApplication.ICON_DELETE,
-            View.OnClickListener { toggleMode(ActionMode.DELETE) })
-        ObjectFab(
-            this,
-            this,
-            R.id.fab1,
-            MyApplication.ICON_ARROW_UP,
-            View.OnClickListener { toggleMode(ActionMode.UP) })
-        ObjectFab(
-            this,
-            this,
-            R.id.fab2,
-            MyApplication.ICON_ARROW_DOWN,
-            View.OnClickListener { toggleMode(ActionMode.DOWN) })
+        toolbar.subtitle = "Tap item to delete or move."
         updateList()
         recyclerView = ObjectRecyclerView(this, this, R.id.card_list, ridArrLabel, ::itemClicked)
     }
@@ -157,7 +135,6 @@ class FavRemoveActivity : BaseActivity() {
             "SPCMESO" -> {
                 ridFav = " : : "
                 ridArr.indices.forEach { ridFav += ":" + ridArr[it] }
-                // FIXME why does this need a trailing semi-colon
                 Utility.writePref(this, prefToken, "$ridFav:")
                 ridFavLabel = " : : "
                 ridFavLabel += recyclerView.toString()
@@ -166,7 +143,7 @@ class FavRemoveActivity : BaseActivity() {
             else -> {
                 ridFav = " : : "
                 ridArr.indices.forEach { ridFav += ":" + ridArr[it] }
-                Utility.writePref(this, prefToken, ridFav)
+                Utility.writePref(this, prefToken, "$ridFav:")
             }
         }
     }
@@ -192,7 +169,7 @@ class FavRemoveActivity : BaseActivity() {
         }
         ridFav = " : : "
         ridArr.indices.forEach { ridFav = ridFav + ":" + ridArr[it] }
-        Utility.writePref(this, prefToken, ridFav)
+        Utility.writePref(this, prefToken, "$ridFav:")
         when (type) {
             "SPCMESO" -> {
                 ridFavLabel = " : : "
@@ -257,44 +234,46 @@ class FavRemoveActivity : BaseActivity() {
     }
 
     private fun itemClicked(position: Int) {
-        when (actionMode) {
-            ActionMode.DELETE -> {
-                when (type) {
-                    "SPCMESO" -> {
-                        ridFav = Utility.readPref(this, prefToken, " : :")
-                        ridFav = ridFav.replace(ridArr[position] + ":", "")
-                        recyclerView.deleteItem(position)
-                        ridFavLabel = " : : "
-                        ridFavLabel += recyclerView.toString()
-                        Utility.writePref(this, prefToken, ridFav)
-                        Utility.writePref(this, prefTokenLabel, ridFavLabel)
-                        saveMyApp(ridFav, ridFavLabel)
-                    }
-                    else -> {
-                        ridFav = Utility.readPref(this, prefToken, " : :")
-                        ridFav = ridFav.replace(ridArr[position] + ":", "")
-                        recyclerView.deleteItem(position)
-                        Utility.writePref(this, prefToken, ridFav)
-                        saveMyApp(ridFav, ridFavLabel)
-                    }
-                }
-            }
-            ActionMode.UP -> {
-                moveUp(position)
-                saveMyApp(ridFav, ridFavLabel)
-            }
-            ActionMode.DOWN -> {
-                moveDown(position)
+        val bottomSheetFragment = BottomSheetFragment()
+        bottomSheetFragment.position = position
+        bottomSheetFragment.usedForLocation = true
+        bottomSheetFragment.fnList = listOf(::deleteItem, ::moveUpItem, ::moveDownItem)
+        bottomSheetFragment.labelList = listOf("Delete Item", "Move Up", "Move Down")
+        bottomSheetFragment.actContext = this
+        bottomSheetFragment.topLabel = ""
+        bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+    }
+
+    private fun deleteItem(position: Int) {
+        when (type) {
+            "SPCMESO" -> {
+                ridFav = Utility.readPref(this, prefToken, " : :")
+                ridFav = ridFav.replace(ridArr[position] + ":", "")
+                recyclerView.deleteItem(position)
+                ridFavLabel = " : : "
+                ridFavLabel += recyclerView.toString()
+                Utility.writePref(this, prefToken, ridFav)
+                Utility.writePref(this, prefTokenLabel, ridFavLabel)
                 saveMyApp(ridFav, ridFavLabel)
             }
             else -> {
+                ridFav = Utility.readPref(this, prefToken, " : :")
+                ridFav = ridFav.replace(ridArr[position] + ":", "")
+                recyclerView.deleteItem(position)
+                Utility.writePref(this, prefToken, ridFav)
+                saveMyApp(ridFav, ridFavLabel)
             }
         }
     }
 
-    private fun toggleMode(am: ActionMode) {
-        actionMode = am
-        toolbar.subtitle = actionMode.getDescription()
+    private fun moveUpItem(position: Int) {
+        moveUp(position)
+        saveMyApp(ridFav, ridFavLabel)
+    }
+
+    private fun moveDownItem(position: Int) {
+        moveDown(position)
+        saveMyApp(ridFav, ridFavLabel)
     }
 }
 

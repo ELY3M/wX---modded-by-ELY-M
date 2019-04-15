@@ -1,23 +1,52 @@
 // TODO base velocity legend
-// TODO NWS URLs http to https const myapp
-// TODO in settings main show notification count in notification label
-// TODO publish Android 4 deprecation date
-// TODO camelCase GlobalArrays ( consult wXL23 )
 // TODO add Ely's MCD/MPD/WAT radar long press code
-// TODO NWS HTTPS migration https://www.nco.ncep.noaa.gov/pmb/changes/URL_http_https.shtml
 // TODO migrate away from US govt website for Sun/Moon data do to cert issues
 // TODO change code so that widget location simply follows current location selected
-// TODO https://www.weather.gov/media/notification/scn18-93cps_wpc_days3-7aab.pdf
-// TODO Fix long press warning open radar mosaic
-// TODO OkHttp 3.13 Requires Android 5+ – Square Corner Blog – Medium  
-// https://medium.com/square-corner-blog/okhttp-3-13-requires-android-5-818bb78d07ce
+// TODO OkHttp 3.13 Requires Android 5+ – Square Corner Blog – Medium  https://medium.com/square-corner-blog/okhttp-3-13-requires-android-5-818bb78d07ce
 // TODO document or fix changing radar settings and impact on main screen radars
 // TODO UtilityMetar in radar has optimization related to text file loading
-// TODO bug dark blue theme does not work with checkbox
-// TODO update Hourly activity to move location to subtitle
 // TODO BUG - storm reports show radar doesn't show location dot for report
+// TODO move off rid/wfo/sounding lat/lon/name currently in pref should be in objects (like flutter/iOS)
+// TODO storm reports - black bg for cards with titles like iOS/flutter
+// TODO revisit spacing for cards in settings
+// TODO rewrite uswarn
+// TODO add new color pal for ref
+// TODO linesize - swo, wb, wbgusts, sti
 
-
+55133 2019_04_14 convert playlist, homescreen, and fav mgt to use bottomsheet
+55132 2019_04_14 convert settings -> location to use bottomsheet
+55131 2019_04_13 seekbar enhancements
+                 severe dashboard will show all data regardless of settings and will pull data immediately
+                 add bottom sheet code for future use
+55129 2019_04_12 use seekbar in settings
+55128 2019_04_12 add seekbar code and implement additional configs for line thickness in radar
+                 [BUG] uswarn - alter regexp to not pick up occasional bogus data
+55127 2019_04_12 increase thickness of gps location circle
+                 UtilityDownloadRadar - refactor
+55126 2019_04_11 [BUG] fav management issue
+                 [BUG] modify UtilityDownloadRadar to use UtilityDownloadNWS.getNWSStringFromUrlNoAcceptHeader()
+                 new icon for uswarn
+55125 2019_04_11 in uswarn remove longpress open radar mosaic which is obsolete
+                 in national text products remove canada which is no longer working
+                 GOES16 - add title
+                 and utilityRadar and Utility to move off pref data for name/lat/lon
+55124 2019_04_10 revert card corners back to 0
+                 SPC HREF updates
+                 change default theme to use original wx blue color (from lighter blue)
+                 minor change to title in hourly
+                 bugfix in usalerts detail
+                 UI change in usalerts detail - remove redundant info
+55123 2019_04_10 add fix for blue/orange themes with regards to outline of checkbox
+                 similar to 55116
+55122 2019_04_03 add LIX sounding LAT/LON data and add to global list
+                wpc images - update CPC hazard URLs
+                remove cloud icon from settings -> homescreen
+                in radar if map shown and go away and then back to app, text labels show over map
+55121 2019_04_03 GOES - fix images that were to large
+                remove experimental forecast images in wpc img
+                remove obsolete precip disc in wpc text
+                update GOES help string to remove reference to overlays
+                android ndk now @ 19c
 55120 2019_03_14 various tooling updates after updating android studio
                 [BUG] GIES16 FD was to large to display
 55116 2019_02_24 update OPC URL

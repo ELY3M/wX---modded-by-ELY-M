@@ -102,8 +102,8 @@ class ProjectionNumbers {
             else -> {
             }
         }
-        x = Utility.readPref(context, "RID_" + radarSite + "_X", "0.00")
-        y = Utility.readPref(context, "RID_" + radarSite + "_Y", "0.00")
+        x = Utility.getRadarSiteX(radarSite)
+        y = Utility.getRadarSiteY(radarSite)
         if (provider === ProjectionType.NWS_GOES) {
             val mnTmp = UtilityUSImgNWSGOESMercator.getMercatorNumbers(context, radarSite)
             x = mnTmp.x

@@ -257,7 +257,7 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
         spRun.setSelection(0)
         om.spTime.setSelection(0)
         om.spTime.clear()
-        (1 until 36).forEach { om.spTime.add(String.format(Locale.US, "%02d", it)) }
+        (om.startStep until om.endStep).forEach { om.spTime.add(String.format(Locale.US, "%02d", it)) }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

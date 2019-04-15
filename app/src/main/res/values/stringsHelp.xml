@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
@@ -544,12 +543,36 @@ Thickness of lines for State, Rivers, highways Lines. Smaller is thinner. Defaul
     </string>
 
     <string name="warn_linesize_np_label">
-Thickness of lines for warnings. Smaller is thinner. Default is 4.
+Thickness of lines for warnings. Smaller number is thinner. Default is 4.
     </string>
 
     <string name="watmcd_linesize_np">
-Thickness of lines for SPC Watch/MCD. Smaller is thinner. Default is 4.
+Thickness of lines for SPC Watch/MCD. Smaller number is thinner. Default is 4.
+    </string>
+
+    <string name="state_linesize_np">
+Thickness of lines for state lines. Smaller number is thinner. Default is 2.
 </string>
+
+    <string name="county_linesize_np">
+Thickness of lines for county outlines. Smaller number is thinner. Default is 2.
+    </string>
+
+    <string name="hw_linesize_np">
+Thickness of lines for main highways. Smaller number is thinner. Default is 2.
+    </string>
+
+    <string name="hwext_linesize_np">
+Thickness of lines for secondary highways/roads. Smaller number is thinner. Default is 2.
+    </string>
+
+    <string name="lakes_linesize_np">
+Thickness of lines for rivers and lakes. Smaller number is thinner. Default is 2.
+    </string>
+
+    <string name="gpscircle_linesize_np">
+Thickness of lines for the GPS location circle. Smaller number is thinner. Default is 5.
+    </string>
 
     <string name="locdot_size_np">
 Allows one to change the size of the location marker. Default value is 8</string>
@@ -767,7 +790,7 @@ Controls the number of minutes before an auto  refresh is triggered if that opti
 Launch the application directly into the radar interface.</string>
 
     <string name="elevation_np_label">
-Control how much elevation is present in the UI.</string>
+Control how much elevation is present in the UI. Default is 0.</string>
 
     <string name="homescreen_help_label">
 This activity is used to manage the cards ( if enabled ) on the \"home page\" (the first screen shown when the app is launched).

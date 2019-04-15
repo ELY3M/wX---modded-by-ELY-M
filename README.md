@@ -35,13 +35,14 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 13\. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor.  
 14\. make VAD Wind Profile more better and friendly  like the one at cod.edu    
 15\. color tables for SRM and Spectrum Width  
-16\. Userpoints system - request by Mike T.   
-17\. get dbz and wind speed from point via long press - request by Mike T.   
+16\. get dbz and wind speed from point via long press - request by Mike T.   
 
 
 #
 ## DONE!
 ====================================   
+updated the code with Joshuas changes (4-13-19).     
+Now, you can change the radar legend text color in the color settings - it was requested by Mike T.  
 Userpoints system is working but userpoints update/refresh is not done asap as you delete/add them.  you have to wait few mins or close the app to see updated userpoints.     
 added in internet check on start with option to turn on and off internet check.    
 get MSL and AGL Beam Heights are available in long press now.  

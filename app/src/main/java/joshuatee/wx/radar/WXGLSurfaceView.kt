@@ -210,8 +210,8 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
         yMiddle = (height / 2).toFloat()
         val diffX = density * (xMiddle - xPos) / mScaleFactor
         val diffY = density * (yMiddle - yPos) / mScaleFactor
-        val xStr = Utility.readPref(context, "RID_" + oglrCurrent.rid + "_X", "0.00")
-        val yStr = Utility.readPref(context, "RID_" + oglrCurrent.rid + "_Y", "0.00")
+        val xStr = Utility.getRadarSiteX(oglrCurrent.rid)
+        val yStr = Utility.getRadarSiteY(oglrCurrent.rid)
         centerX = xStr.toFloatOrNull() ?: 0.0f
         centerY = yStr.toFloatOrNull() ?: 0.0f
         val ppd = oglrCurrent.oneDegreeScaleFactor

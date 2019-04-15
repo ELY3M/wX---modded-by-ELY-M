@@ -91,7 +91,7 @@ class MiscFragment : Fragment() {
             )
 
             hm["uswarn"] = TileObject(
-                R.drawable.warn,
+                R.drawable.uswarn,
                 USWarningsWithRadarActivity::class.java,
                 USWarningsWithRadarActivity.URL,
                 arrayOf(

@@ -135,6 +135,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                 models = UtilityModelSPCHREFInterface.models
                 defaultModel = "HREF"
                 timeTruncate = 2
+                startStep = 1
+                endStep = 49
+                stepAmount = 1
             }
             "SPCHRRR" -> {
                 modelType = ModelType.SPCHRRR

@@ -66,6 +66,7 @@ class SettingsColorsActivity : BaseActivity() {
                 "Hail Text color" to "RADAR_COLOR_HI_TEXT",
                 "Observations color" to "RADAR_COLOR_OBS",
                 "Windbarb color" to "RADAR_COLOR_OBS_WINDBARBS",
+                "Radar Legend Text Color" to "RADAR_SHOW_LEGEND_TEXTCOLOR",
                 "Draw tool color" to "DRAW_TOOL_COLOR",
                 "Widget Text color" to "WIDGET_TEXT_COLOR",
                 "Widget Highlight Text color" to "WIDGET_HIGHLIGHT_TEXT_COLOR",

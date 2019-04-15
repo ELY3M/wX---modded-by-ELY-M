@@ -73,7 +73,7 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         cv1.setVisibility(View.GONE)
         val linearLayout: LinearLayout = findViewById(R.id.ll)
         c0 = ObjectCardVerticalText(this, 5, linearLayout, toolbar)
-        title = "Hourly"
+        title = "Hourly Forecast"
         toolbar.subtitle = Location.getName(locatioNumber)
         getContent()
     }

@@ -66,7 +66,7 @@ class DrawLineView : View {
 
     constructor(
         context: Context,
-        rid1: String,
+        radarSite: String,
         mScaleFactor: Float,
         mPositionX: Float,
         mPositionY: Float,
@@ -78,8 +78,8 @@ class DrawLineView : View {
         this.mPositionY = mPositionY
         this.ortInt = ortInt
         this.oneDegreeScaleFactor = oneDegreeScaleFactor
-        val xStr = Utility.readPref(context, "RID_" + rid1 + "_X", "0.00")
-        val yStr = Utility.readPref(context, "RID_" + rid1 + "_Y", "0.00")
+        val xStr = Utility.getRadarSiteX(radarSite)
+        val yStr = Utility.getRadarSiteY(radarSite)
         centerX = xStr.toFloatOrNull() ?: 0.0f
         centerY = yStr.toFloatOrNull() ?: 0.0f
         xMiddle = (width / 2).toFloat()

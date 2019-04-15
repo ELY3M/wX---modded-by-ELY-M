@@ -75,10 +75,10 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
         paintText.style = Paint.Style.FILL
         paintText.strokeWidth = 1f
         paintText.textSize = MyApplication.radarShowLegendTextSize.toFloat() //was 30f
-        paintText.color = Color.WHITE
-        if (!MyApplication.blackBg) {
-            paintText.color = Color.BLACK
-        }
+        paintText.color = MyApplication.radarShowLegendTextColor
+        //if (!MyApplication.blackBg) {
+        //    paintText.color = Color.BLACK
+        //}
         val startHeight = MyApplication.actionBarHeight.toFloat()
         val width = MyApplication.radarShowLegendWidth.toFloat() //was 50f
         val widthStarting = 0f

@@ -452,8 +452,10 @@ class WXGLRender(private val context: Context) : Renderer {
             }
         }
         GLES20.glLineWidth(defaultLineWidth)
+        // FIXME needs to be tested
         listOf(countyLineBuffers, stateLineBuffers, hwBuffers, hwExtBuffers, lakeBuffers).forEach {
             if (zoom > it.scaleCutOff) {
+                GLES20.glLineWidth(it.geotype.lineWidth.toFloat())
                 drawElement(it)
             }
         }
@@ -517,7 +519,11 @@ class WXGLRender(private val context: Context) : Renderer {
                 locIconBuffers.chunkCount = 1
                 drawLocation(locIconBuffers)
             } else {
-                drawTriangles(locdotBuffers)
+	    //drawTriangles(wbCircleBuffers)
+            //GLES20.glLineWidth(defaultLineWidth)
+            // FIXME use new configurable
+            GLES20.glLineWidth(MyApplication.radarGpsCircleLinesize.toFloat())
+            drawTriangles(locdotBuffers)
             }
 
 

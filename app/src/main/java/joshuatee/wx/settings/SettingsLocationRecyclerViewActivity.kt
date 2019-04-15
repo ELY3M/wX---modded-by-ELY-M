@@ -34,12 +34,12 @@ import android.view.View
 import joshuatee.wx.R
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.notifications.UtilityWXJobService
-import joshuatee.wx.objects.ActionMode
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.ui.ObjectRecyclerViewGeneric
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
 
 class SettingsLocationRecyclerViewActivity : BaseActivity() {
 
@@ -49,8 +49,6 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     private val locArr = mutableListOf<String>()
     private lateinit var recyclerView: ObjectRecyclerViewGeneric
     private lateinit var ca: SettingsLocationAdapterList
-    private var actionMode = ActionMode.SELECT
-    private val selectStr = "Select mode"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,23 +59,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
             false
         )
         ObjectFab(this, this, R.id.fab_add, View.OnClickListener { addItemFAB() })
-        ObjectFab(
-            this,
-            this,
-            R.id.fab_delete,
-            View.OnClickListener { toggleMode(ActionMode.DELETE) })
-        val fabUP =
-            ObjectFab(this, this, R.id.fabUP, View.OnClickListener { toggleMode(ActionMode.UP) })
-        val fabDOWN = ObjectFab(
-            this,
-            this,
-            R.id.fabDOWN,
-            View.OnClickListener { toggleMode(ActionMode.DOWN) })
-        if (Location.numLocations == 1) {
-            fabUP.setVisibility(View.INVISIBLE)
-            fabDOWN.setVisibility(View.INVISIBLE)
-        }
-        toolbar.subtitle = selectStr
+        toolbar.subtitle = "Tap location to edit, delete, or move."
         updateList()
         recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
         ca = SettingsLocationAdapterList(locArr)
@@ -134,69 +116,68 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         title = "Locations (" + ca.itemCount + ")"
     }
 
-    private fun toggleMode(am: ActionMode) {
-        actionMode = if (actionMode == am) {
-            ActionMode.SELECT
-        } else {
-            am
-        }
-        toolbar.subtitle = actionMode.getDescription()
+    private fun itemSelected(position: Int) {
+        val bottomSheetFragment = BottomSheetFragment()
+        bottomSheetFragment.position = position
+        bottomSheetFragment.usedForLocation = true
+        bottomSheetFragment.fnList = listOf(::edit, ::delete, ::moveUp, ::moveDown)
+        bottomSheetFragment.labelList = listOf("Edit Location", "Delete Location", "Move Up", "Move Down")
+        bottomSheetFragment.actContext = this
+        bottomSheetFragment.topLabel = Location.getName(position)
+        bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
     }
 
-    private fun itemSelected(position: Int) {
-        when (actionMode) {
-            ActionMode.SELECT -> {
-                val locStrPass = (position + 1).toString()
-                val intent = Intent(this, SettingsLocationGenericActivity::class.java)
-                intent.putExtra(SettingsLocationGenericActivity.LOC_NUM, arrayOf(locStrPass, ""))
-                startActivity(intent)
-            }
-            ActionMode.DELETE -> {
-                if (ca.itemCount > 1) {
-                    Location.deleteLocation(this, (position + 1).toString())
-                    ca.deleteItem(position)
-                    ca.notifyDataSetChanged()
-                    updateList()
-                    updateTitle()
-                    UtilityWXJobService.startService(this)
-                } else {
-                    UtilityUI.makeSnackBar(
-                        recyclerView.recyclerView,
-                        "Must have at least one location."
-                    )
-                }
-            }
-            ActionMode.UP -> {
-                if (position > 0) {
-                    val locA = Location(this, position - 1)
-                    val locB = Location(this, position)
-                    locA.saveLocationToNewSlot(position)
-                    locB.saveLocationToNewSlot(position - 1)
-                } else {
-                    val locA = Location(this, Location.numLocations - 1)
-                    val locB = Location(this, 0)
-                    locA.saveLocationToNewSlot(0)
-                    locB.saveLocationToNewSlot(Location.numLocations - 1)
-                }
-                ca.notifyDataSetChanged()
-            }
-            ActionMode.DOWN -> {
-                if (position < Location.numLocations - 1) {
-                    val locA = Location(this, position)
-                    val locB = Location(this, position + 1)
-                    locA.saveLocationToNewSlot(position + 1)
-                    locB.saveLocationToNewSlot(position)
-                } else {
-                    val locA = Location(this, position)
-                    val locB = Location(this, 0)
-                    locA.saveLocationToNewSlot(0)
-                    locB.saveLocationToNewSlot(position)
-                }
-                ca.notifyDataSetChanged()
-            }
-            else -> {
-            }
+    private fun edit(position: Int) {
+        val locStrPass = (position + 1).toString()
+        val intent = Intent(this, SettingsLocationGenericActivity::class.java)
+        intent.putExtra(SettingsLocationGenericActivity.LOC_NUM, arrayOf(locStrPass, ""))
+        startActivity(intent)
+    }
+
+    private fun delete(position: Int) {
+        if (ca.itemCount > 1) {
+            Location.deleteLocation(this, (position + 1).toString())
+            ca.deleteItem(position)
+            ca.notifyDataSetChanged()
+            updateList()
+            updateTitle()
+            UtilityWXJobService.startService(this)
+        } else {
+            UtilityUI.makeSnackBar(
+                    recyclerView.recyclerView,
+                    "Must have at least one location."
+            )
         }
+    }
+
+    private fun moveUp(position: Int) {
+        if (position > 0) {
+            val locA = Location(this, position - 1)
+            val locB = Location(this, position)
+            locA.saveLocationToNewSlot(position)
+            locB.saveLocationToNewSlot(position - 1)
+        } else {
+            val locA = Location(this, Location.numLocations - 1)
+            val locB = Location(this, 0)
+            locA.saveLocationToNewSlot(0)
+            locB.saveLocationToNewSlot(Location.numLocations - 1)
+        }
+        ca.notifyDataSetChanged()
+    }
+
+    private fun moveDown(position: Int) {
+        if (position < Location.numLocations - 1) {
+            val locA = Location(this, position)
+            val locB = Location(this, position + 1)
+            locA.saveLocationToNewSlot(position + 1)
+            locB.saveLocationToNewSlot(position)
+        } else {
+            val locA = Location(this, position)
+            val locB = Location(this, 0)
+            locA.saveLocationToNewSlot(0)
+            locB.saveLocationToNewSlot(position)
+        }
+        ca.notifyDataSetChanged()
     }
 
     private fun addItemFAB() {

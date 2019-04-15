@@ -93,6 +93,9 @@ object UtilityDownloadNWS {
     fun getNWSStringFromURLJSON(url: String): String =
         getNWSStringFromURLBase(url, "application/geo+json;version=1")
 
+    fun getNWSStringFromUrlNoAcceptHeader(url: String): String =
+            getNWSStringFromURLBaseNoHeader(url)
+
     //fun getNWSStringFromURLNoHeader(url: String): String =
     //    getNWSStringFromURLBaseNoHeader(url)
 
@@ -106,6 +109,28 @@ object UtilityDownloadNWS {
                 .header("User-Agent", USER_AGENT_STR)
                 .addHeader("Accept", header)
                 .build()
+            val response = MyApplication.httpClient!!.newCall(request).execute()
+            val inputStream = BufferedInputStream(response.body()!!.byteStream())
+            val br = BufferedReader(InputStreamReader(inputStream))
+            var line: String? = br.readLine()
+            while (line != null) {
+                out.append(line)
+                line = br.readLine()
+            }
+            br.close()
+        } catch (e: Exception) {
+            UtilityLog.HandleException(e)
+        }
+        return out.toString()
+    }
+
+    private fun getNWSStringFromURLBaseNoHeader(url: String): String {
+        val out = StringBuilder(5000)
+        try {
+            val request = Request.Builder()
+                    .url(url)
+                    .header("User-Agent", USER_AGENT_STR)
+                    .build()
             val response = MyApplication.httpClient!!.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body()!!.byteStream())
             val br = BufferedReader(InputStreamReader(inputStream))

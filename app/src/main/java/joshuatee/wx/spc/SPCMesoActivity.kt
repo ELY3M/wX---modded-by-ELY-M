@@ -70,19 +70,6 @@ class SPCMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
     private var showWatwarn = true
     private var showTopography = true
     private var sector = "19"
-    // FIXME move to util
-    private val sectorMap = mapOf(
-        "19" to "US",
-        "20" to "MW",
-        "13" to "NC",
-        "14" to "C",
-        "15" to "SC",
-        "16" to "NE",
-        "17" to "CE",
-        "18" to "SE",
-        "12" to "SW",
-        "11" to "NW"
-    )
     private lateinit var menuRadar: MenuItem
     private lateinit var menuOutlook: MenuItem
     private lateinit var menuWatwarn: MenuItem
@@ -441,14 +428,14 @@ class SPCMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 if (android.os.Build.VERSION.SDK_INT > 20) {
                     checkOverlayPerms()
                 } else {
-                    var title = sectorMap[sector] + " - " + displayData.paramLabel[0]
+                    var title = UtilitySPCMESO.sectorMap[sector] + " - " + displayData.paramLabel[0]
                     if (animRan) {
                         UtilityShare.shareAnimGif(this, title, displayData.animDrawable[0])
                     } else {
                         if (numPanes == 1) {
                             UtilityShare.shareBitmap(this, title, displayData.bitmap[0])
                         } else {
-                            title = sectorMap[sector] + " - " + displayData.paramLabel[curImg]
+                            title = UtilitySPCMESO.sectorMap[sector] + " - " + displayData.paramLabel[curImg]
                             UtilityShare.shareText(this, title, "", displayData.bitmap[curImg])
                         }
                     }

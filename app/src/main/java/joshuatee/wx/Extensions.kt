@@ -34,6 +34,10 @@ fun String.parse(matchStr: String): String {
     return UtilityString.parseS(this, matchStr)
 }
 
+fun String.condenseSpace(): String {
+    return this.replace("\\s+".toRegex(), " ")
+}
+
 fun String.truncate(size: Int): String {
     return UtilityStringExternal.truncate(this, size)
 }

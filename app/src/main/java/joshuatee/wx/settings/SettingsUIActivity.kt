@@ -67,267 +67,279 @@ class SettingsUIActivity : BaseActivity() {
         (0 until 20).forEach { textSizeArr.add(((it + 1) * 50).toString()) }
         val ll: LinearLayout = findViewById(R.id.ll)
         ll.addView(
-            ObjectSettingsSpinner(
-                this,
-                this,
-                "Theme (restarts app)",
-                "THEME_BLUE",
-                "white",
-                R.string.spinner_theme_label,
-                colorArr
-            ).card
+                ObjectSettingsSpinner(
+                        this,
+                        this,
+                        "Theme (restarts app)",
+                        "THEME_BLUE",
+                        "white",
+                        R.string.spinner_theme_label,
+                        colorArr
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Icons evenly spaced",
-                "UI_ICONS_EVENLY_SPACED",
-                R.string.icons_spacing_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Icons evenly spaced",
+                        "UI_ICONS_EVENLY_SPACED",
+                        R.string.icons_spacing_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Fullscreen mode",
-                "FULLSCREEN_MODE",
-                R.string.fullscreen_mode_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Fullscreen mode",
+                        "FULLSCREEN_MODE",
+                        R.string.fullscreen_mode_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Lock toolbars",
-                "LOCK_TOOLBARS",
-                R.string.lock_toolbars_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Lock toolbars",
+                        "LOCK_TOOLBARS",
+                        R.string.lock_toolbars_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Simple mode (restarts app)",
-                "SIMPLE_MODE",
-                R.string.simple_mode_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Simple mode (restarts app)",
+                        "SIMPLE_MODE",
+                        R.string.simple_mode_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Hide top toolbar (restarts app)",
-                "HIDE_TOP_TOOLBAR",
-                R.string.hide_top_toolbar_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Hide top toolbar (restarts app)",
+                        "HIDE_TOP_TOOLBAR",
+                        R.string.hide_top_toolbar_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Use fahrenheit",
-                "UNITS_F",
-                R.string.units_f_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Use fahrenheit",
+                        "UNITS_F",
+                        R.string.units_f_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Use millibars",
-                "UNITS_M",
-                R.string.units_m_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Use millibars",
+                        "UNITS_M",
+                        R.string.units_m_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Reduce size of tile images",
-                "TILE_IMAGE_DOWNSIZE",
-                R.string.tile_img_resize_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Reduce size of tile images",
+                        "TILE_IMAGE_DOWNSIZE",
+                        R.string.tile_img_resize_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Use FAB in models",
-                "FAB_IN_MODELS",
-                R.string.fab_in_models_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Use FAB in models",
+                        "FAB_IN_MODELS",
+                        R.string.fab_in_models_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "NWS Text, remove line breaks",
-                "NWS_TEXT_REMOVELINEBREAKS",
-                R.string.nws_text_removelinebreak_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "NWS Text, remove line breaks",
+                        "NWS_TEXT_REMOVELINEBREAKS",
+                        R.string.nws_text_removelinebreak_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Radar: transparent toolbars",
-                "RADAR_TOOLBAR_TRANSPARENT",
-                R.string.radar_toolbar_transparent_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Radar: transparent toolbars",
+                        "RADAR_TOOLBAR_TRANSPARENT",
+                        R.string.radar_toolbar_transparent_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Radar: transparent status bar",
-                "RADAR_STATUSBAR_TRANSPARENT",
-                R.string.radar_statusbar_transparent_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Radar: transparent status bar",
+                        "RADAR_STATUSBAR_TRANSPARENT",
+                        R.string.radar_statusbar_transparent_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Radar: immersive mode",
-                "RADAR_IMMERSIVE_MODE",
-                R.string.radar_immersive_mode_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Radar: immersive mode",
+                        "RADAR_IMMERSIVE_MODE",
+                        R.string.radar_immersive_mode_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Record screen for sharing",
-                "RECORD_SCREEN_SHARE",
-                R.string.record_screen_share_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Record screen for sharing",
+                        "RECORD_SCREEN_SHARE",
+                        R.string.record_screen_share_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Prevent accidental exit",
-                "PREF_PREVENT_ACCIDENTAL_EXIT",
-                R.string.prevent_accidental_exit_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Prevent accidental exit",
+                        "PREF_PREVENT_ACCIDENTAL_EXIT",
+                        R.string.prevent_accidental_exit_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Show VR button on main screen",
-                "VR_BUTTON",
-                R.string.vr_button_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Show VR button on main screen",
+                        "VR_BUTTON",
+                        R.string.vr_button_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "WFO - remember location",
-                "WFO_REMEMBER_LOCATION",
-                R.string.wfo_remember
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "WFO - remember location",
+                        "WFO_REMEMBER_LOCATION",
+                        R.string.wfo_remember
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Main screen radar button (requires restart)",
-                "UI_MAIN_SCREEN_RADAR_FAB",
-                R.string.mainscreen_radar_button
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Main screen radar button (requires restart)",
+                        "UI_MAIN_SCREEN_RADAR_FAB",
+                        R.string.mainscreen_radar_button
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Widgets: prevent opening app on tap",
-                "UI_WIDGET_PREVENT_TAP",
-                R.string.widget_prevent_tap
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Widgets: prevent opening app on tap",
+                        "UI_WIDGET_PREVENT_TAP",
+                        R.string.widget_prevent_tap
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Use the AWC Radar mosaic images instead of the main NWS images.",
-                "USE_AWC_RADAR_MOSAIC",
-                R.string.ui_awc_radar_mosaic
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Use the AWC Radar mosaic images instead of the main NWS images.",
+                        "USE_AWC_RADAR_MOSAIC",
+                        R.string.ui_awc_radar_mosaic
+                ).card
         )
         ll.addView(
-            ObjectSettingsNumberPicker(
-                this,
-                this,
-                "UI elevation height",
-                "ELEVATION_PREF",
-                R.string.elevation_np_label,
-                3,
-                0,
-                30
-            ).card
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "UI elevation height",
+                        "ELEVATION_PREF",
+                        R.string.elevation_np_label,
+                        3,
+                        0,
+                        30
+                ).card
         )
         ll.addView(
-            ObjectSettingsNumberPicker(
-                this,
-                this,
-                "NWS icon size",
-                "NWS_ICON_SIZE_PREF",
-                R.string.nws_icon_size_np_label,
-                20,
-                1,
-                50
-            ).card
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "NWS icon size",
+                        "NWS_ICON_SIZE_PREF",
+                        R.string.nws_icon_size_np_label,
+                        20,
+                        1,
+                        50
+                ).card
         )
         ll.addView(
-            ObjectSettingsNumberPicker(
-                this,
-                this,
-                "Card corner radius",
-                "CARD_CORNER_RADIUS",
-                R.string.card_corner_radius_np_label,
-                3,
-                0,
-                10
-            ).card
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Card corner radius",
+                        "CARD_CORNER_RADIUS",
+                        R.string.card_corner_radius_np_label,
+                        0,
+                        0,
+                        10
+                ).card
         )
         ll.addView(
-            ObjectSettingsNumberPicker(
-                this,
-                this,
-                "Image tiles per row",
-                "UI_TILES_PER_ROW",
-                R.string.tiles_per_row_label,
-                3,
-                3,
-                10
-            ).card
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Image tiles per row",
+                        "UI_TILES_PER_ROW",
+                        R.string.tiles_per_row_label,
+                        3,
+                        3,
+                        10
+                ).card
         )
         ll.addView(
-            ObjectSettingsNumberPicker(
-                this,
-                this,
-                "Animation - frames for toolbar icon",
-                "UI_ANIM_ICON_FRAMES",
-                R.string.np_anim_generic_label,
-                6,
-                2,
-                40
-            ).card
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Animation - frames for toolbar icon",
+                        "UI_ANIM_ICON_FRAMES",
+                        R.string.np_anim_generic_label,
+                        6,
+                        2,
+                        40
+                ).card
         )
         ll.addView(
-            ObjectSettingsNumberPickerArray(
-                this,
-                this,
-                "Homescreen text length",
-                R.string.homescreen_text_length_np_label,
-                0,
-                textSizeArr.size - 1,
-                textSizeArr.toTypedArray()
-            ).card
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Homescreen text length",
+                        "HOMESCREEN_TEXT_LENGTH_PREF",
+                        R.string.homescreen_text_length_np_label,
+                        500,
+                        50,
+                        1000
+                ).card
         )
+        /*ll.addView(
+                ObjectSettingsNumberPickerArray(
+                        this,
+                        this,
+                        "Homescreen text length",
+                        R.string.homescreen_text_length_np_label,
+                        0,
+                        textSizeArr.size - 1,
+                        textSizeArr.toTypedArray()
+                ).card
+        )*/
     }
 
     override fun onStop() {

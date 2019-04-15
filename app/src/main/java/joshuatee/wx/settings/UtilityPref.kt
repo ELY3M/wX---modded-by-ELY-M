@@ -18,7 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-//modded by ELY M.  dislike the offical kotlin style
+
 package joshuatee.wx.settings
 
 import android.content.Context

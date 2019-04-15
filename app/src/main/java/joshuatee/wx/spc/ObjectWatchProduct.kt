@@ -56,7 +56,7 @@ internal class ObjectWatchProduct(type: PolygonType, productNumber: String) {
                 imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + productNumber +
                         "_radar.gif"
                 textUrl =
-                        "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww$productNumber.html"
+                    "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww$productNumber.html"
                 title = "Watch $productNumber"
                 prod = "SPCWAT$productNumber"
             }
@@ -68,7 +68,7 @@ internal class ObjectWatchProduct(type: PolygonType, productNumber: String) {
             }
             PolygonType.MPD -> {
                 imgUrl =
-                        "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$productNumber.gif"
+                    "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$productNumber.gif"
                 title = "MPD $productNumber"
                 prod = "WPCMPD$productNumber"
             }
@@ -85,7 +85,13 @@ internal class ObjectWatchProduct(type: PolygonType, productNumber: String) {
     }
 
     val textForSubtitle: String
-        get() = text.parse("Areas affected...(.*?)<BR>")
+        get() {
+            var stitle = text.parse("Areas affected...(.*?)<BR>")
+            if (stitle == "" ) {
+                stitle = text.parse("Watch for (.*?)<BR>").condenseSpace()
+            }
+            return stitle
+        }
 }
 
 

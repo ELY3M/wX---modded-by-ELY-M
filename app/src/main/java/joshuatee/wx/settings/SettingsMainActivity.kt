@@ -51,7 +51,7 @@ class SettingsMainActivity : BaseActivity() {
         contextg = this
         val backuprestore = UtilityBackupRestore()
         val version = Utility.getVersion(this)
-        toolbar.subtitle = "version: $version, Please tap on text for additional help."
+        toolbar.subtitle = "v$version, tap on text for additional help."
         val linearLayout: LinearLayout = findViewById(R.id.ll)
         val cardAbout = ObjectCardText(this, "About wX", MyApplication.textSizeNormal)
         val cardLocations = ObjectCardText(
@@ -216,40 +216,40 @@ class SettingsMainActivity : BaseActivity() {
                 ).card
         )
         linearLayout.addView(
-            ObjectSettingsNumberPicker(
-                this,
-                this,
-                "Refresh interval for location",
-                "REFRESH_LOC_MIN",
-                R.string.refresh_loc_min_np_label,
-                30,
-                0,
-                120
-            ).card
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Refresh interval for location",
+                        "REFRESH_LOC_MIN",
+                        R.string.refresh_loc_min_np_label,
+                        10,
+                        0,
+                        120
+                ).card
         )
         linearLayout.addView(
-            ObjectSettingsNumberPicker(
-                this,
-                this,
-                "ROAMING distance check",
-                "ROAMING_LOCATION_DISTANCE_CHECK",
-                R.string.roaming_location_distance_check_np_label,
-                5,
-                1,
-                120
-            ).card
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "ROAMING distance check",
+                        "ROAMING_LOCATION_DISTANCE_CHECK",
+                        R.string.roaming_location_distance_check_np_label,
+                        5,
+                        1,
+                        120
+                ).card
         )
         linearLayout.addView(
-            ObjectSettingsNumberPicker(
-                this,
-                this,
-                "Text to speech speed",
-                "TTS_SPEED_PREF",
-                R.string.tts_speed_np_label,
-                10,
-                1,
-                20
-            ).card
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Text to speech speed",
+                        "TTS_SPEED_PREF",
+                        R.string.tts_speed_np_label,
+                        10,
+                        1,
+                        20
+                ).card
         )
     }
 

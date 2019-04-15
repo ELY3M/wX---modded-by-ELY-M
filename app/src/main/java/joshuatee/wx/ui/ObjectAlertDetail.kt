@@ -38,40 +38,42 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
     private val tvArr = mutableListOf<TextView>()
     var title: String = ""
         private set
+    var wfoTitle: String = ""
+        private set
 
     init {
-        (0 until 7).forEach {
+        (0 until 5).forEach {
             tvArr.add(TextView(context))
             ll.addView(tvArr[it])
         }
         // setPadding(int left, int top, int right, int bottom)
-        tvArr[0].setPadding(
+        /*tvArr[0].setPadding(
             MyApplication.padding,
             MyApplication.padding,
             MyApplication.padding,
             MyApplication.padding
-        )
-        tvArr[1].setPadding(MyApplication.padding, 0, MyApplication.padding, 0)  // wfo
-        tvArr[2].setPadding(MyApplication.padding, 0, MyApplication.padding, 0)  // start
-        tvArr[3].setPadding(
+        )*/
+        //tvArr[1].setPadding(MyApplication.padding, 0, MyApplication.padding, 0)  // wfo
+        tvArr[0].setPadding(MyApplication.padding, 0, MyApplication.padding, 0)  // start
+        tvArr[1].setPadding(
             MyApplication.padding,
             0,
             MyApplication.padding,
             MyApplication.padding
         )  // end
+        tvArr[2].setPadding(
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding
+        )
+        tvArr[3].setPadding(
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding,
+            MyApplication.padding
+        )
         tvArr[4].setPadding(
-            MyApplication.padding,
-            MyApplication.padding,
-            MyApplication.padding,
-            MyApplication.padding
-        )
-        tvArr[5].setPadding(
-            MyApplication.padding,
-            MyApplication.padding,
-            MyApplication.padding,
-            MyApplication.padding
-        )
-        tvArr[6].setPadding(
             MyApplication.padding,
             MyApplication.padding,
             MyApplication.padding,
@@ -82,7 +84,7 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
     fun updateContent(ca: CAPAlert, url: String) {
         val startTime: String
         var endTime = ""
-        val wfo: String
+        var wfo = ""
         if (ca.text.contains("This alert has expired")) {
             tvArr[0].text = ca.text
             tvArr[0].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeLarge)
@@ -116,6 +118,16 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
                     startTime = tmpArr[1]
                     endTime = tmpArr[2]
                     wfo = tmpArr[3]
+                } else if (ca.title.contains("until")) {
+                    val tmpArr = UtilityString.parseMultipe(
+                            ca.title,
+                            "(.*?) issued (.*?) until (.*?) by (.*?)$",
+                            4
+                    )
+                    title = tmpArr[0]
+                    startTime = tmpArr[1]
+                    endTime = tmpArr[2]
+                    wfo = tmpArr[3]
                 } else {
                     val tmpArr =
                         UtilityString.parseMultipe(ca.title, "(.*?) issued (.*?) by (.*?)$", 3)
@@ -124,16 +136,17 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
                     wfo = tmpArr[2]
                 }
             }
-            tvArr[0].text = title
-            tvArr[0].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeLarge)
-            tvArr[1].text = wfo
-            tvArr[2].text = context.resources.getString(R.string.uswarn_start_time, startTime)
-            tvArr[3].text = context.resources.getString(R.string.uswarn_end_time, endTime)
-            tvArr[4].text = ca.area
-            tvArr[4].setTextColor(UIPreferences.textHighlightColor)
-            tvArr[5].text = Utility.fromHtml(ca.summary)
-            tvArr[6].text = Utility.fromHtml(ca.instructions)
+            //tvArr[0].text = title
+            //tvArr[0].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeLarge)
+            //tvArr[1].text = wfo
+            tvArr[0].text = context.resources.getString(R.string.uswarn_start_time, startTime)
+            tvArr[1].text = context.resources.getString(R.string.uswarn_end_time, endTime)
+            tvArr[2].text = ca.area
+            tvArr[2].setTextColor(UIPreferences.textHighlightColor)
+            tvArr[3].text = Utility.fromHtml(ca.summary)
+            tvArr[4].text = Utility.fromHtml(ca.instructions)
         }
+        wfoTitle = wfo
     }
 }
 

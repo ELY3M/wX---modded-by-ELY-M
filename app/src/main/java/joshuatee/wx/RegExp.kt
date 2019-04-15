@@ -64,7 +64,7 @@ object RegExp {
     val utilnxanimPattern2: Pattern =
         Pattern.compile(".*?([0-9]{2}-[A-Za-z]{3}-[0-9]{4} [0-9]{2}:[0-9]{2}).*?")
     val uswarnPattern: Pattern =
-        Pattern.compile("<entry>.*?<id>(.+?)</id>.*?<title>(.+?)</title>.*?<summary>(.*?)</summary>.*?<cap:event>(.*?)</cap:event>.*?<cap:areaDesc>(.*?)</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>(.*?)</value>.*?<valueName>VTEC</valueName>.*?<value>(.*?)</value>.*?</entry>.*?")
+        Pattern.compile("<entry>.*?<id>(.+?-[0-9]{7})</id>.*?<title>(.+?)</title>.*?<summary>(.*?)</summary>.*?<cap:event>(.*?)</cap:event>.*?<cap:areaDesc>(.*?)</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>(.*?)</value>.*?<valueName>VTEC</valueName>.*?<value>(.*?)</value>.*?</entry>.*?")
     val stiPattern1: Pattern = Pattern.compile("AZ/RAN(.*?)V")
     val stiPattern2: Pattern = Pattern.compile("MVT(.*?)V")
     val stiPattern3: Pattern = Pattern.compile("\\d+")

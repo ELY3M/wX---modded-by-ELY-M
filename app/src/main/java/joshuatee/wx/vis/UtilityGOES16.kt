@@ -30,7 +30,6 @@ import joshuatee.wx.util.UtilityImgAnim
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
-import joshuatee.wx.util.UtilityLog
 
 object UtilityGOES16 {
 
@@ -53,26 +52,21 @@ object UtilityGOES16 {
         var fileName = "latest.jpg"
         if (sectorLocal == "FD") {
             fileName = "1808x1808.jpg"
-        }
-
-        UtilityLog.d("wx", sectorLocal);
+        } // FIXME redo util goes16
         if (sectorLocal == "SECTOR/eep" || sectorLocal == "SECTOR/wus") {
-            fileName = "1000x1000.jpg";
+            fileName = "1000x1000.jpg"
         }
         if (sectorLocal == "SECTOR/tpw" || sectorLocal == "SECTOR/taw") {
-            fileName = "1800x1080.jpg";
+            fileName = "1800x1080.jpg"
         }
         if (sectorLocal == "can") {
-            fileName = "1125x560.jpg";
+            fileName = "1125x560.jpg"
         }
         if (sectorLocal == "mex") {
-            fileName = "1000x1000.jpg";
+            fileName = "1000x1000.jpg"
         }
-
-
         val url =
             MyApplication.goes16Url + "/" + satellite + "/ABI/" + sectorLocal + "/" + product + "/" + fileName
-        UtilityLog.d("wx", url + " " + sectorLocal)
         return url.getImage()
     }
 
@@ -154,6 +148,34 @@ object UtilityGOES16 {
         "psw",
         "tpw",
         "wus"
+    )
+
+    val sectorToName = mapOf(
+        "FD" to "Full Disk",
+        "CONUS" to "GOES-EAST US",
+        "CONUS-G17" to "GOES-WEST US",
+        "pnw" to "Pacific Northwest",
+        "nr" to "Northern Rockies",
+        "umv" to "Upper Mississippi Valley",
+        "cgl" to "Central Great Lakes",
+        "ne" to "Northeast",
+        "psw" to "Pacific Southwest",
+        "sr" to "Southern Rockies",
+        "sp" to "Southern Plains",
+        "smv" to "Southern Mississippi Valley",
+        "se" to "Southeast",
+        "gm" to "Gulf of Mexico",
+        "car" to "Caribbean",
+        "eus" to "U.S. Atlantic Coast",
+        "pr" to "Puerto Rico",
+        "taw" to "Tropical Atlantic",
+        "ak" to "Alaska",
+        "hi" to "Hawaii",
+        "wus" to "US Pacific Coast",
+        "tpw" to "Tropical Pacific",
+        "eep" to "Eastern Pacific",
+        "can" to "Canada",
+        "mex" to "Mexico"
     )
 }
 

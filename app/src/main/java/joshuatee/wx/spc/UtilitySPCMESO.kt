@@ -80,6 +80,19 @@ object UtilitySPCMESO {
 
     const val defaultSector: String = "19"
 
+    val sectorMap = mapOf(
+            "19" to "US",
+            "20" to "MW",
+            "13" to "NC",
+            "14" to "C",
+            "15" to "SC",
+            "16" to "NE",
+            "17" to "CE",
+            "18" to "SE",
+            "12" to "SW",
+            "11" to "NW"
+    )
+
     internal val imgSf = listOf(
         "mixr",
         "ttd",

@@ -75,10 +75,10 @@ class ObjectCardAlertSummaryItem(context: Context) {
         val title: String
         val startTime: String
         var endTime = ""
-        if (ca.title.contains("expiring")) {
+        if (ca.title.contains("until")) {
             val tmpArr = UtilityString.parseMultipe(
                 ca.title,
-                "(.*?) issued (.*?) expiring (.*?) by (.*?)$",
+                "(.*?) issued (.*?) until (.*?) by (.*?)$", // changed expiring to until
                 4
             )
             title = tmpArr[0]
@@ -93,8 +93,8 @@ class ObjectCardAlertSummaryItem(context: Context) {
         textViewTop.text = "$nwsOffice ($nwsLoc)"
         textViewBottom.text = ca.area
         textViewTitle.text = title
-        textViewStart.text = startTime
-        textViewEnd.text = endTime
+        textViewStart.text = "Start: $startTime"
+        textViewEnd.text = "End: $endTime"
     }
 }
 

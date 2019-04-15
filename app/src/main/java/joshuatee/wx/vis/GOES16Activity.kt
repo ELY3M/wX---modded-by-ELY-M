@@ -77,7 +77,6 @@ class GOES16Activity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
         getContent(sector)
     }
 
-    // FIXME
     private fun getContentFixThis() {
         getContent(sector)
     }
@@ -85,6 +84,7 @@ class GOES16Activity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
     private fun getContent(sectorF: String) = GlobalScope.launch(uiDispatcher) {
         sector = sectorF
         writePrefs()
+        toolbar.title = UtilityGOES16.sectorToName[sector] ?: ""
         toolbar.subtitle = drw.getLabel()
         bitmap = withContext(Dispatchers.IO) { UtilityGOES16.getImage(drw.getUrl(), sector) }
         img.setBitmap(bitmap)

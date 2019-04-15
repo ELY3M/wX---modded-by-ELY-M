@@ -68,9 +68,8 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     private lateinit var diaMain: ObjectDialogue
     private lateinit var diaImg: ObjectDialogue
     private lateinit var diaAfd: ObjectDialogue
-    //private lateinit var diaVis: ObjectDialogue
     private lateinit var diaRadar: ObjectDialogue
-    private var actionMode = ActionMode.DELETE
+    //private var actionMode = ActionMode.DELETE
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +82,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         toolbarBottom.setOnMenuItemClickListener(this)
         ridFav = MyApplication.homescreenFav
         hmFavOrig = ridFav
-        toolbar.subtitle = actionMode.getDescription()
+        toolbar.subtitle = "Tap item to delete or move."
         UtilityToolbar.fullScreenMode(toolbar, false)
         ObjectFab(
             this,
@@ -91,18 +90,6 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             R.id.fab,
             MyApplication.ICON_ADD,
             View.OnClickListener { diaMain.show() })
-        ObjectFab(
-            this,
-            this,
-            R.id.fab1,
-            MyApplication.ICON_ARROW_UP,
-            View.OnClickListener { toggleMode(ActionMode.UP) })
-        ObjectFab(
-            this,
-            this,
-            R.id.fab2,
-            MyApplication.ICON_ARROW_DOWN,
-            View.OnClickListener { toggleMode(ActionMode.DOWN) })
         updateList(true)
         recyclerView = ObjectRecyclerView(this, this, R.id.card_list, ridArrLabel, ::prodClicked)
         diaMain = ObjectDialogue(
@@ -137,14 +124,6 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                 which
             )
         })
-        /*diaVis = ObjectDialogue(this, "Select fixed location 1KM Vis products:", GlobalArrays.wfos)
-        diaVis.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
-            alertDialogClicked(
-                diaVis,
-                "IMG-",
-                which
-            )
-        })*/
         diaRadar =
             ObjectDialogue(this, "Select fixed location Nexrad products:", GlobalArrays.radars)
         diaRadar.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
@@ -154,11 +133,6 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                 which
             )
         })
-    }
-
-    private fun toggleMode(am: ActionMode) {
-        actionMode = am
-        toolbar.subtitle = actionMode.getDescription()
     }
 
     private fun updateList(firstTime: Boolean = false) {
@@ -213,10 +187,8 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_delete -> toggleMode(ActionMode.DELETE)
             R.id.action_img -> diaImg.show()
             R.id.action_afd -> diaAfd.show()
-           // R.id.action_cloud -> diaVis.show()
             R.id.action_radar -> diaRadar.show()
             R.id.action_help -> showHelpText(resources.getString(R.string.homescreen_help_label))
             R.id.action_reset -> {
@@ -336,31 +308,40 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun prodClicked(position: Int) {
-        when (actionMode) {
-            ActionMode.DELETE -> {
-                if (position < ridArr.size) {
-                    ridFav = MyApplication.homescreenFav
-                    ridFav += ":"
-                    ridFav = ridFav.replace(ridArr[position] + ":", "")
-                    ridFav = ridFav.replace(":$".toRegex(), "")
-                    Utility.writePref(this, prefToken, ridFav)
-                    MyApplication.homescreenFav = ridFav
-                    recyclerView.deleteItem(position)
-                    recyclerView.notifyDataSetChanged()
-                }
-            }
-            ActionMode.UP -> {
-                moveUp(position)
-                MyApplication.homescreenFav = ridFav
-            }
-            ActionMode.DOWN -> {
-                moveDown(position)
-                MyApplication.homescreenFav = ridFav
-            }
-            else -> {
-            }
-        }
+        val bottomSheetFragment = BottomSheetFragment()
+        bottomSheetFragment.position = position
+        bottomSheetFragment.usedForLocation = true
+        bottomSheetFragment.fnList = listOf(::deleteItem, ::moveUpItem, ::moveDownItem)
+        bottomSheetFragment.labelList = listOf("Delete Item", "Move Up", "Move Down")
+        bottomSheetFragment.actContext = this
+        bottomSheetFragment.topLabel = ""
+        bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+    }
+
+    private fun moveUpItem(position: Int) {
+        moveUp(position)
+        MyApplication.homescreenFav = ridFav
         updateList()
+    }
+
+    private fun moveDownItem(position: Int) {
+        moveDown(position)
+        MyApplication.homescreenFav = ridFav
+        updateList()
+    }
+
+    fun deleteItem(position: Int) {
+        if (position < ridArr.size) {
+            ridFav = MyApplication.homescreenFav
+            ridFav += ":"
+            ridFav = ridFav.replace(ridArr[position] + ":", "")
+            ridFav = ridFav.replace(":$".toRegex(), "")
+            Utility.writePref(this, prefToken, ridFav)
+            MyApplication.homescreenFav = ridFav
+            recyclerView.deleteItem(position)
+            recyclerView.notifyDataSetChanged()
+            updateList()
+        }
     }
 
     private fun alertDialogClicked(dialogue: ObjectDialogue, token: String, which: Int) {

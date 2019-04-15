@@ -28,47 +28,54 @@ enum class GeographyType constructor(
     var relativeBuffer: ByteBuffer,
     var count: Int,
     var color: Int,
-    var pref: Boolean
+    var pref: Boolean,
+    var lineWidth: Int
 ) {
 
     STATE_LINES(
         MyApplication.stateRelativeBuffer,
         MyApplication.countState,
         MyApplication.radarColorState,
-        true
+        true,
+        MyApplication.radarStateLinesize
     ),
     COUNTY_LINES(
         MyApplication.countyRelativeBuffer,
         MyApplication.countCounty,
         MyApplication.radarColorCounty,
-        MyApplication.radarCounty
+        MyApplication.radarCounty,
+        MyApplication.radarCountyLinesize
     ),
     LAKES(
         MyApplication.lakesRelativeBuffer,
         MyApplication.countLakes,
         MyApplication.radarColorLakes,
-        MyApplication.radarLakes
+        MyApplication.radarLakes,
+        MyApplication.radarLakeLinesize
     ),
     HIGHWAYS(
         MyApplication.hwRelativeBuffer,
         MyApplication.countHw,
         MyApplication.radarColorHw,
-        MyApplication.radarHw
+        MyApplication.radarHw,
+        MyApplication.radarHwLinesize
     ),
     HIGHWAYS_EXTENDED(
         MyApplication.hwExtRelativeBuffer,
         MyApplication.countHwExt,
         MyApplication.radarColorHwExt,
-        MyApplication.radarHwEnhExt
+        MyApplication.radarHwEnhExt,
+        MyApplication.radarHwExtLinesize
     ),
-    CITIES(ByteBuffer.allocate(0), 0, MyApplication.radarColorCity, MyApplication.radarCities),
+    CITIES(ByteBuffer.allocate(0), 0, MyApplication.radarColorCity, MyApplication.radarCities, 0),
     COUNTY_LABELS(
         ByteBuffer.allocate(0),
         0,
         MyApplication.radarColorCountyLabels,
-        MyApplication.radarCountyLabels
+        MyApplication.radarCountyLabels, 
+        0
     ),
-    NONE(ByteBuffer.allocateDirect(0), 0, 0, false);
+    NONE(ByteBuffer.allocateDirect(0), 0, 0, false, 0);
 
     // FIXME refresh rest of values
     companion object {
@@ -96,6 +103,11 @@ enum class GeographyType constructor(
             CITIES.pref = MyApplication.radarCities
             COUNTY_LABELS.pref = MyApplication.radarCountyLabels
 
+            STATE_LINES.lineWidth = MyApplication.radarStateLinesize
+            COUNTY_LINES.lineWidth = MyApplication.radarCountyLinesize
+            LAKES.lineWidth = MyApplication.radarLakeLinesize
+            HIGHWAYS.lineWidth = MyApplication.radarHwLinesize
+            HIGHWAYS_EXTENDED.lineWidth = MyApplication.radarHwExtLinesize
         }
     }
 }

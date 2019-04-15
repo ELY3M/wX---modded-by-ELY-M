@@ -39,20 +39,6 @@
             android:padding="@dimen/padding" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/fab_margin_mini_2"
-            android:layout_marginBottom="@dimen/fab_margin_bottom_mini"
-            app:elevation="@dimen/fab_elevation"
-            app:fabSize="mini"
-            app:layout_anchor="@id/card_list"
-            app:layout_anchorGravity="bottom|right"
-            app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-            app:srcCompat="@drawable/ic_delete_24dp" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -63,34 +49,6 @@
             app:layout_anchorGravity="bottom|right"
             app:pressedTranslationZ="@dimen/fab_elevation_pressed"
             app:srcCompat="@drawable/ic_add_box_24dp" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabUP"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/fab_margin_right_mini"
-            android:layout_marginBottom="@dimen/fab_margin_mini_1"
-            app:elevation="@dimen/fab_elevation"
-            app:fabSize="mini"
-            app:layout_anchor="@id/card_list"
-            app:layout_anchorGravity="bottom|right"
-            app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-            app:srcCompat="@drawable/ic_keyboard_arrow_up_24dp" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabDOWN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_marginEnd="@dimen/fab_margin_right_mini"
-            android:layout_marginBottom="@dimen/fab_margin_mini_2"
-            app:elevation="@dimen/fab_elevation"
-            app:fabSize="mini"
-            app:layout_anchor="@id/card_list"
-            app:layout_anchorGravity="bottom|right"
-            app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-            app:srcCompat="@drawable/ic_keyboard_arrow_down_24dp" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </LinearLayout>

@@ -2,7 +2,7 @@ APP_NAME=wX
 cd ~/StudioProjects/$APP_NAME
 cp app/build/outputs/apk/release/app-release.apk $APP_NAME.apk 
 ls -l  $APP_NAME.apk
-mv .gradle ..
+#mv .gradle ..
 mv .git ~/.git
 cd app
 cd build
@@ -21,7 +21,7 @@ cd ~/StudioProjects/
 zip -r $APP_NAME${ver}.zip $APP_NAME  > /dev/null
 ls -l $APP_NAME${ver}.zip 
 cd $APP_NAME
-mv ../.gradle .
+#mv ../.gradle .
 mv ~/.git .
 cd app/build
 mv ~/intermediates .

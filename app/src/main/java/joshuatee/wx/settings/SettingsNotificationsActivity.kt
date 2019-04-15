@@ -53,260 +53,260 @@ class SettingsNotificationsActivity : BaseActivity() {
         toolbar.subtitle = "Please tap on text for additional help."
         val ll: LinearLayout = findViewById(R.id.ll)
         val cardSound =
-            ObjectCardText(this, ll, "Notification sound chooser", MyApplication.textSizeNormal)
+                ObjectCardText(this, ll, "Notification sound chooser", MyApplication.textSizeNormal)
         val cardWFOFilter =
-            ObjectCardText(this, ll, "WFO notification filter", MyApplication.textSizeNormal)
+                ObjectCardText(this, ll, "WFO notification filter", MyApplication.textSizeNormal)
         ObjectCardText(
-            this,
-            ll,
-            "Text product notifications: " + UtilityNotificationTextProduct.showAll(),
-            MyApplication.textSizeNormal
+                this,
+                ll,
+                "Text product notifications: " + UtilityNotificationTextProduct.showAll(),
+                MyApplication.textSizeNormal
         )
         cardSound.setOnClickListener(View.OnClickListener { notifSoundPicker() })
         cardWFOFilter.setOnClickListener(View.OnClickListener { showWFONotificationFilterDialogue() })
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "US Tornado",
-                "ALERT_TORNADO_NOTIFICATION",
-                R.string.b_tornado
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "US Tornado",
+                        "ALERT_TORNADO_NOTIFICATION",
+                        R.string.b_tornado
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "SPC MCD",
-                "ALERT_SPCMCD_NOTIFICATION",
-                R.string.b_mcd
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "SPC MCD",
+                        "ALERT_SPCMCD_NOTIFICATION",
+                        R.string.b_mcd
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "SPC Watch",
-                "ALERT_SPCWAT_NOTIFICATION",
-                R.string.b_wat
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "SPC Watch",
+                        "ALERT_SPCWAT_NOTIFICATION",
+                        R.string.b_wat
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "SPC SWO",
-                "ALERT_SPCSWO_NOTIFICATION",
-                R.string.b_swo
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "SPC SWO",
+                        "ALERT_SPCSWO_NOTIFICATION",
+                        R.string.b_swo
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "SPC SWO include slight",
-                "ALERT_SPCSWO_SLIGHT_NOTIFICATION",
-                R.string.b_swo2
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "SPC SWO include slight",
+                        "ALERT_SPCSWO_SLIGHT_NOTIFICATION",
+                        R.string.b_swo2
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "WPC MPD",
-                "ALERT_WPCMPD_NOTIFICATION",
-                R.string.b_mpd
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "WPC MPD",
+                        "ALERT_WPCMPD_NOTIFICATION",
+                        R.string.b_mpd
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "NHC Advisories EPAC",
-                "ALERT_NHC_EPAC_NOTIFICATION",
-                R.string.b_nhc_epac
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "NHC Advisories EPAC",
+                        "ALERT_NHC_EPAC_NOTIFICATION",
+                        R.string.b_nhc_epac
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "NHC Advisories ATL",
-                "ALERT_NHC_ATL_NOTIFICATION",
-                R.string.b_nhc_atl
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "NHC Advisories ATL",
+                        "ALERT_NHC_ATL_NOTIFICATION",
+                        R.string.b_nhc_atl
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "US Tornado Sound",
-                "ALERT_NOTIFICATION_SOUND_TORNADO",
-                R.string.alert_sound_tornado_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "US Tornado Sound",
+                        "ALERT_NOTIFICATION_SOUND_TORNADO",
+                        R.string.alert_sound_tornado_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "SPC MCD Sound",
-                "ALERT_NOTIFICATION_SOUND_SPCMCD",
-                R.string.alert_sound_spcmcd_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "SPC MCD Sound",
+                        "ALERT_NOTIFICATION_SOUND_SPCMCD",
+                        R.string.alert_sound_spcmcd_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "SPC Watch Sound",
-                "ALERT_NOTIFICATION_SOUND_SPCWAT",
-                R.string.alert_sound_spcwat_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "SPC Watch Sound",
+                        "ALERT_NOTIFICATION_SOUND_SPCWAT",
+                        R.string.alert_sound_spcwat_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "SPC SWO Sound",
-                "ALERT_NOTIFICATION_SOUND_SPCSWO",
-                R.string.alert_sound_spcswo_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "SPC SWO Sound",
+                        "ALERT_NOTIFICATION_SOUND_SPCSWO",
+                        R.string.alert_sound_spcswo_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "WPC MPD Sound",
-                "ALERT_NOTIFICATION_SOUND_WPCMPD",
-                R.string.alert_sound_wpcmpd_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "WPC MPD Sound",
+                        "ALERT_NOTIFICATION_SOUND_WPCMPD",
+                        R.string.alert_sound_wpcmpd_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "NHC Advisories EPAC Sound",
-                "ALERT_NOTIFICATION_SOUND_NHC_EPAC",
-                R.string.alert_sound_nhc_epac_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "NHC Advisories EPAC Sound",
+                        "ALERT_NOTIFICATION_SOUND_NHC_EPAC",
+                        R.string.alert_sound_nhc_epac_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "NHC Advisories ATL Sound",
-                "ALERT_NOTIFICATION_SOUND_NHC_ATL",
-                R.string.alert_sound_nhc_atl_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "NHC Advisories ATL Sound",
+                        "ALERT_NOTIFICATION_SOUND_NHC_ATL",
+                        R.string.alert_sound_nhc_atl_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Text products Sound",
-                "ALERT_NOTIFICATION_SOUND_TEXT_PROD",
-                R.string.alert_sound_text_prod_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Text products Sound",
+                        "ALERT_NOTIFICATION_SOUND_TEXT_PROD",
+                        R.string.alert_sound_text_prod_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Play sound repeatedly",
-                "NOTIF_SOUND_REPEAT",
-                R.string.tv_notif_sound_repeat_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Play sound repeatedly",
+                        "NOTIF_SOUND_REPEAT",
+                        R.string.tv_notif_sound_repeat_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Notif text to speech",
-                "NOTIF_TTS",
-                R.string.tv_notif_tts_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Notif text to speech",
+                        "NOTIF_TTS",
+                        R.string.tv_notif_tts_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Blackout alert sounds",
-                "ALERT_BLACKOUT",
-                R.string.alert_blackout_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Blackout alert sounds",
+                        "ALERT_BLACKOUT",
+                        R.string.alert_blackout_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Alert only once",
-                "ALERT_ONLYONCE",
-                R.string.alert_onlyonce_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Alert only once",
+                        "ALERT_ONLYONCE",
+                        R.string.alert_onlyonce_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Auto cancel notifs",
-                "ALERT_AUTOCANCEL",
-                R.string.alert_autocancel_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Auto cancel notifs",
+                        "ALERT_AUTOCANCEL",
+                        R.string.alert_autocancel_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Tor warn override blackout",
-                "ALERT_BLACKOUT_TORNADO",
-                R.string.alert_blackout_tornado_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Tor warn override blackout",
+                        "ALERT_BLACKOUT_TORNADO",
+                        R.string.alert_blackout_tornado_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsNumberPicker(
-                this,
-                this,
-                "Notification check interval(m)",
-                "ALERT_NOTIFICATION_INTERVAL",
-                R.string.alert_interval_np_label,
-                12,
-                1,
-                180
-            ).card
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Notification check interval(m)",
+                        "ALERT_NOTIFICATION_INTERVAL",
+                        R.string.alert_interval_np_label,
+                        12,
+                        1,
+                        120
+                ).card
         )
         ll.addView(
-            ObjectSettingsNumberPicker(
-                this,
-                this,
-                "Notification blackout - PM(h)",
-                "ALERT_BLACKOUT_PM",
-                R.string.alert_blackout_pm_np_label,
-                22,
-                0,
-                23
-            ).card
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Notification blackout - PM(h)",
+                        "ALERT_BLACKOUT_PM",
+                        R.string.alert_blackout_pm_np_label,
+                        22,
+                        0,
+                        23
+                ).card
         )
         ll.addView(
-            ObjectSettingsNumberPicker(
-                this,
-                this,
-                "Notification blackout - AM(h)",
-                "ALERT_BLACKOUT_AM",
-                R.string.alert_blackout_am_np_label,
-                7,
-                0,
-                23
-            ).card
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Notification blackout - AM(h)",
+                        "ALERT_BLACKOUT_AM",
+                        R.string.alert_blackout_am_np_label,
+                        7,
+                        0,
+                        23
+                ).card
         )
     }
 
     override fun onStop() {
         super.onStop()
         if (MyApplication.notifTts != Utility.readPref(
-                this,
-                "NOTIF_TTS",
-                "false"
-            ).startsWith("t")
+                        this,
+                        "NOTIF_TTS",
+                        "false"
+                ).startsWith("t")
         ) {
             showFileWritePermsDialogue()
         }
@@ -358,42 +358,42 @@ class SettingsNotificationsActivity : BaseActivity() {
             }
         }
         val dialog = AlertDialog.Builder(this)
-            .setTitle("Choose which Local NWS Alerts to not show:")
-            .setMultiChoiceItems(
-                items.toTypedArray(),
-                checkedItems
-            ) { _, indexSelected, isChecked ->
-                if (isChecked) {
-                    seletedItems.add(indexSelected)
-                } else if (seletedItems.contains(indexSelected)) {
-                    seletedItems.remove(Integer.valueOf(indexSelected))
-                }
-            }.setPositiveButton("OK") { _, _ ->
-                var nwsWfoFilterStrLoc = ""
-                seletedItems.indices.forEach { nwsWfoFilterStrLoc += items[seletedItems[it]] + ":" }
-                Utility.writePref(this, "NOTIF_WFO_FILTER", nwsWfoFilterStrLoc)
-            }.setNegativeButton("Cancel") { _, _ ->
-            }.create()
+                .setTitle("Choose which Local NWS Alerts to not show:")
+                .setMultiChoiceItems(
+                        items.toTypedArray(),
+                        checkedItems
+                ) { _, indexSelected, isChecked ->
+                    if (isChecked) {
+                        seletedItems.add(indexSelected)
+                    } else if (seletedItems.contains(indexSelected)) {
+                        seletedItems.remove(Integer.valueOf(indexSelected))
+                    }
+                }.setPositiveButton("OK") { _, _ ->
+                    var nwsWfoFilterStrLoc = ""
+                    seletedItems.indices.forEach { nwsWfoFilterStrLoc += items[seletedItems[it]] + ":" }
+                    Utility.writePref(this, "NOTIF_WFO_FILTER", nwsWfoFilterStrLoc)
+                }.setNegativeButton("Cancel") { _, _ ->
+                }.create()
         dialog.show()
     }
 
     private fun showFileWritePermsDialogue() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (ContextCompat.checkSelfPermission(
-                    this,
-                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED
+                            this,
+                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) == PackageManager.PERMISSION_GRANTED
             ) {
             } else {
                 if (ContextCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ) != PackageManager.PERMISSION_GRANTED
+                                this,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        ) != PackageManager.PERMISSION_GRANTED
                 ) {
                     ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        fileWritePerm
+                            this,
+                            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                            fileWritePerm
                     )
                 }
             }
@@ -403,9 +403,9 @@ class SettingsNotificationsActivity : BaseActivity() {
     private val fileWritePerm = 5002
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<String>,
+            grantResults: IntArray
     ) {
         when (requestCode) {
             fileWritePerm -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

@@ -43,7 +43,6 @@ import joshuatee.wx.util.Utility
 object UtilityUI {
 
     // called from LOCFRAG and ObjectSettingsSpinner
-    // FIXME
     fun setupSpinner(spinner: Spinner, light: Boolean) {
         var tint = ColorStateList.valueOf(UIPreferences.colorBlack)
         if (light) {
