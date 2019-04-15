@@ -59,10 +59,10 @@ class ObjectSettingsCheckBox(
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
         tv.setTextColor(UIPreferences.backgroundColor)
         tv.setPadding(
-            MyApplication.padding,
-            MyApplication.padding,
-            MyApplication.padding,
-            MyApplication.padding
+            MyApplication.paddingSettings,
+            MyApplication.paddingSettings,
+            MyApplication.paddingSettings,
+            MyApplication.paddingSettings
         )
         tv.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,

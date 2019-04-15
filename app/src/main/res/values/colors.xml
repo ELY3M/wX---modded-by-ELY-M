@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
@@ -43,15 +42,10 @@
     <color name="orange_accent">#5879A9</color>
     <color name="primary_orange">#A14300</color>
     <color name="offwhite_toolbar">#B3FFFFFF</color>
-    <!--<color name="light_blue">#4b576c</color>-->
     <color name="light_blue">#566D87</color>
 
     <!-- telecine -->
     <color name="primary_normal">#ff455a64</color>
-    <!--<color name="primary_dark_normal">#ff263238</color>-->
-    <!--<color name="accent_normal">#ffe73c35</color>-->
-
-
     <color name="accent_pressed">#ffa72600</color>
     <color name="gray_normal">#ff757575</color>
     <color name="fuchsia">#FF00FF</color>

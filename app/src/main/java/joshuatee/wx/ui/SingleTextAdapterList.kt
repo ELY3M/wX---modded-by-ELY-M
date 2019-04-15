@@ -5,22 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
 
 // thanks http://www.truiton.com/2015/03/android-cardview-example/
 
 class SingleTextAdapterList(private val mDataset: MutableList<String>) :
-    RecyclerView.Adapter<SingleTextAdapterList.DataObjectHolder>() {
+        RecyclerView.Adapter<SingleTextAdapterList.DataObjectHolder>() {
 
     class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+            View.OnClickListener {
 
         val label: TextView = itemView.findViewById(R.id.singletext)
 
         init {
             ObjectCard(itemView, R.id.cv1)
             itemView.setOnClickListener(this)
+            label.setPadding(MyApplication.paddingSettings, MyApplication.paddingSettings, MyApplication.paddingSettings, MyApplication.paddingSettings)
         }
 
         override fun onClick(v: View) {

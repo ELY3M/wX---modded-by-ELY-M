@@ -38,6 +38,7 @@
 
     <dimen name="padding_dynamic_tv">1dip</dimen>
     <dimen name="padding_dynamic_tv_small">1dip</dimen>
+    <dimen name="padding_dynamic_tv_settings">3dip</dimen>
 
     <!--  used in at least hourly, uswarn, nhc   -->
     <dimen name="padding_ll">5dip</dimen>

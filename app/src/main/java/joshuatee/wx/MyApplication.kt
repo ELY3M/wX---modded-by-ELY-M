@@ -79,6 +79,11 @@ class MyApplication : Application() {
             res.getDimension(R.dimen.padding_dynamic_tv),
             dm
         ).toInt()
+        paddingSettings = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                res.getDimension(R.dimen.padding_dynamic_tv_settings),
+                dm
+        ).toInt()
         paddingSmall = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             res.getDimension(R.dimen.padding_dynamic_tv_small),
@@ -350,6 +355,7 @@ class MyApplication : Application() {
         var goesVisSector: String = ""
         var nwsIconSize: Int = 0
         var padding: Int = 0
+        var paddingSettings: Int = 0
         var paddingSmall: Int = 0
         //var tabHeaders: Array<String> = arrayOf("", "", "", "")
         var tabHeaders: Array<String> = arrayOf("", "", "")

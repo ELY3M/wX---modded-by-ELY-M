@@ -32,7 +32,6 @@ import java.util.Locale
 
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
-import joshuatee.wx.objects.ActionMode
 import joshuatee.wx.util.UtilityAlertDialog
 
 import joshuatee.wx.GlobalArrays
@@ -69,7 +68,6 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     private lateinit var diaImg: ObjectDialogue
     private lateinit var diaAfd: ObjectDialogue
     private lateinit var diaRadar: ObjectDialogue
-    //private var actionMode = ActionMode.DELETE
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -55,45 +55,49 @@ class SettingsRadarActivity : BaseActivity() {
         toolbar.subtitle = "Please tap on text for additional help."
         val ll: LinearLayout = findViewById(R.id.ll)
         ObjectCardText(
-            this,
-            ll,
-            "Colors",
-            MyApplication.textSizeNormal,
-            SettingsColorsActivity::class.java
+                this,
+                ll,
+                "Colors",
+                MyApplication.textSizeNormal,
+                SettingsColorsActivity::class.java,
+                MyApplication.paddingSettings
         )
         cardPal94 = ObjectCardText(
-            this,
-            ll,
-            resources.getString(R.string.label_settings_color_palette_94) + ": " + MyApplication.radarColorPalette["94"],
-            MyApplication.textSizeNormal
+                this,
+                ll,
+                resources.getString(R.string.label_settings_color_palette_94) + ": " + MyApplication.radarColorPalette["94"],
+                MyApplication.textSizeNormal,
+                MyApplication.paddingSettings
         )
         cardPal99 = ObjectCardText(
-            this,
-            ll,
-            resources.getString(R.string.label_settings_color_palette_99) + ": " + MyApplication.radarColorPalette["99"],
-            MyApplication.textSizeNormal
+                this,
+                ll,
+                resources.getString(R.string.label_settings_color_palette_99) + ": " + MyApplication.radarColorPalette["99"],
+                MyApplication.textSizeNormal,
+                MyApplication.paddingSettings
         )
         ObjectCardText(
-            this,
-            ll,
-            "Screen Recorder",
-            MyApplication.textSizeNormal,
-            SettingsTelecineActivity::class.java
+                this,
+                ll,
+                "Screen Recorder",
+                MyApplication.textSizeNormal,
+                SettingsTelecineActivity::class.java,
+                MyApplication.paddingSettings
         )
         cardPal94.setOnClickListener(View.OnClickListener {
             ObjectIntent(
-                this,
-                SettingsColorPaletteActivity::class.java,
-                SettingsColorPaletteActivity.TYPE,
-                arrayOf("94")
+                    this,
+                    SettingsColorPaletteActivity::class.java,
+                    SettingsColorPaletteActivity.TYPE,
+                    arrayOf("94")
             )
         })
         cardPal99.setOnClickListener(View.OnClickListener {
             ObjectIntent(
-                this,
-                SettingsColorPaletteActivity::class.java,
-                SettingsColorPaletteActivity.TYPE,
-                arrayOf("99")
+                    this,
+                    SettingsColorPaletteActivity::class.java,
+                    SettingsColorPaletteActivity.TYPE,
+                    arrayOf("99")
             )
         })
 
@@ -111,128 +115,128 @@ class SettingsRadarActivity : BaseActivity() {
 	
 	
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Show WAT/MCD",
-                "RADAR_SHOW_WATCH",
-                R.string.radar_show_watch_default_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Show WAT/MCD",
+                        "RADAR_SHOW_WATCH",
+                        R.string.radar_show_watch_default_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Show MPD",
-                "RADAR_SHOW_MPD",
-                R.string.radar_show_mpd_default_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Show MPD",
+                        "RADAR_SHOW_MPD",
+                        R.string.radar_show_mpd_default_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Show cities",
-                "COD_CITIES_DEFAULT",
-                R.string.cod_cities_default_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Show cities",
+                        "COD_CITIES_DEFAULT",
+                        R.string.cod_cities_default_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Show highways",
-                "COD_HW_DEFAULT",
-                R.string.cod_hw_default_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Show highways",
+                        "COD_HW_DEFAULT",
+                        R.string.cod_hw_default_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Hw data, show secondary roads",
-                "RADAR_HW_ENH_EXT",
-                R.string.hw_enh_ext_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Hw data, show secondary roads",
+                        "RADAR_HW_ENH_EXT",
+                        R.string.hw_enh_ext_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Show CA/MX borders",
-                "RADAR_CAMX_BORDERS",
-                R.string.camx_borders_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Show CA/MX borders",
+                        "RADAR_CAMX_BORDERS",
+                        R.string.camx_borders_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Show lakes and rivers",
-                "COD_LAKES_DEFAULT",
-                R.string.cod_lakes_default_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Show lakes and rivers",
+                        "COD_LAKES_DEFAULT",
+                        R.string.cod_lakes_default_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Show spotters",
-                "WXOGL_SPOTTERS",
-                R.string.spotters_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Show spotters",
+                        "WXOGL_SPOTTERS",
+                        R.string.spotters_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Show spotter labels",
-                "WXOGL_SPOTTERS_LABEL",
-                R.string.spotters_label_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Show spotter labels",
+                        "WXOGL_SPOTTERS_LABEL",
+                        R.string.spotters_label_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Show observations",
-                "WXOGL_OBS",
-                R.string.obs_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Show observations",
+                        "WXOGL_OBS",
+                        R.string.obs_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Show wind barbs",
-                "WXOGL_OBS_WINDBARBS",
-                R.string.obs_windbarbs_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Show wind barbs",
+                        "WXOGL_OBS_WINDBARBS",
+                        R.string.obs_windbarbs_label
+                ).card
         )
         ll.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Show location marker",
-                "COD_LOCDOT_DEFAULT",
-                R.string.cod_locdot_default_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Show location marker",
+                        "COD_LOCDOT_DEFAULT",
+                        R.string.cod_locdot_default_label
+                ).card
         )
         val gpsSw = ObjectSettingsCheckBox(
-            this,
-            this,
-            "Location marker follows GPS",
-            "LOCDOT_FOLLOWS_GPS",
-            R.string.locdot_follows_gps_label
+                this,
+                this,
+                "Location marker follows GPS",
+                "LOCDOT_FOLLOWS_GPS",
+                R.string.locdot_follows_gps_label
         )
         ll.addView(gpsSw.card)
         gpsSw.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, _ ->
             MyApplication.locdotFollowsGps = compoundButton.isChecked
             if (MyApplication.locdotFollowsGps != Utility.readPref(
-                    this,
-                    "LOCDOT_FOLLOWS_GPS",
-                    "false"
-                ).startsWith("t")
+                            this,
+                            "LOCDOT_FOLLOWS_GPS",
+                            "false"
+                    ).startsWith("t")
             )
                 showGPSPermsDialogue()
 

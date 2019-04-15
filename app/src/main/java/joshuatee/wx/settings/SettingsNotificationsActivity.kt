@@ -53,14 +53,15 @@ class SettingsNotificationsActivity : BaseActivity() {
         toolbar.subtitle = "Please tap on text for additional help."
         val ll: LinearLayout = findViewById(R.id.ll)
         val cardSound =
-                ObjectCardText(this, ll, "Notification sound chooser", MyApplication.textSizeNormal)
+                ObjectCardText(this, ll, "Notification sound chooser", MyApplication.textSizeNormal, MyApplication.paddingSettings)
         val cardWFOFilter =
-                ObjectCardText(this, ll, "WFO notification filter", MyApplication.textSizeNormal)
+                ObjectCardText(this, ll, "WFO notification filter", MyApplication.textSizeNormal, MyApplication.paddingSettings)
         ObjectCardText(
                 this,
                 ll,
                 "Text product notifications: " + UtilityNotificationTextProduct.showAll(),
-                MyApplication.textSizeNormal
+                MyApplication.textSizeNormal,
+                MyApplication.paddingSettings
         )
         cardSound.setOnClickListener(View.OnClickListener { notifSoundPicker() })
         cardWFOFilter.setOnClickListener(View.OnClickListener { showWFONotificationFilterDialogue() })

@@ -64,6 +64,7 @@ internal object UtilityColor {
         "RADAR_COLOR_OBS" -> Color.WHITE
         "RADAR_COLOR_OBS_WINDBARBS" -> Color.WHITE
         "RADAR_COLOR_COUNTY_LABELS" -> Color.rgb(75, 75, 75)
+	"RADAR_SHOW_LEGEND_TEXTCOLOR" -> Color.WHITE
         "NWS_ICON_TEXT_COLOR" -> Color.rgb(38, 97, 139)
         "NWS_ICON_BOTTOM_COLOR" -> Color.rgb(255, 255, 255)
         "WIDGET_TEXT_COLOR" -> Color.WHITE
