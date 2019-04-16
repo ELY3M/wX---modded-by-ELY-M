@@ -31,7 +31,7 @@ import joshuatee.wx.fragments.UtilityNWS
  * This is the service that provides the factory to be bound to the collection service.
  */
 class WeatherWidgetService : RemoteViewsService() {
-    override fun onGetViewFactory(intent: Intent): RemoteViewsService.RemoteViewsFactory =
+    override fun onGetViewFactory(intent: Intent): RemoteViewsFactory =
         StackRemoteViewsFactory(this.applicationContext)
 }
 

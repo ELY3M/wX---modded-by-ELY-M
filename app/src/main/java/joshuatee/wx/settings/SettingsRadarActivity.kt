@@ -597,7 +597,7 @@ class SettingsRadarActivity : BaseActivity() {
         ll.addView(ObjectSettingsSeekbar(this, this, "Location Bug size", "RADAR_LOCBUG_SIZE", R.string.locbug_size_np, 75, 1, 530).card)
         ll.addView(ObjectSettingsSeekbar(this, this, "Userpoints icon size", "RADAR_USERPOINT_SIZE", R.string.userpoints_size_np, 75, 1, 530).card)
         ll.addView(ObjectSettingsSeekbar(this, this, "Hail marker size", "RADAR_HI_SIZE", R.string.hi_size_np, 75, 1, 530).card)
-        ll.addView(ObjectSettingsSeekbar(this, this, "Hail Text size", "RADAR_HI_TEXT_SIZE", R.string.hi_textsize_np, (MyApplication.radarTextSize * 10).toInt(), 1, 20).card)
+        ll.addView(ObjectSettingsSeekbar(this, this, "Hail Text size", "RADAR_HI_TEXT_SIZE", R.string.hi_textsize_np, (MyApplication.radarHiTextSize * 10).toInt(), 1, 20).card)
         ll.addView(ObjectSettingsSeekbar(this, this, "TVS icon size", "RADAR_TVS_SIZE", R.string.tvs_size_np, 75, 1, 530).card)
 
         ll.addView(
@@ -707,7 +707,7 @@ class SettingsRadarActivity : BaseActivity() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (ContextCompat.checkSelfPermission(
                             this,
-                            android.Manifest.permission.ACCESS_FINE_LOCATION
+                            Manifest.permission.ACCESS_FINE_LOCATION
                     ) == PackageManager.PERMISSION_GRANTED
             ) {
             } else {

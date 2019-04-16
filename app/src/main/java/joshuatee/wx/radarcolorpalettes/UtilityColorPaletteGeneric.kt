@@ -281,70 +281,70 @@ object UtilityColorPaletteGeneric {
         // FIXME reorg this
         when (prod) {
             "94" -> when (MyApplication.radarColorPalette[prod]) {
-                "AF" -> UtilityColorPaletteGeneric.generate(context, prod, "AF")
-                "EAK" -> UtilityColorPaletteGeneric.generate(context, prod, "EAK")
-                "DKenh" -> UtilityColorPaletteGeneric.generate(context, prod, "DKenh")
-                "COD", "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
-                "MENH" -> UtilityColorPaletteGeneric.generate(context, prod, "MENH")
-                else -> UtilityColorPaletteGeneric.generate(
+                "AF" -> generate(context, prod, "AF")
+                "EAK" -> generate(context, prod, "EAK")
+                "DKenh" -> generate(context, prod, "DKenh")
+                "COD", "CODENH" -> generate(context, prod, "CODENH")
+                "MENH" -> generate(context, prod, "MENH")
+                else -> generate(
                     context,
                     prod,
                     MyApplication.radarColorPalette[prod]!!
                 )
             }
             "99" -> when (MyApplication.radarColorPalette[prod]) {
-                "COD", "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
-                "AF" -> UtilityColorPaletteGeneric.generate(context, prod, "AF")
-                "EAK" -> UtilityColorPaletteGeneric.generate(context, prod, "EAK")
-                else -> UtilityColorPaletteGeneric.generate(
+                "COD", "CODENH" -> generate(context, prod, "CODENH")
+                "AF" -> generate(context, prod, "AF")
+                "EAK" -> generate(context, prod, "EAK")
+                else -> generate(
                     context,
                     prod,
                     MyApplication.radarColorPalette[prod]!!
                 )
             }
             "134" -> when (MyApplication.radarColorPalette[prod]) {
-                "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
-                else -> UtilityColorPaletteGeneric.generate(
+                "CODENH" -> generate(context, prod, "CODENH")
+                else -> generate(
                     context,
                     prod,
                     MyApplication.radarColorPalette[prod]!!
                 )
             }
             "135" -> when (MyApplication.radarColorPalette[prod]) {
-                "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
-                else -> UtilityColorPaletteGeneric.generate(
+                "CODENH" -> generate(context, prod, "CODENH")
+                else -> generate(
                     context,
                     prod,
                     MyApplication.radarColorPalette[prod]!!
                 )
             }
             "159" -> when (MyApplication.radarColorPalette[prod]) {
-                "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
-                else -> UtilityColorPaletteGeneric.generate(
+                "CODENH" -> generate(context, prod, "CODENH")
+                else -> generate(
                     context,
                     prod,
                     MyApplication.radarColorPalette[prod]!!
                 )
             }
             "161" -> when (MyApplication.radarColorPalette[prod]) {
-                "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
-                else -> UtilityColorPaletteGeneric.generate(
+                "CODENH" -> generate(context, prod, "CODENH")
+                else -> generate(
                     context,
                     prod,
                     MyApplication.radarColorPalette[prod]!!
                 )
             }
             "163" -> when (MyApplication.radarColorPalette[prod]) {
-                "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
-                else -> UtilityColorPaletteGeneric.generate(
+                "CODENH" -> generate(context, prod, "CODENH")
+                else -> generate(
                     context,
                     prod,
                     MyApplication.radarColorPalette[prod]!!
                 )
             }
             "172" -> when (MyApplication.radarColorPalette[prod]) {
-                "CODENH" -> UtilityColorPaletteGeneric.generate(context, prod, "CODENH")
-                else -> UtilityColorPaletteGeneric.generate(
+                "CODENH" -> generate(context, prod, "CODENH")
+                else -> generate(
                     context,
                     prod,
                     MyApplication.radarColorPalette[prod]!!

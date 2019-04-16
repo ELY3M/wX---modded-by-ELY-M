@@ -59,7 +59,7 @@ object UtilityModels {
             if (om.truncateTime) {
                 om.time = UtilityStringExternal.truncate(om.time, om.timeTruncate)
             }
-            UtilityModels.writePrefs(context, om)
+            writePrefs(context, om)
             withContext(Dispatchers.IO) {
                 (0 until om.numPanes).forEach {
                     om.displayData.bitmap[it] = om.getImage(it, overlayImg)
@@ -91,7 +91,7 @@ object UtilityModels {
                 om.firstRun = true
             }
             // FIXME change to just take OM
-            UtilityModels.updateToolbarLabels(om.toolbar, om.miStatusParam1, om.miStatusParam2, om)
+            updateToolbarLabels(om.toolbar, om.miStatusParam1, om.miStatusParam2, om)
             om.imageLoaded = true
         }
 
@@ -122,7 +122,7 @@ object UtilityModels {
         om: ObjectModel
     ) {
         if (om.numPanes > 1) {
-            UtilityModels.setSubtitleRestoreIMGXYZOOM(
+            setSubtitleRestoreIMGXYZOOM(
                 om.displayData.img,
                 toolbar,
                 "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
@@ -277,8 +277,7 @@ object UtilityModels {
             }
             (0 until listTime.size).forEach {
                 tmpStr = MyApplication.space.split(listTime[it])[0].replace(prefix, "")
-                listTime[it] = prefix + tmpStr + " " +
-                        UtilityModels.convertTimeRuntoTimeString(run, tmpStr, showDate)
+                listTime[it] = prefix + tmpStr + " " + convertTimeRuntoTimeString(run, tmpStr, showDate)
             }
             dataAdapterTime.notifyDataSetChanged()
         }

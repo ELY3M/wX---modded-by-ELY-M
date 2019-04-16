@@ -216,7 +216,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             menu.findItem(R.id.action_tilt_blank).isVisible = false
             menu.findItem(R.id.action_tools_blank).isVisible = false
         }
-        if (android.os.Build.VERSION.SDK_INT < 21) menu.findItem(R.id.action_share).title = "Share"
+        if (Build.VERSION.SDK_INT < 21) menu.findItem(R.id.action_share).title = "Share"
         delay = UtilityImg.animInterval(this)
         numPanesArr.forEach {
             glviewArr.add(WXGLSurfaceView(this, widthDivider, numPanes))
@@ -630,7 +630,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 , this
             )
             R.id.action_share -> {
-                if (android.os.Build.VERSION.SDK_INT > 20) {
+                if (Build.VERSION.SDK_INT > 20) {
                     checkOverlayPerms()
                 } else {
                     if (animRan) {

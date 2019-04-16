@@ -39,7 +39,6 @@ import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.ui.ObjectRecyclerViewGeneric
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityLog
 
 class SettingsLocationRecyclerViewActivity : BaseActivity() {
 

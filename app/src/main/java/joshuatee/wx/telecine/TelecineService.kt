@@ -67,7 +67,7 @@ class TelecineService : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         if (running) {
-            return Service.START_NOT_STICKY
+            return START_NOT_STICKY
         }
         running = true
         val resultCode = intent.getIntExtra(EXTRA_RESULT_CODE, 0)
@@ -83,7 +83,7 @@ class TelecineService : Service() {
             showRecordingTools == "true"
         )
         recordingSession!!.showOverlay()
-        return Service.START_NOT_STICKY
+        return START_NOT_STICKY
     }
 
     override fun onDestroy() {

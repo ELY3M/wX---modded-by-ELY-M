@@ -46,14 +46,6 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
             tvArr.add(TextView(context))
             ll.addView(tvArr[it])
         }
-        // setPadding(int left, int top, int right, int bottom)
-        /*tvArr[0].setPadding(
-            MyApplication.padding,
-            MyApplication.padding,
-            MyApplication.padding,
-            MyApplication.padding
-        )*/
-        //tvArr[1].setPadding(MyApplication.padding, 0, MyApplication.padding, 0)  // wfo
         tvArr[0].setPadding(MyApplication.padding, 0, MyApplication.padding, 0)  // start
         tvArr[1].setPadding(
             MyApplication.padding,
@@ -136,9 +128,6 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
                     wfo = tmpArr[2]
                 }
             }
-            //tvArr[0].text = title
-            //tvArr[0].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeLarge)
-            //tvArr[1].text = wfo
             tvArr[0].text = context.resources.getString(R.string.uswarn_start_time, startTime)
             tvArr[1].text = context.resources.getString(R.string.uswarn_end_time, endTime)
             tvArr[2].text = ca.area

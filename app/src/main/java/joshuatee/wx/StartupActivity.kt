@@ -31,6 +31,7 @@ import joshuatee.wx.util.UtilityAlertDialog.showHelpText
 
 class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCallback {
 
+    //
     // This activity is the first activity started when the app starts.
     // It's job is to initialize preferences if not done previously,
     // display the splash screen, start the service that handles notifications,

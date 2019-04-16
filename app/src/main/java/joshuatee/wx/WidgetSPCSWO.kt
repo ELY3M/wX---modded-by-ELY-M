@@ -35,12 +35,12 @@ class WidgetSPCSWO : AppWidgetProvider() {
     private val type = SPCSWO
 
     override fun onDisabled(context: Context) {
-        UtilityWidget.disableWidget(context, WidgetFile.SPCSWO)
+        UtilityWidget.disableWidget(context, SPCSWO)
         super.onDisabled(context)
     }
 
     override fun onEnabled(context: Context) {
-        UtilityWidget.enableWidget(context, WidgetFile.SPCSWO)
+        UtilityWidget.enableWidget(context, SPCSWO)
         contextg = context
         getContent()
         super.onEnabled(context)

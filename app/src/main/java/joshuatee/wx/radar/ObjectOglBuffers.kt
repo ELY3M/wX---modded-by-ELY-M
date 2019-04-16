@@ -165,12 +165,12 @@ open class ObjectOglBuffers() {
 
     fun draw(pn: ProjectionNumbers) {
         when (type) {
-            PolygonType.HI -> ObjectOglBuffers.redrawTriangleUp(this, pn)
-            PolygonType.SPOTTER -> ObjectOglBuffers.redrawCircle(this, pn)
-            PolygonType.TVS -> ObjectOglBuffers.redrawTriangle(this, pn)
-            PolygonType.LOCDOT -> ObjectOglBuffers.redrawCircle(this, pn)
-            PolygonType.WIND_BARB_CIRCLE -> ObjectOglBuffers.redrawCircleWithColor(this, pn)
-            else -> ObjectOglBuffers.redrawTriangle(this, pn)
+            PolygonType.HI -> redrawTriangleUp(this, pn)
+            PolygonType.SPOTTER -> redrawCircle(this, pn)
+            PolygonType.TVS -> redrawTriangle(this, pn)
+            PolygonType.LOCDOT -> redrawCircle(this, pn)
+            PolygonType.WIND_BARB_CIRCLE -> redrawCircleWithColor(this, pn)
+            else -> redrawTriangle(this, pn)
         }
     }
 

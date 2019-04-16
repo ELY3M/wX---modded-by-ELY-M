@@ -67,27 +67,27 @@ object UtilityImg {
         val layers = mutableListOf<Drawable>()
         layers.add(BitmapDrawable(context.resources, imageA))
         layers.add(BitmapDrawable(context.resources, imageB))
-        return UtilityImg.layerDrawableToBitmap(layers)
+        return layerDrawableToBitmap(layers)
     }
 
     fun addColorBG(context: Context, imageA: Bitmap, color: Int): Bitmap {
         val layers = mutableListOf<Drawable>()
         layers.add(ColorDrawable(color))
         layers.add(BitmapDrawable(context.resources, imageA))
-        return UtilityImg.layerDrawableToBitmap(layers)
+        return layerDrawableToBitmap(layers)
     }
 
-    fun getBlankBitmap(): Bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
+    fun getBlankBitmap(): Bitmap = Bitmap.createBitmap(10, 10, Config.ARGB_8888)
 
     fun getBitmapRemoveBG(imgUrl: String, color: Int): Bitmap =
-        UtilityImg.eraseBG(imgUrl.getImage(), color)
+        eraseBG(imgUrl.getImage(), color)
 
     fun getBitmapAddWhiteBG(context: Context, imgUrl: String): Bitmap {
         val layers = mutableListOf<Drawable>()
         val bitmap = imgUrl.getImage()
         layers.add(ColorDrawable(Color.WHITE))
         layers.add(BitmapDrawable(context.resources, bitmap))
-        return UtilityImg.layerDrawableToBitmap(layers)
+        return layerDrawableToBitmap(layers)
     }
 
     fun firstRunSetZoomPosn(firstRunF: Boolean, img: TouchImageView2, pref: String): Boolean {
@@ -153,7 +153,7 @@ object UtilityImg {
         var options: BitmapFactory.Options? = null
         if (resize) {
             options = BitmapFactory.Options()
-            options.inPreferredConfig = Bitmap.Config.RGB_565
+            options.inPreferredConfig = Config.RGB_565
             options.inSampleSize = 2
         }
         bitmap = try {
@@ -161,7 +161,7 @@ object UtilityImg {
                 BitmapFactory.decodeStream(inputStream)
             else
                 BitmapFactory.decodeStream(inputStream, null, options)
-                    ?: UtilityImg.getBlankBitmap()
+                    ?: getBlankBitmap()
         } catch (e: OutOfMemoryError) {
             UtilityLog.HandleException(e)
             return getBlankBitmap()
@@ -189,13 +189,13 @@ object UtilityImg {
             try {
                 bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888)
             } catch (e: OutOfMemoryError) {
-                return UtilityImg.getBlankBitmap()
+                return getBlankBitmap()
             }
             val canvas = Canvas(bitmap)
             drawable.setBounds(0, 0, canvas.width, canvas.height)
             drawable.draw(canvas)
         } else {
-            bitmap = UtilityImg.getBlankBitmap()
+            bitmap = getBlankBitmap()
         }
         return bitmap
     }
@@ -210,7 +210,7 @@ object UtilityImg {
             drawable.setBounds(0, 0, canvas.width, canvas.height)
             drawable.draw(canvas)
         } else {
-            bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
+            bitmap = Bitmap.createBitmap(10, 10, Config.ARGB_8888)
             val canvas = Canvas(bitmap)
             drawable.setBounds(0, 0, canvas.width, canvas.height)
             drawable.draw(canvas)
@@ -233,7 +233,7 @@ object UtilityImg {
             b.setPixels(pixels, 0, width, 0, 0, width, height)
             b
         } catch (e: OutOfMemoryError) {
-            UtilityImg.getBlankBitmap()
+            getBlankBitmap()
         }
     }
 
@@ -279,7 +279,7 @@ object UtilityImg {
             return bitmap
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
-            return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
+            return Bitmap.createBitmap(10, 10, Config.ARGB_8888)
         }
     }
 
@@ -300,14 +300,14 @@ object UtilityImg {
             return bitmap
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
-            return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
+            return Bitmap.createBitmap(10, 10, Config.ARGB_8888)
         }
     }
 
     fun vectorDrawableToBitmap(context: Context, resdraw: Int, color: Int): Bitmap {
         val d = ContextCompat.getDrawable(context, resdraw)!!
         DrawableCompat.setTint(d, color)
-        val b = Bitmap.createBitmap(d.intrinsicWidth, d.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val b = Bitmap.createBitmap(d.intrinsicWidth, d.intrinsicHeight, Config.ARGB_8888)
         val c = Canvas(b)
         d.setBounds(0, 0, c.width, c.height)
         d.draw(c)

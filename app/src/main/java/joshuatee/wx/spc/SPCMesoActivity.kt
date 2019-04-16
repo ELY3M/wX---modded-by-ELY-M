@@ -392,7 +392,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
             R.id.action_multipane -> ObjectIntent(
                 this,
                 SPCMesoActivity::class.java,
-                SPCMesoActivity.INFO,
+                INFO,
                 arrayOf("", "2", prefModel)
             )
             R.id.action_fav -> toggleFavorite()

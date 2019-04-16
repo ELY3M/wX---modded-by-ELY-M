@@ -24,7 +24,6 @@ package joshuatee.wx.activitiesmisc
 import joshuatee.wx.util.UtilityDownloadNWS
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.util.UtilityLog
 
 class CAPAlert {
 
@@ -54,7 +53,6 @@ class CAPAlert {
         zones: String,
         vtec: String
     ) {
-        //UtilityLog.d("Wx", url + " " + event)
         this.url = url
         this.title = title
         this.event = event

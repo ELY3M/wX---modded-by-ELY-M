@@ -29,23 +29,6 @@ import joshuatee.wx.MyApplication
 object UtilityDownloadRadar {
 
     // FIXME make URLs global static
-
-//was getNWSStringFromURL
-/*
-
-        MyApplication.severeDashboardSvr.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Severe%20Thunderstorm%20Warning"))
-        MyApplication.severeDashboardEww.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Extreme%20Wind%20Warning"))
-        MyApplication.severeDashboardFfw.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Flash%20Flood%20Warning"))
-        MyApplication.severeDashboardSmw.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Special%20Marine%20Warning"))
-        MyApplication.severeDashboardSvs.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Severe%20Weather%20Statement"))
-        MyApplication.severeDashboardSps.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Special%20Weather%20Statement"))
-        //MyApplication.severeDashboardSps.valueSet(context, UtilityDownloadNWS.getNWSStringFromURLJSON("http://192.168.1.113/nws/SPS-12-31-18-5.09pm.txt"))
-
-
-*/
-
-
-    // FIXME make URLs global static
 // was getNWSStringFromURLJSON getNWSStringFromURL
 
     /*fun getPolygonVTEC(context: Context) {
@@ -67,16 +50,16 @@ object UtilityDownloadRadar {
         )
     }*/
 
-    val baseUrl = "https://api.weather.gov/alerts/active?event="
+    private const val baseUrl = "https://api.weather.gov/alerts/active?event="
 
-    val torUrl = baseUrl + "Tornado%20Warning"
-    val svrURl = baseUrl + "Severe%20Thunderstorm%20Warning"
-    val ffwUrl = baseUrl + "Flash%20Flood%20Warning"
-    val ewwUrl = baseUrl + "Extreme%20Wind%20Warning"
-    val smwUrl = baseUrl + "Special%20Marine%20Warning"
-    val svsUrl = baseUrl + "Severe%20Weather%20Statement"
-    val spsUrl = baseUrl + "Special%20Weather%20Statement"
-    //val spsUrl = "http://192.168.1.113/nws/SPS-12-31-18-5.09pm.txt" //for testing
+    private const val torUrl = baseUrl + "Tornado%20Warning"
+    private const val svrURl = baseUrl + "Severe%20Thunderstorm%20Warning"
+    private const val ffwUrl = baseUrl + "Flash%20Flood%20Warning"
+    private const val ewwUrl = baseUrl + "Extreme%20Wind%20Warning"
+    private const val smwUrl = baseUrl + "Special%20Marine%20Warning"
+    private const val svsUrl = baseUrl + "Severe%20Weather%20Statement"
+    private const val spsUrl = baseUrl + "Special%20Weather%20Statement"
+    //private const val spsUrl = "http://192.168.1.113/nws/SPS-12-31-18-5.09pm.txt" //for testing
     // Below is for testing
     //val ffwUrl = baseUrl + "Flood%20Warning"
 

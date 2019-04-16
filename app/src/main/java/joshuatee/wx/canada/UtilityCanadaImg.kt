@@ -80,13 +80,13 @@ object UtilityCanadaImg {
         rid: String,
         frameCntStr: String
     ): AnimationDrawable {
-        val urlStr = UtilityCanadaImg.getRadarAnimStringArray(rid, frameCntStr)
+        val urlStr = getRadarAnimStringArray(rid, frameCntStr)
         val urlAl = urlStr.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
         val baseUrl = "http://weather.gc.ca"
         val bmAl = mutableListOf<Bitmap>()
         urlAl.reverse()
         urlAl.asSequence().filter { it != "" }.mapTo(bmAl) {
-            UtilityCanadaImg.getRadarBitmapOptionsApplied(
+            getRadarBitmapOptionsApplied(
                 context,
                 rid,
                 baseUrl + it.replace("detailed/", "")

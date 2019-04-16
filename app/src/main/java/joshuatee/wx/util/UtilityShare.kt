@@ -62,9 +62,9 @@ object UtilityShare {
                 }
         }
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
-        val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
+        val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain"
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "$subject $formattedDate")
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "$subject $formattedDate")
         sharingIntent.putExtra(Intent.EXTRA_TEXT, "wX Settings attached")
         sharingIntent.putExtra(Intent.EXTRA_STREAM, imgUri)//attachment
         context.startActivity(Intent.createChooser(sharingIntent, "Share via"))
@@ -72,10 +72,10 @@ object UtilityShare {
 
     fun shareText(context: Context, subject: String, text: String) {
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
-        val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
+        val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain"
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "$subject $formattedDate")
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, text)
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "$subject $formattedDate")
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, text)
         context.startActivity(Intent.createChooser(sharingIntent, "Share via"))
     }
 
@@ -97,11 +97,11 @@ object UtilityShare {
             UtilityLog.HandleException(e)
         }
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
-        val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
+        val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain"
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "$subject $formattedDate")
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, text)
-        sharingIntent.putExtra(android.content.Intent.EXTRA_STREAM, imgUri)
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "$subject $formattedDate")
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, text)
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, imgUri)
         sharingIntent.type = "image/png"
         sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         context.startActivity(Intent.createChooser(sharingIntent, "Share via"))
@@ -130,11 +130,11 @@ object UtilityShare {
             }
         }
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
-        val sharingIntent = Intent(android.content.Intent.ACTION_SEND_MULTIPLE)
+        val sharingIntent = Intent(Intent.ACTION_SEND_MULTIPLE)
         sharingIntent.type = "text/plain"
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "$subject $formattedDate")
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, text)
-        sharingIntent.putParcelableArrayListExtra(android.content.Intent.EXTRA_STREAM, imgUriAl)
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "$subject $formattedDate")
+        sharingIntent.putExtra(Intent.EXTRA_TEXT, text)
+        sharingIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imgUriAl)
         sharingIntent.type = "image/png"
         sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         context.startActivity(Intent.createChooser(sharingIntent, "Share via"))
@@ -158,9 +158,9 @@ object UtilityShare {
             UtilityLog.HandleException(e)
         }
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
-        val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "$subject $formattedDate")
-        sharingIntent.putExtra(android.content.Intent.EXTRA_STREAM, imgUri)
+        val sharingIntent = Intent(Intent.ACTION_SEND)
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "$subject $formattedDate")
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, imgUri)
         sharingIntent.type = "image/png"
         sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         context.startActivity(Intent.createChooser(sharingIntent, "Share via"))

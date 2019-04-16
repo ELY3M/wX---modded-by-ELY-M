@@ -88,7 +88,7 @@ abstract class VideoRecordActivity : AppCompatActivity() {
 
     protected fun checkOverlayPerms() {
         if (isStoragePermissionGranted) {
-            if (android.os.Build.VERSION.SDK_INT > 22)
+            if (Build.VERSION.SDK_INT > 22)
                 checkDrawOverlayPermission()
             else
                 fireScreenCaptureIntent()
@@ -97,7 +97,7 @@ abstract class VideoRecordActivity : AppCompatActivity() {
 
     protected fun fireScreenCaptureIntent() {
         val manager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-        if (android.os.Build.VERSION.SDK_INT > 20) {
+        if (Build.VERSION.SDK_INT > 20) {
             val intent = manager.createScreenCaptureIntent()
             startActivityForResult(intent, CREATE_SCREEN_CAPTURE)
         }
@@ -143,7 +143,7 @@ abstract class VideoRecordActivity : AppCompatActivity() {
     val isStoragePermissionGranted: Boolean
         get() {
             return if (Build.VERSION.SDK_INT >= 23) {
-                if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+                if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     true
                 } else {
                     ActivityCompat.requestPermissions(

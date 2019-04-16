@@ -8,11 +8,17 @@
 // TODO BUG - storm reports show radar doesn't show location dot for report
 // TODO move off rid/wfo/sounding lat/lon/name currently in pref should be in objects (like flutter/iOS)
 // TODO storm reports - black bg for cards with titles like iOS/flutter
-// TODO revisit spacing for cards in settings
 // TODO rewrite uswarn
 // TODO add new color pal for ref
 // TODO linesize - swo, wb, wbgusts, sti
+// TODO improve settings labels
 
+55135 2019_04_15 seekbar - add background progress tint for white themes
+                 change elevation default to 5 from 3
+                 bottomsheet - add labels in playlist, homescreen, fav mgmt
+                 [ELY] integrate code for MPD/MCD/Watch on long press in Radar
+                 lint cleanup
+55134 2019_04_15 increase padding in settings to match Flutter port
 55133 2019_04_14 convert playlist, homescreen, and fav mgt to use bottomsheet
 55132 2019_04_14 convert settings -> location to use bottomsheet
 55131 2019_04_13 seekbar enhancements

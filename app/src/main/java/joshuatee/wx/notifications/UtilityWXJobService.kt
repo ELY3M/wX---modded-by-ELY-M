@@ -36,7 +36,7 @@ object UtilityWXJobService {
 
     fun startService(c: Context) {
         if (android.os.Build.VERSION.SDK_INT > 23) {
-            UtilityWXJobService.start(c)
+            start(c)
         } else {
             c.startService(Intent(c, AlertService::class.java))
         }

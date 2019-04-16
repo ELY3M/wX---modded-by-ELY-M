@@ -48,7 +48,7 @@ object UtilityUI {
         if (light) {
             tint = ColorStateList.valueOf(UIPreferences.colorOffwhiteToolbar)
         }
-        if (android.os.Build.VERSION.SDK_INT > 20) {
+        if (Build.VERSION.SDK_INT > 20) {
             spinner.backgroundTintList = tint
         }
     }

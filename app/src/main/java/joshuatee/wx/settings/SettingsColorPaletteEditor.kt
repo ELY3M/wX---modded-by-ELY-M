@@ -276,7 +276,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
      * Fires an intent to spin up the "file chooser" UI and select an image.
      */
     private fun performFileSearch() {
-        if (android.os.Build.VERSION.SDK_INT > 18) {
+        if (Build.VERSION.SDK_INT > 18) {
             // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file browser.
             val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
             // Filter to only show results that can be "opened", such as a

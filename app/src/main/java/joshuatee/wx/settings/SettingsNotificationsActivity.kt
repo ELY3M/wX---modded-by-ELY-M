@@ -382,7 +382,7 @@ class SettingsNotificationsActivity : BaseActivity() {
         if (Build.VERSION.SDK_INT >= 23) {
             if (ContextCompat.checkSelfPermission(
                             this,
-                            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
                     ) == PackageManager.PERMISSION_GRANTED
             ) {
             } else {

@@ -133,7 +133,7 @@ object UtilityNotification {
                             objPI.resultPendingIntent2,
                             context.resources.getString(R.string.read_aloud)
                         )
-                        val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
+                        val noti = createNotifBigTextWithAction(notifObj)
                         notifObj.sendNotification(context, cancelStr, 1, noti)
                         //notifier.notify(cancelStr, 1, noti)
                     }
@@ -352,7 +352,7 @@ object UtilityNotification {
                         objPI.resultPendingIntent2,
                         "7 Day Forecast"
                     )
-                    val noti2 = UtilityNotification.createNotifBigTextWithAction(notifObj)
+                    val noti2 = createNotifBigTextWithAction(notifObj)
                     notifObj.sendNotification(context, url + "7day", 1, noti2)
                 } // end 7 day
             } // end if current time
@@ -523,7 +523,7 @@ object UtilityNotification {
         } else {
             ""
         }
-        if (android.os.Build.VERSION.SDK_INT > 20) {
+        if (Build.VERSION.SDK_INT > 20) {
             val actionBack = NotificationCompat.Action.Builder(
                 MyApplication.ICON_SKIP_BACK,
                 "",

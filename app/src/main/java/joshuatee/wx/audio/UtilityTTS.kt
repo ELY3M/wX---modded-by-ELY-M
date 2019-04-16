@@ -288,7 +288,7 @@ object UtilityTTS {
     internal fun mediaPlayerRewind(context: Context) {
         if (mpInit) {
             if (mMediaPlayer!!.currentPosition < 10000) {
-                UtilityTTS.synthesizeTextAndPlayPrevoius(context)
+                synthesizeTextAndPlayPrevoius(context)
             } else {
                 playMediaPlayerFile(context, 0)
                 currentFile += 1
@@ -324,7 +324,7 @@ object UtilityTTS {
     ) {
         if (activityArguments.size > index) {
             if (activityArguments[index] == "sound") {
-                UtilityTTS.synthesizeTextAndPlay(context, html, label)
+                synthesizeTextAndPlay(context, html, label)
             }
         }
     }

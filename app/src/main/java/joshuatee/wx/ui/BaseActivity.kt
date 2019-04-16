@@ -60,7 +60,6 @@ abstract class BaseActivity : AppCompatActivity() {
         } else {
             toolbarBottom = Toolbar(this as Context)
         }
-        //UtilityToolbar.transparentToolbars(this, toolbar)
         UtilityToolbar.fullScreenMode(toolbar, false)
     }
 }

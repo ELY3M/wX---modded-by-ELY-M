@@ -544,7 +544,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
                 } else {
                     if (ContextCompat.checkSelfPermission(
                             this,
-                            android.Manifest.permission.ACCESS_FINE_LOCATION
+                            Manifest.permission.ACCESS_FINE_LOCATION
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
                         val xy = UtilityLocation.getGPS(this)

@@ -32,26 +32,19 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import joshuatee.wx.ui.ObjectTextView
-import joshuatee.wx.util.UtilityLog
 
-class BottomSheetFragment() : BottomSheetDialogFragment() {
+class BottomSheetFragment : BottomSheetDialogFragment() {
 
     lateinit  var linearLayout: LinearLayout
     lateinit  var label: TextView
     lateinit  var edit: TextView
     lateinit  var delete: TextView
-    lateinit  var moveUp: TextView
-    lateinit  var moveDown: TextView
     var position = -1
-  /*  lateinit var fn1: (pos: Int) -> Unit
-    lateinit var fn2: (pos: Int) -> Unit
-    lateinit var fn3: (pos: Int) -> Unit
-    lateinit var fn4: (pos: Int) -> Unit*/
     lateinit var actContext: Context
     lateinit var fnList: List<(Int) -> Unit>
     lateinit var labelList: List<String>
     lateinit var topLabel: String
-    var textViewList = mutableListOf<ObjectTextView>()
+    private var textViewList = mutableListOf<ObjectTextView>()
     var usedForLocation = false
 
     private var fragmentView: View? = null
@@ -62,12 +55,7 @@ class BottomSheetFragment() : BottomSheetDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fragmentView = inflater.inflate(R.layout.bottom_sheet_layout, container, false)
         label = fragmentView!!.findViewById(R.id.label)
-        /*edit = fragmentView!!.findViewById(R.id.edit)
-        delete = fragmentView!!.findViewById(R.id.delete)
-        moveUp = fragmentView!!.findViewById(R.id.moveUp)
-        moveDown = fragmentView!!.findViewById(R.id.moveDown)*/
         linearLayout = fragmentView!!.findViewById(R.id.linearLayout)
-
         labelList.forEachIndexed { index, it ->
             val item = ObjectTextView(actContext, it)
             textViewList.add(item)
@@ -76,7 +64,6 @@ class BottomSheetFragment() : BottomSheetDialogFragment() {
             item.tv.setOnClickListener { fnList[index](position); dismiss() }
             linearLayout.addView(item.tv)
         }
-
         return fragmentView
     }
 
@@ -90,11 +77,7 @@ class BottomSheetFragment() : BottomSheetDialogFragment() {
         initView()
     }
 
-    fun initView() {
+    private fun initView() {
         label.text = topLabel
-        //edit.setOnClickListener{ fn1(position); dismiss()}
-        //delete.setOnClickListener{ fn2(position); dismiss()}
-        //moveUp.setOnClickListener{ fn3(position); dismiss()}
-        //moveDown.setOnClickListener{ fn4(position); dismiss()}
     }
 }

@@ -225,7 +225,7 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnMenuItemClickListener,
             R.id.action_multipane -> ObjectIntent(
                 this,
                 ModelsSPCHRRRActivity::class.java,
-                ModelsSPCHRRRActivity.INFO,
+                INFO,
                 arrayOf("2", turl[1], turl[2])
             )
             R.id.action_back -> UtilityModels.moveBack(om.spTime)

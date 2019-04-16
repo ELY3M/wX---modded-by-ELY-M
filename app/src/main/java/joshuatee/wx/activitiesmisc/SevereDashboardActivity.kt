@@ -32,7 +32,6 @@ import android.view.View
 import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
 
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
@@ -96,24 +95,15 @@ class SevereDashboardActivity : BaseActivity() {
             val wSmw = SevereWarning(PolygonType.SMW)
             val wSvs = SevereWarning(PolygonType.SVS)
             val wSps = SpecialWeather(PolygonType.SPS)
-	    /*
-            wTor.generateString(contextg, MyApplication.severeDashboardTor.valueGet())
-            wSvr.generateString(contextg, MyApplication.severeDashboardSvr.valueGet())
-            wEww.generateString(contextg, MyApplication.severeDashboardEww.valueGet())
-            wFfw.generateString(contextg, MyApplication.severeDashboardFfw.valueGet())
-            wSmw.generateString(contextg, MyApplication.severeDashboardSmw.valueGet())
-            wSvs.generateString(contextg, MyApplication.severeDashboardSvs.valueGet())
-            wSps.generateSpsString(contextg, MyApplication.severeDashboardSps.valueGet())
-	    */
 	    
 	    withContext(Dispatchers.IO) {
             wTor.generateString(contextg, UtilityDownloadRadar.getVtecTor())
             wSvr.generateString(contextg, UtilityDownloadRadar.getVtecSvr())
             wFfw.generateString(contextg, UtilityDownloadRadar.getVtecFfw())
-	        wEww.generateString(contextg, UtilityDownloadRadar.getVtecEww())
-	        wSmw.generateString(contextg, UtilityDownloadRadar.getVtecSmw())
-	        wSvs.generateString(contextg, UtilityDownloadRadar.getVtecSvs())
-	        //wSps.generateSpsString(contextg, MyApplication.severeDashboardSps.valueGet())
+	    wEww.generateString(contextg, UtilityDownloadRadar.getVtecEww())
+	    wSmw.generateString(contextg, UtilityDownloadRadar.getVtecSmw())
+	    wSvs.generateString(contextg, UtilityDownloadRadar.getVtecSvs())
+	    //wSps.generateSpsString(contextg, MyApplication.severeDashboardSps.valueGet())
             wSps.generateSpsString(contextg, UtilityDownloadRadar.getSps())
             }
             if (wTor.count > 0) {
@@ -147,22 +137,14 @@ class SevereDashboardActivity : BaseActivity() {
 
         
 	withContext(Dispatchers.IO) {
-	    /*
-            snMcd.getBitmaps(MyApplication.severeDashboardMcd.valueGet())
-            //snWatch.getBitmaps(MyApplication.severeDashboardWat.valueGet())
-            snWatchTor.getBitmaps(MyApplication.severeDashboardWat.valueGet())
-            snWatchSvr.getBitmaps(MyApplication.severeDashboardWat.valueGet())
-            snMpd.getBitmaps(MyApplication.severeDashboardMpd.valueGet())
-	    */
-	        snMcd.getBitmaps(UtilityDownloadRadar.getMcd())
-            //snWat.getBitmaps(UtilityDownloadRadar.getWatch())
-	        snWatchTor.getBitmaps(UtilityDownloadRadar.getWatch())
+	    snMcd.getBitmaps(UtilityDownloadRadar.getMcd())
+	    snWatchTor.getBitmaps(UtilityDownloadRadar.getWatch())
             snWatchSvr.getBitmaps(UtilityDownloadRadar.getWatch())
             snMpd.getBitmaps(UtilityDownloadRadar.getMpd())
             bitmapArrRep.add((UtilitySPC.getStormReportsTodayUrl()).getImage())
         }
         if (bitmapArrRep.size > 0) {
-            bitmapArrRep.indices.forEach { it ->
+            bitmapArrRep.indices.forEach {
                 val card = ObjectCardImage(contextg, linearLayout, bitmapArrRep[it])
                 card.setOnClickListener(View.OnClickListener {
                     ObjectIntent(

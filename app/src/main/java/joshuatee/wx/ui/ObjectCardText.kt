@@ -34,8 +34,6 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.audio.UtilityTTSTranslations
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityLog
 
 class ObjectCardText(private val context: Context) {
 
@@ -278,7 +276,6 @@ class ObjectCardText(private val context: Context) {
 
     companion object {
         fun textViewSetup(tvTmp: TextView) {
-            UtilityLog.d("Wx 1", MyApplication.padding.toString())
             tvTmp.setPadding(
                     MyApplication.padding,
                     MyApplication.padding,
@@ -291,7 +288,6 @@ class ObjectCardText(private val context: Context) {
         }
 
         fun textViewSetup(objCardText: ObjectCardText) {
-            UtilityLog.d("Wx 2", objCardText.padding.toString())
             objCardText.tv.setPadding(
                     objCardText.padding,
                     objCardText.padding,

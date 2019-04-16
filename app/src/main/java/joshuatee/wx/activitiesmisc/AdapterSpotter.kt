@@ -59,7 +59,7 @@ internal class AdapterSpotter(private val mDataset: MutableList<Spotter>) :
     }
 
     fun setListener(fn: (Int) -> Unit) {
-        myClickListener = object : AdapterSpotter.MyClickListener {
+        myClickListener = object : MyClickListener {
             override fun onItemClick(position: Int) {
                 fn(position)
             }

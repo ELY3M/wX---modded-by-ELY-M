@@ -33,6 +33,7 @@ import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.settings.Location
 
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.GlobalArrays
 import joshuatee.wx.radar.LatLon
 import joshuatee.wx.util.UtilityAlertDialog.showDialogueWithContext
 import joshuatee.wx.radar.UtilityRadar
@@ -94,16 +95,14 @@ object Utility {
         return site
     }
 
-    /*static func generateSoundingNameList() -> [String] {
-        var list = <String>[]
-        GlobalArrays.soundingSites.sort()
-        GlobalArrays.soundingSites.forEach((data) {
-            list.add(data + ": " + getSoundingSiteName(data))
-        });
+    fun generateSoundingNameList(): List<String> {
+        val list = mutableListOf<String>()
+        GlobalArrays.soundingSites.sorted()
+        GlobalArrays.soundingSites.forEach {
+            list.add(it + ": " + getSoundingSiteName(it))
+        }
         return list
-    }*/
-
-
+    }
 
     fun getVersion(context: Context): String {
         var vers = ""

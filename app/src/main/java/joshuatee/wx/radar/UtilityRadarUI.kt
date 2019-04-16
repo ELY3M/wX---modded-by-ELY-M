@@ -644,14 +644,6 @@ internal object UtilityRadarUI {
             oglr.constructTVS()
         else
             oglr.deconstructTVS()
-
-        /*
-        if (PolygonType.USERPOINTS.pref && !archiveMode)
-            oglr.constructUserPoints()
-        else
-            oglr.deconstructUserPoints()
-        */
-
         if (MyApplication.locdotFollowsGps && !archiveMode) {
             fnGps()
         }

@@ -61,7 +61,7 @@ class VoiceCommandActivity : Activity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == requestOk && resultCode == Activity.RESULT_OK) {
+        if (requestCode == requestOk && resultCode == RESULT_OK) {
             val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             UtilityUI.makeSnackBar(mainView, thingsYouSaid[0])
             val addrStrTmp = thingsYouSaid[0]

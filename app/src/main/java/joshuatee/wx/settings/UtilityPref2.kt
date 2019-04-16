@@ -175,7 +175,7 @@ object UtilityPref2 {
             editor.putString("OU_FOR_SOUNDINGS", ouForSoundingsDefault)
             editor.putString("OU_FOR_SOUNDINGS", ouForSoundingsDefault)
             editor.putString("CARDS_MAIN_SCREEN", "true")
-            editor.putInt("ELEVATION_PREF", 0) //was 3 // was 10 on 2018-10-27
+            editor.putInt("ELEVATION_PREF", 0) //was 5
             editor.apply()
         }
     }

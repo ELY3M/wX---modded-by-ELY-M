@@ -114,14 +114,12 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
         super.onCreateContextMenu(menu, v, menuInfo)
         val zone = objAlertSummary.mapButtonZone[v.id]
         menu.add(0, v.id, 0, "Open radar interface")
-        //menu.add(0, v.id, 0, "Open radar mosaic")
         menu.add(0, v.id, 0, "Add new location for this warning ($zone)")
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         when {
             item.title == "Open radar interface" -> radarInterface(item.itemId)
-            //item.title == "Open radar mosaic" -> radarMosaic(item.itemId)
             (item.title as String).contains("Add new location for this warning") -> locationAdd(item.itemId)
             else -> return false
         }
@@ -137,16 +135,6 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
             arrayOf(rid, objAlertSummary.mapButtonState[id]!!, "N0Q", "")
         )
     }
-
-    // FIXME convert to US NWS Radar mosaics
-   /* private fun radarMosaic(id: Int) {
-        ObjectIntent(
-            this,
-            USNWSGOESActivity::class.java,
-            USNWSGOESActivity.RID,
-            arrayOf("nws", objAlertSummary.mapButtonNws[id]!!.toLowerCase(Locale.US), "nws_warn")
-        )
-    }*/
 
     private fun locationAdd(id: Int) {
         saveLocFromZone(id)

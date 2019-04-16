@@ -241,7 +241,7 @@ internal class RecordingSession(
         } catch (e: IOException) {
             throw RuntimeException("Unable to prepare MediaRecorder.", e)
         }
-        if (android.os.Build.VERSION.SDK_INT > 20) {
+        if (Build.VERSION.SDK_INT > 20) {
             projection = projectionManager!!.getMediaProjection(resultCode, data)
             val surface = recorder!!.surface
             display = projection!!.createVirtualDisplay(
@@ -265,7 +265,7 @@ internal class RecordingSession(
         showOverlay()
         var propagate = false
         try {
-            if (android.os.Build.VERSION.SDK_INT > 20) {
+            if (Build.VERSION.SDK_INT > 20) {
                 // Stop the projection in order to flush everything to the recorder.
                 projection!!.stop()
                 // Stop the recorder which writes the contents to the file.
@@ -289,7 +289,7 @@ internal class RecordingSession(
                 }
             }
         }
-        if (android.os.Build.VERSION.SDK_INT > 20) {
+        if (Build.VERSION.SDK_INT > 20) {
             if (recorder != null) recorder!!.release()
             display!!.release()
         }
@@ -469,7 +469,7 @@ internal class RecordingSession(
         val share = context.getText(R.string.notification_captured_share)
         val delete = context.getText(R.string.notification_captured_delete)
         var builder: NotificationCompat.Builder? = null
-        if (android.os.Build.VERSION.SDK_INT > 20) {
+        if (Build.VERSION.SDK_INT > 20) {
             val actionShare = NotificationCompat.Action.Builder(
                 R.drawable.ic_share_24dp,
                 share,

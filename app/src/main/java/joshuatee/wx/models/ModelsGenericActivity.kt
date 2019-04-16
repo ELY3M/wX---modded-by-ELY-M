@@ -203,7 +203,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             R.id.action_multipane -> ObjectIntent(
                 this,
                 ModelsGenericActivity::class.java,
-                ModelsGenericActivity.INFO,
+                INFO,
                 arrayOf("2", activityArguments[1], activityArguments[2])
             )
             R.id.action_share -> {

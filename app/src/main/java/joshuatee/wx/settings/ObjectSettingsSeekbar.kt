@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
 
 package joshuatee.wx.settings
 
@@ -27,7 +28,6 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.NumberPicker
 import android.widget.SeekBar
 import android.widget.TextView
 
@@ -38,7 +38,6 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 import joshuatee.wx.util.UtilityLog
-import kotlin.math.roundToInt
 
 internal class ObjectSettingsSeekbar(
         context: Context,
@@ -46,29 +45,28 @@ internal class ObjectSettingsSeekbar(
         val label: String,
         pref: String,
         strId: Int,
-        val defValue: Int,
-        val lowValue: Int,
-        val highValue: Int
+        private val defValue: Int,
+        private val lowValue: Int,
+        highValue: Int
 ) {
 
     private val objCard = ObjectCard(context)
-    private val initValue: Int
-    private val tv: TextView
+    private val initValue: Int = when (pref) {
+        "RADAR_TEXT_SIZE" -> (Utility.readPref(context, pref, defValue.toFloat()) * 10).toInt()
+        "RADAR_HI_TEXT_SIZE" -> (Utility.readPref(context, pref, defValue.toFloat()) * 10).toInt()
+        "UI_ANIM_ICON_FRAMES" -> (Utility.readPref(
+                context,
+                pref,
+                MyApplication.uiAnimIconFrames
+        )).toIntOrNull()
+                ?: 0
+        "CARD_CORNER_RADIUS" -> (Utility.readPref(context, pref, 0))
+        else -> Utility.readPref(context, pref, defValue)
+    }
+    private val tv: TextView = TextView(context)
     private val seekBar: SeekBar
 
     init {
-        initValue = when (pref) {
-            "RADAR_TEXT_SIZE" -> (Utility.readPref(context, pref, defValue.toFloat()) * 10).toInt()
-            "UI_ANIM_ICON_FRAMES" -> (Utility.readPref(
-                    context,
-                    pref,
-                    MyApplication.uiAnimIconFrames
-            )).toIntOrNull()
-                    ?: 0
-            "CARD_CORNER_RADIUS" -> (Utility.readPref(context, pref, 0))
-            else -> Utility.readPref(context, pref, defValue)
-        }
-        tv = TextView(context)
         ObjectCardText.textViewSetup(tv)
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
         tv.setTextColor(UIPreferences.backgroundColor)
@@ -120,6 +118,7 @@ internal class ObjectSettingsSeekbar(
                 val newVal = convertForSave(seekBar.progress)
                 when (pref) {
                     "RADAR_TEXT_SIZE" -> Utility.writePref(context, pref, newVal / 10.0f)
+                    "RADAR_HI_TEXT_SIZE" -> Utility.writePref(context, pref, newVal / 10.0f)
                     "UI_ANIM_ICON_FRAMES" -> Utility.writePref(context, pref, newVal.toString())
                     else -> Utility.writePref(context, pref, newVal)
                 }
@@ -129,17 +128,11 @@ internal class ObjectSettingsSeekbar(
     }
 
     private fun convert(value: Int): Int {
-        //val range = highValue - lowValue
-        //val modifiedValue = ( (value.toDouble() / range.toDouble()) * 100.0).roundToInt()
-        val modifiedValue = value - lowValue
-        return modifiedValue
+        return value - lowValue
     }
 
     private fun convertForSave(value: Int): Int {
-        //val range = highValue - lowValue
-        //val modifiedValue = ((value.toDouble() / 100.0) * range.toFloat()).roundToInt()
-        val modifiedValue = value + lowValue
-        return modifiedValue
+        return value + lowValue
     }
 
     fun updateLabel() {

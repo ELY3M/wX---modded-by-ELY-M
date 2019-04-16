@@ -495,7 +495,7 @@ class MyApplication : Application() {
             goesVisX = getInitialPreference("GOESVIS_X", 0.5f)
             goesVisY = getInitialPreference("GOESVIS_Y", 0.5f)
             goesVisSector = getInitialPreferenceString("GOESVIS_SECTOR", "")
-            elevationPref = getInitialPreference("ELEVATION_PREF", 0).toFloat()
+            elevationPref = getInitialPreference("ELEVATION_PREF", 0).toFloat() //5 id not for me! ELY M. 
             elevationPref =
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, elevationPref, dm)
             cardElevation = elevationPref
@@ -532,7 +532,6 @@ class MyApplication : Application() {
         private const val mxResid = R.raw.mx
         private const val caCnt = 161792
         private const val mxCnt = 151552
-
         var stateRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
         var countState: Int = 200000 // v3 205748
         var hwRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
@@ -718,12 +717,12 @@ class MyApplication : Application() {
             }
         }
 
+        //
         // Radar Preferences
-        // FIXME will need to be HTTPS soon
-        const val NWS_RADAR_PUB: String = "http://tgftp.nws.noaa.gov/" //(Official current URL, problem with cricket but so does cp.ncep now )
-        //public static final String NWS_RADAR_PUB = "http://tgftp.cp.ncep.noaa.gov/";
-        const val nwsRadarLevel2Pub: String = "http://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
-        //conus radar for zoom out
+        //
+        const val NWS_RADAR_PUB: String = "https://tgftp.nws.noaa.gov/"
+        const val nwsRadarLevel2Pub: String = "https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
+	//conus radar for zoom out
         const val NWS_CONUS_RADAR: String = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
         const val NWS_CONUS_RADAR_GFW: String = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
         var radarConusRadar: Boolean = false
@@ -845,7 +844,6 @@ class MyApplication : Application() {
             radarWarnLinesize = getInitialPreference("RADAR_WARN_LINESIZE", 4)
             radarWatmcdLinesize = getInitialPreference("RADAR_WATMCD_LINESIZE", 2)
 
-            // FIXME new datastructure
             radarStateLinesize = getInitialPreference("RADAR_STATE_LINESIZE", 2)
             radarCountyLinesize = getInitialPreference("RADAR_COUNTY_LINESIZE", 2)
             radarHwLinesize = getInitialPreference("RADAR_HW_LINESIZE", 2)
