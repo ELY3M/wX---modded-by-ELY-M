@@ -36,6 +36,7 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 
 import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.UtilityLog
 
 class ObjectWidgetCC(context: Context) {
 
@@ -57,7 +58,8 @@ class ObjectWidgetCC(context: Context) {
         val tempArr: List<String>
         val ccArr: List<String>
         var ccTimeFormatted = ""
-        if (tmpArrCc.size > 4 && Location.isUS(widgetLocNumInt)) {
+        if (tmpArrCc.size > 4 && tmpArrCc[0] != "" && Location.isUS(widgetLocNumInt)) {
+            UtilityLog.d("wx", "WIDGETCC:" + tmpArrCc[0] + ":")
             tempArr = tmpArrCc[0].split("/").dropLastWhile { it.isEmpty() }
             remoteViews.setTextViewText(R.id.wind, tmpArrCc[2])
             ccArr = updtime.split(" ")

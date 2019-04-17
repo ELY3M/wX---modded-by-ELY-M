@@ -32,7 +32,7 @@ class AudioServiceForward : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         UtilityTTS.synthesizeTextAndPlayNext(this)
-        return Service.START_NOT_STICKY
+        return START_NOT_STICKY
     }
 } 
 

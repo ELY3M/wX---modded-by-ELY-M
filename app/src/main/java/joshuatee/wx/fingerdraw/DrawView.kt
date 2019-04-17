@@ -100,7 +100,7 @@ class DrawView : View {
     }
 
     /** DrawListener will take touches and add segments  */
-    private inner class DrawListener : View.OnTouchListener {
+    private inner class DrawListener : OnTouchListener {
         override fun onTouch(view: View, event: MotionEvent): Boolean {
             if (event.action == MotionEvent.ACTION_DOWN) {
                 //action down is fired when your finger hits the screen

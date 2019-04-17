@@ -328,6 +328,18 @@ class SettingsUIActivity : BaseActivity() {
                         1000
                 ).card
         )
+        ll.addView(
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Text size",
+                        "TEXTVIEW_FONT_SIZE",
+                        R.string.textview_fontsize_np_label,
+                        16,
+                        12,
+                        25
+                ).card
+        )
     }
 
     override fun onStop() {

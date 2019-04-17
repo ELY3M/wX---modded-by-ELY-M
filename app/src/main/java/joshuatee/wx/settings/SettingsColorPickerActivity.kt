@@ -34,6 +34,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.graphics.Color
 import android.widget.Button
+import androidx.core.content.ContextCompat
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.util.Utility
 
@@ -76,6 +77,7 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
         val currentColor = Utility.readPref(this, prefVal, color)
         picker = findViewById(R.id.picker)
         buttonDefault.setTextColor(color)
+        //buttonDefault.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
         picker.oldCenterColor = currentColor
         picker.color = currentColor
         picker.addValueBar(vBar)

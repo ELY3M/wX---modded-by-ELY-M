@@ -22,6 +22,7 @@
 package joshuatee.wx.ui
 
 import android.content.Context
+import android.util.TypedValue
 import android.widget.RemoteViews
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
@@ -37,6 +38,7 @@ class ObjectWidgetTextWPC(context: Context) {
     init {
         val text = Utility.readPref(context, "TEXTWPC_WIDGET", "")
         remoteViews.setTextViewText(R.id.text1, Utility.fromHtml(text))
+        remoteViews.setTextViewTextSize(R.id.text1, TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
         if (!MyApplication.widgetPreventTap) {
             UtilityWidget.setupIntent(
                 context,

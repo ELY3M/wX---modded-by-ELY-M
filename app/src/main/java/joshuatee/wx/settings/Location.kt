@@ -96,7 +96,7 @@ class Location(val context: Context, locNumInt: Int) {
         dst = Utility.readPref(context, "LOC" + jStr + "_TIMEDST", "")
         state = Utility.readPref(context, "NWS_LOCATION_$wfo", "").split(",")[0]
         isUS = us(x)
-        Location.addToListOfNames(name)
+        addToListOfNames(name)
     }
 
     fun saveLocationToNewSlot(newLocNumInt: Int) {
@@ -124,7 +124,7 @@ class Location(val context: Context, locNumInt: Int) {
         Utility.writePref(context, "NWS$iStr", wfo)
         Utility.writePref(context, "RID$iStr", rid)
         Utility.writePref(context, "NWS" + iStr + "_STATE", nwsStateCurrent)
-        Location.refreshLocationData(context)
+        refreshLocationData(context)
     }
 
     val notification: Boolean get() = alertNotificationCurrent.startsWith("t")
@@ -186,7 +186,7 @@ class Location(val context: Context, locNumInt: Int) {
         var currentLocationStr: String
             get() = (currentLocation + 1).toString()
             set(currentLocationStr) {
-                Location.currentLocation = (currentLocationStr.toIntOrNull() ?: 0) - 1
+                currentLocation = (currentLocationStr.toIntOrNull() ?: 0) - 1
             }
 
         val state: String get() = MyApplication.locations.getOrNull(currentLocation)?.state ?: "MI"
@@ -199,7 +199,7 @@ class Location(val context: Context, locNumInt: Int) {
 
         val y: String get() = MyApplication.locations.getOrNull(currentLocation)?.y ?: "-0.0"
 
-        val latLon: LatLon get() = joshuatee.wx.radar.LatLon(x, y)
+        val latLon: LatLon get() = LatLon(x, y)
 
         val name: String get() = MyApplication.locations.getOrNull(currentLocation)?.name ?: ""
 
@@ -213,9 +213,9 @@ class Location(val context: Context, locNumInt: Int) {
 
         fun getWfo(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.wfo ?: "DTX"
 
-        fun getLatLon(locNum: Int): LatLon = joshuatee.wx.radar.LatLon(getX(locNum), getY(locNum))
+        fun getLatLon(locNum: Int): LatLon = LatLon(getX(locNum), getY(locNum))
 
-        val locationIndex: Int get() = Location.currentLocation
+        val locationIndex: Int get() = currentLocation
 
         fun isUS(locationNumber: Int): Boolean =
             MyApplication.locations.getOrNull(locationNumber)?.isUS
@@ -230,12 +230,12 @@ class Location(val context: Context, locNumInt: Int) {
             Utility.readPref(context, "RID$locNum", "")
 
         fun refreshLocationData(context: Context) {
-            Location.initNumLocations(context)
+            initNumLocations(context)
             MyApplication.locations.clear()
-            Location.clearListOfNames()
-            (0 until Location.numLocations).mapTo(MyApplication.locations) { Location(context, it) }
-            Location.addToListOfNames(ADD_LOC_STR)
-            Location.checkCurrentLocationValidity()
+            clearListOfNames()
+            (0 until numLocations).mapTo(MyApplication.locations) { Location(context, it) }
+            addToListOfNames(ADD_LOC_STR)
+            checkCurrentLocationValidity()
         }
 
         fun locationSave(
@@ -250,7 +250,7 @@ class Location(val context: Context, locNumInt: Int) {
             }
             val locNumToSave: Int
             val locNumInt = locNum.toIntOrNull() ?: 0
-            val locNumIntCurrent = Location.numLocations
+            val locNumIntCurrent = numLocations
             locNumToSave = if (locNumInt == locNumIntCurrent + 1) {
                 locNumInt
             } else {
@@ -261,7 +261,7 @@ class Location(val context: Context, locNumInt: Int) {
             Utility.writePref(context, "LOC" + locNum + "_LABEL", labelStr)
             var nwsOfficeShortLower = ""
             var rid = ""
-            if (Location.us(xStr)) {
+            if (us(xStr)) {
                 setNumLocations(context, locNumToSave)
                 try {
                     nwsOfficeShortLower =
@@ -311,7 +311,7 @@ class Location(val context: Context, locNumInt: Int) {
                     "CANADA" + ":" + prov + ":" + tmpLatlon.latStr
                 )
                 Utility.writePref(context, "LOC" + locNum + "_Y", id + ":" + tmpLatlon.lonStr)
-                joshuatee.wx.settings.Location.setNumLocations(context, locNumToSave)
+                setNumLocations(context, locNumToSave)
                 rid = UtilityCanada.getRid(xStr, yStr)
                 Utility.writePref(context, "RID$locNum", rid.toUpperCase(Locale.US))
                 Utility.writePref(context, "NWS" + locNum + "_STATE", prov)
@@ -328,10 +328,10 @@ class Location(val context: Context, locNumInt: Int) {
 
         fun deleteLocation(context: Context, locToDeleteStr: String) {
             val locToDeleteInt = locToDeleteStr.toIntOrNull() ?: 0
-            val locNumIntCurrent = Location.numLocations
+            val locNumIntCurrent = numLocations
             val locNumIntCurrentStr = locNumIntCurrent.toString()
             if (locToDeleteInt == locNumIntCurrent) {
-                Location.setNumLocations(context, locNumIntCurrent - 1)
+                setNumLocations(context, locNumIntCurrent - 1)
             } else {
                 var i = locToDeleteInt
                 while (i < locNumIntCurrent) {
@@ -417,7 +417,7 @@ class Location(val context: Context, locNumInt: Int) {
                     Utility.writePref(context, "NWS$iStr", nwsCurrent)
                     Utility.writePref(context, "RID$iStr", ridCurrent)
                     Utility.writePref(context, "NWS" + iStr + "_STATE", nwsStateCurrent)
-                    Location.setNumLocations(context, locNumIntCurrent - 1)
+                    setNumLocations(context, locNumIntCurrent - 1)
                     i += 1
                 }
             }
@@ -435,14 +435,14 @@ class Location(val context: Context, locNumInt: Int) {
             Utility.writePref(context, "ALERT_NOTIFICATION_SWO$locNumIntCurrentStr", "false")
             Utility.writePref(context, "ALERT_NOTIFICATION_SPCFW$locNumIntCurrentStr", "false")
             Utility.writePref(context, "ALERT_NOTIFICATION_WPCMPD$locNumIntCurrentStr", "false")
-            val locFragCurrentInt = Location.currentLocation
+            val locFragCurrentInt = currentLocation
             if (locToDeleteInt == (locFragCurrentInt + 1)) {
                 Utility.writePref(context, "CURRENT_LOC_FRAGMENT", "1")
-                Location.currentLocationStr = "1"
+                currentLocationStr = "1"
             } else if (locFragCurrentInt > locToDeleteInt) {
                 val shiftNum = (locFragCurrentInt - 1).toString()
                 Utility.writePref(context, "CURRENT_LOC_FRAGMENT", shiftNum)
-                Location.currentLocationStr = shiftNum
+                currentLocationStr = shiftNum
             }
             val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
             val widgetLocNumInt = widgetLocNum.toIntOrNull() ?: 0

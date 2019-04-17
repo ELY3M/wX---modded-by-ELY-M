@@ -128,8 +128,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val action = event.actionMasked
-        when (action) {
+        when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 if (!locfrag) {
                     (0 until numPanes).forEach {

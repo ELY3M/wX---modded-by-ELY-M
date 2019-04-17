@@ -25,8 +25,10 @@ package joshuatee.wx
 import android.content.Context
 import android.graphics.Color
 import androidx.core.content.ContextCompat
+import joshuatee.wx.ui.UtilityUI
 
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
 
 object UIPreferences {
 
@@ -51,6 +53,7 @@ object UIPreferences {
     var themeInt: Int = 0
     var smallTextTheme: Int = 0
     var textHighlightColor: Int = 0
+    var textSmallThemeColor: Int = 0
     var highlightColorStr: String = ""
     var themeIsWhite: Boolean = true
     var hideTopToolbar: Boolean = false
@@ -59,6 +62,14 @@ object UIPreferences {
     var useAwcRadarMosaic: Boolean = false
 
     fun initPreferences(context: Context) {
+
+        val normalTextSize = Utility.readPref(context, "TEXTVIEW_FONT_SIZE", 16) // 14 16 21
+        MyApplication.textSizeSmall = UtilityUI.spToPx(normalTextSize - 2, context)
+        MyApplication.textSizeNormal = UtilityUI.spToPx(normalTextSize, context)
+        MyApplication.textSizeLarge = UtilityUI.spToPx(normalTextSize + 5, context)
+
+        UtilityLog.d("wx", "FONT: " + MyApplication.textSizeNormal)
+
         useAwcRadarMosaic =
             Utility.readPref(context, "USE_AWC_RADAR_MOSAIC", "false").startsWith("t")
         locfragDontShowIcons =
@@ -92,12 +103,14 @@ object UIPreferences {
         themeInt = Utility.theme(themeStr)
         if (themeInt == R.style.MyCustomTheme_white_NOAB || themeInt == R.style.MyCustomTheme_whiter_NOAB) {
             smallTextTheme = android.R.style.TextAppearance_Small_Inverse
+            textSmallThemeColor = Color.GRAY
             textHighlightColor = Color.BLUE
             backgroundColor = Color.BLACK
             highlightColorStr = "blue"
             themeIsWhite = true
         } else {
             smallTextTheme = android.R.style.TextAppearance_Small
+            textSmallThemeColor = Color.LTGRAY
             textHighlightColor = Color.YELLOW
             backgroundColor = Color.WHITE
             highlightColorStr = "yellow"

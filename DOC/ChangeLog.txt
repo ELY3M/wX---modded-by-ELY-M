@@ -6,6 +6,9 @@
 // TODO document or fix changing radar settings and impact on main screen radars
 // TODO UtilityMetar in radar has optimization related to text file loading
 // TODO BUG - storm reports show radar doesn't show location dot for report
+// TODO enhance hourly graphics
+// TODO fix wfo issue for locations
+// TODO fix issue for precip radar products when there is no data
 // TODO move off rid/wfo/sounding lat/lon/name currently in pref should be in objects (like flutter/iOS)
 // TODO storm reports - black bg for cards with titles like iOS/flutter
 // TODO rewrite uswarn
@@ -13,6 +16,12 @@
 // TODO linesize - swo, wb, wbgusts, sti
 // TODO improve settings labels
 
+55137 2019_04_16 lint cleanup
+                 wpc/afd/hwo widgets - respect text size setting
+55136 2019_04_15 [ELY] left out one thing from MCD/MPD/Watch in 135
+                 ObjectWidgetCC - if first element is "" don't update
+                 add initial support to set text size (TODO: fix XML references, take effectimmediatley)
+                 settings playlist - fix bug when move item and then view and go back ( onrestart )
 55135 2019_04_15 seekbar - add background progress tint for white themes
                  change elevation default to 5 from 3
                  bottomsheet - add labels in playlist, homescreen, fav mgmt

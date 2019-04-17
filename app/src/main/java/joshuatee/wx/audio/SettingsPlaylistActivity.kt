@@ -140,7 +140,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     override fun onRestart() {
-        updateListNoInit()
+        //updateListNoInit()
         ca.notifyDataSetChanged()
         super.onRestart()
     }

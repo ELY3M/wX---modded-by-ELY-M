@@ -22,6 +22,7 @@
 package joshuatee.wx.ui
 
 import android.content.Context
+import android.util.TypedValue
 import android.widget.RemoteViews
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
@@ -39,6 +40,7 @@ class ObjectWidgetAFD(context: Context) {
         val nws1Current = Utility.readPref(context, "NWS$widgetLocNum", "")
         val afd = Utility.readPref(context, "AFD_WIDGET", "")
         remoteViews.setTextViewText(R.id.text1, Utility.fromHtml(afd))
+        remoteViews.setTextViewTextSize(R.id.text1, TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
         var prodToGoTo = "AFD"
         if (Utility.readPref(context, "WFO_TEXT_FAV", "").startsWith("VFD")) {
             prodToGoTo = "VFD"

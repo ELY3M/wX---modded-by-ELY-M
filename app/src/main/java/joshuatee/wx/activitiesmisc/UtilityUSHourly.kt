@@ -135,8 +135,7 @@ object UtilityUSHourly {
         val hourString = hour.toString()
         val c = Calendar.getInstance()
         c.set(year - 1900, month - 1, day, 0, 0)
-        val dayOfTheWeekIndex = c.get(Calendar.DAY_OF_WEEK)
-        val dayOfTheWeek = when (dayOfTheWeekIndex) {
+        val dayOfTheWeek = when (c.get(Calendar.DAY_OF_WEEK)) {
             6 -> "Mon"
             7 -> "Tue"
             1 -> "Wed"

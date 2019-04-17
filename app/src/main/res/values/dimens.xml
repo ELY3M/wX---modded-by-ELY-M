@@ -42,9 +42,11 @@
 
     <!--  used in at least hourly, uswarn, nhc   -->
     <dimen name="padding_ll">5dip</dimen>
+
     <dimen name="normal_text">16sp</dimen>
     <dimen name="large_text">21sp</dimen>
     <dimen name="listitem_text">14sp</dimen>
+
     <dimen name="fab_elevation_pressed">0dp</dimen>
     <dimen name="fab_elevation">0dp</dimen>
     <dimen name="fab_margin">18dp</dimen>

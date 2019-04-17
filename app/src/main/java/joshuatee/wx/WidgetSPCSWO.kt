@@ -24,7 +24,6 @@ package joshuatee.wx
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
-import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
 import kotlinx.coroutines.*
 

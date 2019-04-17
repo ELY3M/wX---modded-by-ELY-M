@@ -86,7 +86,7 @@ class CRC {
         if (temp < 0) {
             temp += 256
         }
-        globalCRC = globalCRC shl 8 xor CRC.crc32Table[temp]
+        globalCRC = globalCRC shl 8 xor crc32Table[temp]
     }
 
     companion object {

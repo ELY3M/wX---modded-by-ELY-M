@@ -39,6 +39,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.util.Utility
+import android.util.TypedValue
 
 object UtilityUI {
 
@@ -164,5 +165,9 @@ object UtilityUI {
             result = context.resources.getDimensionPixelSize(resourceId)
         }
         return result
+    }
+
+    fun spToPx(sp: Int, context: Context): Float {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp.toFloat(), context.resources.displayMetrics)
     }
 }

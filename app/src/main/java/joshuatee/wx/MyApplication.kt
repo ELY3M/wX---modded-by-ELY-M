@@ -89,9 +89,20 @@ class MyApplication : Application() {
             res.getDimension(R.dimen.padding_dynamic_tv_small),
             dm
         ).toInt()
-        textSizeSmall = res.getDimension(R.dimen.listitem_text)
-        textSizeNormal = res.getDimension(R.dimen.normal_text)
-        textSizeLarge = res.getDimension(R.dimen.large_text)
+
+
+        //textSizeSmall = res.getDimension(R.dimen.listitem_text)
+        //textSizeNormal = res.getDimension(R.dimen.normal_text)
+        //textSizeLarge = res.getDimension(R.dimen.large_text)
+
+        // FIXME needed? dup in UIpref
+        val normalTextSize = getInitialPreference("TEXTVIEW_FONT_SIZE", 16) // 14 16 21
+        textSizeSmall = UtilityUI.spToPx(normalTextSize - 2, this)
+        textSizeNormal = UtilityUI.spToPx(normalTextSize, this)
+        textSizeLarge = UtilityUI.spToPx(normalTextSize + 5, this)
+
+        UtilityLog.d("wx", "FONT: " + textSizeNormal)
+
         lLpadding = res.getDimension(R.dimen.padding_ll)
         // Calculate ActionBar height
         val tv = TypedValue()

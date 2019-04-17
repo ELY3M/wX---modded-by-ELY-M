@@ -195,11 +195,11 @@ class SVBar : View {
         } else {
             heightMeasureSpec
         }
-        val lengthMode = View.MeasureSpec.getMode(measureSpec)
-        val lengthSize = View.MeasureSpec.getSize(measureSpec)
+        val lengthMode = MeasureSpec.getMode(measureSpec)
+        val lengthSize = MeasureSpec.getSize(measureSpec)
         val length: Int = when (lengthMode) {
-            View.MeasureSpec.EXACTLY -> lengthSize
-            View.MeasureSpec.AT_MOST -> Math.min(intrinsicSize, lengthSize)
+            MeasureSpec.EXACTLY -> lengthSize
+            MeasureSpec.AT_MOST -> Math.min(intrinsicSize, lengthSize)
             else -> intrinsicSize
         }
         val barPointerHaloRadiusx2 = mBarPointerHaloRadius * 2

@@ -107,7 +107,8 @@ class ObjectTextView(val context: Context) {
 
     fun setAsBackgroundText() {
         setAsSmallText()
-        tv.setTextAppearance(context, UIPreferences.smallTextTheme)
+        tv.setTextColor(UIPreferences.textSmallThemeColor)
+        //tv.setTextAppearance(context, UIPreferences.smallTextTheme)
     }
 
     fun setAsSmallText() {

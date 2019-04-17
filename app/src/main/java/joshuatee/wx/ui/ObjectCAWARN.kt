@@ -102,7 +102,7 @@ class ObjectCAWARN(
         var locWatch: String
         var locStatement: String
         var provL: String
-        listLocUrl.indices.forEach { it ->
+        listLocUrl.indices.forEach {
             locWarning = listLocWarning[it]
             locWatch = listLocWatch[it]
             locStatement = listLocStatement[it]

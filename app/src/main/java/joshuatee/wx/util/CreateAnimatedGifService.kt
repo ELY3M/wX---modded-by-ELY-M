@@ -63,12 +63,12 @@ class CreateAnimatedGifService : IntentService("CreateAnimatedGifService") {
             e.printStackTrace()
         }
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
-        val sharingIntent = Intent(android.content.Intent.ACTION_SEND)
+        val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.putExtra(
-            android.content.Intent.EXTRA_SUBJECT,
+            Intent.EXTRA_SUBJECT,
             UtilityShare.subjectPublic + " Animation" + " " + formattedDate
         )
-        sharingIntent.putExtra(android.content.Intent.EXTRA_STREAM, contentUri)
+        sharingIntent.putExtra(Intent.EXTRA_STREAM, contentUri)
         sharingIntent.type = "image/gif"
         sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         UtilityShare.contextPublic!!.startActivity(Intent.createChooser(sharingIntent, "Share via"))

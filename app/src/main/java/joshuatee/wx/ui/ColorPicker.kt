@@ -405,20 +405,20 @@ class ColorPicker : View {
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val intrinsicSize = 2 * (mPreferredColorWheelRadius + mColorPointerHaloRadius)
 
-        val widthMode = View.MeasureSpec.getMode(widthMeasureSpec)
-        val widthSize = View.MeasureSpec.getSize(widthMeasureSpec)
-        val heightMode = View.MeasureSpec.getMode(heightMeasureSpec)
-        val heightSize = View.MeasureSpec.getSize(heightMeasureSpec)
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
         val width: Int
         val height: Int
         width = when (widthMode) {
-            View.MeasureSpec.EXACTLY -> widthSize
-            View.MeasureSpec.AT_MOST -> min(intrinsicSize, widthSize)
+            MeasureSpec.EXACTLY -> widthSize
+            MeasureSpec.AT_MOST -> min(intrinsicSize, widthSize)
             else -> intrinsicSize
         }
         height = when (heightMode) {
-            View.MeasureSpec.EXACTLY -> heightSize
-            View.MeasureSpec.AT_MOST -> min(intrinsicSize, heightSize)
+            MeasureSpec.EXACTLY -> heightSize
+            MeasureSpec.AT_MOST -> min(intrinsicSize, heightSize)
             else -> intrinsicSize
         }
         val min = min(width, height)

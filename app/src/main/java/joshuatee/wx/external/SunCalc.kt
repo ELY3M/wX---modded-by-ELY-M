@@ -93,11 +93,11 @@ class SunCalc {
     }
 
     private fun rightAscension(l: Double, b: Double): Double {
-        return atan2(sin(l) * cos(SunCalc.e) - tan(b) * sin(SunCalc.e), cos(l))
+        return atan2(sin(l) * cos(e) - tan(b) * sin(e), cos(l))
     }
 
     private fun declination(l: Double, b: Double): Double {
-        return asin(sin(b) * cos(SunCalc.e) + cos(b) * sin(SunCalc.e) * sin(l))
+        return asin(sin(b) * cos(e) + cos(b) * sin(e) * sin(l))
     }
 
     private fun azimuth(h: Double, phi: Double, dec: Double): Double {
@@ -109,7 +109,7 @@ class SunCalc {
     }
 
     private fun siderealTime(d: Double, lw: Double): Double {
-        return SunCalc.radPerDegree * (280.16 + 360.9856235 * d) - lw
+        return radPerDegree * (280.16 + 360.9856235 * d) - lw
     }
 
     private fun astroRefraction(aH: Double): Double {
@@ -122,13 +122,13 @@ class SunCalc {
     }
 
     private fun solarMeanAnomaly(d: Double): Double {
-        return SunCalc.radPerDegree * (357.5291 + 0.98560028 * d)
+        return radPerDegree * (357.5291 + 0.98560028 * d)
     }
 
     private fun eclipticLongitude(m: Double): Double {
         val c =
-            SunCalc.radPerDegree * (1.9148 * sin(m) + 0.02 * sin(2.0 * m) + 0.0003 * sin(3.0 * m))
-        val p = SunCalc.radPerDegree * 102.9372
+            radPerDegree * (1.9148 * sin(m) + 0.02 * sin(2.0 * m) + 0.0003 * sin(3.0 * m))
+        val p = radPerDegree * 102.9372
         return m + c + p + PI
     }
 
@@ -152,28 +152,28 @@ class SunCalc {
     }
 
     private fun moonCoordinates(d: Double): MoonCoordinate {
-        val l = SunCalc.radPerDegree * (218.316 + 13.176396 * d)
-        val m = SunCalc.radPerDegree * (134.963 + 13.064993 * d)
-        val f = SunCalc.radPerDegree * (93.272 + 13.229350 * d)
-        val altL = l + SunCalc.radPerDegree * 6.289 * sin(m)
-        val b = SunCalc.radPerDegree * 5.128 * sin(f)
+        val l = radPerDegree * (218.316 + 13.176396 * d)
+        val m = radPerDegree * (134.963 + 13.064993 * d)
+        val f = radPerDegree * (93.272 + 13.229350 * d)
+        val altL = l + radPerDegree * 6.289 * sin(m)
+        val b = radPerDegree * 5.128 * sin(f)
         val dt = 385001.0 - 20905.0 * cos(m)
         return MoonCoordinate(rightAscension(altL, b), declination(altL, b), dt)
     }
 
     fun sunPosition(date: Date, location: Location): AzimuthCoordinate {
-        val lw = SunCalc.radPerDegree * location.longitude * -1.0
-        val phi = SunCalc.radPerDegree * location.latitude
-        val d = SunCalc.daysSince2000()
+        val lw = radPerDegree * location.longitude * -1.0
+        val phi = radPerDegree * location.latitude
+        val d = daysSince2000()
         val c = sunCoordinates(d)
         val h = siderealTime(d, lw) - c.rightAscension
         return AzimuthCoordinate(azimuth(h, phi, c.declination), altitude(h, phi, c.declination))
     }
 
     fun moonPosition(date: Date, location: Location): MoonPosition {
-        val lw = SunCalc.radPerDegree * location.longitude * -1.0
-        val phi = SunCalc.radPerDegree * location.latitude
-        val d = SunCalc.daysSince2000()
+        val lw = radPerDegree * location.longitude * -1.0
+        val phi = radPerDegree * location.latitude
+        val d = daysSince2000()
         val c = moonCoordinates(d)
         val h = siderealTime(d, lw) - c.rightAscension
         var h1 = altitude(h, phi, c.declination)
@@ -183,7 +183,7 @@ class SunCalc {
     }
 
     fun moonIllumination(date: Date = Date()): MoonIllumination {
-        val d = SunCalc.daysSince2000()
+        val d = daysSince2000()
         val s = sunCoordinates(d)
         val m = moonCoordinates(d)
         val sDist = 149598000.0 // Distance from earth to sun
