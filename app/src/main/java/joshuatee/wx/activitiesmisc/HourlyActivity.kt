@@ -36,6 +36,8 @@ import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectCardVerticalText
 import joshuatee.wx.util.UtilityShare
 
+import kotlinx.android.synthetic.main.activity_hourly.*
+
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.GraphView
@@ -71,7 +73,7 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         locatioNumber = (intent.getStringExtra(LOC_NUM).toIntOrNull() ?: 0) - 1
         cv1 = ObjectCard(this, R.color.black, R.id.cv1)
         cv1.setVisibility(View.GONE)
-        val linearLayout: LinearLayout = findViewById(R.id.ll)
+        //val linearLayout: LinearLayout = findViewById(R.id.ll)
         c0 = ObjectCardVerticalText(this, 5, linearLayout, toolbar)
         title = "Hourly Forecast"
         toolbar.subtitle = Location.getName(locatioNumber)
