@@ -45,6 +45,8 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
+//import kotlinx.android.synthetic.main.activity_canada_radar.*
+
 class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelectedListener,
     OnMenuItemClickListener {
 

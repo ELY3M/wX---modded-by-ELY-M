@@ -102,8 +102,6 @@ class MyApplication : Application() {
         textSizeNormal = UtilityUI.spToPx(normalTextSize, this)
         textSizeLarge = UtilityUI.spToPx(normalTextSize + 5, this)
 
-        UtilityLog.d("wx", "FONT: " + textSizeNormal)
-
         lLpadding = res.getDimension(R.dimen.padding_ll)
         // Calculate ActionBar height
         val tv = TypedValue()

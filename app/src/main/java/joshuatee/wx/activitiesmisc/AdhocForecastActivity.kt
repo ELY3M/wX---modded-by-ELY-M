@@ -79,6 +79,7 @@ class AdhocForecastActivity : BaseActivity() {
         latlon = LatLon(activityArguments[0], activityArguments[1])
         title = "Forecast for"
         toolbar.subtitle = latlon.latString + "," + latlon.lonString
+        // TODO activity_linear_layout
         scrollView = findViewById(R.id.sv)
         linearLayout = findViewById(R.id.ll)
         cardCC = ObjectCardCC(this, 2)

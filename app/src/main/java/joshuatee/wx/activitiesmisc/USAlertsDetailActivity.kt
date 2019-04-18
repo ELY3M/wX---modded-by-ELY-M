@@ -24,7 +24,6 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
 import joshuatee.wx.R
@@ -35,6 +34,8 @@ import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
+
+import kotlinx.android.synthetic.main.activity_usalertsdetail.*
 
 class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -56,7 +57,6 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val tts = m.findItem(R.id.action_playlist)
         tts.isVisible = false
         toolbarBottom.setOnMenuItemClickListener(this)
-        val linearLayout: LinearLayout = findViewById(R.id.ll)
         objAlerts = ObjectAlertDetail(this, linearLayout)
         activityArguments = intent.getStringArrayExtra(URL)
         getContent()
@@ -65,7 +65,6 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         ca = withContext(Dispatchers.IO) { CAPAlert.createFromURL(activityArguments[0]) }
         objAlerts.updateContent(ca, activityArguments[0])
-        //toolbar.subtitle = ca.area
         toolbar.subtitle = objAlerts.wfoTitle
         title = objAlerts.title
         UtilityTTS.conditionalPlay(

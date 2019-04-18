@@ -162,57 +162,57 @@ class SettingsMainActivity : BaseActivity() {
         linearLayout.addView(cardbackuppref.card)
         linearLayout.addView(cardrestorepref.card)
         linearLayout.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Check for SPC MCD/W",
-                "CHECKSPC",
-                R.string.checkspc_switch_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Check for SPC MCD/Watches",
+                        "CHECKSPC",
+                        R.string.checkspc_switch_label
+                ).card
         )
         linearLayout.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Check for WPC MPD",
-                "CHECKWPC",
-                R.string.checkwpc_switch_label
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Check for WPC MPDs",
+                        "CHECKWPC",
+                        R.string.checkwpc_switch_label
+                ).card
         )
         linearLayout.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
                 "Check for TOR, SVR, EWW, FFW, SVS, SMW, SPS",
-                "CHECKTOR",
-                R.string.checktor_switch_label
-            ).card
+                        "CHECKTOR",
+                        R.string.checktor_switch_label
+                ).card
         )
         linearLayout.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Media control notif",
-                "MEDIA_CONTROL_NOTIF",
-                R.string.media_control_notif_tv
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Media control notification",
+                        "MEDIA_CONTROL_NOTIF",
+                        R.string.media_control_notif_tv
+                ).card
         )
         linearLayout.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Dual-pane radar from main screen",
-                "DUALPANE_RADAR_ICON",
-                R.string.dualpane_radar_icon_tv
-            ).card
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Dual-pane radar from main screen",
+                        "DUALPANE_RADAR_ICON",
+                        R.string.dualpane_radar_icon_tv
+                ).card
         )
         linearLayout.addView(
-            ObjectSettingsCheckBox(
-                this,
-                this,
-                "Translate abbreviations",
-                "TRANSLATE_TEXT",
-                R.string.translate_text_label
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Translate abbreviations",
+                        "TRANSLATE_TEXT",
+                        R.string.translate_text_label
             ).card
         )
         linearLayout.addView(

@@ -35,43 +35,4 @@
         android:background="@color/primary_blue"
         android:textColor="@color/white"
         android:textSize="20sp" />
-    <!--<TextView
-       android:id="@+id/edit"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:fontFamily="sans-serif"
-       android:padding="16dp"
-       android:gravity="center_vertical"
-       android:text="Edit Location"
-       android:textSize="16sp" />
-   <TextView
-       android:id="@+id/delete"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:fontFamily="sans-serif"
-       android:padding="16dp"
-       android:text="Delete Location"
-       android:gravity="center_vertical"
-       android:textSize="16sp"
-       />
-   <TextView
-       android:id="@+id/moveUp"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:fontFamily="sans-serif"
-       android:padding="16dp"
-       android:gravity="center_vertical"
-       android:text="Move Up"
-       android:textSize="16sp"
-       />
-   <TextView
-       android:id="@+id/moveDown"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:fontFamily="sans-serif"
-       android:padding="16dp"
-       android:gravity="center_vertical"
-       android:text="Move Down"
-       android:textSize="16sp"
-       />-->
 </LinearLayout>

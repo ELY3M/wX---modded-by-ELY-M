@@ -8,6 +8,7 @@
 // TODO BUG - storm reports show radar doesn't show location dot for report
 // TODO enhance hourly graphics
 // TODO fix wfo issue for locations
+// TODO new polygons - snow squall, sps, other
 // TODO fix issue for precip radar products when there is no data
 // TODO move off rid/wfo/sounding lat/lon/name currently in pref should be in objects (like flutter/iOS)
 // TODO storm reports - black bg for cards with titles like iOS/flutter
@@ -15,7 +16,17 @@
 // TODO add new color pal for ref
 // TODO linesize - swo, wb, wbgusts, sti
 // TODO improve settings labels
+// TODO test Kotlin binding enhancement
 
+55142 2019_04_18
+55141 2019_04_18 WPCText fix
+55140 2019_04_18 update to Android Studio 3.4 which includes the normal gradle/plugin updates, etc
+                 WPCImg, WPCMPDSum, WPCText: test kotlin binding enhancement
+55139 2019_04_18 AFD, USAlertsDetail, USAlerts: test kotlin binding enhancement
+                 lint cleanup
+55138 2019_04_17 ObjectWidgetCC - if first element contains "NA" don't update
+                 Hourly: test kotlin binding enhancement
+		         bottomsheet xml layout - add themed color for linearLayout bg
 55137 2019_04_16 lint cleanup
                  wpc/afd/hwo widgets - respect text size setting
 55136 2019_04_15 [ELY] left out one thing from MCD/MPD/Watch in 135

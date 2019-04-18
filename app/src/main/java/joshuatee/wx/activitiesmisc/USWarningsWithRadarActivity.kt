@@ -27,8 +27,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
-import android.widget.LinearLayout
-import android.widget.ScrollView
 import java.util.Locale
 import android.view.ContextMenu
 import android.view.MenuItem
@@ -49,6 +47,8 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownloadNWS
 import joshuatee.wx.util.UtilityImg
 import kotlinx.coroutines.*
+
+import kotlinx.android.synthetic.main.activity_uswarnings_with_radar.*
 
 class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
@@ -72,7 +72,6 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var drw: ObjectNavDrawer
     private lateinit var objAlertSummary: ObjectAlertSummary
-    private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
@@ -89,8 +88,6 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
         val actvityArguments = intent.getStringArrayExtra(URL)
         turlLocal[0] = actvityArguments[0]
         turlLocal[1] = actvityArguments[1]
-        linearLayout = findViewById(R.id.ll)
-        val scrollView: ScrollView = findViewById(R.id.sv)
         objAlertSummary = ObjectAlertSummary(this, this, linearLayout, scrollView)
         drw = ObjectNavDrawer(this, objAlertSummary.filterArray.toList())
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->

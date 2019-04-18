@@ -35,12 +35,13 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.ObjectNavDrawerCombo
 import joshuatee.wx.ui.OnSwipeTouchListener
-import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
+
+import kotlinx.android.synthetic.main.activity_wpcimages.*
 
 class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
     Toolbar.OnMenuItemClickListener {
@@ -54,7 +55,7 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
     private var timePeriod = 1
     private var firstRun = false
     private var imageLoaded = false
-    private lateinit var img: TouchImageView2
+    //private lateinit var img: TouchImageView2
     private lateinit var actionBack: MenuItem
     private lateinit var actionForward: MenuItem
     private lateinit var drw: ObjectNavDrawerCombo
@@ -71,7 +72,6 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        img = findViewById(R.id.iv)
         img.setOnClickListener(this)
         img.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeLeft() {

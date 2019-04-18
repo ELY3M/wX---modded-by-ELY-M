@@ -31,8 +31,6 @@ import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
 import android.view.ContextMenu.ContextMenuInfo
-import android.widget.LinearLayout
-import android.widget.TextView
 
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
@@ -51,6 +49,8 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.RegExp
 import joshuatee.wx.objects.ObjectIntent
 import kotlinx.coroutines.*
+
+import kotlinx.android.synthetic.main.activity_wpcmpdshow_summary.*
 
 class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -71,7 +71,6 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private val mpdNumbers = mutableListOf<String>()
     // FIXME remove
     private lateinit var objCard: ObjectCard
-    private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
     private var titleString = "MPDs"
 
@@ -81,7 +80,6 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         objCard = ObjectCard(this, R.id.cv1)
-        linearLayout = findViewById(R.id.ll)
         // FIXME make number = intent.getStringArrayExtra(NO)[0]
         val no = intent.getStringExtra(NO)
         imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$no.gif"
@@ -128,11 +126,10 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
             title = titleString
             toolbar.subtitle = text.parse("AREAS AFFECTED...(.*?)CONCERNING").replace("<BR>", "")
         }
-        val tv: TextView = findViewById(R.id.tv)
         if (mpdList.isEmpty()) {
-            tv.text = resources.getString(R.string.wpc_mpd_noactive)
+            textView.text = resources.getString(R.string.wpc_mpd_noactive)
         } else {
-            tv.visibility = View.GONE
+            textView.visibility = View.GONE
             objCard.setVisibility(View.GONE)
         }
     }

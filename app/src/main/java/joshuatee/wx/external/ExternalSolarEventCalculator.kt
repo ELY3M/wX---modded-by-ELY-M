@@ -52,7 +52,7 @@ internal class ExternalSolarEventCalculator
      *
      * @param location
      * `Location` of the place where the solar event should be calculated from.
-     * @param timeZoneIdentifier
+     * timeZoneIdentifier
      * time zone identifier of the timezone of the location parameter. For example,
      * "America/New_York".
      */
@@ -89,9 +89,9 @@ internal class ExternalSolarEventCalculator
     /**
      * Computes the sunset time for the given zenith at the given date.
      *
-     * @param solarZenith
+     * solarZenith
      * `Zenith` enum corresponding to the type of sunset to compute.
-     * @param date
+     * date
      * `Calendar` object representing the date to compute the sunset for.
      * @return the sunset time, in HH:MM format (24-hour clock), 00:00 if the sun does not set on the given
      * date.

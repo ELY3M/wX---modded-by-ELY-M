@@ -28,7 +28,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
-import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
@@ -54,6 +53,8 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectNavDrawerCombo
 import kotlinx.coroutines.*
 
+import kotlinx.android.synthetic.main.activity_wpctextproducts.*
+
 class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     AdapterView.OnItemSelectedListener {
 
@@ -72,7 +73,6 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     private lateinit var activityArguments: Array<String>
     private var prod = ""
     private var html = ""
-    private lateinit var scrollView: ScrollView
     private var initProd = ""
     private var products = listOf<String>()
     private lateinit var star: MenuItem
@@ -81,7 +81,6 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     private lateinit var c0: ObjectCardText
     private lateinit var sp: ObjectSpinner
     private lateinit var drw: ObjectNavDrawerCombo
-    private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
@@ -102,8 +101,6 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
             prod = activityArguments[0]
             initProd = prod
         }
-        scrollView = findViewById(R.id.sv)
-        linearLayout = findViewById(R.id.ll)
         c0 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         products = UtilityFavorites.setupFavMenuNWSTEXT(MyApplication.nwsTextFav, prod)
         sp = ObjectSpinner(this, this, this, R.id.spinner1, products)

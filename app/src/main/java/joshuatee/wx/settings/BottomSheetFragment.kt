@@ -22,6 +22,7 @@
 package joshuatee.wx.settings
 
 import android.content.Context
+import android.graphics.Color
 import joshuatee.wx.R
 import android.os.Bundle
 import android.view.Gravity
@@ -61,6 +62,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             textViewList.add(item)
             item.setPadding(60, 30, 0, 30)
             item.gravity = Gravity.CENTER_HORIZONTAL
+            item.setTextColor(Color.BLACK)
             item.tv.setOnClickListener { fnList[index](position); dismiss() }
             linearLayout.addView(item.tv)
         }

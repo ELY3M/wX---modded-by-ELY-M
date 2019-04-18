@@ -353,7 +353,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
             if (fullScreen) {
                 super.onMeasure(widthMeasureSpec, heightMeasureSpec)
             } else {
-                width = View.MeasureSpec.getSize(widthMeasureSpec)
+                width = MeasureSpec.getSize(widthMeasureSpec)
                 this.setMeasuredDimension(width, width)
             }
         } else {

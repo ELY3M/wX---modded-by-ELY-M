@@ -34,7 +34,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.graphics.Color
 import android.widget.Button
-import androidx.core.content.ContextCompat
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.util.Utility
 

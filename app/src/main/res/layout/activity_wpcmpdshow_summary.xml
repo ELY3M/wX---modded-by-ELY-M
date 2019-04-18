@@ -38,7 +38,7 @@
             android:scrollbars="none">
 
             <LinearLayout
-                android:id="@+id/ll"
+                android:id="@+id/linearLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -52,7 +52,7 @@
                     android:layout_gravity="center">
 
                     <TextView
-                        android:id="@+id/tv"
+                        android:id="@+id/textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="@dimen/padding"

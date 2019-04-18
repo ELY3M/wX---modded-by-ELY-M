@@ -78,9 +78,11 @@ UncompressInputStream.java This file is part of the HTTPClient package Ronald Ts
 Compression.java Mark Taylor (Starlink)
 http://stackoverflow.com/questions/4414673/android-color-between-two-colors-based-on-percentage Stuck Mark Renouf
 
-Ely M - finding bugs and prodiving code for fixes ( as specified in ChangeLog )
+Ely M:
+ - finding bugs and prodiving code for fixes (as specified in ChangeLog)
+ - adding radarlong press options to show Watch/MPD/MCD text
 
-Point Sprite shader and codes used for loading icons and images on radar  
+ - Point Sprite shader and codes used for loading icons and images on radar  
 http://opengles2learning.blogspot.com/2011/05/applying-texture-to-point-sprite.html
 
 //GIF* class files

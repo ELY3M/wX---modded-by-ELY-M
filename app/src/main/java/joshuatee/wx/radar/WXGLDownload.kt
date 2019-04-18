@@ -260,7 +260,7 @@ class WXGLDownload {
         fun getNidsTab(context: Context, product: String, radarSite: String, fileName: String) {
             val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, false)
             val url =
-                MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[product]!! + "/SI." + ridPrefix + radarSite.toLowerCase() + "/sn.last"
+                MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + (NEXRAD_PRODUCT_STRING[product] ?: "") + "/SI." + ridPrefix + radarSite.toLowerCase() + "/sn.last"
             val inputstream = UtilityDownload.getInputStreamFromURL(url)
             inputstream?.let { UtilityIO.saveInputStream(context, it, fileName) }
         }

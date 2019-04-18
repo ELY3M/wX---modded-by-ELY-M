@@ -26,8 +26,6 @@ import android.content.Context
 import java.util.Locale
 
 import androidx.cardview.widget.CardView
-import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -51,6 +49,8 @@ import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
+import kotlinx.android.synthetic.main.activity_afd.*
+
 class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClickListener {
 
     // The primary purpose of this activity is to view AFD from location's NWS office
@@ -72,7 +72,6 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     private var product = ""
     private var nwsOffice = ""
     private lateinit var imageMap: ObjectImageMap
-    private lateinit var scrollView: ScrollView
     private var html = ""
     private var mapShown = false
     private lateinit var notifToggle: MenuItem
@@ -85,7 +84,6 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     private var oldProd = ""
     private var oldNwsOffice = ""
     private var wfoListPerState = mutableListOf<String>()
-    private lateinit var linearLayout: LinearLayout
     private val cardList = mutableListOf<CardView>()
     private lateinit var c0: ObjectCardText
     private lateinit var spinner1: ObjectSpinner
@@ -97,7 +95,6 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
-        linearLayout = findViewById(R.id.ll)
         c0 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         notifToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
@@ -126,7 +123,6 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
             prefToken
         )
         spinner1 = ObjectSpinner(this, this, this, R.id.spinner1, ridArrLoc)
-        scrollView = findViewById(R.id.sv)
         imageMap = ObjectImageMap(
             this,
             this,

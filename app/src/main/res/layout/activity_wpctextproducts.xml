@@ -23,7 +23,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -38,13 +38,13 @@
             <include layout="@layout/widget_toolbar_top_with_spinner" />
 
             <ScrollView
-                android:id="@+id/sv"
+                android:id="@+id/scrollView"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:scrollbars="none">
 
                 <LinearLayout
-                    android:id="@+id/ll"
+                    android:id="@+id/linearLayout"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"

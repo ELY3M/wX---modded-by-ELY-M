@@ -48,7 +48,7 @@
                 android:stretchColumns="*">
 
                 <joshuatee.wx.ui.TouchImageView2
-                    android:id="@+id/iv"
+                    android:id="@+id/img"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
