@@ -27,7 +27,6 @@ import android.content.Context
 import android.os.Bundle
 import android.graphics.Bitmap
 import android.view.MenuItem
-import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
@@ -35,6 +34,8 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
+
+import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class SPCTstormOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
@@ -59,8 +60,7 @@ class SPCTstormOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         bitmaps = withContext(Dispatchers.IO) { UtilitySPC.tstormOutlookImages }
-        val linearLayout: LinearLayout = findViewById(R.id.ll)
-        bitmaps.forEach { ObjectCardImage(contextg, linearLayout, it) }
+        bitmaps.forEach { ObjectCardImage(contextg, ll, it) }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

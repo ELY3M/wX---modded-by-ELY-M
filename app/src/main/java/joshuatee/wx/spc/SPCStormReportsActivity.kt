@@ -39,7 +39,6 @@ import android.view.View
 import android.view.ContextMenu.ContextMenuInfo
 import android.widget.AdapterView
 import android.widget.LinearLayout
-import android.widget.ScrollView
 import joshuatee.wx.Extensions.getHtmlSep
 import joshuatee.wx.Extensions.getImage
 
@@ -61,6 +60,8 @@ import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.ObjectCardStormReportItem
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
+
+import kotlinx.android.synthetic.main.activity_storm_reports.*
 
 class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -97,7 +98,6 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var br: Pattern
     private val out = StringBuilder(5000)
-    private lateinit var scrollView: ScrollView
     private var storms = mutableListOf<StormReport>()
     private lateinit var drw: ObjectNavDrawer
     private lateinit var activity: Activity
@@ -112,7 +112,6 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val menu = toolbarBottom.menu
         val playlistMi = menu.findItem(R.id.action_playlist)
         playlistMi.isVisible = false
-        scrollView = findViewById(R.id.sv)
         val activityArguments = intent.getStringArrayExtra(NO)
         no = activityArguments[0]
         val cal = Calendar.getInstance()

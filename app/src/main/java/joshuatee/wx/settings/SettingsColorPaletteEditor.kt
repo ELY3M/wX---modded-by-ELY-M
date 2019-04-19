@@ -33,7 +33,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.widget.EditText
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
 import joshuatee.wx.MyApplication
@@ -46,6 +45,7 @@ import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.util.*
 import java.io.File
+import kotlinx.android.synthetic.main.activity_settings_color_palette_editor.*
 
 class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
@@ -56,8 +56,6 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
     private var TAG: String = "ColorPaletteEditor"
     private lateinit var turl: Array<String>
-    private lateinit var palTitle: EditText
-    private lateinit var palContent: EditText
     private var formattedDate = ""
     private var name = ""
 
@@ -72,8 +70,6 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         toolbarBottom.setOnMenuItemClickListener(this)
         ObjectFab(this, this, R.id.fab, View.OnClickListener { fabSavePAL(this) })
         ObjectCard(this, R.id.cv1)
-        palTitle = findViewById(R.id.pal_title)
-        palContent = findViewById(R.id.pal_content)
         if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
             listOf(palTitle, palContent).forEach {
                 it.setTextColor(Color.BLACK)

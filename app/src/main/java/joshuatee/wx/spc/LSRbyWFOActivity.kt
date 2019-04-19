@@ -25,8 +25,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import java.util.Locale
 
-import android.widget.LinearLayout
-import android.widget.ScrollView
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -49,6 +47,8 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityString
 import kotlinx.coroutines.*
 
+import kotlinx.android.synthetic.main.activity_afd.*
+
 class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClickListener {
 
     // The primary purpose of this activity is to view all recent LSR by WFO
@@ -66,14 +66,12 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
     private var prod = ""
     private var nwsOffice = ""
     private lateinit var imageMap: ObjectImageMap
-    private lateinit var sv: ScrollView
     private var mapShown = false
     private lateinit var star: MenuItem
     private var locations = listOf<String>()
     private val prefTokenLocation = "NWS_LOCATION_"
     private val prefToken = "WFO_FAV"
     private var ridFavOld = ""
-    private lateinit var linearLayout: LinearLayout
     private var wfoProd = listOf<String>()
     private lateinit var sp: ObjectSpinner
     private lateinit var contextg: Context
@@ -83,7 +81,6 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
         super.onCreate(savedInstanceState, R.layout.activity_afd, R.menu.lsrbywfo)
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        linearLayout = findViewById(R.id.ll)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         val turl = intent.getStringArrayExtra(URL)
         nwsOffice = turl[0]
@@ -102,8 +99,7 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
             prefToken
         )
         sp = ObjectSpinner(this, this, this, R.id.spinner1, locations)
-        sv = findViewById(R.id.sv)
-        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(sv))
+        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(scrollView))
         imageMap.addClickHandler(::mapSwitch, UtilityImageMap::maptoWFO)
     }
 
@@ -138,7 +134,7 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
     }
 
     private fun mapSwitch(loc: String) {
-        sv.visibility = View.VISIBLE
+        scrollView.visibility = View.VISIBLE
         nwsOffice = loc.toUpperCase(Locale.US)
         mapShown = false
         locations = UtilityFavorites.setupFavMenu(
@@ -188,7 +184,7 @@ class LSRbyWFOActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        sv.smoothScrollTo(0, 0)
+        scrollView.smoothScrollTo(0, 0)
         ridFavOld = MyApplication.wfoFav
         wfoProd = withContext(Dispatchers.IO) { lsrFromWFO }
         linearLayout.removeAllViewsInLayout()

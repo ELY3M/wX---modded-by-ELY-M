@@ -65,7 +65,7 @@
                             android:orientation="vertical">
 
                             <EditText
-                                android:id="@+id/pal_title"
+                                android:id="@+id/palTitle"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:hint="Name"
@@ -73,7 +73,7 @@
                                 android:textSize="18sp" />
 
                             <EditText
-                                android:id="@+id/pal_content"
+                                android:id="@+id/palContent"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:hint="Color Palette"

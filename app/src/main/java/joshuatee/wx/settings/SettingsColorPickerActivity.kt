@@ -25,17 +25,16 @@ import joshuatee.wx.R
 import joshuatee.wx.ui.ColorPicker
 import joshuatee.wx.ui.ColorPicker.OnColorChangedListener
 import joshuatee.wx.MyApplication
-import joshuatee.wx.ui.SaturationBar
 import joshuatee.wx.ui.UtilityToolbar
-import joshuatee.wx.ui.ValueBar
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.graphics.Color
-import android.widget.Button
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.util.Utility
+
+import kotlinx.android.synthetic.main.activity_settings_color_picker.*
 
 class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener {
 
@@ -61,9 +60,6 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
             setTheme(UIPreferences.themeInt)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings_color_picker)
-        val vBar: ValueBar = findViewById(R.id.vbar)
-        val sBar: SaturationBar = findViewById(R.id.sbar)
-        val buttonDefault: Button = findViewById(R.id.button_default)
         toolbar = findViewById(R.id.toolbar_top)
         setSupportActionBar(toolbar)
         assert(supportActionBar != null)

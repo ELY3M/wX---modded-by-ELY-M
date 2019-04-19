@@ -279,14 +279,14 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         }
         addDynamicCards()
         cardCC?.let { objectCardCC ->
-            objectCardCC.textViewTop.setOnClickListener(View.OnClickListener {
+            objectCardCC.textViewTop.setOnClickListener(OnClickListener {
                 if (Location.isUS) {
                     if (MyApplication.helpMode) {
                         showHelp(helpCurrentGeneric)
                     }
                 }
             })
-            objectCardCC.textViewBottom.setOnClickListener(View.OnClickListener {
+            objectCardCC.textViewBottom.setOnClickListener(OnClickListener {
                 if (MyApplication.helpMode) {
                     showHelp(helpForecastGenericStatus)
                 }

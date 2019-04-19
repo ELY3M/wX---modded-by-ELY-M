@@ -24,13 +24,14 @@ package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.LinearLayout
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.ui.BaseActivity
+
+import kotlinx.android.synthetic.main.activity_linear_layout.*
 
 class SettingsColorsActivity : BaseActivity() {
 
@@ -39,7 +40,6 @@ class SettingsColorsActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        val linearLayout: LinearLayout = findViewById(R.id.ll)
         val mapColorToPref = mapOf(
                 "Highway color" to "RADAR_COLOR_HW",
                 "Secondary Highway color" to "RADAR_COLOR_HW_EXT",
@@ -76,7 +76,7 @@ class SettingsColorsActivity : BaseActivity() {
         )
         mapColorToPref.keys.asSequence().sorted()
             .mapTo(colorObjects) { ObjectSettingsColorLabel(this, it, mapColorToPref[it]!!) }
-        colorObjects.forEach { linearLayout.addView(it.card) }
+        colorObjects.forEach { ll.addView(it.card) }
     }
 
     override fun onRestart() {

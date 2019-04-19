@@ -41,14 +41,14 @@
             android:layout_gravity="center" />
 
         <joshuatee.wx.ui.ValueBar
-            android:id="@+id/vbar"
+            android:id="@+id/vBar"
             android:layout_width="322dp"
             android:layout_height="112dp"
             android:layout_gravity="center"
             android:layout_margin="8dip" />
 
         <joshuatee.wx.ui.SaturationBar
-            android:id="@+id/sbar"
+            android:id="@+id/sBar"
             android:layout_width="322dp"
             android:layout_height="112dp"
             android:layout_gravity="center"
@@ -60,7 +60,7 @@
             android:weightSum="1">
 
             <Button
-                android:id="@+id/button_default"
+                android:id="@+id/buttonDefault"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

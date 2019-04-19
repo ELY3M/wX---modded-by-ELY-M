@@ -30,7 +30,6 @@ import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
 import android.view.ContextMenu.ContextMenuInfo
-import android.widget.LinearLayout
 import android.widget.TextView
 
 import joshuatee.wx.R
@@ -49,6 +48,8 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ObjectIntent
 import kotlinx.coroutines.*
+
+import kotlinx.android.synthetic.main.activity_spcmcdwshow_summary.*
 
 class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -81,7 +82,6 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
     private lateinit var miImage: MenuItem
     private lateinit var miTest: MenuItem
     private lateinit var objCard: ObjectCard
-    private lateinit var linearLayout: LinearLayout
     private lateinit var polygonType: PolygonType
     private lateinit var contextg: Context
 
@@ -95,7 +95,6 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         objCard = ObjectCard(this, R.id.cv1)
-        linearLayout = findViewById(R.id.ll)
         val menu = toolbarBottom.menu
         miAll = menu.findItem(R.id.action_share_all)
         miText = menu.findItem(R.id.action_share_text)

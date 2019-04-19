@@ -24,9 +24,7 @@ package joshuatee.wx.settings
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import androidx.appcompat.widget.SwitchCompat
 import android.widget.CompoundButton
-import android.widget.LinearLayout
 
 import joshuatee.wx.R
 import joshuatee.wx.external.UtilityStringExternal
@@ -35,6 +33,8 @@ import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.util.Utility
+
+import kotlinx.android.synthetic.main.activity_settings_widgets.*
 
 class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener {
 
@@ -57,8 +57,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                     locTruncateLen
             )
         }
-        val ll: LinearLayout = findViewById(R.id.ll)
-        ll.addView(
+        linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
                         this,
@@ -67,7 +66,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         R.string.loc1_radar_warnings_label
                 ).card
         )
-        ll.addView(
+        linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
                         this,
@@ -76,7 +75,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         R.string.cc_widget_show_sevenday
                 ).card
         )
-        ll.addView(
+        linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
                         this,
@@ -85,7 +84,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         R.string.loc1_radar_label
                 ).card
         )
-        ll.addView(
+        linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
                         this,
@@ -94,7 +93,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         R.string.loc1_mosaics_label
                 ).card
         )
-        ll.addView(
+        linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
                         this,
@@ -103,7 +102,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         R.string.loc1_mosaics_rad_label
                 ).card
         )
-        ll.addView(
+        linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
                         this,
@@ -112,7 +111,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         R.string.loc1_txt_label
                 ).card
         )
-        ll.addView(
+        linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
                         this,
@@ -121,7 +120,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         R.string.loc1_txt_hwo_label
                 ).card
         )
-        ll.addView(
+        linearLayout.addView(
                 ObjectSettingsSpinner(
                         this,
                         this,
@@ -132,7 +131,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         zoomStrArr
                 ).card
         )
-        ll.addView(
+        linearLayout.addView(
                 ObjectSettingsSpinner(
                         this,
                         this,
@@ -143,7 +142,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         locationAl
                 ).card
         )
-        ll.addView(
+        linearLayout.addView(
                 ObjectSettingsSpinner(
                         this,
                         this,
@@ -154,7 +153,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         nexradCenterArr
                 ).card
         )
-        ll.addView(
+        linearLayout.addView(
                 ObjectSettingsSeekbar(
                         this,
                         this,
@@ -166,7 +165,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         120
                 ).card
         )
-        ll.addView(
+        linearLayout.addView(
                 ObjectSettingsSeekbar(
                         this,
                         this,
@@ -178,14 +177,14 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         15
                 ).card
         )
-        val abSw: SwitchCompat = findViewById(R.id.ab_switch)
-        abSw.setOnCheckedChangeListener(this)
-        abSw.isChecked = Utility.readPref(this, "WIDGETS_ENABLED", "false").startsWith("t")
+        //val abSwitch: SwitchCompat = findViewById(R.id.ab_switch)
+        abSwitch.setOnCheckedChangeListener(this)
+        abSwitch.isChecked = Utility.readPref(this, "WIDGETS_ENABLED", "false").startsWith("t")
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton, isChecked: Boolean) {
         when (buttonView.id) {
-            R.id.ab_switch -> {
+            R.id.abSwitch -> {
                 if (buttonView.isChecked) {
                     Utility.writePref(this, "WIDGETS_ENABLED", "true")
                 } else {

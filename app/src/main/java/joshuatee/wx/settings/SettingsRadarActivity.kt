@@ -31,7 +31,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.view.View
 import android.widget.CompoundButton
-import android.widget.LinearLayout
 
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
@@ -44,6 +43,8 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.telecine.SettingsTelecineActivity
 import joshuatee.wx.util.Utility
 
+import kotlinx.android.synthetic.main.activity_linear_layout.*
+
 class SettingsRadarActivity : BaseActivity() {
 
     private lateinit var cardPal94: ObjectCardText
@@ -53,7 +54,6 @@ class SettingsRadarActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         toolbar.subtitle = "Please tap on text for additional help."
-        val ll: LinearLayout = findViewById(R.id.ll)
         ObjectCardText(
                 this,
                 ll,

@@ -62,6 +62,8 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMap
 import kotlinx.coroutines.*
 
+import kotlinx.android.synthetic.main.activity_settings_location_generic.*
+
 class SettingsLocationGenericActivity : BaseActivity(),
     OnMenuItemClickListener { // OnCheckedChangeListener OnClickListener
 
@@ -89,14 +91,9 @@ class SettingsLocationGenericActivity : BaseActivity(),
     private lateinit var alertSwoSw: ObjectSettingsCheckBox
     private lateinit var alertSpcfwSw: ObjectSettingsCheckBox
     private lateinit var alertWpcmpdSw: ObjectSettingsCheckBox
-    private lateinit var locXEt: EditText
-    private lateinit var locYEt: EditText
-    private lateinit var locLabelEt: EditText
     private lateinit var cityAa: ArrayAdapter<String>
-    private lateinit var rl: RelativeLayout
     private var menuLocal: Menu? = null
     private lateinit var contextg: Context
-    private lateinit var linearLayout: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -114,8 +111,6 @@ class SettingsLocationGenericActivity : BaseActivity(),
         ObjectFab(this, this, R.id.fab, OnClickListener { fabSaveLocation() })
         val me = toolbarBottom.menu
         listOf(R.id.cv1).forEach { ObjectCard(this, it) }
-        rl = findViewById(R.id.rl)
-        linearLayout = findViewById(R.id.ll)
         val locNumArr = intent.getStringArrayExtra(LOC_NUM)
         locNum = locNumArr[0]
         val locNumInt = locNum.toIntOrNull() ?: 0
@@ -164,11 +159,8 @@ class SettingsLocationGenericActivity : BaseActivity(),
         updateSubTitle()
         val delB = me.findItem(R.id.action_delete)
         delB.isVisible = locNumIntCurrent > 1
-        locLabelEt = findViewById(R.id.loc_label_text)
         locLabelEt.setText(locLabelCurrent)
-        locXEt = findViewById(R.id.loc_lat_text)
         locXEt.setText(locXStr)
-        locYEt = findViewById(R.id.loc_lon_text)
         locYEt.setText(locYStr)
         if (UIPreferences.themeIsWhite) {
             locLabelEt.setTextColor(Color.BLACK)
@@ -432,7 +424,6 @@ class SettingsLocationGenericActivity : BaseActivity(),
             }
 
             override fun onQueryTextSubmit(query: String): Boolean {
-                locLabelEt = findViewById(R.id.loc_label_text)
                 locLabelEt.setText(query)
                 val addrSend = query.replace(" ", "+")
                 addressSearch("osm", addrSend)
