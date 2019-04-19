@@ -47,8 +47,8 @@ class SettingsUIActivity : BaseActivity() {
             "gray",
             "white",
             "whiteNew",
-            "orange"
-	    "BlackAqua"
+            "orange",
+	        "BlackAqua"
     )
     private val textSizeArr = mutableListOf<String>()
     private var tilesPerRowStart = 0
