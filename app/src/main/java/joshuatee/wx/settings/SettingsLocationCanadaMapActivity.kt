@@ -156,7 +156,7 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
     }
 
     private fun hideAllMaps() {
-        val mapIds = listOf(
+        listOf(
             R.id.map_ab,
             R.id.map_bc,
             R.id.map_mb,
@@ -169,8 +169,7 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
             R.id.map_qc,
             R.id.map_sk,
             R.id.map_yt
-        )
-        mapIds.forEach {
+        ).forEach {
             val map: ImageMap = findViewById(it)
             map.visibility = View.GONE
         }

@@ -23,11 +23,12 @@ package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.webkit.WebView
 import android.webkit.WebViewClient
 
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
+
+import kotlinx.android.synthetic.main.activity_webview_toolbar.*
 
 class WebscreenABModels : BaseActivity() {
 
@@ -43,9 +44,6 @@ class WebscreenABModels : BaseActivity() {
         const val URL: String = ""
     }
 
-    // added to support webview history, this var and block below it
-    private lateinit var webview: WebView
-
     override fun onBackPressed() {
         if (webview.canGoBack())
             webview.goBack()
@@ -59,7 +57,6 @@ class WebscreenABModels : BaseActivity() {
         val activityArguments = intent.getStringArrayExtra(URL)
         val url = activityArguments[0]
         title = activityArguments[1]
-        webview = findViewById(R.id.webview)
         val webSettings = webview.settings
         webSettings.javaScriptEnabled = true
         webSettings.builtInZoomControls = true

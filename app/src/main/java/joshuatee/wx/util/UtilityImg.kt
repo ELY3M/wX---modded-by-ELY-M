@@ -42,6 +42,10 @@ import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.TouchImageView2
+import android.opengl.ETC1.getWidth
+import android.opengl.ETC1.getHeight
+
+
 
 object UtilityImg {
 
@@ -312,5 +316,25 @@ object UtilityImg {
         d.setBounds(0, 0, c.width, c.height)
         d.draw(c)
         return b
+    }
+
+    fun mergeImagesVertically(images: List<Bitmap>): Bitmap {
+        val combinedImage: Bitmap?
+        var width = 0
+        var height = 0
+        images.forEach {
+            height += it.height
+            if (it.width > width) {
+                width = it.width
+            }
+        }
+        combinedImage = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val comboImage = Canvas(combinedImage!!)
+        var workingHeight = 0f
+        images.forEach {
+            comboImage.drawBitmap(it, 0f, workingHeight, null)
+            workingHeight += it.height
+        }
+        return combinedImage
     }
 }

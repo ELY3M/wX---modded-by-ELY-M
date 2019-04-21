@@ -25,15 +25,30 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.activitiesmisc.LightningActivity
 import joshuatee.wx.canada.CanadaRadarActivity
 import joshuatee.wx.radar.USNWSMosaicActivity
-import joshuatee.wx.spc.SPCMesoActivity
-import joshuatee.wx.spc.SPCSWOActivity
-import joshuatee.wx.spc.SPCSoundingsActivity
-import joshuatee.wx.spc.SPCStormReportsActivity
+import joshuatee.wx.spc.*
 import joshuatee.wx.vis.GOES16Activity
 import joshuatee.wx.vis.USNWSGOESActivity
 import joshuatee.wx.wpc.WPCImagesActivity
 
 internal object UtilityHomeScreen {
+
+    val localChoicesText = listOf(
+            "CC: Current Conditions",
+            "CC2: Current Conditions with image",
+            "HAZ: Hazards", "7DAY: 7 Day Forecast",
+            "7DAY2: 7 Day Forecast with images",
+            "AFDLOC: Area Forecast Discussion",
+            "HWOLOC: Hazardous Weather Outlook",
+            "VFDLOC: Aviation only Area Forecast Discussion",
+            "SUNMOON: Sun/Moon Data",
+            "HOURLY: Hourly Forecast",
+            "CTOF: Celsius to Fahrenheit table"
+    )
+    val localChoicesImg = listOf(
+            "RADAR: Local NEXRAD Radar",
+            "CARAIN: Local CA Radar",
+            "WEATHERSTORY: Local NWS Weather Story"
+    )
 
     fun setupMap() {
         (1..3).forEach {
@@ -50,6 +65,10 @@ internal object UtilityHomeScreen {
             MyApplication.HM_CLASS_ARGS[token] = arrayOf(token, number, "SPCMESO")
             MyApplication.HM_CLASS_ID[token] = SPCMesoActivity.INFO
         }
+
+        MyApplication.HM_CLASS["SPC_TST"] = SPCTstormOutlookActivity::class.java
+        MyApplication.HM_CLASS_ARGS["SPC_TST"] = arrayOf("")
+        MyApplication.HM_CLASS_ID["SPC_TST"] = ""
 
         MyApplication.HM_CLASS["STRPT"] = SPCStormReportsActivity::class.java
         MyApplication.HM_CLASS_ARGS["STRPT"] = arrayOf("today")

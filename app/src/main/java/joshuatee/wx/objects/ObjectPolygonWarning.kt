@@ -1,4 +1,5 @@
-<!--
+/*
+
     Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
@@ -16,17 +17,27 @@
     You should have received a copy of the GNU General Public License
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
- -->
+*/
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+package joshuatee.wx.objects
 
-    <include layout="@layout/widget_toolbar_top" />
+import android.content.Context
+import joshuatee.wx.DataStorage
+import joshuatee.wx.util.Utility
 
-    <WebView
-        android:id="@+id/webview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
+
+    var color = 0
+    val storage = DataStorage(type.prefTokenStorage)
+    var isEnabled = false
+
+    init {
+        storage.update(context)
+        color = Utility.readPref(context, type.prefTokenColor, type.initialColor)
+        isEnabled = Utility.readPref(context, type.prefTokenEnabled, "false").startsWith("t")
+    }
+
+    val name: String get() = type.urlToken.replace("%20", " ")
+
+}
+

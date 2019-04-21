@@ -53,15 +53,15 @@ object Utility {
 
     }
     
-        fun getRadarSiteName(radarSite: String): String {
+    fun getRadarSiteName(radarSite: String): String {
         return UtilityRadar.radarIdToName[radarSite] ?: ""
     }
 
-    fun getRadarSiteLatLon(radarSite: String): LatLon {
+   /* fun getRadarSiteLatLon(radarSite: String): LatLon {
         val lat = UtilityRadar.radarSiteToLat[radarSite] ?: ""
         val lon = UtilityRadar.radarSiteToLon[radarSite] ?: ""
         return LatLon(lat, lon)
-    }
+    }*/
 
     fun getRadarSiteX(radarSite: String): String {
         return UtilityRadar.radarSiteToLat[radarSite] ?: ""
@@ -71,7 +71,7 @@ object Utility {
         return UtilityRadar.radarSiteToLon[radarSite] ?: ""
     }
 
-    fun getWfoSiteName(wfo: String): String {
+    /*fun getWfoSiteName(wfo: String): String {
         return UtilityRadar.wfoIdToName[wfo] ?: ""
     }
 
@@ -79,15 +79,15 @@ object Utility {
         val lat = UtilityRadar.wfoSitetoLat[wfo] ?: ""
         val lon = UtilityRadar.wfoSitetoLon[wfo] ?: ""
         return LatLon(lat, lon)
-    }
+    }*/
 
-    fun getSoundingSiteLatLon(wfo: String): LatLon {
+    /*fun getSoundingSiteLatLon(wfo: String): LatLon {
         val lat = UtilityRadar.soundingSiteToLat[wfo] ?: ""
         val lon = "-" + (UtilityRadar.soundingSiteToLon[wfo] ?: "")
         return LatLon(lat, lon)
-    }
+    }*/
 
-    fun getSoundingSiteName(wfo: String): String {
+  /*  fun getSoundingSiteName(wfo: String): String {
         var site = UtilityRadar.wfoIdToName[wfo] ?: ""
         if (site == "") {
             site = UtilityRadar.soundingIdToName[wfo] ?: ""
@@ -102,7 +102,7 @@ object Utility {
             list.add(it + ": " + getSoundingSiteName(it))
         }
         return list
-    }
+    }*/
 
     fun getVersion(context: Context): String {
         var vers = ""

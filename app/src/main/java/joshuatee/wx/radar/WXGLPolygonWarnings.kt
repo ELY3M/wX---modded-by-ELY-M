@@ -31,6 +31,8 @@ import joshuatee.wx.util.UtilityCanvasProjection
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
+import joshuatee.wx.objects.ObjectPolygonWarning
+import joshuatee.wx.objects.PolygonWarningType
 import joshuatee.wx.util.UtilityLog
 import java.io.StringReader
 import java.util.regex.Pattern
@@ -40,6 +42,76 @@ import net.minidev.json.JSONArray
 
 
 internal object WXGLPolygonWarnings {
+
+    fun addGenericWarnings(
+            context: Context,
+            provider: ProjectionType,
+            rid1: String,
+            type: ObjectPolygonWarning
+    ): List<Double> {
+        val warningList = mutableListOf<Double>()
+        /*val prefToken = when (type) {
+            PolygonType.TOR -> MyApplication.severeDashboardTor.valueGet()
+            PolygonType.TST -> MyApplication.severeDashboardTst.valueGet()
+            else -> MyApplication.severeDashboardFfw.valueGet()
+        }*/
+        val prefToken = type.storage.valueGet()
+        //UtilityLog.d("wx", "SPS: " + prefToken)
+        val pn = ProjectionNumbers(context, rid1, provider)
+        var j: Int
+        var pixXInit: Double
+        var pixYInit: Double
+        var warningHTML = ""
+        try {
+            warningHTML = prefToken.replace("\n", "").replace(" ", "")
+        } catch (e: OutOfMemoryError) {
+            UtilityLog.HandleException(e)
+        }
+        val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
+        val vtecAl = warningHTML.parseColumn(RegExp.warningVtecPattern)
+        //UtilityLog.d("wx", polygonArr.toString())
+        //UtilityLog.d("wx", vtecAl.toString())
+        var polyCount = -1
+        polygonArr.forEach { polygon ->
+            polyCount += 1
+            if ( type.type == PolygonWarningType.SpecialWeatherStatement || (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith("0.CAN")  )
+            ) {
+                val polyTmp =
+                        polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
+                val testArr = polyTmp.split(" ")
+                val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }
+                        .map {
+                            it.toDoubleOrNull() ?: 0.0
+                        }.toList()
+                val x = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 != 0 }
+                        .map {
+                            it.toDoubleOrNull() ?: 0.0
+                        }.toList()
+                if (y.isNotEmpty() && x.isNotEmpty()) {
+                    var tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], pn)
+                    pixXInit = tmpCoords[0]
+                    pixYInit = tmpCoords[1]
+                    warningList.add(tmpCoords[0])
+                    warningList.add(tmpCoords[1])
+                    if (x.size == y.size) {
+                        j = 1
+                        while (j < x.size) {
+                            tmpCoords =
+                                    UtilityCanvasProjection.computeMercatorNumbers(x[j], y[j], pn)
+                            warningList.add(tmpCoords[0])
+                            warningList.add(tmpCoords[1])
+                            warningList.add(tmpCoords[0])
+                            warningList.add(tmpCoords[1])
+                            j += 1
+                        }
+                        warningList.add(pixXInit)
+                        warningList.add(pixYInit)
+                    }
+                }
+            }
+        }
+        return warningList
+    }
 
     fun addWarnings(
         context: Context,

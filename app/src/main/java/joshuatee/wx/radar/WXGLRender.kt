@@ -30,9 +30,9 @@ import javax.microedition.khronos.opengles.GL10
 
 import android.content.Context
 import android.graphics.*
+import android.opengl.GLSurfaceView.Renderer
 import android.opengl.*
 import android.opengl.Matrix
-import android.opengl.GLSurfaceView.Renderer
 import android.util.Log
 import joshuatee.wx.JNI
 import joshuatee.wx.MyApplication
@@ -125,6 +125,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private val locBugBuffers = ObjectOglBuffers()
     private val wbCircleBuffers = ObjectOglBuffers(PolygonType.WIND_BARB_CIRCLE, zoomToHideMiscFeatures)
     private val conusRadarBuffers = ObjectOglBuffers()
+    private val genericWarningBuffers = mutableListOf<ObjectOglBuffers>()
     private val colorSwo = IntArray(5)
     private var breakSize15 = 15000
     private val breakSizeRadar = 15000
@@ -228,6 +229,9 @@ class WXGLRender(private val context: Context) : Renderer {
         } else {
             JNI.genIndex(triangleIndexBuffer, breakSize15, breakSize15)
             JNI.genIndexLine(lineIndexBuffer, breakSizeLine * 4, breakSizeLine * 2)
+        }
+        MyApplication.radarWarningPolygons.forEach {
+            genericWarningBuffers.add(ObjectOglBuffers(it))
         }
     }
 
@@ -543,8 +547,19 @@ class WXGLRender(private val context: Context) : Renderer {
 
         GLES20.glLineWidth(warnLineWidth)
         listOf(warningSpsBuffers, warningSvsBuffers, warningSmwBuffers, warningSvrBuffers, warningEwwBuffers, warningFfwBuffers, warningTorBuffers).forEach { drawPolygons(it, 8) }
+
+        genericWarningBuffers.forEach {
+            if (it.warningType!!.isEnabled) {
+                drawPolygons(it, 8)
+            }
+	}
+
         GLES20.glLineWidth(watmcdLineWidth)
         listOf(mpdBuffers, mcdBuffers, watchSvrBuffers, watchTorBuffers, swoBuffers).forEach { drawPolygons(it, 8) }
+
+
+
+
 
         //TODO try to use real plotting without adding usa map....
         //hack job!!!
@@ -921,19 +936,34 @@ class WXGLRender(private val context: Context) : Renderer {
         }
     }
 
-
-
-
-
     private fun drawPolygons(buffers: ObjectOglBuffers, countDivisor: Int) {
         if (buffers.isInitialized) {
             // FIXME is chunkcount ever above one? "it" is never reference in the loop
             (0 until buffers.chunkCount).forEach { _ ->
                 lineIndexBuffer.position(0)
                 buffers.setToPositionZero()
-                GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
-                GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, buffers.colorBuffer)
-                GLES20.glDrawElements(GLES20.GL_LINES, buffers.floatBuffer.capacity() / countDivisor, GLES20.GL_UNSIGNED_SHORT, lineIndexBuffer.slice().asShortBuffer())
+                GLES20.glVertexAttribPointer(
+                    mPositionHandle,
+                    2,
+                    GLES20.GL_FLOAT,
+                    false,
+                    0,
+                    buffers.floatBuffer.slice().asFloatBuffer()
+                )
+                GLES20.glVertexAttribPointer(
+                    colorHandle,
+                    3,
+                    GLES20.GL_UNSIGNED_BYTE,
+                    true,
+                    0,
+                    buffers.colorBuffer
+                )
+                GLES20.glDrawElements(
+                    GLES20.GL_LINES,
+                    buffers.floatBuffer.capacity() / countDivisor,
+                    GLES20.GL_UNSIGNED_SHORT,
+                    lineIndexBuffer.slice().asShortBuffer()
+                )
             }
         }
     }
@@ -950,9 +980,28 @@ class WXGLRender(private val context: Context) : Renderer {
                     buffers.floatBuffer.position(it * 480000)
                     buffers.colorBuffer.position(0)
                     lineIndexBuffer.position(0)
-                    GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
-                    GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, buffers.colorBuffer.slice())
-                    GLES20.glDrawElements(GLES20.GL_LINES, lineCnt, GLES20.GL_UNSIGNED_SHORT, lineIndexBuffer.slice().asShortBuffer())
+                    GLES20.glVertexAttribPointer(
+                        mPositionHandle,
+                        2,
+                        GLES20.GL_FLOAT,
+                        false,
+                        0,
+                        buffers.floatBuffer.slice().asFloatBuffer()
+                    )
+                    GLES20.glVertexAttribPointer(
+                        colorHandle,
+                        3,
+                        GLES20.GL_UNSIGNED_BYTE,
+                        true,
+                        0,
+                        buffers.colorBuffer.slice()
+                    )
+                    GLES20.glDrawElements(
+                        GLES20.GL_LINES,
+                        lineCnt,
+                        GLES20.GL_UNSIGNED_SHORT,
+                        lineIndexBuffer.slice().asShortBuffer()
+                    )
                 } catch (e: Exception) {
 
                 }
@@ -967,7 +1016,16 @@ class WXGLRender(private val context: Context) : Renderer {
             mtrxView[it] = 0.0f
             mtrxProjectionAndView[it] = 0.0f
         }
-        Matrix.orthoM(mtrxProjection, 0, (-1 * ortInt).toFloat(), ortInt.toFloat(), -1f * ortInt.toFloat() * (1 / mSurfaceRatio), ortInt * (1 / mSurfaceRatio), 1f, -1f)
+        Matrix.orthoM(
+            mtrxProjection,
+            0,
+            (-1 * ortInt).toFloat(),
+            ortInt.toFloat(),
+            -1f * ortInt.toFloat() * (1 / mSurfaceRatio),
+            ortInt * (1 / mSurfaceRatio),
+            1f,
+            -1f
+        )
         Matrix.setLookAtM(mtrxView, 0, 0f, 0f, 1f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
         Matrix.multiplyMM(mtrxProjectionAndView, 0, mtrxProjection, 0, mtrxView, 0)
         Matrix.multiplyMM(mtrxProjectionAndViewOrig, 0, mtrxProjection, 0, mtrxView, 0)
@@ -1161,6 +1219,18 @@ class WXGLRender(private val context: Context) : Renderer {
     }
     fun deconstructSpsWarningLines() {
         deconstructGenericLines(warningSpsBuffers)
+    }
+    
+    
+    fun constructGenericWarningLines() {
+        genericWarningBuffers.forEach {
+            if (it.warningType!!.isEnabled) {
+                //UtilityLog.d("wx", it.warningType!!.type.productCode)
+                constructGenericLines(it)
+            } else {
+                deconstructGenericLines(it)
+            }
+        }
     }
 
     fun constructLocationDot(locXCurrent: String, locYCurrentF: String, archiveMode: Boolean) {
@@ -1388,11 +1458,16 @@ class WXGLRender(private val context: Context) : Renderer {
     private fun constructGenericLines(buffers: ObjectOglBuffers) {
         var fList = listOf<Double>()
         when (buffers.type) {
-            PolygonType.MCD, PolygonType.MPD, PolygonType.WATCH_SVR, PolygonType.WATCH_TOR -> fList = UtilityWatch.addWat(context, provider, rid, buffers.type).toList()
+            PolygonType.MCD, PolygonType.MPD, PolygonType.WATCH_SVR, PolygonType.WATCH_TOR -> fList = 
+                UtilityWatch.addWat(context, provider, rid, buffers.type).toList()
             PolygonType.TOR, PolygonType.SVR, PolygonType.EWW, PolygonType.FFW, PolygonType.SMW, PolygonType.SVS -> fList = WXGLPolygonWarnings.addWarnings(context, provider, rid, buffers.type).toList()
             PolygonType.SPS -> fList = WXGLPolygonWarnings.addSPS(context, provider, rid, buffers.type).toList()
             PolygonType.STI -> fList = WXGLNexradLevel3StormInfo.decodeAndPlot(context, idxStr, rid, provider).toList()
             else -> {
+                if (buffers.warningType != null) {
+                    fList = WXGLPolygonWarnings.addGenericWarnings(context, provider, rid, buffers.warningType!!).toList()
+                    //UtilityLog.d("wx", "SPS: " + fList)
+                }
             }
         }
         buffers.breakSize = 15000
@@ -1407,12 +1482,22 @@ class WXGLRender(private val context: Context) : Renderer {
             remainder = totalBinsGeneric - buffers.breakSize * buffers.chunkCount
             buffers.chunkCount = buffers.chunkCount + 1
         }
-        buffers.initialize(
-            4 * 4 * totalBinsGeneric,
-            0,
-            3 * 4 * totalBinsGeneric,
-            buffers.type.color
-        )
+        // FIXME need a better solution then this hack
+        if (buffers.warningType == null) {
+            buffers.initialize(
+                    4 * 4 * totalBinsGeneric,
+                    0,
+                    3 * 4 * totalBinsGeneric,
+                    buffers.type.color
+            )
+        } else {
+            buffers.initialize(
+                    4 * 4 * totalBinsGeneric,
+                    0,
+                    3 * 4 * totalBinsGeneric,
+                    buffers.warningType!!.color
+            )
+        }
         if (MyApplication.radarUseJni) {
             JNI.colorGen(buffers.colorBuffer, 4 * totalBinsGeneric, buffers.colorArray)
         } else {

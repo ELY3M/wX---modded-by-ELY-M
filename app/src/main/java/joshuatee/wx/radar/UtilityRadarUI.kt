@@ -37,6 +37,7 @@ import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.spc.SPCMCDWShowActivity
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectImageMap
 
@@ -141,113 +142,6 @@ internal object UtilityRadarUI {
         )
     }
 
-    private fun showNearestSps(context: Context, glview: WXGLSurfaceView) {
-        val polygonUrl = UtilityWXOGL.showSpsProducts(
-                glview.newY.toDouble(),
-                glview.newX.toDouble() * -1.0
-        )
-        if (polygonUrl != "") ObjectIntent(
-                context,
-                USAlertsDetailActivity::class.java,
-                USAlertsDetailActivity.URL,
-                arrayOf(polygonUrl, "")
-        )
-    }
-    
-    
-    private fun showNearestWatch(
-            context: Context,
-            act: Activity,
-            glview: WXGLSurfaceView,
-            uiDispatcher: CoroutineDispatcher
-    ) = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) {
-            UtilityWatch.showWatchProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
-        }
-        if (txt == "") { txt = "No active watch"}
-        UtilityAlertDialog.showHelpText(txt, act)
-    }
-
-    private fun showNearestMcd(
-            context: Context,
-            act: Activity,
-            glview: WXGLSurfaceView,
-            uiDispatcher: CoroutineDispatcher
-    ) = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) {
-            UtilityWatch.showMCDProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
-        }
-        if (txt == "") { txt = "No active MCD"}
-        UtilityAlertDialog.showHelpText(txt, act)
-    }
-
-
-    private fun showNearestMpd(
-            context: Context,
-            act: Activity,
-            glview: WXGLSurfaceView,
-            uiDispatcher: CoroutineDispatcher
-    ) = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) {
-            UtilityWatch.showMPDProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0)
-        }
-	if (txt == "") { txt = "No active MPD"}
-        UtilityAlertDialog.showHelpText(txt, act)
-    }
-
-    private fun showSpotterInfo(
-            act: Activity,
-            glview: WXGLSurfaceView,
-            uiDispatcher: CoroutineDispatcher
-    ) = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) {
-            UtilitySpotter.findClosestSpotter(glview.latLon)
-        }
-        UtilityAlertDialog.showHelpText(txt, act)
-    }
-
-    private fun showUserPointInfo(
-            act: Activity,
-            context: Context,
-            glview: WXGLSurfaceView,
-            uiDispatcher: CoroutineDispatcher
-    ) = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) {
-            UtilityUserPoints.findClosestUserPoint(context, glview.latLon)
-        }
-        UtilityAlertDialog.showHelpText(txt, act)
-    }
-
-    private fun addUserPoint(act: Activity, context: Context, oglr: WXGLRender, glview: WXGLSurfaceView) {
-        UtilityUserPoints.addUserPoint(context, oglr, glview, glview.latLon)
-        UtilityAlertDialog.showHelpText("added userpoint", act)
-    }
-
-
-    private fun deleteUserPoint(
-            act: Activity,
-            context: Context,
-            oglr: WXGLRender,
-            glview: WXGLSurfaceView,
-            uiDispatcher: CoroutineDispatcher
-    ) = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) {
-            UtilityUserPoints.deleteUserPoint(
-                    context, oglr, glview, glview.latLon)
-        }
-        UtilityAlertDialog.showHelpText(txt, act)
-    }
-
-    private fun deleteAllUserPoints(
-            act: Activity,
-            context: Context,
-            uiDispatcher: CoroutineDispatcher
-    ) = GlobalScope.launch(uiDispatcher) {
-        UtilityUserPoints.deleteAllUserPoints(context)
-        UtilityAlertDialog.showHelpText("Deleted all userpoints", act)
-    }
-
-
     fun addItemsToLongPress(
         alertDialogRadarLongpressAl: MutableList<String>,
         lat: String,
@@ -264,18 +158,13 @@ internal object UtilityRadarUI {
         val locY = lon.toDoubleOrNull() ?: 0.0
         val pointX = glview.newY.toDouble()
         val pointY = glview.newX * -1.0
-        val dist = LatLon.distance(LatLon(locX, locY), LatLon(pointX, pointY), DistanceUnit.MILE)
-        //val ridX = (Utility.readPref(context, "RID_" + oglr.rid + "_X", "0.0")).toDouble()
-        //val ridY = -1.0 * (Utility.readPref(context, "RID_" + oglr.rid + "_Y", "0.0")).toDouble()
+        val dist =
+            LatLon.distance(LatLon(locX, locY), LatLon(pointX, pointY), DistanceUnit.MILE)
         val ridX = Utility.getRadarSiteX(oglr.rid).toDouble()
-        val ridY = -1.0 * Utility.getRadarSiteY(oglr.rid).toDouble()	    
-	    
-        val distRid =
-            LatLon.distance(LatLon(ridX, ridY), LatLon(pointX, pointY), DistanceUnit.MILE)
-
-        val distRidKm =
-                LatLon.distance(LatLon(ridX, ridY), LatLon(pointX, pointY), DistanceUnit.KM)
-
+        val ridY = -1.0 * Utility.getRadarSiteY(oglr.rid).toDouble()
+        val distRid = LatLon.distance(LatLon(ridX, ridY), LatLon(pointX, pointY), DistanceUnit.MILE)
+        val distRidKm = LatLon.distance(LatLon(ridX, ridY), LatLon(pointX, pointY), DistanceUnit.KM)
+	
         // FIXME look at iOS version and try to match in data provided and improve formatting
         val latLonTitle = UtilityStringExternal.truncate(glview.newY.toString(), 6) +
                 ", -" +
@@ -386,13 +275,13 @@ internal object UtilityRadarUI {
                 showNearestSps(context, glview)
             }
             strName.contains("Show watch text") -> {
-                showNearestWatch(context, act, glview, uiDispatcher)
+                showNearestProduct(context, act, PolygonType.WATCH, glview, uiDispatcher)
             }
             strName.contains("Show MCD text") -> {
-                showNearestMcd(context, act, glview, uiDispatcher)
+                showNearestProduct(context, act, PolygonType.MCD, glview, uiDispatcher)
             }
             strName.contains("Show MPD text") -> {
-                showNearestMpd(context, act, glview, uiDispatcher)
+                showNearestProduct(context, act, PolygonType.MPD, glview, uiDispatcher)
             }
             strName.contains("Show nearest observation") -> {
                 getMetar(glview, act, context, uiDispatcher)
@@ -414,21 +303,16 @@ internal object UtilityRadarUI {
             }
             strName.contains("userpoint info") -> {
                 showUserPointInfo(act, context, glview, uiDispatcher)
-
             }
             strName.contains("Add userpoint for") -> {
                 addUserPoint(act, context, oglr, glview)
-
             }
             strName.contains("Delete userpoint for") -> {
                 deleteUserPoint(act, context, oglr, glview, uiDispatcher)
-
             }
             strName.contains("Delete all userpoints") -> {
                 deleteAllUserPoints(act, context, uiDispatcher)
-
             }
-
             else -> fn(strName)
         }
     }
@@ -581,11 +465,11 @@ internal object UtilityRadarUI {
                 ogl.constructWATMCDLines()
             else
                 ogl.deconstructWATMCDLines()
-
             if (PolygonType.MPD.pref && !archiveMode)
                 ogl.constructMPDLines()
             else
                 ogl.deconstructMPDLines()
+            ogl.constructGenericWarningLines()
             glv.requestRender()
         }).start()
         if (MyApplication.locdotFollowsGps) {
@@ -674,4 +558,98 @@ internal object UtilityRadarUI {
             }
         //} //showExtras
     }
+    
+    
+    
+    private fun showNearestSps(context: Context, glview: WXGLSurfaceView) {
+        val polygonUrl = UtilityWXOGL.showSpsProducts(
+                glview.newY.toDouble(),
+                glview.newX.toDouble() * -1.0
+        )
+        if (polygonUrl != "") ObjectIntent(
+                context,
+                USAlertsDetailActivity::class.java,
+                USAlertsDetailActivity.URL,
+                arrayOf(polygonUrl, "")
+        )
+    }
+
+    private fun showNearestProduct(
+            context: Context,
+            act: Activity,
+            type: PolygonType,
+            glview: WXGLSurfaceView,
+            uiDispatcher: CoroutineDispatcher
+    ) = GlobalScope.launch(uiDispatcher) {
+        var txt = withContext(Dispatchers.IO) {
+            UtilityWatch.showProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0, type)
+        }
+        ObjectIntent(
+                context,
+                SPCMCDWShowActivity::class.java,
+                SPCMCDWShowActivity.NO,
+                arrayOf(txt, "", type.toString())
+        )
+        /*if (txt == "") {
+            txt = "No active " + type.typeAsString
+        }
+        UtilityAlertDialog.showHelpText(txt, act)*/
+    }
+
+    
+
+    private fun showSpotterInfo(
+            act: Activity,
+            glview: WXGLSurfaceView,
+            uiDispatcher: CoroutineDispatcher
+    ) = GlobalScope.launch(uiDispatcher) {
+        val txt = withContext(Dispatchers.IO) {
+            UtilitySpotter.findClosestSpotter(glview.latLon)
+        }
+        UtilityAlertDialog.showHelpText(txt, act)
+    }
+
+    private fun showUserPointInfo(
+            act: Activity,
+            context: Context,
+            glview: WXGLSurfaceView,
+            uiDispatcher: CoroutineDispatcher
+    ) = GlobalScope.launch(uiDispatcher) {
+        val txt = withContext(Dispatchers.IO) {
+            UtilityUserPoints.findClosestUserPoint(context, glview.latLon)
+        }
+        UtilityAlertDialog.showHelpText(txt, act)
+    }
+
+    private fun addUserPoint(act: Activity, context: Context, oglr: WXGLRender, glview: WXGLSurfaceView) {
+        UtilityUserPoints.addUserPoint(context, oglr, glview, glview.latLon)
+        UtilityAlertDialog.showHelpText("added userpoint", act)
+    }
+
+
+    private fun deleteUserPoint(
+            act: Activity,
+            context: Context,
+            oglr: WXGLRender,
+            glview: WXGLSurfaceView,
+            uiDispatcher: CoroutineDispatcher
+    ) = GlobalScope.launch(uiDispatcher) {
+        val txt = withContext(Dispatchers.IO) {
+            UtilityUserPoints.deleteUserPoint(
+                    context, oglr, glview, glview.latLon)
+        }
+        UtilityAlertDialog.showHelpText(txt, act)
+    }
+
+    private fun deleteAllUserPoints(
+            act: Activity,
+            context: Context,
+            uiDispatcher: CoroutineDispatcher
+    ) = GlobalScope.launch(uiDispatcher) {
+        UtilityUserPoints.deleteAllUserPoints(context)
+        UtilityAlertDialog.showHelpText("Deleted all userpoints", act)
+    }
+
+
+
 }

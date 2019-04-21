@@ -23,7 +23,6 @@ package joshuatee.wx.canada
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.widget.LinearLayout
 
 import joshuatee.wx.R
 import joshuatee.wx.settings.Location
@@ -31,6 +30,8 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCALegal
 import joshuatee.wx.ui.ObjectCardText
 import kotlinx.coroutines.*
+
+import kotlinx.android.synthetic.main.activity_linear_layout.*
 
 class CanadaHourlyActivity : BaseActivity() {
 
@@ -45,17 +46,14 @@ class CanadaHourlyActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        val locNum = intent.getStringExtra(LOC_NUM)
-        locNumInt = (locNum.toIntOrNull() ?: 0) - 1
-        val linearLayout: LinearLayout = findViewById(R.id.ll)
-        c0 = ObjectCardText(this, linearLayout, toolbar)
-        ObjectCALegal(this, linearLayout, UtilityCanadaHourly.getUrl(Location.locationIndex))
+        locNumInt = (intent.getStringExtra(LOC_NUM).toIntOrNull() ?: 0) - 1
+        c0 = ObjectCardText(this, ll, toolbar)
+        ObjectCALegal(this, ll, UtilityCanadaHourly.getUrl(Location.locationIndex))
         title = Location.getName(locNumInt) + " hourly forecast"
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        val html = withContext(Dispatchers.IO) { UtilityCanadaHourly.getString(locNumInt) }
-        c0.setText(html)
+        c0.setText(withContext(Dispatchers.IO) { UtilityCanadaHourly.getString(locNumInt) })
     }
 }

@@ -27,12 +27,13 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.webkit.WebView
 import android.webkit.WebViewClient
 
 import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.BaseActivity
+
+import kotlinx.android.synthetic.main.activity_webview_toolbar.*
 
 class WebscreenAB : BaseActivity() {
 
@@ -46,7 +47,6 @@ class WebscreenAB : BaseActivity() {
     }
 
     // added to support webview history, this var and block below it
-    private lateinit var webview: WebView
     private var url = ""
 
     override fun onBackPressed() {
@@ -67,7 +67,6 @@ class WebscreenAB : BaseActivity() {
         val activityArguments = intent.getStringArrayExtra(URL)
         url = activityArguments[0]
         title = activityArguments[1]
-        webview = findViewById(R.id.webview)
         val webSettings = webview.settings
         webSettings.javaScriptEnabled = true
         webview.webViewClient = WebViewClient()

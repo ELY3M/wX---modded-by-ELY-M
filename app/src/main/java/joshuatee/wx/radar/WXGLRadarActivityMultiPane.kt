@@ -296,14 +296,13 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         }
         numPanesArr.forEach { oldRidArr[it] = "" }
         val defaultProducts = listOf("N0Q", "N0U", "N0C", "DVL")
-        (0..(numPanes - 1)).forEach {
+        (0 until numPanes).forEach {
             oglrArr[it].product = Utility.readPref(
                 this,
                 prefPrefix + "_PROD" + (it + 1).toString(),
                 defaultProducts[it]
             )
         }
-
         glviewArr[0].scaleFactor = Utility.readPref(
             this,
             prefPrefix + "_ZOOM1",

@@ -28,9 +28,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-import android.widget.ScrollView
 
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
@@ -44,6 +42,8 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.ObjectIntent
 import kotlinx.coroutines.*
+
+import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -66,7 +66,6 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var c4: ObjectCardImage
     private lateinit var c5: ObjectCardImage
     private lateinit var c6: ObjectCardImage
-    private lateinit var scrollView: ScrollView
     private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
@@ -78,8 +77,6 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        scrollView = findViewById(R.id.sv)
-        val ll: LinearLayout = findViewById(R.id.ll)
         c1 = ObjectCardImage(this, ll)
         c2 = ObjectCardText(this, ll, toolbar, toolbarBottom)
         c3 = ObjectCardImage(this, ll)
@@ -158,7 +155,7 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     c5
                 ).forEach { card ->
                     card.setOnClickListener(View.OnClickListener {
-                        scrollView.smoothScrollTo(
+                        sv.smoothScrollTo(
                             0,
                             0
                         )
@@ -173,7 +170,7 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 c6.setVisibility(View.GONE)
                 listOf(c3).forEach { card ->
                     card.setOnClickListener(View.OnClickListener {
-                        scrollView.smoothScrollTo(
+                        sv.smoothScrollTo(
                             0,
                             0
                         )
@@ -188,7 +185,7 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 c6.setVisibility(View.GONE)
                 listOf(c3).forEach { card ->
                     card.setOnClickListener(View.OnClickListener {
-                        scrollView.smoothScrollTo(
+                        sv.smoothScrollTo(
                             0,
                             0
                         )
@@ -208,7 +205,7 @@ class SPCSWOActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     c6
                 ).forEach { card ->
                     card.setOnClickListener(View.OnClickListener {
-                        scrollView.smoothScrollTo(
+                        sv.smoothScrollTo(
                             0,
                             0
                         )

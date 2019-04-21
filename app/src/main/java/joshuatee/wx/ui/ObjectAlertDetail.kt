@@ -100,32 +100,36 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
                     wfo = tmpArr[2]
                 }
             } else {
-                if (ca.title.contains("expiring")) {
-                    val tmpArr = UtilityString.parseMultipe(
-                        ca.title,
-                        "(.*?) issued (.*?) expiring (.*?) by (.*?)$",
-                        4
-                    )
-                    title = tmpArr[0]
-                    startTime = tmpArr[1]
-                    endTime = tmpArr[2]
-                    wfo = tmpArr[3]
-                } else if (ca.title.contains("until")) {
-                    val tmpArr = UtilityString.parseMultipe(
-                            ca.title,
-                            "(.*?) issued (.*?) until (.*?) by (.*?)$",
-                            4
-                    )
-                    title = tmpArr[0]
-                    startTime = tmpArr[1]
-                    endTime = tmpArr[2]
-                    wfo = tmpArr[3]
-                } else {
-                    val tmpArr =
-                        UtilityString.parseMultipe(ca.title, "(.*?) issued (.*?) by (.*?)$", 3)
-                    title = tmpArr[0]
-                    startTime = tmpArr[1]
-                    wfo = tmpArr[2]
+                when {
+                    ca.title.contains("expiring") -> {
+                        val tmpArr = UtilityString.parseMultipe(
+                                ca.title,
+                                "(.*?) issued (.*?) expiring (.*?) by (.*?)$",
+                                4
+                        )
+                        title = tmpArr[0]
+                        startTime = tmpArr[1]
+                        endTime = tmpArr[2]
+                        wfo = tmpArr[3]
+                    }
+                    ca.title.contains("until") -> {
+                        val tmpArr = UtilityString.parseMultipe(
+                                ca.title,
+                                "(.*?) issued (.*?) until (.*?) by (.*?)$",
+                                4
+                        )
+                        title = tmpArr[0]
+                        startTime = tmpArr[1]
+                        endTime = tmpArr[2]
+                        wfo = tmpArr[3]
+                    }
+                    else -> {
+                        val tmpArr =
+                                UtilityString.parseMultipe(ca.title, "(.*?) issued (.*?) by (.*?)$", 3)
+                        title = tmpArr[0]
+                        startTime = tmpArr[1]
+                        wfo = tmpArr[2]
+                    }
                 }
             }
             tvArr[0].text = context.resources.getString(R.string.uswarn_start_time, startTime)

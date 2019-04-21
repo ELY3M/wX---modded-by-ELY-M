@@ -26,8 +26,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.LinearLayout
-import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
@@ -36,6 +34,8 @@ import joshuatee.wx.ui.ObjectCAWARN
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import kotlinx.coroutines.*
+
+import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
@@ -54,15 +54,13 @@ class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        val linearLayout: LinearLayout = findViewById(R.id.ll)
-        objWarn = ObjectCAWARN(this, this, linearLayout, toolbar)
+        objWarn = ObjectCAWARN(this, this, ll, toolbar)
         objWarn.prov = Utility.readPref(this, "CA_ALERTS_PROV", objWarn.prov)
         title = "Canada Alerts"
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        val sv: ScrollView = findViewById(R.id.sv)
         sv.smoothScrollTo(0, 0)
         withContext(Dispatchers.IO) { objWarn.getData() }
         objWarn.showData()

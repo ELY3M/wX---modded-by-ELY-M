@@ -32,7 +32,9 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.objects.GeographyType
+import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.objects.PolygonWarningType
 
 open class ObjectOglBuffers() {
 
@@ -75,11 +77,15 @@ open class ObjectOglBuffers() {
     var scaleCutOff: Float = 0.0f
     var type: PolygonType = PolygonType.NONE
     var geotype: GeographyType = GeographyType.NONE
+    var warningType: ObjectPolygonWarning? = null
 
     constructor(type: PolygonType) : this() {
         this.type = type
     }
 
+    constructor(warningType: ObjectPolygonWarning) : this() {
+        this.warningType = warningType
+    }
     constructor(geotype: GeographyType, scaleCutOff: Float) : this() {
         this.geotype = geotype
         this.scaleCutOff = scaleCutOff

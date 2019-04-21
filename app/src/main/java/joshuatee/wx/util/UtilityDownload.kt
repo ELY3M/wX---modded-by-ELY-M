@@ -173,6 +173,11 @@ object UtilityDownload {
             "QPF6-7" -> url = "${MyApplication.nwsWPCwebsitePrefix}/qpf/97ep48iwbg_fill.gif"
             "QPF1-5" -> url = "${MyApplication.nwsWPCwebsitePrefix}/qpf/p120i.gif"
             "QPF1-7" -> url = "${MyApplication.nwsWPCwebsitePrefix}/qpf/p168i.gif"
+            "SPC_TST" -> {
+                needsBitmap = false
+                val images = UtilitySPC.tstormOutlookImages
+                return UtilityImg.mergeImagesVertically(images)
+            }
             "SWOD1" -> {
                 needsBitmap = false
                 bm = UtilitySPCSWO.getImageUrls("1", false)[0]

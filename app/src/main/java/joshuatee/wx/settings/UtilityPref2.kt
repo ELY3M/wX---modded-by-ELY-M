@@ -130,7 +130,6 @@ object UtilityPref2 {
             editor.putInt("ALERT_BLACKOUT_AM", alertBlackoutAmDefault)
             editor.putInt("ALERT_BLACKOUT_PM", alertBlackoutPmDefault)
             editor.putString("ALERT_BLACKOUT_TORNADO", alertBlackoutTornadoDefault)
-            //editor.apply()
             editor.putInt("REFRESH_MAIN_MIN", refreshMainMinDefault)
             editor.putInt("LOC_NUM_INT", locNumIntDefault)
             editor.putInt("REFRESH_SPC_MIN", refreshSpcMinDefault)

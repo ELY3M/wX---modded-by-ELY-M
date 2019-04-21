@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/singletext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
                 android:paddingRight="@dimen/padding_half"
                 android:textSize="@dimen/normal_text" />
 
-            <androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/timeandsize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
                 android:paddingEnd="@dimen/padding" />
         </LinearLayout>
 
-        <androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

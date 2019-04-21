@@ -25,7 +25,12 @@ package joshuatee.wx.objects
 import android.graphics.Color
 import joshuatee.wx.MyApplication
 
-enum class PolygonType constructor(var color: Int, private val typeAsString: String, var pref: Boolean, var size: Float) {
+enum class PolygonType constructor(
+    var color: Int,
+    val typeAsString: String,
+    var pref: Boolean,
+    var size: Float
+) {
 
     MCD(MyApplication.radarColorMcd, "MCD", MyApplication.radarWatMcd, 0.0f),
     MPD(MyApplication.radarColorMpd, "MPD", MyApplication.radarMpd, 0.0f),
@@ -39,18 +44,60 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
     SMW(MyApplication.radarColorSmw, "SMW", MyApplication.radarSmwWarnings, 0.0f),
     SVS(MyApplication.radarColorSvs, "SVS", MyApplication.radarSvsWarnings, 0.0f),
     SPS(MyApplication.radarColorSps, "SPS", MyApplication.radarSpsWarnings, 0.0f),
-    SPOTTER(MyApplication.radarColorSpotter, "SPOTTER", MyApplication.radarSpotters, MyApplication.radarSpotterSize.toFloat()),
-    SPOTTER_LABELS(MyApplication.radarColorSpotter, "SPOTTER_LABELS", MyApplication.radarSpottersLabel, 0.0f),
-    WIND_BARB_GUSTS(Color.RED, "WIND_BARB_GUSTS", MyApplication.radarObsWindbarbs, 0.0f),
-    WIND_BARB(MyApplication.radarColorObsWindbarbs, "WIND_BARB", MyApplication.radarObsWindbarbs, MyApplication.radarAviationSize.toFloat()),
-    WIND_BARB_CIRCLE(MyApplication.radarColorObsWindbarbs, "WIND_BARB_CIRCLE", MyApplication.radarObsWindbarbs, MyApplication.radarAviationSize.toFloat()),
-    LOCDOT(MyApplication.radarColorLocdot, "LOCDOT", MyApplication.radarLocDot, MyApplication.radarLocdotSize.toFloat()),
-    STI(MyApplication.radarColorSti, "STI", MyApplication.radarSti, 0.0f),
-    TVS(MyApplication.radarColorTor, "TVS", MyApplication.radarTvs, MyApplication.radarTvsSize.toFloat()),
-    HI(MyApplication.radarColorHi, "HI", MyApplication.radarHi, MyApplication.radarHiSize.toFloat()),
-    HAIL_LABELS(MyApplication.radarColorHi, "HAILSIZE_LABELS", MyApplication.radarHailSizeLabel, 0.0f),
+    
+    SPOTTER(
+        MyApplication.radarColorSpotter,
+        "SPOTTER",
+        MyApplication.radarSpotters,
+        MyApplication.radarSpotterSize.toFloat()
+    ),
+    SPOTTER_LABELS(
+        MyApplication.radarColorSpotter,
+        "SPOTTER_LABELS",
+        MyApplication.radarSpottersLabel,
+        0.0f
+    ),
+    WIND_BARB_GUSTS(Color.RED, "WIND_BARB_GUSTS", MyApplication.radarObsWindbarbs, MyApplication.radarWbLinesize.toFloat()),
+    WIND_BARB(
+        MyApplication.radarColorObsWindbarbs,
+        "WIND_BARB",
+        MyApplication.radarObsWindbarbs,
+            MyApplication.radarWbLinesize.toFloat()
+        //MyApplication.radarAviationSize.toFloat()
+    ),
+    WIND_BARB_CIRCLE(
+        MyApplication.radarColorObsWindbarbs,
+        "WIND_BARB_CIRCLE",
+        MyApplication.radarObsWindbarbs,
+        MyApplication.radarAviationSize.toFloat()
+    ),
+    LOCDOT(
+        MyApplication.radarColorLocdot,
+        "LOCDOT",
+        MyApplication.radarLocDot,
+        MyApplication.radarLocdotSize.toFloat()
+    ),
+    STI(MyApplication.radarColorSti, "STI", MyApplication.radarSti, MyApplication.radarStiLinesize.toFloat()),
+    TVS(
+        MyApplication.radarColorTor,
+        "TVS",
+        MyApplication.radarTvs,
+        MyApplication.radarTvsSize.toFloat()
+    ),
+    HI(
+        MyApplication.radarColorHi,
+        "HI",
+        MyApplication.radarHi,
+        MyApplication.radarHiSize.toFloat()
+    ),
+    HAIL_LABELS(
+    	MyApplication.radarColorHi, 
+	"HAILSIZE_LABELS", 
+	MyApplication.radarHailSizeLabel, 
+	0.0f
+    ),
     OBS(MyApplication.radarColorObs, "OBS", MyApplication.radarObs, 0.0f),
-    SWO(MyApplication.radarColorHi, "SWO", MyApplication.radarSwo, 0.0f),
+    SWO(MyApplication.radarColorHi, "SWO", MyApplication.radarSwo, MyApplication.radarSwoLinesize.toFloat()),
     USERPOINTS(0, "USERPOINTS", MyApplication.radarUserPoints, 0.0f),
     CONUS(0, "CONUS", MyApplication.radarConusRadar, 0.0f),
     NONE(0, "", false, 0.0f);

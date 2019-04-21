@@ -110,10 +110,19 @@ class SettingsRadarActivity : BaseActivity() {
         ll.addView(ObjectSettingsCheckBox(this, this, "Show SPS warnings", "SPS_WARNINGS", R.string.sps_warnings_label).card)
         
 	
-	
-	
-	
-	
+
+        MyApplication.radarWarningPolygons.forEach {
+            ll.addView(
+                    ObjectSettingsCheckBox(
+                            this,
+                            this,
+                            "Show " + it.name,
+                            it.type.prefTokenEnabled,
+                            R.string.cod_warnings_default_label // FIXME add constructor to take string instead
+                    ).card
+            )
+        }
+
         ll.addView(
                 ObjectSettingsCheckBox(
                         this,
@@ -701,6 +710,7 @@ class SettingsRadarActivity : BaseActivity() {
         }
         GeographyType.refresh()
         PolygonType.refresh()
+        MyApplication.initGenericRadarWarnings(this)
     }
 
     private fun showGPSPermsDialogue() {

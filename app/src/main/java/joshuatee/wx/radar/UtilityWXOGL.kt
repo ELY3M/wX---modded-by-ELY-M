@@ -31,6 +31,10 @@ import java.util.Locale
 import joshuatee.wx.MyApplication
 import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.external.ExternalPolygon
+import joshuatee.wx.util.UCARRandomAccessFile
+import joshuatee.wx.util.UtilityDownload
+import joshuatee.wx.util.UtilityIO
+import joshuatee.wx.util.UtilityLog
 
 import joshuatee.wx.Extensions.*
 
@@ -149,7 +153,13 @@ object UtilityWXOGL {
     fun showTextProducts(lat: Double, lon: Double): String {
         var warningHTML = 
 	MyApplication.severeDashboardTor.valueGet() + MyApplication.severeDashboardSvr.valueGet() + MyApplication.severeDashboardEww.valueGet() + MyApplication.severeDashboardFfw.valueGet() + MyApplication.severeDashboardSmw.valueGet()
-        val urlList = warningHTML.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
+        MyApplication.radarWarningPolygons.forEach {
+            if (it.isEnabled) {
+                warningHTML += it.storage.valueGet()
+            }
+        }
+        val urlList =
+            warningHTML.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
         warningHTML = warningHTML.replace("\n", "")
         warningHTML = warningHTML.replace(" ", "")
         val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
@@ -161,10 +171,8 @@ object UtilityWXOGL {
         var polyCount = -1
         polygonArr.forEach { polys ->
             polyCount += 1
-            if (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith(
-                    "0.CAN"
-                )
-            ) {
+            //if (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith("0.CAN")) {
+            if (true) {
                 val polyTmp = polys.replace("[", "").replace("]", "").replace(",", " ")
                 testArr = polyTmp.split(" ").dropLastWhile { it.isEmpty() }
                 val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }

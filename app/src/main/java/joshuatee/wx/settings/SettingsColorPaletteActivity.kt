@@ -27,7 +27,6 @@ import android.content.Context
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -43,6 +42,8 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 import joshuatee.wx.util.UtilityFileManagement
 
+import kotlinx.android.synthetic.main.activity_recyclerview_toolbar_with_twofab.*
+
 class SettingsColorPaletteActivity : BaseActivity() {
 
     companion object {
@@ -50,7 +51,6 @@ class SettingsColorPaletteActivity : BaseActivity() {
         private var prefToken = "RADAR_COLOR_PALETTE_94"
     }
 
-    private lateinit var rView: RecyclerView
     private lateinit var rowListItem: List<TileObjectColorPalette>
     private lateinit var rcAdapter: TileAdapterColorPalette
     private var type = ""
@@ -98,11 +98,11 @@ class SettingsColorPaletteActivity : BaseActivity() {
             View.OnClickListener { editPalFAB(this) })
         rowListItem = allItemList
         val lLayout = GridLayoutManager(this, UIPreferences.tilesPerRow)
-        rView = findViewById(R.id.card_list)
-        rView.setHasFixedSize(true)
-        rView.layoutManager = lLayout
+        // FIXME camelCase
+        card_list.setHasFixedSize(true)
+        card_list.layoutManager = lLayout
         rcAdapter = TileAdapterColorPalette(rowListItem, UIPreferences.tilesPerRow)
-        rView.adapter = rcAdapter
+        card_list.adapter = rcAdapter
         rcAdapter.setListener(::itemClicked)
     }
 
@@ -118,7 +118,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                 allItems.add(TileObjectColorPalette("NWSD", toolbar, prefToken, cg, type, true))
                 allItems.add(TileObjectColorPalette("AF", toolbar, prefToken, cg, type, true))
                 allItems.add(TileObjectColorPalette("EAK", toolbar, prefToken, cg, type, true))
-                allItems.add(TileObjectColorPalette("ELY", toolbar, prefToken, cg, type, true))
+		allItems.add(TileObjectColorPalette("ELY", toolbar, prefToken, cg, type, true))
                 val prefArr =
                     MyApplication.radarColorPalette94List.split(":").dropLastWhile { it.isEmpty() }
                 prefArr.asSequence().filter { it != "" }.mapTo(allItems) {
@@ -145,11 +145,17 @@ class SettingsColorPaletteActivity : BaseActivity() {
                     }
                 }
             } else {
+	    
+	    	listOf("CODENH", "AF", "EAK", "ELY", "ELYENH").forEach {
+                    allItems.add(TileObjectColorPalette(it, toolbar, prefToken, cg, type, true))
+                }
+		/*
                 allItems.add(TileObjectColorPalette("CODENH", toolbar, prefToken, cg, type, true))
                 allItems.add(TileObjectColorPalette("AF", toolbar, prefToken, cg, type, true))
                 allItems.add(TileObjectColorPalette("EAK", toolbar, prefToken, cg, type, true))
                 allItems.add(TileObjectColorPalette("ELY", toolbar, prefToken, cg, type, true))
                 allItems.add(TileObjectColorPalette("ELYENH", toolbar, prefToken, cg, type, true))
+		*/
                 val prefArr =
                     MyApplication.radarColorPalette99List.split(":").dropLastWhile { it.isEmpty() }
                 prefArr.asSequence().filter { it != "" }.mapTo(allItems) {
@@ -182,7 +188,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
     override fun onRestart() {
         rowListItem = allItemList
         rcAdapter = TileAdapterColorPalette(rowListItem, UIPreferences.tilesPerRow)
-        rView.adapter = rcAdapter
+        card_list.adapter = rcAdapter
         toolbar.subtitle = MyApplication.radarColorPalette[type]
         UtilityColorPaletteGeneric.loadColorMap(this, type)
         super.onRestart()
@@ -241,7 +247,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                 UtilityColorPaletteGeneric.loadColorMap(this, type)
                 rowListItem = allItemList
                 rcAdapter = TileAdapterColorPalette(rowListItem, UIPreferences.tilesPerRow)
-                rView.adapter = rcAdapter
+                card_list.adapter = rcAdapter
             } else {
                 UtilityAlertDialog.showHelpText(builtInHelpMsg, this)
             }
@@ -275,7 +281,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                 UtilityColorPaletteGeneric.loadColorMap(this, type)
                 rowListItem = allItemList
                 rcAdapter = TileAdapterColorPalette(rowListItem, UIPreferences.tilesPerRow)
-                rView.adapter = rcAdapter
+                card_list.adapter = rcAdapter
             } else {
                 UtilityAlertDialog.showHelpText(builtInHelpMsg, this)
             }

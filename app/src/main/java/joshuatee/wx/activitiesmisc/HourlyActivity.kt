@@ -39,7 +39,6 @@ import kotlinx.android.synthetic.main.activity_hourly.*
 
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
-import com.jjoe64.graphview.GraphView
 import com.jjoe64.graphview.DefaultLabelFormatter
 import kotlinx.coroutines.*
 
@@ -72,8 +71,8 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         locatioNumber = (intent.getStringExtra(LOC_NUM).toIntOrNull() ?: 0) - 1
         cv1 = ObjectCard(this, R.color.black, R.id.cv1)
         cv1.setVisibility(View.GONE)
-        //val linearLayout: LinearLayout = findViewById(R.id.ll)
         c0 = ObjectCardVerticalText(this, 5, linearLayout, toolbar)
+        c0.setOnClickListener(View.OnClickListener { sv.scrollTo(0,0)})
         title = "Hourly Forecast"
         toolbar.subtitle = Location.getName(locatioNumber)
         getContent()
@@ -117,7 +116,6 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             time += 1
             dataPoints.add(DataPoint(time.toDouble(), temp.toDouble()))
         }
-        val graph = findViewById<GraphView>(R.id.graph)
         val series = LineGraphSeries(dataPoints.toTypedArray())
         graph.viewport.isXAxisBoundsManual = true
         graph.viewport.setMinX(0.0)

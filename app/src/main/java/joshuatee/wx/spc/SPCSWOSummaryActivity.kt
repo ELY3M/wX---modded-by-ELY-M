@@ -27,7 +27,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
@@ -39,11 +38,12 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityShortcut
 import kotlinx.coroutines.*
 
+import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
+
 class SPCSWOSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val bitmaps = mutableListOf<Bitmap>()
-    private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
@@ -58,7 +58,6 @@ class SPCSWOSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         val menu = toolbarBottom.menu
         UtilityShortcut.hidePinIfNeeded(menu)
         contextg = this
-        linearLayout = findViewById(R.id.ll)
         title = "SPC"
         toolbar.subtitle = "Convective Outlook Summary"
         getContent()
@@ -73,7 +72,7 @@ class SPCSWOSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             }
         }
         bitmaps.forEach { bitmap ->
-            val card = ObjectCardImage(contextg, linearLayout, bitmap)
+            val card = ObjectCardImage(contextg, ll, bitmap)
             val day = if (bitmaps.indexOf(bitmap) < 3) {
                 (bitmaps.indexOf(bitmap) + 1).toString()
             } else {

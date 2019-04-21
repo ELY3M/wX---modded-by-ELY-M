@@ -29,7 +29,6 @@ import android.content.IntentFilter
 import android.os.Bundle
 import com.google.android.material.tabs.TabLayout
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import androidx.viewpager.widget.ViewPager
 import androidx.appcompat.widget.Toolbar
 import android.view.KeyEvent
 import android.view.MenuItem
@@ -44,11 +43,12 @@ import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 
+import kotlinx.android.synthetic.main.activity_main.*
+
 class WX : CommonActionBarFragment() {
 
     private var backButtonCounter = 0
     private lateinit var vpa: ViewPagerAdapter
-    private lateinit var mSlidingTabLayout: TabLayout
     private lateinit var miVr: MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,20 +87,18 @@ class WX : CommonActionBarFragment() {
         } else {
             fab.setVisibility(View.GONE)
         }
-        val viewPager: ViewPager = findViewById(R.id.pager)
         viewPager.offscreenPageLimit = 4
         vpa = ViewPagerAdapter(supportFragmentManager)
         viewPager.adapter = vpa
-        mSlidingTabLayout = findViewById(R.id.sliding_tabs)
-        mSlidingTabLayout.tabGravity = TabLayout.GRAVITY_FILL
-        mSlidingTabLayout.setupWithViewPager(viewPager)
+        slidingTabLayout.tabGravity = TabLayout.GRAVITY_FILL
+        slidingTabLayout.setupWithViewPager(viewPager)
         if (android.os.Build.VERSION.SDK_INT > 20) {
-            mSlidingTabLayout.elevation = MyApplication.elevationPref
+            slidingTabLayout.elevation = MyApplication.elevationPref
         }
         if (MyApplication.simpleMode || UIPreferences.hideTopToolbar) {
-            mSlidingTabLayout.visibility = View.GONE
+            slidingTabLayout.visibility = View.GONE
         }
-        mSlidingTabLayout.setSelectedTabIndicatorColor(
+        slidingTabLayout.setSelectedTabIndicatorColor(
             UtilityTheme.getPrimaryColorFromSelectedTheme(
                 this,
                 0
@@ -116,7 +114,7 @@ class WX : CommonActionBarFragment() {
         if (UIPreferences.prefPreventAccidentalExit) {
             if (backButtonCounter < 1) {
                 UtilityUI.makeSnackBar(
-                    mSlidingTabLayout,
+                        slidingTabLayout,
                     "Please tap the back button one more time to close wX."
                 )
                 backButtonCounter += 1
@@ -133,11 +131,10 @@ class WX : CommonActionBarFragment() {
             val tabStr = UtilitySPC.checkSpc(this)
             vpa.setTabTitles(1, tabStr[0])
             vpa.setTabTitles(2, tabStr[1])
-            if (mSlidingTabLayout.tabCount > 3) {
-                mSlidingTabLayout.getTabAt(0)!!.text = MyApplication.tabHeaders[0]
-                mSlidingTabLayout.getTabAt(1)!!.text = vpa.tabTitles[1]
-                mSlidingTabLayout.getTabAt(2)!!.text = vpa.tabTitles[2]
-                mSlidingTabLayout.getTabAt(3)!!.text = MyApplication.tabHeaders[3]
+            if (slidingTabLayout.tabCount > 2) {
+                slidingTabLayout.getTabAt(0)!!.text = MyApplication.tabHeaders[0]
+                slidingTabLayout.getTabAt(1)!!.text = vpa.tabTitles[1]
+                slidingTabLayout.getTabAt(2)!!.text = vpa.tabTitles[2]
             }
         }
     }

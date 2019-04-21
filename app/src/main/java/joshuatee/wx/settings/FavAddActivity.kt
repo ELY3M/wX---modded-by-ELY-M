@@ -58,12 +58,12 @@ class FavAddActivity : BaseActivity() {
                 val tmpArr = mutableListOf<String>()
                 GlobalArrays.soundingSites.indices.forEach {
                     var tmpLoc =
-                        Utility.readPref(this, "NWS_LOCATION_" + GlobalArrays.soundingSites[it], "")
+                            Utility.readPref(this, "NWS_LOCATION_" + GlobalArrays.soundingSites[it], "")
                     if (tmpLoc == "") {
                         tmpLoc = Utility.readPref(
-                            this,
-                            "NWS_SOUNDINGLOCATION_" + GlobalArrays.soundingSites[it],
-                            ""
+                                this,
+                                "NWS_SOUNDINGLOCATION_" + GlobalArrays.soundingSites[it],
+                                ""
                         )
                     }
                     tmpArr.add(GlobalArrays.soundingSites[it] + " " + tmpLoc)

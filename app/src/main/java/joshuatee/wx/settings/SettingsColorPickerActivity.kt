@@ -22,7 +22,6 @@
 package joshuatee.wx.settings
 
 import joshuatee.wx.R
-import joshuatee.wx.ui.ColorPicker
 import joshuatee.wx.ui.ColorPicker.OnColorChangedListener
 import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.UtilityToolbar
@@ -48,7 +47,6 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
         const val INFO: String = ""
     }
 
-    private lateinit var picker: ColorPicker
     private var color = 0
     private var prefVal = ""
     private lateinit var toolbar: Toolbar
@@ -70,9 +68,7 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
         title = turl[1]
         color = UtilityColor.setColor(prefVal)
         val currentColor = Utility.readPref(this, prefVal, color)
-        picker = findViewById(R.id.picker)
         buttonDefault.setTextColor(color)
-        //buttonDefault.setBackgroundColor(ContextCompat.getColor(this, R.color.black))
         picker.oldCenterColor = currentColor
         picker.color = currentColor
         picker.addValueBar(vBar)

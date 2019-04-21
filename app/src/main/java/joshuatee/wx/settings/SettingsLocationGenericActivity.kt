@@ -243,7 +243,6 @@ class SettingsLocationGenericActivity : BaseActivity(),
             R.string.alert_wpcmpd_switch_text
         )
         alertWpcmpdSw.isChecked(alertNotificationWpcmpdCurrent == "true")
-
         linearLayout.addView(alertSw.card)
         linearLayout.addView(alertSoundSw.card)
         linearLayout.addView(alertRadar1Sw.card)
@@ -253,7 +252,6 @@ class SettingsLocationGenericActivity : BaseActivity(),
         linearLayout.addView(alertSwoSw.card)
         linearLayout.addView(alertSpcfwSw.card)
         linearLayout.addView(alertWpcmpdSw.card)
-
         hideNONUSNotifs()
         if (locNumArr[1] != "") {
             if (locNumArr[1] == " roaming") {
@@ -304,6 +302,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
             Utility.readPref(this, "ALERT_NOTIFICATION_SPCFW$locNum", "false")
         val alertNotificationWpcmpdCurrent =
             Utility.readPref(this, "ALERT_NOTIFICATION_WPCMPD$locNum", "false")
+        // FIXME use listOf
         alertRadar1Sw.card.visibility = View.VISIBLE
         alertSoundSw.card.visibility = View.VISIBLE
         alert7Day1Sw.card.visibility = View.VISIBLE
@@ -644,6 +643,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
 
     private fun notifsCA(hide: Boolean) {
         if (hide) {
+            // FIXME use listOf()
             alertMcdSw.card.visibility = View.GONE
             alertSwoSw.card.visibility = View.GONE
             alertSpcfwSw.card.visibility = View.GONE

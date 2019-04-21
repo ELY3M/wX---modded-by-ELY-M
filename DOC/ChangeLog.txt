@@ -1,5 +1,4 @@
 // TODO base velocity legend
-// TODO add Ely's MCD/MPD/WAT radar long press code
 // TODO migrate away from US govt website for Sun/Moon data do to cert issues
 // TODO change code so that widget location simply follows current location selected
 // TODO OkHttp 3.13 Requires Android 5+ – Square Corner Blog – Medium  https://medium.com/square-corner-blog/okhttp-3-13-requires-android-5-818bb78d07ce
@@ -8,17 +7,24 @@
 // TODO BUG - storm reports show radar doesn't show location dot for report
 // TODO enhance hourly graphics
 // TODO fix wfo issue for locations
-// TODO new polygons - snow squall, sps, other
+// TODO new polygons - snow squall, special marine warning
 // TODO fix issue for precip radar products when there is no data
 // TODO move off rid/wfo/sounding lat/lon/name currently in pref should be in objects (like flutter/iOS)
-// TODO storm reports - black bg for cards with titles like iOS/flutter
-// TODO rewrite uswarn
-// TODO add new color pal for ref
 // TODO linesize - swo, wb, wbgusts, sti
-// TODO improve settings labels
-// TODO test Kotlin binding enhancement
 
-55142 2019_04_18 [BUGFIX] LSRbyWFOActivity is using afd layout so it was crashing after binding conversion
+55148 2019_04_20
+55147 2019_04_20 add better framework for radar polygon warnings and test for SMR (special marine warning), SPS
+                 add SPC Thunderstorm outlook as homescreen option and method in utilImg to combine list of images vertically
+                 change longpress mcd/watch/mpd to use dedicted viewer (SPCMCDShowActivity)
+55146 2019_04_20 more kotlin binding enhancement
+                 lint cleanup
+                 [BUG] fix dynamic tab headers, broke after removing images tab
+                 Hourly - if tap in text, scroll back to top
+55145 2019_04_19 refector long press watch/mpd/mcd code
+55144 2019_04_19 storm reports - black background/white text for headers
+55143 2019_04_19 more kotlin binding enhancement
+55142 2019_04_19 [BUGFIX] LSRbyWFOActivity is using afd layout so it was crashing after binding conversion
+                [BUGFIX] bottomsheet crashed under certain conditions in settings homescreen and fav mgmt
                 SettingsMainActivity, Settings*, SPCTstormOutlookActivity
                 SPCMCDWShowSummaryActivity, SPCStormReportsActivity, SettingsColorPaletteEditor, SettingsWidgetsActivity, SettingsNotificationsActivity
                 SettingsLocationGenericActivity, SettingsColorPickerActivity, SettingsUIActivity: test kotlin binding enhancement

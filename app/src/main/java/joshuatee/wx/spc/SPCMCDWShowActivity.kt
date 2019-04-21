@@ -30,7 +30,6 @@ import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
 import android.view.ContextMenu.ContextMenuInfo
-import android.widget.LinearLayout
 
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
@@ -42,6 +41,8 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
+
+import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -62,7 +63,6 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var c0: ObjectCardImage
     private lateinit var c1: ObjectCardText
     private lateinit var objWatch: ObjectWatchProduct
-    private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
@@ -74,9 +74,8 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        linearLayout = findViewById(R.id.ll)
-        c0 = ObjectCardImage(this, linearLayout)
-        c1 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
+        c0 = ObjectCardImage(this, ll)
+        c1 = ObjectCardText(this, ll, toolbar, toolbarBottom)
         activityArguments = intent.getStringArrayExtra(NO)
         number = activityArguments[0]
         when (activityArguments[2]) {
@@ -132,7 +131,7 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 UtilityLocation.saveLocationForMcd(
                     objWatch.wfoArr[it],
                     contextg,
-                    linearLayout,
+                    ll,
                     uiDispatcher
                 )
             }

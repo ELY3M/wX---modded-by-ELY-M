@@ -59,10 +59,10 @@ class FavRemoveActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_recyclerview_toolbar,
-            null,
-            false
+                savedInstanceState,
+                R.layout.activity_recyclerview_toolbar,
+                null,
+                false
         )
         val turl = intent.getStringArrayExtra(TYPE)
         type = turl[0]
@@ -195,7 +195,7 @@ class FavRemoveActivity : BaseActivity() {
             "RID" -> tmpLoc = shortCode + ": " +
                     Utility.readPref(this, prefTokenLocation + shortCode, "")
             "NWSTEXT" -> tmpLoc =
-                GlobalArrays.nwsTextProducts[UtilityFavorites.findPositionNWSTEXT(shortCode)]
+                    GlobalArrays.nwsTextProducts[UtilityFavorites.findPositionNWSTEXT(shortCode)]
             "SREF" -> tmpLoc = shortCode
             "RIDCA" -> tmpLoc = findCARIDLabel(shortCode)
             "SPCMESO" -> tmpLoc = findSPCMesoLabel(shortCode)
@@ -218,13 +218,13 @@ class FavRemoveActivity : BaseActivity() {
     }
 
     private fun findCARIDLabel(rid: String) =
-        (0 until GlobalArrays.canadaRadars.size).firstOrNull {
-            GlobalArrays.canadaRadars[it].contains(
-                rid
-            )
-        }
-            ?.let { GlobalArrays.canadaRadars[it].replace(":", "") }
-            ?: rid
+            (0 until GlobalArrays.canadaRadars.size).firstOrNull {
+                GlobalArrays.canadaRadars[it].contains(
+                        rid
+                )
+            }
+                    ?.let { GlobalArrays.canadaRadars[it].replace(":", "") }
+                    ?: rid
 
     private fun findSPCMesoLabel(rid: String): String {
         val index = UtilitySPCMESO.params.indexOf(rid)
@@ -236,7 +236,7 @@ class FavRemoveActivity : BaseActivity() {
     private fun itemClicked(position: Int) {
         val bottomSheetFragment = BottomSheetFragment()
         bottomSheetFragment.position = position
-        bottomSheetFragment.usedForLocation = true
+        bottomSheetFragment.usedForLocation = false
         bottomSheetFragment.fnList = listOf(::deleteItem, ::moveUpItem, ::moveDownItem)
         bottomSheetFragment.labelList = listOf("Delete Item", "Move Up", "Move Down")
         bottomSheetFragment.actContext = this

@@ -27,8 +27,6 @@ import java.util.Locale
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
-import android.widget.LinearLayout
-import android.widget.ScrollView
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
@@ -41,10 +39,11 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.wpc.WPCTextProductsActivity
 import kotlinx.coroutines.*
 
+import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
+
 class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private lateinit var linearLayout: LinearLayout
     private lateinit var objNHC: ObjectNHC
 
     @SuppressLint("MissingSuperCall")
@@ -55,14 +54,12 @@ class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.menu.nhc
         )
         toolbarBottom.setOnMenuItemClickListener(this)
-        linearLayout = findViewById(R.id.ll)
-        objNHC = ObjectNHC(this, linearLayout)
+        objNHC = ObjectNHC(this, ll)
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        val scrollView: ScrollView = findViewById(R.id.sv)
-        scrollView.smoothScrollTo(0, 0)
+        sv.smoothScrollTo(0, 0)
         withContext(Dispatchers.IO) { objNHC.getData() }
         objNHC.showData()
     }

@@ -30,7 +30,7 @@
         android:layout_above="@id/toolbar_bottom"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,14 +39,14 @@
             android:paddingRight="@dimen/padding"
             android:textSize="@dimen/normal_text" />
 
-        <androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/padding"
             android:paddingRight="@dimen/padding" />
 
-        <androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

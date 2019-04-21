@@ -27,7 +27,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.Extensions.getImage
 
@@ -39,11 +38,12 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.wpc.WPCTextProductsActivity
 import kotlinx.coroutines.*
 
+import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
+
 class SPCFireOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val bitmaps = mutableListOf<Bitmap>()
-    private lateinit var linearLayout: LinearLayout
     private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
@@ -56,7 +56,6 @@ class SPCFireOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        linearLayout = findViewById(R.id.ll)
         title = "SPC"
         toolbar.subtitle = "Fire Weather Outlook"
         getContent()
@@ -65,7 +64,7 @@ class SPCFireOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) { UtilitySPCFireOutlook.imageUrls.mapTo(bitmaps) { it.getImage() } }
         bitmaps.forEach { bitmap ->
-            val card = ObjectCardImage(contextg, linearLayout, bitmap)
+            val card = ObjectCardImage(contextg, ll, bitmap)
             val prod = UtilitySPCFireOutlook.textProducts[bitmaps.indexOf(bitmap)]
             card.setOnClickListener(View.OnClickListener {
                 ObjectIntent(

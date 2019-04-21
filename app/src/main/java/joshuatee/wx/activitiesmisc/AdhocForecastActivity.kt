@@ -43,6 +43,8 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.LatLon
 import kotlinx.coroutines.*
 
+import kotlinx.android.synthetic.main.activity_linear_layout.*
+
 class AdhocForecastActivity : BaseActivity() {
 
     // long press in nexrad radar and select 7 day forecast from arbitrary point
@@ -59,7 +61,6 @@ class AdhocForecastActivity : BaseActivity() {
     private var objFcst: ObjectForecastPackage? = null
     private var objHazards: ObjectForecastPackageHazards? = null
     private var objSevenDay: ObjectForecastPackage7Day? = null
-    private lateinit var scrollView: ScrollView
     private var ccTime = ""
     private var radarTime = ""
     private var hazardsSum = ""
@@ -67,7 +68,6 @@ class AdhocForecastActivity : BaseActivity() {
     private lateinit var cardCC: ObjectCardCC
     private lateinit var linearLayoutForecast: LinearLayout
     private lateinit var linearLayoutHazards: LinearLayout
-    private lateinit var linearLayout: LinearLayout
     private val hazardsCardAl = mutableListOf<ObjectCardText>()
     private val hazardsExpandedAl = mutableListOf<Boolean>()
     private lateinit var contextg: Context
@@ -79,17 +79,14 @@ class AdhocForecastActivity : BaseActivity() {
         latlon = LatLon(activityArguments[0], activityArguments[1])
         title = "Forecast for"
         toolbar.subtitle = latlon.latString + "," + latlon.lonString
-        // TODO activity_linear_layout
-        scrollView = findViewById(R.id.sv)
-        linearLayout = findViewById(R.id.ll)
         cardCC = ObjectCardCC(this, 2)
-        linearLayout.addView(cardCC.card)
+        ll.addView(cardCC.card)
         linearLayoutHazards = LinearLayout(this)
         linearLayoutHazards.orientation = LinearLayout.VERTICAL
-        linearLayout.addView(linearLayoutHazards)
+        ll.addView(linearLayoutHazards)
         linearLayoutForecast = LinearLayout(this)
         linearLayoutForecast.orientation = LinearLayout.VERTICAL
-        linearLayout.addView(linearLayoutForecast)
+        ll.addView(linearLayoutForecast)
         contextg = this
         getContent()
     }
@@ -136,14 +133,14 @@ class AdhocForecastActivity : BaseActivity() {
             bmArr.forEachIndexed { idx, bm ->
                 val c7day = ObjectCard7Day(contextg, bm, true, idx, day7Arr)
                 c7day.setOnClickListener(View.OnClickListener {
-                    scrollView.smoothScrollTo(0, 0)
+                    sv.smoothScrollTo(0, 0)
                 })
                 linearLayoutForecast.addView(c7day.card)
             }
             // sunrise card
             val cardSunrise = ObjectCardText(contextg)
             cardSunrise.center()
-            cardSunrise.lightText()
+            //cardSunrise.lightText()
             try {
                 cardSunrise.setText(
                     UtilityDownload.getSunriseSunset(

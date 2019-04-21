@@ -26,8 +26,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.LinearLayout
-import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.MyApplication
@@ -41,6 +39,8 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
+
+import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -68,10 +68,8 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var goesId = ""
     private var goesSector = ""
     private var toolbarTitle = ""
-    private lateinit var scrollView: ScrollView
     private val bitmaps = mutableListOf<Bitmap>()
     private var baseUrl = ""
-    private lateinit var linearLayout: LinearLayout
     private lateinit var cTextProd: ObjectCardText
     private lateinit var contextg: Context
 
@@ -84,8 +82,6 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        linearLayout = findViewById(R.id.ll)
-        scrollView = findViewById(R.id.sv)
         activityArguments = intent.getStringArrayExtra(URL).toList()
         url = activityArguments[0]
         toolbarTitle = activityArguments[1]
@@ -108,7 +104,7 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (goesId.length < 2) {
             goesId = "0$goesId"
         }
-        cTextProd = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
+        cTextProd = ObjectCardText(this, ll, toolbar, toolbarBottom)
         product = "MIATCP$stormId"
         getContent()
     }
@@ -132,9 +128,9 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         cTextProd.setText(Utility.fromHtml(url))
         html = url
-        scrollView.smoothScrollTo(0, 0)
+        sv.smoothScrollTo(0, 0)
         bitmaps.filter { it.width > 100 }
-            .forEach { ObjectCardImage(contextg, linearLayout, it) }
+            .forEach { ObjectCardImage(contextg, ll, it) }
         if (activityArguments.size > 2) {
             if (activityArguments[2] == "sound") UtilityTTS.synthesizeTextAndPlay(
                 applicationContext,
@@ -152,7 +148,7 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
             cTextProd.setText(url)
         }
         html = url
-        scrollView.smoothScrollTo(0, 0)
+        sv.smoothScrollTo(0, 0)
     }
 
     private fun setProduct(productF: String) {

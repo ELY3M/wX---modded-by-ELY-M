@@ -195,8 +195,8 @@ object UtilityLocation {
         if (officeType == "NWS") {
             addChar = ""
         } // WFO
-        var x = ""
-        var y = ""
+        val x: String
+        val y: String
         if (officeType == "RID") {
             x = Utility.getRadarSiteX(site.toUpperCase())
             y = addChar + Utility.getRadarSiteY(site.toUpperCase())

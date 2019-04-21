@@ -39,6 +39,8 @@ import java.util.regex.Pattern
 import joshuatee.wx.audio.UtilityTTS
 import joshuatee.wx.notifications.UtilityNotificationTextProduct
 import joshuatee.wx.objects.GeographyType
+import joshuatee.wx.objects.ObjectPolygonWarning
+import joshuatee.wx.objects.PolygonWarningType
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityHomeScreen
@@ -90,11 +92,6 @@ class MyApplication : Application() {
             res.getDimension(R.dimen.padding_dynamic_tv_small),
             dm
         ).toInt()
-
-
-        //textSizeSmall = res.getDimension(R.dimen.listitem_text)
-        //textSizeNormal = res.getDimension(R.dimen.normal_text)
-        //textSizeLarge = res.getDimension(R.dimen.large_text)
 
         // FIXME needed? dup in UIpref
         val normalTextSize = getInitialPreference("TEXTVIEW_FONT_SIZE", 16) // 14 16 21
@@ -162,7 +159,6 @@ class MyApplication : Application() {
         const val nwsGraphicalWebsitePrefix: String = "https://graphical.weather.gov"
         const val nwsCPCNcepWebsitePrefix: String = "https://www.cpc.ncep.noaa.gov"
         const val nwsGoesWebsitePrefix: String = "https://www.goes.noaa.gov"
-        //const val nwsOpcWebsitePrefix: String = "https://www.opc.ncep.noaa.gov"
         const val nwsOpcWebsitePrefix: String = "https://ocean.weather.gov"
         const val nwsNhcWebsitePrefix: String = "https://www.nhc.noaa.gov"
         const val nwsRadarWebsitePrefix: String = "https://radar.weather.gov"
@@ -339,8 +335,6 @@ class MyApplication : Application() {
         const val ICON_MIC: Int = R.drawable.ic_mic_24dp
         const val ICON_PAUSE: Int = R.drawable.ic_pause_24dp
         const val ICON_PAUSE_PRESSED: Int = R.drawable.ic_pause_white_24dp
-        const val ICON_ARROW_UP: Int = R.drawable.ic_keyboard_arrow_up_24dp
-        const val ICON_ARROW_DOWN: Int = R.drawable.ic_keyboard_arrow_down_24dp
         const val ICON_ADD: Int = R.drawable.ic_add_box_24dp
         const val ICON_BACK: Int = R.drawable.ic_keyboard_arrow_left_24dp
         const val ICON_FORWARD: Int = R.drawable.ic_keyboard_arrow_right_24dp
@@ -349,7 +343,6 @@ class MyApplication : Application() {
         const val MD_COMP: String = "<center>No Mesoscale Discussions are currently in effect."
         const val WATCH_COMP: String = "<center><strong>No watches are currently valid"
         const val MPD_COMP: String = "No MPDs are currently in effect."
-        const val currentConditionsViaMetar: Boolean = true
         var spchrrrZoom: Float = 0f
         var spchrrrX: Float = 0f
         var spchrrrY: Float = 0f
@@ -367,18 +360,35 @@ class MyApplication : Application() {
         var padding: Int = 0
         var paddingSettings: Int = 0
         var paddingSmall: Int = 0
-        //var tabHeaders: Array<String> = arrayOf("", "", "", "")
         var tabHeaders: Array<String> = arrayOf("", "", "")
 
         fun initPreferences(context: Context) {
             initRadarPreferences()
             UIPreferences.initPreferences(context)
             radarGeometrySetColors()
-            listOf(94, 99, 134, 135, 159, 161, 163, 165, 172).forEach { radarColorPalette[it.toString()] = getInitialPreferenceString("RADAR_COLOR_PALETTE_" + it.toString(), "CODENH") }
-            cardCorners = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, preferences.getInt("CARD_CORNER_RADIUS", 0).toFloat(), dm) //was 3 i hate rounded corners // was 0 as of 2018-10-27
+            listOf(
+                94,
+                99,
+                134,
+                135,
+                159,
+                161,
+                163,
+                165,
+                172
+            ).forEach {
+                radarColorPalette[it.toString()] =
+                    getInitialPreferenceString("RADAR_COLOR_PALETTE_$it", "CODENH")
+            }
+            cardCorners = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                preferences.getInt("CARD_CORNER_RADIUS", 0).toFloat(),
+                dm
+            ) // was 0 as of 2018-10-27
             telecineVideoSizePercentage = preferencesTelecine.getInt("video-size", 100)
             telecineSwitchShowCountdown = preferencesTelecine.getBoolean("show-countdown", false)
-            telecineSwitchRecordingNotification = preferencesTelecine.getBoolean("recording-notification", false)
+            telecineSwitchRecordingNotification =
+                preferencesTelecine.getBoolean("recording-notification", false)
             telecineSwitchShowTouches = false
             vrButton = getInitialPreference("VR_BUTTON", "false")
             radarUseJni = getInitialPreference("RADAR_USE_JNI", "false")
@@ -505,7 +515,7 @@ class MyApplication : Application() {
             goesVisX = getInitialPreference("GOESVIS_X", 0.5f)
             goesVisY = getInitialPreference("GOESVIS_Y", 0.5f)
             goesVisSector = getInitialPreferenceString("GOESVIS_SECTOR", "")
-            elevationPref = getInitialPreference("ELEVATION_PREF", 0).toFloat() //5 id not for me! ELY M. 
+            elevationPref = getInitialPreference("ELEVATION_PREF", 0).toFloat() //5 is not for me! ELY M. 
             elevationPref =
                 TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, elevationPref, dm)
             cardElevation = elevationPref
@@ -583,6 +593,7 @@ class MyApplication : Application() {
         var radarColorObsWindbarbs: Int = 0
         var radarColorCountyLabels: Int = 0
         var radarShowLegendTextColor: Int = 0
+	var radarWarningPolygons = mutableListOf<ObjectPolygonWarning>()
 
         private fun radarGeometrySetColors() {
             radarColorHw = getInitialPreference("RADAR_COLOR_HW", Color.BLUE)
@@ -615,8 +626,17 @@ class MyApplication : Application() {
 
         }
 
-        private fun initRadarGeometryAll(context: Context) =
+        private fun initRadarGeometryAll(context: Context) {
+            initGenericRadarWarnings(context)
             GeographyType.values().forEach { initRadarGeometryByType(context, it) }
+        }
+
+        fun initGenericRadarWarnings(context: Context) {
+            radarWarningPolygons.clear()
+            PolygonWarningType.values().forEach {
+                radarWarningPolygons.add(ObjectPolygonWarning(context, it))
+            }
+        }
 
         fun initRadarGeometryByType(context: Context, type: GeographyType) {
             if (!radarHwEnh) {
@@ -736,7 +756,8 @@ class MyApplication : Application() {
         const val NWS_CONUS_RADAR: String = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
         const val NWS_CONUS_RADAR_GFW: String = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
         var radarConusRadar: Boolean = false
-        var radarTorWarnings: Boolean = true
+        var radarWarnings: Boolean = false
+	var radarTorWarnings: Boolean = true
         var radarSvrWarnings: Boolean = true
         var radarEwwWarnings: Boolean = true
         var radarFfwWarnings: Boolean = true
@@ -802,6 +823,7 @@ class MyApplication : Application() {
 
         private fun initRadarPreferences() {
             radarConusRadar = getInitialPreference("CONUS_RADAR", "false")
+	    radarWarnings = getInitialPreference("COD_WARNINGS_DEFAULT", "false")
             radarTorWarnings = getInitialPreference("TOR_WARNINGS", "false")
             radarSvrWarnings = getInitialPreference("SVR_WARNINGS", "false")
             radarEwwWarnings = getInitialPreference("EWW_WARNINGS", "false")

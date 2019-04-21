@@ -18,11 +18,13 @@
 14\. make VAD Wind Profile more better and friendly  like the one at cod.edu    
 15\. color tables for SRM and Spectrum Width  
 16\. get dbz and wind speed from point via long press - request by Mike T.   
+17\. Redo my warnings mod to match up with Joshua's warnings changes.    
 
 
 #
 ## DONE!
 ====================================   
+updated the code with Joshuas changes with the warnings mod/settings (4-20-19).   
 updated the code with Joshuas changes (4-13-19).     
 Now, you can change the radar legend text color in the color settings - it was requested by Mike T.  
 Userpoints system is working but userpoints update/refresh is not done asap as you delete/add them.  you have to wait few mins or close the app to see updated userpoints.     

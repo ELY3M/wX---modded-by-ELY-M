@@ -25,8 +25,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.LinearLayout
-import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
 import joshuatee.wx.R
@@ -39,13 +37,14 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityString
 import kotlinx.coroutines.*
 
+import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
+
 class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var prod = "focn45"
     private var description = "Significant Weather Discussion, PASPC"
-    private var sigHtmlTmp = ""
-    private lateinit var sv: ScrollView
+    private var html = ""
     private lateinit var c0: ObjectCardText
     private lateinit var contextg: Context
 
@@ -58,10 +57,8 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        sv = findViewById(R.id.sv)
-        val linearLayout: LinearLayout = findViewById(R.id.ll)
-        c0 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        ObjectCALegal(this, linearLayout, "")
+        c0 = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        ObjectCALegal(this, ll, "")
         prod = Utility.readPref(this, "CA_TEXT_LASTUSED", prod)
         description = Utility.readPref(this, "CA_TEXT_LASTUSED_TITLE", description)
         getContent()
@@ -71,25 +68,25 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         title = description
         sv.smoothScrollTo(0, 0)
         withContext(Dispatchers.IO) {
-            sigHtmlTmp =
+            html =
                 if (prod != "https://weather.gc.ca/forecast/public_bulletins_e.html?Bulletin=fpcn48.cwao") {
                     UtilityDownload.getTextProduct(contextg, prod)
                 } else {
                     UtilityString.getHTMLandParseSep(prod, "<pre>(.*?)</pre>")
                 }
         }
-        c0.setTextAndTranslate(Utility.fromHtml(sigHtmlTmp))
+        c0.setTextAndTranslate(Utility.fromHtml(html))
         Utility.writePref(contextg, "CA_TEXT_LASTUSED", prod)
         Utility.writePref(contextg, "CA_TEXT_LASTUSED_TITLE", description)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, sigHtmlTmp, prod, prod)) {
+        if (audioPlayMenu(item.itemId, html, prod, prod)) {
             return true
         }
         when (item.itemId) {
             R.id.action_share -> {
-                UtilityShare.shareText(this, description, Utility.fromHtml(sigHtmlTmp))
+                UtilityShare.shareText(this, description, Utility.fromHtml(html))
                 return true
             }
             R.id.action_focn45 -> setProdAndDescription(

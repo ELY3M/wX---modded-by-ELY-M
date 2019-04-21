@@ -74,10 +74,13 @@ class ObjectCardStormReportItem(context: Context) {
 
     fun setTextHeader(stormReport: StormReport) {
         textViewTop.text = stormReport.text.toUpperCase()
-        textViewTop.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
+        textViewTop.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeLarge)
+        textViewTop.setPadding(20,20,20,20)
         textViewTop.setTextColor(UIPreferences.textHighlightColor)
         textViewTitle.tv.visibility = View.GONE
         textViewBottom.tv.visibility = View.GONE
+        textViewTop.tv.setBackgroundColor(Color.BLACK)
+        textViewTop.tv.setTextColor(Color.WHITE)
     }
 }
 

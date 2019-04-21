@@ -45,23 +45,6 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     private var ridFav = ""
     private val prefToken = "HOMESCREEN_FAV"
     private var ridArrLabel = mutableListOf<String>()
-    private val localChoicesText = listOf(
-        "CC: Current Conditions",
-        "CC2: Current Conditions with image",
-        "HAZ: Hazards", "7DAY: 7 Day Forecast",
-        "7DAY2: 7 Day Forecast with images",
-        "AFDLOC: Area Forecast Discussion",
-        "HWOLOC: Hazardous Weather Outlook",
-        "VFDLOC: Aviation only Area Forecast Discussion",
-        "SUNMOON: Sun/Moon Data",
-        "HOURLY: Hourly Forecast",
-        "CTOF: Celsius to Fahrenheit table"
-    )
-    private val localChoicesImg = listOf(
-        "RADAR: Local NEXRAD Radar",
-        "CARAIN: Local CA Radar",
-        "WEATHERSTORY: Local NWS Weather Story"
-    )
     private var hmFavOrig = ""
     private lateinit var recyclerView: ObjectRecyclerView
     private lateinit var diaMain: ObjectDialogue
@@ -72,10 +55,10 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_recyclerview_homescreen,
-            R.menu.settings_homescreen,
-            true
+                savedInstanceState,
+                R.layout.activity_recyclerview_homescreen,
+                R.menu.settings_homescreen,
+                true
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         ridFav = MyApplication.homescreenFav
@@ -83,52 +66,52 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         toolbar.subtitle = "Tap item to delete or move."
         UtilityToolbar.fullScreenMode(toolbar, false)
         ObjectFab(
-            this,
-            this,
-            R.id.fab,
-            MyApplication.ICON_ADD,
-            View.OnClickListener { diaMain.show() })
+                this,
+                this,
+                R.id.fab,
+                MyApplication.ICON_ADD,
+                View.OnClickListener { diaMain.show() })
         updateList(true)
         recyclerView = ObjectRecyclerView(this, this, R.id.card_list, ridArrLabel, ::prodClicked)
         diaMain = ObjectDialogue(
-            this,
-            "Select text products:",
-            localChoicesText + GlobalArrays.nwsTextProducts
+                this,
+                "Select text products:",
+                UtilityHomeScreen.localChoicesText + GlobalArrays.nwsTextProducts
         )
         diaMain.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
-                diaMain,
-                "TXT-",
-                which
+                    diaMain,
+                    "TXT-",
+                    which
             )
         })
         diaImg = ObjectDialogue(
-            this,
-            "Select image products:",
-            localChoicesImg + GlobalArrays.nwsImageProducts
+                this,
+                "Select image products:",
+                UtilityHomeScreen.localChoicesImg + GlobalArrays.nwsImageProducts
         )
         diaImg.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
-                diaImg,
-                "",
-                which
+                    diaImg,
+                    "",
+                    which
             )
         })
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
         diaAfd.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
-                diaAfd,
-                "TXT-" + "AFD",
-                which
+                    diaAfd,
+                    "TXT-" + "AFD",
+                    which
             )
         })
         diaRadar =
-            ObjectDialogue(this, "Select fixed location Nexrad products:", GlobalArrays.radars)
+                ObjectDialogue(this, "Select fixed location Nexrad products:", GlobalArrays.radars)
         diaRadar.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
-                diaRadar,
-                "NXRD-",
-                which
+                    diaRadar,
+                    "NXRD-",
+                    which
             )
         })
     }
@@ -253,24 +236,24 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun findPositionTEXT(key: String) = (0 until GlobalArrays.nwsTextProducts.size)
-        .firstOrNull {
-            GlobalArrays.nwsTextProducts[it].startsWith(
-                key.toLowerCase().replace(
-                    "txt-",
-                    ""
+            .firstOrNull {
+                GlobalArrays.nwsTextProducts[it].startsWith(
+                        key.toLowerCase().replace(
+                                "txt-",
+                                ""
+                        )
                 )
-            )
-        }
-        ?.let { GlobalArrays.nwsTextProducts[it] }
-        ?: ""
+            }
+            ?.let { GlobalArrays.nwsTextProducts[it] }
+            ?: ""
 
     private fun findPositionIMG(key: String) = (0 until GlobalArrays.nwsImageProducts.size)
-        .firstOrNull { GlobalArrays.nwsImageProducts[it].startsWith(key.replace("IMG-", "")) }
-        ?.let { GlobalArrays.nwsImageProducts[it] }
-        ?: ""
+            .firstOrNull { GlobalArrays.nwsImageProducts[it].startsWith(key.replace("IMG-", "")) }
+            ?.let { GlobalArrays.nwsImageProducts[it] }
+            ?: ""
 
     private fun findPositionIMG2(key: String): String {
-        for (l in localChoicesImg) {
+        for (l in UtilityHomeScreen.localChoicesImg) {
             if (l.startsWith(key.replace("OGL-", ""))) return l
             if (l.startsWith(key.replace("IMG-", ""))) return l
         }
@@ -278,8 +261,8 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun findPositionTEXTLOCAL(key: String) =
-        localChoicesText.firstOrNull { it.startsWith(key.replace("TXT-", "")) }
-            ?: ""
+            UtilityHomeScreen.localChoicesText.firstOrNull { it.startsWith(key.replace("TXT-", "")) }
+                    ?: ""
 
     private fun findPositionAFD(key: String): String {
         (0 until GlobalArrays.wfos.size).forEach {
@@ -294,8 +277,8 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun findPositionRadar(key: String) = (0 until GlobalArrays.radars.size)
-        .firstOrNull { GlobalArrays.radars[it].startsWith(key.replace("NXRD-", "")) }
-        ?.let { GlobalArrays.radars[it] + " (NEXRAD)" } ?: ""
+            .firstOrNull { GlobalArrays.radars[it].startsWith(key.replace("NXRD-", "")) }
+            ?.let { GlobalArrays.radars[it] + " (NEXRAD)" } ?: ""
 
     override fun onBackPressed() {
         if (ridFav != hmFavOrig) {
@@ -308,7 +291,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     private fun prodClicked(position: Int) {
         val bottomSheetFragment = BottomSheetFragment()
         bottomSheetFragment.position = position
-        bottomSheetFragment.usedForLocation = true
+        bottomSheetFragment.usedForLocation = false
         bottomSheetFragment.fnList = listOf(::deleteItem, ::moveUpItem, ::moveDownItem)
         bottomSheetFragment.labelList = listOf("Delete Item", "Move Up", "Move Down")
         bottomSheetFragment.actContext = this
@@ -345,7 +328,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     private fun alertDialogClicked(dialogue: ObjectDialogue, token: String, which: Int) {
         val strName = dialogue.getItem(which)
         var txtprod =
-            token + strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)
+                token + strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)
         if (token == "") {
             txtprod = if (txtprod != "RADAR") {
                 "IMG-" + txtprod.toUpperCase()

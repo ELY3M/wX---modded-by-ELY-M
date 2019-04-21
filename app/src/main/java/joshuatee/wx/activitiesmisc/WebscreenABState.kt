@@ -29,7 +29,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
@@ -43,13 +42,14 @@ import joshuatee.wx.GlobalArrays
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.util.Utility
 
+import kotlinx.android.synthetic.main.activity_webview_toolbar_state.*
+
 class WebscreenABState : BaseActivity(), OnItemSelectedListener {
 
     // This is a general purpose activity used to view web pages.
     // Toolbar is displayed ( thus AB ie ActionBar (old name) in activity name )
     // URL and title are passed in via extras
 
-    private lateinit var webview: WebView
     private var url = ""
     private val caArr = listOf(
         "bcstorm: British Columbia",
@@ -98,7 +98,6 @@ class WebscreenABState : BaseActivity(), OnItemSelectedListener {
         sp = ObjectSpinner(this, this, this, R.id.spinner1, stateArr)
         // FIXME add to constructor
         sp.setSelection(findPosition(stateCodeCurrent.toLowerCase(Locale.US)))
-        webview = findViewById(R.id.webview)
         val webSettings = webview.settings
         webSettings.javaScriptEnabled = true
         webview.webViewClient = WebViewClient()

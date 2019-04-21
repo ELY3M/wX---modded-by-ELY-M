@@ -26,9 +26,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.settings.Location
 
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.radar.LatLon
-import kotlin.math.roundToInt
 
 class ObjectForecastPackageCurrentConditions {
 
@@ -56,38 +54,18 @@ class ObjectForecastPackageCurrentConditions {
     // US
     internal constructor(context: Context, locNum: Int) {
         if (Location.isUS(locNum)) {
-            if (MyApplication.currentConditionsViaMetar) {
-                val tmpArr = getConditionsViaMetar(context, Location.getLatLon(locNum))
-                data1 = tmpArr[0]
-                iconUrl = tmpArr[1]
-            } else {
-                val tmpArr = getConditions(context, Location.getLatLon(locNum))
-                data1 = tmpArr[0]
-                iconUrl = tmpArr[1]
-            }
-            status = if (MyApplication.currentConditionsViaMetar) {
-                UtilityUSv2.getStatusViaMetar(context, conditionsTimeStr)
-            } else {
-                UtilityUSv2.getStatus(context, conditionsTimeStr)
-            }
+            val tmpArr = getConditionsViaMetar(context, Location.getLatLon(locNum))
+            data1 = tmpArr[0]
+            iconUrl = tmpArr[1]
+            status = UtilityUSv2.getStatusViaMetar(context, conditionsTimeStr)
         }
     }
 
     internal constructor(context: Context, location: LatLon) {
-        if (MyApplication.currentConditionsViaMetar) {
-            val tmpArr = getConditionsViaMetar(context, location)
-            data1 = tmpArr[0]
-            iconUrl = tmpArr[1]
-        } else {
-            val tmpArr = getConditions(context, location)
-            data1 = tmpArr[0]
-            iconUrl = tmpArr[1]
-        }
-        status = if (MyApplication.currentConditionsViaMetar) {
-            UtilityUSv2.getStatusViaMetar(context, conditionsTimeStr)
-        } else {
-            UtilityUSv2.getStatus(context, conditionsTimeStr)
-        }
+        val tmpArr = getConditionsViaMetar(context, location)
+        data1 = tmpArr[0]
+        iconUrl = tmpArr[1]
+        status = UtilityUSv2.getStatusViaMetar(context, conditionsTimeStr)
     }
 
     private fun getConditionsViaMetar(context: Context, location: LatLon): List<String> {
@@ -120,145 +98,7 @@ class ObjectForecastPackageCurrentConditions {
         return listOf(sb, objMetar.icon)
         //sb    String    "NA° / 22°(NA%) - 1016 mb - W 13 mph - 10 mi - Mostly Cloudy"
     }
-
-    private fun getConditions(context: Context, location: LatLon): List<String> {
-        var conditions = ""
-        val obsClosest = UtilityUSv2.getObsFromLatLon(context, location)
-        val observationData =
-            UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/stations/$obsClosest/observations/current")
-        val icon = observationData.parse("\"icon\": \"(.*?)\", ")
-        var condition = observationData.parse("\"textDescription\": \"(.*?)\", ")
-        var temperature = observationData.parse("\"temperature\":.*?\"value\": (.*?),")
-        var dewpoint = observationData.parse("\"dewpoint\":.*?\"value\": (.*?),")
-        var windDirection = observationData.parse("\"windDirection\":.*?\"value\": (.*?),")
-        var windSpeed = observationData.parse("\"windSpeed\":.*?\"value\": (.*?),")
-        var windGust = observationData.parse("\"windGust\":.*?\"value\": (.*?),")
-        var seaLevelPressure = observationData.parse("\"barometricPressure\":.*?\"value\": (.*?),")
-        var visibility = observationData.parse("\"visibility\":.*?\"value\": (.*?),")
-        var relativeHumidity = observationData.parse("\"relativeHumidity\":.*?\"value\": (.*?),")
-        var windChill = observationData.parse("\"windChill\":.*?\"value\": (.*?),")
-        var heatIndex = observationData.parse("\"heatIndex\":.*?\"value\": (.*?),")
-        conditionsTimeStr = observationData.parse("\"timestamp\": \"(.*?)\"")
-        temperature = if (!temperature.contains("NA") && !temperature.contains("null")) {
-            val tempD = temperature.toDoubleOrNull() ?: 0.0
-            if (MyApplication.unitsF) {
-                UtilityMath.cTof(tempD)
-            } else {
-                UtilityMath.roundToString(tempD)
-            }
-        } else {
-            "NA"
-        }
-        windChill = if (!windChill.contains("NA") && !windChill.contains("null")) {
-            val tempD = windChill.toDoubleOrNull() ?: 0.0
-            if (MyApplication.unitsF) {
-                UtilityMath.cTof(tempD)
-            } else {
-                UtilityMath.roundToString(tempD)
-            }
-        } else {
-            "NA"
-        }
-        heatIndex = if (!heatIndex.contains("NA") && !heatIndex.contains("null")) {
-            val tempD = heatIndex.toDoubleOrNull() ?: 0.0
-            if (MyApplication.unitsF) {
-                UtilityMath.cTof(tempD)
-            } else {
-                UtilityMath.roundToString(tempD)
-            }
-        } else {
-            "NA"
-        }
-        dewpoint = if (!dewpoint.contains("NA") && !dewpoint.contains("null")) {
-            val tempD = dewpoint.toDoubleOrNull() ?: 0.0
-            if (MyApplication.unitsF) {
-                UtilityMath.cTof(tempD)
-            } else {
-                UtilityMath.roundToString(tempD)
-            }
-        } else {
-            "NA"
-        }
-        windDirection = if (!windDirection.contains("NA") && !windDirection.contains("null")) {
-            UtilityMath.convertWindDir(windDirection.toDoubleOrNull() ?: 0.0)
-        } else {
-            "NA"
-        }
-        windSpeed = if (!windSpeed.contains("NA") && !windSpeed.contains("null")) {
-            val tempD = windSpeed.toDoubleOrNull() ?: 0.0
-            UtilityMath.metersPerSecondtoMPH(tempD)
-        } else {
-            "NA"
-        }
-        relativeHumidity =
-            if (!relativeHumidity.contains("NA") && !relativeHumidity.contains("null")) {
-                val tempD = relativeHumidity.toDoubleOrNull() ?: 0.0
-                //UtilityMath.roundToString(tempD)
-                tempD.roundToInt().toString()
-            } else {
-                "NA"
-            }
-        visibility = if (!visibility.contains("NA") && !visibility.contains("null")) {
-            val tempD = visibility.toDoubleOrNull() ?: 0.0
-            UtilityMath.metersToMileRounded(tempD)
-        } else {
-            "NA"
-        }
-        try {
-            val tempD = seaLevelPressure.toDoubleOrNull() ?: 0.0
-            seaLevelPressure = if (!MyApplication.unitsM) {
-                UtilityMath.pressureMBtoIn(seaLevelPressure)
-            } else {
-                UtilityMath.pressurePAtoMB(tempD) + " mb"
-            }
-        } catch (e: Exception) {
-            seaLevelPressure = "NA"
-            UtilityLog.HandleException(e)
-        }
-        if (windGust == "null") {
-            windGust = ""
-        } else {
-            val tempD = windGust.toDoubleOrNull() ?: 0.0
-            windGust = UtilityMath.metersPerSecondtoMPH(tempD)
-            windGust = "G $windGust"
-        }
-        if (condition == "") {
-            condition = " "
-        }
-        conditions += temperature + MyApplication.DEGREE_SYMBOL
-        if (windChill != "NA") {
-            conditions += "(" + windChill + MyApplication.DEGREE_SYMBOL + ")"
-        } else if (heatIndex != "NA") {
-            conditions += "(" + heatIndex + MyApplication.DEGREE_SYMBOL + ")"
-        }
-        conditions += " / " + dewpoint + MyApplication.DEGREE_SYMBOL + "(" + relativeHumidity
-        conditions += "%) - $seaLevelPressure - $windDirection $windSpeed"
-        if (windGust != "") {
-            conditions += " "
-        }
-        conditions += "$windGust mph - $visibility mi - $condition"
-        return listOf(conditions, icon)
-    }
 }
 
-/*
- 
- 
- {
- "number": 14,
- "name": "Tuesday Night",
- "startTime": "2016-12-27T18:00:00-05:00",
- "endTime": "2016-12-28T06:00:00-05:00",
- "isDaytime": false,
- "temperature": 50,
- "windSpeed": "7 mph",
- "windDirection": "NW",
- "icon": "https://api-v1.weather.gov/icons/land/night/rain_showers,30?size=medium",
- "shortForecast": "Chance Rain Showers",
- "detailedForecast": "A chance of rain showers. Mostly cloudy, with a low around 50. Chance of precipitation is 30%."
- }
- 
- 
- */
 
 

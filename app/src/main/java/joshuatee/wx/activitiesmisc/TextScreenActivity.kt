@@ -24,7 +24,6 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
 import joshuatee.wx.R
@@ -37,6 +36,8 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.util.UtilityLog
 import kotlinx.coroutines.*
+
+import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -72,8 +73,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         url = activityArguments[0]
         title = activityArguments[1]
-        val linearLayout: LinearLayout = findViewById(R.id.ll)
-        c0 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
+        c0 = ObjectCardText(this, ll, toolbar, toolbarBottom)
         if (!url.startsWith("http")) {
             if (url.contains("<")) {
                 c0.setText(Utility.fromHtml(url))

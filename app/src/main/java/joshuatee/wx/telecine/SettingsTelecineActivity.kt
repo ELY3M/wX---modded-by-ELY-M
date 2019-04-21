@@ -12,12 +12,13 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.widget.LinearLayout
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.settings.ObjectSettingsCheckBox
 import joshuatee.wx.settings.ObjectSettingsSpinner
 import joshuatee.wx.ui.BaseActivity
+
+import kotlinx.android.synthetic.main.activity_linear_layout.*
 
 class SettingsTelecineActivity : BaseActivity() {
 
@@ -25,7 +26,6 @@ class SettingsTelecineActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         val vidSize = listOf("100", "75", "50")
-        val ll: LinearLayout = findViewById(R.id.ll)
         val vidSpinner = ObjectSettingsSpinner(
             this as Context,
             this as Activity,
