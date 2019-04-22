@@ -302,7 +302,9 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         var time = storms[id].time
         var rid1 = UtilityLocation.getNearestOffice(this, "RADAR", LatLon(x, y))
         time = UtilityStringExternal.truncate(time, 3)
-        if (prod == "TR0" || prod == "TV0") rid1 = WXGLNexrad.getTDWRFromRID(rid1)
+        if (prod == "TR0" || prod == "TV0") {
+            rid1 = WXGLNexrad.getTdwrFromRid(rid1)
+        }
         if ((storms[id].time.toIntOrNull() ?: 0) < 1000) {
             monthStr = String.format(Locale.US, "%02d", pMonth + 1)
             dayStr = String.format(Locale.US, "%02d", pDay + 1)

@@ -107,7 +107,6 @@ enum class PolygonWarningType constructor(
     ),
     SevereWeatherStatement(
             "SVS",
-            //"Flood%20Warning",
             "Severe%20Weather%20Statement",
             "RADAR_SHOW_SVS",
             "RADAR_COLOR_SVS",

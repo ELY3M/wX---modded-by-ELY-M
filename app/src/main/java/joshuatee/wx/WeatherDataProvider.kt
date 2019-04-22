@@ -43,11 +43,11 @@ class WeatherDataProvider : ContentProvider() {
 
     override fun onCreate(): Boolean {
         val preferences =
-            context.getSharedPreferences(context.packageName + "_preferences", Context.MODE_PRIVATE)
-        val sevenDay = preferences.getString("7DAY_EXT_WIDGET", "No data")
+            context!!.getSharedPreferences(context!!.packageName + "_preferences", Context.MODE_PRIVATE)
+        val sevenDay = preferences.getString("7DAY_EXT_WIDGET", "No data")!!
         val dayArr = sevenDay.split("\n\n").dropLastWhile { it.isEmpty() }.toMutableList()
         if (dayArr.size > 1) {
-            dayArr[0] = preferences.getString("CC_WIDGET", "No data")
+            dayArr[0] = preferences.getString("CC_WIDGET", "No data")!!
             (0 until dayArr.size - 1).mapTo(sData) { WeatherDataPoint(dayArr[it] + "\n", 0) }
         }
         return true
@@ -98,7 +98,7 @@ class WeatherDataProvider : ContentProvider() {
         }
         // Notify any listeners that the data backing the content provider has changed, and return
         // the number of rows affected.
-        context.contentResolver.notifyChange(uri, null)
+        context!!.contentResolver.notifyChange(uri, null)
         return 1
     }
 

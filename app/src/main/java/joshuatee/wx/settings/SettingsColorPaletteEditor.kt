@@ -30,7 +30,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -54,7 +53,6 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         private const val READ_REQUEST_CODE = 42
     }
 
-    private var TAG: String = "ColorPaletteEditor"
     private lateinit var turl: Array<String>
     private var formattedDate = ""
     private var name = ""
@@ -309,7 +307,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
     private fun readTextFromUri(uri: Uri): String {
         val content = UtilityIO.readTextFromUri(this, uri)
         val uriArr =
-            uri.lastPathSegment.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            uri.lastPathSegment!!.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         var fileName = "map"
         if (uriArr.isNotEmpty()) {
             fileName = uriArr[uriArr.size - 1]
@@ -323,7 +321,6 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
     private fun savepalfile(fileName: String, text: String) {
         val dir = MyApplication.PalFilesPath
-        Log.i(TAG, "saving palfile: "+fileName)
         //println(content)
         File("$dir/$fileName").printWriter().use {
             it.println(text)

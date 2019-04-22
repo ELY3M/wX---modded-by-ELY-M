@@ -29,7 +29,7 @@ import joshuatee.wx.util.Utility
 
 object WXGLNexrad {
 
-    private val COD_HASH = mapOf(
+    private val closestTdwrToNexrad = mapOf(
         "DTX" to "DTW",
         "LOT" to "ORD",
         "MKX" to "MKE",
@@ -113,12 +113,11 @@ object WXGLNexrad {
         else -> binSize54
     }
 
-    // FIXME rename and use different split
-    fun isRIDTDWR(rid: String): Boolean =
+    // FIXME use different split
+    fun isRidTdwr(rid: String): Boolean =
         GlobalArrays.tdwrRadars.any { rid == MyApplication.space.split(it)[0] }
 
-    // FIXME rename method and COD_HASH
-    fun getTDWRFromRID(rid: String): String = COD_HASH[rid] ?: ""
+    fun getTdwrFromRid(rid: String): String = closestTdwrToNexrad[rid] ?: ""
 
     fun savePrefs(context: Context, prefPrefix: String, oglr: WXGLRender) {
         Utility.writePref(context, prefPrefix + "_RID", oglr.rid)

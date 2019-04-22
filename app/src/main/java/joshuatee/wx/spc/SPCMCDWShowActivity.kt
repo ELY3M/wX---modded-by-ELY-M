@@ -93,9 +93,7 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) { objWatch.getData(contextg) }
         c1.setText(Utility.fromHtml(objWatch.text))
-        //if (activityArguments[2] == "MCD" || activityArguments[2] == "MPD") {
         toolbar.subtitle = objWatch.textForSubtitle
-        //}
         c0.setImage(objWatch.bitmap)
         registerForContextMenu(c0.img)
         UtilityTTS.conditionalPlay(

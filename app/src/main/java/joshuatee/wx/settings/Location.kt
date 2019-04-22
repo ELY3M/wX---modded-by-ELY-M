@@ -31,6 +31,8 @@ import joshuatee.wx.radar.LatLon
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import java.util.*
+import joshuatee.wx.Extensions.*
+import joshuatee.wx.util.UtilityString
 
 // implement up/down mini fab in settings
 // hide fabs if only one location
@@ -238,6 +240,18 @@ class Location(val context: Context, locNumInt: Int) {
             checkCurrentLocationValidity()
         }
 
+        private fun getWfoRadarSiteFromPoint(location: LatLon): List<String> {
+            val pointData = ("https://api.weather.gov/points/" + location.latString + "," + location.lonString).getNwsHtml()
+            // "cwa": "IWX",
+            // "radarStation": "KGRR"
+            val wfo = pointData.parse("\"cwa\": \"(.*?)\"")
+            var radarStation = pointData.parse("\"radarStation\": \"(.*?)\"")
+            radarStation = UtilityString.getLastXChars(radarStation, 3)
+            //print(wfo);
+            //print(radarStation);
+            return listOf(wfo, radarStation)
+        }
+
         fun locationSave(
             context: Context,
             locNum: String,
@@ -259,28 +273,35 @@ class Location(val context: Context, locNumInt: Int) {
             Utility.writePref(context, "LOC" + locNum + "_X", xStr)
             Utility.writePref(context, "LOC" + locNum + "_Y", yStr)
             Utility.writePref(context, "LOC" + locNum + "_LABEL", labelStr)
-            var nwsOfficeShortLower = ""
-            var rid = ""
+            var wfo = ""
+            var radarSite = ""
             if (us(xStr)) {
                 setNumLocations(context, locNumToSave)
                 try {
-                    nwsOfficeShortLower =
-                        UtilityLocation.getNearestOffice(context, "WFO", LatLon(xStr, yStr))
-                            .toLowerCase(Locale.US)
-                    rid = UtilityLocation.getNearestOffice(context, "RADAR", LatLon(xStr, yStr))
+                    val wfoAndRadar =  getWfoRadarSiteFromPoint(LatLon(xStr, yStr))
+                    wfo = wfoAndRadar[0]
+                    radarSite = wfoAndRadar[1]
+                    if (wfo == "") {
+                        wfo =
+                                UtilityLocation.getNearestOffice(context, "WFO", LatLon(xStr, yStr))
+                                        .toLowerCase(Locale.US)
+                    }
+                    if (radarSite == "") {
+                        radarSite = UtilityLocation.getNearestOffice(context, "RADAR", LatLon(xStr, yStr))
+                    }
                     // CT shows mosaic not nexrad so the old way is needed
-                    if (rid == "") {
-                        rid = Utility.readPref(
+                    if (radarSite == "") {
+                        radarSite = Utility.readPref(
                             context,
-                            "NWS_RID_" + nwsOfficeShortLower.toUpperCase(Locale.US),
+                            "NWS_RID_" + wfo.toUpperCase(Locale.US),
                             ""
                         )
                     }
-                    Utility.writePref(context, "RID$locNum", rid.toUpperCase(Locale.US))
+                    Utility.writePref(context, "RID$locNum", radarSite.toUpperCase(Locale.US))
                     Utility.writePref(
                         context,
                         "NWS$locNum",
-                        nwsOfficeShortLower.toUpperCase(Locale.US)
+                            wfo.toUpperCase(Locale.US)
                     )
                 } catch (e: Exception) {
                     UtilityLog.HandleException(e)
@@ -312,8 +333,8 @@ class Location(val context: Context, locNumInt: Int) {
                 )
                 Utility.writePref(context, "LOC" + locNum + "_Y", id + ":" + tmpLatlon.lonStr)
                 setNumLocations(context, locNumToSave)
-                rid = UtilityCanada.getRid(xStr, yStr)
-                Utility.writePref(context, "RID$locNum", rid.toUpperCase(Locale.US))
+                radarSite = UtilityCanada.getRid(xStr, yStr)
+                Utility.writePref(context, "RID$locNum", radarSite.toUpperCase(Locale.US))
                 Utility.writePref(context, "NWS" + locNum + "_STATE", prov)
                 Utility.writePref(context, "ZONE$locNum", "")
                 Utility.writePref(context, "COUNTY$locNum", "")
@@ -321,9 +342,9 @@ class Location(val context: Context, locNumInt: Int) {
             }
             refreshLocationData(context)
             LocalBroadcastManager.getInstance(context).sendBroadcast(Intent("locationadded"))
-            return "Saving location $locNum as $labelStr ($xStr,$yStr) " + nwsOfficeShortLower.toUpperCase(
+            return "Saving location $locNum as $labelStr ($xStr,$yStr) " + wfo.toUpperCase(
                 Locale.US
-            ) + "(" + rid.toUpperCase(Locale.US) + ")"
+            ) + "(" + radarSite.toUpperCase(Locale.US) + ")"
         }
 
         fun deleteLocation(context: Context, locToDeleteStr: String) {

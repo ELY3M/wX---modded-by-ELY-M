@@ -30,8 +30,6 @@ import joshuatee.wx.util.UtilityCanvasProjection
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.external.ExternalPolygon
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityDownload
 
 internal object UtilityWatch {
 
@@ -93,36 +91,35 @@ internal object UtilityWatch {
         return warningList
     }
 
-    fun showProducts(context: Context, lat: Double, lon: Double, type: PolygonType): String {
+    fun showProducts(lat: Double, lon: Double, type: PolygonType): String {
         var text = ""
         val textWatNoList: String
         val mcdNoArr: Array<String>
         val watchLatLon: String
-        val productStringPrefix: String
         when (type) {
             PolygonType.WATCH -> {
                 textWatNoList = MyApplication.watchNoList.valueGet()
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
                 watchLatLon = MyApplication.watchLatlonList.valueGet()
-                productStringPrefix = "SPCWAT"
+                //productStringPrefix = "SPCWAT"
             }
             PolygonType.MCD -> {
                 textWatNoList = MyApplication.mcdNoList.valueGet()
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
                 watchLatLon = MyApplication.mcdLatlon.valueGet()
-                productStringPrefix = "SPCMCD"
+                //productStringPrefix = "SPCMCD"
             }
             PolygonType.MPD -> {
                 textWatNoList = MyApplication.mpdNoList.valueGet()
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
                 watchLatLon = MyApplication.mpdLatlon.valueGet()
-                productStringPrefix = "WPCMPD"
+                //productStringPrefix = "WPCMPD"
             }
             else -> {
                 textWatNoList = MyApplication.watchNoList.valueGet()
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
                 watchLatLon = MyApplication.watchLatlonList.valueGet()
-                productStringPrefix = ""
+                //productStringPrefix = ""
             }
         }
         val latlonArr = MyApplication.colon.split(watchLatLon)
@@ -153,8 +150,6 @@ internal object UtilityWatch {
                 val polygon2 = poly2.build()
                 val contains = polygon2.contains(ExternalPoint(lat.toFloat(), lon.toFloat()))
                 if (contains && notFound) {
-                    //val mcdPre = UtilityDownload.getTextProduct(context, productStringPrefix + mcdNoArr[z])
-                    //text = Utility.fromHtml(mcdPre)
                     text = mcdNoArr[z]
                     notFound = false
                 }

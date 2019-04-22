@@ -176,7 +176,7 @@ object UtilityDownload {
             "SPC_TST" -> {
                 needsBitmap = false
                 val images = UtilitySPC.tstormOutlookImages
-                return UtilityImg.mergeImagesVertically(images)
+                bm = UtilityImg.mergeImagesVertically(images)
             }
             "SWOD1" -> {
                 needsBitmap = false
@@ -316,7 +316,9 @@ object UtilityDownload {
                 needsBitmap = false
             }
         }
-        if (needsBitmap) bm = url.getImage()
+        if (needsBitmap) {
+            bm = url.getImage()
+        }
         return bm
     }
 

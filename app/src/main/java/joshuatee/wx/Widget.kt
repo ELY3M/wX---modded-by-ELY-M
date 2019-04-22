@@ -48,11 +48,11 @@ class Widget : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.hasExtra(WIDGET_IDS_KEY)) {
-            val ids = intent.extras.getIntArray(WIDGET_IDS_KEY)
+            val ids = intent.extras!!.getIntArray(WIDGET_IDS_KEY)
             if (intent.hasExtra(WIDGET_DATA_KEY)) {
-                this.onUpdate(context, AppWidgetManager.getInstance(context), ids)
+                this.onUpdate(context, AppWidgetManager.getInstance(context), ids!!)
             } else {
-                this.onUpdate(context, AppWidgetManager.getInstance(context), ids)
+                this.onUpdate(context, AppWidgetManager.getInstance(context), ids!!)
             }
         } else
             super.onReceive(context, intent)

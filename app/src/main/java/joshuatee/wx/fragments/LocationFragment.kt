@@ -33,7 +33,6 @@ import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.util.TypedValue
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +43,6 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.ScrollView
 import android.widget.Spinner
-import android.widget.TextView
 import android.widget.AdapterView.OnItemSelectedListener
 import androidx.fragment.app.Fragment
 import androidx.cardview.widget.CardView
@@ -420,13 +418,13 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         if (oglrIdx != -1)
             if (!radarLocationChangedAl[oglrIdx])
                 oglrArr[oglrIdx].rid = Location.rid
-        if (oglrArr[idx].product == "N0Q" && WXGLNexrad.isRIDTDWR(oglrArr[idx].rid))
+        if (oglrArr[idx].product == "N0Q" && WXGLNexrad.isRidTdwr(oglrArr[idx].rid))
             oglrArr[idx].product = "TZL"
-        if (oglrArr[idx].product == "TZL" && !WXGLNexrad.isRIDTDWR(oglrArr[idx].rid))
+        if (oglrArr[idx].product == "TZL" && !WXGLNexrad.isRidTdwr(oglrArr[idx].rid))
             oglrArr[idx].product = "N0Q"
-        if (oglrArr[idx].product == "N0U" && WXGLNexrad.isRIDTDWR(oglrArr[idx].rid))
+        if (oglrArr[idx].product == "N0U" && WXGLNexrad.isRidTdwr(oglrArr[idx].rid))
             oglrArr[idx].product = "TV0"
-        if (oglrArr[idx].product == "TV0" && !WXGLNexrad.isRIDTDWR(oglrArr[idx].rid))
+        if (oglrArr[idx].product == "TV0" && !WXGLNexrad.isRidTdwr(oglrArr[idx].rid))
             oglrArr[idx].product = "N0U"
         UtilityRadarUI.initWxoglGeom(
             glviewArr[idx],

@@ -368,7 +368,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        val ridIsTdwr = WXGLNexrad.isRIDTDWR(oglr.rid)
+        val ridIsTdwr = WXGLNexrad.isRidTdwr(oglr.rid)
         if (ridIsTdwr) {
             l3Menu.isVisible = false
             l2Menu.isVisible = false
@@ -661,7 +661,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     oglr.product = "L2REF"
                     tiltOption = false
                 } else {
-                    if (!WXGLNexrad.isRIDTDWR(oglr.rid)) {
+                    if (!WXGLNexrad.isRidTdwr(oglr.rid)) {
                         oglr.product = "N" + tilt + "Q"
                         tiltOption = true
                     } else {
@@ -676,7 +676,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     oglr.product = "L2VEL"
                     tiltOption = false
                 } else {
-                    if (!WXGLNexrad.isRIDTDWR(oglr.rid)) {
+                    if (!WXGLNexrad.isRidTdwr(oglr.rid)) {
                         oglr.product = "N" + tilt + "U"
                         tiltOption = true
                     } else {

@@ -275,13 +275,13 @@ internal object UtilityRadarUI {
                 showNearestSps(context, glview)
             }
             strName.contains("Show watch text") -> {
-                showNearestProduct(context, act, PolygonType.WATCH, glview, uiDispatcher)
+                showNearestProduct(context, PolygonType.WATCH, glview, uiDispatcher)
             }
             strName.contains("Show MCD text") -> {
-                showNearestProduct(context, act, PolygonType.MCD, glview, uiDispatcher)
+                showNearestProduct(context, PolygonType.MCD, glview, uiDispatcher)
             }
             strName.contains("Show MPD text") -> {
-                showNearestProduct(context, act, PolygonType.MPD, glview, uiDispatcher)
+                showNearestProduct(context, PolygonType.MPD, glview, uiDispatcher)
             }
             strName.contains("Show nearest observation") -> {
                 getMetar(glview, act, context, uiDispatcher)
@@ -576,13 +576,12 @@ internal object UtilityRadarUI {
 
     private fun showNearestProduct(
             context: Context,
-            act: Activity,
             type: PolygonType,
             glview: WXGLSurfaceView,
             uiDispatcher: CoroutineDispatcher
     ) = GlobalScope.launch(uiDispatcher) {
-        var txt = withContext(Dispatchers.IO) {
-            UtilityWatch.showProducts(context, glview.newY.toDouble(), glview.newX.toDouble() * -1.0, type)
+        val txt = withContext(Dispatchers.IO) {
+            UtilityWatch.showProducts(glview.newY.toDouble(), glview.newX.toDouble() * -1.0, type)
         }
         ObjectIntent(
                 context,
@@ -590,13 +589,7 @@ internal object UtilityRadarUI {
                 SPCMCDWShowActivity.NO,
                 arrayOf(txt, "", type.toString())
         )
-        /*if (txt == "") {
-            txt = "No active " + type.typeAsString
-        }
-        UtilityAlertDialog.showHelpText(txt, act)*/
-    }
-
-    
+    }    
 
     private fun showSpotterInfo(
             act: Activity,

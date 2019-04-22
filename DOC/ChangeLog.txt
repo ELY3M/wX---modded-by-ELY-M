@@ -6,13 +6,14 @@
 // TODO UtilityMetar in radar has optimization related to text file loading
 // TODO BUG - storm reports show radar doesn't show location dot for report
 // TODO enhance hourly graphics
-// TODO fix wfo issue for locations
-// TODO new polygons - snow squall, special marine warning
 // TODO fix issue for precip radar products when there is no data
 // TODO move off rid/wfo/sounding lat/lon/name currently in pref should be in objects (like flutter/iOS)
 // TODO linesize - swo, wb, wbgusts, sti
+// TODO in settings -> location show current conditions in 2nd line for all locations
 
-55148 2019_04_20
+55149 2019_04_21 lint cleanup
+55148 2019_04_21 code cleanup (settings)
+                 in location save, determine wfo/rid from NWS API, fall back to closest
 55147 2019_04_20 add better framework for radar polygon warnings and test for SMR (special marine warning), SPS
                  add SPC Thunderstorm outlook as homescreen option and method in utilImg to combine list of images vertically
                  change longpress mcd/watch/mpd to use dedicted viewer (SPCMCDShowActivity)

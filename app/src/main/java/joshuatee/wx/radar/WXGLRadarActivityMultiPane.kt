@@ -416,17 +416,17 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
     private fun getContent(glv: WXGLSurfaceView, ogl: WXGLRender, z: Int) =
         GlobalScope.launch(uiDispatcher) {
-            if ((oglrArr[z].product == "N0Q" || oglrArr[z].product == "N1Q" || oglrArr[z].product == "N2Q" || oglrArr[z].product == "N3Q" || oglrArr[z].product == "L2REF") && WXGLNexrad.isRIDTDWR(
+            if ((oglrArr[z].product == "N0Q" || oglrArr[z].product == "N1Q" || oglrArr[z].product == "N2Q" || oglrArr[z].product == "N3Q" || oglrArr[z].product == "L2REF") && WXGLNexrad.isRidTdwr(
                     oglrArr[z].rid
                 )
             ) oglrArr[z].product = "TZL"
-            if (oglrArr[z].product == "TZL" && !WXGLNexrad.isRIDTDWR(oglrArr[z].rid)) oglrArr[z].product =
+            if (oglrArr[z].product == "TZL" && !WXGLNexrad.isRidTdwr(oglrArr[z].rid)) oglrArr[z].product =
                 "N0Q"
-            if ((oglrArr[z].product == "N0U" || oglrArr[z].product == "N1U" || oglrArr[z].product == "N2U" || oglrArr[z].product == "N3U" || oglrArr[z].product == "L2VEL") && WXGLNexrad.isRIDTDWR(
+            if ((oglrArr[z].product == "N0U" || oglrArr[z].product == "N1U" || oglrArr[z].product == "N2U" || oglrArr[z].product == "N3U" || oglrArr[z].product == "L2VEL") && WXGLNexrad.isRidTdwr(
                     oglrArr[z].rid
                 )
             ) oglrArr[z].product = "TV0"
-            if (oglrArr[z].product == "TV0" && !WXGLNexrad.isRIDTDWR(oglrArr[z].rid)) oglrArr[z].product =
+            if (oglrArr[z].product == "TV0" && !WXGLNexrad.isRidTdwr(oglrArr[z].rid)) oglrArr[z].product =
                 "N0U"
             toolbar.subtitle = ""
             setToolbarTitle()
@@ -706,7 +706,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             R.id.action_radar3 -> switchRadar(2)
             R.id.action_radar4 -> switchRadar(3)
             R.id.action_n0q -> {
-                if (!WXGLNexrad.isRIDTDWR(oglrArr[curRadar].rid)) {
+                if (!WXGLNexrad.isRidTdwr(oglrArr[curRadar].rid)) {
                     oglrArr[curRadar].product = "N" + tilt + "Q"
                 } else {
                     oglrArr[curRadar].product = "TZL"
@@ -714,7 +714,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 getContentIntelligent()
             }
             R.id.action_n0u -> {
-                if (!WXGLNexrad.isRIDTDWR(oglrArr[curRadar].rid)) {
+                if (!WXGLNexrad.isRidTdwr(oglrArr[curRadar].rid)) {
                     oglrArr[curRadar].product = "N" + tilt + "U"
                 } else {
                     oglrArr[curRadar].product = "TV$tilt"

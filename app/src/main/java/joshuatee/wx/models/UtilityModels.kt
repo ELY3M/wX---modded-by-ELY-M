@@ -46,92 +46,86 @@ import kotlinx.coroutines.*
 object UtilityModels {
 
     fun getContent(
-        context: Context,
-        om: ObjectModel,
-        overlayImg: List<String>,
-        uiDispatcher: CoroutineDispatcher
+            context: Context,
+            om: ObjectModel,
+            overlayImg: List<String>,
+            uiDispatcher: CoroutineDispatcher
     ): Job =
-        GlobalScope.launch(uiDispatcher) {
-            om.run = om.spRun.selectedItem.toString()
-            om.time = om.spTime.selectedItem.toString()
-            om.sector = om.spSector.selectedItem.toString()
-            om.sectorInt = om.spSector.selectedItemPosition
-            if (om.truncateTime) {
-                om.time = UtilityStringExternal.truncate(om.time, om.timeTruncate)
-            }
-            writePrefs(context, om)
-            withContext(Dispatchers.IO) {
-                (0 until om.numPanes).forEach {
-                    om.displayData.bitmap[it] = om.getImage(it, overlayImg)
+            GlobalScope.launch(uiDispatcher) {
+                om.run = om.spRun.selectedItem.toString()
+                om.time = om.spTime.selectedItem.toString()
+                om.sector = om.spSector.selectedItem.toString()
+                om.sectorInt = om.spSector.selectedItemPosition
+                if (om.truncateTime) {
+                    om.time = UtilityStringExternal.truncate(om.time, om.timeTruncate)
                 }
-            }
+                writePrefs(context, om)
+                withContext(Dispatchers.IO) {
+                    (0 until om.numPanes).forEach {
+                        om.displayData.bitmap[it] = om.getImage(it, overlayImg)
+                    }
+                }
 
-            (0 until om.numPanes).forEach {
-                if (om.numPanes > 1)
-                    UtilityImg.resizeViewSetImgByHeight(
-                        om.displayData.bitmap[it],
-                        om.displayData.img[it]
-                    )
-                else
-                    om.displayData.img[it].setImageBitmap(om.displayData.bitmap[it])
-            }
-            om.animRan = false
-            if (!om.firstRun) {
                 (0 until om.numPanes).forEach {
-                    UtilityImg.imgRestorePosnZoom(
-                        context,
-                        om.displayData.img[it],
-                        om.modelProvider + om.numPanes.toString() + it.toString()
-                    )
+                    if (om.numPanes > 1)
+                        UtilityImg.resizeViewSetImgByHeight(
+                                om.displayData.bitmap[it],
+                                om.displayData.img[it]
+                        )
+                    else
+                        om.displayData.img[it].setImageBitmap(om.displayData.bitmap[it])
                 }
-                if (UIPreferences.fabInModels && om.numPanes < 2) {
-                    om.fab1?.setVisibility(View.VISIBLE)
-                    om.fab2?.setVisibility(View.VISIBLE)
+                om.animRan = false
+                if (!om.firstRun) {
+                    (0 until om.numPanes).forEach {
+                        UtilityImg.imgRestorePosnZoom(
+                                context,
+                                om.displayData.img[it],
+                                om.modelProvider + om.numPanes.toString() + it.toString()
+                        )
+                    }
+                    if (UIPreferences.fabInModels && om.numPanes < 2) {
+                        om.fab1?.setVisibility(View.VISIBLE)
+                        om.fab2?.setVisibility(View.VISIBLE)
+                    }
+                    om.firstRun = true
                 }
-                om.firstRun = true
+                updateToolbarLabels(om)
+                om.imageLoaded = true
             }
-            // FIXME change to just take OM
-            updateToolbarLabels(om.toolbar, om.miStatusParam1, om.miStatusParam2, om)
-            om.imageLoaded = true
-        }
 
     fun getAnimate(
-        om: ObjectModel,
-        overlayImg: List<String>,
-        uiDispatcher: CoroutineDispatcher
+            om: ObjectModel,
+            overlayImg: List<String>,
+            uiDispatcher: CoroutineDispatcher
     ): Job =
-        GlobalScope.launch(uiDispatcher) {
-            withContext(Dispatchers.IO) {
-                (0 until om.numPanes).forEach {
-                    om.displayData.animDrawable[it] = om.getAnimate(it, overlayImg)
+            GlobalScope.launch(uiDispatcher) {
+                withContext(Dispatchers.IO) {
+                    (0 until om.numPanes).forEach {
+                        om.displayData.animDrawable[it] = om.getAnimate(it, overlayImg)
+                    }
                 }
+                (0 until om.numPanes).forEach {
+                    UtilityImgAnim.startAnimation(
+                            om.displayData.animDrawable[it],
+                            om.displayData.img[it]
+                    )
+                }
+                om.animRan = true
             }
-            (0 until om.numPanes).forEach {
-                UtilityImgAnim.startAnimation(
-                    om.displayData.animDrawable[it],
-                    om.displayData.img[it]
-                )
-            }
-            om.animRan = true
-        }
 
-    private fun updateToolbarLabels(
-        toolbar: Toolbar,
-        miStatusParam1: MenuItem,
-        miStatusParam2: MenuItem,
-        om: ObjectModel
-    ) {
+    private fun updateToolbarLabels(om: ObjectModel) {
         if (om.numPanes > 1) {
             setSubtitleRestoreIMGXYZOOM(
-                om.displayData.img,
-                toolbar,
-                "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
+                    om.displayData.img,
+                    om.toolbar,
+                    "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
             )
-            miStatusParam1.title = om.displayData.paramLabel[0]
-            miStatusParam2.title = om.displayData.paramLabel[1]
+            om.miStatusParam1.title = om.displayData.paramLabel[0]
+            om.miStatusParam2.title = om.displayData.paramLabel[1]
         } else {
-            toolbar.subtitle = om.displayData.paramLabel[0]
-            miStatusParam1.title = om.displayData.paramLabel[0]
+            om.toolbar.subtitle = om.displayData.paramLabel[0]
+            om.miStatusParam1.title = om.displayData.paramLabel[0]
         }
     }
 
@@ -140,9 +134,9 @@ object UtilityModels {
         (0 until om.numPanes).forEach {
             Utility.writePref(context, om.prefParam + it.toString(), om.displayData.param[it])
             Utility.writePref(
-                context,
-                om.prefParamLabel + it.toString(),
-                om.displayData.paramLabel[it]
+                    context,
+                    om.prefParamLabel + it.toString(),
+                    om.displayData.paramLabel[it]
             )
         }
     }
@@ -150,15 +144,15 @@ object UtilityModels {
     fun legacyShare(context: Context, animRan: Boolean, om: ObjectModel) {
         if (animRan)
             UtilityShare.shareAnimGif(
-                context,
-                om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.spTime.selectedItem.toString(),
-                om.displayData.animDrawable[0]
+                    context,
+                    om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.spTime.selectedItem.toString(),
+                    om.displayData.animDrawable[0]
             )
         else
             UtilityShare.shareBitmap(
-                context,
-                om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.spTime.selectedItem.toString(),
-                om.displayData.bitmap[0]
+                    context,
+                    om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.spTime.selectedItem.toString(),
+                    om.displayData.bitmap[0]
             )
     }
 
@@ -222,8 +216,8 @@ object UtilityModels {
         val calendar2 = Calendar.getInstance()
         calendar2.set(Calendar.HOUR_OF_DAY, runInt)
         calendar2.add(
-            Calendar.HOUR_OF_DAY,
-            timeInt + offsetFromUtc / 60 / 60
+                Calendar.HOUR_OF_DAY,
+                timeInt + offsetFromUtc / 60 / 60
         ) // was 2*offsetFromUtc/60/60
         val dayOfMonth = calendar2.get(Calendar.DAY_OF_MONTH)
         val month = 1 + calendar2.get(Calendar.MONTH)
@@ -250,12 +244,12 @@ object UtilityModels {
     }
 
     fun updateTime(
-        runF: String,
-        modelCurrentTimeF: String,
-        listTime: MutableList<String>,
-        dataAdapterTime: ArrayAdapter<String>,
-        prefix: String,
-        showDate: Boolean
+            runF: String,
+            modelCurrentTimeF: String,
+            listTime: MutableList<String>,
+            dataAdapterTime: ArrayAdapter<String>,
+            prefix: String,
+            showDate: Boolean
     ) {
         var run = runF
         var modelCurrentTime = modelCurrentTimeF
@@ -284,9 +278,9 @@ object UtilityModels {
     }
 
     fun setSubtitleRestoreIMGXYZOOM(
-        img: MutableList<TouchImageView2>,
-        toolbar: Toolbar,
-        str: String
+            img: MutableList<TouchImageView2>,
+            toolbar: Toolbar,
+            str: String
     ) {
         val x = FloatArray(img.size)
         val y = FloatArray(img.size)
@@ -300,7 +294,7 @@ object UtilityModels {
         }
         toolbar.subtitle = str
         (0 until img.size)
-            .filter { !x[it].isNaN() && !y[it].isNaN() }
-            .forEach { img[it].setZoom(z[it], x[it], y[it]) }
+                .filter { !x[it].isNaN() && !y[it].isNaN() }
+                .forEach { img[it].setZoom(z[it], x[it], y[it]) }
     }
 }

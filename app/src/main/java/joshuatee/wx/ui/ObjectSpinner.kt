@@ -126,7 +126,7 @@ class ObjectSpinner {
     }
 
     private fun findPosition(key: String) = (0 until arrayAdapter.count).firstOrNull {
-        arrayAdapter.getItem(it) != null && arrayAdapter.getItem(it).contains(key)
+        arrayAdapter.getItem(it) != null && arrayAdapter.getItem(it)!!.contains(key)
     }
         ?: 0
 

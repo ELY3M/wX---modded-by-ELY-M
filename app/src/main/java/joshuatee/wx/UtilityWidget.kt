@@ -267,10 +267,10 @@ object UtilityWidget {
         }
         val preferences =
             context.getSharedPreferences(context.packageName + "_preferences", Context.MODE_PRIVATE)
-        val sevenDay = preferences.getString("7DAY_EXT_WIDGET", "No data")
+        val sevenDay = preferences.getString("7DAY_EXT_WIDGET", "No data")!!
         val dayArr = sevenDay.split("\n\n").dropLastWhile { it.isEmpty() }.toMutableList()
         if (dayArr.isNotEmpty()) {
-            dayArr[0] = preferences.getString("CC_WIDGET", "No data")
+            dayArr[0] = preferences.getString("CC_WIDGET", "No data")!!
         }
         val count = dayArr.size - 1
         (0 until count).forEach {

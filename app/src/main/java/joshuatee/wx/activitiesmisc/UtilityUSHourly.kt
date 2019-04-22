@@ -81,7 +81,7 @@ object UtilityUSHourly {
     fun getString(locNum: Int): List<String> {
         val x = UtilityMath.latLonFix(Location.getX(locNum))
         val y = UtilityMath.latLonFix(Location.getY(locNum))
-        val sigHtmlTmp =
+        val html =
             UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/points/$x,$y/forecast/hourly")
         val header = String.format("%-16s", "Time") + " " + String.format(
             "%-10s",
@@ -90,7 +90,7 @@ object UtilityUSHourly {
             "%-8s",
             "WindDir"
         ) + MyApplication.newline
-        return listOf(header + parse(sigHtmlTmp), sigHtmlTmp)
+        return listOf(header + parse(html), html)
     }
 
     private fun parse(html: String): String {

@@ -62,7 +62,7 @@ object UtilityUSImgWX {
         var scaleType = ProjectionType.WX_RENDER
         val hwLineWidth = 1
         if (product == "TR0" || product == "TV0" || product == "TZL") {
-            ridTdwr = WXGLNexrad.getTDWRFromRID(rid1)
+            ridTdwr = WXGLNexrad.getTdwrFromRid(rid1)
             tdwr = true
             rid1 = ridTdwr
             scaleType = ProjectionType.WX_RENDER_48
@@ -150,7 +150,7 @@ object UtilityUSImgWX {
         var scaleType = ProjectionType.WX_RENDER
         val hwLineWidth = 1
         if (prod == "TR0" || prod == "TV0" || prod == "TZL") {
-            ridTdwr = WXGLNexrad.getTDWRFromRID(rid)
+            ridTdwr = WXGLNexrad.getTdwrFromRid(rid)
             tdwr = true
             rid = ridTdwr
             scaleType = ProjectionType.WX_RENDER_48
@@ -212,7 +212,7 @@ object UtilityUSImgWX {
         var scaleType = ProjectionType.WX_RENDER
         val ridTdwr: String
         if (prod == "TR0" || prod == "TV0" || prod == "TZL") {
-            ridTdwr = WXGLNexrad.getTDWRFromRID(rid1)
+            ridTdwr = WXGLNexrad.getTdwrFromRid(rid1)
             rid1 = ridTdwr
             scaleType = ProjectionType.WX_RENDER_48
         }

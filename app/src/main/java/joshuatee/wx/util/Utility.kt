@@ -207,7 +207,7 @@ object Utility {
 
     // FIXME deprecate these
     fun readPref(key: String, value: String): String =
-            MyApplication.preferences.getString(key, value)
+            MyApplication.preferences.getString(key, value)!!
 
     fun theme(themeStr: String): Int = when {
         themeStr.startsWith("blue") -> R.style.MyCustomTheme_NOAB
