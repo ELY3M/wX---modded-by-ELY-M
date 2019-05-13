@@ -224,15 +224,13 @@ object Utility {
         else -> R.style.MyCustomTheme_NOAB
     }
 
-    private fun getCurrentConditionsCanada(locNum: Int): ObjectForecastPackage {
+    private fun getCurrentConditionsCanada(locNum: Int): ObjectForecastPackageCurrentConditions {
         val html = UtilityCanada.getLocationHtml(Location.getLatLon(locNum))
-        val objCC = ObjectForecastPackageCurrentConditions.createForCanada(html)
-        return ObjectForecastPackage(objCC)
+        return ObjectForecastPackageCurrentConditions.createForCanada(html)
     }
 
-    private fun getCurrentConditionsUS(context: Context, locNum: Int): ObjectForecastPackage {
-        val objCC = ObjectForecastPackageCurrentConditions(context, locNum)
-        return ObjectForecastPackage(objCC)
+    private fun getCurrentConditionsUS(context: Context, locNum: Int): ObjectForecastPackageCurrentConditions {
+        return ObjectForecastPackageCurrentConditions(context, locNum)
     }
 
     fun getCurrentHazards(locNum: Int): ObjectForecastPackageHazards {
@@ -246,8 +244,8 @@ object Utility {
 
     fun getCurrentSevenDay(locNum: Int): ObjectForecastPackage7Day {
         return if (Location.isUS(locNum)) {
-            val sevenDayJson = UtilityDownloadNWS.get7DayJSON(Location.getLatLon(locNum))
-            ObjectForecastPackage7Day(locNum, sevenDayJson)
+            val html = UtilityDownloadNws.get7DayData(Location.getLatLon(locNum))
+            ObjectForecastPackage7Day(locNum, html)
         } else {
             val html = UtilityCanada.getLocationHtml(Location.getLatLon(locNum))
             ObjectForecastPackage7Day(locNum, html)
@@ -255,20 +253,19 @@ object Utility {
     }
 
     fun getCurrentSevenDay(location: LatLon): ObjectForecastPackage7Day {
-        val sevenDayJson = UtilityDownloadNWS.get7DayJSON(location)
-        return ObjectForecastPackage7Day(-1, sevenDayJson)
+        val html = UtilityDownloadNws.get7DayData(location)
+        return ObjectForecastPackage7Day(-1, html)
     }
 
     fun getCurrentHazards(location: LatLon): ObjectForecastPackageHazards {
         return ObjectForecastPackageHazards(location)
     }
 
-    fun getCurrentConditionsByLatLon(context: Context, location: LatLon): ObjectForecastPackage {
-        val objCC = ObjectForecastPackageCurrentConditions(context, location)
-        return ObjectForecastPackage(objCC)
+    fun getCurrentConditionsByLatLon(context: Context, location: LatLon): ObjectForecastPackageCurrentConditions {
+        return ObjectForecastPackageCurrentConditions(context, location)
     }
 
-    fun getCurrentConditions(context: Context, locNum: Int): ObjectForecastPackage =
+    fun getCurrentConditions(context: Context, locNum: Int): ObjectForecastPackageCurrentConditions =
             if (Location.isUS(locNum)) {
                 getCurrentConditionsUS(context, locNum)
             } else {
@@ -285,6 +282,14 @@ object Utility {
     }
 
     fun safeGet(list: List<String>, index: Int): String {
+        return if (list.size <= index) {
+            ""
+        } else {
+            list[index]
+        }
+    }
+
+    fun safeGet(list: Array<String>, index: Int): String {
         return if (list.size <= index) {
             ""
         } else {

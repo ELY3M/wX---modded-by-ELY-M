@@ -161,11 +161,6 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                 imageType = "rad"
                 getContent()
             }
-            R.id.action_wv -> {
-                mosaicShown = false
-                imageType = "wv"
-                getContent()
-            }
             R.id.action_vis_west -> getVisOrIr(
                 "vis",
                 "https://weather.gc.ca/data/satellite/goes_wcan_visible_100.jpg"

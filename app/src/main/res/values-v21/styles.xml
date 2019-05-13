@@ -23,7 +23,6 @@
 
     <style name="MyCustomTheme_NOAB" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/primary_blue</item>
-        <!-- <item name="android:buttonTint">@color/primary_blue</item> -->
         <item name="android:buttonTint">@color/off_white</item>
         <item name="colorPrimaryDark">@color/primary_dark_blue</item>
         <item name="colorAccent">@color/blue_accent</item>
@@ -60,8 +59,6 @@
         <item name="colorPrimary">@color/primary_blue</item>
         <item name="android:buttonTint">@color/primary_blue</item>
         <item name="android:progressBackgroundTint">@color/light_blue</item>
-        <!--<item name="colorPrimary">@color/light_blue</item>
-        <item name="android:buttonTint">@color/light_blue</item>-->
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/white</item>
         <item name="android:statusBarColor">@color/primary_dark_blue</item>
@@ -153,7 +150,6 @@
 
     <style name="MyCustomTheme_orange_NOAB" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/bg_orange</item>
-       <!-- <item name="android:buttonTint">@color/bg_orange</item> -->
         <item name="android:buttonTint">@color/off_white</item>
         <item name="colorPrimaryDark">@color/dark_orange</item>
         <item name="colorAccent">@color/orange_accent</item>

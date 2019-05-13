@@ -46,12 +46,12 @@ object UtilityString {
         return String(chars)
     }
 
-    internal fun shortenTimeV2(longTimeF: String): String {
+    /*internal fun shortenTimeV2(longTimeF: String): String {
         var longTime = longTimeF
         longTime = longTime.replace("-09:00", "").replace("-10:00", "").replace("-05:00", "")
             .replace("T", " ").replace("-04:00", "").replace(":00 ", " ")
         return longTime.replace("-06:00", "").replace("-07:00", "")
-    }
+    }*/
 
     fun getHTMLandParse(url: String, matchStr: String): String = url.getHtml().parse(matchStr)
 

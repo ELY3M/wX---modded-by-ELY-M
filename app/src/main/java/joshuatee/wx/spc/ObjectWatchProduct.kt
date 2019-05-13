@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M.
 
 package joshuatee.wx.spc
 
@@ -51,7 +50,7 @@ internal class ObjectWatchProduct(type: PolygonType, productNumber: String) {
     init {
         this.productNumber = productNumber
         when (type) {
-            PolygonType.WATCH_TOR, PolygonType.WATCH_SVR -> {
+            PolygonType.WATCH_TORNADO, PolygonType.WATCH -> {
                 this.productNumber = productNumber.replace("w".toRegex(), "")
                 imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + productNumber +
                         "_radar.gif"

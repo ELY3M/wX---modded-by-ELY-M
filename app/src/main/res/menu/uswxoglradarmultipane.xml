@@ -79,13 +79,21 @@
         app:showAsAction="never">
         <menu>
             <item
+                android:id="@+id/action_n0q_menu"
+                android:title="@string/label_br"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_n0u_menu"
+                android:title="@string/label_bv"
+                app:showAsAction="never" />
+            <item
                 android:id="@+id/action_net"
                 android:title="@string/label_eet"
-                app:showAsAction="ifRoom" />
+                app:showAsAction="never" />
             <item
                 android:id="@+id/action_vil"
                 android:title="@string/label_vil"
-                app:showAsAction="ifRoom" />
+                app:showAsAction="never" />
             <item
                 android:id="@+id/action_N0X"
                 android:title="@string/label_n0x"

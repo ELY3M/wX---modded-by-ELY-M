@@ -318,14 +318,6 @@ US lightning strikes: An image showing recent lightning strikes CONUS wide. For 
 Twitter widgets: Content is shown for state or Canadian province wx and tornado search via the 2 right most icons in the bottom row.
 </string>
 
-
-    <string name="help_goes_image_browser">
-GOES image browser: Browse GOES provided radar, vis, ir, and wv. Animation and many mesoscale overlays available.
-        Images support pan, pinch zoom, and double tap zoom. GOES has additional enhancements including ( if enabled )
-        polygon warnings and city support.
-</string>
-
-
     <string name="help_hourly_forecast">
 Hourly forecast for the next seven days for the currently active location.
 </string>
@@ -552,31 +544,26 @@ Thickness of lines for warnings. Smaller number is thinner. Default is 4.
 
     <string name="watmcd_linesize_np">
 Thickness of lines for SPC Watch/MCD. Smaller number is thinner. Default is 4.
-    </string>
-
-    <string name="state_linesize_np">
-Thickness of lines for state lines. Smaller number is thinner. Default is 2.
 </string>
 
-    <string name="county_linesize_np">
+ <string name="state_linesize_np">
+Thickness of lines for state lines. Smaller number is thinner. Default is 2.
+</string>
+ <string name="county_linesize_np">
 Thickness of lines for county outlines. Smaller number is thinner. Default is 2.
-    </string>
-
-    <string name="hw_linesize_np">
+</string>
+ <string name="hw_linesize_np">
 Thickness of lines for main highways. Smaller number is thinner. Default is 2.
-    </string>
-
-    <string name="hwext_linesize_np">
+</string>
+ <string name="hwext_linesize_np">
 Thickness of lines for secondary highways/roads. Smaller number is thinner. Default is 2.
-    </string>
-
-    <string name="lakes_linesize_np">
+</string>
+ <string name="lakes_linesize_np">
 Thickness of lines for rivers and lakes. Smaller number is thinner. Default is 2.
-    </string>
-
-    <string name="gpscircle_linesize_np">
+</string>
+ <string name="gpscircle_linesize_np">
 Thickness of lines for the GPS location circle. Smaller number is thinner. Default is 5.
-    </string>
+</string>
 
     <string name="locdot_size_np">
 Allows one to change the size of the location marker. Default value is 8</string>
@@ -694,7 +681,10 @@ If using a roaming location the amount of miles traveled before a location chang
     </string>
 
     <string name="cc_interval_np_label">
-Check interval for widget data in minutes. This interval is also used for the current conditions and 7day notifications.</string>
+        Check interval for widget data in minutes.
+        This interval is also used for the current conditions and 7day notifications.
+        The default is 30 minutes.
+    </string>
     <string name="loc1_radar_label">
 Controls whether nexrad radar data should be downloaded.</string>
     <string name="loc1_mosaics_label">

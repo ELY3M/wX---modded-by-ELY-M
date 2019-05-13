@@ -40,6 +40,13 @@
             android:textSize="@dimen/normal_text" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/currentConditions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/padding"
+            android:paddingRight="@dimen/padding" />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

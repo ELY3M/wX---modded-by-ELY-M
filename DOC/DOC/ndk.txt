@@ -1,3 +1,0 @@
- export NDK_PROJECT_PATH=/home/josh/StudioProjects/wX/app/src/main
- ~/android-ndk-r10e/ndk-build
-

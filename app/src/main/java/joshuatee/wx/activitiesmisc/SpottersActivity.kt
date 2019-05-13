@@ -36,19 +36,18 @@ import java.util.Comparator
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.objects.ActionMode
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.Spotter
 import joshuatee.wx.radar.UtilitySpotter
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.radar.LatLon
+import joshuatee.wx.settings.BottomSheetFragment
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.ui.ObjectRecyclerViewGeneric
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMap
-import joshuatee.wx.util.UtilityTime
 import kotlinx.coroutines.*
 
 class SpottersActivity : BaseActivity() {
@@ -58,8 +57,8 @@ class SpottersActivity : BaseActivity() {
     private var spotterlist = mutableListOf<Spotter>()
     private var spotterlist2 = mutableListOf<Spotter>()
     private lateinit var recyclerView: ObjectRecyclerViewGeneric
-    private var actionMode = ActionMode.RADAR
     private var firstTime = true
+    private val titleString = "Spotters active"
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.spotters, menu)
@@ -70,8 +69,10 @@ class SpottersActivity : BaseActivity() {
 
             override fun onQueryTextChange(query: String): Boolean {
                 val filteredModelList = filter(spotterlist2, query)
-                ca.animateTo(filteredModelList)
-                recyclerView.scrollToPosition(0)
+                if (::ca.isInitialized) {
+                    ca.animateTo(filteredModelList)
+                    recyclerView.scrollToPosition(0)
+                }
                 return true
             }
         })
@@ -83,20 +84,12 @@ class SpottersActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_spotters_recyclerview, null, false)
-        title = "spotters active"
-        toolbar.subtitle = actionMode.getDescription()
-        ObjectFab(this, this, R.id.fab_fav, View.OnClickListener { toggleMode(ActionMode.FAV) })
-        ObjectFab(this, this, R.id.fab_map, View.OnClickListener { toggleMode(ActionMode.MAP) })
-        ObjectFab(this, this, R.id.fab_radar, View.OnClickListener { toggleMode(ActionMode.RADAR) })
-        ObjectFab(this, this, R.id.fab_reports, View.OnClickListener { reportFAB() })
+        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_onefab, null, false)
+        title = titleString
+        toolbar.subtitle = "Tap on name for actions."
+        ObjectFab(this, this, R.id.fab, R.drawable.ic_info_outline_24dp, View.OnClickListener { reportFAB() })
         recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
         getContent()
-    }
-
-    private fun toggleMode(am: ActionMode) {
-        actionMode = am
-        toolbar.subtitle = actionMode.getDescription()
     }
 
     private fun reportFAB() {
@@ -108,8 +101,8 @@ class SpottersActivity : BaseActivity() {
         markFavorites()
         ca = AdapterSpotter(spotterlist)
         recyclerView.recyclerView.adapter = ca
-        title = spotterlist.size.toString() + " spotters active " + UtilityTime.gmtTime("HH:mm")
-        ca.setListener(::itemSelected)
+        title = spotterlist.size.toString() + " " + titleString
+        ca.setListener(::itemClicked)
     }
 
     private fun changeSearchViewTextColor(view: View?) {
@@ -137,7 +130,7 @@ class SpottersActivity : BaseActivity() {
     private fun checkFav(posn: Int) {
         if (MyApplication.spotterFav.contains(spotterlist[posn].uniq + ":")) {
             MyApplication.spotterFav =
-                MyApplication.spotterFav.replace(spotterlist[posn].uniq + ":", "")
+                    MyApplication.spotterFav.replace(spotterlist[posn].uniq + ":", "")
             spotterlist[posn].lastName = spotterlist[posn].lastName.replace("0FAV ", "")
         } else {
             MyApplication.spotterFav = MyApplication.spotterFav + spotterlist[posn].uniq + ":"
@@ -150,8 +143,8 @@ class SpottersActivity : BaseActivity() {
 
     private fun markFavorites() {
         spotterlist
-            .filter { MyApplication.spotterFav.contains(it.uniq + ":") && !it.lastName.contains("0FAV ") }
-            .forEach { it.lastName = "0FAV " + it.lastName }
+                .filter { MyApplication.spotterFav.contains(it.uniq + ":") && !it.lastName.contains("0FAV ") }
+                .forEach { it.lastName = "0FAV " + it.lastName }
         sortSpotters()
     }
 
@@ -175,36 +168,49 @@ class SpottersActivity : BaseActivity() {
         })
     }
 
-    private fun itemSelected(position: Int) {
-        when (actionMode) {
-            ActionMode.MAP -> ObjectIntent(
+    private fun itemClicked(position: Int) {
+        val bottomSheetFragment = BottomSheetFragment()
+        bottomSheetFragment.position = position
+        bottomSheetFragment.usedForLocation = false
+        bottomSheetFragment.fnList = listOf(::showItemOnRadar, ::showItemOnMap, ::toggleFavorite)
+        bottomSheetFragment.labelList = listOf("Show on radar", "Show on map", "Toggle favorite")
+        bottomSheetFragment.actContext = this
+        //bottomSheetFragment.topLabel = recyclerView.getItem(position)
+        // FIXME push to Spotter object
+        bottomSheetFragment.topLabel = ca.getItem(position).lastName + ", " + ca.getItem(position).firstName
+        bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+    }
+
+    private fun showItemOnMap(position: Int) {
+        ObjectIntent(
                 this,
                 WebscreenAB::class.java,
                 WebscreenAB.URL,
                 arrayOf(
-                    UtilityMap.genMapURL(
-                        spotterlist[position].lat,
-                        spotterlist[position].lon,
-                        "9"
-                    ), spotterlist[position].lastName + ", " + spotterlist[position].firstName
+                        UtilityMap.genMapURL(
+                                spotterlist[position].lat,
+                                spotterlist[position].lon,
+                                "9"
+                        ), spotterlist[position].lastName + ", " + spotterlist[position].firstName
                 )
-            )
-            ActionMode.FAV -> checkFav(position)
-            ActionMode.RADAR -> {
-                val rid = UtilityLocation.getNearestOffice(
-                    this,
-                    "RADAR",
-                    LatLon(spotterlist[position].lat, spotterlist[position].lon)
-                )
-                ObjectIntent(
-                    this,
-                    WXGLRadarActivity::class.java,
-                    WXGLRadarActivity.RID,
-                    arrayOf(rid, "", "N0Q", "", spotterlist[position].uniq)
-                )
-            }
-            else -> {
-            }
-        }
+        )
+    }
+
+    private fun showItemOnRadar(position: Int) {
+        val rid = UtilityLocation.getNearestOffice(
+                this,
+                "RADAR",
+                LatLon(spotterlist[position].lat, spotterlist[position].lon)
+        )
+        ObjectIntent(
+                this,
+                WXGLRadarActivity::class.java,
+                WXGLRadarActivity.RID,
+                arrayOf(rid, "", "N0Q", "", spotterlist[position].uniq)
+        )
+    }
+
+    private fun toggleFavorite(position: Int) {
+        checkFav(position)
     }
 } 

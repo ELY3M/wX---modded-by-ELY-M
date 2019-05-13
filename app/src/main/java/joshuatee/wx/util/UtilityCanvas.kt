@@ -208,8 +208,8 @@ internal object UtilityCanvas {
         when (polyType) {
             PolygonType.MCD -> prefToken = MyApplication.mcdLatlon.valueGet()
             PolygonType.MPD -> prefToken = MyApplication.mpdLatlon.valueGet()
-            PolygonType.WATCH_SVR -> prefToken = MyApplication.watchLatlonSvr.valueGet()
-            PolygonType.WATCH_TOR -> prefToken = MyApplication.watchLatlonTor.valueGet()
+            PolygonType.WATCH -> prefToken = MyApplication.watchLatlon.valueGet()
+            PolygonType.WATCH_TORNADO -> prefToken = MyApplication.watchLatlonTor.valueGet()
             else -> {
             }
         }

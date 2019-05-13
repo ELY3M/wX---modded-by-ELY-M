@@ -21,7 +21,7 @@
 
 package joshuatee.wx.activitiesmisc
 
-import joshuatee.wx.util.UtilityDownloadNWS
+import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
 
@@ -68,7 +68,7 @@ class CAPAlert {
             val obj = CAPAlert()
             obj.url = url
             val html = if (url.contains("NWS-IDP-PROD")) {
-                UtilityDownloadNWS.getNWSStringFromURLSep(url)
+                UtilityDownloadNws.getNWSStringFromURLSep(url)
             } else {
                 url.getHtmlSep()
             }

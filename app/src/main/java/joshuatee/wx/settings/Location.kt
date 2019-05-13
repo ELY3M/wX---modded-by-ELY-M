@@ -65,9 +65,12 @@ class Location(val context: Context, locNumInt: Int) {
     private val raw: String
     private val dst: String
     val isUS: Boolean
+    var observation = ""
+    private val prefNumberString: String
 
     init {
         val jStr = (locNumInt + 1).toString()
+        prefNumberString = jStr
         x = Utility.readPref(context, "LOC" + jStr + "_X", "0.0")
         y = Utility.readPref(context, "LOC" + jStr + "_Y", "0.0")
         name = Utility.readPref(context, "LOC" + jStr + "_LABEL", "")
@@ -97,6 +100,7 @@ class Location(val context: Context, locNumInt: Int) {
         raw = Utility.readPref(context, "LOC" + jStr + "_TIMERAW", "")
         dst = Utility.readPref(context, "LOC" + jStr + "_TIMEDST", "")
         state = Utility.readPref(context, "NWS_LOCATION_$wfo", "").split(",")[0]
+        observation = Utility.readPref(context, "LOC" + jStr + "_OBSERVATION", "")
         isUS = us(x)
         addToListOfNames(name)
     }
@@ -126,7 +130,13 @@ class Location(val context: Context, locNumInt: Int) {
         Utility.writePref(context, "NWS$iStr", wfo)
         Utility.writePref(context, "RID$iStr", rid)
         Utility.writePref(context, "NWS" + iStr + "_STATE", nwsStateCurrent)
+        Utility.writePref(context, "LOC" + iStr + "_OBSERVATION", observation)
         refreshLocationData(context)
+    }
+
+    fun updateObservation(observation: String) {
+        this.observation = observation
+        Utility.writePref(context, "LOC" + prefNumberString + "_OBSERVATION", observation)
     }
 
     val notification: Boolean get() = alertNotificationCurrent.startsWith("t")
@@ -214,6 +224,8 @@ class Location(val context: Context, locNumInt: Int) {
         fun getRid(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.rid ?: "DTX"
 
         fun getWfo(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.wfo ?: "DTX"
+
+        fun getObservation(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.observation ?: ""
 
         fun getLatLon(locNum: Int): LatLon = LatLon(getX(locNum), getY(locNum))
 
@@ -359,6 +371,7 @@ class Location(val context: Context, locNumInt: Int) {
                     val j = i + 1
                     val jStr = j.toString()
                     val iStr = i.toString()
+                    val locObsCurrent = Utility.readPref(context, "LOC" + jStr + "_OBSERVATION", "")
                     val locXCurrent = Utility.readPref(context, "LOC" + jStr + "_X", "")
                     val locYCurrent = Utility.readPref(context, "LOC" + jStr + "_Y", "")
                     val locLabelCurrent = Utility.readPref(context, "LOC" + jStr + "_LABEL", "")
@@ -432,6 +445,7 @@ class Location(val context: Context, locNumInt: Int) {
                         "ALERT_NOTIFICATION_RADAR$iStr",
                         alertNotificationRadarCurrent
                     )
+                    Utility.writePref(context, "LOC" + iStr + "_OBSERVATION", locObsCurrent)
                     Utility.writePref(context, "LOC" + iStr + "_X", locXCurrent)
                     Utility.writePref(context, "LOC" + iStr + "_Y", locYCurrent)
                     Utility.writePref(context, "LOC" + iStr + "_LABEL", locLabelCurrent)

@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55149"
-    android:versionName="55149"
+    android:versionCode="55178"
+    android:versionName="55178"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -91,11 +91,6 @@
       android:name=".settings.SettingsUIActivity"
       android:label="@string/title_activity_settings_ui"
       android:windowSoftInputMode="stateHidden"
-      android:parentActivityName="WX" >
-  </activity>
-  <activity
-      android:name=".settings.SettingsPrefIO"
-      android:label="@string/title_activity_settings_prefio"
       android:parentActivityName="WX" >
   </activity>
   <activity
@@ -526,10 +521,6 @@
       android:parentActivityName="WX" >
   </activity>
   <activity
-      android:name=".vis.USNWSGOESActivity"
-      android:parentActivityName="WX" >
-  </activity>
-  <activity
       android:name=".settings.SettingsColorPickerActivity"
       android:parentActivityName="WX" >
   </activity>
@@ -541,6 +532,11 @@
   <activity
       android:name=".settings.SettingsRadarActivity"
       android:label="Radar Settings"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsColorPaletteListingActivity"
+      android:label="Nexrad Color Palettes"
       android:parentActivityName="WX" >
   </activity>
   <activity

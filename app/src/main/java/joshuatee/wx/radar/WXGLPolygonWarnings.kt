@@ -23,17 +23,19 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-import com.beust.klaxon.*
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.util.UtilityCanvasProjection
 import joshuatee.wx.util.ProjectionNumbers
+
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
 import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.PolygonWarningType
 import joshuatee.wx.util.UtilityLog
+import joshuatee.wx.util.UtilityTime
+import com.beust.klaxon.*
 import java.io.StringReader
 import java.util.regex.Pattern
 import com.jayway.jsonpath.Configuration
@@ -74,8 +76,10 @@ internal object WXGLPolygonWarnings {
         var polyCount = -1
         polygonArr.forEach { polygon ->
             polyCount += 1
-            if ( type.type == PolygonWarningType.SpecialWeatherStatement || (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith("0.CAN")  )
+            //UtilityLog.d("wx", "VTEC" + vtecAl[polyCount])
+            if ( type.type == PolygonWarningType.SpecialWeatherStatement || (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("O.EXP") && !vtecAl[polyCount].startsWith("O.CAN")  )
             ) {
+                //UtilityLog.d("wx", vtecAl[polyCount])
                 val polyTmp =
                         polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
                 val testArr = polyTmp.split(" ")
@@ -126,7 +130,8 @@ internal object WXGLPolygonWarnings {
             PolygonType.EWW -> MyApplication.severeDashboardEww.valueGet()
             PolygonType.FFW -> MyApplication.severeDashboardFfw.valueGet()
             PolygonType.SMW -> MyApplication.severeDashboardSmw.valueGet()
-            ///PolygonType.SPS -> MyApplication.severeDashboardSps.valueGet()
+            PolygonType.SVS -> MyApplication.severeDashboardSvs.valueGet()
+            PolygonType.SPS -> MyApplication.severeDashboardSps.valueGet()
             //else -> MyApplication.severeDashboardSvr.valueGet()
             else -> "" //bug fix when svr warnings are struck and not expiring as it should have.
         }
@@ -145,9 +150,11 @@ internal object WXGLPolygonWarnings {
         var polyCount = -1
         polygonArr.forEach { polygon ->
             polyCount += 1
-            if (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith(
-                    "0.CAN"
-                )
+            val vtecIsCurrent = UtilityTime.isVtecCurrent(vtecAl[polyCount])
+            if (vtecAl.size > polyCount
+                    && !vtecAl[polyCount].startsWith("O.EXP")
+                    && !vtecAl[polyCount].startsWith("O.CAN")
+                    && vtecIsCurrent
             ) {
                 val polyTmp =
                     polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
@@ -183,8 +190,6 @@ internal object WXGLPolygonWarnings {
                 }
             }
         }
-        UtilityLog.d("wx", "warningHTML: "+warningHTML)
-        UtilityLog.d("wx", "warningList: "+warningList)
         return warningList
     }
 

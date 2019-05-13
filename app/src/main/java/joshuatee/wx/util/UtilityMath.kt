@@ -73,10 +73,10 @@ object UtilityMath {
         return value
     }
 
-    internal fun cTof(valueDF: Double): String {
+   /* internal fun cTof(valueDF: Double): String {
         val valueD = valueDF * 9 / 5 + 32
         return round(valueD).toInt().toString()
-    }
+    }*/
 
     internal fun fToC(valueDF: Double): String {
         val valueD = (valueDF - 32) * 5 / 9
@@ -105,12 +105,12 @@ object UtilityMath {
 
     internal fun roundToString(valueD: Double) = round(valueD.toFloat()).toInt().toString()
 
-    internal fun metersPerSecondtoMPH(valueDF: Double): String {
+    /*internal fun metersPerSecondtoMPH(valueDF: Double): String {
         val valueD = valueDF * 2.23694
         return round(valueD).toInt().toString()
-    }
+    }*/
 
-    internal fun metersToMileRounded(valueDF: Double): String {
+   /* internal fun metersToMileRounded(valueDF: Double): String {
         val valueD = valueDF / 1609.34
         return round(valueD).toInt().toString()
     }
@@ -118,7 +118,7 @@ object UtilityMath {
     internal fun pressurePAtoMB(valueDF: Double): String {
         val valueD = valueDF / 100.0
         return round(valueD).toInt().toString()
-    }
+    }*/
 
     internal fun pressureMBtoIn(valueF: String): String {
         var value = valueF
@@ -156,5 +156,10 @@ object UtilityMath {
         else if (direction > 292.5 && direction <= 337.5)
             dirStr = "NW"
         return dirStr
+    }
+
+    // https://training.weather.gov/wdtd/tools/misc/beamwidth/index.htm
+    fun getRadarBeamHeight(degree: Float, distance: Double): Double {
+        return 3.281 * (Math.sin(Math.toRadians(degree.toDouble())) * distance + distance * distance / 15417.82) * 1000.0
     }
 }

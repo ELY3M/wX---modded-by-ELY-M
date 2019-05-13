@@ -23,7 +23,6 @@ package joshuatee.wx.models
 
 import android.content.Context
 import android.graphics.PointF
-import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import android.widget.ArrayAdapter
@@ -65,7 +64,6 @@ object UtilityModels {
                         om.displayData.bitmap[it] = om.getImage(it, overlayImg)
                     }
                 }
-
                 (0 until om.numPanes).forEach {
                     if (om.numPanes > 1)
                         UtilityImg.resizeViewSetImgByHeight(

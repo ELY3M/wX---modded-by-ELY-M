@@ -81,15 +81,15 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                 if (MyApplication.helpMode) {
                     MyApplication.helpMode = false
                     UtilityUI.makeSnackBar(
-                        view,
-                        "Help mode is now disabled. Select again to turn on."
+                            view,
+                            "Help mode is now disabled. Select again to turn on."
                     )
                     helpMi.title = "Help"
                 } else {
                     MyApplication.helpMode = true
                     UtilityUI.makeSnackBar(
-                        view,
-                        "Help mode is now enabled. Select again to turn off. Tap any icon to see help text."
+                            view,
+                            "Help mode is now enabled. Select again to turn off. Tap any icon to see help text."
                     )
                     helpMi.title = helpStr
                 }
@@ -110,13 +110,13 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                 } else {
                     if (Location.isUS) {
                         ObjectIntent(
-                            this,
-                            USWarningsWithRadarActivity::class.java,
-                            USWarningsWithRadarActivity.URL,
-                            arrayOf(
+                                this,
+                                USWarningsWithRadarActivity::class.java,
+                                USWarningsWithRadarActivity.URL,
+                                arrayOf(
 			    ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Extreme Wind Warning.*?|.*?Flash Flood Warning.*?|.*?Special Marine Warning.*?|.*?Severe Weather Statement.*?|.*?Special Weather Statement.*?", 
-                                "us"
-                            )
+                                        "us"
+                                )
                         )
                     } else {
                         ObjectIntent(this, CanadaAlertsActivity::class.java)
@@ -129,20 +129,20 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                 } else {
                     if (Location.isUS) {
                         ObjectIntent(
-                            this,
-                            ImageCollectionActivity::class.java,
-                            ImageCollectionActivity.TYPE,
-                            arrayOf("OBSERVATIONS")
+                                this,
+                                ImageCollectionActivity::class.java,
+                                ImageCollectionActivity.TYPE,
+                                arrayOf("OBSERVATIONS")
                         )
                     } else {
                         ObjectIntent(
-                            this,
-                            ImageShowActivity::class.java,
-                            ImageShowActivity.URL,
-                            arrayOf(
-                                "http://weather.gc.ca/data/wxoimages/wocanmap0_e.jpg",
-                                "Observations"
-                            )
+                                this,
+                                ImageShowActivity::class.java,
+                                ImageShowActivity.URL,
+                                arrayOf(
+                                        "http://weather.gc.ca/data/wxoimages/wocanmap0_e.jpg",
+                                        "Observations"
+                                )
                         )
                     }
                 }
@@ -159,10 +159,10 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                     showHelpCAB(item.itemId)
                 } else {
                     if (Location.isUS) ObjectIntent(
-                        this,
-                        SPCSoundingsActivity::class.java,
-                        SPCSoundingsActivity.URL,
-                        arrayOf(Location.wfo, "")
+                            this,
+                            SPCSoundingsActivity::class.java,
+                            SPCSoundingsActivity.URL,
+                            arrayOf(Location.wfo, "")
                     )
                 }
             }
@@ -174,17 +174,17 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                 } else {
                     if (Location.isUS) {
                         ObjectIntent(
-                            this,
-                            HourlyActivity::class.java,
-                            HourlyActivity.LOC_NUM,
-                            Location.currentLocationStr
+                                this,
+                                HourlyActivity::class.java,
+                                HourlyActivity.LOC_NUM,
+                                Location.currentLocationStr
                         )
                     } else {
                         ObjectIntent(
-                            this,
-                            CanadaHourlyActivity::class.java,
-                            CanadaHourlyActivity.LOC_NUM,
-                            Location.currentLocationStr
+                                this,
+                                CanadaHourlyActivity::class.java,
+                                CanadaHourlyActivity.LOC_NUM,
+                                Location.currentLocationStr
                         )
                     }
                 }
@@ -200,30 +200,30 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                     if (Location.isUS) {
                         if (!UIPreferences.useAwcRadarMosaic) {
                             ObjectIntent(
-                                this,
-                                USNWSMosaicActivity::class.java,
-                                USNWSMosaicActivity.URL,
-                                arrayOf("location")
+                                    this,
+                                    USNWSMosaicActivity::class.java,
+                                    USNWSMosaicActivity.URL,
+                                    arrayOf("location")
                             )
                         } else {
                             ObjectIntent(
-                                this,
-                                AwcRadarMosaicActivity::class.java,
-                                AwcRadarMosaicActivity.URL,
-                                arrayOf("")
+                                    this,
+                                    AwcRadarMosaicActivity::class.java,
+                                    AwcRadarMosaicActivity.URL,
+                                    arrayOf("")
                             )
                         }
                     } else {
                         val prov = Utility.readPref(
-                            this,
-                            "NWS" + Location.currentLocationStr + "_STATE",
-                            ""
+                                this,
+                                "NWS" + Location.currentLocationStr + "_STATE",
+                                ""
                         )
                         ObjectIntent(
-                            this,
-                            CanadaRadarActivity::class.java,
-                            CanadaRadarActivity.RID,
-                            arrayOf(UtilityCanada.getECSectorFromProv(prov), "rad")
+                                this,
+                                CanadaRadarActivity::class.java,
+                                CanadaRadarActivity.RID,
+                                arrayOf(UtilityCanada.getECSectorFromProv(prov), "rad")
                         )
                     }
                 }
@@ -242,9 +242,9 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                         startActivityForResult(i, requestOk)
                     } catch (e: Exception) {
                         Toast.makeText(
-                            this,
-                            "Error initializing speech to text engine.",
-                            Toast.LENGTH_LONG
+                                this,
+                                "Error initializing speech to text engine.",
+                                Toast.LENGTH_LONG
                         ).show()
                     }
                 }
@@ -286,12 +286,12 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
             UtilityUI.makeSnackBar(view, thingsYouSaid[0])
             val addrStrTmp = thingsYouSaid[0]
             UtilityVoiceCommand.processCommand(
-                this,
-                view,
-                addrStrTmp,
-                Location.rid,
-                Location.wfo,
-                Location.state
+                    this,
+                    view,
+                    addrStrTmp,
+                    Location.rid,
+                    Location.wfo,
+                    Location.state
             )
         }
     }
@@ -303,25 +303,25 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
             if (Location.isUS) {
                 if (!UIPreferences.dualpaneRadarIcon) {
                     ObjectIntent(
-                        context,
-                        WXGLRadarActivity::class.java,
-                        WXGLRadarActivity.RID,
-                        arrayOf(Location.rid, "")
+                            context,
+                            WXGLRadarActivity::class.java,
+                            WXGLRadarActivity.RID,
+                            arrayOf(Location.rid, "")
                     )
                 } else {
                     ObjectIntent(
-                        context,
-                        WXGLRadarActivityMultiPane::class.java,
-                        WXGLRadarActivityMultiPane.RID,
-                        arrayOf(Location.rid, "", "2")
+                            context,
+                            WXGLRadarActivityMultiPane::class.java,
+                            WXGLRadarActivityMultiPane.RID,
+                            arrayOf(Location.rid, "", "2")
                     )
                 }
             } else {
                 ObjectIntent(
-                    context,
-                    CanadaRadarActivity::class.java,
-                    CanadaRadarActivity.RID,
-                    arrayOf(Location.rid, "rad")
+                        context,
+                        CanadaRadarActivity::class.java,
+                        CanadaRadarActivity.RID,
+                        arrayOf(Location.rid, "rad")
                 )
             }
         }
@@ -333,10 +333,10 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
         } else {
             if (Location.isUS) {
                 ObjectIntent(
-                    this,
-                    AFDActivity::class.java,
-                    AFDActivity.URL,
-                    arrayOf(Location.wfo, "")
+                        this,
+                        AFDActivity::class.java,
+                        AFDActivity.URL,
+                        arrayOf(Location.wfo, "")
                 )
             } else {
                 ObjectIntent(this, CanadaTextActivity::class.java)
@@ -360,10 +360,10 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                 ObjectIntent(this, GOES16Activity::class.java, GOES16Activity.RID, arrayOf(""))
             } else {
                 ObjectIntent(
-                    this,
-                    CanadaRadarActivity::class.java,
-                    CanadaRadarActivity.RID,
-                    arrayOf(Location.rid, "vis")
+                        this,
+                        CanadaRadarActivity::class.java,
+                        CanadaRadarActivity.RID,
+                        arrayOf(Location.rid, "vis")
                 )
             }
         }

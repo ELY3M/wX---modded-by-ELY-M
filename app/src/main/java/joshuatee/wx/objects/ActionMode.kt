@@ -32,7 +32,7 @@ enum class ActionMode constructor(private val description: String) {
     FAV("Fav"),
     TEXT("Text");
 
-    internal fun getDescription() = "$description Mode"
+    //internal fun getDescription() = "$description Mode"
 }
 
 

@@ -47,9 +47,6 @@ import kotlinx.android.synthetic.main.activity_linear_layout.*
 
 class SettingsRadarActivity : BaseActivity() {
 
-    private lateinit var cardPal94: ObjectCardText
-    private lateinit var cardPal99: ObjectCardText
-
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
@@ -62,18 +59,15 @@ class SettingsRadarActivity : BaseActivity() {
                 SettingsColorsActivity::class.java,
                 MyApplication.paddingSettings
         )
-        cardPal94 = ObjectCardText(
+	
+	
+	
+        ObjectCardText(
                 this,
                 ll,
-                resources.getString(R.string.label_settings_color_palette_94) + ": " + MyApplication.radarColorPalette["94"],
+                "Color Palettes",
                 MyApplication.textSizeNormal,
-                MyApplication.paddingSettings
-        )
-        cardPal99 = ObjectCardText(
-                this,
-                ll,
-                resources.getString(R.string.label_settings_color_palette_99) + ": " + MyApplication.radarColorPalette["99"],
-                MyApplication.textSizeNormal,
+                SettingsColorPaletteListingActivity::class.java,
                 MyApplication.paddingSettings
         )
         ObjectCardText(
@@ -84,22 +78,8 @@ class SettingsRadarActivity : BaseActivity() {
                 SettingsTelecineActivity::class.java,
                 MyApplication.paddingSettings
         )
-        cardPal94.setOnClickListener(View.OnClickListener {
-            ObjectIntent(
-                    this,
-                    SettingsColorPaletteActivity::class.java,
-                    SettingsColorPaletteActivity.TYPE,
-                    arrayOf("94")
-            )
-        })
-        cardPal99.setOnClickListener(View.OnClickListener {
-            ObjectIntent(
-                    this,
-                    SettingsColorPaletteActivity::class.java,
-                    SettingsColorPaletteActivity.TYPE,
-                    arrayOf("99")
-            )
-        })
+
+
 
         ll.addView(ObjectSettingsCheckBox(this, this, "Show TOR warnings", "TOR_WARNINGS", R.string.tor_warnings_label).card)
         ll.addView(ObjectSettingsCheckBox(this, this, "Show SVR warnings", "SVR_WARNINGS", R.string.svr_warnings_label).card)
@@ -117,12 +97,11 @@ class SettingsRadarActivity : BaseActivity() {
                             this,
                             this,
                             "Show " + it.name,
-                            it.type.prefTokenEnabled,
+                            it.prefTokenEnabled,
                             R.string.cod_warnings_default_label // FIXME add constructor to take string instead
                     ).card
             )
         }
-
         ll.addView(
                 ObjectSettingsCheckBox(
                         this,
@@ -748,11 +727,5 @@ class SettingsRadarActivity : BaseActivity() {
             } else {
             }
         }
-    }
-
-    override fun onRestart() {
-        cardPal94.setText(resources.getString(R.string.label_settings_color_palette_94) + ": " + MyApplication.radarColorPalette["94"])
-        cardPal99.setText(resources.getString(R.string.label_settings_color_palette_99) + ": " + MyApplication.radarColorPalette["99"])
-        super.onRestart()
     }
 }

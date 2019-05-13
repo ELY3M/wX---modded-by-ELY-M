@@ -23,6 +23,7 @@ internal class SettingsLocationAdapterList(private val mDataset: MutableList<Str
         View.OnClickListener {
 
         val text1 = ObjectTextView(itemView, R.id.text1)
+        val currentConditions = ObjectTextView(itemView, R.id.currentConditions)
         val text2 = ObjectTextView(itemView, R.id.text2)
         val text3 = ObjectTextView(itemView, R.id.text3)
         val objCard = ObjectCard(itemView, R.id.cv1)
@@ -70,6 +71,12 @@ internal class SettingsLocationAdapterList(private val mDataset: MutableList<Str
         } else {
             holder.text1.setTextColor(UIPreferences.backgroundColor)
         }
+
+
+        holder.currentConditions.text = Location.getObservation(position)
+        //holder.currentConditions.tv.visibility = View.INVISIBLE
+
+
         if (nonUs)
             holder.text2.text =
                 """${UtilityStringExternal.truncate(lat, 6)} , ${UtilityStringExternal.truncate(
@@ -81,7 +88,7 @@ internal class SettingsLocationAdapterList(private val mDataset: MutableList<Str
                 Location.getX(position),
                 6
             )} , ${UtilityStringExternal.truncate(Location.getY(position), 6)}"
-        holder.text2.setAsSmallText()
+        holder.text2.setAsBackgroundText()
         if (nonUs) {
             holder.text3.text =
                 "RID: ${Location.getRid(position)} ${UtilityLocation.hasAlerts(position)}"

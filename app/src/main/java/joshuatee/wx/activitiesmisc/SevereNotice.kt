@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M.
 
 package joshuatee.wx.activitiesmisc
 
@@ -43,9 +42,7 @@ internal class SevereNotice(val type: PolygonType) {
     init {
         when (type) {
             PolygonType.MCD -> typeAsString = "MCD"
-            //PolygonType.WATCH -> typeAsString = "WATCH"
-            PolygonType.WATCH_TOR -> typeAsString = "WATCH_TOR"
-            PolygonType.WATCH_SVR -> typeAsString = "WATCH_SVR"
+            PolygonType.WATCH -> typeAsString = "WATCH"
             PolygonType.MPD -> typeAsString = "MPD"
             else -> {
             }
@@ -57,9 +54,7 @@ internal class SevereNotice(val type: PolygonType) {
         var url = ""
         when (type) {
             PolygonType.MCD -> comp = "<center>No Mesoscale Discussions are currently in effect."
-            //PolygonType.WATCH -> comp = "<center><strong>No watches are currently valid"
-            PolygonType.WATCH_TOR -> comp = "<center><strong>No TOR watches are currently valid"
-            PolygonType.WATCH_SVR -> comp = "<center><strong>No SVR watches are currently valid"
+            PolygonType.WATCH -> comp = "<center><strong>No watches are currently valid"
             PolygonType.MPD -> comp = "No MPDs are currently in effect."
             else -> {
             }
@@ -67,9 +62,7 @@ internal class SevereNotice(val type: PolygonType) {
         if (!dataAsStringMCD.contains(comp)) {
             when (type) {
                 PolygonType.MCD -> pattern = RegExp.mcdPatternUtilspc
-                //PolygonType.WATCH -> pattern = RegExp.watchPattern
-                PolygonType.WATCH_TOR -> pattern = RegExp.watchPattern
-                PolygonType.WATCH_SVR -> pattern = RegExp.watchPattern
+                PolygonType.WATCH -> pattern = RegExp.watchPattern
                 PolygonType.MPD -> pattern = RegExp.mpdPattern
                 else -> {
                 }
@@ -78,12 +71,16 @@ internal class SevereNotice(val type: PolygonType) {
         }
         strList.indices.forEach { count ->
             when (type) {
-                PolygonType.MCD -> url = "${MyApplication.nwsSPCwebsitePrefix}/products/md/mcd" + strList[count] + ".gif"
-                PolygonType.WATCH_TOR, PolygonType.WATCH_SVR -> {
+                PolygonType.MCD -> url = "${MyApplication.nwsSPCwebsitePrefix}/products/md/mcd" +
+                        strList[count] + ".gif"
+                PolygonType.WATCH -> {
                     strList[count] = String.format("%4s", strList[count]).replace(' ', '0')
-                    url = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + strList[count] + "_radar.gif"
+                    url = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" +
+                            strList[count] + "_radar.gif"
                 }
-                PolygonType.MPD -> url = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd" + strList[count] + ".gif"
+                PolygonType.MPD -> url =
+                    "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd" +
+                            strList[count] + ".gif"
                 else -> {
                 }
             }

@@ -58,7 +58,7 @@ class ObjectForecastPackageHazards {
         }
 
         fun getHazardsHtml(location: LatLon): String {
-            return UtilityDownloadNWS.getHazardData(
+            return UtilityDownloadNws.getHazardData(
                 "https://api.weather.gov/alerts?point=" + UtilityMath.latLonFix(
                     location.latString
                 ) + "," + UtilityMath.latLonFix(location.lonString) + "&active=1"

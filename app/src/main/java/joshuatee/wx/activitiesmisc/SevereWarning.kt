@@ -30,6 +30,7 @@ import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityTime
 
 // encapsulates VTEC data and count for tst, tor, ffw, smw
 
@@ -52,21 +53,24 @@ internal class SevereWarning(private val type: PolygonType) {
             PolygonType.FFW -> label = "Flash Flood Warnings"
             PolygonType.SMW -> label = "Special Marine Warnings"
             PolygonType.SVS -> label = "Severe Weather Statement"
-            //PolygonType.SPS -> label = "Special Weather Statement"
+            PolygonType.SPS -> label = "Special Weather Statement"
             else -> {
             }
         }
         val warningAl = textTor.parseColumn(RegExp.warningVtecPattern)
-        count = warningAl.size
         warningAl.forEach {
-            text += it
-            nwsOfficeArr = it.split(".")
-            if (nwsOfficeArr.size > 1) {
-                nwsOffice = nwsOfficeArr[2]
-                nwsOffice = nwsOffice.replace("^[KP]".toRegex(), "")
-                nwsLoc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "")
+            val vtecIsCurrent = UtilityTime.isVtecCurrent(it)
+            if (!it.startsWith("O.EXP") && vtecIsCurrent) {
+                text += it
+                count += 1
+                nwsOfficeArr = it.split(".")
+                if (nwsOfficeArr.size > 1) {
+                    nwsOffice = nwsOfficeArr[2]
+                    nwsOffice = nwsOffice.replace("^[KP]".toRegex(), "")
+                    nwsLoc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "")
+                }
+                text += "  " + nwsLoc + MyApplication.newline
             }
-            text += "  " + nwsLoc + MyApplication.newline
         }
         val remover = ExternalDuplicateRemover()
         text = remover.stripDuplicates(text)

@@ -163,7 +163,7 @@ object UtilityWXOGL {
         warningHTML = warningHTML.replace("\n", "")
         warningHTML = warningHTML.replace(" ", "")
         val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
-        val vtecAl = warningHTML.parseColumn(RegExp.warningVtecPattern)
+        //val vtecAl = warningHTML.parseColumn(RegExp.warningVtecPattern)
         var retStr = ""
         var testArr: List<String>
         var q = 0

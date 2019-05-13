@@ -33,7 +33,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.audio.UtilityTTS
 import joshuatee.wx.external.UtilityStringExternal
-import joshuatee.wx.notifications.UtilityNotificationNHC
+import joshuatee.wx.notifications.UtilityNotificationNhc
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.audio.AudioPlayActivity
@@ -171,7 +171,7 @@ class NHCStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.id.action_MIATCMEP2 -> setProduct("MIATCM$stormId")
             R.id.action_MIATCDEP2 -> setProduct("MIATCD$stormId")
             R.id.action_MIAPWSEP2 -> setProduct("MIAPWS$stormId")
-            R.id.action_mute_notification -> UtilityNotificationNHC.muteNotification(
+            R.id.action_mute_notification -> UtilityNotificationNhc.muteNotification(
                 this,
                 toolbarTitle
             )

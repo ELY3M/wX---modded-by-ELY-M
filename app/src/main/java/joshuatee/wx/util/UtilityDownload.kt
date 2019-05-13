@@ -63,7 +63,6 @@ object UtilityDownload {
     private fun get2KMURL() = UtilityImg.getBlankBitmap()
 
     fun getRadarMosiac(context: Context): Bitmap {
-        //val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
         val location = Location.currentLocationStr
         val rid1 = Location.getRid(context, location)
         var bitmap: Bitmap = UtilityImg.getBlankBitmap()
@@ -201,8 +200,10 @@ object UtilityDownload {
             }
             "SPCMESO1" -> {
                 var param = "500mb"
-                tmpArr = MyApplication.spcmesoFav.split(":")
-                if (tmpArr.size > 3) param = tmpArr[3]
+                tmpArr = MyApplication.spcmesoFav.split(":").dropLastWhile { it.isEmpty() }
+                if (tmpArr.size > 3) {
+                    param = tmpArr[3]
+                }
                 needsBitmap = false
                 bm = UtilitySPCMESOInputOutput.getImage(
                     context,
@@ -332,7 +333,9 @@ object UtilityDownload {
         } else if (prod == "VFDLOC") {
             text = getTextProduct(context, "vfd" + Location.wfo.toLowerCase(Locale.US))
         } else if (prod == "SUNMOON") {
-            text = UtilitySunMoon.getData(Location.locationIndex)
+            text = UtilitySunMoon.getExtendedData(Location.locationIndex)
+            val (_, B) = UtilitySunMoon.parseData(text)
+            text = B
         } else if (prod == "HOURLY") {
             val textArr = UtilityUSHourly.getString(Location.currentLocation)
             text = textArr[0]
@@ -488,10 +491,10 @@ object UtilityDownload {
             var t2 = prod.substring(3)
             t2 = t2.replace("%", "")
             val html =
-                UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/products/types/$t1/locations/$t2")
+                    UtilityDownloadNws.getNWSStringFromURL("https://api.weather.gov/products/types/$t1/locations/$t2")
             val urlProd = html.parse("\"id\": \"(.*?)\"")
             val prodHtml =
-                UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/products/$urlProd")
+                    UtilityDownloadNws.getNWSStringFromURL("https://api.weather.gov/products/$urlProd")
             text = UtilityString.parseAcrossLines(prodHtml, "\"productText\": \"(.*?)\\}")
             //text = text.replace("\\n\\n", "<BR>")
             //text = text.replace("\\n", " ")

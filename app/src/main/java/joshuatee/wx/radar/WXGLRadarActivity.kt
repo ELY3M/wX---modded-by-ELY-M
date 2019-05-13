@@ -56,16 +56,10 @@ import joshuatee.wx.activitiesmisc.WebscreenABModels
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.telecine.TelecineService
 import joshuatee.wx.MyApplication
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityAlertDialog
-import joshuatee.wx.util.UtilityFavorites
-import joshuatee.wx.util.UtilityFileManagement
-import joshuatee.wx.util.UtilityImageMap
-import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.util.UtilityLog
-import joshuatee.wx.settings.*
+import joshuatee.wx.settings.FavAddActivity
+import joshuatee.wx.settings.FavRemoveActivity
+import joshuatee.wx.settings.SettingsRadarActivity
 import joshuatee.wx.ui.*
-import joshuatee.wx.util.UtilityShare
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
@@ -73,6 +67,7 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.GlobalArrays
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.util.*
 
 import joshuatee.wx.radar.SpotterNetworkPositionReport.SendPosition
 
@@ -236,7 +231,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         delay = UtilityImg.animInterval(this)
         img = findViewById(R.id.iv)
         img.setMaxZoom(6.0f)
-        glview = WXGLSurfaceView(this, 1, numPanes)
+        glview = WXGLSurfaceView(this, 1, numPanes, 1)
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf(img, glview))
         imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::maptoRid)
         rl = findViewById(R.id.rl)
@@ -342,13 +337,18 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     this,
                     android.Manifest.permission.ACCESS_COARSE_LOCATION
                 ) == PackageManager.PERMISSION_GRANTED
-            )
-                locationManager?.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    20000.toLong(),
-                    30.toFloat(),
-                    locationListener
-                )
+            ) {
+                val gpsEnabled = locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                if (gpsEnabled != null && gpsEnabled) {
+                    locationManager?.requestLocationUpdates(
+                            LocationManager.GPS_PROVIDER,
+                            //20000.toLong(),
+                            (MyApplication.radarLocationUpdateInterval * 1000).toLong(),
+                            30.toFloat(),
+                            locationListener
+                    )
+                }
+            }
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             mHandler = Handler()
             startRepeatingTask()
@@ -545,10 +545,16 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private fun setSubTitle() {
         val info = Utility.readPref(contextg, "WX_RADAR_CURRENT_INFO", "")
         val tmpArr = info.split(" ")
-        if (tmpArr.size > 3)
+        if (tmpArr.size > 3) {
             toolbar.subtitle = tmpArr[3]
-        else
+            if (UtilityTime.isRadarTimeOld(tmpArr[3])) {
+                toolbar.setSubtitleTextColor(Color.RED)
+            } else {
+                toolbar.setSubtitleTextColor(Color.LTGRAY)
+            }
+        } else {
             toolbar.subtitle = ""
+        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -638,6 +644,28 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 ImageShowActivity.URL,
                 arrayOf("raw:radar_legend", "Radar Markers", "false")
             )
+            R.id.action_radar_2 -> {
+                if (!archiveMode && !fixedSite) {
+                    WXGLNexrad.savePrefs(this, "WXOGL", oglr)
+                }
+                ObjectIntent(
+                    this,
+                    WXGLRadarActivityMultiPane::class.java,
+                    WXGLRadarActivityMultiPane.RID,
+                    arrayOf(joshuatee.wx.settings.Location.rid, "", "2", "true")
+                )
+            }
+            R.id.action_radar_4 -> {
+                if (!archiveMode && !fixedSite) {
+                    WXGLNexrad.savePrefs(this, "WXOGL", oglr)
+                }
+                ObjectIntent(
+                    this,
+                    WXGLRadarActivityMultiPane::class.java,
+                    WXGLRadarActivityMultiPane.RID,
+                    arrayOf(joshuatee.wx.settings.Location.rid, "", "4", "true")
+                )
+            }
             R.id.action_radar_site_status_l3 -> ObjectIntent(
                 this,
                 WebscreenABModels::class.java,
@@ -656,7 +684,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     resources.getString(R.string.action_radar_site_status_l2)
                 )
             )
-            R.id.action_n0q -> {
+            R.id.action_n0q, R.id.action_n0q_menu  -> {
                 if (MyApplication.radarIconsLevel2 && oglr.product.matches("N[0-3]Q".toRegex())) {
                     oglr.product = "L2REF"
                     tiltOption = false
@@ -671,7 +699,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 }
                 getContent()
             }
-            R.id.action_n0u -> {
+            R.id.action_n0u, R.id.action_n0u_menu -> {
                 if (MyApplication.radarIconsLevel2 && oglr.product.matches("N[0-3]U".toRegex())) {
                     oglr.product = "L2VEL"
                     tiltOption = false

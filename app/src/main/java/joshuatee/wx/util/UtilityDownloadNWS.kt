@@ -33,28 +33,18 @@ import okhttp3.Request
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
 
-object UtilityDownloadNWS {
+object UtilityDownloadNws {
 
     private const val USER_AGENT_STR =
         "Android ${MyApplication.packageNameAsString} ${MyApplication.emailAsString}"
-
-    internal fun get7DayJSON(location: LatLon): String {
-        var x = location.latString
-        var y = location.lonString
-        x = UtilityMath.latLonFix(x)
-        y = UtilityMath.latLonFix(y)
-        return getNWSStringFromURLJSON("https://api.weather.gov/points/$x,$y/forecast")
-    }
 
     fun getHazardData(url: String): String {
         return getNWSStringFromURLJSON(url)
     }
 
-    fun get7DayURL(x: String, y: String): String = "https://forecast-v3.weather.gov/point/$x,$y"
-
     fun getLatLonForZone(zone: String): List<String> {
-        var html =
-            getNWSStringFromURL("https://api.weather.gov/zones/forecast/" + zone.toUpperCase(Locale.US))
+        // FIXME myapp var
+        var html = getNWSStringFromURL("https://api.weather.gov/zones/forecast/" + zone.toUpperCase(Locale.US))
         html = html.replace("\n", "")
         html = html.replace(" ", "")
         val polygonArr = html.parseColumn(RegExp.warningLatLonPattern)
@@ -95,11 +85,6 @@ object UtilityDownloadNWS {
 
     fun getNWSStringFromUrlNoAcceptHeader(url: String): String =
             getNWSStringFromURLBaseNoHeader(url)
-
-    //fun getNWSStringFromURLNoHeader(url: String): String =
-    //    getNWSStringFromURLBaseNoHeader(url)
-
-    //private fun getNWSStringFromURLLDJSON(url: String) = getNWSStringFromURLBase(url, "application/ld+json;version=1")
 
     private fun getNWSStringFromURLBase(url: String, header: String): String {
         val out = StringBuilder(5000)
@@ -173,4 +158,28 @@ object UtilityDownloadNWS {
 
     private fun getNWSStringFromURLXML(url: String) =
         getNWSStringFromURLBase(url, "application/atom+xml")
+
+
+    // Following methods derived from flutter port in response to June 2019 change
+    fun getHourlyData(latLon: LatLon): String {
+        val pointsData = getLocationPointData(latLon)
+        val hourlyUrl = pointsData.parse("\"forecastHourly\": \"(.*?)\"")
+        return hourlyUrl.getNwsHtml()
+    }
+
+    fun get7DayData(latLon: LatLon): String {
+        val pointsData = getLocationPointData(latLon)
+        val forecastUrl = pointsData.parse("\"forecast\": \"(.*?)\"")
+        return forecastUrl.getNwsHtml()
+    }
+
+    fun get7DayUrl(latLon: LatLon): String {
+        val pointsData = getLocationPointData(latLon)
+        return pointsData.parse("\"forecast\": \"(.*?)\"")
+    }
+
+    private fun getLocationPointData(latLon: LatLon): String {
+        val url = MyApplication.nwsApiUrl + "/points/" + latLon.latString + "," + latLon.lonString
+        return url.getNwsHtml()
+    }
 }

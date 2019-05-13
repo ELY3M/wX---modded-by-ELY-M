@@ -95,7 +95,7 @@ abstract class VideoRecordActivity : AppCompatActivity() {
         }
     }
 
-    protected fun fireScreenCaptureIntent() {
+    private fun fireScreenCaptureIntent() {
         val manager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         if (Build.VERSION.SDK_INT > 20) {
             val intent = manager.createScreenCaptureIntent()
@@ -120,7 +120,7 @@ abstract class VideoRecordActivity : AppCompatActivity() {
         }
     }
 
-    protected fun checkDrawOverlayPermission() {
+    private fun checkDrawOverlayPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
             /** check if we already  have permission to draw over other apps  */
             if (!Settings.canDrawOverlays(this)) {
@@ -139,7 +139,7 @@ abstract class VideoRecordActivity : AppCompatActivity() {
         }
     }
 
-    protected //permission is automatically granted on sdk<23 upon installation
+    private //permission is automatically granted on sdk<23 upon installation
     val isStoragePermissionGranted: Boolean
         get() {
             return if (Build.VERSION.SDK_INT >= 23) {

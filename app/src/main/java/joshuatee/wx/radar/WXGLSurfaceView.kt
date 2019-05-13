@@ -82,6 +82,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     private var wxgl = mutableListOf<WXGLSurfaceView>()
     var idxInt: Int = 0
     private var widthDivider = 0
+    private var heightDivider = 2
     var citiesExtAl: MutableList<TextView> = mutableListOf()
     var countyLabelsAl: MutableList<TextView> = mutableListOf()
     var obsAl: MutableList<TextView> = mutableListOf()
@@ -93,8 +94,9 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     var locfrag: Boolean = false
     private var act: Activity? = null
 
-    constructor(context: Context, widthDivider: Int, numPanes: Int) : super(context) {
+    constructor(context: Context, widthDivider: Int, numPanes: Int, heightDivider: Int) : super(context) {
         this.widthDivider = widthDivider
+        this.heightDivider = heightDivider
         this.numPanes = numPanes
         mGestureDetector = GestureDetector(context, this)
         mScaleDetector = ScaleGestureDetector(context, ScaleListener())
@@ -363,16 +365,15 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
                 else
                     MyApplication.dm.widthPixels / widthDivider
             if (Build.VERSION.SDK_INT >= 19 && (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent)) {
-                height = MyApplication.dm.heightPixels / 2 + UtilityUI.statusBarHeight(context)
+                height = MyApplication.dm.heightPixels / heightDivider + UtilityUI.statusBarHeight(context)
                 if (numPanes == 2) {
-                    height = MyApplication.dm.heightPixels /
-                            2 - UtilityUI.statusBarHeight(context) / 2
+                    height = MyApplication.dm.heightPixels / heightDivider - UtilityUI.statusBarHeight(context) / 2
                 }
             } else {
-                height = MyApplication.dm.heightPixels / 2 - MyApplication.actionBarHeight
+                height = MyApplication.dm.heightPixels / heightDivider - MyApplication.actionBarHeight
             }
             if (Build.VERSION.SDK_INT >= 19 && UIPreferences.radarToolbarTransparent && !UIPreferences.radarImmersiveMode && numPanes == 4)
-                height = MyApplication.dm.heightPixels / 2 - UtilityUI.statusBarHeight(context) / 2
+                height = MyApplication.dm.heightPixels / heightDivider - UtilityUI.statusBarHeight(context) / 2
             this.setMeasuredDimension(width, height)
         }
     }

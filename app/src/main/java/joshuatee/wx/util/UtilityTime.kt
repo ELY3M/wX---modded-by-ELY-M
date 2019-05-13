@@ -21,10 +21,6 @@
 
 package joshuatee.wx.util
 
-import joshuatee.wx.external.ExternalSunriseLocation
-import joshuatee.wx.external.ExternalSunriseSunsetCalculator
-import joshuatee.wx.radar.RID
-
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -32,9 +28,12 @@ import java.util.GregorianCalendar
 import java.util.Locale
 import java.util.TimeZone
 
+import joshuatee.wx.Extensions.*
+
+
 object UtilityTime {
 
-    internal fun convertFromUTC(time: String): String {
+    /*internal fun convertFromUTC(time: String): String {
         var returnTime = time
         val inputFormat = SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss", Locale.US)
         inputFormat.timeZone = TimeZone.getTimeZone("UTC")
@@ -46,7 +45,7 @@ object UtilityTime {
             UtilityLog.HandleException(e)
         }
         return returnTime
-    }
+    }*/
 
     internal fun convertFromUTCForMetar(time: String): String {
         var returnTime = time
@@ -151,12 +150,69 @@ object UtilityTime {
     val currentHourInUTC: Int
         get() = Calendar.getInstance(TimeZone.getTimeZone("GMT")).get(Calendar.HOUR_OF_DAY)
 
-    fun getSunriseSunsetFromObs(obs: RID): List<Calendar> {
-        val location = ExternalSunriseLocation(obs.location.latString, obs.location.lonString)
-        val calculator = ExternalSunriseSunsetCalculator(location, TimeZone.getDefault())
-        val officialSunriseCal =
-            calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
-        val officialSunsetCal = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance())
-        return listOf(officialSunriseCal, officialSunsetCal)
+    fun isRadarTimeOld(radarTime: String): Boolean {
+        val radarTimeComponents = radarTime.split(":")
+        if (radarTimeComponents.size < 3) {
+            // something went wrong
+            return false
+        }
+        val radarTimeHours = radarTimeComponents[0].toIntOrNull() ?: 0
+        val radarTimeMinutes = radarTimeComponents[1].toIntOrNull() ?: 0
+        val radarTimeTotalMinutes = radarTimeHours * 60 + radarTimeMinutes
+        val currentTime = getCurrentLocalTimeAsString().split(" ")[1]
+        val currentTimeComponents = currentTime.split(":")
+        if (currentTimeComponents.size < 3) {
+            // something went wrong
+            return false
+        }
+        val currentTimeHours = currentTimeComponents[0].toIntOrNull() ?: 0
+        val currentTimeMinutes = currentTimeComponents[1].toIntOrNull() ?: 0
+        val currentTimeTotalMinutes = currentTimeHours * 60 + currentTimeMinutes
+        //UtilityLog.d("wx", radarTime)
+        //UtilityLog.d("wx", radarTimeTotalMinutes.toString())
+        //UtilityLog.d("wx", currentTime)
+        //UtilityLog.d("wx", currentTimeTotalMinutes.toString())
+        if (currentTimeTotalMinutes < 30) {
+            // FIXME find out how to handle midnight
+            return false
+        }
+        if (radarTimeTotalMinutes > currentTimeTotalMinutes) {
+            // radar time should not be in the future, radar is down
+            return true
+        }
+        if (radarTimeTotalMinutes < (currentTimeTotalMinutes - 20)) {
+            return true
+        }
+        return false
+    }
+
+
+    fun isVtecCurrent(vtec: String ): Boolean {
+        // example 190512T1252Z-190512T1545Z
+        val timeRange = (vtec).parse("-([0-9]{6}T[0-9]{4})Z")
+        val timeInMinutes = decodeVtecTime(timeRange)
+        val currentTimeInMinutes = decodeVtecTime(getGmtTimeForVtec())
+        val vtecCurrent = currentTimeInMinutes.before(timeInMinutes)
+        return vtecCurrent
+    }
+
+    fun decodeVtecTime(timeRangeOriginal: String): Calendar {
+        // Y2K issue
+        val timeRange = timeRangeOriginal.replace("T","")
+        val year = ("20" + (timeRange).parse("([0-9]{2})[0-9]{4}[0-9]{4}")).toIntOrNull()  ?: 0;
+        val month = ((timeRange).parse("[0-9]{2}([0-9]{2})[0-9]{2}[0-9]{4}")).toIntOrNull()  ?: 0;
+        val day = ((timeRange).parse("[0-9]{4}([0-9]{2})[0-9]{4}")).toIntOrNull()  ?: 0;
+        val hour = ((timeRange).parse("[0-9]{6}([0-9]{2})[0-9]{2}")).toIntOrNull()  ?: 0;
+        val minute = ((timeRange).parse("[0-9]{6}[0-9]{2}([0-9]{2})")).toIntOrNull() ?: 0;
+        //UtilityLog.d("wx", timeRange + "," + year.toString() + "," + month.toString() + "," + day.toString() + "," + hour.toString() + "," + minute.toString());
+        val cal = Calendar.getInstance()
+        cal.set(year, month - 1, day, hour, minute);
+        return cal
+    }
+
+    fun getGmtTimeForVtec(): String{
+        val dateFormatGmt = SimpleDateFormat("yyMMddHHmm", Locale.US)
+        dateFormatGmt.timeZone = TimeZone.getTimeZone("GMT")
+        return dateFormatGmt.format(Date())
     }
 }

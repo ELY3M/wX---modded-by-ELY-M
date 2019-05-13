@@ -35,7 +35,6 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 
 import joshuatee.wx.MyApplication
-import joshuatee.wx.R
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.util.UtilityCanvasMain
 import joshuatee.wx.util.UtilityDownload
@@ -272,14 +271,8 @@ object UtilityUSImgWX {
     }
 
     fun bitmapForColorPalette(context: Context, product: String): Bitmap {
-        val fileName: String
-        if (product == "N0Q") {
-            fileName = "nids_dvn_94_archive"
-            UtilityIO.saveRawToInternalStorage(context, R.raw.dvn94, fileName)
-        } else {
-            fileName = "nids_dvn_99_archive"
-            UtilityIO.saveRawToInternalStorage(context, R.raw.dvn99, fileName)
-        }
+        val fileName = "nids_dvn_" + product + "_archive"
+        UtilityIO.saveRawToInternalStorage(context, WXGLNexrad.productCodeStringToResourceFile[product]!!, fileName)
         val layers = mutableListOf<Drawable>()
         val cd = if (MyApplication.blackBg) {
             ColorDrawable(Color.BLACK)
@@ -292,7 +285,7 @@ object UtilityUSImgWX {
                 context,
                 bitmapCanvas,
                 fileName,
-                product
+                WXGLNexrad.productCodeStringToCode[product]!! // was product
             )
             layers.add(cd)
             layers.add(BitmapDrawable(context.resources, bitmapCanvas))

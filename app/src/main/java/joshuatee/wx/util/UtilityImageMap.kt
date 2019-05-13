@@ -186,7 +186,7 @@ object UtilityImageMap {
     }
 
 
-    fun maptoGOESWFO(id: Int): String = when (id) {
+   /* fun maptoGOESWFO(id: Int): String = when (id) {
         R.id.afc -> "ak"
         R.id.afg -> "ak"
         R.id.ajk -> "ak"
@@ -310,7 +310,7 @@ object UtilityImageMap {
         R.id.unr -> "unr"
         R.id.vef -> "vef"
         else -> ""
-    }
+    }*/
 
     fun maptoWFO(id: Int): String = when (id) {
         R.id.afc -> "afc"

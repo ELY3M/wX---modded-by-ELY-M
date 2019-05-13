@@ -78,11 +78,8 @@ class SevereDashboardActivity : BaseActivity() {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-
         val bitmapArrRep = mutableListOf<Bitmap>()
-        //val snWatch = SevereNotice(PolygonType.WATCH)
-        val snWatchTor = SevereNotice(PolygonType.WATCH_TOR)
-        val snWatchSvr = SevereNotice(PolygonType.WATCH_SVR)
+        val snWat = SevereNotice(PolygonType.WATCH)
         val snMcd = SevereNotice(PolygonType.MCD)
         val snMpd = SevereNotice(PolygonType.MPD)
 
@@ -135,10 +132,9 @@ class SevereDashboardActivity : BaseActivity() {
             }
 
         
-	withContext(Dispatchers.IO) {
-	    snMcd.getBitmaps(UtilityDownloadRadar.getMcd())
-	    snWatchTor.getBitmaps(UtilityDownloadRadar.getWatch())
-            snWatchSvr.getBitmaps(UtilityDownloadRadar.getWatch())
+        withContext(Dispatchers.IO) {
+            snMcd.getBitmaps(UtilityDownloadRadar.getMcd())
+            snWat.getBitmaps(UtilityDownloadRadar.getWatch())
             snMpd.getBitmaps(UtilityDownloadRadar.getMpd())
             bitmapArrRep.add((UtilitySPC.getStormReportsTodayUrl()).getImage())
         }
@@ -155,7 +151,7 @@ class SevereDashboardActivity : BaseActivity() {
                 })
             }
         }
-        listOf(snWatchTor, snWatchSvr, snMcd, snMpd)
+        listOf(snWat, snMcd, snMpd)
             .asSequence()
             .filter { it.bitmaps.size > 0 }
             .forEach { severeNotice ->
@@ -169,7 +165,7 @@ class SevereDashboardActivity : BaseActivity() {
                             cla = SPCMCDWShowActivity::class.java
                             claStr = SPCMCDWShowActivity.NO
                         }
-                        PolygonType.WATCH_TOR, PolygonType.WATCH_SVR -> {
+                        PolygonType.WATCH -> {
                             cla = SPCMCDWShowActivity::class.java
                             claStr = SPCMCDWShowActivity.NO
                         }
@@ -192,9 +188,7 @@ class SevereDashboardActivity : BaseActivity() {
                     })
                 }
             }
-        //bitmaps.addAll(snWatch.bitmaps)
-        bitmaps.addAll(snWatchTor.bitmaps)
-        bitmaps.addAll(snWatchSvr.bitmaps)
+        bitmaps.addAll(snWat.bitmaps)
         bitmaps.addAll(snMcd.bitmaps)
         bitmaps.addAll(snMpd.bitmaps)
         bitmaps.addAll(bitmapArrRep)

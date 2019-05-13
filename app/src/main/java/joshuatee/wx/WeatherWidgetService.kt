@@ -104,7 +104,7 @@ internal class StackRemoteViewsFactory(private val context: Context) :
         rv.setTextViewText(R.id.widget_tv1, String.format(formatStr, temp, t1))
         rv.setTextViewText(R.id.widget_tv2, String.format(formatStr, temp, t2))
         var iconStr = preferences.getString("7DAY_ICONS_WIDGET", "NoData")
-        iconStr = preferences.getString("CC_WIDGET_ICON_URL", "NULL") + "!" + iconStr
+        iconStr = preferences.getString("CC_WIDGET_ICON_URL", "NULL")!! + "!" + iconStr
         val iconArr = iconStr.split("!")
         if (position < iconArr.size) {
             rv.setImageViewUri(R.id.iv, Uri.parse(""))

@@ -22,12 +22,13 @@
 package joshuatee.wx.settings
 
 import joshuatee.wx.MyApplication
+import joshuatee.wx.UIPreferences
 import joshuatee.wx.activitiesmisc.LightningActivity
 import joshuatee.wx.canada.CanadaRadarActivity
+import joshuatee.wx.radar.AwcRadarMosaicActivity
 import joshuatee.wx.radar.USNWSMosaicActivity
 import joshuatee.wx.spc.*
 import joshuatee.wx.vis.GOES16Activity
-import joshuatee.wx.vis.USNWSGOESActivity
 import joshuatee.wx.wpc.WPCImagesActivity
 
 internal object UtilityHomeScreen {
@@ -62,7 +63,7 @@ internal object UtilityHomeScreen {
             val number = it.toString()
             val token = "SPCMESO$number"
             MyApplication.HM_CLASS[token] = SPCMesoActivity::class.java
-            MyApplication.HM_CLASS_ARGS[token] = arrayOf(token, number, "SPCMESO")
+            MyApplication.HM_CLASS_ARGS[token] = arrayOf(token, "1", "SPCMESO")
             MyApplication.HM_CLASS_ID[token] = SPCMesoActivity.INFO
         }
 
@@ -98,10 +99,6 @@ internal object UtilityHomeScreen {
         MyApplication.HM_CLASS_ARGS["OBS"] = arrayOf("STATE_LOWER", "")
         MyApplication.HM_CLASS_ID["OBS"] = SPCSoundingsActivity.URL
 
-        MyApplication.HM_CLASS["VIS_1KM"] = USNWSGOESActivity::class.java
-        MyApplication.HM_CLASS_ARGS["VIS_1KM"] = arrayOf("nws", "WFO_FOR_GOES")
-        MyApplication.HM_CLASS_ID["VIS_1KM"] = USNWSGOESActivity.RID
-
         MyApplication.HM_CLASS["CARAIN"] = CanadaRadarActivity::class.java
         MyApplication.HM_CLASS_ARGS["CARAIN"] = arrayOf("RID_FOR_CA", "rad")
         MyApplication.HM_CLASS_ID["CARAIN"] = CanadaRadarActivity.RID
@@ -110,21 +107,15 @@ internal object UtilityHomeScreen {
         MyApplication.HM_CLASS_ARGS["RAD_1KM"] = arrayOf("1km", "rad", "ONEK", "STATE_UPPER")
         MyApplication.HM_CLASS_ID["RAD_1KM"] = SPCSoundingsActivity.URL
 
-        MyApplication.HM_CLASS["RAD_2KM"] = USNWSMosaicActivity::class.java
-        MyApplication.HM_CLASS_ARGS["RAD_2KM"] = arrayOf("location")
-        MyApplication.HM_CLASS_ID["RAD_2KM"] = USNWSMosaicActivity.URL
-
-        MyApplication.HM_CLASS["VIS_2KM"] = USNWSGOESActivity::class.java
-        MyApplication.HM_CLASS_ARGS["VIS_2KM"] = arrayOf("nws", "WFO_FOR_GOES", "mosaic")
-        MyApplication.HM_CLASS_ID["VIS_2KM"] = USNWSGOESActivity.RID
-
-        MyApplication.HM_CLASS["WV_2KM"] = USNWSGOESActivity::class.java
-        MyApplication.HM_CLASS_ARGS["WV_2KM"] = arrayOf("nws", "WFO_FOR_GOES", "mosaic", "wv")
-        MyApplication.HM_CLASS_ID["WV_2KM"] = USNWSGOESActivity.RID
-
-        MyApplication.HM_CLASS["IR_2KM"] = USNWSGOESActivity::class.java
-        MyApplication.HM_CLASS_ARGS["IR_2KM"] = arrayOf("nws", "WFO_FOR_GOES", "mosaic", "ir2")
-        MyApplication.HM_CLASS_ID["IR_2KM"] = USNWSGOESActivity.RID
+        if (!UIPreferences.useAwcRadarMosaic) {
+            MyApplication.HM_CLASS["RAD_2KM"] = USNWSMosaicActivity::class.java
+            MyApplication.HM_CLASS_ARGS["RAD_2KM"] = arrayOf("location")
+            MyApplication.HM_CLASS_ID["RAD_2KM"] = USNWSMosaicActivity.URL
+        } else {
+            MyApplication.HM_CLASS["RAD_2KM"] = AwcRadarMosaicActivity::class.java
+            MyApplication.HM_CLASS_ARGS["RAD_2KM"] = arrayOf("")
+            MyApplication.HM_CLASS_ID["RAD_2KM"] = AwcRadarMosaicActivity.URL
+        }
 
         MyApplication.HM_CLASS["QPF1"] = WPCImagesActivity::class.java
         MyApplication.HM_CLASS_ARGS["QPF1"] = arrayOf("")

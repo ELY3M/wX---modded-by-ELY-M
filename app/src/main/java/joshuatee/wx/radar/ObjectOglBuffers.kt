@@ -34,7 +34,6 @@ import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.objects.PolygonWarningType
 
 open class ObjectOglBuffers() {
 

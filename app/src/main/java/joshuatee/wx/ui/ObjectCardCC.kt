@@ -31,7 +31,7 @@ import androidx.core.widget.TextViewCompat
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.settings.Location
-import joshuatee.wx.util.ObjectForecastPackage
+import joshuatee.wx.util.ObjectForecastPackageCurrentConditions
 
 class ObjectCardCC(context: Context, version: Int) {
 
@@ -140,14 +140,14 @@ class ObjectCardCC(context: Context, version: Int) {
 
     fun updateContent(
         bitmap: Bitmap,
-        objFcst: ObjectForecastPackage,
+        objCc: ObjectForecastPackageCurrentConditions,
         isUS: Boolean,
         ccTime: String,
         radarTime: String
     ) {
         imageView.setImage(bitmap)
         val sep = " - "
-        val tmpArrCc = objFcst.objCC.data1.split(sep).dropLastWhile { it.isEmpty() }
+        val tmpArrCc = objCc.data1.split(sep).dropLastWhile { it.isEmpty() }
         val tempArr: List<String>
         if (tmpArrCc.size > 4 && isUS) {
             tempArr = tmpArrCc[0].split("/").dropLastWhile { it.isEmpty() }

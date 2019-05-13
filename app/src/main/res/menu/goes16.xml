@@ -72,15 +72,19 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/action_FD"
-        android:title="Full Disk"
+        android:title="Full Disk: GOES-East"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_FD_G17"
+        android:title="Full Disk: GOES-West"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_CONUS"
-        android:title="GOES-EAST US"
+        android:title="CONUS: GOES-East"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_CONUS_G17"
-        android:title="GOES-WEST US"
+        android:title="PACUS: GOES-West"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_regionalSectors"
@@ -135,6 +139,26 @@
                 android:id="@+id/action_hi"
                 android:title="Hawaii"
                 app:showAsAction="never" />
+            <item
+                android:id="@+id/action_can"
+                android:title="Canada"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_mex"
+                android:title="Mexico"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_cam"
+                android:title="Central America"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_nsa"
+                android:title="South America (north)"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_ssa"
+                android:title="South America (south)"
+                app:showAsAction="never" />
         </menu>
     </item>
     <item
@@ -163,16 +187,20 @@
                 android:title="Tropical Atlantic: wide view"
                 app:showAsAction="never" />
             <item
-                android:id="@+id/action_tpw"
+                android:id="@+id/action_wus"
                 android:title="US Pacific Coast"
                 app:showAsAction="never" />
             <item
-                android:id="@+id/action_wus"
+                android:id="@+id/action_tpw"
                 android:title="Tropical Pacific"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_eep"
                 android:title="Eastern Pacific"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_np"
+                android:title="Northern Pacific"
                 app:showAsAction="never" />
         </menu>
     </item>

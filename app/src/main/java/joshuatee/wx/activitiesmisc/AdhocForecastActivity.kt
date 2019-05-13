@@ -58,7 +58,7 @@ class AdhocForecastActivity : BaseActivity() {
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var activityArguments: Array<String>
     private var latlon = LatLon()
-    private var objFcst: ObjectForecastPackage? = null
+    private var objCc: ObjectForecastPackageCurrentConditions? = null
     private var objHazards: ObjectForecastPackageHazards? = null
     private var objSevenDay: ObjectForecastPackage7Day? = null
     private var ccTime = ""
@@ -99,11 +99,11 @@ class AdhocForecastActivity : BaseActivity() {
             //
             // CC
             //
-            objFcst = Utility.getCurrentConditionsByLatLon(contextg, latlon)
+            objCc = Utility.getCurrentConditionsByLatLon(contextg, latlon)
             objHazards = Utility.getCurrentHazards(latlon)
             objSevenDay = Utility.getCurrentSevenDay(latlon)
             hazardRaw = objHazards!!.hazards.getHtmlSep()
-            bmCc = UtilityNWS.getIcon(contextg, objFcst!!.objCC.iconUrl)
+            bmCc = UtilityNWS.getIcon(contextg, objCc!!.iconUrl)
             //
             // 7day
             //
@@ -116,18 +116,18 @@ class AdhocForecastActivity : BaseActivity() {
         //
         // CC
         //
-        objFcst?.let { _ ->
+        objCc?.let { _ ->
             cardCC.let {
-                ccTime = objFcst!!.objCC.status
+                ccTime = objCc!!.status
                 if (bmCc != null) {
-                    it.updateContent(bmCc!!, objFcst!!, true, ccTime, radarTime)
+                    it.updateContent(bmCc!!, objCc!!, true, ccTime, radarTime)
                 }
             }
         }
         //
         // 7day
         //
-        objFcst?.let {
+        objCc?.let {
             linearLayoutForecast.removeAllViewsInLayout()
             val day7Arr = objSevenDay!!.fcstList
             bmArr.forEachIndexed { idx, bm ->

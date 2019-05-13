@@ -18,14 +18,12 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M.
 
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
-import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
 import joshuatee.wx.R
@@ -35,6 +33,8 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.Location
 import kotlinx.coroutines.*
+
+import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -55,26 +55,23 @@ class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
         toolbarBottom.setOnMenuItemClickListener(this)
         val menu = toolbarBottom.menu
         menu.findItem(R.id.action_playlist).isVisible = false
-        val linearLayout: LinearLayout = findViewById(R.id.ll)
-        card0 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        //getContent()
-        contentFull = UtilitySunMoon.getData(Location.locationIndex)
+        card0 = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
-            //content = UtilitySunMoon.getExtendedData(Location.locationIndex)
-            contentFull = UtilitySunMoon.getData(Location.locationIndex)
+            content = UtilitySunMoon.getExtendedData(Location.locationIndex)
+            contentFull = UtilitySunMoon.getFullDates()
         }
-        //val (A, B) = UtilitySunMoon.parseData(content)
-        //dataA = A
-        //dataB = B
+        val (A, B) = UtilitySunMoon.parseData(content)
+        dataA = A
+        dataB = B
         title = dataA
         toolbar.subtitle = Location.name
-        card0.setText(contentFull)
+        card0.setText(dataB + MyApplication.newline + MyApplication.newline + contentFull)
     }
 
-    //FIXME matchup texts.
     override fun onMenuItemClick(item: MenuItem): Boolean {
         if (audioPlayMenu(item.itemId, dataB, "sunmoon", "sunmoon")) return true
         when (item.itemId) {

@@ -21,9 +21,9 @@
 
 package joshuatee.wx.util
 
-import android.app.Notification
 import android.content.Context
 import android.graphics.Color
+import androidx.core.app.NotificationCompat
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
@@ -33,7 +33,6 @@ import joshuatee.wx.settings.Location
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.notifications.*
-import joshuatee.wx.radar.LatLon
 
 // FIXME rename
 object UtilityUSv2 {
@@ -41,7 +40,7 @@ object UtilityUSv2 {
     var obsClosestClass: String = ""
     private val OBS_CODE_TO_LOCATION = mutableMapOf<String, String>()
 
-    internal fun getStatus(context: Context, conditionsTimeStrF: String): String {
+    /*internal fun getStatus(context: Context, conditionsTimeStrF: String): String {
         var conditionsTimeStr = conditionsTimeStrF
         var locationName: String? = OBS_CODE_TO_LOCATION[obsClosestClass]
         if (locationName == null) {
@@ -55,7 +54,7 @@ object UtilityUSv2 {
         return conditionsTimeStr.replace(":00 ", " ") + " " + UtilityString.capitalizeString(
             locationName
         ).trim { it <= ' ' } + " (" + obsClosestClass + ") "  // strip off seconds that is always 00, need to do this here
-    }
+    }*/
 
     internal fun getStatusViaMetar(context: Context, conditionsTimeStr: String): String {
         var locationName: String? = OBS_CODE_TO_LOCATION[obsClosestClass]
@@ -86,7 +85,7 @@ object UtilityUSv2 {
         return locatioName
     }
 
-    internal fun getObsFromLatLon(context: Context, location: LatLon): String {
+    /*internal fun getObsFromLatLon(context: Context, location: LatLon): String {
         var x = location.latString
         var y = location.lonString
         x = UtilityMath.latLonFix(x)
@@ -104,7 +103,7 @@ object UtilityUSv2 {
         }
         obsClosestClass = obsClosest
         return obsClosest
-    }
+    }*/
 
     /*
 
@@ -125,10 +124,10 @@ object UtilityUSv2 {
 	 */
 
     fun checkForNotifications(
-        context: Context,
-        currentLoc: Int,
-        inBlackout: Boolean,
-        tornadoWarningString: String
+            context: Context,
+            currentLoc: Int,
+            inBlackout: Boolean,
+            tornadoWarningString: String
     ): String {
         var html = ObjectForecastPackageHazards.getHazardsHtml(Location.getLatLon(currentLoc))
         var notifUrls = ""
@@ -148,33 +147,33 @@ object UtilityUSv2 {
                     val noBody = title + " " + ca.area + " " + ca.summary
                     val noSummary = title + ": " + ca.area + " " + ca.summary
                     val objPI = ObjectPendingIntents(
-                        context,
-                        USAlertsDetailActivity::class.java,
-                        USAlertsDetailActivity.URL,
-                        arrayOf(url, ""),
-                        arrayOf(url, "sound")
+                            context,
+                            USAlertsDetailActivity::class.java,
+                            USAlertsDetailActivity.URL,
+                            arrayOf(url, ""),
+                            arrayOf(url, "sound")
                     )
                     val tornadoWarningPresent = title.contains(tornadoWarningString)
                     if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
-                            context,
-                            url
-                        ))
+                                    context,
+                                    url
+                            ))
                     ) {
                         val sound =
-                            MyApplication.locations[currentLoc].sound && !inBlackout || MyApplication.locations[currentLoc].sound && tornadoWarningPresent && MyApplication.alertBlackoutTornadoCurrent
+                                MyApplication.locations[currentLoc].sound && !inBlackout || MyApplication.locations[currentLoc].sound && tornadoWarningPresent && MyApplication.alertBlackoutTornadoCurrent
                         val notifObj = ObjectNotification(
-                            context,
-                            sound,
-                            noMain,
-                            noBody,
-                            objPI.resultPendingIntent,
-                            MyApplication.ICON_ALERT,
-                            noSummary,
-                            Notification.PRIORITY_MAX,
-                            Color.BLUE,
-                            MyApplication.ICON_ACTION,
-                            objPI.resultPendingIntent2,
-                            context.resources.getString(R.string.read_aloud)
+                                context,
+                                sound,
+                                noMain,
+                                noBody,
+                                objPI.resultPendingIntent,
+                                MyApplication.ICON_ALERT,
+                                noSummary,
+                                NotificationCompat.PRIORITY_HIGH,
+                                Color.BLUE,
+                                MyApplication.ICON_ACTION,
+                                objPI.resultPendingIntent2,
+                                context.resources.getString(R.string.read_aloud)
                         )
                         val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
                         notifObj.sendNotification(context, url, 1, noti)

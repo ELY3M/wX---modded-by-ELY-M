@@ -21,9 +21,9 @@
 
 package joshuatee.wx.notifications
 
-import android.app.Notification
 import android.content.Context
 import android.graphics.Color
+import androidx.core.app.NotificationCompat
 
 import joshuatee.wx.R
 import joshuatee.wx.activitiesmisc.CAPAlert
@@ -33,6 +33,7 @@ import joshuatee.wx.util.UtilityLog
 
 import joshuatee.wx.Extensions.*
 
+// FIXME share more code with severe dashboard or nexrad radar
 internal object UtilityNotificationTornado {
 
     // the fun with support 23.2.0 continues
@@ -51,9 +52,9 @@ internal object UtilityNotificationTornado {
     }
 
     private fun checkForNotifications(
-        context: Context,
-        htmlF: String,
-        inBlackout: Boolean
+            context: Context,
+            htmlF: String,
+            inBlackout: Boolean
     ): String {
         var html = htmlF
         var notifUrls = ""
@@ -66,9 +67,9 @@ internal object UtilityNotificationTornado {
                 val url = idAl[i]
                 val ca = CAPAlert.createFromURL(url)
                 if (UtilityNotificationTools.nwsLocalAlertNotFiltered(
-                        context,
-                        title
-                    )
+                                context,
+                                title
+                        )
                 ) { // placeholder for WFO filter check
                     html = "$html<b>$title</b><br>"
                     html = html + "<b>Counties: " + ca.area + "</b><br>"
@@ -77,32 +78,32 @@ internal object UtilityNotificationTornado {
                     val noBody = title + " " + ca.area + " " + ca.summary
                     val noSummary = title + ": " + ca.area + " " + ca.summary
                     val objPI = ObjectPendingIntents(
-                        context,
-                        USAlertsDetailActivity::class.java,
-                        USAlertsDetailActivity.URL,
-                        arrayOf(url, ""),
-                        arrayOf(url, "sound")
+                            context,
+                            USAlertsDetailActivity::class.java,
+                            USAlertsDetailActivity.URL,
+                            arrayOf(url, ""),
+                            arrayOf(url, "sound")
                     )
                     if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
-                            context,
-                            url
-                        ))
+                                    context,
+                                    url
+                            ))
                     ) {
                         val sound =
-                            MyApplication.alertNotificationSoundTornadoCurrent && !inBlackout
+                                MyApplication.alertNotificationSoundTornadoCurrent && !inBlackout
                         val notifObj = ObjectNotification(
-                            context,
-                            sound,
-                            noMain,
-                            noBody,
-                            objPI.resultPendingIntent,
-                            MyApplication.ICON_TORNADO,
-                            noSummary,
-                            Notification.PRIORITY_MAX,
-                            Color.RED,
-                            MyApplication.ICON_ACTION,
-                            objPI.resultPendingIntent2,
-                            context.resources.getString(R.string.read_aloud)
+                                context,
+                                sound,
+                                noMain,
+                                noBody,
+                                objPI.resultPendingIntent,
+                                MyApplication.ICON_TORNADO,
+                                noSummary,
+                                NotificationCompat.PRIORITY_HIGH,
+                                Color.RED,
+                                MyApplication.ICON_ACTION,
+                                objPI.resultPendingIntent2,
+                                context.resources.getString(R.string.read_aloud)
                         )
                         val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
                         notifObj.sendNotification(context, url, 1, noti)

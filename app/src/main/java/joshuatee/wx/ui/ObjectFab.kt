@@ -46,11 +46,11 @@ class ObjectFab {
     }
 
     constructor(
-        activity: Activity,
-        context: Context,
-        resId: Int,
-        iconID: Int,
-        fn: View.OnClickListener
+            activity: Activity,
+            context: Context,
+            resId: Int,
+            iconID: Int,
+            fn: View.OnClickListener
     ) {
         fab = activity.findViewById(resId)
         setupFAB(context, iconID)
@@ -74,9 +74,9 @@ class ObjectFab {
         } else {
             val d = ContextCompat.getDrawable(context, resdraw)!!
             val b = Bitmap.createBitmap(
-                d.intrinsicWidth,
-                d.intrinsicHeight,
-                Bitmap.Config.ARGB_8888
+                    d.intrinsicWidth,
+                    d.intrinsicHeight,
+                    Bitmap.Config.ARGB_8888
             )
             val c = Canvas(b)
             d.setBounds(0, 0, c.width, c.height)
@@ -87,7 +87,7 @@ class ObjectFab {
 
     private fun setupFAB(context: Context, icon: Int) {
         if (UIPreferences.themeIsWhite) fab.backgroundTintList =
-            ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+                ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
         fabSetResDrawable(context, icon)
         if (Build.VERSION.SDK_INT > 20) {
             fab.elevation = MyApplication.fabElevation
@@ -98,7 +98,7 @@ class ObjectFab {
     private fun setupFAB(context: Context) {
         if (UIPreferences.themeIsWhite) {
             fab.backgroundTintList =
-                ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+                    ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
         }
         if (Build.VERSION.SDK_INT > 20) {
             fab.elevation = MyApplication.fabElevation

@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M. 
 
 package joshuatee.wx.objects
 
@@ -38,9 +39,6 @@ import android.graphics.Color
 enum class PolygonWarningType constructor(
         var productCode: String,
         var urlToken: String,
-        var prefTokenEnabled: String,
-        var prefTokenColor: String,
-        var prefTokenStorage: String,
         var initialColor: Int
 ) {
 
@@ -75,50 +73,32 @@ enum class PolygonWarningType constructor(
     ExtremeWindWarning(
             "EWW",
             "Extreme%20Wind%20Warning",
-            "RADAR_SHOW_EWW",
-            "RADAR_COLOR_EWW",
-            "SEVERE_DASHBOARD_EWW",
             Color.GRAY
     ),
 
     SpecialMarineWarning(
             "SMW",
             "Special%20Marine%20Warning",
-            "RADAR_SHOW_SMW",
-            "RADAR_COLOR_SMW",
-            "SEVERE_DASHBOARD_SMW",
             Color.CYAN
     ),
     SnowSquallWarning(
             "SQW",
             "Snow%20Squall%20Warning",
-            "RADAR_SHOW_SQW",
-            "RADAR_COLOR_SQW",
-            "SEVERE_DASHBOARD_SQW",
             Color.rgb(199, 21, 133)
     ),
     DustStormWarning(
             "DSW",
             "Dust%20Storm%20Warning",
-            "RADAR_SHOW_DSW",
-            "RADAR_COLOR_DSW",
-            "SEVERE_DASHBOARD_DSW",
             Color.rgb(255, 228, 196)
     ),
     SevereWeatherStatement(
             "SVS",
             "Severe%20Weather%20Statement",
-            "RADAR_SHOW_SVS",
-            "RADAR_COLOR_SVS",
-            "SEVERE_DASHBOARD_SVS",
             Color.rgb(255, 203, 103)
     ),
     SpecialWeatherStatement(
             "SPS",
             "Special%20Weather%20Statement",
-            "RADAR_SHOW_SPS",
-            "RADAR_COLOR_SPS",
-            "SEVERE_DASHBOARD_SPS",
             Color.rgb(255, 204, 102)
     );
 }

@@ -1,17 +1,114 @@
+// TODO FUTURE Jetpack Compose
 // TODO base velocity legend
-// TODO migrate away from US govt website for Sun/Moon data do to cert issues
+// TODO Level 2 BV colormap and wrapping (Alex)
+// TODO migrate away from US govt website for Sun/Moon data do to cert issues, use external code that is Local to prevent dependencies ( prefarbly same code used in iOS wXL23)
 // TODO change code so that widget location simply follows current location selected
 // TODO OkHttp 3.13 Requires Android 5+ – Square Corner Blog – Medium  https://medium.com/square-corner-blog/okhttp-3-13-requires-android-5-818bb78d07ce
 // TODO document or fix changing radar settings and impact on main screen radars
 // TODO UtilityMetar in radar has optimization related to text file loading
+// TODO color pal editor, make generic so can edit any product
 // TODO BUG - storm reports show radar doesn't show location dot for report
 // TODO enhance hourly graphics
-// TODO fix issue for precip radar products when there is no data
 // TODO move off rid/wfo/sounding lat/lon/name currently in pref should be in objects (like flutter/iOS)
+// TODO SPS longpress does not always work well
+// TODO fix issue for precip radar products when there is no data
+// TODO assess impact of scoped storage: https://developer.android.com/preview/privacy/scoped-storage
 // TODO linesize - swo, wb, wbgusts, sti
-// TODO in settings -> location show current conditions in 2nd line for all locations
+// TODO dual pange split when rotated not optimal (Jim)
+// TODO bottomsheet for spotters
+// TODO make location update interval configurable
+// TODO add vtec end date check to tor notif
 
-55149 2019_04_21 lint cleanup
+[ADD] - adding something new - method, file, etc. to the repo
+[REM] - remove items
+[IMP] - improvement
+[DEB] - Added temporary debug code
+[FIX] - bug fixes
+[REF] - refactor a method, group, variable, etc.
+[MER] - merge
+
+55178 2019_05_13    [BUG] nexrad radar long press, if select a different type of polygon don't show anything
+55177 2019_05_13    [IMP] Convert Spotters activity to use bottomsheet and one FAB instead of 4 FAB
+55176 2019_05_13    [IMP] nexrad dual pane - support portrait better
+                    [IMP] nexrad radar location update interval, set from 20sec to 10sec and move to MyApp for future config
+55175 2019_05_12    [IMP] severe dashboard -  check end time of vtec and compare to current time to overcome NWS warning garbage with new API
+55174 2019_05_12    [REF] refactor goes16 util from flutter
+55173 2019_05_12    [BUG] vtec time decode had some bugs
+55172 2019_05_12    [IMP] in polygon warning decode end time of vtec and compare to current time to overcome NWS warning garbage with new API
+55171 2019_05_12    [BUG] launching SPC Meso from homescreen SPC Meso images was not working correctly in most cases
+                    [BUG] Homescreen SPC Meso Fav #1 500mb was not working if falling back to default
+                    [BUG] kotlin.UninitializedPropertyAccessException at joshuatee.wx.activitiesmisc.SpottersActivity$onCreateOptionsMenu$1.onQueryTextChange (SpottersActivity.kt:73)
+55170 2019_05_12    [BUG] GOES16/17 - CONUS was using native size, use 1250x750
+                    [BUG] check if LocationManager.GPS_PROVIDER is avail in nexrad
+                    [BUG]  at joshuatee.wx.external.ExternalSunriseLocation.<init> (ExternalSunriseLocation.kt:50)
+                        java.lang.NumberFormatException: (use kotlin toBigDecimalOrNull)
+                    [IMP] in ObjectWidgetCC show sunrise/sunset before main data has downloaded
+                    [IMP] CC_NOTIFICATION_INTERVAL(widgets cc/7day notif ) change from 60 to 30 as default in
+                        stringsHelp.xml SettingsWidgetsActivity UtilityNotification
+                    [REF] ObjectWidgetCC.kt
+                    [BUG] at joshuatee.wx.radar.UtilityRadarUI.addItemsToLongPress (UtilityRadarUI.kt:135)
+                        java.lang.NumberFormatException:
+55169 2019_05_11    [BUG] if dual/quad pane radar invoked from single pane try to inherits state
+55168 2019_05_11    if dual/quad pane radar invoked from single pane try to inherits state
+55167 2019_05_11    add better labels in nexrad radar submenu (Jim)
+                    add links to dual/quad pane radar from radar (Jim)
+55166 2019_05_11    mac os
+                    add "Cumulonimbus Clouds Observed": "tsra_hi"
+                    in nexrad radar and bv/br to list (Jim)
+55164 2019_05_06 bugfixes and UI enhancements in color palette area
+55163 2019_05_06 minor UI tweak in SettingsColorPaletteListingActivity
+                 color interpolation fix for n0u
+55162 2019_05_05 add SettingsColorPaletteListingActivity and add additional radar products
+55161 2019_05_04 [BUG] in color pal editor, delete file if pal saved so it regenerates with saved changes
+                    add UtilityTimeSunMoon
+                    in single pane radar change title bar color if radar is not "current" - in testing phase
+55160 2019_05_04 add color pal editor support for DVL 134 (Craig)
+55159 2019_05_04 [BUG] errors in color pal listing / editor , refactor
+                 [BUG] remove comments in base velocity cod default palette which was causing issues when cloning from
+55158 2019_04_30
+                remove FL,THE VILLAGES    ,KVVG
+                from files (line count before removal)
+                2315 us_metar3.txt
+                2732 stations_us4.txt
+                // TODO HIGH IMPACT CHANGE REQUIRED BY June 24, 2019 for Service Change Notice 19-35
+                // https://api.weather.gov/points/38.8904,-77.032/forecast -> https://api.weather.gov/gridpoints/LWX/96,70/forecast
+                // https://api.weather.gov/points/38.8904,-77.032/forecast/hourly -> https://api.weather.gov/gridpoints/LWX/96,70/forecast/hourly
+                // Details: https://www.weather.gov/documentation/services-web-api
+                //
+                // Example: https://api.weather.gov/points/39.7456,-97.0892
+                //         "forecastOffice": "https://api.weather.gov/offices/TOP",
+                //        "forecast": "https://api.weather.gov/gridpoints/TOP/31,80/forecast",
+                //        "forecastHourly": "https://api.weather.gov/gridpoints/TOP/31,80/forecast/hourly",
+                //        "forecastGridData": "https://api.weather.gov/gridpoints/TOP/31,80",
+                //        "forecastZone": "https://api.weather.gov/zones/forecast/KSZ009",
+
+55157 2019_04_27 work on SunCalc
+55156 2019_04_27 [BUG] check for O.EXP in radar polygons, severe dash, utilVtec since NWS is occasionally showing expired warnings in active url
+55155 2019_04_26 camelCase in notifications directory
+55154 2019_04_26 lint cleanup
+                 remove ObjectForecastPackage.kt
+                 GOES16/17 - add np Northern Pacific 1800x1080, cam Central America 1000x1000
+                 GOES16/17 - add FD for GOES-West
+                 GOES16/17 - add Canada/Mexico/South America (north)/South America (south) under Regional Views
+                 GOES16/17 - new product "AirMass"
+                 [BUG] UtilityNotificationWPC - use safeGet in once spot
+                 [BUG] GOES17 - US Pacific Coast was not properly labeled
+                 GOES16/17 - change labels to CONUS/PACUS
+                 lint - remove unused resources: ic_keyboard_arrow_up_24dp ic_keyboard_arrow_down_24dp
+55153 2019_04_24 activate radar beam height
+                 continue work on settings->locations obs via additions to Location class
+55152 2019_04_24 lint cleanup
+                 [Thanks to Ely] add code for radar beam height in radar long press (TODO: needs verification)
+                 reorg ObjectPolygonWarning, PolygonWarningType
+                 add structural code for current conditions in settings->locations (work in progress, move items, delete, etc)
+55151 2019_04_23 lint cleanup
+                 in LocationFragment, use GOES16 as the activity to display if a homescreen item has nothing defined ( was USNWSGOESActivity)
+                 remove USNWSGOESActivity
+                 Notifications - change Notification.PRIORITY_MAX to NotificationCompat.PRIORITY_HIGH
+55150 2019_04_22 remove unused resources
+                   widget cc - don't update image if NA
+55149 2019_04_22 lint cleanup
+                 [BUG] widget (legacy cc) cloud icon was not pointing to GOES16
 55148 2019_04_21 code cleanup (settings)
                  in location save, determine wfo/rid from NWS API, fall back to closest
 55147 2019_04_20 add better framework for radar polygon warnings and test for SMR (special marine warning), SPS

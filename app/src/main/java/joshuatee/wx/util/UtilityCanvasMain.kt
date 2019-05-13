@@ -190,9 +190,9 @@ object UtilityCanvasMain {
         }
         if (PolygonType.MCD.pref) {
             arrayOf(
-	    PolygonType.MCD, 
-	    PolygonType.WATCH_SVR, 
-	    PolygonType.WATCH_TOR
+                PolygonType.MCD,
+                PolygonType.WATCH,
+                PolygonType.WATCH_TORNADO
 	    ).forEach { UtilityCanvas.addMCD(context, scaleType, bitmapCanvas, rid, it) }
         }
         if (PolygonType.MPD.pref) {
@@ -252,8 +252,8 @@ object UtilityCanvasMain {
         if (PolygonType.MCD.pref) {
             arrayOf(
                     PolygonType.MCD,
-                    PolygonType.WATCH_SVR,
-                    PolygonType.WATCH_TOR
+                    PolygonType.WATCH,
+                    PolygonType.WATCH_TORNADO
             ).forEach { UtilityCanvas.addMCD(context, scaleType, bitmapCanvas, rid, it) }
         }
         if (PolygonType.MPD.pref) {

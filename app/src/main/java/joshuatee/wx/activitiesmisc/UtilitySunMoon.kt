@@ -18,213 +18,92 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M.
 
 package joshuatee.wx.activitiesmisc
 
 import joshuatee.wx.MyApplication
-import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.settings.Location
+import joshuatee.wx.util.*
+import joshuatee.wx.Extensions.*
 
-import org.shredzone.commons.suncalc.MoonTimes
-import org.shredzone.commons.suncalc.SunTimes
-import org.shredzone.commons.suncalc.MoonIllumination
-import org.shredzone.commons.suncalc.MoonPhase
-import java.text.DecimalFormat
-import java.util.*
-
-
-
-//TODO use SunCalc Lib instead of a website!!!
-//FIXME the whole website is broke!!!
 object UtilitySunMoon {
 
+    /*
+    http://api.usno.navy.mil/rstt/oneday?date=3/10/2016&coords=41.89N,82.48E&tz=5
+    http://aa.usno.navy.mil/data/docs/api.php#rstt
+    http://aa.usno.navy.mil/data/docs/RS_OneDay.php
+    http://api.usno.navy.mil/rstt/oneday?date=today&coords=42.26,-83.73&tz=-5*/
 
-    fun getData(currentLoc: Int): String {
-        //val tzOffset: String
-        var x = 0.0
-        var y = 0.0
+    fun getExtendedData(currentLoc: Int): String {
+        val tzOffset: String
+        var x = ""
+        var y = ""
         if (Location.isUS(currentLoc)) {
-            x = Location.x.toDouble()
-            y = Location.y.toDouble()
+            x = Location.x
+            y = Location.y
         } else {
             val tmpX = MyApplication.colon.split(Location.x)
             val tmpY = MyApplication.colon.split(Location.y)
             if (tmpX.size > 2 && tmpY.size > 1) {
-                x = tmpX[2].toDouble()
-                y = tmpY[1].toDouble()
+                x = tmpX[2]
+                y = tmpY[1]
             }
         }
-        //val timeZone = UtilityTime.getDateAsString("Z")
-        //tzOffset = timeZone.substring(0, 3) + "." + timeZone.substring(3, 5)
-        //val url = "https://api.usno.navy.mil/rstt/oneday?date=today&coords=$x,$y&tz=$tzOffset"
-        //return url.getHtmlUnsafe()
-
-
-        val now: Date = Date()
-        val suntimes: SunTimes = SunTimes.compute()
-                .on(now)       // set a date
-                .at(x, y)   // set a location
-                .execute()     // get the results
-
-        //sun rise/set
-        val astronomical = SunTimes.compute().twilight(SunTimes.Twilight.ASTRONOMICAL).on(now).at(x, y).execute()
-        val nautical = SunTimes.compute().twilight(SunTimes.Twilight.NAUTICAL).on(now).at(x, y).execute()
-        val civil = SunTimes.compute().twilight(SunTimes.Twilight.CIVIL).on(now).at(x, y).execute()
-
-
-        //moon rise/set
-
-        val moontimes: MoonTimes = MoonTimes.compute()
-                .on(now)       // set a date
-                .at(x, y)   // set a location
-                .execute();     // get the results
-
-        //The phase angle is the angle sun-moon-earth,
-        //0 = full phase, 180 = new.
-
-        val illumination = MoonIllumination.compute().on(now).timezone(TimeZone.getDefault()).execute()
-        val phase = illumination.phase
-        val moonFracillum = illumination.fraction * 100
-        val moonangle = illumination.angle
-        val normalized = phase + 180.0
-        val moonage = 29.0 * (normalized / 360.0) + 1.0
-
-
-        val moonphase = MoonPhase.compute().on(now).timezone(TimeZone.getDefault()).execute()
-        val test = moonphase.time
-
-
-        val header = "Sun/Moon Data" + MyApplication.newline
-        var content = "Astronomical Rise: " + astronomical.rise + MyApplication.newline
-        content += "Nautical Rise: " + nautical.rise + MyApplication.newline
-        content += "Civil Rise: " + civil.rise + MyApplication.newline
-        content += "SunRise: " + suntimes.rise + MyApplication.newline
-        content += "Sun Upper Transit: " + suntimes.noon + MyApplication.newline
-        content += "SunSet: " + suntimes.set + MyApplication.newline
-        content += "Civil Set: " + civil.set + MyApplication.newline
-        content += "Nautical Set: " + nautical.set + MyApplication.newline
-        content += "Astronomical Set: " + astronomical.set + MyApplication.newline
-
-        content += "MoonRise: " + moontimes.rise + MyApplication.newline
-        //FIXME find out if can get moon upper transit
-        content += "MoonSet: " + moontimes.set + MyApplication.newline
-
-        content += "Moon Age: " + UtilityStringExternal.truncate(moonage.toString(), 5) + MyApplication.newline
-        content += "Moon Illumination: " + UtilityStringExternal.truncate(moonFracillum.toString(),5) + "%" + MyApplication.newline
-
-        //get current moon phase
-        val getCurrentPhase = getPhase(moonage)
-        content += getCurrentPhase + " is the current phase" + MyApplication.newline
-
-        return content
-
+        val timeZone = UtilityTime.getDateAsString("Z")
+        tzOffset = timeZone.substring(0, 3) + "." + timeZone.substring(3, 5)
+        val url = "${MyApplication.sunMoonDataUrl}/rstt/oneday?date=today&coords=$x,$y&tz=$tzOffset"
+        return url.getHtmlUnsafe()
     }
 
-
-    //FIXME redo moon's phase.
-
-
-
-    /*
-
-
-
- */
-
-    fun roundTo(value: Double, places: Int): Double {
-        val scale = Math.pow(10.0, places.toDouble())
-        return Math.round(value * scale) / scale
+    fun parseData(contentF: String): Pair<String, String> {
+        var content = contentF
+        val sundataChunk = content.parse("sundata\":\\[(.*?)\\]")
+        val moondataChunk = content.parse("moondata.:\\[(.*?)\\]")
+        val moonphaseChunk = content.parse("closestphase.:\\{(.*?)\\}")
+        val moonFracillum = content.parse("fracillum\":\"(.*?)%")
+        val moonCurrentphase = content.parse("curphase\":\"(.*?)\"")
+        val sunTwilight = sundataChunk.parse(" \\{\"phen\":\"BC\", \"time\":\"(.*?)\"\\}")
+        val sunRise = sundataChunk.parse(" \\{\"phen\":\"R\", \"time\":\"(.*?)\"\\}")
+        val sunUppertransit = sundataChunk.parse(" \\{\"phen\":\"U\", \"time\":\"(.*?)\"\\}")
+        val sunSet = sundataChunk.parse(" \\{\"phen\":\"S\", \"time\":\"(.*?)\"\\}")
+        val sunEndTwilight = sundataChunk.parse(" \\{\"phen\":\"EC\", \"time\":\"(.*?)\"\\}")
+        val moonRise = moondataChunk.parse(" \\{\"phen\":\"R\", \"time\":\"(.*?)\"\\}")
+        val moonUppertransit = moondataChunk.parse(" \\{\"phen\":\"U\", \"time\":\"(.*?)\"\\}")
+        val moonSet = moondataChunk.parse(" \\{\"phen\":\"S\", \"time\":\"(.*?)\"\\}")
+        val header = "Sun/Moon Data"
+        content = sunTwilight + " Sun Twilight" + MyApplication.newline + sunRise + " Sunrise" +
+                MyApplication.newline + sunUppertransit + " Sun Upper Transit" +
+                MyApplication.newline + sunSet + " Sunset" + MyApplication.newline +
+                sunEndTwilight + " Sun Twilight End" + MyApplication.newline +
+                MyApplication.newline + moonRise + " Moonrise" + MyApplication.newline +
+                moonUppertransit + " Moon Upper Transit" + MyApplication.newline + moonSet +
+                " Moonset" + MyApplication.newline + MyApplication.newline +
+                moonphaseChunk.replace("\"time\"", "").replace("\"date\"", "").replace(
+                    "\"",
+                    ""
+                ).replace(":", " ").replace(",", "") + MyApplication.newline + moonFracillum +
+                "% Moon fracillum" + MyApplication.newline + moonCurrentphase +
+                " is the current phase" + MyApplication.newline
+        return Pair(header, content)
     }
 
-    /*
-         NEW_MOON(0.0),
-        /**
-         * Waxing half moon.
-         */
-        FIRST_QUARTER(90.0),
-
-        /**
-         * Full moon.
-         */
-        FULL_MOON(180.0),
-
-        /**
-         * Waning half moon.
-         */
-        LAST_QUARTER(270.0);
-     */
-
-    private fun getPhasefromDegree(illumination: Double): String {
-        var illum = roundTo(illumination , 3)
-        var phaseString = "unknown"
-        if (illum   >= 0.0 && illum   < 0.02) {
-            phaseString = "New Moon"
+    fun getFullDates(): String {
+        val url =
+            "${MyApplication.sunMoonDataUrl}/moon/phase?date=" + UtilityTime.month().toString() + "/" + UtilityTime.day().toString() + "/" + UtilityTime.year().toString() + "&nump=99"
+        val text = url.getHtmlUnsafe()
+        var fullText = ""
+        val phaseArr = text.parseColumn("\"phase\":\"(.*?)\"")
+        val dateArr = text.parseColumn("\"date\":\"(.*?)\"")
+        val timeArr = text.parseColumn("\"time\":\"(.*?)\"")
+        var idx = 0
+        phaseArr.forEach { _ ->
+            fullText += if (phaseArr[idx].contains("Full Moon")) {
+                dateArr[idx] + " " + timeArr[idx] + " " + phaseArr[idx] + "  <-----" + MyApplication.newline
+            } else {
+                dateArr[idx] + " " + timeArr[idx] + " " + phaseArr[idx] + MyApplication.newline
+            }
+            idx += 1
         }
-        if (illum   >= 0.02 && illum   < 0.23) {
-            phaseString = "Waxing Crescent"
-        }
-        if (illum   >= 0.23 && illum   < 0.27) {
-            phaseString = "First Quarter"
-        }
-        if (illum   >= 0.27 && illum   < 0.47) {
-            phaseString = "Waxing Gibbous"
-        }
-        if (illum   >= 180 && illum   < 180) {
-            phaseString = "Full Moon"
-        }
-        if (illum   >= 0.52 && illum   < 0.73) {
-            phaseString = "Waning Gibbous"
-        }
-        if (illum   >= 0.270 && illum   < 0.77) {
-            phaseString = "Last Quarter"
-        }
-        if (illum   >= 0.77 && illum   < 1.01) {
-            phaseString = "Waning Crescent"
-        }
-
-    return phaseString + " ("+illum+") "
-
+        return fullText
     }
-
-
-
-    private fun getPhase(age: Double): String {
-        if (age >= 29 || age <= 1) {
-            return "New Moon"
-        }
-        if (age > 4 && age < 10) {
-            return "Waxing Crescent"
-        }
-        if (age >= 7 && age <= 8) {
-            return "First Quarter"
-        }
-
-        if (age >= 14 && age <= 15) {
-            return "Full Moon"
-        }
-
-        if (age >= 21 && age <= 22) {
-            return "Waning Crescent"
-        }
-
-        if (age > 1 && age < 7) {
-            return "Crescent Concave"
-        }
-
-        if (age > 8 && age < 14) {
-            return "Crescent Gibbous"
-        }
-
-        if (age > 15 && age < 21) {
-            return "Waning Gibbous"
-        }
-
-        return if (age > 22 && age < 29) {
-            "Waning Crescent"
-        } else ""
-
-    }
-
-
 }

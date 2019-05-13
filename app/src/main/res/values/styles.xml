@@ -144,7 +144,6 @@
         <item name="colorControlActivated">@color/black</item>
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
     </style>
-
     <style name="MyCustomTheme_orange_NOAB" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@color/primary_orange</item>
         <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>

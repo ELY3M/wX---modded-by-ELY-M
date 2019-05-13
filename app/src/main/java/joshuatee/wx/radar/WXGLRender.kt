@@ -115,9 +115,9 @@ class WXGLRender(private val context: Context) : Renderer {
     private val warningSmwBuffers = ObjectOglBuffers(PolygonType.SMW, 0.0f)
     private val warningSvsBuffers = ObjectOglBuffers(PolygonType.SVS, 0.0f)
     private val warningSpsBuffers = ObjectOglBuffers(PolygonType.SPS, 0.0f)
-    private val watchSvrBuffers = ObjectOglBuffers(PolygonType.WATCH_SVR, 0.0f)
-    private val watchTorBuffers = ObjectOglBuffers(PolygonType.WATCH_TOR)
-    private val mcdBuffers = ObjectOglBuffers(PolygonType.MCD, 0.0f)
+    private val watchBuffers = ObjectOglBuffers(PolygonType.WATCH)
+    private val watchTornadoBuffers = ObjectOglBuffers(PolygonType.WATCH_TORNADO)
+    private val mcdBuffers = ObjectOglBuffers(PolygonType.MCD)
     private val swoBuffers = ObjectOglBuffers()
     private val userPointsBuffers = ObjectOglBuffers(PolygonType.USERPOINTS, zoomToHideMiscFeatures)
     private val locdotBuffers = ObjectOglBuffers(PolygonType.LOCDOT, 0.0f)
@@ -555,7 +555,7 @@ class WXGLRender(private val context: Context) : Renderer {
 	}
 
         GLES20.glLineWidth(watmcdLineWidth)
-        listOf(mpdBuffers, mcdBuffers, watchSvrBuffers, watchTorBuffers, swoBuffers).forEach { drawPolygons(it, 8) }
+        listOf(mpdBuffers, mcdBuffers, watchBuffers, watchTornadoBuffers, swoBuffers).forEach { drawPolygons(it, 8) }
 
 
 
@@ -1162,14 +1162,14 @@ class WXGLRender(private val context: Context) : Renderer {
 
     fun constructWATMCDLines() {
         constructGenericLines(mcdBuffers)
-        constructGenericLines(watchTorBuffers)
-        constructGenericLines(watchSvrBuffers)
+        constructGenericLines(watchBuffers)
+        constructGenericLines(watchTornadoBuffers)
     }
 
     fun deconstructWATMCDLines() {
         deconstructGenericLines(mcdBuffers)
-        deconstructGenericLines(watchTorBuffers)
-        deconstructGenericLines(watchSvrBuffers)
+        deconstructGenericLines(watchBuffers)
+        deconstructGenericLines(watchTornadoBuffers)
     }
 
     fun constructTorWarningLines() {
@@ -1458,7 +1458,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private fun constructGenericLines(buffers: ObjectOglBuffers) {
         var fList = listOf<Double>()
         when (buffers.type) {
-            PolygonType.MCD, PolygonType.MPD, PolygonType.WATCH_SVR, PolygonType.WATCH_TOR -> fList = 
+            PolygonType.MCD, PolygonType.MPD, PolygonType.WATCH, PolygonType.WATCH_TORNADO -> fList =
                 UtilityWatch.addWat(context, provider, rid, buffers.type).toList()
             PolygonType.TOR, PolygonType.SVR, PolygonType.EWW, PolygonType.FFW, PolygonType.SMW, PolygonType.SVS -> fList = WXGLPolygonWarnings.addWarnings(context, provider, rid, buffers.type).toList()
             PolygonType.SPS -> fList = WXGLPolygonWarnings.addSPS(context, provider, rid, buffers.type).toList()

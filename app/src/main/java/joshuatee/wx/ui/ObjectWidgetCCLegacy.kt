@@ -40,8 +40,7 @@ import joshuatee.wx.settings.Location
 import joshuatee.wx.spc.SPCSoundingsActivity
 import joshuatee.wx.spc.UtilitySPC
 import joshuatee.wx.util.*
-import joshuatee.wx.vis.USNWSGOESActivity
-import java.util.*
+import joshuatee.wx.vis.GOES16Activity
 
 import java.util.regex.Pattern
 
@@ -80,27 +79,27 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
             remoteViews.setImageViewResource(R.id.b_dash, R.drawable.ic_report_24dp)
         } else {
             val img = listOf(
-                R.drawable.ic_flash_on_24dp,
-                R.drawable.ic_cloud_24dp,
-                R.drawable.ic_info_outline_24dp,
-                R.drawable.ic_place_24dp,
-                R.drawable.ic_warning_24dp,
-                R.drawable.ic_report_24dp
+                    R.drawable.ic_flash_on_24dp,
+                    R.drawable.ic_cloud_24dp,
+                    R.drawable.ic_info_outline_24dp,
+                    R.drawable.ic_place_24dp,
+                    R.drawable.ic_warning_24dp,
+                    R.drawable.ic_report_24dp
             )
             val btn = listOf(
-                R.id.b_radar,
-                R.id.b_cloud,
-                R.id.b_afd,
-                R.id.b_hourly,
-                R.id.b_alert,
-                R.id.b_dash
+                    R.id.b_radar,
+                    R.id.b_cloud,
+                    R.id.b_afd,
+                    R.id.b_hourly,
+                    R.id.b_alert,
+                    R.id.b_dash
             )
             img.indices.forEach {
                 UtilityUI.setResDrawable(
-                    context,
-                    remoteViews,
-                    btn[it],
-                    img[it]
+                        context,
+                        remoteViews,
+                        btn[it],
+                        img[it]
                 )
             }
         }
@@ -125,159 +124,159 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         remoteViews.setTextViewText(R.id.hazard, hazardSum)
         remoteViews.setTextViewText(R.id.forecast, sd)
         remoteViews.setTextViewText(
-            R.id.widget_time,
-            "Updated: " + UtilityTime.getDateAsString("h:mm a")
+                R.id.widget_time,
+                "Updated: " + UtilityTime.getDateAsString("h:mm a")
         ) // "%k:%M:%S"
         UtilityWidget.setupIntent(
-            context,
-            remoteViews,
-            SPCSoundingsActivity::class.java,
-            R.id.cc,
-            SPCSoundingsActivity.URL,
-            arrayOf(nws1Current, ""),
-            actionCc
+                context,
+                remoteViews,
+                SPCSoundingsActivity::class.java,
+                R.id.cc,
+                SPCSoundingsActivity.URL,
+                arrayOf(nws1Current, ""),
+                actionCc
         )
         UtilityWidget.setupIntent(
-            context,
-            remoteViews,
-            TextScreenActivity::class.java,
-            R.id.forecast,
-            TextScreenActivity.URL,
-            arrayOf(sdExt, locLabel),
-            actionSd
+                context,
+                remoteViews,
+                TextScreenActivity::class.java,
+                R.id.forecast,
+                TextScreenActivity.URL,
+                arrayOf(sdExt, locLabel),
+                actionSd
         )
         var hazardsExt = Utility.getHazards(hazardRaw)
         hazardsExt = hazardsExt.replace("<hr /><br />", "")
         UtilityWidget.setupIntent(
-            context,
-            remoteViews,
-            TextScreenActivity::class.java,
-            R.id.hazard,
-            TextScreenActivity.URL,
-            arrayOf(hazardsExt, "Local Hazards"),
-            actionHazard
+                context,
+                remoteViews,
+                TextScreenActivity::class.java,
+                R.id.hazard,
+                TextScreenActivity.URL,
+                arrayOf(hazardsExt, "Local Hazards"),
+                actionHazard
         )
         // radar
         if (Location.isUS(widgetLocNum)) {
             UtilityWidget.setupIntent(
-                context,
-                remoteViews,
-                WXGLRadarActivity::class.java,
-                R.id.b_radar,
-                WXGLRadarActivity.RID,
-                arrayOf(rid1, nws1StateCurrent),
-                actionRadar
+                    context,
+                    remoteViews,
+                    WXGLRadarActivity::class.java,
+                    R.id.b_radar,
+                    WXGLRadarActivity.RID,
+                    arrayOf(rid1, nws1StateCurrent),
+                    actionRadar
             )
         } else {
             UtilityWidget.setupIntent(
-                context,
-                remoteViews,
-                CanadaRadarActivity::class.java,
-                R.id.b_radar,
-                CanadaRadarActivity.RID,
-                arrayOf(rid1, "rad"),
-                actionRadar
+                    context,
+                    remoteViews,
+                    CanadaRadarActivity::class.java,
+                    R.id.b_radar,
+                    CanadaRadarActivity.RID,
+                    arrayOf(rid1, "rad"),
+                    actionRadar
             )
         }
         // local alerts ( or nat for CA )
         if (Location.isUS(widgetLocNum)) {
             UtilityWidget.setupIntent(
-                context,
-                remoteViews,
-                USWarningsWithRadarActivity::class.java,
-                R.id.b_alert,
-                USWarningsWithRadarActivity.URL,
-                arrayOf(
+                    context,
+                    remoteViews,
+                    USWarningsWithRadarActivity::class.java,
+                    R.id.b_alert,
+                    USWarningsWithRadarActivity.URL,
+                    arrayOf(
 		    ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Extreme Wind Warning.*?|.*?Flash Flood Warning.*?|.*?Special Marine Warning.*?|.*?Severe Weather Statement.*?|.*?Special Weather Statement.*?", 
-                    "us"
-                ),
-                actionAlert
+                            "us"
+                    ),
+                    actionAlert
             )
         } else {
             UtilityWidget.setupIntent(
-                context,
-                remoteViews,
-                CanadaAlertsActivity::class.java,
-                R.id.b_alert,
-                actionAlert
+                    context,
+                    remoteViews,
+                    CanadaAlertsActivity::class.java,
+                    R.id.b_alert,
+                    actionAlert
             )
         }
         // Hourly
         if (Location.isUS(widgetLocNum)) {
             UtilityWidget.setupIntent(
-                context,
-                remoteViews,
-                HourlyActivity::class.java,
-                R.id.b_hourly,
-                HourlyActivity.LOC_NUM,
-                widgetLocNum,
-                actionHourly
+                    context,
+                    remoteViews,
+                    HourlyActivity::class.java,
+                    R.id.b_hourly,
+                    HourlyActivity.LOC_NUM,
+                    widgetLocNum,
+                    actionHourly
             )
         } else {
             UtilityWidget.setupIntent(
-                context,
-                remoteViews,
-                CanadaHourlyActivity::class.java,
-                R.id.b_hourly,
-                CanadaHourlyActivity.LOC_NUM,
-                widgetLocNum,
-                actionHourly
+                    context,
+                    remoteViews,
+                    CanadaHourlyActivity::class.java,
+                    R.id.b_hourly,
+                    CanadaHourlyActivity.LOC_NUM,
+                    widgetLocNum,
+                    actionHourly
             )
         }
         // AFD
         if (Location.isUS(widgetLocNum)) {
             UtilityWidget.setupIntent(
-                context,
-                remoteViews,
-                AFDActivity::class.java,
-                R.id.b_afd,
-                AFDActivity.URL,
-                arrayOf(nws1Current, ""),
-                actionAfd
+                    context,
+                    remoteViews,
+                    AFDActivity::class.java,
+                    R.id.b_afd,
+                    AFDActivity.URL,
+                    arrayOf(nws1Current, ""),
+                    actionAfd
             )
         } else {
             UtilityWidget.setupIntent(
-                context,
-                remoteViews,
-                CanadaTextActivity::class.java,
-                R.id.b_afd,
-                actionAfd
+                    context,
+                    remoteViews,
+                    CanadaTextActivity::class.java,
+                    R.id.b_afd,
+                    actionAfd
             )
         }
         UtilityWidget.setupIntent(
-            context,
-            remoteViews,
-            SevereDashboardActivity::class.java,
-            R.id.b_dash,
-            actionDashboard
+                context,
+                remoteViews,
+                SevereDashboardActivity::class.java,
+                R.id.b_dash,
+                actionDashboard
         )
         // cloud icon - vis
         if (Location.isUS(widgetLocNum)) {
             UtilityWidget.setupIntent(
-                context,
-                remoteViews,
-                USNWSGOESActivity::class.java,
-                R.id.b_cloud,
-                USNWSGOESActivity.RID,
-                arrayOf("nws", nws1Current.toLowerCase(Locale.US)),
-                actionCloud
+                    context,
+                    remoteViews,
+                    GOES16Activity::class.java,
+                    R.id.b_cloud,
+                    GOES16Activity.RID,
+                    arrayOf(""),
+                    actionCloud
             )
         } else {
             UtilityWidget.setupIntent(
-                context,
-                remoteViews,
-                CanadaRadarActivity::class.java,
-                R.id.b_cloud,
-                CanadaRadarActivity.RID,
-                arrayOf(rid1, "vis"),
-                actionCloud
+                    context,
+                    remoteViews,
+                    CanadaRadarActivity::class.java,
+                    R.id.b_cloud,
+                    CanadaRadarActivity.RID,
+                    arrayOf(rid1, "vis"),
+                    actionCloud
             )
         }
         val updateIntent = Intent()
         updateIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         updateIntent.putExtra(Widget.WIDGET_IDS_KEY, allWidgetIds)
         val pendingIntentWidgetTime =
-            PendingIntent.getBroadcast(context, 0, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+                PendingIntent.getBroadcast(context, 0, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         remoteViews.setOnClickPendingIntent(R.id.widget_time, pendingIntentWidgetTime)
         val tabStr = UtilitySPC.checkSpc(context)
         remoteViews.setViewVisibility(R.id.tab, View.VISIBLE)

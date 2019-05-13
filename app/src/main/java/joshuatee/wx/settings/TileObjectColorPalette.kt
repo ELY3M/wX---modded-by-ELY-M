@@ -43,48 +43,37 @@ internal class TileObjectColorPalette(
     val builtin: Boolean
 ) {
 
-    val bmPassed: Bitmap
+    val bitmapWithText: Bitmap
 
     init {
         val oldMap: String
-        val bm1: Bitmap
+        val bitmap: Bitmap
         var textColor = Color.WHITE
         if (builtin) textColor = Color.YELLOW
+        //UtilityLog.d("wx", "COLORPAL TILE: " + "colormap" + prod + this.colorMapLabel)
         if (UtilityFileManagement.internalFileExist(
                 context,
                 "colormap" + prod + this.colorMapLabel
             )
         ) {
-            bmPassed = UtilityIO.bitmapFromInternalStorage(
+            UtilityLog.d("wx", "COLORPAL exists img: " + "colormap$prod$colorMapLabel")
+            bitmapWithText = UtilityIO.bitmapFromInternalStorage(
                 context,
                 "colormap" + prod + this.colorMapLabel
             )
         } else {
-            if (prod == "94") {
-                oldMap = MyApplication.radarColorPalette[prod]!!
-                MyApplication.radarColorPalette[prod] = colorMapLabel
-                try {
-                    UtilityColorPaletteGeneric.loadColorMap(context, "94")
-                } catch (e: Exception) {
-                    UtilityLog.HandleException(e)
-                }
-                bm1 = UtilityUSImgWX.bitmapForColorPalette(context, "N0Q")
-                bmPassed = UtilityImg.drawTextToBitmap(context, bm1, colorMapLabel, textColor)
-                UtilityIO.bitmapToInternalStorage(context, bmPassed, "colormap94$colorMapLabel")
-                MyApplication.radarColorPalette[prod] = oldMap
-            } else {
-                oldMap = MyApplication.radarColorPalette[prod]!!
-                MyApplication.radarColorPalette[prod] = colorMapLabel
-                try {
-                    UtilityColorPaletteGeneric.loadColorMap(context, "99")
-                } catch (e: Exception) {
-                    UtilityLog.HandleException(e)
-                }
-                bm1 = UtilityUSImgWX.bitmapForColorPalette(context, "N0U")
-                bmPassed = UtilityImg.drawTextToBitmap(context, bm1, colorMapLabel, textColor)
-                UtilityIO.bitmapToInternalStorage(context, bmPassed, "colormap99$colorMapLabel")
-                MyApplication.radarColorPalette[prod] = oldMap
+            UtilityLog.d("wx", "COLORPAL create img: " + "colormap$prod$colorMapLabel")
+            oldMap = MyApplication.radarColorPalette[prod]!!
+            MyApplication.radarColorPalette[prod] = colorMapLabel
+            try {
+                UtilityColorPaletteGeneric.loadColorMap(context, prod)
+            } catch (e: Exception) {
+                UtilityLog.HandleException(e)
             }
+            bitmap = UtilityUSImgWX.bitmapForColorPalette(context, prod)
+            bitmapWithText = UtilityImg.drawTextToBitmap(context, bitmap, colorMapLabel, textColor)
+            UtilityIO.bitmapToInternalStorage(context, bitmapWithText, "colormap$prod$colorMapLabel")
+            MyApplication.radarColorPalette[prod] = oldMap
         }
     }
 }

@@ -38,23 +38,23 @@ import kotlinx.android.synthetic.main.activity_settings_widgets.*
 
 class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener {
 
-    private val zoomStrArr = listOf("regional", "usa")
-    private val nexradCenterArr = listOf("Center", "NW", "NE", "SW", "SE", "N", "E", "S", "W")
+    private val sectors = listOf("regional", "usa")
+    private val nexradCenterList = listOf("Center", "NW", "NE", "SW", "SE", "N", "E", "S", "W")
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_widgets, null, false)
         toolbar.subtitle = "Please tap on text for additional help."
-        val locNumIntCurrent = Location.numLocations
-        val locTruncateLen = 20
-        val locationAl = (1 until locNumIntCurrent + 1).mapTo(mutableListOf()) {
+        val numberOfLocations = Location.numLocations
+        val locatioNameShortLength = 20
+        val locationAl = (1 until numberOfLocations + 1).mapTo(mutableListOf()) {
             "$it: " + UtilityStringExternal.truncate(
                     Utility.readPref(
                             this,
                             "LOC" + it + "_LABEL",
                             ""
                     ),
-                    locTruncateLen
+                    locatioNameShortLength
             )
         }
         linearLayout.addView(
@@ -128,7 +128,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         "WIDGET_RADAR_LEVEL",
                         "1km",
                         R.string.widget_nexrad_size_label,
-                        zoomStrArr
+                        sectors
                 ).card
         )
         linearLayout.addView(
@@ -150,7 +150,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         "WIDGET_NEXRAD_CENTER",
                         "",
                         R.string.nexrad_center_label,
-                        nexradCenterArr
+                        nexradCenterList
                 ).card
         )
         linearLayout.addView(
@@ -160,7 +160,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         "Widget check interval(m)",
                         "CC_NOTIFICATION_INTERVAL",
                         R.string.cc_interval_np_label,
-                        60,
+                        30,
                         1,
                         120
                 ).card

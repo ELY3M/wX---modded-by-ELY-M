@@ -41,11 +41,11 @@ import joshuatee.wx.util.UtilityLog
 import kotlin.math.*
 
 class WXGLTextObject(
-    private val context: Context,
-    private val rl: RelativeLayout,
-    private val glview: WXGLSurfaceView,
-    private var OGLR: WXGLRender,
-    private val numPanes: Int
+        private val context: Context,
+        private val rl: RelativeLayout,
+        private val glview: WXGLSurfaceView,
+        private var OGLR: WXGLRender,
+        private val numPanes: Int
 ) {
 
     private var lp: RelativeLayout.LayoutParams
@@ -94,8 +94,8 @@ class WXGLTextObject(
             this.glviewHeight = MyApplication.dm.heightPixels
         pn = ProjectionNumbers(context, OGLR.rid, ProjectionType.WX_OGL)
         lp = RelativeLayout.LayoutParams(
-            RelativeLayout.LayoutParams.WRAP_CONTENT,
-            RelativeLayout.LayoutParams.WRAP_CONTENT
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
         )
         lp.addRule(RelativeLayout.CENTER_HORIZONTAL)
         lp.addRule(RelativeLayout.CENTER_VERTICAL)
@@ -120,11 +120,11 @@ class WXGLTextObject(
                         break
                     }
                     checkAndDrawText(
-                        glview.citiesExtAl,
-                        UtilityCitiesExtended.cityAl[c].latD,
-                        UtilityCitiesExtended.cityAl[c].lonD,
-                        UtilityCitiesExtended.cityAl[c].name,
-                        MyApplication.radarColorCity
+                            glview.citiesExtAl,
+                            UtilityCitiesExtended.cityAl[c].latD,
+                            UtilityCitiesExtended.cityAl[c].lonD,
+                            UtilityCitiesExtended.cityAl[c].name,
+                            MyApplication.radarColorCity
                     )
                 }
             } else {
@@ -157,7 +157,7 @@ class WXGLTextObject(
     }
 
     private fun getScale() =
-        8.1f * OGLR.zoom / MyApplication.deviceScale * (glviewWidth / 800.0f * MyApplication.deviceScale) / MyApplication.TEXTVIEW_MAGIC_FUDGE_FACTOR
+            8.1f * OGLR.zoom / MyApplication.deviceScale * (glviewWidth / 800.0f * MyApplication.deviceScale) / MyApplication.TEXTVIEW_MAGIC_FUDGE_FACTOR
 
     private fun addTVCountyLabels() {
         if (MyApplication.radarCountyLabels && countyLabelsTvArrInit) {
@@ -173,11 +173,11 @@ class WXGLTextObject(
             if (OGLR.zoom > 1.50) {
                 UtilityCountyLabels.countyName.indices.forEach {
                     checkAndDrawText(
-                        glview.countyLabelsAl,
-                        UtilityCountyLabels.countyLat[it],
-                        UtilityCountyLabels.countyLon[it],
-                        UtilityCountyLabels.countyName[it],
-                        MyApplication.radarColorCountyLabels
+                            glview.countyLabelsAl,
+                            UtilityCountyLabels.countyLat[it],
+                            UtilityCountyLabels.countyLon[it],
+                            UtilityCountyLabels.countyName[it],
+                            MyApplication.radarColorCountyLabels
                     )
                 }
             } else {
@@ -349,11 +349,11 @@ class WXGLTextObject(
 
 
     private fun checkAndDrawText(
-        tvList: MutableList<TextView>,
-        lat: Double,
-        lon: Double,
-        text: String,
-        color: Int
+            tvList: MutableList<TextView>,
+            lat: Double,
+            lon: Double,
+            text: String,
+            color: Int
     ) {
         val tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(lat, lon, pn)
         tmpCoords[0] = tmpCoords[0] + OGLR.x / OGLR.zoom
@@ -368,37 +368,37 @@ class WXGLTextObject(
             if ((tmpCoords[1] * scale).toInt() < 0) {
                 if ((tmpCoords[0] * scale).toInt() < 0)
                     tvList[ii].setPadding(
-                        0,
-                        0,
-                        (-(tmpCoords[0] * scale)).toInt(),
-                        (-(tmpCoords[1] * scale)).toInt()
+                            0,
+                            0,
+                            (-(tmpCoords[0] * scale)).toInt(),
+                            (-(tmpCoords[1] * scale)).toInt()
                     )
                 else
                     tvList[ii].setPadding(
-                        (tmpCoords[0] * scale).toInt(),
-                        0,
-                        0,
-                        (-(tmpCoords[1] * scale)).toInt()
+                            (tmpCoords[0] * scale).toInt(),
+                            0,
+                            0,
+                            (-(tmpCoords[1] * scale)).toInt()
                     )
             } else {
                 if ((tmpCoords[0] * scale).toInt() < 0)
                     tvList[ii].setPadding(
-                        0,
-                        (tmpCoords[1] * scale).toInt(),
-                        (-(tmpCoords[0] * scale)).toInt(),
-                        0
+                            0,
+                            (tmpCoords[1] * scale).toInt(),
+                            (-(tmpCoords[0] * scale)).toInt(),
+                            0
                     )
                 else
                     tvList[ii].setPadding(
-                        (tmpCoords[0] * scale).toInt(),
-                        (tmpCoords[1] * scale).toInt(),
-                        0,
-                        0
+                            (tmpCoords[0] * scale).toInt(),
+                            (tmpCoords[1] * scale).toInt(),
+                            0,
+                            0
                     )
             }
             lp = RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
             )
             lp.addRule(RelativeLayout.CENTER_HORIZONTAL)
             lp.addRule(RelativeLayout.CENTER_VERTICAL)
@@ -408,11 +408,11 @@ class WXGLTextObject(
     }
 
     private fun checkButDoNotDrawText(
-        tvList: MutableList<TextView>,
-        lat: Double,
-        lon: Double,
-        color: Int,
-        textSizeTv: Float
+            tvList: MutableList<TextView>,
+            lat: Double,
+            lon: Double,
+            color: Int,
+            textSizeTv: Float
     ): Boolean {
         val tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(lat, lon, pn)
         tmpCoords[0] = tmpCoords[0] + OGLR.x / OGLR.zoom
@@ -429,37 +429,37 @@ class WXGLTextObject(
             if ((tmpCoords[1] * scale).toInt() < 0) {
                 if ((tmpCoords[0] * scale).toInt() < 0)
                     tvList[ii].setPadding(
-                        0,
-                        0,
-                        (-(tmpCoords[0] * scale)).toInt(),
-                        (-(tmpCoords[1] * scale)).toInt()
+                            0,
+                            0,
+                            (-(tmpCoords[0] * scale)).toInt(),
+                            (-(tmpCoords[1] * scale)).toInt()
                     )
                 else
                     tvList[ii].setPadding(
-                        (tmpCoords[0] * scale).toInt(),
-                        0,
-                        0,
-                        (-(tmpCoords[1] * scale)).toInt()
+                            (tmpCoords[0] * scale).toInt(),
+                            0,
+                            0,
+                            (-(tmpCoords[1] * scale)).toInt()
                     )
             } else {
                 if ((tmpCoords[0] * scale).toInt() < 0)
                     tvList[ii].setPadding(
-                        0,
-                        (tmpCoords[1] * scale).toInt(),
-                        (-(tmpCoords[0] * scale)).toInt(),
-                        0
+                            0,
+                            (tmpCoords[1] * scale).toInt(),
+                            (-(tmpCoords[0] * scale)).toInt(),
+                            0
                     )
                 else
                     tvList[ii].setPadding(
-                        (tmpCoords[0] * scale).toInt(),
-                        (tmpCoords[1] * scale).toInt(),
-                        0,
-                        0
+                            (tmpCoords[0] * scale).toInt(),
+                            (tmpCoords[1] * scale).toInt(),
+                            0,
+                            0
                     )
             }
             lp = RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT
+                    RelativeLayout.LayoutParams.WRAP_CONTENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT
             )
             lp.addRule(RelativeLayout.CENTER_HORIZONTAL)
             lp.addRule(RelativeLayout.CENTER_VERTICAL)
@@ -511,16 +511,16 @@ class WXGLTextObject(
                 showSpotter()
                 for (c in 0 until 1) {
                     val drawText = checkButDoNotDrawText(
-                        glview.spotterTv,
-                        spotterLat,
-                        spotterLon * -1,
-                        MyApplication.radarColorSpotter,
-                        MyApplication.textSizeSmall * oglrZoom * 1.5f * MyApplication.radarTextSize
+                            glview.spotterTv,
+                            spotterLat,
+                            spotterLon * -1,
+                            MyApplication.radarColorSpotter,
+                            MyApplication.textSizeSmall * oglrZoom * 1.5f * MyApplication.radarTextSize
                     )
                     if (drawText) {
                         if (!report) {
                             glview.spotterTv[c].text =
-                                UtilitySpotter.spotterList[aa].lastName.replace("0FAV ", "")
+                                    UtilitySpotter.spotterList[aa].lastName.replace("0FAV ", "")
                         } else {
                             glview.spotterTv[c].text = UtilitySpotter.spotterReports[bb].type
                         }
@@ -566,7 +566,7 @@ class WXGLTextObject(
         addTVCitiesExt()
         addTVCountyLabels()
         if (numPanes == 1) {
-        addTVObs()
+            addTVObs()
         }
         addTVSpottersLabels()
         if (numPanes == 1 && WXGLRadarActivity.spotterShowSelected) {
@@ -654,11 +654,11 @@ class WXGLTextObject(
     }
 
     private fun hideObs() {
-            glview.obsAl.indices.forEach {
-                glview.obsAl[it].visibility = View.GONE
-                rl.removeView(glview.obsAl[it])
-            }
+        glview.obsAl.indices.forEach {
+            glview.obsAl[it].visibility = View.GONE
+            rl.removeView(glview.obsAl[it])
         }
+    }
 
     fun setOGLR(OGLR: WXGLRender) {
         this.OGLR = OGLR

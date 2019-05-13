@@ -125,10 +125,10 @@
         android:id="@+id/action_hazards"
         android:title="NWS Office hazards map"
         app:showAsAction="never" />
-    <item
+    <!--<item
         android:id="@+id/action_forecast"
         android:title="Current location forecast website"
-        app:showAsAction="never" />
+        app:showAsAction="never" />-->
 </menu>
 
 

@@ -28,6 +28,7 @@ import joshuatee.wx.external.ExternalDuplicateRemover
 
 import joshuatee.wx.Extensions.*
 
+// FIXME rename camelcase
 object UtilityVTEC {
 
     fun getStormCount(context: Context, textTor: String): Int {
@@ -39,14 +40,17 @@ object UtilityVTEC {
             "([A-Z0]{1}\\.[A-Z]{3}\\.[A-Z]{4}\\.[A-Z]{2}\\.[A-Z]\\.[0-9]{4}\\.[0-9]{6}T[0-9]{4}Z\\-[0-9]{6}T[0-9]{4}Z)"
         val stormList = textTor.parseColumn(pVtec)
         stormList.forEach {
-            dashboardStrTor += it
-            nwsOfficeArr = it.split(".")
-            if (nwsOfficeArr.size > 1) {
-                nwsOffice = nwsOfficeArr[2]
-                nwsOffice = nwsOffice.replace("^[KP]".toRegex(), "")
-                nwsLoc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "")
+            val vtecIsCurrent = UtilityTime.isVtecCurrent(it)
+            if (!it.startsWith("O.EXP") && vtecIsCurrent) {
+                dashboardStrTor += it
+                nwsOfficeArr = it.split(".")
+                if (nwsOfficeArr.size > 1) {
+                    nwsOffice = nwsOfficeArr[2]
+                    nwsOffice = nwsOffice.replace("^[KP]".toRegex(), "")
+                    nwsLoc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "")
+                }
+                dashboardStrTor += "  " + nwsLoc + MyApplication.newline
             }
-            dashboardStrTor += "  " + nwsLoc + MyApplication.newline
         }
         dashboardStrTor = ExternalDuplicateRemover().stripDuplicates(dashboardStrTor)
         return dashboardStrTor.split(MyApplication.newline).dropLastWhile { it.isEmpty() }.size

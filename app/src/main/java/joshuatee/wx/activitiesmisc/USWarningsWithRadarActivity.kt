@@ -44,7 +44,7 @@ import joshuatee.wx.ui.ObjectAlertSummary
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityDownloadNWS
+import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.util.UtilityImg
 import kotlinx.coroutines.*
 
@@ -151,7 +151,7 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
                 coord = if (zone.matches("[A-Z][A-Z]C.*?".toRegex())) {
                     UtilityLocation.getXYFromAddressOSM(county + "," + zone.substring(0, 2))
                 } else {
-                    UtilityDownloadNWS.getLatLonForZone(zone)
+                    UtilityDownloadNws.getLatLonForZone(zone)
                 }
                 state = zone.substring(0, 2)
             }
@@ -168,7 +168,7 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
             if (turlLocal[1] == "us" && usDownloaded) {
                 html = usDataStr
             } else {
-                html = UtilityDownloadNWS.getCAP(turlLocal[1])
+                html = UtilityDownloadNws.getCAP(turlLocal[1])
                 if (turlLocal[1] == "us") {
                     usDataStr = html
                     usDownloaded = true

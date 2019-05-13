@@ -152,6 +152,10 @@ object UtilityColorPaletteGeneric {
                 }
             }
         } // end loop over lines
+        //UtilityLog.d("wx", dbzAl.toString())
+        //UtilityLog.d("wx", rAl.toString())
+        //UtilityLog.d("wx", gAl.toString())
+        //UtilityLog.d("wx", bAl.toString())
         var low: Int
         var high: Int
         var lowColor: Int
@@ -192,26 +196,26 @@ object UtilityColorPaletteGeneric {
                 }
             }
         }
-        dbzAl.indices.forEach { i ->
-            if (i < dbzAl.size - 1) {
-                low = dbzAl[i]
-                lowColor = Color.rgb(rAl[i], gAl[i], bAl[i])
-                high = dbzAl[i + 1]
-                highColor = Color.rgb(rAl[i + 1], gAl[i + 1], bAl[i + 1])
+        dbzAl.indices.forEach { index ->
+            if (index < dbzAl.size - 1) {
+                low = dbzAl[index]
+                lowColor = Color.rgb(rAl[index], gAl[index], bAl[index])
+                high = dbzAl[index + 1]
+                highColor = Color.rgb(rAl[index + 1], gAl[index + 1], bAl[index + 1])
                 diff = high - low
                 if (colorMapR.hasRemaining())
-                    colorMapR.put(rAl[i].toByte())
+                    colorMapR.put(rAl[index].toByte())
                 if (colorMapG.hasRemaining())
-                    colorMapG.put(gAl[i].toByte())
+                    colorMapG.put(gAl[index].toByte())
                 if (colorMapB.hasRemaining())
-                    colorMapB.put(bAl[i].toByte())
+                    colorMapB.put(bAl[index].toByte())
                 if (scale == 2) {
                     if (colorMapR.hasRemaining())
-                        colorMapR.put(rAl[i].toByte())
+                        colorMapR.put(rAl[index].toByte())
                     if (colorMapG.hasRemaining())
-                        colorMapG.put(gAl[i].toByte())
+                        colorMapG.put(gAl[index].toByte())
                     if (colorMapB.hasRemaining())
-                        colorMapB.put(bAl[i].toByte())
+                        colorMapB.put(bAl[index].toByte())
                 }
                 (1 until diff).forEach { j ->
                     if (scale == 1) {
@@ -220,6 +224,7 @@ object UtilityColorPaletteGeneric {
                             highColor,
                             j.toDouble() / (diff * scale).toDouble()
                         )
+                        //UtilityLog.d("wx", ((j).toDouble() / (diff * scale).toDouble()).toString() + " " + j.toString() + " " + diff.toString())
                         if (colorMapR.hasRemaining()) {
                             colorMapR.put(Color.red(colorInt).toByte())
                         }
@@ -230,23 +235,32 @@ object UtilityColorPaletteGeneric {
                             colorMapB.put(Color.blue(colorInt).toByte())
                         }
                     } else if (scale == 2) {
-                        colorInt = UtilityNexradColors.interpolateColor(
+                        /*colorInt = UtilityNexradColors.interpolateColor(
                             lowColor,
                             highColor,
                             (j * scale - 1).toDouble() / (diff * scale).toDouble()
+                        )*/
+
+                        colorInt = UtilityNexradColors.interpolateColor(
+                                lowColor,
+                                highColor,
+                                (j * scale - 1).toDouble() / (diff * scale).toDouble()
                         )
+                        //UtilityLog.d("wx", ((j * scale - 1).toDouble() / (diff * scale).toDouble()).toString())
+                        //UtilityLog.d("wx", ((j * scale).toDouble() / (diff * scale).toDouble()).toString())
                         colorInt2 = UtilityNexradColors.interpolateColor(
                             lowColor,
                             highColor,
                             (j * scale).toDouble() / (diff * scale).toDouble()
                         )
-                        if (colorMapR.hasRemaining())
+                       if (colorMapR.hasRemaining())
                             colorMapR.put(Color.red(colorInt).toByte())
                         if (colorMapG.hasRemaining())
                             colorMapG.put(Color.green(colorInt).toByte())
                         if (colorMapB.hasRemaining())
                             colorMapB.put(Color.blue(colorInt).toByte())
-                        if (colorMapR.hasRemaining())
+
+                       if (colorMapR.hasRemaining())
                             colorMapR.put(Color.red(colorInt2).toByte())
                         if (colorMapG.hasRemaining())
                             colorMapG.put(Color.green(colorInt2).toByte())
@@ -256,18 +270,18 @@ object UtilityColorPaletteGeneric {
                 }
             } else {
                 if (colorMapR.hasRemaining())
-                    colorMapR.put(rAl[i].toByte())
+                    colorMapR.put(rAl[index].toByte())
                 if (colorMapG.hasRemaining())
-                    colorMapG.put(gAl[i].toByte())
+                    colorMapG.put(gAl[index].toByte())
                 if (colorMapB.hasRemaining())
-                    colorMapB.put(bAl[i].toByte())
+                    colorMapB.put(bAl[index].toByte())
                 if (scale == 2) {
                     if (colorMapR.hasRemaining())
-                        colorMapR.put(rAl[i].toByte())
+                        colorMapR.put(rAl[index].toByte())
                     if (colorMapG.hasRemaining())
-                        colorMapG.put(gAl[i].toByte())
+                        colorMapG.put(gAl[index].toByte())
                     if (colorMapB.hasRemaining())
-                        colorMapB.put(bAl[i].toByte())
+                        colorMapB.put(bAl[index].toByte())
                 }
             }
         }

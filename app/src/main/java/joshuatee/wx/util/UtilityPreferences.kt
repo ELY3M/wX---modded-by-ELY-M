@@ -22,7 +22,6 @@
 package joshuatee.wx.util
 
 import android.content.Context
-import android.preference.PreferenceManager
 
 object UtilityPreferences {
 
@@ -32,10 +31,10 @@ object UtilityPreferences {
         }
     }
 
-    private const val sep = "-:-"
-    private const val newline = "-:-NL-:-"
+    //private const val sep = "-:-"
+    //private const val newline = "-:-NL-:-"
 
-    fun printAllPreferences(context: Context): String {
+    /*fun printAllPreferences(context: Context): String {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val keys = preferences.all
         val sb = StringBuilder(1000)
@@ -73,9 +72,9 @@ object UtilityPreferences {
         }
         return sb.toString()
 
-    }
+    }*/
 
-    fun applySettings(context: Context, txt: String) {
+    /*fun applySettings(context: Context, txt: String) {
         val prefLines = txt.split(newline.toRegex()).dropLastWhile { it.isEmpty() }
         var lineArr: List<String>
         prefLines.forEach { line ->
@@ -94,5 +93,5 @@ object UtilityPreferences {
             }
         }
         Utility.commitPref(context)
-    }
+    }*/
 }

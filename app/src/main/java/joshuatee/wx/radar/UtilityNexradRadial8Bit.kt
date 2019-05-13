@@ -145,6 +145,12 @@ internal object UtilityNexradRadial8Bit {
                 "DSA" -> colorMapProductCode = 172
                 else -> colorMapProductCode = 94
             }
+           /* when (product) {
+                153 -> colorMapProductCode = 94
+                154 -> colorMapProductCode = 99
+                else -> colorMapProductCode = product
+            }*/
+
             bufR = MyApplication.colorMap[colorMapProductCode]!!.redValues
             bufG = MyApplication.colorMap[colorMapProductCode]!!.greenValues
             bufB = MyApplication.colorMap[colorMapProductCode]!!.blueValues

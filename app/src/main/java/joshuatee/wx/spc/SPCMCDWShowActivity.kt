@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-//modded by ELY M. 
 
 package joshuatee.wx.spc
 
@@ -80,8 +79,7 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         number = activityArguments[0]
         when (activityArguments[2]) {
             "MCD" -> objWatch = ObjectWatchProduct(PolygonType.MCD, number)
-            "WATCH_TOR" -> objWatch = ObjectWatchProduct(PolygonType.WATCH_TOR, number)
-            "WATCH_SVR" -> objWatch = ObjectWatchProduct(PolygonType.WATCH_SVR, number)
+            "WATCH" -> objWatch = ObjectWatchProduct(PolygonType.WATCH, number)
             "MPD" -> objWatch = ObjectWatchProduct(PolygonType.MPD, number)
             else -> {
             }

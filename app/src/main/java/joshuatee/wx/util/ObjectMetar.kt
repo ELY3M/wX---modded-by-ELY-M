@@ -113,7 +113,7 @@ internal class ObjectMetar(context: Context, location: LatLon) {
 
     private fun decodeIconFromMetar(condition: String, obs: RID): String {
         // https://api.weather.gov/icons/land/day/ovc?size=medium
-        val sunTimes = UtilityTime.getSunriseSunsetFromObs(obs)
+        val sunTimes = UtilityTimeSunMoon.getSunriseSunsetFromObs(obs)
         val sunRiseDate = sunTimes[0].time
         val sunSetDate = sunTimes[1].time
         val currentTime = Date()

@@ -151,20 +151,17 @@ internal object UtilityRadarUI {
         oglr: WXGLRender,
         alertDialogRadarLongPress: ObjectDialogue
     ) {
-
         alertDialogRadarLongpressAl.clear()
-
         val locX = lat.toDoubleOrNull() ?: 0.0
         val locY = lon.toDoubleOrNull() ?: 0.0
         val pointX = glview.newY.toDouble()
         val pointY = glview.newX * -1.0
         val dist =
             LatLon.distance(LatLon(locX, locY), LatLon(pointX, pointY), DistanceUnit.MILE)
-        val ridX = Utility.getRadarSiteX(oglr.rid).toDouble()
-        val ridY = -1.0 * Utility.getRadarSiteY(oglr.rid).toDouble()
+        val ridX = Utility.getRadarSiteX(oglr.rid).toDoubleOrNull() ?: 0.0
+        val ridY = -1.0 * (Utility.getRadarSiteY(oglr.rid).toDoubleOrNull() ?: 0.0)
         val distRid = LatLon.distance(LatLon(ridX, ridY), LatLon(pointX, pointY), DistanceUnit.MILE)
         val distRidKm = LatLon.distance(LatLon(ridX, ridY), LatLon(pointX, pointY), DistanceUnit.KM)
-	
         // FIXME look at iOS version and try to match in data provided and improve formatting
         val latLonTitle = UtilityStringExternal.truncate(glview.newY.toString(), 6) +
                 ", -" +
@@ -183,6 +180,8 @@ internal object UtilityRadarUI {
             ) + " miles from " + oglr.rid
         )
 
+
+
         //get msl and AGL here
         val radarheight = WXGLNexradLevel3.radarHeight
         val distance = UtilityStringExternal.truncate(distRidKm.toString(), 4).toDouble()
@@ -191,25 +190,7 @@ internal object UtilityRadarUI {
         //var degree = WXGLNexradLevel3.getproductSpecific / 10.0f
         val degree = WXGLNexradLevel3.getElevation
 
-        /*
-        var degree: Double = 0.0
-        if (oglr.product.contains("0")) {
-            degree = 0.5
-        }
-        if (oglr.product.contains("1")) {
-            degree = 1.5
-        }
-        if (oglr.product.contains("2")) {
-            degree = 2.4
-        }
-        if (oglr.product.contains("3")) {
-            degree = 3.4
-        }
 
-        if (degree == 0.0) {
-            degree = 0.5
-        }
-        */
 
         UtilityLog.d("wx", "radarHeight: "+radarheight)
         UtilityLog.d("wx", "degree: "+degree)
@@ -218,13 +199,14 @@ internal object UtilityRadarUI {
         val heightAGL = 3.281 * (Math.sin(Math.toRadians(degree.toDouble())) * distance + distance * distance / 15417.82) * 1000.0
         val heightMSL = (radarheight + heightAGL)
 
-        alertDialogRadarLongpressAl.add(
-        "Beam Height MSL: "+UtilityStringExternal.truncate(heightMSL.toString(), 6)+" AGL: "+UtilityStringExternal.truncate(heightAGL.toString(), 6)
-        )
+        alertDialogRadarLongpressAl.add("Beam Height MSL: "+UtilityStringExternal.truncate(heightMSL.toString(), 6)+" ft, AGL: "+UtilityStringExternal.truncate(heightAGL.toString(), 6)+" ft")
 
 
 
-
+        //val distance = UtilityStringExternal.truncate(distRidKm.toString(), 4).toDouble()
+        //val heightAgl = UtilityMath.getRadarBeamHeight(oglr.radarL3Object.degree, distRidKm)
+        //val heightMsl = (oglr.radarL3Object.radarHeight + heightAgl)
+        //alertDialogRadarLongpressAl.add("Beam Height MSL: " + heightMsl.roundToInt().toString() + " ft, AGL: " + heightAgl.roundToInt().toString() + " ft")
         oglr.ridNewList.mapTo(alertDialogRadarLongpressAl) {
             "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.getRadarSiteName(it.name)
         }
@@ -575,21 +557,31 @@ internal object UtilityRadarUI {
     }
 
     private fun showNearestProduct(
+            //act: Activity,
             context: Context,
             type: PolygonType,
             glview: WXGLSurfaceView,
             uiDispatcher: CoroutineDispatcher
     ) = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) {
+        val text = withContext(Dispatchers.IO) {
             UtilityWatch.showProducts(glview.newY.toDouble(), glview.newX.toDouble() * -1.0, type)
         }
-        ObjectIntent(
-                context,
-                SPCMCDWShowActivity::class.java,
-                SPCMCDWShowActivity.NO,
-                arrayOf(txt, "", type.toString())
-        )
-    }    
+        if (text != "") {
+            ObjectIntent(
+                    context,
+                    SPCMCDWShowActivity::class.java,
+                    SPCMCDWShowActivity.NO,
+                    arrayOf(text, "", type.toString())
+            )
+
+
+            //if (txt == "") {
+            //    txt = "No active " + type.typeAsString
+            //}
+            //UtilityAlertDialog.showHelpText(txt, context)
+
+        }
+    }
 
     private fun showSpotterInfo(
             act: Activity,
@@ -602,6 +594,8 @@ internal object UtilityRadarUI {
         UtilityAlertDialog.showHelpText(txt, act)
     }
 
+
+    //UserPoints System
     private fun showUserPointInfo(
             act: Activity,
             context: Context,

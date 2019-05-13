@@ -24,12 +24,49 @@ package joshuatee.wx.radar
 import android.content.Context
 import joshuatee.wx.GlobalArrays
 import joshuatee.wx.MyApplication
+import joshuatee.wx.R
 
 import joshuatee.wx.util.Utility
 
 object WXGLNexrad {
 
-    private val closestTdwrToNexrad = mapOf(
+    // next 3 maps are for color palette editor
+    val productCodeStringToName: Map<String, String> = mapOf(
+            "94" to "Reflectivity",
+            "99" to "Velocity",
+            "134" to "Digital Vertical Integrated Liquid",
+            "135" to "Enhanced Echo Tops",
+            "159" to "Differential Reflectivity",
+            "161" to "Correlation Coefficient",
+            "163" to "Specific Differential Phase",
+            "172" to "Digital Storm Total Precipitation"
+    )
+
+    val productCodeStringToCode: Map<String, String> = mapOf(
+            "94" to "N0Q",
+            "99" to "N0U",
+            "134" to "DVL",
+            "135" to "EET",
+            "159" to "N0X",
+            "161" to "N0C",
+            "163" to "N0K",
+            "172" to "DSP"
+    )
+
+    val productCodeStringToResourceFile: Map<String, Int> = mapOf(
+            "94" to R.raw.dvn94,
+            "99" to R.raw.dvn99,
+            "134" to R.raw.gsp134,
+            "135" to R.raw.vax135,
+            "159" to R.raw.vax159,
+            "161" to R.raw.vax161,
+            "163" to R.raw.vax163,
+            "172" to R.raw.vax172
+    )
+
+    val colorPaletteProducts: List<String> = listOf("94", "99", "134", "135", "159", "161", "163", "172")
+
+    private val closestTdwrToNexrad: Map<String, String> = mapOf(
         "DTX" to "DTW",
         "LOT" to "ORD",
         "MKX" to "MKE",

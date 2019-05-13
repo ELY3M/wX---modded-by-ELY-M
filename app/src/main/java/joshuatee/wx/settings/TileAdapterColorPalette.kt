@@ -45,7 +45,7 @@ internal class TileAdapterColorPalette(
     }
 
     override fun onBindViewHolder(holder: RecyclerViewHoldersColorPalette, position: Int) {
-        val bm = itemList[position].bmPassed
+        val bm = itemList[position].bitmapWithText
         val paramsIv = holder.iv.layoutParams
         paramsIv.width = MyApplication.dm.widthPixels / tilesPerRow
         paramsIv.height = paramsIv.width * bm.height / bm.width

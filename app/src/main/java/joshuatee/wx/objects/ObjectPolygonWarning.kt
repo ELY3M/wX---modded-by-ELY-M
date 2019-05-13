@@ -28,16 +28,18 @@ import joshuatee.wx.util.Utility
 class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
 
     var color = 0
-    val storage = DataStorage(type.prefTokenStorage)
+    val storage = DataStorage(prefTokenStorage)
     var isEnabled = false
 
     init {
         storage.update(context)
-        color = Utility.readPref(context, type.prefTokenColor, type.initialColor)
-        isEnabled = Utility.readPref(context, type.prefTokenEnabled, "false").startsWith("t")
+        color = Utility.readPref(context, prefTokenColor, type.initialColor)
+        isEnabled = Utility.readPref(context, prefTokenEnabled, "false").startsWith("t")
     }
 
     val name: String get() = type.urlToken.replace("%20", " ")
-
+    val prefTokenEnabled: String get() = "RADAR_SHOW_" + type.productCode
+    val prefTokenColor: String get() = "RADAR_COLOR_" + type.productCode
+    private val prefTokenStorage: String get() = "SEVERE_DASHBOARD_" + type.productCode
 }
 

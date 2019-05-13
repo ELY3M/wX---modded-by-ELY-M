@@ -36,52 +36,55 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 
 import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.util.UtilityLog
 
 class ObjectWidgetCC(context: Context) {
 
     val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_cc_layout)
 
     init {
-        val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
-        val widgetLocNumInt = (widgetLocNum.toIntOrNull() ?: 0) - 1
-        val cc = Utility.readPref(context, "CC_WIDGET", "No data")
+        val widgetLocNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
+        val widgetLocNumberAsInteger = (widgetLocNumber.toIntOrNull() ?: 0) - 1
+        val currentConditionsString = Utility.readPref(context, "CC_WIDGET", "No data")
         val iconUrl = Utility.readPref(context, "CC_WIDGET_ICON_URL", "NULL")
-        val updtime = Utility.readPref(context, "UPDTIME_WIDGET", "No data")
+        val updateTime = Utility.readPref(context, "UPDTIME_WIDGET", "No data")
         val sevenDay = Utility.readPref(context, "7DAY_EXT_WIDGET", "No data")
-        var bmCc = UtilityImg.getBlankBitmap()
-        if (Location.isUS(widgetLocNumInt)) {
-            bmCc = UtilityNWS.getIcon(context, iconUrl)
+        var bitmap = UtilityImg.getBlankBitmap()
+        if (Location.isUS(widgetLocNumberAsInteger)) {
+            bitmap = UtilityNWS.getIcon(context, iconUrl)
         }
-        val sep = " - "
-        val tmpArrCc = cc.split(sep).dropLastWhile { it.isEmpty() }
-        val tempArr: List<String>
-        val ccArr: List<String>
-        var ccTimeFormatted = ""
-        if (tmpArrCc.size > 4 && !tmpArrCc[0].contains("NA") && Location.isUS(widgetLocNumInt)) {
-            UtilityLog.d("wx", "WIDGETCC:" + tmpArrCc[0] + ":")
-            tempArr = tmpArrCc[0].split("/").dropLastWhile { it.isEmpty() }
-            remoteViews.setTextViewText(R.id.wind, tmpArrCc[2])
-            ccArr = updtime.split(" ")
-            if (ccArr.size > 2) ccTimeFormatted = ccArr[0] + " " + ccArr[1]
-            remoteViews.setTextViewText(R.id.pressure, tmpArrCc[1])
-            remoteViews.setTextViewText(R.id.visibility, tmpArrCc[3])
+        val stringSeparator = " - "
+        val currentConditionsList = currentConditionsString.split(stringSeparator).dropLastWhile { it.isEmpty() }
+        var currentConditionsTime = ""
+        if (Location.isUS(widgetLocNumberAsInteger)) {
+            remoteViews.setTextViewText(
+                    R.id.location,
+                    Location.getName(widgetLocNumberAsInteger) + " " + UtilityDownload.getSunriseSunsetShort(
+                            context,
+                            (widgetLocNumberAsInteger + 1).toString()
+                    )
+            )
+            remoteViews.setTextColor(R.id.location, MyApplication.widgetTextColor)
+        }
+        if (currentConditionsList.size > 4
+                && !currentConditionsList[0].contains("NA")
+                && Location.isUS(widgetLocNumberAsInteger)
+        ) {
+            val temperatureList = currentConditionsList[0].split("/").dropLastWhile { it.isEmpty() }
+            remoteViews.setTextViewText(R.id.wind, currentConditionsList[2])
+            val ccArr = updateTime.split(" ")
+            if (ccArr.size > 2) {
+                currentConditionsTime = ccArr[0] + " " + ccArr[1]
+            }
+            remoteViews.setTextViewText(R.id.pressure, currentConditionsList[1])
+            remoteViews.setTextViewText(R.id.visibility, currentConditionsList[3])
             remoteViews.setTextColor(R.id.bigdewpt, MyApplication.widgetTextColor)
             remoteViews.setTextColor(R.id.wind, MyApplication.widgetTextColor)
             remoteViews.setTextColor(R.id.pressure, MyApplication.widgetTextColor)
             remoteViews.setTextColor(R.id.visibility, MyApplication.widgetTextColor)
-            remoteViews.setTextViewText(
-                R.id.location,
-                Location.getName(widgetLocNumInt) + " " + UtilityDownload.getSunriseSunsetShort(
-                    context,
-                    (widgetLocNumInt + 1).toString()
-                )
-            )
-            remoteViews.setTextViewText(R.id.updatetime, ccTimeFormatted)
-            remoteViews.setTextColor(R.id.location, MyApplication.widgetTextColor)
+            remoteViews.setTextViewText(R.id.updatetime, currentConditionsTime)
             remoteViews.setTextColor(R.id.updatetime, MyApplication.widgetTextColor)
-            remoteViews.setTextViewText(R.id.bigtemp, tempArr[0])
-            remoteViews.setTextViewText(R.id.bigdewpt, tempArr[1].replace("^ ".toRegex(), ""))
+            remoteViews.setTextViewText(R.id.bigtemp, temperatureList[0])
+            remoteViews.setTextViewText(R.id.bigdewpt, temperatureList[1].replace("^ ".toRegex(), ""))
             remoteViews.setTextColor(R.id.bigtemp, MyApplication.widgetHighlightTextColor)
         }
         if (!MyApplication.widgetCCShow7Day) {
@@ -90,15 +93,17 @@ class ObjectWidgetCC(context: Context) {
         }
         if (android.os.Build.VERSION.SDK_INT > 20) {
             val wbIcon = UtilityImg.vectorDrawableToBitmap(
-                context,
-                R.drawable.ic_navigation_white_24dp,
-                MyApplication.widgetHighlightTextColor
+                    context,
+                    R.drawable.ic_navigation_white_24dp,
+                    MyApplication.widgetHighlightTextColor
             )
             var windBardRotate = 0.0f
-            if (tmpArrCc.size > 2) {
-                val tmpWindArr = MyApplication.space.split(tmpArrCc[2])
+            if (currentConditionsList.size > 2) {
+                val tmpWindArr = MyApplication.space.split(currentConditionsList[2])
                 var windDirStr = ""
-                if (tmpWindArr.isNotEmpty()) windDirStr = tmpWindArr[0]
+                if (tmpWindArr.isNotEmpty()) {
+                    windDirStr = tmpWindArr[0]
+                }
                 windBardRotate = when (windDirStr) {
                     "N" -> 180f
                     "NE" -> 225f
@@ -115,18 +120,22 @@ class ObjectWidgetCC(context: Context) {
             val matrix = Matrix()
             matrix.postRotate(windBardRotate, 100f, 100f)
             var rotatedWb =
-                Bitmap.createBitmap(wbIcon, 0, 0, wbIcon.width, wbIcon.height, matrix, true)
+                    Bitmap.createBitmap(wbIcon, 0, 0, wbIcon.width, wbIcon.height, matrix, true)
             rotatedWb = Bitmap.createScaledBitmap(
-                rotatedWb,
-                (wbIcon.width * scaleFactor).toInt(),
-                (wbIcon.height * scaleFactor).toInt(),
-                false
+                    rotatedWb,
+                    (wbIcon.width * scaleFactor).toInt(),
+                    (wbIcon.height * scaleFactor).toInt(),
+                    false
             )
             remoteViews.setImageViewUri(R.id.wind_barb, Uri.parse(""))
-            if (windBardRotate < 500) remoteViews.setImageViewBitmap(R.id.wind_barb, rotatedWb)
+            if (windBardRotate < 500) {
+                remoteViews.setImageViewBitmap(R.id.wind_barb, rotatedWb)
+            }
         }
-        remoteViews.setImageViewUri(R.id.iv, Uri.parse(""))
-        remoteViews.setImageViewBitmap(R.id.iv, bmCc)
+        if (!currentConditionsList[0].contains("NA")) {
+            remoteViews.setImageViewUri(R.id.iv, Uri.parse(""))
+            remoteViews.setImageViewBitmap(R.id.iv, bitmap)
+        }
         if (!MyApplication.widgetPreventTap) {
             UtilityWidget.setupIntent(context, remoteViews, WX::class.java, R.id.layout, "WX")
         }

@@ -23,11 +23,11 @@ package joshuatee.wx.notifications
 
 import java.util.Locale
 
-import android.app.Notification
 import android.content.Context
 import android.graphics.Color
 import android.text.TextUtils
 import android.view.View
+import androidx.core.app.NotificationCompat
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
@@ -80,35 +80,35 @@ object UtilityNotificationTextProduct {
     }
 
     private fun sendTextProdNotification(
-        context: Context,
-        prod: String,
-        firstLine: String,
-        textBody: String
+            context: Context,
+            prod: String,
+            firstLine: String,
+            textBody: String
     ) {
         val noBody = Utility.fromHtml(textBody)
         val noSummary = Utility.fromHtml(textBody)
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         val objPI = ObjectPendingIntents(
-            context,
-            TextScreenActivity::class.java,
-            TextScreenActivity.URL,
-            arrayOf(textBody, prod, ""),
-            arrayOf(textBody, prod, "sound")
+                context,
+                TextScreenActivity::class.java,
+                TextScreenActivity.URL,
+                arrayOf(textBody, prod, ""),
+                arrayOf(textBody, prod, "sound")
         )
         val sound = MyApplication.alertNotificationSoundTextProd && !inBlackout
         val notifObj = ObjectNotification(
-            context,
-            sound,
-            prod,
-            noBody,
-            objPI.resultPendingIntent,
-            MyApplication.ICON_CURRENT,
-            noSummary,
-            Notification.PRIORITY_DEFAULT,
-            Color.YELLOW,
-            MyApplication.ICON_ACTION,
-            objPI.resultPendingIntent2,
-            context.resources.getString(R.string.read_aloud)
+                context,
+                sound,
+                prod,
+                noBody,
+                objPI.resultPendingIntent,
+                MyApplication.ICON_CURRENT,
+                noSummary,
+                NotificationCompat.PRIORITY_HIGH,
+                Color.YELLOW,
+                MyApplication.ICON_ACTION,
+                objPI.resultPendingIntent2,
+                context.resources.getString(R.string.read_aloud)
         )
         val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
         notifObj.sendNotification(context, firstLine, 1, noti)

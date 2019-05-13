@@ -42,15 +42,9 @@ import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.TouchImageView2
-import android.opengl.ETC1.getWidth
-import android.opengl.ETC1.getHeight
-
-
 
 object UtilityImg {
 
-    //fun showNextImg(drw: ObjectNavDrawer, fn: () -> Unit) {
-    // FIXME
     fun showNextImg(drw: ObjectNavDrawer, fn: () -> Unit) {
         drw.index += 1
         if (drw.index == drw.getUrlCount()) {
@@ -133,11 +127,6 @@ object UtilityImg {
                     MyApplication.spcsseoZoom = z
                     MyApplication.spcsseoX = x
                     MyApplication.spcsseoY = y
-                }
-                "GOESVIS" -> {
-                    MyApplication.goesVisZoom = z
-                    MyApplication.goesVisX = x
-                    MyApplication.goesVisY = y
                 }
                 // FIXME
                 "WPCGEFS1" -> {
@@ -328,7 +317,7 @@ object UtilityImg {
                 width = it.width
             }
         }
-        combinedImage = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        combinedImage = Bitmap.createBitmap(width, height, Config.ARGB_8888)
         val comboImage = Canvas(combinedImage!!)
         var workingHeight = 0f
         images.forEach {

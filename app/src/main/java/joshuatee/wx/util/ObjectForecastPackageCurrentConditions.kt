@@ -41,6 +41,7 @@ class ObjectForecastPackageCurrentConditions {
     }
 
     var contextg: Context? = null
+    var ccLine1: String = ""
     var data1: String = ""
         private set
     var iconUrl: String = ""
@@ -97,6 +98,27 @@ class ObjectForecastPackageCurrentConditions {
         sb += "$windGust mph - $visibility mi - $condition"
         return listOf(sb, objMetar.icon)
         //sb    String    "NA° / 22°(NA%) - 1016 mb - W 13 mph - 10 mi - Mostly Cloudy"
+    }
+
+    // FIXME sync up with flutter/ios port
+    fun formatCC() {
+        val sep = " - "
+        val tmpArrCc = data1.split(sep)
+        var retStr = ""
+        //var retStr2 = "";
+        //var tempArr = listOf<String>()
+        if (tmpArrCc.size > 4) {
+            val tmpList = tmpArrCc[0].split("/")
+            retStr = tmpArrCc[4].replace("^ ", "") + " " + tmpList[0] + tmpArrCc[2]
+            /*retStr2 = tempArr[1].replace("^ ", "") +
+                    sep +
+                    tmpArrCc[1] +
+                    sep +
+                    tmpArrCc[3];*/
+        }
+        ccLine1 = retStr
+        //ccLine2 = retStr2.trim();
+        //ccLine3 = UtilityString.capitalize(locationString);
     }
 }
 

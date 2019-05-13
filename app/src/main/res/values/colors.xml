@@ -19,7 +19,6 @@
 <!-- modded by ELY M. -->
 
 <resources>
-
     <color name="dividerColor">#2b5070</color>
     <color name="my_custom_color">#2e3f59</color>
     <color name="white">#ffffff</color>
@@ -43,7 +42,6 @@
     <color name="primary_orange">#A14300</color>
     <color name="offwhite_toolbar">#B3FFFFFF</color>
     <color name="light_blue">#566D87</color>
-
     <!-- telecine -->
     <color name="primary_normal">#ff455a64</color>
     <color name="accent_pressed">#ffa72600</color>

@@ -147,6 +147,7 @@ class SettingsMainActivity : BaseActivity() {
                     arrayOf(UtilityAlertDialog.showVersion(this, this), "About wX")
             )
         })
+        // FIXME listOf()
         ll.addView(cardAbout.card)
         ll.addView(cardLocations.card)
         ll.addView(cardsn.card)

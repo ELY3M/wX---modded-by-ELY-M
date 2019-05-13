@@ -63,14 +63,12 @@ class WXGLNexradLevel3 {
         private set
     var iBuff: ByteBuffer = ByteBuffer.allocate(0)
     var oBuff: ByteBuffer = ByteBuffer.allocate(0)
-
     val productSpecific = IntArray(10)
     companion object {
-        var volumeScanPattern: Int = 0
-        var radarHeight: Int = 0
-        var radarElevation: Int = 0
-        var getElevation: Float = 0f
-        var productSpecific2: Int = 0
+    var radarHeight: Int = 0
+    var radarElevation: Int = 0
+    var getElevation: Float = 0f
+    var productSpecific2: Int = 0
     }
 
     init {
@@ -112,8 +110,7 @@ class WXGLNexradLevel3 {
             radarHeight = heightOfRadar.toInt()
             productCode = dis.readUnsignedShort().toShort()
             val operationalMode = dis.readUnsignedShort().toShort()
-            volumeScanPattern =  dis.readUnsignedShort()
-            UtilityLog.d("wx", "VCP: "+ volumeScanPattern)
+            val volumeScanPattern =  dis.readUnsignedShort()
             val seqnumber = dis.readUnsignedShort()
             val scannumber = dis.readUnsignedShort()
             //val volscandate = dis.readUnsignedShort()
@@ -130,9 +127,9 @@ class WXGLNexradLevel3 {
             }
             // Get elevation number
             radarElevation = dis.readUnsignedShort()
-            UtilityLog.d("wx", "RadarElevation: "+ radarElevation)
+            //UtilityLog.d("wx", "RadarElevation: "+ radarElevation)
             productSpecific[2] = dis.readUnsignedShort()
-            UtilityLog.d("wx", "productSpecific[2]: "+productSpecific[2])
+            //UtilityLog.d("wx", "productSpecific[2]: "+productSpecific[2])
             productSpecific2 = productSpecific[2]
             getElevation = (productSpecific[2] / 10.0f)
             val d = UtilityTime.radarTime(volumeScanDate, volumeScanTime)
@@ -142,9 +139,6 @@ class WXGLNexradLevel3 {
                 volumeScanPattern,
                 productCode.toInt(),
                 heightOfRadar.toInt(),
-                radarElevation,
-                productSpecific2,
-                getElevation.toInt(),
                 latitudeOfRadar,
                 longitudeOfRadar
             )
@@ -205,8 +199,7 @@ class WXGLNexradLevel3 {
             radarHeight = heightOfRadar.toInt()
             productCode = dis.readUnsignedShort().toShort()
             val operationalMode = dis.readUnsignedShort().toShort()
-            volumeScanPattern =  dis.readUnsignedShort()
-            UtilityLog.d("wx", "4-bit VCP: "+ volumeScanPattern)
+            val volumeScanPattern =  dis.readUnsignedShort()
             val seqnumber = dis.readUnsignedShort()
             val scannumber = dis.readUnsignedShort()
             //val volscandate = dis.readUnsignedShort()
@@ -221,9 +214,9 @@ class WXGLNexradLevel3 {
             }
             // Get elevation number
             radarElevation = dis.readUnsignedShort()
-            UtilityLog.d("wx", "4-bit RadarElevation: "+ radarElevation)
+            //UtilityLog.d("wx", "4-bit RadarElevation: "+ radarElevation)
             productSpecific[2] = dis.readUnsignedShort()
-            UtilityLog.d("wx", "productSpecific[2]: "+productSpecific[2])
+            //UtilityLog.d("wx", "productSpecific[2]: "+productSpecific[2])
             productSpecific2 = productSpecific[2]
             getElevation = (productSpecific[2] / 10.0f)
 
@@ -234,12 +227,9 @@ class WXGLNexradLevel3 {
             val radarInfo = formatRadarString(
                 d,
                 operationalMode.toInt(),
-                volumeScanPattern,
+		volumeScanPattern.toInt(),
                 productCode.toInt(),
                 heightOfRadar.toInt(),
-                radarElevation,
-                productSpecific2,
-                getElevation.toInt(),
                 latitudeOfRadar,
                 longitudeOfRadar
             )
@@ -307,9 +297,6 @@ class WXGLNexradLevel3 {
         volumeScanPattern: Int,
         productCode: Int,
         heightOfRadar: Int,
-        radarElevation: Int,
-        productSpecific2: Int,
-        getElevation: Int,
         latitudeOfRadar: Double,
         longitudeOfRadar: Double
     ): String {
@@ -319,9 +306,6 @@ class WXGLNexradLevel3 {
                     "VCP: " + volumeScanPattern + MyApplication.newline +
                     "Product Code: " + productCode + MyApplication.newline +
                     "Radar height: " + heightOfRadar + MyApplication.newline +
-                    "Elevation Num: " + radarElevation + MyApplication.newline +
-                    "productSpecific[2]: " + productSpecific2 + MyApplication.newline +
-                    "getElevation: " + getElevation + MyApplication.newline +
                     "Radar Lat: " + latitudeOfRadar + MyApplication.newline +
                     "Radar Lon: " + longitudeOfRadar
         } catch (e: AssertionError) {

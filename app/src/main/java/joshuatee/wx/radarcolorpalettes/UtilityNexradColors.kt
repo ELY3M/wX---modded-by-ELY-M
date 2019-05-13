@@ -22,6 +22,8 @@
 package joshuatee.wx.radarcolorpalettes
 
 import android.graphics.Color
+//import joshuatee.wx.util.UtilityLog
+import kotlin.math.absoluteValue
 
 internal object UtilityNexradColors {
 
@@ -32,16 +34,42 @@ internal object UtilityNexradColors {
 
     private fun interpolateHue(a: Float, b: Float, proportion: Float): Float {
         val diff = b - a
-        val ret: Float
+        val fudgeFactor = 0.01
+        var transformedColor: Float
         val total = 360f // hue ranges from 0-360
-        return if (diff > total / 2) {
-            ret = (total - (b - a)) * -1
-            if (ret < 0)
-                ret + total
-            else
-                ret
+        return if (diff > ((total / 2) - fudgeFactor)) {
+            transformedColor = (total - (b - a)) * -1
+            //transformedColor = (a + (b - a) * proportion) * -1
+            if (transformedColor < 0) {
+                transformedColor += total
+                //transformedColor.absoluteValue
+                //UtilityLog.d("wx1", "wx1 " + a.toString() + " " + b.toString() + " " + (transformedColor).toString())
+                transformedColor
+            } else {
+                //UtilityLog.d("wx2", "wx2 " + a.toString() + " " + b.toString() + " " + (transformedColor).toString())
+                transformedColor
+            }
         } else {
-            a + (b - a) * proportion
+            //transformedColor = a + (b - a) * proportion // was originally just this
+            if ( b > a) {
+                //transformedColor = (b + (b - a) * proportion).absoluteValue
+                transformedColor = (a + (b - a) * proportion).absoluteValue
+                //UtilityLog.d("wx3", "wx3 " + a.toString() + " " + b.toString() + " " + transformedColor.toString())
+                //a + (b - a) * proportion
+                //b + (a - b) * proportion
+                transformedColor
+            } else {
+                //transformedColor = (b + (b - a) * proportion).absoluteValue
+                transformedColor = a + (b - a) * proportion
+                if ( a > 270.0 && b < 90.0) {
+                    //transformedColor = (a + (b)*proportion)
+                    transformedColor = (a + (360 - a + b)*proportion)
+                }
+                //UtilityLog.d("wx4", "wx4 " + a.toString() + " " + b.toString() + " " + transformedColor.toString())
+                //a + (b - a) * proportion
+                //b + (a - b) * proportion
+                transformedColor
+            }
         }
     }
 
@@ -54,6 +82,7 @@ internal object UtilityNexradColors {
         (0..2).forEach {
             if (it > 0) {
                 hsvb[it] = interpolate(hsva[it], hsvb[it], proportion.toFloat())
+                //hsvb[it] = interpolateHue(hsva[it], hsvb[it], proportion.toFloat())
             } else {
                 hsvb[it] = interpolateHue(hsva[it], hsvb[it], proportion.toFloat())
             }

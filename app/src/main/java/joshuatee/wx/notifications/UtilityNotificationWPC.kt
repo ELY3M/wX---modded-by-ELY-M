@@ -29,21 +29,22 @@ import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.external.ExternalPolygon
 
-import android.app.Notification
 import android.content.Context
 import android.graphics.Color
+import androidx.core.app.NotificationCompat
 
 import joshuatee.wx.objects.PolygonType.MPD
+import joshuatee.wx.util.Utility
 
-internal object UtilityNotificationWPC {
+internal object UtilityNotificationWpc {
 
-    fun locationNeedsMPD(): Boolean {
+    fun locationNeedsMpd(): Boolean {
         return (0 until Location.numLocations).any {
             MyApplication.locations.getOrNull(it)?.notificationWpcmpd ?: false
         }
     }
 
-    fun sendMPDLocationNotifs(context: Context): String {
+    fun sendMpdLocationNotifications(context: Context): String {
         val textMcd = MyApplication.mpdLatlon.valueGet()
         val textMcdNoList = MyApplication.mpdNoList.valueGet()
         val x = mutableListOf<Double>()
@@ -84,9 +85,10 @@ internal object UtilityNotificationWPC {
                         locXDbl = MyApplication.locations[n - 1].x.toDoubleOrNull() ?: 0.0
                         locYDbl = MyApplication.locations[n - 1].y.toDoubleOrNull() ?: 0.0
                         val contains =
-                            polygon2.contains(ExternalPoint(locXDbl.toFloat(), locYDbl.toFloat()))
+                                polygon2.contains(ExternalPoint(locXDbl.toFloat(), locYDbl.toFloat()))
                         if (contains) {
-                            notifUrls += sendMPDNotif(context, locNum, mcdNoArr[z])
+                            //notifUrls += sendMPDNotif(context, locNum, mcdNoArr[z])
+                            notifUrls += sendMpdNotification(context, locNum, Utility.safeGet(mcdNoArr, z))
                         }
                     }
                 }
@@ -96,7 +98,7 @@ internal object UtilityNotificationWPC {
         return notifUrls
     }
 
-    private fun sendMPDNotif(context: Context, locNum: String, mdNo: String): String {
+    private fun sendMpdNotification(context: Context, locNum: String, mdNo: String): String {
         val locNumInt = (locNum.toIntOrNull() ?: 0) - 1
         var notifUrls = ""
         val noMain: String
@@ -112,32 +114,32 @@ internal object UtilityNotificationWPC {
         noSummary = mcdPre
         val polygonType = MPD
         val objPI = ObjectPendingIntents(
-            context,
-            SPCMCDWShowActivity::class.java,
-            SPCMCDWShowActivity.NO,
-            arrayOf(mdNo, "", polygonType.toString()),
-            arrayOf(mdNo, "sound", polygonType.toString())
+                context,
+                SPCMCDWShowActivity::class.java,
+                SPCMCDWShowActivity.NO,
+                arrayOf(mdNo, "", polygonType.toString()),
+                arrayOf(mdNo, "sound", polygonType.toString())
         )
         val cancelStr = "wpcmpdloc$mdNo$locNum"
         if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
-                context,
-                cancelStr
-            ))
+                        context,
+                        cancelStr
+                ))
         ) {
             val sound = MyApplication.locations[locNumInt].sound && !inBlackout
             val notifObj = ObjectNotification(
-                context,
-                sound,
-                noMain,
-                noBody,
-                objPI.resultPendingIntent,
-                MyApplication.ICON_ALERT,
-                noSummary,
-                Notification.PRIORITY_DEFAULT,
-                Color.YELLOW,
-                MyApplication.ICON_ACTION,
-                objPI.resultPendingIntent2,
-                context.resources.getString(R.string.read_aloud)
+                    context,
+                    sound,
+                    noMain,
+                    noBody,
+                    objPI.resultPendingIntent,
+                    MyApplication.ICON_ALERT,
+                    noSummary,
+                    NotificationCompat.PRIORITY_HIGH, // was Notification.PRIORITY_DEFAULT
+                    Color.YELLOW,
+                    MyApplication.ICON_ACTION,
+                    objPI.resultPendingIntent2,
+                    context.resources.getString(R.string.read_aloud)
             )
             val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
             notifObj.sendNotification(context, cancelStr, 1, noti)

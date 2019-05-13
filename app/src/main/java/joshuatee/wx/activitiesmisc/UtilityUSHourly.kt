@@ -23,8 +23,7 @@ package joshuatee.wx.activitiesmisc
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.Location
-import joshuatee.wx.util.UtilityDownloadNWS
-import joshuatee.wx.util.UtilityMath
+import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.util.UtilityTime
 import joshuatee.wx.util.Utility
 
@@ -79,10 +78,13 @@ object UtilityUSHourly {
         .replace("T-storms", "Tst")
 
     fun getString(locNum: Int): List<String> {
-        val x = UtilityMath.latLonFix(Location.getX(locNum))
-        val y = UtilityMath.latLonFix(Location.getY(locNum))
-        val html =
-            UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/points/$x,$y/forecast/hourly")
+        //val x = UtilityMath.latLonFix(Location.getX(locNum))
+        //val y = UtilityMath.latLonFix(Location.getY(locNum))
+        // FIXME move URL itself to downloadNWS
+        //val html =
+        //    UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/points/$x,$y/forecast/hourly")
+
+        val html = UtilityDownloadNws.getHourlyData(Location.getLatLon(locNum))
         val header = String.format("%-16s", "Time") + " " + String.format(
             "%-10s",
             "Temp"

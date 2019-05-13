@@ -18,7 +18,6 @@
 -->
 
 <resources>
-
     <string name="label_short_sfc">SFC</string>
     <string name="label_short_ua">UA</string>
     <string name="label_short_cpe">CPE</string>
@@ -59,35 +58,14 @@
     <string name="label_eshr">Bulk Shear - Effective</string>
 
     <string name="label_multi_pane">Multi Pane</string>
-
     <string name="label_spc_day1">SPC Day 1 Convective Outlook</string>
     <string name="label_wat_warn">Watches/Warnings</string>
-
     <string name="label_sel_img1">Select Image 1</string>
     <string name="label_sel_img2">Select Image 2</string>
-
     <string name="label_sel_radar1">Select Radar 1</string>
     <string name="label_sel_radar2">Select Radar 2</string>
     <string name="label_sel_radar3">Select Radar 3</string>
     <string name="label_sel_radar4">Select Radar 4</string>
-
-    <string name="label_rh">Relative Humidity</string>
-    <string name="label_dp">Dew Point</string>
-    <string name="label_temp">Temperature</string>
-    <string name="label_sfc_plot">Surface Plot</string>
-    <string name="label_sfc_wind">Surface Wind</string>
-
-
-    <string name="label_ir_unenh">IR Unenhanced</string>
-    <string name="label_ir_swir">IR Shortwave</string>
-    <string name="label_ir_avn">IR AVN</string>
-    <string name="label_ir_bd">IR Dvorak</string>
-    <string name="label_ir_jsl">IR JSL</string>
-    <string name="label_ir_rgb">IR RGB</string>
-    <string name="label_ir_ft">IR Funktop</string>
-    <string name="label_ir_rb">IR Rainbow</string>
-    <string name="label_ir_ir2f">IR Fire</string>
-
     <string name="label_radar_mosaic">Radar Mosaic</string>
     <string name="label_observations">Observations</string>
     <string name="label_soundings">Soundings</string>
@@ -95,6 +73,4 @@
     <string name="label_spotters">Spotters</string>
     <string name="label_severe_dashboard">Severe Dashboard</string>
     <string name="label_voice_command">Voice Command</string>
-
-
 </resources>

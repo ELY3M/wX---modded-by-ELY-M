@@ -1,6 +1,9 @@
 !files
 /!files
 /!files/
+!crashes
+/!crashes
+/!crashes/
 gradle/
 /gradle/
 app/build

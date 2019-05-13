@@ -18,7 +18,6 @@
 -->
 
 <resources>
-
     <string name="label_NAT">National</string>
     <string name="label_MW">Midwest</string>
     <string name="label_NC">North-Central</string>
@@ -29,30 +28,15 @@
     <string name="label_NE">Northeast</string>
     <string name="label_SW">Southwest</string>
     <string name="label_NW">Northwest</string>
-
-    <string name="label_WC">West-Central</string>
-    <string name="label_MA">Mid-Atlantic</string>
-    <string name="label_GL">Great Lakes</string>
-    <string name="label_NP">Northern Plains</string>
-    <string name="label_CP">Central Plains</string>
-
-    <string name="label_NA">NA</string>
-    <string name="label_US">US</string>
-    <string name="label_AK">AK</string>
-    <string name="label_HI">HI</string>
-
     <string name="label_E">East</string>
     <string name="label_W">West</string>
-
     <string name="label_ATL">Atlantic</string>
     <string name="label_PAC">Pacific</string>
-
     <string name="label_CA">Canada</string>
     <string name="label_CA_BC">British Columbia</string>
     <string name="label_CA_AB">Alberta</string>
     <string name="label_CA_SK">Saskatchewan</string>
     <string name="label_CA_MB">Manitoba</string>
-
     <string name="label_CA_YT">Yukon</string>
     <string name="label_CA_PE">Prince Edward Island</string>
     <string name="label_CA_NU">Nunavut</string>
@@ -60,22 +44,17 @@
     <string name="label_CA_NS">Nova Scotia</string>
     <string name="label_CA_NL">Newfoundland and Labrador</string>
     <string name="label_CA_NB">New Brunswick</string>
-
     <string name="label_CA_QC_S">Quebec - South</string>
     <string name="label_CA_QC_N">Quebec - North</string>
     <string name="label_CA_QC">Quebec</string>
-
     <string name="label_CA_ON_S">Ontario - South</string>
     <string name="label_CA_ON_N">Ontario - North</string>
     <string name="label_CA_ON">Ontario</string>
-
     <string name="label_PRAIRIES">Prairies</string>
-
     <string name="label_CA_MB_S">S MB</string>
     <string name="label_CA_MB_N">N MB</string>
     <string name="label_CA_SK_S">S SK</string>
     <string name="label_CA_SK_N">N SK</string>
     <string name="label_CA_AB_S">S AB</string>
     <string name="label_CA_AB_N">N AB</string>
-
 </resources>

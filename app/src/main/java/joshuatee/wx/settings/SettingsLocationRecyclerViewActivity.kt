@@ -30,24 +30,30 @@ import android.content.IntentFilter
 import android.os.Bundle
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.view.View
+import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
-import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.ui.ObjectRecyclerViewGeneric
 import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.util.ObjectForecastPackageCurrentConditions
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
+import kotlinx.coroutines.*
 
 class SettingsLocationRecyclerViewActivity : BaseActivity() {
 
     // Activity to manage ( add, delete, edit ) all locations
     //
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val locArr = mutableListOf<String>()
     private lateinit var recyclerView: ObjectRecyclerViewGeneric
     private lateinit var ca: SettingsLocationAdapterList
+    private lateinit var contextg: Context
+    private var currentConditions = mutableListOf<ObjectForecastPackageCurrentConditions>()
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,23 +71,40 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         recyclerView.recyclerView.adapter = ca
         updateTitle()
         ca.setListener(::itemSelected)
+        contextg = this
+        getContent()
+    }
+
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        currentConditions.clear()
+        withContext(Dispatchers.IO) {
+            for (index in MyApplication.locations.indices) {
+                currentConditions.add(Utility.getCurrentConditions(contextg, index))
+                currentConditions[index].formatCC()
+                UtilityLog.d("wx", currentConditions[index].ccLine1)
+            }
+        }
+        updateListWithCurrentConditions()
+        ca.notifyDataSetChanged()
     }
 
     private fun updateList() {
         val locNumIntCurrent = Location.numLocations
         locArr.clear()
+        // FIXME this activity needs to be cleaned up
         (0 until locNumIntCurrent).forEach {
-            val locNumStr = (it + 1).toString()
-            val locX = Utility.readPref(this, "LOC" + locNumStr + "_X", "")
-            val locY = Utility.readPref(this, "LOC" + locNumStr + "_Y", "")
-            val locLabel = Utility.readPref(this, "LOC" + locNumStr + "_LABEL", "")
-            val zone = Utility.readPref(this, "ZONE$locNumStr", "")
-            val btnStr =
-                (it + 1).toString() + ": \"" + locLabel + "\" " + "(" + UtilityStringExternal.truncate(
-                    locX,
-                    6
-                ) + "," + UtilityStringExternal.truncate(locY, 6) + ") " + zone
+            val btnStr = ""
             locArr.add(btnStr)
+            MyApplication.locations[it].updateObservation("")
+        }
+    }
+
+    private fun updateListWithCurrentConditions() {
+        val locNumIntCurrent = Location.numLocations
+        locArr.clear()
+        (0 until locNumIntCurrent).forEach {
+            MyApplication.locations[it].updateObservation(currentConditions[it].ccLine1)
+            locArr.add(currentConditions[it].ccLine1)
         }
     }
 
@@ -91,6 +114,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         recyclerView.recyclerView.adapter = ca
         updateTitle()
         Location.refreshLocationData(this)
+        getContent()
         super.onRestart()
     }
 
@@ -112,7 +136,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     }
 
     private fun updateTitle() {
-        title = "Locations (" + ca.itemCount + ")"
+        title = "Locations"
     }
 
     private fun itemSelected(position: Int) {
@@ -138,7 +162,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
             Location.deleteLocation(this, (position + 1).toString())
             ca.deleteItem(position)
             ca.notifyDataSetChanged()
-            updateList()
+            //updateList()
             updateTitle()
             UtilityWXJobService.startService(this)
         } else {

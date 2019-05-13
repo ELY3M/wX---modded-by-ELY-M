@@ -136,20 +136,20 @@ object UtilityWidget {
 
     fun widgetDownloadData(
         context: Context,
-        objFcst: ObjectForecastPackage,
+        objCc: ObjectForecastPackageCurrentConditions,
         objSevenDay: ObjectForecastPackage7Day,
         objHazards: ObjectForecastPackageHazards
     ) {
         val hazardRaw = objHazards.hazards
         Utility.writePref(context, "HAZARD_WIDGET", objHazards.getHazardsShort())
         Utility.writePref(context, "7DAY_WIDGET", objSevenDay.sevenDayShort)
-        if (objFcst.objCC.data1 != "") {
-            Utility.writePref(context, "CC_WIDGET", objFcst.objCC.data1)
+        if (objCc.data1 != "") {
+            Utility.writePref(context, "CC_WIDGET", objCc.data1)
         }
-        if (objFcst.objCC.iconUrl != "") {
-            Utility.writePref(context, "CC_WIDGET_ICON_URL", objFcst.objCC.iconUrl)
+        if (objCc.iconUrl != "") {
+            Utility.writePref(context, "CC_WIDGET_ICON_URL", objCc.iconUrl)
         }
-        Utility.writePref(context, "UPDTIME_WIDGET", objFcst.objCC.status)
+        Utility.writePref(context, "UPDTIME_WIDGET", objCc.status)
         if (objSevenDay.sevenDayExtStr != "") {
             Utility.writePref(context, "7DAY_EXT_WIDGET", objSevenDay.sevenDayExtStr)
         }

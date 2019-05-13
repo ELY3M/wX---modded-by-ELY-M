@@ -21,9 +21,9 @@
 
 package joshuatee.wx.notifications
 
-import android.app.Notification
 import android.content.Context
 import android.graphics.Color
+import androidx.core.app.NotificationCompat
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
@@ -34,7 +34,7 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityString
 
-object UtilityNotificationNHC {
+object UtilityNotificationNhc {
 
     fun muteNotification(context: Context, title: String) {
         var muteStr: String = Utility.readPref(context, "NOTIF_NHC_MUTE", "")
@@ -44,7 +44,7 @@ object UtilityNotificationNHC {
         }
     }
 
-    internal fun sendNHCNotifs(context: Context, epac: Boolean, atl: Boolean): String {
+    internal fun sendNhcNotifications(context: Context, epac: Boolean, atl: Boolean): String {
         var notifUrls = ""
         val muteStr = Utility.readPref(context, "NOTIF_NHC_MUTE", "")
         val atlSumList = mutableListOf<String>()
@@ -91,7 +91,7 @@ object UtilityNotificationNHC {
         if (atl) {
             (0 until atlSumList.size).forEach {
                 if (!muteStr.contains(atlTitleList[it]))
-                    notifUrls += sendNHCNotif(
+                    notifUrls += sendNhcNotification(
                         context,
                         atlLinkList[it],
                         Utility.fromHtml(atlSumList[it]),
@@ -110,7 +110,7 @@ object UtilityNotificationNHC {
         if (epac) {
             (0 until pacSumList.size).forEach {
                 if (!muteStr.contains(pacTitleList[it]))
-                    notifUrls += sendNHCNotif(
+                    notifUrls += sendNhcNotification(
                         context,
                         pacLinkList[it],
                         Utility.fromHtml(pacSumList[it]),
@@ -129,7 +129,7 @@ object UtilityNotificationNHC {
         return notifUrls
     }
 
-    private fun sendNHCNotif(
+    private fun sendNhcNotification(
         context: Context, notifUrl: String, mdNo: String, notifTitle: String, iconAlert: Int,
         img1Url: String, img2Url: String, soundPref: Boolean, wallet: String
     ): String {
@@ -157,7 +157,7 @@ object UtilityNotificationNHC {
                 objPI.resultPendingIntent,
                 iconAlert,
                 noSummary,
-                Notification.PRIORITY_DEFAULT,
+                NotificationCompat.PRIORITY_HIGH,
                 Color.YELLOW,
                 MyApplication.ICON_ACTION,
                 objPI.resultPendingIntent2,

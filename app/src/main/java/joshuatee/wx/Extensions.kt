@@ -27,7 +27,7 @@ import java.util.regex.Pattern
 
 import joshuatee.wx.util.UtilityString
 import joshuatee.wx.util.UtilityDownload
-import joshuatee.wx.util.UtilityDownloadNWS
+import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.external.UtilityStringExternal
 
 fun String.parse(matchStr: String): String {
@@ -75,7 +75,7 @@ fun String.getHtmlUnsafe(): String {
 }
 
 fun String.getNwsHtml(): String {
-    return UtilityDownloadNWS.getNWSStringFromURL(this)
+    return UtilityDownloadNws.getNWSStringFromURL(this)
 }
 
 fun String.getHtmlSep(): String {

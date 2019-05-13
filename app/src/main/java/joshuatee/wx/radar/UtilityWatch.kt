@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-//modded by ELY M. 
 
 package joshuatee.wx.radar
 
@@ -44,8 +43,8 @@ internal object UtilityWatch {
         var prefToken = ""
         when (type) {
             PolygonType.MCD -> prefToken = MyApplication.mcdLatlon.valueGet()
-            PolygonType.WATCH_SVR -> prefToken = MyApplication.watchLatlonSvr.valueGet()
-            PolygonType.WATCH_TOR -> prefToken = MyApplication.watchLatlonTor.valueGet()
+            PolygonType.WATCH -> prefToken = MyApplication.watchLatlon.valueGet()
+            PolygonType.WATCH_TORNADO -> prefToken = MyApplication.watchLatlonTor.valueGet()
             PolygonType.MPD -> prefToken = MyApplication.mpdLatlon.valueGet()
             else -> {
             }
