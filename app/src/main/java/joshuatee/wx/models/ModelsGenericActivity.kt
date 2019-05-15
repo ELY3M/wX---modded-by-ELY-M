@@ -63,7 +63,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
     private var spinnerTimeRan = false
     private var spinnerSectorRan = false
     private var spinnerModelRan = false
-    private lateinit var activityArguments: Array<String>
+    private var activityArguments: Array<String>? = arrayOf()
     private lateinit var miStatus: MenuItem
     private lateinit var miStatusParam1: MenuItem
     private lateinit var miStatusParam2: MenuItem
@@ -78,7 +78,10 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         contextg = this
         activityArguments = intent.getStringArrayExtra(INFO)
-        om = ObjectModel(this, activityArguments[1], activityArguments[0])
+        if (activityArguments == null) {
+            activityArguments = arrayOf("1", "NCEP", "NCEP")
+        }
+        om = ObjectModel(this, activityArguments!![1], activityArguments!![0])
         if (om.numPanes == 1) {
             super.onCreate(
                 savedInstanceState,
@@ -97,7 +100,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             )
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = activityArguments[2]
+        title = activityArguments!![2]
         val m = toolbarBottom.menu
         miStatusParam1 = m.findItem(R.id.action_status_param1)
         miStatusParam2 = m.findItem(R.id.action_status_param2)
@@ -204,7 +207,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 this,
                 ModelsGenericActivity::class.java,
                 INFO,
-                arrayOf("2", activityArguments[1], activityArguments[2])
+                arrayOf("2", activityArguments!![1], activityArguments!![2])
             )
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {

@@ -353,8 +353,8 @@ class MyApplication : Application() {
         var paddingSettings: Int = 0
         var paddingSmall: Int = 0
         var tabHeaders: Array<String> = arrayOf("", "", "")
-        // FIXME make configurable
         var radarLocationUpdateInterval = 10
+        const val radarLocationUpdateDistanceInMeters = 30
 
         fun initPreferences(context: Context) {
             initRadarPreferences()
@@ -808,6 +808,7 @@ class MyApplication : Application() {
         var radarWbLinesize: Int = 0
 
         private fun initRadarPreferences() {
+	    radarLocationUpdateInterval = getInitialPreference("RADAR_LOCATION_UPDATE_INTERVAL", 10)
             radarConusRadar = getInitialPreference("CONUS_RADAR", "false")
             radarWarnings = getInitialPreference("COD_WARNINGS_DEFAULT", "false")
             radarTorWarnings = getInitialPreference("TOR_WARNINGS", "false")

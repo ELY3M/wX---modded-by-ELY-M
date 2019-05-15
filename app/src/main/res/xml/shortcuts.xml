@@ -48,7 +48,7 @@
             android:targetPackage="joshuatee.wx" />
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="joshuatee.wx.models.ModelsNCEPActivity"
+            android:targetClass="joshuatee.wx.models.ModelsGenericActivity"
             android:targetPackage="joshuatee.wx" />
         <categories android:name="android.shortcut.conversation" />
     </shortcut>

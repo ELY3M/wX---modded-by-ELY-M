@@ -19,6 +19,10 @@
 <!-- modded by ELY M. -->
 <resources>
 
+    <string name="gps_update_interval_label">
+          Minumum time in seconds between GPS updates if GPS and auto-refresh enabled.
+</string>
+
     <string name="textview_fontsize_np_label">
          Size of the normal size text. Default is 16. Large and small font are relative to this as well. A full manual app restart might be required for this (for now). Work in progress.
 </string>

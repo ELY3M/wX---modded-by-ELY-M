@@ -64,13 +64,16 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
     private lateinit var drw: ObjectNavDrawerCombo
     private lateinit var contextg: Context
     private lateinit var om: ObjectModel
-    private lateinit var activityArguments: Array<String>
+    private var activityArguments: Array<String>? = arrayOf()
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         contextg = this
         activityArguments = intent.getStringArrayExtra(INFO)
-        om = ObjectModel(this, activityArguments[1], activityArguments[0])
+        if (activityArguments == null) {
+            activityArguments = arrayOf("1", "SPCHREF", "SPC HREF")
+        }
+        om = ObjectModel(this, activityArguments!![1], activityArguments!![0])
         if (om.numPanes == 1) {
             super.onCreate(
                 savedInstanceState,
@@ -89,7 +92,7 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
             )
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = activityArguments[2]
+        title = activityArguments!![2]
         val m = toolbarBottom.menu
         miStatusParam1 = m.findItem(R.id.action_status_param1)
         miStatusParam2 = m.findItem(R.id.action_status_param2)
@@ -204,7 +207,7 @@ class ModelsSPCHREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 this,
                 ModelsSPCHREFActivity::class.java,
                 INFO,
-                arrayOf("2", activityArguments[1], activityArguments[2])
+                arrayOf("2", activityArguments!![1], activityArguments!![2])
             )
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {

@@ -29,14 +29,12 @@ import android.os.Build
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.view.View
 import android.widget.CompoundButton
 
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.GeographyType
-import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardText
@@ -674,6 +672,18 @@ class SettingsRadarActivity : BaseActivity() {
                         7,
                         1,
                         10
+                ).card
+        )
+        ll.addView(
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "GPS update interval",
+                        "RADAR_LOCATION_UPDATE_INTERVAL",
+                        R.string.gps_update_interval_label,
+                        10,
+                        1,
+                        60
                 ).card
         )
     }

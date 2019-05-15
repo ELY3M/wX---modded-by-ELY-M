@@ -27,6 +27,9 @@
 [REF] - refactor a method, group, variable, etc.
 [MER] - merge
 
+55179 2019_05_14    [ADD] make radarLocationUpdateInterval (GPS) configurable
+                    [BUG] SPC HREF from long press app icon was not working (crash)
+                    [BUG] NCEP from long press app icon was not working
 55178 2019_05_13    [BUG] nexrad radar long press, if select a different type of polygon don't show anything
 55177 2019_05_13    [IMP] Convert Spotters activity to use bottomsheet and one FAB instead of 4 FAB
 55176 2019_05_13    [IMP] nexrad dual pane - support portrait better
