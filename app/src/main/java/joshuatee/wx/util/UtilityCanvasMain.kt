@@ -193,7 +193,7 @@ object UtilityCanvasMain {
                 PolygonType.MCD,
                 PolygonType.WATCH,
                 PolygonType.WATCH_TORNADO
-	    ).forEach { UtilityCanvas.addMCD(context, scaleType, bitmapCanvas, rid, it) }
+            ).forEach { UtilityCanvas.addMCD(context, scaleType, bitmapCanvas, rid, it) }
         }
         if (PolygonType.MPD.pref) {
             UtilityCanvas.addMCD(context, scaleType, bitmapCanvas, rid, PolygonType.MPD)
@@ -356,7 +356,7 @@ object UtilityCanvasMain {
                 }
             }
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
 
         return GeometryData(

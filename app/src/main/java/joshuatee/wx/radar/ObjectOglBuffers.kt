@@ -105,7 +105,7 @@ open class ObjectOglBuffers() {
             colorBuffer.order(ByteOrder.nativeOrder())
             setToPositionZero()
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 

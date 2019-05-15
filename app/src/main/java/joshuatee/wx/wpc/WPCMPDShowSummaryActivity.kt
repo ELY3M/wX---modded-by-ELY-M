@@ -69,7 +69,6 @@ class WPCMPDShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var product = ""
     private val bitmaps = mutableListOf<Bitmap>()
     private val mpdNumbers = mutableListOf<String>()
-    // FIXME remove
     private lateinit var objCard: ObjectCard
     private lateinit var contextg: Context
     private var titleString = "MPDs"

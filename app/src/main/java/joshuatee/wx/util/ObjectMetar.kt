@@ -135,7 +135,7 @@ internal class ObjectMetar(context: Context, location: LatLon) {
 
     init {
         val obsClosest = UtilityMetar.findClosestObservation(context, location)
-        UtilityUSv2.obsClosestClass = obsClosest.name
+        UtilityUS.obsClosestClass = obsClosest.name
         val observationData =
             ("https://api.weather.gov/stations/" + obsClosest.name + "/observations/current").getNwsHtml()
         icon = observationData.parse("\"icon\": \"(.*?)\",")

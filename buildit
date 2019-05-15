@@ -3,7 +3,8 @@
 #export PATH=~/android-studio/jre/bin:$PATH
 APP_NAME=wX
 dropBoxPath=${HOME}/Dropbox/wX/
-dateString=$(date '+%Y_%m_%d_%H_%M')
+#dateString=$(date '+%Y_%m_%d_%H_%M')
+dateString=$(date '+%Y/%m/%d %H:%M')
 gitRepo="https://gitlab.com/joshua.tee/wx.git"
 gitRepoShortname="wx"
 ver=$(grep versionName app/src/main/AndroidManifest.xml |awk -F'"'  '{print $2}')
@@ -11,7 +12,7 @@ tmpPath=${HOME}/tmp
 
 echo Compile release
 export PATH=/Applications/"Android Studio.app"/Contents/jre/jdk/Contents/Home/bin:~/android-studio/jre/bin:$PATH
-./gradlew assembleRelease
+./gradlew assembleRelease --warning-mode=all
 cp app/build/outputs/apk/release/app-release.apk ${HOME}/StudioProjects/wX${ver}.apk
 
 echo Git commit and push

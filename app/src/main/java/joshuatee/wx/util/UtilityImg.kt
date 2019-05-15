@@ -128,7 +128,6 @@ object UtilityImg {
                     MyApplication.spcsseoX = x
                     MyApplication.spcsseoY = y
                 }
-                // FIXME
                 "WPCGEFS1" -> {
                     MyApplication.wpcgefsZoom = z
                     MyApplication.wpcgefsX = x
@@ -140,7 +139,7 @@ object UtilityImg {
         }
     }
 
-    fun loadBM(context: Context, res: Int, resize: Boolean): Bitmap {
+    fun loadBitmap(context: Context, res: Int, resize: Boolean): Bitmap {
         val bitmap: Bitmap
         val inputStream = context.resources.openRawResource(res)
         var options: BitmapFactory.Options? = null
@@ -156,13 +155,13 @@ object UtilityImg {
                 BitmapFactory.decodeStream(inputStream, null, options)
                     ?: getBlankBitmap()
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
             return getBlankBitmap()
         } finally {
             try {
                 inputStream.close()
             } catch (e: Exception) {
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             }
         }
         return bitmap

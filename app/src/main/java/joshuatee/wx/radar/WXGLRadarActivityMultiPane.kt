@@ -911,7 +911,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
     private val changeListener = object : WXGLSurfaceView.OnProgressChangeListener {
         override fun onProgressChanged(progress: Int, idx: Int, idxInt: Int) {
-            // FIXME needed?
             idxIntAl = idxInt
             if (progress != 50000) {
                 UtilityRadarUI.addItemsToLongPress(

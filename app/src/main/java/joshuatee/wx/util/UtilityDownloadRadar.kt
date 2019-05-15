@@ -29,28 +29,6 @@ import joshuatee.wx.objects.PolygonWarningType
 
 object UtilityDownloadRadar {
 
-    // FIXME make URLs global static
-// was getNWSStringFromURLJSON getNWSStringFromURL
-
-    /*fun getPolygonVTEC(context: Context) {
-        MyApplication.severeDashboardTst.valueSet(
-            context,
-            UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Severe%20Thunderstorm%20Warning")
-        )
-        UtilityLog.d(
-            "wx",
-            "RADAR: " + UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Severe%20Thunderstorm%20Warning")
-        )
-        MyApplication.severeDashboardFfw.valueSet(
-            context,
-            UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Flash%20Flood%20Warning")
-        )
-        MyApplication.severeDashboardTor.valueSet(
-            context,
-            UtilityDownloadNWS.getNWSStringFromURLJSON("https://api.weather.gov/alerts/active?event=Tornado%20Warning")
-        )
-    }*/
-
     private const val baseUrl = "https://api.weather.gov/alerts/active?event="
 
     private const val torUrl = baseUrl + "Tornado%20Warning"
@@ -68,62 +46,61 @@ object UtilityDownloadRadar {
     fun getPolygonVTEC(context: Context) {
         MyApplication.severeDashboardTor.valueSet(
                 context,
-                UtilityDownloadNws.getNWSStringFromUrlNoAcceptHeader(torUrl)
+                UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(torUrl)
         )
         MyApplication.severeDashboardSvr.valueSet(
                 context,
-                UtilityDownloadNws.getNWSStringFromUrlNoAcceptHeader(svrURl)
+                UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(svrURl)
         )
         MyApplication.severeDashboardFfw.valueSet(
                 context,
-                UtilityDownloadNws.getNWSStringFromUrlNoAcceptHeader(ffwUrl)
+                UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(ffwUrl)
         )
         MyApplication.severeDashboardEww.valueSet(
                 context,
-                UtilityDownloadNws.getNWSStringFromUrlNoAcceptHeader(ewwUrl)
+                UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(ewwUrl)
         )
         MyApplication.severeDashboardSmw.valueSet(
                 context,
-                UtilityDownloadNws.getNWSStringFromUrlNoAcceptHeader(smwUrl)
+                UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(smwUrl)
         )
         MyApplication.severeDashboardSvs.valueSet(
                 context,
-                UtilityDownloadNws.getNWSStringFromUrlNoAcceptHeader(svsUrl)
+                UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(svsUrl)
         )
         MyApplication.severeDashboardSps.valueSet(
                 context,
-                UtilityDownloadNws.getNWSStringFromUrlNoAcceptHeader(spsUrl)
+                UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(spsUrl)
         )
 
     }
-
-    // FIXME use in Background fetch
+    
     fun getVtecTor(): String {
-        return UtilityDownloadNws.getNWSStringFromUrlNoAcceptHeader(torUrl)
+        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(torUrl)
     }
     fun getVtecSvr(): String {
-        return UtilityDownloadNws.getNWSStringFromUrlNoAcceptHeader(svrURl)
+        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(svrURl)
     }
     fun getVtecFfw(): String {
-        return UtilityDownloadNws.getNWSStringFromUrlNoAcceptHeader(ffwUrl)
+        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(ffwUrl)
     }
     fun getVtecEww(): String {
-        return UtilityDownloadNws.getNWSStringFromUrlNoAcceptHeader(ewwUrl)
+        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(ewwUrl)
     }
     fun getVtecSmw(): String {
-        return UtilityDownloadNws.getNWSStringFromUrlNoAcceptHeader(smwUrl)
+        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(smwUrl)
     }
     fun getVtecSvs(): String {
-        return UtilityDownloadNws.getNWSStringFromUrlNoAcceptHeader(svsUrl)
+        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(svsUrl)
     }
     fun getSps(): String {
-        return UtilityDownloadNws.getNWSStringFromUrlNoAcceptHeader(spsUrl)
+        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(spsUrl)
     }
     
     fun getVtecByType(type: PolygonWarningType): String {
-        return UtilityDownloadNws.getNWSStringFromUrlNoAcceptHeader(baseUrl + type.urlToken)
+        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(baseUrl + type.urlToken)
     }
-    
+
     fun getMcd(): String {
         return "${MyApplication.nwsSPCwebsitePrefix}/products/md/".getHtml()
     }
@@ -136,4 +113,3 @@ object UtilityDownloadRadar {
         return "${MyApplication.nwsSPCwebsitePrefix}/products/watch/".getHtml()
     }
 }
-

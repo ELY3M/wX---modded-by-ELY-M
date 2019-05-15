@@ -23,6 +23,7 @@
 package joshuatee.wx.radar
 
 import android.content.Context
+
 import java.io.EOFException
 import java.io.File
 import java.io.IOException
@@ -72,15 +73,15 @@ object UtilityWXOGL {
         return ridPrefix
     }
 
-    //FIXME make better VWP chart like one on cod.edu
-    fun getVWP(context: Context, rid1: String): String {
+    //FIXME make better VWP chart like one on cod.edu //ELY M. 
+    fun getVwp(context: Context, rid1: String): String {
         // http://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.48vwp/SI.kccx/
         val prod = "VWP"
         val l3BaseFn = "nidsVWP"
         val idxStr = "0"
         val ridPrefix = getRidPrefix(rid1, prod)
         val fh: File
-        val inputStream = UtilityDownload.getInputStreamFromURL(
+        val inputStream = UtilityDownload.getInputStreamFromUrl(
             MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(
                 Locale.US
             ) + "/sn.last"
@@ -149,9 +150,8 @@ object UtilityWXOGL {
         return output
     }
 
-    // FIXME convert to LatLon as single arg
     fun showTextProducts(lat: Double, lon: Double): String {
-        var warningHTML = 
+        var warningHTML =
 	MyApplication.severeDashboardTor.valueGet() + MyApplication.severeDashboardSvr.valueGet() + MyApplication.severeDashboardEww.valueGet() + MyApplication.severeDashboardFfw.valueGet() + MyApplication.severeDashboardSmw.valueGet()
         MyApplication.radarWarningPolygons.forEach {
             if (it.isEnabled) {
@@ -163,7 +163,6 @@ object UtilityWXOGL {
         warningHTML = warningHTML.replace("\n", "")
         warningHTML = warningHTML.replace(" ", "")
         val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
-        //val vtecAl = warningHTML.parseColumn(RegExp.warningVtecPattern)
         var retStr = ""
         var testArr: List<String>
         var q = 0

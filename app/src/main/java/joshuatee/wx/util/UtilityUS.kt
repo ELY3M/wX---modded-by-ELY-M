@@ -34,8 +34,7 @@ import joshuatee.wx.settings.Location
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.notifications.*
 
-// FIXME rename
-object UtilityUSv2 {
+object UtilityUS {
 
     var obsClosestClass: String = ""
     private val OBS_CODE_TO_LOCATION = mutableMapOf<String, String>()

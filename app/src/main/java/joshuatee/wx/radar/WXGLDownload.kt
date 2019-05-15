@@ -56,7 +56,7 @@ class WXGLDownload {
         this.rid1 = rid1
         this.prod = prod
         if (!prod.contains("L2")) {
-            val inputStream = UtilityDownload.getInputStreamFromURL(
+            val inputStream = UtilityDownload.getInputStreamFromUrl(
                 MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +
                         NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(Locale.US) + "/sn.last"
             )
@@ -118,7 +118,6 @@ class WXGLDownload {
         ridPrefix: String,
         rid1: String
     ): List<String> {
-        // FIXME HTTPS there are 4 places below you need to add Unsafe
         val nidsArr = mutableListOf<String>()
         var htmlOut =
             (MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(
@@ -164,7 +163,7 @@ class WXGLDownload {
             }
             j = 0
             while (j < nidsArr.size) {
-                val inputStream = UtilityDownload.getInputStreamFromURL(
+                val inputStream = UtilityDownload.getInputStreamFromUrl(
                     MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +
                             NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(
                         Locale.US
@@ -201,7 +200,7 @@ class WXGLDownload {
             val token = tmpArr.getOrNull(arrLength - (frameCount - count + additionalAdd) * 2 + 1)
             if (token != null) {
                 l2Arr.add(token)
-                val inputStream = UtilityDownload.getInputStreamFromURL(baseUrl + token)
+                val inputStream = UtilityDownload.getInputStreamFromUrl(baseUrl + token)
                 inputStream?.let { UtilityIO.saveInputStream(context, inputStream, token) }
             }
         }
@@ -261,7 +260,7 @@ class WXGLDownload {
             val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, false)
             val url =
                 MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + (NEXRAD_PRODUCT_STRING[product] ?: "") + "/SI." + ridPrefix + radarSite.toLowerCase() + "/sn.last"
-            val inputstream = UtilityDownload.getInputStreamFromURL(url)
+            val inputstream = UtilityDownload.getInputStreamFromUrl(url)
             inputstream?.let { UtilityIO.saveInputStream(context, it, fileName) }
         }
     }

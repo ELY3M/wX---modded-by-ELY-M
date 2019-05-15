@@ -78,12 +78,11 @@ object UtilityTimeSunMoon {
         val sunCalc = SunCalc()
         val now = Calendar.getInstance()
         val moonIllumination = sunCalc.moonIllumination(now)
-        // FIXME truncate double
         return moonPhaseFromIllumination(moonIllumination.phase) + " " + moonIllumination.phase.toString()
     }
 
     fun moonPhaseFromIllumination(phase: Double): String {
-        var phaseString = ""
+        var phaseString: String
         if (phase < 0.02) {
             phaseString = "New Moon"
         } else if (0.02 <= phase && phase < 0.23) {

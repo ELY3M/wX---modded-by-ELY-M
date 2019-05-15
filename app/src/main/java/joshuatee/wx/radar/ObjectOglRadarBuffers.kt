@@ -78,7 +78,7 @@ class ObjectOglRadarBuffers(val context: Context, var bgColor: Int) : ObjectOglB
                     ByteBuffer.allocateDirect(12 * numberOfRadials * numRangeBins)  // was 16
             }
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 }

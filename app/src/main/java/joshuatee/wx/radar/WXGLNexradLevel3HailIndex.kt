@@ -96,7 +96,7 @@ object WXGLNexradLevel3HailIndex {
             hailPercent = retStr.parseColumn(RegExp.hiPattern2)
             hailSize = retStr.parseColumn(RegExp.hiPattern3)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
             return listOf()
         }
         var posnStr = ""

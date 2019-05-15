@@ -304,9 +304,9 @@ public class TouchImageView2 extends ImageView {
 		try {
 			super.onDraw(canvas);
 		} catch (OutOfMemoryError e) {
-			UtilityLog.INSTANCE.HandleException(e);
+			UtilityLog.INSTANCE.handleException(e);
 		} catch (Exception e) {
-			UtilityLog.INSTANCE.HandleException(e);
+			UtilityLog.INSTANCE.handleException(e);
 		}
 	}
 

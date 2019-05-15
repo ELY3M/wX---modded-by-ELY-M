@@ -98,7 +98,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private val radarBuffers = ObjectOglRadarBuffers(context, MyApplication.nexradRadarBackgroundColor)
     private val spotterBuffers = ObjectOglBuffers(PolygonType.SPOTTER, zoomToHideMiscFeatures)
     private val stateLineBuffers = ObjectOglBuffers(GeographyType.STATE_LINES, 0.0f)
-    private val countyLineBuffers = ObjectOglBuffers(GeographyType.COUNTY_LINES, 0.75f)
+    private val countyLineBuffers = ObjectOglBuffers(GeographyType.COUNTY_LINES, 0.35f) // was .75
     private val hwBuffers = ObjectOglBuffers(GeographyType.HIGHWAYS, 0.45f)
     private val hwExtBuffers = ObjectOglBuffers(GeographyType.HIGHWAYS_EXTENDED, 3.00f)
     private val lakeBuffers = ObjectOglBuffers(GeographyType.LAKES, zoomToHideMiscFeatures)
@@ -456,7 +456,6 @@ class WXGLRender(private val context: Context) : Renderer {
             }
         }
         GLES20.glLineWidth(defaultLineWidth)
-        // FIXME needs to be tested
         listOf(countyLineBuffers, stateLineBuffers, hwBuffers, hwExtBuffers, lakeBuffers).forEach {
             if (zoom > it.scaleCutOff) {
                 GLES20.glLineWidth(it.geotype.lineWidth.toFloat())
@@ -464,7 +463,6 @@ class WXGLRender(private val context: Context) : Renderer {
             }
         }
 
-        // FIXME
         // whether or not to respect the display being touched needs to be stored in
         // objectglbuffers. The wXL23 Metal code is more generic and thus each element drawn will need
         // to be checked. Will do this later when I have more time

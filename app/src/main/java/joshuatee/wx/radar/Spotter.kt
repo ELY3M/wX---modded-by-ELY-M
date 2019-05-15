@@ -70,6 +70,10 @@ class Spotter internal constructor(uniq: String, icon: String, camera: String, r
         latD = lat.toDoubleOrNull() ?: 0.0
         lonD = -1.0 * (lon.toDoubleOrNull() ?: 0.0)
     }
+
+    override fun toString(): String {
+        return "$firstName $lastName"
+    }
 }
 
 

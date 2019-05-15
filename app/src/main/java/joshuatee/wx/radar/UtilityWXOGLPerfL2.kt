@@ -105,9 +105,9 @@ internal object UtilityWXOGLPerfL2 {
             dis.close()
             dis2.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         } catch (ooo: OutOfMemoryError) {
-            UtilityLog.HandleException(ooo)
+            UtilityLog.handleException(ooo)
         }
     }
 

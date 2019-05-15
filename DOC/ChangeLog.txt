@@ -18,6 +18,7 @@
 // TODO bottomsheet for spotters
 // TODO make location update interval configurable
 // TODO add vtec end date check to tor notif
+// TODO camelCase filenames in particular when acronyms longer then 2 chars exist
 
 [ADD] - adding something new - method, file, etc. to the repo
 [REM] - remove items
@@ -27,6 +28,9 @@
 [REF] - refactor a method, group, variable, etc.
 [MER] - merge
 
+55180 2019_05_15    [IMP] in radar don't hide counties until zoomed out further (Craig)
+                    [IMP] address or remove various minor FIXME/TODO
+                    [REF] various camelCase
 55179 2019_05_14    [ADD] make radarLocationUpdateInterval (GPS) configurable
                     [BUG] SPC HREF from long press app icon was not working (crash)
                     [BUG] NCEP from long press app icon was not working

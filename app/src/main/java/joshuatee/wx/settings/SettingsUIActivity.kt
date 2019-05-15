@@ -354,13 +354,10 @@ class SettingsUIActivity : BaseActivity() {
         et2.setText(MyApplication.tabHeaders[1])
         et3.setText(MyApplication.tabHeaders[2])
         if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
-            // FIXME use listOf()
-            et1.setTextColor(Color.BLACK)
-            et2.setTextColor(Color.BLACK)
-            et3.setTextColor(Color.BLACK)
-            et1.setHintTextColor(Color.GRAY)
-            et2.setHintTextColor(Color.GRAY)
-            et3.setHintTextColor(Color.GRAY)
+            listOf(et1, et2, et3).forEach {
+                it.setTextColor(Color.BLACK)
+                it.setHintTextColor(Color.GRAY)
+            }
         }
     }
 

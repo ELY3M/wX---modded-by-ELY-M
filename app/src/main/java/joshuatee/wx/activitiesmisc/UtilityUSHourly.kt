@@ -57,40 +57,34 @@ object UtilityUSHourly {
             conditionData += shortenConditions(shortForecast) + MyApplication.newline
         }
         return ObjectHourly(
-            timeData,
-            tempData,
-            windSpeedData,
-            windDirData,
-            conditionData
+                timeData,
+                tempData,
+                windSpeedData,
+                windDirData,
+                conditionData
         )
     }
 
     private fun shortenConditions(str: String) = str.replace("Showers And Thunderstorms", "Sh/Tst")
-        .replace("Chance", "Chc")
-        .replace("Slight", "Slt")
-        .replace("Light", "Lgt")
-        .replace("Scattered", "Sct")
-        .replace("Rain", "Rn")
-        .replace("Showers", "Shwr")
-        .replace("Snow", "Sn")
-        .replace("Rn And Sn", "Rn/Sn")
-        .replace("Freezing", "Frz")
-        .replace("T-storms", "Tst")
+            .replace("Chance", "Chc")
+            .replace("Slight", "Slt")
+            .replace("Light", "Lgt")
+            .replace("Scattered", "Sct")
+            .replace("Rain", "Rn")
+            .replace("Showers", "Shwr")
+            .replace("Snow", "Sn")
+            .replace("Rn And Sn", "Rn/Sn")
+            .replace("Freezing", "Frz")
+            .replace("T-storms", "Tst")
 
     fun getString(locNum: Int): List<String> {
-        //val x = UtilityMath.latLonFix(Location.getX(locNum))
-        //val y = UtilityMath.latLonFix(Location.getY(locNum))
-        // FIXME move URL itself to downloadNWS
-        //val html =
-        //    UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/points/$x,$y/forecast/hourly")
-
         val html = UtilityDownloadNws.getHourlyData(Location.getLatLon(locNum))
         val header = String.format("%-16s", "Time") + " " + String.format(
-            "%-10s",
-            "Temp"
+                "%-10s",
+                "Temp"
         ) + String.format("%-10s", "WindSpd") + String.format(
-            "%-8s",
-            "WindDir"
+                "%-8s",
+                "WindDir"
         ) + MyApplication.newline
         return listOf(header + parse(html), html)
     }
@@ -106,11 +100,11 @@ object UtilityUSHourly {
         val yearStr = year.toString()
         startTime.indices.forEach {
             content +=
-                String.format(
-                    "%-16s", startTime[it].replace("-0[0-9]:00".toRegex(), "")
-                        .replace(("$yearStr-"), "").replace(":00:00", "").replace("T", " ")
+                    String.format(
+                            "%-16s", startTime[it].replace("-0[0-9]:00".toRegex(), "")
+                            .replace(("$yearStr-"), "").replace(":00:00", "").replace("T", " ")
 
-                )
+                    )
             if (temperature.size > it) {
                 content += String.format("%-12s", temperature[it])
             }

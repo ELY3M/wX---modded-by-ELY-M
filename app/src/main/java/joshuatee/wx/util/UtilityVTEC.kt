@@ -28,8 +28,7 @@ import joshuatee.wx.external.ExternalDuplicateRemover
 
 import joshuatee.wx.Extensions.*
 
-// FIXME rename camelcase
-object UtilityVTEC {
+object UtilityVtec {
 
     fun getStormCount(context: Context, textTor: String): Int {
         var dashboardStrTor = ""

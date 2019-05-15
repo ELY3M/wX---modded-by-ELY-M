@@ -108,7 +108,6 @@ class SPCSoundingsActivity : BaseActivity(), OnItemSelectedListener,
         withContext(Dispatchers.IO) {
             bitmap = UtilitySPCSoundings.getImage(contextg, nwsOffice)
         }
-        // FIXME should this be in object
         img.img.visibility = View.VISIBLE
         img.setBitmap(bitmap)
         img.setMaxZoom(4f)

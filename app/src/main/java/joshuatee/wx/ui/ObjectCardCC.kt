@@ -39,10 +39,9 @@ class ObjectCardCC(context: Context, version: Int) {
     private var imageView = ObjectImageView(context)
     val textViewTop: ObjectTextView
     val textViewBottom: ObjectTextView
-    private val tvCc22: ObjectTextView
+    private val textViewMiddle: ObjectTextView
 
     init {
-        // FIXME better variable names
         val linearLayoutHorizontal = LinearLayout(context)
         val linearLayoutVertical = LinearLayout(context)
         textViewTop = ObjectTextView(context, TextSize.MEDIUM)
@@ -59,14 +58,14 @@ class ObjectCardCC(context: Context, version: Int) {
         textViewBottom.gravity = Gravity.CENTER
         textViewBottom.setAsBackgroundText()
         textViewBottom.setPadding(MyApplication.padding, 0, MyApplication.padding, 2)
-        tvCc22 = ObjectTextView(context)
-        tvCc22.gravity = Gravity.CENTER
-        tvCc22.setAsBackgroundText()
-        tvCc22.setPadding(MyApplication.padding, 0, MyApplication.padding, 0)
+        textViewMiddle = ObjectTextView(context)
+        textViewMiddle.gravity = Gravity.CENTER
+        textViewMiddle.setAsBackgroundText()
+        textViewMiddle.setPadding(MyApplication.padding, 0, MyApplication.padding, 0)
         if (version == 2) {
             linearLayoutHorizontal.orientation = LinearLayout.HORIZONTAL
             textViewTop.gravity = Gravity.START
-            tvCc22.gravity = Gravity.START
+            textViewMiddle.gravity = Gravity.START
             textViewBottom.gravity = Gravity.START
             textViewTop.setPadding(
                 MyApplication.padding,
@@ -74,7 +73,7 @@ class ObjectCardCC(context: Context, version: Int) {
                 MyApplication.paddingSmall,
                 0
             )
-            tvCc22.setPadding(MyApplication.padding, 0, MyApplication.paddingSmall, 0)
+            textViewMiddle.setPadding(MyApplication.padding, 0, MyApplication.paddingSmall, 0)
             textViewBottom.setPadding(
                 MyApplication.padding,
                 0,
@@ -84,7 +83,7 @@ class ObjectCardCC(context: Context, version: Int) {
             linearLayoutVertical.orientation = LinearLayout.VERTICAL
             linearLayoutVertical.gravity = Gravity.CENTER_VERTICAL
             linearLayoutVertical.addView(textViewTop.tv)
-            linearLayoutVertical.addView(tvCc22.tv)
+            linearLayoutVertical.addView(textViewMiddle.tv)
             linearLayoutVertical.addView(textViewBottom.tv)
             linearLayoutHorizontal.addView(imageView.image)
             linearLayoutHorizontal.addView(linearLayoutVertical)
@@ -109,7 +108,7 @@ class ObjectCardCC(context: Context, version: Int) {
     }
 
     private fun setMiddleLine(text: String) {
-        tvCc22.text = text
+        textViewMiddle.text = text
     }
 
     fun setListener(

@@ -68,7 +68,7 @@ class CAPAlert {
             val obj = CAPAlert()
             obj.url = url
             val html = if (url.contains("NWS-IDP-PROD")) {
-                UtilityDownloadNws.getNWSStringFromURLSep(url)
+                UtilityDownloadNws.getNwsStringFromUrlSep(url)
             } else {
                 url.getHtmlSep()
             }

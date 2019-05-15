@@ -77,13 +77,13 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
     lateinit var spSector: ObjectSpinner
 
     fun setUIElements(
-        toolbar: Toolbar,
-        fab1: ObjectFab?,
-        fab2: ObjectFab?,
-        miStatusParam1: MenuItem,
-        miStatusParam2: MenuItem,
-        spRun: ObjectSpinner,
-        spSector: ObjectSpinner
+            toolbar: Toolbar,
+            fab1: ObjectFab?,
+            fab2: ObjectFab?,
+            miStatusParam1: MenuItem,
+            miStatusParam2: MenuItem,
+            spRun: ObjectSpinner,
+            spSector: ObjectSpinner
     ) {
         this.miStatusParam1 = miStatusParam1
         this.miStatusParam2 = miStatusParam2
@@ -165,7 +165,6 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
     fun getImage(index: Int, overlayImg: List<String>): Bitmap {
         currentParam = displayData.param[index]
         return when (modelType) {
-            // FIXME remove time as it's part of om
             ModelType.WPCGEFS -> UtilityModelWPCGEFSInputOutput.getImage(this, time)
             ModelType.ESRL -> UtilityModelESRLInputOutput.getImage(this, time)
             ModelType.NSSL -> UtilityModelNSSLWRFInputOutput.getImage(context, this, time)
@@ -174,10 +173,10 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
             ModelType.SPCSREF -> UtilityModelsSPCSREFInputOutput.getImage(context, this, time)
             ModelType.SPCHREF -> UtilityModelSPCHREFInputOutput.getImage(context, this, time)
             ModelType.SPCHRRR -> UtilityModelSPCHRRRInputOutput.getImage(
-                context,
-                this,
-                time,
-                overlayImg
+                    context,
+                    this,
+                    time,
+                    overlayImg
             )
         }
     }
@@ -194,9 +193,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
             ModelType.SPCSREF -> UtilityModelsSPCSREFInputOutput.getAnimation(context, this)
             ModelType.SPCHREF -> UtilityModelSPCHREFInputOutput.getAnimation(context, this)
             ModelType.SPCHRRR -> UtilityModelSPCHRRRInputOutput.getAnimation(
-                context,
-                this,
-                overlayImg
+                    context,
+                    this,
+                    overlayImg
             )
         }
     }
@@ -207,9 +206,9 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
             ModelType.ESRL -> UtilityModelESRLInputOutput.getRunTime(model, displayData.param[0])
             ModelType.NSSL -> UtilityModelNSSLWRFInputOutput.runTime
             ModelType.NCEP -> UtilityModelNCEPInputOutput.getRunTime(
-                model,
-                displayData.param[0],
-                sector
+                    model,
+                    displayData.param[0],
+                    sector
             )
             ModelType.SPCSREF -> UtilityModelsSPCSREFInputOutput.runTime
             ModelType.SPCHREF -> UtilityModelSPCHREFInputOutput.runTime

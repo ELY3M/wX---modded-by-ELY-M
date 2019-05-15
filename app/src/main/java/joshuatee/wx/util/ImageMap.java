@@ -1824,12 +1824,8 @@ textOutlinePaint);
 		void onBubbleClicked(int id);
 	}
 
-	/*
-	 * Misc getters
-	 * TODO: setters for there?
-	 */
 
-	public float getmMaxSize()
+/*	public float getmMaxSize()
 	{
 		return mMaxSize;
 	}
@@ -1842,5 +1838,5 @@ textOutlinePaint);
 	public boolean ismFitImageToScreen()
 	{
 		return mFitImageToScreen;
-	}
+	}*/
 }

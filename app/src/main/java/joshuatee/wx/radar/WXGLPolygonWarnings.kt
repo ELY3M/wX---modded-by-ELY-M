@@ -67,7 +67,7 @@ internal object WXGLPolygonWarnings {
         try {
             warningHTML = prefToken.replace("\n", "").replace(" ", "")
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
         val vtecAl = warningHTML.parseColumn(RegExp.warningVtecPattern)
@@ -143,7 +143,7 @@ internal object WXGLPolygonWarnings {
         try {
             warningHTML = prefToken.replace("\n", "").replace(" ", "")
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
         val vtecAl = warningHTML.parseColumn(RegExp.warningVtecPattern)
@@ -300,7 +300,7 @@ internal object WXGLPolygonWarnings {
         try {
             spsHTML = prefToken.replace("\n", "").replace(" ", "")
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
 
 

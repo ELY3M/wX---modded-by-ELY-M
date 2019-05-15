@@ -16,5 +16,7 @@ object UtilityLog {
     // FIXME camelcase
     fun HandleException(exception: Exception): Unit = exception.printStackTrace()
 
-    fun HandleException(exception: OutOfMemoryError): Unit = exception.printStackTrace()
+    fun handleException(exception: Exception): Unit = exception.printStackTrace()
+
+    fun handleException(exception: OutOfMemoryError): Unit = exception.printStackTrace()
 }

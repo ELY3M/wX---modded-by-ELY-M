@@ -58,10 +58,10 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_settings_location_recyclerview,
-            null,
-            false
+                savedInstanceState,
+                R.layout.activity_settings_location_recyclerview,
+                null,
+                false
         )
         ObjectFab(this, this, R.id.fab_add, View.OnClickListener { addItemFAB() })
         toolbar.subtitle = "Tap location to edit, delete, or move."
@@ -131,7 +131,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
 
     override fun onResume() {
         LocalBroadcastManager.getInstance(this)
-            .registerReceiver(onBroadcast, IntentFilter("locationadded"))
+                .registerReceiver(onBroadcast, IntentFilter("locationadded"))
         super.onResume()
     }
 
@@ -162,7 +162,6 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
             Location.deleteLocation(this, (position + 1).toString())
             ca.deleteItem(position)
             ca.notifyDataSetChanged()
-            //updateList()
             updateTitle()
             UtilityWXJobService.startService(this)
         } else {

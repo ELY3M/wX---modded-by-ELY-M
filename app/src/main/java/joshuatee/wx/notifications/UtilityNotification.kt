@@ -85,7 +85,7 @@ object UtilityNotification {
             var alertPresent = false
             if (Location.isUS(locNumInt)) {
                 val oldnotifUrls = notifUrls
-                notifUrls += UtilityUSv2.checkForNotifications(
+                notifUrls += UtilityUS.checkForNotifications(
                         context,
                         locNumInt,
                         inBlackout,
@@ -203,7 +203,6 @@ object UtilityNotification {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 )
                 if (!(MyApplication.alertOnlyonce && oldNotifStr.contains(url2 + "radar"))) {
-                    // FIXME make an object for this type of notif
                     noti2 = createNotifBigPicture(
                             context,
                             noMain,

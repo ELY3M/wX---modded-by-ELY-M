@@ -73,20 +73,20 @@ internal object UtilityWidgetDownload {
     }
 
     private fun downloadGeneric(context: Context, type: WidgetFile, prod: String) {
-        val bitmap = UtilityDownload.getImgProduct(context, prod)
+        val bitmap = UtilityDownload.getImageProduct(context, prod)
         saveImage(context, bitmap, type.fileName)
     }
 
     private fun downloadSPCSWO(context: Context) {
         listOf("1", "2", "3", "4").forEach {
-            val bitmap = UtilityDownload.getImgProduct(context, "SWOD$it")
+            val bitmap = UtilityDownload.getImageProduct(context, "SWOD$it")
             saveImage(context, bitmap, SPCSWO.fileName + it)
         }
     }
 
     private fun downloadVis(context: Context) {
         try {
-            val bitmap = UtilityDownload.getImgProduct(context, "GOES16")
+            val bitmap = UtilityDownload.getImageProduct(context, "GOES16")
             saveImage(context, bitmap, VIS.fileName)
         } catch (e: Exception) {
             UtilityLog.HandleException(e)

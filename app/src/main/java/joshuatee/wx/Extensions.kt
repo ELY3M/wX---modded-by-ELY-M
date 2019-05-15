@@ -56,7 +56,7 @@ fun String.parseColumn(p: Pattern): List<String> {
 
 fun String.getImage(): Bitmap {
     return if (Build.VERSION.SDK_INT > 20) {
-        UtilityDownload.getBitmapFromURLS(this)
+        UtilityDownload.getBitmapFromUrl(this)
     } else {
         UtilityDownload.getBitmapFromUrlUnsafe(this)
     }
@@ -64,7 +64,7 @@ fun String.getImage(): Bitmap {
 
 fun String.getHtml(): String {
     return if (Build.VERSION.SDK_INT > 20) {
-        UtilityDownload.getStringFromURLS(this)
+        UtilityDownload.getStringFromUrl(this)
     } else {
         UtilityDownload.getStringFromUrlUnsafe(this)
     }
@@ -75,11 +75,11 @@ fun String.getHtmlUnsafe(): String {
 }
 
 fun String.getNwsHtml(): String {
-    return UtilityDownloadNws.getNWSStringFromURL(this)
+    return UtilityDownloadNws.getNwsStringFromUrl(this)
 }
 
 fun String.getHtmlSep(): String {
-    return UtilityDownload.getStringFromURLSepS(this)
+    return UtilityDownload.getStringFromUrlWithSeparator(this)
 }
 
 fun String.parseColumnAll(p: Pattern): List<String> {

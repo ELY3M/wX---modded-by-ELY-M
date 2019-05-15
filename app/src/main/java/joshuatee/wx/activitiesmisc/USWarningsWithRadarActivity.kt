@@ -77,10 +77,10 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_uswarnings_with_radar,
-            R.menu.uswarn,
-            true
+                savedInstanceState,
+                R.layout.activity_uswarnings_with_radar,
+                R.menu.uswarn,
+                true
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -93,7 +93,6 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
             drw.drawerLayout.closeDrawer(drw.listView)
-            // FIXME put this in a new method
             if (objAlertSummary.filterArray[position].length != 2) {
                 turlLocal[0] = "^" + objAlertSummary.filterArray[position]
                 turlLocal[1] = "us"
@@ -126,10 +125,10 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     private fun radarInterface(id: Int) {
         val rid = Utility.readPref(contextg, "NWS_RID_" + objAlertSummary.mapButtonNws[id], "")
         ObjectIntent(
-            contextg,
-            WXGLRadarActivity::class.java,
-            WXGLRadarActivity.RID,
-            arrayOf(rid, objAlertSummary.mapButtonState[id]!!, "N0Q", "")
+                contextg,
+                WXGLRadarActivity::class.java,
+                WXGLRadarActivity.RID,
+                arrayOf(rid, objAlertSummary.mapButtonState[id]!!, "N0Q", "")
         )
     }
 
@@ -168,7 +167,7 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
             if (turlLocal[1] == "us" && usDownloaded) {
                 html = usDataStr
             } else {
-                html = UtilityDownloadNws.getCAP(turlLocal[1])
+                html = UtilityDownloadNws.getCap(turlLocal[1])
                 if (turlLocal[1] == "us") {
                     usDataStr = html
                     usDownloaded = true
@@ -194,7 +193,7 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+            drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
@@ -202,26 +201,26 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
         }
         when (item.itemId) {
             R.id.action_warnmap -> ObjectIntent(
-                contextg,
-                ImageShowActivity::class.java,
-                ImageShowActivity.URL,
-                arrayOf("http://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map")
+                    contextg,
+                    ImageShowActivity::class.java,
+                    ImageShowActivity.URL,
+                    arrayOf("http://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map")
             )
             R.id.action_warnmapAK -> ObjectIntent(
-                contextg,
-                ImageShowActivity::class.java,
-                ImageShowActivity.URL,
-                arrayOf("http://forecast.weather.gov/wwamap/png/ak.png", "AK warning map")
+                    contextg,
+                    ImageShowActivity::class.java,
+                    ImageShowActivity.URL,
+                    arrayOf("http://forecast.weather.gov/wwamap/png/ak.png", "AK warning map")
             )
             R.id.action_warnmapHI -> ObjectIntent(
-                contextg,
-                ImageShowActivity::class.java,
-                ImageShowActivity.URL,
-                arrayOf("http://forecast.weather.gov/wwamap/png/hi.png", "HI warning map")
+                    contextg,
+                    ImageShowActivity::class.java,
+                    ImageShowActivity.URL,
+                    arrayOf("http://forecast.weather.gov/wwamap/png/hi.png", "HI warning map")
             )
             R.id.action_impact_graphics -> ObjectIntent(
-                contextg,
-                USWarningsImpactActivity::class.java
+                    contextg,
+                    USWarningsImpactActivity::class.java
             )
             else -> return super.onOptionsItemSelected(item)
         }

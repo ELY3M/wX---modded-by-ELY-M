@@ -78,7 +78,7 @@ internal object UtilityCanvasGeneric {
             }
             canvas.drawPath(wallpath, paint)
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 }

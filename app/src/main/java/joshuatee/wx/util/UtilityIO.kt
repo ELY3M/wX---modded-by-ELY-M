@@ -97,9 +97,9 @@ object UtilityIO {
             val inputSteam = context.openFileInput(path)
             bitmap = BitmapFactory.decodeStream(inputSteam)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return bitmap
     }

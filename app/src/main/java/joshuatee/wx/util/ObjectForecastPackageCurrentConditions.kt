@@ -58,7 +58,7 @@ class ObjectForecastPackageCurrentConditions {
             val tmpArr = getConditionsViaMetar(context, Location.getLatLon(locNum))
             data1 = tmpArr[0]
             iconUrl = tmpArr[1]
-            status = UtilityUSv2.getStatusViaMetar(context, conditionsTimeStr)
+            status = UtilityUS.getStatusViaMetar(context, conditionsTimeStr)
         }
     }
 
@@ -66,7 +66,7 @@ class ObjectForecastPackageCurrentConditions {
         val tmpArr = getConditionsViaMetar(context, location)
         data1 = tmpArr[0]
         iconUrl = tmpArr[1]
-        status = UtilityUSv2.getStatusViaMetar(context, conditionsTimeStr)
+        status = UtilityUS.getStatusViaMetar(context, conditionsTimeStr)
     }
 
     private fun getConditionsViaMetar(context: Context, location: LatLon): List<String> {
@@ -105,20 +105,11 @@ class ObjectForecastPackageCurrentConditions {
         val sep = " - "
         val tmpArrCc = data1.split(sep)
         var retStr = ""
-        //var retStr2 = "";
-        //var tempArr = listOf<String>()
         if (tmpArrCc.size > 4) {
             val tmpList = tmpArrCc[0].split("/")
             retStr = tmpArrCc[4].replace("^ ", "") + " " + tmpList[0] + tmpArrCc[2]
-            /*retStr2 = tempArr[1].replace("^ ", "") +
-                    sep +
-                    tmpArrCc[1] +
-                    sep +
-                    tmpArrCc[3];*/
         }
         ccLine1 = retStr
-        //ccLine2 = retStr2.trim();
-        //ccLine3 = UtilityString.capitalize(locationString);
     }
 }
 

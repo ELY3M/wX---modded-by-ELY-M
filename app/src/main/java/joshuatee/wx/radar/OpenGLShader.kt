@@ -144,7 +144,7 @@ internal object OpenGLShader {
         try {
             bmp.recycle()
         } catch (e: NullPointerException) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
 
     }
@@ -167,13 +167,13 @@ internal object OpenGLShader {
             GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, img, 0)
             UtilityLog.d("wx", "Loaded texture" + ":H:" + img!!.height + ":W:" + img.width)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
 
         try {
             img!!.recycle()
         } catch (e: NullPointerException) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
 
         return textures[0]
@@ -188,7 +188,7 @@ internal object OpenGLShader {
             img = BitmapFactory.decodeFile(imagefile, options)
 
         } catch (e: NullPointerException) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return img
     }
@@ -227,7 +227,7 @@ internal object OpenGLShader {
         try {
             img.recycle()
         } catch (e: NullPointerException) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
 
         return textures[0]

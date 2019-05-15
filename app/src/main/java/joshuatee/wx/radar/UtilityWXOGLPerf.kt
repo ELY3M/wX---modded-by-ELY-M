@@ -178,9 +178,9 @@ internal object UtilityWXOGLPerf {
             }
             dis2.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return totalBins
     }
@@ -671,99 +671,12 @@ internal object UtilityWXOGLPerf {
         }
     }
 
-    fun genConus(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: Double, y: Double) {
-        buffers.setToPositionZero()
-        val pixYD: Float
-        val pixXD = (-((y - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
-        var ixCount = 0
-        val test1 = M_180_div_PI * log(tan(M_PI_div_4 + x * M_PI_div_360), E).toFloat()
-        val test2 = M_180_div_PI * log(tan(M_PI_div_4 + pn.xDbl * M_PI_div_360), E).toFloat()
-        val len = 1 //buffers.lenInit * 2.0f
-        val triangleAmount = 1 //buffers.triangleCount
-        pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
-        (0 until triangleAmount).forEach {
-            buffers.putFloat(pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
-            buffers.putFloat(-pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
-            buffers.putFloat(pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
-            buffers.putFloat(-pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
-            buffers.putIndex(ixCount.toShort())
-            buffers.putIndex((ixCount + 1).toShort())
-            ixCount += 2
-        }
-    }
-
-    //for single images
-    fun genMarker(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: Double, y: Double) {
-        buffers.setToPositionZero()
-        val pixYD: Float
-        val pixXD = (-((y - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
-        var ixCount = 0
-        val test1 = M_180_div_PI * log(tan(M_PI_div_4 + x * M_PI_div_360), E).toFloat()
-        val test2 = M_180_div_PI * log(tan(M_PI_div_4 + pn.xDbl * M_PI_div_360), E).toFloat()
-        val len = 0f
-        val triangleAmount = 1
-        pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
-        (0 until triangleAmount).forEach {
-            buffers.putFloat(pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
-            buffers.putFloat(-pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
-            buffers.putFloat(pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
-            buffers.putFloat(-pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
-            buffers.putIndex(ixCount.toShort())
-            buffers.putIndex((ixCount + 1).toShort())
-            ixCount += 2
-        }
-    }
-
-    //for tvs / hi imagees
-    fun genMarkerList(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: DoubleArray, y: DoubleArray) {
-        var pointX: Double
-        var pointY: Double
-        var pixYD: Float
-        var pixXD: Float
-        var iCount = 0
-        var ixCount = 0
-        var test1: Float
-        var test2: Float
-        val len = 0f //buffers.lenInit * 0.50f
-        val triangleAmount = 1 //buffers.triangleCount
-        var iI = 0
-        var lI = 0
-        buffers.setToPositionZero()
-        while (iCount < buffers.count) {
-            pointX = x[iCount]
-            pointY = y[iCount]
-            test1 = M_180_div_PI * log(tan(M_PI_div_4 + pointX * M_PI_div_360), E).toFloat()
-            test2 = M_180_div_PI * log(tan(M_PI_div_4 + pn.xDbl * M_PI_div_360), E).toFloat()
-            pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
-            pixXD = (-((pointY - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
-            (0 until triangleAmount).forEach {
-                buffers.putFloat(lI, pixXD)
-                lI += 4
-                buffers.putFloat(lI, -pixYD)
-                lI += 4
-                buffers.putFloat(lI, pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
-                lI += 4
-                buffers.putFloat(lI, -pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
-                lI += 4
-                buffers.putFloat(lI, pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
-                lI += 4
-                buffers.putFloat(lI, -pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
-                lI += 4
-                buffers.putIndex(iI, ixCount.toShort())
-                iI += 2
-                buffers.putIndex(iI, (ixCount + 1).toShort())
-                iI += 2
-                buffers.putIndex(iI, (ixCount + 2).toShort())
-                iI += 2
-                ixCount += 3
-
-            }
-            iCount += 1
-        }
-    }
-
-
-    fun decode8BitWX(context: Context, src: String, radialStartAngle: ByteBuffer, binWord: ByteBuffer): Short {
+    fun decode8BitWX(
+        context: Context,
+        src: String,
+        radialStartAngle: ByteBuffer,
+        binWord: ByteBuffer
+    ): Short {
         var numberOfRangeBins = 0
         try {
             val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, src))
@@ -858,4 +771,102 @@ internal object UtilityWXOGLPerf {
             }
         }
     }
+    
+    
+        fun genConus(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: Double, y: Double) {
+        buffers.setToPositionZero()
+        val pixYD: Float
+        val pixXD = (-((y - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
+        var ixCount = 0
+        val test1 = M_180_div_PI * log(tan(M_PI_div_4 + x * M_PI_div_360), E).toFloat()
+        val test2 = M_180_div_PI * log(tan(M_PI_div_4 + pn.xDbl * M_PI_div_360), E).toFloat()
+        val len = 1 //buffers.lenInit * 2.0f
+        val triangleAmount = 1 //buffers.triangleCount
+        pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
+        (0 until triangleAmount).forEach {
+            buffers.putFloat(pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+            buffers.putFloat(-pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+            buffers.putFloat(pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+            buffers.putFloat(-pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+            buffers.putIndex(ixCount.toShort())
+            buffers.putIndex((ixCount + 1).toShort())
+            ixCount += 2
+        }
+    }
+
+    //for single images
+    fun genMarker(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: Double, y: Double) {
+        buffers.setToPositionZero()
+        val pixYD: Float
+        val pixXD = (-((y - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
+        var ixCount = 0
+        val test1 = M_180_div_PI * log(tan(M_PI_div_4 + x * M_PI_div_360), E).toFloat()
+        val test2 = M_180_div_PI * log(tan(M_PI_div_4 + pn.xDbl * M_PI_div_360), E).toFloat()
+        val len = 0f
+        val triangleAmount = 1
+        pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
+        (0 until triangleAmount).forEach {
+            buffers.putFloat(pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+            buffers.putFloat(-pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+            buffers.putFloat(pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+            buffers.putFloat(-pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+            buffers.putIndex(ixCount.toShort())
+            buffers.putIndex((ixCount + 1).toShort())
+            ixCount += 2
+        }
+    }
+
+    //for tvs / hi imagees
+    fun genMarkerList(buffers: ObjectOglBuffers, pn: ProjectionNumbers, x: DoubleArray, y: DoubleArray) {
+        var pointX: Double
+        var pointY: Double
+        var pixYD: Float
+        var pixXD: Float
+        var iCount = 0
+        var ixCount = 0
+        var test1: Float
+        var test2: Float
+        val len = 0f //buffers.lenInit * 0.50f
+        val triangleAmount = 1 //buffers.triangleCount
+        var iI = 0
+        var lI = 0
+        buffers.setToPositionZero()
+        while (iCount < buffers.count) {
+            pointX = x[iCount]
+            pointY = y[iCount]
+            test1 = M_180_div_PI * log(tan(M_PI_div_4 + pointX * M_PI_div_360), E).toFloat()
+            test2 = M_180_div_PI * log(tan(M_PI_div_4 + pn.xDbl * M_PI_div_360), E).toFloat()
+            pixYD = -((test1 - test2) * pn.oneDegreeScaleFactorFloat) + pn.yCenter.toFloat()
+            pixXD = (-((pointY - pn.yDbl) * pn.oneDegreeScaleFactor) + pn.xCenter).toFloat()
+            (0 until triangleAmount).forEach {
+                buffers.putFloat(lI, pixXD)
+                lI += 4
+                buffers.putFloat(lI, -pixYD)
+                lI += 4
+                buffers.putFloat(lI, pixXD + len * cos((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                lI += 4
+                buffers.putFloat(lI, -pixYD + len * sin((it * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                lI += 4
+                buffers.putFloat(lI, pixXD + len * cos(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                lI += 4
+                buffers.putFloat(lI, -pixYD + len * sin(((it + 1) * TWICE_PI / triangleAmount).toDouble()).toFloat())
+                lI += 4
+                buffers.putIndex(iI, ixCount.toShort())
+                iI += 2
+                buffers.putIndex(iI, (ixCount + 1).toShort())
+                iI += 2
+                buffers.putIndex(iI, (ixCount + 2).toShort())
+                iI += 2
+                ixCount += 3
+
+            }
+            iCount += 1
+        }
+    }
+
+
+    
+    
+    
+    
 }

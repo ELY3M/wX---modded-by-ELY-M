@@ -123,7 +123,7 @@ internal object Level2 {
         } catch (e: Exception) {
             UtilityLog.HandleException(e)
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 }

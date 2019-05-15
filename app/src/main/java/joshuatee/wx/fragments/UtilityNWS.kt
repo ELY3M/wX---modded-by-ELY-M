@@ -52,7 +52,7 @@ object UtilityNWS {
         bm = if (fnResId == null || fn.contains(",")) {
             parseBitmap(context, fn)
         } else {
-            UtilityImg.loadBM(context, fnResId, false)
+            UtilityImg.loadBitmap(context, fnResId, false)
         }
         return bm
     }
@@ -108,7 +108,7 @@ object UtilityNWS {
         if (fnResId1 == null || fnResId2 == null) {
             return bm
         }
-        val bm1Tmp = UtilityImg.loadBM(context, fnResId1, false)
+        val bm1Tmp = UtilityImg.loadBitmap(context, fnResId1, false)
         val bm1 = Bitmap.createBitmap(bm1Tmp, leftCropA, 0, 41, dimens)
         canvas.drawBitmap(bm1, 0f, 0f, Paint(Paint.FILTER_BITMAP_FLAG))
         val paint = ObjectPaint()
@@ -129,7 +129,7 @@ object UtilityNWS {
             )
             canvas.drawText("$num1%", xTextLeft.toFloat(), yText.toFloat(), paint.paint)
         }
-        val bm2Tmp = UtilityImg.loadBM(context, fnResId2, false)
+        val bm2Tmp = UtilityImg.loadBitmap(context, fnResId2, false)
         val bm2 = Bitmap.createBitmap(bm2Tmp, leftCropB, 0, 41, dimens) // was 42 change to 40
         canvas.drawBitmap(bm2, 45f, 0f, Paint(Paint.FILTER_BITMAP_FLAG)) // was 42 change to 44
         if (num2 != "") {
@@ -161,7 +161,7 @@ object UtilityNWS {
         val canvas = Canvas(bm)
         canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
         val fnResId1 = UtilityNwsIcon.iconMap["$a.png"] ?: return bm
-        val bm1Tmp = UtilityImg.loadBM(context, fnResId1, false)
+        val bm1Tmp = UtilityImg.loadBitmap(context, fnResId1, false)
         val bm1 = Bitmap.createBitmap(bm1Tmp, 0, 0, dimens, dimens) // was 41,dimens
         canvas.drawBitmap(bm1, 0f, 0f, Paint(Paint.FILTER_BITMAP_FLAG))
         val paint = ObjectPaint()

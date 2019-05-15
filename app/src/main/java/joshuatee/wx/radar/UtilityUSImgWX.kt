@@ -69,7 +69,7 @@ object UtilityUSImgWX {
         val ridPrefix = UtilityWXOGL.getRidPrefix(rid1, tdwr)
         val inputStream: InputStream?
         if (!product.contains("L2")) {
-            inputStream = UtilityDownload.getInputStreamFromURL(
+            inputStream = UtilityDownload.getInputStreamFromUrl(
                 MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[product] + "/SI." + ridPrefix + rid1.toLowerCase(
                     Locale.US
                 ) + "/sn.last"
@@ -78,7 +78,7 @@ object UtilityUSImgWX {
         } else {
             val wd = WXGLDownload()
             val remoteFile = wd.getLevel2Url(rid1)
-            inputStream = UtilityDownload.getInputStreamFromURL(remoteFile)
+            inputStream = UtilityDownload.getInputStreamFromUrl(remoteFile)
             inputStream?.let { UtilityIO.saveInputStream(context, it, "l2") }
             try {
                 inputStream?.close()
@@ -129,9 +129,9 @@ object UtilityUSImgWX {
             layers.add(cd)
             layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return UtilityImg.layerDrawableToBitmap(layers)
     }
@@ -290,9 +290,9 @@ object UtilityUSImgWX {
             layers.add(cd)
             layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return UtilityImg.scaleBitmap(UtilityImg.layerDrawableToBitmap(layers), 300, 300)
     }

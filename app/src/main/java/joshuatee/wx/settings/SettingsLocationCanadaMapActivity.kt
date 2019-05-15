@@ -119,7 +119,7 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
             }
         }
         hideAllMaps()
-        val bm = UtilityImg.loadBM(this, imgRes, false)
+        val bm = UtilityImg.loadBitmap(this, imgRes, false)
         val map: ImageMap = findViewById(imgMap)
         map.visibility = View.VISIBLE
         map.setImageBitmap(bm)

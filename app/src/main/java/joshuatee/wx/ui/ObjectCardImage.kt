@@ -74,7 +74,6 @@ open class ObjectCardImage {
         })
     }
 
-    // TODO make better use of this and above constructor
     constructor(
         context: Context,
         linearLayout: LinearLayout,

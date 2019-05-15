@@ -58,17 +58,17 @@ class GOES16Activity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_image_show_navdrawer_bottom_toolbar,
-            R.menu.goes16,
-            iconsEvenlySpaced = true,
-            bottomToolbar = true
+                savedInstanceState,
+                R.layout.activity_image_show_navdrawer_bottom_toolbar,
+                R.menu.goes16,
+                iconsEvenlySpaced = true,
+                bottomToolbar = true
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
         activityArguments = intent.getStringArrayExtra(RID)
-        drw = ObjectNavDrawer(this, UtilityGOES16.labels, UtilityGOES16.codes)
+        drw = ObjectNavDrawer(this, UtilityGoes.labels, UtilityGoes.codes)
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, "")
         img.setMaxZoom(8f)
         img.setListener(this, drw, ::getContentFixThis)
@@ -84,9 +84,9 @@ class GOES16Activity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
     private fun getContent(sectorF: String) = GlobalScope.launch(uiDispatcher) {
         sector = sectorF
         writePrefs()
-        toolbar.title = UtilityGOES16.sectorToName[sector] ?: ""
+        toolbar.title = UtilityGoes.sectorToName[sector] ?: ""
         toolbar.subtitle = drw.getLabel()
-        bitmap = withContext(Dispatchers.IO) { UtilityGOES16.getImage(drw.getUrl(), sector) }
+        bitmap = withContext(Dispatchers.IO) { UtilityGoes.getImage(drw.getUrl(), sector) }
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn(prefImagePosition)
         if (oldSector != sector) {
@@ -186,7 +186,7 @@ class GOES16Activity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+            drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onStop() {
         img.imgSavePosnZoom(this, prefImagePosition)
@@ -195,11 +195,11 @@ class GOES16Activity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
 
     private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
         animDrawable = withContext(Dispatchers.IO) {
-            UtilityGOES16.getAnimation(
-                contextg,
-                drw.getUrl(),
-                sector,
-                frameCount
+            UtilityGoes.getAnimation(
+                    contextg,
+                    drw.getUrl(),
+                    sector,
+                    frameCount
             )
         }
         UtilityImgAnim.startAnimation(animDrawable, img)

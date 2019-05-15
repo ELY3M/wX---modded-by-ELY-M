@@ -54,13 +54,13 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.radar.UtilityAwcRadarMosaic
 import joshuatee.wx.radar.UtilityUSImgNWSMosaic
-import joshuatee.wx.vis.UtilityGOES16
+import joshuatee.wx.vis.UtilityGoes
 
 object UtilityDownload {
 
-    private fun get1KMURL() = UtilityImg.getBlankBitmap()
+    private fun get1KmUrl() = UtilityImg.getBlankBitmap()
 
-    private fun get2KMURL() = UtilityImg.getBlankBitmap()
+    private fun get2KmUrl() = UtilityImg.getBlankBitmap()
 
     fun getRadarMosiac(context: Context): Bitmap {
         val location = Location.currentLocationStr
@@ -81,16 +81,16 @@ object UtilityDownload {
                         UtilityUSImgNWSMosaic.get(context, "latest", false)
                     } else {
                         UtilityUSImgNWSMosaic.get(
-                            context,
-                            UtilityUSImgNWSMosaic.getSectorFromState(state),
-                            false
+                                context,
+                                UtilityUSImgNWSMosaic.getSectorFromState(state),
+                                false
                         )
                     }
                 } else {
                     val prov = Utility.readPref(context, "NWS" + location + "_STATE", "")
                     UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(
-                        context,
-                        UtilityCanada.getECSectorFromProv(prov)
+                            context,
+                            UtilityCanada.getECSectorFromProv(prov)
                     )
                 }
             } else {
@@ -112,7 +112,7 @@ object UtilityDownload {
         return bitmap
     }
 
-    fun getImgProduct(context: Context, product: String): Bitmap {
+    fun getImageProduct(context: Context, product: String): Bitmap {
         var url = ""
         var bm = UtilityImg.getBlankBitmap()
         val tmpArr: List<String>
@@ -121,24 +121,24 @@ object UtilityDownload {
             "GOES16" -> {
                 needsBitmap = false
                 val index = Utility.readPref(context, "GOES16_IMG_FAV_IDX", 0)
-                bm = UtilityGOES16.getImage(
-                    UtilityGOES16.codes[index],
-                    Utility.readPref(context, "GOES16_SECTOR", "cgl")
+                bm = UtilityGoes.getImage(
+                        UtilityGoes.codes[index],
+                        Utility.readPref(context, "GOES16_SECTOR", "cgl")
                 )
             }
             "VIS_1KM", "VIS_MAIN" -> {
                 needsBitmap = false
-                bm = get1KMURL()
+                bm = get1KmUrl()
             }
             "CARAIN" -> if (Location.x.contains("CANADA")) {
                 needsBitmap = false
                 var rid = Location.rid
                 if (rid == "NAT") rid = "CAN"
                 bm =
-                    if (rid == "CAN" || rid == "PAC" || rid == "WRN" || rid == "ONT" || rid == "QUE" || rid == "ERN")
-                        UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(context, rid)
-                    else
-                        UtilityCanadaImg.getRadarBitmapOptionsApplied(context, rid, "")
+                        if (rid == "CAN" || rid == "PAC" || rid == "WRN" || rid == "ONT" || rid == "QUE" || rid == "ERN")
+                            UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(context, rid)
+                        else
+                            UtilityCanadaImg.getRadarBitmapOptionsApplied(context, rid, "")
             }
             "RAD_1KM" -> {
             }
@@ -148,11 +148,11 @@ object UtilityDownload {
             }
             "IR_2KM", "WV_2KM", "VIS_2KM" -> {
                 needsBitmap = false
-                bm = get2KMURL()
+                bm = get2KmUrl()
             }
             "VIS_CONUS" -> {
                 needsBitmap = false
-                bm = UtilityGOES16.getImage("02", "CONUS")
+                bm = UtilityGoes.getImage("02", "CONUS")
             }
             "FMAP" -> url = "${MyApplication.nwsWPCwebsitePrefix}/noaa/noaa.gif"
             "FMAP12" -> url = "${MyApplication.nwsWPCwebsitePrefix}/basicwx/92fwbg.gif"
@@ -184,7 +184,7 @@ object UtilityDownload {
             "WEATHERSTORY" -> {
                 needsBitmap = false
                 bm =
-                    ("http://www.weather.gov/images/" + Location.wfo.toLowerCase() + "/wxstory/Tab2FileL.png").getImage()
+                        ("http://www.weather.gov/images/" + Location.wfo.toLowerCase() + "/wxstory/Tab2FileL.png").getImage()
             }
             "SWOD2" -> {
                 needsBitmap = false
@@ -206,13 +206,13 @@ object UtilityDownload {
                 }
                 needsBitmap = false
                 bm = UtilitySPCMESOInputOutput.getImage(
-                    context,
-                    param,
-                    Utility.readPref(
                         context,
-                        "SPCMESO" + 1 + "_SECTOR_LAST_USED",
-                        UtilitySPCMESO.defaultSector
-                    )
+                        param,
+                        Utility.readPref(
+                                context,
+                                "SPCMESO" + 1 + "_SECTOR_LAST_USED",
+                                UtilitySPCMESO.defaultSector
+                        )
                 )
             }
             "SPCMESO2" -> {
@@ -221,13 +221,13 @@ object UtilityDownload {
                 if (tmpArr.size > 4) param = tmpArr[4]
                 needsBitmap = false
                 bm = UtilitySPCMESOInputOutput.getImage(
-                    context,
-                    param,
-                    Utility.readPref(
                         context,
-                        "SPCMESO" + 1 + "_SECTOR_LAST_USED",
-                        UtilitySPCMESO.defaultSector
-                    )
+                        param,
+                        Utility.readPref(
+                                context,
+                                "SPCMESO" + 1 + "_SECTOR_LAST_USED",
+                                UtilitySPCMESO.defaultSector
+                        )
                 )
             }
             "SPCMESO3" -> {
@@ -236,13 +236,13 @@ object UtilityDownload {
                 if (tmpArr.size > 5) param = tmpArr[5]
                 needsBitmap = false
                 bm = UtilitySPCMESOInputOutput.getImage(
-                    context,
-                    param,
-                    Utility.readPref(
                         context,
-                        "SPCMESO" + 1 + "_SECTOR_LAST_USED",
-                        UtilitySPCMESO.defaultSector
-                    )
+                        param,
+                        Utility.readPref(
+                                context,
+                                "SPCMESO" + 1 + "_SECTOR_LAST_USED",
+                                UtilitySPCMESO.defaultSector
+                        )
                 )
             }
             "SPCMESO4" -> {
@@ -251,13 +251,13 @@ object UtilityDownload {
                 if (tmpArr.size > 6) param = tmpArr[6]
                 needsBitmap = false
                 bm = UtilitySPCMESOInputOutput.getImage(
-                    context,
-                    param,
-                    Utility.readPref(
                         context,
-                        "SPCMESO" + 1 + "_SECTOR_LAST_USED",
-                        UtilitySPCMESO.defaultSector
-                    )
+                        param,
+                        Utility.readPref(
+                                context,
+                                "SPCMESO" + 1 + "_SECTOR_LAST_USED",
+                                UtilitySPCMESO.defaultSector
+                        )
                 )
             }
             "SPCMESO5" -> {
@@ -266,13 +266,13 @@ object UtilityDownload {
                 if (tmpArr.size > 7) param = tmpArr[7]
                 needsBitmap = false
                 bm = UtilitySPCMESOInputOutput.getImage(
-                    context,
-                    param,
-                    Utility.readPref(
                         context,
-                        "SPCMESO" + 1 + "_SECTOR_LAST_USED",
-                        UtilitySPCMESO.defaultSector
-                    )
+                        param,
+                        Utility.readPref(
+                                context,
+                                "SPCMESO" + 1 + "_SECTOR_LAST_USED",
+                                UtilitySPCMESO.defaultSector
+                        )
                 )
             }
             "SPCMESO6" -> {
@@ -281,39 +281,39 @@ object UtilityDownload {
                 if (tmpArr.size > 8) param = tmpArr[8]
                 needsBitmap = false
                 bm = UtilitySPCMESOInputOutput.getImage(
-                    context,
-                    param,
-                    Utility.readPref(
                         context,
-                        "SPCMESO" + 1 + "_SECTOR_LAST_USED",
-                        UtilitySPCMESO.defaultSector
-                    )
+                        param,
+                        Utility.readPref(
+                                context,
+                                "SPCMESO" + 1 + "_SECTOR_LAST_USED",
+                                UtilitySPCMESO.defaultSector
+                        )
                 )
             }
             "CONUSWV" -> {
                 needsBitmap = false
-                bm = UtilityGOES16.getImage("09", "CONUS")
+                bm = UtilityGoes.getImage("09", "CONUS")
             }
             "LTG" -> {
                 needsBitmap = false
                 bm = UtilityLightning.getImage(
-                    Utility.readPref(
-                        context,
-                        "LIGHTNING_SECTOR",
-                        "usa_big"
-                    ), Utility.readPref(context, "LIGHTNING_PERIOD", "0.25")
+                        Utility.readPref(
+                                context,
+                                "LIGHTNING_SECTOR",
+                                "usa_big"
+                        ), Utility.readPref(context, "LIGHTNING_PERIOD", "0.25")
                 )
             }
             "SND" -> {
                 needsBitmap = false
                 bm = UtilitySPCSoundings.getImage(
-                    context,
-                    UtilityLocation.getNearestSnd(context, Location.latLon)
+                        context,
+                        UtilityLocation.getNearestSnd(context, Location.latLon)
                 )
             }
             "STRPT" -> url = UtilitySPC.getStormReportsTodayUrl()
             else -> {
-                bm = get1KMURL()
+                bm = get1KmUrl()
                 needsBitmap = false
             }
         }
@@ -352,8 +352,8 @@ object UtilityDownload {
         } else if (prod == "SWPC3DAYGEO") {
             text = ("http://services.swpc.noaa.gov/text/3-day-geomag-forecast.txt").getHtmlSep()
         } else if (prod.contains("MIATCP") || prod.contains("MIATCM") || prod.contains("MIATCD") || prod.contains(
-                "MIAPWS"
-            ) || prod.contains("MIAHS")
+                        "MIAPWS"
+                ) || prod.contains("MIAHS")
         ) {
             text = UtilityString.getNWSPRE("${MyApplication.nwsNhcWebsitePrefix}/text/$prod.shtml")
             if (prod.contains("MIATCD")) {
@@ -363,8 +363,8 @@ object UtilityDownload {
             text = text.replace("^<br>".toRegex(), "")
         } else if (prod.contains("MIAT")) {
             text = UtilityString.getHTMLandParseSep(
-                "${MyApplication.nwsNhcWebsitePrefix}/ftp/pub/forecasts/discussion/$prod",
-                "(.*)"
+                    "${MyApplication.nwsNhcWebsitePrefix}/ftp/pub/forecasts/discussion/$prod",
+                    "(.*)"
             )
             text = text.substring(text.indexOf('>') + 1)
             text = text.substring(text.indexOf('>') + 1)
@@ -372,20 +372,20 @@ object UtilityDownload {
             text = text.substring(text.indexOf('>') + 1)
             text = text.replace("^<br>".toRegex(), "")
             if (UIPreferences.nwsTextRemovelinebreaks && (prod == "MIATWOAT" ||
-                        prod == "MIATWDAT" ||
-                        prod == "MIATWOEP" ||
-                        prod == "MIATWDEP"
-                        )
+                            prod == "MIATWDAT" ||
+                            prod == "MIATWOEP" ||
+                            prod == "MIATWDEP"
+                            )
             ) {
                 text = text.replace("<br><br>", "<BR><BR>")
                 text = text.replace("<br>", " ")
             }
         } else if (prod.startsWith("SCCNS")) {
             text = UtilityString.getHTMLandParseSep(
-                "${MyApplication.nwsWPCwebsitePrefix}/discussions/nfd" + prod.toLowerCase(Locale.US).replace(
-                    "ns",
-                    ""
-                ) + ".html", RegExp.pre2Pattern
+                    "${MyApplication.nwsWPCwebsitePrefix}/discussions/nfd" + prod.toLowerCase(Locale.US).replace(
+                            "ns",
+                            ""
+                    ) + ".html", RegExp.pre2Pattern
             )
             text = text.replace("^<br><br>".toRegex(), "")
             if (UIPreferences.nwsTextRemovelinebreaks) {
@@ -415,7 +415,7 @@ object UtilityDownload {
         } else if (prod.contains("WPCMPD")) {
             val no = prod.substring(6)
             val textUrl =
-                "${MyApplication.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd_multi.php?md=$no"
+                    "${MyApplication.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd_multi.php?md=$no"
             text = UtilityString.getHTMLandParseSep(textUrl, RegExp.pre2Pattern)
             text = text.replace("^<br>".toRegex(), "")
             text = text.replace("^ <br>".toRegex(), "")
@@ -425,7 +425,7 @@ object UtilityDownload {
             }
         } else if (prod.contains("QPFHSD")) {
             val textUrl =
-                "${MyApplication.nwsWPCwebsitePrefix}/discussions/hpcdiscussions.php?disc=qpfhsd"
+                    "${MyApplication.nwsWPCwebsitePrefix}/discussions/hpcdiscussions.php?disc=qpfhsd"
             text = UtilityString.getHTMLandParseSep(textUrl, RegExp.pre2Pattern)
             text = text.replace("^<br>".toRegex(), "")
             text = text.replace("^ <br>".toRegex(), "")
@@ -444,15 +444,15 @@ object UtilityDownload {
             }
         } else if (prod.startsWith("AWCN")) {
             text =
-                ("${MyApplication.NWS_RADAR_PUB}/data/raw/aw/" + prod.toLowerCase(Locale.US) + ".cwwg..txt").getHtmlSep()
+                    ("${MyApplication.NWS_RADAR_PUB}/data/raw/aw/" + prod.toLowerCase(Locale.US) + ".cwwg..txt").getHtmlSep()
         } else if (prod.contains("NFD")) {
             text = ("http://www.opc.ncep.noaa.gov/mobile/mobile_product.php?id=" + prod.toUpperCase(
-                Locale.US
+                    Locale.US
             )).getHtml()
         } else if (prod.contains("FWDDY38")) {
             text = UtilityString.getHTMLandParseSep(
-                "${MyApplication.nwsSPCwebsitePrefix}/products/exper/fire_wx/",
-                "<pre>(.*?)</pre>"
+                    "${MyApplication.nwsSPCwebsitePrefix}/products/exper/fire_wx/",
+                    "<pre>(.*?)</pre>"
             )
             text = text.replace("^<br>".toRegex(), "")
             text = text.replace("^ <br>".toRegex(), "")
@@ -476,13 +476,13 @@ object UtilityDownload {
             text = "${MyApplication.NWS_RADAR_PUB}/data/raw/fp/fpcn48.cwao..txt".getHtmlSep()
         } else if (prod.contains("QPFPFD")) {
             val textUrl =
-                MyApplication.nwsWPCwebsitePrefix + "/discussions/hpcdiscussions.php?disc=qpfpfd"
+                    MyApplication.nwsWPCwebsitePrefix + "/discussions/hpcdiscussions.php?disc=qpfpfd"
             text = textUrl.getHtmlSep()
             text = text.parse(RegExp.pre2Pattern)
         } else if (prod.contains("PMDTHR")) {
             text = UtilityString.getHTMLandParseSep(
-                "http://www.cpc.noaa.gov/products/predictions/threats/threats.php",
-                "<div id=\"discDiv\">(.*?)</div>"
+                    "http://www.cpc.noaa.gov/products/predictions/threats/threats.php",
+                    "<div id=\"discDiv\">(.*?)</div>"
             )
         } else if (prod.contains("CTOF")) {
             text = "Celsius to Fahrenheit table" + MyApplication.newline + UtilityMath.cToFTable()
@@ -490,11 +490,9 @@ object UtilityDownload {
             val t1 = prod.substring(0, 3)
             var t2 = prod.substring(3)
             t2 = t2.replace("%", "")
-            val html =
-                    UtilityDownloadNws.getNWSStringFromURL("https://api.weather.gov/products/types/$t1/locations/$t2")
+            val html = ("https://api.weather.gov/products/types/$t1/locations/$t2").getNwsHtml()
             val urlProd = html.parse("\"id\": \"(.*?)\"")
-            val prodHtml =
-                    UtilityDownloadNws.getNWSStringFromURL("https://api.weather.gov/products/$urlProd")
+            val prodHtml = ("https://api.weather.gov/products/$urlProd").getNwsHtml()
             text = UtilityString.parseAcrossLines(prodHtml, "\"productText\": \"(.*?)\\}")
             //text = text.replace("\\n\\n", "<BR>")
             //text = text.replace("\\n", " ")
@@ -510,11 +508,11 @@ object UtilityDownload {
         val t1 = prod.substring(0, 3)
         val t2 = prod.substring(3)
         val url =
-            "http://forecast.weather.gov/product.php?site=NWS&product=$t1&issuedby=$t2&version=$version"
+                "http://forecast.weather.gov/product.php?site=NWS&product=$t1&issuedby=$t2&version=$version"
         var text = UtilityString.getHTMLandParseSep(url, RegExp.prePattern)
         text = text.replace(
-            "Graphics available at <a href=\"${MyApplication.nwsWPCwebsitePrefix}/basicwx/basicwx_wbg.php\"><u>www.wpc.ncep.noaa.gov/basicwx/basicwx_wbg.php</u></a>",
-            ""
+                "Graphics available at <a href=\"${MyApplication.nwsWPCwebsitePrefix}/basicwx/basicwx_wbg.php\"><u>www.wpc.ncep.noaa.gov/basicwx/basicwx_wbg.php</u></a>",
+                ""
         )
         text = text.substring(text.indexOf('>') + 1)
         text = text.substring(text.indexOf('>') + 1)
@@ -547,7 +545,7 @@ object UtilityDownload {
         val location = ExternalSunriseLocation(lat, lon)
         val calculator = ExternalSunriseSunsetCalculator(location, TimeZone.getDefault())
         val officialSunriseCal =
-            calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
+                calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
         val officialSunsetCal = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance())
         val srTime: String
         val ssTime: String
@@ -558,16 +556,16 @@ object UtilityDownload {
             pmStr = "pm"
             srTime = (officialSunriseCal.get(Calendar.HOUR)).toString() + ":" +
                     String.format("%2s", (officialSunriseCal.get(Calendar.MINUTE))).replace(
-                        ' ',
-                        '0'
+                            ' ',
+                            '0'
                     )
             ssTime = (officialSunsetCal.get(Calendar.HOUR)).toString() + ":" +
                     String.format("%2s", (officialSunsetCal.get(Calendar.MINUTE))).replace(' ', '0')
         } else {
             srTime = (officialSunriseCal.get(Calendar.HOUR_OF_DAY)).toString() + ":" +
                     String.format("%2s", (officialSunriseCal.get(Calendar.MINUTE))).replace(
-                        ' ',
-                        '0'
+                            ' ',
+                            '0'
                     )
             ssTime = (officialSunsetCal.get(Calendar.HOUR_OF_DAY)).toString() + ":" +
                     String.format("%2s", (officialSunsetCal.get(Calendar.MINUTE))).replace(' ', '0')
@@ -594,7 +592,7 @@ object UtilityDownload {
         val location = ExternalSunriseLocation(lat, lon)
         val calculator = ExternalSunriseSunsetCalculator(location, TimeZone.getDefault())
         val officialSunriseCal =
-            calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
+                calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
         val officialSunsetCal = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance())
         val srTime: String
         val ssTime: String
@@ -605,16 +603,16 @@ object UtilityDownload {
             pmStr = "pm"
             srTime = (officialSunriseCal.get(Calendar.HOUR)).toString() + ":" +
                     String.format("%2s", (officialSunriseCal.get(Calendar.MINUTE))).replace(
-                        ' ',
-                        '0'
+                            ' ',
+                            '0'
                     )
             ssTime = (officialSunsetCal.get(Calendar.HOUR)).toString() + ":" +
                     String.format("%2s", (officialSunsetCal.get(Calendar.MINUTE))).replace(' ', '0')
         } else {
             srTime = (officialSunriseCal.get(Calendar.HOUR_OF_DAY)).toString() + ":" +
                     String.format("%2s", (officialSunriseCal.get(Calendar.MINUTE))).replace(
-                        ' ',
-                        '0'
+                            ' ',
+                            '0'
                     )
             ssTime = (officialSunsetCal.get(Calendar.HOUR_OF_DAY)).toString() + ":" +
                     String.format("%2s", (officialSunsetCal.get(Calendar.MINUTE))).replace(' ', '0')
@@ -622,10 +620,10 @@ object UtilityDownload {
         return "$srTime$amStr / $ssTime$pmStr"
     }
 
-    fun getStringFromURLS(strURL: String): String {
+    fun getStringFromUrl(url: String): String {
         val out = StringBuilder(5000)
         try {
-            val request = Request.Builder().url(strURL).build()
+            val request = Request.Builder().url(url).build()
             val response = MyApplication.httpClient!!.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body()!!.byteStream())
             val br = BufferedReader(InputStreamReader(inputStream))
@@ -636,9 +634,9 @@ object UtilityDownload {
             }
             br.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return out.toString()
     }
@@ -657,21 +655,21 @@ object UtilityDownload {
             }
             br.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return out.toString()
     }
 
-    fun getStringFromURLSepS(strURL: String): String {
+    fun getStringFromUrlWithSeparator(url: String): String {
         val breakStr = "ABC123_456ZZ"
         val out = StringBuilder(5000)
         try {
-            val request = Request.Builder().url(strURL).build()
+            val request = Request.Builder().url(url).build()
             val response = MyApplication.httpClient!!.newCall(request).execute()
             val br =
-                BufferedReader(InputStreamReader(BufferedInputStream(response.body()!!.byteStream())))
+                    BufferedReader(InputStreamReader(BufferedInputStream(response.body()!!.byteStream())))
             var line: String? = br.readLine()
             while (line != null) {
                 out.append(line)
@@ -706,7 +704,7 @@ object UtilityDownload {
         return out.toString().replace(breakStr, "<br>")
     }*/
 
-    fun getBitmapFromURLS(url: String): Bitmap {
+    fun getBitmapFromUrl(url: String): Bitmap {
         return try {
             val request = Request.Builder().url(url).build()
             val response = MyApplication.httpClient!!.newCall(request).execute()
@@ -718,7 +716,6 @@ object UtilityDownload {
         }
     }
 
-    // FIXME lots of camelcase fixes needed in this file
     fun getBitmapFromUrlUnsafe(url: String): Bitmap {
         return try {
             val request = Request.Builder().url(url).build()
@@ -731,9 +728,9 @@ object UtilityDownload {
         }
     }
 
-    fun getInputStreamFromURL(strURL: String): InputStream? {
+    fun getInputStreamFromUrl(url: String): InputStream? {
         return try {
-            val request = Request.Builder().url(strURL).build()
+            val request = Request.Builder().url(url).build()
             val response = MyApplication.httpClient!!.newCall(request).execute()
             response.body()!!.byteStream()
         } catch (e: IOException) {

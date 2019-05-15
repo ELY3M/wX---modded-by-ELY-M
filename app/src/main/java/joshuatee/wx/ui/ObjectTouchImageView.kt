@@ -188,7 +188,6 @@ class ObjectTouchImageView {
                         MyApplication.spcsseoX = x
                         MyApplication.spcsseoY = y
                     }
-                    // FIXME
                     "WPCGEFS1" -> {
                         MyApplication.wpcgefsZoom = z
                         MyApplication.wpcgefsX = x

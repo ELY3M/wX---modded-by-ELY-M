@@ -48,10 +48,10 @@ internal object WXGLNexradLevel3TVS {
             dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, tvsBaseFn + fnSuffix))
             dis.bigEndian = true
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
             return listOf()
         } catch (e: OutOfMemoryError) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
             return listOf()
         }
         var retStr = UtilityLevel3TextProduct.read(dis)

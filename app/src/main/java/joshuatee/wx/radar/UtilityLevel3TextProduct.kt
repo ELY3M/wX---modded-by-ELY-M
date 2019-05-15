@@ -50,7 +50,7 @@ object UtilityLevel3TextProduct {
                 } catch (e: EOFException) {
                     UtilityLog.HandleException(e)
                 } catch (e: OutOfMemoryError) {
-                    UtilityLog.HandleException(e)
+                    UtilityLog.handleException(e)
                 } finally {
                     try {
                         it.close()

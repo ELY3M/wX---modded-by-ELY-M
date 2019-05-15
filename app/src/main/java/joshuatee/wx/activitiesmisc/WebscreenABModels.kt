@@ -32,8 +32,6 @@ import kotlinx.android.synthetic.main.activity_webview_toolbar.*
 
 class WebscreenABModels : BaseActivity() {
 
-    // FIXME why is this needed along with WebscreenAB? it is used by other activities
-
     // This is a general purpose activity used to view web pages.
     // Toolbar is displayed ( thus AB ie ActionBar (old name) in activity name )
     // URL and title are passed in via extras

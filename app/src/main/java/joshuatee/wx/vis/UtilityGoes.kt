@@ -32,7 +32,7 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityLog
 
-object UtilityGOES16 {
+object UtilityGoes {
 
     private fun getImageFileName(sector: String): String {
         val fullSize = "latest";

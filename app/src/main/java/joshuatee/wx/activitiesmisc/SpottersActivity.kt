@@ -175,9 +175,7 @@ class SpottersActivity : BaseActivity() {
         bottomSheetFragment.fnList = listOf(::showItemOnRadar, ::showItemOnMap, ::toggleFavorite)
         bottomSheetFragment.labelList = listOf("Show on radar", "Show on map", "Toggle favorite")
         bottomSheetFragment.actContext = this
-        //bottomSheetFragment.topLabel = recyclerView.getItem(position)
-        // FIXME push to Spotter object
-        bottomSheetFragment.topLabel = ca.getItem(position).lastName + ", " + ca.getItem(position).firstName
+        bottomSheetFragment.topLabel = ca.getItem(position).toString()
         bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
     }
 

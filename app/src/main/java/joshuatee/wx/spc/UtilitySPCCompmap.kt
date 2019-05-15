@@ -43,12 +43,12 @@ internal object UtilitySPCCompmap {
             layerStrArr.indices.forEach {
                 layerStrArr[it] = layerStrArr[it].replace("a", "")
                 val gd = ExternalGifDecoder()
-                gd.read(UtilityDownload.getInputStreamFromURL("${MyApplication.nwsSPCwebsitePrefix}/exper/compmap/" + layerStrArr[it] + ".gif"))
+                gd.read(UtilityDownload.getInputStreamFromUrl("${MyApplication.nwsSPCwebsitePrefix}/exper/compmap/" + layerStrArr[it] + ".gif"))
                 layersAl.add(BitmapDrawable(context.resources, gd.bitmap))
             }
         } else {
             val gd = ExternalGifDecoder()
-            gd.read(UtilityDownload.getInputStreamFromURL("${MyApplication.nwsSPCwebsitePrefix}/exper/compmap/" + "basemap" + ".gif"))
+            gd.read(UtilityDownload.getInputStreamFromUrl("${MyApplication.nwsSPCwebsitePrefix}/exper/compmap/" + "basemap" + ".gif"))
             layersAl.add(BitmapDrawable(context.resources, gd.bitmap))
         }
         return UtilityImg.layerDrawableToBitmap(layersAl)

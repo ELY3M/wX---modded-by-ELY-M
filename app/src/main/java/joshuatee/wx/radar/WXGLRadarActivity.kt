@@ -541,7 +541,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
     }
 
-    // FIXME use code similar to multipane for this and above method
     private fun setSubTitle() {
         val info = Utility.readPref(contextg, "WX_RADAR_CURRENT_INFO", "")
         val tmpArr = info.split(" ")
@@ -1116,9 +1115,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         }
     }
 
-    // FIXME migrate
     private fun getContentVWP() = GlobalScope.launch(uiDispatcher) {
-        //val txt = withContext(Dispatchers.IO) { UtilityWXOGL.getVWP(contextg, oglr.rid) }
+        //val txt = withContext(Dispatchers.IO) { UtilityWXOGL.getVwp(contextg, oglr.rid) }
         //ObjectIntent(contextg, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(txt, oglr.rid + " VAD Wind Profile"))
         var vmpurl = "https://weather.cod.edu/satrad/nexrad/index.php?type="+oglr.rid+"-NVW"
         ObjectIntent(contextg, WebscreenABModels::class.java, WebscreenABModels.URL, arrayOf(vmpurl, oglr.rid + " VAD Wind Profile"))

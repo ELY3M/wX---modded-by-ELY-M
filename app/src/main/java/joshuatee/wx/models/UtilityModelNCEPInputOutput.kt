@@ -39,12 +39,11 @@ internal object UtilityModelNCEPInputOutput {
 
     fun getRunTime(model: String, param: String, spinnerSectorCurrent: String): RunTimeData {
         val runData = RunTimeData()
-        // FIXME get rid of StringBuilder but deal with insert below
         val runCompletionDataStr = StringBuilder(100)
         var html = UtilityString.getHTMLandParse(
-            "${MyApplication.nwsMagNcepWebsitePrefix}/model-guidance-model-parameter.php?group=Model%20Guidance&model="
-                    + model.toUpperCase(Locale.US) + "&area=" + spinnerSectorCurrent + "&ps=area",
-            RegExp.ncepPattern2
+                "${MyApplication.nwsMagNcepWebsitePrefix}/model-guidance-model-parameter.php?group=Model%20Guidance&model="
+                        + model.toUpperCase(Locale.US) + "&area=" + spinnerSectorCurrent + "&ps=area",
+                RegExp.ncepPattern2
         )
         html = html.replace("UTC selected_cell", "Z")
         runCompletionDataStr.append(html.replace("Z", " UTC"))
@@ -52,11 +51,11 @@ internal object UtilityModelNCEPInputOutput {
             runCompletionDataStr.insert(8, " ")
         }
         val timeCompleteUrl =
-            "${MyApplication.nwsMagNcepWebsitePrefix}/model-fhrs.php?group=Model%20Guidance&model=" + model.toLowerCase(
-                Locale.US
-            ) + "&fhr_mode=image&loop_start=-1&loop_end=-1&area=" +
-                    spinnerSectorCurrent + "&fourpan=no&imageSize=&preselected_formatted_cycle_date=" +
-                    runCompletionDataStr + "&cycle=" + runCompletionDataStr + "&param=" + param + "&ps=area"
+                "${MyApplication.nwsMagNcepWebsitePrefix}/model-fhrs.php?group=Model%20Guidance&model=" + model.toLowerCase(
+                        Locale.US
+                ) + "&fhr_mode=image&loop_start=-1&loop_end=-1&area=" +
+                        spinnerSectorCurrent + "&fourpan=no&imageSize=&preselected_formatted_cycle_date=" +
+                        runCompletionDataStr + "&cycle=" + runCompletionDataStr + "&param=" + param + "&ps=area"
         val timeCompleteHTML = (timeCompleteUrl.replace(" ", "%20")).getHtml()
         runData.imageCompleteStr = timeCompleteHTML.parseLastMatch("SubmitImageForm.(.*?).\"")
         runData.mostRecentRun = html.parseLastMatch(RegExp.ncepPattern1)
@@ -66,25 +65,25 @@ internal object UtilityModelNCEPInputOutput {
     fun getImage(om: ObjectModel, time: String): Bitmap {
         val imgUrl: String = when {
             om.model == "GFS" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(
-                Locale.US
+                    Locale.US
             ) + "/" + om.run.replace(
-                "Z",
-                ""
+                    "Z",
+                    ""
             ) +
                     "/" + om.sector.toLowerCase(Locale.US) + "/" + om.currentParam + "/" + om.model.toLowerCase(
-                Locale.US
+                    Locale.US
             ) + "_" +
                     om.sector.toLowerCase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
             om.model == "HRRR" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(
-                Locale.US
+                    Locale.US
             ) + "/" + om.run.replace(
-                "Z",
-                ""
+                    "Z",
+                    ""
             ) +
                     "/" + om.model.toLowerCase(Locale.US) + "_" + om.sector.toLowerCase(Locale.US) + "_" + time + "00_" + om.currentParam + ".gif"
             else -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace(
-                "Z",
-                ""
+                    "Z",
+                    ""
             ) +
                     "/" + om.model.toLowerCase(Locale.US) + "_" + om.sector.toLowerCase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
         }

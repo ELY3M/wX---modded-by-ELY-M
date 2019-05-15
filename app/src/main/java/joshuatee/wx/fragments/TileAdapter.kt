@@ -28,9 +28,9 @@ internal class TileAdapter(
 
     override fun onBindViewHolder(holder: RecyclerViewHolders, position: Int) {
         val bitmap = if (!MyApplication.tileDownsize) {
-            UtilityImg.loadBM(context, itemList[position].photo, false)
+            UtilityImg.loadBitmap(context, itemList[position].photo, false)
         } else {
-            UtilityImg.loadBM(context, itemList[position].photo, true)
+            UtilityImg.loadBitmap(context, itemList[position].photo, true)
         }
         val paramsIv = holder.iv.layoutParams
         paramsIv.width = MyApplication.dm.widthPixels / tilesPerRow

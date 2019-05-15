@@ -94,7 +94,6 @@ class SettingsColorPaletteActivity : BaseActivity() {
                 View.OnClickListener { editPalFAB(this) })
         rowListItem = allItemList
         val lLayout = GridLayoutManager(this, UIPreferences.tilesPerRow)
-        // FIXME camelCase
         card_list.setHasFixedSize(true)
         card_list.layoutManager = lLayout
         rcAdapter = TileAdapterColorPalette(rowListItem, UIPreferences.tilesPerRow)
@@ -130,7 +129,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                     }
                 }
                 "99" -> {
-                    listOf("CODENH", "AF", "EAK").forEach {
+                    listOf("CODENH", "AF", "EAK", "ELY", "ELYENH").forEach {
                         allItems.add(TileObjectColorPalette(it, toolbar, prefToken, cg, type, true))
                     }
                     val prefArr =

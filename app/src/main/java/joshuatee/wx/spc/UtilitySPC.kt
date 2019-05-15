@@ -27,7 +27,7 @@ import android.graphics.Bitmap
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityDownload
-import joshuatee.wx.util.UtilityVTEC
+import joshuatee.wx.util.UtilityVtec
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
@@ -35,7 +35,7 @@ import joshuatee.wx.RegExp
 object UtilitySPC {
 
     fun getStormReportsTodayUrl(): String =
-        "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/" + "today" + ".gif"
+            "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/" + "today" + ".gif"
 
     internal val tstormOutlookImages: List<Bitmap>
         get() {
@@ -69,10 +69,10 @@ object UtilitySPC {
             returnStr = "high"
         }
         html = html.replace("ACUS[0-9]{2} KWNS [0-9]{6}".toRegex(), "")
-            .replace("SWOD[Y4][1-3]".toRegex(), "")
-            .replace("SPC AC [0-9]{6}".toRegex(), "")
-            .replace("NWS STORM PREDICTION CENTER NORMAN OK", "")
-            .replace("CONVECTIVE OUTLOOK", "")
+                .replace("SWOD[Y4][1-3]".toRegex(), "")
+                .replace("SPC AC [0-9]{6}".toRegex(), "")
+                .replace("NWS STORM PREDICTION CENTER NORMAN OK", "")
+                .replace("CONVECTIVE OUTLOOK", "")
         return listOf(returnStr, html)
     }
 
@@ -92,14 +92,14 @@ object UtilitySPC {
             if (!MyApplication.severeDashboardMcd.valueGet().contains(MyApplication.MD_COMP)) {
                 mdPresent = true
                 val al = MyApplication.severeDashboardMcd.valueGet()
-                    .parseColumn(RegExp.mcdPatternUtilspc)
+                        .parseColumn(RegExp.mcdPatternUtilspc)
                 mdCount = al.size
                 al.forEach { dashboardStrMcd += ":$it" }
             }
             if (!MyApplication.severeDashboardWat.valueGet().contains(MyApplication.WATCH_COMP)) {
                 watchPresent = true
                 val al =
-                    MyApplication.severeDashboardWat.valueGet().parseColumn(RegExp.watchPattern)
+                        MyApplication.severeDashboardWat.valueGet().parseColumn(RegExp.watchPattern)
                 watchCount = al.size
                 al.forEach { dashboardStrWat += ":$it" }
             }
@@ -134,25 +134,25 @@ object UtilitySPC {
         var svsCount = 0
         var spsCount = 0
         if (MyApplication.checktor) {
-            torCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardTor.valueGet())
+            torCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardTor.valueGet())
             if (torCount > 0) uswarnPresent = true
 
-            svrCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardSvr.valueGet())
+            svrCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardSvr.valueGet())
             if (svrCount > 0) uswarnPresent = true
 
-            ewwCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardEww.valueGet())
+            ewwCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardEww.valueGet())
             if (ewwCount > 0) uswarnPresent = true
 
-            ffwCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardFfw.valueGet())
+            ffwCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardFfw.valueGet())
             if (ffwCount > 0) uswarnPresent = true
 
-            smwCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardSmw.valueGet())
+            smwCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardSmw.valueGet())
             if (smwCount > 0) uswarnPresent = true
 
-            svsCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardSvs.valueGet())
+            svsCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardSvs.valueGet())
             if (svsCount > 0) uswarnPresent = true
 
-            spsCount = UtilityVTEC.getStormCount(context, MyApplication.severeDashboardSps.valueGet())
+            spsCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardSps.valueGet())
             if (spsCount > 0) uswarnPresent = true
 
         }

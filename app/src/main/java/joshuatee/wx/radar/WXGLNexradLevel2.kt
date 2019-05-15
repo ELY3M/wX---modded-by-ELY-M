@@ -95,9 +95,9 @@ class WXGLNexradLevel2 {
                         productCode.toInt()
                     )
                 } catch (e: Exception) {
-                    UtilityLog.HandleException(e)
+                    UtilityLog.handleException(e)
                 } catch (e: OutOfMemoryError) {
-                    UtilityLog.HandleException(e)
+                    UtilityLog.handleException(e)
                 }
             }
         }

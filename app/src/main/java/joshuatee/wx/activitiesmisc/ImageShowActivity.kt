@@ -97,7 +97,7 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun loadRawBitmap() {
-        bitmap = UtilityImg.loadBM(this, R.drawable.radar_legend, false)
+        bitmap = UtilityImg.loadBitmap(this, R.drawable.radar_legend, false)
         img.setBitmap(bitmap)
     }
 

@@ -44,7 +44,7 @@ import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
 class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
-    OnItemSelectedListener {
+        OnItemSelectedListener {
 
     // This code provides a native android interface to Weather Models
     //
@@ -84,19 +84,19 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
         om = ObjectModel(this, activityArguments!![1], activityArguments!![0])
         if (om.numPanes == 1) {
             super.onCreate(
-                savedInstanceState,
-                R.layout.activity_models_generic,
-                R.menu.models_generic,
-                iconsEvenlySpaced = false,
-                bottomToolbar = true
+                    savedInstanceState,
+                    R.layout.activity_models_generic,
+                    R.menu.models_generic,
+                    iconsEvenlySpaced = false,
+                    bottomToolbar = true
             )
         } else {
             super.onCreate(
-                savedInstanceState,
-                R.layout.activity_models_generic_multipane,
-                R.menu.models_generic,
-                iconsEvenlySpaced = false,
-                bottomToolbar = true
+                    savedInstanceState,
+                    R.layout.activity_models_generic_multipane,
+                    R.menu.models_generic,
+                    iconsEvenlySpaced = false,
+                    bottomToolbar = true
             )
         }
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -106,15 +106,15 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
         miStatusParam2 = m.findItem(R.id.action_status_param2)
         if (om.numPanes < 2) {
             fab1 = ObjectFab(
-                this,
-                this,
-                R.id.fab1,
-                View.OnClickListener { UtilityModels.moveBack(om.spTime) })
+                    this,
+                    this,
+                    R.id.fab1,
+                    View.OnClickListener { UtilityModels.moveBack(om.spTime) })
             fab2 = ObjectFab(
-                this,
-                this,
-                R.id.fab2,
-                View.OnClickListener { UtilityModels.moveForward(om.spTime) })
+                    this,
+                    this,
+                    R.id.fab2,
+                    View.OnClickListener { UtilityModels.moveForward(om.spTime) })
             m.findItem(R.id.action_img1).isVisible = false
             m.findItem(R.id.action_img2).isVisible = false
             if (UIPreferences.fabInModels) {
@@ -136,7 +136,6 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
         om.displayData = DisplayData(this, this, om.numPanes, om.spTime)
         spRun = ObjectSpinner(this, this, this, R.id.spinner_run)
         spSector = ObjectSpinner(this, this, this, R.id.spinner_sector, om.sectors)
-        // FIXME use constructor with init value at end
         spSector.setSelection(om.sector)
         ObjectSpinner(this, this, this, R.id.spinner_model, om.models, om.model)
         drw = ObjectNavDrawer(this, om.labels, om.params)
@@ -178,7 +177,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+            drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item))
@@ -190,24 +189,24 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             R.id.action_img1 -> {
                 om.curImg = 0
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(
-                    om.displayData.img,
-                    toolbar,
-                    "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
+                        om.displayData.img,
+                        toolbar,
+                        "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
                 )
             }
             R.id.action_img2 -> {
                 om.curImg = 1
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(
-                    om.displayData.img,
-                    toolbar,
-                    "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
+                        om.displayData.img,
+                        toolbar,
+                        "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
                 )
             }
             R.id.action_multipane -> ObjectIntent(
-                this,
-                ModelsGenericActivity::class.java,
-                INFO,
-                arrayOf("2", activityArguments!![1], activityArguments!![2])
+                    this,
+                    ModelsGenericActivity::class.java,
+                    INFO,
+                    arrayOf("2", activityArguments!![1], activityArguments!![2])
             )
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
@@ -222,13 +221,12 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
     }
 
     private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
-        // FIXME NCEP should not have different code
         if (om.modelType == ModelType.NCEP) {
             om.rtd = withContext(Dispatchers.IO) {
                 UtilityModelNCEPInputOutput.getRunTime(
-                    om.model,
-                    om.displayData.param[0],
-                    om.sectors[0]
+                        om.model,
+                        om.displayData.param[0],
+                        om.sectors[0]
                 )
             }
             om.time = om.rtd.mostRecentRun
@@ -242,10 +240,10 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             (0 until om.spTime.size()).forEach {
                 tmpStr = MyApplication.space.split(om.spTime[it])[0]
                 om.spTime[it] = "$tmpStr " + UtilityModels.convertTimeRuntoTimeString(
-                    om.rtd.mostRecentRun.replace(
-                        "Z",
-                        ""
-                    ), tmpStr, true
+                        om.rtd.mostRecentRun.replace(
+                                "Z",
+                                ""
+                        ), tmpStr, true
                 )
             }
             om.spTime.notifyDataSetChanged()
@@ -260,12 +258,11 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             miStatus.isVisible = true
             miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
             spRun.notifyDataSetChanged()
-            // FIXME
             (0 until om.spTime.size()).forEach {
                 om.spTime[it] = om.spTime[it] + " " + UtilityModels.convertTimeRuntoTimeString(
-                    om.rtd.timeStrConv.replace("Z", ""),
-                    om.spTime[it],
-                    false
+                        om.rtd.timeStrConv.replace("Z", ""),
+                        om.spTime[it],
+                        false
                 )
             }
             om.spTime.notifyDataSetChanged()
@@ -290,9 +287,9 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
         if (om.imageLoaded) {
             (0 until om.numPanes).forEach {
                 UtilityImg.imgSavePosnZoom(
-                    this,
-                    om.displayData.img[it],
-                    om.modelProvider + om.numPanes.toString() + it.toString()
+                        this,
+                        om.displayData.img[it],
+                        om.modelProvider + om.numPanes.toString() + it.toString()
                 )
             }
             Utility.writePref(this, om.prefRunPosn, om.spTime.selectedItemPosition)
@@ -304,12 +301,12 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
         (0 until om.numPanes).forEach {
             om.displayData.param[it] = om.params[0]
             om.displayData.param[it] =
-                Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[0])
+                    Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[0])
             om.displayData.paramLabel[it] = om.params[0]
             om.displayData.paramLabel[it] = Utility.readPref(
-                this,
-                om.prefParamLabel + it.toString(),
-                om.displayData.paramLabel[0]
+                    this,
+                    om.prefParamLabel + it.toString(),
+                    om.displayData.paramLabel[0]
             )
         }
         if (!UtilityModels.parmInArray(om.params, om.displayData.param[0])) {
@@ -329,6 +326,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             ModelType.NCEP -> {
                 setupListRunZ(om.numberRuns)
             }
+            else -> {}
         }
         om.spTime.setSelection(0)
         om.spTime.list.clear()
@@ -336,20 +334,20 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             ModelType.GLCFS -> {
                 (om.startStep..om.endStep step om.stepAmount).forEach {
                     om.spTime.list.add(
-                        String.format(
-                            Locale.US,
-                            om.format,
-                            it
-                        )
+                            String.format(
+                                    Locale.US,
+                                    om.format,
+                                    it
+                            )
                     )
                 }
                 (51..121 step 3).forEach {
                     om.spTime.list.add(
-                        String.format(
-                            Locale.US,
-                            om.format,
-                            it
-                        )
+                            String.format(
+                                    Locale.US,
+                                    om.format,
+                                    it
+                            )
                     )
                 }
             }
@@ -358,58 +356,58 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
                     "HRRR" -> {
                         (om.startStep..om.endStep step om.stepAmount).forEach {
                             om.spTime.add(
-                                String.format(
-                                    Locale.US,
-                                    "%03d" + "00",
-                                    it
-                                )
+                                    String.format(
+                                            Locale.US,
+                                            "%03d" + "00",
+                                            it
+                                    )
                             )
                         }
                     }
                     "GEFS-SPAG", "GEFS-MEAN-SPRD" -> {
                         (0..181 step 6).forEach {
                             om.spTime.add(
-                                String.format(
-                                    Locale.US,
-                                    "%03d",
-                                    it
-                                )
+                                    String.format(
+                                            Locale.US,
+                                            "%03d",
+                                            it
+                                    )
                             )
                         }
                         (192..385 step 12).forEach {
                             om.spTime.add(
-                                String.format(
-                                    Locale.US,
-                                    "%03d",
-                                    it
-                                )
+                                    String.format(
+                                            Locale.US,
+                                            "%03d",
+                                            it
+                                    )
                             )
                         }
                     }
                     "GFS" -> {
                         (0..241 step 3).forEach {
                             om.spTime.add(
-                                String.format(
-                                    Locale.US,
-                                    "%03d",
-                                    it
-                                )
+                                    String.format(
+                                            Locale.US,
+                                            "%03d",
+                                            it
+                                    )
                             )
                         }
                         (252..385 step 12).forEach {
                             om.spTime.add(
-                                String.format(
-                                    Locale.US,
-                                    "%03d",
-                                    it
-                                )
+                                    String.format(
+                                            Locale.US,
+                                            "%03d",
+                                            it
+                                    )
                             )
                         }
                     }
                     else -> {
                         (om.startStep..om.endStep step om.stepAmount).forEach {
                             om.spTime.list.add(
-                                String.format(Locale.US, om.format, it)
+                                    String.format(Locale.US, om.format, it)
                             )
                         }
                     }
@@ -418,11 +416,11 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             else -> {
                 (om.startStep..om.endStep step om.stepAmount).forEach {
                     om.spTime.list.add(
-                        String.format(
-                            Locale.US,
-                            om.format,
-                            it
-                        )
+                            String.format(
+                                    Locale.US,
+                                    om.format,
+                                    it
+                            )
                     )
                 }
             }
@@ -443,7 +441,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 spRun.add("12Z")
                 spRun.add("18Z")
             }
-            5 -> {  // FIXME use enum
+            5 -> {
                 spRun.add("03Z")
                 spRun.add("09Z")
                 spRun.add("15Z")
