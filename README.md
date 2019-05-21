@@ -13,10 +13,14 @@ Joshua Tee is welcome to add any of changes I did.
 
 The apk is in Releases section. download from there   
 
-https://github.com/ELY3M/wX---modded-by-ELY-M/releases
+https://github.com/ELY3M/wX---modded-by-ELY-M/releases  
 
-==================================================================
+==================================================================   
 
+The screenshots of the app are at 
+http://bmx3r.com/wx 
+
+==================================================================   
 
 ## TO DO List: 
 
