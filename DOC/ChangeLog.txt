@@ -20,7 +20,16 @@
 // TODO camelCase filenames in particular when acronyms longer then 2 chars exist
 // TODO add user accessible debug log from try-catch data
 // TODO remove unused prefs
+// TODO color pal edit for SRM and L2 VEL/REF
 // TODO don't display full precision in lat/lon in settings location edit
+// TODO  enhance formatting for NHC Storms
+// TODO - bug , SPC Meso swipe left/right takes on extra to get started
+// TODO - in settings homescreen remove 7DAY from choices
+// TODO - nexrad radar on landscape - switch to dual pane is not centered
+// TODO - in settings indicate minutes for varoius update options (widget/notification)
+// TODO - update polygons when radar is open (in addition to background). Possibly use two sets of prefs , cloned at radar start
+// TODO - color pal , allow cloning of a user created pal
+// TODO - radar , tap stop button should then fetch latest radar
 
 [ADD] - adding something new - method, file, etc. to the repo
 [REM] - remove items

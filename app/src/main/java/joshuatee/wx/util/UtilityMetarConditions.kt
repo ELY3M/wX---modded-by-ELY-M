@@ -301,6 +301,7 @@ object UtilityMetarConditions {
             // FIXME
             //"Thunderstorm in Vicinity Haze" to "hi_tsra",
             "Cumulonimbus Clouds Observed" to "tsra_hi",
+            "Towering Cumulus Clouds Observed" to "tsra_hi",
 
             "Funnel Cloud" to "fc",
             "Funnel Cloud in Vicinity" to "fc",
