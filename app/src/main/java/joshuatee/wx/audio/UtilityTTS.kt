@@ -52,7 +52,7 @@ object UtilityTTS {
     private var playlistNumber = 0
     private var playlistArr = List(2) { "" }
 
-    fun initTTS(context: Context) {
+    fun initTts(context: Context) {
         // samsung bug, if users do not have google TTS selected it will crash - add try-catch so user can at least use rest of prog
         try {
             ttobjGlobal = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
@@ -63,13 +63,13 @@ object UtilityTTS {
             })
             ttsInit = true
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 
-    internal fun playAgainTTS(context: Context) {
+    internal fun playAgainTts(context: Context) {
         if (!ttsInit) {
-            initTTS(context)
+            initTts(context)
         }
         ttobjGlobal!!.setSpeechRate(Utility.readPref(context, "TTS_SPEED_PREF", 10) / 10f)
         splitInChunks(Utility.fromHtml(TEXT_OLD), 1000).forEach {
@@ -117,7 +117,7 @@ object UtilityTTS {
         playlistTotal = playlistArr.size
         currentFile = 0
         ttsIsPaused = false
-        if (!ttsInit) initTTS(context)
+        if (!ttsInit) initTts(context)
         // clear the queue of any pending objects
         ttobjGlobal!!.stop()
         if (!mpInit) {
@@ -151,7 +151,7 @@ object UtilityTTS {
             playlistTotal = playlistArr.size
             currentFile = 0
             ttsIsPaused = false
-            if (!ttsInit) initTTS(context)
+            if (!ttsInit) initTts(context)
             // clear the queue of any pending objects
             ttobjGlobal!!.stop()
             if (!mpInit) {
@@ -178,7 +178,7 @@ object UtilityTTS {
         }
     }
 
-    private fun synthesizeTextAndPlayPrevoius(context: Context) {
+    private fun synthesizeTextAndPlayPrevious(context: Context) {
         playlistArr = MyApplication.playlistStr.split(":")
         playlistNumber -= 1
         if (playlistNumber == -1) playlistNumber = playlistArr.size - 1
@@ -186,7 +186,7 @@ object UtilityTTS {
         playlistTotal = playlistArr.size
         currentFile = 0
         ttsIsPaused = false
-        if (!ttsInit) initTTS(context)
+        if (!ttsInit) initTts(context)
         // clear the queue of any pending objects
         ttobjGlobal!!.stop()
         if (!mpInit) {
@@ -216,7 +216,7 @@ object UtilityTTS {
         playlistTotal = 1
         currentFile = 0
         ttsIsPaused = false
-        if (!ttsInit) initTTS(context)
+        if (!ttsInit) initTts(context)
         // clear the queue of any pending objects
         ttobjGlobal!!.stop()
         if (!mpInit) {
@@ -242,7 +242,7 @@ object UtilityTTS {
         if (mMediaPlayer != null && mMediaPlayer!!.isPlaying) {
             mMediaPlayer!!.stop()
         }
-        txt = UtilityTTSTranslations.tranlasteAbbrev(txt)
+        txt = UtilityTTSTranslations.translateAbbreviation(txt)
         val myHashRender = HashMap<String, String>()
         val musicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
         val wxDir = File(musicDir, MyApplication.packageNameAsString)
@@ -288,7 +288,7 @@ object UtilityTTS {
     internal fun mediaPlayerRewind(context: Context) {
         if (mpInit) {
             if (mMediaPlayer!!.currentPosition < 10000) {
-                synthesizeTextAndPlayPrevoius(context)
+                synthesizeTextAndPlayPrevious(context)
             } else {
                 playMediaPlayerFile(context, 0)
                 currentFile += 1
@@ -311,7 +311,7 @@ object UtilityTTS {
             mMediaPlayer?.prepare()
             mMediaPlayer?.start()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 

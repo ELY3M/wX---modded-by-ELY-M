@@ -33,21 +33,7 @@ import joshuatee.wx.Extensions.*
 
 object UtilityTime {
 
-    /*internal fun convertFromUTC(time: String): String {
-        var returnTime = time
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss", Locale.US)
-        inputFormat.timeZone = TimeZone.getTimeZone("UTC")
-        val outputFormat = SimpleDateFormat("yyyy-MM-dd h:mm a", Locale.US)
-        try {
-            val date = inputFormat.parse(time.replace("+00:00", ""))
-            returnTime = outputFormat.format(date)
-        } catch (e: Exception) {
-            UtilityLog.HandleException(e)
-        }
-        return returnTime
-    }*/
-
-    internal fun convertFromUTCForMetar(time: String): String {
+    internal fun convertFromUtcForMetar(time: String): String {
         var returnTime = time
         val inputFormat = SimpleDateFormat("yyyy.MM.dd' 'HHmm", Locale.US)
         inputFormat.timeZone = TimeZone.getTimeZone("UTC")
@@ -56,7 +42,7 @@ object UtilityTime {
             val date = inputFormat.parse(time)
             returnTime = outputFormat.format(date)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return returnTime
     }
@@ -72,7 +58,7 @@ object UtilityTime {
                 parsed = format.parse(time)
                 t = parsed.time
             } catch (e: Exception) {
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             }
             listRun.add(format.format(Date(t - 60 * oneMinuteInMillis * it.toLong() * hours.toLong())))
         }
@@ -90,7 +76,7 @@ object UtilityTime {
                 parsed = format.parse(time)
                 t = parsed.time
             } catch (e: Exception) {
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             }
             listRun.add(format.format(Date(t - 60 * oneMinuteInMillis * it.toLong() * hours.toLong())))
         }
@@ -147,7 +133,7 @@ object UtilityTime {
 
     fun day(): Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
-    val currentHourInUTC: Int
+    val currentHourInUtc: Int
         get() = Calendar.getInstance(TimeZone.getTimeZone("GMT")).get(Calendar.HOUR_OF_DAY)
 
     fun isRadarTimeOld(radarTime: String): Boolean {
@@ -192,25 +178,24 @@ object UtilityTime {
         val timeRange = (vtec).parse("-([0-9]{6}T[0-9]{4})Z")
         val timeInMinutes = decodeVtecTime(timeRange)
         val currentTimeInMinutes = decodeVtecTime(getGmtTimeForVtec())
-        val vtecCurrent = currentTimeInMinutes.before(timeInMinutes)
-        return vtecCurrent
+        return currentTimeInMinutes.before(timeInMinutes)
     }
 
-    fun decodeVtecTime(timeRangeOriginal: String): Calendar {
+    private fun decodeVtecTime(timeRangeOriginal: String): Calendar {
         // Y2K issue
         val timeRange = timeRangeOriginal.replace("T","")
-        val year = ("20" + (timeRange).parse("([0-9]{2})[0-9]{4}[0-9]{4}")).toIntOrNull()  ?: 0;
-        val month = ((timeRange).parse("[0-9]{2}([0-9]{2})[0-9]{2}[0-9]{4}")).toIntOrNull()  ?: 0;
-        val day = ((timeRange).parse("[0-9]{4}([0-9]{2})[0-9]{4}")).toIntOrNull()  ?: 0;
-        val hour = ((timeRange).parse("[0-9]{6}([0-9]{2})[0-9]{2}")).toIntOrNull()  ?: 0;
-        val minute = ((timeRange).parse("[0-9]{6}[0-9]{2}([0-9]{2})")).toIntOrNull() ?: 0;
+        val year = ("20" + (timeRange).parse("([0-9]{2})[0-9]{4}[0-9]{4}")).toIntOrNull()  ?: 0
+        val month = ((timeRange).parse("[0-9]{2}([0-9]{2})[0-9]{2}[0-9]{4}")).toIntOrNull()  ?: 0
+        val day = ((timeRange).parse("[0-9]{4}([0-9]{2})[0-9]{4}")).toIntOrNull()  ?: 0
+        val hour = ((timeRange).parse("[0-9]{6}([0-9]{2})[0-9]{2}")).toIntOrNull()  ?: 0
+        val minute = ((timeRange).parse("[0-9]{6}[0-9]{2}([0-9]{2})")).toIntOrNull() ?: 0
         //UtilityLog.d("wx", timeRange + "," + year.toString() + "," + month.toString() + "," + day.toString() + "," + hour.toString() + "," + minute.toString());
         val cal = Calendar.getInstance()
-        cal.set(year, month - 1, day, hour, minute);
+        cal.set(year, month - 1, day, hour, minute)
         return cal
     }
 
-    fun getGmtTimeForVtec(): String{
+    private fun getGmtTimeForVtec(): String{
         val dateFormatGmt = SimpleDateFormat("yyMMddHHmm", Locale.US)
         dateFormatGmt.timeZone = TimeZone.getTimeZone("GMT")
         return dateFormatGmt.format(Date())

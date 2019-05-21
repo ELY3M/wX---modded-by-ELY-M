@@ -89,7 +89,7 @@ class BackgroundFetch(val context: Context) {
         if (MyApplication.alertTornadoNotificationCurrent || MyApplication.checktor || PolygonType.SVR.pref) {
             try {
                 // store data for use by severe dashboard and cod warnings
-                UtilityDownloadRadar.getPolygonVTEC(context)
+                UtilityDownloadRadar.getPolygonVtec(context)
                 if (MyApplication.alertTornadoNotificationCurrent) {
                     notifUrls += UtilityNotificationTornado.checkAndSendTornadoNotification(
                             context,
@@ -97,7 +97,7 @@ class BackgroundFetch(val context: Context) {
                     )
                 }
             } catch (e: Exception) {
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             }
         } else {
             MyApplication.severeDashboardTor.valueSet(context, "")
@@ -121,7 +121,7 @@ class BackgroundFetch(val context: Context) {
                         var mcdPre = UtilityDownload.getTextProduct(context, "SPCMCD$mdNo")
                         if (PolygonType.MCD.pref || locationNeedsMcd) {
                             mcdNoList = "$mcdNoList$mdNo:"
-                            mcdLatlon += UtilityNotification.storeWatMCDLATLON(mcdPre)
+                            mcdLatlon += UtilityNotification.storeWatMcdLatLon(mcdPre)
                         }
                         if (MyApplication.alertSpcmcdNotificationCurrent) {
                             noMain = "SPC MCD #$mdNo"
@@ -167,7 +167,7 @@ class BackgroundFetch(val context: Context) {
                     } // end while find
                 }
             } catch (e: Exception) {
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             }
         } else {
             MyApplication.severeDashboardMcd.valueSet(context, "")
@@ -187,7 +187,7 @@ class BackgroundFetch(val context: Context) {
                         var mcdPre = UtilityDownload.getTextProduct(context, "WPCMPD$mdNo")
                         if (PolygonType.MPD.pref || locationNeedsWpcmpd) {
                             mpdNoList = "$mpdNoList$mdNo:"
-                            mpdLatlon += UtilityNotification.storeWatMCDLATLON(mcdPre)
+                            mpdLatlon += UtilityNotification.storeWatMcdLatLon(mcdPre)
                         }
                         if (MyApplication.alertWpcmpdNotificationCurrent) {
                             noMain = "WPC MPD #$mdNo"
@@ -235,7 +235,7 @@ class BackgroundFetch(val context: Context) {
                     } // end while find
                 }
             } catch (e: Exception) {
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             }
         } else {
             MyApplication.severeDashboardMpd.valueSet(context, "")
@@ -254,13 +254,16 @@ class BackgroundFetch(val context: Context) {
                         mdNo = String.format("%4s", mdNo).replace(' ', '0')
                         var mcdPre = UtilityDownload.getTextProduct(context, "SPCWAT$mdNo")
                         watchNoList = "$watchNoList$mdNo:"
-                        val mcdPre2 = UtilityString.getHTMLandParseLastMatch("${MyApplication.nwsSPCwebsitePrefix}/products/watch/wou$mdNo.html", RegExp.pre2Pattern)
-                        watchLatlonList += UtilityNotification.storeWatMCDLATLON(mcdPre2)
+                        val mcdPre2 = UtilityString.getHtmlAndParseLastMatch(
+                                "${MyApplication.nwsSPCwebsitePrefix}/products/watch/wou$mdNo.html",
+                                RegExp.pre2Pattern
+                        )
+                        watchLatlonList += UtilityNotification.storeWatMcdLatLon(mcdPre2)
                         if (PolygonType.MCD.pref) {
                             if (mcdPre.contains("Severe Thunderstorm Watch")) {
-                                watchLatlon += UtilityNotification.storeWatMCDLATLON(mcdPre2)
+                                watchLatlon += UtilityNotification.storeWatMcdLatLon(mcdPre2)
                             } else {
-                                watchLatlonTor += UtilityNotification.storeWatMCDLATLON(mcdPre2)
+                                watchLatlonTor += UtilityNotification.storeWatMcdLatLon(mcdPre2)
                             }
                         }
                         if (MyApplication.alertSpcwatNotificationCurrent) {
@@ -308,7 +311,7 @@ class BackgroundFetch(val context: Context) {
                     } // end while find
                 }
             } catch (e: Exception) {
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             }
         } else {
             MyApplication.severeDashboardWat.valueSet(context, "")

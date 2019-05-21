@@ -91,7 +91,7 @@ class ObjectCAWARN(
                 "<tr><td><a href=\".*?\">.*?</a></td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<td>(.*?)</td>.*?<tr>"
             )
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 

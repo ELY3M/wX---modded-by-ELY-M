@@ -83,7 +83,7 @@ object UtilityUSImgWX {
             try {
                 inputStream?.close()
             } catch (e: Exception) {
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             }
         }
         val layers = mutableListOf<Drawable>()

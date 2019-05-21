@@ -58,21 +58,21 @@ object UtilityLocationFragment {
     fun extract7DayMetrics(chunk: String): String {
         val spacing = " "
         // wind 24 to 29 mph
-        val wind = UtilityString.parseMultipe(chunk, RegExp.sevenDayWind1, 2)
+        val wind = UtilityString.parseMultiple(chunk, RegExp.sevenDayWind1, 2)
         // wind around 9 mph
         val wind2 = chunk.parse(RegExp.sevenDayWind2)
         // 5 to 10 mph after
-        val wind3 = UtilityString.parseMultipe(chunk, RegExp.sevenDayWind4, 2)
+        val wind3 = UtilityString.parseMultiple(chunk, RegExp.sevenDayWind4, 2)
         // around 5 mph after
         val wind4 = chunk.parse(RegExp.sevenDayWind5)
         // 5 to 7 mph in
-        val wind5 = UtilityString.parseMultipe(chunk, RegExp.sevenDayWind6, 2)
+        val wind5 = UtilityString.parseMultiple(chunk, RegExp.sevenDayWind6, 2)
         // around 6 mph.
         val wind7 = chunk.parse(RegExp.sevenDayWind7)
         // with gusts as high as 21 mph
         var gust = chunk.parse(RegExp.sevenDayWind3)
         // 5 to 7 mph.
-        val wind9 = UtilityString.parseMultipe(chunk, RegExp.sevenDayWind9, 2)
+        val wind9 = UtilityString.parseMultiple(chunk, RegExp.sevenDayWind9, 2)
         // Winds could gusts as high as 21 mph.
         if (gust == "") {
             gust = chunk.parse(RegExp.sevenDayWind8)
@@ -101,26 +101,26 @@ object UtilityLocationFragment {
         }
     }
 
-    fun setNWSIconSize(): Int =
+    fun setNwsIconSize(): Int =
         (MyApplication.dm.widthPixels * (MyApplication.nwsIconSize / 100f)).toInt()
 
     fun extractWindDirection(chunk: String): String {
-        val winddir1 = chunk.parseLastMatch(RegExp.sevenDayWinddir1)
-        val winddir2 = chunk.parseLastMatch(RegExp.sevenDayWinddir2)
-        val winddir3 = chunk.parseLastMatch(RegExp.sevenDayWinddir3)
-        val winddir4 = chunk.parseLastMatch(RegExp.sevenDayWinddir4)
-        val winddir5 = chunk.parseLastMatch(RegExp.sevenDayWinddir5)
-        val winddir6 = chunk.parseLastMatch(RegExp.sevenDayWinddir6)
-        val winddir7 = chunk.parseLastMatch(RegExp.sevenDayWinddir7)
+        val windDir1 = chunk.parseLastMatch(RegExp.sevenDayWinddir1)
+        val windDir2 = chunk.parseLastMatch(RegExp.sevenDayWinddir2)
+        val windDir3 = chunk.parseLastMatch(RegExp.sevenDayWinddir3)
+        val windDir4 = chunk.parseLastMatch(RegExp.sevenDayWinddir4)
+        val windDir5 = chunk.parseLastMatch(RegExp.sevenDayWinddir5)
+        val windDir6 = chunk.parseLastMatch(RegExp.sevenDayWinddir6)
+        val windDir7 = chunk.parseLastMatch(RegExp.sevenDayWinddir7)
         var retStr = ""
         when {
-            winddir4 != "" -> retStr = winddir4
-            winddir3 != "" -> retStr = winddir3
-            winddir2 != "" -> retStr = winddir2
-            winddir1 != "" -> retStr = winddir1
-            winddir5 != "" -> retStr = winddir5
-            winddir6 != "" -> retStr = winddir6
-            winddir7 != "" -> retStr = winddir7
+            windDir4 != "" -> retStr = windDir4
+            windDir3 != "" -> retStr = windDir3
+            windDir2 != "" -> retStr = windDir2
+            windDir1 != "" -> retStr = windDir1
+            windDir5 != "" -> retStr = windDir5
+            windDir6 != "" -> retStr = windDir6
+            windDir7 != "" -> retStr = windDir7
         }
         return if (retStr == "") {
             ""
@@ -134,7 +134,7 @@ object UtilityLocationFragment {
         }
     }
 
-    fun extractTemp(blob: String): String {
+    fun extractTemperature(blob: String): String {
         var temp = blob.parse(RegExp.nws7DayTemp1)
         if (temp != "") {
             return temp
@@ -182,7 +182,7 @@ object UtilityLocationFragment {
         return temp
     }
 
-    fun extractCATemp(blob: String): String {
+    fun extractCanadaTemperature(blob: String): String {
         var temp = blob.parse(RegExp.ca7DayTemp1)
         if (temp != "") return temp.replace("minus ", "-")
         temp = blob.parse(RegExp.ca7DayTemp2)
@@ -230,7 +230,7 @@ object UtilityLocationFragment {
         return temp
     }
 
-    fun extractCAWindDir(fcst: String): String {
+    fun extractCanadaWindDirection(fcst: String): String {
         var wdir = fcst.parse(RegExp.ca7DayWinddir1)
         if (wdir == "")
             wdir = fcst.parse(RegExp.ca7DayWinddir2)
@@ -239,12 +239,12 @@ object UtilityLocationFragment {
         return wdir
     }
 
-    fun extractCAWindSpeed(fcst: String): String {
-        val wspdRange = UtilityString.parseMultipe(fcst, RegExp.ca7DayWindspd1, 2)
-        val wspd = fcst.parse(RegExp.ca7DayWindspd2)
+    fun extractCanadaWindSpeed(forecast: String): String {
+        val wspdRange = UtilityString.parseMultiple(forecast, RegExp.ca7DayWindspd1, 2)
+        val wspd = forecast.parse(RegExp.ca7DayWindspd2)
         var gust = ""
-        if (fcst.contains("gusting")) {
-            gust = " G " + fcst.parse(RegExp.ca7DayWindspd3)
+        if (forecast.contains("gusting")) {
+            gust = " G " + forecast.parse(RegExp.ca7DayWindspd3)
         }
         if (wspdRange.size > 1 && wspdRange[0] != "" && wspdRange[1] != "") {
             return " " + wspdRange[0] + "-" + wspdRange[1] + gust + " km/h"

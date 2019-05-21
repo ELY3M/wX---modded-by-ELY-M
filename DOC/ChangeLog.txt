@@ -14,11 +14,13 @@
 // TODO fix issue for precip radar products when there is no data
 // TODO assess impact of scoped storage: https://developer.android.com/preview/privacy/scoped-storage
 // TODO linesize - swo, wb, wbgusts, sti
-// TODO dual pange split when rotated not optimal (Jim)
-// TODO bottomsheet for spotters
+// TODO SRM - ability to add custom palette
 // TODO make location update interval configurable
 // TODO add vtec end date check to tor notif
 // TODO camelCase filenames in particular when acronyms longer then 2 chars exist
+// TODO add user accessible debug log from try-catch data
+// TODO remove unused prefs
+// TODO don't display full precision in lat/lon in settings location edit
 
 [ADD] - adding something new - method, file, etc. to the repo
 [REM] - remove items
@@ -28,8 +30,29 @@
 [REF] - refactor a method, group, variable, etc.
 [MER] - merge
 
+55190 2019_05_18    [IMP] add more whitespace around hazards on main screen
+                    [IMP] don't squash whitespace in US alerts detail
+                    [REF] camelCase and better naming
+                    [IMP] change default warning line size from 4 to 5 (does not impact existing users). Remove default values from some help strings as
+                    they are shown elsewhere
+55189 2019_05_18    [REF] more work on 7day object
+                    [REF] more work on cc object
+55188 2019_05_18    [REF] more work on hazards object
+55187 2019_05_18    [IMP] Left justify hourly text
+                    [REF] camelCase and better naming
+55186 2019_05_18    [IMP] add quad pane link in dual pane (Jim)
+                    [IMP] in dual pane invoked from single pane save product changes (Jim)
+                    [REF] change how ObjectForecastPackageHazards is used
+55185 2019_05_17    [REF] camelCase and better naming
+55184 2019_05_17    [REF] camelCase and better naming
+55183 2019_05_16    [IMP] address or remove various minor FIXM/TOD
+                    [REM] legacy GOES transformations code
+55182 2019_05_16    [IMP] in location edit, if user taps GPS button save location automatically
+                    [IMP] in severe dashboard show stats in subtitle like flutter port
+55181 2019_05_15    [REM] remove county zoom change
+                    [IMP] address or remove various minor FIXM/TOD
 55180 2019_05_15    [IMP] in radar don't hide counties until zoomed out further (Craig)
-                    [IMP] address or remove various minor FIXME/TODO
+                    [IMP] address or remove various minor FIXM/TOD
                     [REF] various camelCase
 55179 2019_05_14    [ADD] make radarLocationUpdateInterval (GPS) configurable
                     [BUG] SPC HREF from long press app icon was not working (crash)

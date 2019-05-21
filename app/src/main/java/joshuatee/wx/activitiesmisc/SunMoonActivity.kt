@@ -41,7 +41,7 @@ class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var content = ""
     private var contentFull = ""
-    private lateinit var card0: ObjectCardText
+    private lateinit var textCard: ObjectCardText
     private var dataA = ""
     private var dataB = ""
 
@@ -55,7 +55,7 @@ class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
         toolbarBottom.setOnMenuItemClickListener(this)
         val menu = toolbarBottom.menu
         menu.findItem(R.id.action_playlist).isVisible = false
-        card0 = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        textCard = ObjectCardText(this, ll, toolbar, toolbarBottom)
         getContent()
     }
 
@@ -69,7 +69,7 @@ class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
         dataB = B
         title = dataA
         toolbar.subtitle = Location.name
-        card0.setText(dataB + MyApplication.newline + MyApplication.newline + contentFull)
+        textCard.setText(dataB + MyApplication.newline + MyApplication.newline + contentFull)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

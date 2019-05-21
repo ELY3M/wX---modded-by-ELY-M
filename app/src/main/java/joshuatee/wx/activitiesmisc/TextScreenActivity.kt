@@ -53,7 +53,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var activityArguments: Array<String>
     private var url = ""
     private var html = ""
-    private lateinit var c0: ObjectCardText
+    private lateinit var textCard: ObjectCardText
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,16 +69,16 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         try {
             activityArguments = intent.getStringArrayExtra(URL)
         } catch (e: IllegalStateException) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         url = activityArguments[0]
         title = activityArguments[1]
-        c0 = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        textCard = ObjectCardText(this, ll, toolbar, toolbarBottom)
         if (!url.startsWith("http")) {
             if (url.contains("<")) {
-                c0.setText(Utility.fromHtml(url))
+                textCard.setText(Utility.fromHtml(url))
             } else {
-                c0.setText(url)
+                textCard.setText(url)
             }
             html = url
         } else {
@@ -95,7 +95,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         html = withContext(Dispatchers.IO) { url.getHtml() }
-        c0.setTextAndTranslate(Utility.fromHtml(html))
+        textCard.setTextAndTranslate(Utility.fromHtml(html))
         UtilityTTS.conditionalPlay(activityArguments, 2, applicationContext, html, "textscreen")
     }
 

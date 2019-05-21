@@ -63,7 +63,7 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        ca = withContext(Dispatchers.IO) { CAPAlert.createFromURL(activityArguments[0]) }
+        ca = withContext(Dispatchers.IO) { CAPAlert.createFromUrl(activityArguments[0]) }
         objAlerts.updateContent(ca, activityArguments[0])
         toolbar.subtitle = objAlerts.wfoTitle
         title = objAlerts.title

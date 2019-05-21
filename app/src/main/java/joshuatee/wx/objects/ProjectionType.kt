@@ -33,7 +33,6 @@ enum class ProjectionType constructor(
     WX_RENDER_48(true, false, true, true),
     WX_OGL(true, false, false, false),
     WX_OGL_48(true, false, false, false),
-    NWS_GOES(true, true, false, false);
 }
 
 

@@ -174,7 +174,7 @@ object UtilityModels {
 
     fun parmInArray(arr: List<String>, parm: String): Boolean = arr.contains(parm)
 
-    fun convertTimeRuntoTimeString(runStr: String, timeStrF: String, showDate: Boolean): String {
+    fun convertTimeRunToTimeString(runStr: String, timeStrF: String, showDate: Boolean): String {
         var timeStr = timeStrF
         // in response to timeStr coming in as the following on rare occasions we need to truncate
         // 000 Wed 8pm
@@ -269,7 +269,7 @@ object UtilityModels {
             }
             (0 until listTime.size).forEach {
                 tmpStr = MyApplication.space.split(listTime[it])[0].replace(prefix, "")
-                listTime[it] = prefix + tmpStr + " " + convertTimeRuntoTimeString(run, tmpStr, showDate)
+                listTime[it] = prefix + tmpStr + " " + convertTimeRunToTimeString(run, tmpStr, showDate)
             }
             dataAdapterTime.notifyDataSetChanged()
         }

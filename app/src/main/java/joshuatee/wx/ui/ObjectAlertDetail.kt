@@ -31,6 +31,7 @@ import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.activitiesmisc.CAPAlert
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityString
 
 class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
@@ -83,7 +84,7 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
         } else {
             if (!url.contains("NWS-IDP-PROD")) {
                 if (ca.title.contains("until")) {
-                    val tmpArr = UtilityString.parseMultipe(
+                    val tmpArr = UtilityString.parseMultiple(
                         ca.title,
                         "(.*?) issued (.*?) until (.*?) by (.*?)$",
                         4
@@ -94,7 +95,7 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
                     wfo = tmpArr[3]
                 } else {
                     val tmpArr =
-                        UtilityString.parseMultipe(ca.title, "(.*?) issued (.*?) by (.*?)$", 3)
+                        UtilityString.parseMultiple(ca.title, "(.*?) issued (.*?) by (.*?)$", 3)
                     title = tmpArr[0]
                     startTime = tmpArr[1]
                     wfo = tmpArr[2]
@@ -102,7 +103,7 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
             } else {
                 when {
                     ca.title.contains("expiring") -> {
-                        val tmpArr = UtilityString.parseMultipe(
+                        val tmpArr = UtilityString.parseMultiple(
                                 ca.title,
                                 "(.*?) issued (.*?) expiring (.*?) by (.*?)$",
                                 4
@@ -113,7 +114,7 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
                         wfo = tmpArr[3]
                     }
                     ca.title.contains("until") -> {
-                        val tmpArr = UtilityString.parseMultipe(
+                        val tmpArr = UtilityString.parseMultiple(
                                 ca.title,
                                 "(.*?) issued (.*?) until (.*?) by (.*?)$",
                                 4
@@ -125,7 +126,7 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
                     }
                     else -> {
                         val tmpArr =
-                                UtilityString.parseMultipe(ca.title, "(.*?) issued (.*?) by (.*?)$", 3)
+                                UtilityString.parseMultiple(ca.title, "(.*?) issued (.*?) by (.*?)$", 3)
                         title = tmpArr[0]
                         startTime = tmpArr[1]
                         wfo = tmpArr[2]
@@ -136,8 +137,8 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
             tvArr[1].text = context.resources.getString(R.string.uswarn_end_time, endTime)
             tvArr[2].text = ca.area
             tvArr[2].setTextColor(UIPreferences.textHighlightColor)
-            tvArr[3].text = Utility.fromHtml(ca.summary)
-            tvArr[4].text = Utility.fromHtml(ca.instructions)
+            tvArr[3].text = ca.summary
+            tvArr[4].text = ca.instructions
         }
         wfoTitle = wfo
     }

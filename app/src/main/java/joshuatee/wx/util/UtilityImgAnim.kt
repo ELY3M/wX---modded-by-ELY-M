@@ -48,12 +48,12 @@ object UtilityImgAnim {
                 (0 until radarAl.size).mapTo(retAl) { radarAl[it] }
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return retAl
     }
 
-    fun getAnimationDrawableFromURLList(
+    fun getAnimationDrawableFromUrlList(
         context: Context,
         urlAl: List<String>,
         delayF: Int
@@ -72,7 +72,7 @@ object UtilityImgAnim {
         return animDrawable
     }
 
-    fun getAnimationDrawableFromURLListWhiteBG(
+    fun getAnimationDrawableFromUrlListWhiteBG(
         context: Context,
         urlAl: List<String>,
         delayF: Int

@@ -32,7 +32,7 @@ import joshuatee.wx.radar.LatLon
 
 object UtilityCanada {
 
-    private val provToSector = mapOf(
+    private val providenceToSector = mapOf(
         "AB" to "PAC",
         "BC" to "PAC",
         "MB" to "PAC",
@@ -56,7 +56,7 @@ object UtilityCanada {
         return iconList
     }
 
-    fun getIcons7DayAl(html: String): List<String> {
+    fun getIcons7DayAsList(html: String): List<String> {
         val dayAr = html.split((MyApplication.newline + MyApplication.newline))
             .dropLastWhile { it.isEmpty() }
         return dayAr.mapTo(mutableListOf()) { translateIconName(it) }
@@ -258,7 +258,7 @@ object UtilityCanada {
         return newName
     }
 
-    fun getProvHTML(prov: String): String =
+    fun getProvidenceHtml(prov: String): String =
         ("http://weather.gc.ca/forecast/canada/index_e.html?id=$prov").getHtmlSep()
 
     fun getLocationHtml(location: LatLon): String {
@@ -385,7 +385,7 @@ object UtilityCanada {
         return warningData
     }
 
-    fun getECSectorFromProv(prov: String): String = provToSector[prov] ?: ""
+    fun getECSectorFromProv(prov: String): String = providenceToSector[prov] ?: ""
 
     fun isLabelPresent(label: String): Boolean {
         if (!UtilityCitiesCA.cityInit) {

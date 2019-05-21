@@ -85,7 +85,7 @@ class SPCSoundingsActivity : BaseActivity(), OnItemSelectedListener,
         sp = ObjectSpinner(this, this, this, R.id.spinner1, locations)
         imageMap =
             ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
-        imageMap.addClickHandler(::mapSwitch, UtilityImageMap::maptoSND)
+        imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToSnd)
     }
 
     override fun onRestart() {
@@ -118,7 +118,7 @@ class SPCSoundingsActivity : BaseActivity(), OnItemSelectedListener,
     private fun getContentSPCPlot() = GlobalScope.launch(uiDispatcher) {
         imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/$upperAir"
         withContext(Dispatchers.IO) {
-            val date = UtilityString.getHTMLandParse(
+            val date = UtilityString.getHtmlAndParse(
                 "${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/",
                 "/obswx/maps/" + upperAir + "_([0-9]{6}_[0-9]{2}).gif"
             )

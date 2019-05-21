@@ -47,7 +47,7 @@ object UtilityIO {
             fos.flush()
             fos.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 
@@ -67,7 +67,7 @@ object UtilityIO {
             outputStream.close()
             inputStream.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return outputStream.toString()
     }
@@ -87,7 +87,7 @@ object UtilityIO {
             output.close()
             input.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 
@@ -111,7 +111,7 @@ object UtilityIO {
             fos.flush()
             fos.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 
@@ -126,7 +126,7 @@ object UtilityIO {
                 line = reader.readLine()
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return content
     }

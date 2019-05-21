@@ -55,7 +55,6 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
     private var timePeriod = 1
     private var firstRun = false
     private var imageLoaded = false
-    //private lateinit var img: TouchImageView2
     private lateinit var actionBack: MenuItem
     private lateinit var actionForward: MenuItem
     private lateinit var drw: ObjectNavDrawerCombo

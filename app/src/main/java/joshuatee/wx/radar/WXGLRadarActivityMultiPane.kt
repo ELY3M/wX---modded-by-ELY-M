@@ -216,7 +216,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         }
         setupAlertDialogRadarLongPress()
         UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
-        val latlonArrD = UtilityLocation.getGPS(this as Context)
+        val latlonArrD = UtilityLocation.getGps(this as Context)
         latD = latlonArrD[0]
         lonD = latlonArrD[1]
         val menu = toolbarBottom.menu
@@ -224,9 +224,12 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         anim = menu.findItem(R.id.action_a)
         val rad3 = menu.findItem(R.id.action_radar3)
         val rad4 = menu.findItem(R.id.action_radar4)
+        val quadPaneJump = menu.findItem(R.id.action_radar_4)
         if (numPanes == 2) {
             rad3.isVisible = false
             rad4.isVisible = false
+        } else {
+            quadPaneJump.isVisible = false
         }
         if (!UIPreferences.radarImmersiveMode) {
             val blank = menu.findItem(R.id.action_blank)
@@ -307,7 +310,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 toolbarBottom,
                 rlArr.toList() as List<View> + glviewArr.toList() as List<View>
         )
-        imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::maptoRid)
+        imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::mapToRid)
         oglInView = true
         numPanesArr.forEach {
             if (!useSinglePanePref) {
@@ -484,7 +487,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                         numPanesArr,
                         imageMap,
                         glviewArr,
-                        ::getGPSFromDouble,
+                        ::getGpsFromDouble,
                         ::getLatLon
                 )
                 withContext(Dispatchers.IO) {
@@ -492,7 +495,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                             ogl,
                             "",
                             contextg,
-                            ::getGPSFromDouble,
+                            ::getGpsFromDouble,
                             ::getLatLon,
                             false
                     )
@@ -558,7 +561,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                             )
                     }
                 } catch (e: Exception) {
-                    UtilityLog.HandleException(e)
+                    UtilityLog.handleException(e)
                 }
             }
             var loopCnt = 0
@@ -588,7 +591,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                                     )
                             }
                         } catch (e: Exception) {
-                            UtilityLog.HandleException(e)
+                            UtilityLog.handleException(e)
                         }
                     }
                     animTriggerDownloads = false
@@ -801,6 +804,19 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     }
                 }
             }
+            R.id.action_radar_4 -> {
+                if (!dontSavePref) {
+                    numPanesArr.forEach { WXGLNexrad.savePrefs(this, prefPrefix, it + 1, oglrArr[it]) }
+                } else {
+                    numPanesArr.forEach { WXGLNexrad.saveProductPrefs(this, prefPrefix, it + 1, oglrArr[it]) }
+                }
+                ObjectIntent(
+                        this,
+                        WXGLRadarActivityMultiPane::class.java,
+                        RID,
+                        arrayOf(joshuatee.wx.settings.Location.rid, "", "4", "true")
+                )
+            }
             R.id.action_TDWR -> alertDialogTDWR()
             R.id.action_ridmap -> {
                 imageMap.toggleMap()
@@ -890,6 +906,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         super.onStop()
         if (!dontSavePref) {
             numPanesArr.forEach { WXGLNexrad.savePrefs(this, prefPrefix, it + 1, oglrArr[it]) }
+        } else {
+            numPanesArr.forEach { WXGLNexrad.saveProductPrefs(this, prefPrefix, it + 1, oglrArr[it]) }
         }
         // otherwise cpu will spin with no fix but to kill app
         inOglAnim = false
@@ -1013,21 +1031,21 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private fun makeUseOfNewLocation(location: Location) {
         latD = location.latitude
         lonD = location.longitude
-        getGPSFromDouble()
+        getGpsFromDouble()
         numPanesArr.forEach {
             oglrArr[it].constructLocationDot(locXCurrent, locYCurrent, false)
             glviewArr[it].requestRender()
         }
     }
 
-    private fun getGPSFromDouble() {
+    private fun getGpsFromDouble() {
         try {
             latlonArr[0] = latD.toString()
             latlonArr[1] = lonD.toString()
             locXCurrent = latlonArr[0]
             locYCurrent = latlonArr[1]
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 

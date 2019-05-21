@@ -80,7 +80,7 @@ class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7
         if (dayTmpArr.size > 1) {
             if (isUS) {
                 setTv1(
-                    dayTmpArr[0].replace(":", " ") + " (" + UtilityLocationFragment.extractTemp(
+                    dayTmpArr[0].replace(":", " ") + " (" + UtilityLocationFragment.extractTemperature(
                         dayTmpArr[1]
                     )
                             + MyApplication.DEGREE_SYMBOL
@@ -90,10 +90,10 @@ class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7
             } else {
                 setTv1(
                     dayTmpArr[0].replace(":", " ") + " ("
-                            + UtilityLocationFragment.extractCATemp(dayTmpArr[1])
+                            + UtilityLocationFragment.extractCanadaTemperature(dayTmpArr[1])
                             + MyApplication.DEGREE_SYMBOL
-                            + UtilityLocationFragment.extractCAWindDir(dayTmpArr[1])
-                            + UtilityLocationFragment.extractCAWindSpeed(dayTmpArr[1]) + ")"
+                            + UtilityLocationFragment.extractCanadaWindDirection(dayTmpArr[1])
+                            + UtilityLocationFragment.extractCanadaWindSpeed(dayTmpArr[1]) + ")"
                 )
             }
             if (isUS) {

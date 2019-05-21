@@ -63,7 +63,7 @@ internal object UtilityWXOGLPerfL2 {
             wChannel.close()
             fos.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 
@@ -92,7 +92,7 @@ internal object UtilityWXOGLPerfL2 {
                 rChannel.read(binWord)
             rChannel.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 
@@ -198,7 +198,7 @@ internal object UtilityWXOGLPerfL2 {
                     }
                     if (obuff.size >= 0) outputRaf.write(obuff, 0, total)
                 } catch (e: Exception) {
-                    UtilityLog.HandleException(e)
+                    UtilityLog.handleException(e)
                 }
                 if (total == refDecompSize || total == velDecompSize) loopCnt += 1
                 if (loopCnt > loopCntBreak) break
@@ -207,7 +207,7 @@ internal object UtilityWXOGLPerfL2 {
             bis?.close()
             outputRaf.flush()
         } catch (e: IOException) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return outputRaf
     }

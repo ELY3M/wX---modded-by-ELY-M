@@ -239,7 +239,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             var tmpStr: String
             (0 until om.spTime.size()).forEach {
                 tmpStr = MyApplication.space.split(om.spTime[it])[0]
-                om.spTime[it] = "$tmpStr " + UtilityModels.convertTimeRuntoTimeString(
+                om.spTime[it] = "$tmpStr " + UtilityModels.convertTimeRunToTimeString(
                         om.rtd.mostRecentRun.replace(
                                 "Z",
                                 ""
@@ -259,7 +259,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
             spRun.notifyDataSetChanged()
             (0 until om.spTime.size()).forEach {
-                om.spTime[it] = om.spTime[it] + " " + UtilityModels.convertTimeRuntoTimeString(
+                om.spTime[it] = om.spTime[it] + " " + UtilityModels.convertTimeRunToTimeString(
                         om.rtd.timeStrConv.replace("Z", ""),
                         om.spTime[it],
                         false

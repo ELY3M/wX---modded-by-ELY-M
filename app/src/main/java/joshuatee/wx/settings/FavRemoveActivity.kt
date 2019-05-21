@@ -64,8 +64,8 @@ class FavRemoveActivity : BaseActivity() {
                 null,
                 false
         )
-        val turl = intent.getStringArrayExtra(TYPE)
-        type = turl[0]
+        val activityArguments = intent.getStringArrayExtra(TYPE)
+        type = activityArguments[0]
         when (type) {
             "SND" -> {
                 prefToken = "SND_FAV"
@@ -195,7 +195,7 @@ class FavRemoveActivity : BaseActivity() {
             "RID" -> tmpLoc = shortCode + ": " +
                     Utility.readPref(this, prefTokenLocation + shortCode, "")
             "NWSTEXT" -> tmpLoc =
-                    GlobalArrays.nwsTextProducts[UtilityFavorites.findPositionNWSTEXT(shortCode)]
+                    GlobalArrays.nwsTextProducts[UtilityFavorites.findPositionNwsText(shortCode)]
             "SREF" -> tmpLoc = shortCode
             "RIDCA" -> tmpLoc = findCARIDLabel(shortCode)
             "SPCMESO" -> tmpLoc = findSPCMesoLabel(shortCode)

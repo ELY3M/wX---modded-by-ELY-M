@@ -59,7 +59,7 @@ object UtilityWidget {
                     .activityInfo.packageName
             context.grantUriPermission(str, imgUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return imgUri
     }
@@ -143,20 +143,20 @@ object UtilityWidget {
         val hazardRaw = objHazards.hazards
         Utility.writePref(context, "HAZARD_WIDGET", objHazards.getHazardsShort())
         Utility.writePref(context, "7DAY_WIDGET", objSevenDay.sevenDayShort)
-        if (objCc.data1 != "") {
-            Utility.writePref(context, "CC_WIDGET", objCc.data1)
+        if (objCc.data != "") {
+            Utility.writePref(context, "CC_WIDGET", objCc.data)
         }
         if (objCc.iconUrl != "") {
             Utility.writePref(context, "CC_WIDGET_ICON_URL", objCc.iconUrl)
         }
         Utility.writePref(context, "UPDTIME_WIDGET", objCc.status)
-        if (objSevenDay.sevenDayExtStr != "") {
-            Utility.writePref(context, "7DAY_EXT_WIDGET", objSevenDay.sevenDayExtStr)
+        if (objSevenDay.sevenDayLong != "") {
+            Utility.writePref(context, "7DAY_EXT_WIDGET", objSevenDay.sevenDayLong)
         }
         Utility.writePref(context, "HAZARD_URL_WIDGET", objHazards.hazards)
         Utility.writePref(context, "HAZARD_RAW_WIDGET", hazardRaw)
-        if (objSevenDay.iconstr != "") {
-            Utility.writePref(context, "7DAY_ICONS_WIDGET", objSevenDay.iconstr)
+        if (objSevenDay.iconsAsString != "") {
+            Utility.writePref(context, "7DAY_ICONS_WIDGET", objSevenDay.iconsAsString)
         }
         Utility.commitPref(context)
         update(context, CCLegacy)
@@ -181,7 +181,6 @@ object UtilityWidget {
         }
     }
 
-    // FIXME create helper objects
     fun setupIntent(
         context: Context,
         remoteViews: RemoteViews,
@@ -192,14 +191,13 @@ object UtilityWidget {
         actionString: String
     ) {
         val requestID = System.currentTimeMillis().toInt()
-        val intentAfd = Intent(context, activity)
-        intentAfd.putExtra(activityFlag, activityStringArr)
-        intentAfd.action = actionString
+        val intent = Intent(context, activity)
+        intent.putExtra(activityFlag, activityStringArr)
+        intent.action = actionString
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(activity)
-        stackBuilder.addNextIntent(intentAfd)
-        val pendingIntent =
-            stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+        stackBuilder.addNextIntent(intent)
+        val pendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
         remoteViews.setOnClickPendingIntent(layoutItem, pendingIntent)
     }
 
@@ -213,14 +211,13 @@ object UtilityWidget {
         actionString: String
     ) {
         val requestID = System.currentTimeMillis().toInt()
-        val intentAfd = Intent(context, activity)
-        intentAfd.putExtra(activityFlag, activityString)
-        intentAfd.action = actionString
+        val intent = Intent(context, activity)
+        intent.putExtra(activityFlag, activityString)
+        intent.action = actionString
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(activity)
-        stackBuilder.addNextIntent(intentAfd)
-        val pendingIntent =
-            stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+        stackBuilder.addNextIntent(intent)
+        val pendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
         remoteViews.setOnClickPendingIntent(layoutItem, pendingIntent)
     }
 
@@ -232,13 +229,12 @@ object UtilityWidget {
         actionString: String
     ) {
         val requestID = System.currentTimeMillis().toInt()
-        val intentAfd = Intent(context, activity)
-        intentAfd.action = actionString
+        val intent = Intent(context, activity)
+        intent.action = actionString
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(activity)
-        stackBuilder.addNextIntent(intentAfd)
-        val pendingIntent =
-            stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+        stackBuilder.addNextIntent(intent)
+        val pendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
         remoteViews.setOnClickPendingIntent(layoutItem, pendingIntent)
     }
 

@@ -72,7 +72,7 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 if (prod != "https://weather.gc.ca/forecast/public_bulletins_e.html?Bulletin=fpcn48.cwao") {
                     UtilityDownload.getTextProduct(contextg, prod)
                 } else {
-                    UtilityString.getHTMLandParseSep(prod, "<pre>(.*?)</pre>")
+                    UtilityString.getHtmlAndParseSep(prod, "<pre>(.*?)</pre>")
                 }
         }
         c0.setTextAndTranslate(Utility.fromHtml(html))

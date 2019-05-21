@@ -52,13 +52,13 @@ object UtilityShare {
             fos.flush()
             fos.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         } finally {
             if (fos != null)
                 try {
                     fos.close()
                 } catch (e: Exception) {
-                    UtilityLog.HandleException(e)
+                    UtilityLog.handleException(e)
                 }
         }
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
@@ -94,7 +94,7 @@ object UtilityShare {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
             fos.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
         val sharingIntent = Intent(Intent.ACTION_SEND)
@@ -126,7 +126,7 @@ object UtilityShare {
                 bm.compress(Bitmap.CompressFormat.PNG, 100, fos)
                 fos.close()
             } catch (e: Exception) {
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             }
         }
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
@@ -155,7 +155,7 @@ object UtilityShare {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
             fos.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
         val sharingIntent = Intent(Intent.ACTION_SEND)

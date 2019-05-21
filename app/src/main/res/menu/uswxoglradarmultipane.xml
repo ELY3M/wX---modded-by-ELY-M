@@ -195,6 +195,10 @@
         android:title="@string/label_tdwr_sites"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_radar_4"
+        android:title="Quad Pane Radar"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_tools"
         android:title="@string/menu_tools"
         app:showAsAction="never">

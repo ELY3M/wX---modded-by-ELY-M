@@ -42,9 +42,9 @@ internal class SevereWarning(private val type: PolygonType) {
         private set
 
     fun generateString(context: Context, textTor: String) {
-        var nwsOfficeArr: List<String>
-        var nwsOffice: String
-        var nwsLoc = ""
+        var vtecComponents: List<String>
+        var wfo = ""
+        var wfoLocation = ""
         var label = ""
         when (type) {
             PolygonType.TOR -> label = "Tornado Warnings"
@@ -63,13 +63,13 @@ internal class SevereWarning(private val type: PolygonType) {
             if (!it.startsWith("O.EXP") && vtecIsCurrent) {
                 text += it
                 count += 1
-                nwsOfficeArr = it.split(".")
-                if (nwsOfficeArr.size > 1) {
-                    nwsOffice = nwsOfficeArr[2]
-                    nwsOffice = nwsOffice.replace("^[KP]".toRegex(), "")
-                    nwsLoc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "")
+                vtecComponents = it.split(".")
+                if (vtecComponents.size > 1) {
+                    wfo = vtecComponents[2]
+                    wfo = wfo.replace("^[KP]".toRegex(), "")
+                    wfoLocation = Utility.readPref(context, "NWS_LOCATION_$wfo", "")
                 }
-                text += "  " + nwsLoc + MyApplication.newline
+                text += "  " + wfoLocation + MyApplication.newline
             }
         }
         val remover = ExternalDuplicateRemover()

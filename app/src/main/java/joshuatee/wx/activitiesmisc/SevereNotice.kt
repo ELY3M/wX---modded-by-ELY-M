@@ -35,7 +35,7 @@ internal class SevereNotice(val type: PolygonType) {
     // encapsulates a string array representation and bitmap arraylist of current mcd, wat, or mpd
 
     val bitmaps = mutableListOf<Bitmap>()
-    var strList = mutableListOf<String>()
+    var numbers = mutableListOf<String>()
     var pattern: Pattern = Pattern.compile("")
     private var typeAsString = ""
 
@@ -49,17 +49,17 @@ internal class SevereNotice(val type: PolygonType) {
         }
     }
 
-    fun getBitmaps(dataAsStringMCD: String) {
-        var comp = ""
+    fun getBitmaps(html: String) {
+        var zeroString = ""
         var url = ""
         when (type) {
-            PolygonType.MCD -> comp = "<center>No Mesoscale Discussions are currently in effect."
-            PolygonType.WATCH -> comp = "<center><strong>No watches are currently valid"
-            PolygonType.MPD -> comp = "No MPDs are currently in effect."
+            PolygonType.MCD -> zeroString = "<center>No Mesoscale Discussions are currently in effect."
+            PolygonType.WATCH -> zeroString = "<center><strong>No watches are currently valid"
+            PolygonType.MPD -> zeroString = "No MPDs are currently in effect."
             else -> {
             }
         }
-        if (!dataAsStringMCD.contains(comp)) {
+        if (!html.contains(zeroString)) {
             when (type) {
                 PolygonType.MCD -> pattern = RegExp.mcdPatternUtilspc
                 PolygonType.WATCH -> pattern = RegExp.watchPattern
@@ -67,20 +67,20 @@ internal class SevereNotice(val type: PolygonType) {
                 else -> {
                 }
             }
-            strList = UtilityString.parseColumnAl(dataAsStringMCD, pattern)
+            numbers = UtilityString.parseColumnAl(html, pattern)
         }
-        strList.indices.forEach { count ->
+        numbers.indices.forEach { count ->
             when (type) {
                 PolygonType.MCD -> url = "${MyApplication.nwsSPCwebsitePrefix}/products/md/mcd" +
-                        strList[count] + ".gif"
+                        numbers[count] + ".gif"
                 PolygonType.WATCH -> {
-                    strList[count] = String.format("%4s", strList[count]).replace(' ', '0')
+                    numbers[count] = String.format("%4s", numbers[count]).replace(' ', '0')
                     url = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" +
-                            strList[count] + "_radar.gif"
+                            numbers[count] + "_radar.gif"
                 }
                 PolygonType.MPD -> url =
                     "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd" +
-                            strList[count] + ".gif"
+                            numbers[count] + ".gif"
                 else -> {
                 }
             }

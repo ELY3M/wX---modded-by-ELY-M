@@ -90,9 +90,6 @@ object UtilityVoiceCommand {
                 )
             }
         } else if (vrString.contains("cloud")) {
-            //if (tokens.size > 1) {
-            //    nws1Current = tokens[1]
-            //}
             ObjectIntent(
                     context,
                     GOES16Activity::class.java,

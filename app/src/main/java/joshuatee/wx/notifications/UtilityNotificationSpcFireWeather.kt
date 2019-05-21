@@ -107,7 +107,7 @@ internal object UtilityNotificationSpcFireWeather {
         for (day in 1..2) {
             val urlLocal =
                     "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/fwdy" + day.toString() + ".html"
-            urlBlob = UtilityString.getHTMLandParse(
+            urlBlob = UtilityString.getHtmlAndParse(
                     urlLocal,
                     "CLICK FOR <a href=.(.*?txt).>DAY [12] FIREWX AREAL OUTLINE PRODUCT .KWNSPFWFD[12].</a>"
             )
@@ -141,7 +141,7 @@ internal object UtilityNotificationSpcFireWeather {
                                 yStrTmp = tmpDbl.toString()
                             }
                         } catch (e: Exception) {
-                            UtilityLog.HandleException(e)
+                            UtilityLog.handleException(e)
                         }
                         retStr = "$retStr$xStrTmp $yStrTmp "
                     }

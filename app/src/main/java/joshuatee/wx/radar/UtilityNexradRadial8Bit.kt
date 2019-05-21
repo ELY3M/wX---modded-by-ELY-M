@@ -85,7 +85,7 @@ internal object UtilityNexradRadial8Bit {
                 Utility.writePref(context, "WX_RADAR_CURRENT_INFO_WIDGET_TIME", d.toString())
             } catch (e: Exception) {
                 Utility.writePref(context, "WX_RADAR_CURRENT_INFO_WIDGET_TIME", "")
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             } catch (e: AssertionError) {
                 Utility.writePref(context, "WX_RADAR_CURRENT_INFO_WIDGET_TIME", "")
             }
@@ -211,7 +211,7 @@ internal object UtilityNexradRadial8Bit {
                 g += 1
             }
         } catch (e: IOException) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 }

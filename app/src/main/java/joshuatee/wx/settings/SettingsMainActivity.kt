@@ -128,7 +128,7 @@ class SettingsMainActivity : BaseActivity() {
                     contextg,
                     TextScreenActivity::class.java,
                     TextScreenActivity.URL,
-                    arrayOf(UtilityMath.cToFTable(), "Celsius to Fahrenheit table")
+                    arrayOf(UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table")
             )
         })
         cardbackuppref.setOnClickListener(View.OnClickListener { backuprestore.backupPrefs(contextg) })
@@ -147,23 +147,7 @@ class SettingsMainActivity : BaseActivity() {
                     arrayOf(UtilityAlertDialog.showVersion(this, this), "About wX")
             )
         })
-        
-        /*ll.addView(cardAbout.card)
-        ll.addView(cardLocations.card)
-        ll.addView(cardsn.card)
-        ll.addView(cardNotif.card)
-        ll.addView(cardWidgets.card)
-        ll.addView(cardColors.card)
-        ll.addView(cardPL.card)
-        ll.addView(cardRadar.card)
-        ll.addView(cardHS.card)
-        ll.addView(cardUI.card)
-        ll.addView(cardCtoF.card)
-        ll.addView(cardDeleteFiles.card)
-        ll.addView(cardbackuppref.card)
-	ll.addView(cardrestorepref.card)*/
-	
-	listOf(
+        listOf(
                 cardAbout.card,
                 cardLocations.card,
 		cardsn.card,

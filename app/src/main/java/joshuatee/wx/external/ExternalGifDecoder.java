@@ -264,7 +264,7 @@ public class ExternalGifDecoder {
 		try {
 			is.close();
 		} catch (Exception e) {
-			UtilityLog.INSTANCE.HandleException(e);
+			UtilityLog.INSTANCE.handleException(e);
 		}
 		return status;
 	}

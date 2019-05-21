@@ -63,7 +63,7 @@ object UtilityCanvasProjection {
                 }
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 

@@ -27,13 +27,10 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.util.Calendar
 import java.util.Locale
-import java.util.TimeZone
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.text.format.DateFormat
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.activitiesmisc.UtilityLightning
@@ -41,8 +38,6 @@ import joshuatee.wx.activitiesmisc.UtilitySunMoon
 import joshuatee.wx.activitiesmisc.UtilityUSHourly
 import joshuatee.wx.audio.UtilityPlayList
 import joshuatee.wx.canada.UtilityCanadaImg
-import joshuatee.wx.external.ExternalSunriseLocation
-import joshuatee.wx.external.ExternalSunriseSunsetCalculator
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.spc.*
@@ -62,7 +57,7 @@ object UtilityDownload {
 
     private fun get2KmUrl() = UtilityImg.getBlankBitmap()
 
-    fun getRadarMosiac(context: Context): Bitmap {
+    fun getRadarMosaic(context: Context): Bitmap {
         val location = Location.currentLocationStr
         val rid1 = Location.getRid(context, location)
         var bitmap: Bitmap = UtilityImg.getBlankBitmap()
@@ -94,10 +89,6 @@ object UtilityDownload {
                     )
                 }
             } else {
-                //val prefToken = "AWCMOSAIC_PARAM_LAST_USED"
-                //val index = Utility.readPref(context, prefToken, 0)
-                //bitmap = UtilityAwcRadarMosaic.get(UtilityAwcRadarMosaic.sectors[index])
-
                 var product = "rad_rala"
                 val prefTokenSector = "AWCMOSAIC_SECTOR_LAST_USED"
                 val prefTokenProduct = "AWCMOSAIC_PRODUCT_LAST_USED"
@@ -107,7 +98,7 @@ object UtilityDownload {
                 bitmap = UtilityAwcRadarMosaic.get(sector, product)
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return bitmap
     }
@@ -144,7 +135,7 @@ object UtilityDownload {
             }
             "RAD_2KM" -> {
                 needsBitmap = false
-                bm = getRadarMosiac(context)
+                bm = getRadarMosaic(context)
             }
             "IR_2KM", "WV_2KM", "VIS_2KM" -> {
                 needsBitmap = false
@@ -355,14 +346,14 @@ object UtilityDownload {
                         "MIAPWS"
                 ) || prod.contains("MIAHS")
         ) {
-            text = UtilityString.getNWSPRE("${MyApplication.nwsNhcWebsitePrefix}/text/$prod.shtml")
+            text = UtilityString.getNwsPre("${MyApplication.nwsNhcWebsitePrefix}/text/$prod.shtml")
             if (prod.contains("MIATCD")) {
                 text = text.replace("<br><br>", "<BR><BR>")
                 text = text.replace("<br>", " ")
             }
             text = text.replace("^<br>".toRegex(), "")
         } else if (prod.contains("MIAT")) {
-            text = UtilityString.getHTMLandParseSep(
+            text = UtilityString.getHtmlAndParseSep(
                     "${MyApplication.nwsNhcWebsitePrefix}/ftp/pub/forecasts/discussion/$prod",
                     "(.*)"
             )
@@ -381,7 +372,7 @@ object UtilityDownload {
                 text = text.replace("<br>", " ")
             }
         } else if (prod.startsWith("SCCNS")) {
-            text = UtilityString.getHTMLandParseSep(
+            text = UtilityString.getHtmlAndParseSep(
                     "${MyApplication.nwsWPCwebsitePrefix}/discussions/nfd" + prod.toLowerCase(Locale.US).replace(
                             "ns",
                             ""
@@ -396,7 +387,7 @@ object UtilityDownload {
         } else if (prod.contains("SPCMCD")) {
             val no = prod.substring(6)
             val textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/md$no.html"
-            text = UtilityString.getHTMLandParseSep(textUrl, RegExp.pre2Pattern)
+            text = UtilityString.getHtmlAndParseSep(textUrl, RegExp.pre2Pattern)
             text = text.replace("^<br><br>".toRegex(), "")
             if (UIPreferences.nwsTextRemovelinebreaks) {
                 text = text.replace("<br><br>", "<BR><BR>")
@@ -406,7 +397,7 @@ object UtilityDownload {
         } else if (prod.contains("SPCWAT")) {
             val no = prod.substring(6)
             val textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww$no.html"
-            text = UtilityString.getHTMLandParseSep(textUrl, RegExp.pre2Pattern)
+            text = UtilityString.getHtmlAndParseSep(textUrl, RegExp.pre2Pattern)
             text = text.replace("^<br>".toRegex(), "")
             if (UIPreferences.nwsTextRemovelinebreaks) {
                 text = text.replace("<br><br>", "<BR><BR>")
@@ -416,7 +407,7 @@ object UtilityDownload {
             val no = prod.substring(6)
             val textUrl =
                     "${MyApplication.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd_multi.php?md=$no"
-            text = UtilityString.getHTMLandParseSep(textUrl, RegExp.pre2Pattern)
+            text = UtilityString.getHtmlAndParseSep(textUrl, RegExp.pre2Pattern)
             text = text.replace("^<br>".toRegex(), "")
             text = text.replace("^ <br>".toRegex(), "")
             if (UIPreferences.nwsTextRemovelinebreaks) {
@@ -426,7 +417,7 @@ object UtilityDownload {
         } else if (prod.contains("QPFHSD")) {
             val textUrl =
                     "${MyApplication.nwsWPCwebsitePrefix}/discussions/hpcdiscussions.php?disc=qpfhsd"
-            text = UtilityString.getHTMLandParseSep(textUrl, RegExp.pre2Pattern)
+            text = UtilityString.getHtmlAndParseSep(textUrl, RegExp.pre2Pattern)
             text = text.replace("^<br>".toRegex(), "")
             text = text.replace("^ <br>".toRegex(), "")
             if (UIPreferences.nwsTextRemovelinebreaks) {
@@ -450,7 +441,7 @@ object UtilityDownload {
                     Locale.US
             )).getHtml()
         } else if (prod.contains("FWDDY38")) {
-            text = UtilityString.getHTMLandParseSep(
+            text = UtilityString.getHtmlAndParseSep(
                     "${MyApplication.nwsSPCwebsitePrefix}/products/exper/fire_wx/",
                     "<pre>(.*?)</pre>"
             )
@@ -480,24 +471,22 @@ object UtilityDownload {
             text = textUrl.getHtmlSep()
             text = text.parse(RegExp.pre2Pattern)
         } else if (prod.contains("PMDTHR")) {
-            text = UtilityString.getHTMLandParseSep(
+            text = UtilityString.getHtmlAndParseSep(
                     "http://www.cpc.noaa.gov/products/predictions/threats/threats.php",
                     "<div id=\"discDiv\">(.*?)</div>"
             )
         } else if (prod.contains("CTOF")) {
-            text = "Celsius to Fahrenheit table" + MyApplication.newline + UtilityMath.cToFTable()
+            text = "Celsius to Fahrenheit table" + MyApplication.newline + UtilityMath.celsiusToFahrenheitTable()
         } else {
             val t1 = prod.substring(0, 3)
             var t2 = prod.substring(3)
             t2 = t2.replace("%", "")
-            val html = ("https://api.weather.gov/products/types/$t1/locations/$t2").getNwsHtml()
+            val html = (MyApplication.nwsApiUrl + "/products/types/$t1/locations/$t2").getNwsHtml()
             val urlProd = html.parse("\"id\": \"(.*?)\"")
-            val prodHtml = ("https://api.weather.gov/products/$urlProd").getNwsHtml()
+            val prodHtml = (MyApplication.nwsApiUrl + "/products/$urlProd").getNwsHtml()
             text = UtilityString.parseAcrossLines(prodHtml, "\"productText\": \"(.*?)\\}")
-            //text = text.replace("\\n\\n", "<BR>")
-            //text = text.replace("\\n", " ")
-            text = text.replace("\\n\\n", "<BR><BR>")
-            text = text.replace("\\n", "<BR>")
+            text = text.replace("\\n\\n", "<BR>")
+            text = text.replace("\\n", " ")
         }
         UtilityPlayList.checkAndSave(context, prod, text)
         return text
@@ -509,7 +498,7 @@ object UtilityDownload {
         val t2 = prod.substring(3)
         val url =
                 "http://forecast.weather.gov/product.php?site=NWS&product=$t1&issuedby=$t2&version=$version"
-        var text = UtilityString.getHTMLandParseSep(url, RegExp.prePattern)
+        var text = UtilityString.getHtmlAndParseSep(url, RegExp.prePattern)
         text = text.replace(
                 "Graphics available at <a href=\"${MyApplication.nwsWPCwebsitePrefix}/basicwx/basicwx_wbg.php\"><u>www.wpc.ncep.noaa.gov/basicwx/basicwx_wbg.php</u></a>",
                 ""
@@ -524,100 +513,6 @@ object UtilityDownload {
             text = text.replace("<br>", " ")
         }
         return text
-    }
-
-    fun getSunriseSunset(context: Context, locNum: String): String {
-        val locNumInt = (locNum.toIntOrNull() ?: 0) - 1
-        val lat: String
-        val lon: String
-        if (!Location.isUS(locNumInt)) {
-            val latArr = Location.getX(locNumInt).split(":")
-            val lonArr = Location.getY(locNumInt).split(":")
-            if (latArr.size > 2 && lonArr.size > 1) {
-                lat = latArr[2]
-                lon = lonArr[1]
-            } else
-                return ""
-        } else {
-            lat = Location.getX(locNumInt)
-            lon = Location.getY(locNumInt)
-        }
-        val location = ExternalSunriseLocation(lat, lon)
-        val calculator = ExternalSunriseSunsetCalculator(location, TimeZone.getDefault())
-        val officialSunriseCal =
-                calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
-        val officialSunsetCal = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance())
-        val srTime: String
-        val ssTime: String
-        var amStr = ""
-        var pmStr = ""
-        if (!DateFormat.is24HourFormat(context)) {
-            amStr = "am"
-            pmStr = "pm"
-            srTime = (officialSunriseCal.get(Calendar.HOUR)).toString() + ":" +
-                    String.format("%2s", (officialSunriseCal.get(Calendar.MINUTE))).replace(
-                            ' ',
-                            '0'
-                    )
-            ssTime = (officialSunsetCal.get(Calendar.HOUR)).toString() + ":" +
-                    String.format("%2s", (officialSunsetCal.get(Calendar.MINUTE))).replace(' ', '0')
-        } else {
-            srTime = (officialSunriseCal.get(Calendar.HOUR_OF_DAY)).toString() + ":" +
-                    String.format("%2s", (officialSunriseCal.get(Calendar.MINUTE))).replace(
-                            ' ',
-                            '0'
-                    )
-            ssTime = (officialSunsetCal.get(Calendar.HOUR_OF_DAY)).toString() + ":" +
-                    String.format("%2s", (officialSunsetCal.get(Calendar.MINUTE))).replace(' ', '0')
-        }
-        return "Sunrise: $srTime$amStr   Sunset: $ssTime$pmStr"
-    }
-
-    fun getSunriseSunsetShort(context: Context, locNum: String): String {
-        val locNumInt = (locNum.toIntOrNull() ?: 0) - 1
-        val lat: String
-        val lon: String
-        if (!MyApplication.locations[locNumInt].isUS) {
-            val latArr = MyApplication.colon.split(Location.getX(locNumInt))
-            val lonArr = MyApplication.colon.split(Location.getY(locNumInt))
-            if (latArr.size > 2 && lonArr.size > 1) {
-                lat = latArr[2]
-                lon = lonArr[1]
-            } else
-                return ""
-        } else {
-            lat = Location.getX(locNumInt)
-            lon = Location.getY(locNumInt)
-        }
-        val location = ExternalSunriseLocation(lat, lon)
-        val calculator = ExternalSunriseSunsetCalculator(location, TimeZone.getDefault())
-        val officialSunriseCal =
-                calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
-        val officialSunsetCal = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance())
-        val srTime: String
-        val ssTime: String
-        var amStr = ""
-        var pmStr = ""
-        if (!DateFormat.is24HourFormat(context)) {
-            amStr = "am"
-            pmStr = "pm"
-            srTime = (officialSunriseCal.get(Calendar.HOUR)).toString() + ":" +
-                    String.format("%2s", (officialSunriseCal.get(Calendar.MINUTE))).replace(
-                            ' ',
-                            '0'
-                    )
-            ssTime = (officialSunsetCal.get(Calendar.HOUR)).toString() + ":" +
-                    String.format("%2s", (officialSunsetCal.get(Calendar.MINUTE))).replace(' ', '0')
-        } else {
-            srTime = (officialSunriseCal.get(Calendar.HOUR_OF_DAY)).toString() + ":" +
-                    String.format("%2s", (officialSunriseCal.get(Calendar.MINUTE))).replace(
-                            ' ',
-                            '0'
-                    )
-            ssTime = (officialSunsetCal.get(Calendar.HOUR_OF_DAY)).toString() + ":" +
-                    String.format("%2s", (officialSunsetCal.get(Calendar.MINUTE))).replace(' ', '0')
-        }
-        return "$srTime$amStr / $ssTime$pmStr"
     }
 
     fun getStringFromUrl(url: String): String {
@@ -678,7 +573,7 @@ object UtilityDownload {
             }
             br.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return out.toString().replace(breakStr, "<br>")
     }
@@ -734,7 +629,7 @@ object UtilityDownload {
             val response = MyApplication.httpClient!!.newCall(request).execute()
             response.body()!!.byteStream()
         } catch (e: IOException) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
             null
         }
     }
@@ -771,7 +666,7 @@ object UtilityDownload {
             UtilityLog.d("wx", "getRadarStatus testtext: " + text)
             //try another url...
             UtilityLog.d("wx", "getRadarStatus trying another url for FTM")
-            text = UtilityString.getHTMLandParseSep(
+            text = UtilityString.getHtmlAndParseSep(
                     "https://forecast.weather.gov/product.php?site=NWS&issuedby="+ridSmall.toUpperCase(Locale.US)+"&product=FTM&format=TXT&glossary=0",
                     RegExp.prePattern
             )

@@ -389,7 +389,7 @@ object UtilityConusRadar {
             val file = File(dir, fileName)
             fos = FileOutputStream(file)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return fos
     }

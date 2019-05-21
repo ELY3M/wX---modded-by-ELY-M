@@ -30,8 +30,8 @@ import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.external.UtilityStringExternal
 
-fun String.parse(matchStr: String): String {
-    return UtilityString.parseS(this, matchStr)
+fun String.parse(match: String): String {
+    return UtilityString.parse(this, match)
 }
 
 fun String.condenseSpace(): String {
@@ -42,16 +42,16 @@ fun String.truncate(size: Int): String {
     return UtilityStringExternal.truncate(this, size)
 }
 
-fun String.parse(p: Pattern): String {
-    return UtilityString.parseS(this, p)
+fun String.parse(pattern: Pattern): String {
+    return UtilityString.parse(this, pattern)
 }
 
-fun String.parseColumn(matchStr: String): List<String> {
-    return UtilityString.parseColumnS(this, matchStr)
+fun String.parseColumn(match: String): List<String> {
+    return UtilityString.parseColumn(this, match)
 }
 
-fun String.parseColumn(p: Pattern): List<String> {
-    return UtilityString.parseColumnS(this, p)
+fun String.parseColumn(pattern: Pattern): List<String> {
+    return UtilityString.parseColumn(this, pattern)
 }
 
 fun String.getImage(): Bitmap {
@@ -75,23 +75,23 @@ fun String.getHtmlUnsafe(): String {
 }
 
 fun String.getNwsHtml(): String {
-    return UtilityDownloadNws.getNwsStringFromUrl(this)
+    return UtilityDownloadNws.getStringFromUrl(this)
 }
 
 fun String.getHtmlSep(): String {
     return UtilityDownload.getStringFromUrlWithSeparator(this)
 }
 
-fun String.parseColumnAll(p: Pattern): List<String> {
-    return UtilityString.parseColumnAllS(this, p)
+fun String.parseColumnAll(pattern: Pattern): List<String> {
+    return UtilityString.parseColumnAll(this, pattern)
 }
 
-fun String.parseLastMatch(p: Pattern): String {
-    return UtilityString.parseLastMatchS(this, p)
+fun String.parseLastMatch(pattern: Pattern): String {
+    return UtilityString.parseLastMatch(this, pattern)
 }
 
-fun String.parseLastMatch(matchStr: String): String {
-    return UtilityString.parseLastMatchS(this, matchStr)
+fun String.parseLastMatch(match: String): String {
+    return UtilityString.parseLastMatch(this, match)
 }
 
 

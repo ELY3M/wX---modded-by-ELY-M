@@ -534,52 +534,55 @@ Use a white or black background in as many radar products as possible.
 Show Conus Radar when you zoom out to the whole map.
     </string>
 
+    <string name="conus_radar_zoom_label">
+Allows one to change the zoom of the conus radar viewing.</string>
+
       <string name="anim_np_label">
 Animation speed. Lower is faster. Default is 5.
       </string>
 
     <string name="default_linesize_np_label">
-Thickness of lines for State, Rivers, highways Lines. Smaller is thinner. Default is 1.
+Thickness of lines for State, Rivers, highways Lines. Smaller is thinner.
     </string>
 
     <string name="warn_linesize_np_label">
-Thickness of lines for warnings. Smaller number is thinner. Default is 4.
+Thickness of lines for warnings. Smaller number is thinner.
     </string>
 
     <string name="watmcd_linesize_np">
-Thickness of lines for SPC Watch/MCD. Smaller number is thinner. Default is 4.
+Thickness of lines for SPC Watch/MCD. Smaller number is thinner.
 </string>
 
  <string name="state_linesize_np">
-Thickness of lines for state lines. Smaller number is thinner. Default is 2.
+Thickness of lines for state lines. Smaller number is thinner.
 </string>
  <string name="county_linesize_np">
-Thickness of lines for county outlines. Smaller number is thinner. Default is 2.
+Thickness of lines for county outlines. Smaller number is thinner.
 </string>
  <string name="hw_linesize_np">
-Thickness of lines for main highways. Smaller number is thinner. Default is 2.
+Thickness of lines for main highways. Smaller number is thinner.
 </string>
  <string name="hwext_linesize_np">
-Thickness of lines for secondary highways/roads. Smaller number is thinner. Default is 2.
+Thickness of lines for secondary highways/roads. Smaller number is thinner.
 </string>
  <string name="lakes_linesize_np">
-Thickness of lines for rivers and lakes. Smaller number is thinner. Default is 2.
+Thickness of lines for rivers and lakes. Smaller number is thinner.
 </string>
  <string name="gpscircle_linesize_np">
-Thickness of lines for the GPS location circle. Smaller number is thinner. Default is 5.
+Thickness of lines for the GPS location circle. Smaller number is thinner.
 </string>
 
     <string name="locdot_size_np">
-Allows one to change the size of the location marker. Default value is 8</string>
+Allows one to change the size of the location marker.</string>
 
     <string name="locicon_size_np">
-Allows one to change the size of the GPS location Image. Default value is 75</string>
+Allows one to change the size of the GPS location Image.</string>
 
     <string name="locbug_size_np">
-Allows one to change the size of the GPS location Bug. Default value is 75</string>
+Allows one to change the size of the GPS location Bug.</string>
 
     <string name="wxogl_size_np">
-Allows one to change the default view size for the WXOGL Nexrad radar interface. Default value is 10. Larger value is more zoomed in.</string>
+Allows one to change the default view size for the WXOGL Nexrad radar interface. Larger value is more zoomed in.</string>
 
     <string name="b_tornado">
 Turn on alerts for US-wide tornado warnings.</string>
@@ -767,16 +770,16 @@ If enabled the WXOGL radar will hail signatures will show text of hail sizes</st
 If enabled the WXOGL radar will show tornado vortext signature as shown via upside down triangle with color matching tornado warning/watch polygons.</string>
 
         <string name="hi_size_np">
-Allows one to change the size of the Hail markers. Default value is 75.</string>
+Allows one to change the size of the Hail markers.</string>
 
     <string name="hi_textsize_np">
-Allows one to change the size of the Hail Text. Default value is 8.</string>
+Allows one to change the size of the Hail Text.</string>
 
     <string name="tvs_size_np">
-Allows one to change the size of the TVS markers. Default value is 75.</string>
+Allows one to change the size of the TVS markers.</string>
 
     <string name="userpoints_size_np">
-Allows one to change the size of the Userpoints markers. Default value is 75.</string>
+Allows one to change the size of the Userpoints markers.</string>
 
     <string name="rememberloc_label">
 WXOGL will use the last location and zoom level instead of the radar site for the current location in the main tab.</string>
@@ -788,7 +791,7 @@ Controls the number of minutes before an auto  refresh is triggered if that opti
 Launch the application directly into the radar interface.</string>
 
     <string name="elevation_np_label">
-Control how much elevation is present in the UI. Default is 0.</string>
+Control how much elevation is present in the UI.</string>
 
     <string name="homescreen_help_label">
 This activity is used to manage the cards ( if enabled ) on the \"home page\" (the first screen shown when the app is launched).

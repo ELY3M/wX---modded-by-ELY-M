@@ -114,7 +114,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
                 hazardSum += MyApplication.newline + m.group(1)
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         hazardSum = hazardSum.replace(("^" + MyApplication.newline).toRegex(), "")
         if (hazardSum != "")

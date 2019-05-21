@@ -34,8 +34,13 @@ enum public class PolygonType constructor(
 
     MCD(MyApplication.radarColorMcd, "MCD", MyApplication.radarWatMcd, 0.0f),
     MPD(MyApplication.radarColorMpd, "MPD", MyApplication.radarMpd, 0.0f),
-    WATCH(MyApplication.radarColorSvrWatch, "WATCH_SVR", MyApplication.radarWatMcd, 0.0f),
-    WATCH_TORNADO(MyApplication.radarColorTorWatch, "WATCH_TOR", MyApplication.radarWatMcd, 0.0f),
+    WATCH(MyApplication.radarColorSvrWatch, "WATCH", MyApplication.radarWatMcd, 0.0f),
+    WATCH_TORNADO(
+            MyApplication.radarColorTorWatch,
+            "WATCH_TORNADO",
+            MyApplication.radarWatMcd,
+            0.0f
+    ),
     TOR(MyApplication.radarColorTor, "TOR", MyApplication.radarTorWarnings, 0.0f),
     SVR(MyApplication.radarColorSvr, "SVR", MyApplication.radarSvrWarnings, 0.0f),
     EWW(MyApplication.radarColorEww, "EWW", MyApplication.radarEwwWarnings, 0.0f),
@@ -107,7 +112,6 @@ enum public class PolygonType constructor(
 
             MCD.pref = MyApplication.radarWatMcd
             MPD.pref = MyApplication.radarMpd
-            WATCH.pref = MyApplication.radarWatMcd
             WATCH.pref = MyApplication.radarWatMcd
             WATCH_TORNADO.pref = MyApplication.radarWatMcd
             TOR.pref = MyApplication.radarTorWarnings

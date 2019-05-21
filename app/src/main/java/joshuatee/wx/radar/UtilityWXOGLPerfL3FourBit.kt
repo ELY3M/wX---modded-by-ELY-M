@@ -72,7 +72,7 @@ internal object UtilityWXOGLPerfL3FourBit {
             }
             dis.close()
         } catch (e: IOException) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return numberOfRangeBins
     }

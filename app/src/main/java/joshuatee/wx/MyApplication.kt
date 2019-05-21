@@ -131,7 +131,7 @@ class MyApplication : Application() {
                 .readTimeout(15, TimeUnit.SECONDS)
                 .addInterceptor(okhttp3Interceptor)
                 .build()
-        UtilityTTS.initTTS(applicationContext)
+        UtilityTTS.initTts(applicationContext)
         UtilityCities.initCitiesArray()
         if (!loadedBuffers) {
             initBuffers(this)
@@ -730,7 +730,7 @@ class MyApplication : Application() {
                     dis.close()
                     inputStream.close()
                 } catch (e: IOException) {
-                    UtilityLog.HandleException(e)
+                    UtilityLog.handleException(e)
                 }
             }
         }
@@ -744,8 +744,9 @@ class MyApplication : Application() {
         const val NWS_CONUS_RADAR: String = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
         const val NWS_CONUS_RADAR_GFW: String = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
         var radarConusRadar: Boolean = false
+        var radarConusRadarZoom: Int = 173
         var radarWarnings: Boolean = false
-	var radarTorWarnings: Boolean = true
+	    var radarTorWarnings: Boolean = true
         var radarSvrWarnings: Boolean = true
         var radarEwwWarnings: Boolean = true
         var radarFfwWarnings: Boolean = true
@@ -810,6 +811,7 @@ class MyApplication : Application() {
         private fun initRadarPreferences() {
 	    radarLocationUpdateInterval = getInitialPreference("RADAR_LOCATION_UPDATE_INTERVAL", 10)
             radarConusRadar = getInitialPreference("CONUS_RADAR", "false")
+            radarConusRadarZoom = getInitialPreference("CONUS_RADAR_ZOOM", 173)
             radarWarnings = getInitialPreference("COD_WARNINGS_DEFAULT", "false")
             radarTorWarnings = getInitialPreference("TOR_WARNINGS", "false")
             radarSvrWarnings = getInitialPreference("SVR_WARNINGS", "false")

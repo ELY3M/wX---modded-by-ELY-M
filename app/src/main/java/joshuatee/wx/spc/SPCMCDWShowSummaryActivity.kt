@@ -150,7 +150,7 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
                     bitmaps.add(imgUrl.getImage())
                 }
             } catch (e: Exception) {
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             }
             if (mcdList.size == 1) {
                 if (number.contains("at")) {

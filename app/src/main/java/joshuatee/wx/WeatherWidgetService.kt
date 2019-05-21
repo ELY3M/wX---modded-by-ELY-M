@@ -84,7 +84,7 @@ internal class StackRemoteViewsFactory(private val context: Context) :
             val tempStrArr = MyApplication.colonSpace.split(day)
             if (tempStrArr != null && tempStrArr.size > 1) {
                 t1 = tempStrArr[0].replace(":", " ") + " (" +
-                        UtilityLocationFragment.extractTemp(tempStrArr[1]) +
+                        UtilityLocationFragment.extractTemperature(tempStrArr[1]) +
                         MyApplication.DEGREE_SYMBOL +
                         UtilityLocationFragment.extractWindDirection(tempStrArr[1].substring(1)) +
                         UtilityLocationFragment.extract7DayMetrics(tempStrArr[1].substring(1)) + ")"

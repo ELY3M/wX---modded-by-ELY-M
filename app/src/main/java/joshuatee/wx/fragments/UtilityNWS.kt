@@ -33,8 +33,10 @@ import joshuatee.wx.util.UtilityImg
 
 object UtilityNWS {
 
+    // FIXME better var naming in this class
+
     fun getIcon(context: Context, url: String): Bitmap {
-        val bm: Bitmap
+        val bitmap: Bitmap
         if (url == "NULL") {
             return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
         }
@@ -49,28 +51,28 @@ object UtilityNWS {
                 .replace("/", "/n")
         }
         val fnResId = UtilityNwsIcon.iconMap["$fn.png"]
-        bm = if (fnResId == null || fn.contains(",")) {
+        bitmap = if (fnResId == null || fn.contains(",")) {
             parseBitmap(context, fn)
         } else {
             UtilityImg.loadBitmap(context, fnResId, false)
         }
-        return bm
+        return bitmap
     }
 
     private fun parseBitmap(context: Context, url: String): Bitmap {
-        val bm: Bitmap
-        val tmpArr: List<String>
+        val bitmap: Bitmap
+        val conditions: List<String>
         if (url.contains("/")) {
-            tmpArr = url.split("/").dropLastWhile { it.isEmpty() } //  snow,20/ovc,20
-            bm = if (tmpArr.size > 1) {
-                dualBitmapWithNumbers(context, tmpArr[0], tmpArr[1])
+            conditions = url.split("/").dropLastWhile { it.isEmpty() } //  snow,20/ovc,20
+            bitmap = if (conditions.size > 1) {
+                dualBitmapWithNumbers(context, conditions[0], conditions[1])
             } else {
                 UtilityImg.getBlankBitmap()
             }
         } else {
-            bm = dualBitmapWithNumbers(context, url)
+            bitmap = dualBitmapWithNumbers(context, url)
         }
-        return bm
+        return bitmap
     }
 
     private fun dualBitmapWithNumbers(context: Context, aF: String, bF: String): Bitmap {
@@ -100,13 +102,13 @@ object UtilityNWS {
         if (b.contains("fg")) {
             leftCropB = 45
         }
-        val bm = Bitmap.createBitmap(dimens, dimens, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bm)
+        val bitmap = Bitmap.createBitmap(dimens, dimens, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
         canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
         val fnResId1 = UtilityNwsIcon.iconMap["$a.png"]
         val fnResId2 = UtilityNwsIcon.iconMap["$b.png"]
         if (fnResId1 == null || fnResId2 == null) {
-            return bm
+            return bitmap
         }
         val bm1Tmp = UtilityImg.loadBitmap(context, fnResId1, false)
         val bm1 = Bitmap.createBitmap(bm1Tmp, leftCropA, 0, 41, dimens)
@@ -142,7 +144,7 @@ object UtilityNWS {
             )
             canvas.drawText("$num2%", xText.toFloat(), yText.toFloat(), paint.paint)
         }
-        return bm
+        return bitmap
     }
 
     private fun dualBitmapWithNumbers(context: Context, aF: String): Bitmap {
@@ -157,10 +159,10 @@ object UtilityNWS {
         }
         val dimens = 86
         val numHeight = 15
-        val bm = Bitmap.createBitmap(dimens, dimens, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bm)
+        val bitmap = Bitmap.createBitmap(dimens, dimens, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
         canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
-        val fnResId1 = UtilityNwsIcon.iconMap["$a.png"] ?: return bm
+        val fnResId1 = UtilityNwsIcon.iconMap["$a.png"] ?: return bitmap
         val bm1Tmp = UtilityImg.loadBitmap(context, fnResId1, false)
         val bm1 = Bitmap.createBitmap(bm1Tmp, 0, 0, dimens, dimens) // was 41,dimens
         canvas.drawBitmap(bm1, 0f, 0f, Paint(Paint.FILTER_BITMAP_FLAG))
@@ -181,7 +183,7 @@ object UtilityNWS {
             )
             canvas.drawText("$num1%", xText.toFloat(), yText.toFloat(), paint.paint)
         }
-        return bm
+        return bitmap
     }
 }
 

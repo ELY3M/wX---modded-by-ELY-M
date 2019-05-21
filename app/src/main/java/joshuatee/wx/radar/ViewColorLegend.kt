@@ -31,9 +31,6 @@ import android.view.View
 import joshuatee.wx.MyApplication
 import joshuatee.wx.external.UtilityStringExternal
 
-// thanks for skeletal framework
-// https://newcircle.com/s/post/1036/android_2d_graphics_example
-
 class ViewColorLegend(context: Context, private val product: String) : View(context) {
 
     private val myPaint = Paint()

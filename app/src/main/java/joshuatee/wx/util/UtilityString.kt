@@ -46,233 +46,226 @@ object UtilityString {
         return String(chars)
     }
 
-    /*internal fun shortenTimeV2(longTimeF: String): String {
-        var longTime = longTimeF
-        longTime = longTime.replace("-09:00", "").replace("-10:00", "").replace("-05:00", "")
-            .replace("T", " ").replace("-04:00", "").replace(":00 ", " ")
-        return longTime.replace("-06:00", "").replace("-07:00", "")
-    }*/
+    fun getHtmlAndParse(url: String, match: String): String = url.getHtml().parse(match)
 
-    fun getHTMLandParse(url: String, matchStr: String): String = url.getHtml().parse(matchStr)
+    fun getHtmlAndParse(url: String, pattern: Pattern): String = url.getHtml().parse(pattern)
 
-    fun getHTMLandParse(url: String, p: Pattern): String = url.getHtml().parse(p)
+    fun getHtmlAndParseLastMatch(url: String, match: String): String =
+        url.getHtml().parseLastMatch(match)
 
-    fun getHTMLandParseLastMatch(url: String, matchStr: String): String =
-        url.getHtml().parseLastMatch(matchStr)
+    fun getHtmlAndParseLastMatch(url: String, pattern: Pattern): String = url.getHtml().parseLastMatch(pattern)
 
-    fun getHTMLandParseLastMatch(url: String, p: Pattern): String = url.getHtml().parseLastMatch(p)
-
-    fun parseLastMatchS(str: String, p: Pattern): String {
+    fun parseLastMatch(str: String, pattern: Pattern): String {
         var content = ""
         try {
-            val m = p.matcher(str)
+            val m = pattern.matcher(str)
             while (m.find()) {
                 content = m.group(1)
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return content
     }
 
-    fun parseLastMatchS(str: String, matchStr: String): String {
+    fun parseLastMatch(string: String, match: String): String {
         var content = ""
         try {
-            val p = Pattern.compile(matchStr)
-            val m = p.matcher(str)
+            val p = Pattern.compile(match)
+            val m = p.matcher(string)
             while (m.find()) {
                 content = m.group(1)
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return content
     }
 
-    fun parseS(data: String, matchStr: String): String {
+    fun parse(data: String, match: String): String {
         var content = ""
         try {
-            val p = Pattern.compile(matchStr)
+            val p = Pattern.compile(match)
             val m = p.matcher(data)
             if (m.find()) content = m.group(1)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return content
     }
 
-    internal fun parseAcrossLines(data: String, matchStr: String): String {
+    internal fun parseAcrossLines(data: String, match: String): String {
         var content = ""
         try {
-            val p = Pattern.compile(matchStr, Pattern.DOTALL)
-            val m = p.matcher(data)
+            val pattern = Pattern.compile(match, Pattern.DOTALL)
+            val m = pattern.matcher(data)
             if (m.find()) content = m.group(1)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return content
     }
 
-    fun parseS(data: String, p: Pattern): String {
+    fun parse(data: String, pattern: Pattern): String {
         var content = ""
         try {
-            val m = p.matcher(data)
+            val m = pattern.matcher(data)
             if (m.find()) content = m.group(1)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return content
     }
 
-    fun getHTMLandParseSep(url: String, matchStr: String): String = url.getHtmlSep().parse(matchStr)
+    fun getHtmlAndParseSep(url: String, match: String): String = url.getHtmlSep().parse(match)
 
-    internal fun getHTMLandParseSep(url: String, p: Pattern) = url.getHtmlSep().parse(p)
+    internal fun getHtmlAndParseSep(url: String, pattern: Pattern) = url.getHtmlSep().parse(pattern)
 
-    fun getHTMLandParseMultipeFirstMatch(
+    fun getHtmlAndParseMultipleFirstMatch(
         url: String,
-        matchStr: String,
+        match: String,
         number: Int
-    ): MutableList<String> = parseMultipeFirst(url.getHtml(), matchStr, number)
+    ): MutableList<String> = parseMultipleFirst(url.getHtml(), match, number)
 
-    private fun parseMultipeFirst(
+    private fun parseMultipleFirst(
         data: String,
-        match_str: String,
+        match: String,
         number: Int
     ): MutableList<String> {
         val result = MutableList(number) { "" }
         try {
-            val p = Pattern.compile(match_str)
-            val m = p.matcher(data)
+            val pattern = Pattern.compile(match)
+            val m = pattern.matcher(data)
             m.find()
             (0 until number).forEach { result[it] = m.group(it + 1) }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return result
     }
 
-    fun parseMultipe(data: String, match_str: String, number: Int): MutableList<String> {
+    fun parseMultiple(data: String, match: String, number: Int): MutableList<String> {
         val result = MutableList(number) { "" }
         try {
-            val p = Pattern.compile(match_str)
-            val m = p.matcher(data)
+            val pattern = Pattern.compile(match)
+            val m = pattern.matcher(data)
             while (m.find()) {
                 (0 until number).forEach { result[it] = m.group(it + 1) }
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return result
     }
 
-    fun parseMultipe(data: String, p: Pattern, number: Int): MutableList<String> {
+    fun parseMultiple(data: String, pattern: Pattern, number: Int): MutableList<String> {
         val result = MutableList(number) { "" }
         try {
-            val m = p.matcher(data)
+            val m = pattern.matcher(data)
             while (m.find()) {
                 (0 until number).forEach { result[it] = m.group(it + 1) }
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return result
     }
 
-    fun parseColumnS(data: String, matchStr: String): List<String> {
+    fun parseColumn(data: String, match: String): List<String> {
         val result = mutableListOf<String>()
         try {
-            val p = Pattern.compile(matchStr)
-            val m = p.matcher(data)
+            val pattern = Pattern.compile(match)
+            val m = pattern.matcher(data)
             while (m.find()) {
                 result.add(m.group(1))
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return result
     }
 
-    fun parseColumnMutable(data: String, matchStr: String): MutableList<String> {
+    fun parseColumnMutable(data: String, match: String): MutableList<String> {
         val result = mutableListOf<String>()
         try {
-            val p = Pattern.compile(matchStr)
-            val m = p.matcher(data)
+            val pattern = Pattern.compile(match)
+            val m = pattern.matcher(data)
             while (m.find()) {
                 result.add(m.group(1))
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return result
     }
 
-    fun parseColumnMutable(data: String, p: Pattern): MutableList<String> {
+    fun parseColumnMutable(data: String, pattern: Pattern): MutableList<String> {
         val result = mutableListOf<String>()
         try {
-            val m = p.matcher(data)
+            val m = pattern.matcher(data)
             while (m.find()) {
                 result.add(m.group(1))
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return result
     }
 
-    fun parseColumnS(data: String, p: Pattern): List<String> {
+    fun parseColumn(data: String, pattern: Pattern): List<String> {
         val result = mutableListOf<String>()
         try {
-            val m = p.matcher(data)
+            val m = pattern.matcher(data)
             while (m.find()) {
                 result.add(m.group(1))
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return result
     }
 
-    fun parseColumnAl(data: String, p: Pattern): MutableList<String> {
+    fun parseColumnAl(data: String, pattern: Pattern): MutableList<String> {
         val result = mutableListOf<String>()
         try {
-            val m = p.matcher(data)
+            val m = pattern.matcher(data)
             while (m.find()) {
                 result.add(m.group(1))
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return result
     }
 
-    fun parseColumnAllS(data: String, p: Pattern): List<String> {
+    fun parseColumnAll(data: String, pattern: Pattern): List<String> {
         val result = mutableListOf<String>()
         try {
-            val m = p.matcher(data)
+            val m = pattern.matcher(data)
             while (m.find()) {
                 result.add(m.group())
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return result
     }
 
-    fun parseAndCount(data: String, matchStr: String): Int {
+    fun parseAndCount(data: String, match: String): Int {
         var i = 0
         try {
-            val p = Pattern.compile(matchStr)
+            val p = Pattern.compile(match)
             val m = p.matcher(data)
             while (m.find()) {
                 i += 1
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return i
     }
 
-    fun getNWSPRE(url: String): String = url.getHtmlSep().parse(RegExp.pre2Pattern)
+    fun getNwsPre(url: String): String = url.getHtmlSep().parse(RegExp.pre2Pattern)
 
     fun getLastXChars(s: String, x: Int): String = when {
         s.length == x -> s
@@ -280,6 +273,6 @@ object UtilityString {
         else -> s
     }
 
-    fun addPeriodBeforeLastTwoChars(str: String): String =
-        StringBuilder(str).insert(str.length - 2, ".").toString()
+    fun addPeriodBeforeLastTwoChars(string: String): String =
+        StringBuilder(string).insert(string.length - 2, ".").toString()
 }

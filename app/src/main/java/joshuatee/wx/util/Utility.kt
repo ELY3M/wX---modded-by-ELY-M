@@ -109,7 +109,7 @@ object Utility {
         try {
             vers = context.packageManager.getPackageInfo(context.packageName, 0).versionName
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return vers
     }
@@ -206,8 +206,7 @@ object Utility {
     }
 
     // FIXME deprecate these
-    fun readPref(key: String, value: String): String =
-            MyApplication.preferences.getString(key, value)!!
+    fun readPref(key: String, value: String): String = MyApplication.preferences.getString(key, value)!!
 
     fun theme(themeStr: String): Int = when {
         themeStr.startsWith("blue") -> R.style.MyCustomTheme_NOAB
@@ -223,54 +222,6 @@ object Utility {
         themeStr.startsWith("WhiteToolbar") -> R.style.MyCustomTheme_white_NOAB
         else -> R.style.MyCustomTheme_NOAB
     }
-
-    private fun getCurrentConditionsCanada(locNum: Int): ObjectForecastPackageCurrentConditions {
-        val html = UtilityCanada.getLocationHtml(Location.getLatLon(locNum))
-        return ObjectForecastPackageCurrentConditions.createForCanada(html)
-    }
-
-    private fun getCurrentConditionsUS(context: Context, locNum: Int): ObjectForecastPackageCurrentConditions {
-        return ObjectForecastPackageCurrentConditions(context, locNum)
-    }
-
-    fun getCurrentHazards(locNum: Int): ObjectForecastPackageHazards {
-        return if (Location.isUS(locNum)) {
-            ObjectForecastPackageHazards(locNum)
-        } else {
-            val html = UtilityCanada.getLocationHtml(Location.getLatLon(locNum))
-            ObjectForecastPackageHazards.createForCanada(html)
-        }
-    }
-
-    fun getCurrentSevenDay(locNum: Int): ObjectForecastPackage7Day {
-        return if (Location.isUS(locNum)) {
-            val html = UtilityDownloadNws.get7DayData(Location.getLatLon(locNum))
-            ObjectForecastPackage7Day(locNum, html)
-        } else {
-            val html = UtilityCanada.getLocationHtml(Location.getLatLon(locNum))
-            ObjectForecastPackage7Day(locNum, html)
-        }
-    }
-
-    fun getCurrentSevenDay(location: LatLon): ObjectForecastPackage7Day {
-        val html = UtilityDownloadNws.get7DayData(location)
-        return ObjectForecastPackage7Day(-1, html)
-    }
-
-    fun getCurrentHazards(location: LatLon): ObjectForecastPackageHazards {
-        return ObjectForecastPackageHazards(location)
-    }
-
-    fun getCurrentConditionsByLatLon(context: Context, location: LatLon): ObjectForecastPackageCurrentConditions {
-        return ObjectForecastPackageCurrentConditions(context, location)
-    }
-
-    fun getCurrentConditions(context: Context, locNum: Int): ObjectForecastPackageCurrentConditions =
-            if (Location.isUS(locNum)) {
-                getCurrentConditionsUS(context, locNum)
-            } else {
-                getCurrentConditionsCanada(locNum)
-            }
 
     fun getHazards(url: String): String =
             url.parse("<!-- AddThis Button END --> {3}<hr /><br />(.*?)</div>")

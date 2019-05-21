@@ -69,18 +69,18 @@ object UtilityLocation {
             return latlonAl
         }
 
-    fun getXYFromAddressOSM(addressF: String): List<String> {
+    fun getXYFromAddressOsm(addressF: String): List<String> {
         val address = addressF.replace(" ", "+")
         val url =
             "http://nominatim.openstreetmap.org/search?q=$address&format=xml&polygon=0&addressdetails=1"
-        return UtilityString.getHTMLandParseMultipeFirstMatch(
+        return UtilityString.getHtmlAndParseMultipleFirstMatch(
             url,
             "lat=.(.*?).\\slon=.(.*?).\\s",
             2
         ).toList()
     }
 
-    fun getGPS(context: Context): DoubleArray {
+    fun getGps(context: Context): DoubleArray {
         val lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         val providers = lm.getProviders(true)
         var l: Location? = null
@@ -209,7 +209,7 @@ object UtilityLocation {
     }
 
     fun checkRoamingLocation(context: Context, locNum: String, xStr: String, yStr: String) {
-        val currentXY = getGPS(context)
+        val currentXY = getGps(context)
         val roamingLocationDistanceCheck =
             Utility.readPref(context, "ROAMING_LOCATION_DISTANCE_CHECK", 5)
         val locX = xStr.toDoubleOrNull() ?: 0.0
@@ -246,7 +246,7 @@ object UtilityLocation {
             val locNumToSaveStr = locNumIntCurrent.toString()
             val loc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "")
             val addrSend = loc.replace(" ", "+")
-            val xyStr = getXYFromAddressOSM(addrSend)
+            val xyStr = getXYFromAddressOsm(addrSend)
             toastStr = joshuatee.wx.settings.Location.locationSave(
                 context,
                 locNumToSaveStr,

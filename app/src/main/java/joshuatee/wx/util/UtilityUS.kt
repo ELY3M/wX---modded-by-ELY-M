@@ -39,22 +39,6 @@ object UtilityUS {
     var obsClosestClass: String = ""
     private val OBS_CODE_TO_LOCATION = mutableMapOf<String, String>()
 
-    /*internal fun getStatus(context: Context, conditionsTimeStrF: String): String {
-        var conditionsTimeStr = conditionsTimeStrF
-        var locationName: String? = OBS_CODE_TO_LOCATION[obsClosestClass]
-        if (locationName == null) {
-            locationName = findObsName(context, obsClosestClass)
-            if (locationName != "" && obsClosestClass != "") {
-                OBS_CODE_TO_LOCATION[obsClosestClass] = locationName
-            }
-        }
-        conditionsTimeStr =
-            UtilityTime.convertFromUTC(UtilityString.shortenTimeV2(conditionsTimeStr))
-        return conditionsTimeStr.replace(":00 ", " ") + " " + UtilityString.capitalizeString(
-            locationName
-        ).trim { it <= ' ' } + " (" + obsClosestClass + ") "  // strip off seconds that is always 00, need to do this here
-    }*/
-
     internal fun getStatusViaMetar(context: Context, conditionsTimeStr: String): String {
         var locationName: String? = OBS_CODE_TO_LOCATION[obsClosestClass]
         if (locationName == null) {
@@ -67,7 +51,7 @@ object UtilityUS {
     }
 
     private fun findObsName(context: Context, obsShortCode: String): String {
-        var locatioName = ""
+        var locationName = ""
         try {
             val xmlFileInputStream = context.resources.openRawResource(R.raw.stations_us4)
             val text = UtilityIO.readTextFile(xmlFileInputStream)
@@ -76,51 +60,13 @@ object UtilityUS {
             val tmp = lines.lastOrNull { it.contains(",$obsShortCode") } ?: ""
             tmpArr = tmp.split(",")
             if (tmpArr.size > 2) {
-                locatioName = tmpArr[0] + ", " + tmpArr[1]
+                locationName = tmpArr[0] + ", " + tmpArr[1]
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
-        return locatioName
+        return locationName
     }
-
-    /*internal fun getObsFromLatLon(context: Context, location: LatLon): String {
-        var x = location.latString
-        var y = location.lonString
-        x = UtilityMath.latLonFix(x)
-        y = UtilityMath.latLonFix(y)
-        val key = "LLTOOBS$x,$y"
-        var obsClosest: String = Utility.readPref(key, "")
-        if (obsClosest == "") {
-            val obsHtml =
-                UtilityDownloadNWS.getNWSStringFromURL("https://api.weather.gov/points/$x,$y/stations")
-            obsClosest = obsHtml.parse("gov/stations/(.*?)\"")
-            obsClosestClass = obsClosest
-            if (key != "" && obsClosest != "") {
-                Utility.writePref(context, key, obsClosest)
-            }
-        }
-        obsClosestClass = obsClosest
-        return obsClosest
-    }*/
-
-    /*
-
-
-	"number": 1,
-                "name": "This Afternoon",
-                "startTime": "2016-12-21T14:00:00-05:00",
-                "endTime": "2016-12-21T18:00:00-05:00",
-                "isDaytime": true,
-                "temperature": 58,
-                "windSpeed": "3 mph",
-                "windDirection": "WSW",
-                "icon": "https://api-v1.weather.gov/icons/land/day/few?size=medium",
-                "shortForecast": "Sunny",
-                "detailedForecast": "Sunny, with a high near 58. West southwest wind around 3 mph."
-
-
-	 */
 
     fun checkForNotifications(
             context: Context,
@@ -137,7 +83,7 @@ object UtilityUS {
         hazardTitles.forEach { title ->
             if (idAl.size > i) {
                 val url = idAl[i]
-                val ca = CAPAlert.createFromURL(url)
+                val ca = CAPAlert.createFromUrl(url)
                 if (UtilityNotificationTools.nwsLocalAlertNotFiltered(context, title)) {
                     html = "$html<b>$title</b><br>"
                     html = html + "<b>Counties: " + ca.area + "</b><br>"

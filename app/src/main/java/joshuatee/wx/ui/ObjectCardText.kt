@@ -231,9 +231,14 @@ class ObjectCardText(private val context: Context) {
         })
     }
 
+    fun setPaddingAmount(padding: Int) {
+        this.padding = padding
+        tv.setPadding(padding, padding, padding, padding)
+    }
+
     fun setTextAndTranslate(text: String) {
         val localText = if (UIPreferences.translateText) {
-            UtilityTTSTranslations.tranlasteAbbrevForVisual(text)
+            UtilityTTSTranslations.translateAbbreviationsForVisual(text)
         } else {
             text
         }

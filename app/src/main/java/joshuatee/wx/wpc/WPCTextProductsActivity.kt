@@ -77,7 +77,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     private lateinit var star: MenuItem
     private lateinit var notifToggle: MenuItem
     private var ridFavOld = ""
-    private lateinit var c0: ObjectCardText
+    private lateinit var textCard: ObjectCardText
     private lateinit var sp: ObjectSpinner
     private lateinit var drw: ObjectNavDrawerCombo
     private lateinit var contextg: Context
@@ -100,8 +100,8 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
             prod = activityArguments[0]
             initProd = prod
         }
-        c0 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        products = UtilityFavorites.setupFavMenuNWSTEXT(MyApplication.nwsTextFav, prod)
+        textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
+        products = UtilityFavorites.setupFavMenuNwsText(MyApplication.nwsTextFav, prod)
         sp = ObjectSpinner(this, this, this, R.id.spinner1, products)
         UtilityWPCText.createData()
         drw = ObjectNavDrawerCombo(
@@ -125,7 +125,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         }
         ridFavOld = MyApplication.nwsTextFav
         html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(contextg, prod) }
-        c0.setTextAndTranslate(Utility.fromHtml(html))
+        textCard.setTextAndTranslate(Utility.fromHtml(html))
         UtilityTTS.conditionalPlay(activityArguments, 2, applicationContext, html, "wpctext")
         if (initProd != prod) {
             Utility.writePref(contextg, "WPC_TEXT_FAV", prod)
@@ -211,7 +211,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
 
     override fun onRestart() {
         if (ridFavOld != MyApplication.nwsTextFav) {
-            products = UtilityFavorites.setupFavMenuNWSTEXT(
+            products = UtilityFavorites.setupFavMenuNwsText(
                 MyApplication.nwsTextFav,
                 GlobalArrays.nwsTextProducts[findPosition(prod)]
             )
@@ -222,13 +222,13 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
 
     private fun toggleFavorite() {
         UtilityFavorites.toggleFavorite(this, prod, star, "NWS_TEXT_FAV")
-        products = UtilityFavorites.setupFavMenuNWSTEXT(MyApplication.nwsTextFav, prod)
+        products = UtilityFavorites.setupFavMenuNwsText(MyApplication.nwsTextFav, prod)
         sp.refreshData(this, products)
     }
 
     private fun changeProduct() {
         prod = drw.getUrl()
-        products = UtilityFavorites.setupFavMenuNWSTEXT(
+        products = UtilityFavorites.setupFavMenuNwsText(
             MyApplication.nwsTextFav,
             GlobalArrays.nwsTextProducts[findPosition(prod)]
         )

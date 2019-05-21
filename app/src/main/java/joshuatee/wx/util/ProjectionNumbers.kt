@@ -24,7 +24,6 @@ package joshuatee.wx.util
 import android.content.Context
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ProjectionType
-import joshuatee.wx.vis.UtilityUSImgNWSGOESMercator
 
 class ProjectionNumbers {
 
@@ -104,14 +103,6 @@ class ProjectionNumbers {
         }
         x = Utility.getRadarSiteX(radarSite)
         y = Utility.getRadarSiteY(radarSite)
-        if (provider === ProjectionType.NWS_GOES) {
-            val mnTmp = UtilityUSImgNWSGOESMercator.getMercatorNumbers(context, radarSite)
-            x = mnTmp.x
-            y = mnTmp.y
-            scale = mnTmp.scale
-            xCenter = mnTmp.xCenter
-            yCenter = mnTmp.yCenter
-        }
         oneDegreeScaleFactor = UtilityMath.pixPerDegreeLon(xDbl, scale)
         scaleFloat = scale.toFloat()
     }

@@ -67,7 +67,7 @@ object UtilityNotificationNhc {
                 if (dataRet.title != "") {
                     atlTitleList.add(dataRet.title.replace("NHC Atlantic Wallet", ""))
                     atlSumList.add(dataRet.summary)
-                    atlLinkList.add(UtilityString.getNWSPRE(dataRet.url))
+                    atlLinkList.add(UtilityString.getNwsPre(dataRet.url))
                     atlImg1List.add(dataRet.img1)
                     atlImg2List.add(dataRet.img2)
                     atlWalletList.add(dataRet.wallet)
@@ -81,7 +81,7 @@ object UtilityNotificationNhc {
                 if (dataRet.title != "") {
                     pacTitleList.add(dataRet.title.replace("NHC Eastern Pacific Wallet", ""))
                     pacSumList.add(dataRet.summary)
-                    pacLinkList.add(UtilityString.getNWSPRE(dataRet.url))
+                    pacLinkList.add(UtilityString.getNwsPre(dataRet.url))
                     pacImg1List.add(dataRet.img1)
                     pacImg2List.add(dataRet.img2)
                     pacWalletList.add(dataRet.wallet)

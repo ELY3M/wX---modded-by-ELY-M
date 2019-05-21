@@ -30,6 +30,7 @@ import android.graphics.Bitmap
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.canada.UtilityCanadaImg
+import joshuatee.wx.nhc.UtilityNHC
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
 import joshuatee.wx.settings.Location
@@ -44,14 +45,14 @@ internal object UtilityWidgetDownload {
             SPCMESO -> downloadGeneric(context, SPCMESO, "SPCMESO1")
             STRPT -> downloadGeneric(context, STRPT, "STRPT")
             CONUSWV -> downloadGeneric(context, CONUSWV, "CONUSWV")
-            SPCSWO -> downloadSPCSWO(context)
-            WPCIMG -> downloadWPCIMG(context, widgetType)
-            NHC -> downloadNHC(context, widgetType)
+            SPCSWO -> downloadSpcSwo(context)
+            WPCIMG -> downloadWpcImage(context, widgetType)
+            NHC -> downloadNhc(context, widgetType)
             VIS -> downloadVis(context)
-            HWO -> downloadHWO(context)
-            TEXT_WPC -> downloadTextWPC(context)
-            AFD -> downloadAFD(context)
-            MOSAIC_RADAR -> downloadRadMosaic(context)
+            HWO -> downloadHwo(context)
+            TEXT_WPC -> downloadTextWpc(context)
+            AFD -> downloadAfd(context)
+            MOSAIC_RADAR -> downloadRadarMosaic(context)
             else -> {
             }
         }
@@ -68,7 +69,7 @@ internal object UtilityWidgetDownload {
             }
             saveImage(context, bitmap, NEXRAD_RADAR.fileName)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 
@@ -77,7 +78,7 @@ internal object UtilityWidgetDownload {
         saveImage(context, bitmap, type.fileName)
     }
 
-    private fun downloadSPCSWO(context: Context) {
+    private fun downloadSpcSwo(context: Context) {
         listOf("1", "2", "3", "4").forEach {
             val bitmap = UtilityDownload.getImageProduct(context, "SWOD$it")
             saveImage(context, bitmap, SPCSWO.fileName + it)
@@ -89,7 +90,7 @@ internal object UtilityWidgetDownload {
             val bitmap = UtilityDownload.getImageProduct(context, "GOES16")
             saveImage(context, bitmap, VIS.fileName)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 
@@ -103,7 +104,7 @@ internal object UtilityWidgetDownload {
         fos2?.close()
     }
 
-    private fun downloadHWO(context: Context) {
+    private fun downloadHwo(context: Context) {
         val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
         var nws1Current = Utility.readPref(context, "NWS$widgetLocNum", "").toUpperCase(Locale.US)
         if (Utility.readPref(context, "WFO_REMEMBER_LOCATION", "") == "true") {
@@ -116,13 +117,13 @@ internal object UtilityWidgetDownload {
         Utility.commitPref(context)
     }
 
-    private fun downloadTextWPC(context: Context) {
+    private fun downloadTextWpc(context: Context) {
         val text = UtilityDownload.getTextProduct(context, MyApplication.wpcTextFav)
         Utility.writePref(context, "TEXTWPC_WIDGET", text)
         Utility.commitPref(context)
     }
 
-    private fun downloadAFD(context: Context) {
+    private fun downloadAfd(context: Context) {
         val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
         var nws1Current = Utility.readPref(context, "NWS$widgetLocNum", "").toUpperCase(Locale.US)
         if (Utility.readPref(context, "WFO_REMEMBER_LOCATION", "") == "true") {
@@ -144,11 +145,11 @@ internal object UtilityWidgetDownload {
         }
     }
 
-    private fun downloadRadMosaic(context: Context) {
+    private fun downloadRadarMosaic(context: Context) {
         try {
-            saveImage(context, UtilityDownload.getRadarMosiac(context), MOSAIC_RADAR.fileName)
+            saveImage(context, UtilityDownload.getRadarMosaic(context), MOSAIC_RADAR.fileName)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 
@@ -161,21 +162,21 @@ internal object UtilityWidgetDownload {
             val file = File(dir, fileName)
             fos = FileOutputStream(file)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return fos
     }
 
-    private fun downloadWPCIMG(context: Context, type: WidgetFile) {
+    private fun downloadWpcImage(context: Context, type: WidgetFile) {
         val imgUrl = Utility.readPref(context, "WPG_IMG_FAV_URL", UtilityWPCImages.urls[0])
         val bitmap = imgUrl.getImage()
         saveImage(context, bitmap, type.fileName)
     }
 
-    private fun downloadNHC(context: Context, type: WidgetFile) {
-        val bm1 = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png".getImage()
-        val bm2 = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png".getImage()
-        saveImage(context, bm1, type.fileName + "0")
-        saveImage(context, bm2, type.fileName + "1")
+    private fun downloadNhc(context: Context, type: WidgetFile) {
+        val bitmap1 = UtilityNHC.widgetImageUrlBottom.getImage()
+        val bitmap2 = UtilityNHC.widgetImageUrlTop.getImage()
+        saveImage(context, bitmap1, type.fileName + "0")
+        saveImage(context, bitmap2, type.fileName + "1")
     }
 }

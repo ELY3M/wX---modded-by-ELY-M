@@ -39,8 +39,6 @@ import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.ui.ObjectRecyclerViewGeneric
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.ObjectForecastPackageCurrentConditions
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityLog
 import kotlinx.coroutines.*
 
 class SettingsLocationRecyclerViewActivity : BaseActivity() {
@@ -79,9 +77,9 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         currentConditions.clear()
         withContext(Dispatchers.IO) {
             for (index in MyApplication.locations.indices) {
-                currentConditions.add(Utility.getCurrentConditions(contextg, index))
+                currentConditions.add(ObjectForecastPackageCurrentConditions(contextg, index))
                 currentConditions[index].formatCC()
-                UtilityLog.d("wx", currentConditions[index].ccLine1)
+                //UtilityLog.d("wx", currentConditions[index].topLine)
             }
         }
         updateListWithCurrentConditions()
@@ -103,8 +101,8 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         val locNumIntCurrent = Location.numLocations
         locArr.clear()
         (0 until locNumIntCurrent).forEach {
-            MyApplication.locations[it].updateObservation(currentConditions[it].ccLine1)
-            locArr.add(currentConditions[it].ccLine1)
+            MyApplication.locations[it].updateObservation(currentConditions[it].topLine)
+            locArr.add(currentConditions[it].topLine)
         }
     }
 

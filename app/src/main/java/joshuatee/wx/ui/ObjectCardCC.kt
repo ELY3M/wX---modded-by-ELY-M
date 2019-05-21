@@ -146,7 +146,7 @@ class ObjectCardCC(context: Context, version: Int) {
     ) {
         imageView.setImage(bitmap)
         val sep = " - "
-        val tmpArrCc = objCc.data1.split(sep).dropLastWhile { it.isEmpty() }
+        val tmpArrCc = objCc.data.split(sep).dropLastWhile { it.isEmpty() }
         val tempArr: List<String>
         if (tmpArrCc.size > 4 && isUS) {
             tempArr = tmpArrCc[0].split("/").dropLastWhile { it.isEmpty() }

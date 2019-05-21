@@ -61,7 +61,6 @@ object UIPreferences {
     var useAwcRadarMosaic: Boolean = false
 
     fun initPreferences(context: Context) {
-
         val normalTextSize = Utility.readPref(context, "TEXTVIEW_FONT_SIZE", 16) // 14 16 21
         MyApplication.textSizeSmall = UtilityUI.spToPx(normalTextSize - 2, context)
         MyApplication.textSizeNormal = UtilityUI.spToPx(normalTextSize, context)

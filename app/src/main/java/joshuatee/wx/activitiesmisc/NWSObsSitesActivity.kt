@@ -38,6 +38,7 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
 
+// FIXME camelcase file name
 class NWSObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val listIds = mutableListOf<String>()
@@ -83,7 +84,7 @@ class NWSObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         if (!siteDisplay) {
             provSelected = UtilityStringExternal.truncate(GlobalArrays.states[position], 2)
             title = "$titleString ($provSelected)"
-            provSelected()
+            stateSelected()
         } else {
             when (position) {
                 0 -> {
@@ -110,7 +111,7 @@ class NWSObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         )
     }
 
-    private fun provSelected() {
+    private fun stateSelected() {
         getContent()
     }
 

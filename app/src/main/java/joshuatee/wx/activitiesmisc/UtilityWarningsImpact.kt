@@ -29,7 +29,7 @@ internal object UtilityWarningsImpact {
 
     // main site is http://www.weather.gov/crh/impact
 
-    val impactWarningData: List<ObjectImpactGraphic>
+    val data: List<ObjectImpactGraphic>
         get() {
             val warningsList = mutableListOf<ObjectImpactGraphic>()
             val html = url.getHtmlSep()

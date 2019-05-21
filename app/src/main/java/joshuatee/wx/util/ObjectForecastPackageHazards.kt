@@ -21,6 +21,7 @@
 
 package joshuatee.wx.util
 
+import joshuatee.wx.Extensions.parseColumn
 import joshuatee.wx.MyApplication
 import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.radar.LatLon
@@ -29,40 +30,42 @@ import joshuatee.wx.settings.Location
 class ObjectForecastPackageHazards {
 
     private var hazardsShort = ""
+    var urls = listOf<String>()
+    var titles = listOf<String>()
     var hazards: String = ""
         private set
 
-    private constructor()
+    constructor()
 
     // US
-    internal constructor(locNum: Int) {
+    constructor(locNum: Int) {
         if (Location.isUS(locNum) && MyApplication.homescreenFav.contains("TXT-HAZ")) {
             hazards = getHazardsHtml(Location.getLatLon(locNum))
+            urls = hazards.parseColumn("\"id\": \"(" + MyApplication.nwsApiUrl + ".*?)\"")
+            titles = hazards.parseColumn("\"event\": \"(.*?)\"")
         }
     }
 
-    internal constructor(location: LatLon) {
+    // Canada
+    constructor(html: String) {
+        val hazArr = UtilityCanada.getHazards(html)
+        hazardsShort = hazArr[0]
+        hazards = hazArr[1]
+    }
+
+    // adhoc forecast
+    constructor(location: LatLon) {
         hazards = getHazardsHtml(location)
+        urls = hazards.parseColumn("\"id\": \"(" + MyApplication.nwsApiUrl + ".*?)\"")
+        titles = hazards.parseColumn("\"event\": \"(.*?)\"")
     }
 
     fun getHazardsShort(): String = hazardsShort.replace("^<BR>".toRegex(), "")
 
     companion object {
-        // CA
-        internal fun createForCanada(html: String): ObjectForecastPackageHazards {
-            val obj = ObjectForecastPackageHazards()
-            val hazArr = UtilityCanada.getHazards(html)
-            obj.hazardsShort = hazArr[0]
-            obj.hazards = hazArr[1]
-            return obj
-        }
-
         fun getHazardsHtml(location: LatLon): String {
-            return UtilityDownloadNws.getHazardData(
-                "https://api.weather.gov/alerts?point=" + UtilityMath.latLonFix(
-                    location.latString
-                ) + "," + UtilityMath.latLonFix(location.lonString) + "&active=1"
-            )
+            val url = "https://api.weather.gov/alerts?point=" + UtilityMath.latLonFix(location.latString) + "," + UtilityMath.latLonFix(location.lonString) + "&active=1"
+            return UtilityDownloadNws.getHazardData(url)
         }
     }
 }

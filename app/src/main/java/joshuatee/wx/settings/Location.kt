@@ -316,7 +316,7 @@ class Location(val context: Context, locNumInt: Int) {
                             wfo.toUpperCase(Locale.US)
                     )
                 } catch (e: Exception) {
-                    UtilityLog.HandleException(e)
+                    UtilityLog.handleException(e)
                 }
             } else if (xStr.contains("CANADA")) {
                 var tmpLatlon = LatLonStr()

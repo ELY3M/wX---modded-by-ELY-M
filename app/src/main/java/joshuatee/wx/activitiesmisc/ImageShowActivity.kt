@@ -61,7 +61,7 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private var urls = listOf<String>()
     private var bitmap = UtilityImg.getBlankBitmap()
     private var shareTitle = ""
-    private var needsWhitebg = false
+    private var needsWhiteBackground = false
     private lateinit var img: ObjectTouchImageView
     private lateinit var contextg: Context
 
@@ -81,7 +81,7 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         title = activityArguments[1]
         shareTitle = activityArguments[1]
         if (activityArguments.size > 2) {
-            needsWhitebg = activityArguments[2] == "true"
+            needsWhiteBackground = activityArguments[2] == "true"
         }
         when {
             url.contains("file:") -> {
@@ -103,7 +103,7 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         bitmap = withContext(Dispatchers.IO) { url.getImage() }
-        if (needsWhitebg) {
+        if (needsWhiteBackground) {
             bitmap = UtilityImg.addColorBG(contextg, bitmap, Color.WHITE)
         }
         img.setBitmap(bitmap)

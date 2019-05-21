@@ -68,7 +68,7 @@ internal class TileObjectColorPalette(
             try {
                 UtilityColorPaletteGeneric.loadColorMap(context, prod)
             } catch (e: Exception) {
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             }
             bitmap = UtilityUSImgWX.bitmapForColorPalette(context, prod)
             bitmapWithText = UtilityImg.drawTextToBitmap(context, bitmap, colorMapLabel, textColor)

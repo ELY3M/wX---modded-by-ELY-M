@@ -74,7 +74,7 @@ internal class SpecialWeather(private val type: PolygonType) {
                     .parseJsonObject(StringReader(MyApplication.severeDashboardSps.valueGet()))
 
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
 
         UtilityLog.d("SpecialWeather", "sps count: "+count)

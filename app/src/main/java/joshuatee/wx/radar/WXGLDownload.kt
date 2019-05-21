@@ -173,7 +173,7 @@ class WXGLDownload {
                 j += 1
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return nidsArr
     }

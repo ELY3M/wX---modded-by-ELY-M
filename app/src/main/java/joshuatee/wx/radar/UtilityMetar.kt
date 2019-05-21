@@ -198,8 +198,8 @@ internal object UtilityMetar {
                     if (tdArr.size > 1) {
                         t = tdArr[0]
                         d = tdArr[1]
-                        t = UtilityMath.cTof(t.replace("M", "-"))
-                        d = UtilityMath.cTof(d.replace("M", "-"))
+                        t = UtilityMath.celsiusToFahrenheit(t.replace("M", "-"))
+                        d = UtilityMath.celsiusToFahrenheit(d.replace("M", "-"))
                         obsSite = tmpArr2[0]
                         latlon = OBS_LATLON[obsSite] ?: arrayOf("0.0", "0.0")
                         if (latlon[0] != "0.0") {
@@ -224,7 +224,7 @@ internal object UtilityMetar {
                                     obsAlWbGust.add(latlon[0] + ":" + latlon[1] + ":" + windDir + ":" + windgustInKt)
                                 }
                             } catch (e: Exception) {
-                                UtilityLog.HandleException(e)
+                                UtilityLog.handleException(e)
                             }
                         }
                     }

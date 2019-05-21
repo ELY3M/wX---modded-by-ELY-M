@@ -76,24 +76,23 @@ internal class AdapterSpotter(private val mDataset: MutableList<Spotter>) :
         holder.name.text = mDataset[position].lastName + ", " + mDataset[position].firstName
         holder.time.text = mDataset[position].reportAt
         holder.email.text = mDataset[position].email.replace(MyApplication.newline, " ")
-        val he = holder.email
-        val emailAddress = holder.email.text
         holder.email.setOnClickListener(View.OnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:")
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(emailAddress))
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(holder.email.text))
             intent.putExtra(Intent.EXTRA_SUBJECT, "")
-            he.context.startActivity(Intent.createChooser(intent, "Send Email"))
+            holder.email.context.startActivity(Intent.createChooser(intent, "Send Email"))
         })
         holder.phone.text = mDataset[position].phone.replace(MyApplication.newline, " ")
-        listOf(holder.time, holder.email, holder.phone).forEach { it.setAsBackgroundText() }
-        val hp = holder.phone
+        listOf(holder.time, holder.email, holder.phone).forEach {
+            it.setAsBackgroundText()
+        }
         holder.phone.setOnClickListener(View.OnClickListener {
-            val tm = hp.context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
-            if (tm.phoneType != TelephonyManager.PHONE_TYPE_NONE) {
+            val telephonyManager = holder.phone.context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
+            if (telephonyManager.phoneType != TelephonyManager.PHONE_TYPE_NONE) {
                 val intent = Intent(Intent.ACTION_DIAL)
                 intent.data = Uri.parse("tel:" + mDataset[position].phone)
-                hp.context.startActivity(intent)
+                holder.phone.context.startActivity(intent)
             }
         })
     }

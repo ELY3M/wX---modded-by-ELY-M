@@ -35,8 +35,8 @@ import joshuatee.wx.util.UtilityLog
 object UtilityGoes {
 
     private fun getImageFileName(sector: String): String {
-        val fullSize = "latest";
-        val size = sizeMap[sector] ?: fullSize;
+        val fullSize = "latest"
+        val size = sizeMap[sector] ?: fullSize
         return "$size.jpg"
     }
 
@@ -59,7 +59,7 @@ object UtilityGoes {
         // https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/cgl/12/latest.jpg
         // https://cdn.star.nesdis.noaa.gov/GOES17/ABI/CONUS/GEOCOLOR/1250x750.jpg
         // https://cdn.star.nesdis.noaa.gov/GOES16/ABI/CONUS/GEOCOLOR/1250x750.jpg
-        val url = MyApplication.goes16Url + "/" + satellite + "/ABI/" + sectorLocal + "/" + product + "/" + getImageFileName(sector);
+        val url = MyApplication.goes16Url + "/" + satellite + "/ABI/" + sectorLocal + "/" + product + "/" + getImageFileName(sector)
         UtilityLog.d("wx", url)
         return url.getImage()
     }
@@ -180,7 +180,7 @@ object UtilityGoes {
             "ssa" to "South America (south)"
     )
 
-    val sizeMap = mapOf(
+    private val sizeMap = mapOf(
             "CONUS-G17" to "1250x750",
             "CONUS" to "1250x750",
             "FD" to "1808x1808",

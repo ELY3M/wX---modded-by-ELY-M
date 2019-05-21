@@ -58,7 +58,7 @@ internal object WXGLNexradLevel3StormInfo {
             posn = retStr.parseColumn(RegExp.stiPattern1)
             motion = retStr.parseColumn(RegExp.stiPattern2)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
             return listOf()
         }
         var posnStr = ""

@@ -135,16 +135,16 @@ object UtilityWXOGL {
                     }
                 }
             } catch (e: EOFException) {
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             } finally {
                 try {
                     dis.close()
                 } catch (e: IOException) {
-                    UtilityLog.HandleException(e)
+                    UtilityLog.handleException(e)
                 }
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         output += "</small></font>"
         return output

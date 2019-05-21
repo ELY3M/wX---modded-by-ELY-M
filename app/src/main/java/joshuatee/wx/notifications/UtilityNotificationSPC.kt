@@ -442,7 +442,7 @@ internal object UtilityNotificationSpc {
         val threatList = mutableListOf<String>()
         threatList.add("SPC30percent")
         threatList.add("SPC15percent")
-        var urlBlob = UtilityString.getHTMLandParse(
+        var urlBlob = UtilityString.getHtmlAndParse(
                 "${MyApplication.nwsSPCwebsitePrefix}/products/exper/day4-8/",
                 "CLICK TO GET <a href=.(.*?txt).>WUUS48 PTSD48</a>"
         )

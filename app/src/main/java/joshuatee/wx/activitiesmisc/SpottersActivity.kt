@@ -127,14 +127,14 @@ class SpottersActivity : BaseActivity() {
         return filteredModelList
     }
 
-    private fun checkFav(posn: Int) {
-        if (MyApplication.spotterFav.contains(spotterlist[posn].uniq + ":")) {
+    private fun checkFavorite(position: Int) {
+        if (MyApplication.spotterFav.contains(spotterlist[position].uniq + ":")) {
             MyApplication.spotterFav =
-                    MyApplication.spotterFav.replace(spotterlist[posn].uniq + ":", "")
-            spotterlist[posn].lastName = spotterlist[posn].lastName.replace("0FAV ", "")
+                    MyApplication.spotterFav.replace(spotterlist[position].uniq + ":", "")
+            spotterlist[position].lastName = spotterlist[position].lastName.replace("0FAV ", "")
         } else {
-            MyApplication.spotterFav = MyApplication.spotterFav + spotterlist[posn].uniq + ":"
-            spotterlist[posn].lastName = "0FAV " + spotterlist[posn].lastName
+            MyApplication.spotterFav = MyApplication.spotterFav + spotterlist[position].uniq + ":"
+            spotterlist[position].lastName = "0FAV " + spotterlist[position].lastName
         }
         sortSpotters()
         ca.notifyDataSetChanged()
@@ -185,7 +185,7 @@ class SpottersActivity : BaseActivity() {
                 WebscreenAB::class.java,
                 WebscreenAB.URL,
                 arrayOf(
-                        UtilityMap.genMapURL(
+                        UtilityMap.genMapUrl(
                                 spotterlist[position].lat,
                                 spotterlist[position].lon,
                                 "9"
@@ -209,6 +209,6 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun toggleFavorite(position: Int) {
-        checkFav(position)
+        checkFavorite(position)
     }
 } 

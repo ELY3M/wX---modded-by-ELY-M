@@ -221,7 +221,7 @@ internal object OpenGLShader {
             GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, img, 0)
             UtilityLog.d("wx","Loaded texture" + ":H:" + img.height + ":W:" + img.width)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
 
         try {

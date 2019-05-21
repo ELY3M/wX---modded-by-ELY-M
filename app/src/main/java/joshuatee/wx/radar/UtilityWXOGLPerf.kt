@@ -114,7 +114,7 @@ internal object UtilityWXOGLPerf {
                         curLevel =
                             (dis2.readUnsignedByte() and 0xFF).toByte() // was dis2!!.readUnsignedByte().toInt()
                     } catch (e: Exception) {
-                        UtilityLog.HandleException(e)
+                        UtilityLog.handleException(e)
                     }
                     if (bin == 0)
                         level = curLevel
@@ -734,7 +734,7 @@ internal object UtilityWXOGLPerf {
             }
             dis2.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         binWord.position(0)
         radialStartAngle.position(0)

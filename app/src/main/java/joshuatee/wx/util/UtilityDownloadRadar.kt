@@ -43,62 +43,62 @@ object UtilityDownloadRadar {
     //val ffwUrl = baseUrl + "Flood%20Warning"
 
 
-    fun getPolygonVTEC(context: Context) {
+    fun getPolygonVtec(context: Context) {
         MyApplication.severeDashboardTor.valueSet(
                 context,
-                UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(torUrl)
+                UtilityDownloadNws.getStringFromUrlNoAcceptHeader(torUrl)
         )
         MyApplication.severeDashboardSvr.valueSet(
                 context,
-                UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(svrURl)
+                UtilityDownloadNws.getStringFromUrlNoAcceptHeader(svrURl)
         )
         MyApplication.severeDashboardFfw.valueSet(
                 context,
-                UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(ffwUrl)
+                UtilityDownloadNws.getStringFromUrlNoAcceptHeader(ffwUrl)
         )
         MyApplication.severeDashboardEww.valueSet(
                 context,
-                UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(ewwUrl)
+                UtilityDownloadNws.getStringFromUrlNoAcceptHeader(ewwUrl)
         )
         MyApplication.severeDashboardSmw.valueSet(
                 context,
-                UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(smwUrl)
+                UtilityDownloadNws.getStringFromUrlNoAcceptHeader(smwUrl)
         )
         MyApplication.severeDashboardSvs.valueSet(
                 context,
-                UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(svsUrl)
+                UtilityDownloadNws.getStringFromUrlNoAcceptHeader(svsUrl)
         )
         MyApplication.severeDashboardSps.valueSet(
                 context,
-                UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(spsUrl)
+                UtilityDownloadNws.getStringFromUrlNoAcceptHeader(spsUrl)
         )
 
     }
     
     fun getVtecTor(): String {
-        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(torUrl)
+        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(torUrl)
     }
     fun getVtecSvr(): String {
-        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(svrURl)
+        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(svrURl)
     }
     fun getVtecFfw(): String {
-        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(ffwUrl)
+        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(ffwUrl)
     }
     fun getVtecEww(): String {
-        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(ewwUrl)
+        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(ewwUrl)
     }
     fun getVtecSmw(): String {
-        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(smwUrl)
+        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(smwUrl)
     }
     fun getVtecSvs(): String {
-        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(svsUrl)
+        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(svsUrl)
     }
     fun getSps(): String {
-        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(spsUrl)
+        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(spsUrl)
     }
     
     fun getVtecByType(type: PolygonWarningType): String {
-        return UtilityDownloadNws.getNwsStringFromUrlNoAcceptHeader(baseUrl + type.urlToken)
+        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(baseUrl + type.urlToken)
     }
 
     fun getMcd(): String {

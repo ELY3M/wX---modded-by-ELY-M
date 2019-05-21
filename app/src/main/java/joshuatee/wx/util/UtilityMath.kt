@@ -39,7 +39,7 @@ object UtilityMath {
             newX = newX.replace("0$".toRegex(), "")
             newX = newX.replace("\\.$".toRegex(), "")
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return newX
     }
@@ -62,7 +62,7 @@ object UtilityMath {
         return value
     }
 
-    fun cTof(valueF: String): String {
+    fun celsiusToFahrenheit(valueF: String): String {
         var value = valueF
         var tmpNum: Double
         if (MyApplication.unitsF) {
@@ -73,17 +73,12 @@ object UtilityMath {
         return value
     }
 
-   /* internal fun cTof(valueDF: Double): String {
-        val valueD = valueDF * 9 / 5 + 32
-        return round(valueD).toInt().toString()
-    }*/
-
-    internal fun fToC(valueDF: Double): String {
+    internal fun fahrenheitToCelsius(valueDF: Double): String {
         val valueD = (valueDF - 32) * 5 / 9
         return round(valueD).toInt().toString()
     }
 
-    private fun cToFInt(valueF: Int): String {
+    private fun celsiusToFahrenheitAsInt(valueF: Int): String {
         var value = valueF
         var retVal = ""
         if (MyApplication.unitsF) {
@@ -93,11 +88,11 @@ object UtilityMath {
         return retVal
     }
 
-    fun cToFTable(): String {
+    fun celsiusToFahrenheitTable(): String {
         var table = ""
         val cInit = -40
         for (z in 40 downTo cInit) {
-            val f = cToFInt(z)
+            val f = celsiusToFahrenheitAsInt(z)
             table += z.toString() + "  " + f + MyApplication.newline
         }
         return table

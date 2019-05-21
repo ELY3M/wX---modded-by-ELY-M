@@ -930,7 +930,7 @@ class NeuQuant {
 					p[1] -= (a * (p[1] - g)) / alpharadbias;
 					p[2] -= (a * (p[2] - r)) / alpharadbias;
 				} catch (Exception e) {
-					UtilityLog.INSTANCE.HandleException(e);
+					UtilityLog.INSTANCE.handleException(e);
 				} // prevents 1.3 miscompilation
 			}
 			if (k > lo) {
@@ -940,7 +940,7 @@ class NeuQuant {
 					p[1] -= (a * (p[1] - g)) / alpharadbias;
 					p[2] -= (a * (p[2] - r)) / alpharadbias;
 				} catch (Exception e) {
-					UtilityLog.INSTANCE.HandleException(e);
+					UtilityLog.INSTANCE.handleException(e);
 				}
 			}
 		}

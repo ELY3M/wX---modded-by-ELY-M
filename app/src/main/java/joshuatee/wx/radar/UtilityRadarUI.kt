@@ -213,15 +213,15 @@ internal object UtilityRadarUI {
         alertDialogRadarLongpressAl.add("Delete all userpoints")
         alertDialogRadarLongPress.show()
     }
-    
-        fun doLongPressAction(
-        strName: String,
-        context: Context,
-        act: Activity,
-        glview: WXGLSurfaceView,
-        oglr: WXGLRender,
-        uiDispatcher: CoroutineDispatcher,
-        fn: (strName: String) -> Unit
+
+    fun doLongPressAction(
+            strName: String,
+            context: Context,
+            act: Activity,
+            glview: WXGLSurfaceView,
+            oglr: WXGLRender,
+            uiDispatcher: CoroutineDispatcher,
+            fn: (strName: String) -> Unit
     ) {
         when {
             strName.contains("Show warning text") -> {
@@ -502,35 +502,28 @@ internal object UtilityRadarUI {
                 oglr.deconstructWBLines()
             }
             if (PolygonType.SWO.pref && !archiveMode) {
-                UtilitySWOD1.getSWO()
-                oglr.constructSWOLines()
+                UtilitySWOD1.getSwo()
+                oglr.constructSwoLines()
             } else {
-                oglr.deconstructSWOLines()
+                oglr.deconstructSwoLines()
             }
         //} //showExtras
     }
-    
+
     fun resetGlview(glviewloc: WXGLSurfaceView, OGLRLOC: WXGLRender) {
         glviewloc.scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
         OGLRLOC.setViewInitial(MyApplication.wxoglSize.toFloat() / 10.0f, 0.0f, 0.0f)
         glviewloc.requestRender()
-    }    
-    
-    
-    
-    
-
-    
+    }
 
     private fun showNearestProduct(
-            //act: Activity,
             context: Context,
             type: PolygonType,
             glview: WXGLSurfaceView,
             uiDispatcher: CoroutineDispatcher
     ) = GlobalScope.launch(uiDispatcher) {
         val text = withContext(Dispatchers.IO) {
-            UtilityWatch.showProducts(glview.newY.toDouble(), glview.newX.toDouble() * -1.0, type)
+            UtilityWatch.show(glview.newY.toDouble(), glview.newX.toDouble() * -1.0, type)
         }
         if (text != "") {
             ObjectIntent(

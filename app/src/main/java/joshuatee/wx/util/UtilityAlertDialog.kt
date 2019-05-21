@@ -71,7 +71,7 @@ object UtilityAlertDialog {
         try {
             version = activity.packageManager.getPackageInfo(activity.packageName, 0).versionName
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         val tmpStr =
             activity.resources.getString(R.string.about_wx) + MyApplication.newline + version

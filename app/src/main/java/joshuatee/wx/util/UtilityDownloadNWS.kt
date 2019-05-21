@@ -35,13 +35,11 @@ import joshuatee.wx.RegExp
 
 object UtilityDownloadNws {
 
-    // FIXME remove nws from method name as class name already has it
-
     private const val USER_AGENT_STR =
         "Android ${MyApplication.packageNameAsString} ${MyApplication.emailAsString}"
 
     fun getHazardData(url: String): String {
-        return getNwsStringFromUrlJson(url)
+        return getStringFromUrlJson(url)
     }
 
     fun getLatLonForZone(zone: String): List<String> {
@@ -65,9 +63,9 @@ object UtilityDownloadNws {
     }
 
     fun getCap(sector: String): String = if (sector == "us") {
-        getNwsStringFromUrlXml(MyApplication.nwsApiUrl + "/alerts/active?region_type=land")
+        getStringFromUrlXml(MyApplication.nwsApiUrl + "/alerts/active?region_type=land")
     } else {
-        getNwsStringFromUrlXml(
+        getStringFromUrlXml(
                 MyApplication.nwsApiUrl + "/alerts/active/area/" + sector.toUpperCase(
                 Locale.US
             )
@@ -77,16 +75,16 @@ object UtilityDownloadNws {
     // https://forecast-v3.weather.gov/documentation?redirect=legacy
     // http://www.nws.noaa.gov/os/notification/pns16-35forecastgov.htm
 
-    fun getNwsStringFromUrl(url: String): String =
-        getNWSStringFromURLBase(url, "application/vnd.noaa.dwml+xml;version=1")
+    fun getStringFromUrl(url: String): String =
+        getStringFromURLBase(url, "application/vnd.noaa.dwml+xml;version=1")
 
-    private fun getNwsStringFromUrlJson(url: String): String =
-        getNWSStringFromURLBase(url, "application/geo+json;version=1")
+    private fun getStringFromUrlJson(url: String): String =
+        getStringFromURLBase(url, "application/geo+json;version=1")
 
-    fun getNwsStringFromUrlNoAcceptHeader(url: String): String =
-            getNwsStringFromUrlBaseNoHeader(url)
+    fun getStringFromUrlNoAcceptHeader(url: String): String =
+            getStringFromUrlBaseNoHeader(url)
 
-    private fun getNWSStringFromURLBase(url: String, header: String): String {
+    private fun getStringFromURLBase(url: String, header: String): String {
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
@@ -104,12 +102,12 @@ object UtilityDownloadNws {
             }
             br.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return out.toString()
     }
 
-    private fun getNwsStringFromUrlBaseNoHeader(url: String): String {
+    private fun getStringFromUrlBaseNoHeader(url: String): String {
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
@@ -126,12 +124,12 @@ object UtilityDownloadNws {
             }
             br.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return out.toString()
     }
 
-    fun getNwsStringFromUrlSep(strURL: String): String {
+    fun getStringFromUrlSep(strURL: String): String {
         val breakStr = "ABC123_456ZZ"
         val out = StringBuilder(5000)
         try {
@@ -151,13 +149,13 @@ object UtilityDownloadNws {
             out.append(breakStr)
             br.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return out.toString().replace(breakStr, "<br>")
     }
 
-    private fun getNwsStringFromUrlXml(url: String) =
-        getNWSStringFromURLBase(url, "application/atom+xml")
+    private fun getStringFromUrlXml(url: String) =
+        getStringFromURLBase(url, "application/atom+xml")
 
 
     // Following methods derived from flutter port in response to June 2019 change

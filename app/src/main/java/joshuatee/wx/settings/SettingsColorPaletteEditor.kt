@@ -118,9 +118,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             UtilityAlertDialog.showHelpText(errorCheck, this)
         }
         val fileName = "colormap" + type + palTitle.text.toString()
-        UtilityLog.d("wx","COLORPAL CHECK: " + fileName)
         if (UtilityFileManagement.internalFileExist(context, fileName)) {
-            UtilityLog.d("wx","COLORPAL DELETE: " + fileName)
             UtilityFileManagement.deleteFile(context, fileName)
         }
     }
@@ -175,7 +173,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                     }
                 } catch (e: Exception) {
                     errors += "Problem parsing number."
-                    UtilityLog.HandleException(e)
+                    UtilityLog.handleException(e)
                 }
             }
         }

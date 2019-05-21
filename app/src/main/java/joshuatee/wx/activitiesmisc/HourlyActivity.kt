@@ -54,10 +54,10 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var htmlShare = listOf<String>()
-    private lateinit var cv1: ObjectCard
-    private lateinit var c0: ObjectCardVerticalText
+    private lateinit var card: ObjectCard
+    private lateinit var textCard: ObjectCardVerticalText
     private var hourlyData = ObjectHourly()
-    private var locatioNumber = 0
+    private var locationNumber = 0
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,26 +68,26 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             true
         )
         toolbarBottom.setOnMenuItemClickListener(this)
-        locatioNumber = (intent.getStringExtra(LOC_NUM).toIntOrNull() ?: 0) - 1
-        cv1 = ObjectCard(this, R.color.black, R.id.cv1)
-        cv1.setVisibility(View.GONE)
-        c0 = ObjectCardVerticalText(this, 5, linearLayout, toolbar)
-        c0.setOnClickListener(View.OnClickListener { sv.scrollTo(0,0)})
+        locationNumber = (intent.getStringExtra(LOC_NUM).toIntOrNull() ?: 0) - 1
+        card = ObjectCard(this, R.color.black, R.id.cv1)
+        cv1.visibility = View.GONE
+        textCard = ObjectCardVerticalText(this, 5, linearLayout, toolbar)
+        textCard.setOnClickListener(View.OnClickListener { sv.scrollTo(0,0)})
         title = "Hourly Forecast"
-        toolbar.subtitle = Location.getName(locatioNumber)
+        toolbar.subtitle = Location.getName(locationNumber)
         //UtilityLog.d("wx", UtilityTimeSunMoon.getSunTimesForHomescreen())
         //UtilityLog.d("wx", UtilityTimeSunMoon.getMoonTimesForHomescreen())
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        val result1 = async(Dispatchers.IO) { UtilityUSHourly.getString(locatioNumber) }
+        val result1 = async(Dispatchers.IO) { UtilityUSHourly.getString(locationNumber) }
         htmlShare = result1.await()
         val result2 =
             async(Dispatchers.IO) { UtilityUSHourly.getStringForActivity(htmlShare[1]) }
         hourlyData = result2.await()
-        cv1.setVisibility(View.VISIBLE)
-        c0.setText(
+        cv1.visibility = View.VISIBLE
+        textCard.setText(
             listOf(
                 hourlyData.time,
                 hourlyData.temp,
@@ -96,7 +96,7 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
                 hourlyData.conditions
             )
         )
-        plot1()
+        plotData()
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -109,12 +109,12 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         return true
     }
 
-    private fun plot1() {
-        val tmpArr2 = hourlyData.temp.split(MyApplication.newline).dropLastWhile { it.isEmpty() }
+    private fun plotData() {
+        val linesOfData = hourlyData.temp.split(MyApplication.newline).dropLastWhile { it.isEmpty() }
         val dataPoints = mutableListOf<DataPoint>()
         var time = 0
-        (1 until tmpArr2.size - 1).forEach {
-            val temp = tmpArr2[it].toIntOrNull() ?: 0
+        (1 until linesOfData.size - 1).forEach {
+            val temp = linesOfData[it].toIntOrNull() ?: 0
             time += 1
             dataPoints.add(DataPoint(time.toDouble(), temp.toDouble()))
         }

@@ -58,7 +58,7 @@ internal object UtilityNexradRadial4Bit {
             val fis = context.openFileInput(fn)
             dis = DataInputStream(BufferedInputStream(fis))
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         try {
             if (dis != null) {
@@ -226,7 +226,7 @@ internal object UtilityNexradRadial4Bit {
                 }
             }
         } catch (e: IOException) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 }

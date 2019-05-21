@@ -208,7 +208,7 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                         contextg,
                         WebscreenAB::class.java,
                         WebscreenAB.URL,
-                        arrayOf(UtilityMap.genMapURL(xStr, yStr, "10"), "$xStr,$yStr")
+                        arrayOf(UtilityMap.genMapUrl(xStr, yStr, "10"), "$xStr,$yStr")
                     )
                 })
                 if (s.text.contains("(") && s.text.contains(")")) {

@@ -270,7 +270,7 @@ object UtilityImg {
             canvas.drawText(mText, x * scale, y * scale, paint)
             return bitmap
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
             return Bitmap.createBitmap(10, 10, Config.ARGB_8888)
         }
     }
@@ -291,7 +291,7 @@ object UtilityImg {
             canvas.drawText(radarStatus, x * scale, y * scale, paint)
             return bitmap
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
             return Bitmap.createBitmap(10, 10, Config.ARGB_8888)
         }
     }

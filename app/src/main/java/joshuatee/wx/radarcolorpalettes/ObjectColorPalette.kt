@@ -52,7 +52,7 @@ class ObjectColorPalette(val context: Context, private val colormapCode: String)
                 try {
                     UtilityColorPalette30.gen30()
                 } catch (e: Exception) {
-                    UtilityLog.HandleException(e)
+                    UtilityLog.handleException(e)
                 }
             }
             "56" -> {
@@ -60,7 +60,7 @@ class ObjectColorPalette(val context: Context, private val colormapCode: String)
                 try {
                     UtilityColorPalette56.gen56()
                 } catch (e: Exception) {
-                    UtilityLog.HandleException(e)
+                    UtilityLog.handleException(e)
                 }
             }
             "165" -> {
@@ -68,7 +68,7 @@ class ObjectColorPalette(val context: Context, private val colormapCode: String)
                 try {
                     UtilityColorPalette165.loadColorMap(context)
                 } catch (e: Exception) {
-                    UtilityLog.HandleException(e)
+                    UtilityLog.handleException(e)
                 }
             }
             else -> {
@@ -76,7 +76,7 @@ class ObjectColorPalette(val context: Context, private val colormapCode: String)
                 try {
                     UtilityColorPaletteGeneric.loadColorMap(context, colormapCode)
                 } catch (e: Exception) {
-                    UtilityLog.HandleException(e)
+                    UtilityLog.handleException(e)
                 }
             }
         }

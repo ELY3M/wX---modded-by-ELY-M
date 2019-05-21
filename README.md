@@ -42,6 +42,8 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 #
 ## DONE!
 ====================================   
+updated the code with Joshua many changes and added in zoom setting for conus radar to zoom out to (5-20-19) (Tornado day in OK!)   
+all watch crash bugs should be gone, hopefully!   
 updated the code with Joshuas changes with the warnings mod/settings (4-20-19).   
 updated the code with Joshuas changes (4-13-19).     
 Now, you can change the radar legend text color in the color settings - it was requested by Mike T.  

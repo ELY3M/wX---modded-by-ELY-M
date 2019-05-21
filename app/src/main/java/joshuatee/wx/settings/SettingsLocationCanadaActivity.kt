@@ -97,7 +97,7 @@ class SettingsLocationCanadaActivity : BaseActivity() {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
-            val html = UtilityCanada.getProvHTML(provSelected)
+            val html = UtilityCanada.getProvidenceHtml(provSelected)
             listIds =
                 html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-(.*?)_metric_e.html\">.*?</a></li>")
             listCity =

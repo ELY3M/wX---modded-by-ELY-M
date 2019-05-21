@@ -574,6 +574,18 @@ class SettingsRadarActivity : BaseActivity() {
                 ).card
         )
 
+        ll.addView(
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Conus Radar Zoom",
+                        "CONUS_RADAR_ZOOM",
+                        R.string.conus_radar_zoom_label,
+                        173,
+                        1,
+                        530
+                ).card
+        )
 
         ll.addView(ObjectSettingsSeekbar(this, this, "Location dot size", "RADAR_LOCDOT_SIZE", R.string.locdot_size_np, 10, 1, 75).card)
         ll.addView(ObjectSettingsSeekbar(this, this, "Location icon size", "RADAR_LOCICON_SIZE", R.string.locicon_size_np, 75, 1, 530).card)

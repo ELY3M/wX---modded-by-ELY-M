@@ -69,7 +69,9 @@ internal class AdapterUSWarningsImpact(private val mDataset: List<ObjectImpactGr
         holder.title.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
         holder.cities.text = mDataset[position].cities
         holder.population.text = mDataset[position].population
-        listOf(holder.cities, holder.population).forEach { it.setAsSmallText() }
+        listOf(holder.cities, holder.population).forEach {
+            it.setAsSmallText()
+        }
     }
 
     override fun getItemCount() = mDataset.size

@@ -25,7 +25,8 @@ import java.util.Locale
 
 object UtilityTTSTranslations {
 
-    internal fun tranlasteAbbrev(sF: String): String {
+    // FIXME rename method arg
+    internal fun translateAbbreviation(sF: String): String {
         // http://www.spc.noaa.gov/misc/acronyms.html
         val s = sF.replace("...", " ")
             .replace(" \\-([0-9])".toRegex(), " negative $1")
@@ -58,15 +59,15 @@ object UtilityTTSTranslations {
             // .replace(">", " ")
             .replace("$$", " ")
 
-        return tranlasteAbbrevChunk(s)
+        return translateAbbreviationChunk(s)
     }
 
-    fun tranlasteAbbrevForVisual(sF: String): String {
+    fun translateAbbreviationsForVisual(sF: String): String {
         val s = sF.replace("&nbsp", " ")
-        return tranlasteAbbrevChunk(s)
+        return translateAbbreviationChunk(s)
     }
 
-    private fun tranlasteAbbrevChunk(sF: String): String {
+    private fun translateAbbreviationChunk(sF: String): String {
         var s = sF.toUpperCase(Locale.US)
         s = s.replace(" SVR ", " severe ")
             .replace(" TSTM ", " thunderstorm ")

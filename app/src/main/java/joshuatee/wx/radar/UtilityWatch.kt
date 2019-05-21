@@ -32,7 +32,7 @@ import joshuatee.wx.external.ExternalPolygon
 
 internal object UtilityWatch {
 
-    fun addWat(
+    fun add(
         context: Context,
         provider: ProjectionType,
         rid1: String,
@@ -90,7 +90,7 @@ internal object UtilityWatch {
         return warningList
     }
 
-    fun showProducts(lat: Double, lon: Double, type: PolygonType): String {
+    fun show(lat: Double, lon: Double, type: PolygonType): String {
         var text = ""
         val textWatNoList: String
         val mcdNoArr: Array<String>
@@ -100,36 +100,32 @@ internal object UtilityWatch {
                 textWatNoList = MyApplication.watchNoList.valueGet()
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
                 watchLatLon = MyApplication.watchLatlonList.valueGet()
-                //productStringPrefix = "SPCWAT"
             }
             PolygonType.MCD -> {
                 textWatNoList = MyApplication.mcdNoList.valueGet()
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
                 watchLatLon = MyApplication.mcdLatlon.valueGet()
-                //productStringPrefix = "SPCMCD"
             }
             PolygonType.MPD -> {
                 textWatNoList = MyApplication.mpdNoList.valueGet()
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
                 watchLatLon = MyApplication.mpdLatlon.valueGet()
-                //productStringPrefix = "WPCMPD"
             }
             else -> {
                 textWatNoList = MyApplication.watchNoList.valueGet()
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
                 watchLatLon = MyApplication.watchLatlonList.valueGet()
-                //productStringPrefix = ""
             }
         }
-        val latlonArr = MyApplication.colon.split(watchLatLon)
+        val latLonArr = MyApplication.colon.split(watchLatLon)
         val x = mutableListOf<Double>()
         val y = mutableListOf<Double>()
         var i: Int
         var testArr: List<String>
         var z = 0
         var notFound = true
-        while (z < latlonArr.size) {
-            testArr = latlonArr[z].split(" ")
+        while (z < latLonArr.size) {
+            testArr = latLonArr[z].split(" ")
             x.clear()
             y.clear()
             i = 0

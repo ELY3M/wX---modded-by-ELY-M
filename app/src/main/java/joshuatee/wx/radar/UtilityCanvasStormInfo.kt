@@ -225,7 +225,7 @@ object UtilityCanvasStormInfo {
                 }
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         stormListArr = FloatArray(stormList.size)
         stormList.indices.forEach { stormListArr[it] = stormList[it].toFloat() }

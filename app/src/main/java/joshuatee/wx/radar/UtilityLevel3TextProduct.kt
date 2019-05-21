@@ -48,19 +48,19 @@ object UtilityLevel3TextProduct {
                         sb.append(String(byteArrayOf(it.readByte()), charset("ISO-8859-1")))
                     }
                 } catch (e: EOFException) {
-                    UtilityLog.HandleException(e)
+                    UtilityLog.handleException(e)
                 } catch (e: OutOfMemoryError) {
                     UtilityLog.handleException(e)
                 } finally {
                     try {
                         it.close()
                     } catch (e: IOException) {
-                        UtilityLog.HandleException(e)
+                        UtilityLog.handleException(e)
                     }
                 }
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         return sb.toString()
     }

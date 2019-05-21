@@ -287,7 +287,7 @@ class WXGLNexradLevel3 {
                 UtilityWXOGLPerfL3FourBit.decode4Bit(context, fn, radialStart, binWord)
             binSize = WXGLNexrad.getBinSize(productCode.toInt())
         } catch (e: IOException) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 

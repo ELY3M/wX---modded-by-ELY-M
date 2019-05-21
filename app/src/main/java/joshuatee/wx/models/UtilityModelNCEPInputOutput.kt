@@ -40,7 +40,7 @@ internal object UtilityModelNCEPInputOutput {
     fun getRunTime(model: String, param: String, spinnerSectorCurrent: String): RunTimeData {
         val runData = RunTimeData()
         val runCompletionDataStr = StringBuilder(100)
-        var html = UtilityString.getHTMLandParse(
+        var html = UtilityString.getHtmlAndParse(
                 "${MyApplication.nwsMagNcepWebsitePrefix}/model-guidance-model-parameter.php?group=Model%20Guidance&model="
                         + model.toUpperCase(Locale.US) + "&area=" + spinnerSectorCurrent + "&ps=area",
                 RegExp.ncepPattern2

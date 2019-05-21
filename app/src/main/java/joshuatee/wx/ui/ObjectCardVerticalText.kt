@@ -53,7 +53,8 @@ class ObjectCardVerticalText(context: Context, numColumns: Int) {
             )
             ll.addView(llv)
             tvArr.add(TextView(context))
-            tvArr[it].gravity = Gravity.CENTER_HORIZONTAL
+            //tvArr[it].gravity = Gravity.CENTER_HORIZONTAL
+            tvArr[it].gravity = Gravity.START
             tvArr[it].layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT

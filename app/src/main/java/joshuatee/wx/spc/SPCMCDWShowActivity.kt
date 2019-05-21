@@ -105,14 +105,14 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
-        (0 until objWatch.wfoArr.size - 1).forEach {
+        (0 until objWatch.wfos.size - 1).forEach {
             menu.add(
                 0,
                 v.id,
                 0,
-                "Add location: " + objWatch.wfoArr[it] + " - " + Utility.readPref(
+                "Add location: " + objWatch.wfos[it] + " - " + Utility.readPref(
                     this,
-                    "NWS_LOCATION_" + objWatch.wfoArr[it],
+                    "NWS_LOCATION_" + objWatch.wfos[it],
                     ""
                 )
             )
@@ -121,11 +121,11 @@ class SPCMCDWShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         val itemStr = item.title.toString()
-        (0 until objWatch.wfoArr.size - 1)
-            .filter { itemStr.contains(objWatch.wfoArr[it]) }
+        (0 until objWatch.wfos.size - 1)
+            .filter { itemStr.contains(objWatch.wfos[it]) }
             .forEach {
                 UtilityLocation.saveLocationForMcd(
-                    objWatch.wfoArr[it],
+                    objWatch.wfos[it],
                     contextg,
                     ll,
                     uiDispatcher

@@ -171,7 +171,7 @@ class ObjectAlertSummary(
                 //}
             }
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
 
         var mapOut = map.toString()

@@ -206,7 +206,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
         if (archiveMode && !spotterShowSelected)
             toolbarBottom.visibility = View.GONE
-        val latLonArrD = UtilityLocation.getGPS(this)
+        val latLonArrD = UtilityLocation.getGps(this)
         latD = latLonArrD[0]
         lonD = latLonArrD[1]
         val menu = toolbarBottom.menu
@@ -233,7 +233,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         img.setMaxZoom(6.0f)
         glview = WXGLSurfaceView(this, 1, numPanes, 1)
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf(img, glview))
-        imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::maptoRid)
+        imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::mapToRid)
         rl = findViewById(R.id.rl)
         rl.addView(glview)
         val rlArr = arrayOf(rl)
@@ -473,7 +473,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                         UtilityLog.d("wx", "Problem moving to nexrad_anim$it")
                 }
             } catch (e: Exception) {
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             }
             var loopCnt = 0
             while (inOglAnim) {
@@ -496,7 +496,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                                 )
                         }
                     } catch (e: Exception) {
-                        UtilityLog.HandleException(e)
+                        UtilityLog.handleException(e)
                     }
                     animTriggerDownloads = false
                 }

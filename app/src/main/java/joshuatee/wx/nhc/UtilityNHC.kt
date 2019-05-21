@@ -24,9 +24,13 @@ package joshuatee.wx.nhc
 import android.graphics.Bitmap
 
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.MyApplication
 import joshuatee.wx.RegExp
 
 object UtilityNHC {
+
+    const val widgetImageUrlTop = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png"
+    const val widgetImageUrlBottom = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png"
 
     fun getHurricaneInfo(rssUrl: String): ObjectNHCStormInfo {
         var title = ""

@@ -38,7 +38,7 @@ import joshuatee.wx.objects.GeographyType
 
 object UtilityCanadaImg {
 
-    internal fun getGOESAnim(context: Context, url: String): AnimationDrawable {
+    internal fun getGoesAnimation(context: Context, url: String): AnimationDrawable {
         val region = url.parse("goes_(.*?)_")
         val imgType = url.parse("goes_.*?_(.*?)_")
         val urlAnim =
@@ -55,7 +55,7 @@ object UtilityCanadaImg {
                     "_"
                 ).replace("/", "@") + ".jpg"
             }
-        return UtilityImgAnim.getAnimationDrawableFromURLList(context, urlAl, delay)
+        return UtilityImgAnim.getAnimationDrawableFromUrlList(context, urlAl, delay)
     }
 
     private fun getRadarAnimStringArray(rid: String, duration: String): String {
@@ -218,7 +218,7 @@ object UtilityCanadaImg {
         val urlAl =
             urlArr.mapTo(mutableListOf()) { "http://weather.gc.ca" + it.replace("detailed/", "") }
         urlAl.reverse()
-        return UtilityImgAnim.getAnimationDrawableFromURLList(
+        return UtilityImgAnim.getAnimationDrawableFromUrlList(
             context,
             urlAl,
             UtilityImg.animInterval(context)

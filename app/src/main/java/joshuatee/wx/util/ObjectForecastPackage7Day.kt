@@ -26,38 +26,51 @@ import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.settings.Location
 
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.radar.LatLon
 
-class ObjectForecastPackage7Day internal constructor(locNum: Int, html: String) {
+class ObjectForecastPackage7Day {
 
-    var iconstr: String = ""
+    // separated by "!"
+    var iconsAsString: String = ""
         private set
-    var sevenDayExtStr: String = ""
+    var sevenDayLong: String = ""
         private set
     var sevenDayShort: String = ""
         private set
-    var iconAl: List<String> = listOf()
+    var icons: List<String> = listOf()
         private set
-    private var detailedForecastAl = mutableListOf<String>()
+    private var detailedForecasts = mutableListOf<String>()
 
-    init {
-        if (locNum == -1 || Location.isUS(locNum)) {
-            iconstr = getIcons7Day(html)
-            sevenDayExtStr = get7DayExt(html)
+    constructor()
+
+    constructor(locNum: Int) {
+        if (Location.isUS(locNum)) {
+            val html = UtilityDownloadNws.get7DayData(Location.getLatLon(locNum))
+            iconsAsString = getIcons7Day(html)
+            sevenDayLong = get7DayExt(html)
             sevenDayShort = get7DayShort(html)
         } else {
-            sevenDayExtStr = UtilityCanada.get7Day(html)
-            iconstr = UtilityCanada.getIcons7Day(sevenDayExtStr)
-            iconAl = UtilityCanada.getIcons7DayAl(sevenDayExtStr)
-            convertExt7DaytoList()
+            val html = UtilityCanada.getLocationHtml(Location.getLatLon(locNum))
+            sevenDayLong = UtilityCanada.get7Day(html)
+            iconsAsString = UtilityCanada.getIcons7Day(sevenDayLong)
+            icons = UtilityCanada.getIcons7DayAsList(sevenDayLong)
+            convertExt7DayToList()
         }
     }
 
-    val fcstList: List<String>
-        get() = detailedForecastAl
+    constructor(latLon: LatLon) {
+        val html = UtilityDownloadNws.get7DayData(latLon)
+        iconsAsString = getIcons7Day(html)
+        sevenDayLong = get7DayExt(html)
+        sevenDayShort = get7DayShort(html)
+    }
 
-    private fun convertExt7DaytoList() {
-        detailedForecastAl = sevenDayExtStr.split(MyApplication.newline + MyApplication.newline)
-            .dropLastWhile { it.isEmpty() }.toMutableList()
+    val forecastList: List<String>
+        get() = detailedForecasts
+
+    private fun convertExt7DayToList() {
+        detailedForecasts = sevenDayLong.split(MyApplication.newline + MyApplication.newline)
+                .dropLastWhile { it.isEmpty() }.toMutableList()
     }
 
     private fun getIcons7Day(html: String): String {
@@ -75,10 +88,10 @@ class ObjectForecastPackage7Day internal constructor(locNum: Int, html: String) 
         if ((nameAl.size == temperatureAl.size) && (temperatureAl.size == shortForecastAl.size) && (shortForecastAl.size == detailedForecastAl.size)) {
             val forecastAl = (0 until nameAl.size).mapTo(mutableListOf()) {
                 ObjectForecast(
-                    nameAl[it],
-                    temperatureAl[it],
-                    shortForecastAl[it],
-                    detailedForecastAl[it]
+                        nameAl[it],
+                        temperatureAl[it],
+                        shortForecastAl[it],
+                        detailedForecastAl[it]
                 )
             }
             var forecast = MyApplication.newline + MyApplication.newline
@@ -96,16 +109,16 @@ class ObjectForecastPackage7Day internal constructor(locNum: Int, html: String) 
         val forecastAl = mutableListOf<ObjectForecast>()
         val nameAl = html.parseColumn("\"name\": \"(.*?)\",")
         val temperatureAl = html.parseColumn("\"temperature\": (.*?),")
-        this.iconAl = html.parseColumn("\"icon\": \"(.*?)\",")
+        this.icons = html.parseColumn("\"icon\": \"(.*?)\",")
         val shortForecastAl = html.parseColumn("\"shortForecast\": \"(.*?)\",")
         val detailedForecastAlLocal = html.parseColumn("\"detailedForecast\": \"(.*?)\"")
         if (nameAl.size == temperatureAl.size && temperatureAl.size == shortForecastAl.size && shortForecastAl.size == detailedForecastAlLocal.size) {
             (0 until nameAl.size).mapTo(forecastAl) {
                 ObjectForecast(
-                    nameAl[it],
-                    temperatureAl[it],
-                    shortForecastAl[it],
-                    detailedForecastAlLocal[it]
+                        nameAl[it],
+                        temperatureAl[it],
+                        shortForecastAl[it],
+                        detailedForecastAlLocal[it]
                 )
             }
         }
@@ -113,7 +126,7 @@ class ObjectForecastPackage7Day internal constructor(locNum: Int, html: String) 
         forecastAl.forEach {
             forecast += it.name + ": " + it.detailedForecast
             forecast += MyApplication.newline + MyApplication.newline
-            detailedForecastAl.add(it.name + ": " + it.detailedForecast)
+            detailedForecasts.add(it.name + ": " + it.detailedForecast)
         }
         return forecast
     }
@@ -135,8 +148,29 @@ class ObjectForecastPackage7Day internal constructor(locNum: Int, html: String) 
  "shortForecast": "Chance Rain Showers",
  "detailedForecast": "A chance of rain showers. Mostly cloudy, with a low around 50. Chance of precipitation is 30%."
  }
- 
- 
+
+ --------
+ sevenDayShort
+ ------
+
+  Tuesday Night(49): Slight Chance Rain then Chance T-storms
+
+    Wednesday(75): Chance T-storms
+
+    Wednesday Night(56): Partly Cloudy
+
+-----------
+sevenDayLong
+-----------
+
+Tuesday Night: A slight chance of rain before 8pm, then a chance of thunderstorms and a chance of rain. Mostly cloudy, with a low around 49.
+
+    Wednesday: A chance of thunderstorms and a chance of rain before 2pm. Partly sunny, with a high near 75.
+
+    Wednesday Night: Partly cloudy, with a low around 56.
+
+
+
  */
 
 

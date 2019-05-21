@@ -227,7 +227,7 @@ object UtilityCanvasWindbarbs {
                 } // if length greater then 4
             } // loop over wind barbs
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         stormListArr = FloatArray(stormList.size)
         stormList.indices.forEach { stormListArr[it] = stormList[it].toFloat() }

@@ -53,7 +53,7 @@ class USWarningsImpactActivity : BaseActivity() {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        warningsList = withContext(Dispatchers.IO) { UtilityWarningsImpact.impactWarningData }
+        warningsList = withContext(Dispatchers.IO) { UtilityWarningsImpact.data }
         val ca = AdapterUSWarningsImpact(warningsList)
         recyclerView.recyclerView.adapter = ca
         title = warningsList.size.toString() + " NWS warnings active " +

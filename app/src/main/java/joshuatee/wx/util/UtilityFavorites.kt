@@ -35,17 +35,12 @@ object UtilityFavorites {
     private const val MODIFY_STR = "Modify..."
 
     private fun checkAndCorrectFav(context: Context, fav: String, prefToken: String) {
-        //UtilityLog.d("wx","fav-" + fav + "PREF:" + prefToken)
-
         if (fav.contains("::")) {
             val newFav = fav.replace(":{2,}".toRegex(), ":")
             savePref(context, newFav, prefToken)
         }
-
         if (!fav.contains(MyApplication.prefSeperator)) {
-            //UtilityLog.d("wx","Errorfav-" + fav)
             val newFav = MyApplication.prefSeperator + fav.trimStart()
-            //UtilityLog.d("wx","Correctedfav-" + newFav)
             savePref(context, newFav, prefToken)
         }
     }
@@ -91,7 +86,7 @@ object UtilityFavorites {
         return ridArrLoc.toList()
     }
 
-    fun setupFavMenuCA(ridFav: String, nwsOffice: String): List<String> {
+    fun setupFavMenuCanada(ridFav: String, nwsOffice: String): List<String> {
         val ridArr = MyApplication.colon.split(ridFav)
         ridArr[0] = nwsOffice
         ridArr[1] = ADD_STR
@@ -108,7 +103,7 @@ object UtilityFavorites {
     }
 
     fun toggleFavorite(context: Context, rid: String, star: MenuItem, prefToken: String) {
-        var ridFav: String = Utility.readPref(context, prefToken, " : : :")
+        var ridFav = Utility.readPref(context, prefToken, " : : :")
         if (ridFav.contains(rid)) {
             ridFav = ridFav.replace("$rid:", "")
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
@@ -127,14 +122,13 @@ object UtilityFavorites {
     }
 
     // mirror of method above save it returns the string
-
     fun toggleFavoriteString(
         context: Context,
         rid: String,
         star: MenuItem,
         prefToken: String
     ): String {
-        var ridFav: String = Utility.readPref(context, prefToken, " : : :")
+        var ridFav = Utility.readPref(context, prefToken, " : : :")
         if (ridFav.contains(rid)) {
             ridFav = ridFav.replace("$rid:", "")
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
@@ -153,9 +147,9 @@ object UtilityFavorites {
         return ridFav
     }
 
-    fun toggleFavoriteSPCMESO(context: Context, rid: String, label: String, star: MenuItem) {
-        var ridFav: String = Utility.readPref(context, "SPCMESO_FAV", " : : :")
-        var ridFavLabel: String = Utility.readPref(context, "SPCMESO_LABEL_FAV", " : : :")
+    fun toggleFavoriteSpcMeso(context: Context, rid: String, label: String, star: MenuItem) {
+        var ridFav = Utility.readPref(context, "SPCMESO_FAV", " : : :")
+        var ridFavLabel = Utility.readPref(context, "SPCMESO_LABEL_FAV", " : : :")
         if (ridFav.contains(rid)) {
             ridFav = ridFav.replace("$rid:", "")
             ridFavLabel = ridFavLabel.replace("$label:", "")
@@ -171,7 +165,7 @@ object UtilityFavorites {
         MyApplication.spcmesoLabelFav = ridFavLabel
     }
 
-    fun setupFavMenuSREF(ridFav: String, param: String): List<String> {
+    fun setupFavMenuSref(ridFav: String, param: String): List<String> {
         val ridArr = MyApplication.colon.split(ridFav)
         ridArr[0] = param
         ridArr[1] = ADD_STR
@@ -186,7 +180,7 @@ object UtilityFavorites {
         return ridArrLoc.toList()
     }
 
-    fun setupFavMenuSPCMESO(ridFav: String, param: String): List<String> {
+    fun setupFavMenuSpcMeso(ridFav: String, param: String): List<String> {
         var ridArr = MyApplication.colon.split(ridFav)
         // bug experienced where somehow size was below 3
         if (ridArr.size < 3) {
@@ -205,7 +199,7 @@ object UtilityFavorites {
         return ridArrLoc.toList()
     }
 
-    fun setupFavMenuNWSTEXT(ridFav: String, param: String): List<String> {
+    fun setupFavMenuNwsText(ridFav: String, param: String): List<String> {
         val ridArr = MyApplication.colon.split(ridFav)
         ridArr[0] = param
         ridArr[1] = ADD_STR
@@ -215,12 +209,12 @@ object UtilityFavorites {
             if (it == 1 || it == 2)
                 ridArrLoc[it] = ridArr[it]
             else
-                ridArrLoc[it] = GlobalArrays.nwsTextProducts[findPositionNWSTEXT(ridArr[it])]
+                ridArrLoc[it] = GlobalArrays.nwsTextProducts[findPositionNwsText(ridArr[it])]
         }
         return ridArrLoc.toList()
     }
 
-    fun findPositionNWSTEXT(key: String): Int =
+    fun findPositionNwsText(key: String): Int =
         GlobalArrays.nwsTextProducts.indices.firstOrNull {
             GlobalArrays.nwsTextProducts[it].contains(
                 key

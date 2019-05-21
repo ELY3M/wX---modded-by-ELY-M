@@ -288,7 +288,7 @@ internal object WXGLPolygonWarnings {
                     .parseJsonObject(StringReader(MyApplication.severeDashboardSps.valueGet()))
 
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
 
 

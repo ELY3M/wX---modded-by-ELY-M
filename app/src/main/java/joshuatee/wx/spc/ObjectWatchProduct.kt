@@ -44,7 +44,7 @@ internal class ObjectWatchProduct(type: PolygonType, productNumber: String) {
         private set
     var text = ""
         private set
-    var wfoArr = listOf<String>()
+    var wfos = listOf<String>()
         private set
 
     init {
@@ -79,8 +79,8 @@ internal class ObjectWatchProduct(type: PolygonType, productNumber: String) {
     fun getData(context: Context) {
         text = UtilityDownload.getTextProduct(context, prod)
         bitmap = imgUrl.getImage()
-        val wfoStr = text.parse("ATTN...WFO...(.*?)...<BR><BR>")
-        wfoArr = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
+        val wfoString = text.parse("ATTN...WFO...(.*?)...<BR><BR>")
+        wfos = wfoString.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
     }
 
     val textForSubtitle: String

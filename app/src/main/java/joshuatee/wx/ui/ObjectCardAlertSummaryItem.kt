@@ -76,7 +76,7 @@ class ObjectCardAlertSummaryItem(context: Context) {
         val startTime: String
         var endTime = ""
         if (ca.title.contains("until")) {
-            val tmpArr = UtilityString.parseMultipe(
+            val tmpArr = UtilityString.parseMultiple(
                 ca.title,
                 "(.*?) issued (.*?) until (.*?) by (.*?)$", // changed expiring to until
                 4
@@ -86,7 +86,7 @@ class ObjectCardAlertSummaryItem(context: Context) {
             endTime = tmpArr[2]
         } else {
             val tmpArr =
-                UtilityString.parseMultipe(ca.title, "(.*?) issued (.*?) by (.*?)$", 3)
+                UtilityString.parseMultiple(ca.title, "(.*?) issued (.*?) by (.*?)$", 3)
             title = tmpArr[0]
             startTime = tmpArr[1]
         }

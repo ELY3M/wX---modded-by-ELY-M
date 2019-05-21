@@ -107,15 +107,15 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         title = "Canada"
         imageMap =
             ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
-        imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::maptoCARid)
+        imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::mapToCanadaRadarSite)
         ridFav = Utility.readPref(this, "RID_CA_FAV", " : : :")
-        ridArrLoc = UtilityFavorites.setupFavMenuCA(ridFav, rid1)
+        ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, rid1)
         sp = ObjectSpinner(this, this, this, R.id.spinner1, ridArrLoc)
     }
 
     override fun onRestart() {
         ridFav = Utility.readPref(this, "RID_CA_FAV", " : : :")
-        ridArrLoc = UtilityFavorites.setupFavMenuCA(ridFav, rid1)
+        ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, rid1)
         sp.refreshData(this, ridArrLoc)
         super.onRestart()
     }
@@ -216,14 +216,14 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         imageType = "rad"
         rid1 = r
         img.resetZoom()
-        ridArrLoc = UtilityFavorites.setupFavMenuCA(ridFav, r)
+        ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, r)
         sp.refreshData(this, ridArrLoc)
     }
 
     private fun getAnimate(frameCountStr: String) = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
             animDrawable = if (imageType == "vis" || imageType == "wv" || imageType == "ir") {
-                UtilityCanadaImg.getGOESAnim(contextg, url)
+                UtilityCanadaImg.getGoesAnimation(contextg, url)
             } else {
                 if (!mosaicShown)
                     UtilityCanadaImg.getRadarAnimOptionsApplied(contextg, rad, frameCountStr)
@@ -234,12 +234,12 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         animRan = UtilityImgAnim.startAnimation(animDrawable, img)
     }
 
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
         if (firstTime) {
             UtilityToolbar.fullScreenMode(toolbar, toolbarBottom)
             firstTime = false
         }
-        when (pos) {
+        when (position) {
             1 -> ObjectIntent(
                 contextg,
                 FavAddActivity::class.java,
@@ -253,8 +253,8 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                 arrayOf("RIDCA")
             )
             else -> {
-                if (ridArrLoc[pos].length > 3) {
-                    rad = UtilityStringExternal.truncate(ridArrLoc[pos], 3)
+                if (ridArrLoc[position].length > 3) {
+                    rad = UtilityStringExternal.truncate(ridArrLoc[position], 3)
                     mosaicShown = false
                     img.resetZoom()
                     getContent()
@@ -262,7 +262,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                     mosaicShown = true
                     img.resetZoom()
                     if (imageType == "rad") {
-                        getMosaic(ridArrLoc[pos])
+                        getMosaic(ridArrLoc[position])
                     } else {
                         getContent()
                     }
@@ -281,7 +281,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
 
     private fun toggleFavorite() {
         ridFav = UtilityFavorites.toggleFavoriteString(this, rid1, star, "RID_CA_FAV")
-        ridArrLoc = UtilityFavorites.setupFavMenuCA(ridFav, rid1)
+        ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, rid1)
         sp.refreshData(this, ridArrLoc)
     }
 

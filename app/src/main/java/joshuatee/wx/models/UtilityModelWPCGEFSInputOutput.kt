@@ -39,7 +39,7 @@ internal object UtilityModelWPCGEFSInputOutput {
     val runTime: RunTimeData
         get() {
             val runData = RunTimeData()
-            val currentHour = UtilityTime.currentHourInUTC
+            val currentHour = UtilityTime.currentHourInUtc
             runData.mostRecentRun = "00"
             if (currentHour in 12..17) {
                 runData.mostRecentRun = "06"

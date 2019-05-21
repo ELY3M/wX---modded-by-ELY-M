@@ -121,7 +121,7 @@ internal object Level2 {
             }
             dis2.close()
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         } catch (e: OutOfMemoryError) {
             UtilityLog.handleException(e)
         }

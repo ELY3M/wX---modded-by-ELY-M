@@ -70,23 +70,23 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     private var firstTime = true
     private lateinit var activityArguments: Array<String>
     private var product = ""
-    private var nwsOffice = ""
+    private var wfo = ""
     private lateinit var imageMap: ObjectImageMap
     private var html = ""
     private var mapShown = false
-    private lateinit var notifToggle: MenuItem
+    private lateinit var notificationToggle: MenuItem
     private lateinit var star: MenuItem
-    private lateinit var ridArrLoc: List<String>
+    private lateinit var locationList: List<String>
     private val prefTokenLocation = "NWS_LOCATION_"
     private val prefToken = "WFO_FAV"
     private var ridFavOld = ""
     private var version = 0
-    private var oldProd = ""
-    private var oldNwsOffice = ""
+    private var oldProduct = ""
+    private var oldWfo = ""
     private var wfoListPerState = mutableListOf<String>()
     private val cardList = mutableListOf<CardView>()
-    private lateinit var c0: ObjectCardText
-    private lateinit var spinner1: ObjectSpinner
+    private lateinit var textCard: ObjectCardText
+    private lateinit var spinner: ObjectSpinner
     private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
@@ -95,16 +95,16 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
-        c0 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
+        textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
-        notifToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
+        notificationToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
         activityArguments = intent.getStringArrayExtra(URL)
-        nwsOffice = activityArguments[0]
+        wfo = activityArguments[0]
         if (Utility.readPref(this, "WFO_REMEMBER_LOCATION", "") == "true") {
-            nwsOffice = Utility.readPref(this, "WFO_LAST_USED", Location.wfo)
+            wfo = Utility.readPref(this, "WFO_LAST_USED", Location.wfo)
         }
-        if (nwsOffice == "") {
-            nwsOffice = "OUN"
+        if (wfo == "") {
+            wfo = "OUN"
         }
         product = if (activityArguments[1] == "") {
             MyApplication.wfoTextFav
@@ -113,85 +113,85 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         }
         title = product
         version = 1
-        oldProd = ""
-        oldNwsOffice = ""
-        ridArrLoc = UtilityFavorites.setupFavMenu(
-            this,
-            MyApplication.wfoFav,
-            nwsOffice,
-            prefTokenLocation,
-            prefToken
+        oldProduct = ""
+        oldWfo = ""
+        locationList = UtilityFavorites.setupFavMenu(
+                this,
+                MyApplication.wfoFav,
+                wfo,
+                prefTokenLocation,
+                prefToken
         )
-        spinner1 = ObjectSpinner(this, this, this, R.id.spinner1, ridArrLoc)
+        spinner = ObjectSpinner(this, this, this, R.id.spinner1, locationList)
         imageMap = ObjectImageMap(
-            this,
-            this,
-            R.id.map,
-            toolbar,
-            toolbarBottom,
-            listOf<View>(c0.card, scrollView)
+                this,
+                this,
+                R.id.map,
+                toolbar,
+                toolbarBottom,
+                listOf<View>(textCard.card, scrollView)
         )
-        imageMap.addClickHandler(::mapSwitch, UtilityImageMap::maptoWFO)
+        imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToWfo)
     }
 
     override fun onRestart() {
         if (ridFavOld != MyApplication.wfoFav) {
-            ridArrLoc = UtilityFavorites.setupFavMenu(
-                this,
-                MyApplication.wfoFav,
-                nwsOffice,
-                prefTokenLocation,
-                prefToken
+            locationList = UtilityFavorites.setupFavMenu(
+                    this,
+                    MyApplication.wfoFav,
+                    wfo,
+                    prefTokenLocation,
+                    prefToken
             )
-            spinner1.refreshData(this, ridArrLoc)
+            spinner.refreshData(this, locationList)
         }
         super.onRestart()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        updateSubmenuNotifText()
-        if (MyApplication.wfoFav.contains(":$nwsOffice:")) {
+        updateSubmenuNotificationText()
+        if (MyApplication.wfoFav.contains(":$wfo:")) {
             star.setIcon(MyApplication.STAR_ICON)
         } else {
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         }
         scrollView.smoothScrollTo(0, 0)
         ridFavOld = MyApplication.wfoFav
-        if (product != oldProd) {
+        if (product != oldProduct) {
             version = 1
         }
-        if (nwsOffice != oldNwsOffice) {
+        if (wfo != oldWfo) {
             version = 1
         }
         html = withContext(Dispatchers.IO) {
             if (version == 1) {
-                UtilityDownload.getTextProduct(contextg, product + nwsOffice)
+                UtilityDownload.getTextProduct(contextg, product + wfo)
             } else {
-                UtilityDownload.getTextProduct(product + nwsOffice, version)
+                UtilityDownload.getTextProduct(product + wfo, version)
             }
         }
         title = product
         cardList.forEach {
             linearLayout.removeView(it)
         }
-        c0.setVisibility(View.VISIBLE)
+        textCard.setVisibility(View.VISIBLE)
         scrollView.visibility = View.VISIBLE
         if (html == "") {
             html = "None issued by this office recently."
         }
-        c0.setTextAndTranslate(Utility.fromHtml(html))
+        textCard.setTextAndTranslate(Utility.fromHtml(html))
         UtilityTTS.conditionalPlay(activityArguments, 2, applicationContext, html, product)
         if (activityArguments[1] == "") {
             Utility.writePref(contextg, "WFO_TEXT_FAV", product)
             MyApplication.wfoTextFav = product
         }
-        oldProd = product
-        oldNwsOffice = nwsOffice
-        Utility.writePref(contextg, "WFO_LAST_USED", nwsOffice)
+        oldProduct = product
+        oldWfo = wfo
+        Utility.writePref(contextg, "WFO_LAST_USED", wfo)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, html, product, product + nwsOffice)) {
+        if (audioPlayMenu(item.itemId, html, product, product + wfo)) {
             return true
         }
         when (item.itemId) {
@@ -207,8 +207,8 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
             }
             R.id.action_fav -> toggleFavorite()
             R.id.action_notif_text_prod -> {
-                UtilityNotificationTextProduct.toggle(this, linearLayout, product + nwsOffice)
-                updateSubmenuNotifText()
+                UtilityNotificationTextProduct.toggle(this, linearLayout, product + wfo)
+                updateSubmenuNotificationText()
             }
             R.id.action_prod_by_state -> {
                 wfoByState()
@@ -229,30 +229,30 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
             R.id.action_rer -> getProduct("RER")
             R.id.action_nsh -> getProduct("NSH")
             R.id.action_website -> ObjectIntent(
-                this,
-                WebscreenABModels::class.java,
-                WebscreenABModels.URL,
-                arrayOf("http://www.weather.gov/" + nwsOffice.toLowerCase(Locale.US), nwsOffice)
+                    this,
+                    WebscreenABModels::class.java,
+                    WebscreenABModels.URL,
+                    arrayOf("http://www.weather.gov/" + wfo.toLowerCase(Locale.US), wfo)
             )
             R.id.action_hazards -> ObjectIntent(
-                this,
-                ImageShowActivity::class.java,
-                ImageShowActivity.URL,
-                arrayOf(
-                    "http://www.weather.gov/wwamap/png/" + nwsOffice.toLowerCase(Locale.US) + ".png",
-                    "$nwsOffice WWA Map"
-                )
+                    this,
+                    ImageShowActivity::class.java,
+                    ImageShowActivity.URL,
+                    arrayOf(
+                            "http://www.weather.gov/wwamap/png/" + wfo.toLowerCase(Locale.US) + ".png",
+                            "$wfo WWA Map"
+                    )
             )
-           /* R.id.action_forecast -> ObjectIntent(
-                this,
-                WebscreenABModels::class.java,
-                WebscreenABModels.URL,
-                arrayOf(UtilityDownloadNWS.get7DayURL(Location.x, Location.y), "Local forecast")
-            )*/
+            /* R.id.action_forecast -> ObjectIntent(
+                 this,
+                 WebscreenABModels::class.java,
+                 WebscreenABModels.URL,
+                 arrayOf(UtilityDownloadNWS.get7DayURL(Location.x, Location.y), "Local forecast")
+             )*/
             R.id.action_share -> UtilityShare.shareText(
-                this,
-                product + nwsOffice,
-                Utility.fromHtml(html)
+                    this,
+                    product + wfo,
+                    Utility.fromHtml(html)
             )
             else -> return super.onOptionsItemSelected(item)
         }
@@ -265,42 +265,41 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     }
 
     private fun mapSwitch(loc: String) {
-        nwsOffice = loc.toUpperCase(Locale.US)
+        wfo = loc.toUpperCase(Locale.US)
         mapShown = false
-        ridArrLoc = UtilityFavorites.setupFavMenu(
-            this,
-            MyApplication.wfoFav,
-            nwsOffice,
-            prefTokenLocation,
-            prefToken
+        locationList = UtilityFavorites.setupFavMenu(
+                this,
+                MyApplication.wfoFav,
+                wfo,
+                prefTokenLocation,
+                prefToken
         )
-        spinner1.refreshData(this, ridArrLoc)
+        spinner.refreshData(this, locationList)
     }
 
     private fun toggleFavorite() {
-        val ridFav = UtilityFavorites.toggleFavoriteString(this, nwsOffice, star, prefToken)
-        ridArrLoc =
-            UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefTokenLocation, prefToken)
-        spinner1.refreshData(this, ridArrLoc)
+        val ridFav = UtilityFavorites.toggleFavoriteString(this, wfo, star, prefToken)
+        locationList = UtilityFavorites.setupFavMenu(this, ridFav, wfo, prefTokenLocation, prefToken)
+        spinner.refreshData(this, locationList)
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        if (ridArrLoc.isNotEmpty()) {
+        if (locationList.isNotEmpty()) {
             when (pos) {
                 1 -> ObjectIntent(
-                    this,
-                    FavAddActivity::class.java,
-                    FavAddActivity.TYPE,
-                    arrayOf("WFO")
+                        this,
+                        FavAddActivity::class.java,
+                        FavAddActivity.TYPE,
+                        arrayOf("WFO")
                 )
                 2 -> ObjectIntent(
-                    this,
-                    FavRemoveActivity::class.java,
-                    FavRemoveActivity.TYPE,
-                    arrayOf("WFO")
+                        this,
+                        FavRemoveActivity::class.java,
+                        FavRemoveActivity.TYPE,
+                        arrayOf("WFO")
                 )
                 else -> {
-                    nwsOffice = ridArrLoc[pos].split(" ").getOrNull(0) ?: ""
+                    wfo = locationList[pos].split(" ").getOrNull(0) ?: ""
                     getContent()
                 }
             }
@@ -313,21 +312,21 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
 
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
-    private fun updateSubmenuNotifText() {
-        if (UtilityNotificationTextProduct.check(product + nwsOffice)) {
-            notifToggle.title = resources.getString(R.string.notif_remove)
+    private fun updateSubmenuNotificationText() {
+        if (UtilityNotificationTextProduct.check(product + wfo)) {
+            notificationToggle.title = resources.getString(R.string.notif_remove)
         } else {
-            notifToggle.title = resources.getString(R.string.notif_add)
+            notificationToggle.title = resources.getString(R.string.notif_add)
         }
     }
 
     private fun wfoByState() {
-        val state = ridArrLoc[0].split(" ")[1]
+        val state = locationList[0].split(" ")[1]
         wfoListPerState = mutableListOf()
         wfoListPerState.clear()
         GlobalArrays.wfos
-            .filter { it.contains(state) }
-            .forEach { wfoListPerState.add(MyApplication.space.split(it)[0].replace(":", "")) }
+                .filter { it.contains(state) }
+                .forEach { wfoListPerState.add(MyApplication.space.split(it)[0].replace(":", "")) }
         wfoListPerState.sort()
     }
 
@@ -335,10 +334,10 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         val wfoProd = mutableListOf<String>()
         scrollView.smoothScrollTo(0, 0)
         ridFavOld = MyApplication.wfoFav
-        if (product != oldProd) {
+        if (product != oldProduct) {
             version = 1
         }
-        if (nwsOffice != oldNwsOffice) {
+        if (wfo != oldWfo) {
             version = 1
         }
         title = product
@@ -353,12 +352,12 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
                 wfoProd.add(html)
             }
         }
-        c0.setVisibility(View.GONE)
+        textCard.setVisibility(View.GONE)
         cardList.clear()
         wfoProd.forEach {
-            val cTmp = ObjectCardText(contextg, linearLayout)
-            cTmp.setTextAndTranslate(Utility.fromHtml(it))
-            cardList.add(cTmp.card)
+            val textCard = ObjectCardText(contextg, linearLayout)
+            textCard.setTextAndTranslate(Utility.fromHtml(it))
+            cardList.add(textCard.card)
         }
     }
 }

@@ -33,9 +33,9 @@ import joshuatee.wx.WX
 import joshuatee.wx.fragments.UtilityNWS
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityDownload
 
 import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.UtilityTimeSunMoon
 
 class ObjectWidgetCC(context: Context) {
 
@@ -58,7 +58,7 @@ class ObjectWidgetCC(context: Context) {
         if (Location.isUS(widgetLocNumberAsInteger)) {
             remoteViews.setTextViewText(
                     R.id.location,
-                    Location.getName(widgetLocNumberAsInteger) + " " + UtilityDownload.getSunriseSunsetShort(
+                    Location.getName(widgetLocNumberAsInteger) + " " + UtilityTimeSunMoon.getSunriseSunsetShort(
                             context,
                             (widgetLocNumberAsInteger + 1).toString()
                     )

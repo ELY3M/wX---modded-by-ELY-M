@@ -76,7 +76,7 @@ class WXGLNexradLevel2 {
                     productCode.toInt()
                 )
             } catch (e: Exception) {
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             }
         } else {
             if (performDecomp) {
@@ -161,7 +161,7 @@ class WXGLNexradLevel2 {
             Utility.writePref(context, "WX_RADAR_CURRENT_INFO$radarStatusStr", radarInfo)
             binSize = WXGLNexrad.getBinSize(productCode.toInt())
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
         if (!MyApplication.radarUseJni) UtilityFileManagement.deleteFile(context, decompFileName)
     }

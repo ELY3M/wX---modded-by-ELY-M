@@ -126,7 +126,7 @@ open class ObjectOglBuffers() {
         try {
             floatBuffer.putFloat(newValue)
         } catch (e: Exception) {
-            UtilityLog.HandleException(e)
+            UtilityLog.handleException(e)
         }
     }
 
@@ -147,7 +147,7 @@ open class ObjectOglBuffers() {
             try {
                 colorBuffer.put(b)
             } catch (e: Exception) {
-                UtilityLog.HandleException(e)
+                UtilityLog.handleException(e)
             }
         }
     }

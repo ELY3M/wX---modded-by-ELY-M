@@ -176,4 +176,8 @@ object WXGLNexrad {
         Utility.writePref(context, prefPrefix + "_X" + idx.toString(), oglr.x)
         Utility.writePref(context, prefPrefix + "_Y" + idx.toString(), oglr.y)
     }
+
+    fun saveProductPrefs(context: Context, prefPrefix: String, idx: Int, oglr: WXGLRender) {
+        Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), oglr.product)
+    }
 }

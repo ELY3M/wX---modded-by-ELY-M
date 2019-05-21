@@ -30,49 +30,43 @@ import joshuatee.wx.radar.LatLon
 
 class ObjectForecastPackageCurrentConditions {
 
-    companion object {
-        // CA
-        internal fun createForCanada(html: String): ObjectForecastPackageCurrentConditions {
-            val obj = ObjectForecastPackageCurrentConditions()
-            obj.data1 = UtilityCanada.getConditions(html)
-            obj.status = UtilityCanada.getStatus(html)
-            return obj
-        }
-    }
-
     var contextg: Context? = null
-    var ccLine1: String = ""
-    var data1: String = ""
+    var topLine: String = ""
+    var data: String = ""
         private set
     var iconUrl: String = ""
         private set
-    private var conditionsTimeStr = ""
+    private var time = ""
     var status: String = ""
         private set
 
-    private constructor()
+    constructor()
 
-    // US
-    internal constructor(context: Context, locNum: Int) {
+    constructor(context: Context, locNum: Int) {
         if (Location.isUS(locNum)) {
             val tmpArr = getConditionsViaMetar(context, Location.getLatLon(locNum))
-            data1 = tmpArr[0]
+            // 62° / 54°(74%) - 1013 mb - ESE 7 mph - 8 mi - Partly Cloudy
+            data = tmpArr[0]
             iconUrl = tmpArr[1]
-            status = UtilityUS.getStatusViaMetar(context, conditionsTimeStr)
+            status = UtilityUS.getStatusViaMetar(context, time)
+        } else {
+            val html = UtilityCanada.getLocationHtml(Location.getLatLon(locNum))
+            data = UtilityCanada.getConditions(html)
+            status = UtilityCanada.getStatus(html)
         }
     }
 
-    internal constructor(context: Context, location: LatLon) {
+    constructor(context: Context, location: LatLon) {
         val tmpArr = getConditionsViaMetar(context, location)
-        data1 = tmpArr[0]
+        data = tmpArr[0]
         iconUrl = tmpArr[1]
-        status = UtilityUS.getStatusViaMetar(context, conditionsTimeStr)
+        status = UtilityUS.getStatusViaMetar(context, time)
     }
 
     private fun getConditionsViaMetar(context: Context, location: LatLon): List<String> {
         var sb = ""
         val objMetar = ObjectMetar(context, location)
-        conditionsTimeStr = objMetar.conditionsTimeStr
+        time = objMetar.conditionsTimeStr
         val temperature = objMetar.temperature + MyApplication.DEGREE_SYMBOL
         val windChill = objMetar.windChill + MyApplication.DEGREE_SYMBOL
         val heatIndex = objMetar.heatIndex + MyApplication.DEGREE_SYMBOL
@@ -103,13 +97,13 @@ class ObjectForecastPackageCurrentConditions {
     // FIXME sync up with flutter/ios port
     fun formatCC() {
         val sep = " - "
-        val tmpArrCc = data1.split(sep)
+        val tmpArrCc = data.split(sep)
         var retStr = ""
         if (tmpArrCc.size > 4) {
             val tmpList = tmpArrCc[0].split("/")
             retStr = tmpArrCc[4].replace("^ ", "") + " " + tmpList[0] + tmpArrCc[2]
         }
-        ccLine1 = retStr
+        topLine = retStr
     }
 }
 
