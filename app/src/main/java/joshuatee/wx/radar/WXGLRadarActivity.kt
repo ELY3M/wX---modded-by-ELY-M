@@ -575,6 +575,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             else
                 star.setIcon(MyApplication.STAR_OUTLINE_ICON)
             anim.setIcon(MyApplication.ICON_PLAY)
+            getContent()
             if (item.itemId == R.id.action_a) return true
         }
 

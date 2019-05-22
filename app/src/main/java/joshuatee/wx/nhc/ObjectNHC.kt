@@ -50,8 +50,7 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
     private val pacTitleList = mutableListOf<String>()
     private val bitmaps = mutableListOf<Bitmap>()
     private var cNotif: ObjectCardText? = null
-    private val cardNotifHeaderText =
-        "Currently blocked storm notifications, tap this text to clear all blocks "
+    private val cardNotifHeaderText = "Currently blocked storm notifications, tap this text to clear all blocks "
     var html: String = ""
 
     fun getData() {
@@ -109,19 +108,20 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
         } else {
             atlSumList.indices.forEach { k ->
                 if (atlImg1List[k] != "") {
-                    val cAtl = ObjectCardText(context, dynamicview, Utility.fromHtml(atlSumList[k]))
+                    val objStormData = ObjectNHCStormDetails(atlSumList[k])
+                    val cAtlData = ObjectCardNhcStormReportItem(context, dynamicview, objStormData)
                     html += atlSumList[k]
                     val url = atlLinkList[k]
                     val imgUrl1 = atlImg1List[k]
                     val imgUrl2 = atlImg2List[k]
                     val title = atlTitleList[k]
                     val wallet = atlWalletList[k]
-                    cAtl.setOnClickListener(View.OnClickListener {
+                    cAtlData.setListener(View.OnClickListener {
                         ObjectIntent(
-                            context,
-                            NHCStormActivity::class.java,
-                            NHCStormActivity.URL,
-                            arrayOf(url, title, "nosound", imgUrl1, imgUrl2, wallet)
+                                context,
+                                NHCStormActivity::class.java,
+                                NHCStormActivity.URL,
+                                arrayOf(url, title, "nosound", imgUrl1, imgUrl2, wallet)
                         )
                     })
                 }
@@ -134,14 +134,16 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
         } else {
             pacSumList.indices.forEach { k ->
                 if (pacImg1List[k] != "") {
-                    val cPac = ObjectCardText(context, dynamicview, Utility.fromHtml(pacSumList[k]))
+                    val objStormData = ObjectNHCStormDetails(pacSumList[k])
+                    val cPacData = ObjectCardNhcStormReportItem(context, dynamicview, objStormData)
+                    //val cPac = ObjectCardText(context, dynamicview, Utility.fromHtml(pacSumList[k]))
                     html += pacSumList[k]
                     val url = pacLinkList[k]
                     val imgUrl1 = pacImg1List[k]
                     val imgUrl2 = pacImg2List[k]
                     val title = pacTitleList[k]
                     val wallet = pacWalletList[k]
-                    cPac.setOnClickListener(View.OnClickListener {
+                    cPacData.setListener(View.OnClickListener {
                         ObjectIntent(
                             context,
                             NHCStormActivity::class.java,

@@ -26,10 +26,9 @@
 // TODO - bug , SPC Meso swipe left/right takes on extra to get started
 // TODO - in settings homescreen remove 7DAY from choices
 // TODO - nexrad radar on landscape - switch to dual pane is not centered
-// TODO - in settings indicate minutes for varoius update options (widget/notification)
+// TODO - in settings indicate minutes for various update options (widget/notification)
 // TODO - update polygons when radar is open (in addition to background). Possibly use two sets of prefs , cloned at radar start
 // TODO - color pal , allow cloning of a user created pal
-// TODO - radar , tap stop button should then fetch latest radar
 
 [ADD] - adding something new - method, file, etc. to the repo
 [REM] - remove items
@@ -39,6 +38,10 @@
 [REF] - refactor a method, group, variable, etc.
 [MER] - merge
 
+55192 2019_05_21    [IMP] Enhance storm card formatting in NHC main screen
+                    [IMP] In nexrad radar if animating and tap stop icon - get most recent scan and display
+                    [FIX] add a catch memory error in wxrender around line 180
+                    [IMP] SPC Meso add "850mb Analysis (version 2)" (850mb2) under "Upper Air"
 55190 2019_05_18    [IMP] add more whitespace around hazards on main screen
                     [IMP] don't squash whitespace in US alerts detail
                     [REF] camelCase and better naming

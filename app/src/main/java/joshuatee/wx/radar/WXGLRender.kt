@@ -216,6 +216,8 @@ class WXGLRender(private val context: Context) : Renderer {
             lineIndexBuffer = ByteBuffer.allocateDirect(4 * breakSizeLine)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
+        } catch (ooo: OutOfMemoryError) {
+            UtilityLog.handleException(ooo)
         }
         triangleIndexBuffer.order(ByteOrder.nativeOrder())
         triangleIndexBuffer.position(0)

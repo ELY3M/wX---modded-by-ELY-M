@@ -663,6 +663,12 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     2000
             )
             anim.setIcon(MyApplication.ICON_PLAY)
+            // spotter code is serialized for now
+            if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) {
+                getContentSerial()
+            } else {
+                getContentParallel()
+            }
             if (item.itemId == R.id.action_a) return true
         }
         when (item.itemId) {
