@@ -150,11 +150,11 @@ internal object WXGLPolygonWarnings {
         var polyCount = -1
         polygonArr.forEach { polygon ->
             polyCount += 1
-            val vtecIsCurrent = UtilityTime.isVtecCurrent(vtecAl[polyCount])
+            //val vtecIsCurrent = UtilityTime.isVtecCurrent(vtecAl[polyCount])
             if (vtecAl.size > polyCount
                     && !vtecAl[polyCount].startsWith("O.EXP")
                     && !vtecAl[polyCount].startsWith("O.CAN")
-                    && vtecIsCurrent
+                    && UtilityTime.isVtecCurrent(vtecAl[polyCount])
             ) {
                 val polyTmp =
                     polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")

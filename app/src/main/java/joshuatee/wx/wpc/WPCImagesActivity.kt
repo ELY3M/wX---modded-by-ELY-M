@@ -44,7 +44,7 @@ import kotlinx.coroutines.*
 import kotlinx.android.synthetic.main.activity_wpcimages.*
 
 class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
-    Toolbar.OnMenuItemClickListener {
+        Toolbar.OnMenuItemClickListener {
 
     companion object {
         const val URL: String = ""
@@ -63,11 +63,11 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_wpcimages,
-            R.menu.wpcimages,
-            iconsEvenlySpaced = true,
-            bottomToolbar = true
+                savedInstanceState,
+                R.layout.activity_wpcimages,
+                R.menu.wpcimages,
+                iconsEvenlySpaced = true,
+                bottomToolbar = true
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -86,14 +86,14 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
         actionForward = menu.findItem(R.id.action_forward)
         actionBack.isVisible = false
         actionForward.isVisible = false
-        UtilityWPCImages.createData()
+        UtilityWpcImages.createData()
         drw = ObjectNavDrawerCombo(
-            this,
-            UtilityWPCImages.groups,
-            UtilityWPCImages.longCodes,
-            UtilityWPCImages.shortCodes,
-            this,
-            "WPG_IMG"
+                this,
+                UtilityWpcImages.groups,
+                UtilityWpcImages.longCodes,
+                UtilityWpcImages.shortCodes,
+                this,
+                "WPG_IMG"
         )
         drw.setListener(::getContentFixThis)
         toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
@@ -183,7 +183,7 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+            drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onClick(v: View) {
         when (v.id) {
@@ -200,7 +200,7 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
 
     private fun showNextImg() {
         drw.imgIdx += 1
-        if (UtilityWPCImages.shortCodes[drw.imgGroupIdx][drw.imgIdx] == "") {
+        if (UtilityWpcImages.shortCodes[drw.imgGroupIdx][drw.imgIdx] == "") {
             drw.imgIdx = 0
         }
         getContent()
@@ -209,8 +209,8 @@ class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
     private fun showPrevImg() {
         drw.imgIdx -= 1
         if (drw.imgIdx == -1) {
-            for (j in 0 until UtilityWPCImages.shortCodes[drw.imgGroupIdx].size) {
-                if (UtilityWPCImages.shortCodes[drw.imgGroupIdx][j] == "") {
+            for (j in 0 until UtilityWpcImages.shortCodes[drw.imgGroupIdx].size) {
+                if (UtilityWpcImages.shortCodes[drw.imgGroupIdx][j] == "") {
                     drw.imgIdx = j - 1
                     break
                 }

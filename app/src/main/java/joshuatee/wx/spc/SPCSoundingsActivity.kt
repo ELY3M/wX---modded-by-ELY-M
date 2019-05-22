@@ -106,7 +106,7 @@ class SPCSoundingsActivity : BaseActivity(), OnItemSelectedListener,
         else
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         withContext(Dispatchers.IO) {
-            bitmap = UtilitySPCSoundings.getImage(contextg, nwsOffice)
+            bitmap = UtilitySpcSoundings.getImage(contextg, nwsOffice)
         }
         img.img.visibility = View.VISIBLE
         img.setBitmap(bitmap)

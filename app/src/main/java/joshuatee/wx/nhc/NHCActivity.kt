@@ -44,7 +44,7 @@ import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private lateinit var objNHC: ObjectNHC
+    private lateinit var objNhc: ObjectNhc
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,14 +54,14 @@ class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.menu.nhc
         )
         toolbarBottom.setOnMenuItemClickListener(this)
-        objNHC = ObjectNHC(this, ll)
+        objNhc = ObjectNhc(this, ll)
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         sv.smoothScrollTo(0, 0)
-        withContext(Dispatchers.IO) { objNHC.getData() }
-        objNHC.showData()
+        withContext(Dispatchers.IO) { objNhc.getData() }
+        objNhc.showData()
     }
 
     private fun showTextProduct(prod: String) {
@@ -83,7 +83,7 @@ class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, objNHC.html, "", "")) {
+        if (audioPlayMenu(item.itemId, objNhc.html, "", "")) {
             return true
         }
         when (item.itemId) {
@@ -93,7 +93,7 @@ class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.id.action_epac_twd -> showTextProduct("MIATWDEP")
             R.id.action_atl_tws -> showTextProduct("MIATWSAT")
             R.id.action_epac_tws -> showTextProduct("MIATWSEP")
-            R.id.action_share -> UtilityShare.shareText(this, "", Utility.fromHtml(objNHC.html))
+            R.id.action_share -> UtilityShare.shareText(this, "", Utility.fromHtml(objNhc.html))
             R.id.action_epac_daily -> showImageProduct(
                 "http://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/PAC/20.jpg",
                 "EPAC Daily Analysis",
@@ -136,7 +136,7 @@ class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onRestart() {
-        objNHC.handleRestartForNotif()
+        objNhc.handleRestartForNotif()
         super.onRestart()
     }
 }

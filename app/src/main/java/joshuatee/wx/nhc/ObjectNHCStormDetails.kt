@@ -24,7 +24,7 @@ package joshuatee.wx.nhc
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 
-class ObjectNHCStormDetails(val data: String) {
+class ObjectNhcStormDetails(val data: String) {
 
     /*
    <nhc:center>30.8, -68.3<br>

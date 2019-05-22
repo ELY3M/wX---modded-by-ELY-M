@@ -27,7 +27,7 @@ import joshuatee.wx.util.Group
 import joshuatee.wx.ui.ObjectMenuTitle
 import java.util.*
 
-internal object UtilityWPCText {
+internal object UtilityWpcText {
 
     private val titles = Arrays.asList(
         ObjectMenuTitle("General", 3),

@@ -21,41 +21,41 @@
 
 package joshuatee.wx.ui
 
-import joshuatee.wx.activitiesmisc.UtilityOPCImages
+import joshuatee.wx.activitiesmisc.UtilityOpcImages
 import joshuatee.wx.activitiesmisc.UtilityObservations
 import joshuatee.wx.vis.UtilityNWSGOESFullDisk
 
 class ObjectImagesCollection(
-    var title: String,
-    var urls: List<String>,
-    var labels: List<String>,
-    val prefTokenIdx: String,
-    val prefImagePosition: String
+        var title: String,
+        var urls: List<String>,
+        var labels: List<String>,
+        val prefTokenIdx: String,
+        val prefImagePosition: String
 ) {
 
     companion object {
         fun initialize(): MutableMap<String, ObjectImagesCollection> {
             val collectionMap: MutableMap<String, ObjectImagesCollection> = mutableMapOf()
             collectionMap["OPC"] = ObjectImagesCollection(
-                "OPC",
-                UtilityOPCImages.urls,
-                UtilityOPCImages.labels,
-                "OPC_IMG_FAV_IDX",
-                "OPCIMG"
+                    "OPC",
+                    UtilityOpcImages.urls,
+                    UtilityOpcImages.labels,
+                    "OPC_IMG_FAV_IDX",
+                    "OPCIMG"
             )
             collectionMap["OBSERVATIONS"] = ObjectImagesCollection(
-                "Observations",
-                UtilityObservations.urls,
-                UtilityObservations.labels,
-                "SFC_OBS_IMG_IDX",
-                "OBS"
+                    "Observations",
+                    UtilityObservations.urls,
+                    UtilityObservations.labels,
+                    "SFC_OBS_IMG_IDX",
+                    "OBS"
             )
             collectionMap["GOESFD"] = ObjectImagesCollection(
-                "GOESFD",
-                UtilityNWSGOESFullDisk.urls,
-                UtilityNWSGOESFullDisk.labels,
-                "GOESFULLDISK_IMG_FAV_IDX",
-                "GOESFULLDISKIMG"
+                    "GOESFD",
+                    UtilityNWSGOESFullDisk.urls,
+                    UtilityNWSGOESFullDisk.labels,
+                    "GOESFULLDISK_IMG_FAV_IDX",
+                    "GOESFULLDISKIMG"
             )
             return collectionMap
         }

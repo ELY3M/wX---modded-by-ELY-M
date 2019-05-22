@@ -33,7 +33,7 @@ import joshuatee.wx.external.ExternalGifDecoder
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityImg
 
-internal object UtilitySPCCompmap {
+internal object UtilitySpcCompmap {
 
     fun getImage(context: Context, layerStr: String): Bitmap {
         val layersAl = mutableListOf<Drawable>()

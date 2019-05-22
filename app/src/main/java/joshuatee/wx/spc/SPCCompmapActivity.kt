@@ -58,12 +58,12 @@ class SPCCompmapActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        paramList = UtilitySPCCompmap.labels.toMutableList()
+        paramList = UtilitySpcCompmap.labels.toMutableList()
         drw = ObjectNavDrawer(this, paramList)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
             drw.drawerLayout.closeDrawer(drw.listView)
-            val positionStr = UtilitySPCCompmap.urlIndex[position]
+            val positionStr = UtilitySpcCompmap.urlIndex[position]
             if (paramList[position].contains("(on)")) {
                 paramList[position] = paramList[position].replace("\\(on\\) ".toRegex(), "")
                 layerStr = layerStr.replace("a$positionStr:", "")
@@ -89,8 +89,8 @@ class SPCCompmapActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private fun selectItemNoGet(positionF: Int) {
         var position = positionF
-        for (i in (0 until UtilitySPCCompmap.urlIndex.size)) {
-            if (position.toString() == UtilitySPCCompmap.urlIndex[i]) {
+        for (i in (0 until UtilitySpcCompmap.urlIndex.size)) {
+            if (position.toString() == UtilitySpcCompmap.urlIndex[i]) {
                 position = i
                 break
             }
@@ -103,7 +103,7 @@ class SPCCompmapActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        bitmap = withContext(Dispatchers.IO) { UtilitySPCCompmap.getImage(contextg, layerStr) }
+        bitmap = withContext(Dispatchers.IO) { UtilitySpcCompmap.getImage(contextg, layerStr) }
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn("SPCCOMPMAP")
         Utility.writePref(contextg, "SPCCOMPMAP_LAYERSTR", layerStr)

@@ -30,7 +30,7 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.util.UtilityFavorites
 
 import joshuatee.wx.GlobalArrays
-import joshuatee.wx.spc.UtilitySPCMESO
+import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
 
@@ -105,7 +105,7 @@ class FavRemoveActivity : BaseActivity() {
                 "NWSTEXT" -> ridArrLabel.add(getFullString(ridArr[it]))
                 "SREF" -> ridArrLabel.add(ridArr[it])
                 "RIDCA" -> ridArrLabel.add(findCARIDLabel(ridArr[it]))
-                "SPCMESO" -> ridArrLabel.add(findSPCMesoLabel(ridArr[it]))
+                "SPCMESO" -> ridArrLabel.add(findSpcMesoLabel(ridArr[it]))
                 else -> ridArrLabel.add(getFullString(ridArr[it]))
             }
         }
@@ -198,7 +198,7 @@ class FavRemoveActivity : BaseActivity() {
                     GlobalArrays.nwsTextProducts[UtilityFavorites.findPositionNwsText(shortCode)]
             "SREF" -> tmpLoc = shortCode
             "RIDCA" -> tmpLoc = findCARIDLabel(shortCode)
-            "SPCMESO" -> tmpLoc = findSPCMesoLabel(shortCode)
+            "SPCMESO" -> tmpLoc = findSpcMesoLabel(shortCode)
         }
         return tmpLoc
     }
@@ -226,11 +226,11 @@ class FavRemoveActivity : BaseActivity() {
                     ?.let { GlobalArrays.canadaRadars[it].replace(":", "") }
                     ?: rid
 
-    private fun findSPCMesoLabel(rid: String): String {
-        val index = UtilitySPCMESO.params.indexOf(rid)
+    private fun findSpcMesoLabel(rid: String): String {
+        val index = UtilitySpcMeso.params.indexOf(rid)
         if (index == -1)
-            return UtilitySPCMESO.labels[0]
-        return UtilitySPCMESO.labels[index]
+            return UtilitySpcMeso.labels[0]
+        return UtilitySpcMeso.labels[index]
     }
 
     private fun itemClicked(position: Int) {

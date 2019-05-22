@@ -43,7 +43,7 @@ internal class SevereWarning(private val type: PolygonType) {
 
     fun generateString(context: Context, textTor: String) {
         var vtecComponents: List<String>
-        var wfo = ""
+        var wfo: String
         var wfoLocation = ""
         var label = ""
         when (type) {

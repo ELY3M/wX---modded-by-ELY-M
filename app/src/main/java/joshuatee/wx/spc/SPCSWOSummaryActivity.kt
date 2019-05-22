@@ -49,10 +49,10 @@ class SPCSWOSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_linear_layout_bottom_toolbar,
-            R.menu.spc_swo_summary,
-            true
+                savedInstanceState,
+                R.layout.activity_linear_layout_bottom_toolbar,
+                R.menu.spc_swo_summary,
+                true
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         val menu = toolbarBottom.menu
@@ -67,7 +67,7 @@ class SPCSWOSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         withContext(Dispatchers.IO) {
             arrayOf("1", "2", "3", "4-8").forEach {
                 bitmaps.addAll(
-                    UtilitySPCSWO.getImageUrls(it, false)
+                        UtilitySpcSwo.getImageUrls(it, false)
                 )
             }
         }
@@ -80,10 +80,10 @@ class SPCSWOSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             }
             card.setOnClickListener(View.OnClickListener {
                 ObjectIntent(
-                    contextg,
-                    SPCSWOActivity::class.java,
-                    SPCSWOActivity.NO,
-                    arrayOf(day, "")
+                        contextg,
+                        SPCSWOActivity::class.java,
+                        SPCSWOActivity.NO,
+                        arrayOf(day, "")
                 )
             })
         }
@@ -93,10 +93,10 @@ class SPCSWOSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.SPC_SWO_SUMMARY)
             R.id.action_share -> UtilityShare.shareText(
-                this,
-                "Convective Outlook Summary",
-                "",
-                bitmaps
+                    this,
+                    "Convective Outlook Summary",
+                    "",
+                    bitmaps
             )
             else -> return super.onOptionsItemSelected(item)
         }

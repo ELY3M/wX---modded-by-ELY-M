@@ -23,7 +23,7 @@ package joshuatee.wx.spc
 
 import joshuatee.wx.UIPreferences
 
-internal object UtilitySPCStormReports {
+internal object UtilitySpcStormReports {
 
     fun processData(textArr: List<String>): MutableList<StormReport> {
         val output = StringBuilder()

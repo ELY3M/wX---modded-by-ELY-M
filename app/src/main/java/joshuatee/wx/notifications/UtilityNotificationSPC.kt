@@ -25,7 +25,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.Location
-import joshuatee.wx.spc.UtilitySPC
+import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.external.ExternalPolygon
@@ -51,7 +51,7 @@ internal object UtilityNotificationSpc {
             val urls = arrayOf("SWODY1", "SWODY2", "SWODY3")
             var test: Boolean
             (0 until urls.size).forEach {
-                val threatLevel = UtilitySPC.checkSpcDayX(context, urls[it])
+                val threatLevel = UtilitySpc.checkSpcDayX(context, urls[it])
                 test = if (MyApplication.alertSpcswoSlightNotificationCurrent) {
                     threatLevel[0] == "high" || threatLevel[0] == "modt" || threatLevel[0] == "enh" || threatLevel[0] == "slight"
                 } else {

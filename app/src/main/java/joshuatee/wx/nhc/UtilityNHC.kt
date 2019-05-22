@@ -27,12 +27,12 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 import joshuatee.wx.RegExp
 
-object UtilityNHC {
+object UtilityNhc {
 
     const val widgetImageUrlTop = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png"
     const val widgetImageUrlBottom = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png"
 
-    fun getHurricaneInfo(rssUrl: String): ObjectNHCStormInfo {
+    fun getHurricaneInfo(rssUrl: String): ObjectNhcStormInfo {
         var title = ""
         var summary = ""
         var url = ""
@@ -53,7 +53,7 @@ object UtilityNHC {
                 img2 = urlList[1]
             }
         }
-        return ObjectNHCStormInfo(title, summary, url, img1, img2, wallet)
+        return ObjectNhcStormInfo(title, summary, url, img1, img2, wallet)
     }
 
     fun getImage(rid: String, prod: String): Bitmap =

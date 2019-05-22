@@ -107,6 +107,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
         mScaleDetector = ScaleGestureDetector(context, ScaleListener())
     }
 
+    // FIXME variable naming is bad
     fun setRenderVar(
         oglrR: WXGLRender,
         OGLR_r: MutableList<WXGLRender>,

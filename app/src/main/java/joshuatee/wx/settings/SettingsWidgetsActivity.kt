@@ -46,7 +46,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
         super.onCreate(savedInstanceState, R.layout.activity_settings_widgets, null, false)
         toolbar.subtitle = "Please tap on text for additional help."
         val numberOfLocations = Location.numLocations
-        val locatioNameShortLength = 20
+        val locationNameShortLength = 20
         val locationAl = (1 until numberOfLocations + 1).mapTo(mutableListOf()) {
             "$it: " + UtilityStringExternal.truncate(
                     Utility.readPref(
@@ -54,7 +54,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                             "LOC" + it + "_LABEL",
                             ""
                     ),
-                    locatioNameShortLength
+                    locationNameShortLength
             )
         }
         linearLayout.addView(
@@ -157,7 +157,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                 ObjectSettingsSeekbar(
                         this,
                         this,
-                        "Widget check interval(m)",
+                        "Widget check interval in minutes",
                         "CC_NOTIFICATION_INTERVAL",
                         R.string.cc_interval_np_label,
                         30,

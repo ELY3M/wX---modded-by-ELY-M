@@ -32,7 +32,7 @@ import joshuatee.wx.util.UtilityVtec
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
 
-object UtilitySPC {
+object UtilitySpc {
 
     fun getStormReportsTodayUrl(): String =
             "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/" + "today" + ".gif"

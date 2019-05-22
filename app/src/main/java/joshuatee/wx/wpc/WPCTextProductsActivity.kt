@@ -55,7 +55,7 @@ import kotlinx.coroutines.*
 import kotlinx.android.synthetic.main.activity_wpctextproducts.*
 
 class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
-    AdapterView.OnItemSelectedListener {
+        AdapterView.OnItemSelectedListener {
 
     // Display WPC ( and other ) text products
     // last used product is first shown on re-entry
@@ -85,9 +85,9 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_wpctextproducts,
-            R.menu.wpctext_products
+                savedInstanceState,
+                R.layout.activity_wpctextproducts,
+                R.menu.wpctext_products
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -103,14 +103,14 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         products = UtilityFavorites.setupFavMenuNwsText(MyApplication.nwsTextFav, prod)
         sp = ObjectSpinner(this, this, this, R.id.spinner1, products)
-        UtilityWPCText.createData()
+        UtilityWpcText.createData()
         drw = ObjectNavDrawerCombo(
-            this,
-            UtilityWPCText.groups,
-            UtilityWPCText.longCodes,
-            UtilityWPCText.shortCodes,
-            this,
-            ""
+                this,
+                UtilityWpcText.groups,
+                UtilityWpcText.longCodes,
+                UtilityWpcText.shortCodes,
+                this,
+                ""
         )
         drw.setListener(::changeProduct)
     }
@@ -134,7 +134,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+            drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         if (audioPlayMenu(item.itemId, html, prod, prod)) {
@@ -144,32 +144,32 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
             R.id.action_fav -> toggleFavorite()
             R.id.action_notif_text_prod -> {
                 UtilityNotificationTextProduct.toggle(
-                    this,
-                    linearLayout,
-                    prod.toUpperCase(Locale.US)
+                        this,
+                        linearLayout,
+                        prod.toUpperCase(Locale.US)
                 )
                 updateSubmenuNotifText()
             }
             R.id.action_mpd -> ObjectIntent(this, WPCMPDShowSummaryActivity::class.java)
             R.id.action_qpferf -> ObjectIntent(this, WPCRainfallForecastActivity::class.java)
             R.id.action_low1 -> ObjectIntent(
-                this,
-                ImageShowActivity::class.java,
-                ImageShowActivity.URL,
-                arrayOf(
-                    "${MyApplication.nwsWPCwebsitePrefix}/wwd/lowtrack_circles.gif",
-                    "Significant Surface Low Tracks"
-                )
-            )
-            R.id.action_low2 -> {
-                ObjectIntent(
                     this,
                     ImageShowActivity::class.java,
                     ImageShowActivity.URL,
                     arrayOf(
-                        "${MyApplication.nwsWPCwebsitePrefix}/lowtracks/lowtrack_ensembles.gif",
-                        "Low Tracks and Clusters"
+                            "${MyApplication.nwsWPCwebsitePrefix}/wwd/lowtrack_circles.gif",
+                            "Significant Surface Low Tracks"
                     )
+            )
+            R.id.action_low2 -> {
+                ObjectIntent(
+                        this,
+                        ImageShowActivity::class.java,
+                        ImageShowActivity.URL,
+                        arrayOf(
+                                "${MyApplication.nwsWPCwebsitePrefix}/lowtracks/lowtrack_ensembles.gif",
+                                "Low Tracks and Clusters"
+                        )
                 )
             }
             R.id.action_share -> UtilityShare.shareText(this, prod, Utility.fromHtml(html))
@@ -181,16 +181,16 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         when (pos) {
             1 -> ObjectIntent(
-                this,
-                FavAddActivity::class.java,
-                FavAddActivity.TYPE,
-                arrayOf("NWSTEXT")
+                    this,
+                    FavAddActivity::class.java,
+                    FavAddActivity.TYPE,
+                    arrayOf("NWSTEXT")
             )
             2 -> ObjectIntent(
-                this,
-                FavRemoveActivity::class.java,
-                FavRemoveActivity.TYPE,
-                arrayOf("NWSTEXT")
+                    this,
+                    FavRemoveActivity::class.java,
+                    FavRemoveActivity.TYPE,
+                    arrayOf("NWSTEXT")
             )
             else -> {
                 prod = products[pos].split(":").getOrNull(0) ?: ""
@@ -202,18 +202,18 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
     private fun findPosition(key: String) =
-        (0 until GlobalArrays.nwsTextProducts.size).firstOrNull {
-            GlobalArrays.nwsTextProducts[it].contains(
-                key
-            )
-        }
-            ?: 0
+            (0 until GlobalArrays.nwsTextProducts.size).firstOrNull {
+                GlobalArrays.nwsTextProducts[it].contains(
+                        key
+                )
+            }
+                    ?: 0
 
     override fun onRestart() {
         if (ridFavOld != MyApplication.nwsTextFav) {
             products = UtilityFavorites.setupFavMenuNwsText(
-                MyApplication.nwsTextFav,
-                GlobalArrays.nwsTextProducts[findPosition(prod)]
+                    MyApplication.nwsTextFav,
+                    GlobalArrays.nwsTextProducts[findPosition(prod)]
             )
             sp.refreshData(this, products)
         }
@@ -229,8 +229,8 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     private fun changeProduct() {
         prod = drw.getUrl()
         products = UtilityFavorites.setupFavMenuNwsText(
-            MyApplication.nwsTextFav,
-            GlobalArrays.nwsTextProducts[findPosition(prod)]
+                MyApplication.nwsTextFav,
+                GlobalArrays.nwsTextProducts[findPosition(prod)]
         )
         sp.refreshData(this, products)
     }

@@ -165,12 +165,12 @@ object UtilityDownload {
             "QPF1-7" -> url = "${MyApplication.nwsWPCwebsitePrefix}/qpf/p168i.gif"
             "SPC_TST" -> {
                 needsBitmap = false
-                val images = UtilitySPC.tstormOutlookImages
+                val images = UtilitySpc.tstormOutlookImages
                 bm = UtilityImg.mergeImagesVertically(images)
             }
             "SWOD1" -> {
                 needsBitmap = false
-                bm = UtilitySPCSWO.getImageUrls("1", false)[0]
+                bm = UtilitySpcSwo.getImageUrls("1", false)[0]
             }
             "WEATHERSTORY" -> {
                 needsBitmap = false
@@ -179,15 +179,15 @@ object UtilityDownload {
             }
             "SWOD2" -> {
                 needsBitmap = false
-                bm = UtilitySPCSWO.getImageUrls("2", false)[0]
+                bm = UtilitySpcSwo.getImageUrls("2", false)[0]
             }
             "SWOD3" -> {
                 needsBitmap = false
-                bm = UtilitySPCSWO.getImageUrls("3", false)[0]
+                bm = UtilitySpcSwo.getImageUrls("3", false)[0]
             }
             "SWOD4" -> {
                 needsBitmap = false
-                bm = UtilitySPCSWO.getImageUrls("4", false)[0]
+                bm = UtilitySpcSwo.getImageUrls("4", false)[0]
             }
             "SPCMESO1" -> {
                 var param = "500mb"
@@ -196,13 +196,13 @@ object UtilityDownload {
                     param = tmpArr[3]
                 }
                 needsBitmap = false
-                bm = UtilitySPCMESOInputOutput.getImage(
+                bm = UtilitySpcMesoInputOutput.getImage(
                         context,
                         param,
                         Utility.readPref(
                                 context,
                                 "SPCMESO" + 1 + "_SECTOR_LAST_USED",
-                                UtilitySPCMESO.defaultSector
+                                UtilitySpcMeso.defaultSector
                         )
                 )
             }
@@ -211,13 +211,13 @@ object UtilityDownload {
                 tmpArr = MyApplication.spcmesoFav.split(":")
                 if (tmpArr.size > 4) param = tmpArr[4]
                 needsBitmap = false
-                bm = UtilitySPCMESOInputOutput.getImage(
+                bm = UtilitySpcMesoInputOutput.getImage(
                         context,
                         param,
                         Utility.readPref(
                                 context,
                                 "SPCMESO" + 1 + "_SECTOR_LAST_USED",
-                                UtilitySPCMESO.defaultSector
+                                UtilitySpcMeso.defaultSector
                         )
                 )
             }
@@ -226,13 +226,13 @@ object UtilityDownload {
                 tmpArr = MyApplication.spcmesoFav.split(":")
                 if (tmpArr.size > 5) param = tmpArr[5]
                 needsBitmap = false
-                bm = UtilitySPCMESOInputOutput.getImage(
+                bm = UtilitySpcMesoInputOutput.getImage(
                         context,
                         param,
                         Utility.readPref(
                                 context,
                                 "SPCMESO" + 1 + "_SECTOR_LAST_USED",
-                                UtilitySPCMESO.defaultSector
+                                UtilitySpcMeso.defaultSector
                         )
                 )
             }
@@ -241,13 +241,13 @@ object UtilityDownload {
                 tmpArr = MyApplication.spcmesoFav.split(":")
                 if (tmpArr.size > 6) param = tmpArr[6]
                 needsBitmap = false
-                bm = UtilitySPCMESOInputOutput.getImage(
+                bm = UtilitySpcMesoInputOutput.getImage(
                         context,
                         param,
                         Utility.readPref(
                                 context,
                                 "SPCMESO" + 1 + "_SECTOR_LAST_USED",
-                                UtilitySPCMESO.defaultSector
+                                UtilitySpcMeso.defaultSector
                         )
                 )
             }
@@ -256,13 +256,13 @@ object UtilityDownload {
                 tmpArr = MyApplication.spcmesoFav.split(":")
                 if (tmpArr.size > 7) param = tmpArr[7]
                 needsBitmap = false
-                bm = UtilitySPCMESOInputOutput.getImage(
+                bm = UtilitySpcMesoInputOutput.getImage(
                         context,
                         param,
                         Utility.readPref(
                                 context,
                                 "SPCMESO" + 1 + "_SECTOR_LAST_USED",
-                                UtilitySPCMESO.defaultSector
+                                UtilitySpcMeso.defaultSector
                         )
                 )
             }
@@ -271,13 +271,13 @@ object UtilityDownload {
                 tmpArr = MyApplication.spcmesoFav.split(":")
                 if (tmpArr.size > 8) param = tmpArr[8]
                 needsBitmap = false
-                bm = UtilitySPCMESOInputOutput.getImage(
+                bm = UtilitySpcMesoInputOutput.getImage(
                         context,
                         param,
                         Utility.readPref(
                                 context,
                                 "SPCMESO" + 1 + "_SECTOR_LAST_USED",
-                                UtilitySPCMESO.defaultSector
+                                UtilitySpcMeso.defaultSector
                         )
                 )
             }
@@ -297,12 +297,12 @@ object UtilityDownload {
             }
             "SND" -> {
                 needsBitmap = false
-                bm = UtilitySPCSoundings.getImage(
+                bm = UtilitySpcSoundings.getImage(
                         context,
                         UtilityLocation.getNearestSnd(context, Location.latLon)
                 )
             }
-            "STRPT" -> url = UtilitySPC.getStormReportsTodayUrl()
+            "STRPT" -> url = UtilitySpc.getStormReportsTodayUrl()
             else -> {
                 bm = get1KmUrl()
                 needsBitmap = false

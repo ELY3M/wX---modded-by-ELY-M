@@ -38,7 +38,7 @@ import joshuatee.wx.util.Utility
 
 import kotlin.math.*
 
-object UtilitySPCMESOInputOutput {
+object UtilitySpcMesoInputOutput {
 
     fun getImage(context: Context, param: String, sector: String): Bitmap {
         val prefModel = "SPCMESO"
@@ -50,7 +50,7 @@ object UtilitySPCMESOInputOutput {
             Utility.readPref(context, prefModel + "_SHOW_WATWARN", "false").startsWith("t")
         val showTopo = Utility.readPref(context, prefModel + "_SHOW_TOPO", "false").startsWith("t")
         val layersAl = mutableListOf<Drawable>()
-        val gifUrl = if (UtilitySPCMESO.imgSf.contains(param) && !showRadar) {
+        val gifUrl = if (UtilitySpcMeso.imgSf.contains(param) && !showRadar) {
             "_sf.gif"
         } else {
             ".gif"

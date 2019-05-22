@@ -31,7 +31,7 @@ import joshuatee.wx.GlobalArrays
 import joshuatee.wx.models.UtilityModelsSPCSREFInterface
 import joshuatee.wx.ui.BaseActivity
 
-import joshuatee.wx.spc.UtilitySPCMESO
+import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
 
@@ -93,8 +93,8 @@ class FavAddActivity : BaseActivity() {
             "SPCMESO" -> {
                 prefToken = "SPCMESO_FAV"
                 prefTokenLabel = "SPCMESO_LABEL_FAV"
-                data = UtilitySPCMESO.labels
-                dataTokens = UtilitySPCMESO.params
+                data = UtilitySpcMeso.labels
+                dataTokens = UtilitySpcMeso.params
             }
         }
         ObjectRecyclerView(this, this, R.id.card_list, data.toMutableList(), ::itemClicked)
@@ -132,8 +132,8 @@ class FavAddActivity : BaseActivity() {
         if (!ridFav.contains(tmpArr[0])) {
             when (type) {
                 "SPCMESO" -> {
-                    ridFav += UtilitySPCMESO.params[position] + ":"
-                    ridFavLabel += UtilitySPCMESO.labels[position] + ":"
+                    ridFav += UtilitySpcMeso.params[position] + ":"
+                    ridFavLabel += UtilitySpcMeso.labels[position] + ":"
                     Utility.writePref(this, prefTokenLabel, ridFavLabel)
                 }
                 else -> ridFav += tmpArr[0] + ":"

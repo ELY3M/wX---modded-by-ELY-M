@@ -42,7 +42,7 @@ import joshuatee.wx.audio.UtilityTTS
 import joshuatee.wx.fragments.UtilityNWS
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.settings.UtilityLocation
-import joshuatee.wx.spc.UtilitySPC
+import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.audio.VoiceCommandActivity
 import joshuatee.wx.canada.CanadaHourlyActivity
 import joshuatee.wx.canada.CanadaRadarActivity
@@ -515,7 +515,7 @@ object UtilityNotification {
         val notifCurrent = "true"
         val txt: String
         txt = if (notifCurrent.startsWith("t")) {
-            val tabStr = UtilitySPC.checkSpc(context)
+            val tabStr = UtilitySpc.checkSpc(context)
             "" + tabStr[0] + " " + tabStr[1].replace("MISC", "")
         } else {
             ""

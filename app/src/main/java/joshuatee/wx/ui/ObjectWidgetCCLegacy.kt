@@ -38,7 +38,7 @@ import joshuatee.wx.canada.CanadaTextActivity
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.spc.SPCSoundingsActivity
-import joshuatee.wx.spc.UtilitySPC
+import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.util.*
 import joshuatee.wx.vis.GOES16Activity
 
@@ -278,7 +278,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         val pendingIntentWidgetTime =
                 PendingIntent.getBroadcast(context, 0, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         remoteViews.setOnClickPendingIntent(R.id.widget_time, pendingIntentWidgetTime)
-        val tabStr = UtilitySPC.checkSpc(context)
+        val tabStr = UtilitySpc.checkSpc(context)
         remoteViews.setViewVisibility(R.id.tab, View.VISIBLE)
         remoteViews.setTextViewText(R.id.tab, tabStr[0] + "   " + tabStr[1])
     }

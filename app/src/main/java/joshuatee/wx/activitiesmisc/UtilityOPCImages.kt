@@ -23,7 +23,7 @@ package joshuatee.wx.activitiesmisc
 
 import joshuatee.wx.MyApplication
 
-internal object UtilityOPCImages {
+internal object UtilityOpcImages {
 
     val labels = listOf(
         "Atlantic Surface Analysis",

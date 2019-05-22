@@ -62,10 +62,10 @@ class SPCFireOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        withContext(Dispatchers.IO) { UtilitySPCFireOutlook.imageUrls.mapTo(bitmaps) { it.getImage() } }
+        withContext(Dispatchers.IO) { UtilitySpcFireOutlook.imageUrls.mapTo(bitmaps) { it.getImage() } }
         bitmaps.forEach { bitmap ->
             val card = ObjectCardImage(contextg, ll, bitmap)
-            val prod = UtilitySPCFireOutlook.textProducts[bitmaps.indexOf(bitmap)]
+            val prod = UtilitySpcFireOutlook.textProducts[bitmaps.indexOf(bitmap)]
             card.setOnClickListener(View.OnClickListener {
                 ObjectIntent(
                     contextg,
@@ -81,7 +81,7 @@ class SPCFireOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_share -> UtilityShare.shareText(
                 this,
-                getString(UtilitySPCFireOutlook.activityTitle),
+                getString(UtilitySpcFireOutlook.activityTitle),
                 "",
                 bitmaps
             )

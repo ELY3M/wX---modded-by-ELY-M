@@ -36,7 +36,7 @@ import android.view.View
 import android.view.View.OnClickListener
 
 import joshuatee.wx.fragments.ViewPagerAdapter
-import joshuatee.wx.spc.UtilitySPC
+import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.ui.UtilityTheme
 import joshuatee.wx.ui.UtilityToolbar
@@ -128,7 +128,7 @@ class WX : CommonActionBarFragment() {
 
     private fun refreshDynamicContent() {
         if (!MyApplication.simpleMode) {
-            val tabStr = UtilitySPC.checkSpc(this)
+            val tabStr = UtilitySpc.checkSpc(this)
             vpa.setTabTitles(1, tabStr[0])
             vpa.setTabTitles(2, tabStr[1])
             if (slidingTabLayout.tabCount > 2) {

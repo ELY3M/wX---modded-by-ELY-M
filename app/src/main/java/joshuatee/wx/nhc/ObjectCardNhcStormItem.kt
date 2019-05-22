@@ -31,7 +31,7 @@ import androidx.cardview.widget.CardView
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
 
-class ObjectCardNhcStormReportItem(context: Context, linearLayout: LinearLayout, stormData: ObjectNHCStormDetails) {
+class ObjectCardNhcStormReportItem(context: Context, linearLayout: LinearLayout, stormData: ObjectNhcStormDetails) {
 
     private val objCard: ObjectCard
     private val textViewTop: ObjectTextView

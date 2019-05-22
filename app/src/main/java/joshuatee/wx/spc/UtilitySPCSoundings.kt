@@ -26,7 +26,7 @@ import android.graphics.Bitmap
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityImg
 
-object UtilitySPCSoundings {
+object UtilitySpcSoundings {
     fun getImage(context: Context, nwsOffice: String): Bitmap {
         return UtilityImg.getBitmapAddWhiteBG(
             context,

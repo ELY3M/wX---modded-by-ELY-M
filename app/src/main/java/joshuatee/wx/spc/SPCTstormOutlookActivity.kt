@@ -59,7 +59,7 @@ class SPCTstormOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        bitmaps = withContext(Dispatchers.IO) { UtilitySPC.tstormOutlookImages }
+        bitmaps = withContext(Dispatchers.IO) { UtilitySpc.tstormOutlookImages }
         bitmaps.forEach { ObjectCardImage(contextg, ll, it) }
     }
 

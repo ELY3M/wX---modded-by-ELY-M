@@ -24,7 +24,7 @@ package joshuatee.wx.wpc
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 
-internal object UtilityWPCRainfallForecast {
+internal object UtilityWpcRainfallForecast {
 
     val textUrls = listOf(
         "${MyApplication.nwsWPCwebsitePrefix}/qpf/94epoints.txt",

@@ -26,7 +26,7 @@ import android.graphics.Bitmap
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 
-internal object UtilitySPCSWO {
+internal object UtilitySpcSwo {
 
     fun getSwoStateUrl(state: String, day: String): String {
         return "${MyApplication.nwsSPCwebsitePrefix}/public/state/images/" + state + "_swody" + day + ".png"

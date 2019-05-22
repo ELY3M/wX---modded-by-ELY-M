@@ -41,16 +41,17 @@ import joshuatee.wx.util.Utility
 
 class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
+    // FIXME var naming
     private var ridArr = mutableListOf<String>()
     private var ridFav = ""
     private val prefToken = "HOMESCREEN_FAV"
-    private var ridArrLabel = mutableListOf<String>()
-    private var hmFavOrig = ""
+    private var labels = mutableListOf<String>()
+    private var homeScreenFavOrig = ""
     private lateinit var recyclerView: ObjectRecyclerView
-    private lateinit var diaMain: ObjectDialogue
-    private lateinit var diaImg: ObjectDialogue
-    private lateinit var diaAfd: ObjectDialogue
-    private lateinit var diaRadar: ObjectDialogue
+    private lateinit var dialogueMain: ObjectDialogue
+    private lateinit var dialogueImages: ObjectDialogue
+    private lateinit var dialogueAfd: ObjectDialogue
+    private lateinit var dialogueRadar: ObjectDialogue
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +63,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         ridFav = MyApplication.homescreenFav
-        hmFavOrig = ridFav
+        homeScreenFavOrig = ridFav
         toolbar.subtitle = "Tap item to delete or move."
         UtilityToolbar.fullScreenMode(toolbar, false)
         ObjectFab(
@@ -70,46 +71,45 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                 this,
                 R.id.fab,
                 MyApplication.ICON_ADD,
-                View.OnClickListener { diaMain.show() })
+                View.OnClickListener { dialogueMain.show() })
         updateList(true)
-        recyclerView = ObjectRecyclerView(this, this, R.id.card_list, ridArrLabel, ::prodClicked)
-        diaMain = ObjectDialogue(
+        recyclerView = ObjectRecyclerView(this, this, R.id.card_list, labels, ::prodClicked)
+        dialogueMain = ObjectDialogue(
                 this,
                 "Select text products:",
                 UtilityHomeScreen.localChoicesText + GlobalArrays.nwsTextProducts
         )
-        diaMain.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
+        dialogueMain.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
-                    diaMain,
+                    dialogueMain,
                     "TXT-",
                     which
             )
         })
-        diaImg = ObjectDialogue(
+        dialogueImages = ObjectDialogue(
                 this,
                 "Select image products:",
                 UtilityHomeScreen.localChoicesImg + GlobalArrays.nwsImageProducts
         )
-        diaImg.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
+        dialogueImages.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
-                    diaImg,
+                    dialogueImages,
                     "",
                     which
             )
         })
-        diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
-        diaAfd.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
+        dialogueAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
+        dialogueAfd.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
-                    diaAfd,
+                    dialogueAfd,
                     "TXT-" + "AFD",
                     which
             )
         })
-        diaRadar =
-                ObjectDialogue(this, "Select fixed location Nexrad products:", GlobalArrays.radars)
-        diaRadar.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
+        dialogueRadar = ObjectDialogue(this, "Select fixed location Nexrad products:", GlobalArrays.radars)
+        dialogueRadar.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
-                    diaRadar,
+                    dialogueRadar,
                     "NXRD-",
                     which
             )
@@ -125,39 +125,39 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             ridArr.clear()
             ridArrtmp.indices.forEach { ridArr.add(ridArrtmp[it]) }
             if (firstTime) {
-                ridArrLabel = mutableListOf()
+                labels = mutableListOf()
             }
             ridArr.indices.forEach { k ->
                 if (!firstTime) {
-                    ridArrLabel[k] = findPositionAFD(ridArr[k])
+                    labels[k] = findPositionAFD(ridArr[k])
                 } else {
-                    ridArrLabel.add(findPositionAFD(ridArr[k]))
+                    labels.add(findPositionAFD(ridArr[k]))
                 }
-                if (ridArrLabel[k] == "") {
-                    ridArrLabel[k] = findPositionTEXT(ridArr[k])
+                if (labels[k] == "") {
+                    labels[k] = findPositionTEXT(ridArr[k])
                 }
-                if (ridArrLabel[k] == "") {
-                    ridArrLabel[k] = findPositionIMG(ridArr[k])
+                if (labels[k] == "") {
+                    labels[k] = findPositionIMG(ridArr[k])
                 }
-                if (ridArrLabel[k] == "") {
-                    ridArrLabel[k] = findPositionTEXTLOCAL(ridArr[k])
+                if (labels[k] == "") {
+                    labels[k] = findPositionTEXTLOCAL(ridArr[k])
                 }
-                if (ridArrLabel[k] == "") {
-                    ridArrLabel[k] = findPositionIMG2(ridArr[k])
+                if (labels[k] == "") {
+                    labels[k] = findPositionIMG2(ridArr[k])
                 }
-                if (ridArrLabel[k] == "") {
-                    ridArrLabel[k] = findPositionRadar(ridArr[k])
+                if (labels[k] == "") {
+                    labels[k] = findPositionRadar(ridArr[k])
                 }
-                if (ridArrLabel[k] == "") {
-                    ridArrLabel[k] = ridArr[k]
+                if (labels[k] == "") {
+                    labels[k] = ridArr[k]
                 }
             }
         } else {
             if (!firstTime) {
-                ridArrLabel.clear()
+                labels.clear()
                 ridArr.clear()
             } else {
-                ridArrLabel = mutableListOf()
+                labels = mutableListOf()
                 ridArr = mutableListOf()
             }
         }
@@ -168,23 +168,23 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_img -> diaImg.show()
-            R.id.action_afd -> diaAfd.show()
-            R.id.action_radar -> diaRadar.show()
+            R.id.action_img -> dialogueImages.show()
+            R.id.action_afd -> dialogueAfd.show()
+            R.id.action_radar -> dialogueRadar.show()
             R.id.action_help -> showHelpText(resources.getString(R.string.homescreen_help_label))
             R.id.action_reset -> {
                 MyApplication.homescreenFav = MyApplication.HOMESCREEN_FAV_DEFAULT
                 Utility.writePref(this, prefToken, MyApplication.homescreenFav)
                 ridFav = MyApplication.homescreenFav
                 updateList(true)
-                recyclerView.refreshList(ridArrLabel)
+                recyclerView.refreshList(labels)
             }
             R.id.action_reset_ca -> {
                 MyApplication.homescreenFav = MyApplication.HOMESCREEN_FAV_DEFAULT_CA
                 Utility.writePref(this, prefToken, MyApplication.homescreenFav)
                 ridFav = MyApplication.homescreenFav
                 updateList(true)
-                recyclerView.refreshList(ridArrLabel)
+                recyclerView.refreshList(labels)
             }
             else -> return super.onOptionsItemSelected(item)
         }
@@ -281,7 +281,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             ?.let { GlobalArrays.radars[it] + " (NEXRAD)" } ?: ""
 
     override fun onBackPressed() {
-        if (ridFav != hmFavOrig) {
+        if (ridFav != homeScreenFavOrig) {
             UtilityAlertDialog.restart()
         } else {
             super.onBackPressed()
@@ -341,7 +341,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             ridFav = "$ridFav:$txtprod"
             Utility.writePref(this, prefToken, ridFav)
             MyApplication.homescreenFav = ridFav
-            ridArrLabel.add(txtprod)
+            labels.add(txtprod)
             updateList()
             recyclerView.notifyDataSetChanged()
         } else {

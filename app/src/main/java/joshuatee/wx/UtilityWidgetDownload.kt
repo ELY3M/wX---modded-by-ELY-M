@@ -30,12 +30,12 @@ import android.graphics.Bitmap
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.canada.UtilityCanadaImg
-import joshuatee.wx.nhc.UtilityNHC
+import joshuatee.wx.nhc.UtilityNhc
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.*
-import joshuatee.wx.wpc.UtilityWPCImages
+import joshuatee.wx.wpc.UtilityWpcImages
 
 internal object UtilityWidgetDownload {
 
@@ -168,14 +168,14 @@ internal object UtilityWidgetDownload {
     }
 
     private fun downloadWpcImage(context: Context, type: WidgetFile) {
-        val imgUrl = Utility.readPref(context, "WPG_IMG_FAV_URL", UtilityWPCImages.urls[0])
+        val imgUrl = Utility.readPref(context, "WPG_IMG_FAV_URL", UtilityWpcImages.urls[0])
         val bitmap = imgUrl.getImage()
         saveImage(context, bitmap, type.fileName)
     }
 
     private fun downloadNhc(context: Context, type: WidgetFile) {
-        val bitmap1 = UtilityNHC.widgetImageUrlBottom.getImage()
-        val bitmap2 = UtilityNHC.widgetImageUrlTop.getImage()
+        val bitmap1 = UtilityNhc.widgetImageUrlBottom.getImage()
+        val bitmap2 = UtilityNhc.widgetImageUrlTop.getImage()
         saveImage(context, bitmap1, type.fileName + "0")
         saveImage(context, bitmap2, type.fileName + "1")
     }

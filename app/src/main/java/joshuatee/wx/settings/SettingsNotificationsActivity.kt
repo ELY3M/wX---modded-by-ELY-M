@@ -267,7 +267,7 @@ class SettingsNotificationsActivity : BaseActivity() {
                 ObjectSettingsSeekbar(
                         this,
                         this,
-                        "Notification check interval(m)",
+                        "Notification check interval in minutes",
                         "ALERT_NOTIFICATION_INTERVAL",
                         R.string.alert_interval_np_label,
                         12,
@@ -346,14 +346,14 @@ class SettingsNotificationsActivity : BaseActivity() {
     private fun showWFONotificationFilterDialogue() {
         val items = listOf("Air Quality Alert", "Wind Advisory", "Lake Wind Advisory")
         val checkedItems = BooleanArray(items.size)
-        val seletedItems = mutableListOf<Int>()
+        val selectedItems = mutableListOf<Int>()
         val nwsWfoFilterStr = Utility.readPref(this, "NOTIF_WFO_FILTER", "")
         var valueInArray: Boolean
         items.indices.forEach { i ->
             valueInArray = MyApplication.colon.split(nwsWfoFilterStr).any { it == items[i] }
             if (valueInArray) {
                 checkedItems[i] = true
-                seletedItems.add(i)
+                selectedItems.add(i)
             } else {
                 checkedItems[i] = false
             }
@@ -365,13 +365,13 @@ class SettingsNotificationsActivity : BaseActivity() {
                         checkedItems
                 ) { _, indexSelected, isChecked ->
                     if (isChecked) {
-                        seletedItems.add(indexSelected)
-                    } else if (seletedItems.contains(indexSelected)) {
-                        seletedItems.remove(Integer.valueOf(indexSelected))
+                        selectedItems.add(indexSelected)
+                    } else if (selectedItems.contains(indexSelected)) {
+                        selectedItems.remove(Integer.valueOf(indexSelected))
                     }
                 }.setPositiveButton("OK") { _, _ ->
                     var nwsWfoFilterStrLoc = ""
-                    seletedItems.indices.forEach { nwsWfoFilterStrLoc += items[seletedItems[it]] + ":" }
+                    selectedItems.indices.forEach { nwsWfoFilterStrLoc += items[selectedItems[it]] + ":" }
                     Utility.writePref(this, "NOTIF_WFO_FILTER", nwsWfoFilterStrLoc)
                 }.setNegativeButton("Cancel") { _, _ ->
                 }.create()

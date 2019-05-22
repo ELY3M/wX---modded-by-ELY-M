@@ -24,7 +24,7 @@ package joshuatee.wx.spc
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 
-internal object UtilitySPCFireOutlook {
+internal object UtilitySpcFireOutlook {
 
     val textProducts = listOf(
         "fwddy1",

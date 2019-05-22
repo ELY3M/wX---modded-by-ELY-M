@@ -185,7 +185,7 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             filter = "All"
             displayData()
         })
-        storms = UtilitySPCStormReports.processData(textArr.toList())
+        storms = UtilitySpcStormReports.processData(textArr.toList())
         var stormCnt = -3
         storms.forEachIndexed { k, s ->
             if (filter == "All" || s.state == filter || s.text.contains("<H2>") || s.text == "Tornado Reports" || s.text == "Wind Reports" || s.text == "Hail Reports") {

@@ -34,7 +34,7 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ObjectIntent
 
-class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
+class ObjectNhc(val context: Context, private val dynamicview: LinearLayout) {
 
     private val atlSumList = mutableListOf<String>()
     private val atlLinkList = mutableListOf<String>()
@@ -62,10 +62,9 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
             "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png",
             "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png"
         ).forEach { bitmaps.add(it.getImage()) }
-        var dataRet: ObjectNHCStormInfo
+        var dataRet: ObjectNhcStormInfo
         (1 until 6).forEach {
-            dataRet =
-                UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_at" + it.toString() + ".xml")
+            dataRet = UtilityNhc.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_at" + it.toString() + ".xml")
             if (dataRet.title != "") {
                 atlSumList.add(dataRet.summary)
                 atlLinkList.add(UtilityString.getNwsPre(dataRet.url))
@@ -76,8 +75,7 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
             }
         }
         (1 until 6).forEach {
-            dataRet =
-                UtilityNHC.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_ep" + it.toString() + ".xml")
+            dataRet = UtilityNhc.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_ep" + it.toString() + ".xml")
             if (dataRet.title != "") {
                 pacSumList.add(dataRet.summary)
                 pacLinkList.add(UtilityString.getNwsPre(dataRet.url))
@@ -108,7 +106,7 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
         } else {
             atlSumList.indices.forEach { k ->
                 if (atlImg1List[k] != "") {
-                    val objStormData = ObjectNHCStormDetails(atlSumList[k])
+                    val objStormData = ObjectNhcStormDetails(atlSumList[k])
                     val cAtlData = ObjectCardNhcStormReportItem(context, dynamicview, objStormData)
                     html += atlSumList[k]
                     val url = atlLinkList[k]
@@ -134,7 +132,7 @@ class ObjectNHC(val context: Context, private val dynamicview: LinearLayout) {
         } else {
             pacSumList.indices.forEach { k ->
                 if (pacImg1List[k] != "") {
-                    val objStormData = ObjectNHCStormDetails(pacSumList[k])
+                    val objStormData = ObjectNhcStormDetails(pacSumList[k])
                     val cPacData = ObjectCardNhcStormReportItem(context, dynamicview, objStormData)
                     //val cPac = ObjectCardText(context, dynamicview, Utility.fromHtml(pacSumList[k]))
                     html += pacSumList[k]

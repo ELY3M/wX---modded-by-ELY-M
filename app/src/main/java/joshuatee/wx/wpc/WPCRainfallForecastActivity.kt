@@ -49,35 +49,35 @@ class WPCRainfallForecastActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_linear_layout_bottom_toolbar,
-            R.menu.shared_multigraphics,
-            true
+                savedInstanceState,
+                R.layout.activity_linear_layout_bottom_toolbar,
+                R.menu.shared_multigraphics,
+                true
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = getString(UtilityWPCRainfallForecast.activityTitle)
+        title = getString(UtilityWpcRainfallForecast.activityTitle)
         linearLayout = findViewById(R.id.ll)
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
-            UtilityWPCRainfallForecast.imageUrls.forEach { bitmaps.add(it.getImage()) }
+            UtilityWpcRainfallForecast.imageUrls.forEach { bitmaps.add(it.getImage()) }
         }
         bitmaps.forEach { bitmap ->
             val card = ObjectCardImage(contextg, linearLayout, bitmap)
-            val prodTextUrlLocal = UtilityWPCRainfallForecast.textUrls[bitmaps.indexOf(bitmap)]
+            val prodTextUrlLocal = UtilityWpcRainfallForecast.textUrls[bitmaps.indexOf(bitmap)]
             val prodTitleLocal =
-                UtilityWPCRainfallForecast.productLabels[bitmaps.indexOf(bitmap)] + " - " + getString(
-                    UtilityWPCRainfallForecast.activityTitle
-                )
+                    UtilityWpcRainfallForecast.productLabels[bitmaps.indexOf(bitmap)] + " - " + getString(
+                            UtilityWpcRainfallForecast.activityTitle
+                    )
             card.setOnClickListener(View.OnClickListener {
                 ObjectIntent(
-                    contextg,
-                    TextScreenActivity::class.java,
-                    TextScreenActivity.URL,
-                    arrayOf(prodTextUrlLocal, prodTitleLocal)
+                        contextg,
+                        TextScreenActivity::class.java,
+                        TextScreenActivity.URL,
+                        arrayOf(prodTextUrlLocal, prodTitleLocal)
                 )
             })
         }
@@ -86,10 +86,10 @@ class WPCRainfallForecastActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> UtilityShare.shareText(
-                this,
-                getString(UtilityWPCRainfallForecast.activityTitle),
-                "",
-                bitmaps
+                    this,
+                    getString(UtilityWpcRainfallForecast.activityTitle),
+                    "",
+                    bitmaps
             )
             else -> return super.onOptionsItemSelected(item)
         }

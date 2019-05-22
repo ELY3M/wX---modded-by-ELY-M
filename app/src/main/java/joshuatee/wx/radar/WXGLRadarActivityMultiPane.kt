@@ -202,11 +202,13 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         infoAnim = Array(numPanes) { "" }
         oldRidArr = Array(numPanes) { "" }
         infoArr = Array(numPanes) { "" }
-
         if (numPanes == 4) {
             widthDivider = 2
             prefPrefix = "WXOGL_QUADPANE"
+        } else if (numPanes == 2 && landScape) {
+            widthDivider = 2
         }
+
         contextg = this
         if (MyApplication.checkinternet) {
             Utility.checkInternet(contextg)
@@ -240,7 +242,9 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             menu.findItem(R.id.action_tilt_blank).isVisible = false
             menu.findItem(R.id.action_tools_blank).isVisible = false
         }
-        if (Build.VERSION.SDK_INT < 21) menu.findItem(R.id.action_share).title = "Share"
+        if (Build.VERSION.SDK_INT < 21) {
+            menu.findItem(R.id.action_share).title = "Share"
+        }
         delay = UtilityImg.animInterval(this)
         numPanesArr.forEach {
             glviewArr.add(WXGLSurfaceView(this, widthDivider, numPanes, heightDivider))
@@ -256,8 +260,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 rlArr[it].addView(glviewArr[it])
                 val params = rlArr[it].layoutParams
                 if (Build.VERSION.SDK_INT >= 19 && (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent))
-                    params.height = MyApplication.dm.heightPixels / 2 +
-                            UtilityUI.statusBarHeight(this)
+                    params.height = MyApplication.dm.heightPixels / 2 + UtilityUI.statusBarHeight(this)
                 else
                     params.height = MyApplication.dm.heightPixels /
                             2 - MyApplication.actionBarHeight /
@@ -268,9 +271,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                         && !UIPreferences.radarImmersiveMode
                         && numPanes == 4
                 )
-                    params.height = MyApplication.dm.heightPixels / 2 - UtilityUI.statusBarHeight(
-                            this
-                    ) / 2
+                    params.height = MyApplication.dm.heightPixels / 2 - UtilityUI.statusBarHeight(this) / 2
 
                 params.width = MyApplication.dm.widthPixels / 2
             }
