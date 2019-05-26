@@ -85,18 +85,18 @@ object UtilityCanvasMain {
     }
 
     fun addCanvasItems(
-        context: Context,
-        bitmapCanvas: Bitmap,
-        scaleType: ProjectionType,
-        rid: String,
-        hwLineWidth: Int,
-        citySize: Int,
-        isInteractive: Boolean
+            context: Context,
+            bitmapCanvas: Bitmap,
+            scaleType: ProjectionType,
+            radarSite: String,
+            hwLineWidth: Int,
+            citySize: Int,
+            isInteractive: Boolean
     ) {
         val highwayProvider = scaleType.isCanvas
         val stateLinesProvider = scaleType.isCanvas
         val countyProvider =
-            scaleType === ProjectionType.WX_RENDER_48 || scaleType === ProjectionType.WX_RENDER
+                scaleType === ProjectionType.WX_RENDER_48 || scaleType === ProjectionType.WX_RENDER
         val cityProvider = true
         val windBarbProvider = scaleType.isMercator
         val stormMotionProvider = scaleType.isMercator
@@ -104,107 +104,105 @@ object UtilityCanvasMain {
         // if a widget or notification load the GEOM data in real-time
         val geometryData = if (isInteractive) {
             GeometryData(
-                GeographyType.HIGHWAYS.relativeBuffer, GeographyType.COUNTY_LINES.relativeBuffer,
-                GeographyType.STATE_LINES.relativeBuffer, GeographyType.LAKES.relativeBuffer
+                    GeographyType.HIGHWAYS.relativeBuffer, GeographyType.COUNTY_LINES.relativeBuffer,
+                    GeographyType.STATE_LINES.relativeBuffer, GeographyType.LAKES.relativeBuffer
             )
         } else {
             getLocalGeometryData(context)
         }
 
         if (PolygonType.TOR.pref) {
-            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
         }
         if (PolygonType.SVR.pref) {
-            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
         }
         if (PolygonType.FFW.pref) {
-            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
         }
         if (PolygonType.SMW.pref) {
-            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
         }
         if (PolygonType.SVS.pref) {
-            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
         }
         if (PolygonType.SPS.pref) {
-            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
         }
         if (GeographyType.HIGHWAYS.pref && highwayProvider) {
             UtilityCanvasGeneric.draw(
-                context,
-                scaleType,
-                bitmapCanvas,
-                rid,
-                hwLineWidth,
-                GeographyType.HIGHWAYS,
-                geometryData.highways
+                    scaleType,
+                    bitmapCanvas,
+                    radarSite,
+                    hwLineWidth,
+                    GeographyType.HIGHWAYS,
+                    geometryData.highways
             )
         }
         if (GeographyType.CITIES.pref && cityProvider) {
-            UtilityCanvas.drawCitiesUS(context, scaleType, bitmapCanvas, rid, citySize)
+            UtilityCanvas.drawCitiesUS(scaleType, bitmapCanvas, radarSite, citySize)
         }
         if (stateLinesProvider) {
             UtilityCanvasGeneric.draw(
-                context,
-                scaleType,
-                bitmapCanvas,
-                rid,
-                1,
-                GeographyType.STATE_LINES,
-                geometryData.stateLines
+                    scaleType,
+                    bitmapCanvas,
+                    radarSite,
+                    1,
+                    GeographyType.STATE_LINES,
+                    geometryData.stateLines
             )
             if (GeographyType.LAKES.pref) {
                 UtilityCanvasGeneric.draw(
-                    context,
-                    scaleType,
-                    bitmapCanvas,
-                    rid,
-                    hwLineWidth,
-                    GeographyType.LAKES,
-                    geometryData.lakes
+                        scaleType,
+                        bitmapCanvas,
+                        radarSite,
+                        hwLineWidth,
+                        GeographyType.LAKES,
+                        geometryData.lakes
                 )
             }
         }
         if (countyProvider) {
             if (GeographyType.COUNTY_LINES.pref) {
                 UtilityCanvasGeneric.draw(
-                    context,
-                    scaleType,
-                    bitmapCanvas,
-                    rid,
-                    hwLineWidth,
-                    GeographyType.COUNTY_LINES,
-                    geometryData.counties
+                        scaleType,
+                        bitmapCanvas,
+                        radarSite,
+                        hwLineWidth,
+                        GeographyType.COUNTY_LINES,
+                        geometryData.counties
                 )
             }
         }
         if (PolygonType.LOCDOT.pref) {
-            UtilityCanvas.addLocationDotForCurrentLocation(context, scaleType, bitmapCanvas, rid)
+            UtilityCanvas.addLocationDotForCurrentLocation(scaleType, bitmapCanvas, radarSite)
         }
         if (PolygonType.WIND_BARB.pref && windBarbProvider) {
-            UtilityCanvasWindbarbs.drawWindbarbs(context, scaleType, bitmapCanvas, rid, true)
-            UtilityCanvasWindbarbs.drawWindbarbs(context, scaleType, bitmapCanvas, rid, false)
+            UtilityCanvasWindbarbs.draw(context, scaleType, bitmapCanvas, radarSite, true)
+            UtilityCanvasWindbarbs.draw(context, scaleType, bitmapCanvas, radarSite, false)
         }
         if (PolygonType.STI.pref && stormMotionProvider) {
-            UtilityCanvasStormInfo.drawNexRadStormMotion(context, scaleType, bitmapCanvas, rid)
+            UtilityCanvasStormInfo.drawNexRadStormMotion(context, scaleType, bitmapCanvas, radarSite)
         }
         if (PolygonType.MCD.pref) {
             arrayOf(
                 PolygonType.MCD,
                 PolygonType.WATCH,
                 PolygonType.WATCH_TORNADO
-            ).forEach { UtilityCanvas.addMCD(context, scaleType, bitmapCanvas, rid, it) }
+            ).forEach { UtilityCanvas.addMcd(scaleType, bitmapCanvas, radarSite, it) }
         }
         if (PolygonType.MPD.pref) {
-            UtilityCanvas.addMCD(context, scaleType, bitmapCanvas, rid, PolygonType.MPD)
+            UtilityCanvas.addMcd(scaleType, bitmapCanvas, radarSite, PolygonType.MPD)
         }
     }
 
+
+    //for Conus Radar
     fun addCanvasConus(
             context: Context,
             bitmapCanvas: Bitmap,
             scaleType: ProjectionType,
-            rid: String
+            radarSite: String
     ) {
 
         val stateLinesProvider = scaleType.isCanvas
@@ -214,30 +212,29 @@ object UtilityCanvasMain {
         val geometryData = getLocalGeometryData(context)
 
         if (PolygonType.TOR.pref) {
-            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
         }
         if (PolygonType.SVR.pref) {
-            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
         }
         if (PolygonType.FFW.pref) {
-            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
         }
         if (PolygonType.SMW.pref) {
-            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
         }
         if (PolygonType.SVS.pref) {
-            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
         }
         if (PolygonType.SPS.pref) {
-            UtilityCanvas.addWarnings(context, scaleType, bitmapCanvas, rid)
+            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
         }
 
         if (stateLinesProvider) {
             UtilityCanvasGeneric.draw(
-                    context,
                     scaleType,
                     bitmapCanvas,
-                    rid,
+                    radarSite,
                     1,
                     GeographyType.STATE_LINES,
                     geometryData.stateLines
@@ -246,7 +243,7 @@ object UtilityCanvasMain {
         }
 
         if (PolygonType.LOCDOT.pref) {
-            UtilityCanvas.addLocationDotForCurrentLocation(context, scaleType, bitmapCanvas, rid)
+            UtilityCanvas.addLocationDotForCurrentLocation(scaleType, bitmapCanvas, radarSite)
         }
 
         if (PolygonType.MCD.pref) {
@@ -254,22 +251,19 @@ object UtilityCanvasMain {
                     PolygonType.MCD,
                     PolygonType.WATCH,
                     PolygonType.WATCH_TORNADO
-            ).forEach { UtilityCanvas.addMCD(context, scaleType, bitmapCanvas, rid, it) }
+            ).forEach { UtilityCanvas.addMcd(scaleType, bitmapCanvas, radarSite, it) }
         }
         if (PolygonType.MPD.pref) {
-            UtilityCanvas.addMCD(context, scaleType, bitmapCanvas, rid, PolygonType.MPD)
+            UtilityCanvas.addMcd(scaleType, bitmapCanvas, radarSite, PolygonType.MPD)
         }
     }
 
     private fun getLocalGeometryData(context: Context): GeometryData {
-
         val caResid = R.raw.ca
         val mxResid = R.raw.mx
         val caCnt = 161792
         val mxCnt = 151552
-
         val stateLinesFileResid = R.raw.statev2
-
         var stateRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
         val countState = 200000 // v3 205748
         var hwRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
@@ -284,26 +278,22 @@ object UtilityCanvasMain {
         val hwFileResid = R.raw.hwv4
         val lakesFileResid = R.raw.lakesv3
         val countyFileResid = R.raw.county
-
         val fileidArr = listOf(
-            lakesFileResid,
-            hwFileResid,
-            countyFileResid,
-            stateLinesFileResid,
-            caResid,
-            mxResid,
-            hwExtFileResid
+                lakesFileResid,
+                hwFileResid,
+                countyFileResid,
+                stateLinesFileResid,
+                caResid,
+                mxResid,
+                hwExtFileResid
         )
-        val countArr =
-            listOf(countLakes, countHw, countCounty, countState, caCnt, mxCnt, countHwExt)
-
-
+        val countArr = listOf(countLakes, countHw, countCounty, countState, caCnt, mxCnt, countHwExt)
         try {
             for (type in listOf(
-                GeographyType.HIGHWAYS,
-                GeographyType.COUNTY_LINES,
-                GeographyType.STATE_LINES,
-                GeographyType.LAKES
+                    GeographyType.HIGHWAYS,
+                    GeographyType.COUNTY_LINES,
+                    GeographyType.STATE_LINES,
+                    GeographyType.LAKES
             )) {
                 when (type) {
                     GeographyType.STATE_LINES -> {
@@ -312,10 +302,10 @@ object UtilityCanvasMain {
                         stateRelativeBuffer.position(0)
                         listOf(3).forEach {
                             loadBuffer(
-                                context,
-                                fileidArr[it],
-                                stateRelativeBuffer,
-                                countArr[it]
+                                    context,
+                                    fileidArr[it],
+                                    stateRelativeBuffer,
+                                    countArr[it]
                             )
                         }
                     }
@@ -358,19 +348,16 @@ object UtilityCanvasMain {
         } catch (e: OutOfMemoryError) {
             UtilityLog.handleException(e)
         }
-
         return GeometryData(
-            hwRelativeBuffer,
-            countyRelativeBuffer,
-            stateRelativeBuffer,
-            lakesRelativeBuffer
+                hwRelativeBuffer,
+                countyRelativeBuffer,
+                stateRelativeBuffer,
+                lakesRelativeBuffer
         )
     }
 
     private fun loadBuffer(context: Context, fileID: Int, bb: ByteBuffer, count: Int) {
-
         val res = context.resources
-
         try {
             val inputStream = res.openRawResource(fileID)
             val dis = DataInputStream(BufferedInputStream(inputStream))

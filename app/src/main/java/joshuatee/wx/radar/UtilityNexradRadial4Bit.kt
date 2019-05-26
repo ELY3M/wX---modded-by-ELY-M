@@ -42,20 +42,20 @@ import joshuatee.wx.util.UtilityTime
 
 internal object UtilityNexradRadial4Bit {
 
-    fun decodeAndPlotNexrad(context: Context, bm1: Bitmap, fn: String, prod: String) {
-        val canvas = Canvas(bm1)
+    fun decodeAndPlot(context: Context, bitmap: Bitmap, fileName: String, product: String) {
+        val canvas = Canvas(bitmap)
         val nwsRadarBgBlack = Utility.readPref(context, "NWS_RADAR_BG_BLACK", "")
         var zeroColor = ContextCompat.getColor(context, R.color.black)
         if (nwsRadarBgBlack != "true") {
             zeroColor = ContextCompat.getColor(context, R.color.white)
         }
         var isVelocity = false
-        if (prod.contains("S") || prod.contains("V") || prod.contains("U")) {
+        if (product.contains("S") || product.contains("V") || product.contains("U")) {
             isVelocity = true
         }
         var dis: DataInputStream? = null
         try {
-            val fis = context.openFileInput(fn)
+            val fis = context.openFileInput(fileName)
             dis = DataInputStream(BufferedInputStream(fis))
         } catch (e: Exception) {
             UtilityLog.handleException(e)

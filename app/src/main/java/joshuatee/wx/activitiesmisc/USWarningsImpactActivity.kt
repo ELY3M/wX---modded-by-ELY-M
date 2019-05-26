@@ -37,7 +37,7 @@ class USWarningsImpactActivity : BaseActivity() {
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var recyclerView: ObjectRecyclerViewGeneric
     private var warningsList = listOf<ObjectImpactGraphic>()
-    private lateinit var contextg: Context
+    private lateinit var contextGlobal: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +47,7 @@ class USWarningsImpactActivity : BaseActivity() {
             null,
             false
         )
-        contextg = this
+        contextGlobal = this
         recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
         getContent()
     }
@@ -56,12 +56,11 @@ class USWarningsImpactActivity : BaseActivity() {
         warningsList = withContext(Dispatchers.IO) { UtilityWarningsImpact.data }
         val ca = AdapterUSWarningsImpact(warningsList)
         recyclerView.recyclerView.adapter = ca
-        title = warningsList.size.toString() + " NWS warnings active " +
-                UtilityTime.gmtTime("HH:mm")
-        ca.setOnItemClickListener(object : AdapterUSWarningsImpact.MyClickListener {
+        title = warningsList.size.toString() + " NWS warnings active " + UtilityTime.gmtTime("HH:mm")
+        ca.setOnItemClickListener(object: AdapterUSWarningsImpact.MyClickListener {
             override fun onItemClick(position: Int) {
                 ObjectIntent(
-                        contextg,
+                        contextGlobal,
                         ImageShowActivity::class.java,
                         ImageShowActivity.URL,
                         arrayOf(warningsList[position].imgFile, warningsList[position].title)

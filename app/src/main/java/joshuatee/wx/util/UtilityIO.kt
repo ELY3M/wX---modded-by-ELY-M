@@ -25,10 +25,12 @@ import java.io.ByteArrayOutputStream
 import java.io.InputStream
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import joshuatee.wx.MyApplication
+import joshuatee.wx.R
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -53,6 +55,11 @@ object UtilityIO {
 
     fun getFilePath(context: Context, fileName: String): String =
         context.getFileStreamPath(fileName).absolutePath
+
+    fun readTextFileFromRaw(resources: Resources, fileRaw: Int): String {
+        val inputStream = resources.openRawResource(fileRaw)
+        return readTextFile(inputStream)
+    }
 
     fun readTextFile(inputStream: InputStream): String {
         val outputStream = ByteArrayOutputStream()

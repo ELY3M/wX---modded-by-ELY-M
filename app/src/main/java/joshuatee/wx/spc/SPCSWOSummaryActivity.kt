@@ -40,7 +40,7 @@ import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
-class SPCSWOSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
+class SpcSwoSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val bitmaps = mutableListOf<Bitmap>()
@@ -81,8 +81,8 @@ class SPCSWOSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             card.setOnClickListener(View.OnClickListener {
                 ObjectIntent(
                         contextg,
-                        SPCSWOActivity::class.java,
-                        SPCSWOActivity.NO,
+                        SpcSwoActivity::class.java,
+                        SpcSwoActivity.NO,
                         arrayOf(day, "")
                 )
             })
@@ -91,7 +91,7 @@ class SPCSWOSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.SPC_SWO_SUMMARY)
+            R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.SPC_SWO_SUMMARY)
             R.id.action_share -> UtilityShare.shareText(
                     this,
                     "Convective Outlook Summary",

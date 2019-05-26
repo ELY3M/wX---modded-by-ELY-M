@@ -25,7 +25,7 @@
 // In addition, it intelligently detects when enough "chunks" have been downloaded to
 // assemble the lowest tilt for base reflectivity or base velocity
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_level2Decompress(JNIEnv * env, jclass clazz, jstring src, jstring dst,jobject i_buff,jobject o_buff, jint product_code){
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_level2Decompress(JNIEnv * env, jclass clazz, jstring src, jstring dst,jobject i_buff,jobject o_buff, jint product_code){
 
 	const char *src_path = (*env)->GetStringUTFChars(env, src, NULL );
 	const char *dst_path = (*env)->GetStringUTFChars(env, dst, NULL );

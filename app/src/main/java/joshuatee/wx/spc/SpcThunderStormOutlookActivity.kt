@@ -37,7 +37,7 @@ import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
-class SPCTstormOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
+class SpcThunderStormOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmaps = listOf<Bitmap>()
@@ -59,7 +59,7 @@ class SPCTstormOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        bitmaps = withContext(Dispatchers.IO) { UtilitySpc.tstormOutlookImages }
+        bitmaps = withContext(Dispatchers.IO) { UtilitySpc.thunderStormOutlookImages }
         bitmaps.forEach { ObjectCardImage(contextg, ll, it) }
     }
 

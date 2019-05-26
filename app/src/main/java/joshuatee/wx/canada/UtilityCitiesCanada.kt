@@ -21,7 +21,7 @@
 
 package joshuatee.wx.canada
 
-object UtilityCitiesCA {
+object UtilityCitiesCanada {
 
  var cityInit: Boolean = false
 

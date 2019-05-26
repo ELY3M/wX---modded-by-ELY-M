@@ -37,10 +37,10 @@ import joshuatee.wx.canada.CanadaRadarActivity
 import joshuatee.wx.canada.CanadaTextActivity
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.settings.Location
-import joshuatee.wx.spc.SPCSoundingsActivity
+import joshuatee.wx.spc.SpcSoundingsActivity
 import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.util.*
-import joshuatee.wx.vis.GOES16Activity
+import joshuatee.wx.vis.GoesActivity
 
 import java.util.regex.Pattern
 
@@ -68,7 +68,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         val nwsLocation = Utility.readPref(context, "NWS_LOCATION_$nws1Current", "")
         val nwsLocationArr = nwsLocation.split(",").dropLastWhile { it.isEmpty() }
         val nws1StateCurrent = nwsLocationArr.getOrNull(0) ?: ""
-        val rid1 = Location.getRid(context, widgetLocNum)
+        val radarSite = Location.getRid(context, widgetLocNum)
         val locLabel = Utility.readPref(context, "LOC" + widgetLocNum + "_LABEL", "")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             remoteViews.setImageViewResource(R.id.b_radar, R.drawable.ic_flash_on_24dp)
@@ -130,9 +130,9 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         UtilityWidget.setupIntent(
                 context,
                 remoteViews,
-                SPCSoundingsActivity::class.java,
+                SpcSoundingsActivity::class.java,
                 R.id.cc,
-                SPCSoundingsActivity.URL,
+                SpcSoundingsActivity.URL,
                 arrayOf(nws1Current, ""),
                 actionCc
         )
@@ -164,7 +164,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
                     WXGLRadarActivity::class.java,
                     R.id.b_radar,
                     WXGLRadarActivity.RID,
-                    arrayOf(rid1, nws1StateCurrent),
+                    arrayOf(radarSite, nws1StateCurrent),
                     actionRadar
             )
         } else {
@@ -174,7 +174,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
                     CanadaRadarActivity::class.java,
                     R.id.b_radar,
                     CanadaRadarActivity.RID,
-                    arrayOf(rid1, "rad"),
+                    arrayOf(radarSite, "rad"),
                     actionRadar
             )
         }
@@ -228,9 +228,9 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
             UtilityWidget.setupIntent(
                     context,
                     remoteViews,
-                    AFDActivity::class.java,
+                    AfdActivity::class.java,
                     R.id.b_afd,
-                    AFDActivity.URL,
+                    AfdActivity.URL,
                     arrayOf(nws1Current, ""),
                     actionAfd
             )
@@ -255,9 +255,9 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
             UtilityWidget.setupIntent(
                     context,
                     remoteViews,
-                    GOES16Activity::class.java,
+                    GoesActivity::class.java,
                     R.id.b_cloud,
-                    GOES16Activity.RID,
+                    GoesActivity.RID,
                     arrayOf(""),
                     actionCloud
             )
@@ -268,7 +268,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
                     CanadaRadarActivity::class.java,
                     R.id.b_cloud,
                     CanadaRadarActivity.RID,
-                    arrayOf(rid1, "vis"),
+                    arrayOf(radarSite, "vis"),
                     actionCloud
             )
         }

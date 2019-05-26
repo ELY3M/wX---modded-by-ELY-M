@@ -32,7 +32,7 @@ import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.Utility
-import joshuatee.wx.vis.GOES16Activity
+import joshuatee.wx.vis.GoesActivity
 
 class ObjectWidgetVis(context: Context) {
 
@@ -42,28 +42,28 @@ class ObjectWidgetVis(context: Context) {
         val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
         val intentHome = Intent("android.intent.action.MAIN")
         intentHome.addCategory("android.intent.category.HOME")
-        val rid1 = Location.getRid(context, widgetLocNum)
+        val radarSite = Location.getRid(context, widgetLocNum)
         UtilityWidget.setImage(context, remoteViews, VIS.fileName)
         if (!MyApplication.widgetPreventTap) {
             if (Location.isUS(widgetLocNum)) {
                 UtilityWidget.setupIntent(
-                    context,
-                    remoteViews,
-                    GOES16Activity::class.java,
-                    R.id.iv,
-                    GOES16Activity.RID,
-                    arrayOf(""),
-                    WidgetFile.VIS.action
+                        context,
+                        remoteViews,
+                        GoesActivity::class.java,
+                        R.id.iv,
+                        GoesActivity.RID,
+                        arrayOf(""),
+                        WidgetFile.VIS.action
                 )
             } else {
                 UtilityWidget.setupIntent(
-                    context,
-                    remoteViews,
-                    CanadaRadarActivity::class.java,
-                    R.id.iv,
-                    CanadaRadarActivity.RID,
-                    arrayOf(rid1, "vis"),
-                    WidgetFile.VIS.action
+                        context,
+                        remoteViews,
+                        CanadaRadarActivity::class.java,
+                        R.id.iv,
+                        CanadaRadarActivity.RID,
+                        arrayOf(radarSite, "vis"),
+                        WidgetFile.VIS.action
                 )
             }
         }

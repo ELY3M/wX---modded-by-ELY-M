@@ -21,7 +21,6 @@
 
 package joshuatee.wx.radar
 
-import android.content.Context
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.util.UtilityCanvasProjection
 import joshuatee.wx.external.ExternalEllipsoid
@@ -32,13 +31,12 @@ import joshuatee.wx.util.ProjectionNumbers
 internal object WXGLNexradLevel3WindBarbs {
 
     fun decodeAndPlot(
-        context: Context,
         rid: String,
         provider: ProjectionType,
         isGust: Boolean
     ): List<Double> {
         val stormList = mutableListOf<Double>()
-        val pn = ProjectionNumbers(context, rid, provider)
+        val pn = ProjectionNumbers(rid, provider)
         val arrWb = if (!isGust) {
             UtilityMetar.obsArrWb
         } else {

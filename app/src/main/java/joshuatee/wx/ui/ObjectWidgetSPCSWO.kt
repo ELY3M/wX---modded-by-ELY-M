@@ -28,9 +28,9 @@ import joshuatee.wx.R
 import joshuatee.wx.UtilityWidget
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
-import joshuatee.wx.spc.SPCSWOActivity
+import joshuatee.wx.spc.SpcSwoActivity
 
-class ObjectWidgetSPCSWO(context: Context) {
+class ObjectWidgetSpcSwo(context: Context) {
 
     val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_spcswo_layout)
     private val ivList = listOf(R.id.iv1, R.id.iv2, R.id.iv3, R.id.iv4)
@@ -41,13 +41,13 @@ class ObjectWidgetSPCSWO(context: Context) {
             UtilityWidget.setImage(context, remoteViews, ivList[it], SPCSWO.fileName + dayAsString)
             if (!MyApplication.widgetPreventTap) {
                 UtilityWidget.setupIntent(
-                    context,
-                    remoteViews,
-                    SPCSWOActivity::class.java,
-                    ivList[it],
-                    SPCSWOActivity.NO,
-                    arrayOf(dayAsString, ""),
-                    WidgetFile.SPCSWO.action + dayAsString
+                        context,
+                        remoteViews,
+                        SpcSwoActivity::class.java,
+                        ivList[it],
+                        SpcSwoActivity.NO,
+                        arrayOf(dayAsString, ""),
+                        WidgetFile.SPCSWO.action + dayAsString
                 )
             }
         }

@@ -21,7 +21,7 @@
 
 #include "genCircle.h"
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_genCircle(JNIEnv * env, jclass clazz, jobject loc_buff, jobject index_buff, jfloat center_x, jfloat center_y, jfloat x_image_center_pixels, jfloat y_image_center_pixels,  jfloat one_degree_scale_factor, jdoubleArray x,jdoubleArray y,jint count,jfloat len, int triangleAmount, jobject color_buff,jbooleanArray col) {
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genCircle(JNIEnv * env, jclass clazz, jobject loc_buff, jobject index_buff, jfloat center_x, jfloat center_y, jfloat x_image_center_pixels, jfloat y_image_center_pixels,  jfloat one_degree_scale_factor, jdoubleArray x,jdoubleArray y,jint count,jfloat len, int triangleAmount, jobject color_buff,jbooleanArray col) {
 
 	jfloat* lBuff = (*env)-> GetDirectBufferAddress(env, loc_buff);
 	jshort* iBuff = (*env)-> GetDirectBufferAddress(env, index_buff);

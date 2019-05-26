@@ -29,11 +29,11 @@ import joshuatee.wx.util.UtilityIO
 internal object UtilityCitiesExtended {
 
     private var initialized = false
-    var cityAl = mutableListOf<CityExt>()
+    var cities = mutableListOf<CityExt>()
 
-    fun populateArrays(context: Context) {
+    fun create(context: Context) {
         if (!initialized) {
-            cityAl = mutableListOf()
+            cities = mutableListOf()
             initialized = true
             val text: String
             val lines: List<String>
@@ -44,18 +44,18 @@ internal object UtilityCitiesExtended {
             lines.forEach {
                 tmpArr = MyApplication.comma.split(it)
                 if (tmpArr.size > 3) {
-                    cityAl.add(
-                        CityExt(
-                            tmpArr[0], tmpArr[1].toDoubleOrNull()
-                                ?: 0.0, (tmpArr[2].replace("-", "")).toDoubleOrNull() ?: 0.0
-                        )
+                    cities.add(
+                            CityExt(
+                                    tmpArr[0], tmpArr[1].toDoubleOrNull()
+                                    ?: 0.0, (tmpArr[2].replace("-", "")).toDoubleOrNull() ?: 0.0
+                            )
                     )
                 } else {
-                    cityAl.add(
-                        CityExt(
-                            tmpArr[0], tmpArr[1].toDoubleOrNull()
-                                ?: 0.0, (tmpArr[2].replace("-", "")).toDoubleOrNull() ?: 0.0
-                        )
+                    cities.add(
+                            CityExt(
+                                    tmpArr[0], tmpArr[1].toDoubleOrNull()
+                                    ?: 0.0, (tmpArr[2].replace("-", "")).toDoubleOrNull() ?: 0.0
+                            )
                     )
                 }
             }

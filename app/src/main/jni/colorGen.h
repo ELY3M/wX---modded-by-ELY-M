@@ -24,13 +24,13 @@
 #include <math.h>
 #include <stdlib.h>
 
-#ifndef _Included_joshuatee_wX_JNI_ColorGen
-#define _Included_joshuatee_wX_JNI_ColorGen
+#ifndef _Included_joshuatee_wX_Jni_ColorGen
+#define _Included_joshuatee_wX_Jni_ColorGen
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_ColorGen
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_ColorGen
   (JNIEnv * , jclass, jobject , jint , jbyteArray);
 
 #ifdef __cplusplus

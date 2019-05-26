@@ -26,7 +26,7 @@ import android.graphics.Color
 import androidx.core.app.NotificationCompat
 
 import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.CAPAlert
+import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityLog
@@ -40,7 +40,7 @@ internal object UtilityNotificationTornado {
     // https://code.google.com/p/android/issues/detail?id=201958
     // Issue 201958: 	NotificationCompat does not appear to support vector drawables (wrapped in another drawable or not)
 
-    fun checkAndSendTornadoNotification(context: Context, html: String): String {
+    fun checkAndSend(context: Context, html: String): String {
         var notifUrls = ""
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         try {
@@ -65,7 +65,7 @@ internal object UtilityNotificationTornado {
         for (title in hazardTitles) {
             if (idAl.size > i) {
                 val url = idAl[i]
-                val ca = CAPAlert.createFromUrl(url)
+                val ca = CapAlert.createFromUrl(url)
                 if (UtilityNotificationTools.nwsLocalAlertNotFiltered(
                                 context,
                                 title

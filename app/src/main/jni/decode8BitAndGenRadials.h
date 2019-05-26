@@ -27,13 +27,13 @@
 #include "bzlib.h"
 //#include <android/log.h>
 
-#ifndef _Included_joshuatee_wX_JNI_decode8BitAndGenRadials
-#define _Included_joshuatee_wX_JNI_decode8BitAndGenRadials
+#ifndef _Included_joshuatee_wX_Jni_decode8BitAndGenRadials
+#define _Included_joshuatee_wX_Jni_decode8BitAndGenRadials
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT jint JNICALL Java_joshuatee_wx_JNI_decode8BitAndGenRadials
+JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials
   (JNIEnv * , jclass, jstring , jlong ,jint ,jobject , jobject  ,jobject , jobject , jfloat, jbyte, jbyte, jbyte, jobject, jobject , jobject );
 
 #ifdef __cplusplus

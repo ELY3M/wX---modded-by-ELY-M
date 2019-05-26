@@ -41,40 +41,40 @@ import joshuatee.wx.RegExp
 
 class WXGLDownload {
 
-    private var rid1 = ""
-    private var prod = ""
+    private var radarSite = ""
+    private var product = ""
 
     fun getRadarFile(
-        context: Context,
-        urlStr: String,
-        rid1: String,
-        prod: String,
-        idxStr: String,
-        TDWR: Boolean
+            context: Context,
+            urlStr: String,
+            radarSite: String,
+            product: String,
+            idxStr: String,
+            TDWR: Boolean
     ): String {
-        val ridPrefix = UtilityWXOGL.getRidPrefix(rid1, TDWR)
-        this.rid1 = rid1
-        this.prod = prod
-        if (!prod.contains("L2")) {
+        val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, TDWR)
+        this.radarSite = radarSite
+        this.product = product
+        if (!product.contains("L2")) {
             val inputStream = UtilityDownload.getInputStreamFromUrl(
-                MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +
-                        NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(Locale.US) + "/sn.last"
+                    MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +
+                            NEXRAD_PRODUCT_STRING[product] + "/SI." + ridPrefix + radarSite.toLowerCase(Locale.US) + "/sn.last"
             )
             val l3BaseFn = "nids"
             inputStream?.let {
                 UtilityIO.saveInputStream(
-                    context,
-                    inputStream,
-                    l3BaseFn + idxStr + "_d"
+                        context,
+                        inputStream,
+                        l3BaseFn + idxStr + "_d"
                 )
             }
             UtilityFileManagement.moveFile(context, l3BaseFn + idxStr + "_d", l3BaseFn + idxStr)
         } else {
             if (urlStr == "") {
-                val inputStream = getInputStreamFromURLL2(getLevel2Url(rid1), prod)
+                val inputStream = getInputStreamFromUrlL2(getLevel2Url(radarSite), product)
                 inputStream?.let { UtilityIO.saveInputStream(context, it, "l2_d$idxStr") }
             } else {
-                val inputStream = getInputStreamFromURLL2(iowaMesoL2ARCHIVE(rid1, urlStr), prod)
+                val inputStream = getInputStreamFromUrlL2(iowaMesoL2Archive(radarSite, urlStr), product)
                 inputStream?.let { UtilityIO.saveInputStream(context, it, "l2_d$idxStr") }
             }
             UtilityFileManagement.moveFile(context, "l2_d$idxStr", "l2$idxStr", 1024)
@@ -85,26 +85,26 @@ class WXGLDownload {
     // Download a list of files and return the list as a list of Strings
     // Determines of Level 2 or Level 3 and calls appropriate method
     fun getRadarFilesForAnimation(context: Context, frameCount: Int): List<String> {
-        val nidsArr: List<String>
-        val ridPrefix = UtilityWXOGL.getRidPrefix(rid1, prod)
-        nidsArr = if (!prod.contains("L2")) {
+        val fileList: List<String>
+        val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, product)
+        fileList = if (!product.contains("L2")) {
             getLevel3FilesForAnimation(
-                context,
-                frameCount,
-                prod,
-                ridPrefix,
-                rid1.toLowerCase(Locale.US)
+                    context,
+                    frameCount,
+                    product,
+                    ridPrefix,
+                    radarSite.toLowerCase(Locale.US)
             )
         } else {
             getLevel2FilesForAnimation(
-                context,
-                MyApplication.nwsRadarLevel2Pub + ridPrefix.toUpperCase(Locale.US) + rid1.toUpperCase(
-                    Locale.US
-                ) + "/",
-                frameCount
+                    context,
+                    MyApplication.nwsRadarLevel2Pub + ridPrefix.toUpperCase(Locale.US) + radarSite.toUpperCase(
+                            Locale.US
+                    ) + "/",
+                    frameCount
             )
         }
-        return nidsArr
+        return fileList
     }
 
     // getRadarFilesForAnimation  getLevel3FilesForAnimation  getLevel2FilesForAnimation
@@ -112,32 +112,32 @@ class WXGLDownload {
     // Download a list of files and return the list as a list of Strings
     // Determines of Level 2 or Level 3 and calls appropriate method
     private fun getLevel3FilesForAnimation(
-        context: Context,
-        frameCount: Int,
-        prod: String,
-        ridPrefix: String,
-        rid1: String
+            context: Context,
+            frameCount: Int,
+            prod: String,
+            ridPrefix: String,
+            radarSite: String
     ): List<String> {
-        val nidsArr = mutableListOf<String>()
+        val fileList = mutableListOf<String>()
         var htmlOut =
-            (MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(
-                Locale.US
-            ) + "/").getHtml()
+                (MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + radarSite.toLowerCase(
+                        Locale.US
+                ) + "/").getHtml()
         var snFiles = htmlOut.parseColumn(RegExp.utilnxanimPattern1)
         var snDates = htmlOut.parseColumn(RegExp.utilnxanimPattern2)
         if (snDates.isEmpty()) {
             htmlOut =
-                (MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(
-                    Locale.US
-                ) + "/").getHtml()
+                    (MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + radarSite.toLowerCase(
+                            Locale.US
+                    ) + "/").getHtml()
             snFiles = htmlOut.parseColumn(RegExp.utilnxanimPattern1)
             snDates = htmlOut.parseColumn(RegExp.utilnxanimPattern2)
         }
         if (snDates.isEmpty()) {
             htmlOut =
-                (MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(
-                    Locale.US
-                ) + "/").getHtml()
+                    (MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + radarSite.toLowerCase(
+                            Locale.US
+                    ) + "/").getHtml()
             snFiles = htmlOut.parseColumn(RegExp.utilnxanimPattern1)
             snDates = htmlOut.parseColumn(RegExp.utilnxanimPattern2)
         }
@@ -147,7 +147,7 @@ class WXGLDownload {
         var mostRecentSn = ""
         val mostRecentTime = snDates[snDates.size - 1]
         (0 until snDates.size - 1).filter { snDates[it] == mostRecentTime }
-            .forEach { mostRecentSn = snFiles[it] }
+                .forEach { mostRecentSn = snFiles[it] }
         try {
             val seq = mostRecentSn.replace("sn.", "").toIntOrNull() ?: 0
             var j = 0
@@ -157,36 +157,36 @@ class WXGLDownload {
                 var tmpK = k
                 if (tmpK < 0)
                     tmpK += 251
-                nidsArr.add("sn." + String.format("%4s", tmpK.toString()).replace(' ', '0'))
+                fileList.add("sn." + String.format("%4s", tmpK.toString()).replace(' ', '0'))
                 k += 1
                 j += 1
             }
             j = 0
-            while (j < nidsArr.size) {
+            while (j < fileList.size) {
                 val inputStream = UtilityDownload.getInputStreamFromUrl(
-                    MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +
-                            NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(
-                        Locale.US
-                    ) + "/" + nidsArr[j]
+                        MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +
+                                NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + radarSite.toLowerCase(
+                                Locale.US
+                        ) + "/" + fileList[j]
                 )
-                inputStream?.let { UtilityIO.saveInputStream(context, inputStream, nidsArr[j]) }
+                inputStream?.let { UtilityIO.saveInputStream(context, inputStream, fileList[j]) }
                 j += 1
             }
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
-        return nidsArr
+        return fileList
     }
 
     // Level 2: Download a list of files and return the list as a list of Strings
     private fun getLevel2FilesForAnimation(
-        context: Context,
-        baseUrl: String,
-        frameCount: Int
+            context: Context,
+            baseUrl: String,
+            frameCount: Int
     ): List<String> {
-        val l2Arr = mutableListOf<String>()
+        val fileList = mutableListOf<String>()
         val tmpArr = (baseUrl + "dir.list").getHtmlSep().replace("<br>", " ").split(" ")
-            .dropLastWhile { it.isEmpty() }
+                .dropLastWhile { it.isEmpty() }
         if (tmpArr.isEmpty()) {
             return listOf("")
         }
@@ -199,20 +199,20 @@ class WXGLDownload {
         (0 until frameCount).forEach { count ->
             val token = tmpArr.getOrNull(arrLength - (frameCount - count + additionalAdd) * 2 + 1)
             if (token != null) {
-                l2Arr.add(token)
+                fileList.add(token)
                 val inputStream = UtilityDownload.getInputStreamFromUrl(baseUrl + token)
                 inputStream?.let { UtilityIO.saveInputStream(context, inputStream, token) }
             }
         }
-        return l2Arr
+        return fileList
     }
 
-    fun getLevel2Url(rid1: String): String {
+    fun getLevel2Url(radarSite: String): String {
         var fn: String
-        val ridPrefix = UtilityWXOGL.getRidPrefix(rid1, false).toUpperCase(Locale.US)
-        val baseUrl = MyApplication.nwsRadarLevel2Pub + ridPrefix + rid1 + "/"
+        val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, false).toUpperCase(Locale.US)
+        val baseUrl = MyApplication.nwsRadarLevel2Pub + ridPrefix + radarSite + "/"
         val tmpArr = (baseUrl + "dir.list").getHtmlSep().replace("<br>", " ").split(" ")
-            .dropLastWhile { it.isEmpty() }
+                .dropLastWhile { it.isEmpty() }
         if (tmpArr.size < 4) {
             return ""
         }
@@ -225,21 +225,21 @@ class WXGLDownload {
         return baseUrl + fn
     }
 
-    private fun getInputStreamFromURLL2(strURL: String, prod: String): InputStream? {
+    private fun getInputStreamFromUrlL2(url: String, product: String): InputStream? {
         // This method is used exclusively for download of partial binary files for Level 2
         // experimentation has shown that L2REF and L2VEL lowest tiles are at the start of the
         // file so "Range" HTTP header is used to download just what is needed based on prod
         // requested
         // testing of specific radar binary files
         //return UtilityIO.readRawFile(R.raw.l2missingradials);
-        if (strURL == "") {
+        if (url == "") {
             return null
         }
         var byteEnd = "2450000"
-        if (prod == "L2VEL")
+        if (product == "L2VEL")
             byteEnd = "3000000"
         return try {
-            val request = Request.Builder().url(strURL).header("Range", "bytes=0-$byteEnd").build()
+            val request = Request.Builder().url(url).header("Range", "bytes=0-$byteEnd").build()
             val response = MyApplication.httpClient!!.newCall(request).execute() // was client
             response.body()!!.byteStream()
         } catch (e: IOException) {
@@ -247,11 +247,11 @@ class WXGLDownload {
         }
     }
 
-    private fun iowaMesoL2ARCHIVE(rid1: String, urlStr: String): String {
-        val ridPrefix = UtilityWXOGL.getRidPrefix(rid1, false).toUpperCase(Locale.US)
-        val baseUrl = "http://mesonet-nexrad.agron.iastate.edu/level2/raw/$ridPrefix$rid1/"
+    private fun iowaMesoL2Archive(radarSite: String, url: String): String {
+        val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, false).toUpperCase(Locale.US)
+        val baseUrl = "http://mesonet-nexrad.agron.iastate.edu/level2/raw/$ridPrefix$radarSite/"
         val tmpStr = (baseUrl + "dir.list").getHtmlSep()
-        val regexp = ".*?($ridPrefix$urlStr[0-9]).*?"
+        val regexp = ".*?($ridPrefix$url[0-9]).*?"
         return baseUrl + tmpStr.parse(regexp)
     }
 
@@ -259,7 +259,7 @@ class WXGLDownload {
         fun getNidsTab(context: Context, product: String, radarSite: String, fileName: String) {
             val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, false)
             val url =
-                MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + (NEXRAD_PRODUCT_STRING[product] ?: "") + "/SI." + ridPrefix + radarSite.toLowerCase() + "/sn.last"
+                    MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + (NEXRAD_PRODUCT_STRING[product] ?: "") + "/SI." + ridPrefix + radarSite.toLowerCase() + "/sn.last"
             val inputstream = UtilityDownload.getInputStreamFromUrl(url)
             inputstream?.let { UtilityIO.saveInputStream(context, it, fileName) }
         }

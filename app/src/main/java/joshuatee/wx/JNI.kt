@@ -25,7 +25,7 @@ package joshuatee.wx
 
 import java.nio.ByteBuffer
 
-object JNI {
+object Jni {
 
     // Native code accessed via JNI was originally developed in 2014. At the time it was necessary for best performnace.
     // 2+ years later gains in hardware and software make the gains neglible in most cases.

@@ -21,7 +21,7 @@
 
 package joshuatee.wx.models
 
-internal object UtilityModelGLCFSInterface {
+internal object UtilityModelGlcfsInterface {
 
     // http://www.glerl.noaa.gov/res/glcfs
 

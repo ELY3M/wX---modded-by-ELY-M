@@ -24,16 +24,16 @@
 #include <math.h>
 #include <stdlib.h>
 
-#ifndef _Included_joshuatee_wX_JNI_genIndex
-#define _Included_joshuatee_wX_JNI_genIndex
+#ifndef _Included_joshuatee_wX_Jni_genIndex
+#define _Included_joshuatee_wX_Jni_genIndex
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_genIndex
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndex
   (JNIEnv * , jclass, jobject , jint, jint);
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_genIndexLine
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndexLine
   (JNIEnv * , jclass, jobject , jint, jint);
 
 #ifdef __cplusplus

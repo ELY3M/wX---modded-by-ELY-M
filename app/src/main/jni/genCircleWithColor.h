@@ -24,13 +24,13 @@
 #include <math.h>
 #include <stdlib.h>
 
-#ifndef _Included_joshuatee_wX_JNI_genCircleWithColor
-#define _Included_joshuatee_wX_JNI_genCircleWithColor
+#ifndef _Included_joshuatee_wX_Jni_genCircleWithColor
+#define _Included_joshuatee_wX_Jni_genCircleWithColor
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_genCircleWithColor
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genCircleWithColor
   (JNIEnv * , jclass, jobject , jobject, jfloat, jfloat, jfloat, jfloat, jfloat , jdoubleArray ,jdoubleArray ,jint,jfloat,jint,jobject,jintArray);
 
 #ifdef __cplusplus

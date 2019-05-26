@@ -23,6 +23,7 @@ package joshuatee.wx.radar
 
 import java.util.Comparator
 
+// FIXME rename RID
 class RID(val name: String, val location: LatLon) {
 
     var distance: Int = 0

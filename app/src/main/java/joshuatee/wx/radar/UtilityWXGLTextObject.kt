@@ -43,7 +43,6 @@ object UtilityWXGLTextObject {
             wxgltextArr[it].addTVHailLabels()
         }
     }
-
     fun updateObs(numPanes: Int, wxgltextArr: MutableList<WXGLTextObject>) {
         (0 until numPanes).forEach {
             wxgltextArr[it].initTVObs()

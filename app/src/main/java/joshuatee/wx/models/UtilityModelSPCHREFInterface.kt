@@ -28,7 +28,7 @@ import java.util.Arrays
 
 import joshuatee.wx.util.Group
 
-internal object UtilityModelSPCHREFInterface {
+internal object UtilityModelSpcHrefInterface {
 
     val models = listOf("HREF")
 

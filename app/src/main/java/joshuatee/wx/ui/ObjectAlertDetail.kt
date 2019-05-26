@@ -29,9 +29,7 @@ import android.widget.TextView
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.activitiesmisc.CAPAlert
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityLog
+import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.util.UtilityString
 
 class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
@@ -74,7 +72,7 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
         )
     }
 
-    fun updateContent(ca: CAPAlert, url: String) {
+    fun updateContent(ca: CapAlert, url: String) {
         val startTime: String
         var endTime = ""
         var wfo = ""

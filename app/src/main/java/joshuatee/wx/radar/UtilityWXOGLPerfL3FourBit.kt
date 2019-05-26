@@ -34,7 +34,7 @@ internal object UtilityWXOGLPerfL3FourBit {
 
     // Used for Legacy 4bit radar - only SRM or spectrum width 30
     // was decode4bit
-    fun decode4Bit(
+    fun decode(
         context: Context,
         fn: String,
         radialStart: ByteBuffer,

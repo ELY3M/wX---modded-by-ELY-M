@@ -37,7 +37,7 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class GOES16Activity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
+class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
 
     companion object {
         const val RID: String = ""
@@ -130,7 +130,7 @@ class GOES16Activity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item))
             return true
         when (item.itemId) {
-            R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.GOES16)
+            R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.GOES16)
             R.id.action_a12 -> getAnimate(12)
             R.id.action_a24 -> getAnimate(24)
             R.id.action_a36 -> getAnimate(36)

@@ -17,18 +17,41 @@
     You should have received a copy of the GNU General Public License
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
- */
+*/
 
-package joshuatee.wx.util
+package joshuatee.wx.ui
 
 import android.content.Context
-import android.graphics.Bitmap
+import android.view.View
+import android.widget.LinearLayout
 
-import joshuatee.wx.radar.UtilityUSImgWX
+class ObjectLinearLayout {
 
-object UtilityUSImg {
-    fun getPreferredLayeredImg(context: Context, radarSite: String, isInteractive: Boolean): Bitmap =
-        UtilityUSImgWX.layeredImg(context, radarSite, "N0Q", isInteractive)
+    private val linearLayout: LinearLayout
+
+    constructor(context: Context, parentView: LinearLayout) {
+        linearLayout = LinearLayout(context)
+        linearLayout.orientation = LinearLayout.VERTICAL
+        parentView.addView(linearLayout)
+    }
+
+    fun removeAllViewsInLayout() {
+        linearLayout.removeAllViewsInLayout()
+    }
+
+    fun addView(child: View) {
+        linearLayout.addView(child)
+    }
+
+    fun removeAllViews() {
+        linearLayout.removeAllViews()
+    }
+
+    var visibility: Int
+        get() = linearLayout.visibility
+        set(value) {
+            linearLayout.visibility = value
+        }
 }
 
 

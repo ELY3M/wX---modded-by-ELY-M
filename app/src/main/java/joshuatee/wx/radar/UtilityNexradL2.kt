@@ -59,7 +59,7 @@ internal object UtilityNexradL2 {
 
     private const val DECOMP_FN = "l2.decomp"
 
-    fun decodeAndPlotNexradL2(context: Context, bitmap: Bitmap, prod: String) {
+    fun decodeAndPlot(context: Context, bitmap: Bitmap, prod: String) {
         val canvas = Canvas(bitmap)
         var productCode = 153
         if (prod == "L2VEL") productCode = 154

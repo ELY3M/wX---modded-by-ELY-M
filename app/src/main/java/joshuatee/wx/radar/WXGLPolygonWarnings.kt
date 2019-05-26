@@ -22,7 +22,6 @@
 
 package joshuatee.wx.radar
 
-import android.content.Context
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
@@ -45,41 +44,30 @@ import net.minidev.json.JSONArray
 
 internal object WXGLPolygonWarnings {
 
-    fun addGenericWarnings(
-            context: Context,
+    fun addGeneric(
             provider: ProjectionType,
-            rid1: String,
+            radarSite: String,
             type: ObjectPolygonWarning
     ): List<Double> {
         val warningList = mutableListOf<Double>()
-        /*val prefToken = when (type) {
-            PolygonType.TOR -> MyApplication.severeDashboardTor.valueGet()
-            PolygonType.TST -> MyApplication.severeDashboardTst.valueGet()
-            else -> MyApplication.severeDashboardFfw.valueGet()
-        }*/
         val prefToken = type.storage.valueGet()
-        //UtilityLog.d("wx", "SPS: " + prefToken)
-        val pn = ProjectionNumbers(context, rid1, provider)
+        val pn = ProjectionNumbers(radarSite, provider)
         var j: Int
         var pixXInit: Double
         var pixYInit: Double
-        var warningHTML = ""
+        var html = ""
         try {
-            warningHTML = prefToken.replace("\n", "").replace(" ", "")
+            html = prefToken.replace("\n", "").replace(" ", "")
         } catch (e: OutOfMemoryError) {
             UtilityLog.handleException(e)
         }
-        val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
-        val vtecAl = warningHTML.parseColumn(RegExp.warningVtecPattern)
-        //UtilityLog.d("wx", polygonArr.toString())
-        //UtilityLog.d("wx", vtecAl.toString())
+        val polygons = html.parseColumn(RegExp.warningLatLonPattern)
+        val vtecs = html.parseColumn(RegExp.warningVtecPattern)
         var polyCount = -1
-        polygonArr.forEach { polygon ->
+        polygons.forEach { polygon ->
             polyCount += 1
-            //UtilityLog.d("wx", "VTEC" + vtecAl[polyCount])
-            if ( type.type == PolygonWarningType.SpecialWeatherStatement || (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("O.EXP") && !vtecAl[polyCount].startsWith("O.CAN")  )
+            if ( type.type == PolygonWarningType.SpecialWeatherStatement || (vtecs.size > polyCount && !vtecs[polyCount].startsWith("O.EXP") && !vtecs[polyCount].startsWith("O.CAN")  )
             ) {
-                //UtilityLog.d("wx", vtecAl[polyCount])
                 val polyTmp =
                         polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
                 val testArr = polyTmp.split(" ")
@@ -117,10 +105,9 @@ internal object WXGLPolygonWarnings {
         return warningList
     }
 
-    fun addWarnings(
-        context: Context,
+    fun add(
         provider: ProjectionType,
-        rid1: String,
+        radarSite: String,
         type: PolygonType
     ): List<Double> {
         val warningList = mutableListOf<Double>()
@@ -135,29 +122,28 @@ internal object WXGLPolygonWarnings {
             //else -> MyApplication.severeDashboardSvr.valueGet()
             else -> "" //bug fix when svr warnings are struck and not expiring as it should have.
         }
-        val pn = ProjectionNumbers(context, rid1, provider)
+        val pn = ProjectionNumbers(radarSite, provider)
         var j: Int
         var pixXInit: Double
         var pixYInit: Double
-        var warningHTML = ""
+        var html = ""
         try {
-            warningHTML = prefToken.replace("\n", "").replace(" ", "")
+            html = prefToken.replace("\n", "").replace(" ", "")
         } catch (e: OutOfMemoryError) {
             UtilityLog.handleException(e)
         }
-        val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
-        val vtecAl = warningHTML.parseColumn(RegExp.warningVtecPattern)
+        val polygons = html.parseColumn(RegExp.warningLatLonPattern)
+        val vtecs = html.parseColumn(RegExp.warningVtecPattern)
         var polyCount = -1
-        polygonArr.forEach { polygon ->
+        polygons.forEach { polygon ->
             polyCount += 1
             //val vtecIsCurrent = UtilityTime.isVtecCurrent(vtecAl[polyCount])
-            if (vtecAl.size > polyCount
-                    && !vtecAl[polyCount].startsWith("O.EXP")
-                    && !vtecAl[polyCount].startsWith("O.CAN")
-                    && UtilityTime.isVtecCurrent(vtecAl[polyCount])
+            if (vtecs.size > polyCount
+                    && !vtecs[polyCount].startsWith("O.EXP")
+                    && !vtecs[polyCount].startsWith("O.CAN")
+                    && UtilityTime.isVtecCurrent(vtecs[polyCount])
             ) {
-                val polyTmp =
-                    polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
+                val polyTmp = polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
                 val testArr = polyTmp.split(" ")
                 val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }
                     .map {
@@ -194,10 +180,17 @@ internal object WXGLPolygonWarnings {
     }
 
 
+
+
+
+
+
+
+
+//TODO DO AWAY WITH THIS!!!!  USE JOSHS CODE
     //SPS do not have VTEC
     var specialWeatherList = mutableListOf<SpecialWeather>()
     fun addSPS(
-            context: Context,
             provider: ProjectionType,
             rid1: String,
             type: PolygonType
@@ -292,7 +285,7 @@ internal object WXGLPolygonWarnings {
         }
 
 
-        val pn = ProjectionNumbers(context, rid1, provider)
+        val pn = ProjectionNumbers(rid1, provider)
         var j: Int
         var pixXInit: Double
         var pixYInit: Double

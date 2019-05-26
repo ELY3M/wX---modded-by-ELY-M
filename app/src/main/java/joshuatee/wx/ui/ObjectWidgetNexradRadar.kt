@@ -39,7 +39,7 @@ class ObjectWidgetNexradRadar(context: Context) {
 
     init {
         val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
-        val rid1 = Location.getRid(context, widgetLocNum)
+        val radarSite = Location.getRid(context, widgetLocNum)
         UtilityWidget.setImage(context, remoteViews, NEXRAD_RADAR.fileName)
         if (!MyApplication.widgetPreventTap) {
             if (Location.isUS(widgetLocNum)) {
@@ -49,7 +49,7 @@ class ObjectWidgetNexradRadar(context: Context) {
                     WXGLRadarActivity::class.java,
                     R.id.iv,
                     WXGLRadarActivity.RID,
-                    arrayOf(rid1, ""),
+                    arrayOf(radarSite, ""),
                     WidgetFile.NEXRAD_RADAR.action
                 )
             } else {
@@ -59,7 +59,7 @@ class ObjectWidgetNexradRadar(context: Context) {
                     CanadaRadarActivity::class.java,
                     R.id.iv,
                     CanadaRadarActivity.RID,
-                    arrayOf(rid1, "rad"),
+                    arrayOf(radarSite, "rad"),
                     WidgetFile.NEXRAD_RADAR.action
                 )
             }

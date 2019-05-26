@@ -27,7 +27,7 @@ import androidx.core.app.NotificationCompat
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.CAPAlert
+import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.settings.Location
 
@@ -83,7 +83,7 @@ object UtilityUS {
         hazardTitles.forEach { title ->
             if (idAl.size > i) {
                 val url = idAl[i]
-                val ca = CAPAlert.createFromUrl(url)
+                val ca = CapAlert.createFromUrl(url)
                 if (UtilityNotificationTools.nwsLocalAlertNotFiltered(context, title)) {
                     html = "$html<b>$title</b><br>"
                     html = html + "<b>Counties: " + ca.area + "</b><br>"

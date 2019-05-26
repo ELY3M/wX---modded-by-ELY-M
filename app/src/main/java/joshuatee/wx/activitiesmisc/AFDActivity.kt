@@ -34,7 +34,7 @@ import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
 import joshuatee.wx.R
-import joshuatee.wx.audio.UtilityTTS
+import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.notifications.UtilityNotificationTextProduct
 import joshuatee.wx.MyApplication
 import joshuatee.wx.audio.AudioPlayActivity
@@ -51,7 +51,7 @@ import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_afd.*
 
-class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClickListener {
+class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClickListener {
 
     // The primary purpose of this activity is to view AFD from location's NWS office
     // However, other NWS office text products are also available from the AB menu
@@ -180,7 +180,7 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
             html = "None issued by this office recently."
         }
         textCard.setTextAndTranslate(Utility.fromHtml(html))
-        UtilityTTS.conditionalPlay(activityArguments, 2, applicationContext, html, product)
+        UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, product)
         if (activityArguments[1] == "") {
             Utility.writePref(contextg, "WFO_TEXT_FAV", product)
             MyApplication.wfoTextFav = product
@@ -215,7 +215,7 @@ class AFDActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
                 getContentByState()
             }
             R.id.action_map -> imageMap.toggleMap()
-            R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.AFD)
+            R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.AFD)
             R.id.action_afd -> getProduct("AFD")
             R.id.action_vfd -> getProduct("VFD")
             R.id.action_hwo -> getProduct("HWO")

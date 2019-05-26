@@ -37,7 +37,7 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.ObjectIntent
 import kotlinx.coroutines.*
 
-class ObjectCAWARN(
+class ObjectCAWarn(
     private val context: Context,
     private val activity: Activity,
     private val linearLayout: LinearLayout,

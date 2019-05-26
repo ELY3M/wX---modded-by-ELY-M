@@ -82,8 +82,8 @@ object UtilityPref2 {
             val loc1XDefault = "35.231"
             val loc1YDefault = "-97.451"
             val loc1NwsDefault = "OUN"
-            val nws1Default = "OUN"
-            val rid1Default = "TLX"
+            val wfoDefault = "OUN"
+            val radarSiteDefault = "TLX"
             val nws1DefaultState = "OK"
             val nwsRadarBgBlack = "true"
             val torWarnings = "true"
@@ -156,8 +156,8 @@ object UtilityPref2 {
             editor.putString("ZIPCODE1", zipcodeDefault)
             editor.putString("LOC1_TIMERAW", rawOffset1Default)
             editor.putString("LOC1_TIMEDST", dstOffset1Default)
-            editor.putString("NWS1", nws1Default)
-            editor.putString("RID1", rid1Default)
+            editor.putString("NWS1", wfoDefault)
+            editor.putString("RID1", radarSiteDefault)
             editor.putString("NWS1_STATE", nws1DefaultState)
             editor.putString("THEME_BLUE", themeBlueDefault)
             editor.putString("NWS_RADAR_BG_BLACK", nwsRadarBgBlack)

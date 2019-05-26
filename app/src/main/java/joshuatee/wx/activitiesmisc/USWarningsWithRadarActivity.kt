@@ -72,7 +72,7 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var drw: ObjectNavDrawer
     private lateinit var objAlertSummary: ObjectAlertSummary
-    private lateinit var contextg: Context
+    private lateinit var contextGlobal: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,12 +82,12 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
                 R.menu.uswarn,
                 true
         )
-        contextg = this
+        contextGlobal = this
         toolbarBottom.setOnMenuItemClickListener(this)
         toolbar.setOnClickListener { toolbar.showOverflowMenu() }
-        val actvityArguments = intent.getStringArrayExtra(URL)
-        turlLocal[0] = actvityArguments[0]
-        turlLocal[1] = actvityArguments[1]
+        val activityArguments = intent.getStringArrayExtra(URL)
+        turlLocal[0] = activityArguments[0]
+        turlLocal[1] = activityArguments[1]
         objAlertSummary = ObjectAlertSummary(this, this, linearLayout, scrollView)
         drw = ObjectNavDrawer(this, objAlertSummary.filterArray.toList())
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
@@ -123,12 +123,12 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     }
 
     private fun radarInterface(id: Int) {
-        val rid = Utility.readPref(contextg, "NWS_RID_" + objAlertSummary.mapButtonNws[id], "")
+        val radarSite = Utility.readPref(contextGlobal, "NWS_RID_" + objAlertSummary.mapButtonNws[id], "")
         ObjectIntent(
-                contextg,
+                contextGlobal,
                 WXGLRadarActivity::class.java,
                 WXGLRadarActivity.RID,
-                arrayOf(rid, objAlertSummary.mapButtonState[id]!!, "N0Q", "")
+                arrayOf(radarSite, objAlertSummary.mapButtonState[id]!!, "N0Q", "")
         )
     }
 
@@ -156,7 +156,7 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
             }
             val x = coord[0]
             val y = coord[1]
-            toastStr = Location.locationSave(contextg, locNumToSaveStr, x, y, state + "_" + county)
+            toastStr = Location.locationSave(contextGlobal, locNumToSaveStr, x, y, state + "_" + county)
         }
         UtilityUI.makeSnackBar(linearLayout, toastStr)
     }
@@ -177,7 +177,7 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
         objAlertSummary.updateContent(bitmap, html, turlLocal[0], firstRun)
         title = objAlertSummary.getTitle(turlLocal[1])
         if (firstRun) {
-            drw.updateLists(contextg, objAlertSummary.navList.toList())
+            drw.updateLists(contextGlobal, objAlertSummary.navList.toList())
             firstRun = false
         }
     }
@@ -201,25 +201,25 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
         }
         when (item.itemId) {
             R.id.action_warnmap -> ObjectIntent(
-                    contextg,
+                    contextGlobal,
                     ImageShowActivity::class.java,
                     ImageShowActivity.URL,
                     arrayOf("http://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map")
             )
             R.id.action_warnmapAK -> ObjectIntent(
-                    contextg,
+                    contextGlobal,
                     ImageShowActivity::class.java,
                     ImageShowActivity.URL,
                     arrayOf("http://forecast.weather.gov/wwamap/png/ak.png", "AK warning map")
             )
             R.id.action_warnmapHI -> ObjectIntent(
-                    contextg,
+                    contextGlobal,
                     ImageShowActivity::class.java,
                     ImageShowActivity.URL,
                     arrayOf("http://forecast.weather.gov/wwamap/png/hi.png", "HI warning map")
             )
             R.id.action_impact_graphics -> ObjectIntent(
-                    contextg,
+                    contextGlobal,
                     USWarningsImpactActivity::class.java
             )
             else -> return super.onOptionsItemSelected(item)

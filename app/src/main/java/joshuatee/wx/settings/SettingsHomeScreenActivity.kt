@@ -205,8 +205,8 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             ridArr[pos - 1] = ridArr[pos]
             ridArr[pos] = tmp
         } else {
-            val tmp = ridArr[ridArr.size - 1]
-            ridArr[ridArr.size - 1] = ridArr[pos]
+            val tmp = ridArr.last()
+            ridArr[ridArr.lastIndex] = ridArr[pos]
             ridArr[0] = tmp
         }
         ridFav = ""
@@ -220,14 +220,14 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         val ridArrtmp = MyApplication.colon.split(ridFav)
         ridArr.clear()
         ridArrtmp.indices.forEach { ridArr.add(ridArrtmp[it]) }
-        if (pos != ridArr.size - 1) {
+        if (pos != ridArr.lastIndex) {
             val tmp = ridArr[pos + 1]
             ridArr[pos + 1] = ridArr[pos]
             ridArr[pos] = tmp
         } else {
             val tmp = ridArr[0]
             ridArr[0] = ridArr[pos]
-            ridArr[ridArr.size - 1] = tmp
+            ridArr[ridArr.lastIndex] = tmp
         }
         ridFav = ""
         ridArr.indices.forEach { ridFav = ridFav + ":" + ridArr[it] }

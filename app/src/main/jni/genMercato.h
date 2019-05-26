@@ -24,13 +24,13 @@
 #include <math.h>
 #include <stdlib.h>
 
-#ifndef _Included_joshuatee_wX_JNI_genMercato
-#define _Included_joshuatee_wX_JNI_genMercato
+#ifndef _Included_joshuatee_wX_Jni_genMercato
+#define _Included_joshuatee_wX_Jni_genMercato
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_genMercato
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genMercato
   (JNIEnv * , jclass, jobject , jobject, jfloat, jfloat, jfloat, jfloat, jfloat , jint);
 
 #ifdef __cplusplus

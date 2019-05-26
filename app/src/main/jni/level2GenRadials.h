@@ -24,13 +24,13 @@
 #include <math.h>
 #include <stdlib.h>
 
-#ifndef _Included_joshuatee_wX_JNI_Level2GenRadials
-#define _Included_joshuatee_wX_JNI_Level2GenRadials
+#ifndef _Included_joshuatee_wX_Jni_Level2GenRadials
+#define _Included_joshuatee_wX_Jni_Level2GenRadials
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT jint JNICALL Java_joshuatee_wx_JNI_Level2GenRadials
+JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_Level2GenRadials
   (JNIEnv * , jclass, jobject , jobject , jobject,jobject, jint, jint, jfloat, jboolean,
    jobject, jobject, jobject, jint);
 

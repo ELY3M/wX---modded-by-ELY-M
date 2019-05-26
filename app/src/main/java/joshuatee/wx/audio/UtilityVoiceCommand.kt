@@ -26,20 +26,20 @@ import java.util.Locale
 import android.content.Context
 import android.view.View
 
-import joshuatee.wx.activitiesmisc.AFDActivity
-import joshuatee.wx.radar.USNWSMosaicActivity
+import joshuatee.wx.activitiesmisc.AfdActivity
+import joshuatee.wx.radar.USNwsMosaicActivity
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.settings.Location
-import joshuatee.wx.spc.SPCMesoActivity
+import joshuatee.wx.spc.SpcMesoActivity
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.MyApplication
 import joshuatee.wx.activitiesmisc.WebscreenAB
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.settings.SettingsLocationGenericActivity
-import joshuatee.wx.spc.SPCSWOActivity
+import joshuatee.wx.spc.SpcSwoActivity
 import joshuatee.wx.util.Utility
-import joshuatee.wx.vis.GOES16Activity
-import joshuatee.wx.wpc.WPCTextProductsActivity
+import joshuatee.wx.vis.GoesActivity
+import joshuatee.wx.wpc.WpcTextProductsActivity
 
 object UtilityVoiceCommand {
 
@@ -47,20 +47,20 @@ object UtilityVoiceCommand {
             context: Context,
             view: View,
             vrStringF: String,
-            rid1F: String,
+            radarSiteArg: String,
             nws1CurrentF: String,
             nws1StateCurrent: String
     ): Boolean {
         var vrString = vrStringF
-        var rid1 = rid1F
+        var radarSite = radarSiteArg
         var nws1Current = nws1CurrentF
         var gotHit = true
         val tokens = MyApplication.space.split(vrString)
         if (vrString.contains("radar")) {
             var validRid = true
             if (tokens.size > 1) {
-                rid1 = tokens[1].toUpperCase(Locale.US)
-                if (Utility.readPrefWithNull(context, "RID_LOC_$rid1", null) == null) {
+                radarSite = tokens[1].toUpperCase(Locale.US)
+                if (Utility.readPrefWithNull(context, "RID_LOC_$radarSite", null) == null) {
                     validRid = false
                 }
             }
@@ -68,7 +68,7 @@ object UtilityVoiceCommand {
                     context,
                     WXGLRadarActivity::class.java,
                     WXGLRadarActivity.RID,
-                    arrayOf(rid1, nws1StateCurrent)
+                    arrayOf(radarSite, nws1StateCurrent)
             )
         } else if (vrString.contains("AFD") || vrString.contains("text")) {
             if (tokens.size > 1) {
@@ -77,23 +77,23 @@ object UtilityVoiceCommand {
             if (nws1Current == "WPC") {
                 ObjectIntent(
                         context,
-                        WPCTextProductsActivity::class.java,
-                        WPCTextProductsActivity.URL,
+                        WpcTextProductsActivity::class.java,
+                        WpcTextProductsActivity.URL,
                         arrayOf("pmdspd", "Short Range Forecast Discussion", "sound")
                 )
             } else {
                 ObjectIntent(
                         context,
-                        AFDActivity::class.java,
-                        AFDActivity.URL,
+                        AfdActivity::class.java,
+                        AfdActivity.URL,
                         arrayOf(nws1Current, "AFD", "sound")
                 )
             }
         } else if (vrString.contains("cloud")) {
             ObjectIntent(
                     context,
-                    GOES16Activity::class.java,
-                    GOES16Activity.RID,
+                    GoesActivity::class.java,
+                    GoesActivity.RID,
                     arrayOf("")
             )
         } else if (vrString.toUpperCase(Locale.US).contains("SPC")) {
@@ -101,63 +101,63 @@ object UtilityVoiceCommand {
                 when {
                     vrString.contains("1") -> ObjectIntent(
                             context,
-                            SPCSWOActivity::class.java,
-                            SPCSWOActivity.NO,
+                            SpcSwoActivity::class.java,
+                            SpcSwoActivity.NO,
                             arrayOf("1", "sound")
                     )
                     vrString.contains("2") -> ObjectIntent(
                             context,
-                            SPCSWOActivity::class.java,
-                            SPCSWOActivity.NO,
+                            SpcSwoActivity::class.java,
+                            SpcSwoActivity.NO,
                             arrayOf("2", "sound")
                     )
                     vrString.contains("3") -> ObjectIntent(
                             context,
-                            SPCSWOActivity::class.java,
-                            SPCSWOActivity.NO,
+                            SpcSwoActivity::class.java,
+                            SpcSwoActivity.NO,
                             arrayOf("3", "sound")
                     )
                     else -> ObjectIntent(
                             context,
-                            SPCSWOActivity::class.java,
-                            SPCSWOActivity.NO,
+                            SpcSwoActivity::class.java,
+                            SpcSwoActivity.NO,
                             arrayOf("4-8", "sound")
                     )
                 }
             } else {
                 ObjectIntent(
                         context,
-                        SPCSWOActivity::class.java,
-                        SPCSWOActivity.NO,
+                        SpcSwoActivity::class.java,
+                        SpcSwoActivity.NO,
                         arrayOf("1", "sound")
                 )
             }
         } else if (vrString.contains("day one")) {
             ObjectIntent(
                     context,
-                    SPCSWOActivity::class.java,
-                    SPCSWOActivity.NO,
+                    SpcSwoActivity::class.java,
+                    SpcSwoActivity.NO,
                     arrayOf("1", "sound")
             )
         } else if (vrString.contains("day 2")) {
             ObjectIntent(
                     context,
-                    SPCSWOActivity::class.java,
-                    SPCSWOActivity.NO,
+                    SpcSwoActivity::class.java,
+                    SpcSwoActivity.NO,
                     arrayOf("2", "sound")
             )
         } else if (vrString.contains("day 3")) {
             ObjectIntent(
                     context,
-                    SPCSWOActivity::class.java,
-                    SPCSWOActivity.NO,
+                    SpcSwoActivity::class.java,
+                    SpcSwoActivity.NO,
                     arrayOf("3", "sound")
             )
         } else if (vrString.contains("day 4")) {
             ObjectIntent(
                     context,
-                    SPCSWOActivity::class.java,
-                    SPCSWOActivity.NO,
+                    SpcSwoActivity::class.java,
+                    SpcSwoActivity.NO,
                     arrayOf("4-8", "sound")
             )
         } else if (vrString.contains("add")) {
@@ -179,8 +179,8 @@ object UtilityVoiceCommand {
         } else if (vrString.contains("mosaic")) {
             ObjectIntent(
                     context,
-                    USNWSMosaicActivity::class.java,
-                    USNWSMosaicActivity.URL,
+                    USNwsMosaicActivity::class.java,
+                    USNwsMosaicActivity.URL,
                     arrayOf("")
             )
         } else if (vrString.contains("Twitter")) {
@@ -235,13 +235,13 @@ object UtilityVoiceCommand {
             }
             ObjectIntent(
                     context,
-                    SPCMesoActivity::class.java,
-                    SPCMesoActivity.INFO,
+                    SpcMesoActivity::class.java,
+                    SpcMesoActivity.INFO,
                     arrayOf("", "1", "SPCMESO")
             )
         } else if (vrString.contains("forecast")) {
             val fcstStr = Utility.readPref(context, "FCST", "")
-            UtilityTTS.synthesizeTextAndPlay(context, fcstStr, "7day")
+            UtilityTts.synthesizeTextAndPlay(context, fcstStr, "7day")
         } else if (vrString.contains("download playlist")) {
             UtilityUI.makeSnackBar(view, "Download initiated")
             ObjectIntent(
@@ -251,7 +251,7 @@ object UtilityVoiceCommand {
                     "true"
             )
         } else if (vrString.contains("playlist")) {
-            UtilityTTS.synthesizeTextAndPlayPlaylist(context, 1)
+            UtilityTts.synthesizeTextAndPlayPlaylist(context, 1)
         } else {
             gotHit = false
         }

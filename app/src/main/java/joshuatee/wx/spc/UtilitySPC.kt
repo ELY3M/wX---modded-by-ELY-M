@@ -37,7 +37,7 @@ object UtilitySpc {
     fun getStormReportsTodayUrl(): String =
             "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/" + "today" + ".gif"
 
-    internal val tstormOutlookImages: List<Bitmap>
+    internal val thunderStormOutlookImages: List<Bitmap>
         get() {
             val url = "${MyApplication.nwsSPCwebsitePrefix}/products/exper/enhtstm"
             val html = url.getHtml()

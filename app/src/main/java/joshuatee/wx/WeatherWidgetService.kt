@@ -25,7 +25,7 @@ import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 
 import joshuatee.wx.fragments.UtilityLocationFragment
-import joshuatee.wx.fragments.UtilityNWS
+import joshuatee.wx.fragments.UtilityNws
 
 /**
  * This is the service that provides the factory to be bound to the collection service.
@@ -108,7 +108,7 @@ internal class StackRemoteViewsFactory(private val context: Context) :
         val iconArr = iconStr.split("!")
         if (position < iconArr.size) {
             rv.setImageViewUri(R.id.iv, Uri.parse(""))
-            rv.setImageViewBitmap(R.id.iv, UtilityNWS.getIcon(context, iconArr[position]))
+            rv.setImageViewBitmap(R.id.iv, UtilityNws.getIcon(context, iconArr[position]))
         }
         val fillInIntent = Intent()
         val extras = Bundle()

@@ -63,7 +63,7 @@ import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_storm_reports.*
 
-class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
+class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     // SPC storm reports. Touch image for data selector
     //
@@ -162,14 +162,14 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val c0 = ObjectCardImage(contextg, linearLayout, bitmap)
         c0.setOnClickListener(View.OnClickListener {
             val stDatePicker = DatePickerDialog(
-                this@SPCStormReportsActivity,
-                pDateSetListener,
-                pYear, pMonth, pDay
+                    this,
+                    pDateSetListener,
+                    pYear, pMonth, pDay
             )
             val cal = Calendar.getInstance()
             cal.set(
-                Calendar.YEAR,
-                2004
+                    Calendar.YEAR,
+                    2004
             ) // 2011-05-27 was the earliest date for filtered, moved to non-filtered and can go back to 2004-03-23
             cal.set(Calendar.MONTH, 2)
             cal.set(Calendar.DAY_OF_MONTH, 23)
@@ -205,10 +205,10 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 val yStr = s.lon
                 stormCard.setListener(View.OnClickListener {
                     ObjectIntent(
-                        contextg,
-                        WebscreenAB::class.java,
-                        WebscreenAB.URL,
-                        arrayOf(UtilityMap.genMapUrl(xStr, yStr, "10"), "$xStr,$yStr")
+                            contextg,
+                            WebscreenAB::class.java,
+                            WebscreenAB.URL,
+                            arrayOf(UtilityMap.getMapUrl(xStr, yStr, "10"), "$xStr,$yStr")
                     )
                 })
                 if (s.text.contains("(") && s.text.contains(")")) {
@@ -217,8 +217,8 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     stormCard.setTextHeader(s)
                     stormCard.setListener(View.OnClickListener {
                         scrollView.smoothScrollTo(
-                            0,
-                            0
+                                0,
+                                0
                         )
                     })
                 }
@@ -245,12 +245,12 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private val pDateSetListener =
-        DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-            pYear = year
-            pMonth = monthOfYear
-            pDay = dayOfMonth
-            updateDisplay()
-        }
+            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                pYear = year
+                pMonth = monthOfYear
+                pDay = dayOfMonth
+                updateDisplay()
+            }
 
     private fun updateDisplay() {
         if (cMonth != pMonth || cYear != pYear || cDay != pDay) {
@@ -282,9 +282,9 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val index = v.id
         val x = storms[index].lat
         val y = storms[index].lon
-        val rid1 = UtilityLocation.getNearestOffice(this, "RADAR", LatLon(x, y))
-        menu.add(0, v.id, 0, "Show L2REF from $rid1")
-        menu.add(0, v.id, 0, "Show L2VEL from $rid1")
+        val radarSite = UtilityLocation.getNearestOffice(this, "RADAR", LatLon(x, y))
+        menu.add(0, v.id, 0, "Show L2REF from $radarSite")
+        menu.add(0, v.id, 0, "Show L2VEL from $radarSite")
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
@@ -300,10 +300,10 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         var x = storms[id].lat
         var y = storms[id].lon
         var time = storms[id].time
-        var rid1 = UtilityLocation.getNearestOffice(this, "RADAR", LatLon(x, y))
+        var radarSite = UtilityLocation.getNearestOffice(this, "RADAR", LatLon(x, y))
         time = UtilityStringExternal.truncate(time, 3)
         if (prod == "TR0" || prod == "TV0") {
-            rid1 = WXGLNexrad.getTdwrFromRid(rid1)
+            radarSite = WXGLNexrad.getTdwrFromRid(radarSite)
         }
         if ((storms[id].time.toIntOrNull() ?: 0) < 1000) {
             monthStr = String.format(Locale.US, "%02d", pMonth + 1)
@@ -313,16 +313,16 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             date = yearStr + monthStr + dayStr
             iowaMesoStr = "20$yearStr$monthStr$dayStr"
         }
-        val patternL2 = rid1 + "_" + iowaMesoStr + "_" + time
+        val patternL2 = radarSite + "_" + iowaMesoStr + "_" + time
         if (!PolygonType.LOCDOT.pref) {
             x = "0.0"
             y = "0.0"
         }
         if (prod == "L2REF" || prod == "L2VEL") ObjectIntent(
-            this,
-            WXGLRadarActivity::class.java,
-            WXGLRadarActivity.RID,
-            arrayOf(rid1, "", prod, "", patternL2, x, y)
+                this,
+                WXGLRadarActivity::class.java,
+                WXGLRadarActivity.RID,
+                arrayOf(radarSite, "", prod, "", patternL2, x, y)
         )
     }
 
@@ -340,22 +340,22 @@ class SPCStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (audioPlayMenu(item.itemId, out.toString(), "spcstreports", "spcstreports")) return true
         when (item.itemId) {
             R.id.action_share_all -> UtilityShare.shareText(
-                this,
-                "Storm Reports - $no",
-                out.toString(),
-                bitmap
+                    this,
+                    "Storm Reports - $no",
+                    out.toString(),
+                    bitmap
             )
             R.id.action_share_text -> UtilityShare.shareText(
-                this,
-                "Storm Reports - $no",
-                out.toString()
+                    this,
+                    "Storm Reports - $no",
+                    out.toString()
             )
             R.id.action_share_image -> UtilityShare.shareBitmap(this, "Storm Reports - $no", bitmap)
             R.id.action_lsrbywfo -> ObjectIntent(
-                this,
-                LSRbyWFOActivity::class.java,
-                LSRbyWFOActivity.URL,
-                arrayOf(Location.wfo, "LSR")
+                    this,
+                    LSRbyWFOActivity::class.java,
+                    LSRbyWFOActivity.URL,
+                    arrayOf(Location.wfo, "LSR")
             )
             else -> return super.onOptionsItemSelected(item)
         }

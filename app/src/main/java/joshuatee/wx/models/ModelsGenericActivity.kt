@@ -223,7 +223,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
     private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
         if (om.modelType == ModelType.NCEP) {
             om.rtd = withContext(Dispatchers.IO) {
-                UtilityModelNCEPInputOutput.getRunTime(
+                UtilityModelNcepInputOutput.getRunTime(
                         om.model,
                         om.displayData.param[0],
                         om.sectors[0]

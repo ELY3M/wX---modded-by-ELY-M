@@ -404,7 +404,6 @@ class ColorPicker : View {
     @SuppressLint("SwitchIntDef")
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val intrinsicSize = 2 * (mPreferredColorWheelRadius + mColorPointerHaloRadius)
-
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
@@ -430,7 +429,6 @@ class ColorPicker : View {
             (-mColorWheelRadius).toFloat(), (-mColorWheelRadius).toFloat(),
             mColorWheelRadius.toFloat(), mColorWheelRadius.toFloat()
         )
-
         mColorCenterRadius =
             (mPreferredColorCenterRadius.toFloat() * (mColorWheelRadius.toFloat() / mPreferredColorWheelRadius.toFloat())).toInt()
         mColorCenterHaloRadius =
@@ -461,14 +459,14 @@ class ColorPicker : View {
             unit += 1f
         }
         if (unit <= 0) {
-            mColor = COLORS[0]
-            return COLORS[0]
+            mColor = COLORS.first()
+            return COLORS.first()
         }
         if (unit >= 1) {
-            mColor = COLORS[COLORS.size - 1]
-            return COLORS[COLORS.size - 1]
+            mColor = COLORS.last()
+            return COLORS.last()
         }
-        var p = unit * (COLORS.size - 1)
+        var p = unit * COLORS.lastIndex
         val i = p.toInt()
         p -= i.toFloat()
         val c0 = COLORS[i]

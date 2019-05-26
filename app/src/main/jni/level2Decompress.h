@@ -27,13 +27,13 @@
 #include "bzlib.h"
 //#include <android/log.h>
 
-#ifndef _Included_joshuatee_wX_JNI_Level2Decompress
-#define _Included_joshuatee_wX_JNI_Level2Decompress
+#ifndef _Included_joshuatee_wX_Jni_Level2Decompress
+#define _Included_joshuatee_wX_Jni_Level2Decompress
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_Level2Decompress
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_Level2Decompress
   (JNIEnv * , jclass, jstring, jstring ,jobject,jobject, jint);
 
 #ifdef __cplusplus

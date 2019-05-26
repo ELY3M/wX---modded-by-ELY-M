@@ -23,7 +23,7 @@ class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         } else {
             when (position) {
                 0 -> return LocationFragment()
-                1 -> return SPCFragment()
+                1 -> return SpcFragment()
                 2 -> return MiscFragment()
             }
         }

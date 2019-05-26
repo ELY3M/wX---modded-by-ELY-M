@@ -40,22 +40,22 @@ import joshuatee.wx.util.ProjectionNumbers
 
 object UtilityCanvasWindbarbs {
 
-    fun drawWindbarbs(
+    fun draw(
         context: Context,
         provider: ProjectionType,
-        bm1: Bitmap,
-        rid1: String,
+        bitmap: Bitmap,
+        radarSite: String,
         isGust: Boolean
     ) {
         val textSize = 22
-        UtilityMetar.getStateMetarArrayForWXOGL(context, rid1)
+        UtilityMetar.getStateMetarArrayForWXOGL(context, radarSite)
         val wbCircleXArr = UtilityMetar.x
         val wbCircleYArr = UtilityMetar.y
-        var mercato = false
+        var mercator = false
         if (provider !== ProjectionType.NWS_MOSAIC) {
-            mercato = true
+            mercator = true
         }
-        val canvas = Canvas(bm1)
+        val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.FILL
         paint.strokeWidth = 2f
@@ -68,7 +68,7 @@ object UtilityCanvasWindbarbs {
             paint.color = MyApplication.radarColorObsWindbarbs
         }
         paint.textSize = textSize.toFloat()
-        val pn = ProjectionNumbers(context, rid1, provider)
+        val pn = ProjectionNumbers(radarSite, provider)
         var pixXInit: Double
         var pixYInit: Double
         var tmpCoords: DoubleArray
@@ -235,7 +235,7 @@ object UtilityCanvasWindbarbs {
         // draw aviation circle on top
         wbCircleXArr.indices.forEach { k ->
             if (UtilityMetar.obsArrAviationColor.size > k) {
-                if (mercato) {
+                if (mercator) {
                     paint.color = UtilityMetar.obsArrAviationColor[k]
                     tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(
                         wbCircleXArr[k],

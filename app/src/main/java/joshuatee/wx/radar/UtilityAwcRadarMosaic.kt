@@ -104,8 +104,7 @@ object UtilityAwcRadarMosaic {
             imageType = ".jpg"
             topUrlAddOn = "&type=" + product.replace("sat_", "")
         }
-        val productUrl =
-            "https://www.aviationweather.gov/" + baseAddOnTopUrl + "plot?region=" + sector + topUrlAddOn
+        val productUrl = "https://www.aviationweather.gov/" + baseAddOnTopUrl + "plot?region=" + sector + topUrlAddOn
         val html = productUrl.getHtml()
         val urls = html.parseColumn(
             "image_url.[0-9]{1,2}. = ./data/obs/" + baseAddOn + "([0-9]{8}/[0-9]{2}/[0-9]{8}_[0-9]{4}_" + product + "_"

@@ -28,7 +28,7 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 
-import joshuatee.wx.activitiesmisc.CAPAlert
+import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.objects.TextSize
 import joshuatee.wx.util.UtilityString
 
@@ -71,7 +71,7 @@ class ObjectCardAlertSummaryItem(context: Context) {
         objCard.card.setOnClickListener(fn)
     }
 
-    fun setTextFields(nwsOffice: String, nwsLoc: String, ca: CAPAlert) {
+    fun setTextFields(nwsOffice: String, nwsLoc: String, ca: CapAlert) {
         val title: String
         val startTime: String
         var endTime = ""

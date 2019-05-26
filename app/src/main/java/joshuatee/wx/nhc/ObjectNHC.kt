@@ -55,12 +55,12 @@ class ObjectNhc(val context: Context, private val dynamicview: LinearLayout) {
 
     fun getData() {
         listOf(
-            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png",
-            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png",
-            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png",
-            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png",
-            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png",
-            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png"
+                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png",
+                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png",
+                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png",
+                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png",
+                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png",
+                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png"
         ).forEach { bitmaps.add(it.getImage()) }
         var dataRet: ObjectNhcStormInfo
         (1 until 6).forEach {
@@ -117,8 +117,8 @@ class ObjectNhc(val context: Context, private val dynamicview: LinearLayout) {
                     cAtlData.setListener(View.OnClickListener {
                         ObjectIntent(
                                 context,
-                                NHCStormActivity::class.java,
-                                NHCStormActivity.URL,
+                                NhcStormActivity::class.java,
+                                NhcStormActivity.URL,
                                 arrayOf(url, title, "nosound", imgUrl1, imgUrl2, wallet)
                         )
                     })
@@ -143,10 +143,10 @@ class ObjectNhc(val context: Context, private val dynamicview: LinearLayout) {
                     val wallet = pacWalletList[k]
                     cPacData.setListener(View.OnClickListener {
                         ObjectIntent(
-                            context,
-                            NHCStormActivity::class.java,
-                            NHCStormActivity.URL,
-                            arrayOf(url, title, "nosound", imgUrl1, imgUrl2, wallet)
+                                context,
+                                NhcStormActivity::class.java,
+                                NhcStormActivity.URL,
+                                arrayOf(url, title, "nosound", imgUrl1, imgUrl2, wallet)
                         )
                     })
                 }

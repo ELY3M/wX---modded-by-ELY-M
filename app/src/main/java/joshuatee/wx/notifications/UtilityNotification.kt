@@ -38,8 +38,8 @@ import joshuatee.wx.audio.AudioServiceBack
 import joshuatee.wx.audio.AudioServiceForward
 import joshuatee.wx.audio.AudioServiceToggleState
 import joshuatee.wx.activitiesmisc.TextScreenActivity
-import joshuatee.wx.audio.UtilityTTS
-import joshuatee.wx.fragments.UtilityNWS
+import joshuatee.wx.audio.UtilityTts
+import joshuatee.wx.fragments.UtilityNws
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.spc.UtilitySpc
@@ -62,7 +62,7 @@ object UtilityNotification {
 
     private var notiChannelInitialized = false
 
-    internal fun sendNotif(context: Context, locNum: String, y: Int): String {
+    internal fun send(context: Context, locNum: String, y: Int): String {
         val locNumInt = (locNum.toIntOrNull() ?: 1) - 1
         var notifUrls = ""
         val i = 0
@@ -295,9 +295,9 @@ object UtilityNotification {
                         }
                     }
                     val bmc = if (Location.isUS(locNumInt)) {
-                        UtilityNWS.getIcon(context, objCc.iconUrl)
+                        UtilityNws.getIcon(context, objCc.iconUrl)
                     } else {
-                        UtilityNWS.getIcon(
+                        UtilityNws.getIcon(
                                 context,
                                 UtilityCanada.translateIconNameCurrentConditions(
                                         objCc.data,
@@ -438,7 +438,7 @@ object UtilityNotification {
             if (MyApplication.notifSoundRepeat)
                 noti.flags = noti.flags or Notification.FLAG_INSISTENT
             if (MyApplication.notifTts)
-                UtilityTTS.synthesizeTextAndPlay(
+                UtilityTts.synthesizeTextAndPlay(
                         notification.context,
                         notification.noMain,
                         notification.noMain
@@ -478,7 +478,7 @@ object UtilityNotification {
         else
             MyApplication.mediaNotifTtsTitle = title
         val pauseIcon: Int =
-                if (UtilityTTS.mMediaPlayer != null && !UtilityTTS.mMediaPlayer!!.isPlaying)
+                if (UtilityTts.mMediaPlayer != null && !UtilityTts.mMediaPlayer!!.isPlaying)
                     MyApplication.ICON_PAUSE_PRESSED
                 else
                     MyApplication.ICON_PAUSE
@@ -604,7 +604,7 @@ object UtilityNotification {
             if (MyApplication.notifSoundRepeat)
                 noti.flags = noti.flags or Notification.FLAG_INSISTENT
             if (MyApplication.notifTts)
-                UtilityTTS.synthesizeTextAndPlay(context, noMain, noMain)
+                UtilityTts.synthesizeTextAndPlay(context, noMain, noMain)
         } else {
             noti = NotificationCompat.BigTextStyle(
                     NotificationCompat.Builder(context, notiChannelStrNoSound)

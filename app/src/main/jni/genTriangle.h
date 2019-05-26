@@ -24,13 +24,13 @@
 #include <math.h>
 #include <stdlib.h>
 
-#ifndef _Included_joshuatee_wX_JNI_genTriangle
-#define _Included_joshuatee_wX_JNI_genTriangle
+#ifndef _Included_joshuatee_wX_Jni_genTriangle
+#define _Included_joshuatee_wX_Jni_genTriangle
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_genTriangle
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genTriangle
   (JNIEnv * ,jclass, jobject , jobject, jfloat, jfloat, jfloat, jfloat, jfloat , jdoubleArray ,jdoubleArray ,jint,jfloat,jobject,jbooleanArray);
 
 #ifdef __cplusplus

@@ -38,7 +38,7 @@ import joshuatee.wx.util.UtilityTime
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 
-internal object UtilityModelSPCHRRRInputOutput {
+internal object UtilityModelSpcHrrrInputOutput {
 
     val runTime: RunTimeData
         get() {
@@ -103,9 +103,9 @@ internal object UtilityModelSPCHRRRInputOutput {
     }
 
     private fun getSectorCode(sectorName: String) =
-        (0 until UtilityModelSPCHRRRInterface.sectors.size)
-            .firstOrNull { sectorName == UtilityModelSPCHRRRInterface.sectors[it] }
-            ?.let { UtilityModelSPCHRRRInterface.sectorCodes[it] }
+        (0 until UtilityModelSpcHrrrInterface.sectors.size)
+            .firstOrNull { sectorName == UtilityModelSpcHrrrInterface.sectors[it] }
+            ?.let { UtilityModelSpcHrrrInterface.sectorCodes[it] }
             ?: "S19"
 
 

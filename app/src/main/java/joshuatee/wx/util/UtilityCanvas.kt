@@ -26,7 +26,6 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.Paint.Style
 import android.graphics.drawable.BitmapDrawable
-import android.util.Log
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.PolygonType
@@ -39,14 +38,12 @@ import joshuatee.wx.objects.GeographyType
 
 internal object UtilityCanvas {
 
-    val TAG = "joshuatee UtilityCanvas"
-    fun addWarnings(context: Context, provider: ProjectionType, bitmap: Bitmap, rid: String) {
-        val mercato = provider.isMercator
+    fun addWarnings(provider: ProjectionType, bitmap: Bitmap, radarSite: String) {
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.STROKE
-        val wallpath = Path()
-        wallpath.reset()
+        val wallPath = Path()
+        wallPath.reset()
         val paintList = listOf(
     	MyApplication.radarColorTor,
 	    MyApplication.radarColorSvr,
@@ -68,7 +65,7 @@ internal object UtilityCanvas {
         if (provider.needsCanvasShift) {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         }
-        val pn = ProjectionNumbers(context, rid, provider)
+        val pn = ProjectionNumbers(radarSite, provider)
         paint.strokeWidth = pn.polygonWidth.toFloat()
         warningDataList.forEachIndexed { idx, it ->
             paint.color = paintList[idx]
@@ -81,18 +78,16 @@ internal object UtilityCanvas {
                 warningAl[i] =
                     warn.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
             }
-            canvasDrawWarningsNewAPI(warningAl, vtecAl, canvas, wallpath, paint, mercato, pn)
+            canvasDrawWarningsNewApi(warningAl, vtecAl, canvas, wallPath, paint, provider.isMercator, pn)
         }
     }
 
     fun drawCitiesUS(
-        context: Context,
         provider: ProjectionType,
         bitmap: Bitmap,
-        rid: String,
+        radarSite: String,
         textSize: Int
     ) {
-        val mercator = provider.isMercator
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.FILL
@@ -105,12 +100,12 @@ internal object UtilityCanvas {
             paint.color = Color.rgb(0, 0, 0)
         }
         paint.textSize = textSize.toFloat()
-        val pn = ProjectionNumbers(context, rid, provider)
+        val pn = ProjectionNumbers(radarSite, provider)
         var pixXInit: Double
         var pixYInit: Double
         var tmpCoords: DoubleArray
         UtilityCities.CITY_OBJ.indices.forEach {
-            tmpCoords = if (mercator) {
+            tmpCoords = if (provider.isMercator) {
                 UtilityCanvasProjection.computeMercatorNumbers(
                     UtilityCities.CITY_OBJ[it]!!.x,
                     UtilityCities.CITY_OBJ[it]!!.y,
@@ -140,12 +135,10 @@ internal object UtilityCanvas {
     }
 
     fun addLocationDotForCurrentLocation(
-        context: Context,
         provider: ProjectionType,
         bitmap: Bitmap,
-        rid: String
+        radarSite: String
     ) {
-        val mercato = provider.isMercator
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.FILL
@@ -157,17 +150,15 @@ internal object UtilityCanvas {
         val locXCurrent = Location.x
         var locYCurrent = Location.y
         locYCurrent = locYCurrent.replace("-", "")
-        val pn = ProjectionNumbers(context, rid, provider)
+        val pn = ProjectionNumbers(radarSite, provider)
         val x = locXCurrent.toDoubleOrNull() ?: 0.0
         val y = locYCurrent.toDoubleOrNull() ?: 0.0
         val tmpCoords: DoubleArray
-        UtilityLog.d("wx", "mercato in addLocationDotForCurrentLocation: "+mercato)
-        tmpCoords = if (mercato) {
+        tmpCoords = if (provider.isMercator) {
             UtilityCanvasProjection.computeMercatorNumbers(x, y, pn)
         } else {
             UtilityCanvasProjection.compute4326Numbers(x, y, pn)
         }
-        //tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x, y, pn)
         val pixXInit = tmpCoords[0]
         val pixYInit = tmpCoords[1]
         paint.color = MyApplication.radarColorLocdot
@@ -184,24 +175,22 @@ internal object UtilityCanvas {
 
     }
 
-    fun addMCD(
-        context: Context,
+    fun addMcd(
         provider: ProjectionType,
         bitmap: Bitmap,
-        rid1: String,
+        radarSite: String,
         polyType: PolygonType
     ) {
-        val mercato = provider.isMercator
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.STROKE
         paint.color = Color.rgb(255, 0, 0)
-        val wallpath = Path()
-        wallpath.reset()
+        val wallPath = Path()
+        wallPath.reset()
         if (provider.needsCanvasShift) {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         }
-        val pn = ProjectionNumbers(context, rid1, provider)
+        val pn = ProjectionNumbers(radarSite, provider)
         paint.strokeWidth = pn.polygonWidth.toFloat()
         paint.color = polyType.color
         var prefToken = ""
@@ -214,16 +203,16 @@ internal object UtilityCanvas {
             }
         }
         val tmpArr = MyApplication.colon.split(prefToken).toList()
-        canvasDrawWarnings(tmpArr, canvas, wallpath, paint, mercato, pn)
+        canvasDrawWarnings(tmpArr, canvas, wallPath, paint, provider.isMercator, pn)
     }
 
     // used by MCD/WAT/MPD
     private fun canvasDrawWarnings(
         warningAl: List<String>,
         canvas: Canvas,
-        wallpath: Path,
+        wallPath: Path,
         paint: Paint,
-        mercato: Boolean,
+        mercator: Boolean,
         pn: ProjectionNumbers
     ) {
         var pixXInit: Double
@@ -240,41 +229,41 @@ internal object UtilityCanvas {
             val y = testArr.filterIndexed { idx: Int, _: String -> idx and 1 != 0 }.map {
                 it.toDoubleOrNull() ?: 0.0
             }
-            wallpath.reset()
+            wallPath.reset()
             if (y.isNotEmpty() && x.isNotEmpty()) {
-                tmpCoords = if (mercato) {
+                tmpCoords = if (mercator) {
                     UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], pn)
                 } else {
                     UtilityCanvasProjection.compute4326Numbers(x[0], y[0], pn)
                 }
                 pixXInit = tmpCoords[0]
                 pixYInit = tmpCoords[1]
-                wallpath.moveTo(pixXInit.toFloat(), pixYInit.toFloat())
+                wallPath.moveTo(pixXInit.toFloat(), pixYInit.toFloat())
                 if (x.size == y.size) {
                     (1 until x.size).forEach {
-                        tmpCoords = if (mercato) {
+                        tmpCoords = if (mercator) {
                             UtilityCanvasProjection.computeMercatorNumbers(x[it], y[it], pn)
                         } else {
                             UtilityCanvasProjection.compute4326Numbers(x[it], y[it], pn)
                         }
                         pixX = tmpCoords[0]
                         pixY = tmpCoords[1]
-                        wallpath.lineTo(pixX.toFloat(), pixY.toFloat())
+                        wallPath.lineTo(pixX.toFloat(), pixY.toFloat())
                     }
-                    wallpath.lineTo(pixXInit.toFloat(), pixYInit.toFloat())
-                    canvas.drawPath(wallpath, paint)
+                    wallPath.lineTo(pixXInit.toFloat(), pixYInit.toFloat())
+                    canvas.drawPath(wallPath, paint)
                 }
             }
         }
     }
 
-    private fun canvasDrawWarningsNewAPI(
-        warningAl: List<String>,
-        vtecAl: List<String>,
+    private fun canvasDrawWarningsNewApi(
+        warnings: List<String>,
+        vtecs: List<String>,
         canvas: Canvas,
-        wallpath: Path,
+        wallPath: Path,
         paint: Paint,
-        mercato: Boolean,
+        mercator: Boolean,
         pn: ProjectionNumbers
     ) {
         var pixXInit: Double
@@ -284,42 +273,42 @@ internal object UtilityCanvas {
         var pixY: Double
         var polyCount = -1
         var testArr: Array<String>
-        warningAl.forEach { warn ->
+        warnings.forEach { warning ->
             polyCount += 1
-            if (vtecAl.isNotEmpty() && vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith(
+            if (vtecs.isNotEmpty() && vtecs.size > polyCount && !vtecs[polyCount].startsWith("0.EXP") && !vtecs[polyCount].startsWith(
                     "0.CAN"
                 )
             ) {
-                testArr = MyApplication.space.split(warn)
+                testArr = MyApplication.space.split(warning)
                 val y = testArr.filterIndexed { idx: Int, _: String -> idx and 1 == 0 }.map {
                     it.toDoubleOrNull() ?: 0.0
                 }
                 val x = testArr.filterIndexed { idx: Int, _: String -> idx and 1 != 0 }.map {
                     it.toDoubleOrNull() ?: 0.0
                 }
-                wallpath.reset()
+                wallPath.reset()
                 if (y.isNotEmpty() && x.isNotEmpty()) {
-                    tmpCoords = if (mercato) {
+                    tmpCoords = if (mercator) {
                         UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], pn)
                     } else {
                         UtilityCanvasProjection.compute4326Numbers(x[0], y[0], pn)
                     }
                     pixXInit = tmpCoords[0]
                     pixYInit = tmpCoords[1]
-                    wallpath.moveTo(pixXInit.toFloat(), pixYInit.toFloat())
+                    wallPath.moveTo(pixXInit.toFloat(), pixYInit.toFloat())
                     if (x.size == y.size) {
                         (1 until x.size).forEach {
-                            tmpCoords = if (mercato) {
+                            tmpCoords = if (mercator) {
                                 UtilityCanvasProjection.computeMercatorNumbers(x[it], y[it], pn)
                             } else {
                                 UtilityCanvasProjection.compute4326Numbers(x[it], y[it], pn)
                             }
                             pixX = tmpCoords[0]
                             pixY = tmpCoords[1]
-                            wallpath.lineTo(pixX.toFloat(), pixY.toFloat())
+                            wallPath.lineTo(pixX.toFloat(), pixY.toFloat())
                         }
-                        wallpath.lineTo(pixXInit.toFloat(), pixYInit.toFloat())
-                        canvas.drawPath(wallpath, paint)
+                        wallPath.lineTo(pixXInit.toFloat(), pixYInit.toFloat())
+                        canvas.drawPath(wallPath, paint)
                     }
                 }
             }

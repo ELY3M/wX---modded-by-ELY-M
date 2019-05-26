@@ -21,7 +21,7 @@
 
 #include "genIndex.h"
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_genIndex(JNIEnv * env, jclass clazz,  jobject index_buff, jint len, jint break_size) {
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndex(JNIEnv * env, jclass clazz,  jobject index_buff, jint len, jint break_size) {
 
 	jshort* iBuff = (*env)->GetDirectBufferAddress(env, index_buff);
 	int i = 0;
@@ -56,7 +56,7 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_genIndex(JNIEnv * env, jclass clazz
 	}
 }
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_genIndexLine(JNIEnv * env, jclass clazz,  jobject index_buff, jint len, jint break_size) {
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndexLine(JNIEnv * env, jclass clazz,  jobject index_buff, jint len, jint break_size) {
 
 	jshort* iBuff = (*env)->GetDirectBufferAddress(env, index_buff);
 	int i = 0;

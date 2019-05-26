@@ -41,7 +41,7 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 import kotlinx.coroutines.*
 
-class SPCSWOStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListener,
+class SpcSwoStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListener,
     OnMenuItemClickListener {
 
     // Show state level SPC SWO grapahics for D1-3

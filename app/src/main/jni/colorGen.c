@@ -21,7 +21,7 @@
 
 #include "colorGen.h"
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_colorGen
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_colorGen
 (JNIEnv * env, jclass clazz,  jobject color_buff, jint len, jbyteArray col){
 
 	jbyte* cBuff =  (*env)-> GetDirectBufferAddress(env,color_buff);

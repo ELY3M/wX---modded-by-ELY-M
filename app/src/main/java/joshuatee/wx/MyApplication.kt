@@ -36,7 +36,7 @@ import android.util.TypedValue
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
-import joshuatee.wx.audio.UtilityTTS
+import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.notifications.UtilityNotificationTextProduct
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectPolygonWarning
@@ -131,7 +131,7 @@ class MyApplication : Application() {
                 .readTimeout(15, TimeUnit.SECONDS)
                 .addInterceptor(okhttp3Interceptor)
                 .build()
-        UtilityTTS.initTts(applicationContext)
+        UtilityTts.initTts(applicationContext)
         UtilityCities.initCitiesArray()
         if (!loadedBuffers) {
             initBuffers(this)

@@ -30,7 +30,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UtilityWidget
 import joshuatee.wx.WX
-import joshuatee.wx.fragments.UtilityNWS
+import joshuatee.wx.fragments.UtilityNws
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.Utility
 
@@ -50,7 +50,7 @@ class ObjectWidgetCC(context: Context) {
         val sevenDay = Utility.readPref(context, "7DAY_EXT_WIDGET", "No data")
         var bitmap = UtilityImg.getBlankBitmap()
         if (Location.isUS(widgetLocNumberAsInteger)) {
-            bitmap = UtilityNWS.getIcon(context, iconUrl)
+            bitmap = UtilityNws.getIcon(context, iconUrl)
         }
         val stringSeparator = " - "
         val currentConditionsList = currentConditionsString.split(stringSeparator).dropLastWhile { it.isEmpty() }

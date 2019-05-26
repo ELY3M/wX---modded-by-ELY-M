@@ -272,7 +272,7 @@ void readData(jbyte* bin_word, long offset, int cnt, short s) {
 	bin_word_idx = bin_word_idx + cnt;
 }
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_level2Decode(JNIEnv * env, jclass clazz, jstring src, jobject bin_word_g,jobject radial_start_angle_g, jint product_code, jobject bb_days, jobject bb_msecs){
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_level2Decode(JNIEnv * env, jclass clazz, jstring src, jobject bin_word_g,jobject radial_start_angle_g, jint product_code, jobject bb_days, jobject bb_msecs){
 
 	jbyte* bin_word = (*env)->GetDirectBufferAddress(env, bin_word_g);
 	jfloat* radial_start_angle = (*env)->GetDirectBufferAddress(env, radial_start_angle_g);

@@ -27,13 +27,13 @@
 #include <stdio.h>
 //#include <android/log.h>
 
-#ifndef _Included_joshuatee_wx_JNI_level2Decode
-#define _Included_joshuatee_wx_JNI_level2Decode
+#ifndef _Included_joshuatee_wx_Jni_level2Decode
+#define _Included_joshuatee_wx_Jni_level2Decode
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_level2Decode
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_level2Decode
         (JNIEnv * , jclass , jstring  ,jobject ,jobject , jint , jobject, jobject );
 
 #ifdef __cplusplus

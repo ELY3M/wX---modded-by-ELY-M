@@ -27,7 +27,7 @@ import androidx.core.app.NotificationCompat
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.nhc.NHCStormActivity
+import joshuatee.wx.nhc.NhcStormActivity
 import joshuatee.wx.nhc.ObjectNhcStormInfo
 import joshuatee.wx.nhc.UtilityNhc
 import joshuatee.wx.util.Utility
@@ -44,7 +44,7 @@ object UtilityNotificationNhc {
         }
     }
 
-    internal fun sendNhcNotifications(context: Context, epac: Boolean, atl: Boolean): String {
+    internal fun send(context: Context, epac: Boolean, atl: Boolean): String {
         var notifUrls = ""
         val muteStr = Utility.readPref(context, "NOTIF_NHC_MUTE", "")
         val atlSumList = mutableListOf<String>()
@@ -89,7 +89,7 @@ object UtilityNotificationNhc {
         if (atl) {
             (0 until atlSumList.size).forEach {
                 if (!muteStr.contains(atlTitleList[it]))
-                    notifUrls += sendNhcNotification(
+                    notifUrls += sendNotification(
                             context,
                             atlLinkList[it],
                             Utility.fromHtml(atlSumList[it]),
@@ -108,7 +108,7 @@ object UtilityNotificationNhc {
         if (epac) {
             (0 until pacSumList.size).forEach {
                 if (!muteStr.contains(pacTitleList[it]))
-                    notifUrls += sendNhcNotification(
+                    notifUrls += sendNotification(
                             context,
                             pacLinkList[it],
                             Utility.fromHtml(pacSumList[it]),
@@ -127,7 +127,7 @@ object UtilityNotificationNhc {
         return notifUrls
     }
 
-    private fun sendNhcNotification(
+    private fun sendNotification(
             context: Context, notifUrl: String, mdNo: String, notifTitle: String, iconAlert: Int,
             img1Url: String, img2Url: String, soundPref: Boolean, wallet: String
     ): String {
@@ -137,7 +137,7 @@ object UtilityNotificationNhc {
         val noSummary: String = mdNo
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         val objPI = ObjectPendingIntents(
-                context, NHCStormActivity::class.java, NHCStormActivity.URL,
+                context, NhcStormActivity::class.java, NhcStormActivity.URL,
                 arrayOf(notifUrl, notifTitle, "nosound", img1Url, img2Url, wallet),
                 arrayOf(notifUrl, notifTitle, "sound", img1Url, img2Url, wallet)
         )

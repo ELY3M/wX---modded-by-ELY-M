@@ -51,7 +51,7 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
-class SPCMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
+class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
         AdapterView.OnItemSelectedListener {
 
     // native interface to the mobile SPC meso website
@@ -388,7 +388,7 @@ class SPCMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
             R.id.action_help -> getHelp()
             R.id.action_multipane -> ObjectIntent(
                     this,
-                    SPCMesoActivity::class.java,
+                    SpcMesoActivity::class.java,
                     INFO,
                     arrayOf("", "2", prefModel)
             )

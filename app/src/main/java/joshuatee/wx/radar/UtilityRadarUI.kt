@@ -28,7 +28,7 @@ import android.opengl.GLSurfaceView
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.MyApplication
-import joshuatee.wx.activitiesmisc.AdhocForecastActivity
+import joshuatee.wx.activitiesmisc.ForecastActivity
 import joshuatee.wx.activitiesmisc.ImageShowActivity
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.external.UtilityStringExternal
@@ -37,7 +37,7 @@ import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.UtilityLocation
-import joshuatee.wx.spc.SPCMCDWShowActivity
+import joshuatee.wx.spc.SpcMcdWatchShowActivity
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectImageMap
 
@@ -82,8 +82,8 @@ internal object UtilityRadarUI {
     private fun showNearestForecast(context: Context, glview: WXGLSurfaceView) {
         ObjectIntent(
                 context,
-                AdhocForecastActivity::class.java,
-                AdhocForecastActivity.URL,
+                ForecastActivity::class.java,
+                ForecastActivity.URL,
                 arrayOf(glview.newY.toString(), "-" + glview.newX.toString())
         )
     }
@@ -185,15 +185,15 @@ internal object UtilityRadarUI {
             "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.getRadarSiteName(it.name)
         }
         val obsSite = UtilityMetar.findClosestObservation(
-            context,
-            glview.latLon
+                context,
+                glview.latLon
         )
-        alertDialogRadarLongpressAl.add("Show warning text")
+        alertDialogRadarLongpressAl.add("Show Warning text")
         if (MyApplication.radarSpsWarnings) {
             alertDialogRadarLongpressAl.add("Show special weather text")
         }
         if (MyApplication.radarWatMcd) {
-            alertDialogRadarLongpressAl.add("Show watch text")
+            alertDialogRadarLongpressAl.add("Show Watch text")
             alertDialogRadarLongpressAl.add("Show MCD text")
         }
         if (MyApplication.radarMpd) {
@@ -224,13 +224,13 @@ internal object UtilityRadarUI {
             fn: (strName: String) -> Unit
     ) {
         when {
-            strName.contains("Show warning text") -> {
+            strName.contains("Show Warning text") -> {
                 showNearestWarning(context, glview)
             }
             strName.contains("Show special weather text") -> {
                 showNearestSps(context, glview)
             }
-            strName.contains("Show watch text") -> {
+            strName.contains("Show Watch text") -> {
                 showNearestProduct(context, PolygonType.WATCH, glview, uiDispatcher)
             }
             strName.contains("Show MCD text") -> {
@@ -502,7 +502,7 @@ internal object UtilityRadarUI {
                 oglr.deconstructWBLines()
             }
             if (PolygonType.SWO.pref && !archiveMode) {
-                UtilitySWOD1.getSwo()
+                UtilitySwoD1.get()
                 oglr.constructSwoLines()
             } else {
                 oglr.deconstructSwoLines()
@@ -528,8 +528,8 @@ internal object UtilityRadarUI {
         if (text != "") {
             ObjectIntent(
                     context,
-                    SPCMCDWShowActivity::class.java,
-                    SPCMCDWShowActivity.NO,
+                    SpcMcdWatchShowActivity::class.java,
+                    SpcMcdWatchShowActivity.NO,
                     arrayOf(text, "", type.toString())
             )
 

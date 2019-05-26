@@ -21,7 +21,7 @@
 
 #include "level2GenRadials.h"
 
-JNIEXPORT jint JNICALL Java_joshuatee_wx_JNI_level2GenRadials(JNIEnv * env, jclass clazz, jobject rad_buff, jobject color_buff, jobject bin_buff, jobject radial_start, jint number_of_radials, jint num_range_bins, jfloat bin_size, jboolean bg_color, jobject colormap_r, jobject colormap_g, jobject colormap_b, int product_code){
+JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_level2GenRadials(JNIEnv * env, jclass clazz, jobject rad_buff, jobject color_buff, jobject bin_buff, jobject radial_start, jint number_of_radials, jint num_range_bins, jfloat bin_size, jboolean bg_color, jobject colormap_r, jobject colormap_g, jobject colormap_b, int product_code){
 
 	unsigned char* c_r = (*env)->GetDirectBufferAddress(env,colormap_r);
 	unsigned char* c_g = (*env)->GetDirectBufferAddress(env,colormap_g);

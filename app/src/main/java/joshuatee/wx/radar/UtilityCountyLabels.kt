@@ -33,7 +33,7 @@ internal object UtilityCountyLabels {
     var countyLat = DoubleArray(1)
     var countyLon = DoubleArray(1)
 
-    fun populateArrays(context: Context) {
+    fun create(context: Context) {
         if (!initialized) {
             initialized = true
             val text: String

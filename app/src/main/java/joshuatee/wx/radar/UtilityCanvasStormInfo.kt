@@ -47,13 +47,12 @@ object UtilityCanvasStormInfo {
     fun drawNexRadStormMotion(
         context: Context,
         provider: ProjectionType,
-        bm1: Bitmap,
-        rid: String
+        bitmap: Bitmap,
+        radarSite: String
     ) {
         val textSize = 22
-        WXGLDownload.getNidsTab(context, "STI", rid.toLowerCase(), stiBaseFn + "")
-        val mercato = provider.isMercator
-        val canvas = Canvas(bm1)
+        WXGLDownload.getNidsTab(context, "STI", radarSite.toLowerCase(), stiBaseFn + "")
+        val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.FILL
         paint.strokeWidth = 2f
@@ -64,13 +63,13 @@ object UtilityCanvasStormInfo {
             paint.color = Color.rgb(0, 0, 0)
         }
         paint.textSize = textSize.toFloat()
-        val pn = ProjectionNumbers(context, rid, provider)
+        val pn = ProjectionNumbers(radarSite, provider)
         var tmpCoords: DoubleArray
         var tmpCoords2: DoubleArray
         val stormList = mutableListOf<Double>()
         val stormListArr: FloatArray
         val retStr: String
-        val location = UtilityLocation.getSiteLocation(context, rid)
+        val location = UtilityLocation.getSiteLocation(context, radarSite)
         try {
             val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, stiBaseFn + ""))
             dis.bigEndian = true
@@ -231,11 +230,11 @@ object UtilityCanvasStormInfo {
         stormList.indices.forEach { stormListArr[it] = stormList[it].toFloat() }
         paint.color = MyApplication.radarColorSti
         canvas.drawLines(stormListArr, paint)
-        val wallpath = Path()
-        wallpath.reset()
+        val wallPath = Path()
+        wallPath.reset()
         var i = 0
         while (i < stormListArr.size) {
-            if (mercato) {
+            if (provider.isMercator) {
                 tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(
                     stormListArr[i].toDouble(),
                     stormListArr[i + 1].toDouble(),
@@ -258,10 +257,10 @@ object UtilityCanvasStormInfo {
                     pn
                 )
             }
-            wallpath.reset()
-            wallpath.moveTo(tmpCoords[0].toFloat(), tmpCoords[1].toFloat())
-            wallpath.lineTo(tmpCoords2[0].toFloat(), tmpCoords2[1].toFloat())
-            canvas.drawPath(wallpath, paint)
+            wallPath.reset()
+            wallPath.moveTo(tmpCoords[0].toFloat(), tmpCoords[1].toFloat())
+            wallPath.lineTo(tmpCoords2[0].toFloat(), tmpCoords2[1].toFloat())
+            canvas.drawPath(wallPath, paint)
             i += 4
         }
     }

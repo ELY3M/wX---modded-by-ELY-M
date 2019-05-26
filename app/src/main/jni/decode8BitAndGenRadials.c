@@ -33,7 +33,7 @@ unsigned short toShort(char* value){
 	return cs.value;
 }
 
-JNIEXPORT jint JNICALL Java_joshuatee_wx_JNI_decode8BitAndGenRadials
+JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_decode8BitAndGenRadials
 (JNIEnv * env, jclass clazz, jstring src, jlong seek_start,jint length,jobject i_buff, jobject o_buff, jobject rad_buff, jobject color_buff, jfloat bin_size, jbyte bg_color_red, jbyte bg_color_green, jbyte bg_color_blue, jobject colormap_r, jobject colormap_g, jobject colormap_b){
 
 	jbyte* color_r =  (*env)-> GetDirectBufferAddress(env,colormap_r);

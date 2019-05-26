@@ -36,7 +36,7 @@ class VoiceCommandActivity : Activity() {
     private val requestOk = 1
     private var nws1Current = ""
     private var nws1StateCurrent = ""
-    private var rid1 = ""
+    private var radarSite = ""
     private lateinit var mainView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,10 +44,10 @@ class VoiceCommandActivity : Activity() {
         mainView = findViewById(android.R.id.content)
         nws1Current = Location.wfo
         nws1StateCurrent = Location.state
-        rid1 = Location.rid
-        if (UtilityTTS.mMediaPlayer != null && UtilityTTS.mMediaPlayer!!.isPlaying) {
-            UtilityTTS.mMediaPlayer!!.stop()
-            UtilityTTS.ttsIsPaused = true
+        radarSite = Location.rid
+        if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying) {
+            UtilityTts.mMediaPlayer!!.stop()
+            UtilityTts.ttsIsPaused = true
         }
         val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US")
@@ -55,7 +55,7 @@ class VoiceCommandActivity : Activity() {
             startActivityForResult(i, requestOk)
         } catch (e: Exception) {
             Toast.makeText(this, "Error initializing speech to text engine.", Toast.LENGTH_LONG)
-                .show()
+                    .show()
         }
     }
 
@@ -64,14 +64,14 @@ class VoiceCommandActivity : Activity() {
         if (requestCode == requestOk && resultCode == RESULT_OK) {
             val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             UtilityUI.makeSnackBar(mainView, thingsYouSaid[0])
-            val addrStrTmp = thingsYouSaid[0]
+            val address = thingsYouSaid[0]
             val gotHit = UtilityVoiceCommand.processCommand(
-                this,
-                mainView,
-                addrStrTmp,
-                rid1,
-                nws1Current,
-                nws1StateCurrent
+                    this,
+                    mainView,
+                    address,
+                    radarSite,
+                    nws1Current,
+                    nws1StateCurrent
             )
             if (!gotHit) {
                 finish()

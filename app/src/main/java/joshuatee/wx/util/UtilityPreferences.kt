@@ -25,7 +25,7 @@ import android.content.Context
 
 object UtilityPreferences {
 
-    fun writePrefs(context: Context, prefList: List<String>) {
+    fun write(context: Context, prefList: List<String>) {
         (0 until prefList.size step 2).forEach {
             Utility.writePref(context, prefList[it], prefList[it + 1])
         }

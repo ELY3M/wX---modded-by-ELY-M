@@ -32,7 +32,7 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 import joshuatee.wx.RegExp
 
-internal object UtilityModelsSPCSREFInputOutput {
+internal object UtilityModelSpcSrefInputOutput {
 
     val runTime: RunTimeData
         get() {

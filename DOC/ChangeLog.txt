@@ -19,13 +19,13 @@
 // TODO add vtec end date check to tor notif
 // TODO camelCase filenames in particular when acronyms longer then 2 chars exist
 // TODO add user accessible debug log from try-catch data
-// TODO remove unused prefs
 // TODO color pal edit for SRM and L2 VEL/REF
 // TODO don't display full precision in lat/lon in settings location edit
-// TODO  enhance formatting for NHC Storms
-// TODO - update polygons when radar is open (in addition to background). Possibly use two sets of prefs , cloned at radar start
-// TODO - color pal , allow cloning of a user created pal
-// TODO - bug , SPC Meso swipe left/right takes on extra to get started
+// TODO enhance formatting for NHC Storms
+// TODO update polygons when radar is open (in addition to background). Possibly use two sets of prefs , cloned at radar start
+// TODO color pal , allow cloning of a user created pal
+// TODO bug , SPC Meso swipe left/right takes on extra to get started
+// TODO look into tornado instead of #tornado for twitter embedded widget
 
 [ADD] - adding something new - method, file, etc. to the repo
 [REM] - remove items
@@ -35,6 +35,20 @@
 [REF] - refactor a method, group, variable, etc.
 [MER] - merge
 
+55201 2019_05_26    [FIX] at joshuatee.wx.models.UtilityModelNcepInputOutput.getAnimation(UtilityModelNcepInputOutput.kt:96)
+                       java.lang.IndexOutOfBoundsException: Index: 16, Size: 16
+                       (pre-launch report routinely does this by doing odd interactions, trigger animation in multi-pane, switch models, hit back arrow )
+                    [REF] make better use of List lastIndex and last()
+55200 2019_05_26    [REF] better variable naming
+                    [FIX] modify native code to refer to Jni instead of JNI
+55199 2019_05_25    [FIX] modify native code to refer to Jni instead of JNI
+                    [IMP] add ObjectLinearLayout and use in ForecastActivity
+55198 2019_05_25    [REF] better variable naming
+                    [IMP] don't hide location circle when panning
+55197 2019_05_25    [REF] camelCase model/ui/jni files
+55196 2019_05_23    [REF] various camelCase WIP
+55195 2019_05_23    [FIX] severe tstorm watch showing as tor in radar
+                    [REF] various camelCase
 55194 2019_05_22    [FIX] at joshuatee.wx.radar.WXGLPolygonWarnings.addWarnings (WXGLPolygonWarnings.kt:139)
                             java.lang.IndexOutOfBoundsException:
 55193 2019_05_22    [REF] various camelCase

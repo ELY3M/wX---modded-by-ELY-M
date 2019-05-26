@@ -37,7 +37,7 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
+class USNwsMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
 
     // Provides native interface to NWS radar mosaics along with animations
     //
@@ -62,11 +62,11 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_nwsmosaic,
-            R.menu.nwsmosaic,
-            iconsEvenlySpaced = true,
-            bottomToolbar = true
+                savedInstanceState,
+                R.layout.activity_nwsmosaic,
+                R.menu.nwsmosaic,
+                iconsEvenlySpaced = true,
+                bottomToolbar = true
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -74,7 +74,7 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
         val activityArguments = intent.getStringArrayExtra(URL)
         if (activityArguments == null) {
             nwsRadarMosaicSectorLabelCurrent =
-                Utility.readPref(this, "NWS_RADAR_MOSAIC_SECTOR_CURRENT", "Central Great Lakes")
+                    Utility.readPref(this, "NWS_RADAR_MOSAIC_SECTOR_CURRENT", "Central Great Lakes")
         } else {
             if (activityArguments.isNotEmpty() && activityArguments[0] == "location") {
                 val rid1 = Location.rid
@@ -82,9 +82,9 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
                 val nwsLocationArr = ridLoc.split(",").dropLastWhile { it.isEmpty() }
                 val state = nwsLocationArr.getOrNull(0) ?: ""
                 nwsRadarMosaicSectorLabelCurrent =
-                    UtilityUSImgNWSMosaic.getSectorFromState(state)
-                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNWSMosaic.getSectorLabelFromCode(
-                    nwsRadarMosaicSectorLabelCurrent
+                        UtilityUSImgNwsMosaic.getSectorFromState(state)
+                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNwsMosaic.getSectorLabelFromCode(
+                        nwsRadarMosaicSectorLabelCurrent
                 )
                 doNotSavePref = true
             } else if (activityArguments.isNotEmpty() && activityArguments[0] == "widget") {
@@ -94,19 +94,19 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
                 val nwsLocationArr = ridLoc.split(",").dropLastWhile { it.isEmpty() }
                 val state = Utility.readPref(this, "STATE_CODE_" + nwsLocationArr.getOrNull(0), "")
                 nwsRadarMosaicSectorLabelCurrent =
-                    UtilityUSImgNWSMosaic.getSectorFromState(state)
-                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNWSMosaic.getSectorLabelFromCode(
-                    nwsRadarMosaicSectorLabelCurrent
+                        UtilityUSImgNwsMosaic.getSectorFromState(state)
+                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNwsMosaic.getSectorLabelFromCode(
+                        nwsRadarMosaicSectorLabelCurrent
                 )
             } else {
                 nwsRadarMosaicSectorLabelCurrent = Utility.readPref(
-                    this,
-                    "NWS_RADAR_MOSAIC_SECTOR_CURRENT",
-                    "Central Great Lakes"
+                        this,
+                        "NWS_RADAR_MOSAIC_SECTOR_CURRENT",
+                        "Central Great Lakes"
                 )
             }
         }
-        drw = ObjectNavDrawer(this, UtilityUSImgNWSMosaic.labels, UtilityUSImgNWSMosaic.sectors)
+        drw = ObjectNavDrawer(this, UtilityUSImgNwsMosaic.labels, UtilityUSImgNwsMosaic.sectors)
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, "")
         img.setMaxZoom(8.0f)
         img.setListener(this, drw, ::getContentFixThis)
@@ -126,8 +126,8 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
         if (key == "latest") {
             key = "CONUS"
         }
-        return UtilityUSImgNWSMosaic.labels.indices.firstOrNull { key == UtilityUSImgNWSMosaic.labels[it] }
-            ?: 0
+        return UtilityUSImgNwsMosaic.labels.indices.firstOrNull { key == UtilityUSImgNwsMosaic.labels[it] }
+                ?: 0
     }
 
     override fun onRestart() {
@@ -138,18 +138,18 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         toolbar.subtitle = drw.getLabel()
         bitmap = withContext(Dispatchers.IO) {
-            UtilityUSImgNWSMosaic.get(
-                contextg,
-                drw.getUrl(),
-                true
+            UtilityUSImgNwsMosaic.get(
+                    contextg,
+                    drw.getUrl(),
+                    true
             )
         }
         // FIXME bug in API 28 after changing
         if (!doNotSavePref) {
             Utility.writePref(
-                contextg,
-                "NWS_RADAR_MOSAIC_SECTOR_CURRENT",
-                drw.getLabel()
+                    contextg,
+                    "NWS_RADAR_MOSAIC_SECTOR_CURRENT",
+                    drw.getLabel()
             )
         }
         img.setBitmap(bitmap)
@@ -159,11 +159,11 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
 
     private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
         animDrawable = withContext(Dispatchers.IO) {
-            UtilityUSImgNWSMosaic.getAnimation(
-                contextg,
-                drw.getUrl(),
-                frameCount,
-                true
+            UtilityUSImgNwsMosaic.getAnimation(
+                    contextg,
+                    drw.getUrl(),
+                    frameCount,
+                    true
             )
         }
         animRan = UtilityImgAnim.startAnimation(animDrawable, img)
@@ -184,7 +184,7 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
             return true
         }
         when (item.itemId) {
-            R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.RADAR_MOSAIC)
+            R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.RADAR_MOSAIC)
             R.id.action_a12 -> getAnimate(12)
             R.id.action_a18 -> getAnimate(18)
             R.id.action_a6 -> getAnimate(6)
@@ -195,15 +195,15 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
                 } else {
                     if (animRan) {
                         UtilityShare.shareAnimGif(
-                            this,
-                            "NWS mosaic",
-                            animDrawable
+                                this,
+                                "NWS mosaic",
+                                animDrawable
                         )
                     } else {
                         UtilityShare.shareBitmap(
-                            this,
-                            "NWS mosaic",
-                            bitmap
+                                this,
+                                "NWS mosaic",
+                                bitmap
                         )
                     }
                 }
@@ -214,7 +214,7 @@ class USNWSMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+            drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onStop() {
         img.imgSavePosnZoom(this, prefImagePosition)

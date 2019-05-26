@@ -27,7 +27,7 @@ import android.graphics.Color
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-import joshuatee.wx.JNI
+import joshuatee.wx.Jni
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.ProjectionNumbers
 import joshuatee.wx.util.UtilityLog
@@ -186,7 +186,7 @@ open class ObjectOglBuffers() {
             if (!MyApplication.radarUseJni)
                 UtilityWXOGLPerf.genMarkerList(buffers, pn, buffers.xList, buffers.yList)
             else
-                JNI.genTriangle(buffers.floatBuffer, buffers.indexBuffer, pn.xFloat, pn.yFloat, pn.xCenter.toFloat(), pn.yCenter.toFloat(),
+                Jni.genTriangle(buffers.floatBuffer, buffers.indexBuffer, pn.xFloat, pn.yFloat, pn.xCenter.toFloat(), pn.yCenter.toFloat(),
                         pn.oneDegreeScaleFactorFloat, buffers.xList, buffers.yList, buffers.count, buffers.lenInit, buffers.colorBuffer, buffers.colorArray)
         }
 
@@ -195,7 +195,7 @@ open class ObjectOglBuffers() {
             if (!MyApplication.radarUseJni)
                 UtilityWXOGLPerf.genMarkerList(buffers, pn, buffers.xList, buffers.yList)
             else
-                JNI.genTriangleUp(buffers.floatBuffer, buffers.indexBuffer, pn.xFloat, pn.yFloat, pn.xCenter.toFloat(), pn.yCenter.toFloat(),
+                Jni.genTriangleUp(buffers.floatBuffer, buffers.indexBuffer, pn.xFloat, pn.yFloat, pn.xCenter.toFloat(), pn.yCenter.toFloat(),
                         pn.oneDegreeScaleFactorFloat, buffers.xList, buffers.yList, buffers.count, buffers.lenInit, buffers.colorBuffer, buffers.colorArray)
         }
 
@@ -204,7 +204,7 @@ open class ObjectOglBuffers() {
             if (!MyApplication.radarUseJni)
                 UtilityWXOGLPerf.genCircle(buffers, pn, buffers.xList, buffers.yList)
             else
-                JNI.genCircle(
+                Jni.genCircle(
                     buffers.floatBuffer,
                     buffers.indexBuffer,
                     pn.xFloat,
@@ -227,7 +227,7 @@ open class ObjectOglBuffers() {
             if (!MyApplication.radarUseJni)
                 UtilityWXOGLPerf.genCircleWithColor(buffers, pn, buffers.xList, buffers.yList)
             else
-                JNI.genCircleWithColor(
+                Jni.genCircleWithColor(
                     buffers.floatBuffer,
                     buffers.indexBuffer,
                     pn.xFloat,

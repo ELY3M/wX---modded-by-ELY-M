@@ -39,7 +39,7 @@ import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
-class WPCRainfallForecastActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
+class WpcRainfallForecastActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val bitmaps = mutableListOf<Bitmap>()

@@ -76,7 +76,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         pause = menu.findItem(R.id.action_stop)
         val playlist = menu.findItem(R.id.action_playlist)
         playlist.let { playlist.setIcon(R.drawable.ic_playlist_add_24dp) }
-        if (UtilityTTS.mMediaPlayer != null && !UtilityTTS.mMediaPlayer!!.isPlaying)
+        if (UtilityTts.mMediaPlayer != null && !UtilityTts.mMediaPlayer!!.isPlaying)
             pause.setIcon(MyApplication.ICON_PAUSE_PRESSED)
         else
             pause.setIcon(MyApplication.ICON_PAUSE)
@@ -93,20 +93,20 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         when (item) {
             R.id.action_read_aloud -> {
                 if (isStoragePermissionGranted) {
-                    UtilityTTS.synthesizeTextAndPlay(applicationContext, txt, prod)
+                    UtilityTts.synthesizeTextAndPlay(applicationContext, txt, prod)
                     pause.setIcon(MyApplication.ICON_PAUSE)
                     if (UIPreferences.mediaControlNotif)
                         UtilityNotification.createMediaControlNotif(applicationContext, "")
                 }
             }
             R.id.action_stop -> {
-                if (UtilityTTS.mMediaPlayer != null)
-                    UtilityTTS.playMediaPlayer(1)
-                if (UtilityTTS.mMediaPlayer != null && !UtilityTTS.mMediaPlayer!!.isPlaying)
+                if (UtilityTts.mMediaPlayer != null)
+                    UtilityTts.playMediaPlayer(1)
+                if (UtilityTts.mMediaPlayer != null && !UtilityTts.mMediaPlayer!!.isPlaying)
                     pause.setIcon(MyApplication.ICON_PAUSE_PRESSED)
                 else
                     pause.setIcon(MyApplication.ICON_PAUSE)
-                if (UtilityTTS.mMediaPlayer != null && UtilityTTS.mMediaPlayer!!.isPlaying)
+                if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying)
                     if (UIPreferences.mediaControlNotif)
                         UtilityNotification.createMediaControlNotif(applicationContext, "")
             }
@@ -117,7 +117,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
     }
 
     override fun onRestart() {
-        if (UtilityTTS.mMediaPlayer != null && !UtilityTTS.mMediaPlayer!!.isPlaying)
+        if (UtilityTts.mMediaPlayer != null && !UtilityTts.mMediaPlayer!!.isPlaying)
             pause.setIcon(MyApplication.ICON_PAUSE_PRESSED)
         else
             pause.setIcon(MyApplication.ICON_PAUSE)
@@ -151,7 +151,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
             1 -> {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    UtilityTTS.synthesizeTextAndPlay(applicationContext, ttsTxt, ttsProd)
+                    UtilityTts.synthesizeTextAndPlay(applicationContext, ttsTxt, ttsProd)
                     pause.setIcon(MyApplication.ICON_PAUSE)
                     if (UIPreferences.mediaControlNotif)
                         UtilityNotification.createMediaControlNotif(applicationContext, "")

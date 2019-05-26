@@ -28,7 +28,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
 
-internal object UtilityNWSGOESFullDisk {
+internal object UtilityGoesFullDisk {
 
     val labels = listOf(
         "GOES West Infrared",

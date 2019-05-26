@@ -29,8 +29,8 @@ import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.external.ExternalPolygon
-import joshuatee.wx.spc.SPCMCDWShowActivity
-import joshuatee.wx.spc.SPCSWOActivity
+import joshuatee.wx.spc.SpcMcdWatchShowActivity
+import joshuatee.wx.spc.SpcSwoActivity
 import joshuatee.wx.util.UtilityString
 
 import android.app.PendingIntent
@@ -65,7 +65,7 @@ internal object UtilityNotificationSpc {
                     detailRaw = detailRaw.replace("&nbsp".toRegex(), " ")
                     val noBody = detailRaw
                     val objPI = ObjectPendingIntents(
-                            context, SPCSWOActivity::class.java, SPCSWOActivity.NO,
+                            context, SpcSwoActivity::class.java, SpcSwoActivity.NO,
                             arrayOf((it + 1).toString(), ""), arrayOf((it + 1).toString(), "sound")
                     )
                     val cancelStr = "usspcswo" + it.toString() + threatLevel[0] + validTime
@@ -320,16 +320,16 @@ internal object UtilityNotificationSpc {
         mcdPre = mcdPre.replace("<.*?>".toRegex(), " ")
         noBody = mcdPre
         noSummary = mcdPre
-        val resultIntent = Intent(context, SPCMCDWShowActivity::class.java)
-        val resultIntent2 = Intent(context, SPCMCDWShowActivity::class.java)
+        val resultIntent = Intent(context, SpcMcdWatchShowActivity::class.java)
+        val resultIntent2 = Intent(context, SpcMcdWatchShowActivity::class.java)
         val polygonType = PolygonType.MCD
-        resultIntent.putExtra(SPCMCDWShowActivity.NO, arrayOf(mdNo, "", polygonType.toString()))
+        resultIntent.putExtra(SpcMcdWatchShowActivity.NO, arrayOf(mdNo, "", polygonType.toString()))
         resultIntent2.putExtra(
-                SPCMCDWShowActivity.NO,
+                SpcMcdWatchShowActivity.NO,
                 arrayOf(mdNo, "sound", polygonType.toString())
         )
         val stackBuilder = TaskStackBuilder.create(context)
-        stackBuilder.addParentStack(SPCMCDWShowActivity::class.java)
+        stackBuilder.addParentStack(SpcMcdWatchShowActivity::class.java)
         stackBuilder.addNextIntent(resultIntent)
         val resultPendingIntent =
                 stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -391,14 +391,14 @@ internal object UtilityNotificationSpc {
         detailRaw = detailRaw.replace("&nbsp".toRegex(), " ")
         noBody = detailRaw
         noSummary = noBody
-        val resultIntent = Intent(context, SPCSWOActivity::class.java)
-        val resultIntent2 = Intent(context, SPCSWOActivity::class.java)
+        val resultIntent = Intent(context, SpcSwoActivity::class.java)
+        val resultIntent2 = Intent(context, SpcSwoActivity::class.java)
         var dayStrArg = day.toString()
         if (day > 3) dayStrArg = "4-8"
-        resultIntent.putExtra(SPCSWOActivity.NO, arrayOf(dayStrArg, ""))
-        resultIntent2.putExtra(SPCSWOActivity.NO, arrayOf(dayStrArg, "sound"))
+        resultIntent.putExtra(SpcSwoActivity.NO, arrayOf(dayStrArg, ""))
+        resultIntent2.putExtra(SpcSwoActivity.NO, arrayOf(dayStrArg, "sound"))
         val stackBuilder = TaskStackBuilder.create(context)
-        stackBuilder.addParentStack(SPCSWOActivity::class.java)
+        stackBuilder.addParentStack(SpcSwoActivity::class.java)
         stackBuilder.addNextIntent(resultIntent)
         val resultPendingIntent =
                 stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)

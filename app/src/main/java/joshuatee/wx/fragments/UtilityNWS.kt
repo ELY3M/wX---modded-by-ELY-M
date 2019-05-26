@@ -31,7 +31,7 @@ import joshuatee.wx.ui.ObjectPaintStripe
 import joshuatee.wx.ui.UtilityTheme
 import joshuatee.wx.util.UtilityImg
 
-object UtilityNWS {
+object UtilityNws {
 
     // FIXME better var naming in this class
 

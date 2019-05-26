@@ -46,8 +46,7 @@ import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class ModelsSPCHRRRActivity : VideoRecordActivity(), OnMenuItemClickListener,
-    OnItemSelectedListener {
+class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener, OnItemSelectedListener {
 
     companion object {
         const val INFO: String = ""
@@ -78,48 +77,48 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnMenuItemClickListener,
         om = ObjectModel(this, turl[1], turl[0])
         if (om.numPanes == 1) {
             super.onCreate(
-                savedInstanceState,
-                R.layout.activity_models_generic,
-                R.menu.models_spchrrr,
-                iconsEvenlySpaced = false,
-                bottomToolbar = true
+                    savedInstanceState,
+                    R.layout.activity_models_generic,
+                    R.menu.models_spchrrr,
+                    iconsEvenlySpaced = false,
+                    bottomToolbar = true
             )
         } else {
             super.onCreate(
-                savedInstanceState,
-                R.layout.activity_models_generic_multipane,
-                R.menu.models_spchrrr,
-                iconsEvenlySpaced = false,
-                bottomToolbar = true
+                    savedInstanceState,
+                    R.layout.activity_models_generic_multipane,
+                    R.menu.models_spchrrr,
+                    iconsEvenlySpaced = false,
+                    bottomToolbar = true
             )
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         title = turl[2]
         overlayImg.addAll(
-            Arrays.asList(
-                *TextUtils.split(
-                    Utility.readPref(
-                        this,
-                        "SPCHRRR_OVERLAY",
-                        ""
-                    ), ":"
+                Arrays.asList(
+                        *TextUtils.split(
+                                Utility.readPref(
+                                        this,
+                                        "SPCHRRR_OVERLAY",
+                                        ""
+                                ), ":"
+                        )
                 )
-            )
         )
         val m = toolbarBottom.menu
         miStatusParam1 = m.findItem(R.id.action_status_param1)
         miStatusParam2 = m.findItem(R.id.action_status_param2)
         if (om.numPanes < 2) {
             fab1 = ObjectFab(
-                this,
-                this,
-                R.id.fab1,
-                View.OnClickListener { UtilityModels.moveBack(om.spTime) })
+                    this,
+                    this,
+                    R.id.fab1,
+                    View.OnClickListener { UtilityModels.moveBack(om.spTime) })
             fab2 = ObjectFab(
-                this,
-                this,
-                R.id.fab2,
-                View.OnClickListener { UtilityModels.moveForward(om.spTime) })
+                    this,
+                    this,
+                    R.id.fab2,
+                    View.OnClickListener { UtilityModels.moveForward(om.spTime) })
             m.findItem(R.id.action_img1).isVisible = false
             m.findItem(R.id.action_img2).isVisible = false
             if (UIPreferences.fabInModels) {
@@ -138,18 +137,18 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnMenuItemClickListener,
         om.displayData = DisplayData(this, this, om.numPanes, om.spTime)
         spRun = ObjectSpinner(this, this, this, R.id.spinner_run)
         spSector = ObjectSpinner(
-            this,
-            this,
-            this,
-            R.id.spinner_sector,
-            UtilityModelSPCHRRRInterface.sectors,
-            om.sector
+                this,
+                this,
+                this,
+                R.id.spinner_sector,
+                UtilityModelSpcHrrrInterface.sectors,
+                om.sector
         )
         ObjectSpinner(this, this, this, R.id.spinner_model, om.models, om.model)
         drw = ObjectNavDrawer(
-            this,
-            UtilityModelSPCHRRRInterface.labels,
-            UtilityModelSPCHRRRInterface.params
+                this,
+                UtilityModelSpcHrrrInterface.labels,
+                UtilityModelSpcHrrrInterface.params
         )
         om.setUIElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, spRun, spSector)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
@@ -178,8 +177,8 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnMenuItemClickListener,
         }
         if (parent.id == R.id.spinner_run) {
             UtilityModels.updateTime(
-                UtilityString.getLastXChars(spRun.selectedItem.toString(), 2),
-                om.rtd.mostRecentRun, om.spTime.list, om.spTime.arrayAdapter, "", false
+                    UtilityString.getLastXChars(spRun.selectedItem.toString(), 2),
+                    om.rtd.mostRecentRun, om.spTime.list, om.spTime.arrayAdapter, "", false
             )
         }
     }
@@ -187,7 +186,7 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnMenuItemClickListener,
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+            drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item))
@@ -196,17 +195,17 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnMenuItemClickListener,
             R.id.action_img1 -> {
                 om.curImg = 0
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(
-                    om.displayData.img,
-                    toolbar,
-                    "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
+                        om.displayData.img,
+                        toolbar,
+                        "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
                 )
             }
             R.id.action_img2 -> {
                 om.curImg = 1
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(
-                    om.displayData.img,
-                    toolbar,
-                    "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
+                        om.displayData.img,
+                        toolbar,
+                        "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
                 )
             }
             R.id.action_layer_obs -> overlaySelected("bigsfc")
@@ -223,10 +222,10 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 UtilityModels.getContent(this, om, overlayImg, uiDispatcher)
             }
             R.id.action_multipane -> ObjectIntent(
-                this,
-                ModelsSPCHRRRActivity::class.java,
-                INFO,
-                arrayOf("2", turl[1], turl[2])
+                    this,
+                    ModelsSpcHrrrActivity::class.java,
+                    INFO,
+                    arrayOf("2", turl[1], turl[2])
             )
             R.id.action_back -> UtilityModels.moveBack(om.spTime)
             R.id.action_forward -> UtilityModels.moveForward(om.spTime)
@@ -270,12 +269,12 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnMenuItemClickListener,
         (0 until om.numPanes).forEach {
             om.displayData.param[it] = om.params[0]
             om.displayData.param[it] =
-                Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[it])
+                    Utility.readPref(this, om.prefParam + it.toString(), om.displayData.param[it])
             om.displayData.paramLabel[it] = om.labels[0]
             om.displayData.paramLabel[it] = Utility.readPref(
-                this,
-                om.prefParamLabel + it.toString(),
-                om.displayData.paramLabel[it]
+                    this,
+                    om.prefParamLabel + it.toString(),
+                    om.displayData.paramLabel[it]
             )
             if (!UtilityModels.parmInArray(om.params, om.displayData.param[it])) {
                 om.displayData.param[it] = om.params[0]
@@ -287,11 +286,11 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnMenuItemClickListener,
         om.spTime.clear()
         (om.startStep until om.endStep).forEach {
             om.spTime.add(
-                String.format(
-                    Locale.US,
-                    "%02d",
-                    it
-                )
+                    String.format(
+                            Locale.US,
+                            "%02d",
+                            it
+                    )
             )
         }
     }
@@ -311,9 +310,9 @@ class ModelsSPCHRRRActivity : VideoRecordActivity(), OnMenuItemClickListener,
             Utility.writePref(this, "SPCHRRR_OVERLAY", TextUtils.join(":", overlayImg))
             (0 until om.numPanes).forEach {
                 UtilityImg.imgSavePosnZoom(
-                    this,
-                    om.displayData.img[it],
-                    om.modelProvider + om.numPanes.toString() + it.toString()
+                        this,
+                        om.displayData.img[it],
+                        om.modelProvider + om.numPanes.toString() + it.toString()
                 )
             }
             Utility.writePref(this, om.prefRunPosn, om.spTime.selectedItemPosition)

@@ -32,7 +32,7 @@ import joshuatee.wx.util.UtilityString
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
 
-internal object UtilityModelESRLInputOutput {
+internal object UtilityModelEsrlInputOutput {
 
     private const val urlBase = "https://rapidrefresh.noaa.gov"
 

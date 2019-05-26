@@ -28,7 +28,7 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
-import joshuatee.wx.audio.UtilityTTS
+import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.ui.ObjectAlertDetail
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.util.Utility
@@ -45,7 +45,7 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var activityArguments: Array<String>
-    private var ca = CAPAlert()
+    private var ca = CapAlert()
     private lateinit var objAlerts: ObjectAlertDetail
 
     @SuppressLint("MissingSuperCall")
@@ -63,11 +63,11 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        ca = withContext(Dispatchers.IO) { CAPAlert.createFromUrl(activityArguments[0]) }
+        ca = withContext(Dispatchers.IO) { CapAlert.createFromUrl(activityArguments[0]) }
         objAlerts.updateContent(ca, activityArguments[0])
         toolbar.subtitle = objAlerts.wfoTitle
         title = objAlerts.title
-        UtilityTTS.conditionalPlay(
+        UtilityTts.conditionalPlay(
             activityArguments,
             1,
             applicationContext,

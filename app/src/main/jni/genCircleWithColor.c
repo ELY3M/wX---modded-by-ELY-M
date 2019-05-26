@@ -33,7 +33,7 @@ jbyte blue(color) {
       return (color & 0xFF);
 }
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_genCircleWithColor(JNIEnv * env, jclass clazz, jobject loc_buff, jobject index_buff, jfloat center_x, jfloat center_y, jfloat x_image_center_pixels, jfloat y_image_center_pixels,  jfloat one_degree_scale_factor, jdoubleArray x,jdoubleArray y,jint count,jfloat len, int triangleAmount, jobject color_buff,jintArray color_arrInt){
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genCircleWithColor(JNIEnv * env, jclass clazz, jobject loc_buff, jobject index_buff, jfloat center_x, jfloat center_y, jfloat x_image_center_pixels, jfloat y_image_center_pixels,  jfloat one_degree_scale_factor, jdoubleArray x,jdoubleArray y,jint count,jfloat len, int triangleAmount, jobject color_buff,jintArray color_arrInt){
 
 	jfloat* lBuff = (*env)-> GetDirectBufferAddress(env, loc_buff);
 	jshort* iBuff = (*env)-> GetDirectBufferAddress(env, index_buff);

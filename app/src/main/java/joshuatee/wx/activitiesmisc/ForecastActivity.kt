@@ -27,11 +27,11 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
-import android.widget.*
+//import android.widget.*
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
-import joshuatee.wx.fragments.UtilityNWS
+import joshuatee.wx.fragments.UtilityNws
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
@@ -44,7 +44,7 @@ import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_linear_layout.*
 
-class AdhocForecastActivity : BaseActivity() {
+class ForecastActivity : BaseActivity() {
 
     // long press in nexrad radar and select 7 day forecast from arbitrary point
     // arg0  lat
@@ -63,10 +63,10 @@ class AdhocForecastActivity : BaseActivity() {
     private var ccTime = ""
     private var radarTime = ""
     private lateinit var cardCC: ObjectCardCC
-    private lateinit var linearLayoutForecast: LinearLayout
-    private lateinit var linearLayoutHazards: LinearLayout
+    private lateinit var linearLayoutForecast: ObjectLinearLayout
+    private lateinit var linearLayoutHazards: ObjectLinearLayout
     private val hazardCards = mutableListOf<ObjectCardText>()
-    private lateinit var contextg: Context
+    private lateinit var contextGlobal: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,14 +78,9 @@ class AdhocForecastActivity : BaseActivity() {
         toolbar.subtitle = latLon.latString + "," + latLon.lonString
         cardCC = ObjectCardCC(this, 2)
         ll.addView(cardCC.card)
-        // FIXME add wrapper class for LinearLayout below
-        linearLayoutHazards = LinearLayout(this)
-        linearLayoutHazards.orientation = LinearLayout.VERTICAL
-        ll.addView(linearLayoutHazards)
-        linearLayoutForecast = LinearLayout(this)
-        linearLayoutForecast.orientation = LinearLayout.VERTICAL
-        ll.addView(linearLayoutForecast)
-        contextg = this
+        linearLayoutHazards = ObjectLinearLayout(this, ll)
+        linearLayoutForecast = ObjectLinearLayout(this, ll)
+        contextGlobal = this
         getContent()
     }
 
@@ -97,14 +92,14 @@ class AdhocForecastActivity : BaseActivity() {
             //
             // Current conditions
             //
-            objCc = ObjectForecastPackageCurrentConditions(contextg, latLon)
+            objCc = ObjectForecastPackageCurrentConditions(contextGlobal, latLon)
             objHazards = ObjectForecastPackageHazards(latLon)
             objSevenDay = ObjectForecastPackage7Day(latLon)
-            bitmapForCurrentCondition = UtilityNWS.getIcon(contextg, objCc.iconUrl)
+            bitmapForCurrentCondition = UtilityNws.getIcon(contextGlobal, objCc.iconUrl)
             //
             // 7day
             //
-            objSevenDay.icons.mapTo(bitmaps) { UtilityNWS.getIcon(contextg, it) }
+            objSevenDay.icons.mapTo(bitmaps) { UtilityNws.getIcon(contextGlobal, it) }
             //
             // hazards
             //
@@ -124,19 +119,19 @@ class AdhocForecastActivity : BaseActivity() {
         //
         linearLayoutForecast.removeAllViewsInLayout()
         bitmaps.forEachIndexed { index, bitmap ->
-            val c7day = ObjectCard7Day(contextg, bitmap, true, index, objSevenDay.forecastList)
+            val c7day = ObjectCard7Day(contextGlobal, bitmap, true, index, objSevenDay.forecastList)
             c7day.setOnClickListener(View.OnClickListener {
                 sv.smoothScrollTo(0, 0)
             })
             linearLayoutForecast.addView(c7day.card)
         }
         // sunrise card
-        val cardSunrise = ObjectCardText(contextg)
+        val cardSunrise = ObjectCardText(contextGlobal)
         cardSunrise.center()
         try {
             cardSunrise.setText(
                     UtilityTimeSunMoon.getSunriseSunset(
-                            contextg,
+                            contextGlobal,
                             Location.currentLocationStr
                     ) + MyApplication.newline + UtilityTime.gmtTime()
             )
@@ -161,14 +156,14 @@ class AdhocForecastActivity : BaseActivity() {
         linearLayoutHazards.removeAllViews()
         hazardCards.clear()
         objHazards.titles.indices.forEach { z ->
-            hazardCards.add(ObjectCardText(contextg))
+            hazardCards.add(ObjectCardText(contextGlobal))
             hazardCards[z].setPaddingAmount(MyApplication.paddingSettings)
             hazardCards[z].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
             hazardCards[z].setTextColor(UIPreferences.textHighlightColor)
             hazardCards[z].setText(objHazards.titles[z].toUpperCase(Locale.US))
             hazardCards[z].setOnClickListener(View.OnClickListener {
                 ObjectIntent(
-                        contextg,
+                        contextGlobal,
                         USAlertsDetailActivity::class.java,
                         USAlertsDetailActivity.URL,
                         arrayOf(objHazards.urls[z])

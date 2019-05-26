@@ -35,7 +35,7 @@ import joshuatee.wx.RegExp
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityString
 
-internal object UtilityModelNCEPInputOutput {
+internal object UtilityModelNcepInputOutput {
 
     fun getRunTime(model: String, param: String, spinnerSectorCurrent: String): RunTimeData {
         val runData = RunTimeData()
@@ -91,9 +91,12 @@ internal object UtilityModelNCEPInputOutput {
     }
 
     fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) return AnimationDrawable()
-        val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) {
-            getImage(om, om.spTime.list[it].split(" ").getOrNull(0) ?: "")
+        if (om.spinnerTimeValue == -1) {
+            return AnimationDrawable()
+        }
+        val timeList = om.spTime.list.toMutableList()
+        val bmAl = (om.spinnerTimeValue until timeList.size).mapTo(mutableListOf()) {
+            getImage(om, timeList[it].split(" ").getOrNull(0) ?: "")
         }
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
     }

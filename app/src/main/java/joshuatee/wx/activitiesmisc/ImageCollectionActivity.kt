@@ -39,7 +39,7 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityShare
-import joshuatee.wx.vis.UtilityNWSGOESFullDisk
+import joshuatee.wx.vis.UtilityGoesFullDisk
 import kotlinx.coroutines.*
 
 class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
@@ -151,7 +151,7 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
 
     private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
         animDrawable = withContext(Dispatchers.IO) {
-            UtilityNWSGOESFullDisk.getAnimation(
+            UtilityGoesFullDisk.getAnimation(
                 contextg,
                 drw.getUrl()
             )

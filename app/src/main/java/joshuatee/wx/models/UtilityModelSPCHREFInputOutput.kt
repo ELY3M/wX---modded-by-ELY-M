@@ -33,7 +33,7 @@ import joshuatee.wx.util.UtilityTime
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 
-internal object UtilityModelSPCHREFInputOutput {
+internal object UtilityModelSpcHrefInputOutput {
 
     val runTime: RunTimeData
         get() {
@@ -54,9 +54,9 @@ internal object UtilityModelSPCHREFInputOutput {
         val sectorIndex: Int = if (om.sector == "") {
             0
         } else {
-            UtilityModelSPCHREFInterface.sectorsLong.indexOf(om.sector)
+            UtilityModelSpcHrefInterface.sectorsLong.indexOf(om.sector)
         }
-        val sector = UtilityModelSPCHREFInterface.sectors[sectorIndex]
+        val sector = UtilityModelSpcHrefInterface.sectors[sectorIndex]
         if (om.run.length < 10) return UtilityImg.getBlankBitmap()
         val year = om.run.substring(0, 4)
         val month = om.run.substring(4, 6)

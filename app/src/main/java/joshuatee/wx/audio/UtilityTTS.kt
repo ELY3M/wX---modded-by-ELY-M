@@ -37,7 +37,7 @@ import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 
-object UtilityTTS {
+object UtilityTts {
 
     private var ttsInit = false
     private var ttobjGlobal: TextToSpeech? = null
@@ -242,7 +242,7 @@ object UtilityTTS {
         if (mMediaPlayer != null && mMediaPlayer!!.isPlaying) {
             mMediaPlayer!!.stop()
         }
-        txt = UtilityTTSTranslations.translateAbbreviation(txt)
+        txt = UtilityTtsTranslations.translateAbbreviation(txt)
         val myHashRender = HashMap<String, String>()
         val musicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
         val wxDir = File(musicDir, MyApplication.packageNameAsString)

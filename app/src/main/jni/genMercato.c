@@ -21,7 +21,7 @@
 
 #include "genMercato.h"
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_JNI_genMercato(JNIEnv * env, jclass clazz, jobject in_buff, jobject out_buff, jfloat center_x, jfloat center_y, jfloat x_image_center_pixels, jfloat y_image_center_pixels,  jfloat one_degree_scale_factor, jint count){
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genMercato(JNIEnv * env, jclass clazz, jobject in_buff, jobject out_buff, jfloat center_x, jfloat center_y, jfloat x_image_center_pixels, jfloat y_image_center_pixels,  jfloat one_degree_scale_factor, jint count){
 
 	jfloat* iBuff = (*env)->GetDirectBufferAddress(env, in_buff);
 	jfloat* oBuff = (*env)->GetDirectBufferAddress(env, out_buff);

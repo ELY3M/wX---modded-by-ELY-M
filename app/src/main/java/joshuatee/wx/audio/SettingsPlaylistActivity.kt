@@ -72,7 +72,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         toolbarBottom.setOnMenuItemClickListener(this)
         ObjectFab(this, this, R.id.fab, View.OnClickListener { playAll() })
         fabPause = ObjectFab(this, this, R.id.fab3, View.OnClickListener { playItemFAB() })
-        if (UtilityTTS.mMediaPlayer != null && !UtilityTTS.mMediaPlayer!!.isPlaying) {
+        if (UtilityTts.mMediaPlayer != null && !UtilityTts.mMediaPlayer!!.isPlaying) {
             fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE_PRESSED)
         } else {
             fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE)
@@ -196,21 +196,21 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             1 -> {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    UtilityTTS.synthesizeTextAndPlayPlaylist(contextg, 1)
+                    UtilityTts.synthesizeTextAndPlayPlaylist(contextg, 1)
             }
         }
     }
 
     private fun playItemFAB() {
-        if (UtilityTTS.mMediaPlayer != null) {
-            UtilityTTS.playMediaPlayer(1)
+        if (UtilityTts.mMediaPlayer != null) {
+            UtilityTts.playMediaPlayer(1)
         }
-        if (UtilityTTS.mMediaPlayer != null && !UtilityTTS.mMediaPlayer!!.isPlaying) {
+        if (UtilityTts.mMediaPlayer != null && !UtilityTts.mMediaPlayer!!.isPlaying) {
             fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE_PRESSED)
         } else {
             fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE)
         }
-        if (UtilityTTS.mMediaPlayer != null && UtilityTTS.mMediaPlayer!!.isPlaying) {
+        if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying) {
             if (UIPreferences.mediaControlNotif) {
                 UtilityNotification.createMediaControlNotif(applicationContext, "")
             }
@@ -220,9 +220,9 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     private fun playAll() {
         fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE)
         if (isStoragePermissionGranted) {
-            UtilityTTS.synthesizeTextAndPlayPlaylist(contextg, 1)
+            UtilityTts.synthesizeTextAndPlayPlaylist(contextg, 1)
         }
-        if (UtilityTTS.mMediaPlayer != null && UtilityTTS.mMediaPlayer!!.isPlaying) {
+        if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying) {
             if (UIPreferences.mediaControlNotif) {
                 UtilityNotification.createMediaControlNotif(applicationContext, "")
             }
@@ -279,6 +279,6 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun playItem(position: Int) {
-        UtilityTTS.synthesizeTextAndPlayPlaylist(contextg, position + 1)
+        UtilityTts.synthesizeTextAndPlayPlaylist(contextg, position + 1)
     }
 } 

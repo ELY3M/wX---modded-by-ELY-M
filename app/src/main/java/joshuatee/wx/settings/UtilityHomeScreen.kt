@@ -26,10 +26,10 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.activitiesmisc.LightningActivity
 import joshuatee.wx.canada.CanadaRadarActivity
 import joshuatee.wx.radar.AwcRadarMosaicActivity
-import joshuatee.wx.radar.USNWSMosaicActivity
+import joshuatee.wx.radar.USNwsMosaicActivity
 import joshuatee.wx.spc.*
-import joshuatee.wx.vis.GOES16Activity
-import joshuatee.wx.wpc.WPCImagesActivity
+import joshuatee.wx.vis.GoesActivity
+import joshuatee.wx.wpc.WpcImagesActivity
 
 internal object UtilityHomeScreen {
 
@@ -56,80 +56,80 @@ internal object UtilityHomeScreen {
         (1..3).forEach {
             val number = it.toString()
             val token = "SWOD$number"
-            MyApplication.HM_CLASS[token] = SPCSWOActivity::class.java
+            MyApplication.HM_CLASS[token] = SpcSwoActivity::class.java
             MyApplication.HM_CLASS_ARGS[token] = arrayOf(number, "")
-            MyApplication.HM_CLASS_ID[token] = SPCSWOActivity.NO
+            MyApplication.HM_CLASS_ID[token] = SpcSwoActivity.NO
         }
         (1..6).forEach {
             val number = it.toString()
             val token = "SPCMESO$number"
-            MyApplication.HM_CLASS[token] = SPCMesoActivity::class.java
+            MyApplication.HM_CLASS[token] = SpcMesoActivity::class.java
             MyApplication.HM_CLASS_ARGS[token] = arrayOf(token, "1", "SPCMESO")
-            MyApplication.HM_CLASS_ID[token] = SPCMesoActivity.INFO
+            MyApplication.HM_CLASS_ID[token] = SpcMesoActivity.INFO
         }
 
-        MyApplication.HM_CLASS["SPC_TST"] = SPCTstormOutlookActivity::class.java
+        MyApplication.HM_CLASS["SPC_TST"] = SpcThunderStormOutlookActivity::class.java
         MyApplication.HM_CLASS_ARGS["SPC_TST"] = arrayOf("")
         MyApplication.HM_CLASS_ID["SPC_TST"] = ""
 
-        MyApplication.HM_CLASS["STRPT"] = SPCStormReportsActivity::class.java
+        MyApplication.HM_CLASS["STRPT"] = SpcStormReportsActivity::class.java
         MyApplication.HM_CLASS_ARGS["STRPT"] = arrayOf("today")
-        MyApplication.HM_CLASS_ID["STRPT"] = SPCStormReportsActivity.NO
+        MyApplication.HM_CLASS_ID["STRPT"] = SpcStormReportsActivity.NO
 
         MyApplication.HM_CLASS["LTG"] = LightningActivity::class.java
         MyApplication.HM_CLASS_ARGS["LTG"] = arrayOf("")
         MyApplication.HM_CLASS_ID["LTG"] = LightningActivity.URL
 
-        MyApplication.HM_CLASS["CONUSWV"] = GOES16Activity::class.java
+        MyApplication.HM_CLASS["CONUSWV"] = GoesActivity::class.java
         MyApplication.HM_CLASS_ARGS["CONUSWV"] = arrayOf("CONUS", "09")
-        MyApplication.HM_CLASS_ID["CONUSWV"] = GOES16Activity.RID
+        MyApplication.HM_CLASS_ID["CONUSWV"] = GoesActivity.RID
 
-        MyApplication.HM_CLASS["VIS_CONUS"] = GOES16Activity::class.java
+        MyApplication.HM_CLASS["VIS_CONUS"] = GoesActivity::class.java
         MyApplication.HM_CLASS_ARGS["VIS_CONUS"] = arrayOf("CONUS", "02")
-        MyApplication.HM_CLASS_ID["VIS_CONUS"] = GOES16Activity.RID
+        MyApplication.HM_CLASS_ID["VIS_CONUS"] = GoesActivity.RID
 
-        MyApplication.HM_CLASS["GOES16"] = GOES16Activity::class.java
+        MyApplication.HM_CLASS["GOES16"] = GoesActivity::class.java
         MyApplication.HM_CLASS_ARGS["GOES16"] = arrayOf("")
-        MyApplication.HM_CLASS_ID["GOES16"] = GOES16Activity.RID
+        MyApplication.HM_CLASS_ID["GOES16"] = GoesActivity.RID
 
-        MyApplication.HM_CLASS["SND"] = SPCSoundingsActivity::class.java
+        MyApplication.HM_CLASS["SND"] = SpcSoundingsActivity::class.java
         MyApplication.HM_CLASS_ARGS["SND"] = arrayOf("WFO_FOR_SND", "")
-        MyApplication.HM_CLASS_ID["SND"] = SPCSoundingsActivity.URL
+        MyApplication.HM_CLASS_ID["SND"] = SpcSoundingsActivity.URL
 
-        MyApplication.HM_CLASS["OBS"] = SPCSoundingsActivity::class.java
+        MyApplication.HM_CLASS["OBS"] = SpcSoundingsActivity::class.java
         MyApplication.HM_CLASS_ARGS["OBS"] = arrayOf("STATE_LOWER", "")
-        MyApplication.HM_CLASS_ID["OBS"] = SPCSoundingsActivity.URL
+        MyApplication.HM_CLASS_ID["OBS"] = SpcSoundingsActivity.URL
 
         MyApplication.HM_CLASS["CARAIN"] = CanadaRadarActivity::class.java
         MyApplication.HM_CLASS_ARGS["CARAIN"] = arrayOf("RID_FOR_CA", "rad")
         MyApplication.HM_CLASS_ID["CARAIN"] = CanadaRadarActivity.RID
 
-        MyApplication.HM_CLASS["RAD_1KM"] = SPCSoundingsActivity::class.java
+        MyApplication.HM_CLASS["RAD_1KM"] = SpcSoundingsActivity::class.java
         MyApplication.HM_CLASS_ARGS["RAD_1KM"] = arrayOf("1km", "rad", "ONEK", "STATE_UPPER")
-        MyApplication.HM_CLASS_ID["RAD_1KM"] = SPCSoundingsActivity.URL
+        MyApplication.HM_CLASS_ID["RAD_1KM"] = SpcSoundingsActivity.URL
 
         if (!UIPreferences.useAwcRadarMosaic) {
-            MyApplication.HM_CLASS["RAD_2KM"] = USNWSMosaicActivity::class.java
+            MyApplication.HM_CLASS["RAD_2KM"] = USNwsMosaicActivity::class.java
             MyApplication.HM_CLASS_ARGS["RAD_2KM"] = arrayOf("location")
-            MyApplication.HM_CLASS_ID["RAD_2KM"] = USNWSMosaicActivity.URL
+            MyApplication.HM_CLASS_ID["RAD_2KM"] = USNwsMosaicActivity.URL
         } else {
             MyApplication.HM_CLASS["RAD_2KM"] = AwcRadarMosaicActivity::class.java
             MyApplication.HM_CLASS_ARGS["RAD_2KM"] = arrayOf("")
             MyApplication.HM_CLASS_ID["RAD_2KM"] = AwcRadarMosaicActivity.URL
         }
 
-        MyApplication.HM_CLASS["QPF1"] = WPCImagesActivity::class.java
+        MyApplication.HM_CLASS["QPF1"] = WpcImagesActivity::class.java
         MyApplication.HM_CLASS_ARGS["QPF1"] = arrayOf("")
-        MyApplication.HM_CLASS_ID["QPF1"] = WPCImagesActivity.URL
+        MyApplication.HM_CLASS_ID["QPF1"] = WpcImagesActivity.URL
 
-        MyApplication.HM_CLASS["FMAP"] = WPCImagesActivity::class.java
+        MyApplication.HM_CLASS["FMAP"] = WpcImagesActivity::class.java
         MyApplication.HM_CLASS_ARGS["FMAP"] = arrayOf("")
-        MyApplication.HM_CLASS_ID["FMAP"] = WPCImagesActivity.URL
+        MyApplication.HM_CLASS_ID["FMAP"] = WpcImagesActivity.URL
 
         listOf("QPF2", "QPF3", "QPF1-2", "QPF1-3", "QPF4-5", "QPF6-7", "QPF1-5", "QPF1-7").forEach {
-            MyApplication.HM_CLASS[it] = WPCImagesActivity::class.java
+            MyApplication.HM_CLASS[it] = WpcImagesActivity::class.java
             MyApplication.HM_CLASS_ARGS[it] = arrayOf("")
-            MyApplication.HM_CLASS_ID[it] = WPCImagesActivity.URL
+            MyApplication.HM_CLASS_ID[it] = WpcImagesActivity.URL
         }
 
         listOf(
@@ -142,9 +142,9 @@ internal object UtilityHomeScreen {
             "FMAP5D",
             "FMAP6D"
         ).forEach {
-            MyApplication.HM_CLASS[it] = WPCImagesActivity::class.java
+            MyApplication.HM_CLASS[it] = WpcImagesActivity::class.java
             MyApplication.HM_CLASS_ARGS[it] = arrayOf("")
-            MyApplication.HM_CLASS_ID[it] = WPCImagesActivity.URL
+            MyApplication.HM_CLASS_ID[it] = WpcImagesActivity.URL
         }
     }
 }

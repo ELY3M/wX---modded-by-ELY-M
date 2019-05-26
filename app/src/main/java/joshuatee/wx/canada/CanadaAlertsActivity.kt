@@ -30,7 +30,7 @@ import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectCAWARN
+import joshuatee.wx.ui.ObjectCAWarn
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import kotlinx.coroutines.*
@@ -41,8 +41,8 @@ class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var firstTime = true
-    private lateinit var objWarn: ObjectCAWARN
-    private lateinit var contextg: Context
+    private lateinit var objWarn: ObjectCAWarn
+    private lateinit var contextGlobal: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,9 +52,9 @@ class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             R.menu.caalerts,
             true
         )
-        contextg = this
+        contextGlobal = this
         toolbarBottom.setOnMenuItemClickListener(this)
-        objWarn = ObjectCAWARN(this, this, ll, toolbar)
+        objWarn = ObjectCAWarn(this, this, ll, toolbar)
         objWarn.prov = Utility.readPref(this, "CA_ALERTS_PROV", objWarn.prov)
         title = "Canada Alerts"
         getContent()
@@ -68,7 +68,7 @@ class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             UtilityToolbar.fullScreenMode(toolbar)
             firstTime = false
         }
-        Utility.writePref(contextg, "CA_ALERTS_PROV", objWarn.prov)
+        Utility.writePref(contextGlobal, "CA_ALERTS_PROV", objWarn.prov)
         toolbar.subtitle = objWarn.title
     }
 

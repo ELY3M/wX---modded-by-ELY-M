@@ -38,106 +38,106 @@ import joshuatee.wx.util.UtilityImgAnim
 
 import joshuatee.wx.Extensions.*
 
-object UtilityUSImgNWSMosaic {
+object UtilityUSImgNwsMosaic {
 
     internal val sectors = listOf(
-        "alaska",
-        "hawaii",
-        "pacsouthwest",
-        "southrockies",
-        "southplains",
-        "southmissvly",
-        "southeast",
-        "pacnorthwest",
-        "northrockies",
-        "uppermissvly",
-        "centgrtlakes",
-        "northeast",
-        "latest"
+            "alaska",
+            "hawaii",
+            "pacsouthwest",
+            "southrockies",
+            "southplains",
+            "southmissvly",
+            "southeast",
+            "pacnorthwest",
+            "northrockies",
+            "uppermissvly",
+            "centgrtlakes",
+            "northeast",
+            "latest"
     )
 
     internal val labels = listOf(
-        "Alaska",
-        "Hawaii",
-        "Pacific Southwest",
-        "South Rockies",
-        "Southern Plains",
-        "Southern MS Valley",
-        "Southeast",
-        "Pacific Northwest",
-        "North Rockies",
-        "Upper MS Valley",
-        "Central Great Lakes",
-        "Northeast",
-        "CONUS"
+            "Alaska",
+            "Hawaii",
+            "Pacific Southwest",
+            "South Rockies",
+            "Southern Plains",
+            "Southern MS Valley",
+            "Southeast",
+            "Pacific Northwest",
+            "North Rockies",
+            "Upper MS Valley",
+            "Central Great Lakes",
+            "Northeast",
+            "CONUS"
     )
 
     private val sectorToLabel = mapOf(
-        "alaska" to "Alaska",
-        "hawaii" to "Hawaii",
-        "pacsouthwest" to "Pacific Southwest",
-        "pacnorthwest" to "Pacific Northwest",
-        "southrockies" to "South Rockies",
-        "northrockies" to "North Rockies",
-        "uppermissvly" to "Upper MS Valley",
-        "southplains" to "Southern Plains",
-        "centgrtlakes" to "Central Great Lakes",
-        "southmissvly" to "Southern MS Valley",
-        "southeast" to "Southeast",
-        "northeast" to "Northeast",
-        "conus" to "CONUS"
+            "alaska" to "Alaska",
+            "hawaii" to "Hawaii",
+            "pacsouthwest" to "Pacific Southwest",
+            "pacnorthwest" to "Pacific Northwest",
+            "southrockies" to "South Rockies",
+            "northrockies" to "North Rockies",
+            "uppermissvly" to "Upper MS Valley",
+            "southplains" to "Southern Plains",
+            "centgrtlakes" to "Central Great Lakes",
+            "southmissvly" to "Southern MS Valley",
+            "southeast" to "Southeast",
+            "northeast" to "Northeast",
+            "conus" to "CONUS"
     )
 
     private val stateToSector = mapOf(
-        "WA" to "pacnorthwest",
-        "ID" to "pacnorthwest",
-        "OR" to "pacnorthwest",
-        "CA" to "pacsouthwest",
-        "NV" to "pacsouthwest",
-        "UT" to "northrockies",
-        "AZ" to "southrockies",
-        "NM" to "southrockies",
-        "ND" to "uppermissvly",
-        "SD" to "uppermissvly",
-        "MT" to "northrockies",
-        "WY" to "northrockies",
-        "CO" to "northrockies",
-        "NE" to "uppermissvly",
-        "KS" to "uppermissvly",
-        "OK" to "southplains",
-        "TX" to "southplains",
-        "LA" to "southmissvly",
-        "MN" to "uppermissvly",
-        "WI" to "centgrtlakes",
-        "MI" to "centgrtlakes",
-        "IA" to "uppermissvly",
-        "IN" to "centgrtlakes",
-        "IL" to "centgrtlakes",
-        "TN" to "southmissvly",
-        "MO" to "uppermissvly",
-        "AR" to "southmissvly",
-        "FL" to "southeast",
-        "MS" to "southmissvly",
-        "AL" to "southmissvly",
-        "GA" to "southeast",
-        "SC" to "southeast",
-        "NC" to "southeast",
-        "KY" to "centgrtlakes",
-        "OH" to "centgrtlakes",
-        "WV" to "centgrtlakes",
-        "VA" to "northeast",
-        "PA" to "northeast",
-        "NJ" to "northeast",
-        "DE" to "northeast",
-        "ME" to "northeast",
-        "MA" to "northeast",
-        "NH" to "northeast",
-        "VT" to "northeast",
-        "CT" to "northeast",
-        "RI" to "northeast",
-        "NY" to "northeast",
-        "AK" to "alaska",
-        "HI" to "hawaii"
+            "WA" to "pacnorthwest",
+            "ID" to "pacnorthwest",
+            "OR" to "pacnorthwest",
+            "CA" to "pacsouthwest",
+            "NV" to "pacsouthwest",
+            "UT" to "northrockies",
+            "AZ" to "southrockies",
+            "NM" to "southrockies",
+            "ND" to "uppermissvly",
+            "SD" to "uppermissvly",
+            "MT" to "northrockies",
+            "WY" to "northrockies",
+            "CO" to "northrockies",
+            "NE" to "uppermissvly",
+            "KS" to "uppermissvly",
+            "OK" to "southplains",
+            "TX" to "southplains",
+            "LA" to "southmissvly",
+            "MN" to "uppermissvly",
+            "WI" to "centgrtlakes",
+            "MI" to "centgrtlakes",
+            "IA" to "uppermissvly",
+            "IN" to "centgrtlakes",
+            "IL" to "centgrtlakes",
+            "TN" to "southmissvly",
+            "MO" to "uppermissvly",
+            "AR" to "southmissvly",
+            "FL" to "southeast",
+            "MS" to "southmissvly",
+            "AL" to "southmissvly",
+            "GA" to "southeast",
+            "SC" to "southeast",
+            "NC" to "southeast",
+            "KY" to "centgrtlakes",
+            "OH" to "centgrtlakes",
+            "WV" to "centgrtlakes",
+            "VA" to "northeast",
+            "PA" to "northeast",
+            "NJ" to "northeast",
+            "DE" to "northeast",
+            "ME" to "northeast",
+            "MA" to "northeast",
+            "NH" to "northeast",
+            "VT" to "northeast",
+            "CT" to "northeast",
+            "RI" to "northeast",
+            "NY" to "northeast",
+            "AK" to "alaska",
+            "HI" to "hawaii"
     )
 
     internal fun getSectorLabelFromCode(code: String) = sectorToLabel[code] ?: ""
@@ -145,20 +145,20 @@ object UtilityUSImgNWSMosaic {
     fun getSectorFromState(state: String): String = stateToSector[state] ?: ""
 
     internal fun getAnimation(
-        context: Context,
-        sector: String,
-        frameCount: Int,
-        isInteractive: Boolean
+            context: Context,
+            sector: String,
+            frameCount: Int,
+            isInteractive: Boolean
     ): AnimationDrawable {
-        val urlArr: List<String>
-        val bmAl = mutableListOf<Bitmap>()
+        val urls: List<String>
+        val bitmaps = mutableListOf<Bitmap>()
         var scaleType = ProjectionType.NWS_MOSAIC_SECTOR
         val sectorUrl = if (sector == "latest") {
             "Conus"
         } else {
             sector
         }
-        val cd = if (MyApplication.blackBg) {
+        val colorDrawable = if (MyApplication.blackBg) {
             ColorDrawable(Color.BLACK)
         } else {
             ColorDrawable(Color.WHITE)
@@ -172,29 +172,29 @@ object UtilityUSImgNWSMosaic {
         if (sectorUrl == "alaska") {
             sPattern = "href=.(" + "NATAK" + "_[0-9]{8}_[0-9]{4}.gif)"
         }
-        urlArr = UtilityImgAnim.getUrlArray(
-            "${MyApplication.nwsRadarWebsitePrefix}/ridge/Conus/RadarImg/",
-            sPattern,
-            frameCount
+        urls = UtilityImgAnim.getUrlArray(
+                "${MyApplication.nwsRadarWebsitePrefix}/ridge/Conus/RadarImg/",
+                sPattern,
+                frameCount
         )
-        urlArr.forEach {
+        urls.forEach {
             if (MyApplication.blackBg && sector != "alaska") {
-                bmAl.add(UtilityImg.getBitmapRemoveBG(baseUrl + it, -1))
+                bitmaps.add(UtilityImg.getBitmapRemoveBG(baseUrl + it, -1))
             } else {
-                bmAl.add((baseUrl + it).getImage())
+                bitmaps.add((baseUrl + it).getImage())
             }
         }
         try {
-            if (bmAl.size > 1 && bmAl[0].height > 10) {
-                bitmapCanvas = Bitmap.createBitmap(bmAl[0].width, bmAl[0].height, Config.ARGB_8888)
+            if (bitmaps.size > 1 && bitmaps[0].height > 10) {
+                bitmapCanvas = Bitmap.createBitmap(bitmaps[0].width, bitmaps[0].height, Config.ARGB_8888)
                 UtilityCanvasMain.addCanvasItems(
-                    context,
-                    bitmapCanvas,
-                    scaleType,
-                    sector,
-                    1,
-                    13,
-                    isInteractive
+                        context,
+                        bitmapCanvas,
+                        scaleType,
+                        sector,
+                        1,
+                        13,
+                        isInteractive
                 )
             }
         } catch (e: OutOfMemoryError) {
@@ -202,22 +202,21 @@ object UtilityUSImgNWSMosaic {
         }
         val delay = UtilityImg.animInterval(context)
         return UtilityImgAnim.getAnimationDrawableFromBMListWithCanvas(
-            context,
-            bmAl,
-            delay,
-            cd,
-            bitmapCanvas
+                context,
+                bitmaps,
+                delay,
+                colorDrawable,
+                bitmapCanvas
         )
     }
 
     fun get(context: Context, sector: String, isInteractive: Boolean): Bitmap {
-        val imgUrl =
-            "${MyApplication.nwsRadarWebsitePrefix}/Conus/RadarImg/" + sector + "_radaronly.gif"
+        val imgUrl = "${MyApplication.nwsRadarWebsitePrefix}/Conus/RadarImg/" + sector + "_radaronly.gif"
         if (sector == "alaska") {
             return "${MyApplication.nwsRadarWebsitePrefix}/ridge/Conus/RadarImg/alaska.gif".getImage()
         }
         val layers = mutableListOf<Drawable>()
-        val cd = if (MyApplication.blackBg) {
+        val colorDrawable = if (MyApplication.blackBg) {
             ColorDrawable(Color.BLACK)
         } else {
             ColorDrawable(Color.WHITE)
@@ -234,16 +233,16 @@ object UtilityUSImgNWSMosaic {
         if (bitmap.height > 10) {
             bitmapCanvas = Bitmap.createBitmap(bitmap.width, bitmap.height, Config.ARGB_8888)
             UtilityCanvasMain.addCanvasItems(
-                context,
-                bitmapCanvas,
-                scaleType,
-                sector,
-                1,
-                13,
-                isInteractive
+                    context,
+                    bitmapCanvas,
+                    scaleType,
+                    sector,
+                    1,
+                    13,
+                    isInteractive
             )
         }
-        layers.add(cd)
+        layers.add(colorDrawable)
         layers.add(BitmapDrawable(context.resources, bitmap))
         layers.add(BitmapDrawable(context.resources, bitmapCanvas))
         return UtilityImg.layerDrawableToBitmap(layers)

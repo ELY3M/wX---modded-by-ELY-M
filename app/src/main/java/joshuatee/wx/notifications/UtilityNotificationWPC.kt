@@ -24,7 +24,7 @@ package joshuatee.wx.notifications
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.settings.Location
-import joshuatee.wx.spc.SPCMCDWShowActivity
+import joshuatee.wx.spc.SpcMcdWatchShowActivity
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.external.ExternalPolygon
@@ -115,8 +115,8 @@ internal object UtilityNotificationWpc {
         val polygonType = MPD
         val objPI = ObjectPendingIntents(
                 context,
-                SPCMCDWShowActivity::class.java,
-                SPCMCDWShowActivity.NO,
+                SpcMcdWatchShowActivity::class.java,
+                SpcMcdWatchShowActivity.NO,
                 arrayOf(mdNo, "", polygonType.toString()),
                 arrayOf(mdNo, "sound", polygonType.toString())
         )

@@ -30,7 +30,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityTime
 
-internal object UtilityModelWPCGEFSInputOutput {
+internal object UtilityModelWpcGefsInputOutput {
 
     // 00Z loads around 0540Z
     // 06Z loads around 1140Z

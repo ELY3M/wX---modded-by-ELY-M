@@ -33,20 +33,19 @@ object UtilityVtec {
     fun getStormCount(context: Context, textTor: String): Int {
         var dashboardStrTor = ""
         var nwsLoc = ""
-        var nwsOfficeArr: List<String>
-        var nwsOffice: String
-        val pVtec =
-            "([A-Z0]{1}\\.[A-Z]{3}\\.[A-Z]{4}\\.[A-Z]{2}\\.[A-Z]\\.[0-9]{4}\\.[0-9]{6}T[0-9]{4}Z\\-[0-9]{6}T[0-9]{4}Z)"
+        var wfos: List<String>
+        var wfo: String
+        val pVtec = "([A-Z0]{1}\\.[A-Z]{3}\\.[A-Z]{4}\\.[A-Z]{2}\\.[A-Z]\\.[0-9]{4}\\.[0-9]{6}T[0-9]{4}Z\\-[0-9]{6}T[0-9]{4}Z)"
         val stormList = textTor.parseColumn(pVtec)
         stormList.forEach {
             val vtecIsCurrent = UtilityTime.isVtecCurrent(it)
             if (!it.startsWith("O.EXP") && vtecIsCurrent) {
                 dashboardStrTor += it
-                nwsOfficeArr = it.split(".")
-                if (nwsOfficeArr.size > 1) {
-                    nwsOffice = nwsOfficeArr[2]
-                    nwsOffice = nwsOffice.replace("^[KP]".toRegex(), "")
-                    nwsLoc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "")
+                wfos = it.split(".")
+                if (wfos.size > 1) {
+                    wfo = wfos[2]
+                    wfo = wfo.replace("^[KP]".toRegex(), "")
+                    nwsLoc = Utility.readPref(context, "NWS_LOCATION_$wfo", "")
                 }
                 dashboardStrTor += "  " + nwsLoc + MyApplication.newline
             }

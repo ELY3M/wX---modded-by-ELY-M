@@ -28,7 +28,7 @@ import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.util.UtilityImgAnim
 
-internal object UtilityModelGLCFSInputOutput {
+internal object UtilityModelGlcfsInputOutput {
 
     fun getImage(om: ObjectModel, timeF: String): Bitmap {
         var sector = ""

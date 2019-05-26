@@ -42,11 +42,11 @@ import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private var prod = "focn45"
+    private var product = "focn45"
     private var description = "Significant Weather Discussion, PASPC"
     private var html = ""
     private lateinit var c0: ObjectCardText
-    private lateinit var contextg: Context
+    private lateinit var contextGlobal: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,11 +55,11 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.layout.activity_linear_layout_bottom_toolbar,
             R.menu.canada_text
         )
-        contextg = this
+        contextGlobal = this
         toolbarBottom.setOnMenuItemClickListener(this)
         c0 = ObjectCardText(this, ll, toolbar, toolbarBottom)
         ObjectCALegal(this, ll, "")
-        prod = Utility.readPref(this, "CA_TEXT_LASTUSED", prod)
+        product = Utility.readPref(this, "CA_TEXT_LASTUSED", product)
         description = Utility.readPref(this, "CA_TEXT_LASTUSED_TITLE", description)
         getContent()
     }
@@ -69,19 +69,19 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         sv.smoothScrollTo(0, 0)
         withContext(Dispatchers.IO) {
             html =
-                if (prod != "https://weather.gc.ca/forecast/public_bulletins_e.html?Bulletin=fpcn48.cwao") {
-                    UtilityDownload.getTextProduct(contextg, prod)
+                if (product != "https://weather.gc.ca/forecast/public_bulletins_e.html?Bulletin=fpcn48.cwao") {
+                    UtilityDownload.getTextProduct(contextGlobal, product)
                 } else {
-                    UtilityString.getHtmlAndParseSep(prod, "<pre>(.*?)</pre>")
+                    UtilityString.getHtmlAndParseSep(product, "<pre>(.*?)</pre>")
                 }
         }
         c0.setTextAndTranslate(Utility.fromHtml(html))
-        Utility.writePref(contextg, "CA_TEXT_LASTUSED", prod)
-        Utility.writePref(contextg, "CA_TEXT_LASTUSED_TITLE", description)
+        Utility.writePref(contextGlobal, "CA_TEXT_LASTUSED", product)
+        Utility.writePref(contextGlobal, "CA_TEXT_LASTUSED_TITLE", description)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, html, prod, prod)) {
+        if (audioPlayMenu(item.itemId, html, product, product)) {
             return true
         }
         when (item.itemId) {
@@ -107,8 +107,8 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         return true
     }
 
-    private fun setProdAndDescription(prod: String, description: String) {
-        this.prod = prod
+    private fun setProdAndDescription(product: String, description: String) {
+        this.product = product
         this.description = description
     }
 }

@@ -34,7 +34,7 @@ import java.util.Locale
 
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
-import joshuatee.wx.audio.UtilityTTS
+import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.notifications.UtilityNotificationTextProduct
 import joshuatee.wx.settings.FavAddActivity
 import joshuatee.wx.settings.FavRemoveActivity
@@ -54,7 +54,7 @@ import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_wpctextproducts.*
 
-class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
+class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         AdapterView.OnItemSelectedListener {
 
     // Display WPC ( and other ) text products
@@ -126,7 +126,7 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         ridFavOld = MyApplication.nwsTextFav
         html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(contextg, prod) }
         textCard.setTextAndTranslate(Utility.fromHtml(html))
-        UtilityTTS.conditionalPlay(activityArguments, 2, applicationContext, html, "wpctext")
+        UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, "wpctext")
         if (initProd != prod) {
             Utility.writePref(contextg, "WPC_TEXT_FAV", prod)
             MyApplication.wpcTextFav = prod
@@ -150,8 +150,8 @@ class WPCTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
                 )
                 updateSubmenuNotifText()
             }
-            R.id.action_mpd -> ObjectIntent(this, WPCMPDShowSummaryActivity::class.java)
-            R.id.action_qpferf -> ObjectIntent(this, WPCRainfallForecastActivity::class.java)
+            R.id.action_mpd -> ObjectIntent(this, WpcMpdShowSummaryActivity::class.java)
+            R.id.action_qpferf -> ObjectIntent(this, WpcRainfallForecastActivity::class.java)
             R.id.action_low1 -> ObjectIntent(
                     this,
                     ImageShowActivity::class.java,

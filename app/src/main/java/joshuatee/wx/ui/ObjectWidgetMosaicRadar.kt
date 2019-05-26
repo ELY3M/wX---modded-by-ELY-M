@@ -30,7 +30,7 @@ import joshuatee.wx.canada.CanadaRadarActivity
 import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
-import joshuatee.wx.radar.USNWSMosaicActivity
+import joshuatee.wx.radar.USNwsMosaicActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.Utility
 
@@ -45,23 +45,23 @@ class ObjectWidgetMosaicRadar(context: Context) {
         if (!MyApplication.widgetPreventTap) {
             if (Location.isUS(widgetLocNum)) {
                 UtilityWidget.setupIntent(
-                    context,
-                    remoteViews,
-                    USNWSMosaicActivity::class.java,
-                    R.id.iv,
-                    USNWSMosaicActivity.URL,
-                    arrayOf("widget"),
-                    WidgetFile.MOSAIC_RADAR.action
+                        context,
+                        remoteViews,
+                        USNwsMosaicActivity::class.java,
+                        R.id.iv,
+                        USNwsMosaicActivity.URL,
+                        arrayOf("widget"),
+                        WidgetFile.MOSAIC_RADAR.action
                 )
             } else {
                 UtilityWidget.setupIntent(
-                    context,
-                    remoteViews,
-                    CanadaRadarActivity::class.java,
-                    R.id.iv,
-                    CanadaRadarActivity.RID,
-                    arrayOf(UtilityCanada.getECSectorFromProv(prov), "rad"),
-                    WidgetFile.MOSAIC_RADAR.action
+                        context,
+                        remoteViews,
+                        CanadaRadarActivity::class.java,
+                        R.id.iv,
+                        CanadaRadarActivity.RID,
+                        arrayOf(UtilityCanada.getECSectorFromProv(prov), "rad"),
+                        WidgetFile.MOSAIC_RADAR.action
                 )
             }
         }

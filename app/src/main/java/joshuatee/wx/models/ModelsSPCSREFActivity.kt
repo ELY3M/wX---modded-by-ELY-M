@@ -51,8 +51,7 @@ import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.util.UtilityString
 import kotlinx.coroutines.*
 
-class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
-    OnItemSelectedListener {
+class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener, OnItemSelectedListener {
 
     // native interface to the mobile SPC SREF website
     //
@@ -89,19 +88,19 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
         om = ObjectModel(this, activityArguments[1], activityArguments[0])
         if (om.numPanes == 1) {
             super.onCreate(
-                savedInstanceState,
-                R.layout.activity_models_spcsref,
-                R.menu.models_spcsref,
-                iconsEvenlySpaced = false,
-                bottomToolbar = true
+                    savedInstanceState,
+                    R.layout.activity_models_spcsref,
+                    R.menu.models_spcsref,
+                    iconsEvenlySpaced = false,
+                    bottomToolbar = true
             )
         } else {
             super.onCreate(
-                savedInstanceState,
-                R.layout.activity_models_spcsrefmultipane,
-                R.menu.models_spcsref,
-                iconsEvenlySpaced = false,
-                bottomToolbar = true
+                    savedInstanceState,
+                    R.layout.activity_models_spcsrefmultipane,
+                    R.menu.models_spcsref,
+                    iconsEvenlySpaced = false,
+                    bottomToolbar = true
             )
         }
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -114,15 +113,15 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
         val m = toolbarBottom.menu
         if (om.numPanes < 2) {
             fab1 = ObjectFab(
-                this,
-                this,
-                R.id.fab1,
-                OnClickListener { UtilityModels.moveBack(om.spTime) })
+                    this,
+                    this,
+                    R.id.fab1,
+                    OnClickListener { UtilityModels.moveBack(om.spTime) })
             fab2 = ObjectFab(
-                this,
-                this,
-                R.id.fab2,
-                OnClickListener { UtilityModels.moveForward(om.spTime) })
+                    this,
+                    this,
+                    R.id.fab2,
+                    OnClickListener { UtilityModels.moveForward(om.spTime) })
             m.findItem(R.id.action_img1).isVisible = false
             m.findItem(R.id.action_img2).isVisible = false
             if (UIPreferences.fabInModels) {
@@ -142,19 +141,19 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
         setupModel()
         spRun = ObjectSpinner(this, this, this, R.id.spinner_run)
         favList = UtilityFavorites.setupFavMenuSref(
-            MyApplication.srefFav,
-            om.displayData.param[om.curImg]
+                MyApplication.srefFav,
+                om.displayData.param[om.curImg]
         )
         spFav = ObjectSpinner(this, this, this, R.id.spinner1, favList)
-        UtilityModelsSPCSREFInterface.createData()
+        UtilityModelSpcSrefInterface.createData()
         om.setUIElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, spRun, spRun)
         drw = ObjectNavDrawerCombo(
-            this,
-            UtilityModelsSPCSREFInterface.groups,
-            UtilityModelsSPCSREFInterface.longCodes,
-            UtilityModelsSPCSREFInterface.shortCodes,
-            this,
-            ""
+                this,
+                UtilityModelSpcSrefInterface.groups,
+                UtilityModelSpcSrefInterface.longCodes,
+                UtilityModelSpcSrefInterface.shortCodes,
+                this,
+                ""
         )
         drw.setListener(::refreshSpinner)
         getRunStatus()
@@ -162,8 +161,8 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
 
     override fun onRestart() {
         favList = UtilityFavorites.setupFavMenuSref(
-            MyApplication.srefFav,
-            om.displayData.param[om.curImg]
+                MyApplication.srefFav,
+                om.displayData.param[om.curImg]
         )
         spFav.refreshData(this, favList)
         super.onRestart()
@@ -184,9 +183,9 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
         (0 until om.spTime.size()).forEach {
             om.spTime[it] = om.spTime[it] + " " +
                     UtilityModels.convertTimeRunToTimeString(
-                        om.rtd.mostRecentRun.replace("z", ""),
-                        om.spTime[it].replace("f", ""),
-                        false
+                            om.rtd.mostRecentRun.replace("z", ""),
+                            om.spTime[it].replace("f", ""),
+                            false
                     )
         }
         om.spTime.notifyDataSetChanged()
@@ -214,24 +213,24 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
             R.id.action_img1 -> {
                 om.curImg = 0
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(
-                    om.displayData.img,
-                    toolbar,
-                    "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
+                        om.displayData.img,
+                        toolbar,
+                        "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
                 )
             }
             R.id.action_img2 -> {
                 om.curImg = 1
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(
-                    om.displayData.img,
-                    toolbar,
-                    "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
+                        om.displayData.img,
+                        toolbar,
+                        "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
                 )
             }
             R.id.action_multipane -> ObjectIntent(
-                this,
-                ModelsSPCSREFActivity::class.java,
-                INFO,
-                arrayOf("2", activityArguments[1], activityArguments[2])
+                    this,
+                    ModelsSpcSrefActivity::class.java,
+                    INFO,
+                    arrayOf("2", activityArguments[1], activityArguments[2])
             )
             R.id.action_fav -> toggleFavorite()
             R.id.action_share -> {
@@ -265,8 +264,8 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
 
     private fun showHelpTextDialog() {
         UtilityAlertDialog.showHelpTextWeb(
-            "${MyApplication.nwsSPCwebsitePrefix}/exper/sref/about_sref.html",
-            this
+                "${MyApplication.nwsSPCwebsitePrefix}/exper/sref/about_sref.html",
+                this
         )
     }
 
@@ -275,16 +274,16 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
             if (parent.id == R.id.spinner1) {
                 when (pos) {
                     1 -> ObjectIntent(
-                        this,
-                        FavAddActivity::class.java,
-                        FavAddActivity.TYPE,
-                        arrayOf("SREF")
+                            this,
+                            FavAddActivity::class.java,
+                            FavAddActivity.TYPE,
+                            arrayOf("SREF")
                     )
                     2 -> ObjectIntent(
-                        this,
-                        FavRemoveActivity::class.java,
-                        FavRemoveActivity.TYPE,
-                        arrayOf("SREF")
+                            this,
+                            FavRemoveActivity::class.java,
+                            FavRemoveActivity.TYPE,
+                            arrayOf("SREF")
                     )
                     else -> {
                         om.displayData.param[om.curImg] = favList[pos]
@@ -308,12 +307,12 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
         }
         if (parent.id == R.id.spinner_run) {
             UtilityModels.updateTime(
-                UtilityString.getLastXChars(spRun.selectedItem.toString().replace("z", ""), 2),
-                om.rtd.mostRecentRun,
-                om.spTime.list,
-                om.spTime.arrayAdapter,
-                "f",
-                false
+                    UtilityString.getLastXChars(spRun.selectedItem.toString().replace("z", ""), 2),
+                    om.rtd.mostRecentRun,
+                    om.spTime.list,
+                    om.spTime.arrayAdapter,
+                    "f",
+                    false
             )
         }
     }
@@ -323,8 +322,8 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
     private fun toggleFavorite() {
         UtilityFavorites.toggleFavorite(this, om.displayData.param[om.curImg], star, "SREF_FAV")
         favList = UtilityFavorites.setupFavMenuSref(
-            MyApplication.srefFav,
-            om.displayData.param[om.curImg]
+                MyApplication.srefFav,
+                om.displayData.param[om.curImg]
         )
         spFav.refreshData(this, favList)
     }
@@ -333,8 +332,8 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
         om.displayData.param[om.curImg] = drw.getUrl()
         om.displayData.paramLabel[om.curImg] = drw.getLabel()
         favList = UtilityFavorites.setupFavMenuSref(
-            MyApplication.srefFav,
-            om.displayData.param[om.curImg]
+                MyApplication.srefFav,
+                om.displayData.param[om.curImg]
         )
         spFav.refreshData(this, favList)
     }
@@ -343,9 +342,9 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
         if (om.imageLoaded) {
             (0 until om.numPanes).forEach {
                 UtilityImg.imgSavePosnZoom(
-                    this,
-                    om.displayData.img[it],
-                    om.modelProvider + om.numPanes.toString() + it.toString()
+                        this,
+                        om.displayData.img[it],
+                        om.modelProvider + om.numPanes.toString() + it.toString()
                 )
             }
             Utility.writePref(this, om.prefRunPosn, om.spTime.selectedItemPosition)
@@ -356,21 +355,21 @@ class ModelsSPCSREFActivity : VideoRecordActivity(), OnMenuItemClickListener,
     private fun setupModel() {
         (om.startStep..om.endStep step om.stepAmount).forEach {
             om.spTime.add(
-                "f" + String.format(
-                    Locale.US,
-                    "%03d",
-                    it
-                )
+                    "f" + String.format(
+                            Locale.US,
+                            "%03d",
+                            it
+                    )
             )
         }
         om.spTime.notifyDataSetChanged()
         (0 until om.numPanes).forEach {
             om.displayData.param[it] =
-                Utility.readPref(this, om.prefParam + it.toString(), "SREF_H5__")
+                    Utility.readPref(this, om.prefParam + it.toString(), "SREF_H5__")
             om.displayData.paramLabel[it] = Utility.readPref(
-                this,
-                om.prefParamLabel + it.toString(),
-                "[MN]:500MB Height~Wind~Temp~Isotach"
+                    this,
+                    om.prefParamLabel + it.toString(),
+                    "[MN]:500MB Height~Wind~Temp~Isotach"
             )
         }
     }

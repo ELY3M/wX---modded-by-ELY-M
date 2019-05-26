@@ -32,7 +32,7 @@ import joshuatee.wx.util.UtilityImg
 
 import joshuatee.wx.Extensions.*
 
-internal object UtilityModelNSSLWRFInputOutput {
+internal object UtilityModelNsslWrfInputOutput {
 
     private const val baseUrl = "https://cams.nssl.noaa.gov"
 
@@ -57,9 +57,9 @@ internal object UtilityModelNSSLWRFInputOutput {
         val sectorIndex: Int = if (om.sector == "") {
             0
         } else {
-            UtilityModelNSSLWRFInterface.sectorsLong.indexOf(om.sector)
+            UtilityModelNsslWrfInterface.sectorsLong.indexOf(om.sector)
         }
-        val sector = UtilityModelNSSLWRFInterface.sectors[sectorIndex]
+        val sector = UtilityModelNsslWrfInterface.sectors[sectorIndex]
         val baseLayerUrl = "https://cams.nssl.noaa.gov/graphics/blank_maps/spc_$sector.png"
         var modelPostfix = "_nssl"
         var model = om.model.toLowerCase()

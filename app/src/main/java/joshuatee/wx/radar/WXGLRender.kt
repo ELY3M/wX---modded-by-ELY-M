@@ -34,7 +34,7 @@ import android.opengl.GLSurfaceView.Renderer
 import android.opengl.*
 import android.opengl.Matrix
 import android.util.Log
-import joshuatee.wx.JNI
+import joshuatee.wx.Jni
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.PolygonType
@@ -227,8 +227,8 @@ class WXGLRender(private val context: Context) : Renderer {
             UtilityWXOGLPerf.genIndex(triangleIndexBuffer, breakSize15, breakSize15)
             UtilityWXOGLPerf.genIndexLine(lineIndexBuffer, breakSizeLine * 4, breakSizeLine * 2)
         } else {
-            JNI.genIndex(triangleIndexBuffer, breakSize15, breakSize15)
-            JNI.genIndexLine(lineIndexBuffer, breakSizeLine * 4, breakSizeLine * 2)
+            Jni.genIndex(triangleIndexBuffer, breakSize15, breakSize15)
+            Jni.genIndexLine(lineIndexBuffer, breakSizeLine * 4, breakSizeLine * 2)
         }
         MyApplication.radarWarningPolygons.forEach {
             genericWarningBuffers.add(ObjectOglBuffers(it))
@@ -246,7 +246,7 @@ class WXGLRender(private val context: Context) : Renderer {
                 prod = "N0Q"
             }
         }
-        pn = ProjectionNumbers(context, this.rid, provider)
+        pn = ProjectionNumbers(this.rid, provider)
         oneDegreeScaleFactorGlobal = pn.oneDegreeScaleFactorFloat
     }
 
@@ -279,34 +279,69 @@ class WXGLRender(private val context: Context) : Renderer {
         try {
             when {
                 product.contains("L2") -> {
-                    rdL2.decocodeAndPlotNexradL2(context, radarBuffers.fn, prod, radarStatusStr, idxStr, performDecomp)
+                    rdL2.decocodeAndPlot(
+                            context,
+                            radarBuffers.fn,
+                            prod,
+                            radarStatusStr,
+                            idxStr,
+                            performDecomp
+                    )
                     radarBuffers.extractL2Data(rdL2)
                 }
                 //FIXME this might be better way to do SRM tilts
                 product.contains("NSW") || product.contains("N0S") || product.contains("N1S") || product.contains("N2S") || product.contains("N3S") -> {
-                    radarL3Object.decocodeAndPlotNexradLevel3FourBit(context, radarBuffers.fn, radarStatusStr)
+                    radarL3Object.decocodeAndPlotFourBit(context, radarBuffers.fn, radarStatusStr)
                     radarBuffers.extractL3Data(radarL3Object)
                 }
                 /*
-		        product.contains("NSW") -> {
-                    radarL3Object.decocodeAndPlotNexradLevel3FourBit(context, radarBuffers.fn, radarStatusStr)
+		product.contains("NSW") -> {
+                    radarL3Object.decocodeAndPlotFourBit(
+                            context,
+                            radarBuffers.fn,
+                            radarStatusStr
+                    )
+                    radarBuffers.extractL3Data(radarL3Object)
+                }
+                product.contains("N0S") -> {
+                    radarL3Object.decocodeAndPlotFourBit(
+                            context,
+                            radarBuffers.fn,
+                            radarStatusStr
+                    )
                     radarBuffers.extractL3Data(radarL3Object)
                 }
                 product.contains("N1S") -> {
-                    radarL3Object.decocodeAndPlotNexradLevel3FourBit(context, radarBuffers.fn, radarStatusStr)
+                    radarL3Object.decocodeAndPlotFourBit(
+                            context,
+                            radarBuffers.fn,
+                            radarStatusStr
+                    )
                     radarBuffers.extractL3Data(radarL3Object)
                 }
                 product.contains("N2S") -> {
-                    radarL3Object.decocodeAndPlotNexradLevel3FourBit(context, radarBuffers.fn, radarStatusStr)
+                    radarL3Object.decocodeAndPlotFourBit(
+                            context,
+                            radarBuffers.fn,
+                            radarStatusStr
+                    )
                     radarBuffers.extractL3Data(radarL3Object)
                 }
                 product.contains("N3S") -> {
-                    radarL3Object.decocodeAndPlotNexradLevel3FourBit(context, radarBuffers.fn, radarStatusStr)
+                    radarL3Object.decocodeAndPlotFourBit(
+                            context,
+                            radarBuffers.fn,
+                            radarStatusStr
+                    )
                     radarBuffers.extractL3Data(radarL3Object)
                 }
                 */
                 else -> {
-                    radarL3Object.decocodeAndPlotNexradDigital(context, radarBuffers.fn, radarStatusStr)
+                    radarL3Object.decocodeAndPlot(
+                            context,
+                            radarBuffers.fn,
+                            radarStatusStr
+                    )
                     radarBuffers.extractL3Data(radarL3Object)
                 }
             }
@@ -335,7 +370,7 @@ class WXGLRender(private val context: Context) : Renderer {
                             if (!MyApplication.radarUseJni)
                                 UtilityWXOGLPerf.decode8BitAndGenRadials(context, radarBuffers)
                             else {
-                                JNI.decode8BitAndGenRadials(
+                                Jni.decode8BitAndGenRadials(
                                         UtilityIO.getFilePath(context, radarBuffers.fn),
                                         radarL3Object.seekStart,
                                         radarL3Object.compressedFileSize,
@@ -362,7 +397,7 @@ class WXGLRender(private val context: Context) : Renderer {
             } else {
                 rdL2.binWord.position(0)
                 totalBins = if (MyApplication.radarUseJni)
-                    JNI.level2GenRadials(
+                    Jni.level2GenRadials(
                             radarBuffers.floatBuffer,
                             radarBuffers.colorBuffer,
                             rdL2.binWord,
@@ -398,12 +433,24 @@ class WXGLRender(private val context: Context) : Renderer {
     override fun onSurfaceCreated(gl: GL10, config: EGLConfig) {
         GLES20.glClearColor(bgColorFRed, bgColorFGreen, bgColorFBlue, 1f)
         OpenGLShader.sp_SolidColor = GLES20.glCreateProgram()
-        GLES20.glAttachShader(OpenGLShader.sp_SolidColor, OpenGLShader.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShader.vs_SolidColor))
-        GLES20.glAttachShader(OpenGLShader.sp_SolidColor, OpenGLShader.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShader.fs_SolidColor))
+        GLES20.glAttachShader(
+                OpenGLShader.sp_SolidColor,
+                OpenGLShader.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShader.vs_SolidColor)
+        )
+        GLES20.glAttachShader(
+                OpenGLShader.sp_SolidColor,
+                OpenGLShader.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShader.fs_SolidColor)
+        )
         GLES20.glLinkProgram(OpenGLShader.sp_SolidColor)
         GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
-        val vertexShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_VERTEX_SHADER, OpenGLShaderUniform.vs_SolidColorUnfiform)
-        val fragmentShaderUniform = OpenGLShaderUniform.loadShader(GLES20.GL_FRAGMENT_SHADER, OpenGLShaderUniform.fs_SolidColorUnfiform)
+        val vertexShaderUniform = OpenGLShaderUniform.loadShader(
+                GLES20.GL_VERTEX_SHADER,
+                OpenGLShaderUniform.vs_SolidColorUnfiform
+        )
+        val fragmentShaderUniform = OpenGLShaderUniform.loadShader(
+                GLES20.GL_FRAGMENT_SHADER,
+                OpenGLShaderUniform.fs_SolidColorUnfiform
+        )
         OpenGLShaderUniform.sp_SolidColorUniform = GLES20.glCreateProgram()
         GLES20.glAttachShader(OpenGLShaderUniform.sp_SolidColorUniform, vertexShaderUniform)
         GLES20.glAttachShader(OpenGLShaderUniform.sp_SolidColorUniform, fragmentShaderUniform)
@@ -435,9 +482,12 @@ class WXGLRender(private val context: Context) : Renderer {
         Matrix.multiplyMM(mtrxProjectionAndView, 0, mtrxProjection, 0, mtrxView, 0)
         Matrix.translateM(mtrxProjectionAndView, 0, x, y, 0f)
         Matrix.scaleM(mtrxProjectionAndView, 0, zoom, zoom, 1f)
-        GLES20.glUniformMatrix4fv(GLES20.glGetUniformLocation(OpenGLShader.sp_SolidColor, "uMVPMatrix"), 1, false, mtrxProjectionAndView, 0)
-
-
+        GLES20.glUniformMatrix4fv(
+                GLES20.glGetUniformLocation(
+                        OpenGLShader.sp_SolidColor,
+                        "uMVPMatrix"
+                ), 1, false, mtrxProjectionAndView, 0
+        )
         (0 until chunkCount).forEach {
             radarChunkCnt = if (it < chunkCount - 1) {
                 breakSizeRadar * 6
@@ -446,11 +496,30 @@ class WXGLRender(private val context: Context) : Renderer {
             }
             try {
                 radarBuffers.floatBuffer.position(it * breakSizeRadar * 32)
-                GLES20.glVertexAttribPointer(mPositionHandle, 2, GLES20.GL_FLOAT, false, 0, radarBuffers.floatBuffer.slice().asFloatBuffer())
+                GLES20.glVertexAttribPointer(
+                        mPositionHandle,
+                        2,
+                        GLES20.GL_FLOAT,
+                        false,
+                        0,
+                        radarBuffers.floatBuffer.slice().asFloatBuffer()
+                )
                 radarBuffers.colorBuffer.position(it * breakSizeRadar * 12)
-                GLES20.glVertexAttribPointer(colorHandle, 3, GLES20.GL_UNSIGNED_BYTE, true, 0, radarBuffers.colorBuffer.slice())
+                GLES20.glVertexAttribPointer(
+                        colorHandle,
+                        3,
+                        GLES20.GL_UNSIGNED_BYTE,
+                        true,
+                        0,
+                        radarBuffers.colorBuffer.slice()
+                )
                 triangleIndexBuffer.position(0)
-                GLES20.glDrawElements(GLES20.GL_TRIANGLES, radarChunkCnt, GLES20.GL_UNSIGNED_SHORT, triangleIndexBuffer.slice().asShortBuffer())
+                GLES20.glDrawElements(
+                        GLES20.GL_TRIANGLES,
+                        radarChunkCnt,
+                        GLES20.GL_UNSIGNED_SHORT,
+                        triangleIndexBuffer.slice().asShortBuffer()
+                )
             } catch (e: Exception) {
                 UtilityLog.handleException(e)
             }
@@ -1082,26 +1151,59 @@ class WXGLRender(private val context: Context) : Renderer {
         if (!buffers.isInitialized) {
             buffers.count = buffers.geotype.count
             buffers.breakSize = 30000
-            buffers.initialize(4 * buffers.count, 0, 3 * buffers.breakSize * 2, buffers.geotype.color)
+            buffers.initialize(
+                    4 * buffers.count,
+                    0,
+                    3 * buffers.breakSize * 2,
+                    buffers.geotype.color
+            )
             if (MyApplication.radarUseJni) {
-                JNI.colorGen(buffers.colorBuffer, buffers.breakSize * 2, buffers.colorArray)
+                Jni.colorGen(buffers.colorBuffer, buffers.breakSize * 2, buffers.colorArray)
             } else {
-                UtilityWXOGLPerf.colorGen(buffers.colorBuffer, buffers.breakSize * 2, buffers.colorArray)
+                UtilityWXOGLPerf.colorGen(
+                        buffers.colorBuffer,
+                        buffers.breakSize * 2,
+                        buffers.colorArray
+                )
             }
             buffers.isInitialized = true
         }
         if (!MyApplication.radarUseJni) {
             if (useMercatorProjection) {
-                UtilityWXOGLPerf.genMercator(buffers.geotype.relativeBuffer, buffers.floatBuffer, pn, buffers.count)
+                UtilityWXOGLPerf.genMercator(
+                        buffers.geotype.relativeBuffer,
+                        buffers.floatBuffer,
+                        pn,
+                        buffers.count
+                )
             } else {
-                UtilityWXOGLPerf.generate4326Projection(buffers.geotype.relativeBuffer, buffers.floatBuffer, pn, buffers.count)
+                UtilityWXOGLPerf.generate4326Projection(
+                        buffers.geotype.relativeBuffer,
+                        buffers.floatBuffer,
+                        pn,
+                        buffers.count
+                )
             }
         } else {
             if (useMercatorProjection) {
-                JNI.genMercato(buffers.geotype.relativeBuffer, buffers.floatBuffer, pn.xFloat, pn.yFloat, pn.xCenter.toFloat(), pn.yCenter.toFloat(), pn.oneDegreeScaleFactorFloat, buffers.count)
+                Jni.genMercato(
+                        buffers.geotype.relativeBuffer,
+                        buffers.floatBuffer,
+                        pn.xFloat,
+                        pn.yFloat,
+                        pn.xCenter.toFloat(),
+                        pn.yCenter.toFloat(),
+                        pn.oneDegreeScaleFactorFloat,
+                        buffers.count
+                )
             } else {
                 // FIXME - will want native code version for 4326
-                UtilityWXOGLPerf.generate4326Projection(buffers.geotype.relativeBuffer, buffers.floatBuffer, pn, buffers.count)
+                UtilityWXOGLPerf.generate4326Projection(
+                        buffers.geotype.relativeBuffer,
+                        buffers.floatBuffer,
+                        pn,
+                        buffers.count
+                )
             }
         }
         buffers.setToPositionZero()
@@ -1116,7 +1218,7 @@ class WXGLRender(private val context: Context) : Renderer {
         buffers.initialize(4 * 4 * f.size, 0, 3 * 4 * f.size, buffers.type.color)
         try {
             if (MyApplication.radarUseJni) {
-                JNI.colorGen(buffers.colorBuffer, 4 * f.size, buffers.colorArray)
+                Jni.colorGen(buffers.colorBuffer, 4 * f.size, buffers.colorArray)
             } else {
                 UtilityWXOGLPerf.colorGen(buffers.colorBuffer, 4 * f.size, buffers.colorArray)
             }
@@ -1290,9 +1392,17 @@ class WXGLRender(private val context: Context) : Renderer {
 
         /* not needed .. if have custom location icon
         if (MyApplication.radarUseJni) {
-            JNI.colorGen(locIconBuffers.colorBuffer, 2 * locIconBuffers.triangleCount, locIconBuffers.colorArray)
+            Jni.colorGen(
+                    locCircleBuffers.colorBuffer,
+                    2 * locCircleBuffers.triangleCount,
+                    locCircleBuffers.colorArray
+            )
         } else {
-            UtilityWXOGLPerf.colorGen(locIconBuffers.colorBuffer, 2 * locIconBuffers.triangleCount, locIconBuffers.colorArray)
+            UtilityWXOGLPerf.colorGen(
+                    locCircleBuffers.colorBuffer,
+                    2 * locCircleBuffers.triangleCount,
+                    locCircleBuffers.colorArray
+            )
         }
         */
 
@@ -1359,7 +1469,7 @@ class WXGLRender(private val context: Context) : Renderer {
         spotterBuffers.isInitialized = false //leave it at false or the app will crash randomly
         spotterBuffers.lenInit = MyApplication.radarSpotterSize.toFloat()
         spotterBuffers.triangleCount = 6
-        UtilitySpotter.spotterData
+        UtilitySpotter.data
         spotterBuffers.xList = UtilitySpotter.x
         spotterBuffers.yList = UtilitySpotter.y
         constructTriangles(spotterBuffers)
@@ -1458,13 +1568,14 @@ class WXGLRender(private val context: Context) : Renderer {
         var fList = listOf<Double>()
         when (buffers.type) {
             PolygonType.MCD, PolygonType.MPD, PolygonType.WATCH, PolygonType.WATCH_TORNADO -> fList =
-                UtilityWatch.add(context, provider, rid, buffers.type).toList()
-            PolygonType.TOR, PolygonType.SVR, PolygonType.EWW, PolygonType.FFW, PolygonType.SMW, PolygonType.SVS -> fList = WXGLPolygonWarnings.addWarnings(context, provider, rid, buffers.type).toList()
-            PolygonType.SPS -> fList = WXGLPolygonWarnings.addSPS(context, provider, rid, buffers.type).toList()
+                    UtilityWatch.add(provider, rid, buffers.type).toList()
+            PolygonType.TOR, PolygonType.SVR, PolygonType.EWW, PolygonType.FFW, PolygonType.SMW, PolygonType.SVS -> fList = 
+                    WXGLPolygonWarnings.add(provider, rid, buffers.type).toList()
+            PolygonType.SPS -> fList = WXGLPolygonWarnings.addSPS(provider, rid, buffers.type).toList()
             PolygonType.STI -> fList = WXGLNexradLevel3StormInfo.decodeAndPlot(context, idxStr, rid, provider).toList()
             else -> {
                 if (buffers.warningType != null) {
-                    fList = WXGLPolygonWarnings.addGenericWarnings(context, provider, rid, buffers.warningType!!).toList()
+                    fList = WXGLPolygonWarnings.addGeneric(provider, rid, buffers.warningType!!).toList()
                     //UtilityLog.d("wx", "SPS: " + fList)
                 }
             }
@@ -1498,7 +1609,7 @@ class WXGLRender(private val context: Context) : Renderer {
             )
         }
         if (MyApplication.radarUseJni) {
-            JNI.colorGen(buffers.colorBuffer, 4 * totalBinsGeneric, buffers.colorArray)
+            Jni.colorGen(buffers.colorBuffer, 4 * totalBinsGeneric, buffers.colorArray)
         } else {
             UtilityWXOGLPerf.colorGen(buffers.colorBuffer, 4 * totalBinsGeneric, buffers.colorArray)
         }
@@ -1526,14 +1637,14 @@ class WXGLRender(private val context: Context) : Renderer {
     }
 
     fun constructWBLines() {
-        val fWb = WXGLNexradLevel3WindBarbs.decodeAndPlot(context, rid, provider, false)
+        val fWb = WXGLNexradLevel3WindBarbs.decodeAndPlot(rid, provider, false)
         constructGenericLinesShort(wbBuffers, fWb)
         constructWBLinesGusts()
         constructWBCircle()
     }
 
     private fun constructWBLinesGusts() {
-        val fWbGusts = WXGLNexradLevel3WindBarbs.decodeAndPlot(context, rid, provider, true)
+        val fWbGusts = WXGLNexradLevel3WindBarbs.decodeAndPlot(rid, provider, true)
         constructGenericLinesShort(wbGustsBuffers, fWbGusts)
     }
 
@@ -1569,7 +1680,7 @@ class WXGLRender(private val context: Context) : Renderer {
     }
 
     fun constructSwoLines() {
-        val hashSwo = UtilitySWOD1.HASH_SWO.toMap()
+        val hashSwo = UtilitySwoD1.HASH_SWO.toMap()
         colorSwo[0] = Color.MAGENTA
         colorSwo[1] = Color.RED
         colorSwo[2] = Color.rgb(255, 140, 0)

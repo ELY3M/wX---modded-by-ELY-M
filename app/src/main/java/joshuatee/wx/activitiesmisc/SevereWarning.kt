@@ -57,8 +57,8 @@ internal class SevereWarning(private val type: PolygonType) {
             else -> {
             }
         }
-        val warningAl = textTor.parseColumn(RegExp.warningVtecPattern)
-        warningAl.forEach {
+        val warnings = textTor.parseColumn(RegExp.warningVtecPattern)
+        warnings.forEach {
             val vtecIsCurrent = UtilityTime.isVtecCurrent(it)
             if (!it.startsWith("O.EXP") && vtecIsCurrent) {
                 text += it

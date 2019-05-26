@@ -23,7 +23,7 @@ package joshuatee.wx.ui
 
 import joshuatee.wx.activitiesmisc.UtilityOpcImages
 import joshuatee.wx.activitiesmisc.UtilityObservations
-import joshuatee.wx.vis.UtilityNWSGOESFullDisk
+import joshuatee.wx.vis.UtilityGoesFullDisk
 
 class ObjectImagesCollection(
         var title: String,
@@ -52,8 +52,8 @@ class ObjectImagesCollection(
             )
             collectionMap["GOESFD"] = ObjectImagesCollection(
                     "GOESFD",
-                    UtilityNWSGOESFullDisk.urls,
-                    UtilityNWSGOESFullDisk.labels,
+                    UtilityGoesFullDisk.urls,
+                    UtilityGoesFullDisk.labels,
                     "GOESFULLDISK_IMG_FAV_IDX",
                     "GOESFULLDISKIMG"
             )

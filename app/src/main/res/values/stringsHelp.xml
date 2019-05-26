@@ -291,7 +291,8 @@ WPC text products: Show mostly text products from WPC. Last one viewed is shown 
 
 
     <string name="help_spc_compmap">
-SPC Compmap: Beta activity for this Product. Use pullout nav bar at left to select parameters.
+SPC Compmap: Beta activity for this Product. Use pullout nav bar at left to select parameters. Values are stacked on top of each other.
+        You can select the item again to turn it off. Items will show with leading "on" in nav drawer when enabled.
 </string>
 
 

@@ -28,7 +28,7 @@ import java.util.Arrays
 import joshuatee.wx.ui.ObjectMenuTitle
 import joshuatee.wx.util.Group
 
-object UtilityModelsSPCSREFInterface {
+object UtilityModelSpcSrefInterface {
 
     val models: List<String> = listOf("SREF")
 

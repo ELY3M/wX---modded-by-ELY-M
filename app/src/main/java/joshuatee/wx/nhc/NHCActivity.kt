@@ -36,12 +36,12 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.wpc.WPCTextProductsActivity
+import joshuatee.wx.wpc.WpcTextProductsActivity
 import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
-class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
+class NhcActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var objNhc: ObjectNhc
@@ -49,9 +49,9 @@ class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_linear_layout_bottom_toolbar,
-            R.menu.nhc
+                savedInstanceState,
+                R.layout.activity_linear_layout_bottom_toolbar,
+                R.menu.nhc
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         objNhc = ObjectNhc(this, ll)
@@ -66,19 +66,19 @@ class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun showTextProduct(prod: String) {
         ObjectIntent(
-            this,
-            WPCTextProductsActivity::class.java,
-            WPCTextProductsActivity.URL,
-            arrayOf(prod.toLowerCase(Locale.US), "")
+                this,
+                WpcTextProductsActivity::class.java,
+                WpcTextProductsActivity.URL,
+                arrayOf(prod.toLowerCase(Locale.US), "")
         )
     }
 
     private fun showImageProduct(imageUrl: String, title: String, needWhiteBG: String) {
         ObjectIntent(
-            this,
-            ImageShowActivity::class.java,
-            ImageShowActivity.URL,
-            arrayOf(imageUrl, title, needWhiteBG)
+                this,
+                ImageShowActivity::class.java,
+                ImageShowActivity.URL,
+                arrayOf(imageUrl, title, needWhiteBG)
         )
     }
 
@@ -95,40 +95,40 @@ class NHCActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.id.action_epac_tws -> showTextProduct("MIATWSEP")
             R.id.action_share -> UtilityShare.shareText(this, "", Utility.fromHtml(objNhc.html))
             R.id.action_epac_daily -> showImageProduct(
-                "http://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/PAC/20.jpg",
-                "EPAC Daily Analysis",
-                "false"
+                    "http://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/PAC/20.jpg",
+                    "EPAC Daily Analysis",
+                    "false"
             )
             R.id.action_atl_daily -> showImageProduct(
-                "http://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/ATL/20.jpg",
-                "ATL Daily Analysis",
-                "false"
+                    "http://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/ATL/20.jpg",
+                    "ATL Daily Analysis",
+                    "false"
             )
             R.id.action_epac_7daily -> showImageProduct(
-                "${MyApplication.nwsNhcWebsitePrefix}/tafb/pac_anal.gif",
-                "EPAC 7-Day Analysis",
-                "true"
+                    "${MyApplication.nwsNhcWebsitePrefix}/tafb/pac_anal.gif",
+                    "EPAC 7-Day Analysis",
+                    "true"
             )
             R.id.action_atl_7daily -> showImageProduct(
-                "${MyApplication.nwsNhcWebsitePrefix}/tafb/atl_anal.gif",
-                "ATL 7-Day Analysis",
-                "true"
+                    "${MyApplication.nwsNhcWebsitePrefix}/tafb/atl_anal.gif",
+                    "ATL 7-Day Analysis",
+                    "true"
             )
             R.id.action_epac_sst_anomaly -> showImageProduct(
-                "${MyApplication.nwsNhcWebsitePrefix}/tafb/pac_anom.gif",
-                "EPAC SST Anomaly",
-                "true"
+                    "${MyApplication.nwsNhcWebsitePrefix}/tafb/pac_anom.gif",
+                    "EPAC SST Anomaly",
+                    "true"
             )
             R.id.action_atl_sst_anomaly -> showImageProduct(
-                "${MyApplication.nwsNhcWebsitePrefix}/tafb/atl_anom.gif",
-                "ATL SST Anomaly",
-                "true"
+                    "${MyApplication.nwsNhcWebsitePrefix}/tafb/atl_anom.gif",
+                    "ATL SST Anomaly",
+                    "true"
             )
             R.id.action_glcfs -> ObjectIntent(
-                this,
-                ModelsGenericActivity::class.java,
-                ModelsGenericActivity.INFO,
-                arrayOf("1", "GLCFS", "GLCFS")
+                    this,
+                    ModelsGenericActivity::class.java,
+                    ModelsGenericActivity.INFO,
+                    arrayOf("1", "GLCFS", "GLCFS")
             )
             else -> return super.onOptionsItemSelected(item)
         }

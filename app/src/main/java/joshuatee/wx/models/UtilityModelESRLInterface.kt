@@ -21,7 +21,7 @@
 
 package joshuatee.wx.models
 
-internal object UtilityModelESRLInterface {
+internal object UtilityModelEsrlInterface {
 
     val models = listOf(
         "HRRR",

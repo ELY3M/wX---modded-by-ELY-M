@@ -97,7 +97,7 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        spotterlist = withContext(Dispatchers.IO) { UtilitySpotter.spotterData }.toMutableList()
+        spotterlist = withContext(Dispatchers.IO) { UtilitySpotter.data }.toMutableList()
         markFavorites()
         ca = AdapterSpotter(spotterlist)
         recyclerView.recyclerView.adapter = ca
@@ -185,7 +185,7 @@ class SpottersActivity : BaseActivity() {
                 WebscreenAB::class.java,
                 WebscreenAB.URL,
                 arrayOf(
-                        UtilityMap.genMapUrl(
+                        UtilityMap.getMapUrl(
                                 spotterlist[position].lat,
                                 spotterlist[position].lon,
                                 "9"
@@ -195,7 +195,7 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun showItemOnRadar(position: Int) {
-        val rid = UtilityLocation.getNearestOffice(
+        val radarSite = UtilityLocation.getNearestOffice(
                 this,
                 "RADAR",
                 LatLon(spotterlist[position].lat, spotterlist[position].lon)
@@ -204,7 +204,7 @@ class SpottersActivity : BaseActivity() {
                 this,
                 WXGLRadarActivity::class.java,
                 WXGLRadarActivity.RID,
-                arrayOf(rid, "", "N0Q", "", spotterlist[position].uniq)
+                arrayOf(radarSite, "", "N0Q", "", spotterlist[position].uniq)
         )
     }
 

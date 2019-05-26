@@ -51,7 +51,7 @@ import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_spcmcdwshow_summary.*
 
-class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
+class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     // show a summary of  MCD or a specific MCD, long press on image to save location
     //
@@ -88,9 +88,9 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_spcmcdwshow_summary,
-            R.menu.spcmcdshowdetail
+                savedInstanceState,
+                R.layout.activity_spcmcdwshow_summary,
+                R.menu.spcmcdshowdetail
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -122,7 +122,7 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
             textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/md$number.html"
             url = "${MyApplication.nwsSPCwebsitePrefix}/products/md/"
             patternStr =
-                "<strong><a href=./products/md/md.....html.>Mesoscale Discussion #(.*?)</a></strong>"
+                    "<strong><a href=./products/md/md.....html.>Mesoscale Discussion #(.*?)</a></strong>"
             nothingPresentStr = "No active MCDs"
             activityLabel = "MCDs"
             product = "SPCMCD$number"
@@ -171,10 +171,10 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
             val card = ObjectCardImage(contextg, linearLayout, bitmaps[mcdIndex])
             card.setOnClickListener(View.OnClickListener {
                 ObjectIntent(
-                    contextg,
-                    SPCMCDWShowActivity::class.java,
-                    SPCMCDWShowActivity.NO,
-                    arrayOf(mcdNumbers[mcdIndex], "", polygonType.toString())
+                        contextg,
+                        SpcMcdWatchShowActivity::class.java,
+                        SpcMcdWatchShowActivity.NO,
+                        arrayOf(mcdNumbers[mcdIndex], "", polygonType.toString())
                 )
             })
             if (mcdList.size == 1) {
@@ -195,10 +195,10 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
             miImage.isVisible = true
         } else {
             titleString =
-                "$activityLabel " + mcdNumbers.toString().replace(
-                    "[{}]".toRegex(),
-                    ""
-                ).replace("\\[|\\]".toRegex(), "").replace("w", "")
+                    "$activityLabel " + mcdNumbers.toString().replace(
+                            "[{}]".toRegex(),
+                            ""
+                    ).replace("\\[|\\]".toRegex(), "").replace("w", "")
             miAll.isVisible = true
             title = titleString
         }
@@ -214,32 +214,25 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
-        (0 until wfos.size - 1).forEach {
-            menu.add(
-                0,
-                v.id,
-                0,
-                "Add location: " + wfos[it] + " - " + Utility.readPref(
+        wfos.filter{ !it.contains("<BR>") }.forEach {
+            menu.add(0, v.id, 0, "Add location: $it - " + Utility.readPref(
                     this,
-                    "NWS_LOCATION_" + wfos[it],
+                    "NWS_LOCATION_$it",
                     ""
-                )
+            )
             )
         }
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        val itemStr = item.title.toString()
-        (0 until wfos.size - 1)
-            .filter { itemStr.contains(wfos[it]) }
-            .forEach {
-                UtilityLocation.saveLocationForMcd(
-                    wfos[it],
+        wfos.filter { item.title.toString().contains(it) }.forEach {
+            UtilityLocation.saveLocationForMcd(
+                    it,
                     contextg,
                     linearLayout,
                     uiDispatcher
-                )
-            }
+            )
+        }
         return true
     }
 
@@ -255,9 +248,9 @@ class SPCMCDWShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener 
                     UtilityShare.shareText(this, titleString, Utility.fromHtml(text), bitmaps[0])
             }
             R.id.action_share_text -> UtilityShare.shareText(
-                this,
-                titleString,
-                Utility.fromHtml(text)
+                    this,
+                    titleString,
+                    Utility.fromHtml(text)
             )
             R.id.action_share_url -> UtilityShare.shareText(this, titleString, textUrl)
             R.id.action_share_image -> UtilityShare.shareBitmap(this, titleString, bitmaps[0])

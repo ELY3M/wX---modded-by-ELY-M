@@ -32,7 +32,7 @@ import androidx.cardview.widget.CardView
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.audio.UtilityTTSTranslations
+import joshuatee.wx.audio.UtilityTtsTranslations
 import joshuatee.wx.objects.ObjectIntent
 
 class ObjectCardText(private val context: Context) {
@@ -238,7 +238,7 @@ class ObjectCardText(private val context: Context) {
 
     fun setTextAndTranslate(text: String) {
         val localText = if (UIPreferences.translateText) {
-            UtilityTTSTranslations.translateAbbreviationsForVisual(text)
+            UtilityTtsTranslations.translateAbbreviationsForVisual(text)
         } else {
             text
         }

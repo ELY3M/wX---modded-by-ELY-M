@@ -21,7 +21,6 @@
 
 package joshuatee.wx.util
 
-import android.content.Context
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ProjectionType
 
@@ -40,13 +39,13 @@ class ProjectionNumbers {
     constructor()
 
     constructor(
-        scalef: Double,
+        scale: Double,
         lat: String,
         lon: String,
         xImageCenterPixels: Double,
         yImageCenterPixels: Double
     ) {
-        scale = scalef
+        this.scale = scale
         scaleFloat = scale.toFloat()
         x = lat
         y = lon
@@ -55,7 +54,7 @@ class ProjectionNumbers {
         oneDegreeScaleFactor = UtilityMath.pixPerDegreeLon(xDbl, scale)
     }
 
-    constructor(context: Context, radarSite: String, provider: ProjectionType) {
+    constructor(radarSite: String, provider: ProjectionType) {
         this.radarSite = radarSite
         xCenter = 0.0
         yCenter = 0.0
@@ -97,8 +96,6 @@ class ProjectionNumbers {
                 xCenter = 0.0
                 yCenter = 0.0
                 polygonWidth = 1.0
-            }
-            else -> {
             }
         }
         x = Utility.getRadarSiteX(radarSite)

@@ -37,7 +37,7 @@ import joshuatee.wx.R
 import joshuatee.wx.RegExp
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.Location
-import joshuatee.wx.spc.SPCMCDWShowActivity
+import joshuatee.wx.spc.SpcMcdWatchShowActivity
 
 import joshuatee.wx.objects.PolygonType.MCD
 import joshuatee.wx.objects.PolygonType.MPD
@@ -75,7 +75,7 @@ class BackgroundFetch(val context: Context) {
         var requestID: Int
         (1..Location.numLocations).forEach {
             requestID = System.currentTimeMillis().toInt()
-            notifUrls += UtilityNotification.sendNotif(context, it.toString(), requestID + 1)
+            notifUrls += UtilityNotification.send(context, it.toString(), requestID + 1)
         }
         MyApplication.radarWarningPolygons.forEach {
             if (it.isEnabled) {
@@ -91,7 +91,7 @@ class BackgroundFetch(val context: Context) {
                 // store data for use by severe dashboard and cod warnings
                 UtilityDownloadRadar.getPolygonVtec(context)
                 if (MyApplication.alertTornadoNotificationCurrent) {
-                    notifUrls += UtilityNotificationTornado.checkAndSendTornadoNotification(
+                    notifUrls += UtilityNotificationTornado.checkAndSend(
                             context,
                             MyApplication.severeDashboardTor.valueGet()
                     )
@@ -131,8 +131,8 @@ class BackgroundFetch(val context: Context) {
                             val polygonType = MCD
                             val objPI = ObjectPendingIntents(
                                     context,
-                                    SPCMCDWShowActivity::class.java,
-                                    SPCMCDWShowActivity.NO,
+                                    SpcMcdWatchShowActivity::class.java,
+                                    SpcMcdWatchShowActivity.NO,
                                     arrayOf(mdNo, "", polygonType.toString()),
                                     arrayOf(mdNo, "sound", polygonType.toString())
                             )
@@ -197,8 +197,8 @@ class BackgroundFetch(val context: Context) {
                             val polygonType = MPD
                             val objPI = ObjectPendingIntents(
                                     context,
-                                    SPCMCDWShowActivity::class.java,
-                                    SPCMCDWShowActivity.NO,
+                                    SpcMcdWatchShowActivity::class.java,
+                                    SpcMcdWatchShowActivity.NO,
                                     arrayOf(mdNo, "", polygonType.toString()),
                                     arrayOf(mdNo, "sound", polygonType.toString())
                             )
@@ -241,6 +241,7 @@ class BackgroundFetch(val context: Context) {
             MyApplication.severeDashboardMpd.valueSet(context, "")
             // end of if to test if alerts_wpcmpd are enabled
         }
+        // FIXME refactor to move to utilDownloadRadar like iOS/Swift port
         if (MyApplication.alertSpcwatNotificationCurrent || MyApplication.checkspc || PolygonType.MCD.pref) {
             try {
                 dataAsString = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/".getHtml()
@@ -260,7 +261,8 @@ class BackgroundFetch(val context: Context) {
                         )
                         watchLatlonList += UtilityNotification.storeWatMcdLatLon(mcdPre2)
                         if (PolygonType.MCD.pref) {
-                            if (mcdPre.contains("Severe Thunderstorm Watch")) {
+                            //if (mcdPre.contains("Severe Thunderstorm Watch")) {
+                            if (!mcdPre.contains("Tornado Watch")) {
                                 watchLatlon += UtilityNotification.storeWatMcdLatLon(mcdPre2)
                             } else {
                                 watchLatlonTor += UtilityNotification.storeWatMcdLatLon(mcdPre2)
@@ -274,8 +276,8 @@ class BackgroundFetch(val context: Context) {
                             val polygonType = WATCH
                             val objPI = ObjectPendingIntents(
                                     context,
-                                    SPCMCDWShowActivity::class.java,
-                                    SPCMCDWShowActivity.NO,
+                                    SpcMcdWatchShowActivity::class.java,
+                                    SpcMcdWatchShowActivity.NO,
                                     arrayOf(mdNo, "", polygonType.toString()),
                                     arrayOf(mdNo, "sound", polygonType.toString())
                             )
@@ -320,7 +322,7 @@ class BackgroundFetch(val context: Context) {
         LocalBroadcastManager.getInstance(context).sendBroadcast(Intent("notifran"))
         notifUrls += UtilityNotificationSpc.sendSwoNotifications(context, inBlackout)
         if (MyApplication.alertNhcEpacNotificationCurrent || MyApplication.alertNhcAtlNotificationCurrent)
-            notifUrls += UtilityNotificationNhc.sendNhcNotifications(
+            notifUrls += UtilityNotificationNhc.send(
                     context,
                     MyApplication.alertNhcEpacNotificationCurrent,
                     MyApplication.alertNhcAtlNotificationCurrent

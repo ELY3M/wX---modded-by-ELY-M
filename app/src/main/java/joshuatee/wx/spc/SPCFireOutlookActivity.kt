@@ -35,7 +35,7 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.util.UtilityShare
-import joshuatee.wx.wpc.WPCTextProductsActivity
+import joshuatee.wx.wpc.WpcTextProductsActivity
 import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
@@ -49,10 +49,10 @@ class SPCFireOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_linear_layout_bottom_toolbar,
-            R.menu.shared_multigraphics,
-            true
+                savedInstanceState,
+                R.layout.activity_linear_layout_bottom_toolbar,
+                R.menu.shared_multigraphics,
+                true
         )
         contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -68,10 +68,10 @@ class SPCFireOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             val prod = UtilitySpcFireOutlook.textProducts[bitmaps.indexOf(bitmap)]
             card.setOnClickListener(View.OnClickListener {
                 ObjectIntent(
-                    contextg,
-                    WPCTextProductsActivity::class.java,
-                    WPCTextProductsActivity.URL,
-                    arrayOf(prod)
+                        contextg,
+                        WpcTextProductsActivity::class.java,
+                        WpcTextProductsActivity.URL,
+                        arrayOf(prod)
                 )
             })
         }
@@ -80,10 +80,10 @@ class SPCFireOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> UtilityShare.shareText(
-                this,
-                getString(UtilitySpcFireOutlook.activityTitle),
-                "",
-                bitmaps
+                    this,
+                    getString(UtilitySpcFireOutlook.activityTitle),
+                    "",
+                    bitmaps
             )
             else -> return super.onOptionsItemSelected(item)
         }

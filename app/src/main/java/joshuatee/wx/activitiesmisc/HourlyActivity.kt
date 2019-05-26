@@ -83,8 +83,7 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         val result1 = async(Dispatchers.IO) { UtilityUSHourly.getString(locationNumber) }
         htmlShare = result1.await()
-        val result2 =
-            async(Dispatchers.IO) { UtilityUSHourly.getStringForActivity(htmlShare[1]) }
+        val result2 = async(Dispatchers.IO) { UtilityUSHourly.getStringForActivity(htmlShare[1]) }
         hourlyData = result2.await()
         cv1.visibility = View.VISIBLE
         textCard.setText(

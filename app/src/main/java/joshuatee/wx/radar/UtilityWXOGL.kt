@@ -53,50 +53,53 @@ object UtilityWXOGL {
         return "http://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=$obsSite"
     }
 
-    fun getRidPrefix(rid1: String, prod: String): String {
-        var ridPrefix = when (rid1) {
+    fun getRidPrefix(radarSite: String, product: String): String {
+        var ridPrefix = when (radarSite) {
             "JUA" -> "t"
             "HKI", "HMO", "HKM", "HWA", "APD", "ACG", "AIH", "AHG", "AKC", "ABC", "AEC", "GUA" -> "p"
             else -> "k"
         }
-        if (prod == "TV0" || prod == "TZL") ridPrefix = ""
+        if (product == "TV0" || product == "TZL") {
+            ridPrefix = ""
+        }
         return ridPrefix
     }
 
-    fun getRidPrefix(rid1: String, TDWR: Boolean): String {
-        var ridPrefix = when (rid1) {
+    fun getRidPrefix(radarSite: String, tdwr: Boolean): String {
+        var ridPrefix = when (radarSite) {
             "JUA" -> "t"
             "HKI", "HMO", "HKM", "HWA", "APD", "ACG", "AIH", "AHG", "AKC", "ABC", "AEC", "GUA" -> "p"
             else -> "k"
         }
-        if (TDWR) ridPrefix = ""
+        if (tdwr) {
+            ridPrefix = ""
+        }
         return ridPrefix
     }
 
-    //FIXME make better VWP chart like one on cod.edu //ELY M. 
-    fun getVwp(context: Context, rid1: String): String {
+    fun getVwp(context: Context, radarSite: String): String {
         // http://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.48vwp/SI.kccx/
-        val prod = "VWP"
+        val product = "VWP"
         val l3BaseFn = "nidsVWP"
-        val idxStr = "0"
-        val ridPrefix = getRidPrefix(rid1, prod)
-        val fh: File
+        val indexString = "0"
+        val ridPrefix = getRidPrefix(radarSite, product)
+        val file: File
         val inputStream = UtilityDownload.getInputStreamFromUrl(
-            MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[prod] + "/SI." + ridPrefix + rid1.toLowerCase(
-                Locale.US
-            ) + "/sn.last"
+                MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[product] + "/SI." + ridPrefix + radarSite.toLowerCase(
+                        Locale.US
+                ) + "/sn.last"
         )
         if (inputStream != null) {
-            UtilityIO.saveInputStream(context, inputStream, l3BaseFn + idxStr + "_d")
+            UtilityIO.saveInputStream(context, inputStream, l3BaseFn + indexString + "_d")
         } else {
             return ""
         }
-        fh = File(context.filesDir, l3BaseFn + idxStr + "_d")
-        if (!fh.renameTo(File(context.filesDir, l3BaseFn + idxStr)))
-            UtilityLog.d("wx", "Problem moving file to $l3BaseFn$idxStr")
+        file = File(context.filesDir, l3BaseFn + indexString + "_d")
+        if (!file.renameTo(File(context.filesDir, l3BaseFn + indexString)))
+            UtilityLog.d("wx", "Problem moving file to $l3BaseFn$indexString")
         var output = ""
         try {
-            val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, l3BaseFn + idxStr))
+            val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, l3BaseFn + indexString))
             dis.bigEndian = true
             // ADVANCE PAST WMO HEADER
             while (true) {
@@ -110,25 +113,25 @@ object UtilityWXOGL {
                     break
                 }
             }
-            var b: Byte?
+            var byte: Byte?
             var vSpotted = false
             output += "<font face=monospace><small>"
             try {
                 while (!dis.isAtEndOfFile) {
-                    b = dis.readByte()
+                    byte = dis.readByte()
                     if (android.os.Build.VERSION.SDK_INT >= 19) {
-                        if (b.toChar() == 'V') {
+                        if (byte.toChar() == 'V') {
                             vSpotted = true
                         }
-                        if (Character.isAlphabetic(b.toInt()) || Character.isWhitespace(b.toInt()) || Character.isDigit(
-                                b.toInt()
-                            ) || Character.isISOControl(b.toInt()) || Character.isDefined(b.toInt())
+                        if (Character.isAlphabetic(byte.toInt()) || Character.isWhitespace(byte.toInt()) || Character.isDigit(
+                                        byte.toInt()
+                                ) || Character.isISOControl(byte.toInt()) || Character.isDefined(byte.toInt())
                         ) {
                             if (vSpotted) {
-                                output += if (b == 0.toByte()) {
+                                output += if (byte == 0.toByte()) {
                                     "<br>"
                                 } else {
-                                    String(byteArrayOf(b))
+                                    String(byteArrayOf(byte))
                                 }
                             }
                         }
@@ -151,18 +154,16 @@ object UtilityWXOGL {
     }
 
     fun showTextProducts(lat: Double, lon: Double): String {
-        var warningHTML =
-	MyApplication.severeDashboardTor.valueGet() + MyApplication.severeDashboardSvr.valueGet() + MyApplication.severeDashboardEww.valueGet() + MyApplication.severeDashboardFfw.valueGet() + MyApplication.severeDashboardSmw.valueGet()
+        var html = MyApplication.severeDashboardTor.valueGet() + MyApplication.severeDashboardSvr.valueGet() + MyApplication.severeDashboardEww.valueGet() + MyApplication.severeDashboardFfw.valueGet() + MyApplication.severeDashboardSmw.valueGet()
         MyApplication.radarWarningPolygons.forEach {
             if (it.isEnabled) {
-                warningHTML += it.storage.valueGet()
+                html += it.storage.valueGet()
             }
         }
-        val urlList =
-            warningHTML.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
-        warningHTML = warningHTML.replace("\n", "")
-        warningHTML = warningHTML.replace(" ", "")
-        val polygonArr = warningHTML.parseColumn(RegExp.warningLatLonPattern)
+        val urlList = html.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
+        html = html.replace("\n", "")
+        html = html.replace(" ", "")
+        val polygonArr = html.parseColumn(RegExp.warningLatLonPattern)
         var retStr = ""
         var testArr: List<String>
         var q = 0
@@ -175,21 +176,21 @@ object UtilityWXOGL {
                 val polyTmp = polys.replace("[", "").replace("]", "").replace(",", " ")
                 testArr = polyTmp.split(" ").dropLastWhile { it.isEmpty() }
                 val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }
-                    .map {
-                        it.toDoubleOrNull() ?: 0.0
-                    }.toList()
+                        .map {
+                            it.toDoubleOrNull() ?: 0.0
+                        }.toList()
                 val x = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 != 0 }
-                    .map {
-                        it.toDoubleOrNull() ?: 0.0
-                    }.toList()
+                        .map {
+                            it.toDoubleOrNull() ?: 0.0
+                        }.toList()
                 if (y.size > 3 && x.size > 3 && x.size == y.size) {
                     val poly2 = ExternalPolygon.Builder()
                     x.indices.forEach { j ->
                         poly2.addVertex(
-                            ExternalPoint(
-                                x[j].toFloat(),
-                                y[j].toFloat()
-                            )
+                                ExternalPoint(
+                                        x[j].toFloat(),
+                                        y[j].toFloat()
+                                )
                         )
                     }
                     val polygon2 = poly2.build()
@@ -206,7 +207,7 @@ object UtilityWXOGL {
     }
 
 
-
+//TODO REMOVE unneeded shit here
     fun showSpsProducts(lat: Double, lon: Double): String {
 
         var getspslist = WXGLPolygonWarnings.specialWeatherList

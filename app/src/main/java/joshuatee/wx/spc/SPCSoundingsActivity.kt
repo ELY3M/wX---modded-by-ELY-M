@@ -39,7 +39,7 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class SPCSoundingsActivity : BaseActivity(), OnItemSelectedListener,
+class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
     OnMenuItemClickListener {
 
     companion object {

@@ -46,7 +46,7 @@ import android.view.View.OnClickListener
 import android.widget.*
 
 import joshuatee.wx.R
-import joshuatee.wx.canada.UtilityCitiesCA
+import joshuatee.wx.canada.UtilityCitiesCanada
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.ui.BaseActivity
@@ -376,8 +376,8 @@ class SettingsLocationGenericActivity : BaseActivity(),
         val inflater = menuInflater
         inflater.inflate(R.menu.settings_location_generic, menu)
         val searchView = menu.findItem(R.id.ab_search).actionView as ArrayAdapterSearchView
-        if (!UtilityCitiesCA.cityInit) UtilityCitiesCA.loadCitiesArray()
-        val tmpArr = UtilityCities.cities.toList() + UtilityCitiesCA.CITIES_CA.toList()
+        if (!UtilityCitiesCanada.cityInit) UtilityCitiesCanada.loadCitiesArray()
+        val tmpArr = UtilityCities.cities.toList() + UtilityCitiesCanada.CITIES_CA.toList()
         cityAa = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, tmpArr)
         cityAa.setDropDownViewResource(MyApplication.spinnerLayout)
         searchView.setAdapter(cityAa)
@@ -409,8 +409,8 @@ class SettingsLocationGenericActivity : BaseActivity(),
                 // Y: CODE:-84.
                 searchView.setText(cityAa.getItem(position)!!) // removed .toString() on this and below
                 locLabelEt.setText(cityAa.getItem(position))
-                locXEt.setText("CANADA:" + prov + ":" + UtilityCitiesCA.LAT_CA[k].toString())
-                locYEt.setText(UtilityCitiesCA.code[k] + ":-" + UtilityCitiesCA.LON_CA[k].toString())
+                locXEt.setText("CANADA:" + prov + ":" + UtilityCitiesCanada.LAT_CA[k].toString())
+                locYEt.setText(UtilityCitiesCanada.code[k] + ":-" + UtilityCitiesCanada.LON_CA[k].toString())
                 val searchViewLocal = menuLocal!!.findItem(R.id.ab_search).actionView as SearchView
                 searchViewLocal.onActionViewCollapsed()
                 searchViewLocal.isIconified = true
@@ -483,7 +483,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
                                 this,
                                 WebscreenAB::class.java,
                                 WebscreenAB.URL,
-                                arrayOf(UtilityMap.genMapUrl(xStr, yStr, "9"), "wX")
+                                arrayOf(UtilityMap.getMapUrl(xStr, yStr, "9"), "wX")
                         )
                     } else {
                         val addressForMap = locLabelEt.text.toString()
@@ -491,7 +491,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
                                 this,
                                 WebscreenAB::class.java,
                                 WebscreenAB.URL,
-                                arrayOf(UtilityMap.genMapUrlFromStreetAddress(addressForMap), "wX")
+                                arrayOf(UtilityMap.getMapUrlFromStreetAddress(addressForMap), "wX")
                         )
                     }
                 }

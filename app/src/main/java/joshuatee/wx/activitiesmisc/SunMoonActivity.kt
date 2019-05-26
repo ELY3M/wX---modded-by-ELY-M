@@ -64,6 +64,7 @@ class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
             content = UtilitySunMoon.getExtendedData(Location.locationIndex)
             contentFull = UtilitySunMoon.getFullDates()
         }
+        // FIXME use a list
         val (A, B) = UtilitySunMoon.parseData(content)
         dataA = A
         dataB = B

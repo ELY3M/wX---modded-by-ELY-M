@@ -41,7 +41,7 @@ internal object UtilityNexradRadial8Bit {
 
     // ultimately the code below is used for nexrad widget and for notification that shows radar
 
-    fun decodeAndPlotNexradDigital(
+    fun decodeAndPlot(
         context: Context,
         bitmap: Bitmap,
         fileName: String,

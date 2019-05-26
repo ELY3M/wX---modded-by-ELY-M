@@ -46,7 +46,7 @@ internal object WXGLNexradLevel3StormInfo {
         val stormList = mutableListOf<Double>()
         val retStr: String
         val location = UtilityLocation.getSiteLocation(context, rid)
-        val pn = ProjectionNumbers(context, rid, provider)
+        val pn = ProjectionNumbers(rid, provider)
         WXGLDownload.getNidsTab(context, "STI", pn.radarSite.toLowerCase(), stiBaseFn + fnSuffix)
         val dis: UCARRandomAccessFile
         val posn: List<String>

@@ -28,10 +28,10 @@ import joshuatee.wx.R
 import joshuatee.wx.UtilityWidget
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
-import joshuatee.wx.spc.SPCMesoActivity
-import joshuatee.wx.spc.SPCStormReportsActivity
-import joshuatee.wx.vis.GOES16Activity
-import joshuatee.wx.wpc.WPCImagesActivity
+import joshuatee.wx.spc.SpcMesoActivity
+import joshuatee.wx.spc.SpcStormReportsActivity
+import joshuatee.wx.vis.GoesActivity
+import joshuatee.wx.wpc.WpcImagesActivity
 
 class ObjectWidgetGeneric(context: Context, val type: WidgetFile) {
 
@@ -42,38 +42,38 @@ class ObjectWidgetGeneric(context: Context, val type: WidgetFile) {
         if (!MyApplication.widgetPreventTap) {
             when (type) {
                 WPCIMG -> UtilityWidget.setupIntent(
-                    context,
-                    remoteViews,
-                    WPCImagesActivity::class.java,
-                    R.id.iv,
-                    type.action
+                        context,
+                        remoteViews,
+                        WpcImagesActivity::class.java,
+                        R.id.iv,
+                        type.action
                 )
                 SPCMESO -> UtilityWidget.setupIntent(
-                    context,
-                    remoteViews,
-                    SPCMesoActivity::class.java,
-                    R.id.iv,
-                    SPCMesoActivity.INFO,
-                    arrayOf("SPCMESO1", "1", "SPCMESO"),
-                    type.action
+                        context,
+                        remoteViews,
+                        SpcMesoActivity::class.java,
+                        R.id.iv,
+                        SpcMesoActivity.INFO,
+                        arrayOf("SPCMESO1", "1", "SPCMESO"),
+                        type.action
                 )
                 CONUSWV -> UtilityWidget.setupIntent(
-                    context,
-                    remoteViews,
-                    GOES16Activity::class.java,
-                    R.id.iv,
-                    GOES16Activity.RID,
-                    arrayOf("CONUS", "09"),
-                    type.action
+                        context,
+                        remoteViews,
+                        GoesActivity::class.java,
+                        R.id.iv,
+                        GoesActivity.RID,
+                        arrayOf("CONUS", "09"),
+                        type.action
                 )
                 STRPT -> UtilityWidget.setupIntent(
-                    context,
-                    remoteViews,
-                    SPCStormReportsActivity::class.java,
-                    R.id.iv,
-                    SPCStormReportsActivity.NO,
-                    arrayOf("today"),
-                    type.action
+                        context,
+                        remoteViews,
+                        SpcStormReportsActivity::class.java,
+                        R.id.iv,
+                        SpcStormReportsActivity.NO,
+                        arrayOf("today"),
+                        type.action
                 )
                 else -> {
                 }

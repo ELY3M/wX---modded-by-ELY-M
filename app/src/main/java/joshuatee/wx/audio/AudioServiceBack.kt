@@ -31,7 +31,7 @@ class AudioServiceBack : Service() {
     override fun onBind(intent: Intent): IBinder? = null
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        UtilityTTS.mediaPlayerRewind(this)
+        UtilityTts.mediaPlayerRewind(this)
         return START_NOT_STICKY
     }
 } 

@@ -26,7 +26,7 @@ import java.nio.ByteOrder
 
 import android.content.Context
 
-import joshuatee.wx.JNI
+import joshuatee.wx.Jni
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.*
 
@@ -51,7 +51,7 @@ class WXGLNexradLevel2 {
     }
 
     // last argument is true/false on whether or not the DECOMP stage needs to happen
-    fun decocodeAndPlotNexradL2(
+    fun decocodeAndPlot(
         context: Context,
         fileName: String,
         prod: String,
@@ -68,7 +68,7 @@ class WXGLNexradLevel2 {
             ibuff.position(0)
             obuff.position(0)
             try {
-                JNI.level2Decompress(
+                Jni.level2Decompress(
                     UtilityIO.getFilePath(context, fileName),
                     UtilityIO.getFilePath(context, decompFileName),
                     ibuff,
@@ -111,7 +111,7 @@ class WXGLNexradLevel2 {
         msecs.position(0)
         try {
             if (MyApplication.radarUseJni) {
-                JNI.level2Decode(
+                Jni.level2Decode(
                     UtilityIO.getFilePath(context, decompFileName),
                     binWord,
                     radialStartAngle,

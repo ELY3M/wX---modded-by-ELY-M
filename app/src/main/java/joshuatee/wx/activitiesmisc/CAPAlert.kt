@@ -24,9 +24,8 @@ package joshuatee.wx.activitiesmisc
 import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.util.UtilityLog
 
-class CAPAlert {
+class CapAlert {
 
     var text: String = ""
         private set
@@ -64,9 +63,9 @@ class CAPAlert {
 
     companion object {
 
-        fun createFromUrl(url: String): CAPAlert {
+        fun createFromUrl(url: String): CapAlert {
             val expireStr = "This alert has expired"
-            val obj = CAPAlert()
+            val obj = CapAlert()
             obj.url = url
             val html = if (url.contains("NWS-IDP-PROD")) {
                 //UtilityLog.d("wx", url)

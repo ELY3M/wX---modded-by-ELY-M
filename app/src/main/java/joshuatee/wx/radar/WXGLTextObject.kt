@@ -34,11 +34,12 @@ import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.util.ProjectionNumbers
-import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityCanvasProjection
 import joshuatee.wx.util.UtilityLog
 
 import kotlin.math.*
+
+// FIXME rename var OGLR not camcelCase
 
 class WXGLTextObject(
         private val context: Context,
@@ -92,7 +93,7 @@ class WXGLTextObject(
             this.glviewHeight = MyApplication.dm.heightPixels / 2
         else
             this.glviewHeight = MyApplication.dm.heightPixels
-        pn = ProjectionNumbers(context, OGLR.rid, ProjectionType.WX_OGL)
+        pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
         lp = RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
@@ -103,7 +104,7 @@ class WXGLTextObject(
 
     private fun addTVCitiesExt() {
         if (GeographyType.CITIES.pref && cityextTvArrInit) {
-            pn = ProjectionNumbers(context, OGLR.rid, ProjectionType.WX_OGL)
+            pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
             hideCitiesExt()
             glview.citiesExtAl = mutableListOf()
             scale = getScale()
@@ -114,16 +115,16 @@ class WXGLTextObject(
             textSize = MyApplication.textSizeSmall * oglrZoom * 0.75f * MyApplication.radarTextSize
             val cityMinZoom = 0.50
             if (OGLR.zoom > cityMinZoom) {
-                val cityExtLength = UtilityCitiesExtended.cityAl.size
+                val cityExtLength = UtilityCitiesExtended.cities.size
                 for (c in 0 until cityExtLength) {
                     if (glview.citiesExtAl.size > maxCitiesPerGlview) {
                         break
                     }
                     checkAndDrawText(
                             glview.citiesExtAl,
-                            UtilityCitiesExtended.cityAl[c].latD,
-                            UtilityCitiesExtended.cityAl[c].lonD,
-                            UtilityCitiesExtended.cityAl[c].name,
+                            UtilityCitiesExtended.cities[c].latD,
+                            UtilityCitiesExtended.cities[c].lonD,
+                            UtilityCitiesExtended.cities[c].name,
                             MyApplication.radarColorCity
                     )
                 }
@@ -145,13 +146,13 @@ class WXGLTextObject(
     private fun initTVCitiesExt(context: Context) {
         if (GeographyType.CITIES.pref) {
             cityextTvArrInit = true
-            UtilityCitiesExtended.populateArrays(context)
+            UtilityCitiesExtended.create(context)
         }
     }
 
     private fun initTVCountyLabels(context: Context) {
         if (MyApplication.radarCountyLabels) {
-            UtilityCountyLabels.populateArrays(context)
+            UtilityCountyLabels.create(context)
             countyLabelsTvArrInit = true
         }
     }
@@ -161,7 +162,7 @@ class WXGLTextObject(
 
     private fun addTVCountyLabels() {
         if (MyApplication.radarCountyLabels && countyLabelsTvArrInit) {
-            pn = ProjectionNumbers(context, OGLR.rid, ProjectionType.WX_OGL)
+            pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
             hideCountyLabels()
             glview.countyLabelsAl = mutableListOf()
             scale = getScale()
@@ -201,7 +202,7 @@ class WXGLTextObject(
 
     fun addTVSpottersLabels() {
         if (PolygonType.SPOTTER_LABELS.pref && spottersLabelsTvArrInit) {
-            pn = ProjectionNumbers(context, OGLR.rid, ProjectionType.WX_OGL)
+            pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
             spotterLat = 0.0
             spotterLon = 0.0
             hideSpottersLabels()
@@ -213,14 +214,18 @@ class WXGLTextObject(
             }
             textSize = MyApplication.textSizeSmall * oglrZoom * MyApplication.radarTextSize * 0.75f
             if (OGLR.zoom > 0.5) {
-                // FIXME make copy first
-                UtilitySpotter.spotterList.indices.forEach {
+                // spotter list make copy first
+                // multiple bug reports against this
+                // look at performance impact
+                // UtilityLog.d("wx", "SPOTTER SHOW " + UtilitySpotter.spotterList.size)
+                val spotterListCopy = UtilitySpotter.spotterList.toMutableList()
+                spotterListCopy.indices.forEach {
                     checkAndDrawText(
-                        glview.spottersLabelAl,
-                        UtilitySpotter.spotterList[it].latD,
-                        UtilitySpotter.spotterList[it].lonD,
-                        UtilitySpotter.spotterList[it].lastName.replace("0FAV ", ""),
-                        MyApplication.radarColorSpotter
+                            glview.spottersLabelAl,
+                            spotterListCopy[it].latD,
+                            spotterListCopy[it].lonD,
+                            spotterListCopy[it].lastName.replace("0FAV ", ""),
+                            MyApplication.radarColorSpotter
                     )
                 }
             } else {
@@ -237,7 +242,7 @@ class WXGLTextObject(
 
     fun addTVHailLabels() {
         if (PolygonType.HAIL_LABELS.pref && hailLabelsTvArrInit) {
-            pn = ProjectionNumbers(context, OGLR.rid, ProjectionType.WX_OGL)
+            pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
             hailLat = 0.0
             hailLon = 0.0
             hideHailLabels()
@@ -275,7 +280,7 @@ class WXGLTextObject(
     }
 
     private fun addTVHail() {
-            pn = ProjectionNumbers(context, OGLR.rid, ProjectionType.WX_OGL)
+            pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
             var foundhail: Boolean = false
             var hailLat: Double
             var hailLon: Double
@@ -477,7 +482,7 @@ class WXGLTextObject(
 
     private fun addTVSpotter() {
         if (WXGLRadarActivity.spotterShowSelected) {
-            pn = ProjectionNumbers(context, OGLR.rid, ProjectionType.WX_OGL)
+            pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
             val spotterLat: Double
             val spotterLon: Double
             var report = false
@@ -603,7 +608,7 @@ class WXGLTextObject(
     fun addTVObs() {
         if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && obsTvArrInit) {
             val obsExtZoom = MyApplication.radarObsExtZoom.toDouble()
-            pn = ProjectionNumbers(context, OGLR.rid, ProjectionType.WX_OGL)
+            pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
             obsLat = 0.0
             obsLon = 0.0
             val fontScaleFactorObs = 0.65f

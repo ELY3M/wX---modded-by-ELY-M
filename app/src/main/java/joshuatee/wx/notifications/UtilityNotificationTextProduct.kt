@@ -71,15 +71,14 @@ object UtilityNotificationTextProduct {
                 // compare the first line to a stored first line, if not execute first block
                 if (textProdFirstline != "")
                     if (textProdFirstline != Utility.readPref(context, PREF_TOKEN + "_" + s, "")) {
-                        // send notif
-                        sendTextProdNotification(context, s, textProdFirstline, textProdChunk)
+                        send(context, s, textProdFirstline, textProdChunk)
                         Utility.writePref(context, PREF_TOKEN + "_" + s, textProdFirstline)
                     }
             }
         }
     }
 
-    private fun sendTextProdNotification(
+    private fun send(
             context: Context,
             prod: String,
             firstLine: String,

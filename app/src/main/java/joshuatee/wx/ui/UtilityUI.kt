@@ -113,8 +113,9 @@ object UtilityUI {
             ridArr[pos - 1] = ridArr[pos]
             ridArr[pos] = tmp
         } else {
-            val tmp = ridArr[ridArr.size - 1]
-            ridArr[ridArr.size - 1] = ridArr[pos]
+            val tmp = ridArr.last()
+            //ridArr[ridArr.size - 1] = ridArr[pos]
+            ridArr[ridArr.lastIndex] = ridArr[pos]
             ridArr[0] = tmp
         }
         var ridFav = ""
@@ -131,14 +132,14 @@ object UtilityUI {
         ridArr: MutableList<String>,
         pos: Int
     ): String {
-        if (pos != ridArr.size - 1) {
+        if (pos != ridArr.lastIndex) {
             val tmp = ridArr[pos + 1]
             ridArr[pos + 1] = ridArr[pos]
             ridArr[pos] = tmp
         } else {
-            val tmp = ridArr[0]
+            val tmp = ridArr.first()
             ridArr[0] = ridArr[pos]
-            ridArr[ridArr.size - 1] = tmp
+            ridArr[ridArr.lastIndex] = tmp
         }
         var ridFav = ""
         ridArr.indices.forEach {

@@ -23,7 +23,7 @@ package joshuatee.wx.audio
 
 import java.util.Locale
 
-object UtilityTTSTranslations {
+object UtilityTtsTranslations {
 
     // FIXME rename method arg
     internal fun translateAbbreviation(sF: String): String {

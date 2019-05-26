@@ -128,7 +128,7 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
             return true
         }
         when (item.itemId) {
-            R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.RADAR_MOSAIC)
+            R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.RADAR_MOSAIC)
             R.id.action_animate -> getAnimate()
             R.id.action_stop -> animDrawable.stop()
             R.id.action_rad_rala -> getContent("rad_rala")

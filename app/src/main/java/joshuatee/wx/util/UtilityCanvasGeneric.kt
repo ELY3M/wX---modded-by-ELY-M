@@ -21,7 +21,6 @@
 
 package joshuatee.wx.util
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -35,15 +34,13 @@ import java.nio.ByteBuffer
 internal object UtilityCanvasGeneric {
 
     fun draw(
-        context: Context,
         provider: ProjectionType,
         bitmap: Bitmap,
-        rid: String,
+        radarSite: String,
         lineWidth: Int,
         type: GeographyType,
         genericByteBuffer: ByteBuffer
     ) {
-        val mercato = provider.isMercator
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.STROKE
@@ -54,11 +51,11 @@ internal object UtilityCanvasGeneric {
         paint.color = type.color
         val wallpath = Path()
         wallpath.reset()
-        val pn = ProjectionNumbers(context, rid, provider)
+        val pn = ProjectionNumbers(radarSite, provider)
         genericByteBuffer.position(0)
         try {
             val tmpBuffer = ByteBuffer.allocateDirect(genericByteBuffer.capacity())
-            if (mercato) {
+            if (provider.isMercator) {
                 UtilityCanvasProjection.computeMercatorFloatToBuffer(
                     genericByteBuffer,
                     tmpBuffer,

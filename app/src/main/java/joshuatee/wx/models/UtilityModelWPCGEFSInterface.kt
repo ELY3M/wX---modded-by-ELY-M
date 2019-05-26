@@ -26,7 +26,7 @@ import joshuatee.wx.ui.ObjectMenuTitle
 import joshuatee.wx.util.Group
 import java.util.*
 
-internal object UtilityModelWPCGEFSInterface {
+internal object UtilityModelWpcGefsInterface {
 
     private val titles = Arrays.asList(
         ObjectMenuTitle("Precip", 37),

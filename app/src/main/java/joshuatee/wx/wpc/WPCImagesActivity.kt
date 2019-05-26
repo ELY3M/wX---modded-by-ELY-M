@@ -43,7 +43,7 @@ import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_wpcimages.*
 
-class WPCImagesActivity : VideoRecordActivity(), View.OnClickListener,
+class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
         Toolbar.OnMenuItemClickListener {
 
     companion object {

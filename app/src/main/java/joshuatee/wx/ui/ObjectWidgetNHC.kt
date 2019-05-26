@@ -26,11 +26,11 @@ import android.widget.RemoteViews
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UtilityWidget
-import joshuatee.wx.nhc.NHCActivity
+import joshuatee.wx.nhc.NhcActivity
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
 
-class ObjectWidgetNHC(context: Context) {
+class ObjectWidgetNhc(context: Context) {
 
     val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_nhc_layout)
 
@@ -39,18 +39,18 @@ class ObjectWidgetNHC(context: Context) {
         UtilityWidget.setImage(context, remoteViews, R.id.iv2, NHC.fileName + "1")
         if (!MyApplication.widgetPreventTap) {
             UtilityWidget.setupIntent(
-                context,
-                remoteViews,
-                NHCActivity::class.java,
-                R.id.iv1,
-                WidgetFile.NHC.action + "0"
+                    context,
+                    remoteViews,
+                    NhcActivity::class.java,
+                    R.id.iv1,
+                    WidgetFile.NHC.action + "0"
             )
             UtilityWidget.setupIntent(
-                context,
-                remoteViews,
-                NHCActivity::class.java,
-                R.id.iv2,
-                WidgetFile.NHC.action + "1"
+                    context,
+                    remoteViews,
+                    NhcActivity::class.java,
+                    R.id.iv2,
+                    WidgetFile.NHC.action + "1"
             )
         }
     }

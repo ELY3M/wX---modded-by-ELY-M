@@ -32,13 +32,13 @@ import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 
 import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.AFDActivity
+import joshuatee.wx.activitiesmisc.AfdActivity
 import joshuatee.wx.activitiesmisc.SevereDashboardActivity
 import joshuatee.wx.objects.ObjectIntentShortcut
 import joshuatee.wx.objects.ShortcutType
-import joshuatee.wx.radar.USNWSMosaicActivity
-import joshuatee.wx.spc.SPCSWOSummaryActivity
-import joshuatee.wx.vis.GOES16Activity
+import joshuatee.wx.radar.USNwsMosaicActivity
+import joshuatee.wx.spc.SpcSwoSummaryActivity
+import joshuatee.wx.vis.GoesActivity
 
 // add to menu
 // R.id.action_pin -> UtilityShortcut.createShortcut(this, ShortcutType.SevereDashboard)
@@ -61,7 +61,7 @@ if (android.os.Build.VERSION.SDK_INT < 26) {
 
 object UtilityShortcut {
 
-    fun createShortcut(context: Context, type: ShortcutType) {
+    fun create(context: Context, type: ShortcutType) {
         // https://developer.android.com/guide/topics/ui/shortcuts
         // Pinned shortcuts in API 26 8.0
         if (android.os.Build.VERSION.SDK_INT > 25) {
@@ -70,54 +70,54 @@ object UtilityShortcut {
             when (type) {
                 ShortcutType.SevereDashboard -> {
                     intent = ObjectIntentShortcut(
-                        context,
-                        SevereDashboardActivity::class.java
+                            context,
+                            SevereDashboardActivity::class.java
                     ).intent
                     imageId = R.drawable.ntor
                 }
                 ShortcutType.AFD -> {
-                    intent = ObjectIntentShortcut(context, AFDActivity::class.java).intent
+                    intent = ObjectIntentShortcut(context, AfdActivity::class.java).intent
                     imageId = R.drawable.widget_afd
                 }
                 ShortcutType.GOES16 -> {
                     intent = ObjectIntentShortcut(
-                        context,
-                        GOES16Activity::class.java,
-                        GOES16Activity.RID,
-                        arrayOf("")
+                            context,
+                            GoesActivity::class.java,
+                            GoesActivity.RID,
+                            arrayOf("")
                     ).intent
                     imageId = R.drawable.goes
                 }
                 ShortcutType.RADAR_MOSAIC -> {
-                    intent = ObjectIntentShortcut(context, USNWSMosaicActivity::class.java).intent
+                    intent = ObjectIntentShortcut(context, USNwsMosaicActivity::class.java).intent
                     imageId = R.drawable.widget_radar_mosaic
                 }
                 ShortcutType.SPC_SWO_SUMMARY -> {
-                    intent = ObjectIntentShortcut(context, SPCSWOSummaryActivity::class.java).intent
+                    intent = ObjectIntentShortcut(context, SpcSwoSummaryActivity::class.java).intent
                     imageId = R.drawable.spc_sum
                 }
             }
             val shortcutId = type.toString()
             val mShortcutManager = context.getSystemService(ShortcutManager::class.java)
             val shortcut = ShortcutInfo.Builder(context, shortcutId)
-                .setShortLabel(shortcutId)
-                .setLongLabel(shortcutId)
-                .setIcon(Icon.createWithResource(context, imageId))
-                .setIntents(
-                    arrayOf(
-                        Intent(
-                            Intent.ACTION_MAIN,
-                            Uri.EMPTY,
-                            context,
-                            joshuatee.wx.WX::class.java
-                        ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK),
-                        intent
+                    .setShortLabel(shortcutId)
+                    .setLongLabel(shortcutId)
+                    .setIcon(Icon.createWithResource(context, imageId))
+                    .setIntents(
+                            arrayOf(
+                                    Intent(
+                                            Intent.ACTION_MAIN,
+                                            Uri.EMPTY,
+                                            context,
+                                            joshuatee.wx.WX::class.java
+                                    ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK),
+                                    intent
+                            )
                     )
-                )
-                .build()
+                    .build()
             val pinnedShortcutCallbackIntent = mShortcutManager.createShortcutResultIntent(shortcut)
             val successCallback =
-                PendingIntent.getBroadcast(context, 0, pinnedShortcutCallbackIntent, 0)
+                    PendingIntent.getBroadcast(context, 0, pinnedShortcutCallbackIntent, 0)
             mShortcutManager.requestPinShortcut(shortcut, successCallback.intentSender)
 
         }

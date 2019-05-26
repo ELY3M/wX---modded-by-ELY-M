@@ -21,7 +21,7 @@
 
 package joshuatee.wx.models
 
-internal object UtilityModelNCEPInterface {
+internal object UtilityModelNcepInterface {
 
     val models = listOf(
         "HRRR",

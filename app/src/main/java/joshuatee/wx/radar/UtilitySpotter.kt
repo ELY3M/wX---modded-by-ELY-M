@@ -52,7 +52,7 @@ object UtilitySpotter {
     // strip out storm reports at bottom
     // thanks Landei
     // http://stackoverflow.com/questions/6720236/sorting-an-arraylist-of-objects-by-last-name-and-firstname-in-java
-    val spotterData: MutableList<Spotter>
+    val data: MutableList<Spotter>
         get() {
             var currentTime = System.currentTimeMillis()
             val currentTimeSec = currentTime / 1000
@@ -65,7 +65,7 @@ object UtilitySpotter {
                 var html = ("http://www.spotternetwork.org/feeds/csv.txt").getHtmlSep()
                 val reportData = html.replace(".*?#storm reports".toRegex(), "")
                 Spotterlistbydist = html
-                processReportsData(reportData)
+                process(reportData)
                 html = html.replace("#storm reports.*?$".toRegex(), "")
                 val htmlArr = html.split("<br>").dropLastWhile { it.isEmpty() }
                 var tmpArr: List<String>
@@ -118,7 +118,7 @@ object UtilitySpotter {
 
     // need to return an array of x ( lat ) and an array of y ( lon ) where long is positive
 
-    private fun processReportsData(txt: String) {
+    private fun process(txt: String) {
         val htmlArr = txt.split("<br>").dropLastWhile { it.isEmpty() }
         var tmpArr: List<String>
         htmlArr.forEach { line ->

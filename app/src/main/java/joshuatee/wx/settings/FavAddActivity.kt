@@ -28,7 +28,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.GlobalArrays
 
-import joshuatee.wx.models.UtilityModelsSPCSREFInterface
+import joshuatee.wx.models.UtilityModelSpcSrefInterface
 import joshuatee.wx.ui.BaseActivity
 
 import joshuatee.wx.spc.UtilitySpcMeso
@@ -88,7 +88,7 @@ class FavAddActivity : BaseActivity() {
             }
             "SREF" -> {
                 prefToken = "SREF_FAV"
-                data = UtilityModelsSPCSREFInterface.params
+                data = UtilityModelSpcSrefInterface.params
             }
             "SPCMESO" -> {
                 prefToken = "SPCMESO_FAV"

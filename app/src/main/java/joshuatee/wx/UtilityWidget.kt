@@ -103,23 +103,23 @@ object UtilityWidget {
                     appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
                 }
                 SPCSWO -> {
-                    val obj = ObjectWidgetSPCSWO(context)
+                    val obj = ObjectWidgetSpcSwo(context)
                     appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
                 }
                 NHC -> {
-                    val obj = ObjectWidgetNHC(context)
+                    val obj = ObjectWidgetNhc(context)
                     appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
                 }
                 AFD -> {
-                    val obj = ObjectWidgetAFD(context)
+                    val obj = ObjectWidgetAfd(context)
                     appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
                 }
                 HWO -> {
-                    val obj = ObjectWidgetHWO(context)
+                    val obj = ObjectWidgetHwo(context)
                     appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
                 }
                 TEXT_WPC -> {
-                    val obj = ObjectWidgetTextWPC(context)
+                    val obj = ObjectWidgetTextWpc(context)
                     appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
                 }
                 CC -> {

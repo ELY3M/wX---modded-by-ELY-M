@@ -28,7 +28,7 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
-import joshuatee.wx.audio.UtilityTTS
+import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
@@ -96,7 +96,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         html = withContext(Dispatchers.IO) { url.getHtml() }
         textCard.setTextAndTranslate(Utility.fromHtml(html))
-        UtilityTTS.conditionalPlay(activityArguments, 2, applicationContext, html, "textscreen")
+        UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, "textscreen")
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
