@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M.
 
 package joshuatee.wx.settings
 
@@ -153,7 +152,11 @@ class ObjectSettingsCheckBox(
                 }
             }
             when (pref) {
-                "TOR_WARNINGS", "SVR_WARNINGS", "EWW_WARNINGS", "FFW_WARNINGS", "SMW_WARNINGS", "SVS_WARNINGS", "SPS_WARNINGS", "RADAR_SHOW_MPD", "RADAR_SHOW_WATCH" -> Utility.writePref(context, "RESTART_NOTIF", "true")
+                "COD_WARNINGS_DEFAULT", "RADAR_SHOW_MPD", "RADAR_SHOW_WATCH" -> Utility.writePref(
+                    context,
+                    "RESTART_NOTIF",
+                    "true"
+                )
                 "RADAR_STATE_HIRES", "RADAR_COUNTY_HIRES", "RADAR_HW_ENH_EXT", "RADAR_CAMX_BORDERS", "WXOGL_SPOTTERS", "WXOGL_SPOTTERS_LABEL" -> {
                     MyApplication.initPreferences(context)
                     when (pref) {

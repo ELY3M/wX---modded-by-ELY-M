@@ -17,13 +17,14 @@
 13\. would need to make a function to read any new txt files in /wX/pal/ that is not added via the editor.  
 14\. make VAD Wind Profile more better and friendly  like the one at cod.edu    
 15\. color tables for SRM and Spectrum Width  
-16\. get dbz and wind speed from point via long press - request by Mike T.   
-17\. Redo my warnings mod to match up with Joshua's warnings changes.    
+16\. get dbz and wind speed from point via long press - request by Mike T.      
+17\.  move flash flood warning over with other warnings?   
 
 
 #
 ## DONE!
 ====================================   
+reversed my old warning mod and cleaned up.   
 updated the code with Joshua many changes and added in zoom setting for conus radar to zoom out to (5-20-19) (Tornado day in OK!)   
 all watch crash bugs should be gone, hopefully!   
 updated the code with Joshuas changes with the warnings mod/settings (4-20-19).   

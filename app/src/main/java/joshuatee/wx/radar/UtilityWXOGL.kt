@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-//modded by ELY M.
 
 package joshuatee.wx.radar
 
@@ -41,11 +40,6 @@ import joshuatee.wx.Extensions.*
 
 import joshuatee.wx.NEXRAD_PRODUCT_STRING
 import joshuatee.wx.RegExp
-import joshuatee.wx.external.ExternalDuplicateRemover
-import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.util.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 object UtilityWXOGL {
 
@@ -154,7 +148,7 @@ object UtilityWXOGL {
     }
 
     fun showTextProducts(lat: Double, lon: Double): String {
-        var html = MyApplication.severeDashboardTor.valueGet() + MyApplication.severeDashboardSvr.valueGet() + MyApplication.severeDashboardEww.valueGet() + MyApplication.severeDashboardFfw.valueGet() + MyApplication.severeDashboardSmw.valueGet()
+        var html = MyApplication.severeDashboardTor.valueGet() + MyApplication.severeDashboardTst.valueGet() + MyApplication.severeDashboardFfw.valueGet()
         MyApplication.radarWarningPolygons.forEach {
             if (it.isEnabled) {
                 html += it.storage.valueGet()
@@ -202,52 +196,6 @@ object UtilityWXOGL {
                 }
             }
             q += 1
-        }
-        return retStr
-    }
-
-
-//TODO REMOVE unneeded shit here
-    fun showSpsProducts(lat: Double, lon: Double): String {
-
-        var getspslist = WXGLPolygonWarnings.specialWeatherList
-        var notFound = true
-        var retStr = ""
-        getspslist.forEach {
-            val polygon = it.coordinates
-            var testArr: List<String>
-            var q = 0
-            var polyCount = -1
-                polyCount += 1
-                val polyTmp = polygon.replace("[", "").replace("]", "").replace(",", " ")
-                testArr = polyTmp.split(" ").dropLastWhile { it.isEmpty() }
-                val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }
-                        .map {
-                            it.toDoubleOrNull() ?: 0.0
-                        }.toList()
-                val x = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 != 0 }
-                        .map {
-                            it.toDoubleOrNull() ?: 0.0
-                        }.toList()
-                if (y.size > 3 && x.size > 3 && x.size == y.size) {
-                    val poly2 = ExternalPolygon.Builder()
-                    x.indices.forEach { j ->
-                        poly2.addVertex(
-                                ExternalPoint(
-                                        x[j].toFloat(),
-                                        y[j].toFloat()
-                                )
-                        )
-                    }
-                    val polygon2 = poly2.build()
-                    val contains = polygon2.contains(ExternalPoint(lat.toFloat(), lon.toFloat()))
-                    if (contains && notFound) {
-                        UtilityLog.d("SpecialWeather", "found: "+it.id)
-                        retStr = it.id
-                        notFound = false
-                    }
-                }
-                q += 1
         }
         return retStr
     }

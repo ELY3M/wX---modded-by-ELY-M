@@ -73,19 +73,15 @@ class SettingsRadarActivity : BaseActivity() {
                 SettingsTelecineActivity::class.java,
                 MyApplication.paddingSettings
         )
-
-
-
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show TOR warnings", "TOR_WARNINGS", R.string.tor_warnings_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show SVR warnings", "SVR_WARNINGS", R.string.svr_warnings_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show EWW warnings", "EWW_WARNINGS", R.string.eww_warnings_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show FFW warnings", "FFW_WARNINGS", R.string.ffw_warnings_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show SMW warnings", "SMW_WARNINGS", R.string.smw_warnings_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show SVS warnings", "SVS_WARNINGS", R.string.svs_warnings_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show SPS warnings", "SPS_WARNINGS", R.string.sps_warnings_label).card)
-        
-	
-
+        ll.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
+                        "Show warnings (TST/TOR/FFW)",
+                        "COD_WARNINGS_DEFAULT",
+                        R.string.cod_warnings_default_label
+                ).card
+        )
         MyApplication.radarWarningPolygons.forEach {
             ll.addView(
                     ObjectSettingsCheckBox(

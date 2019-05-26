@@ -111,22 +111,7 @@ object UtilityCanvasMain {
             getLocalGeometryData(context)
         }
 
-        if (PolygonType.TOR.pref) {
-            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
-        }
-        if (PolygonType.SVR.pref) {
-            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
-        }
-        if (PolygonType.FFW.pref) {
-            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
-        }
-        if (PolygonType.SMW.pref) {
-            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
-        }
-        if (PolygonType.SVS.pref) {
-            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
-        }
-        if (PolygonType.SPS.pref) {
+        if (PolygonType.TST.pref) {
             UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
         }
         if (GeographyType.HIGHWAYS.pref && highwayProvider) {
@@ -186,9 +171,9 @@ object UtilityCanvasMain {
         }
         if (PolygonType.MCD.pref) {
             arrayOf(
-                PolygonType.MCD,
-                PolygonType.WATCH,
-                PolygonType.WATCH_TORNADO
+                    PolygonType.MCD,
+                    PolygonType.WATCH,
+                    PolygonType.WATCH_TORNADO
             ).forEach { UtilityCanvas.addMcd(scaleType, bitmapCanvas, radarSite, it) }
         }
         if (PolygonType.MPD.pref) {
@@ -211,22 +196,7 @@ object UtilityCanvasMain {
         // if a widget or notification load the GEOM data in real-time
         val geometryData = getLocalGeometryData(context)
 
-        if (PolygonType.TOR.pref) {
-            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
-        }
-        if (PolygonType.SVR.pref) {
-            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
-        }
-        if (PolygonType.FFW.pref) {
-            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
-        }
-        if (PolygonType.SMW.pref) {
-            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
-        }
-        if (PolygonType.SVS.pref) {
-            UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
-        }
-        if (PolygonType.SPS.pref) {
+        if (PolygonType.TST.pref) {
             UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
         }
 

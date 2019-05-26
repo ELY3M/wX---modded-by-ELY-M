@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M.  
 
 package joshuatee.wx.ui
 
@@ -187,7 +186,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
                     R.id.b_alert,
                     USWarningsWithRadarActivity.URL,
                     arrayOf(
-		    ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Extreme Wind Warning.*?|.*?Flash Flood Warning.*?|.*?Special Marine Warning.*?|.*?Severe Weather Statement.*?|.*?Special Weather Statement.*?", 
+                            ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?",
                             "us"
                     ),
                     actionAlert

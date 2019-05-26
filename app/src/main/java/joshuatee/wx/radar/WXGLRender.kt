@@ -108,13 +108,9 @@ class WXGLRender(private val context: Context) : Renderer {
     private val mpdBuffers = ObjectOglBuffers(PolygonType.MPD)
     private val hiBuffers = ObjectOglBuffers(PolygonType.HI, zoomToHideMiscFeatures)
     private val tvsBuffers = ObjectOglBuffers(PolygonType.TVS, zoomToHideMiscFeatures)
-    private val warningTorBuffers = ObjectOglBuffers(PolygonType.TOR, 0.0f)
-    private val warningSvrBuffers = ObjectOglBuffers(PolygonType.SVR, 0.0f)
-    private val warningEwwBuffers = ObjectOglBuffers(PolygonType.EWW, 0.0f)
-    private val warningFfwBuffers = ObjectOglBuffers(PolygonType.FFW, 0.0f)
-    private val warningSmwBuffers = ObjectOglBuffers(PolygonType.SMW, 0.0f)
-    private val warningSvsBuffers = ObjectOglBuffers(PolygonType.SVS, 0.0f)
-    private val warningSpsBuffers = ObjectOglBuffers(PolygonType.SPS, 0.0f)
+    private val warningFfwBuffers = ObjectOglBuffers(PolygonType.FFW)
+    private val warningTstBuffers = ObjectOglBuffers(PolygonType.TST)
+    private val warningTorBuffers = ObjectOglBuffers(PolygonType.TOR)
     private val watchBuffers = ObjectOglBuffers(PolygonType.WATCH)
     private val watchTornadoBuffers = ObjectOglBuffers(PolygonType.WATCH_TORNADO)
     private val mcdBuffers = ObjectOglBuffers(PolygonType.MCD)
@@ -613,7 +609,12 @@ class WXGLRender(private val context: Context) : Renderer {
 
 
         GLES20.glLineWidth(warnLineWidth)
-        listOf(warningSpsBuffers, warningSvsBuffers, warningSmwBuffers, warningSvrBuffers, warningEwwBuffers, warningFfwBuffers, warningTorBuffers).forEach { drawPolygons(it, 8) }
+        listOf(warningTstBuffers, warningFfwBuffers, warningTorBuffers).forEach {
+            drawPolygons(
+                    it,
+                    8
+            )
+        }
 
         genericWarningBuffers.forEach {
             if (it.warningType!!.isEnabled) {
@@ -1273,56 +1274,18 @@ class WXGLRender(private val context: Context) : Renderer {
         deconstructGenericLines(watchTornadoBuffers)
     }
 
-    fun constructTorWarningLines() {
+    fun constructWarningLines() {
+        constructGenericLines(warningTstBuffers)
         constructGenericLines(warningTorBuffers)
-    }
-    fun deconstructTorWarningLines() {
-        deconstructGenericLines(warningTorBuffers)
-    }
-
-    fun constructSvrWarningLines() {
-        constructGenericLines(warningSvrBuffers)
-    }
-    fun deconstructSvrWarningLines() {
-        deconstructGenericLines(warningSvrBuffers)
-    }
-
-    fun constructEwwWarningLines() {
-        constructGenericLines(warningEwwBuffers)
-    }
-    fun deconstructEwwWarningLines() {
-        deconstructGenericLines(warningEwwBuffers)
-    }
-
-    fun constructFfwWarningLines() {
         constructGenericLines(warningFfwBuffers)
     }
-    fun deconstructFfwWarningLines() {
+
+    fun deconstructWarningLines() {
+        deconstructGenericLines(warningTstBuffers)
+        deconstructGenericLines(warningTorBuffers)
         deconstructGenericLines(warningFfwBuffers)
     }
 
-    fun constructSmwWarningLines() {
-        constructGenericLines(warningSmwBuffers)
-    }
-    fun deconstructSmwWarningLines() {
-        deconstructGenericLines(warningSmwBuffers)
-    }
-
-    fun constructSvsWarningLines() {
-        constructGenericLines(warningSvsBuffers)
-    }
-    fun deconstructSvsWarningLines() {
-        deconstructGenericLines(warningSvsBuffers)
-    }
-
-    fun constructSpsWarningLines() {
-        constructGenericLines(warningSpsBuffers)
-    }
-    fun deconstructSpsWarningLines() {
-        deconstructGenericLines(warningSpsBuffers)
-    }
-    
-    
     fun constructGenericWarningLines() {
         genericWarningBuffers.forEach {
             if (it.warningType!!.isEnabled) {
@@ -1569,10 +1532,10 @@ class WXGLRender(private val context: Context) : Renderer {
         when (buffers.type) {
             PolygonType.MCD, PolygonType.MPD, PolygonType.WATCH, PolygonType.WATCH_TORNADO -> fList =
                     UtilityWatch.add(provider, rid, buffers.type).toList()
-            PolygonType.TOR, PolygonType.SVR, PolygonType.EWW, PolygonType.FFW, PolygonType.SMW, PolygonType.SVS -> fList = 
+            PolygonType.TST, PolygonType.TOR, PolygonType.FFW -> fList =
                     WXGLPolygonWarnings.add(provider, rid, buffers.type).toList()
-            PolygonType.SPS -> fList = WXGLPolygonWarnings.addSPS(provider, rid, buffers.type).toList()
-            PolygonType.STI -> fList = WXGLNexradLevel3StormInfo.decodeAndPlot(context, idxStr, rid, provider).toList()
+            PolygonType.STI -> fList =
+                    WXGLNexradLevel3StormInfo.decodeAndPlot(context, idxStr, rid, provider).toList()
             else -> {
                 if (buffers.warningType != null) {
                     fList = WXGLPolygonWarnings.addGeneric(provider, rid, buffers.warningType!!).toList()

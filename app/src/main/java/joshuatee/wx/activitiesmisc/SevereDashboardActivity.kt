@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M.
 
 package joshuatee.wx.activitiesmisc
 
@@ -57,14 +56,9 @@ class SevereDashboardActivity : BaseActivity() {
     private var watchCount = 0
     private var mcdCount = 0
     private var mpdCount = 0
-    private var svrCount = 0
+    private var tstCount = 0
     private var ffwCount = 0
     private var torCount = 0
-    private var smwCount = 0
-    private var ewwCount = 0
-    private var svsCount = 0
-    private var spsCount = 0 
-    
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.severe_dashboard, menu)
@@ -94,56 +88,27 @@ class SevereDashboardActivity : BaseActivity() {
         val snWat = SevereNotice(PolygonType.WATCH)
         val snMcd = SevereNotice(PolygonType.MCD)
         val snMpd = SevereNotice(PolygonType.MPD)
-
-            ll.removeAllViews()
-            val wTor = SevereWarning(PolygonType.TOR)
-            val wSvr = SevereWarning(PolygonType.SVR)
-            val wEww = SevereWarning(PolygonType.EWW)
-            val wFfw = SevereWarning(PolygonType.FFW)
-            val wSmw = SevereWarning(PolygonType.SMW)
-            val wSvs = SevereWarning(PolygonType.SVS)
-            val wSps = SpecialWeather(PolygonType.SPS)
-	    
-	    withContext(Dispatchers.IO) {
+        ll.removeAllViews()
+        val wTor = SevereWarning(PolygonType.TOR)
+        val wTst = SevereWarning(PolygonType.TST)
+        val wFfw = SevereWarning(PolygonType.FFW)
+        withContext(Dispatchers.IO) {
             wTor.generateString(contextg, UtilityDownloadRadar.getVtecTor())
-            wSvr.generateString(contextg, UtilityDownloadRadar.getVtecSvr())
+            wTst.generateString(contextg, UtilityDownloadRadar.getVtecTstorm())
             wFfw.generateString(contextg, UtilityDownloadRadar.getVtecFfw())
-	    wEww.generateString(contextg, UtilityDownloadRadar.getVtecEww())
-	    wSmw.generateString(contextg, UtilityDownloadRadar.getVtecSmw())
-	    wSvs.generateString(contextg, UtilityDownloadRadar.getVtecSvs())
-	    //wSps.generateSpsString(contextg, MyApplication.severeDashboardSps.valueGet())
-            wSps.generateSpsString(contextg, UtilityDownloadRadar.getSps())
-            }
-            if (wTor.count > 0) {
+        }
+        if (wTor.count > 0) {
             val objTor = ObjectCardText(contextg, ll, wTor.text)
             objTor.setOnClickListener(View.OnClickListener { warningsClicked(".*?Tornado Warning.*?") })
-            }
-            if (wSvr.count > 0) {
-                val objSvr = ObjectCardText(contextg, ll, wSvr.text)
-                objSvr.setOnClickListener(View.OnClickListener { warningsClicked(".*?Severe Thunderstorm Warning.*?") })
-            }
-            if (wEww.count > 0) {
-                val objEww = ObjectCardText(contextg, ll, wEww.text)
-                objEww.setOnClickListener(View.OnClickListener { warningsClicked(".*?Extreme Wind Warning.*?") })
-            }
-            if (wFfw.count > 0) {
-                val objFfw = ObjectCardText(contextg, ll, wFfw.text)
-                objFfw.setOnClickListener(View.OnClickListener { warningsClicked(".*?Flash Flood Warning.*?") })
-            }
-            if (wSmw.count > 0) {
-                val objSmw = ObjectCardText(contextg, ll, wSmw.text)
-                objSmw.setOnClickListener(View.OnClickListener { warningsClicked(".*?Special Marine Warning.*?") })
-            }
-            if (wSvs.count > 0) {
-                val objSvs = ObjectCardText(contextg, ll, wSvs.text)
-                objSvs.setOnClickListener(View.OnClickListener { warningsClicked(".*?Severe Weather Statement.*?") })
-            }
-            if (wSps.count > 0) {
-                val objSps = ObjectCardText(contextg, ll, wSps.text)
-                objSps.setOnClickListener(View.OnClickListener { warningsClicked(".*?Special Weather Statement.*?") })
-            }
-
-        
+        }
+        if (wTst.count > 0) {
+            val objTst = ObjectCardText(contextg, ll, wTst.text)
+            objTst.setOnClickListener(View.OnClickListener { warningsClicked(".*?Severe Thunderstorm Warning.*?") })
+        }
+        if (wFfw.count > 0) {
+            val objFfw = ObjectCardText(contextg, ll, wFfw.text)
+            objFfw.setOnClickListener(View.OnClickListener { warningsClicked(".*?Flash Flood Warning.*?") })
+        }
         withContext(Dispatchers.IO) {
             snMcd.getBitmaps(UtilityDownloadRadar.getMcd())
             snWat.getBitmaps(UtilityDownloadRadar.getWatch())
@@ -204,15 +169,9 @@ class SevereDashboardActivity : BaseActivity() {
         bitmaps.addAll(snMcd.bitmaps)
         bitmaps.addAll(snMpd.bitmaps)
         bitmaps.addAll(bitmapArrRep)
-	
-        svrCount = wSvr.count
+        tstCount = wTst.count
         ffwCount = wFfw.count
         torCount = wTor.count
-	    smwCount = wSmw.count
-	    ewwCount = wEww.count
-    	svsCount = wSvs.count
-	    spsCount = wSps.count
-	
         watchCount = snWat.bitmaps.size
         mcdCount = snMcd.bitmaps.size
         mpdCount = snMpd.bitmaps.size
@@ -230,8 +189,8 @@ class SevereDashboardActivity : BaseActivity() {
         if (mpdCount > 0) {
             subTitle += "P($mpdCount) "
         }
-        if (torCount > 0 || svrCount > 0 || ffwCount > 0 || smwCount > 0 || ewwCount > 0 || svsCount > 0 || spsCount > 0) {
-            subTitle += " ($svrCount,$torCount,$ffwCount,$smwCount,$ewwCount,$svsCount,$spsCount)"
+        if (torCount > 0 || tstCount > 0 || ffwCount > 0) {
+            subTitle += " ($tstCount,$torCount,$ffwCount)"
         }
         return subTitle
     }

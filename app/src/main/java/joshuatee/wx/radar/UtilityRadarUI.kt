@@ -189,9 +189,6 @@ internal object UtilityRadarUI {
                 glview.latLon
         )
         alertDialogRadarLongpressAl.add("Show Warning text")
-        if (MyApplication.radarSpsWarnings) {
-            alertDialogRadarLongpressAl.add("Show special weather text")
-        }
         if (MyApplication.radarWatMcd) {
             alertDialogRadarLongpressAl.add("Show Watch text")
             alertDialogRadarLongpressAl.add("Show MCD text")
@@ -226,9 +223,6 @@ internal object UtilityRadarUI {
         when {
             strName.contains("Show Warning text") -> {
                 showNearestWarning(context, glview)
-            }
-            strName.contains("Show special weather text") -> {
-                showNearestSps(context, glview)
             }
             strName.contains("Show Watch text") -> {
                 showNearestProduct(context, PolygonType.WATCH, glview, uiDispatcher)
@@ -381,42 +375,10 @@ internal object UtilityRadarUI {
         }).start()
 
         Thread(Runnable {
-
-            if (PolygonType.TOR.pref && !archiveMode)
-                ogl.constructTorWarningLines()
+            if (PolygonType.TST.pref && !archiveMode)
+                ogl.constructWarningLines()
             else
-                ogl.deconstructTorWarningLines()
-
-            if (PolygonType.SVR.pref && !archiveMode)
-                ogl.constructSvrWarningLines()
-            else
-                ogl.deconstructSvrWarningLines()
-
-            if (PolygonType.EWW.pref && !archiveMode)
-                ogl.constructEwwWarningLines()
-            else
-                ogl.deconstructEwwWarningLines()
-
-            if (PolygonType.FFW.pref && !archiveMode)
-                ogl.constructFfwWarningLines()
-            else
-                ogl.deconstructFfwWarningLines()
-
-            if (PolygonType.SMW.pref && !archiveMode)
-                ogl.constructSmwWarningLines()
-            else
-                ogl.deconstructSmwWarningLines()
-
-            if (PolygonType.SVS.pref && !archiveMode)
-                ogl.constructSvsWarningLines()
-            else
-                ogl.deconstructSvsWarningLines()
-
-            if (PolygonType.SPS.pref && !archiveMode)
-                ogl.constructSpsWarningLines()
-            else
-                ogl.deconstructSpsWarningLines()
-
+                ogl.deconstructWarningLines()
             if (PolygonType.MCD.pref && !archiveMode)
                 ogl.constructWATMCDLines()
             else
@@ -532,33 +494,8 @@ internal object UtilityRadarUI {
                     SpcMcdWatchShowActivity.NO,
                     arrayOf(text, "", type.toString())
             )
-
-
-            //if (txt == "") {
-            //    txt = "No active " + type.typeAsString
-            //}
-            //UtilityAlertDialog.showHelpText(txt, context)
-
         }
     }
-    
-
-//FIXME remove me... not really needed//    
-        private fun showNearestSps(context: Context, glview: WXGLSurfaceView) {
-        val polygonUrl = UtilityWXOGL.showSpsProducts(
-                glview.newY.toDouble(),
-                glview.newX.toDouble() * -1.0
-        )
-        if (polygonUrl != "") ObjectIntent(
-                context,
-                USAlertsDetailActivity::class.java,
-                USAlertsDetailActivity.URL,
-                arrayOf(polygonUrl, "")
-        )
-    }
-
-
-    
             var getrid: String = ""
     private fun showNearestRadarStatus(
             context: Context,
@@ -573,7 +510,6 @@ internal object UtilityRadarUI {
             )
             UtilityLog.d("wx", "point: x: "+pointX+ "y: "+pointY)
             UtilityLog.d("wx", "radar status on point: "+getrid)
-
             UtilityDownload.getRadarStatusMessage(context, getrid)
         }
         UtilityLog.d("wx", "UtilityRadarUI radarStatus: "+radarStatus)

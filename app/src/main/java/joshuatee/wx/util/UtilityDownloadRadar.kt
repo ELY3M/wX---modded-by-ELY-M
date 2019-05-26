@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M.  
 
 package joshuatee.wx.util
 
@@ -30,73 +29,39 @@ import joshuatee.wx.objects.PolygonWarningType
 object UtilityDownloadRadar {
 
     private const val baseUrl = "https://api.weather.gov/alerts/active?event="
-
-    private const val torUrl = baseUrl + "Tornado%20Warning"
-    private const val svrURl = baseUrl + "Severe%20Thunderstorm%20Warning"
+    private const val tstormURl = baseUrl + "Severe%20Thunderstorm%20Warning"
     private const val ffwUrl = baseUrl + "Flash%20Flood%20Warning"
-    private const val ewwUrl = baseUrl + "Extreme%20Wind%20Warning"
-    private const val smwUrl = baseUrl + "Special%20Marine%20Warning"
-    private const val svsUrl = baseUrl + "Severe%20Weather%20Statement"
-    private const val spsUrl = baseUrl + "Special%20Weather%20Statement"
-    //private const val spsUrl = "http://192.168.1.113/nws/SPS-12-31-18-5.09pm.txt" //for testing
     // Below is for testing
     //val ffwUrl = baseUrl + "Flood%20Warning"
-
+    private const val tornadoUrl = baseUrl + "Tornado%20Warning"
 
     fun getPolygonVtec(context: Context) {
-        MyApplication.severeDashboardTor.valueSet(
+        MyApplication.severeDashboardTst.valueSet(
                 context,
-                UtilityDownloadNws.getStringFromUrlNoAcceptHeader(torUrl)
-        )
-        MyApplication.severeDashboardSvr.valueSet(
-                context,
-                UtilityDownloadNws.getStringFromUrlNoAcceptHeader(svrURl)
+                UtilityDownloadNws.getStringFromUrlNoAcceptHeader(tstormURl)
         )
         MyApplication.severeDashboardFfw.valueSet(
                 context,
                 UtilityDownloadNws.getStringFromUrlNoAcceptHeader(ffwUrl)
         )
-        MyApplication.severeDashboardEww.valueSet(
+        MyApplication.severeDashboardTor.valueSet(
                 context,
-                UtilityDownloadNws.getStringFromUrlNoAcceptHeader(ewwUrl)
+                UtilityDownloadNws.getStringFromUrlNoAcceptHeader(tornadoUrl)
         )
-        MyApplication.severeDashboardSmw.valueSet(
-                context,
-                UtilityDownloadNws.getStringFromUrlNoAcceptHeader(smwUrl)
-        )
-        MyApplication.severeDashboardSvs.valueSet(
-                context,
-                UtilityDownloadNws.getStringFromUrlNoAcceptHeader(svsUrl)
-        )
-        MyApplication.severeDashboardSps.valueSet(
-                context,
-                UtilityDownloadNws.getStringFromUrlNoAcceptHeader(spsUrl)
-        )
+    }
 
+    fun getVtecTstorm(): String {
+        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(tstormURl)
     }
-    
+
     fun getVtecTor(): String {
-        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(torUrl)
+        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(tornadoUrl)
     }
-    fun getVtecSvr(): String {
-        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(svrURl)
-    }
+
     fun getVtecFfw(): String {
         return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(ffwUrl)
     }
-    fun getVtecEww(): String {
-        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(ewwUrl)
-    }
-    fun getVtecSmw(): String {
-        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(smwUrl)
-    }
-    fun getVtecSvs(): String {
-        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(svsUrl)
-    }
-    fun getSps(): String {
-        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(spsUrl)
-    }
-    
+
     fun getVtecByType(type: PolygonWarningType): String {
         return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(baseUrl + type.urlToken)
     }

@@ -45,23 +45,15 @@ internal object UtilityCanvas {
         val wallPath = Path()
         wallPath.reset()
         val paintList = listOf(
-    	MyApplication.radarColorTor,
-	    MyApplication.radarColorSvr,
-	    MyApplication.radarColorEww,
-	    MyApplication.radarColorFfw,
-	    MyApplication.radarColorSmw,
-	    MyApplication.radarColorSvr,
-	    MyApplication.radarColorSps
-	)
+            MyApplication.radarColorFfw,
+            MyApplication.radarColorTstorm,
+            MyApplication.radarColorTor
+        )
         val warningDataList = listOf(
-	    MyApplication.severeDashboardTor.valueGet(),
-    	MyApplication.severeDashboardSvr.valueGet(),
-	    MyApplication.severeDashboardEww.valueGet(),
-	    MyApplication.severeDashboardFfw.valueGet(),
-	    MyApplication.severeDashboardSmw.valueGet(),
-	    MyApplication.severeDashboardSvs.valueGet(),
-	    MyApplication.severeDashboardSps.valueGet()
-	)
+            MyApplication.severeDashboardFfw.valueGet(),
+            MyApplication.severeDashboardTst.valueGet(),
+            MyApplication.severeDashboardTor.valueGet()
+        )
         if (provider.needsCanvasShift) {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         }

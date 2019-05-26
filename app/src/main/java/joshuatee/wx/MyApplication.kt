@@ -289,12 +289,8 @@ class MyApplication : Application() {
         var wxoglX: Float = 0f
         var wxoglY: Float = 0f
         val severeDashboardTor: DataStorage = DataStorage("SEVERE_DASHBOARD_TOR")
-        val severeDashboardSvr: DataStorage = DataStorage("SEVERE_DASHBOARD_SVR")
-        val severeDashboardEww: DataStorage = DataStorage("SEVERE_DASHBOARD_EWW")
+        val severeDashboardTst: DataStorage = DataStorage("SEVERE_DASHBOARD_TST")
         val severeDashboardFfw: DataStorage = DataStorage("SEVERE_DASHBOARD_FFW")
-        val severeDashboardSmw: DataStorage = DataStorage("SEVERE_DASHBOARD_SMW")
-        val severeDashboardSvs: DataStorage = DataStorage("SEVERE_DASHBOARD_SVS")
-        val severeDashboardSps: DataStorage = DataStorage("SEVERE_DASHBOARD_SPS")
         val severeDashboardWat: DataStorage = DataStorage("SEVERE_DASHBOARD_WAT")
         val severeDashboardMcd: DataStorage = DataStorage("SEVERE_DASHBOARD_MCD")
         val severeDashboardMpd: DataStorage = DataStorage("SEVERE_DASHBOARD_MPD")
@@ -478,12 +474,8 @@ class MyApplication : Application() {
             wxoglY = getInitialPreference("WXOGL_Y", 0.0f)
             Location.currentLocationStr = getInitialPreferenceString("CURRENT_LOC_FRAGMENT", "1")
             severeDashboardTor.update(context)
-            severeDashboardSvr.update(context)
-            severeDashboardEww.update(context)
+            severeDashboardTst.update(context)
             severeDashboardFfw.update(context)
-            severeDashboardSmw.update(context)
-            severeDashboardSvs.update(context)
-            severeDashboardSps.update(context)
             severeDashboardWat.update(context)
             severeDashboardMcd.update(context)
             severeDashboardMpd.update(context)
@@ -559,15 +551,11 @@ class MyApplication : Application() {
         var radarColorHw: Int = 0
         var radarColorHwExt: Int = 0
         var radarColorState: Int = 0
-        var radarColorTorWatch: Int = 0
-        var radarColorSvrWatch: Int = 0
+        var radarColorTstorm: Int = 0
+        var radarColorTstormWatch: Int = 0
         var radarColorTor: Int = 0
-        var radarColorSvr: Int = 0
-        var radarColorEww: Int = 0
+        var radarColorTorWatch: Int = 0
         var radarColorFfw: Int = 0
-        var radarColorSmw: Int = 0
-        var radarColorSvs: Int = 0
-        var radarColorSps: Int = 0
         var radarColorMcd: Int = 0
         var radarColorMpd: Int = 0
         var radarColorLocdot: Int = 0
@@ -588,16 +576,12 @@ class MyApplication : Application() {
             radarColorHw = getInitialPreference("RADAR_COLOR_HW", Color.BLUE)
             radarColorHwExt = getInitialPreference("RADAR_COLOR_HW_EXT", Color.BLUE)
             radarColorState = getInitialPreference("RADAR_COLOR_STATE", Color.WHITE)
-            radarColorTorWatch = getInitialPreference("RADAR_COLOR_TOR_WATCH", Color.rgb(113,0,0)) //darker red than tornado warning polygon
-            radarColorSvrWatch = getInitialPreference("RADAR_COLOR_SVR_WATCH", Color.BLUE)
-
+            radarColorTstorm = getInitialPreference("RADAR_COLOR_TSTORM", Color.YELLOW)
+            radarColorTstormWatch =
+                    getInitialPreference("RADAR_COLOR_TSTORM_WATCH", Color.BLUE)
             radarColorTor = getInitialPreference("RADAR_COLOR_TOR", Color.RED)
-            radarColorSvr = getInitialPreference("RADAR_COLOR_SVR", Color.YELLOW)
-            radarColorEww = getInitialPreference("RADAR_COLOR_EWW", Color.GRAY)
+            radarColorTorWatch = getInitialPreference("RADAR_COLOR_TOR_WATCH", Color.rgb(113, 0, 0)) //dark red for watch lines
             radarColorFfw = getInitialPreference("RADAR_COLOR_FFW", Color.GREEN)
-            radarColorSmw = getInitialPreference("RADAR_COLOR_SMW", Color.CYAN)
-            radarColorSvs = getInitialPreference("RADAR_COLOR_SVS", Color.rgb(255, 203, 103))
-            radarColorSps = getInitialPreference("RADAR_COLOR_SPS", Color.rgb(255, 204, 102))
             radarColorMcd = getInitialPreference("RADAR_COLOR_MCD", Color.rgb(255, 255, 163))
             radarColorMpd = getInitialPreference("RADAR_COLOR_MPD", Color.GREEN)
             radarColorLocdot = getInitialPreference("RADAR_COLOR_LOCDOT", Color.WHITE)
@@ -746,13 +730,6 @@ class MyApplication : Application() {
         var radarConusRadar: Boolean = false
         var radarConusRadarZoom: Int = 173
         var radarWarnings: Boolean = false
-	    var radarTorWarnings: Boolean = true
-        var radarSvrWarnings: Boolean = true
-        var radarEwwWarnings: Boolean = true
-        var radarFfwWarnings: Boolean = true
-        var radarSmwWarnings: Boolean = true
-        var radarSvsWarnings: Boolean = true
-        var radarSpsWarnings: Boolean = false
         var locdotFollowsGps: Boolean = false
         var locdotBug: Boolean = false
         var dualpaneshareposn: Boolean = false
@@ -813,13 +790,6 @@ class MyApplication : Application() {
             radarConusRadar = getInitialPreference("CONUS_RADAR", "false")
             radarConusRadarZoom = getInitialPreference("CONUS_RADAR_ZOOM", 173)
             radarWarnings = getInitialPreference("COD_WARNINGS_DEFAULT", "false")
-            radarTorWarnings = getInitialPreference("TOR_WARNINGS", "false")
-            radarSvrWarnings = getInitialPreference("SVR_WARNINGS", "false")
-            radarEwwWarnings = getInitialPreference("EWW_WARNINGS", "false")
-            radarFfwWarnings = getInitialPreference("FFW_WARNINGS", "false")
-            radarSmwWarnings = getInitialPreference("SMW_WARNINGS", "false")
-            radarSvsWarnings = getInitialPreference("SVS_WARNINGS", "false")
-            radarSpsWarnings = getInitialPreference("SPS_WARNINGS", "false")
             locdotFollowsGps = getInitialPreference("LOCDOT_FOLLOWS_GPS", "false")
             locdotBug = getInitialPreference("LOCDOT_BUG", "false")
             dualpaneshareposn = getInitialPreference("DUALPANE_SHARE_POSN", "true")

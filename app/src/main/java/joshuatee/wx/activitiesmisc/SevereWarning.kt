@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M.
 
 package joshuatee.wx.activitiesmisc
 
@@ -32,7 +31,7 @@ import joshuatee.wx.RegExp
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityTime
 
-// encapsulates VTEC data and count for tst, tor, ffw, smw
+// encapsulates VTEC data and count for tst,tor, or ffw
 
 internal class SevereWarning(private val type: PolygonType) {
 
@@ -48,12 +47,8 @@ internal class SevereWarning(private val type: PolygonType) {
         var label = ""
         when (type) {
             PolygonType.TOR -> label = "Tornado Warnings"
-            PolygonType.SVR -> label = "Severe Thunderstorm Warnings"
-            PolygonType.EWW -> label = "Extreme Wind Warnings"
+            PolygonType.TST -> label = "Severe Thunderstorm Warnings"
             PolygonType.FFW -> label = "Flash Flood Warnings"
-            PolygonType.SMW -> label = "Special Marine Warnings"
-            PolygonType.SVS -> label = "Severe Weather Statement"
-            PolygonType.SPS -> label = "Special Weather Statement"
             else -> {
             }
         }
