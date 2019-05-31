@@ -22,7 +22,6 @@
 package joshuatee.wx.nhc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.MenuItem
@@ -71,7 +70,6 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private val bitmaps = mutableListOf<Bitmap>()
     private var baseUrl = ""
     private lateinit var cTextProd: ObjectCardText
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,7 +78,6 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.layout.activity_linear_layout_bottom_toolbar,
             R.menu.nhc_storm
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         activityArguments = intent.getStringArrayExtra(URL).toList()
         url = activityArguments[0]
@@ -112,7 +109,7 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         bitmaps.clear()
         withContext(Dispatchers.IO) {
-            url = UtilityDownload.getTextProduct(contextg, product)
+            url = UtilityDownload.getTextProduct(this@NhcStormActivity, product)
             listOf(
                 "_W5_NL_sm2.png",
                 "_5day_cone_with_line_and_wind_sm2.png",
@@ -130,7 +127,7 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         html = url
         sv.smoothScrollTo(0, 0)
         bitmaps.filter { it.width > 100 }
-            .forEach { ObjectCardImage(contextg, ll, it) }
+            .forEach { ObjectCardImage(this@NhcStormActivity, ll, it) }
         if (activityArguments.size > 2) {
             if (activityArguments[2] == "sound") UtilityTts.synthesizeTextAndPlay(
                 applicationContext,
@@ -141,7 +138,7 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getText() = GlobalScope.launch(uiDispatcher) {
-        url = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(contextg, product) }
+        url = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@NhcStormActivity, product) }
         if (url.contains("<")) {
             cTextProd.setText(Utility.fromHtml(url))
         } else {

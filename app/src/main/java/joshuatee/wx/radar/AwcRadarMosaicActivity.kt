@@ -22,7 +22,6 @@
 package joshuatee.wx.radar
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.Configuration
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
@@ -52,7 +51,6 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
     private var animDrawable = AnimationDrawable()
     private lateinit var img: ObjectTouchImageView
     private var bitmap = UtilityImg.getBlankBitmap()
-    private lateinit var contextg: Context
     private lateinit var drw: ObjectNavDrawer
     private val prefImagePosition = "AWCRADARMOSAIC"
     private var product = "rad_rala"
@@ -69,7 +67,6 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
             iconsEvenlySpaced = true,
             bottomToolbar = true
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
         drw = ObjectNavDrawer(this, UtilityAwcRadarMosaic.labels, UtilityAwcRadarMosaic.sectors)
@@ -102,13 +99,13 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
         img.setBitmap(bitmap)
         animRan = false
         img.firstRunSetZoomPosn(prefImagePosition)
-        Utility.writePref(contextg, prefTokenSector, drw.getUrl())
-        Utility.writePref(contextg, prefTokenProduct, product)
+        Utility.writePref(this@AwcRadarMosaicActivity, prefTokenSector, drw.getUrl())
+        Utility.writePref(this@AwcRadarMosaicActivity, prefTokenProduct, product)
     }
 
     private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
         animDrawable = withContext(Dispatchers.IO) {
-            UtilityAwcRadarMosaic.getAnimation(contextg, drw.getUrl(), product)
+            UtilityAwcRadarMosaic.getAnimation(this@AwcRadarMosaicActivity, drw.getUrl(), product)
         }
         animRan = UtilityImgAnim.startAnimation(animDrawable, img)
     }

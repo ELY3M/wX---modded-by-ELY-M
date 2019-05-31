@@ -50,9 +50,9 @@ class WXGLDownload {
             radarSite: String,
             product: String,
             idxStr: String,
-            TDWR: Boolean
+            tdwr: Boolean
     ): String {
-        val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, TDWR)
+        val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, tdwr)
         this.radarSite = radarSite
         this.product = product
         if (!product.contains("L2")) {
@@ -145,8 +145,8 @@ class WXGLDownload {
             return listOf("")
         }
         var mostRecentSn = ""
-        val mostRecentTime = snDates[snDates.size - 1]
-        (0 until snDates.size - 1).filter { snDates[it] == mostRecentTime }
+        val mostRecentTime = snDates.last()
+        (0 until snDates.lastIndex).filter { snDates[it] == mostRecentTime }
                 .forEach { mostRecentSn = snFiles[it] }
         try {
             val seq = mostRecentSn.replace("sn.", "").toIntOrNull() ?: 0
@@ -216,7 +216,7 @@ class WXGLDownload {
         if (tmpArr.size < 4) {
             return ""
         }
-        fn = tmpArr[tmpArr.size - 1]
+        fn = tmpArr.last()
         val fnPrev = tmpArr[tmpArr.size - 3]
         val fnSize = tmpArr[tmpArr.size - 2].toIntOrNull() ?: 1
         val fnPrevSize = tmpArr[tmpArr.size - 4].toIntOrNull() ?: 1

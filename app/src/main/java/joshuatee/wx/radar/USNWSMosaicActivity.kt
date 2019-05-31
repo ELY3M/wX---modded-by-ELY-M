@@ -22,7 +22,6 @@
 package joshuatee.wx.radar
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.Configuration
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
@@ -55,7 +54,6 @@ class USNwsMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
     private var nwsRadarMosaicSectorLabelCurrent = ""
     private var bitmap = UtilityImg.getBlankBitmap()
     private var doNotSavePref = false
-    private lateinit var contextg: Context
     private lateinit var drw: ObjectNavDrawer
     private val prefImagePosition = "NWSRADMOS"
 
@@ -68,7 +66,6 @@ class USNwsMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
                 iconsEvenlySpaced = true,
                 bottomToolbar = true
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
         val activityArguments = intent.getStringArrayExtra(URL)
@@ -139,7 +136,7 @@ class USNwsMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
         toolbar.subtitle = drw.getLabel()
         bitmap = withContext(Dispatchers.IO) {
             UtilityUSImgNwsMosaic.get(
-                    contextg,
+                    this@USNwsMosaicActivity,
                     drw.getUrl(),
                     true
             )
@@ -147,7 +144,7 @@ class USNwsMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
         // FIXME bug in API 28 after changing
         if (!doNotSavePref) {
             Utility.writePref(
-                    contextg,
+                    this@USNwsMosaicActivity,
                     "NWS_RADAR_MOSAIC_SECTOR_CURRENT",
                     drw.getLabel()
             )
@@ -160,7 +157,7 @@ class USNwsMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
     private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
         animDrawable = withContext(Dispatchers.IO) {
             UtilityUSImgNwsMosaic.getAnimation(
-                    contextg,
+                    this@USNwsMosaicActivity,
                     drw.getUrl(),
                     frameCount,
                     true

@@ -22,7 +22,6 @@
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import java.util.Locale
 
 import androidx.cardview.widget.CardView
@@ -87,12 +86,10 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     private val cardList = mutableListOf<CardView>()
     private lateinit var textCard: ObjectCardText
     private lateinit var spinner: ObjectSpinner
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_afd, R.menu.afd)
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
         textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
@@ -165,7 +162,7 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         }
         html = withContext(Dispatchers.IO) {
             if (version == 1) {
-                UtilityDownload.getTextProduct(contextg, product + wfo)
+                UtilityDownload.getTextProduct(this@AfdActivity, product + wfo)
             } else {
                 UtilityDownload.getTextProduct(product + wfo, version)
             }
@@ -182,12 +179,12 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         textCard.setTextAndTranslate(Utility.fromHtml(html))
         UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, product)
         if (activityArguments[1] == "") {
-            Utility.writePref(contextg, "WFO_TEXT_FAV", product)
+            Utility.writePref(this@AfdActivity, "WFO_TEXT_FAV", product)
             MyApplication.wfoTextFav = product
         }
         oldProduct = product
         oldWfo = wfo
-        Utility.writePref(contextg, "WFO_LAST_USED", wfo)
+        Utility.writePref(this@AfdActivity, "WFO_LAST_USED", wfo)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -345,7 +342,7 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
             html = ""
             wfoListPerState.forEach {
                 html = if (version == 1) {
-                    UtilityDownload.getTextProduct(contextg, product + it)
+                    UtilityDownload.getTextProduct(this@AfdActivity, product + it)
                 } else {
                     UtilityDownload.getTextProduct(product + it, version)
                 }
@@ -355,7 +352,7 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         textCard.setVisibility(View.GONE)
         cardList.clear()
         wfoProd.forEach {
-            val textCard = ObjectCardText(contextg, linearLayout)
+            val textCard = ObjectCardText(this@AfdActivity, linearLayout)
             textCard.setTextAndTranslate(Utility.fromHtml(it))
             cardList.add(textCard.card)
         }

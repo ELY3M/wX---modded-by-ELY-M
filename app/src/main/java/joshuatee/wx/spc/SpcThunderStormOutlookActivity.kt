@@ -22,7 +22,6 @@
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
-import android.content.Context
 
 import android.os.Bundle
 import android.graphics.Bitmap
@@ -41,7 +40,6 @@ class SpcThunderStormOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickLi
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmaps = listOf<Bitmap>()
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +49,6 @@ class SpcThunderStormOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickLi
             R.menu.shared_multigraphics,
             true
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         title = "SPC"
         toolbar.subtitle = "Thunderstorm Outook"
@@ -60,7 +57,7 @@ class SpcThunderStormOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickLi
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         bitmaps = withContext(Dispatchers.IO) { UtilitySpc.thunderStormOutlookImages }
-        bitmaps.forEach { ObjectCardImage(contextg, ll, it) }
+        bitmaps.forEach { ObjectCardImage(this@SpcThunderStormOutlookActivity, ll, it) }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

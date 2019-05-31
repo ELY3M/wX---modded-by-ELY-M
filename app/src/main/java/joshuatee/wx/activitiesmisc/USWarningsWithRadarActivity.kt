@@ -22,7 +22,6 @@
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
@@ -72,7 +71,6 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var drw: ObjectNavDrawer
     private lateinit var objAlertSummary: ObjectAlertSummary
-    private lateinit var contextGlobal: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +80,6 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
                 R.menu.uswarn,
                 true
         )
-        contextGlobal = this
         toolbarBottom.setOnMenuItemClickListener(this)
         toolbar.setOnClickListener { toolbar.showOverflowMenu() }
         val activityArguments = intent.getStringArrayExtra(URL)
@@ -123,9 +120,9 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     }
 
     private fun radarInterface(id: Int) {
-        val radarSite = Utility.readPref(contextGlobal, "NWS_RID_" + objAlertSummary.mapButtonNws[id], "")
+        val radarSite = Utility.readPref(this@USWarningsWithRadarActivity, "NWS_RID_" + objAlertSummary.mapButtonNws[id], "")
         ObjectIntent(
-                contextGlobal,
+                this@USWarningsWithRadarActivity,
                 WXGLRadarActivity::class.java,
                 WXGLRadarActivity.RID,
                 arrayOf(radarSite, objAlertSummary.mapButtonState[id]!!, "N0Q", "")
@@ -156,7 +153,7 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
             }
             val x = coord[0]
             val y = coord[1]
-            toastStr = Location.locationSave(contextGlobal, locNumToSaveStr, x, y, state + "_" + county)
+            toastStr = Location.locationSave(this@USWarningsWithRadarActivity, locNumToSaveStr, x, y, state + "_" + county)
         }
         UtilityUI.makeSnackBar(linearLayout, toastStr)
     }
@@ -177,7 +174,7 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
         objAlertSummary.updateContent(bitmap, html, turlLocal[0], firstRun)
         title = objAlertSummary.getTitle(turlLocal[1])
         if (firstRun) {
-            drw.updateLists(contextGlobal, objAlertSummary.navList.toList())
+            drw.updateLists(this@USWarningsWithRadarActivity, objAlertSummary.navList.toList())
             firstRun = false
         }
     }
@@ -201,25 +198,25 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
         }
         when (item.itemId) {
             R.id.action_warnmap -> ObjectIntent(
-                    contextGlobal,
+                    this@USWarningsWithRadarActivity,
                     ImageShowActivity::class.java,
                     ImageShowActivity.URL,
                     arrayOf("http://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map")
             )
             R.id.action_warnmapAK -> ObjectIntent(
-                    contextGlobal,
+                    this@USWarningsWithRadarActivity,
                     ImageShowActivity::class.java,
                     ImageShowActivity.URL,
                     arrayOf("http://forecast.weather.gov/wwamap/png/ak.png", "AK warning map")
             )
             R.id.action_warnmapHI -> ObjectIntent(
-                    contextGlobal,
+                    this@USWarningsWithRadarActivity,
                     ImageShowActivity::class.java,
                     ImageShowActivity.URL,
                     arrayOf("http://forecast.weather.gov/wwamap/png/hi.png", "HI warning map")
             )
             R.id.action_impact_graphics -> ObjectIntent(
-                    contextGlobal,
+                    this@USWarningsWithRadarActivity,
                     USWarningsImpactActivity::class.java
             )
             else -> return super.onOptionsItemSelected(item)

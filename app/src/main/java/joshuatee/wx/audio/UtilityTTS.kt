@@ -181,7 +181,9 @@ object UtilityTts {
     private fun synthesizeTextAndPlayPrevious(context: Context) {
         playlistArr = MyApplication.playlistStr.split(":")
         playlistNumber -= 1
-        if (playlistNumber == -1) playlistNumber = playlistArr.size - 1
+        if (playlistNumber == -1) {
+            playlistNumber = playlistArr.lastIndex
+        }
         val prodg = playlistArr[playlistNumber]
         playlistTotal = playlistArr.size
         currentFile = 0

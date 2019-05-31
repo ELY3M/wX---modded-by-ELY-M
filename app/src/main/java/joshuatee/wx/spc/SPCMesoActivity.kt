@@ -93,7 +93,6 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
     private lateinit var sp: ObjectSpinner
     private lateinit var drw: ObjectNavDrawerCombo
     private lateinit var displayData: DisplayData
-    private lateinit var contextg: Context
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.spcmeso_top, menu)
@@ -103,7 +102,6 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         var activityArguments = intent.getStringArrayExtra(INFO)
-        contextg = this
         if (activityArguments == null) {
             activityArguments = arrayOf("", "1", "SPCMESO")
         }
@@ -232,7 +230,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 MyApplication.spcmesoFav,
                 displayData.param[curImg]
         )
-        sp.refreshData(contextg, favListLabel)
+        sp.refreshData(this@SpcMesoActivity, favListLabel)
         super.onRestart()
     }
 
@@ -244,7 +242,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
 
         withContext(Dispatchers.IO) {
             (0 until numPanes).forEach {
-                displayData.bitmap[it] = UtilitySpcMesoInputOutput.getImage(contextg, displayData.param[it], sector)
+                displayData.bitmap[it] = UtilitySpcMesoInputOutput.getImage(this@SpcMesoActivity, displayData.param[it], sector)
             }
         }
         (0 until numPanes).forEach {
@@ -260,12 +258,12 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
             (0 until numPanes).forEach {
                 displayData.img[it].setZoom(
                         Utility.readPref(
-                                contextg,
+                                this@SpcMesoActivity,
                                 prefModel + numPanes + it.toString() + "_ZOOM",
                                 1.0f
                         ),
-                        Utility.readPref(contextg, prefModel + numPanes + it.toString() + "_X", 0.5f),
-                        Utility.readPref(contextg, prefModel + numPanes + it.toString() + "_Y", 0.5f)
+                        Utility.readPref(this@SpcMesoActivity, prefModel + numPanes + it.toString() + "_X", 0.5f),
+                        Utility.readPref(this@SpcMesoActivity, prefModel + numPanes + it.toString() + "_Y", 0.5f)
                 )
             }
             firstRun = true
@@ -280,7 +278,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
         withContext(Dispatchers.IO) {
             (0 until numPanes).forEach {
                 displayData.animDrawable[it] = UtilitySpcMesoInputOutput.getAnimation(
-                        contextg,
+                        this@SpcMesoActivity,
                         sector,
                         displayData.param[it],
                         frames
@@ -355,9 +353,10 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
             R.id.action_bigsfc -> setAndLaunchParam("bigsfc", 0, 0)
             R.id.action_rgnlrad -> setAndLaunchParam("rgnlrad", 0, 2)
             R.id.action_1kmv -> setAndLaunchParam("1kmv", 0, 1)
-            R.id.action_300mb -> setAndLaunchParam("300mb", 2, 4)
-            R.id.action_500mb -> setAndLaunchParam("500mb", 2, 3)
-            R.id.action_700mb -> setAndLaunchParam("700mb", 2, 2)
+            R.id.action_300mb -> setAndLaunchParam("300mb", 2, 5)
+            R.id.action_500mb -> setAndLaunchParam("500mb", 2, 4)
+            R.id.action_700mb -> setAndLaunchParam("700mb", 2, 3)
+            R.id.action_850mb2 -> setAndLaunchParam("850mb", 2, 2)
             R.id.action_850mb -> setAndLaunchParam("850mb", 2, 1)
             R.id.action_925mb -> setAndLaunchParam("925mb", 2, 0)
             R.id.action_muli -> setAndLaunchParam("muli", 3, 5)
@@ -513,7 +512,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 MyApplication.spcmesoFav,
                 displayData.param[curImg]
         )
-        sp.refreshData(contextg, favListLabel)
+        sp.refreshData(this@SpcMesoActivity, favListLabel)
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
@@ -561,6 +560,6 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 MyApplication.spcmesoFav,
                 displayData.param[curImg]
         )
-        sp.refreshData(contextg, favListLabel)
+        sp.refreshData(this@SpcMesoActivity, favListLabel)
     }
 }

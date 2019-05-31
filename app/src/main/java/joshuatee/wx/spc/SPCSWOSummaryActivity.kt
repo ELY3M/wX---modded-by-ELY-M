@@ -22,7 +22,6 @@
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.MenuItem
@@ -44,7 +43,6 @@ class SpcSwoSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val bitmaps = mutableListOf<Bitmap>()
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +55,6 @@ class SpcSwoSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         toolbarBottom.setOnMenuItemClickListener(this)
         val menu = toolbarBottom.menu
         UtilityShortcut.hidePinIfNeeded(menu)
-        contextg = this
         title = "SPC"
         toolbar.subtitle = "Convective Outlook Summary"
         getContent()
@@ -72,7 +69,7 @@ class SpcSwoSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             }
         }
         bitmaps.forEach { bitmap ->
-            val card = ObjectCardImage(contextg, ll, bitmap)
+            val card = ObjectCardImage(this@SpcSwoSummaryActivity, ll, bitmap)
             val day = if (bitmaps.indexOf(bitmap) < 3) {
                 (bitmaps.indexOf(bitmap) + 1).toString()
             } else {
@@ -80,7 +77,7 @@ class SpcSwoSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             }
             card.setOnClickListener(View.OnClickListener {
                 ObjectIntent(
-                        contextg,
+                        this@SpcSwoSummaryActivity,
                         SpcSwoActivity::class.java,
                         SpcSwoActivity.NO,
                         arrayOf(day, "")

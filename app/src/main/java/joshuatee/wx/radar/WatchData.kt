@@ -19,27 +19,11 @@
 
 */
 
-package joshuatee.wx.activitiesmisc
+package joshuatee.wx.radar
 
-import joshuatee.wx.util.UtilityLog
-
-internal class ObjectImpactGraphic(
-    var title: String,
-    var cities: String,
-    var population: String,
-    var imgFile: String
-) {
-
-    companion object {
-        private const val baseImageUrl = "https://www.weather.gov/images/crh/impact/"
-    }
-
-    init {
-        this.title = title.replace("^.*?Sev".toRegex(), "Sev")
-        this.cities = "Cities: " + cities.replace("\"", "")
-        this.population = "Population: " + population.replace("\"", "")
-        this.imgFile = baseImageUrl + imgFile.replace("\"", "").replace("file:", "")
-        //UtilityLog.d("wx", this.imgFile)
-    }
-}
+class WatchData(
+        val numberList: List<String>,
+        val htmlList: List<String>
+        //val latLonList: List<String>
+)
 

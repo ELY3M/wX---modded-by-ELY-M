@@ -128,7 +128,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private var animTriggerDownloads = false
     private var curRadar = 0
     private val alertDialogStatusAl = mutableListOf<String>()
-    private lateinit var contextg: Context
     private var idxIntAl = 0
     private var prefPrefix = "WXOGL_DUALPANE"
     private var rlArr = mutableListOf<RelativeLayout>()
@@ -138,6 +137,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private var dontSavePref = false
     private var useSinglePanePref = false
     private var landScape = false
+    private var isGetContentInProgress = false
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -154,6 +154,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         numPanes = activityArguments[2].toIntOrNull() ?: 0
         numPanesArr = (0 until numPanes).toList()
         UtilityFileManagement.deleteCacheFiles(this)
+        isGetContentInProgress = false
         var widthDivider = 1
         var heightDivider = 2
         val layoutType: Int
@@ -208,10 +209,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         } else if (numPanes == 2 && landScape) {
             widthDivider = 2
         }
-
-        contextg = this
         if (MyApplication.checkinternet) {
-            Utility.checkInternet(contextg)
+            Utility.checkInternet(this@WXGLRadarActivityMultiPane)
         }
         if (useSinglePanePref) {
             prefPrefix = "WXOGL"
@@ -495,7 +494,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     UtilityRadarUI.plotRadar(
                             ogl,
                             "",
-                            contextg,
+                            this@WXGLRadarActivityMultiPane,
                             ::getGpsFromDouble,
                             ::getLatLon,
                             false
@@ -527,6 +526,34 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 glv.requestRender()
                 setSubTitle()
                 animRan = false
+
+                withContext(Dispatchers.IO) {
+                    UtilityDownloadWarnings.get(this@WXGLRadarActivityMultiPane)
+                }
+                if (!ogl.product.startsWith("2")) {
+                    UtilityRadarUI.plotWarningPolygons(glv, ogl, false)
+                }
+
+                if (PolygonType.MCD.pref) {
+                    withContext(Dispatchers.IO) {
+                        UtilityDownloadMcd.get(this@WXGLRadarActivityMultiPane)
+                        UtilityDownloadWatch.get(this@WXGLRadarActivityMultiPane)
+                    }
+                    if (!ogl.product.startsWith("2")) {
+                        UtilityRadarUI.plotMcdWatchPolygons(glv, ogl, false)
+                    }
+                }
+
+                if (PolygonType.MPD.pref) {
+                    withContext(Dispatchers.IO) {
+                        UtilityDownloadMpd.get(this@WXGLRadarActivityMultiPane)
+                    }
+                    if (!ogl.product.startsWith("2")) {
+                        UtilityRadarUI.plotMpdPolygons(glv, ogl, false)
+                    }
+                }
+
+                UtilityRadarUI.updateLastRadarTime(this@WXGLRadarActivityMultiPane)
             }
 
     private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
@@ -543,15 +570,15 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             frameCountGlobal = frameCount
             val animArray = Array(numPanes) { Array(frameCount) { "" } }
             numPanesArr.forEach { z ->
-                animArray[z] = oglrArr[z].rdDownload.getRadarFilesForAnimation(contextg, frameCount)
+                animArray[z] = oglrArr[z].rdDownload.getRadarFilesForAnimation(this@WXGLRadarActivityMultiPane, frameCount)
                         .toTypedArray()
                 try {
                     (0 until animArray[z].size).forEach { r ->
-                        fh = File(contextg.filesDir, animArray[z][r])
-                        contextg.deleteFile((z + 1).toString() + oglrArr[z].product + "nexrad_anim" + r.toString())
+                        fh = File(this@WXGLRadarActivityMultiPane.filesDir, animArray[z][r])
+                        this@WXGLRadarActivityMultiPane.deleteFile((z + 1).toString() + oglrArr[z].product + "nexrad_anim" + r.toString())
                         if (!fh.renameTo(
                                         File(
-                                                contextg.filesDir,
+                                                this@WXGLRadarActivityMultiPane.filesDir,
                                                 (z + 1).toString() + oglrArr[z].product + "nexrad_anim" + r.toString()
                                         )
                                 )
@@ -571,17 +598,17 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     numPanesArr.forEach { z ->
                         animArray[z] =
                                 oglrArr[z].rdDownload.getRadarFilesForAnimation(
-                                        contextg,
+                                        this@WXGLRadarActivityMultiPane,
                                         frameCount
                                 )
                                         .toTypedArray()
                         try {
                             (0 until animArray[z].size).forEach { r ->
-                                fh = File(contextg.filesDir, animArray[z][r])
-                                contextg.deleteFile((z + 1).toString() + oglrArr[z].product + "nexrad_anim" + r.toString())
+                                fh = File(this@WXGLRadarActivityMultiPane.filesDir, animArray[z][r])
+                                this@WXGLRadarActivityMultiPane.deleteFile((z + 1).toString() + oglrArr[z].product + "nexrad_anim" + r.toString())
                                 if (!fh.renameTo(
                                                 File(
-                                                        contextg.filesDir,
+                                                        this@WXGLRadarActivityMultiPane.filesDir,
                                                         (z + 1).toString() + oglrArr[z].product + "nexrad_anim" + r.toString()
                                                 )
                                         )
@@ -630,13 +657,13 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                         SystemClock.sleep(delay - ((timeMilli - priorTime)))
                     if (!inOglAnim)
                         break
-                    if (r == (animArray[0].size - 1))
+                    if (r == (animArray[0].lastIndex))
                         SystemClock.sleep(delay.toLong() * 2)
                 }
                 loopCnt += 1
             }
         }
-        UtilityFileManagement.deleteCacheFiles(contextg)
+        UtilityFileManagement.deleteCacheFiles(this@WXGLRadarActivityMultiPane)
     }
 
     private fun progressUpdate(vararg values: String) {
@@ -727,7 +754,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             }
             R.id.action_settings -> startActivity(
                     Intent(
-                            contextg,
+                            this@WXGLRadarActivityMultiPane,
                             SettingsRadarActivity::class.java
                     )
             )
@@ -942,7 +969,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                         alertDialogStatusAl,
                         locXCurrent,
                         locYCurrent,
-                        contextg,
+                        this@WXGLRadarActivityMultiPane,
                         glviewArr[idxInt],
                         oglrArr[idxIntAl],
                         alertDialogRadarLongPress!!
@@ -957,15 +984,18 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
     private val mStatusChecker: Runnable? = object : Runnable {
         override fun run() {
-            if (loopCount > 0) {
-                if (inOglAnim) {
-                    animTriggerDownloads = true
-                } else {
-                    numPanesArr.forEach { getContentSingleThreaded(glviewArr[it], oglrArr[it], it) }
+            if (mHandler != null) {
+                if (loopCount > 0) {
+                    if (inOglAnim) {
+                        animTriggerDownloads = true
+                    } else {
+                        getContentSerial()
+                        //numPanesArr.forEach { getContentSingleThreaded(glviewArr[it], oglrArr[it], it) }
+                    }
                 }
+                loopCount += 1
+                handler.postDelayed(this, mInterval.toLong())
             }
-            loopCount += 1
-            handler.postDelayed(this, mInterval.toLong())
         }
     }
 
@@ -975,14 +1005,15 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
     private fun stopRepeatingTask() {
         mHandler!!.removeCallbacks(mStatusChecker)
+        mHandler = null
     }
 
     //report your spotter network location
     private val sn_handler = Handler()
     private val sn_reporter: Runnable = object : Runnable {
         override fun run() {
-            Log.d(TAG, "SendPosition(contextg) on lat: "+latD+" lon: "+lonD)
-            SendPosition(contextg)
+            Log.d(TAG, "SendPosition(this@WXGLRadarActivityMultiPane) on lat: "+latD+" lon: "+lonD)
+            SendPosition(this@WXGLRadarActivityMultiPane)
 
             sn_handler.postDelayed(this, sn_Interval.toLong())
         }
@@ -993,16 +1024,19 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     private fun stop_sn_reporting() {
-        sn_handler!!.removeCallbacks(sn_reporter)
+        sn_Handler_m!!.removeCallbacks(sn_reporter)
+	    sn_Handler_m = null
     }
 
 
     override fun onPause() {
+        mHandler?.let { stopRepeatingTask() }
         numPanesArr.forEach { glviewArr[it].onPause() }
         super.onPause()
     }
 
     override fun onResume() {
+        checkForAutoRefresh()
         numPanesArr.forEach { glviewArr[it].onResume() }
         super.onResume()
     }
@@ -1059,7 +1093,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private fun getLatLon() = LatLon(locXCurrent, locYCurrent)
 
     private fun setupAlertDialogRadarLongPress() {
-        alertDialogRadarLongPress = ObjectDialogue(contextg, alertDialogStatusAl)
+        alertDialogRadarLongPress = ObjectDialogue(this@WXGLRadarActivityMultiPane, alertDialogStatusAl)
         alertDialogRadarLongPress!!.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
             dialog.dismiss()
             UtilityUI.immersiveMode(act)
@@ -1068,7 +1102,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             val strName = alertDialogStatusAl[which]
             UtilityRadarUI.doLongPressAction(
                     strName,
-                    contextg,
+                    this@WXGLRadarActivityMultiPane,
                     act,
                     glviewArr[idxIntAl],
                     oglrArr[idxIntAl],
@@ -1096,7 +1130,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     private fun alertDialogTDWR() {
-        val diaTdwr = ObjectDialogue(contextg, GlobalArrays.tdwrRadars)
+        val diaTdwr = ObjectDialogue(this@WXGLRadarActivityMultiPane, GlobalArrays.tdwrRadars)
         diaTdwr.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
             dialog.dismiss()
             UtilityUI.immersiveMode(act)
@@ -1116,11 +1150,19 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     private fun getContentSerial() {
-        numPanesArr.forEach { getContentSingleThreaded(glviewArr[it], oglrArr[it], it) }
+        if (!isGetContentInProgress) {
+            isGetContentInProgress = true
+            numPanesArr.forEach { getContentSingleThreaded(glviewArr[it], oglrArr[it], it) }
+            isGetContentInProgress = false
+        }
     }
 
     private fun getContentParallel() {
-        numPanesArr.forEach { getContent(glviewArr[it], oglrArr[it], it) }
+        if (!isGetContentInProgress) {
+            isGetContentInProgress = true
+            numPanesArr.forEach { getContent(glviewArr[it], oglrArr[it], it) }
+            isGetContentInProgress = false
+        }
     }
 
     private fun glviewShow() {
@@ -1200,7 +1242,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         }
     }
 
-    fun getContentSingleThreaded(glvg: WXGLSurfaceView, OGLRg: WXGLRender, curRadar: Int) {
+    private fun getContentSingleThreaded(glvg: WXGLSurfaceView, OGLRg: WXGLRender, curRadar: Int) {
         getContent(glvg, OGLRg, curRadar)
     }
 }

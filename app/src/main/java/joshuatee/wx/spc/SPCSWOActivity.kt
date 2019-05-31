@@ -22,7 +22,6 @@
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
-import android.content.Context
 
 import android.graphics.Bitmap
 import android.os.Bundle
@@ -67,7 +66,6 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var c4: ObjectCardImage
     private lateinit var c5: ObjectCardImage
     private lateinit var c6: ObjectCardImage
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +74,6 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 R.layout.activity_linear_layout_bottom_toolbar,
                 R.menu.spcswo
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         c1 = ObjectCardImage(this, ll)
         c2 = ObjectCardText(this, ll, toolbar, toolbarBottom)
@@ -135,7 +132,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             textUrl = "SWOD48"
         }
         withContext(Dispatchers.IO) {
-            html = UtilityDownload.getTextProduct(contextg, textUrl)
+            html = UtilityDownload.getTextProduct(this@SpcSwoActivity, textUrl)
             bitmaps = UtilitySpcSwo.getImageUrls(turlDay, true)
         }
         c2.setText(Utility.fromHtml(html))

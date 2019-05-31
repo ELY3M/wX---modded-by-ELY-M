@@ -30,7 +30,6 @@ import java.util.regex.Pattern
 import android.app.Activity
 import android.os.Bundle
 import android.app.DatePickerDialog
-import android.content.Context
 import android.content.res.Configuration
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.ContextMenu
@@ -101,14 +100,12 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var storms = mutableListOf<StormReport>()
     private lateinit var drw: ObjectNavDrawer
     private lateinit var activity: Activity
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_storm_reports, R.menu.spc_stormreports)
         toolbarBottom.setOnMenuItemClickListener(this)
         activity = this
-        contextg = this
         val menu = toolbarBottom.menu
         val playlistMi = menu.findItem(R.id.action_playlist)
         playlistMi.isVisible = false
@@ -159,7 +156,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         toolbar.subtitle = no
         val linearLayout: LinearLayout = findViewById(R.id.ll)
         linearLayout.removeAllViews()
-        val c0 = ObjectCardImage(contextg, linearLayout, bitmap)
+        val c0 = ObjectCardImage(this@SpcStormReportsActivity, linearLayout, bitmap)
         c0.setOnClickListener(View.OnClickListener {
             val stDatePicker = DatePickerDialog(
                     this,
@@ -179,7 +176,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             stDatePicker.show()
         })
         c0.resetZoom()
-        val c1 = ObjectCardText(contextg, linearLayout)
+        val c1 = ObjectCardText(this@SpcStormReportsActivity, linearLayout)
         c1.setVisibility(View.GONE)
         c1.setOnClickListener(View.OnClickListener {
             filter = "All"
@@ -194,7 +191,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     val freq3 = mapState[s.state]
                     mapState[s.state] = if (freq3 == null) 1 else freq3 + 1
                 }
-                val stormCard = ObjectCardStormReportItem(contextg)
+                val stormCard = ObjectCardStormReportItem(this@SpcStormReportsActivity)
                 stormCard.setId(k)
                 linearLayout.addView(stormCard.card)
                 stormCard.setTextFields(s)
@@ -205,7 +202,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 val yStr = s.lon
                 stormCard.setListener(View.OnClickListener {
                     ObjectIntent(
-                            contextg,
+                            this@SpcStormReportsActivity,
                             WebscreenAB::class.java,
                             WebscreenAB.URL,
                             arrayOf(UtilityMap.getMapUrl(xStr, yStr, "10"), "$xStr,$yStr")
@@ -336,8 +333,12 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
-        if (audioPlayMenu(item.itemId, out.toString(), "spcstreports", "spcstreports")) return true
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
+        if (audioPlayMenu(item.itemId, out.toString(), "spcstreports", "spcstreports")) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_share_all -> UtilityShare.shareText(
                     this,
@@ -353,8 +354,8 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.id.action_share_image -> UtilityShare.shareBitmap(this, "Storm Reports - $no", bitmap)
             R.id.action_lsrbywfo -> ObjectIntent(
                     this,
-                    LSRbyWFOActivity::class.java,
-                    LSRbyWFOActivity.URL,
+                    LsrByWfoActivity::class.java,
+                    LsrByWfoActivity.URL,
                     arrayOf(Location.wfo, "LSR")
             )
             else -> return super.onOptionsItemSelected(item)
@@ -363,7 +364,9 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)){
+            return true
+        }
         return super.onOptionsItemSelected(item)
     }
 }

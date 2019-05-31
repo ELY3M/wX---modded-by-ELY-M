@@ -154,10 +154,6 @@ object UtilityTime {
         val currentTimeHours = currentTimeComponents[0].toIntOrNull() ?: 0
         val currentTimeMinutes = currentTimeComponents[1].toIntOrNull() ?: 0
         val currentTimeTotalMinutes = currentTimeHours * 60 + currentTimeMinutes
-        //UtilityLog.d("wx", radarTime)
-        //UtilityLog.d("wx", radarTimeTotalMinutes.toString())
-        //UtilityLog.d("wx", currentTime)
-        //UtilityLog.d("wx", currentTimeTotalMinutes.toString())
         if (currentTimeTotalMinutes < 30) {
             // FIXME find out how to handle midnight
             return false

@@ -38,18 +38,18 @@ class ObjectWidgetNexradRadar(context: Context) {
     val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
 
     init {
-        val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
-        val radarSite = Location.getRid(context, widgetLocNum)
+        val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
+        val radarSite = Location.getRid(context, widgetLocationNumber)
         UtilityWidget.setImage(context, remoteViews, NEXRAD_RADAR.fileName)
         if (!MyApplication.widgetPreventTap) {
-            if (Location.isUS(widgetLocNum)) {
+            if (Location.isUS(widgetLocationNumber)) {
                 UtilityWidget.setupIntent(
                     context,
                     remoteViews,
                     WXGLRadarActivity::class.java,
                     R.id.iv,
                     WXGLRadarActivity.RID,
-                    arrayOf(radarSite, ""),
+                    arrayOf(radarSite),
                     WidgetFile.NEXRAD_RADAR.action
                 )
             } else {

@@ -49,8 +49,8 @@ internal object UtilityCanvasGeneric {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         }
         paint.color = type.color
-        val wallpath = Path()
-        wallpath.reset()
+        val wallPath = Path()
+        wallPath.reset()
         val pn = ProjectionNumbers(radarSite, provider)
         genericByteBuffer.position(0)
         try {
@@ -70,10 +70,10 @@ internal object UtilityCanvasGeneric {
             }
             tmpBuffer.position(0)
             while (tmpBuffer.position() < tmpBuffer.capacity()) {
-                wallpath.moveTo(tmpBuffer.float, tmpBuffer.float)
-                wallpath.lineTo(tmpBuffer.float, tmpBuffer.float)
+                wallPath.moveTo(tmpBuffer.float, tmpBuffer.float)
+                wallPath.lineTo(tmpBuffer.float, tmpBuffer.float)
             }
-            canvas.drawPath(wallpath, paint)
+            canvas.drawPath(wallPath, paint)
         } catch (e: OutOfMemoryError) {
             UtilityLog.handleException(e)
         }

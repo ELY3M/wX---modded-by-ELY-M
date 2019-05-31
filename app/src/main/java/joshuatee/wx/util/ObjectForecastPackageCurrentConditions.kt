@@ -30,7 +30,6 @@ import joshuatee.wx.radar.LatLon
 
 class ObjectForecastPackageCurrentConditions {
 
-    var contextg: Context? = null
     var topLine: String = ""
     var data: String = ""
         private set
@@ -42,30 +41,30 @@ class ObjectForecastPackageCurrentConditions {
 
     constructor()
 
-    constructor(context: Context, locNum: Int) {
-        if (Location.isUS(locNum)) {
-            val tmpArr = getConditionsViaMetar(context, Location.getLatLon(locNum))
+    constructor(context: Context, locationNumber: Int) {
+        if (Location.isUS(locationNumber)) {
+            val tmpArr = getConditionsViaMetar(context, Location.getLatLon(locationNumber))
             // 62° / 54°(74%) - 1013 mb - ESE 7 mph - 8 mi - Partly Cloudy
             data = tmpArr[0]
             iconUrl = tmpArr[1]
             status = UtilityUS.getStatusViaMetar(context, time)
         } else {
-            val html = UtilityCanada.getLocationHtml(Location.getLatLon(locNum))
+            val html = UtilityCanada.getLocationHtml(Location.getLatLon(locationNumber))
             data = UtilityCanada.getConditions(html)
             status = UtilityCanada.getStatus(html)
         }
     }
 
-    constructor(context: Context, location: LatLon) {
-        val tmpArr = getConditionsViaMetar(context, location)
+    constructor(context: Context, latLon: LatLon) {
+        val tmpArr = getConditionsViaMetar(context, latLon)
         data = tmpArr[0]
         iconUrl = tmpArr[1]
         status = UtilityUS.getStatusViaMetar(context, time)
     }
 
-    private fun getConditionsViaMetar(context: Context, location: LatLon): List<String> {
+    private fun getConditionsViaMetar(context: Context, latLon: LatLon): List<String> {
         var sb = ""
-        val objMetar = ObjectMetar(context, location)
+        val objMetar = ObjectMetar(context, latLon)
         time = objMetar.conditionsTimeStr
         val temperature = objMetar.temperature + MyApplication.DEGREE_SYMBOL
         val windChill = objMetar.windChill + MyApplication.DEGREE_SYMBOL

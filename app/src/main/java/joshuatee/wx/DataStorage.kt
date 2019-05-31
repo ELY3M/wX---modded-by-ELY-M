@@ -29,6 +29,8 @@ class DataStorage(private var preference: String) {
 
     private var storedVal: String = ""
 
+    val value: String get() = storedVal
+
     // update in memory value from what is on disk
     fun update(context: Context) {
         storedVal = Utility.readPref(context, preference, "")
@@ -42,8 +44,8 @@ class DataStorage(private var preference: String) {
         editor.apply()
     }
 
-    fun valueGet(): String {
+    /*fun valueGet(): String {
         return storedVal
-    }
+    }*/
 }
 

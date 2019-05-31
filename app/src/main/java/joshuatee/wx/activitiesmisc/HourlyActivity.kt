@@ -40,6 +40,7 @@ import kotlinx.android.synthetic.main.activity_hourly.*
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.DefaultLabelFormatter
+import joshuatee.wx.notifications.BackgroundFetch
 import kotlinx.coroutines.*
 
 class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
@@ -77,6 +78,7 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         toolbar.subtitle = Location.getName(locationNumber)
         //UtilityLog.d("wx", UtilityTimeSunMoon.getSunTimesForHomescreen())
         //UtilityLog.d("wx", UtilityTimeSunMoon.getMoonTimesForHomescreen())
+        //BackgroundFetch(this).getContent()
         getContent()
     }
 
@@ -112,7 +114,7 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         val linesOfData = hourlyData.temp.split(MyApplication.newline).dropLastWhile { it.isEmpty() }
         val dataPoints = mutableListOf<DataPoint>()
         var time = 0
-        (1 until linesOfData.size - 1).forEach {
+        (1 until linesOfData.lastIndex).forEach {
             val temp = linesOfData[it].toIntOrNull() ?: 0
             time += 1
             dataPoints.add(DataPoint(time.toDouble(), temp.toDouble()))

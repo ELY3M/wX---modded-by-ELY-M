@@ -231,7 +231,7 @@ class WXGLRender(private val context: Context) : Renderer {
         }
     }
 
-    fun initGEOM() {
+    fun initializeGeometry() {
         totalBins = 0
         if (prod == "TV0" || prod == "TZL") {
             tdwr = true
@@ -589,7 +589,7 @@ class WXGLRender(private val context: Context) : Renderer {
 	    //drawTriangles(wbCircleBuffers)
             //GLES20.glLineWidth(defaultLineWidth)
             // FIXME use new configurable
-            GLES20.glLineWidth(MyApplication.radarGpsCircleLinesize.toFloat())
+            GLES20.glLineWidth(MyApplication.radarGpsCircleLineSize.toFloat())
             drawTriangles(locdotBuffers)
             }
 
@@ -1253,22 +1253,22 @@ class WXGLRender(private val context: Context) : Renderer {
         buffers.isInitialized = true
     }
 
-    fun constructSTILines() {
+    fun constructStiLines() {
         val fSti = WXGLNexradLevel3StormInfo.decodeAndPlot(context, idxStr, rid, provider)
         constructGenericLinesShort(stiBuffers, fSti)
     }
 
-    fun deconstructSTILines() {
+    fun deconstructStiLines() {
         deconstructGenericLines(stiBuffers)
     }
 
-    fun constructWATMCDLines() {
+    fun constructWatchMcdLines() {
         constructGenericLines(mcdBuffers)
         constructGenericLines(watchBuffers)
         constructGenericLines(watchTornadoBuffers)
     }
 
-    fun deconstructWATMCDLines() {
+    fun deconstructWatchMcdLines() {
         deconstructGenericLines(mcdBuffers)
         deconstructGenericLines(watchBuffers)
         deconstructGenericLines(watchTornadoBuffers)
@@ -1442,7 +1442,7 @@ class WXGLRender(private val context: Context) : Renderer {
         spotterBuffers.isInitialized = false
     }
 
-    fun constructHI() {
+    fun constructHi() {
         hiBuffers.lenInit = 0f //MyApplication.radarHiSize.toFloat()
         val stormList = WXGLNexradLevel3HailIndex.decodeAndPlot(context, rid, idxStr)
         hiBuffers.setXYList(stormList)
@@ -1450,7 +1450,7 @@ class WXGLRender(private val context: Context) : Renderer {
         constructMarker(hiBuffers)
     }
 
-    fun deconstructHI() {
+    fun deconstructHi() {
         hiBuffers.isInitialized = false
     }
 
@@ -1507,7 +1507,7 @@ class WXGLRender(private val context: Context) : Renderer {
         }
     }
 
-    fun constructTVS() {
+    fun constructTvs() {
         tvsBuffers.lenInit = 0f //MyApplication.radarTvsSize.toFloat()
         val stormList = WXGLNexradLevel3TVS.decodeAndPlot(context, rid, idxStr)
         tvsBuffers.setXYList(stormList)
@@ -1515,15 +1515,15 @@ class WXGLRender(private val context: Context) : Renderer {
 
     }
 
-    fun deconstructTVS() {
+    fun deconstructTvs() {
         tvsBuffers.isInitialized = false
     }
 
-    fun constructMPDLines() {
+    fun constructMpdLines() {
         constructGenericLines(mpdBuffers)
     }
 
-    fun deconstructMPDLines() {
+    fun deconstructMpdLines() {
         deconstructGenericLines(mpdBuffers)
     }
 

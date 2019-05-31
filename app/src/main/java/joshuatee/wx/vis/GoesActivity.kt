@@ -22,7 +22,6 @@
 package joshuatee.wx.vis
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.Configuration
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
@@ -52,7 +51,6 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
     private var oldSector = "cgl"
     private var savePrefs = true
     private lateinit var activityArguments: Array<String>
-    private lateinit var contextg: Context
     private val prefImagePosition = "GOES16_IMG"
 
     @SuppressLint("MissingSuperCall")
@@ -64,7 +62,6 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
                 iconsEvenlySpaced = true,
                 bottomToolbar = true
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
         activityArguments = intent.getStringArrayExtra(RID)
@@ -72,7 +69,7 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, "")
         img.setMaxZoom(8f)
         img.setListener(this, drw, ::getContentFixThis)
-        readPrefs(this)
+        readPrefs()
         drw.setListener(::getContentFixThis)
         getContent(sector)
     }
@@ -112,10 +109,10 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
         }
     }
 
-    private fun readPrefs(context: Context) {
+    private fun readPrefs() {
         if (activityArguments.isNotEmpty() && activityArguments[0] == "") {
-            sector = Utility.readPref(context, "GOES16_SECTOR", sector)
-            drw.index = Utility.readPref(context, "GOES16_IMG_FAV_IDX", 0)
+            sector = Utility.readPref(this@GoesActivity, "GOES16_SECTOR", sector)
+            drw.index = Utility.readPref(this@GoesActivity, "GOES16_IMG_FAV_IDX", 0)
         } else {
             if (activityArguments.size > 1) {
                 sector = activityArguments[0]
@@ -196,7 +193,7 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
     private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
         animDrawable = withContext(Dispatchers.IO) {
             UtilityGoes.getAnimation(
-                    contextg,
+                    this@GoesActivity,
                     drw.getUrl(),
                     sector,
                     frameCount

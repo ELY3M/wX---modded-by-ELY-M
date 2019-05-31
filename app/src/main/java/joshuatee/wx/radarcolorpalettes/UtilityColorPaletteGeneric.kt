@@ -197,7 +197,7 @@ object UtilityColorPaletteGeneric {
             }
         }
         dbzAl.indices.forEach { index ->
-            if (index < dbzAl.size - 1) {
+            if (index < dbzAl.lastIndex) {
                 low = dbzAl[index]
                 lowColor = Color.rgb(rAl[index], gAl[index], bAl[index])
                 high = dbzAl[index + 1]

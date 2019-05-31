@@ -148,10 +148,10 @@ object UtilityWXOGL {
     }
 
     fun showTextProducts(lat: Double, lon: Double): String {
-        var html = MyApplication.severeDashboardTor.valueGet() + MyApplication.severeDashboardTst.valueGet() + MyApplication.severeDashboardFfw.valueGet()
+        var html = MyApplication.severeDashboardTor.value + MyApplication.severeDashboardTst.value + MyApplication.severeDashboardFfw.value
         MyApplication.radarWarningPolygons.forEach {
             if (it.isEnabled) {
-                html += it.storage.valueGet()
+                html += it.storage.value
             }
         }
         val urlList = html.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")

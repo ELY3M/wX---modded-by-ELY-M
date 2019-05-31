@@ -22,7 +22,6 @@
 package joshuatee.wx.models
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.content.res.Configuration
 
@@ -61,13 +60,11 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
     private lateinit var miStatusParam1: MenuItem
     private lateinit var miStatusParam2: MenuItem
     private lateinit var drw: ObjectNavDrawerCombo
-    private lateinit var contextg: Context
     private lateinit var om: ObjectModel
     private var activityArguments: Array<String>? = arrayOf()
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        contextg = this
         activityArguments = intent.getStringArrayExtra(INFO)
         if (activityArguments == null) {
             activityArguments = arrayOf("1", "SPCHREF", "SPC HREF")
@@ -212,7 +209,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityModels.legacyShare(contextg, om.animRan, om)
+                    UtilityModels.legacyShare(this@ModelsSpcHrefActivity, om.animRan, om)
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -230,10 +227,10 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
         om.spTime.setSelection(0)
         if (!firstRunTimeSet) {
             firstRunTimeSet = true
-            om.spTime.setSelection(Utility.readPref(contextg, om.prefRunPosn, 0))
+            om.spTime.setSelection(Utility.readPref(this@ModelsSpcHrefActivity, om.prefRunPosn, 0))
         }
         om.spTime.notifyDataSetChanged()
-        UtilityModels.getContent(contextg, om, listOf(""), uiDispatcher)
+        UtilityModels.getContent(this@ModelsSpcHrefActivity, om, listOf(""), uiDispatcher)
     }
 
     private fun setupModel() {

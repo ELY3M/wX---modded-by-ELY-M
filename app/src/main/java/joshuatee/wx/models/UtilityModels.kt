@@ -286,7 +286,9 @@ object UtilityModels {
         val poi = mutableListOf<PointF>()
         (0 until img.size).forEach {
             z[it] = img[it].currentZoom
-            poi.add(img[it].scrollPosition)
+            if (img[it].scrollPosition != null) {
+                poi.add(img[it].scrollPosition)
+            }
             x[it] = poi[it].x
             y[it] = poi[it].y
         }

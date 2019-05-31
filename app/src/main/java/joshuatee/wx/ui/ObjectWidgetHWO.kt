@@ -36,8 +36,8 @@ class ObjectWidgetHwo(context: Context) {
     val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_textview_layout)
 
     init {
-        val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
-        val nws1Current = Utility.readPref(context, "NWS$widgetLocNum", "")
+        val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
+        val wfo = Utility.readPref(context, "NWS$widgetLocationNumber", "")
         val hwo = Utility.readPref(context, "HWO_WIDGET", "")
         remoteViews.setTextViewText(R.id.text1, Utility.fromHtml(hwo))
         remoteViews.setTextViewTextSize(R.id.text1, TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
@@ -48,7 +48,7 @@ class ObjectWidgetHwo(context: Context) {
                     AfdActivity::class.java,
                     R.id.text1,
                     AfdActivity.URL,
-                    arrayOf(nws1Current, "HWO"),
+                    arrayOf(wfo, "HWO"),
                     WidgetFile.HWO.action
             )
         }

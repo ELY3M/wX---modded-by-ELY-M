@@ -112,7 +112,7 @@ object UtilityNotification {
                                     ",".toRegex(),
                                     ""
                             ).replace(" ".toRegex(), "")
-                    if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
+                    if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(
                                     context,
                                     cancelStr
                             ))
@@ -202,7 +202,7 @@ object UtilityNotification {
                         i + y,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 )
-                if (!(MyApplication.alertOnlyonce && oldNotifStr.contains(url2 + "radar"))) {
+                if (!(MyApplication.alertOnlyOnce && oldNotifStr.contains(url2 + "radar"))) {
                     noti2 = createNotifBigPicture(
                             context,
                             noMain,

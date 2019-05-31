@@ -22,7 +22,6 @@
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.graphics.Bitmap
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -83,7 +82,6 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
     private lateinit var miTest: MenuItem
     private lateinit var objCard: ObjectCard
     private lateinit var polygonType: PolygonType
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,7 +90,6 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
                 R.layout.activity_spcmcdwshow_summary,
                 R.menu.spcmcdshowdetail
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         objCard = ObjectCard(this, R.id.cv1)
         val menu = toolbarBottom.menu
@@ -164,14 +161,14 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
                     titleString = "MCD " + mcdNumbers[0]
                     product = "SPCMCD" + mcdNumbers[0]
                 }
-                text = UtilityDownload.getTextProduct(contextg, product)
+                text = UtilityDownload.getTextProduct(this@SpcMcdWatchShowSummaryActivity, product)
             }
         }
         mcdList.indices.forEach { mcdIndex ->
-            val card = ObjectCardImage(contextg, linearLayout, bitmaps[mcdIndex])
+            val card = ObjectCardImage(this@SpcMcdWatchShowSummaryActivity, linearLayout, bitmaps[mcdIndex])
             card.setOnClickListener(View.OnClickListener {
                 ObjectIntent(
-                        contextg,
+                        this@SpcMcdWatchShowSummaryActivity,
                         SpcMcdWatchShowActivity::class.java,
                         SpcMcdWatchShowActivity.NO,
                         arrayOf(mcdNumbers[mcdIndex], "", polygonType.toString())
@@ -184,7 +181,7 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
         if (mcdList.size == 1) {
             val wfoStr = text.parse("ATTN...WFO...(.*?)... ")
             wfos = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
-            ObjectCardText(contextg, linearLayout, toolbar, toolbarBottom, Utility.fromHtml(text))
+            ObjectCardText(this@SpcMcdWatchShowSummaryActivity, linearLayout, toolbar, toolbarBottom, Utility.fromHtml(text))
             title = titleString
             if (!number.contains("at")) {
                 toolbar.subtitle = text.parse("Areas affected...(.*?)<BR>")
@@ -228,7 +225,7 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
         wfos.filter { item.title.toString().contains(it) }.forEach {
             UtilityLocation.saveLocationForMcd(
                     it,
-                    contextg,
+                    this@SpcMcdWatchShowSummaryActivity,
                     linearLayout,
                     uiDispatcher
             )

@@ -24,7 +24,6 @@ package joshuatee.wx.audio
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import java.util.Calendar
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 
@@ -49,30 +48,28 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
     private var gposition = 0
     private val modifyModeString = "Modify mode"
     private lateinit var recyclerView: ObjectRecyclerView
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_recyclerview_toolbar_with_twofab,
-            null,
-            false
+                savedInstanceState,
+                R.layout.activity_recyclerview_toolbar_with_twofab,
+                null,
+                false
         )
-        contextg = this
         toolbar.subtitle = modifyModeString
         ObjectFab(
-            this,
-            this,
-            R.id.fab1,
-            R.drawable.ic_alarm_add_24dp,
-            View.OnClickListener { pickTimeFAB() })
+                this,
+                this,
+                R.id.fab1,
+                R.drawable.ic_alarm_add_24dp,
+                View.OnClickListener { pickTimeFAB() })
         ObjectFab(
-            this,
-            this,
-            R.id.fab2,
-            MyApplication.ICON_DELETE,
-            View.OnClickListener { deleteFAB() })
+                this,
+                this,
+                R.id.fab2,
+                MyApplication.ICON_DELETE,
+                View.OnClickListener { deleteFAB() })
         ridFav = Utility.readPref(this, prefToken, "")
         val c = Calendar.getInstance()
         hour = c.get(Calendar.HOUR_OF_DAY)
@@ -98,32 +95,32 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
     private fun pickTimeFAB() {
         val mTimePicker: TimePickerDialog
         mTimePicker = TimePickerDialog(
-            contextg,
-            TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
-                if (!ridFav.contains(
-                        "$selectedHour:" + String.format(
-                            "%2s",
-                            selectedMinute.toString()
-                        ).replace(' ', '0')
-                    )
-                ) {
-                    ridFav = ridFav + selectedHour.toString() + ":" +
-                            String.format("%2s", selectedMinute.toString()).replace(' ', '0') +
-                            tokenSep
-                    Utility.writePref(this, prefToken, ridFav)
-                    updateList()
-                    recyclerView.refreshList(ridArr)
-                    UtilityPlayListAutoDownload.setAlarm(
-                        contextg,
-                        ridArr.size - 1,
-                        selectedHour,
-                        selectedMinute
-                    )
-                }
-            },
-            hour,
-            minute,
-            false
+                this@SettingsPlaylistAutodownloadActivity,
+                TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
+                    if (!ridFav.contains(
+                                    "$selectedHour:" + String.format(
+                                            "%2s",
+                                            selectedMinute.toString()
+                                    ).replace(' ', '0')
+                            )
+                    ) {
+                        ridFav = ridFav + selectedHour.toString() + ":" +
+                                String.format("%2s", selectedMinute.toString()).replace(' ', '0') +
+                                tokenSep
+                        Utility.writePref(this, prefToken, ridFav)
+                        updateList()
+                        recyclerView.refreshList(ridArr)
+                        UtilityPlayListAutoDownload.setAlarm(
+                                this@SettingsPlaylistAutodownloadActivity,
+                                ridArr.lastIndex,
+                                selectedHour,
+                                selectedMinute
+                        )
+                    }
+                },
+                hour,
+                minute,
+                false
         )//no not 24 hour time
         mTimePicker.updateTime(hour, minute)
         mTimePicker.setCanceledOnTouchOutside(true)
@@ -134,51 +131,51 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
     private fun pickItem(position: Int) {
         gposition = position
         if (deleteMode) {
-            ridArr.indices.forEach { UtilityPlayListAutoDownload.cancelAlarm(contextg, it) }
+            ridArr.indices.forEach { UtilityPlayListAutoDownload.cancelAlarm(this@SettingsPlaylistAutodownloadActivity, it) }
             ridFav = ridFav.replace(ridArr[position] + tokenSep, "")
             Utility.writePref(this, prefToken, ridFav)
             updateList()
             recyclerView.refreshList(ridArr)
-            UtilityPlayListAutoDownload.setAllAlarms(contextg)
+            UtilityPlayListAutoDownload.setAllAlarms(this@SettingsPlaylistAutodownloadActivity)
         } else {
             val timeArr = ridArr[position].split(":").dropLastWhile { it.isEmpty() }
             currHr = timeArr[0].toIntOrNull() ?: 0
             currMin = timeArr[1].toIntOrNull() ?: 0
             val mTimePicker: TimePickerDialog
             mTimePicker = TimePickerDialog(
-                contextg,
-                TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
-                    if (!ridFav.contains(
-                            "$selectedHour:" + String.format(
-                                "%2s",
-                                selectedMinute.toString()
-                            ).replace(' ', '0')
-                        )
-                    ) {
-                        ridFav = ridFav.replace(
-                            "$currHr:" + String.format("%2s", currMin).replace(
-                                ' ',
-                                '0'
-                            ),
-                            "$selectedHour:" + String.format(
-                                "%2s",
-                                selectedMinute.toString()
-                            ).replace(' ', '0')
-                        )
-                        UtilityPlayListAutoDownload.setAlarm(
-                            contextg,
-                            gposition,
-                            selectedHour,
-                            selectedMinute
-                        )
-                        Utility.writePref(this, prefToken, ridFav)
-                        updateList()
-                        recyclerView.refreshList(ridArr)
-                    }
-                },
-                hour,
-                minute,
-                false
+                    this@SettingsPlaylistAutodownloadActivity,
+                    TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
+                        if (!ridFav.contains(
+                                        "$selectedHour:" + String.format(
+                                                "%2s",
+                                                selectedMinute.toString()
+                                        ).replace(' ', '0')
+                                )
+                        ) {
+                            ridFav = ridFav.replace(
+                                    "$currHr:" + String.format("%2s", currMin).replace(
+                                            ' ',
+                                            '0'
+                                    ),
+                                    "$selectedHour:" + String.format(
+                                            "%2s",
+                                            selectedMinute.toString()
+                                    ).replace(' ', '0')
+                            )
+                            UtilityPlayListAutoDownload.setAlarm(
+                                    this@SettingsPlaylistAutodownloadActivity,
+                                    gposition,
+                                    selectedHour,
+                                    selectedMinute
+                            )
+                            Utility.writePref(this, prefToken, ridFav)
+                            updateList()
+                            recyclerView.refreshList(ridArr)
+                        }
+                    },
+                    hour,
+                    minute,
+                    false
             )
             mTimePicker.setTitle("Select Time")
             mTimePicker.updateTime(currHr, currMin)

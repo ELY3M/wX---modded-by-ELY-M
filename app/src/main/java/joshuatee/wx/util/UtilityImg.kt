@@ -123,11 +123,11 @@ object UtilityImg {
                     MyApplication.spchrrrX = x
                     MyApplication.spchrrrY = y
                 }
-                "SPCSSEO" -> {
+                /*"SPCSSEO" -> {
                     MyApplication.spcsseoZoom = z
                     MyApplication.spcsseoX = x
                     MyApplication.spcsseoY = y
-                }
+                }*/
                 "WPCGEFS1" -> {
                     MyApplication.wpcgefsZoom = z
                     MyApplication.wpcgefsX = x

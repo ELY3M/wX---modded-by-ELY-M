@@ -787,10 +787,18 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         mActivity = null
     }
 
+    // FIXME change to return context and use getContext in API greater then 22
+    // FIXME duplicate for 2 other areas
+
     private val activityReference: FragmentActivity
         get() {
             if (mActivity == null) {
-                mActivity = activity
+                if (android.os.Build.VERSION.SDK_INT >= 23 ) {
+                    mActivity = activity
+                    //val test = context
+                } else {
+                    mActivity = activity
+                }
             }
             return mActivity!!
         }

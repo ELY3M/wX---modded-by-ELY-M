@@ -57,18 +57,15 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
     private val actionDashboard = "actionDashboard"
 
     init {
-        val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
+        val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
         val cc = Utility.readPref(context, "CC_WIDGET", "No data")
         val sd = Utility.readPref(context, "7DAY_WIDGET", "No data")
-        val updtime = Utility.readPref(context, "UPDTIME_WIDGET", "No data")
+        val updateTime = Utility.readPref(context, "UPDTIME_WIDGET", "No data")
         val sdExt = Utility.readPref(context, "7DAY_EXT_WIDGET", "No data")
         val hazardRaw = Utility.readPref(context, "HAZARD_RAW_WIDGET", "No data")
-        val nws1Current = Utility.readPref(context, "NWS$widgetLocNum", "")
-        val nwsLocation = Utility.readPref(context, "NWS_LOCATION_$nws1Current", "")
-        val nwsLocationArr = nwsLocation.split(",").dropLastWhile { it.isEmpty() }
-        val nws1StateCurrent = nwsLocationArr.getOrNull(0) ?: ""
-        val radarSite = Location.getRid(context, widgetLocNum)
-        val locLabel = Utility.readPref(context, "LOC" + widgetLocNum + "_LABEL", "")
+        val wfo = Utility.readPref(context, "NWS$widgetLocationNumber", "")
+        val radarSite = Location.getRid(context, widgetLocationNumber)
+        val locLabel = Utility.readPref(context, "LOC" + widgetLocationNumber + "_LABEL", "")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             remoteViews.setImageViewResource(R.id.b_radar, R.drawable.ic_flash_on_24dp)
             remoteViews.setImageViewResource(R.id.b_cloud, R.drawable.ic_cloud_24dp)
@@ -103,7 +100,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
             }
         }
         remoteViews.setTextViewText(R.id.cc, cc)
-        remoteViews.setTextViewText(R.id.updtime, updtime)
+        remoteViews.setTextViewText(R.id.updtime, updateTime)
         var hazardSum = ""
         // FIXME legacy matcher
         try {
@@ -132,7 +129,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
                 SpcSoundingsActivity::class.java,
                 R.id.cc,
                 SpcSoundingsActivity.URL,
-                arrayOf(nws1Current, ""),
+                arrayOf(wfo, ""),
                 actionCc
         )
         UtilityWidget.setupIntent(
@@ -156,14 +153,14 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
                 actionHazard
         )
         // radar
-        if (Location.isUS(widgetLocNum)) {
+        if (Location.isUS(widgetLocationNumber)) {
             UtilityWidget.setupIntent(
                     context,
                     remoteViews,
                     WXGLRadarActivity::class.java,
                     R.id.b_radar,
                     WXGLRadarActivity.RID,
-                    arrayOf(radarSite, nws1StateCurrent),
+                    arrayOf(radarSite),
                     actionRadar
             )
         } else {
@@ -178,7 +175,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
             )
         }
         // local alerts ( or nat for CA )
-        if (Location.isUS(widgetLocNum)) {
+        if (Location.isUS(widgetLocationNumber)) {
             UtilityWidget.setupIntent(
                     context,
                     remoteViews,
@@ -201,14 +198,14 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
             )
         }
         // Hourly
-        if (Location.isUS(widgetLocNum)) {
+        if (Location.isUS(widgetLocationNumber)) {
             UtilityWidget.setupIntent(
                     context,
                     remoteViews,
                     HourlyActivity::class.java,
                     R.id.b_hourly,
                     HourlyActivity.LOC_NUM,
-                    widgetLocNum,
+                    widgetLocationNumber,
                     actionHourly
             )
         } else {
@@ -218,19 +215,19 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
                     CanadaHourlyActivity::class.java,
                     R.id.b_hourly,
                     CanadaHourlyActivity.LOC_NUM,
-                    widgetLocNum,
+                    widgetLocationNumber,
                     actionHourly
             )
         }
         // AFD
-        if (Location.isUS(widgetLocNum)) {
+        if (Location.isUS(widgetLocationNumber)) {
             UtilityWidget.setupIntent(
                     context,
                     remoteViews,
                     AfdActivity::class.java,
                     R.id.b_afd,
                     AfdActivity.URL,
-                    arrayOf(nws1Current, ""),
+                    arrayOf(wfo, ""),
                     actionAfd
             )
         } else {
@@ -250,7 +247,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
                 actionDashboard
         )
         // cloud icon - vis
-        if (Location.isUS(widgetLocNum)) {
+        if (Location.isUS(widgetLocationNumber)) {
             UtilityWidget.setupIntent(
                     context,
                     remoteViews,

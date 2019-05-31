@@ -56,12 +56,12 @@ enum class PolygonType constructor(
             MyApplication.radarSpottersLabel,
             0.0f
     ),
-    WIND_BARB_GUSTS(Color.RED, "WIND_BARB_GUSTS", MyApplication.radarObsWindbarbs, MyApplication.radarWbLinesize.toFloat()),
+    WIND_BARB_GUSTS(Color.RED, "WIND_BARB_GUSTS", MyApplication.radarObsWindbarbs, MyApplication.radarWbLineSize.toFloat()),
     WIND_BARB(
             MyApplication.radarColorObsWindbarbs,
             "WIND_BARB",
             MyApplication.radarObsWindbarbs,
-            MyApplication.radarWbLinesize.toFloat()
+            MyApplication.radarWbLineSize.toFloat()
             //MyApplication.radarAviationSize.toFloat()
     ),
     WIND_BARB_CIRCLE(
@@ -76,7 +76,7 @@ enum class PolygonType constructor(
             MyApplication.radarLocDot,
             MyApplication.radarLocdotSize.toFloat()
     ),
-    STI(MyApplication.radarColorSti, "STI", MyApplication.radarSti, MyApplication.radarStiLinesize.toFloat()),
+    STI(MyApplication.radarColorSti, "STI", MyApplication.radarSti, MyApplication.radarStiLineSize.toFloat()),
     TVS(
             MyApplication.radarColorTor,
             "TVS",
@@ -96,7 +96,7 @@ enum class PolygonType constructor(
 	0.0f
     ),
     OBS(MyApplication.radarColorObs, "OBS", MyApplication.radarObs, 0.0f),
-    SWO(MyApplication.radarColorHi, "SWO", MyApplication.radarSwo, MyApplication.radarSwoLinesize.toFloat()),
+    SWO(MyApplication.radarColorHi, "SWO", MyApplication.radarSwo, MyApplication.radarSwoLineSize.toFloat()),
     USERPOINTS(0, "USERPOINTS", MyApplication.radarUserPoints, 0.0f),
     CONUS(0, "CONUS", MyApplication.radarConusRadar, 0.0f),
     NONE(0, "", false, 0.0f);

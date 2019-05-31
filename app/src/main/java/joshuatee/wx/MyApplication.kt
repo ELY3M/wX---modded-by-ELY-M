@@ -168,7 +168,7 @@ class MyApplication : Application() {
         const val goes16AnimUrl: String = "https://www.star.nesdis.noaa.gov"
         const val nwsApiUrl = "https://api.weather.gov"
         const val nwsWeatherGov: String = "https://w1.weather.gov"
-        const val prefSeperator: String = " : : :"
+        const val prefSeparator: String = " : : :"
         var uiAnimIconFrames: String = "rid"
         const val WIDGET_FILE_BAK: String = "BAK"
         val HM_CLASS: MutableMap<String, Class<*>> = mutableMapOf()
@@ -223,7 +223,7 @@ class MyApplication : Application() {
         var locDisplayImg: Boolean = false
         var comma: Pattern = Pattern.compile("")
         var bang: Pattern = Pattern.compile("")
-        var alertOnlyonce: Boolean = false
+        var alertOnlyOnce: Boolean = false
         var drawToolColor: Int = 0
         var widgetTextColor: Int = 0
         var widgetHighlightTextColor: Int = 0
@@ -341,9 +341,6 @@ class MyApplication : Application() {
         var wpcgefsZoom: Float = 0f
         var wpcgefsX: Float = 0f
         var wpcgefsY: Float = 0f
-        var spcsseoZoom: Float = 0f
-        var spcsseoX: Float = 0f
-        var spcsseoY: Float = 0f
         var nwsIconSize: Int = 0
         var padding: Int = 0
         var paddingSettings: Int = 0
@@ -395,7 +392,7 @@ class MyApplication : Application() {
             widgetPreventTap = getInitialPreference("UI_WIDGET_PREVENT_TAP", "")
             fullscreenMode = getInitialPreference("FULLSCREEN_MODE", "false")
             lockToolbars = getInitialPreference("LOCK_TOOLBARS", "false")
-            alertOnlyonce = getInitialPreference("ALERT_ONLYONCE", "false")
+            alertOnlyOnce = getInitialPreference("ALERT_ONLYONCE", "false")
             unitsM = getInitialPreference("UNITS_M", "true")
             unitsF = getInitialPreference("UNITS_F", "true")
             drawToolColor = getInitialPreference("DRAW_TOOL_COLOR", Color.rgb(255, 0, 0))
@@ -412,13 +409,13 @@ class MyApplication : Application() {
             wxoglSize = getInitialPreference("WXOGL_SIZE", 8)
             wxoglRememberLocation = getInitialPreference("WXOGL_REMEMBER_LOCATION", "false")
             wxoglRadarAutorefresh = getInitialPreference("RADAR_AUTOREFRESH", "false")
-            wfoFav = getInitialPreferenceString("WFO_FAV", prefSeperator)
-            ridFav = getInitialPreferenceString("RID_FAV", prefSeperator)
-            sndFav = getInitialPreferenceString("SND_FAV", prefSeperator)
-            srefFav = getInitialPreferenceString("SREF_FAV", prefSeperator)
-            spcmesoFav = getInitialPreferenceString("SPCMESO_FAV", prefSeperator)
-            spcmesoLabelFav = getInitialPreferenceString("SPCMESO_LABEL_FAV", prefSeperator)
-            nwsTextFav = getInitialPreferenceString("NWS_TEXT_FAV", prefSeperator)
+            wfoFav = getInitialPreferenceString("WFO_FAV", prefSeparator)
+            ridFav = getInitialPreferenceString("RID_FAV", prefSeparator)
+            sndFav = getInitialPreferenceString("SND_FAV", prefSeparator)
+            srefFav = getInitialPreferenceString("SREF_FAV", prefSeparator)
+            spcmesoFav = getInitialPreferenceString("SPCMESO_FAV", prefSeparator)
+            spcmesoLabelFav = getInitialPreferenceString("SPCMESO_LABEL_FAV", prefSeparator)
+            nwsTextFav = getInitialPreferenceString("NWS_TEXT_FAV", prefSeparator)
             notifSoundUri = getInitialPreferenceString("NOTIF_SOUND_URI", "")
             if (notifSoundUri == "") {
                 notifSoundUri = Settings.System.DEFAULT_NOTIFICATION_URI.toString()
@@ -495,9 +492,6 @@ class MyApplication : Application() {
             wpcgefsZoom = getInitialPreference("WPCGEFS_ZOOM", 1.0f)
             wpcgefsX = getInitialPreference("WPCGEFS_X", 0.5f)
             wpcgefsY = getInitialPreference("WPCGEFS_Y", 0.5f)
-            spcsseoZoom = getInitialPreference("SPCSSEO_ZOOM", 1.0f)
-            spcsseoX = getInitialPreference("SPCSSEO_X", 0.5f)
-            spcsseoY = getInitialPreference("SPCSSEO_Y", 0.5f)
             elevationPref = getInitialPreference("ELEVATION_PREF", 0).toFloat() //5 is not for me! ELY M. 
             elevationPref =
                     TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, elevationPref, dm)
@@ -530,8 +524,8 @@ class MyApplication : Application() {
             GeographyType.refresh()
         }
 
-        private const val caResid = R.raw.ca
-        private const val mxResid = R.raw.mx
+        private const val canadaResId = R.raw.ca
+        private const val mexicoResId = R.raw.mx
         private const val caCnt = 161792
         private const val mxCnt = 151552
         var stateRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
@@ -540,14 +534,14 @@ class MyApplication : Application() {
         var countHw: Int = 862208 // on disk size 3448832 yields  862208
         var hwExtRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
         const val countHwExt: Int = 770048 // on disk 3080192 yields 770048
-        private const val hwExtFileResid = R.raw.hwv4ext // 2016_04_06
+        private const val hwExtFileResId = R.raw.hwv4ext // 2016_04_06
         var lakesRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
         const val countLakes: Int = 503808 // was 14336 + 489476
         var countyRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
         var countCounty: Int = 212992 // file on disk is 851968, should be
-        private var hwFileResid = R.raw.hwv4
-        private const val lakesFileResid = R.raw.lakesv3
-        private var countyFileResid = R.raw.county
+        private var hwFileResId = R.raw.hwv4
+        private const val lakesFileResId = R.raw.lakesv3
+        private var countyFileResId = R.raw.county
         var radarColorHw: Int = 0
         var radarColorHwExt: Int = 0
         var radarColorState: Int = 0
@@ -612,35 +606,33 @@ class MyApplication : Application() {
 
         fun initRadarGeometryByType(context: Context, type: GeographyType) {
             if (!radarHwEnh) {
-                hwFileResid = R.raw.hw
+                hwFileResId = R.raw.hw
                 countHw = 112640
             }
-            var stateLinesFileResid = R.raw.statev2
+            var stateLinesFileResId = R.raw.statev2
             countState = 205748
             if (radarStateHires) {
-                stateLinesFileResid = R.raw.statev3
+                stateLinesFileResId = R.raw.statev3
                 countState = 1166552
             }
             if (radarCamxBorders) {
                 countState += caCnt + mxCnt
             }
             if (radarCountyHires) {
-                countyFileResid = R.raw.countyv2
+                countyFileResId = R.raw.countyv2
                 countCounty = 820852
             }
-            val fileidArr = listOf(
-                    lakesFileResid,
-                    hwFileResid,
-                    countyFileResid,
-                    stateLinesFileResid,
-                    caResid,
-                    mxResid,
-                    hwExtFileResid
+            val fileIds = listOf(
+                    lakesFileResId,
+                    hwFileResId,
+                    countyFileResId,
+                    stateLinesFileResId,
+                    canadaResId,
+                    mexicoResId,
+                    hwExtFileResId
             )
-            val countArr =
-                    listOf(countLakes, countHw, countCounty, countState, caCnt, mxCnt, countHwExt)
-            val prefArr =
-                    listOf(true, true, true, true, radarCamxBorders, radarCamxBorders, radarHwEnhExt)
+            val countArr = listOf(countLakes, countHw, countCounty, countState, caCnt, mxCnt, countHwExt)
+            val prefArr = listOf(true, true, true, true, radarCamxBorders, radarCamxBorders, radarHwEnhExt)
             when (type) {
                 GeographyType.STATE_LINES -> {
                     stateRelativeBuffer = ByteBuffer.allocateDirect(4 * countState)
@@ -649,7 +641,7 @@ class MyApplication : Application() {
                     listOf(3, 4, 5).forEach {
                         loadBuffer(
                                 context,
-                                fileidArr[it],
+                                fileIds[it],
                                 stateRelativeBuffer,
                                 countArr[it],
                                 prefArr[it]
@@ -661,7 +653,7 @@ class MyApplication : Application() {
                     hwRelativeBuffer.order(ByteOrder.nativeOrder())
                     hwRelativeBuffer.position(0)
                     for (s in intArrayOf(1)) {
-                        loadBuffer(context, fileidArr[s], hwRelativeBuffer, countArr[s], prefArr[s])
+                        loadBuffer(context, fileIds[s], hwRelativeBuffer, countArr[s], prefArr[s])
                     }
                 }
                 GeographyType.HIGHWAYS_EXTENDED -> {
@@ -673,7 +665,7 @@ class MyApplication : Application() {
                     for (s in intArrayOf(6)) {
                         loadBuffer(
                                 context,
-                                fileidArr[s],
+                                fileIds[s],
                                 hwExtRelativeBuffer,
                                 countArr[s],
                                 prefArr[s]
@@ -685,14 +677,14 @@ class MyApplication : Application() {
                     lakesRelativeBuffer.order(ByteOrder.nativeOrder())
                     lakesRelativeBuffer.position(0)
                     val s = 0
-                    loadBuffer(context, fileidArr[s], lakesRelativeBuffer, countArr[s], prefArr[s])
+                    loadBuffer(context, fileIds[s], lakesRelativeBuffer, countArr[s], prefArr[s])
                 }
                 GeographyType.COUNTY_LINES -> {
                     countyRelativeBuffer = ByteBuffer.allocateDirect(4 * countCounty)
                     countyRelativeBuffer.order(ByteOrder.nativeOrder())
                     countyRelativeBuffer.position(0)
                     val s = 2
-                    loadBuffer(context, fileidArr[s], countyRelativeBuffer, countArr[s], prefArr[s])
+                    loadBuffer(context, fileIds[s], countyRelativeBuffer, countArr[s], prefArr[s])
                 }
                 else -> {
                 }
@@ -702,7 +694,7 @@ class MyApplication : Application() {
         private fun loadBuffer(
                 context: Context,
                 fileID: Int,
-                bb: ByteBuffer,
+                byteBuffer: ByteBuffer,
                 count: Int,
                 pref: Boolean
         ) {
@@ -710,7 +702,7 @@ class MyApplication : Application() {
                 try {
                     val inputStream = context.resources.openRawResource(fileID)
                     val dis = DataInputStream(BufferedInputStream(inputStream))
-                    (0 until count).forEach { _ -> bb.putFloat(dis.readFloat()) }
+                    (0 until count).forEach { _ -> byteBuffer.putFloat(dis.readFloat()) }
                     dis.close()
                     inputStream.close()
                 } catch (e: IOException) {
@@ -775,18 +767,18 @@ class MyApplication : Application() {
         var radarHwEnhExt: Boolean = false
         private var radarCamxBorders: Boolean = false
         var radarIconsLevel2: Boolean = false
-        var radarStateLinesize: Int = 0
-        var radarCountyLinesize: Int = 0
-        var radarHwLinesize: Int = 0
-        var radarHwExtLinesize: Int = 0
-        var radarLakeLinesize: Int = 0
-        var radarGpsCircleLinesize: Int = 0
-        var radarStiLinesize: Int = 0
-        var radarSwoLinesize: Int = 0
-        var radarWbLinesize: Int = 0
+        var radarStateLineSize: Int = 0
+        var radarCountyLineSize: Int = 0
+        var radarHwLineSize: Int = 0
+        var radarHwExtLineSize: Int = 0
+        var radarLakeLineSize: Int = 0
+        var radarGpsCircleLineSize: Int = 0
+        var radarStiLineSize: Int = 0
+        var radarSwoLineSize: Int = 0
+        var radarWbLineSize: Int = 0
 
         private fun initRadarPreferences() {
-	    radarLocationUpdateInterval = getInitialPreference("RADAR_LOCATION_UPDATE_INTERVAL", 10)
+            radarLocationUpdateInterval = getInitialPreference("RADAR_LOCATION_UPDATE_INTERVAL", 10)
             radarConusRadar = getInitialPreference("CONUS_RADAR", "false")
             radarConusRadarZoom = getInitialPreference("CONUS_RADAR_ZOOM", 173)
             radarWarnings = getInitialPreference("COD_WARNINGS_DEFAULT", "false")
@@ -834,15 +826,15 @@ class MyApplication : Application() {
             radarDefaultLinesize = getInitialPreference("RADAR_DEFAULT_LINESIZE", 1)
             radarWarnLinesize = getInitialPreference("RADAR_WARN_LINESIZE", 4)
             radarWatmcdLinesize = getInitialPreference("RADAR_WATMCD_LINESIZE", 2)
-            radarStateLinesize = getInitialPreference("RADAR_STATE_LINESIZE", 2)
-            radarCountyLinesize = getInitialPreference("RADAR_COUNTY_LINESIZE", 2)
-            radarHwLinesize = getInitialPreference("RADAR_HW_LINESIZE", 2)
-            radarHwExtLinesize = getInitialPreference("RADAR_HWEXT_LINESIZE", 2)
-            radarLakeLinesize = getInitialPreference("RADAR_LAKE_LINESIZE", 2)
-            radarGpsCircleLinesize = getInitialPreference("RADAR_GPSCIRCLE_LINESIZE", 5)
-            radarStiLinesize = getInitialPreference("RADAR_STI_LINESIZE", 3)
-            radarSwoLinesize = getInitialPreference("RADAR_SWO_LINESIZE", 3)
-            radarWbLinesize = getInitialPreference("RADAR_WB_LINESIZE", 3)
+            radarStateLineSize = getInitialPreference("RADAR_STATE_LINESIZE", 2)
+            radarCountyLineSize = getInitialPreference("RADAR_COUNTY_LINESIZE", 2)
+            radarHwLineSize = getInitialPreference("RADAR_HW_LINESIZE", 2)
+            radarHwExtLineSize = getInitialPreference("RADAR_HWEXT_LINESIZE", 2)
+            radarLakeLineSize = getInitialPreference("RADAR_LAKE_LINESIZE", 2)
+            radarGpsCircleLineSize = getInitialPreference("RADAR_GPSCIRCLE_LINESIZE", 5)
+            radarStiLineSize = getInitialPreference("RADAR_STI_LINESIZE", 3)
+            radarSwoLineSize = getInitialPreference("RADAR_SWO_LINESIZE", 3)
+            radarWbLineSize = getInitialPreference("RADAR_WB_LINESIZE", 3)
         }
 
         private fun getInitialPreference(pref: String, initValue: Int): Int {

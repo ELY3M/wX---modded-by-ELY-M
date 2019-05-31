@@ -124,8 +124,8 @@ internal object UtilitySwoD1 {
                                 warningList.add(y[j + 1])
                             }
                         }
-                        warningList.add(x[x.size - 1])
-                        warningList.add(y[x.size - 1])
+                        warningList.add(x.last())
+                        warningList.add(y[x.lastIndex])
                     }
                     HASH_SWO[it] = warningList
                 }

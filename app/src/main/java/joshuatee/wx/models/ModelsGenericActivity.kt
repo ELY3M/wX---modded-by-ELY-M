@@ -22,7 +22,6 @@
 package joshuatee.wx.models
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.content.res.Configuration
 
@@ -67,7 +66,6 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
     private lateinit var miStatus: MenuItem
     private lateinit var miStatusParam1: MenuItem
     private lateinit var miStatusParam2: MenuItem
-    private lateinit var contextg: Context
     private lateinit var om: ObjectModel
     private lateinit var spRun: ObjectSpinner
     private lateinit var spSector: ObjectSpinner
@@ -76,7 +74,6 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        contextg = this
         activityArguments = intent.getStringArrayExtra(INFO)
         if (activityArguments == null) {
             activityArguments = arrayOf("1", "NCEP", "NCEP")
@@ -212,7 +209,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityModels.legacyShare(contextg, om.animRan, om)
+                    UtilityModels.legacyShare(this@ModelsGenericActivity, om.animRan, om)
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -233,7 +230,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             spRun.notifyDataSetChanged()
             spRun.setSelection(om.rtd.mostRecentRun)
             if (om.model == "CFS" && 0 == spRun.selectedItemPosition) {
-                UtilityModels.getContent(contextg, om, listOf(""), uiDispatcher)
+                UtilityModels.getContent(this@ModelsGenericActivity, om, listOf(""), uiDispatcher)
             }
             miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
             var tmpStr: String
@@ -249,7 +246,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             om.spTime.notifyDataSetChanged()
             if (!firstRunTimeSet) {
                 firstRunTimeSet = true
-                om.spTime.setSelection(Utility.readPref(contextg, om.prefRunPosn, 1))
+                om.spTime.setSelection(Utility.readPref(this@ModelsGenericActivity, om.prefRunPosn, 1))
             }
         } else {
             om.rtd = withContext(Dispatchers.IO) { om.getRunTime() }
@@ -268,7 +265,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             om.spTime.notifyDataSetChanged()
             if (!firstRunTimeSet) {
                 firstRunTimeSet = true
-                om.spTime.setSelection(Utility.readPref(contextg, om.prefRunPosn, 1))
+                om.spTime.setSelection(Utility.readPref(this@ModelsGenericActivity, om.prefRunPosn, 1))
             }
         }
     }

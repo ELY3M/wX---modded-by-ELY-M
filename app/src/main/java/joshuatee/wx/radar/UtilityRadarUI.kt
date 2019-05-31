@@ -48,6 +48,19 @@ import kotlinx.coroutines.*
 internal object UtilityRadarUI {
 
     const val longPressRadarSiteRegex = "\\) ([A-Z]{3,4}) "
+    private const val lastRadarTimePref = "NEXRADDOWNLOAD_TIME_LAST_RAN"
+
+    fun updateLastRadarTime(context: Context) {
+        Utility.writePref(
+            context,
+            lastRadarTimePref,
+            UtilityTime.getCurrentLocalTimeAsString()
+        )
+    }
+
+    fun getLastRadarTime(context: Context): String {
+        return Utility.readPref(context, lastRadarTimePref, "")
+    }
 
     private fun getRadarStatus(
             act: Activity,
@@ -203,8 +216,9 @@ internal object UtilityRadarUI {
             alertDialogRadarLongpressAl.add("Show Spotter Info")
         }
         alertDialogRadarLongpressAl.add("Show current radar status message: " + oglr.rid)
-        ///var getridpoint: String = UtilityLocation.getNearestRadarSite(context, LatLon(pointX.toString(), pointY.toString()))
-        alertDialogRadarLongpressAl.add("userpoint info: " + latLonTitle)
+	val getridpoint: String = UtilityLocation.getNearestRadarSite(context, LatLon(pointX.toString(), pointY.toString()))
+	alertDialogRadarLongpressAl.add("Show nearest radar status message: " + getridpoint)
+	alertDialogRadarLongpressAl.add("userpoint info: " + latLonTitle)
         alertDialogRadarLongpressAl.add("Add userpoint for: " + latLonTitle)
         alertDialogRadarLongpressAl.add("Delete userpoint for: " + latLonTitle)
         alertDialogRadarLongpressAl.add("Delete all userpoints")
@@ -323,7 +337,7 @@ internal object UtilityRadarUI {
             fnGetLatLon: () -> LatLon,
             archiveMode: Boolean = false
     ) {
-        ogl.initGEOM()
+        ogl.initializeGeometry()
         if (oldRidArr[z] != oglrArr[z].rid) {
             ogl.setChunkCount(0)
             ogl.setChunkCountSti(0)
@@ -380,13 +394,13 @@ internal object UtilityRadarUI {
             else
                 ogl.deconstructWarningLines()
             if (PolygonType.MCD.pref && !archiveMode)
-                ogl.constructWATMCDLines()
+                ogl.constructWatchMcdLines()
             else
-                ogl.deconstructWATMCDLines()
+                ogl.deconstructWatchMcdLines()
             if (PolygonType.MPD.pref && !archiveMode)
-                ogl.constructMPDLines()
+                ogl.constructMpdLines()
             else
-                ogl.deconstructMPDLines()
+                ogl.deconstructMpdLines()
             ogl.constructGenericWarningLines()
             glv.requestRender()
         }).start()
@@ -414,6 +428,77 @@ internal object UtilityRadarUI {
         }
     }
 
+    /*fun plotPolygons(
+            glv: WXGLSurfaceView,
+            ogl: WXGLRender,
+            archiveMode: Boolean = false
+    ) {
+        Thread(Runnable {
+            if (PolygonType.TST.pref && !archiveMode)
+                ogl.constructWarningLines()
+            else
+                ogl.deconstructWarningLines()
+            if (PolygonType.MCD.pref && !archiveMode)
+                ogl.constructWatchMcdLines()
+            else
+                ogl.deconstructWatchMcdLines()
+            if (PolygonType.MPD.pref && !archiveMode)
+                ogl.constructMpdLines()
+            else
+                ogl.deconstructMpdLines()
+            ogl.constructGenericWarningLines()
+            glv.requestRender()
+        }).start()
+    }*/
+
+    fun plotWarningPolygons(
+            glv: WXGLSurfaceView,
+            ogl: WXGLRender,
+            archiveMode: Boolean = false
+    ) {
+        Thread(Runnable {
+            if (PolygonType.TST.pref && !archiveMode) {
+                ogl.constructWarningLines()
+            } else {
+                ogl.deconstructWarningLines()
+            }
+            ogl.constructGenericWarningLines()
+            glv.requestRender()
+        }).start()
+    }
+
+    fun plotMcdWatchPolygons(
+            glv: WXGLSurfaceView,
+            ogl: WXGLRender,
+            archiveMode: Boolean = false
+    ) {
+        Thread(Runnable {
+            if (PolygonType.MCD.pref && !archiveMode) {
+                ogl.constructWatchMcdLines()
+            } else {
+                ogl.deconstructWatchMcdLines()
+            }
+            ogl.constructGenericWarningLines()
+            glv.requestRender()
+        }).start()
+    }
+
+    fun plotMpdPolygons(
+            glv: WXGLSurfaceView,
+            ogl: WXGLRender,
+            archiveMode: Boolean = false
+    ) {
+        Thread(Runnable {
+            if (PolygonType.MPD.pref && !archiveMode) {
+                ogl.constructMpdLines()
+            } else {
+                ogl.deconstructMpdLines()
+            }
+            ogl.constructGenericWarningLines()
+            glv.requestRender()
+        }).start()
+    }
+
     fun plotRadar(
             oglr: WXGLRender,
             urlStr: String,
@@ -431,17 +516,17 @@ internal object UtilityRadarUI {
         else
             oglr.deconstructSpotters()
         if (PolygonType.STI.pref && !archiveMode)
-            oglr.constructSTILines()
+            oglr.constructStiLines()
         else
-            oglr.deconstructSTILines()
+            oglr.deconstructStiLines()
         if (PolygonType.HI.pref && !archiveMode)
-            oglr.constructHI()
+            oglr.constructHi()
         else
-            oglr.deconstructHI()
+            oglr.deconstructHi()
         if (PolygonType.TVS.pref && !archiveMode)
-            oglr.constructTVS()
+            oglr.constructTvs()
         else
-            oglr.deconstructTVS()
+            oglr.deconstructTvs()
         if (MyApplication.locdotFollowsGps && !archiveMode) {
             fnGps()
         }
@@ -471,6 +556,8 @@ internal object UtilityRadarUI {
             }
         //} //showExtras
     }
+
+
 
     fun resetGlview(glviewloc: WXGLSurfaceView, OGLRLOC: WXGLRender) {
         glviewloc.scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f

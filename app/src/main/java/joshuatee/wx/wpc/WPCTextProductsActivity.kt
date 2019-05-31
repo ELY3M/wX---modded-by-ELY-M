@@ -22,7 +22,6 @@
 package joshuatee.wx.wpc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.MenuItem
@@ -80,7 +79,6 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     private lateinit var textCard: ObjectCardText
     private lateinit var sp: ObjectSpinner
     private lateinit var drw: ObjectNavDrawerCombo
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,7 +87,6 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
                 R.layout.activity_wpctextproducts,
                 R.menu.wpctext_products
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         notifToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
@@ -124,11 +121,11 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         }
         ridFavOld = MyApplication.nwsTextFav
-        html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(contextg, prod) }
+        html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@WpcTextProductsActivity, prod) }
         textCard.setTextAndTranslate(Utility.fromHtml(html))
         UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, "wpctext")
         if (initProd != prod) {
-            Utility.writePref(contextg, "WPC_TEXT_FAV", prod)
+            Utility.writePref(this@WpcTextProductsActivity, "WPC_TEXT_FAV", prod)
             MyApplication.wpcTextFav = prod
         }
     }
@@ -178,8 +175,8 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         return true
     }
 
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        when (pos) {
+    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+        when (position) {
             1 -> ObjectIntent(
                     this,
                     FavAddActivity::class.java,
@@ -193,7 +190,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
                     arrayOf("NWSTEXT")
             )
             else -> {
-                prod = products[pos].split(":").getOrNull(0) ?: ""
+                prod = products[position].split(":").getOrNull(0) ?: ""
                 getContent()
             }
         }

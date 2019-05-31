@@ -38,9 +38,9 @@ class ObjectForecastPackageHazards {
     constructor()
 
     // US
-    constructor(locNum: Int) {
-        if (Location.isUS(locNum) && MyApplication.homescreenFav.contains("TXT-HAZ")) {
-            hazards = getHazardsHtml(Location.getLatLon(locNum))
+    constructor(locationNumber: Int) {
+        if (Location.isUS(locationNumber) && MyApplication.homescreenFav.contains("TXT-HAZ")) {
+            hazards = getHazardsHtml(Location.getLatLon(locationNumber))
             urls = hazards.parseColumn("\"id\": \"(" + MyApplication.nwsApiUrl + ".*?)\"")
             titles = hazards.parseColumn("\"event\": \"(.*?)\"")
         }
@@ -54,8 +54,8 @@ class ObjectForecastPackageHazards {
     }
 
     // adhoc forecast
-    constructor(location: LatLon) {
-        hazards = getHazardsHtml(location)
+    constructor(latLon: LatLon) {
+        hazards = getHazardsHtml(latLon)
         urls = hazards.parseColumn("\"id\": \"(" + MyApplication.nwsApiUrl + ".*?)\"")
         titles = hazards.parseColumn("\"event\": \"(.*?)\"")
     }
@@ -63,8 +63,8 @@ class ObjectForecastPackageHazards {
     fun getHazardsShort(): String = hazardsShort.replace("^<BR>".toRegex(), "")
 
     companion object {
-        fun getHazardsHtml(location: LatLon): String {
-            val url = "https://api.weather.gov/alerts?point=" + UtilityMath.latLonFix(location.latString) + "," + UtilityMath.latLonFix(location.lonString) + "&active=1"
+        fun getHazardsHtml(latLon: LatLon): String {
+            val url = "https://api.weather.gov/alerts?point=" + UtilityMath.latLonFix(latLon.latString) + "," + UtilityMath.latLonFix(latLon.lonString) + "&active=1"
             return UtilityDownloadNws.getHazardData(url)
         }
     }

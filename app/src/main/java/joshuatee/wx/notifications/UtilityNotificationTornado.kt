@@ -84,7 +84,7 @@ internal object UtilityNotificationTornado {
                             arrayOf(url, ""),
                             arrayOf(url, "sound")
                     )
-                    if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
+                    if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(
                                     context,
                                     url
                             ))

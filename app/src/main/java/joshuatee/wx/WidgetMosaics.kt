@@ -30,7 +30,6 @@ import kotlinx.coroutines.*
 class WidgetMosaics : AppWidgetProvider() {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private lateinit var contextg: Context
     private val type = VIS
 
     override fun onDisabled(context: Context) {
@@ -40,8 +39,7 @@ class WidgetMosaics : AppWidgetProvider() {
 
     override fun onEnabled(context: Context) {
         UtilityWidget.enableWidget(context, type)
-        contextg = context
-        getContent()
+        getContent(context)
         super.onEnabled(context)
     }
 
@@ -53,10 +51,10 @@ class WidgetMosaics : AppWidgetProvider() {
         UtilityWidget.update(context, type)
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent(context: Context) = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
-            UtilityWidgetDownload.download(contextg, type)
+            UtilityWidgetDownload.download(context, type)
         }
-        UtilityWidget.update(contextg, type)
+        UtilityWidget.update(context, type)
     }
 } 

@@ -22,7 +22,6 @@
 package joshuatee.wx.models
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.content.res.Configuration
 
@@ -66,13 +65,12 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener, On
     private lateinit var miStatusParam1: MenuItem
     private lateinit var miStatusParam2: MenuItem
     private lateinit var drw: ObjectNavDrawer
-    private lateinit var contextg: Context
     private lateinit var om: ObjectModel
+    // FIXME var naming turl
     private lateinit var turl: Array<String>
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        contextg = this
         turl = intent.getStringArrayExtra(INFO)
         om = ObjectModel(this, turl[1], turl[0])
         if (om.numPanes == 1) {
@@ -234,7 +232,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityModels.legacyShare(contextg, om.animRan, om)
+                    UtilityModels.legacyShare(this@ModelsSpcHrrrActivity, om.animRan, om)
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -259,10 +257,10 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener, On
         om.spTime.setSelection(0)
         if (!firstRunTimeSet) {
             firstRunTimeSet = true
-            om.spTime.setSelection(Utility.readPref(contextg, om.prefRunPosn, 0))
+            om.spTime.setSelection(Utility.readPref(this@ModelsSpcHrrrActivity, om.prefRunPosn, 0))
         }
         om.spTime.notifyDataSetChanged()
-        UtilityModels.getContent(contextg, om, overlayImg, uiDispatcher)
+        UtilityModels.getContent(this@ModelsSpcHrrrActivity, om, overlayImg, uiDispatcher)
     }
 
     private fun setupModel() {

@@ -22,25 +22,28 @@
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ShortcutType
+import joshuatee.wx.radar.UtilityDownloadMcd
+import joshuatee.wx.radar.UtilityDownloadMpd
+import joshuatee.wx.radar.UtilityDownloadWatch
+import joshuatee.wx.radar.UtilityDownloadWarnings
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.spc.SpcMcdWatchShowActivity
 import joshuatee.wx.spc.SpcStormReportsActivity
 import joshuatee.wx.spc.UtilitySpc
-import joshuatee.wx.util.UtilityDownloadRadar
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityShortcut
 
@@ -52,7 +55,6 @@ class SevereDashboardActivity : BaseActivity() {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val bitmaps = mutableListOf<Bitmap>()
-    private lateinit var contextg: Context
     private var watchCount = 0
     private var mcdCount = 0
     private var mpdCount = 0
@@ -69,13 +71,12 @@ class SevereDashboardActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        contextg = this
         getContent()
     }
 
     private fun warningsClicked(filter: String) {
         ObjectIntent(
-                contextg,
+                this@SevereDashboardActivity,
                 USWarningsWithRadarActivity::class.java,
                 USWarningsWithRadarActivity.URL,
                 arrayOf(filter, "us")
@@ -93,34 +94,38 @@ class SevereDashboardActivity : BaseActivity() {
         val wTst = SevereWarning(PolygonType.TST)
         val wFfw = SevereWarning(PolygonType.FFW)
         withContext(Dispatchers.IO) {
-            wTor.generateString(contextg, UtilityDownloadRadar.getVtecTor())
-            wTst.generateString(contextg, UtilityDownloadRadar.getVtecTstorm())
-            wFfw.generateString(contextg, UtilityDownloadRadar.getVtecFfw())
+            UtilityDownloadWarnings.get(this@SevereDashboardActivity)
+            wTor.generateString(this@SevereDashboardActivity, MyApplication.severeDashboardTor.value)
+            wTst.generateString(this@SevereDashboardActivity, MyApplication.severeDashboardTst.value)
+            wFfw.generateString(this@SevereDashboardActivity, MyApplication.severeDashboardFfw.value)
         }
         if (wTor.count > 0) {
-            val objTor = ObjectCardText(contextg, ll, wTor.text)
+            val objTor = ObjectCardText(this@SevereDashboardActivity, ll, wTor.text)
             objTor.setOnClickListener(View.OnClickListener { warningsClicked(".*?Tornado Warning.*?") })
         }
         if (wTst.count > 0) {
-            val objTst = ObjectCardText(contextg, ll, wTst.text)
+            val objTst = ObjectCardText(this@SevereDashboardActivity, ll, wTst.text)
             objTst.setOnClickListener(View.OnClickListener { warningsClicked(".*?Severe Thunderstorm Warning.*?") })
         }
         if (wFfw.count > 0) {
-            val objFfw = ObjectCardText(contextg, ll, wFfw.text)
+            val objFfw = ObjectCardText(this@SevereDashboardActivity, ll, wFfw.text)
             objFfw.setOnClickListener(View.OnClickListener { warningsClicked(".*?Flash Flood Warning.*?") })
         }
         withContext(Dispatchers.IO) {
-            snMcd.getBitmaps(UtilityDownloadRadar.getMcd())
-            snWat.getBitmaps(UtilityDownloadRadar.getWatch())
-            snMpd.getBitmaps(UtilityDownloadRadar.getMpd())
+            UtilityDownloadMcd.get(this@SevereDashboardActivity)
+            UtilityDownloadWatch.get(this@SevereDashboardActivity)
+            UtilityDownloadMpd.get(this@SevereDashboardActivity)
+            snMcd.getBitmaps(MyApplication.severeDashboardMcd.value)
+            snWat.getBitmaps(MyApplication.severeDashboardWat.value)
+            snMpd.getBitmaps(MyApplication.severeDashboardMpd.value)
             bitmapArrRep.add((UtilitySpc.getStormReportsTodayUrl()).getImage())
         }
         if (bitmapArrRep.size > 0) {
             bitmapArrRep.indices.forEach {
-                val card = ObjectCardImage(contextg, ll, bitmapArrRep[it])
+                val card = ObjectCardImage(this@SevereDashboardActivity, ll, bitmapArrRep[it])
                 card.setOnClickListener(View.OnClickListener {
                     ObjectIntent(
-                            contextg,
+                            this@SevereDashboardActivity,
                             SpcStormReportsActivity::class.java,
                             SpcStormReportsActivity.NO,
                             arrayOf("today")
@@ -133,7 +138,7 @@ class SevereDashboardActivity : BaseActivity() {
                 .filter { it.bitmaps.size > 0 }
                 .forEach { severeNotice ->
                     severeNotice.bitmaps.indices.forEach { j ->
-                        val card = ObjectCardImage(contextg, ll, severeNotice.bitmaps[j])
+                        val card = ObjectCardImage(this@SevereDashboardActivity, ll, severeNotice.bitmaps[j])
                         var cla: Class<*>? = null
                         var claStr = ""
                         val claArgStr = severeNotice.numbers[j]
@@ -157,7 +162,7 @@ class SevereDashboardActivity : BaseActivity() {
                         val clStr = claStr
                         card.setOnClickListener(View.OnClickListener {
                             ObjectIntent(
-                                    contextg,
+                                    this@SevereDashboardActivity,
                                     cl!!,
                                     clStr,
                                     arrayOf(claArgStr, "", severeNotice.toString())

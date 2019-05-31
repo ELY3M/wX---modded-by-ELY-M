@@ -75,20 +75,20 @@ object UtilityUS {
             tornadoWarningString: String
     ): String {
         var html = ObjectForecastPackageHazards.getHazardsHtml(Location.getLatLon(currentLoc))
-        var notifUrls = ""
-        val locLabelStr = "(" + Location.getName(currentLoc) + ") "
-        val idAl = html.parseColumn("\"@id\": \"(.*?)\"")
+        var notificationUrls = ""
+        val locationLabelString = "(" + Location.getName(currentLoc) + ") "
+        val ids = html.parseColumn("\"@id\": \"(.*?)\"")
         val hazardTitles = html.parseColumn("\"event\": \"(.*?)\"")
         var i = 0
         hazardTitles.forEach { title ->
-            if (idAl.size > i) {
-                val url = idAl[i]
+            if (ids.size > i) {
+                val url = ids[i]
                 val ca = CapAlert.createFromUrl(url)
                 if (UtilityNotificationTools.nwsLocalAlertNotFiltered(context, title)) {
                     html = "$html<b>$title</b><br>"
                     html = html + "<b>Counties: " + ca.area + "</b><br>"
                     html = html + ca.summary + "<br><br><br>"
-                    val noMain = locLabelStr + title
+                    val noMain = locationLabelString + title
                     val noBody = title + " " + ca.area + " " + ca.summary
                     val noSummary = title + ": " + ca.area + " " + ca.summary
                     val objPI = ObjectPendingIntents(
@@ -99,7 +99,7 @@ object UtilityUS {
                             arrayOf(url, "sound")
                     )
                     val tornadoWarningPresent = title.contains(tornadoWarningString)
-                    if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
+                    if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(
                                     context,
                                     url
                             ))
@@ -124,11 +124,11 @@ object UtilityUS {
                         notifObj.sendNotification(context, url, 1, noti)
                         //notifier.notify(url, 1, noti)
                     }
-                    notifUrls += url + MyApplication.notificationStrSep
+                    notificationUrls += url + MyApplication.notificationStrSep
                 }
             }
             i += 1
         }
-        return notifUrls
+        return notificationUrls
     }
 }

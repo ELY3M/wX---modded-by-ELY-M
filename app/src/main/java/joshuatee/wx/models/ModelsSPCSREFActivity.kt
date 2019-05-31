@@ -22,7 +22,6 @@
 package joshuatee.wx.models
 
 import android.annotation.SuppressLint
-import android.content.Context
 import java.util.Locale
 
 import android.os.Bundle
@@ -78,13 +77,11 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
     private var spinnerRunRan = false
     private var spinnerTimeRan = false
     private var firstRunTimeSet = false
-    private lateinit var contextg: Context
     private lateinit var om: ObjectModel
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         activityArguments = intent.getStringArrayExtra(INFO)
-        contextg = this
         om = ObjectModel(this, activityArguments[1], activityArguments[0])
         if (om.numPanes == 1) {
             super.onCreate(
@@ -194,12 +191,12 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
         miStatus.title = Utility.fromHtml(om.rtd.imageCompleteStr.replace("in through", "-"))
         if (!firstRunTimeSet) {
             firstRunTimeSet = true
-            om.spTime.setSelection(Utility.readPref(contextg, om.prefRunPosn, 0))
+            om.spTime.setSelection(Utility.readPref(this@ModelsSpcSrefActivity, om.prefRunPosn, 0))
         }
         om.spTime.notifyDataSetChanged()
         if (om.spTime.selectedItemPosition == 0 || om.numPanes > 1) {
             updateStarIcon()
-            UtilityModels.getContent(contextg, om, listOf(""), uiDispatcher)
+            UtilityModels.getContent(this@ModelsSpcSrefActivity, om, listOf(""), uiDispatcher)
         }
     }
 
@@ -237,7 +234,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityModels.legacyShare(contextg, om.animRan, om)
+                    UtilityModels.legacyShare(this@ModelsSpcSrefActivity, om.animRan, om)
                 }
             }
             R.id.action_animate -> UtilityModels.getAnimate(om, listOf(""), uiDispatcher)

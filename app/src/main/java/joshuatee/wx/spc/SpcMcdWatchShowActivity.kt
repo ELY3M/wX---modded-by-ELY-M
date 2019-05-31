@@ -22,7 +22,6 @@
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.ContextMenu
@@ -62,7 +61,6 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var c0: ObjectCardImage
     private lateinit var c1: ObjectCardText
     private lateinit var objWatch: ObjectWatchProduct
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +69,6 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 R.layout.activity_linear_layout_bottom_toolbar,
                 R.menu.spcmcdshowdetail
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         c0 = ObjectCardImage(this, ll)
         c1 = ObjectCardText(this, ll, toolbar, toolbarBottom)
@@ -89,7 +86,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        withContext(Dispatchers.IO) { objWatch.getData(contextg) }
+        withContext(Dispatchers.IO) { objWatch.getData(this@SpcMcdWatchShowActivity) }
         c1.setText(Utility.fromHtml(objWatch.text))
         toolbar.subtitle = objWatch.textForSubtitle
         c0.setImage(objWatch.bitmap)
@@ -119,7 +116,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         objWatch.wfos.filter { item.title.toString().contains(it) }.forEach {
             UtilityLocation.saveLocationForMcd(
                     it,
-                    contextg,
+                    this@SpcMcdWatchShowActivity,
                     ll,
                     uiDispatcher
             )

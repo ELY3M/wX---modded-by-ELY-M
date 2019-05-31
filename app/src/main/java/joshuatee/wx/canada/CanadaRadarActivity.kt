@@ -22,7 +22,6 @@
 package joshuatee.wx.canada
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -76,7 +75,6 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
     private var url = "https://weather.gc.ca/data/satellite/goes_wcan_visible_100.jpg"
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var sp: ObjectSpinner
-    private lateinit var contextGlobal: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,7 +85,6 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                 iconsEvenlySpaced = true,
                 bottomToolbar = true
         )
-        contextGlobal = this
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         img = ObjectTouchImageView(this, this, R.id.iv)
@@ -128,7 +125,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         }
         withContext(Dispatchers.IO) {
             bitmap = if (imageType == "rad") {
-                UtilityCanadaImg.getRadarBitmapOptionsApplied(contextGlobal, rad, "")
+                UtilityCanadaImg.getRadarBitmapOptionsApplied(this@CanadaRadarActivity, rad, "")
             } else {
                 url.getImage()
             }
@@ -142,7 +139,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
     private fun getMosaic(sector: String) = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
             mosaicShownId = sector
-            bitmap = UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(contextGlobal, sector)
+            bitmap = UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(this@CanadaRadarActivity, sector)
         }
         img.setBitmap(bitmap)
         animRan = false
@@ -223,12 +220,12 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
     private fun getAnimate(frameCountStr: String) = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
             animDrawable = if (imageType == "vis" || imageType == "wv" || imageType == "ir") {
-                UtilityCanadaImg.getGoesAnimation(contextGlobal, url)
+                UtilityCanadaImg.getGoesAnimation(this@CanadaRadarActivity, url)
             } else {
                 if (!mosaicShown)
-                    UtilityCanadaImg.getRadarAnimOptionsApplied(contextGlobal, rad, frameCountStr)
+                    UtilityCanadaImg.getRadarAnimOptionsApplied(this@CanadaRadarActivity, rad, frameCountStr)
                 else
-                    UtilityCanadaImg.getRadarMosaicAnimation(contextGlobal, mosaicShownId, frameCountStr)
+                    UtilityCanadaImg.getRadarMosaicAnimation(this@CanadaRadarActivity, mosaicShownId, frameCountStr)
             }
         }
         animRan = UtilityImgAnim.startAnimation(animDrawable, img)
@@ -241,13 +238,13 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         }
         when (position) {
             1 -> ObjectIntent(
-                    contextGlobal,
+                    this@CanadaRadarActivity,
                     FavAddActivity::class.java,
                     FavAddActivity.TYPE,
                     arrayOf("RIDCA")
             )
             2 -> ObjectIntent(
-                    contextGlobal,
+                    this@CanadaRadarActivity,
                     FavRemoveActivity::class.java,
                     FavRemoveActivity.TYPE,
                     arrayOf("RIDCA")

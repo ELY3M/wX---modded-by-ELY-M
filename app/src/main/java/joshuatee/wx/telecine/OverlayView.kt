@@ -191,7 +191,7 @@ internal class OverlayView private constructor(
     private fun countdown(countdownArr: Array<String>, index: Int) {
         postDelayed({
             recordingView.text = countdownArr[index]
-            if (index < countdownArr.size - 1) {
+            if (index < countdownArr.lastIndex) {
                 countdown(countdownArr, index + 1)
             } else {
                 countdownComplete()

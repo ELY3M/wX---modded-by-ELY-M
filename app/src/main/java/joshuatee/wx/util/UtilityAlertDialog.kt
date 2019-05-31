@@ -29,6 +29,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 
 import joshuatee.wx.MyApplication
+import joshuatee.wx.radar.UtilityRadarUI
 import joshuatee.wx.R
 import joshuatee.wx.ui.ObjectDialogue
 import android.webkit.WebResourceRequest
@@ -73,13 +74,14 @@ object UtilityAlertDialog {
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
-        val tmpStr =
-            activity.resources.getString(R.string.about_wx) + MyApplication.newline + version
-        return tmpStr + MyApplication.newline + "Last background update: " + Utility.readPref(
+        var string = activity.resources.getString(R.string.about_wx) + MyApplication.newline + version
+        string += MyApplication.newline + Utility.readPref(
             context,
             "JOBSERVICE_TIME_LAST_RAN",
             ""
-        )
+        ) + "  Last background update"
+        string += MyApplication.newline + UtilityRadarUI.getLastRadarTime(context) + "  Last radar update"
+        return string
     }
 
     fun showDialogueWithContext(str: String, context: Context) {

@@ -268,8 +268,7 @@ object UtilityWidget {
         if (dayArr.isNotEmpty()) {
             dayArr[0] = preferences.getString("CC_WIDGET", "No data")!!
         }
-        val count = dayArr.size - 1
-        (0 until count).forEach {
+        (0 until dayArr.lastIndex).forEach {
             val uri = ContentUris.withAppendedId(WeatherDataProvider.CONTENT_URI, it.toLong())
             val values = ContentValues()
             if (it < dayArr.size) {

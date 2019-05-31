@@ -36,8 +36,8 @@ import joshuatee.wx.models.ModelsSpcSrefActivity
 import joshuatee.wx.models.ModelsSpcHrefActivity
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.spc.SPCCompmapActivity
-import joshuatee.wx.spc.SPCFireOutlookActivity
+import joshuatee.wx.spc.SpcCompmapActivity
+import joshuatee.wx.spc.SpcFireOutlookActivity
 import joshuatee.wx.spc.SpcMcdWatchShowSummaryActivity
 import joshuatee.wx.spc.SpcMesoActivity
 import joshuatee.wx.spc.SpcSwoActivity
@@ -141,7 +141,7 @@ class SpcFragment : Fragment() {
                     "spcmeso"
             )
             hm["spcfire"] = TileObject(
-                    R.drawable.fire_outlook, SPCFireOutlookActivity::class.java, "",
+                    R.drawable.fire_outlook, SpcFireOutlookActivity::class.java, "",
                     arrayOf(""), resources.getString(R.string.help_spc_fire_weather), "spcfire"
             )
             hm["spctstorm"] = TileObject(
@@ -149,7 +149,7 @@ class SpcFragment : Fragment() {
                     arrayOf(), resources.getString(R.string.help_spc_tstorm), "spctstorm"
             )
             hm["spccompmap"] = TileObject(
-                    R.drawable.spccompmap, SPCCompmapActivity::class.java, "",
+                    R.drawable.spccompmap, SpcCompmapActivity::class.java, "",
                     arrayOf(), resources.getString(R.string.help_spc_compmap), "spccompmap"
             )
             hm["spchrrr"] = TileObject(

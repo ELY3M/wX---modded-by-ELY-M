@@ -100,7 +100,6 @@ object UtilityCanvasMain {
         val cityProvider = true
         val windBarbProvider = scaleType.isMercator
         val stormMotionProvider = scaleType.isMercator
-
         // if a widget or notification load the GEOM data in real-time
         val geometryData = if (isInteractive) {
             GeometryData(
@@ -110,7 +109,6 @@ object UtilityCanvasMain {
         } else {
             getLocalGeometryData(context)
         }
-
         if (PolygonType.TST.pref) {
             UtilityCanvas.addWarnings(scaleType, bitmapCanvas, radarSite)
         }
@@ -229,33 +227,33 @@ object UtilityCanvasMain {
     }
 
     private fun getLocalGeometryData(context: Context): GeometryData {
-        val caResid = R.raw.ca
-        val mxResid = R.raw.mx
+        val canadaResId = R.raw.ca
+        val mexicoResId = R.raw.mx
         val caCnt = 161792
         val mxCnt = 151552
-        val stateLinesFileResid = R.raw.statev2
+        val stateLinesFileResId = R.raw.statev2
         var stateRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
         val countState = 200000 // v3 205748
         var hwRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
         val countHw = 862208 // on disk size 3448832 yields  862208
         val hwExtRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
         val countHwExt = 770048 // on disk 3080192 yields 770048
-        val hwExtFileResid = R.raw.hwv4ext // 2016_04_06
+        val hwExtFileResId = R.raw.hwv4ext // 2016_04_06
         var lakesRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
         val countLakes = 503808 // was 14336 + 489476
         var countyRelativeBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
         val countCounty = 212992 // file on disk is 851968, should be
-        val hwFileResid = R.raw.hwv4
-        val lakesFileResid = R.raw.lakesv3
-        val countyFileResid = R.raw.county
-        val fileidArr = listOf(
-                lakesFileResid,
-                hwFileResid,
-                countyFileResid,
-                stateLinesFileResid,
-                caResid,
-                mxResid,
-                hwExtFileResid
+        val hwFileResId = R.raw.hwv4
+        val lakesFileResId = R.raw.lakesv3
+        val countyFileResId = R.raw.county
+        val fileIds = listOf(
+                lakesFileResId,
+                hwFileResId,
+                countyFileResId,
+                stateLinesFileResId,
+                canadaResId,
+                mexicoResId,
+                hwExtFileResId
         )
         val countArr = listOf(countLakes, countHw, countCounty, countState, caCnt, mxCnt, countHwExt)
         try {
@@ -273,7 +271,7 @@ object UtilityCanvasMain {
                         listOf(3).forEach {
                             loadBuffer(
                                     context,
-                                    fileidArr[it],
+                                    fileIds[it],
                                     stateRelativeBuffer,
                                     countArr[it]
                             )
@@ -284,7 +282,7 @@ object UtilityCanvasMain {
                         hwRelativeBuffer.order(ByteOrder.nativeOrder())
                         hwRelativeBuffer.position(0)
                         for (s in intArrayOf(1)) {
-                            loadBuffer(context, fileidArr[s], hwRelativeBuffer, countArr[s])
+                            loadBuffer(context, fileIds[s], hwRelativeBuffer, countArr[s])
                         }
                     }
                     GeographyType.HIGHWAYS_EXTENDED -> {
@@ -294,7 +292,7 @@ object UtilityCanvasMain {
                     hwExtRelativeBuffer.position(0)
                 }*/
                         for (s in intArrayOf(6)) {
-                            loadBuffer(context, fileidArr[s], hwExtRelativeBuffer, countArr[s])
+                            loadBuffer(context, fileIds[s], hwExtRelativeBuffer, countArr[s])
                         }
                     }
                     GeographyType.LAKES -> {
@@ -302,14 +300,14 @@ object UtilityCanvasMain {
                         lakesRelativeBuffer.order(ByteOrder.nativeOrder())
                         lakesRelativeBuffer.position(0)
                         val s = 0
-                        loadBuffer(context, fileidArr[s], lakesRelativeBuffer, countArr[s])
+                        loadBuffer(context, fileIds[s], lakesRelativeBuffer, countArr[s])
                     }
                     GeographyType.COUNTY_LINES -> {
                         countyRelativeBuffer = ByteBuffer.allocateDirect(4 * countCounty)
                         countyRelativeBuffer.order(ByteOrder.nativeOrder())
                         countyRelativeBuffer.position(0)
                         val s = 2
-                        loadBuffer(context, fileidArr[s], countyRelativeBuffer, countArr[s])
+                        loadBuffer(context, fileIds[s], countyRelativeBuffer, countArr[s])
                     }
                     else -> {
                     }
@@ -326,13 +324,13 @@ object UtilityCanvasMain {
         )
     }
 
-    private fun loadBuffer(context: Context, fileID: Int, bb: ByteBuffer, count: Int) {
+    private fun loadBuffer(context: Context, fileID: Int, byteBuffer: ByteBuffer, count: Int) {
         val res = context.resources
         try {
             val inputStream = res.openRawResource(fileID)
             val dis = DataInputStream(BufferedInputStream(inputStream))
             for (it in 0 until count) {
-                bb.putFloat(dis.readFloat())
+                byteBuffer.putFloat(dis.readFloat())
             }
             dis.close()
             inputStream.close()

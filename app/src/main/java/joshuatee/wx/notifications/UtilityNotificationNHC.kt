@@ -141,7 +141,7 @@ object UtilityNotificationNhc {
                 arrayOf(notifUrl, notifTitle, "nosound", img1Url, img2Url, wallet),
                 arrayOf(notifUrl, notifTitle, "sound", img1Url, img2Url, wallet)
         )
-        if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
+        if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(
                         context,
                         notifTitle
                 ))

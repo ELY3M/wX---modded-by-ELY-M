@@ -42,32 +42,32 @@ class ObjectWidgetCC(context: Context) {
     val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_cc_layout)
 
     init {
-        val widgetLocNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
-        val widgetLocNumberAsInteger = (widgetLocNumber.toIntOrNull() ?: 0) - 1
+        val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
+        val widgetLocationNumberAsInteger = (widgetLocationNumber.toIntOrNull() ?: 0) - 1
         val currentConditionsString = Utility.readPref(context, "CC_WIDGET", "No data")
         val iconUrl = Utility.readPref(context, "CC_WIDGET_ICON_URL", "NULL")
         val updateTime = Utility.readPref(context, "UPDTIME_WIDGET", "No data")
         val sevenDay = Utility.readPref(context, "7DAY_EXT_WIDGET", "No data")
         var bitmap = UtilityImg.getBlankBitmap()
-        if (Location.isUS(widgetLocNumberAsInteger)) {
+        if (Location.isUS(widgetLocationNumberAsInteger)) {
             bitmap = UtilityNws.getIcon(context, iconUrl)
         }
         val stringSeparator = " - "
         val currentConditionsList = currentConditionsString.split(stringSeparator).dropLastWhile { it.isEmpty() }
         var currentConditionsTime = ""
-        if (Location.isUS(widgetLocNumberAsInteger)) {
+        if (Location.isUS(widgetLocationNumberAsInteger)) {
             remoteViews.setTextViewText(
                     R.id.location,
-                    Location.getName(widgetLocNumberAsInteger) + " " + UtilityTimeSunMoon.getSunriseSunsetShort(
+                    Location.getName(widgetLocationNumberAsInteger) + " " + UtilityTimeSunMoon.getSunriseSunsetShort(
                             context,
-                            (widgetLocNumberAsInteger + 1).toString()
+                            (widgetLocationNumberAsInteger + 1).toString()
                     )
             )
             remoteViews.setTextColor(R.id.location, MyApplication.widgetTextColor)
         }
         if (currentConditionsList.size > 4
                 && !currentConditionsList[0].contains("NA")
-                && Location.isUS(widgetLocNumberAsInteger)
+                && Location.isUS(widgetLocationNumberAsInteger)
         ) {
             val temperatureList = currentConditionsList[0].split("/").dropLastWhile { it.isEmpty() }
             remoteViews.setTextViewText(R.id.wind, currentConditionsList[2])

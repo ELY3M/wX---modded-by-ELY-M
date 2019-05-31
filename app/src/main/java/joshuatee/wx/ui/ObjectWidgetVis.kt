@@ -39,13 +39,13 @@ class ObjectWidgetVis(context: Context) {
     val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
 
     init {
-        val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
+        val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
         val intentHome = Intent("android.intent.action.MAIN")
         intentHome.addCategory("android.intent.category.HOME")
-        val radarSite = Location.getRid(context, widgetLocNum)
+        val radarSite = Location.getRid(context, widgetLocationNumber)
         UtilityWidget.setImage(context, remoteViews, VIS.fileName)
         if (!MyApplication.widgetPreventTap) {
-            if (Location.isUS(widgetLocNum)) {
+            if (Location.isUS(widgetLocationNumber)) {
                 UtilityWidget.setupIntent(
                         context,
                         remoteViews,

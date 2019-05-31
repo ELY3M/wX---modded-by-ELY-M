@@ -176,7 +176,7 @@ class Location(val context: Context, locNumInt: Int) {
 
         fun checkCurrentLocationValidity() {
             if (currentLocation >= MyApplication.locations.size) {
-                currentLocation = MyApplication.locations.size - 1
+                currentLocation = MyApplication.locations.lastIndex
                 currentLocationStr = (currentLocation + 1).toString()
             }
         }

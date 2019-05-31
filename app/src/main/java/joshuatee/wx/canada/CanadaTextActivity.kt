@@ -22,7 +22,6 @@
 package joshuatee.wx.canada
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -46,7 +45,6 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var description = "Significant Weather Discussion, PASPC"
     private var html = ""
     private lateinit var c0: ObjectCardText
-    private lateinit var contextGlobal: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +53,6 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.layout.activity_linear_layout_bottom_toolbar,
             R.menu.canada_text
         )
-        contextGlobal = this
         toolbarBottom.setOnMenuItemClickListener(this)
         c0 = ObjectCardText(this, ll, toolbar, toolbarBottom)
         ObjectCALegal(this, ll, "")
@@ -70,14 +67,14 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         withContext(Dispatchers.IO) {
             html =
                 if (product != "https://weather.gc.ca/forecast/public_bulletins_e.html?Bulletin=fpcn48.cwao") {
-                    UtilityDownload.getTextProduct(contextGlobal, product)
+                    UtilityDownload.getTextProduct(this@CanadaTextActivity, product)
                 } else {
                     UtilityString.getHtmlAndParseSep(product, "<pre>(.*?)</pre>")
                 }
         }
         c0.setTextAndTranslate(Utility.fromHtml(html))
-        Utility.writePref(contextGlobal, "CA_TEXT_LASTUSED", product)
-        Utility.writePref(contextGlobal, "CA_TEXT_LASTUSED_TITLE", description)
+        Utility.writePref(this@CanadaTextActivity, "CA_TEXT_LASTUSED", product)
+        Utility.writePref(this@CanadaTextActivity, "CA_TEXT_LASTUSED_TITLE", description)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

@@ -49,7 +49,7 @@ object UtilityColorPalette {
         //TODO TESTING scan dir for *_94.txt files....
         //scanfor94pal()
 
-            var cmFileInt: Int = 0
+        var cmFileInt = 0
             var text = "null"
             when (prod) {
                 "94" -> when (code) {

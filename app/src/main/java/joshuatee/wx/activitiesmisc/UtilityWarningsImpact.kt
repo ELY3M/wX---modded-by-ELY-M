@@ -37,6 +37,8 @@ internal object UtilityWarningsImpact {
             val warningListTmp = outerChunk.parseColumn("\\{(.*?)\\}")
             warningListTmp.forEach {
                 val title = it.parse("msg.:.(.*?)\"")
+                        .replace(Regex("including .*until"),"until")
+                        .replace(Regex("continues for .*until"),"until")
                 val cities = it.parse("city_list.:.(.*?).,").replace("including ", "")
                 val population = it.parse("population.:.(.*?)\"")
                 val file = it.parse("file.:.(.*?png)")

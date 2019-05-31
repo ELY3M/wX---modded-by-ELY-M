@@ -50,9 +50,9 @@ internal object UtilityCanvas {
             MyApplication.radarColorTor
         )
         val warningDataList = listOf(
-            MyApplication.severeDashboardFfw.valueGet(),
-            MyApplication.severeDashboardTst.valueGet(),
-            MyApplication.severeDashboardTor.valueGet()
+            MyApplication.severeDashboardFfw.value,
+            MyApplication.severeDashboardTst.value,
+            MyApplication.severeDashboardTor.value
         )
         if (provider.needsCanvasShift) {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
@@ -65,12 +65,12 @@ internal object UtilityCanvas {
             warningHTML = warningHTML.replace(" ", "")
             val warningAl =
                 UtilityString.parseColumnMutable(warningHTML, RegExp.warningLatLonPattern)
-            val vtecAl = warningHTML.parseColumn(RegExp.warningVtecPattern)
+            val vtecs = warningHTML.parseColumn(RegExp.warningVtecPattern)
             warningAl.forEachIndexed { i, warn ->
                 warningAl[i] =
                     warn.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
             }
-            canvasDrawWarningsNewApi(warningAl, vtecAl, canvas, wallPath, paint, provider.isMercator, pn)
+            canvasDrawWarningsNewApi(warningAl, vtecs, canvas, wallPath, paint, provider.isMercator, pn)
         }
     }
 
@@ -187,10 +187,10 @@ internal object UtilityCanvas {
         paint.color = polyType.color
         var prefToken = ""
         when (polyType) {
-            PolygonType.MCD -> prefToken = MyApplication.mcdLatlon.valueGet()
-            PolygonType.MPD -> prefToken = MyApplication.mpdLatlon.valueGet()
-            PolygonType.WATCH -> prefToken = MyApplication.watchLatlon.valueGet()
-            PolygonType.WATCH_TORNADO -> prefToken = MyApplication.watchLatlonTor.valueGet()
+            PolygonType.MCD -> prefToken = MyApplication.mcdLatlon.value
+            PolygonType.MPD -> prefToken = MyApplication.mpdLatlon.value
+            PolygonType.WATCH -> prefToken = MyApplication.watchLatlon.value
+            PolygonType.WATCH_TORNADO -> prefToken = MyApplication.watchLatlonTor.value
             else -> {
             }
         }

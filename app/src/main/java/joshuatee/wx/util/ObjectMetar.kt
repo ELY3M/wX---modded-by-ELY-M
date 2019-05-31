@@ -81,8 +81,8 @@ internal class ObjectMetar(context: Context, location: LatLon) {
     private var metarSkyCondition = ""
     private var metarWeatherCondition = ""
 
-    private fun capitalizeString(str: String): String {
-        val tokens = str.split(" ")
+    private fun capitalizeString(string: String): String {
+        val tokens = string.split(" ")
         var newString = ""
         tokens.forEach { newString += it.capitalize() + " " }
         return newString.trimEnd()

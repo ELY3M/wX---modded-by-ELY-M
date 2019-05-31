@@ -22,7 +22,6 @@
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.content.res.Configuration
 import android.view.MenuItem
@@ -38,7 +37,7 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
-class SPCCompmapActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
+class SpcCompmapActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var layerStr = ""
@@ -46,7 +45,6 @@ class SPCCompmapActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var drw: ObjectNavDrawer
     private var paramList = mutableListOf<String>()
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +54,6 @@ class SPCCompmapActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             R.menu.shared_multigraphics,
             true
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         paramList = UtilitySpcCompmap.labels.toMutableList()
         drw = ObjectNavDrawer(this, paramList)
@@ -103,10 +100,10 @@ class SPCCompmapActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        bitmap = withContext(Dispatchers.IO) { UtilitySpcCompmap.getImage(contextg, layerStr) }
+        bitmap = withContext(Dispatchers.IO) { UtilitySpcCompmap.getImage(this@SpcCompmapActivity, layerStr) }
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn("SPCCOMPMAP")
-        Utility.writePref(contextg, "SPCCOMPMAP_LAYERSTR", layerStr)
+        Utility.writePref(this@SpcCompmapActivity, "SPCCOMPMAP_LAYERSTR", layerStr)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

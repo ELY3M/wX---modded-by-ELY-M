@@ -39,8 +39,8 @@ object UtilityFavorites {
             val newFav = fav.replace(":{2,}".toRegex(), ":")
             savePref(context, newFav, prefToken)
         }
-        if (!fav.contains(MyApplication.prefSeperator)) {
-            val newFav = MyApplication.prefSeperator + fav.trimStart()
+        if (!fav.contains(MyApplication.prefSeparator)) {
+            val newFav = MyApplication.prefSeparator + fav.trimStart()
             savePref(context, newFav, prefToken)
         }
     }

@@ -22,7 +22,6 @@
 package joshuatee.wx.wpc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.MenuItem
@@ -44,7 +43,6 @@ class WpcRainfallForecastActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val bitmaps = mutableListOf<Bitmap>()
     private lateinit var linearLayout: LinearLayout
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +52,6 @@ class WpcRainfallForecastActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
                 R.menu.shared_multigraphics,
                 true
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         title = getString(UtilityWpcRainfallForecast.activityTitle)
         linearLayout = findViewById(R.id.ll)
@@ -66,7 +63,7 @@ class WpcRainfallForecastActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
             UtilityWpcRainfallForecast.imageUrls.forEach { bitmaps.add(it.getImage()) }
         }
         bitmaps.forEach { bitmap ->
-            val card = ObjectCardImage(contextg, linearLayout, bitmap)
+            val card = ObjectCardImage(this@WpcRainfallForecastActivity, linearLayout, bitmap)
             val prodTextUrlLocal = UtilityWpcRainfallForecast.textUrls[bitmaps.indexOf(bitmap)]
             val prodTitleLocal =
                     UtilityWpcRainfallForecast.productLabels[bitmaps.indexOf(bitmap)] + " - " + getString(
@@ -74,7 +71,7 @@ class WpcRainfallForecastActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
                     )
             card.setOnClickListener(View.OnClickListener {
                 ObjectIntent(
-                        contextg,
+                        this@WpcRainfallForecastActivity,
                         TextScreenActivity::class.java,
                         TextScreenActivity.URL,
                         arrayOf(prodTextUrlLocal, prodTitleLocal)

@@ -43,14 +43,14 @@ class ObjectForecastPackage7Day {
 
     constructor()
 
-    constructor(locNum: Int) {
-        if (Location.isUS(locNum)) {
-            val html = UtilityDownloadNws.get7DayData(Location.getLatLon(locNum))
+    constructor(locationNumber: Int) {
+        if (Location.isUS(locationNumber)) {
+            val html = UtilityDownloadNws.get7DayData(Location.getLatLon(locationNumber))
             iconsAsString = getIcons7Day(html)
             sevenDayLong = get7DayExt(html)
             sevenDayShort = get7DayShort(html)
         } else {
-            val html = UtilityCanada.getLocationHtml(Location.getLatLon(locNum))
+            val html = UtilityCanada.getLocationHtml(Location.getLatLon(locationNumber))
             sevenDayLong = UtilityCanada.get7Day(html)
             iconsAsString = UtilityCanada.getIcons7Day(sevenDayLong)
             icons = UtilityCanada.getIcons7DayAsList(sevenDayLong)

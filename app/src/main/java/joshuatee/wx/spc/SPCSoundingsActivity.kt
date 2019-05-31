@@ -22,7 +22,6 @@
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -60,7 +59,6 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
     private var upperAir = ""
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var sp: ObjectSpinner
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +71,6 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv)
-        contextg = this
         nwsOffice = UtilityLocation.getNearestSnd(this, Location.latLon)
         locations = UtilityFavorites.setupFavMenu(
             this,
@@ -106,13 +103,13 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
         else
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         withContext(Dispatchers.IO) {
-            bitmap = UtilitySpcSoundings.getImage(contextg, nwsOffice)
+            bitmap = UtilitySpcSoundings.getImage(this@SpcSoundingsActivity, nwsOffice)
         }
         img.img.visibility = View.VISIBLE
         img.setBitmap(bitmap)
         img.setMaxZoom(4f)
         img.firstRunSetZoomPosn("SOUNDING")
-        Utility.writePref(contextg, "SOUNDING_SECTOR", nwsOffice)
+        Utility.writePref(this@SpcSoundingsActivity, "SOUNDING_SECTOR", nwsOffice)
     }
 
     private fun getContentSPCPlot() = GlobalScope.launch(uiDispatcher) {
@@ -122,7 +119,7 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
                 "${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/",
                 "/obswx/maps/" + upperAir + "_([0-9]{6}_[0-9]{2}).gif"
             )
-            bitmap = UtilityImg.getBitmapAddWhiteBG(contextg, imgUrl + "_" + date + ".gif")
+            bitmap = UtilityImg.getBitmapAddWhiteBG(this@SpcSoundingsActivity, imgUrl + "_" + date + ".gif")
         }
         img.img.visibility = View.VISIBLE
         img.setBitmap(bitmap)

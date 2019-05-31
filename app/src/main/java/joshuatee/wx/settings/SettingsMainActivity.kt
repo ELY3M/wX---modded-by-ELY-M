@@ -23,7 +23,6 @@
 package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 
@@ -43,16 +42,13 @@ import kotlinx.android.synthetic.main.activity_linear_layout.*
 
 class SettingsMainActivity : BaseActivity() {
 
-    private lateinit var contextg: Context
-
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         UtilityTheme.setPrimaryColor(this)
-        contextg = this
         val backuprestore = UtilityBackupRestore()
         val version = Utility.getVersion(this)
-        toolbar.subtitle = "v$version, tap on text for additional help."
+        toolbar.subtitle = "$version, tap on text for additional help."
         val cardAbout = ObjectCardText(this, "About wX", MyApplication.textSizeNormal, MyApplication.paddingSettings)
         val cardLocations = ObjectCardText(
                 this,
@@ -125,23 +121,23 @@ class SettingsMainActivity : BaseActivity() {
         val cardrestorepref = ObjectCardText(this, "Restore Settings", MyApplication.textSizeNormal, MyApplication.paddingSettings)
         cardCtoF.setOnClickListener(View.OnClickListener {
             ObjectIntent(
-                    contextg,
+                    this,
                     TextScreenActivity::class.java,
                     TextScreenActivity.URL,
                     arrayOf(UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table")
             )
         })
-        cardbackuppref.setOnClickListener(View.OnClickListener { backuprestore.backupPrefs(contextg) })
-        cardrestorepref.setOnClickListener(View.OnClickListener { backuprestore.restorePrefs(contextg) })
+        cardbackuppref.setOnClickListener(View.OnClickListener { backuprestore.backupPrefs(this) })
+        cardrestorepref.setOnClickListener(View.OnClickListener { backuprestore.restorePrefs(this) })
         cardDeleteFiles.setOnClickListener(View.OnClickListener {
             UtilityUI.makeSnackBar(
                     ll,
-                    "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(contextg)
+                    "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this)
             )
         })
         cardAbout.setOnClickListener(View.OnClickListener {
             ObjectIntent(
-                    contextg,
+                    this,
                     TextScreenActivity::class.java,
                     TextScreenActivity.URL,
                     arrayOf(UtilityAlertDialog.showVersion(this, this), "About wX")
@@ -187,7 +183,7 @@ class SettingsMainActivity : BaseActivity() {
                 ObjectSettingsCheckBox(
                         this,
                         this,
-                "Check for TOR, SVR, EWW, FFW, SVS, SMW, SPS",
+                        "Check for TOR,TST,FFW",
                         "CHECKTOR",
                         R.string.checktor_switch_label
                 ).card

@@ -22,7 +22,6 @@
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
-import android.content.Context
 
 import android.os.Bundle
 import android.view.MenuItem
@@ -46,7 +45,6 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private var siteDisplay = false
     private var provSelected = ""
     private lateinit var recyclerView: ObjectRecyclerView
-    private lateinit var contextg: Context
     private val titleString = "Observation sites"
     val prefToken: String = "NWS_OBSSITE_LAST_USED"
     private lateinit var lastUsedMenuItem: MenuItem
@@ -54,22 +52,21 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_recyclerview_bottom_toolbar,
-            R.menu.nwsobssites,
-            true
+                savedInstanceState,
+                R.layout.activity_recyclerview_bottom_toolbar,
+                R.menu.nwsobssites,
+                true
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         title = titleString
         updateButton()
         siteDisplay = false
         recyclerView = ObjectRecyclerView(
-            this,
-            this,
-            R.id.card_list,
-            GlobalArrays.states.toMutableList(),
-            ::itemClicked
+                this,
+                this,
+                R.id.card_list,
+                GlobalArrays.states.toMutableList(),
+                ::itemClicked
         )
     }
 
@@ -100,13 +97,13 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         Utility.writePref(prefToken, obsSite)
         updateButton()
         ObjectIntent(
-            contextg,
-            WebscreenAB::class.java,
-            WebscreenAB.URL,
-            arrayOf(
-                "http://www.wrh.noaa.gov/mesowest/timeseries.php?sid=$obsSite",
-                obsSite
-            )
+                this@NwsObsSitesActivity,
+                WebscreenAB::class.java,
+                WebscreenAB.URL,
+                arrayOf(
+                        "http://www.wrh.noaa.gov/mesowest/timeseries.php?sid=$obsSite",
+                        obsSite
+                )
         )
     }
 

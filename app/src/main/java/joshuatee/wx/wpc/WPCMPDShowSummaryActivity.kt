@@ -22,7 +22,6 @@
 package joshuatee.wx.wpc
 
 import android.annotation.SuppressLint
-import android.content.Context
 
 import android.os.Bundle
 import android.graphics.Bitmap
@@ -70,13 +69,11 @@ class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private val bitmaps = mutableListOf<Bitmap>()
     private val mpdNumbers = mutableListOf<String>()
     private lateinit var objCard: ObjectCard
-    private lateinit var contextg: Context
     private var titleString = "MPDs"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_wpcmpdshow_summary, R.menu.shared_tts)
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         objCard = ObjectCard(this, R.id.cv1)
         // FIXME make number = intent.getStringArrayExtra(NO)[0]
@@ -101,14 +98,14 @@ class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
                         mpdNumbers[0] + ".gif"
                 titleString = "MPD " + mpdNumbers[0]
                 product = "WPCMPD" + mpdNumbers[0]
-                text = UtilityDownload.getTextProduct(contextg, product)
+                text = UtilityDownload.getTextProduct(this@WpcMpdShowSummaryActivity, product)
             }
         }
         mpdList.indices.forEach { mpdIndex ->
-            val card = ObjectCardImage(contextg, linearLayout, bitmaps[mpdIndex])
+            val card = ObjectCardImage(this@WpcMpdShowSummaryActivity, linearLayout, bitmaps[mpdIndex])
             card.setOnClickListener(View.OnClickListener {
                 ObjectIntent(
-                        contextg,
+                        this@WpcMpdShowSummaryActivity,
                         SpcMcdWatchShowActivity::class.java,
                         SpcMcdWatchShowActivity.NO,
                         arrayOf(mpdNumbers[mpdIndex], "", PolygonType.MPD.toString())
@@ -121,7 +118,7 @@ class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (mpdList.size == 1) {
             val wfoStr = text.parse("ATTN...WFO...(.*?)...<br>")
             wfos = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
-            ObjectCardText(contextg, linearLayout, toolbar, toolbarBottom, Utility.fromHtml(text))
+            ObjectCardText(this@WpcMpdShowSummaryActivity, linearLayout, toolbar, toolbarBottom, Utility.fromHtml(text))
             title = titleString
             toolbar.subtitle = text.parse("AREAS AFFECTED...(.*?)CONCERNING").replace("<BR>", "")
         }
@@ -145,7 +142,7 @@ class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
         wfos.filter { item.title.toString().contains(it) }.forEach {
             UtilityLocation.saveLocationForMcd(
                     it,
-                    contextg,
+                    this@WpcMpdShowSummaryActivity,
                     linearLayout,
                     uiDispatcher
             )

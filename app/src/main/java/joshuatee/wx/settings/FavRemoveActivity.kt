@@ -104,7 +104,7 @@ class FavRemoveActivity : BaseActivity() {
             when (type) {
                 "NWSTEXT" -> ridArrLabel.add(getFullString(ridArr[it]))
                 "SREF" -> ridArrLabel.add(ridArr[it])
-                "RIDCA" -> ridArrLabel.add(findCARIDLabel(ridArr[it]))
+                "RIDCA" -> ridArrLabel.add(findCanadaRadarSiteLabel(ridArr[it]))
                 "SPCMESO" -> ridArrLabel.add(findSpcMesoLabel(ridArr[it]))
                 else -> ridArrLabel.add(getFullString(ridArr[it]))
             }
@@ -124,10 +124,10 @@ class FavRemoveActivity : BaseActivity() {
             ridArr[pos] = tmp
             recyclerView.setItem(pos, getFullString(tmp))
         } else {
-            val tmp = ridArr[ridArr.size - 1]
+            val tmp = ridArr.last()
             val tmp2 = ridArr[pos]
-            ridArr[ridArr.size - 1] = tmp2
-            recyclerView.setItem(ridArr.size - 1, recyclerView.getItem(pos))
+            ridArr[ridArr.lastIndex] = tmp2
+            recyclerView.setItem(ridArr.lastIndex, recyclerView.getItem(pos))
             ridArr[0] = tmp
             recyclerView.setItem(0, getFullString(tmp))
         }
@@ -153,7 +153,7 @@ class FavRemoveActivity : BaseActivity() {
         ridArrtmp = ridFav.split(":").dropLastWhile { it.isEmpty() }
         ridArr.clear()
         (3 until ridArrtmp.size).mapTo(ridArr) { ridArrtmp[it] }
-        if (pos != ridArr.size - 1) {
+        if (pos != ridArr.lastIndex) {
             val tmp = ridArr[pos + 1]
             val tmp2 = ridArr[pos]
             ridArr[pos + 1] = tmp2
@@ -164,8 +164,8 @@ class FavRemoveActivity : BaseActivity() {
             val tmp = ridArr[0]
             ridArr[0] = ridArr[pos]
             recyclerView.setItem(0, recyclerView.getItem(pos))
-            ridArr[ridArr.size - 1] = tmp
-            recyclerView.setItem(ridArr.size - 1, getFullString(tmp))
+            ridArr[ridArr.lastIndex] = tmp
+            recyclerView.setItem(ridArr.lastIndex, getFullString(tmp))
         }
         ridFav = " : : "
         ridArr.indices.forEach { ridFav = ridFav + ":" + ridArr[it] }
@@ -197,7 +197,7 @@ class FavRemoveActivity : BaseActivity() {
             "NWSTEXT" -> tmpLoc =
                     GlobalArrays.nwsTextProducts[UtilityFavorites.findPositionNwsText(shortCode)]
             "SREF" -> tmpLoc = shortCode
-            "RIDCA" -> tmpLoc = findCARIDLabel(shortCode)
+            "RIDCA" -> tmpLoc = findCanadaRadarSiteLabel(shortCode)
             "SPCMESO" -> tmpLoc = findSpcMesoLabel(shortCode)
         }
         return tmpLoc
@@ -217,7 +217,7 @@ class FavRemoveActivity : BaseActivity() {
         }
     }
 
-    private fun findCARIDLabel(rid: String) =
+    private fun findCanadaRadarSiteLabel(rid: String) =
             (0 until GlobalArrays.canadaRadars.size).firstOrNull {
                 GlobalArrays.canadaRadars[it].contains(
                         rid

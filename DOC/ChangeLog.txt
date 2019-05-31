@@ -26,6 +26,9 @@
 // TODO color pal , allow cloning of a user created pal
 // TODO bug , SPC Meso swipe left/right takes on extra to get started
 // TODO look into tornado instead of #tornado for twitter embedded widget
+// TODO resolve activityReference issue in LocationFragment
+// TODO camelCase Myapp vars wxglrender
+// TODO put more diagnostics in settings -> about including more download stats and also rolling buffer for stacktraces
 
 [ADD] - adding something new - method, file, etc. to the repo
 [REM] - remove items
@@ -35,6 +38,24 @@
 [REF] - refactor a method, group, variable, etc.
 [MER] - merge
 
+55209 2019_05_30    [IMP] add watch/mpd/mcd check in radar based off same code in severe dashboard
+                    [FIX] settings -> radar when invoked from nexrad radar did not reflect changes immediately
+55208 2019_05_30    [REF] var rename
+                    [IMP] add helper methods in UtilutyDownload{Mpd,Watch,Mcd} for future simplification of Background Fetch and more direct use in nexrad and SD
+55207 2019_05_29    [IMP] formatting enhance in settings -> about
+                    [IMP] Us warn impact graphics - reverse sort and improve formatting
+55206 2019_05_29    [FIX] Issue: java.lang.IllegalStateException: img[it].scrollPosition must not be null
+                          at joshuatee.wx.models.UtilityModels.setSubtitleRestoreIMGXYZOOM(UtilityModels.kt:289)
+                    [IMP] change methods such as UtilityDownloadRadar.getWatch(context: Context) and use in SevereDashboard and BackgroundFetch
+55205 2019_05_28    [FIX] utilDownloadRadar - if results is "", don't update (indicates no network)
+                    [FIX] only allow one getContent at once in WXGLRadarActivity
+55204 2019_05_28    [FIX] possible bug in autorefresh
+                    [IMP] download warnings directly in radar - alpha
+55203 2019_05_27    [REF] re-work contexts in Widget*
+                    [FIX] NHC widget image scaling was not correct on smaller screens, merge image before display
+55202 2019_05_27    [REF] use this@WpcImagesActivity instead of contextGlobal in numerous activities
+                    [FIX] SPC Meso - bug in subMenu ordering after adding 850mb2
+                    [REF] rework contexts in WidgetCONUSWV
 55201 2019_05_26    [FIX] at joshuatee.wx.models.UtilityModelNcepInputOutput.getAnimation(UtilityModelNcepInputOutput.kt:96)
                        java.lang.IndexOutOfBoundsException: Index: 16, Size: 16
                        (pre-launch report routinely does this by doing odd interactions, trigger animation in multi-pane, switch models, hit back arrow )

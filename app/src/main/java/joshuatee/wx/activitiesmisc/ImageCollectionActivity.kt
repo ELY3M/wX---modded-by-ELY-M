@@ -22,7 +22,6 @@
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.content.res.Configuration
 import android.graphics.drawable.AnimationDrawable
@@ -52,7 +51,6 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var img: ObjectTouchImageView
     private lateinit var drw: ObjectNavDrawer
-    private lateinit var contextg: Context
     private lateinit var actionAnimate: MenuItem
     private lateinit var imageCollection: ObjectImagesCollection
     private lateinit var activityArguments: Array<String>
@@ -61,15 +59,14 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_image_show_navdrawer_bottom_toolbar,
-            R.menu.imagecollection,
-            iconsEvenlySpaced = true,
-            bottomToolbar = true
+                savedInstanceState,
+                R.layout.activity_image_show_navdrawer_bottom_toolbar,
+                R.menu.imagecollection,
+                iconsEvenlySpaced = true,
+                bottomToolbar = true
         )
         activityArguments = intent.getStringArrayExtra(TYPE)
         imageCollection = MyApplication.imageCollectionMap[activityArguments[0]]!!
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         val menu = toolbarBottom.menu
         actionAnimate = menu.findItem(R.id.action_animate)
@@ -77,13 +74,13 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
         title = imageCollection.title
         drw = ObjectNavDrawer(this, imageCollection.labels, imageCollection.urls)
         img = ObjectTouchImageView(
-            this,
-            this,
-            toolbar,
-            toolbarBottom,
-            R.id.iv,
-            drw,
-            imageCollection.prefTokenIdx
+                this,
+                this,
+                toolbar,
+                toolbarBottom,
+                R.id.iv,
+                drw,
+                imageCollection.prefTokenIdx
         )
         img.setListener(this, drw, ::getContentFixThis)
         drw.index = Utility.readPref(this, imageCollection.prefTokenIdx, 0)
@@ -142,7 +139,7 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+            drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onStop() {
         img.imgSavePosnZoom(this, imageCollection.prefImagePosition)
@@ -152,8 +149,8 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
     private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
         animDrawable = withContext(Dispatchers.IO) {
             UtilityGoesFullDisk.getAnimation(
-                contextg,
-                drw.getUrl()
+                    this@ImageCollectionActivity,
+                    drw.getUrl()
             )
         }
         UtilityImgAnim.startAnimation(animDrawable, img)

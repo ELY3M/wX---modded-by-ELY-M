@@ -85,7 +85,7 @@ class DrawView : View {
         //draw the line segments
         for (segment in segments) {
             val points = segment.points
-            for (i in 0 until points.size - 1) {
+            for (i in 0 until points.lastIndex) {
                 val start = points[i]
                 val end = points[i + 1]
                 //simply draw lines between all points on a segment
@@ -104,7 +104,7 @@ class DrawView : View {
         override fun onTouch(view: View, event: MotionEvent): Boolean {
             if (event.action == MotionEvent.ACTION_DOWN) {
                 //action down is fired when your finger hits the screen
-                if (segments.size == 0 || segments[segments.size - 1].points.size != 0) {
+                if (segments.size == 0 || segments.last().points.size != 0) {
                     //when you put your finger down, we'll start a new segment
                     segments.add(Segment())
                     //and we'll indicate that the last action was a draw
@@ -116,7 +116,7 @@ class DrawView : View {
                 //dragged across the screen
                 //here we add a point to the last segment
                 val point = Point(event.x, event.y)
-                segments[segments.size - 1].points.add(point)
+                segments[segments.lastIndex].points.add(point)
                 invalidate() //time to redraw
             }
             //else if(event.getAction() == MotionEvent.ACTION_UP)

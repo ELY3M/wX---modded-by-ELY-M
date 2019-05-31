@@ -22,7 +22,6 @@
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.MenuItem
@@ -51,7 +50,6 @@ class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
     private var periodPretty = "15 MIN"
     private lateinit var img: ObjectTouchImageView
     private lateinit var drw: ObjectNavDrawer
-    private lateinit var contextg: Context
     private val prefTokenIdx = "LIGHTNING_SECTOR_IDX"
 
     @SuppressLint("MissingSuperCall")
@@ -63,7 +61,6 @@ class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
             iconsEvenlySpaced = true,
             bottomToolbar = true
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         toolbar.setOnClickListener { toolbar.showOverflowMenu() }
         drw = ObjectNavDrawer(this, UtilityLightning.labels, UtilityLightning.urls)
@@ -86,7 +83,7 @@ class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
         bitmap = withContext(Dispatchers.IO) { UtilityLightning.getImage(drw.getUrl(), period) }
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn("LIGHTNING")
-        Utility.writePref(contextg, "LIGHTNING_PERIOD", period)
+        Utility.writePref(this@LightningActivity, "LIGHTNING_PERIOD", period)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

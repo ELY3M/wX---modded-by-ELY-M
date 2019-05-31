@@ -69,7 +69,7 @@ internal object UtilityNotificationSpc {
                             arrayOf((it + 1).toString(), ""), arrayOf((it + 1).toString(), "sound")
                     )
                     val cancelStr = "usspcswo" + it.toString() + threatLevel[0] + validTime
-                    if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
+                    if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(
                                     context,
                                     cancelStr
                             ))
@@ -247,8 +247,8 @@ internal object UtilityNotificationSpc {
     }
 
     fun sendMcdLocationNotifications(context: Context): String {
-        val textMcd = MyApplication.mcdLatlon.valueGet()
-        val textMcdNoList = MyApplication.mcdNoList.valueGet()
+        val textMcd = MyApplication.mcdLatlon.value
+        val textMcdNoList = MyApplication.mcdNoList.value
         val x = mutableListOf<Double>()
         val y = mutableListOf<Double>()
         var locXStr: String
@@ -340,7 +340,7 @@ internal object UtilityNotificationSpc {
                 PendingIntent.FLAG_UPDATE_CURRENT
         )
         val cancelStr = "spcmcdloc$mdNo$locNum"
-        if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
+        if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(
                         context,
                         cancelStr
                 ))
@@ -409,7 +409,7 @@ internal object UtilityNotificationSpc {
                 PendingIntent.FLAG_UPDATE_CURRENT
         )
         val cancelStr = "spcswoloc$day$locNum$threatLevel$validTime"
-        if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
+        if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(
                         context,
                         cancelStr
                 ))

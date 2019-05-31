@@ -22,12 +22,10 @@
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
-//import android.widget.*
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
@@ -66,7 +64,6 @@ class ForecastActivity : BaseActivity() {
     private lateinit var linearLayoutForecast: ObjectLinearLayout
     private lateinit var linearLayoutHazards: ObjectLinearLayout
     private val hazardCards = mutableListOf<ObjectCardText>()
-    private lateinit var contextGlobal: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,7 +77,6 @@ class ForecastActivity : BaseActivity() {
         ll.addView(cardCC.card)
         linearLayoutHazards = ObjectLinearLayout(this, ll)
         linearLayoutForecast = ObjectLinearLayout(this, ll)
-        contextGlobal = this
         getContent()
     }
 
@@ -92,14 +88,14 @@ class ForecastActivity : BaseActivity() {
             //
             // Current conditions
             //
-            objCc = ObjectForecastPackageCurrentConditions(contextGlobal, latLon)
+            objCc = ObjectForecastPackageCurrentConditions(this@ForecastActivity, latLon)
             objHazards = ObjectForecastPackageHazards(latLon)
             objSevenDay = ObjectForecastPackage7Day(latLon)
-            bitmapForCurrentCondition = UtilityNws.getIcon(contextGlobal, objCc.iconUrl)
+            bitmapForCurrentCondition = UtilityNws.getIcon(this@ForecastActivity, objCc.iconUrl)
             //
             // 7day
             //
-            objSevenDay.icons.mapTo(bitmaps) { UtilityNws.getIcon(contextGlobal, it) }
+            objSevenDay.icons.mapTo(bitmaps) { UtilityNws.getIcon(this@ForecastActivity, it) }
             //
             // hazards
             //
@@ -119,19 +115,19 @@ class ForecastActivity : BaseActivity() {
         //
         linearLayoutForecast.removeAllViewsInLayout()
         bitmaps.forEachIndexed { index, bitmap ->
-            val c7day = ObjectCard7Day(contextGlobal, bitmap, true, index, objSevenDay.forecastList)
+            val c7day = ObjectCard7Day(this@ForecastActivity, bitmap, true, index, objSevenDay.forecastList)
             c7day.setOnClickListener(View.OnClickListener {
                 sv.smoothScrollTo(0, 0)
             })
             linearLayoutForecast.addView(c7day.card)
         }
         // sunrise card
-        val cardSunrise = ObjectCardText(contextGlobal)
+        val cardSunrise = ObjectCardText(this@ForecastActivity)
         cardSunrise.center()
         try {
             cardSunrise.setText(
                     UtilityTimeSunMoon.getSunriseSunset(
-                            contextGlobal,
+                            this@ForecastActivity,
                             Location.currentLocationStr
                     ) + MyApplication.newline + UtilityTime.gmtTime()
             )
@@ -156,14 +152,14 @@ class ForecastActivity : BaseActivity() {
         linearLayoutHazards.removeAllViews()
         hazardCards.clear()
         objHazards.titles.indices.forEach { z ->
-            hazardCards.add(ObjectCardText(contextGlobal))
+            hazardCards.add(ObjectCardText(this@ForecastActivity))
             hazardCards[z].setPaddingAmount(MyApplication.paddingSettings)
             hazardCards[z].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
             hazardCards[z].setTextColor(UIPreferences.textHighlightColor)
             hazardCards[z].setText(objHazards.titles[z].toUpperCase(Locale.US))
             hazardCards[z].setOnClickListener(View.OnClickListener {
                 ObjectIntent(
-                        contextGlobal,
+                        this@ForecastActivity,
                         USAlertsDetailActivity::class.java,
                         USAlertsDetailActivity.URL,
                         arrayOf(objHazards.urls[z])

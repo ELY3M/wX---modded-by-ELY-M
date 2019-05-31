@@ -23,7 +23,6 @@
 package joshuatee.wx.canada
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
@@ -42,7 +41,6 @@ class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var firstTime = true
     private lateinit var objWarn: ObjectCAWarn
-    private lateinit var contextGlobal: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +50,6 @@ class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             R.menu.caalerts,
             true
         )
-        contextGlobal = this
         toolbarBottom.setOnMenuItemClickListener(this)
         objWarn = ObjectCAWarn(this, this, ll, toolbar)
         objWarn.prov = Utility.readPref(this, "CA_ALERTS_PROV", objWarn.prov)
@@ -68,7 +65,7 @@ class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             UtilityToolbar.fullScreenMode(toolbar)
             firstTime = false
         }
-        Utility.writePref(contextGlobal, "CA_ALERTS_PROV", objWarn.prov)
+        Utility.writePref(this@CanadaAlertsActivity, "CA_ALERTS_PROV", objWarn.prov)
         toolbar.subtitle = objWarn.title
     }
 

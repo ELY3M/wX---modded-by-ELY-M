@@ -58,24 +58,22 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     private lateinit var fabPause: ObjectFab
     private lateinit var diaMain: ObjectDialogue
     private lateinit var diaAfd: ObjectDialogue
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_recyclerview_playlist,
-            R.menu.settings_playlist,
-            true
+                savedInstanceState,
+                R.layout.activity_recyclerview_playlist,
+                R.menu.settings_playlist,
+                true
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         ObjectFab(this, this, R.id.fab, View.OnClickListener { playAll() })
         fabPause = ObjectFab(this, this, R.id.fab3, View.OnClickListener { playItemFAB() })
         if (UtilityTts.mMediaPlayer != null && !UtilityTts.mMediaPlayer!!.isPlaying) {
-            fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE_PRESSED)
+            fabPause.fabSetResDrawable(this, MyApplication.ICON_PAUSE_PRESSED)
         } else {
-            fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE)
+            fabPause.fabSetResDrawable(this, MyApplication.ICON_PAUSE)
         }
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
         diaAfd.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
@@ -122,15 +120,15 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_downloadall -> ObjectIntent(
-                this,
-                DownloadPlaylistService::class.java,
-                DownloadPlaylistService.URL,
-                "false",
-                true
+                    this,
+                    DownloadPlaylistService::class.java,
+                    DownloadPlaylistService.URL,
+                    "false",
+                    true
             )
             R.id.action_autodownload -> ObjectIntent(
-                this,
-                SettingsPlaylistAutodownloadActivity::class.java
+                    this,
+                    SettingsPlaylistAutodownloadActivity::class.java
             )
             R.id.action_add -> diaMain.show()
             R.id.action_afd -> diaAfd.show()
@@ -154,7 +152,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     override fun onResume() {
         LocalBroadcastManager.getInstance(this)
-            .registerReceiver(onBroadcast, IntentFilter("playlistdownloaded"))
+                .registerReceiver(onBroadcast, IntentFilter("playlistdownloaded"))
         super.onResume()
     }
 
@@ -164,10 +162,10 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun getLongString(code: String) = "$code;" + Utility.readPref(
-        contextg,
-        "PLAYLIST_" + code + "_TIME",
-        "unknown"
-    ) + "  (size: " + Utility.readPref(contextg, "PLAYLIST_$code", "").length + ")"
+            this,
+            "PLAYLIST_" + code + "_TIME",
+            "unknown"
+    ) + "  (size: " + Utility.readPref(this, "PLAYLIST_$code", "").length + ")"
 
     private val isStoragePermissionGranted: Boolean
         get() {
@@ -176,9 +174,9 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
                     true
                 } else {
                     ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        1
+                            this,
+                            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                            1
                     )
                     false
                 }
@@ -188,15 +186,15 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<String>,
+            grantResults: IntArray
     ) {
         when (requestCode) {
             1 -> {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    UtilityTts.synthesizeTextAndPlayPlaylist(contextg, 1)
+                    UtilityTts.synthesizeTextAndPlayPlaylist(this, 1)
             }
         }
     }
@@ -206,9 +204,9 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             UtilityTts.playMediaPlayer(1)
         }
         if (UtilityTts.mMediaPlayer != null && !UtilityTts.mMediaPlayer!!.isPlaying) {
-            fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE_PRESSED)
+            fabPause.fabSetResDrawable(this, MyApplication.ICON_PAUSE_PRESSED)
         } else {
-            fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE)
+            fabPause.fabSetResDrawable(this, MyApplication.ICON_PAUSE)
         }
         if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying) {
             if (UIPreferences.mediaControlNotif) {
@@ -218,9 +216,9 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun playAll() {
-        fabPause.fabSetResDrawable(contextg, MyApplication.ICON_PAUSE)
+        fabPause.fabSetResDrawable(this, MyApplication.ICON_PAUSE)
         if (isStoragePermissionGranted) {
-            UtilityTts.synthesizeTextAndPlayPlaylist(contextg, 1)
+            UtilityTts.synthesizeTextAndPlayPlaylist(this, 1)
         }
         if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying) {
             if (UIPreferences.mediaControlNotif) {
@@ -265,12 +263,12 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     private fun viewItem(position: Int) {
         ObjectIntent(
-                contextg,
+                this,
                 TextScreenActivity::class.java,
                 TextScreenActivity.URL,
                 arrayOf(
                         Utility.readPref(
-                                contextg,
+                                this,
                                 "PLAYLIST_" + MyApplication.semicolon.split(ridArr[position])[0],
                                 ""
                         ), ridArr[position]
@@ -279,6 +277,6 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun playItem(position: Int) {
-        UtilityTts.synthesizeTextAndPlayPlaylist(contextg, position + 1)
+        UtilityTts.synthesizeTextAndPlayPlaylist(this, position + 1)
     }
 } 

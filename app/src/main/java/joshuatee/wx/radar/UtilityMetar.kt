@@ -125,8 +125,8 @@ internal object UtilityMetar {
                         z.parse(RegExp.patternMetarWxogl5) // "SM (.*?) M{0,1}[0-9]{2}/"
                     visBlob = z.parse(" ([0-9].*?SM) ")
                     visBlobArr = MyApplication.space.split(visBlob)
-                    visBlobDisplay = visBlobArr[visBlobArr.size - 1]
-                    visBlob = visBlobArr[visBlobArr.size - 1].replace("SM", "")
+                    visBlobDisplay = visBlobArr.last()
+                    visBlob = visBlobArr.last().replace("SM", "")
                     // might have 1/2 or 1/4 , just call it zero
                     visInt = when {
                         visBlob.contains("/") -> 0

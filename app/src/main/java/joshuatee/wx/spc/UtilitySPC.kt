@@ -88,25 +88,25 @@ object UtilitySpc {
         var dashboardStrMpd = ""
         var dashboardStrMcd = ""
         if (MyApplication.checkspc) {
-            if (!MyApplication.severeDashboardMcd.valueGet().contains(MyApplication.MD_COMP)) {
+            if (!MyApplication.severeDashboardMcd.value.contains(MyApplication.MD_COMP)) {
                 mdPresent = true
-                val al = MyApplication.severeDashboardMcd.valueGet()
+                val al = MyApplication.severeDashboardMcd.value
                         .parseColumn(RegExp.mcdPatternUtilspc)
                 mdCount = al.size
                 al.forEach { dashboardStrMcd += ":$it" }
             }
-            if (!MyApplication.severeDashboardWat.valueGet().contains(MyApplication.WATCH_COMP)) {
+            if (!MyApplication.severeDashboardWat.value.contains(MyApplication.WATCH_COMP)) {
                 watchPresent = true
                 val al =
-                        MyApplication.severeDashboardWat.valueGet().parseColumn(RegExp.watchPattern)
+                        MyApplication.severeDashboardWat.value.parseColumn(RegExp.watchPattern)
                 watchCount = al.size
                 al.forEach { dashboardStrWat += ":$it" }
             }
         }
         if (MyApplication.checkwpc) {
-            if (!MyApplication.severeDashboardMpd.valueGet().contains(MyApplication.MPD_COMP)) {
+            if (!MyApplication.severeDashboardMpd.value.contains(MyApplication.MPD_COMP)) {
                 mpdPresent = true
-                val al = MyApplication.severeDashboardMpd.valueGet().parseColumn(RegExp.mpdPattern)
+                val al = MyApplication.severeDashboardMpd.value.parseColumn(RegExp.mpdPattern)
                 mpdCount = al.size
                 al.forEach { dashboardStrMpd += ":$it" }
             }
@@ -129,9 +129,9 @@ object UtilitySpc {
         var tstormCount = 0
         var floodCount = 0
         if (MyApplication.checktor) {
-            tstormCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardTst.valueGet())
-            torCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardTor.valueGet())
-            floodCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardFfw.valueGet())
+            tstormCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardTst.value)
+            torCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardTor.value)
+            floodCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardFfw.value)
             if (tstormCount > 0 || torCount > 0 || floodCount > 0) {
                 uswarnPresent = true
             }

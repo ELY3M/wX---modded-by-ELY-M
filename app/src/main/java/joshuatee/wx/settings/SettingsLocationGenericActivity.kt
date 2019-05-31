@@ -26,7 +26,6 @@ import java.util.Locale
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
@@ -94,7 +93,6 @@ class SettingsLocationGenericActivity : BaseActivity(),
     private lateinit var alertWpcmpdSw: ObjectSettingsCheckBox
     private lateinit var cityAa: ArrayAdapter<String>
     private var menuLocal: Menu? = null
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -104,7 +102,6 @@ class SettingsLocationGenericActivity : BaseActivity(),
                 R.menu.settings_location_generic_bottom,
                 true
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         Utility.writePref(this, "LOCATION_CANADA_PROV", "")
         Utility.writePref(this, "LOCATION_CANADA_CITY", "")
@@ -281,7 +278,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
             locXEt.setText(resources.getString(R.string.settings_loc_generic_ca_x, caProv))
             locYEt.setText(caId)
             locLabelEt.setText("$caCity, $caProv")
-            notifsCa(true)
+            notificationsCanada(true)
         }
         afterDelete()
         super.onRestart()
@@ -341,16 +338,16 @@ class SettingsLocationGenericActivity : BaseActivity(),
         var xLoc = ""
         withContext(Dispatchers.IO) {
             if (mapType == "osm") {
-                toastStr = Location.locationSave(contextg, locNum, xStr, yStr, labelStr)
+                toastStr = Location.locationSave(this@SettingsLocationGenericActivity, locNum, xStr, yStr, labelStr)
                 xLoc = xStr
             }
         }
         showMessage(toastStr)
         updateSubTitle()
         if (xLoc.startsWith("CANADA:")) {
-            notifsCa(true)
+            notificationsCanada(true)
         } else {
-            notifsCa(false)
+            notificationsCanada(false)
         }
     }
 
@@ -609,7 +606,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
             if (type == "osm") {
                 xyStr = UtilityLocation.getXYFromAddressOsm(address)
                 if (xyStr.size > 1) {
-                    toastStr = Location.locationSave(contextg, locNum, xyStr[0], xyStr[1], labelStr)
+                    toastStr = Location.locationSave(this@SettingsLocationGenericActivity, locNum, xyStr[0], xyStr[1], labelStr)
                     goodLocation = true
                 }
             }
@@ -618,7 +615,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
         locYEt.setText(xyStr[1])
         if (goodLocation) {
             showMessage(toastStr)
-            Utility.writePref(contextg, "CURRENT_LOC_FRAGMENT", locNum)
+            Utility.writePref(this@SettingsLocationGenericActivity, "CURRENT_LOC_FRAGMENT", locNum)
             Location.currentLocationStr = locNum
         }
         finish()
@@ -628,26 +625,26 @@ class SettingsLocationGenericActivity : BaseActivity(),
             GlobalScope.launch(uiDispatcher) {
                 var toastStr = ""
                 var goodLocation = false
-                val xy = UtilityLocation.getGps(contextg)
+                val xy = UtilityLocation.getGps(this@SettingsLocationGenericActivity)
                 locXEt.setText(xy[0].toString())
                 locYEt.setText(xy[1].toString())
                 withContext(Dispatchers.IO) {
                     val xyStr = listOf(xy[0].toString(), xy[1].toString())
                     if (xyStr.size > 1) {
-                        toastStr = Location.locationSave(contextg, locNum, xyStr[0], xyStr[1], labelStr)
+                        toastStr = Location.locationSave(this@SettingsLocationGenericActivity, locNum, xyStr[0], xyStr[1], labelStr)
                         goodLocation = true
                     }
                 }
                 if (goodLocation) {
                     showMessage(toastStr)
-                    Utility.writePref(contextg, "ALERT" + locNum + "_NOTIFICATION", "true")
-                    Utility.writePref(contextg, "CURRENT_LOC_FRAGMENT", locNum)
+                    Utility.writePref(this@SettingsLocationGenericActivity, "ALERT" + locNum + "_NOTIFICATION", "true")
+                    Utility.writePref(this@SettingsLocationGenericActivity, "CURRENT_LOC_FRAGMENT", locNum)
                     Location.currentLocationStr = locNum
                 }
                 finish()
             }
 
-    private fun notifsCa(hide: Boolean) {
+    private fun notificationsCanada(hide: Boolean) {
         var visibility = View.VISIBLE
         if (hide) {
             visibility = View.GONE
@@ -664,7 +661,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
     private fun hideNonUSNotifications() {
         val label = locXEt.text.toString()
         if (label.contains("CANADA")) {
-            notifsCa(true)
+            notificationsCanada(true)
         }
     }
 

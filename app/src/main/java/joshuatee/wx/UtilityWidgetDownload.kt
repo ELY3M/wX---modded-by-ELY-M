@@ -41,28 +41,28 @@ internal object UtilityWidgetDownload {
 
     fun download(context: Context, widgetType: WidgetFile) {
         when (widgetType) {
-            NEXRAD_RADAR -> downloadNexrad(context)
-            SPCMESO -> downloadGeneric(context, SPCMESO, "SPCMESO1")
-            STRPT -> downloadGeneric(context, STRPT, "STRPT")
-            CONUSWV -> downloadGeneric(context, CONUSWV, "CONUSWV")
+            NEXRAD_RADAR -> nexrad(context)
+            SPCMESO -> generic(context, SPCMESO, "SPCMESO1")
+            STRPT -> generic(context, STRPT, "STRPT")
+            CONUSWV -> generic(context, CONUSWV, "CONUSWV")
             SPCSWO -> downloadSpcSwo(context)
-            WPCIMG -> downloadWpcImage(context, widgetType)
-            NHC -> downloadNhc(context, widgetType)
-            VIS -> downloadVis(context)
-            HWO -> downloadHwo(context)
-            TEXT_WPC -> downloadTextWpc(context)
-            AFD -> downloadAfd(context)
-            MOSAIC_RADAR -> downloadRadarMosaic(context)
+            WPCIMG -> wpcImage(context, widgetType)
+            NHC -> nhc(context, widgetType)
+            VIS -> vis(context)
+            HWO -> hwo(context)
+            TEXT_WPC -> textWpc(context)
+            AFD -> afd(context)
+            MOSAIC_RADAR -> radarMosaic(context)
             else -> {
             }
         }
     }
 
-    private fun downloadNexrad(context: Context) {
-        val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
-        val rid = Location.getRid(context, widgetLocNum)
+    private fun nexrad(context: Context) {
+        val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
+        val rid = Location.getRid(context, widgetLocationNumber)
         try {
-            val bitmap = if (Location.isUS(widgetLocNum)) {
+            val bitmap = if (Location.isUS(widgetLocationNumber)) {
                 UtilityUSImg.getPreferredLayeredImg(context, rid, false)
             } else {
                 UtilityCanadaImg.getRadarBitmapOptionsApplied(context, rid, "")
@@ -73,7 +73,7 @@ internal object UtilityWidgetDownload {
         }
     }
 
-    private fun downloadGeneric(context: Context, type: WidgetFile, prod: String) {
+    private fun generic(context: Context, type: WidgetFile, prod: String) {
         val bitmap = UtilityDownload.getImageProduct(context, prod)
         saveImage(context, bitmap, type.fileName)
     }
@@ -85,7 +85,7 @@ internal object UtilityWidgetDownload {
         }
     }
 
-    private fun downloadVis(context: Context) {
+    private fun vis(context: Context) {
         try {
             val bitmap = UtilityDownload.getImageProduct(context, "GOES16")
             saveImage(context, bitmap, VIS.fileName)
@@ -104,48 +104,46 @@ internal object UtilityWidgetDownload {
         fos2?.close()
     }
 
-    private fun downloadHwo(context: Context) {
-        val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
-        var nws1Current = Utility.readPref(context, "NWS$widgetLocNum", "").toUpperCase(Locale.US)
+    private fun hwo(context: Context) {
+        val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
+        var wfo = Utility.readPref(context, "NWS$widgetLocationNumber", "").toUpperCase(Locale.US)
         if (Utility.readPref(context, "WFO_REMEMBER_LOCATION", "") == "true") {
-            nws1Current =
-                Utility.readPref(context, "WFO_LAST_USED", nws1Current).toUpperCase(Locale.US)
+            wfo = Utility.readPref(context, "WFO_LAST_USED", wfo).toUpperCase(Locale.US)
         }
-        var hwoText = UtilityDownload.getTextProduct(context, "HWO$nws1Current")
+        var hwoText = UtilityDownload.getTextProduct(context, "HWO$wfo")
         hwoText = hwoText.replaceFirst("<BR>[A-Z][A-Z]Z.*?[0-9]{4}<BR>".toRegex(), "")
         Utility.writePref(context, "HWO_WIDGET", hwoText)
         Utility.commitPref(context)
     }
 
-    private fun downloadTextWpc(context: Context) {
+    private fun textWpc(context: Context) {
         val text = UtilityDownload.getTextProduct(context, MyApplication.wpcTextFav)
         Utility.writePref(context, "TEXTWPC_WIDGET", text)
         Utility.commitPref(context)
     }
 
-    private fun downloadAfd(context: Context) {
-        val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
-        var nws1Current = Utility.readPref(context, "NWS$widgetLocNum", "").toUpperCase(Locale.US)
+    private fun afd(context: Context) {
+        val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
+        var wfo = Utility.readPref(context, "NWS$widgetLocationNumber", "").toUpperCase(Locale.US)
         if (Utility.readPref(context, "WFO_REMEMBER_LOCATION", "") == "true") {
-            nws1Current =
-                Utility.readPref(context, "WFO_LAST_USED", nws1Current).toUpperCase(Locale.US)
+            wfo = Utility.readPref(context, "WFO_LAST_USED", wfo).toUpperCase(Locale.US)
         }
         if (Utility.readPref(context, "WFO_TEXT_FAV", "").startsWith("VFD")) {
             Utility.writePref(
-                context,
-                "AFD_WIDGET",
-                UtilityDownload.getTextProduct(context, "VFD$nws1Current")
+                    context,
+                    "AFD_WIDGET",
+                    UtilityDownload.getTextProduct(context, "VFD$wfo")
             )
         } else {
             Utility.writePref(
-                context,
-                "AFD_WIDGET",
-                UtilityDownload.getTextProduct(context, "AFD$nws1Current")
+                    context,
+                    "AFD_WIDGET",
+                    UtilityDownload.getTextProduct(context, "AFD$wfo")
             )
         }
     }
 
-    private fun downloadRadarMosaic(context: Context) {
+    private fun radarMosaic(context: Context) {
         try {
             saveImage(context, UtilityDownload.getRadarMosaic(context), MOSAIC_RADAR.fileName)
         } catch (e: Exception) {
@@ -167,16 +165,16 @@ internal object UtilityWidgetDownload {
         return fos
     }
 
-    private fun downloadWpcImage(context: Context, type: WidgetFile) {
+    private fun wpcImage(context: Context, type: WidgetFile) {
         val imgUrl = Utility.readPref(context, "WPG_IMG_FAV_URL", UtilityWpcImages.urls[0])
         val bitmap = imgUrl.getImage()
         saveImage(context, bitmap, type.fileName)
     }
 
-    private fun downloadNhc(context: Context, type: WidgetFile) {
+    private fun nhc(context: Context, type: WidgetFile) {
         val bitmap1 = UtilityNhc.widgetImageUrlBottom.getImage()
         val bitmap2 = UtilityNhc.widgetImageUrlTop.getImage()
-        saveImage(context, bitmap1, type.fileName + "0")
-        saveImage(context, bitmap2, type.fileName + "1")
+        val combinedBitmap = UtilityImg.mergeImagesVertically(listOf(bitmap1, bitmap2))
+        saveImage(context, combinedBitmap, type.fileName + "0")
     }
 }

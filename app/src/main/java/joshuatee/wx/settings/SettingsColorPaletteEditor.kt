@@ -300,7 +300,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                 uri.lastPathSegment!!.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         var fileName = "map"
         if (uriArr.isNotEmpty()) {
-            fileName = uriArr[uriArr.size - 1]
+            fileName = uriArr.last()
         }
         fileName = fileName.replace(".txt", "").replace(".pal", "")
         name = fileName + "_" + formattedDate

@@ -48,7 +48,7 @@ class WeatherDataProvider : ContentProvider() {
         val dayArr = sevenDay.split("\n\n").dropLastWhile { it.isEmpty() }.toMutableList()
         if (dayArr.size > 1) {
             dayArr[0] = preferences.getString("CC_WIDGET", "No data")!!
-            (0 until dayArr.size - 1).mapTo(sData) { WeatherDataPoint(dayArr[it] + "\n", 0) }
+            (0 until dayArr.lastIndex).mapTo(sData) { WeatherDataPoint(dayArr[it] + "\n", 0) }
         }
         return true
     }

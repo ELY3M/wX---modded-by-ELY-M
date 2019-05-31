@@ -65,6 +65,10 @@
                 android:title="@string/label_850mb"
                 app:showAsAction="never" />
             <item
+                android:id="@+id/action_850mb2"
+                android:title="@string/label_850mb2"
+                app:showAsAction="never" />
+            <item
                 android:id="@+id/action_700mb"
                 android:title="@string/label_700mb"
                 app:showAsAction="never" />

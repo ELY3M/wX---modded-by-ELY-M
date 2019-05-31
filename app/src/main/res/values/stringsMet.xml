@@ -33,6 +33,7 @@
 
     <string name="label_925mb">925mb Analysis</string>
     <string name="label_850mb">850mb Analysis</string>
+    <string name="label_850mb2">850mb Analysis (version 2)</string>
     <string name="label_700mb">700mb Analysis</string>
     <string name="label_500mb">500mb Analysis</string>
     <string name="label_300mb">300mb Analysis</string>

@@ -37,35 +37,35 @@ enum class GeographyType constructor(
         MyApplication.countState,
         MyApplication.radarColorState,
         true,
-        MyApplication.radarStateLinesize
+        MyApplication.radarStateLineSize
     ),
     COUNTY_LINES(
         MyApplication.countyRelativeBuffer,
         MyApplication.countCounty,
         MyApplication.radarColorCounty,
         MyApplication.radarCounty,
-        MyApplication.radarCountyLinesize
+        MyApplication.radarCountyLineSize
     ),
     LAKES(
         MyApplication.lakesRelativeBuffer,
         MyApplication.countLakes,
         MyApplication.radarColorLakes,
         MyApplication.radarLakes,
-        MyApplication.radarLakeLinesize
+        MyApplication.radarLakeLineSize
     ),
     HIGHWAYS(
         MyApplication.hwRelativeBuffer,
         MyApplication.countHw,
         MyApplication.radarColorHw,
         MyApplication.radarHw,
-        MyApplication.radarHwLinesize
+        MyApplication.radarHwLineSize
     ),
     HIGHWAYS_EXTENDED(
         MyApplication.hwExtRelativeBuffer,
         MyApplication.countHwExt,
         MyApplication.radarColorHwExt,
         MyApplication.radarHwEnhExt,
-        MyApplication.radarHwExtLinesize
+        MyApplication.radarHwExtLineSize
     ),
     CITIES(ByteBuffer.allocate(0), 0, MyApplication.radarColorCity, MyApplication.radarCities, 0),
     COUNTY_LABELS(
@@ -103,11 +103,11 @@ enum class GeographyType constructor(
             CITIES.pref = MyApplication.radarCities
             COUNTY_LABELS.pref = MyApplication.radarCountyLabels
 
-            STATE_LINES.lineWidth = MyApplication.radarStateLinesize
-            COUNTY_LINES.lineWidth = MyApplication.radarCountyLinesize
-            LAKES.lineWidth = MyApplication.radarLakeLinesize
-            HIGHWAYS.lineWidth = MyApplication.radarHwLinesize
-            HIGHWAYS_EXTENDED.lineWidth = MyApplication.radarHwExtLinesize
+            STATE_LINES.lineWidth = MyApplication.radarStateLineSize
+            COUNTY_LINES.lineWidth = MyApplication.radarCountyLineSize
+            LAKES.lineWidth = MyApplication.radarLakeLineSize
+            HIGHWAYS.lineWidth = MyApplication.radarHwLineSize
+            HIGHWAYS_EXTENDED.lineWidth = MyApplication.radarHwExtLineSize
         }
     }
 }

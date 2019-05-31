@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55201"
-    android:versionName="55201"
+    android:versionCode="55209"
+    android:versionName="55209"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -227,7 +227,7 @@
       android:parentActivityName="WX" >
   </activity>
   <activity
-      android:name=".spc.LSRbyWFOActivity"
+      android:name=".spc.LsrByWfoActivity"
       android:label=""
       android:parentActivityName="WX" >
   </activity>
@@ -273,12 +273,12 @@
       android:parentActivityName="WX" >
   </activity>
   <activity
-      android:name=".spc.SPCCompmapActivity"
+      android:name=".spc.SpcCompmapActivity"
       android:label="@string/title_activity_spccompmap"
       android:parentActivityName="WX" >
   </activity>
   <activity
-      android:name=".spc.SPCFireOutlookActivity"
+      android:name=".spc.SpcFireOutlookActivity"
       android:label="@string/title_activity_spcfire_outlook"
       android:parentActivityName="WX" >
   </activity>

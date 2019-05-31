@@ -40,10 +40,10 @@ internal object UtilityWatch {
         val warningList = mutableListOf<Double>()
         var prefToken = ""
         when (type) {
-            PolygonType.MCD -> prefToken = MyApplication.mcdLatlon.valueGet()
-            PolygonType.WATCH -> prefToken = MyApplication.watchLatlon.valueGet()
-            PolygonType.WATCH_TORNADO -> prefToken = MyApplication.watchLatlonTor.valueGet()
-            PolygonType.MPD -> prefToken = MyApplication.mpdLatlon.valueGet()
+            PolygonType.MCD -> prefToken = MyApplication.mcdLatlon.value
+            PolygonType.WATCH -> prefToken = MyApplication.watchLatlon.value
+            PolygonType.WATCH_TORNADO -> prefToken = MyApplication.watchLatlonTor.value
+            PolygonType.MPD -> prefToken = MyApplication.mpdLatlon.value
             else -> {
             }
         }
@@ -95,24 +95,24 @@ internal object UtilityWatch {
         val watchLatLon: String
         when (type) {
             PolygonType.WATCH -> {
-                textWatNoList = MyApplication.watchNoList.valueGet()
+                textWatNoList = MyApplication.watchNoList.value
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
-                watchLatLon = MyApplication.watchLatlonList.valueGet()
+                watchLatLon = MyApplication.watchLatlonList.value
             }
             PolygonType.MCD -> {
-                textWatNoList = MyApplication.mcdNoList.valueGet()
+                textWatNoList = MyApplication.mcdNoList.value
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
-                watchLatLon = MyApplication.mcdLatlon.valueGet()
+                watchLatLon = MyApplication.mcdLatlon.value
             }
             PolygonType.MPD -> {
-                textWatNoList = MyApplication.mpdNoList.valueGet()
+                textWatNoList = MyApplication.mpdNoList.value
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
-                watchLatLon = MyApplication.mpdLatlon.valueGet()
+                watchLatLon = MyApplication.mpdLatlon.value
             }
             else -> {
-                textWatNoList = MyApplication.watchNoList.valueGet()
+                textWatNoList = MyApplication.watchNoList.value
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
-                watchLatLon = MyApplication.watchLatlonList.valueGet()
+                watchLatLon = MyApplication.watchLatlonList.value
             }
         }
         val latLonArr = MyApplication.colon.split(watchLatLon)

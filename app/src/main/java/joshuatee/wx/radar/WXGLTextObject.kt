@@ -365,7 +365,7 @@ class WXGLTextObject(
         tmpCoords[1] = tmpCoords[1] - OGLR.y / OGLR.zoom
         if (abs(tmpCoords[0] * scale) < glviewWidth && abs(tmpCoords[1] * scale) < glviewHeight) {
             tvList.add(TextView(context))
-            ii = tvList.size - 1
+            ii = tvList.lastIndex
             tvList[ii].setTextColor(color)
             tvList[ii].setShadowLayer(1.5f, 2.0f, 2.0f, R.color.black)
             rl.addView(tvList[ii])
@@ -426,7 +426,7 @@ class WXGLTextObject(
         if (abs(tmpCoords[0] * scale) < glviewWidth && abs(tmpCoords[1] * scale) < glviewHeight) {
             drawText = true
             tvList.add(TextView(context))
-            ii = tvList.size - 1
+            ii = tvList.lastIndex
             tvList[ii].setTextColor(color)
             tvList[ii].setShadowLayer(1.5f, 2.0f, 2.0f, R.color.black)
             rl.addView(tvList[ii])
@@ -643,9 +643,9 @@ class WXGLTextObject(
                         )
                         if (drawText) {
                             if (OGLR.zoom > obsExtZoom) {
-                                glview.obsAl[glview.obsAl.size - 1].text = tmpArrObsExt[2]
+                                glview.obsAl.last().text = tmpArrObsExt[2]
                             } else if (PolygonType.OBS.pref) {
-                                glview.obsAl[glview.obsAl.size - 1].text = tmpArrObs[2]
+                                glview.obsAl.last().text = tmpArrObs[2]
                             }
                         }
                     }

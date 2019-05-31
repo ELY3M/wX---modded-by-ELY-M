@@ -45,8 +45,8 @@ internal object UtilityNotificationWpc {
     }
 
     fun sendMpdLocationNotifications(context: Context): String {
-        val textMcd = MyApplication.mpdLatlon.valueGet()
-        val textMcdNoList = MyApplication.mpdNoList.valueGet()
+        val textMcd = MyApplication.mpdLatlon.value
+        val textMcdNoList = MyApplication.mpdNoList.value
         val x = mutableListOf<Double>()
         val y = mutableListOf<Double>()
         var locNum: String
@@ -121,7 +121,7 @@ internal object UtilityNotificationWpc {
                 arrayOf(mdNo, "sound", polygonType.toString())
         )
         val cancelStr = "wpcmpdloc$mdNo$locNum"
-        if (!(MyApplication.alertOnlyonce && UtilityNotificationUtils.checkToken(
+        if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(
                         context,
                         cancelStr
                 ))

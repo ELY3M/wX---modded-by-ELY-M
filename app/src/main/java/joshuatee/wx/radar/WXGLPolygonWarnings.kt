@@ -31,7 +31,6 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
 import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.PolygonWarningType
-import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityTime
 
 internal object WXGLPolygonWarnings {
@@ -42,17 +41,12 @@ internal object WXGLPolygonWarnings {
             type: ObjectPolygonWarning
     ): List<Double> {
         val warningList = mutableListOf<Double>()
-        val prefToken = type.storage.valueGet()
+        val prefToken = type.storage.value
         val pn = ProjectionNumbers(radarSite, provider)
         var j: Int
         var pixXInit: Double
         var pixYInit: Double
-        var html = ""
-        try {
-            html = prefToken.replace("\n", "").replace(" ", "")
-        } catch (e: OutOfMemoryError) {
-            UtilityLog.handleException(e)
-        }
+        val html = prefToken.replace("\n", "").replace(" ", "")
         val polygons = html.parseColumn(RegExp.warningLatLonPattern)
         val vtecs = html.parseColumn(RegExp.warningVtecPattern)
         var polyCount = -1
@@ -80,8 +74,7 @@ internal object WXGLPolygonWarnings {
                     if (x.size == y.size) {
                         j = 1
                         while (j < x.size) {
-                            tmpCoords =
-                                    UtilityCanvasProjection.computeMercatorNumbers(x[j], y[j], pn)
+                            tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[j], y[j], pn)
                             warningList.add(tmpCoords[0])
                             warningList.add(tmpCoords[1])
                             warningList.add(tmpCoords[0])
@@ -104,20 +97,15 @@ internal object WXGLPolygonWarnings {
     ): List<Double> {
         val warningList = mutableListOf<Double>()
         val prefToken = when (type) {
-            PolygonType.TOR -> MyApplication.severeDashboardTor.valueGet()
-            PolygonType.TST -> MyApplication.severeDashboardTst.valueGet()
-            else -> MyApplication.severeDashboardFfw.valueGet()
+            PolygonType.TOR -> MyApplication.severeDashboardTor.value
+            PolygonType.TST -> MyApplication.severeDashboardTst.value
+            else -> MyApplication.severeDashboardFfw.value
         }
         val pn = ProjectionNumbers(radarSite, provider)
         var j: Int
         var pixXInit: Double
         var pixYInit: Double
-        var html = ""
-        try {
-            html = prefToken.replace("\n", "").replace(" ", "")
-        } catch (e: OutOfMemoryError) {
-            UtilityLog.handleException(e)
-        }
+        val html = prefToken.replace("\n", "").replace(" ", "")
         val polygons = html.parseColumn(RegExp.warningLatLonPattern)
         val vtecs = html.parseColumn(RegExp.warningVtecPattern)
         var polyCount = -1
@@ -148,8 +136,7 @@ internal object WXGLPolygonWarnings {
                     if (x.size == y.size) {
                         j = 1
                         while (j < x.size) {
-                            tmpCoords =
-                                UtilityCanvasProjection.computeMercatorNumbers(x[j], y[j], pn)
+                            tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[j], y[j], pn)
                             warningList.add(tmpCoords[0])
                             warningList.add(tmpCoords[1])
                             warningList.add(tmpCoords[0])

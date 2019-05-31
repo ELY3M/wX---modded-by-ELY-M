@@ -22,7 +22,6 @@
 package joshuatee.wx.wpc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.content.res.Configuration
 import androidx.appcompat.widget.Toolbar
@@ -58,7 +57,6 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
     private lateinit var actionBack: MenuItem
     private lateinit var actionForward: MenuItem
     private lateinit var drw: ObjectNavDrawerCombo
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +67,6 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
                 iconsEvenlySpaced = true,
                 bottomToolbar = true
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         img.setOnClickListener(this)
         img.setOnTouchListener(object : OnSwipeTouchListener(this) {
@@ -125,9 +122,9 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
                 getUrl = drw.getUrl()
             }
         }
-        Utility.writePref(contextg, "WPG_IMG_FAV_URL", drw.getUrl())
-        Utility.writePref(contextg, "WPG_IMG_IDX", drw.imgIdx)
-        Utility.writePref(contextg, "WPG_IMG_GROUPIDX", drw.imgGroupIdx)
+        Utility.writePref(this@WpcImagesActivity, "WPG_IMG_FAV_URL", drw.getUrl())
+        Utility.writePref(this@WpcImagesActivity, "WPG_IMG_IDX", drw.imgIdx)
+        Utility.writePref(this@WpcImagesActivity, "WPG_IMG_GROUPIDX", drw.imgGroupIdx)
         bitmap = withContext(Dispatchers.IO) { getUrl.getImage() }
         img.setImageBitmap(bitmap)
         if (!firstRun) {

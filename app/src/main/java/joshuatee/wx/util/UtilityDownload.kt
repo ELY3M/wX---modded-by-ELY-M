@@ -651,11 +651,11 @@ object UtilityDownload {
     //https://forecast.weather.gov/product.php?site=NWS&issuedby=ARX&product=FTM&format=TXT
     //https://forecast.weather.gov/product.php?site=NWS&issuedby=SFX&product=FTM&format=txt&version=1&glossary=0
     //<span style="color:Red;">None issued by this office recently.</span>
-    fun getRadarStatusMessage(context: Context, rid: String): String {
-        val ridSmall = if (rid.length == 4) {
-            rid.replace("^T".toRegex(), "")
+    fun getRadarStatusMessage(context: Context, radarSite: String): String {
+        val ridSmall = if (radarSite.length == 4) {
+            radarSite.replace("^T".toRegex(), "")
         } else {
-            rid
+            radarSite
         }
         var text: String = getTextProduct(context, "FTM" + ridSmall.toUpperCase(Locale.US))
         UtilityLog.d("wx", "getRadarStatus api text: " + text)

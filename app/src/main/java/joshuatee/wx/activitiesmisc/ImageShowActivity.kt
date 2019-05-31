@@ -22,7 +22,6 @@
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
@@ -63,7 +62,6 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private var shareTitle = ""
     private var needsWhiteBackground = false
     private lateinit var img: ObjectTouchImageView
-    private lateinit var contextg: Context
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,7 +71,6 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             R.menu.image_show_activity,
             true
         )
-        contextg = this
         toolbarBottom.setOnMenuItemClickListener(this)
         img = ObjectTouchImageView(this, this, toolbar, R.id.iv)
         val activityArguments = intent.getStringArrayExtra(URL)
@@ -104,13 +101,13 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         bitmap = withContext(Dispatchers.IO) { url.getImage() }
         if (needsWhiteBackground) {
-            bitmap = UtilityImg.addColorBG(contextg, bitmap, Color.WHITE)
+            bitmap = UtilityImg.addColorBG(this@ImageShowActivity, bitmap, Color.WHITE)
         }
         img.setBitmap(bitmap)
     }
 
     private fun getContentFromStorage() {
-        img.setBitmap(UtilityIO.bitmapFromInternalStorage(contextg, urls[1]))
+        img.setBitmap(UtilityIO.bitmapFromInternalStorage(this@ImageShowActivity, urls[1]))
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

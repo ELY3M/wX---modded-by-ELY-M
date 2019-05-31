@@ -39,11 +39,11 @@ class ObjectWidgetMosaicRadar(context: Context) {
     val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
 
     init {
-        val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
-        val prov = Utility.readPref(context, "NWS" + widgetLocNum + "_STATE", "")
+        val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
+        val prov = Utility.readPref(context, "NWS" + widgetLocationNumber + "_STATE", "")
         UtilityWidget.setImage(context, remoteViews, MOSAIC_RADAR.fileName)
         if (!MyApplication.widgetPreventTap) {
-            if (Location.isUS(widgetLocNum)) {
+            if (Location.isUS(widgetLocationNumber)) {
                 UtilityWidget.setupIntent(
                         context,
                         remoteViews,

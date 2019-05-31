@@ -18,7 +18,7 @@ cp app/build/outputs/apk/release/app-release.apk ${HOME}/StudioProjects/wX${ver}
 echo Git commit and push
 touch doc/ChangeLog.txt
 git commit -a -m "release ${ver} commit ${dateString}"
-git push
+git push origin master
 
 # needed for f-droid
 if [ "$1" == "-t" ]; then
