@@ -291,7 +291,7 @@ internal object UtilityRadarUI {
     ): Boolean {
         glviewloc.setEGLContextClientVersion(2)
         wxgltextArr[z].setOGLR(oglrArr[z])
-        oglrArr[z].idxStr = z.toString()
+        oglrArr[z].indexString = z.toString()
         glviewloc.setRenderer(oglrArr[z])
         glviewloc.setRenderVar(oglrArr[z], oglrArr, glviewArr)
         glviewloc.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
@@ -301,7 +301,7 @@ internal object UtilityRadarUI {
         return true
     }
 
-    fun initGlview(
+    fun initGlView(
             glview: WXGLSurfaceView,
             glviewArr: MutableList<WXGLSurfaceView>,
             oglr: WXGLRender,
@@ -323,7 +323,7 @@ internal object UtilityRadarUI {
         glview.archiveMode = archiveMode
     }
 
-    fun initWxoglGeom(
+    fun initWxOglGeom(
             glv: WXGLSurfaceView,
             ogl: WXGLRender,
             z: Int,

@@ -87,7 +87,7 @@ internal object UtilityNotificationSpcFireWeather {
                     objPI.resultPendingIntent2,
                     context.resources.getString(R.string.read_aloud)
             )
-            val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
+            val noti = UtilityNotification.createNotificationBigTextWithAction(notifObj)
             notifObj.sendNotification(context, cancelStr, 1, noti)
         }
         notifUrls += cancelStr + MyApplication.notificationStrSep

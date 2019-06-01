@@ -141,7 +141,7 @@ internal object UtilityNotificationWpc {
                     objPI.resultPendingIntent2,
                     context.resources.getString(R.string.read_aloud)
             )
-            val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
+            val noti = UtilityNotification.createNotificationBigTextWithAction(notifObj)
             notifObj.sendNotification(context, cancelStr, 1, noti)
             //notifier.notify(cancelStr, 1, noti)
         }

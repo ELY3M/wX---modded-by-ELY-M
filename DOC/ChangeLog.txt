@@ -38,6 +38,8 @@
 [REF] - refactor a method, group, variable, etc.
 [MER] - merge
 
+55210 2019_06_01    [FIX] in UtilityNotification change channel notification importance to NotificationManager.IMPORTANCE_HIGH (Android Q)
+                    [REF] camelcase in some radar and notification files
 55209 2019_05_30    [IMP] add watch/mpd/mcd check in radar based off same code in severe dashboard
                     [FIX] settings -> radar when invoked from nexrad radar did not reflect changes immediately
 55208 2019_05_30    [REF] var rename

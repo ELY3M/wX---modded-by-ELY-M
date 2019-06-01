@@ -104,7 +104,7 @@ class ObjectSettingsCheckBox(
             if (compoundButton.isChecked) {
                 if (pref == "MEDIA_CONTROL_NOTIF") {
                     if (Utility.readPref(context, "MEDIA_CONTROL_NOTIF", "").startsWith("f")) {
-                        UtilityNotification.createMediaControlNotif(context.applicationContext, "")
+                        UtilityNotification.createMediaControlNotification(context.applicationContext, "")
                     }
                 }
                 Utility.writePref(context, pref, "true")

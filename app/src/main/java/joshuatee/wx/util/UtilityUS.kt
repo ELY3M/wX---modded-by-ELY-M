@@ -120,7 +120,7 @@ object UtilityUS {
                                 objPI.resultPendingIntent2,
                                 context.resources.getString(R.string.read_aloud)
                         )
-                        val noti = UtilityNotification.createNotifBigTextWithAction(notifObj)
+                        val noti = UtilityNotification.createNotificationBigTextWithAction(notifObj)
                         notifObj.sendNotification(context, url, 1, noti)
                         //notifier.notify(url, 1, noti)
                     }

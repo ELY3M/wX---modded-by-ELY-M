@@ -240,7 +240,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         oglr = WXGLRender(this)
         oglrArr.add(oglr)
         glviewArr.add(glview)
-        UtilityRadarUI.initGlview(
+        UtilityRadarUI.initGlView(
                 glview,
                 glviewArr,
                 oglr,
@@ -392,7 +392,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 star.setIcon(MyApplication.STAR_OUTLINE_ICON)
             toolbar.subtitle = ""
             if (!oglr.product.startsWith("2")) {
-                UtilityRadarUI.initWxoglGeom(
+                UtilityRadarUI.initWxOglGeom(
                         glview,
                         oglr,
                         0,

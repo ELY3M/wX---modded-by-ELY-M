@@ -51,11 +51,7 @@ class BackgroundFetch(val context: Context) {
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
 
     private fun getNotifications() {
-        var notifUrls = ""
-        //var watchNoList = ""
-        //var watchLatLonList = ""
-        //var watchLatlon = ""
-        //var watchLatlonTor = ""
+        var notificationUrls = ""
         var cancelStr: String
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         val locationNeedsMcd = UtilityNotificationSpc.locationNeedsMcd()
@@ -64,7 +60,7 @@ class BackgroundFetch(val context: Context) {
         val locationNeedsWpcMpd = UtilityNotificationWpc.locationNeedsMpd()
         (1..Location.numLocations).forEach {
             val requestID = System.currentTimeMillis().toInt()
-            notifUrls += UtilityNotification.send(context, it.toString(), requestID + 1)
+            notificationUrls += UtilityNotification.send(context, it.toString(), requestID + 1)
         }
         MyApplication.radarWarningPolygons.forEach {
             if (it.isEnabled) {
@@ -77,7 +73,7 @@ class BackgroundFetch(val context: Context) {
             try {
                 UtilityDownloadWarnings.getForNotification(context)
                 if (MyApplication.alertTornadoNotificationCurrent) {
-                    notifUrls += UtilityNotificationTornado.checkAndSend(context, MyApplication.severeDashboardTor.value)
+                    notificationUrls += UtilityNotificationTornado.checkAndSend(context, MyApplication.severeDashboardTor.value)
                 }
             } catch (e: Exception) {
                 UtilityLog.handleException(e)
@@ -125,10 +121,10 @@ class BackgroundFetch(val context: Context) {
                                     objPI.resultPendingIntent2,
                                     context.resources.getString(R.string.read_aloud)
                             )
-                            val notification = UtilityNotification.createNotifBigTextWithAction(notificationObj)
+                            val notification = UtilityNotification.createNotificationBigTextWithAction(notificationObj)
                             notificationObj.sendNotification(context, cancelStr, 1, notification)
                         }
-                        notifUrls += cancelStr + MyApplication.notificationStrSep
+                        notificationUrls += cancelStr + MyApplication.notificationStrSep
                     }
                 } // end while find
             } catch (e: Exception) {
@@ -176,10 +172,10 @@ class BackgroundFetch(val context: Context) {
                                     objPI.resultPendingIntent2,
                                     context.resources.getString(R.string.read_aloud)
                             )
-                            val notification = UtilityNotification.createNotifBigTextWithAction(notificationObj)
+                            val notification = UtilityNotification.createNotificationBigTextWithAction(notificationObj)
                             notificationObj.sendNotification(context, cancelStr, 1, notification)
                         }
-                        notifUrls += cancelStr + MyApplication.notificationStrSep
+                        notificationUrls += cancelStr + MyApplication.notificationStrSep
                     }
 
                 } // end forEach
@@ -228,10 +224,10 @@ class BackgroundFetch(val context: Context) {
                                     objPI.resultPendingIntent2,
                                     context.resources.getString(R.string.read_aloud)
                             )
-                            val notification = UtilityNotification.createNotifBigTextWithAction(notificationObj)
+                            val notification = UtilityNotification.createNotificationBigTextWithAction(notificationObj)
                             notificationObj.sendNotification(context, cancelStr, 1, notification)
                         }
-                        notifUrls += cancelStr + MyApplication.notificationStrSep
+                        notificationUrls += cancelStr + MyApplication.notificationStrSep
                     }
                 } // end forEach
             } catch (e: Exception) {
@@ -242,9 +238,9 @@ class BackgroundFetch(val context: Context) {
             // end of if to test if alerts_spcwat are enabled
         }
         LocalBroadcastManager.getInstance(context).sendBroadcast(Intent("notifran"))
-        notifUrls += UtilityNotificationSpc.sendSwoNotifications(context, inBlackout)
+        notificationUrls += UtilityNotificationSpc.sendSwoNotifications(context, inBlackout)
         if (MyApplication.alertNhcEpacNotificationCurrent || MyApplication.alertNhcAtlNotificationCurrent)
-            notifUrls += UtilityNotificationNhc.send(
+            notificationUrls += UtilityNotificationNhc.send(
                     context,
                     MyApplication.alertNhcEpacNotificationCurrent,
                     MyApplication.alertNhcAtlNotificationCurrent
@@ -253,7 +249,7 @@ class BackgroundFetch(val context: Context) {
         // send 7day and current conditions notifications for locations
         (1..Location.numLocations).forEach {
             val requestID = System.currentTimeMillis().toInt()
-            notifUrls += UtilityNotification.sendNotifCC(
+            notificationUrls += UtilityNotification.sendNotificationCurrentConditions(
                     context,
                     it.toString(),
                     requestID,
@@ -263,19 +259,19 @@ class BackgroundFetch(val context: Context) {
         // check of any text prod notifs
         UtilityNotificationTextProduct.notifyOnAll(context)
         if (locationNeedsMcd) {
-            notifUrls += UtilityNotificationSpc.sendMcdLocationNotifications(context)
+            notificationUrls += UtilityNotificationSpc.sendMcdLocationNotifications(context)
         }
         if (locationNeedsSwo) {
-            notifUrls += UtilityNotificationSpc.sendSwoLocationNotifications(context)
-            notifUrls += UtilityNotificationSpc.sendSwoD48LocationNotifications(context)
+            notificationUrls += UtilityNotificationSpc.sendSwoLocationNotifications(context)
+            notificationUrls += UtilityNotificationSpc.sendSwoD48LocationNotifications(context)
         }
         if (locationNeedsSpcFw) {
-            notifUrls += UtilityNotificationSpcFireWeather.sendSpcFireWeatherD12LocationNotifications(context)
+            notificationUrls += UtilityNotificationSpcFireWeather.sendSpcFireWeatherD12LocationNotifications(context)
         }
         if (locationNeedsWpcMpd) {
-            notifUrls += UtilityNotificationWpc.sendMpdLocationNotifications(context)
+            notificationUrls += UtilityNotificationWpc.sendMpdLocationNotifications(context)
         }
-        cancelOldNotifications(notifUrls)
+        cancelOldNotifications(notificationUrls)
     }
 
     private fun cancelOldNotifications(notificationString: String) {

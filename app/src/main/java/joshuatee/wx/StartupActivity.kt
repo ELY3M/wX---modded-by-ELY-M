@@ -64,7 +64,7 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         Location.refreshLocationData(this)
         UtilityWXJobService.startService(this)
         if (UIPreferences.mediaControlNotif) {
-            UtilityNotification.createMediaControlNotif(applicationContext, "")
+            UtilityNotification.createMediaControlNotification(applicationContext, "")
         }
 
 

@@ -96,7 +96,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                     UtilityTts.synthesizeTextAndPlay(applicationContext, txt, prod)
                     pause.setIcon(MyApplication.ICON_PAUSE)
                     if (UIPreferences.mediaControlNotif)
-                        UtilityNotification.createMediaControlNotif(applicationContext, "")
+                        UtilityNotification.createMediaControlNotification(applicationContext, "")
                 }
             }
             R.id.action_stop -> {
@@ -108,7 +108,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                     pause.setIcon(MyApplication.ICON_PAUSE)
                 if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying)
                     if (UIPreferences.mediaControlNotif)
-                        UtilityNotification.createMediaControlNotif(applicationContext, "")
+                        UtilityNotification.createMediaControlNotification(applicationContext, "")
             }
             R.id.action_playlist -> UtilityPlayList.add(this, view, playlistToken, txt)
             else -> return false
@@ -154,7 +154,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                     UtilityTts.synthesizeTextAndPlay(applicationContext, ttsTxt, ttsProd)
                     pause.setIcon(MyApplication.ICON_PAUSE)
                     if (UIPreferences.mediaControlNotif)
-                        UtilityNotification.createMediaControlNotif(applicationContext, "")
+                        UtilityNotification.createMediaControlNotification(applicationContext, "")
 
                 }
             }

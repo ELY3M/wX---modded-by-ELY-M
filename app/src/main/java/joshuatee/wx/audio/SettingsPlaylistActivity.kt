@@ -210,7 +210,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         }
         if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying) {
             if (UIPreferences.mediaControlNotif) {
-                UtilityNotification.createMediaControlNotif(applicationContext, "")
+                UtilityNotification.createMediaControlNotification(applicationContext, "")
             }
         }
     }
@@ -222,7 +222,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         }
         if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying) {
             if (UIPreferences.mediaControlNotif) {
-                UtilityNotification.createMediaControlNotif(applicationContext, "")
+                UtilityNotification.createMediaControlNotification(applicationContext, "")
             }
         }
     }

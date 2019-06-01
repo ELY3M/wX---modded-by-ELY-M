@@ -60,6 +60,8 @@ import androidx.core.app.NotificationManagerCompat
 
 object UtilityNotification {
 
+    // FIXME lots of variable naming improvement opportunities
+
     private var notiChannelInitialized = false
 
     internal fun send(context: Context, locNum: String, y: Int): String {
@@ -133,8 +135,8 @@ object UtilityNotification {
                                 objPI.resultPendingIntent2,
                                 context.resources.getString(R.string.read_aloud)
                         )
-                        val noti = createNotifBigTextWithAction(notifObj)
-                        notifObj.sendNotification(context, cancelStr, 1, noti)
+                        val notification = createNotificationBigTextWithAction(notifObj)
+                        notifObj.sendNotification(context, cancelStr, 1, notification)
                     }
                     notifUrls += cancelStr + MyApplication.notificationStrSep
                 }
@@ -203,7 +205,7 @@ object UtilityNotification {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 )
                 if (!(MyApplication.alertOnlyOnce && oldNotifStr.contains(url2 + "radar"))) {
-                    noti2 = createNotifBigPicture(
+                    noti2 = createNotificationBigPicture(
                             context,
                             noMain,
                             resultPendingIntent2,
@@ -220,7 +222,7 @@ object UtilityNotification {
         return notifUrls
     }
 
-    internal fun sendNotifCC(context: Context, locNum: String, x: Int, y: Int): String {
+    internal fun sendNotificationCurrentConditions(context: Context, locNum: String, x: Int, y: Int): String {
         val locNumInt = (locNum.toIntOrNull() ?: 0) - 1
         var notifUrls = ""
         val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
@@ -305,7 +307,7 @@ object UtilityNotification {
                                 )
                         )
                     }
-                    val noti = createNotifBigTextBigIcon(
+                    val noti = createNotificationBigTextBigIcon(
                             context,
                             false,
                             noMain,
@@ -349,7 +351,7 @@ object UtilityNotification {
                             objPI.resultPendingIntent2,
                             "7 Day Forecast"
                     )
-                    val noti2 = createNotifBigTextWithAction(notifObj)
+                    val noti2 = createNotificationBigTextWithAction(notifObj)
                     notifObj.sendNotification(context, url + "7day", 1, noti2)
                 } // end 7 day
             } // end if current time
@@ -357,14 +359,15 @@ object UtilityNotification {
         return notifUrls
     }
 
+    // June 2019
+    // change NotificationManager.IMPORTANCE_DEFAULT and NotificationManager.IMPORTANCE_LOW to NotificationManager.IMPORTANCE_HIGH
+    // in attempt to automatically have notifications in Android Q show up in status bar
     fun initChannels(context: Context) {
         if (Build.VERSION.SDK_INT < 26 || notiChannelInitialized) {
             return
         }
-        val notificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val channel =
-                NotificationChannel("default", "Channel name", NotificationManager.IMPORTANCE_DEFAULT)
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val channel = NotificationChannel("default", "Channel name", NotificationManager.IMPORTANCE_HIGH)
         channel.description = "wX weather"
         channel.setSound(
                 Uri.parse(MyApplication.notifSoundUri), AudioAttributes.Builder()
@@ -375,7 +378,7 @@ object UtilityNotification {
         val channelNoSound = NotificationChannel(
                 notiChannelStrNoSound,
                 "wX No Sound",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_HIGH
         )
         channelNoSound.description = "wX weather no sound"
         channelNoSound.setSound(null, null)
@@ -386,7 +389,7 @@ object UtilityNotification {
     private const val notiChannelStr = "default"
     const val notiChannelStrNoSound: String = "defaultNoSound2"
 
-    private fun createNotifBigPicture(
+    private fun createNotificationBigPicture(
             context: Context,
             noMain: String,
             resultPendingIntent2: PendingIntent,
@@ -409,7 +412,7 @@ object UtilityNotification {
         return noti2
     }
 
-    fun createNotifBigTextWithAction(notification: ObjectNotification): Notification {
+    fun createNotificationBigTextWithAction(notification: ObjectNotification): Notification {
         initChannels(notification.context)
         val onMs = 2000
         val offMs = 4000
@@ -468,9 +471,7 @@ object UtilityNotification {
         return noti
     }
 
-    // https://medium.com/google-developers/migrating-mediastyle-notifications-to-support-android-o-29c7edeca9b7
-
-    fun createMediaControlNotif(context: Context, titleF: String) {
+    fun createMediaControlNotification(context: Context, titleF: String) {
         initChannels(context)
         var title = titleF
         if (title == "")
@@ -573,7 +574,7 @@ object UtilityNotification {
     // bug: https://code.google.com/p/android/issues/detail?id=43179&q=setSmallIcon&colspec=ID%20Type%20Status%20Owner%20Summary%20Stars
     // pulldown small icon taking default level
 
-    private fun createNotifBigTextBigIcon(
+    private fun createNotificationBigTextBigIcon(
             context: Context, sound: Boolean, noMain: String,
             noBody: String, resultPendingIntent: PendingIntent, smallIcon: Int,
             iconAlert: Bitmap, noSummary: String, prio: Int

@@ -261,7 +261,7 @@ object UtilityTts {
             ttobjGlobal!!.synthesizeToFile(chunkAl[it], myHashRender, fileName)
         }
         if (UIPreferences.mediaControlNotif) {
-            UtilityNotification.createMediaControlNotif(context, prod)
+            UtilityNotification.createMediaControlNotification(context, prod)
         }
     }
 

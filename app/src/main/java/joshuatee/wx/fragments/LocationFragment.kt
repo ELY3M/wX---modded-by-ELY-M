@@ -423,7 +423,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             oglrArr[idx].product = "TV0"
         if (oglrArr[idx].product == "TV0" && !WXGLNexrad.isRidTdwr(oglrArr[idx].rid))
             oglrArr[idx].product = "N0U"
-        UtilityRadarUI.initWxoglGeom(
+        UtilityRadarUI.initWxOglGeom(
                 glviewArr[idx],
                 oglrArr[idx],
                 idx,

@@ -32,7 +32,7 @@ class AudioServiceToggleState : IntentService("AudioServiceToggleState") {
         if (UtilityTts.mMediaPlayer != null) {
             UtilityTts.playMediaPlayer(1)
         }
-        UtilityNotification.createMediaControlNotif(this, "")
+        UtilityNotification.createMediaControlNotification(this, "")
     }
 } 
 
