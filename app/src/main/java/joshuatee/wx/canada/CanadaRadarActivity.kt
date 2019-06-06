@@ -74,7 +74,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
     private lateinit var star: MenuItem
     private var url = "https://weather.gc.ca/data/satellite/goes_wcan_visible_100.jpg"
     private var bitmap = UtilityImg.getBlankBitmap()
-    private lateinit var sp: ObjectSpinner
+    private lateinit var objectSpinner: ObjectSpinner
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,13 +107,13 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::mapToCanadaRadarSite)
         ridFav = Utility.readPref(this, "RID_CA_FAV", " : : :")
         ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, radarSite)
-        sp = ObjectSpinner(this, this, this, R.id.spinner1, ridArrLoc)
+        objectSpinner = ObjectSpinner(this, this, this, R.id.spinner1, ridArrLoc)
     }
 
     override fun onRestart() {
         ridFav = Utility.readPref(this, "RID_CA_FAV", " : : :")
         ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, radarSite)
-        sp.refreshData(this, ridArrLoc)
+        objectSpinner.refreshData(this, ridArrLoc)
         super.onRestart()
     }
 
@@ -214,7 +214,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         radarSite = r
         img.resetZoom()
         ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, r)
-        sp.refreshData(this, ridArrLoc)
+        objectSpinner.refreshData(this, ridArrLoc)
     }
 
     private fun getAnimate(frameCountStr: String) = GlobalScope.launch(uiDispatcher) {
@@ -279,7 +279,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
     private fun toggleFavorite() {
         ridFav = UtilityFavorites.toggleFavoriteString(this, radarSite, star, "RID_CA_FAV")
         ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, radarSite)
-        sp.refreshData(this, ridArrLoc)
+        objectSpinner.refreshData(this, ridArrLoc)
     }
 
     override fun onStop() {

@@ -40,8 +40,8 @@ object UtilitySpc {
         get() {
             val url = "${MyApplication.nwsSPCwebsitePrefix}/products/exper/enhtstm"
             val html = url.getHtml()
-            val tstArr = html.parseColumn("OnClick.\"show_tab\\(.([0-9]{4}).\\)\".*?")
-            return tstArr.map { "$url/imgs/enh_$it.gif".getImage() }
+            val dates = html.parseColumn("OnClick.\"show_tab\\(.([0-9]{4}).\\)\".*?")
+            return dates.map { "$url/imgs/enh_$it.gif".getImage() }
         }
 
     fun checkSpcDayX(context: Context, prod: String): List<String> {

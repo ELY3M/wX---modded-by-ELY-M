@@ -36,7 +36,6 @@ import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.spc.SpcMcdWatchShowActivity
-import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
@@ -49,7 +48,7 @@ import joshuatee.wx.RegExp
 import joshuatee.wx.objects.ObjectIntent
 import kotlinx.coroutines.*
 
-import kotlinx.android.synthetic.main.activity_wpcmpdshow_summary.*
+import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -61,24 +60,22 @@ class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private var imgUrl = ""
+    private var imageUrl = ""
     private var url = ""
     private var text = ""
     private var wfos = listOf<String>()
     private var product = ""
     private val bitmaps = mutableListOf<Bitmap>()
     private val mpdNumbers = mutableListOf<String>()
-    private lateinit var objCard: ObjectCard
     private var titleString = "MPDs"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_wpcmpdshow_summary, R.menu.shared_tts)
+        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.shared_tts)
         toolbarBottom.setOnMenuItemClickListener(this)
-        objCard = ObjectCard(this, R.id.cv1)
         // FIXME make number = intent.getStringArrayExtra(NO)[0]
         val no = intent.getStringExtra(NO)
-        imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$no.gif"
+        imageUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$no.gif"
         url = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd.php"
         title = titleString
         getContent()
@@ -89,12 +86,12 @@ class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
         withContext(Dispatchers.IO) {
             mpdList = url.getHtml().parseColumn(RegExp.mpdPattern)
             mpdList.forEach {
-                imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$it.gif"
+                imageUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$it.gif"
                 mpdNumbers.add(it)
-                bitmaps.add(imgUrl.getImage())
+                bitmaps.add(imageUrl.getImage())
             }
             if (mpdList.size == 1) {
-                imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd" +
+                imageUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd" +
                         mpdNumbers[0] + ".gif"
                 titleString = "MPD " + mpdNumbers[0]
                 product = "WPCMPD" + mpdNumbers[0]
@@ -102,7 +99,7 @@ class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
             }
         }
         mpdList.indices.forEach { mpdIndex ->
-            val card = ObjectCardImage(this@WpcMpdShowSummaryActivity, linearLayout, bitmaps[mpdIndex])
+            val card = ObjectCardImage(this@WpcMpdShowSummaryActivity, ll, bitmaps[mpdIndex])
             card.setOnClickListener(View.OnClickListener {
                 ObjectIntent(
                         this@WpcMpdShowSummaryActivity,
@@ -118,15 +115,12 @@ class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (mpdList.size == 1) {
             val wfoStr = text.parse("ATTN...WFO...(.*?)...<br>")
             wfos = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
-            ObjectCardText(this@WpcMpdShowSummaryActivity, linearLayout, toolbar, toolbarBottom, Utility.fromHtml(text))
+            ObjectCardText(this@WpcMpdShowSummaryActivity, ll, toolbar, toolbarBottom, Utility.fromHtml(text))
             title = titleString
             toolbar.subtitle = text.parse("AREAS AFFECTED...(.*?)CONCERNING").replace("<BR>", "")
         }
         if (mpdList.isEmpty()) {
-            textView.text = resources.getString(R.string.wpc_mpd_noactive)
-        } else {
-            textView.visibility = View.GONE
-            objCard.setVisibility(View.GONE)
+            ObjectCardText(this@WpcMpdShowSummaryActivity, ll, toolbar, toolbarBottom, resources.getString(R.string.wpc_mpd_noactive))
         }
     }
 
@@ -140,12 +134,7 @@ class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         wfos.filter { item.title.toString().contains(it) }.forEach {
-            UtilityLocation.saveLocationForMcd(
-                    it,
-                    this@WpcMpdShowSummaryActivity,
-                    linearLayout,
-                    uiDispatcher
-            )
+            UtilityLocation.saveLocationForMcd(it, this@WpcMpdShowSummaryActivity, ll, uiDispatcher)
         }
         return true
     }

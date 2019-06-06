@@ -127,7 +127,7 @@ internal class ObjectMetar(context: Context, location: LatLon) {
             timeOfDay = "day"
         }
         val conditionModified = condition.split(";")[0]
-        UtilityLog.d("wx", conditionModified)
+        //UtilityLog.d("wx", conditionModified)
         val shortCondition = UtilityMetarConditions.iconFromCondition[conditionModified] ?: ""
         return MyApplication.nwsApiUrl + "/icons/land/$timeOfDay/$shortCondition?size=medium"
     }
@@ -135,19 +135,16 @@ internal class ObjectMetar(context: Context, location: LatLon) {
     init {
         val obsClosest = UtilityMetar.findClosestObservation(context, location)
         UtilityUS.obsClosestClass = obsClosest.name
-        val observationData =
-            ("https://api.weather.gov/stations/" + obsClosest.name + "/observations/current").getNwsHtml()
+        val observationData = (MyApplication.nwsApiUrl + "/stations/" + obsClosest.name + "/observations/current").getNwsHtml()
         icon = observationData.parse("\"icon\": \"(.*?)\",")
         condition = observationData.parse("\"textDescription\": \"(.*?)\",")
-        val metarData =
-            ("${MyApplication.NWS_RADAR_PUB}/data/observations/metar/decoded/" + obsClosest.name + ".TXT").getHtmlSep()
+        val metarData = ("${MyApplication.NWS_RADAR_PUB}/data/observations/metar/decoded/" + obsClosest.name + ".TXT").getHtmlSep()
                 .replace("<br>", MyApplication.newline)
         temperature = metarData.parse("Temperature: (.*?) F")
         dewpoint = metarData.parse("Dew Point: (.*?) F")
         windDirection = metarData.parse("Wind: from the (.*?) \\(.*? degrees\\) at .*? MPH ")
         windSpeed = metarData.parse("Wind: from the .*? \\(.*? degrees\\) at (.*?) MPH ")
-        windGust =
-            metarData.parse("Wind: from the .*? \\(.*? degrees\\) at .*? MPH \\(.*? KT\\) gusting to (.*?) MPH")
+        windGust = metarData.parse("Wind: from the .*? \\(.*? degrees\\) at .*? MPH \\(.*? KT\\) gusting to (.*?) MPH")
         seaLevelPressure = metarData.parse("Pressure \\(altimeter\\): .*? in. Hg \\((.*?) hPa\\)")
         visibility = metarData.parse("Visibility: (.*?) mile")
         relativeHumidity = metarData.parse("Relative Humidity: (.*?)%")

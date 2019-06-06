@@ -66,11 +66,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val playlistMi = menu.findItem(R.id.action_playlist)
         playlistMi.isVisible = false
         toolbarBottom.setOnMenuItemClickListener(this)
-        try {
-            activityArguments = intent.getStringArrayExtra(URL)
-        } catch (e: IllegalStateException) {
-            UtilityLog.handleException(e)
-        }
+        activityArguments = intent.getStringArrayExtra(URL)
         url = activityArguments[0]
         title = activityArguments[1]
         textCard = ObjectCardText(this, ll, toolbar, toolbarBottom)

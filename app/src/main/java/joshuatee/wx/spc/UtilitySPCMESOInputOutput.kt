@@ -42,62 +42,54 @@ object UtilitySpcMesoInputOutput {
 
     fun getImage(context: Context, param: String, sector: String): Bitmap {
         val prefModel = "SPCMESO"
-        val showRadar =
-            Utility.readPref(context, prefModel + "_SHOW_RADAR", "false").startsWith("t")
-        val showOutlook =
-            Utility.readPref(context, prefModel + "_SHOW_OUTLOOK", "false").startsWith("t")
-        val showWatwarn =
-            Utility.readPref(context, prefModel + "_SHOW_WATWARN", "false").startsWith("t")
-        val showTopo = Utility.readPref(context, prefModel + "_SHOW_TOPO", "false").startsWith("t")
-        val layersAl = mutableListOf<Drawable>()
+        val showRadar = Utility.readPref(context, prefModel + "_SHOW_RADAR", "false").startsWith("t")
+        val showOutlook = Utility.readPref(context, prefModel + "_SHOW_OUTLOOK", "false").startsWith("t")
+        val showWatchWarn = Utility.readPref(context, prefModel + "_SHOW_WATWARN", "false").startsWith("t")
+        val showTopography = Utility.readPref(context, prefModel + "_SHOW_TOPO", "false").startsWith("t")
+        val drawables = mutableListOf<Drawable>()
         val gifUrl = if (UtilitySpcMeso.imgSf.contains(param) && !showRadar) {
             "_sf.gif"
         } else {
             ".gif"
         }
-        val imgUrl =
-            "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/$param/$param$gifUrl"
-        val radImgUrl =
-            "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/rgnlrad/rgnlrad.gif"
-        val outlookImgUrl =
-            "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/otlk/otlk.gif"
-        val watwarnImgUrl =
-            "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/warns/warns.gif"
-        val topoImgUrl =
-            "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/topo/topo.gif"
+        val imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/$param/$param$gifUrl"
+        val radImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/rgnlrad/rgnlrad.gif"
+        val outlookImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/otlk/otlk.gif"
+        val watchWarningImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/warns/warns.gif"
+        val topographyImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/topo/topo.gif"
         var bitmap = imgUrl.getImage()
-        layersAl.add(ColorDrawable(Color.WHITE))
-        if (showTopo) {
-            layersAl.add(
+        drawables.add(ColorDrawable(Color.WHITE))
+        if (showTopography) {
+            drawables.add(
                 BitmapDrawable(
                     context.resources,
-                    UtilityImg.eraseBG(topoImgUrl.getImage(), -1)
+                    UtilityImg.eraseBG(topographyImgUrl.getImage(), -1)
                 )
             )
         }
         if (showRadar) {
             val bitmapradar = radImgUrl.getImage()
             bitmap = UtilityImg.eraseBG(bitmap, -1)
-            layersAl.add(BitmapDrawable(context.resources, bitmapradar))
+            drawables.add(BitmapDrawable(context.resources, bitmapradar))
         }
-        layersAl.add(BitmapDrawable(context.resources, bitmap))
+        drawables.add(BitmapDrawable(context.resources, bitmap))
         if (showOutlook) {
-            layersAl.add(
+            drawables.add(
                 BitmapDrawable(
                     context.resources,
                     UtilityImg.eraseBG(outlookImgUrl.getImage(), -1)
                 )
             )
         }
-        if (showWatwarn) {
-            layersAl.add(
+        if (showWatchWarn) {
+            drawables.add(
                 BitmapDrawable(
                     context.resources,
-                    UtilityImg.eraseBG(watwarnImgUrl.getImage(), -1)
+                    UtilityImg.eraseBG(watchWarningImgUrl.getImage(), -1)
                 )
             )
         }
-        return UtilityImg.layerDrawableToBitmap(layersAl)
+        return UtilityImg.layerDrawableToBitmap(drawables)
     }
 
     fun getAnimation(

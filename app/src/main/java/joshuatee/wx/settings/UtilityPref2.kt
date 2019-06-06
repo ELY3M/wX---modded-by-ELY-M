@@ -102,6 +102,7 @@ object UtilityPref2 {
             editor.putString("RADAR_SHOW_COUNTY", "true")
             editor.putInt("RADAR_COLOR_HW", Color.BLUE)
             editor.putInt("RADAR_COLOR_STATE", Color.WHITE)
+            editor.putString("RADAR_SHOW_RADAR", "true")
             editor.putString("ALERT1_NOTIFICATION", alertNotificationDefault)
             editor.putString("ALERT_TORNADO_NOTIFICATION", alertTornadoNotificationDefault)
             editor.putString("ALERT_SPCMCD_NOTIFICATION", alertSpcmcdNotificationDefault)

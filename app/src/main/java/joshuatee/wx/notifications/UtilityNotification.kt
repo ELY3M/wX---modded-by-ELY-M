@@ -326,16 +326,18 @@ object UtilityNotification {
                     noBody = objSevenDay.sevenDayShort
                     noSummary = objSevenDay.sevenDayShort
                     val resultIntent2 = Intent(context, TextScreenActivity::class.java)
-                    resultIntent2.putExtra(
-                            TextScreenActivity.URL,
-                            arrayOf(objSevenDay.sevenDayLong, locLabelStr)
-                    )
+                    resultIntent2.putExtra(TextScreenActivity.URL, arrayOf(objSevenDay.sevenDayLong, locLabelStr))
                     val stackBuilder2 = TaskStackBuilder.create(context)
                     stackBuilder2.addParentStack(TextScreenActivity::class.java)
                     stackBuilder2.addNextIntent(resultIntent2)
-                    val resultPendingIntent2 =
-                            stackBuilder2.getPendingIntent(i + y, PendingIntent.FLAG_UPDATE_CURRENT)
-                    val objPI = ObjectPendingIntents(context, TextScreenActivity::class.java)
+                    val resultPendingIntent2 = stackBuilder2.getPendingIntent(i + y, PendingIntent.FLAG_UPDATE_CURRENT)
+                    val objPI = ObjectPendingIntents(
+                            context,
+                            TextScreenActivity::class.java,
+                            TextScreenActivity.URL,
+                            arrayOf(objSevenDay.sevenDayLong, locLabelStr),
+                            arrayOf(objSevenDay.sevenDayLong, locLabelStr, "sound")
+                    )
                     objPI.resultPendingIntent = resultPendingIntent2
                     val notifObj = ObjectNotification(
                             context,

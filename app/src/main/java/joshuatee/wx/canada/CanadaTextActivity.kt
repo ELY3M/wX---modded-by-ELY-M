@@ -44,7 +44,7 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var product = "focn45"
     private var description = "Significant Weather Discussion, PASPC"
     private var html = ""
-    private lateinit var c0: ObjectCardText
+    private lateinit var objectCardText: ObjectCardText
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +54,7 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.menu.canada_text
         )
         toolbarBottom.setOnMenuItemClickListener(this)
-        c0 = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        objectCardText = ObjectCardText(this, ll, toolbar, toolbarBottom)
         ObjectCALegal(this, ll, "")
         product = Utility.readPref(this, "CA_TEXT_LASTUSED", product)
         description = Utility.readPref(this, "CA_TEXT_LASTUSED_TITLE", description)
@@ -72,7 +72,7 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     UtilityString.getHtmlAndParseSep(product, "<pre>(.*?)</pre>")
                 }
         }
-        c0.setTextAndTranslate(Utility.fromHtml(html))
+        objectCardText.setTextAndTranslate(Utility.fromHtml(html))
         Utility.writePref(this@CanadaTextActivity, "CA_TEXT_LASTUSED", product)
         Utility.writePref(this@CanadaTextActivity, "CA_TEXT_LASTUSED_TITLE", description)
     }

@@ -37,6 +37,7 @@ import joshuatee.wx.activitiesmisc.SevereDashboardActivity
 import joshuatee.wx.objects.ObjectIntentShortcut
 import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.radar.USNwsMosaicActivity
+import joshuatee.wx.settings.Location
 import joshuatee.wx.spc.SpcSwoSummaryActivity
 import joshuatee.wx.vis.GoesActivity
 
@@ -76,7 +77,12 @@ object UtilityShortcut {
                     imageId = R.drawable.ntor
                 }
                 ShortcutType.AFD -> {
-                    intent = ObjectIntentShortcut(context, AfdActivity::class.java).intent
+                    intent = ObjectIntentShortcut(
+                            context,
+                            AfdActivity::class.java,
+                            AfdActivity.URL,
+                            arrayOf(Location.wfo, "")
+                    ).intent
                     imageId = R.drawable.widget_afd
                 }
                 ShortcutType.GOES16 -> {

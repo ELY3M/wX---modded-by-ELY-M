@@ -58,7 +58,7 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
     private val prefToken = "SND_FAV"
     private var upperAir = ""
     private var bitmap = UtilityImg.getBlankBitmap()
-    private lateinit var sp: ObjectSpinner
+    private lateinit var objectSpinner: ObjectSpinner
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,9 +79,8 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
             prefTokenLocation,
             prefToken
         )
-        sp = ObjectSpinner(this, this, this, R.id.spinner1, locations)
-        imageMap =
-            ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
+        objectSpinner = ObjectSpinner(this, this, this, R.id.spinner1, locations)
+        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
         imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToSnd)
     }
 
@@ -93,7 +92,7 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
             prefTokenLocation,
             prefToken
         )
-        sp.refreshData(this, locations)
+        objectSpinner.refreshData(this, locations)
         super.onRestart()
     }
 
@@ -167,15 +166,14 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
             prefTokenLocation,
             prefToken
         )
-        sp.refreshData(this, locations)
+        objectSpinner.refreshData(this, locations)
         img.resetZoom()
     }
 
     private fun toggleFavorite() {
         val ridFav = UtilityFavorites.toggleFavoriteString(this, nwsOffice, star, prefToken)
-        locations =
-            UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefTokenLocation, prefToken)
-        sp.refreshData(this, locations)
+        locations = UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefTokenLocation, prefToken)
+        objectSpinner.refreshData(this, locations)
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {

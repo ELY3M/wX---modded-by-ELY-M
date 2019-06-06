@@ -486,42 +486,49 @@ class WXGLRender(private val context: Context) : Renderer {
                         "uMVPMatrix"
                 ), 1, false, matrixProjectionAndView, 0
         )
-        (0 until chunkCount).forEach {
-            radarChunkCnt = if (it < chunkCount - 1) {
-                breakSizeRadar * 6
-            } else {
-                6 * (totalBinsOgl - it * breakSizeRadar)
+
+        //show/hide radar
+        UtilityLog.d("radarshow", "showradar: " + MyApplication.radarShowRadar)
+        if (MyApplication.radarShowRadar) {
+
+            (0 until chunkCount).forEach {
+                radarChunkCnt = if (it < chunkCount - 1) {
+                    breakSizeRadar * 6
+                } else {
+                    6 * (totalBinsOgl - it * breakSizeRadar)
+                }
+                try {
+                    radarBuffers.floatBuffer.position(it * breakSizeRadar * 32)
+                    GLES20.glVertexAttribPointer(
+                            mPositionHandle,
+                            2,
+                            GLES20.GL_FLOAT,
+                            false,
+                            0,
+                            radarBuffers.floatBuffer.slice().asFloatBuffer()
+                    )
+                    radarBuffers.colorBuffer.position(it * breakSizeRadar * 12)
+                    GLES20.glVertexAttribPointer(
+                            colorHandle,
+                            3,
+                            GLES20.GL_UNSIGNED_BYTE,
+                            true,
+                            0,
+                            radarBuffers.colorBuffer.slice()
+                    )
+                    triangleIndexBuffer.position(0)
+                    GLES20.glDrawElements(
+                            GLES20.GL_TRIANGLES,
+                            radarChunkCnt,
+                            GLES20.GL_UNSIGNED_SHORT,
+                            triangleIndexBuffer.slice().asShortBuffer()
+                    )
+                } catch (e: Exception) {
+                    UtilityLog.handleException(e)
+                }
             }
-            try {
-                radarBuffers.floatBuffer.position(it * breakSizeRadar * 32)
-                GLES20.glVertexAttribPointer(
-                        mPositionHandle,
-                        2,
-                        GLES20.GL_FLOAT,
-                        false,
-                        0,
-                        radarBuffers.floatBuffer.slice().asFloatBuffer()
-                )
-                radarBuffers.colorBuffer.position(it * breakSizeRadar * 12)
-                GLES20.glVertexAttribPointer(
-                        colorHandle,
-                        3,
-                        GLES20.GL_UNSIGNED_BYTE,
-                        true,
-                        0,
-                        radarBuffers.colorBuffer.slice()
-                )
-                triangleIndexBuffer.position(0)
-                GLES20.glDrawElements(
-                        GLES20.GL_TRIANGLES,
-                        radarChunkCnt,
-                        GLES20.GL_UNSIGNED_SHORT,
-                        triangleIndexBuffer.slice().asShortBuffer()
-                )
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
-            }
-        }
+        } //show/hide radar
+
         GLES20.glLineWidth(defaultLineWidth)
         listOf(countyLineBuffers, stateLineBuffers, hwBuffers, hwExtBuffers, lakeBuffers).forEach {
             if (zoom > it.scaleCutOff) {

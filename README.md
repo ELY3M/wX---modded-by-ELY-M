@@ -46,6 +46,7 @@ http://bmx3r.com/wx
 #
 ## DONE!
 ====================================   
+Added in function to enable and disable showing radar.  idea/request by Mike T. - very great idea!   The radar show/hide function is in menu in tools section.         
 reversed my old warning mod and cleaned up.   
 updated the code with Joshua many changes and added in zoom setting for conus radar to zoom out to (5-20-19) (Tornado day in OK!)   
 all watch crash bugs should be gone, hopefully!   

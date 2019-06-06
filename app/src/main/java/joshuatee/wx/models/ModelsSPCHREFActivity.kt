@@ -59,7 +59,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
     private lateinit var miStatus: MenuItem
     private lateinit var miStatusParam1: MenuItem
     private lateinit var miStatusParam2: MenuItem
-    private lateinit var drw: ObjectNavDrawerCombo
+    private lateinit var objectNavDrawerCombo: ObjectNavDrawerCombo
     private lateinit var om: ObjectModel
     private var activityArguments: Array<String>? = arrayOf()
 
@@ -73,7 +73,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
         if (om.numPanes == 1) {
             super.onCreate(
                     savedInstanceState,
-                    R.layout.activity_modelsspchref,
+                    R.layout.activity_models_spchref,
                     R.menu.models_spchref,
                     iconsEvenlySpaced = false,
                     bottomToolbar = true
@@ -130,7 +130,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                 om.sector
         )
         UtilityModelSpcHrefInterface.createData()
-        drw = ObjectNavDrawerCombo(
+        objectNavDrawerCombo = ObjectNavDrawerCombo(
                 this,
                 UtilityModelSpcHrefInterface.groups,
                 UtilityModelSpcHrefInterface.longCodes,
@@ -139,10 +139,10 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                 ""
         )
         om.setUIElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, spRun, spSector)
-        drw.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
-            drw.drawerLayout.closeDrawer(drw.listView)
-            om.displayData.param[om.curImg] = drw.getToken(groupPosition, childPosition)
-            om.displayData.paramLabel[om.curImg] = drw.getLabel(groupPosition, childPosition)
+        objectNavDrawerCombo.listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
+            objectNavDrawerCombo.drawerLayout.closeDrawer(objectNavDrawerCombo.listView)
+            om.displayData.param[om.curImg] = objectNavDrawerCombo.getToken(groupPosition, childPosition)
+            om.displayData.paramLabel[om.curImg] = objectNavDrawerCombo.getLabel(groupPosition, childPosition)
             UtilityModels.getContent(this, om, listOf(""), uiDispatcher)
             true
         }
@@ -174,10 +174,10 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-            drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+            objectNavDrawerCombo.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item))
+        if (objectNavDrawerCombo.actionBarDrawerToggle.onOptionsItemSelected(item))
             return true
         when (item.itemId) {
             R.id.action_back -> UtilityModels.moveBack(om.spTime)
@@ -261,12 +261,12 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        drw.actionBarDrawerToggle.syncState()
+        objectNavDrawerCombo.actionBarDrawerToggle.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawerCombo.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
     override fun onStop() {

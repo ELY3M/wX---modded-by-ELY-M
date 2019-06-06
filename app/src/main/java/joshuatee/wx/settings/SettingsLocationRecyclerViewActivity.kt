@@ -76,7 +76,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         withContext(Dispatchers.IO) {
             for (index in MyApplication.locations.indices) {
                 currentConditions.add(ObjectForecastPackageCurrentConditions(this@SettingsLocationRecyclerViewActivity, index))
-                currentConditions[index].formatCC()
+                currentConditions[index].formatCurrentConditions()
             }
         }
         updateListWithCurrentConditions()

@@ -76,7 +76,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private lateinit var scrollView: ScrollView
     private lateinit var spinner: Spinner
     private var lastRefresh = 0.toLong()
-    private var ccTime = ""
+    private var currentConditionsTime = ""
     private var radarTime = ""
     private var x = ""
     private var y = ""
@@ -105,7 +105,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     // used to track the wxogl # for the wxogl that is tied to current location
     private var oglrIdx = -1
     // total # of wxogl
-    private var oglrCnt = 0
+    private var oglrCount = 0
     private var needForecastData = false
     private var linearLayoutForecast: LinearLayout? = null
     // hazards
@@ -154,8 +154,8 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 }
             } else if (tok == "OGL-RADAR") {
                 oglrArr.add(WXGLRender(activityReference))
-                oglrIdx = oglrCnt
-                oglrCnt += 1
+                oglrIdx = oglrCount
+                oglrCount += 1
                 cardViews.add(ObjectCard(activityReference).card)
                 glviewArr.add(WXGLSurfaceView(activityReference, widthDivider, numPanes, 1))
                 oglrArr[index].rid = ""
@@ -195,7 +195,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 setImageOnClick()
             } else if (tok.contains("NXRD-")) {
                 oglrArr.add(WXGLRender(activityReference))
-                oglrCnt += 1
+                oglrCount += 1
                 cardViews.add(ObjectCard(activityReference).card)
                 glviewArr.add(WXGLSurfaceView(activityReference, widthDivider, numPanes, 1))
                 glviewArr[index].idx = index
@@ -287,7 +287,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 }
             })
         }
-        refreshDynamicContent()
+        getContent()
         if (MyApplication.locDisplayImg) {
             glviewArr.indices.forEach {
                 glviewInitialized = UtilityRadarUI.initGlviewFragment(
@@ -338,7 +338,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 }
                 hsImages.forEach { it.resetZoom() }
                 setImageOnClick()
-                refreshDynamicContent()
+                getContent()
             } else {
                 ObjectIntent(
                         activityReference,
@@ -353,7 +353,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
-    private fun refreshDynamicContent() {
+    private fun getContent() {
         locationCard?.let { UtilityUI.cardViewSetup(it) }
         sevenDayExtShown = false
         if (needForecastData) {
@@ -400,7 +400,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         }
         if (UIPreferences.refreshLocMin != 0 || dataNotInitialized) {
             if (currentTimeSec > lastRefresh + refreshIntervalSec || Location.x != xOld || Location.y != yOld) {
-                refreshDynamicContent()
+                getContent()
             }
             dataNotInitialized = false
         }
@@ -472,7 +472,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             glviewArr[idx].requestRender()
             if (idx == oglrIdx) {
                 radarTime = radarTimeStamp
-                cardCC?.setStatus(ccTime + radarTime)
+                cardCC?.setStatus(currentConditionsTime + radarTime)
             }
        // }
     }
@@ -710,7 +710,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         strName,
                         oglrArr[0],
                         activityReference,
-                        ::refreshDynamicContent,
+                        ::getContent,
                         ::resetAllGlview,
                         ::getAllRadars
                 )
@@ -719,7 +719,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         strName,
                         null,
                         activityReference,
-                        ::refreshDynamicContent,
+                        ::getContent,
                         ::resetAllGlview,
                         ::getAllRadars
                 )
@@ -793,11 +793,10 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private val activityReference: FragmentActivity
         get() {
             if (mActivity == null) {
-                if (android.os.Build.VERSION.SDK_INT >= 23 ) {
-                    mActivity = activity
-                    //val test = context
+                mActivity = if (android.os.Build.VERSION.SDK_INT >= 23 ) {
+                    activity
                 } else {
-                    mActivity = activity
+                    activity
                 }
             }
             return mActivity!!
@@ -863,20 +862,20 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             //
             cardCC?.let {
                 if (homescreenFavLocal.contains("TXT-CC2")) {
-                    ccTime = objCc.status
+                    currentConditionsTime = objCc.status
                     if (bitmapForCurrentConditions != null) {
                         it.updateContent(
                                 bitmapForCurrentConditions!!,
                                 objCc,
                                 Location.isUS,
-                                ccTime,
+                                currentConditionsTime,
                                 radarTime
                         )
                     }
                 } else {
                     it.setTopLine(objCc.data)
-                    ccTime = objCc.status
-                    it.setStatus(ccTime + radarTime)
+                    currentConditionsTime = objCc.status
+                    it.setStatus(currentConditionsTime + radarTime)
                 }
             }
         }

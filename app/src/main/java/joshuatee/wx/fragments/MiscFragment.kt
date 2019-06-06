@@ -78,7 +78,7 @@ class MiscFragment : Fragment() {
                     ModelsGenericActivity.INFO,
                     arrayOf("1", "NCEP", "NCEP"),
                     resources.getString(R.string.help_ncep_models),
-                    "model_ncep"
+                    "model_ncep", "NCEP"
             )
             //hm["model_hrrr"] = TileObject(R.drawable.hrrrviewer, ModelsESRLActivity::class.java, ModelsESRLActivity.INFO, arrayOf("1", "ESRL"), resources.getString(R.string.help_hrrr_viewer), "model_hrrr")
             hm["model_hrrr"] = TileObject(
@@ -87,7 +87,7 @@ class MiscFragment : Fragment() {
                     ModelsGenericActivity.INFO,
                     arrayOf("1", "ESRL", "ESRL"),
                     resources.getString(R.string.help_hrrr_viewer),
-                    "model_hrrr"
+                    "model_hrrr", "HRRR"
             )
 
             hm["uswarn"] = TileObject(
@@ -99,7 +99,7 @@ class MiscFragment : Fragment() {
                             "us"
                     ),
                     resources.getString(R.string.help_uswarn),
-                    "uswarn"
+                    "uswarn", "US Warnings"
             )
             hm["wpctext"] = TileObject(
                     R.drawable.srfd,
@@ -107,7 +107,7 @@ class MiscFragment : Fragment() {
                     WpcTextProductsActivity.URL,
                     arrayOf("pmdspd", "Short Range Forecast Discussion"),
                     resources.getString(R.string.help_wpc_text_products),
-                    "wpctext"
+                    "wpctext", "National text products"
             )
             hm["nhc"] = TileObject(
                     R.drawable.nhc,
@@ -115,7 +115,7 @@ class MiscFragment : Fragment() {
                     "",
                     arrayOf(),
                     resources.getString(R.string.help_nhc),
-                    "nhc"
+                    "nhc", "NHC"
             )
             if (!UIPreferences.useAwcRadarMosaic) {
                 hm["nwsmosaic"] = TileObject(
@@ -124,7 +124,7 @@ class MiscFragment : Fragment() {
                         USNwsMosaicActivity.URL,
                         arrayOf("", ""),
                         resources.getString(R.string.help_nws_radar_mosaics),
-                        "nwsmosaic"
+                        "nwsmosaic", "AWC Radar Mosaics"
                 )
             } else {
                 hm["nwsmosaic"] = TileObject(
@@ -133,7 +133,7 @@ class MiscFragment : Fragment() {
                         AwcRadarMosaicActivity.URL,
                         arrayOf(""),
                         resources.getString(R.string.help_nws_radar_mosaics),
-                        "nwsmosaic"
+                        "nwsmosaic", "NWS Radar Mosaics"
                 )
             }
             hm["goes"] = TileObject(
@@ -142,7 +142,7 @@ class MiscFragment : Fragment() {
                     GoesActivity.RID,
                     arrayOf("CONUS", "09"),
                     resources.getString(R.string.help_goes_viewer),
-                    "goes"
+                    "goes", "GOES"
             )
             hm["lightning"] = TileObject(
                     R.drawable.lightning,
@@ -150,7 +150,7 @@ class MiscFragment : Fragment() {
                     "",
                     arrayOf(),
                     resources.getString(R.string.help_lightning),
-                    "lightning"
+                    "lightning", "lightning"
             )
             hm["wpcimages"] = TileObject(
                     R.drawable.fmap,
@@ -158,7 +158,7 @@ class MiscFragment : Fragment() {
                     "",
                     arrayOf(),
                     resources.getString(R.string.help_wpc_images),
-                    "wpcimages"
+                    "wpcimages", "National Images"
             )
             hm["twitter_state"] = TileObject(
                     R.drawable.twstate,
@@ -166,7 +166,7 @@ class MiscFragment : Fragment() {
                     "",
                     arrayOf(),
                     resources.getString(R.string.help_twitter),
-                    "twitter_state"
+                    "twitter_state", "Twitter state"
             )
             hm["twitter_tornado"] = TileObject(
                     R.drawable.twtornado, WebscreenAB::class.java, WebscreenAB.URL,
@@ -174,7 +174,7 @@ class MiscFragment : Fragment() {
                             "<html><meta name=\"viewport\" content=\"width=device-width, user-scalable=no\" /> <body width=\"100%\"><div><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\"://platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script><html><a class=\"twitter-timeline\" data-dnt=\"true\" href=\"https://twitter.com/search?q=%23tornado\" data-widget-id=\"406096257220763648\" data-chrome=\"noscrollbar noheader nofooter noborders \" data-tweet-limit=20>Tweets about \"#tornado\"</a></div></body></html>",
                             "#tornado"
                     ),
-                    resources.getString(R.string.help_twitter), "twitter_tornado"
+                    resources.getString(R.string.help_twitter), "twitter_tornado", "Twitter tornado"
             )
             hm["opc"] = TileObject(
                     R.drawable.opc,
@@ -182,7 +182,7 @@ class MiscFragment : Fragment() {
                     ImageCollectionActivity.TYPE,
                     arrayOf("OPC"),
                     resources.getString(R.string.help_opc),
-                    "opc"
+                    "opc", "OPC"
             )
             hm["goesfulldisk"] = TileObject(
                     R.drawable.goesfulldisk,
@@ -190,7 +190,7 @@ class MiscFragment : Fragment() {
                     ImageCollectionActivity.TYPE,
                     arrayOf("GOESFD"),
                     resources.getString(R.string.help_goesfulldisk),
-                    "goesfulldisk"
+                    "goesfulldisk", "GOES Full Disk"
             )
             hm["nwsobs"] = TileObject(
                     R.drawable.nwsobs,
@@ -198,7 +198,7 @@ class MiscFragment : Fragment() {
                     "",
                     arrayOf(),
                     resources.getString(R.string.help_nws_obs_sites),
-                    "nwsobs"
+                    "nwsobs", "Observation sites"
             )
             if (!UIPreferences.dualpaneRadarIcon) {
                 hm["wxogl"] = TileObject(
@@ -207,7 +207,7 @@ class MiscFragment : Fragment() {
                         WXGLRadarActivityMultiPane.RID,
                         arrayOf(Location.rid, "", "2"),
                         "",
-                        "wxogl"
+                        "wxogl", "Dual pane nexrad radar"
                 )
             } else {
                 hm["wxogl"] = TileObject(
@@ -216,18 +216,17 @@ class MiscFragment : Fragment() {
                         WXGLRadarActivity.RID,
                         arrayOf(Location.rid, ""),
                         "",
-                        "wxogl"
+                        "wxogl", "Single pane nexrad radar"
                 )
             }
             Location.checkCurrentLocationValidity()
-            //val locInt = Location.currentLocation
             hm["wxoglquad"] = TileObject(
                     R.drawable.wxoglquadpane,
                     WXGLRadarActivityMultiPane::class.java,
                     WXGLRadarActivityMultiPane.RID,
                     arrayOf(Location.rid, "", "4"),
                     "",
-                    "wxoglquad"
+                    "wxoglquad", "Dual pane nexrad radar"
             )
             hm["model_nssl_wrf"] = TileObject(
                     R.drawable.nsslwrf,
@@ -235,7 +234,7 @@ class MiscFragment : Fragment() {
                     ModelsGenericActivity.INFO,
                     arrayOf("1", "NSSL", "NSSL"),
                     resources.getString(R.string.help_models_nssl_wrf),
-                    "model_nssl_wrf"
+                    "model_nssl_wrf", "WRF"
             )
             hm["goes16"] = TileObject(
                     R.drawable.goes16,
@@ -243,7 +242,7 @@ class MiscFragment : Fragment() {
                     GoesActivity.RID,
                     arrayOf(""),
                     resources.getString(R.string.help_goes16),
-                    "goes16"
+                    "goes16", "GOES"
             )
             hm["wpcgefs"] = TileObject(
                     R.drawable.wpcgefs,
@@ -251,7 +250,7 @@ class MiscFragment : Fragment() {
                     ModelsGenericActivity.INFO,
                     arrayOf("1", "WPCGEFS", "WPC"),
                     resources.getString(R.string.help_wpcgefs),
-                    "wpcgefs"
+                    "wpcgefs", "WPC GEFS"
             )
             val tileOrder =
                     "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:"

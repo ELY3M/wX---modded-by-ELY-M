@@ -47,8 +47,9 @@ import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.util.UtilityImg
 import kotlinx.coroutines.*
 
-import kotlinx.android.synthetic.main.activity_uswarnings_with_radar.*
+import kotlinx.android.synthetic.main.activity_linear_layout_show_navdrawer_bottom_toolbar.*
 
+// FIXME rename USWarningsWithRadarActivity
 class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     // US weather alert interface
@@ -69,14 +70,14 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     private val turlLocal = Array(3) { "" }
     private var firstRun = true
     private var bitmap = UtilityImg.getBlankBitmap()
-    private lateinit var drw: ObjectNavDrawer
-    private lateinit var objAlertSummary: ObjectAlertSummary
+    private lateinit var objectNavDrawer: ObjectNavDrawer
+    private lateinit var objectAlertSummary: ObjectAlertSummary
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
                 savedInstanceState,
-                R.layout.activity_uswarnings_with_radar,
+                R.layout.activity_linear_layout_show_navdrawer_bottom_toolbar,
                 R.menu.uswarn,
                 true
         )
@@ -85,27 +86,27 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
         val activityArguments = intent.getStringArrayExtra(URL)
         turlLocal[0] = activityArguments[0]
         turlLocal[1] = activityArguments[1]
-        objAlertSummary = ObjectAlertSummary(this, this, linearLayout, scrollView)
-        drw = ObjectNavDrawer(this, objAlertSummary.filterArray.toList())
-        drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            drw.listView.setItemChecked(position, false)
-            drw.drawerLayout.closeDrawer(drw.listView)
-            if (objAlertSummary.filterArray[position].length != 2) {
-                turlLocal[0] = "^" + objAlertSummary.filterArray[position]
+        objectAlertSummary = ObjectAlertSummary(this, this, linearLayout, scrollView)
+        objectNavDrawer = ObjectNavDrawer(this, objectAlertSummary.filterArray.toList())
+        objectNavDrawer.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            objectNavDrawer.listView.setItemChecked(position, false)
+            objectNavDrawer.drawerLayout.closeDrawer(objectNavDrawer.listView)
+            if (objectAlertSummary.filterArray[position].length != 2) {
+                turlLocal[0] = "^" + objectAlertSummary.filterArray[position]
                 turlLocal[1] = "us"
             } else {
                 turlLocal[0] = ".*?"
-                turlLocal[1] = objAlertSummary.filterArray[position].toLowerCase(Locale.US)
+                turlLocal[1] = objectAlertSummary.filterArray[position].toLowerCase(Locale.US)
             }
             getContent()
         }
-        toolbarBottom.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
+        toolbarBottom.setOnClickListener { objectNavDrawer.drawerLayout.openDrawer(objectNavDrawer.listView) }
         getContent()
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
-        val zone = objAlertSummary.mapButtonZone[v.id]
+        val zone = objectAlertSummary.mapButtonZone[v.id]
         menu.add(0, v.id, 0, "Open radar interface")
         menu.add(0, v.id, 0, "Add new location for this warning ($zone)")
     }
@@ -120,12 +121,12 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     }
 
     private fun radarInterface(id: Int) {
-        val radarSite = Utility.readPref(this@USWarningsWithRadarActivity, "NWS_RID_" + objAlertSummary.mapButtonNws[id], "")
+        val radarSite = Utility.readPref(this@USWarningsWithRadarActivity, "NWS_RID_" + objectAlertSummary.mapButtonNws[id], "")
         ObjectIntent(
                 this@USWarningsWithRadarActivity,
                 WXGLRadarActivity::class.java,
                 WXGLRadarActivity.RID,
-                arrayOf(radarSite, objAlertSummary.mapButtonState[id]!!, "N0Q", "")
+                arrayOf(radarSite, objectAlertSummary.mapButtonState[id]!!, "N0Q", "")
         )
     }
 
@@ -140,9 +141,9 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
             var locNumIntCurrent = Location.numLocations
             locNumIntCurrent += 1
             val locNumToSaveStr = locNumIntCurrent.toString()
-            val zone = objAlertSummary.mapButtonZone[id]
-            var state = objAlertSummary.mapButtonState[id]
-            val county = objAlertSummary.mapButtonCounty[id]
+            val zone = objectAlertSummary.mapButtonZone[id]
+            var state = objectAlertSummary.mapButtonState[id]
+            val county = objectAlertSummary.mapButtonCounty[id]
             if (zone!!.length > 3) {
                 coord = if (zone.matches("[A-Z][A-Z]C.*?".toRegex())) {
                     UtilityLocation.getXYFromAddressOsm(county + "," + zone.substring(0, 2))
@@ -171,29 +172,29 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
                 }
             }
         }
-        objAlertSummary.updateContent(bitmap, html, turlLocal[0], firstRun)
-        title = objAlertSummary.getTitle(turlLocal[1])
+        objectAlertSummary.updateContent(bitmap, html, turlLocal[0], firstRun)
+        title = objectAlertSummary.getTitle(turlLocal[1])
         if (firstRun) {
-            drw.updateLists(this@USWarningsWithRadarActivity, objAlertSummary.navList.toList())
+            objectNavDrawer.updateLists(this@USWarningsWithRadarActivity, objectAlertSummary.navList.toList())
             firstRun = false
         }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        drw.actionBarDrawerToggle.syncState()
+        objectNavDrawer.actionBarDrawerToggle.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-            drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+            objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {

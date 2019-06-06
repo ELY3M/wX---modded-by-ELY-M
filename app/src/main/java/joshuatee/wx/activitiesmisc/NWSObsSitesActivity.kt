@@ -44,7 +44,7 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private val listSort = mutableListOf<String>()
     private var siteDisplay = false
     private var provSelected = ""
-    private lateinit var recyclerView: ObjectRecyclerView
+    private lateinit var objectRecyclerView: ObjectRecyclerView
     private val titleString = "Observation sites"
     val prefToken: String = "NWS_OBSSITE_LAST_USED"
     private lateinit var lastUsedMenuItem: MenuItem
@@ -61,7 +61,7 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         title = titleString
         updateButton()
         siteDisplay = false
-        recyclerView = ObjectRecyclerView(
+        objectRecyclerView = ObjectRecyclerView(
                 this,
                 this,
                 R.id.card_list,
@@ -84,7 +84,7 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         } else {
             when (position) {
                 0 -> {
-                    recyclerView.refreshList(GlobalArrays.states.toMutableList())
+                    objectRecyclerView.refreshList(GlobalArrays.states.toMutableList())
                     siteDisplay = false
                     title = titleString
                 }
@@ -124,7 +124,7 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             listCity.add(tmpArr[2] + ": " + tmpArr[1])
             listIds.add(tmpArr[2])
         }
-        recyclerView.refreshList(listCity)
+        objectRecyclerView.refreshList(listCity)
         siteDisplay = true
     }
 

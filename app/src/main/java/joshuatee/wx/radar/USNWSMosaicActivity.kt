@@ -54,14 +54,14 @@ class USNwsMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
     private var nwsRadarMosaicSectorLabelCurrent = ""
     private var bitmap = UtilityImg.getBlankBitmap()
     private var doNotSavePref = false
-    private lateinit var drw: ObjectNavDrawer
+    private lateinit var objectNavDrawer: ObjectNavDrawer
     private val prefImagePosition = "NWSRADMOS"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
                 savedInstanceState,
-                R.layout.activity_nwsmosaic,
+                R.layout.activity_image_show_navdrawer_bottom_toolbar,
                 R.menu.nwsmosaic,
                 iconsEvenlySpaced = true,
                 bottomToolbar = true
@@ -103,13 +103,13 @@ class USNwsMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
                 )
             }
         }
-        drw = ObjectNavDrawer(this, UtilityUSImgNwsMosaic.labels, UtilityUSImgNwsMosaic.sectors)
-        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, "")
+        objectNavDrawer = ObjectNavDrawer(this, UtilityUSImgNwsMosaic.labels, UtilityUSImgNwsMosaic.sectors)
+        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, objectNavDrawer, "")
         img.setMaxZoom(8.0f)
-        img.setListener(this, drw, ::getContentFixThis)
-        drw.index = findPosition(nwsRadarMosaicSectorLabelCurrent)
-        drw.setListener(::getContentFixThis)
-        toolbarBottom.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
+        img.setListener(this, objectNavDrawer, ::getContentFixThis)
+        objectNavDrawer.index = findPosition(nwsRadarMosaicSectorLabelCurrent)
+        objectNavDrawer.setListener(::getContentFixThis)
+        toolbarBottom.setOnClickListener { objectNavDrawer.drawerLayout.openDrawer(objectNavDrawer.listView) }
         getContent()
         // FIXME how to handle this on sector change img.setZoom(1.0f)
     }
@@ -133,11 +133,11 @@ class USNwsMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        toolbar.subtitle = drw.getLabel()
+        toolbar.subtitle = objectNavDrawer.getLabel()
         bitmap = withContext(Dispatchers.IO) {
             UtilityUSImgNwsMosaic.get(
                     this@USNwsMosaicActivity,
-                    drw.getUrl(),
+                    objectNavDrawer.getUrl(),
                     true
             )
         }
@@ -146,7 +146,7 @@ class USNwsMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
             Utility.writePref(
                     this@USNwsMosaicActivity,
                     "NWS_RADAR_MOSAIC_SECTOR_CURRENT",
-                    drw.getLabel()
+                    objectNavDrawer.getLabel()
             )
         }
         img.setBitmap(bitmap)
@@ -158,7 +158,7 @@ class USNwsMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
         animDrawable = withContext(Dispatchers.IO) {
             UtilityUSImgNwsMosaic.getAnimation(
                     this@USNwsMosaicActivity,
-                    drw.getUrl(),
+                    objectNavDrawer.getUrl(),
                     frameCount,
                     true
             )
@@ -168,16 +168,16 @@ class USNwsMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        drw.actionBarDrawerToggle.syncState()
+        objectNavDrawer.actionBarDrawerToggle.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
@@ -211,7 +211,7 @@ class USNwsMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-            drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+            objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onStop() {
         img.imgSavePosnZoom(this, prefImagePosition)

@@ -58,9 +58,9 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var number = ""
     private lateinit var activityArguments: Array<String>
-    private lateinit var c0: ObjectCardImage
-    private lateinit var c1: ObjectCardText
-    private lateinit var objWatch: ObjectWatchProduct
+    private lateinit var objectCardImage: ObjectCardImage
+    private lateinit var objectCardText: ObjectCardText
+    private lateinit var objectWatchProduct: ObjectWatchProduct
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,39 +70,39 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 R.menu.spcmcdshowdetail
         )
         toolbarBottom.setOnMenuItemClickListener(this)
-        c0 = ObjectCardImage(this, ll)
-        c1 = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        objectCardImage = ObjectCardImage(this, ll)
+        objectCardText = ObjectCardText(this, ll, toolbar, toolbarBottom)
         activityArguments = intent.getStringArrayExtra(NO)
         number = activityArguments[0]
         when (activityArguments[2]) {
-            "MCD" -> objWatch = ObjectWatchProduct(PolygonType.MCD, number)
-            "WATCH" -> objWatch = ObjectWatchProduct(PolygonType.WATCH, number)
-            "MPD" -> objWatch = ObjectWatchProduct(PolygonType.MPD, number)
+            "MCD" -> objectWatchProduct = ObjectWatchProduct(PolygonType.MCD, number)
+            "WATCH" -> objectWatchProduct = ObjectWatchProduct(PolygonType.WATCH, number)
+            "MPD" -> objectWatchProduct = ObjectWatchProduct(PolygonType.MPD, number)
             else -> {
             }
         }
-        title = objWatch.title
+        title = objectWatchProduct.title
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        withContext(Dispatchers.IO) { objWatch.getData(this@SpcMcdWatchShowActivity) }
-        c1.setText(Utility.fromHtml(objWatch.text))
-        toolbar.subtitle = objWatch.textForSubtitle
-        c0.setImage(objWatch.bitmap)
-        registerForContextMenu(c0.img)
+        withContext(Dispatchers.IO) { objectWatchProduct.getData(this@SpcMcdWatchShowActivity) }
+        objectCardText.setText(Utility.fromHtml(objectWatchProduct.text))
+        toolbar.subtitle = objectWatchProduct.textForSubtitle
+        objectCardImage.setImage(objectWatchProduct.bitmap)
+        registerForContextMenu(objectCardImage.img)
         UtilityTts.conditionalPlay(
                 activityArguments,
                 1,
                 applicationContext,
-                objWatch.text,
-                objWatch.prod
+                objectWatchProduct.text,
+                objectWatchProduct.prod
         )
     }
 
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
-        objWatch.wfos.forEach {
+        objectWatchProduct.wfos.forEach {
             menu.add(0, v.id, 0, "Add location: $it - " + Utility.readPref(
                     this,
                     "NWS_LOCATION_$it",
@@ -113,7 +113,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
-        objWatch.wfos.filter { item.title.toString().contains(it) }.forEach {
+        objectWatchProduct.wfos.filter { item.title.toString().contains(it) }.forEach {
             UtilityLocation.saveLocationForMcd(
                     it,
                     this@SpcMcdWatchShowActivity,
@@ -125,26 +125,26 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, objWatch.text, number, objWatch.prod)) {
+        if (audioPlayMenu(item.itemId, objectWatchProduct.text, number, objectWatchProduct.prod)) {
             return true
         }
         when (item.itemId) {
             R.id.action_share_all -> UtilityShare.shareText(
                     this,
-                    objWatch.title,
-                    Utility.fromHtml(objWatch.text),
-                    objWatch.bitmap
+                    objectWatchProduct.title,
+                    Utility.fromHtml(objectWatchProduct.text),
+                    objectWatchProduct.bitmap
             )
             R.id.action_share_text -> UtilityShare.shareText(
                     this,
-                    objWatch.title,
-                    Utility.fromHtml(objWatch.text)
+                    objectWatchProduct.title,
+                    Utility.fromHtml(objectWatchProduct.text)
             )
-            R.id.action_share_url -> UtilityShare.shareText(this, objWatch.title, objWatch.textUrl)
+            R.id.action_share_url -> UtilityShare.shareText(this, objectWatchProduct.title, objectWatchProduct.textUrl)
             R.id.action_share_image -> UtilityShare.shareBitmap(
                     this,
-                    objWatch.title,
-                    objWatch.bitmap
+                    objectWatchProduct.title,
+                    objectWatchProduct.bitmap
             )
             else -> return super.onOptionsItemSelected(item)
         }

@@ -40,8 +40,7 @@ internal object UtilitySpcSwo {
             imgUrls.mapTo(bitmaps) { it.getImage() }
             return bitmaps
         }
-        val html =
-            ("${MyApplication.nwsSPCwebsitePrefix}/products/outlook/day" + day + "otlk.html").getHtml()
+        val html = ("${MyApplication.nwsSPCwebsitePrefix}/products/outlook/day" + day + "otlk.html").getHtml()
         val time = html.parse("show_tab\\(.otlk_([0-9]{4}).\\)")
         when (day) {
             "1" -> {

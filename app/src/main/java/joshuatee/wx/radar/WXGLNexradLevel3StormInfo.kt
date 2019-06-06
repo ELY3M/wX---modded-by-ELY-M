@@ -55,6 +55,7 @@ internal object WXGLNexradLevel3StormInfo {
             dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, stiBaseFn + fnSuffix))
             dis.bigEndian = true
             retStr = UtilityLevel3TextProduct.read(dis)
+            //UtilityLog.d("wx", retStr)
             posn = retStr.parseColumn(RegExp.stiPattern1)
             motion = retStr.parseColumn(RegExp.stiPattern2)
         } catch (e: Exception) {
@@ -68,7 +69,9 @@ internal object WXGLNexradLevel3StormInfo {
         motion.map { it.replace("NEW", "0/ 0").replace("/ ", "/").replace("\\s+".toRegex(), " ") }
             .forEach { motionStr += it.replace("/", " ") }
         val posnNumbers = posnStr.parseColumnAll(RegExp.stiPattern3)
+        //UtilityLog.d("wx", posnNumbers.toString())
         val motNumbers = motionStr.parseColumnAll(RegExp.stiPattern3)
+        //UtilityLog.d("wx", motNumbers.toString())
         var degree: Double
         var nm: Double
         var degree2: Double

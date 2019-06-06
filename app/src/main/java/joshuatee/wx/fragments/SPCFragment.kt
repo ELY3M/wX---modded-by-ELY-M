@@ -61,8 +61,7 @@ class SpcFragment : Fragment() {
         val rView: RecyclerView = view.findViewById(R.id.recycler_view)
         rView.setHasFixedSize(true)
         rView.layoutManager = lLayout
-        val rcAdapter =
-                TileAdapter(context!!, rowListItem, UIPreferences.tilesPerRow, "FRAGMENT_SPC_ORDER")
+        val rcAdapter = TileAdapter(context!!, rowListItem, UIPreferences.tilesPerRow, "FRAGMENT_SPC_ORDER")
         rView.adapter = rcAdapter
         val callback = SimpleItemTouchHelperCallback(rcAdapter)
         val touchHelper = ItemTouchHelper(callback)
@@ -78,27 +77,27 @@ class SpcFragment : Fragment() {
                     ModelsSpcSrefActivity.INFO,
                     arrayOf("1", "SPCSREF", "SPCSREF"),
                     resources.getString(R.string.help_spc_sref),
-                    "spcsref"
+                    "spcsref", "SREF"
             )
             hm["spcsummary"] = TileObject(
                     R.drawable.spc_sum, SpcSwoSummaryActivity::class.java, "",
-                    arrayOf(), resources.getString(R.string.help_spc_swo_summary), "spcsummary"
+                    arrayOf(), resources.getString(R.string.help_spc_swo_summary), "spcsummary", "Convective Summary by Image"
             )
             hm["spcswod1"] = TileObject(
                     R.drawable.day1, SpcSwoActivity::class.java, SpcSwoActivity.NO,
-                    arrayOf("1", ""), resources.getString(R.string.help_spc_swo_detail), "spcswod1"
+                    arrayOf("1", ""), resources.getString(R.string.help_spc_swo_detail), "spcswod1", "Day 1"
             )
             hm["spcswod2"] = TileObject(
                     R.drawable.day2, SpcSwoActivity::class.java, SpcSwoActivity.NO,
-                    arrayOf("2", ""), resources.getString(R.string.help_spc_swo_detail), "spcswod2"
+                    arrayOf("2", ""), resources.getString(R.string.help_spc_swo_detail), "spcswod2", "Day 2"
             )
             hm["spcswod3"] = TileObject(
                     R.drawable.day3, SpcSwoActivity::class.java, SpcSwoActivity.NO,
-                    arrayOf("3", ""), resources.getString(R.string.help_spc_swo_detail), "spcswod3"
+                    arrayOf("3", ""), resources.getString(R.string.help_spc_swo_detail), "spcswod3", "Day 3"
             )
             hm["spcswod48"] = TileObject(
                     R.drawable.day48, SpcSwoActivity::class.java, SpcSwoActivity.NO,
-                    arrayOf("4-8", ""), resources.getString(R.string.help_spc_swo_detail), "spcswod48"
+                    arrayOf("4-8", ""), resources.getString(R.string.help_spc_swo_detail), "spcswod48", "Day 4 through 8"
             )
             hm["spcstormrpt1"] = TileObject(
                     R.drawable.report_today,
@@ -106,7 +105,7 @@ class SpcFragment : Fragment() {
                     SpcStormReportsActivity.NO,
                     arrayOf("today"),
                     resources.getString(R.string.help_spc_storm_reports),
-                    "spcstormrpt1"
+                    "spcstormrpt1", "Storm reports today"
             )
             hm["spcstormrpt2"] = TileObject(
                     R.drawable.report_yesterday,
@@ -114,7 +113,7 @@ class SpcFragment : Fragment() {
                     SpcStormReportsActivity.NO,
                     arrayOf("yesterday"),
                     resources.getString(R.string.help_spc_storm_reports),
-                    "spcstormrpt2"
+                    "spcstormrpt2", "Storm reports yesterday"
             )
             hm["spcmcd"] = TileObject(
                     R.drawable.mcd_tile,
@@ -122,7 +121,7 @@ class SpcFragment : Fragment() {
                     SpcMcdWatchShowSummaryActivity.NO,
                     arrayOf("mcd"),
                     resources.getString(R.string.help_spc_mcd),
-                    "spcmcd"
+                    "spcmcd", "MCD"
             )
             hm["spcwat"] = TileObject(
                     R.drawable.wat,
@@ -130,7 +129,7 @@ class SpcFragment : Fragment() {
                     SpcMcdWatchShowSummaryActivity.NO,
                     arrayOf("wat"),
                     resources.getString(R.string.help_spc_watches),
-                    "spcwat"
+                    "spcwat", "Watches"
             )
             hm["spcmeso"] = TileObject(
                     R.drawable.meso,
@@ -138,19 +137,19 @@ class SpcFragment : Fragment() {
                     SpcMesoActivity.INFO,
                     arrayOf("", "1", "SPCMESO"),
                     resources.getString(R.string.help_spc_mesoanalysis),
-                    "spcmeso"
+                    "spcmeso", "Mesoanalysis"
             )
             hm["spcfire"] = TileObject(
                     R.drawable.fire_outlook, SpcFireOutlookActivity::class.java, "",
-                    arrayOf(""), resources.getString(R.string.help_spc_fire_weather), "spcfire"
+                    arrayOf(""), resources.getString(R.string.help_spc_fire_weather), "spcfire", "Fire outlooks"
             )
             hm["spctstorm"] = TileObject(
                     R.drawable.tstorm, SpcThunderStormOutlookActivity::class.java, "",
-                    arrayOf(), resources.getString(R.string.help_spc_tstorm), "spctstorm"
+                    arrayOf(), resources.getString(R.string.help_spc_tstorm), "spctstorm", "Thunderstorm outlooks"
             )
             hm["spccompmap"] = TileObject(
                     R.drawable.spccompmap, SpcCompmapActivity::class.java, "",
-                    arrayOf(), resources.getString(R.string.help_spc_compmap), "spccompmap"
+                    arrayOf(), resources.getString(R.string.help_spc_compmap), "spccompmap", "Compmap"
             )
             hm["spchrrr"] = TileObject(
                     R.drawable.spchrrr,
@@ -158,7 +157,7 @@ class SpcFragment : Fragment() {
                     "",
                     arrayOf("1", "SPCHRRR", "SPC HRRR"),
                     resources.getString(R.string.help_spchrrr_models),
-                    "spchrrr"
+                    "spchrrr", "HRRR"
             )
             hm["spchref"] = TileObject(
                     R.drawable.spchref,
@@ -166,10 +165,9 @@ class SpcFragment : Fragment() {
                     "",
                     arrayOf("1", "SPCHREF", "SPC HREF"),
                     resources.getString(R.string.help_spchref_models),
-                    "spchref"
+                    "spchref", "HREF"
             )
-            val tileOrder =
-                    "spcsref:spcsummary:spcswod1:spcswod2:spcswod3:spcswod48:spcstormrpt1:spcstormrpt2:spcmcd:spcwat:spcmeso:spcfire:spctstorm:spccompmap:"
+            val tileOrder = "spcsref:spcsummary:spcswod1:spcswod2:spcswod3:spcswod48:spcstormrpt1:spcstormrpt2:spcmcd:spcwat:spcmeso:spcfire:spctstorm:spccompmap:"
             var spcPref: String = Utility.readPref("FRAGMENT_SPC_ORDER", tileOrder)
             if (!spcPref.contains("spchrrr")) {
                 spcPref += "spchrrr:"

@@ -40,7 +40,6 @@ import kotlinx.android.synthetic.main.activity_hourly.*
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.DefaultLabelFormatter
-import joshuatee.wx.notifications.BackgroundFetch
 import kotlinx.coroutines.*
 
 class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
@@ -55,8 +54,8 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var htmlShare = listOf<String>()
-    private lateinit var card: ObjectCard
-    private lateinit var textCard: ObjectCardVerticalText
+    private lateinit var objectCard: ObjectCard
+    private lateinit var objectCardVerticalText: ObjectCardVerticalText
     private var hourlyData = ObjectHourly()
     private var locationNumber = 0
 
@@ -70,15 +69,14 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         locationNumber = (intent.getStringExtra(LOC_NUM).toIntOrNull() ?: 0) - 1
-        card = ObjectCard(this, R.color.black, R.id.cv1)
+        objectCard = ObjectCard(this, R.color.black, R.id.cv1)
         cv1.visibility = View.GONE
-        textCard = ObjectCardVerticalText(this, 5, linearLayout, toolbar)
-        textCard.setOnClickListener(View.OnClickListener { sv.scrollTo(0,0)})
+        objectCardVerticalText = ObjectCardVerticalText(this, 5, linearLayout, toolbar)
+        objectCardVerticalText.setOnClickListener(View.OnClickListener { sv.scrollTo(0,0)})
         title = "Hourly Forecast"
         toolbar.subtitle = Location.getName(locationNumber)
         //UtilityLog.d("wx", UtilityTimeSunMoon.getSunTimesForHomescreen())
         //UtilityLog.d("wx", UtilityTimeSunMoon.getMoonTimesForHomescreen())
-        //BackgroundFetch(this).getContent()
         getContent()
     }
 
@@ -88,7 +86,7 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         val result2 = async(Dispatchers.IO) { UtilityUSHourly.getStringForActivity(htmlShare[1]) }
         hourlyData = result2.await()
         cv1.visibility = View.VISIBLE
-        textCard.setText(
+        objectCardVerticalText.setText(
             listOf(
                 hourlyData.time,
                 hourlyData.temp,

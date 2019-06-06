@@ -28,7 +28,12 @@
 // TODO look into tornado instead of #tornado for twitter embedded widget
 // TODO resolve activityReference issue in LocationFragment
 // TODO camelCase Myapp vars wxglrender
+// TODO https://android-developers.googleblog.com/2019/03/introducing-new-google-play-app-and.html
 // TODO put more diagnostics in settings -> about including more download stats and also rolling buffer for stacktraces
+// TODO for imageMap see if can set attributes in code so as to remove redundant layout files
+// TODO make usalerts detail layout more dynamic
+// TODO scan all obs sites - https://w1.weather.gov/xml/current_obs/seek.php?state=nd&Find=Find
+// TODO                          https://tgftp.nws.noaa.gov/data/observations/metar/stations/
 
 [ADD] - adding something new - method, file, etc. to the repo
 [REM] - remove items
@@ -38,6 +43,17 @@
 [REF] - refactor a method, group, variable, etc.
 [MER] - merge
 
+55217 2019_06_06    [IMP] SDK platform tools updated to 29.0.0
+                    [REF] variable renaming cont.
+55216 2019_06_06    [FIX] remove obs site KIGX from stations_us4.txt and us_metar3.txt
+                    [REF] variable renaming cont.
+55215 2019_06_05    [REF] move to common xml layout files in several activities
+                    [REF] variable renaming cont.
+55214 2019_06_02    [IMP] add content description tags in fragment tiles to assist accessibility
+                    [FIX] "pin" a shortcut to desktop for WFO/AFD activity was causing crash and not working
+                    [REF] architectual simplification in WpcMpdShowSummaryActivity/SpcMcdWatchShowSummaryActivity
+55211 2019_06_01    [FIX] at joshuatee.wx.activitiesmisc.TextScreenActivity.onCreate (TextScreenActivity.kt:74)
+                    Caused by: kotlin.UninitializedPropertyAccessException:
 55210 2019_06_01    [FIX] in UtilityNotification change channel notification importance to NotificationManager.IMPORTANCE_HIGH (Android Q)
                     [REF] camelcase in some radar and notification files
 55209 2019_05_30    [IMP] add watch/mpd/mcd check in radar based off same code in severe dashboard

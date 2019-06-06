@@ -41,9 +41,8 @@ class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var content = ""
     private var contentFull = ""
-    private lateinit var textCard: ObjectCardText
-    private var dataA = ""
-    private var dataB = ""
+    private lateinit var objectCardText: ObjectCardText
+    private var data = listOf("", "")
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +54,7 @@ class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
         toolbarBottom.setOnMenuItemClickListener(this)
         val menu = toolbarBottom.menu
         menu.findItem(R.id.action_playlist).isVisible = false
-        textCard = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        objectCardText = ObjectCardText(this, ll, toolbar, toolbarBottom)
         getContent()
     }
 
@@ -64,19 +63,16 @@ class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
             content = UtilitySunMoon.getExtendedData(Location.locationIndex)
             contentFull = UtilitySunMoon.getFullDates()
         }
-        // FIXME use a list
-        val (A, B) = UtilitySunMoon.parseData(content)
-        dataA = A
-        dataB = B
-        title = dataA
+        data = UtilitySunMoon.parseData(content)
+        title = data[0]
         toolbar.subtitle = Location.name
-        textCard.setText(dataB + MyApplication.newline + MyApplication.newline + contentFull)
+        objectCardText.setText(data[1] + MyApplication.newline + MyApplication.newline + contentFull)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, dataB, "sunmoon", "sunmoon")) return true
+        if (audioPlayMenu(item.itemId, data[1], "sunmoon", "sunmoon")) return true
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, dataA, dataB)
+            R.id.action_share -> UtilityShare.shareText(this, data[0], data[1])
             else -> return super.onOptionsItemSelected(item)
         }
         return true

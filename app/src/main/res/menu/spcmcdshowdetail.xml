@@ -36,7 +36,7 @@
         android:title="@string/label_playlist"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_test"
+        android:id="@+id/action_share_menu"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
         app:showAsAction="always">

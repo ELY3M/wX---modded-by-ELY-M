@@ -745,6 +745,7 @@ class MyApplication : Application() {
         var radarSti: Boolean = false
         var radarHi: Boolean = false
         var radarTvs: Boolean = false
+        var radarShowRadar: Boolean = true
         var radarShowLegend: Boolean = false
         var radarShowLegendWidth: Int = 0
         var radarShowLegendTextSize: Int = 0
@@ -808,6 +809,7 @@ class MyApplication : Application() {
             radarCountyHires = getInitialPreference("RADAR_COUNTY_HIRES", "false")
             radarStateHires = getInitialPreference("RADAR_STATE_HIRES", "false")
             radarIconsLevel2 = getInitialPreference("WXOGL_ICONS_LEVEL2", "false")
+            radarShowRadar = getInitialPreference("RADAR_SHOW_RADAR", "false")
             radarShowLegend = getInitialPreference("RADAR_SHOW_LEGEND", "false")
             radarShowLegendWidth = getInitialPreference("RADAR_SHOW_LEGEND_WIDTH", 50)
             radarShowLegendTextSize = getInitialPreference("RADAR_SHOW_LEGEND_TEXTSIZE", 30)

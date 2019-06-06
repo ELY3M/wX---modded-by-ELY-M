@@ -55,54 +55,51 @@ object UtilitySunMoon {
         return url.getHtmlUnsafe()
     }
 
-    fun parseData(contentF: String): Pair<String, String> {
+    fun parseData(contentF: String): List<String> {
         var content = contentF
-        val sundataChunk = content.parse("sundata\":\\[(.*?)\\]")
-        val moondataChunk = content.parse("moondata.:\\[(.*?)\\]")
-        val moonphaseChunk = content.parse("closestphase.:\\{(.*?)\\}")
+        val sunDataChunk = content.parse("sundata\":\\[(.*?)\\]")
+        val moonDataChunk = content.parse("moondata.:\\[(.*?)\\]")
+        val moonPhaseChunk = content.parse("closestphase.:\\{(.*?)\\}")
         val moonFracillum = content.parse("fracillum\":\"(.*?)%")
-        val moonCurrentphase = content.parse("curphase\":\"(.*?)\"")
-        val sunTwilight = sundataChunk.parse(" \\{\"phen\":\"BC\", \"time\":\"(.*?)\"\\}")
-        val sunRise = sundataChunk.parse(" \\{\"phen\":\"R\", \"time\":\"(.*?)\"\\}")
-        val sunUppertransit = sundataChunk.parse(" \\{\"phen\":\"U\", \"time\":\"(.*?)\"\\}")
-        val sunSet = sundataChunk.parse(" \\{\"phen\":\"S\", \"time\":\"(.*?)\"\\}")
-        val sunEndTwilight = sundataChunk.parse(" \\{\"phen\":\"EC\", \"time\":\"(.*?)\"\\}")
-        val moonRise = moondataChunk.parse(" \\{\"phen\":\"R\", \"time\":\"(.*?)\"\\}")
-        val moonUppertransit = moondataChunk.parse(" \\{\"phen\":\"U\", \"time\":\"(.*?)\"\\}")
-        val moonSet = moondataChunk.parse(" \\{\"phen\":\"S\", \"time\":\"(.*?)\"\\}")
+        val moonCurrentPhase = content.parse("curphase\":\"(.*?)\"")
+        val sunTwilight = sunDataChunk.parse(" \\{\"phen\":\"BC\", \"time\":\"(.*?)\"\\}")
+        val sunRise = sunDataChunk.parse(" \\{\"phen\":\"R\", \"time\":\"(.*?)\"\\}")
+        val sunUpperTransit = sunDataChunk.parse(" \\{\"phen\":\"U\", \"time\":\"(.*?)\"\\}")
+        val sunSet = sunDataChunk.parse(" \\{\"phen\":\"S\", \"time\":\"(.*?)\"\\}")
+        val sunEndTwilight = sunDataChunk.parse(" \\{\"phen\":\"EC\", \"time\":\"(.*?)\"\\}")
+        val moonRise = moonDataChunk.parse(" \\{\"phen\":\"R\", \"time\":\"(.*?)\"\\}")
+        val moonUpperTransit = moonDataChunk.parse(" \\{\"phen\":\"U\", \"time\":\"(.*?)\"\\}")
+        val moonSet = moonDataChunk.parse(" \\{\"phen\":\"S\", \"time\":\"(.*?)\"\\}")
         val header = "Sun/Moon Data"
         content = sunTwilight + " Sun Twilight" + MyApplication.newline + sunRise + " Sunrise" +
-                MyApplication.newline + sunUppertransit + " Sun Upper Transit" +
+                MyApplication.newline + sunUpperTransit + " Sun Upper Transit" +
                 MyApplication.newline + sunSet + " Sunset" + MyApplication.newline +
                 sunEndTwilight + " Sun Twilight End" + MyApplication.newline +
                 MyApplication.newline + moonRise + " Moonrise" + MyApplication.newline +
-                moonUppertransit + " Moon Upper Transit" + MyApplication.newline + moonSet +
+                moonUpperTransit + " Moon Upper Transit" + MyApplication.newline + moonSet +
                 " Moonset" + MyApplication.newline + MyApplication.newline +
-                moonphaseChunk.replace("\"time\"", "").replace("\"date\"", "").replace(
+                moonPhaseChunk.replace("\"time\"", "").replace("\"date\"", "").replace(
                     "\"",
                     ""
                 ).replace(":", " ").replace(",", "") + MyApplication.newline + moonFracillum +
-                "% Moon fracillum" + MyApplication.newline + moonCurrentphase +
+                "% Moon fracillum" + MyApplication.newline + moonCurrentPhase +
                 " is the current phase" + MyApplication.newline
-        return Pair(header, content)
+        return listOf(header, content)
     }
 
     fun getFullDates(): String {
-        val url =
-            "${MyApplication.sunMoonDataUrl}/moon/phase?date=" + UtilityTime.month().toString() + "/" + UtilityTime.day().toString() + "/" + UtilityTime.year().toString() + "&nump=99"
+        val url = "${MyApplication.sunMoonDataUrl}/moon/phase?date=" + UtilityTime.month().toString() + "/" + UtilityTime.day().toString() + "/" + UtilityTime.year().toString() + "&nump=99"
         val text = url.getHtmlUnsafe()
         var fullText = ""
-        val phaseArr = text.parseColumn("\"phase\":\"(.*?)\"")
-        val dateArr = text.parseColumn("\"date\":\"(.*?)\"")
-        val timeArr = text.parseColumn("\"time\":\"(.*?)\"")
-        var idx = 0
-        phaseArr.forEach { _ ->
-            fullText += if (phaseArr[idx].contains("Full Moon")) {
-                dateArr[idx] + " " + timeArr[idx] + " " + phaseArr[idx] + "  <-----" + MyApplication.newline
+        val phases = text.parseColumn("\"phase\":\"(.*?)\"")
+        val dates = text.parseColumn("\"date\":\"(.*?)\"")
+        val times = text.parseColumn("\"time\":\"(.*?)\"")
+        phases.forEachIndexed { index, _ ->
+            fullText += if (phases[index].contains("Full Moon")) {
+                dates[index] + " " + times[index] + " " + phases[index] + "  <-----" + MyApplication.newline
             } else {
-                dateArr[idx] + " " + timeArr[idx] + " " + phaseArr[idx] + MyApplication.newline
+                dates[index] + " " + times[index] + " " + phases[index] + MyApplication.newline
             }
-            idx += 1
         }
         return fullText
     }

@@ -1,4 +1,5 @@
-<!-- 
+
+<!--
     Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
 
     This file is part of wX.
@@ -226,6 +227,10 @@
         android:title="@string/menu_tools"
         app:showAsAction="never">
         <menu>
+            <item
+                android:id="@+id/action_radar_showhide"
+                android:title="Show/Hide Radar"
+                app:showAsAction="never" />
             <item
                 android:id="@+id/action_legend"
                 android:title="Show/Hide Legend"

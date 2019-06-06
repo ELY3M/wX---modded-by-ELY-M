@@ -42,7 +42,7 @@ class USWarningsImpactActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
             savedInstanceState,
-            R.layout.activity_uswarningsimpact_recyclerview,
+            R.layout.activity_recyclerview_toolbar,
             null,
             false
         )

@@ -63,46 +63,46 @@ class ObjectForecastPackageCurrentConditions {
     }
 
     private fun getConditionsViaMetar(context: Context, latLon: LatLon): List<String> {
-        var sb = ""
-        val objMetar = ObjectMetar(context, latLon)
-        time = objMetar.conditionsTimeStr
-        val temperature = objMetar.temperature + MyApplication.DEGREE_SYMBOL
-        val windChill = objMetar.windChill + MyApplication.DEGREE_SYMBOL
-        val heatIndex = objMetar.heatIndex + MyApplication.DEGREE_SYMBOL
-        val dewpoint = objMetar.dewpoint + MyApplication.DEGREE_SYMBOL
-        val relativeHumidity = objMetar.relativeHumidity + "%"
-        val seaLevelPressure = objMetar.seaLevelPressure
-        val windDirection = objMetar.windDirection
-        val windSpeed = objMetar.windSpeed
-        val windGust = objMetar.windGust
-        val visibility = objMetar.visibility
-        val condition = objMetar.condition
-        sb += temperature
-        if (objMetar.windChill != "NA") {
-            sb += "($windChill)"
-        } else if (objMetar.heatIndex != "NA") {
-            sb += "($heatIndex)"
+        var stringBuffer = ""
+        val objectMetar = ObjectMetar(context, latLon)
+        time = objectMetar.conditionsTimeStr
+        val temperature = objectMetar.temperature + MyApplication.DEGREE_SYMBOL
+        val windChill = objectMetar.windChill + MyApplication.DEGREE_SYMBOL
+        val heatIndex = objectMetar.heatIndex + MyApplication.DEGREE_SYMBOL
+        val dewpoint = objectMetar.dewpoint + MyApplication.DEGREE_SYMBOL
+        val relativeHumidity = objectMetar.relativeHumidity + "%"
+        val seaLevelPressure = objectMetar.seaLevelPressure
+        val windDirection = objectMetar.windDirection
+        val windSpeed = objectMetar.windSpeed
+        val windGust = objectMetar.windGust
+        val visibility = objectMetar.visibility
+        val condition = objectMetar.condition
+        stringBuffer += temperature
+        if (objectMetar.windChill != "NA") {
+            stringBuffer += "($windChill)"
+        } else if (objectMetar.heatIndex != "NA") {
+            stringBuffer += "($heatIndex)"
         }
-        sb += " / $dewpoint($relativeHumidity) - "
-        sb += "$seaLevelPressure - $windDirection $windSpeed"
+        stringBuffer += " / $dewpoint($relativeHumidity) - "
+        stringBuffer += "$seaLevelPressure - $windDirection $windSpeed"
         if (windGust != "") {
-            sb += " G "
+            stringBuffer += " G "
         }
-        sb += "$windGust mph - $visibility mi - $condition"
-        return listOf(sb, objMetar.icon)
+        stringBuffer += "$windGust mph - $visibility mi - $condition"
+        return listOf(stringBuffer, objectMetar.icon)
         //sb    String    "NA° / 22°(NA%) - 1016 mb - W 13 mph - 10 mi - Mostly Cloudy"
     }
 
     // FIXME sync up with flutter/ios port
-    fun formatCC() {
-        val sep = " - "
-        val tmpArrCc = data.split(sep)
-        var retStr = ""
-        if (tmpArrCc.size > 4) {
-            val tmpList = tmpArrCc[0].split("/")
-            retStr = tmpArrCc[4].replace("^ ", "") + " " + tmpList[0] + tmpArrCc[2]
+    fun formatCurrentConditions() {
+        val separator = " - "
+        val dataList = data.split(separator)
+        var tmpString = ""
+        if (dataList.size > 4) {
+            val tmpList = dataList[0].split("/")
+            tmpString = dataList[4].replace("^ ", "") + " " + tmpList[0] + dataList[2]
         }
-        topLine = retStr
+        topLine = tmpString
     }
 }
 

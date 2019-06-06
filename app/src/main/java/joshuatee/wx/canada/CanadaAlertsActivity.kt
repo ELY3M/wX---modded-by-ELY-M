@@ -40,7 +40,7 @@ class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var firstTime = true
-    private lateinit var objWarn: ObjectCAWarn
+    private lateinit var objectCAWarn: ObjectCAWarn
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,42 +51,42 @@ class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             true
         )
         toolbarBottom.setOnMenuItemClickListener(this)
-        objWarn = ObjectCAWarn(this, this, ll, toolbar)
-        objWarn.prov = Utility.readPref(this, "CA_ALERTS_PROV", objWarn.prov)
+        objectCAWarn = ObjectCAWarn(this, this, ll, toolbar)
+        objectCAWarn.prov = Utility.readPref(this, "CA_ALERTS_PROV", objectCAWarn.prov)
         title = "Canada Alerts"
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         sv.smoothScrollTo(0, 0)
-        withContext(Dispatchers.IO) { objWarn.getData() }
-        objWarn.showData()
+        withContext(Dispatchers.IO) { objectCAWarn.getData() }
+        objectCAWarn.showData()
         if (firstTime) {
             UtilityToolbar.fullScreenMode(toolbar)
             firstTime = false
         }
-        Utility.writePref(this@CanadaAlertsActivity, "CA_ALERTS_PROV", objWarn.prov)
-        toolbar.subtitle = objWarn.title
+        Utility.writePref(this@CanadaAlertsActivity, "CA_ALERTS_PROV", objectCAWarn.prov)
+        toolbar.subtitle = objectCAWarn.title
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_ca -> objWarn.prov = "ca"
-            R.id.action_ab -> objWarn.prov = "ab"
-            R.id.action_bc -> objWarn.prov = "bc"
-            R.id.action_mb -> objWarn.prov = "mb"
-            R.id.action_nb -> objWarn.prov = "nb"
-            R.id.action_nl -> objWarn.prov = "nl"
-            R.id.action_ns -> objWarn.prov = "ns"
-            R.id.action_nt -> objWarn.prov = "nt"
-            R.id.action_nu -> objWarn.prov = "nt"
-            R.id.action_son -> objWarn.prov = "son"
-            R.id.action_non -> objWarn.prov = "non"
-            R.id.action_pei -> objWarn.prov = "pei"
-            R.id.action_sqc -> objWarn.prov = "sqc"
-            R.id.action_nqc -> objWarn.prov = "nqc"
-            R.id.action_sk -> objWarn.prov = "sk"
-            R.id.action_yt -> objWarn.prov = "yt"
+            R.id.action_ca -> objectCAWarn.prov = "ca"
+            R.id.action_ab -> objectCAWarn.prov = "ab"
+            R.id.action_bc -> objectCAWarn.prov = "bc"
+            R.id.action_mb -> objectCAWarn.prov = "mb"
+            R.id.action_nb -> objectCAWarn.prov = "nb"
+            R.id.action_nl -> objectCAWarn.prov = "nl"
+            R.id.action_ns -> objectCAWarn.prov = "ns"
+            R.id.action_nt -> objectCAWarn.prov = "nt"
+            R.id.action_nu -> objectCAWarn.prov = "nt"
+            R.id.action_son -> objectCAWarn.prov = "son"
+            R.id.action_non -> objectCAWarn.prov = "non"
+            R.id.action_pei -> objectCAWarn.prov = "pei"
+            R.id.action_sqc -> objectCAWarn.prov = "sqc"
+            R.id.action_nqc -> objectCAWarn.prov = "nqc"
+            R.id.action_sk -> objectCAWarn.prov = "sk"
+            R.id.action_yt -> objectCAWarn.prov = "yt"
             else -> return super.onOptionsItemSelected(item)
         }
         getContent()

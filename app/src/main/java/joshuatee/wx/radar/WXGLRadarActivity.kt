@@ -100,7 +100,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         var speedCurrent = 0.0f
     }
 
-    private var TAG = "joshuatee-WXGLRadarActivity"
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var oglr: WXGLRender
     private var oldProd = ""
@@ -152,6 +151,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private var animTriggerDownloads = false
     private val alertDialogStatusAl = mutableListOf<String>()
     private var legendShown = false
+    private var radarShown = true
     private val numPanes = 1
     private var numPanesArr = listOf<Int>()
     private var wxgltextArr = mutableListOf<WXGLTextObject>()
@@ -754,6 +754,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             R.id.action_N0C -> changeProd("N" + tilt + "C", true)
             R.id.action_N0K -> changeProd("N" + tilt + "K", true)
             R.id.action_H0C -> changeProd("H" + tilt + "C", true)
+            R.id.action_radar_showhide -> showRadar()
             R.id.action_legend -> showLegend()
             R.id.action_about -> showRadarScanInfo()
             R.id.action_vil -> changeProd("DVL", false)
@@ -1162,6 +1163,23 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         var vmpurl = "https://weather.cod.edu/satrad/nexrad/index.php?type="+oglr.rid+"-NVW"
         ObjectIntent(this@WXGLRadarActivity, WebscreenABModels::class.java, WebscreenABModels.URL, arrayOf(vmpurl, oglr.rid + " VAD Wind Profile"))
 
+    }
+
+    private fun showRadar() {
+        UtilityLog.d("radarshow", "showRadar() radarShown: "+radarShown)
+        if (radarShown) {
+            UtilityLog.d("radarshow", "showRadar() setting to false")
+            radarShown = false
+            MyApplication.radarShowRadar = false
+            Utility.writePref(this, "RADAR_SHOW_RADAR", "false")
+            UtilityLog.d("radarshow", "showRadar() MyApplication.radarShowRadar: "+MyApplication.radarShowRadar)
+        } else {
+            UtilityLog.d("radarshow", "showRadar() setting to true")
+            radarShown = true
+            MyApplication.radarShowRadar = true
+            Utility.writePref(this, "RADAR_SHOW_RADAR", "true")
+            UtilityLog.d("radarshow", "showRadar() MyApplication.radarShowRadar: "+MyApplication.radarShowRadar)
+        }
     }
 
 

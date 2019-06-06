@@ -37,6 +37,7 @@ internal class TileAdapter(
         paramsIv.height = paramsIv.width * bitmap.height / bitmap.width
         holder.iv.layoutParams = paramsIv
         holder.iv.setImageBitmap(bitmap)
+        holder.iv.contentDescription = itemList[position].description
     }
 
     override fun getItemCount() = this.itemList.size

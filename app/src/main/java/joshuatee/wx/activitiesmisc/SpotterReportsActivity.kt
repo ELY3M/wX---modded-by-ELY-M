@@ -40,15 +40,15 @@ class SpotterReportsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
             savedInstanceState,
-            R.layout.activity_spotter_reports_recyclerview,
+            R.layout.activity_recyclerview_toolbar,
             null,
             false
         )
-        val recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
-        val ca = AdapterSpotterReports(UtilitySpotter.spotterReports)
-        recyclerView.recyclerView.adapter = ca
+        val objectRecyclerViewGeneric = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
+        val adapterSpotterReports = AdapterSpotterReports(UtilitySpotter.spotterReports)
+        objectRecyclerViewGeneric.recyclerView.adapter = adapterSpotterReports
         title = UtilitySpotter.spotterReports.size.toString() + " Spotter reports " + UtilityTime.gmtTime("HH:mm")
-        ca.setOnItemClickListener(object : AdapterSpotterReports.MyClickListener {
+        adapterSpotterReports.setOnItemClickListener(object : AdapterSpotterReports.MyClickListener {
             override fun onItemClick(position: Int) {
                 itemSelected(position)
             }

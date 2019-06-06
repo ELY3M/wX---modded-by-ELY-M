@@ -49,27 +49,27 @@ class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
     private var period = "0.25"
     private var periodPretty = "15 MIN"
     private lateinit var img: ObjectTouchImageView
-    private lateinit var drw: ObjectNavDrawer
+    private lateinit var objectNavDrawer: ObjectNavDrawer
     private val prefTokenIdx = "LIGHTNING_SECTOR_IDX"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_image_show_navdrawer_bottom_toolbar,
-            R.menu.lightning_activity,
-            iconsEvenlySpaced = true,
-            bottomToolbar = true
+                savedInstanceState,
+                R.layout.activity_image_show_navdrawer_bottom_toolbar,
+                R.menu.lightning_activity,
+                iconsEvenlySpaced = true,
+                bottomToolbar = true
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         toolbar.setOnClickListener { toolbar.showOverflowMenu() }
-        drw = ObjectNavDrawer(this, UtilityLightning.labels, UtilityLightning.urls)
-        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, prefTokenIdx)
-        drw.index = Utility.readPref(this, prefTokenIdx, 0)
-        drw.setListener(::getContentFixThis)
+        objectNavDrawer = ObjectNavDrawer(this, UtilityLightning.labels, UtilityLightning.urls)
+        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, objectNavDrawer, prefTokenIdx)
+        objectNavDrawer.index = Utility.readPref(this, prefTokenIdx, 0)
+        objectNavDrawer.setListener(::getContentFixThis)
         period = Utility.readPref(this, "LIGHTNING_PERIOD", period)
         periodPretty = UtilityLightning.getTimePretty(period)
-        toolbarBottom.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
+        toolbarBottom.setOnClickListener { objectNavDrawer.drawerLayout.openDrawer(objectNavDrawer.listView) }
         getContent()
     }
 
@@ -78,9 +78,9 @@ class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        title = "Lightning " + drw.getLabel()
+        title = "Lightning " + objectNavDrawer.getLabel()
         toolbar.subtitle = periodPretty
-        bitmap = withContext(Dispatchers.IO) { UtilityLightning.getImage(drw.getUrl(), period) }
+        bitmap = withContext(Dispatchers.IO) { UtilityLightning.getImage(objectNavDrawer.getUrl(), period) }
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn("LIGHTNING")
         Utility.writePref(this@LightningActivity, "LIGHTNING_PERIOD", period)
@@ -88,19 +88,19 @@ class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        drw.actionBarDrawerToggle.syncState()
+        objectNavDrawer.actionBarDrawerToggle.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+            objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
@@ -109,9 +109,9 @@ class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
                     checkOverlayPerms()
                 } else {
                     UtilityShare.shareBitmap(
-                        this,
-                        "Lightning Strikes " + drw.getLabel() + " $periodPretty",
-                        bitmap
+                            this,
+                            "Lightning Strikes " + objectNavDrawer.getLabel() + " $periodPretty",
+                            bitmap
                     )
                 }
             }

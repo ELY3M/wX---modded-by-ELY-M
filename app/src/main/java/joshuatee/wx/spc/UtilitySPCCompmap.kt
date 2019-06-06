@@ -35,23 +35,23 @@ import joshuatee.wx.util.UtilityImg
 
 internal object UtilitySpcCompmap {
 
-    fun getImage(context: Context, layerStr: String): Bitmap {
-        val layersAl = mutableListOf<Drawable>()
-        val layerStrArr = layerStr.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
-        layersAl.add(ColorDrawable(Color.WHITE))
-        if (layerStr != "") {
-            layerStrArr.indices.forEach {
-                layerStrArr[it] = layerStrArr[it].replace("a", "")
+    fun getImage(context: Context, layerString: String): Bitmap {
+        val drawables = mutableListOf<Drawable>()
+        val layers = layerString.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
+        drawables.add(ColorDrawable(Color.WHITE))
+        if (layerString != "") {
+            layers.indices.forEach {
+                layers[it] = layers[it].replace("a", "")
                 val gd = ExternalGifDecoder()
-                gd.read(UtilityDownload.getInputStreamFromUrl("${MyApplication.nwsSPCwebsitePrefix}/exper/compmap/" + layerStrArr[it] + ".gif"))
-                layersAl.add(BitmapDrawable(context.resources, gd.bitmap))
+                gd.read(UtilityDownload.getInputStreamFromUrl("${MyApplication.nwsSPCwebsitePrefix}/exper/compmap/" + layers[it] + ".gif"))
+                drawables.add(BitmapDrawable(context.resources, gd.bitmap))
             }
         } else {
             val gd = ExternalGifDecoder()
             gd.read(UtilityDownload.getInputStreamFromUrl("${MyApplication.nwsSPCwebsitePrefix}/exper/compmap/" + "basemap" + ".gif"))
-            layersAl.add(BitmapDrawable(context.resources, gd.bitmap))
+            drawables.add(BitmapDrawable(context.resources, gd.bitmap))
         }
-        return UtilityImg.layerDrawableToBitmap(layersAl)
+        return UtilityImg.layerDrawableToBitmap(drawables)
     }
 
     val labels = listOf(

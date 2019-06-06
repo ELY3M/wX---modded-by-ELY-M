@@ -51,7 +51,7 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
     private var animDrawable = AnimationDrawable()
     private lateinit var img: ObjectTouchImageView
     private var bitmap = UtilityImg.getBlankBitmap()
-    private lateinit var drw: ObjectNavDrawer
+    private lateinit var objectNavDrawer: ObjectNavDrawer
     private val prefImagePosition = "AWCRADARMOSAIC"
     private var product = "rad_rala"
     private val prefTokenSector = "AWCMOSAIC_SECTOR_LAST_USED"
@@ -62,22 +62,22 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
             savedInstanceState,
-            R.layout.activity_awcmosaic,
+            R.layout.activity_image_show_navdrawer_bottom_toolbar,
             R.menu.awcmosaic,
             iconsEvenlySpaced = true,
             bottomToolbar = true
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
-        drw = ObjectNavDrawer(this, UtilityAwcRadarMosaic.labels, UtilityAwcRadarMosaic.sectors)
-        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, "")
+        objectNavDrawer = ObjectNavDrawer(this, UtilityAwcRadarMosaic.labels, UtilityAwcRadarMosaic.sectors)
+        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, objectNavDrawer, "")
         img.setMaxZoom(8.0f)
-        img.setListener(this, drw, ::getContentFixThis)
+        img.setListener(this, objectNavDrawer, ::getContentFixThis)
         sector = Utility.readPref(prefTokenSector, sector)
         product = Utility.readPref(prefTokenProduct, product)
-        drw.index = UtilityAwcRadarMosaic.sectors.indexOf(sector)
-        drw.setListener(::getContentFixThis)
-        toolbarBottom.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
+        objectNavDrawer.index = UtilityAwcRadarMosaic.sectors.indexOf(sector)
+        objectNavDrawer.setListener(::getContentFixThis)
+        toolbarBottom.setOnClickListener { objectNavDrawer.drawerLayout.openDrawer(objectNavDrawer.listView) }
         getContent(product)
     }
 
@@ -92,36 +92,36 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
 
     private fun getContent(productLocal: String) = GlobalScope.launch(uiDispatcher) {
         product = productLocal
-        toolbar.subtitle = drw.getLabel()
+        toolbar.subtitle = objectNavDrawer.getLabel()
         bitmap = withContext(Dispatchers.IO) {
-            UtilityAwcRadarMosaic.get(drw.getUrl(), product)
+            UtilityAwcRadarMosaic.get(objectNavDrawer.getUrl(), product)
         }
         img.setBitmap(bitmap)
         animRan = false
         img.firstRunSetZoomPosn(prefImagePosition)
-        Utility.writePref(this@AwcRadarMosaicActivity, prefTokenSector, drw.getUrl())
+        Utility.writePref(this@AwcRadarMosaicActivity, prefTokenSector, objectNavDrawer.getUrl())
         Utility.writePref(this@AwcRadarMosaicActivity, prefTokenProduct, product)
     }
 
     private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
         animDrawable = withContext(Dispatchers.IO) {
-            UtilityAwcRadarMosaic.getAnimation(this@AwcRadarMosaicActivity, drw.getUrl(), product)
+            UtilityAwcRadarMosaic.getAnimation(this@AwcRadarMosaicActivity, objectNavDrawer.getUrl(), product)
         }
         animRan = UtilityImgAnim.startAnimation(animDrawable, img)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        drw.actionBarDrawerToggle.syncState()
+        objectNavDrawer.actionBarDrawerToggle.syncState()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
+        objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true
         }
         when (item.itemId) {
@@ -161,7 +161,7 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+            objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onStop() {
         img.imgSavePosnZoom(this, prefImagePosition)
