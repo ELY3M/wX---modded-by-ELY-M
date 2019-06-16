@@ -24,7 +24,7 @@ package joshuatee.wx.settings
 
 import android.content.Context
 import android.graphics.Color
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 
 object UtilityPref2 {
 

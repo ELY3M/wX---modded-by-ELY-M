@@ -234,7 +234,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityModels.legacyShare(this@ModelsSpcSrefActivity, om.animRan, om)
+                    UtilityModels.legacyShare(this@ModelsSpcSrefActivity, this@ModelsSpcSrefActivity, om.animRan, om)
                 }
             }
             R.id.action_animate -> UtilityModels.getAnimate(om, listOf(""), uiDispatcher)

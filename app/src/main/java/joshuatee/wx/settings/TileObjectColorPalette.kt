@@ -56,13 +56,13 @@ internal class TileObjectColorPalette(
                 "colormap" + prod + this.colorMapLabel
             )
         ) {
-            UtilityLog.d("wx", "COLORPAL exists img: " + "colormap$prod$colorMapLabel")
+            //UtilityLog.d("wx", "COLORPAL exists img: " + "colormap$prod$colorMapLabel")
             bitmapWithText = UtilityIO.bitmapFromInternalStorage(
                 context,
                 "colormap" + prod + this.colorMapLabel
             )
         } else {
-            UtilityLog.d("wx", "COLORPAL create img: " + "colormap$prod$colorMapLabel")
+            //UtilityLog.d("wx", "COLORPAL create img: " + "colormap$prod$colorMapLabel")
             oldMap = MyApplication.radarColorPalette[prod]!!
             MyApplication.radarColorPalette[prod] = colorMapLabel
             try {

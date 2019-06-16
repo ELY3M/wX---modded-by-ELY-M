@@ -68,11 +68,11 @@ class ObjectFab {
         }
     }
 
-    fun fabSetResDrawable(context: Context, resdraw: Int) {
+    fun fabSetResDrawable(context: Context, resourceDrawable: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            fab.setImageDrawable(ContextCompat.getDrawable(context, resdraw))
+            fab.setImageDrawable(ContextCompat.getDrawable(context, resourceDrawable))
         } else {
-            val d = ContextCompat.getDrawable(context, resdraw)!!
+            val d = ContextCompat.getDrawable(context, resourceDrawable)!!
             val b = Bitmap.createBitmap(
                     d.intrinsicWidth,
                     d.intrinsicHeight,

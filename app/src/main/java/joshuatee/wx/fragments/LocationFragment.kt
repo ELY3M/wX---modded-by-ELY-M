@@ -21,7 +21,6 @@
 //modded by ELY M.
 //hail size texts
 //OBS text fix
-//spotter - us location removed
 
 package joshuatee.wx.fragments
 
@@ -59,6 +58,7 @@ import joshuatee.wx.util.*
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.notifications.UtilityNotificationTools
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.radar.*
@@ -173,7 +173,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         )
                 )
                 glviewArr[index].wxgltextArr = wxgltextArr
-                glviewArr[index].locfrag = true
+                glviewArr[index].locationFragment = true
                 wxgltextArr[index].initTV(activityReference)
                 rlArr[index].addView(glviewArr[index])
                 cardViews.last().addView(rlArr[index])
@@ -213,7 +213,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         )
                 )
                 glviewArr[index].wxgltextArr = wxgltextArr
-                glviewArr[index].locfrag = true
+                glviewArr[index].locationFragment = true
                 wxgltextArr[index].initTV(activityReference)
                 rlArr[index].addView(glviewArr[index])
                 cardViews.last().addView(rlArr[index])
@@ -437,7 +437,12 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 ::getLatLon
         )
         withContext(Dispatchers.IO) {
-            if (Location.isUS) {
+            // attempted bugfix for most plentiful crash
+            //kotlin.KotlinNullPointerException:
+            //at joshuatee.wx.fragments.LocationFragment.getActivityReference (LocationFragment.kt:783)
+            //at joshuatee.wx.fragments.LocationFragment.access$getActivityReference$p (LocationFragment.kt:65)
+            //at joshuatee.wx.fragments.LocationFragment$getRadar$1$3.invokeSuspend (LocationFragment.kt:440)
+            if (Location.isUS && mActivity != null ) {
                 UtilityRadarUI.plotRadar(
                         oglrArr[idx],
                         "",
@@ -448,9 +453,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 )
             }
         }
-
-        //hmmm not all spotters are in us//
-        //if (Location.isUS) {
+        if (Location.isUS) {
         if (PolygonType.SPOTTER_LABELS.pref) {
             UtilityWXGLTextObject.updateSpotterLabels(numRadars, wxgltextArr)
         }
@@ -474,7 +477,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 radarTime = radarTimeStamp
                 cardCC?.setStatus(currentConditionsTime + radarTime)
             }
-       // }
+        }
     }
 
     private fun getTextProduct(productString: String) = GlobalScope.launch(uiDispatcher) {
@@ -807,21 +810,24 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         hazardsExpandedAl.clear()
         hazardsCards.clear()
         objHazards.titles.indices.forEach { z ->
-            hazardsExpandedAl.add(false)
-            hazardsCards.add(ObjectCardText(activityReference))
-            hazardsCards[z].setPaddingAmount(MyApplication.paddingSettings)
-            hazardsCards[z].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-            hazardsCards[z].setTextColor(UIPreferences.textHighlightColor)
-            hazardsCards[z].setText(objHazards.titles[z].toUpperCase(Locale.US))
-            hazardsCards[z].setOnClickListener(OnClickListener {
-                ObjectIntent(
-                        activityReference,
-                        USAlertsDetailActivity::class.java,
-                        USAlertsDetailActivity.URL,
-                        arrayOf(objHazards.urls[z])
-                )
-            })
-            linearLayoutHazards?.addView(hazardsCards[z].card)
+            //UtilityLog.d("wx", objHazards.titles[z])
+            if (UtilityNotificationTools.nwsLocalAlertNotFiltered(activityReference, objHazards.titles[z])) {
+                hazardsExpandedAl.add(false)
+                hazardsCards.add(ObjectCardText(activityReference))
+                hazardsCards[z].setPaddingAmount(MyApplication.paddingSettings)
+                hazardsCards[z].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
+                hazardsCards[z].setTextColor(UIPreferences.textHighlightColor)
+                hazardsCards[z].setText(objHazards.titles[z].toUpperCase(Locale.US))
+                hazardsCards[z].setOnClickListener(OnClickListener {
+                    ObjectIntent(
+                            activityReference,
+                            USAlertsDetailActivity::class.java,
+                            USAlertsDetailActivity.URL,
+                            arrayOf(objHazards.urls[z])
+                    )
+                })
+                linearLayoutHazards?.addView(hazardsCards[z].card)
+            }
         }
     }
 

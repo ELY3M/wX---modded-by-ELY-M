@@ -30,7 +30,7 @@ class ObjectCardHSImage(context: Context, val product: String) : ObjectCardImage
 
     init {
         img = TouchImageView2(context)
-        img.layoutParams = lparams
+        img.layoutParams = layoutParams
         card.addView(img)
     }
 

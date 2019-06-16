@@ -259,12 +259,12 @@ object UtilityCanada {
     }
 
     fun getProvidenceHtml(prov: String): String =
-        ("http://weather.gc.ca/forecast/canada/index_e.html?id=$prov").getHtmlSep()
+        (MyApplication.canadaEcSitePrefix + "/forecast/canada/index_e.html?id=$prov").getHtmlSep()
 
     fun getLocationHtml(location: LatLon): String {
         val prov = location.latString.split(":").dropLastWhile { it.isEmpty() }
         val id = location.lonString.split(":").dropLastWhile { it.isEmpty() }
-        return ("http://weather.gc.ca/rss/city/" + prov[1].toLowerCase(Locale.US) + "-" + id[0] + "_e.xml").getHtmlSep()
+        return (MyApplication.canadaEcSitePrefix + "/rss/city/" + prov[1].toLowerCase(Locale.US) + "-" + id[0] + "_e.xml").getHtmlSep()
     }
 
     fun getLocationUrl(x: String, y: String): String {
@@ -272,13 +272,13 @@ object UtilityCanada {
         val id = y.split(":").dropLastWhile { it.isEmpty() }
         if (prov.count() < 2 || id.count() < 1)
             return ""
-        return "http://weather.gc.ca/city/pages/" + prov[1].toLowerCase(Locale.US) + "-" + id[0] + "_metric_e.html"
+        return MyApplication.canadaEcSitePrefix + "/city/pages/" + prov[1].toLowerCase(Locale.US) + "-" + id[0] + "_metric_e.html"
     }
 
     fun getStatus(html: String): String = html.parse("<b>Observed at:</b>(.*?)<br/>")
 
     fun getRid(x: String, y: String): String {
-        val url = ("http://weather.gc.ca/city/pages/"
+        val url = (MyApplication.canadaEcSitePrefix + "/city/pages/"
                 + x.split(":").dropLastWhile { it.isEmpty() }[1].toLowerCase(Locale.US) + "-"
                 + y.split(":").dropLastWhile { it.isEmpty() }[0] + "_metric_e.html")
         val html = url.getHtmlSep()
@@ -332,7 +332,6 @@ object UtilityCanada {
         val warningUrl: String
         val statementUrl: String
         val watchUrl: String
-        val baseUrl = "http://weather.gc.ca"
         val result = mutableListOf("", "")
         var urls =
             html.parseColumn("<div id=\"statement\" class=\"floatLeft\">.*?<a href=\"(.*?)\">.*?</a>.*?</div>")
@@ -349,7 +348,7 @@ object UtilityCanada {
         chunk = html.parse("<div id=\"watch\" class=\"floatLeft\">(.*?)</div>")
         urls = chunk.parseColumn("<a href=\"(.*?)\">.*?</a>")
         titles = chunk.parseColumn("<a href=\".*?\">(.*?)</a>")
-        watchUrl = urls.joinToString(",$baseUrl")
+        watchUrl = urls.joinToString(",${MyApplication.canadaEcSitePrefix}")
         watch = titles.joinToString("<BR>")
         result[0] = warning + statement + watch
         result[1] = "$warningUrl,$statementUrl,$watchUrl"

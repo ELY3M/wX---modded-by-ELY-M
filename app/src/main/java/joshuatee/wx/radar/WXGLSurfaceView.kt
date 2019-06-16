@@ -45,7 +45,7 @@ import kotlin.math.*
 class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     GestureDetector.OnDoubleTapListener {
 
-    // currently used in location frag and USWXOGLRadarAtivity to more clearly seperate touch events
+    // currently used in location frag and USWXOGLRadarActivity to more clearly separate touch events
     // WXGLSurfaceView is used to track and respond to user touch events when in the OpenGL based radar
     // pinch zoom, drag, double/single tap, and long press are all handled here
 
@@ -91,7 +91,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     var hailLabelAl: MutableList<TextView> = mutableListOf()
     var hailTv: MutableList<TextView> = mutableListOf()
     var wxgltextArr: MutableList<WXGLTextObject> = mutableListOf()
-    var locfrag: Boolean = false
+    var locationFragment: Boolean = false
     private var act: Activity? = null
 
     constructor(context: Context, widthDivider: Int, numPanes: Int, heightDivider: Int) : super(context) {
@@ -109,23 +109,23 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
 
     // FIXME variable naming is bad
     fun setRenderVar(
-        oglrR: WXGLRender,
-        OGLR_r: MutableList<WXGLRender>,
-        wxglR: MutableList<WXGLSurfaceView>
+            wxglRender: WXGLRender,
+            OGLR_r: MutableList<WXGLRender>,
+            wxglR: MutableList<WXGLSurfaceView>
     ) {
         oglr = OGLR_r
-        oglrCurrent = oglrR
+        oglrCurrent = wxglRender
         wxgl = wxglR
     }
 
     fun setRenderVar(
-        oglrR: WXGLRender,
-        OGLR_r: MutableList<WXGLRender>,
-        wxglR: MutableList<WXGLSurfaceView>,
-        activity: Activity
+            wxglRender: WXGLRender,
+            OGLR_r: MutableList<WXGLRender>,
+            wxglR: MutableList<WXGLSurfaceView>,
+            activity: Activity
     ) {
         oglr = OGLR_r
-        oglrCurrent = oglrR
+        oglrCurrent = wxglRender
         wxgl = wxglR
         act = activity
     }
@@ -133,7 +133,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
-                if (!locfrag) {
+                if (!locationFragment) {
                     (0 until numPanes).forEach {
                         wxgltextArr[it].hideTV()
                         oglr[it].displayHold = true
@@ -160,17 +160,17 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
 
     private inner class ScaleListener : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScale(detector: ScaleGestureDetector): Boolean {
-            val oldScalefactor = mScaleFactor
+            val oldScaleFactor = mScaleFactor
             mScaleFactor *= detector.scaleFactor
             if (MyApplication.dualpaneshareposn) {
                 (0 until numPanes).forEach {
-                    oglr[it].x = oglr[it].x * (mScaleFactor / oldScalefactor)
-                    oglr[it].y = oglr[it].y * (mScaleFactor / oldScalefactor)
+                    oglr[it].x = oglr[it].x * (mScaleFactor / oldScaleFactor)
+                    oglr[it].y = oglr[it].y * (mScaleFactor / oldScaleFactor)
                     oglr[it].zoom = mScaleFactor
                 }
             } else {
-                oglrCurrent.x = oglrCurrent.x * (mScaleFactor / oldScalefactor)
-                oglrCurrent.y = oglrCurrent.y * (mScaleFactor / oldScalefactor)
+                oglrCurrent.x = oglrCurrent.x * (mScaleFactor / oldScaleFactor)
+                oglrCurrent.y = oglrCurrent.y * (mScaleFactor / oldScaleFactor)
                 oglrCurrent.zoom = mScaleFactor
             }
             if (MyApplication.dualpaneshareposn) {
@@ -236,7 +236,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
         distanceY: Float
     ): Boolean {
         var panned = false
-        if (!locfrag) {
+        if (!locationFragment) {
             if (distanceX != 0f) {
                 if (MyApplication.dualpaneshareposn) {
                     (0 until numPanes).forEach { oglr[it].x += -1.0f * distanceX }
@@ -283,7 +283,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
         yPos = event.y
         xMiddle = (width / 2).toFloat()
         yMiddle = (height / 2).toFloat()
-        if (MyApplication.dualpaneshareposn && !locfrag) {
+        if (MyApplication.dualpaneshareposn && !locationFragment) {
             mScaleFactor *= 2.0f
             (0 until numPanes).forEach {
                 oglr[it].setViewInitial(
@@ -320,7 +320,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
 
     override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
         mScaleFactor /= 2.0f
-        if (MyApplication.dualpaneshareposn && !locfrag) {
+        if (MyApplication.dualpaneshareposn && !locationFragment) {
             (0 until numPanes).forEach {
                 oglr[it].setViewInitial(mScaleFactor, oglr[it].x / 2.0f, oglr[it].y / 2.0f)
                 wxgl[it].mScaleFactor = mScaleFactor

@@ -1,0 +1,9 @@
+#!/bin/bash
+cd /var/tmp/download || exit 1
+for site in $(cat /var/tmp/badObs2 | awk '{print $1}')
+do
+ curl https://w1.weather.gov/obhistory/${site}.html > ${site}.html 
+ grep "The page you requested cannot be found" ${site}.html
+ sleep 1
+done
+echo finished successfully

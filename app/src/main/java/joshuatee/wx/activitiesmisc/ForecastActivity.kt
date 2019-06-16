@@ -44,7 +44,7 @@ import kotlinx.android.synthetic.main.activity_linear_layout.*
 
 class ForecastActivity : BaseActivity() {
 
-    // long press in nexrad radar and select 7 day forecast from arbitrary point
+    // long press in radar and select 7 day forecast from arbitrary point
     // arg0  lat
     // arg1  lon
 

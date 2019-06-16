@@ -31,7 +31,7 @@ import joshuatee.wx.settings.Location
 internal object UtilityCanadaHourly {
 
     fun getString(locNumInt: Int): String {
-        val htmlUrl = "http://weather.gc.ca/forecast/hourly/" + MyApplication.colon.split(
+        val htmlUrl = MyApplication.canadaEcSitePrefix + "/forecast/hourly/" + MyApplication.colon.split(
             Location.getX(locNumInt)
         )[1].toLowerCase(Locale.US) + "-" + MyApplication.colon.split(Location.getY(locNumInt))[0] + "_metric_e.html"
         val html = htmlUrl.getHtml()
@@ -40,7 +40,7 @@ internal object UtilityCanadaHourly {
     }
 
     fun getUrl(locNumInt: Int) =
-        "http://weather.gc.ca/forecast/hourly/" + MyApplication.colon.split(Location.getX(locNumInt))[1].toLowerCase(
+            MyApplication.canadaEcSitePrefix + "/forecast/hourly/" + MyApplication.colon.split(Location.getX(locNumInt))[1].toLowerCase(
             Locale.US
         ) + "-" + MyApplication.colon.split(Location.getY(locNumInt))[0] + "_metric_e.html"
 

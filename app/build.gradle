@@ -3,14 +3,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.0'
 
 
     defaultConfig {
         applicationId "joshuatee.wx"
         minSdkVersion 16   // 4.1
-        targetSdkVersion 28 // 8.1
+        targetSdkVersion 29 // 8.1
         // Stops the Gradle plugin’s automatic rasterization of vectors (2016_02_25 add 23.2 )
         //generatedDensities = []
         vectorDrawables.useSupportLibrary = true
@@ -70,17 +70,16 @@ android {
     }
 }
 
+// https://developer.android.com/jetpack/androidx/versions
 dependencies {
     implementation "com.google.android.material:material:1.0.0"
     implementation "androidx.cardview:cardview:1.0.0"
     implementation "androidx.recyclerview:recyclerview:1.0.0"
     implementation "androidx.media:media:1.0.1"
+    implementation "androidx.preference:preference:1.0.0"
     implementation "com.squareup.okhttp3:okhttp:$okHttpVersion"
     implementation 'com.jjoe64:graphview:4.2.2'
     implementation 'com.intentfilter:android-permissions:0.1.7'
-    implementation 'com.beust:klaxon:5.0.1'
-    implementation 'com.jayway.jsonpath:json-path:2.4.0'
-    //implementation 'org.shredzone.commons:commons-suncalc:2.4'
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     // coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"

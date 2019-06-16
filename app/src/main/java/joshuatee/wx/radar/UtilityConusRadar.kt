@@ -524,12 +524,12 @@ object UtilityConusRadar {
         }
     }
 
-
+/*
     fun resizeConus(imagefile: String): Bitmap {
         val bitmap: Bitmap? = OpenGLShader.LoadBitmap(imagefile)
         return Bitmap.createScaledBitmap(bitmap, 1024, 1024, true)
     }
-
+*/
 
     /*
     //get conus bitmap!!//

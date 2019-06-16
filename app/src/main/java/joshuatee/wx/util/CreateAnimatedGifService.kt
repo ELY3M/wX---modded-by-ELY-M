@@ -71,7 +71,7 @@ class CreateAnimatedGifService : IntentService("CreateAnimatedGifService") {
         sharingIntent.putExtra(Intent.EXTRA_STREAM, contentUri)
         sharingIntent.type = "image/gif"
         sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        UtilityShare.contextPublic!!.startActivity(Intent.createChooser(sharingIntent, "Share via"))
+        startActivity(Intent.createChooser(sharingIntent, "Share via"))
     }
 } 
 

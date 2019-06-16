@@ -21,6 +21,7 @@
 
 package joshuatee.wx.models
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.PointF
 import android.view.View
@@ -139,7 +140,7 @@ object UtilityModels {
         }
     }
 
-    fun legacyShare(context: Context, animRan: Boolean, om: ObjectModel) {
+    fun legacyShare(activity: Activity, context: Context, animRan: Boolean, om: ObjectModel) {
         if (animRan)
             UtilityShare.shareAnimGif(
                     context,
@@ -148,6 +149,7 @@ object UtilityModels {
             )
         else
             UtilityShare.shareBitmap(
+                    activity,
                     context,
                     om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.spTime.selectedItem.toString(),
                     om.displayData.bitmap[0]

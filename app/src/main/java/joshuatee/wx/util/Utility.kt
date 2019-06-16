@@ -23,18 +23,14 @@
 package joshuatee.wx.util
 
 import android.os.Build
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import android.text.Html
 import android.content.Context
 import android.net.ConnectivityManager
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.canada.UtilityCanada
-import joshuatee.wx.settings.Location
 
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.GlobalArrays
-import joshuatee.wx.radar.LatLon
 import joshuatee.wx.util.UtilityAlertDialog.showDialogueWithContext
 import joshuatee.wx.radar.UtilityRadar
 object Utility {
@@ -105,13 +101,13 @@ object Utility {
     }*/
 
     fun getVersion(context: Context): String {
-        var vers = ""
+        var version = ""
         try {
-            vers = context.packageManager.getPackageInfo(context.packageName, 0).versionName
+            version = context.packageManager.getPackageInfo(context.packageName, 0).versionName
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
-        return vers
+        return version
     }
 
     fun commitPref(context: Context) {

@@ -42,9 +42,9 @@ import joshuatee.wx.util.Utility
 import kotlinx.coroutines.*
 
 class SpcSwoStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListener,
-    OnMenuItemClickListener {
+        OnMenuItemClickListener {
 
-    // Show state level SPC SWO grapahics for D1-3
+    // Show state level SPC SWO graphics for D1-3
     //
     // Arguments
     // 1: day
@@ -65,11 +65,11 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListene
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_spcswostate,
-            R.menu.spcswostate,
-            iconsEvenlySpaced = true,
-            bottomToolbar = true
+                savedInstanceState,
+                R.layout.activity_spcswostate,
+                R.menu.spcswostate,
+                iconsEvenlySpaced = true,
+                bottomToolbar = true
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         day = intent.getStringArrayExtra(NO)[0]
@@ -95,9 +95,10 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListene
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> UtilityShare.shareBitmap(
-                this,
-                "$state SWO D$day",
-                bitmap
+                    this,
+                    this,
+                    "$state SWO D$day",
+                    bitmap
             )
             else -> return super.onOptionsItemSelected(item)
         }

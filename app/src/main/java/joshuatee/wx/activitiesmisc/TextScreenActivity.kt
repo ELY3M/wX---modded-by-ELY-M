@@ -34,7 +34,6 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
 
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.util.UtilityLog
 import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*

@@ -114,7 +114,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                                 USWarningsWithRadarActivity::class.java,
                                 USWarningsWithRadarActivity.URL,
                                 arrayOf(
-			    ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Extreme Wind Warning.*?|.*?Flash Flood Warning.*?|.*?Special Marine Warning.*?|.*?Severe Weather Statement.*?|.*?Special Weather Statement.*?", 
+                                        ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?",
                                         "us"
                                 )
                         )
@@ -283,7 +283,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == requestOk && resultCode == Activity.RESULT_OK) {
             val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            UtilityUI.makeSnackBar(view, thingsYouSaid[0])
+            UtilityUI.makeSnackBar(view, thingsYouSaid!![0])
             val addrStrTmp = thingsYouSaid[0]
             UtilityVoiceCommand.processCommand(
                     this,

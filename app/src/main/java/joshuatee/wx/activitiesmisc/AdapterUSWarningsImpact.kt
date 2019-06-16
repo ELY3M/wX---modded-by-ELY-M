@@ -33,7 +33,7 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
 
-internal class AdapterUSWarningsImpact(private val mDataset: List<ObjectImpactGraphic>) :
+internal class AdapterUSWarningsImpact(private val dataSet: List<ObjectImpactGraphic>) :
     RecyclerView.Adapter<AdapterUSWarningsImpact.DataObjectHolder>() {
 
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
@@ -64,17 +64,17 @@ internal class AdapterUSWarningsImpact(private val mDataset: List<ObjectImpactGr
     }
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
-        holder.title.text = mDataset[position].title
+        holder.title.text = dataSet[position].title
         holder.title.setTextColor(UIPreferences.textHighlightColor)
         holder.title.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
-        holder.cities.text = mDataset[position].cities
-        holder.population.text = mDataset[position].population
+        holder.cities.text = dataSet[position].cities
+        holder.population.text = dataSet[position].population
         listOf(holder.cities, holder.population).forEach {
             it.setAsSmallText()
         }
     }
 
-    override fun getItemCount() = mDataset.size
+    override fun getItemCount() = dataSet.size
 
     interface MyClickListener {
         fun onItemClick(position: Int)

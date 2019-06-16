@@ -26,9 +26,9 @@ import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class ObjectRecyclerViewGeneric(context: Context, activity: Activity, resid: Int) {
+class ObjectRecyclerViewGeneric(context: Context, activity: Activity, resourceId: Int) {
 
-    var recyclerView: RecyclerView = activity.findViewById(resid)
+    var recyclerView: RecyclerView = activity.findViewById(resourceId)
 
     init {
         recyclerView.setHasFixedSize(true)

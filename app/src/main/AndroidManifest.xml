@@ -22,13 +22,15 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55217"
-    android:versionName="55217"
+    android:versionCode="55235"
+    android:versionName="55235"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+ <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<!-- <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />-->
 
  <!-- add for Telecine -->
  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -603,7 +605,10 @@
       android:exported="true"
       />
 
-  <service android:name="joshuatee.wx.telecine.TelecineService"/>
+  <service
+      android:name="joshuatee.wx.telecine.TelecineService"
+      android:foregroundServiceType="mediaProjection"
+      />
 
   <receiver android:name="joshuatee.wx.telecine.RecordingSession$DeleteRecordingBroadcastReceiver"/>
 

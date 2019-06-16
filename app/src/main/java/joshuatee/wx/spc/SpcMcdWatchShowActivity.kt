@@ -46,7 +46,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     // show a specific MCD, Watch, or MPD - long press on image to save location
     //
-    // Arugments
+    // Arguments
     //
     // 1: number of MCD, WAT, or MPD such as 0403
     //
@@ -129,11 +129,12 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.shareText(
+            R.id.action_share_all -> UtilityShare.shareBitmap(
+                    this,
                     this,
                     objectWatchProduct.title,
-                    Utility.fromHtml(objectWatchProduct.text),
-                    objectWatchProduct.bitmap
+                    objectWatchProduct.bitmap,
+                    Utility.fromHtml(objectWatchProduct.text)
             )
             R.id.action_share_text -> UtilityShare.shareText(
                     this,
@@ -142,6 +143,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
             )
             R.id.action_share_url -> UtilityShare.shareText(this, objectWatchProduct.title, objectWatchProduct.textUrl)
             R.id.action_share_image -> UtilityShare.shareBitmap(
+                    this,
                     this,
                     objectWatchProduct.title,
                     objectWatchProduct.bitmap

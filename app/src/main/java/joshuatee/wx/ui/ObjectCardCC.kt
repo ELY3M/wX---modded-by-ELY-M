@@ -88,7 +88,7 @@ class ObjectCardCC(context: Context, version: Int) {
             linearLayoutHorizontal.addView(imageView.image)
             linearLayoutHorizontal.addView(linearLayoutVertical)
         } else {
-            // legeacy code
+            // legacy code
             linearLayoutHorizontal.orientation = LinearLayout.VERTICAL
             linearLayoutHorizontal.addView(textViewTop.tv)
             linearLayoutHorizontal.addView(textViewBottom.tv)

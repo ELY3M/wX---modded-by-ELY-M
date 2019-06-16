@@ -32,7 +32,7 @@ import java.util.regex.Pattern
 
 internal class SevereNotice(val type: PolygonType) {
 
-    // encapsulates a string array representation and bitmap arraylist of current mcd, wat, or mpd
+    // encapsulates a string array representation and bitmap list of current mcd, wat, or mpd
 
     val bitmaps = mutableListOf<Bitmap>()
     var numbers = mutableListOf<String>()

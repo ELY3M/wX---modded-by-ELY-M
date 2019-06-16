@@ -66,7 +66,7 @@ internal class ObjectMetar(context: Context, location: LatLon) {
 
     var condition = ""
     var temperature = ""
-    var dewpoint = ""
+    var dewPoint = ""
     var windDirection = ""
     var windSpeed = ""
     var windGust = ""
@@ -141,7 +141,7 @@ internal class ObjectMetar(context: Context, location: LatLon) {
         val metarData = ("${MyApplication.NWS_RADAR_PUB}/data/observations/metar/decoded/" + obsClosest.name + ".TXT").getHtmlSep()
                 .replace("<br>", MyApplication.newline)
         temperature = metarData.parse("Temperature: (.*?) F")
-        dewpoint = metarData.parse("Dew Point: (.*?) F")
+        dewPoint = metarData.parse("Dew Point: (.*?) F")
         windDirection = metarData.parse("Wind: from the (.*?) \\(.*? degrees\\) at .*? MPH ")
         windSpeed = metarData.parse("Wind: from the .*? \\(.*? degrees\\) at (.*?) MPH ")
         windGust = metarData.parse("Wind: from the .*? \\(.*? degrees\\) at .*? MPH \\(.*? KT\\) gusting to (.*?) MPH")
@@ -176,7 +176,7 @@ internal class ObjectMetar(context: Context, location: LatLon) {
         }
         seaLevelPressure = changePressureUnits(seaLevelPressure)
         temperature = changeDegreeUnits(temperature)
-        dewpoint = changeDegreeUnits(dewpoint)
+        dewPoint = changeDegreeUnits(dewPoint)
         windChill = changeDegreeUnits(windChill)
         heatIndex = changeDegreeUnits(heatIndex)
         if (windSpeed == "") {

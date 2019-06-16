@@ -84,6 +84,7 @@ class WpcRainfallForecastActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
         when (item.itemId) {
             R.id.action_share -> UtilityShare.shareText(
                     this,
+                    this,
                     getString(UtilityWpcRainfallForecast.activityTitle),
                     "",
                     bitmaps

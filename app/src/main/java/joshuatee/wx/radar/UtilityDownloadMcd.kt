@@ -40,12 +40,11 @@ internal object UtilityDownloadMcd {
     const val type = "MCD"
 
     fun get(context: Context) {
-        //val refreshInterval = Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3)
         val refreshInterval = maxOf(Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3), 6)
         val currentTime1 = System.currentTimeMillis()
         val currentTimeSec = currentTime1 / 1000
         val refreshIntervalSec = (refreshInterval * 60).toLong()
-        UtilityLog.d("wx", "RADAR DOWNLOAD CHECK: $type")
+        //UtilityLog.d("wx", "RADAR DOWNLOAD CHECK: $type")
         if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
             // download data
             initialized = true
@@ -71,7 +70,7 @@ internal object UtilityDownloadMcd {
         }
         val locationNeedsMcd = UtilityNotificationSpc.locationNeedsMcd()
         if (PolygonType.MCD.pref || locationNeedsMcd) {
-            UtilityLog.d("wx","RADAR DOWNLOAD SET: " + latLonString)
+            //UtilityLog.d("wx","RADAR DOWNLOAD SET: " + latLonString)
             MyApplication.mcdLatlon.valueSet(context, latLonString)
         }
         return WatchData(numberList, htmlList)
@@ -79,7 +78,7 @@ internal object UtilityDownloadMcd {
 
     private fun getListOfNumbers(context: Context): List<String> {
         val list = UtilityString.parseColumn(MyApplication.severeDashboardMcd.value, RegExp.mcdPatternAlertr)
-        UtilityLog.d("wx", "RADAR DOWNLOAD $type:$list")
+        //UtilityLog.d("wx", "RADAR DOWNLOAD $type:$list")
         var mcdNoList = ""
         list.forEach {
             mcdNoList = "$mcdNoList$it:"
@@ -93,12 +92,7 @@ internal object UtilityDownloadMcd {
 
     // return the raw MCD text and the lat/lon as a list
     fun getLatLon(context: Context, number: String): List<String> {
-
-        val locationNeedsMcd = UtilityNotificationSpc.locationNeedsMcd()
-
         val html = UtilityDownload.getTextProduct(context, "SPCMCD$number")
-        val list = listOf(html, UtilityNotification.storeWatMcdLatLon(html))
-        //UtilityLog.d("wx", "RADAR DOWNLOAD MCD OBJECT: " + list[1].toString())
-        return list
+        return listOf(html, UtilityNotification.storeWatMcdLatLon(html))
     }
 }

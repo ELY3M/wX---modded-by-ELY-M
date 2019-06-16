@@ -21,6 +21,7 @@
 
 package joshuatee.wx.util
 
+import android.app.Activity
 import java.io.File
 import java.io.FileOutputStream
 
@@ -28,14 +29,14 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
-import android.net.Uri
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.ui.UtilityUI
+import androidx.core.app.ShareCompat.IntentBuilder
 
 object UtilityShare {
 
-    fun shareTextAsAttachment(context: Context, subject: String, text: String, filename: String) {
+    fun shareTextAsAttachment(activity: Activity, context: Context, subject: String, text: String, filename: String) {
         val dir = File(context.filesDir.toString() + "/shared")
         if (!dir.mkdirs())
             UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
@@ -62,12 +63,15 @@ object UtilityShare {
                 }
         }
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
-        val sharingIntent = Intent(Intent.ACTION_SEND)
-        sharingIntent.type = "text/plain"
-        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "$subject $formattedDate")
-        sharingIntent.putExtra(Intent.EXTRA_TEXT, "wX Settings attached")
-        sharingIntent.putExtra(Intent.EXTRA_STREAM, imgUri)//attachment
-        context.startActivity(Intent.createChooser(sharingIntent, "Share via"))
+        val intentBuilder = IntentBuilder.from(activity)
+        intentBuilder.setSubject("$subject $formattedDate")
+        intentBuilder.addEmailTo("")
+        intentBuilder.setText(text)
+        intentBuilder.setStream(imgUri)
+        val sharingIntent = intentBuilder.intent
+        sharingIntent.data = imgUri
+        sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        activity.startActivity(Intent.createChooser(sharingIntent, "Share via"))
     }
 
     fun shareText(context: Context, subject: String, text: String) {
@@ -79,76 +83,20 @@ object UtilityShare {
         context.startActivity(Intent.createChooser(sharingIntent, "Share via"))
     }
 
-    fun shareText(context: Context, subject: String, text: String, bitmap: Bitmap) {
+    fun shareText(activity: Activity, context: Context, subject: String, text: String, bitmaps: List<Bitmap>) {
+        val bitmap = UtilityImg.mergeImagesVertically(bitmaps)
+        shareBitmap(activity, context, subject, bitmap, text)
+    }
+
+    fun shareBitmap(activity: Activity, context: Context, subject: String, bitmap: Bitmap, text: String = "") {
         val dir = File(context.filesDir.toString() + "/shared")
         if (!dir.mkdirs())
             UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
         val file = File(dir, "img1.png")
         val imgUri = FileProvider.getUriForFile(
-            context,
-            "${MyApplication.packageNameAsString}.fileprovider",
-            file
-        )
-        try {
-            val fos = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
-            fos.close()
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
-        val sharingIntent = Intent(Intent.ACTION_SEND)
-        sharingIntent.type = "text/plain"
-        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "$subject $formattedDate")
-        sharingIntent.putExtra(Intent.EXTRA_TEXT, text)
-        sharingIntent.putExtra(Intent.EXTRA_STREAM, imgUri)
-        sharingIntent.type = "image/png"
-        sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        context.startActivity(Intent.createChooser(sharingIntent, "Share via"))
-    }
-
-    fun shareText(context: Context, subject: String, text: String, bitmapArr: List<Bitmap>) {
-        val imgUriAl = ArrayList<Uri>()
-        bitmapArr.forEachIndexed { i, bm ->
-            val dir = File(context.filesDir.toString() + "/shared")
-            if (!dir.mkdirs()) {
-                UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
-            }
-            val file = File(dir, "img$i.png")
-            val imgUri = FileProvider.getUriForFile(
                 context,
                 "${MyApplication.packageNameAsString}.fileprovider",
                 file
-            )
-            imgUriAl.add(imgUri)
-            try {
-                val fos = FileOutputStream(file)
-                bm.compress(Bitmap.CompressFormat.PNG, 100, fos)
-                fos.close()
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
-            }
-        }
-        val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
-        val sharingIntent = Intent(Intent.ACTION_SEND_MULTIPLE)
-        sharingIntent.type = "text/plain"
-        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "$subject $formattedDate")
-        sharingIntent.putExtra(Intent.EXTRA_TEXT, text)
-        sharingIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, imgUriAl)
-        sharingIntent.type = "image/png"
-        sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        context.startActivity(Intent.createChooser(sharingIntent, "Share via"))
-    }
-
-    fun shareBitmap(context: Context, subject: String, bitmap: Bitmap) {
-        val dir = File(context.filesDir.toString() + "/shared")
-        if (!dir.mkdirs())
-            UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
-        val file = File(dir, "img1.png")
-        val imgUri = FileProvider.getUriForFile(
-            context,
-            "${MyApplication.packageNameAsString}.fileprovider",
-            file
         )
         try {
             val fos = FileOutputStream(file)
@@ -158,21 +106,25 @@ object UtilityShare {
             UtilityLog.handleException(e)
         }
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
-        val sharingIntent = Intent(Intent.ACTION_SEND)
-        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "$subject $formattedDate")
-        sharingIntent.putExtra(Intent.EXTRA_STREAM, imgUri)
-        sharingIntent.type = "image/png"
+        val intentBuilder = IntentBuilder.from(activity)
+        intentBuilder.setSubject("$subject $formattedDate")
+        intentBuilder.addEmailTo("")
+        intentBuilder.setText(text)
+        intentBuilder.setStream(imgUri)
+        intentBuilder.setType("image/png")
+        val sharingIntent = intentBuilder.intent
+        sharingIntent.data = imgUri
         sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        context.startActivity(Intent.createChooser(sharingIntent, "Share via"))
+        if (sharingIntent.resolveActivity(activity.packageManager) != null) {
+            activity.startActivity(Intent.createChooser(sharingIntent, "Share via"))
+        }
     }
 
     internal var animDrawablePublic: AnimationDrawable? = null
-    internal var contextPublic: Context? = null
     internal var subjectPublic: String? = null
 
     fun shareAnimGif(context: Context, subject: String, animDrawable: AnimationDrawable) {
         UtilityUI.makeToastLegacy(context, "Creating animated gif")
-        contextPublic = context
         animDrawablePublic = animDrawable
         subjectPublic = subject
         val intent = Intent(context, CreateAnimatedGifService::class.java)

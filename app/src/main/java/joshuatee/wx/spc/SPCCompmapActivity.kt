@@ -124,7 +124,7 @@ class SpcCompmapActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, "SPC Compmap", "", bitmap)
+            R.id.action_share -> UtilityShare.shareBitmap(this, this, "SPC Compmap", bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

@@ -12,7 +12,7 @@ import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
 
-internal class SettingsLocationAdapterList(private val mDataset: MutableList<String>) :
+internal class SettingsLocationAdapterList(private val dataSet: MutableList<String>) :
     RecyclerView.Adapter<SettingsLocationAdapterList.DataObjectHolder>() {
 
     companion object {
@@ -100,13 +100,13 @@ internal class SettingsLocationAdapterList(private val mDataset: MutableList<Str
     }
 
     fun deleteItem(index: Int) {
-        if (index < mDataset.count()) {
-            mDataset.removeAt(index)
+        if (index < dataSet.count()) {
+            dataSet.removeAt(index)
             notifyDataSetChanged()
         }
     }
 
-    override fun getItemCount() = mDataset.size
+    override fun getItemCount() = dataSet.size
 
     interface MyClickListener {
         fun onItemClick(position: Int)

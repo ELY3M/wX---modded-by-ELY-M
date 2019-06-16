@@ -327,25 +327,24 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     private fun alertDialogClicked(dialogue: ObjectDialogue, token: String, which: Int) {
         val strName = dialogue.getItem(which)
-        var txtprod =
-                token + strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)
+        var textProduct = token + strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)
         if (token == "") {
-            txtprod = if (txtprod != "RADAR") {
-                "IMG-" + txtprod.toUpperCase()
+            textProduct = if (textProduct != "RADAR") {
+                "IMG-" + textProduct.toUpperCase()
             } else {
-                "OGL-" + txtprod.toUpperCase()
+                "OGL-" + textProduct.toUpperCase()
             }
         }
         ridFav = MyApplication.homescreenFav
-        if (!ridFav.contains(":$txtprod")) {
-            ridFav = "$ridFav:$txtprod"
+        if (!ridFav.contains(":$textProduct")) {
+            ridFav = "$ridFav:$textProduct"
             Utility.writePref(this, prefToken, ridFav)
             MyApplication.homescreenFav = ridFav
-            labels.add(txtprod)
+            labels.add(textProduct)
             updateList()
             recyclerView.notifyDataSetChanged()
         } else {
-            UtilityUI.makeSnackBar(recyclerView.recyclerView, "$txtprod is already in homescreen.")
+            UtilityUI.makeSnackBar(recyclerView.recyclerView, "$textProduct is already in homescreen.")
         }
     }
 } 

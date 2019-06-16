@@ -27,7 +27,7 @@ internal class RecyclerViewHolders(itemView: View, private val itemList: List<Ti
         itemView.setOnClickListener(this)
     }
 
-    // following 2 methods availbe via implements ItemTouchHelperViewHolder
+    // following 2 methods available via implements ItemTouchHelperViewHolder
 
     override fun onItemSelected() {
         (itemView as CardView).setCardBackgroundColor(Color.RED)

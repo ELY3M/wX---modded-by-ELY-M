@@ -57,7 +57,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var html = ""
     private var bitmaps = listOf<Bitmap>()
     private lateinit var activityArguments: Array<String>
-    private var turlDay = ""
+    private var day = ""
     private var playlistProd = ""
     // FIXME var names
     private lateinit var c1: ObjectCardImage
@@ -82,8 +82,8 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         c5 = ObjectCardImage(this, ll)
         c6 = ObjectCardImage(this, ll)
         activityArguments = intent.getStringArrayExtra(NO)
-        turlDay = activityArguments[0]
-        title = "Day $turlDay Convective Outlook"
+        day = activityArguments[0]
+        title = "Day $day Convective Outlook"
         val menu = toolbarBottom.menu
         val miTornado = menu.findItem(R.id.action_share_tornado)
         val miHail = menu.findItem(R.id.action_share_hail)
@@ -100,21 +100,21 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         miDay6Img.isVisible = false
         miDay7Img.isVisible = false
         miDay8Img.isVisible = false
-        if (turlDay == "1") {
+        if (day == "1") {
             miProbabilistic.isVisible = false
         } else {
             miTornado.isVisible = false
             miHail.isVisible = false
             miWind.isVisible = false
         }
-        if (turlDay == "4-8") {
+        if (day == "4-8") {
             playlistProd = "swod48"
             miProbabilistic.isVisible = false
             miCategorical.isVisible = false
         } else {
-            playlistProd = "swody$turlDay"
+            playlistProd = "swody$day"
         }
-        if (turlDay == "4-8") {
+        if (day == "4-8") {
             val state = menu.findItem(R.id.action_state_graphics)
             state.isVisible = false
             miDay4Img.isVisible = true
@@ -127,20 +127,20 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        var textUrl = "SWODY$turlDay"
-        if (turlDay == "4-8") {
+        var textUrl = "SWODY$day"
+        if (day == "4-8") {
             textUrl = "SWOD48"
         }
         withContext(Dispatchers.IO) {
             html = UtilityDownload.getTextProduct(this@SpcSwoActivity, textUrl)
-            bitmaps = UtilitySpcSwo.getImageUrls(turlDay, true)
+            bitmaps = UtilitySpcSwo.getImageUrls(day, true)
         }
         c2.setText(Utility.fromHtml(html))
         toolbar.subtitle = html.parse("(Valid.*?)<")
         if (activityArguments[1] == "sound") {
             UtilityTts.synthesizeTextAndPlay(applicationContext, html, "spcswo")
         }
-        when (turlDay) {
+        when (day) {
             "1" -> {
                 c1.setImage(bitmaps[0])
                 c3.setImage(bitmaps[1])
@@ -220,61 +220,72 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_share_all -> UtilityShare.shareText(
                     this,
-                    "Day $turlDay Convective Outlook",
+                    this,
+                    "Day $day Convective Outlook",
                     Utility.fromHtml(html),
                     bitmaps
             )
             R.id.action_share_text -> UtilityShare.shareText(
                     this,
-                    "Day $turlDay Convective Outlook - Text",
+                    "Day $day Convective Outlook - Text",
                     Utility.fromHtml(html)
             )
             R.id.action_share_tornado -> if (bitmaps.size > 1) UtilityShare.shareBitmap(
                     this,
-                    "Day $turlDay Convective Outlook - Tornado",
+                    this,
+                    "Day $day Convective Outlook - Tornado",
                     bitmaps[1]
             )
             R.id.action_share_hail -> if (bitmaps.size > 2) UtilityShare.shareBitmap(
                     this,
-                    "Day $turlDay Convective Outlook - Hail",
+                    this,
+                    "Day $day Convective Outlook - Hail",
                     bitmaps[2]
             )
             R.id.action_share_wind -> if (bitmaps.size > 3) UtilityShare.shareBitmap(
                     this,
-                    "Day $turlDay Convective Outlook - Wind",
+                    this,
+                    "Day $day Convective Outlook - Wind",
                     bitmaps[3]
             )
             R.id.action_share_categorical -> if (bitmaps.isNotEmpty()) UtilityShare.shareBitmap(
                     this,
-                    "Day $turlDay Convective Outlook - Categorical",
+                    this,
+                    "Day $day Convective Outlook - Categorical",
                     bitmaps[0]
             )
             R.id.action_share_probabilistic -> if (bitmaps.size > 1) UtilityShare.shareBitmap(
                     this,
-                    "Day $turlDay Convective Outlook - Probabilistic",
+                    this,
+                    "Day $day Convective Outlook - Probabilistic",
                     bitmaps[1]
             )
             R.id.action_share_d4 -> if (bitmaps.isNotEmpty()) UtilityShare.shareBitmap(
+                    this,
                     this,
                     "Day " + "4" + " Convective Outlook - Image",
                     bitmaps[0]
             )
             R.id.action_share_d5 -> if (bitmaps.size > 1) UtilityShare.shareBitmap(
                     this,
+                    this,
                     "Day " + "5" + " Convective Outlook - Image",
                     bitmaps[1]
             )
             R.id.action_share_d6 -> if (bitmaps.size > 2) UtilityShare.shareBitmap(
+                    this,
                     this,
                     "Day " + "6" + " Convective Outlook - Image",
                     bitmaps[2]
             )
             R.id.action_share_d7 -> if (bitmaps.size > 3) UtilityShare.shareBitmap(
                     this,
+                    this,
                     "Day " + "7" + " Convective Outlook - Image",
                     bitmaps[3]
             )
             R.id.action_share_d8 -> if (bitmaps.size > 4) UtilityShare.shareBitmap(
+                    this,
                     this,
                     "Day " + "8" + " Convective Outlook - Image",
                     bitmaps[4]
@@ -283,7 +294,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     this,
                     SpcSwoStateGraphicsActivity::class.java,
                     SpcSwoStateGraphicsActivity.NO,
-                    arrayOf(turlDay, "")
+                    arrayOf(day, "")
             )
             else -> return super.onOptionsItemSelected(item)
         }

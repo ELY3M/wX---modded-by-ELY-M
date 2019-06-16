@@ -161,7 +161,7 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
-            bitmap = "http://forecast.weather.gov/wwamap/png/US.png".getImage()
+            bitmap = "https://forecast.weather.gov/wwamap/png/US.png".getImage()
             if (turlLocal[1] == "us" && usDownloaded) {
                 html = usDataStr
             } else {
@@ -202,19 +202,19 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
                     this@USWarningsWithRadarActivity,
                     ImageShowActivity::class.java,
                     ImageShowActivity.URL,
-                    arrayOf("http://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map")
+                    arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map")
             )
             R.id.action_warnmapAK -> ObjectIntent(
                     this@USWarningsWithRadarActivity,
                     ImageShowActivity::class.java,
                     ImageShowActivity.URL,
-                    arrayOf("http://forecast.weather.gov/wwamap/png/ak.png", "AK warning map")
+                    arrayOf("https://forecast.weather.gov/wwamap/png/ak.png", "AK warning map")
             )
             R.id.action_warnmapHI -> ObjectIntent(
                     this@USWarningsWithRadarActivity,
                     ImageShowActivity::class.java,
                     ImageShowActivity.URL,
-                    arrayOf("http://forecast.weather.gov/wwamap/png/hi.png", "HI warning map")
+                    arrayOf("https://forecast.weather.gov/wwamap/png/hi.png", "HI warning map")
             )
             R.id.action_impact_graphics -> ObjectIntent(
                     this@USWarningsWithRadarActivity,

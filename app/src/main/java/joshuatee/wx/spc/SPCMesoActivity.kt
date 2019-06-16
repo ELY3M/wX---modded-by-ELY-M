@@ -429,10 +429,10 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
                         UtilityShare.shareAnimGif(this, title, displayData.animDrawable[0])
                     } else {
                         if (numPanes == 1) {
-                            UtilityShare.shareBitmap(this, title, displayData.bitmap[0])
+                            UtilityShare.shareBitmap(this, this, title, displayData.bitmap[0])
                         } else {
                             title = UtilitySpcMeso.sectorMap[sector] + " - " + displayData.paramLabel[curImg]
-                            UtilityShare.shareText(this, title, "", displayData.bitmap[curImg])
+                            UtilityShare.shareBitmap(this, this,  title, displayData.bitmap[curImg])
                         }
                     }
                 }

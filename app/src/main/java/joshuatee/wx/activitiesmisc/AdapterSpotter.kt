@@ -37,7 +37,7 @@ import joshuatee.wx.radar.Spotter
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
 
-internal class AdapterSpotter(private val mDataset: MutableList<Spotter>) :
+internal class AdapterSpotter(private val dataSet: MutableList<Spotter>) :
     RecyclerView.Adapter<AdapterSpotter.DataObjectHolder>() {
 
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
@@ -73,9 +73,9 @@ internal class AdapterSpotter(private val mDataset: MutableList<Spotter>) :
     }
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
-        holder.name.text = mDataset[position].lastName + ", " + mDataset[position].firstName
-        holder.time.text = mDataset[position].reportAt
-        holder.email.text = mDataset[position].email.replace(MyApplication.newline, " ")
+        holder.name.text = dataSet[position].lastName + ", " + dataSet[position].firstName
+        holder.time.text = dataSet[position].reportAt
+        holder.email.text = dataSet[position].email.replace(MyApplication.newline, " ")
         holder.email.setOnClickListener(View.OnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:")
@@ -83,7 +83,7 @@ internal class AdapterSpotter(private val mDataset: MutableList<Spotter>) :
             intent.putExtra(Intent.EXTRA_SUBJECT, "")
             holder.email.context.startActivity(Intent.createChooser(intent, "Send Email"))
         })
-        holder.phone.text = mDataset[position].phone.replace(MyApplication.newline, " ")
+        holder.phone.text = dataSet[position].phone.replace(MyApplication.newline, " ")
         listOf(holder.time, holder.email, holder.phone).forEach {
             it.setAsBackgroundText()
         }
@@ -91,33 +91,33 @@ internal class AdapterSpotter(private val mDataset: MutableList<Spotter>) :
             val telephonyManager = holder.phone.context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager
             if (telephonyManager.phoneType != TelephonyManager.PHONE_TYPE_NONE) {
                 val intent = Intent(Intent.ACTION_DIAL)
-                intent.data = Uri.parse("tel:" + mDataset[position].phone)
+                intent.data = Uri.parse("tel:" + dataSet[position].phone)
                 holder.phone.context.startActivity(intent)
             }
         })
     }
 
-    override fun getItemCount() = mDataset.size
+    override fun getItemCount() = dataSet.size
 
-    fun getItem(index: Int): Spotter = mDataset[index]
+    fun getItem(index: Int): Spotter = dataSet[index]
 
     interface MyClickListener {
         fun onItemClick(position: Int)
     }
 
     private fun removeItem(position: Int) {
-        mDataset.removeAt(position)
+        dataSet.removeAt(position)
         notifyItemRemoved(position)
     }
 
     private fun addItem(position: Int, model: Spotter) {
-        mDataset.add(position, model)
+        dataSet.add(position, model)
         notifyItemInserted(position)
     }
 
     private fun moveItem(fromPosition: Int, toPosition: Int) {
-        val model = mDataset.removeAt(fromPosition)
-        mDataset.add(toPosition, model)
+        val model = dataSet.removeAt(fromPosition)
+        dataSet.add(toPosition, model)
         notifyItemMoved(fromPosition, toPosition)
     }
 
@@ -128,8 +128,8 @@ internal class AdapterSpotter(private val mDataset: MutableList<Spotter>) :
     }
 
     private fun applyAndAnimateRemovals(newModels: List<Spotter>) {
-        mDataset.indices.reversed().forEach {
-            val model = mDataset[it]
+        dataSet.indices.reversed().forEach {
+            val model = dataSet[it]
             if (!newModels.contains(model)) {
                 removeItem(it)
             }
@@ -141,7 +141,7 @@ internal class AdapterSpotter(private val mDataset: MutableList<Spotter>) :
         val count = newModels.size
         while (i < count) {
             val model = newModels[i]
-            if (!mDataset.contains(model)) {
+            if (!dataSet.contains(model)) {
                 addItem(i, model)
             }
             i += 1
@@ -151,7 +151,7 @@ internal class AdapterSpotter(private val mDataset: MutableList<Spotter>) :
     private fun applyAndAnimateMovedItems(newModels: List<Spotter>) {
         newModels.indices.reversed().forEach {
             val model = newModels[it]
-            val fromPosition = mDataset.indexOf(model)
+            val fromPosition = dataSet.indexOf(model)
             if (fromPosition >= 0 && fromPosition != it) {
                 moveItem(fromPosition, it)
             }

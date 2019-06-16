@@ -39,17 +39,16 @@ import joshuatee.wx.util.UtilityLog
 
 import kotlin.math.*
 
-// FIXME rename var OGLR not camcelCase
+// TODO camelcase methods
 
 class WXGLTextObject(
         private val context: Context,
-        private val rl: RelativeLayout,
-        private val glview: WXGLSurfaceView,
-        private var OGLR: WXGLRender,
-        private val numPanes: Int
+        private val relativeLayout: RelativeLayout,
+        private val wxglSurfaceView: WXGLSurfaceView,
+        private var wxglRender: WXGLRender,
+        private val numberOfPanes: Int
 ) {
-
-    private var lp: RelativeLayout.LayoutParams
+    private var layoutParams: RelativeLayout.LayoutParams
     private var cityextTvArrInit = false
     private var countyLabelsTvArrInit = false
 
@@ -78,50 +77,50 @@ class WXGLTextObject(
     private var scale = 0.toFloat()
     private var oglrZoom = 0.toFloat()
     private var textSize = 0.toFloat()
-    private var pn: ProjectionNumbers
+    private var projectionNumbers: ProjectionNumbers
 
     init {
-        this.maxCitiesPerGlview = maxCitiesPerGlview / numPanes
+        this.maxCitiesPerGlview = maxCitiesPerGlview / numberOfPanes
         // locfrag should show fewer then full screen wxogl
-        if (numPanes == 1 && !glview.fullScreen)
+        if (numberOfPanes == 1 && !wxglSurfaceView.fullScreen)
             this.maxCitiesPerGlview = (maxCitiesPerGlview * 0.60).toInt()
-        if (numPanes != 1)
-            this.glviewWidth = MyApplication.dm.widthPixels / (numPanes / 2)
+        if (numberOfPanes != 1)
+            this.glviewWidth = MyApplication.dm.widthPixels / (numberOfPanes / 2)
         else
             this.glviewWidth = MyApplication.dm.widthPixels
-        if (numPanes != 1)
+        if (numberOfPanes != 1)
             this.glviewHeight = MyApplication.dm.heightPixels / 2
         else
             this.glviewHeight = MyApplication.dm.heightPixels
-        pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
-        lp = RelativeLayout.LayoutParams(
+        projectionNumbers = ProjectionNumbers(wxglRender.rid, ProjectionType.WX_OGL)
+        layoutParams = RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         )
-        lp.addRule(RelativeLayout.CENTER_HORIZONTAL)
-        lp.addRule(RelativeLayout.CENTER_VERTICAL)
+        layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
+        layoutParams.addRule(RelativeLayout.CENTER_VERTICAL)
     }
 
     private fun addTVCitiesExt() {
         if (GeographyType.CITIES.pref && cityextTvArrInit) {
-            pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
+            projectionNumbers = ProjectionNumbers(wxglRender.rid, ProjectionType.WX_OGL)
             hideCitiesExt()
-            glview.citiesExtAl = mutableListOf()
+            wxglSurfaceView.citiesExtAl = mutableListOf()
             scale = getScale()
             oglrZoom = 1.0f
-            if (OGLR.zoom < 1.00f) {
-                oglrZoom = OGLR.zoom * 0.8f
+            if (wxglRender.zoom < 1.00f) {
+                oglrZoom = wxglRender.zoom * 0.8f
             }
             textSize = MyApplication.textSizeSmall * oglrZoom * 0.75f * MyApplication.radarTextSize
             val cityMinZoom = 0.50
-            if (OGLR.zoom > cityMinZoom) {
+            if (wxglRender.zoom > cityMinZoom) {
                 val cityExtLength = UtilityCitiesExtended.cities.size
                 for (c in 0 until cityExtLength) {
-                    if (glview.citiesExtAl.size > maxCitiesPerGlview) {
+                    if (wxglSurfaceView.citiesExtAl.size > maxCitiesPerGlview) {
                         break
                     }
                     checkAndDrawText(
-                            glview.citiesExtAl,
+                            wxglSurfaceView.citiesExtAl,
                             UtilityCitiesExtended.cities[c].latD,
                             UtilityCitiesExtended.cities[c].lonD,
                             UtilityCitiesExtended.cities[c].name,
@@ -137,9 +136,9 @@ class WXGLTextObject(
     }
 
     private fun hideCitiesExt() {
-        glview.citiesExtAl.indices.forEach {
-            glview.citiesExtAl[it].visibility = View.GONE
-            rl.removeView(glview.citiesExtAl[it])
+        wxglSurfaceView.citiesExtAl.indices.forEach {
+            wxglSurfaceView.citiesExtAl[it].visibility = View.GONE
+            relativeLayout.removeView(wxglSurfaceView.citiesExtAl[it])
         }
     }
 
@@ -158,23 +157,23 @@ class WXGLTextObject(
     }
 
     private fun getScale() =
-            8.1f * OGLR.zoom / MyApplication.deviceScale * (glviewWidth / 800.0f * MyApplication.deviceScale) / MyApplication.TEXTVIEW_MAGIC_FUDGE_FACTOR
+            8.1f * wxglRender.zoom / MyApplication.deviceScale * (glviewWidth / 800.0f * MyApplication.deviceScale) / MyApplication.TEXTVIEW_MAGIC_FUDGE_FACTOR
 
     private fun addTVCountyLabels() {
         if (MyApplication.radarCountyLabels && countyLabelsTvArrInit) {
-            pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
+            projectionNumbers = ProjectionNumbers(wxglRender.rid, ProjectionType.WX_OGL)
             hideCountyLabels()
-            glview.countyLabelsAl = mutableListOf()
+            wxglSurfaceView.countyLabelsAl = mutableListOf()
             scale = getScale()
             oglrZoom = 1.0f
-            if (OGLR.zoom < 1.00f) {
-                oglrZoom = OGLR.zoom * 0.8f
+            if (wxglRender.zoom < 1.00f) {
+                oglrZoom = wxglRender.zoom * 0.8f
             }
             textSize = MyApplication.textSizeSmall * oglrZoom * 0.65f * MyApplication.radarTextSize
-            if (OGLR.zoom > 1.50) {
+            if (wxglRender.zoom > 1.50) {
                 UtilityCountyLabels.countyName.indices.forEach {
                     checkAndDrawText(
-                            glview.countyLabelsAl,
+                            wxglSurfaceView.countyLabelsAl,
                             UtilityCountyLabels.countyLat[it],
                             UtilityCountyLabels.countyLon[it],
                             UtilityCountyLabels.countyName[it],
@@ -190,30 +189,32 @@ class WXGLTextObject(
     }
 
     private fun hideCountyLabels() {
-        glview.countyLabelsAl.indices.forEach {
-            glview.countyLabelsAl[it].visibility = View.GONE
-            rl.removeView(glview.countyLabelsAl[it])
+        wxglSurfaceView.countyLabelsAl.indices.forEach {
+            wxglSurfaceView.countyLabelsAl[it].visibility = View.GONE
+            relativeLayout.removeView(wxglSurfaceView.countyLabelsAl[it])
         }
     }
 
     fun initTVSpottersLabels() {
-        if (PolygonType.SPOTTER_LABELS.pref) spottersLabelsTvArrInit = true
+        if (PolygonType.SPOTTER_LABELS.pref) {
+            spottersLabelsTvArrInit = true
+        }
     }
 
     fun addTVSpottersLabels() {
         if (PolygonType.SPOTTER_LABELS.pref && spottersLabelsTvArrInit) {
-            pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
+            projectionNumbers = ProjectionNumbers(wxglRender.rid, ProjectionType.WX_OGL)
             spotterLat = 0.0
             spotterLon = 0.0
             hideSpottersLabels()
-            glview.spottersLabelAl = mutableListOf()
+            wxglSurfaceView.spottersLabelAl = mutableListOf()
             scale = getScale()
             oglrZoom = 1.0f
-            if (OGLR.zoom < 1.00f) {
-                oglrZoom = OGLR.zoom * 0.8f
+            if (wxglRender.zoom < 1.00f) {
+                oglrZoom = wxglRender.zoom * 0.8f
             }
             textSize = MyApplication.textSizeSmall * oglrZoom * MyApplication.radarTextSize * 0.75f
-            if (OGLR.zoom > 0.5) {
+            if (wxglRender.zoom > 0.5) {
                 // spotter list make copy first
                 // multiple bug reports against this
                 // look at performance impact
@@ -221,7 +222,7 @@ class WXGLTextObject(
                 val spotterListCopy = UtilitySpotter.spotterList.toMutableList()
                 spotterListCopy.indices.forEach {
                     checkAndDrawText(
-                            glview.spottersLabelAl,
+                            wxglSurfaceView.spottersLabelAl,
                             spotterListCopy[it].latD,
                             spotterListCopy[it].lonD,
                             spotterListCopy[it].lastName.replace("0FAV ", ""),
@@ -242,23 +243,23 @@ class WXGLTextObject(
 
     fun addTVHailLabels() {
         if (PolygonType.HAIL_LABELS.pref && hailLabelsTvArrInit) {
-            pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
+            projectionNumbers = ProjectionNumbers(wxglRender.rid, ProjectionType.WX_OGL)
             hailLat = 0.0
             hailLon = 0.0
             hideHailLabels()
-            glview.hailLabelAl = mutableListOf()
+            wxglSurfaceView.hailLabelAl = mutableListOf()
             scale = getScale()
             oglrZoom = 1.0f
-            if (OGLR.zoom < 1.00f) {
-                oglrZoom = OGLR.zoom * 0.8f
+            if (wxglRender.zoom < 1.00f) {
+                oglrZoom = wxglRender.zoom * 0.8f
             }
             textSize = MyApplication.textSizeSmall * oglrZoom * MyApplication.radarHiTextSize * 0.75f
-            if (OGLR.zoom > 0.5) {
+            if (wxglRender.zoom > 0.5) {
                 // FIXME make copy first
                 WXGLNexradLevel3HailIndex.hailList.indices.forEach {
                     checkAndDrawText(
-                            glview.hailLabelAl,
-                            WXGLNexradLevel3HailIndex.hailList[it].lat - 0.130 / OGLR.zoom, //move down to under HI icon
+                            wxglSurfaceView.hailLabelAl,
+                            WXGLNexradLevel3HailIndex.hailList[it].lat - 0.130 / wxglRender.zoom, //move down to under HI icon
                             WXGLNexradLevel3HailIndex.hailList[it].lon,
                             WXGLNexradLevel3HailIndex.hailList[it].hailsize,
                             MyApplication.radarColorHiText
@@ -273,18 +274,18 @@ class WXGLTextObject(
     }
 
     private fun hideHailLabels() {
-        glview.hailLabelAl.indices.forEach {
-            glview.hailLabelAl[it].visibility = View.GONE
-            rl.removeView(glview.hailLabelAl[it])
+        wxglSurfaceView.hailLabelAl.indices.forEach {
+            wxglSurfaceView.hailLabelAl[it].visibility = View.GONE
+            relativeLayout.removeView(wxglSurfaceView.hailLabelAl[it])
         }
     }
 
     private fun addTVHail() {
-            pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
+            projectionNumbers = ProjectionNumbers(wxglRender.rid, ProjectionType.WX_OGL)
             var foundhail: Boolean = false
             var hailLat: Double
             var hailLon: Double
-            glview.hailTv = mutableListOf()
+            wxglSurfaceView.hailTv = mutableListOf()
             var aa = 0
 
             UtilityLog.d("wx", "hailList.size: "+WXGLNexradLevel3HailIndex.hailList.size)
@@ -305,21 +306,21 @@ class WXGLTextObject(
 
                     scale = getScale()
                     oglrZoom = 1.0f
-                    if (OGLR.zoom < 1.0f) {
-                        oglrZoom = OGLR.zoom * 0.8f
+                    if (wxglRender.zoom < 1.0f) {
+                        oglrZoom = wxglRender.zoom * 0.8f
                     }
-                    if (OGLR.zoom > 0.5) {
+                    if (wxglRender.zoom > 0.5) {
                         showHail()
                         for (c in 0 until 1) {
                             val drawText = checkButDoNotDrawText(
-                                    glview.hailTv,
+                                    wxglSurfaceView.hailTv,
                                     hailLat,
                                     hailLon, //move down abit so can read
                                     MyApplication.radarColorHiText,
                                     MyApplication.textSizeSmall * oglrZoom * 1.5f * MyApplication.radarHiTextSize
                             )
                             if (drawText) {
-                                glview.hailTv[c].text = WXGLNexradLevel3HailIndex.hailList[aa].hailsize
+                                wxglSurfaceView.hailTv[c].text = WXGLNexradLevel3HailIndex.hailList[aa].hailsize
 
                             }
                         }
@@ -332,10 +333,10 @@ class WXGLTextObject(
     }
 
     private fun showHail() {
-            if (glview.hailTv.size > 0) {
+            if (wxglSurfaceView.hailTv.size > 0) {
                 var c = 0
                 while (c < 1) {
-                    glview.hailTv[c].visibility = View.VISIBLE
+                    wxglSurfaceView.hailTv[c].visibility = View.VISIBLE
                     c += 1
                 }
             }
@@ -343,10 +344,10 @@ class WXGLTextObject(
 
     private fun hideHail() {
             if (hailSingleLabelTvArrInit)
-            if (glview.hailTv.size > 0) {
+            if (wxglSurfaceView.hailTv.size > 0) {
                 var c = 0
-                while (c < glview.hailTv.size) {
-                    glview.hailTv[c].visibility = View.GONE
+                while (c < wxglSurfaceView.hailTv.size) {
+                    wxglSurfaceView.hailTv[c].visibility = View.GONE
                     c += 1
                 }
             }
@@ -360,15 +361,15 @@ class WXGLTextObject(
             text: String,
             color: Int
     ) {
-        val tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(lat, lon, pn)
-        tmpCoords[0] = tmpCoords[0] + OGLR.x / OGLR.zoom
-        tmpCoords[1] = tmpCoords[1] - OGLR.y / OGLR.zoom
+        val tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(lat, lon, projectionNumbers)
+        tmpCoords[0] = tmpCoords[0] + wxglRender.x / wxglRender.zoom
+        tmpCoords[1] = tmpCoords[1] - wxglRender.y / wxglRender.zoom
         if (abs(tmpCoords[0] * scale) < glviewWidth && abs(tmpCoords[1] * scale) < glviewHeight) {
             tvList.add(TextView(context))
             ii = tvList.lastIndex
             tvList[ii].setTextColor(color)
             tvList[ii].setShadowLayer(1.5f, 2.0f, 2.0f, R.color.black)
-            rl.addView(tvList[ii])
+            relativeLayout.addView(tvList[ii])
             tvList[ii].setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
             if ((tmpCoords[1] * scale).toInt() < 0) {
                 if ((tmpCoords[0] * scale).toInt() < 0)
@@ -401,13 +402,13 @@ class WXGLTextObject(
                             0
                     )
             }
-            lp = RelativeLayout.LayoutParams(
+            layoutParams = RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             )
-            lp.addRule(RelativeLayout.CENTER_HORIZONTAL)
-            lp.addRule(RelativeLayout.CENTER_VERTICAL)
-            tvList[ii].layoutParams = lp
+            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
+            layoutParams.addRule(RelativeLayout.CENTER_VERTICAL)
+            tvList[ii].layoutParams = layoutParams
             tvList[ii].text = text
         }
     }
@@ -419,9 +420,9 @@ class WXGLTextObject(
             color: Int,
             textSizeTv: Float
     ): Boolean {
-        val tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(lat, lon, pn)
-        tmpCoords[0] = tmpCoords[0] + OGLR.x / OGLR.zoom
-        tmpCoords[1] = tmpCoords[1] - OGLR.y / OGLR.zoom
+        val tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(lat, lon, projectionNumbers)
+        tmpCoords[0] = tmpCoords[0] + wxglRender.x / wxglRender.zoom
+        tmpCoords[1] = tmpCoords[1] - wxglRender.y / wxglRender.zoom
         var drawText = false
         if (abs(tmpCoords[0] * scale) < glviewWidth && abs(tmpCoords[1] * scale) < glviewHeight) {
             drawText = true
@@ -429,7 +430,7 @@ class WXGLTextObject(
             ii = tvList.lastIndex
             tvList[ii].setTextColor(color)
             tvList[ii].setShadowLayer(1.5f, 2.0f, 2.0f, R.color.black)
-            rl.addView(tvList[ii])
+            relativeLayout.addView(tvList[ii])
             tvList[ii].setTextSize(TypedValue.COMPLEX_UNIT_PX, textSizeTv)
             if ((tmpCoords[1] * scale).toInt() < 0) {
                 if ((tmpCoords[0] * scale).toInt() < 0)
@@ -462,31 +463,31 @@ class WXGLTextObject(
                             0
                     )
             }
-            lp = RelativeLayout.LayoutParams(
+            layoutParams = RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT,
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             )
-            lp.addRule(RelativeLayout.CENTER_HORIZONTAL)
-            lp.addRule(RelativeLayout.CENTER_VERTICAL)
-            tvList[ii].layoutParams = lp
+            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
+            layoutParams.addRule(RelativeLayout.CENTER_VERTICAL)
+            tvList[ii].layoutParams = layoutParams
         }
         return drawText
     }
 
     private fun hideSpottersLabels() {
-        glview.spottersLabelAl.indices.forEach {
-            glview.spottersLabelAl[it].visibility = View.GONE
-            rl.removeView(glview.spottersLabelAl[it])
+        wxglSurfaceView.spottersLabelAl.indices.forEach {
+            wxglSurfaceView.spottersLabelAl[it].visibility = View.GONE
+            relativeLayout.removeView(wxglSurfaceView.spottersLabelAl[it])
         }
     }
 
     private fun addTVSpotter() {
         if (WXGLRadarActivity.spotterShowSelected) {
-            pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
+            projectionNumbers = ProjectionNumbers(wxglRender.rid, ProjectionType.WX_OGL)
             val spotterLat: Double
             val spotterLon: Double
             var report = false
-            glview.spotterTv = mutableListOf()
+            wxglSurfaceView.spotterTv = mutableListOf()
             var aa = 0
             while (aa < UtilitySpotter.spotterList.size) {
                 if (UtilitySpotter.spotterList[aa].uniq == WXGLRadarActivity.spotterId) break
@@ -509,14 +510,14 @@ class WXGLTextObject(
             }
             scale = getScale()
             oglrZoom = 1.0f
-            if (OGLR.zoom < 1.0f) {
-                oglrZoom = OGLR.zoom * 0.8f
+            if (wxglRender.zoom < 1.0f) {
+                oglrZoom = wxglRender.zoom * 0.8f
             }
-            if (OGLR.zoom > 0.5) {
+            if (wxglRender.zoom > 0.5) {
                 showSpotter()
                 for (c in 0 until 1) {
                     val drawText = checkButDoNotDrawText(
-                            glview.spotterTv,
+                            wxglSurfaceView.spotterTv,
                             spotterLat,
                             spotterLon * -1,
                             MyApplication.radarColorSpotter,
@@ -524,10 +525,10 @@ class WXGLTextObject(
                     )
                     if (drawText) {
                         if (!report) {
-                            glview.spotterTv[c].text =
+                            wxglSurfaceView.spotterTv[c].text =
                                     UtilitySpotter.spotterList[aa].lastName.replace("0FAV ", "")
                         } else {
-                            glview.spotterTv[c].text = UtilitySpotter.spotterReports[bb].type
+                            wxglSurfaceView.spotterTv[c].text = UtilitySpotter.spotterReports[bb].type
                         }
                     }
                 }
@@ -539,10 +540,10 @@ class WXGLTextObject(
 
     private fun showSpotter() {
         if (WXGLRadarActivity.spotterShowSelected) {
-            if (glview.spotterTv.size > 0) {
+            if (wxglSurfaceView.spotterTv.size > 0) {
                 var c = 0
                 while (c < 1) {
-                    glview.spotterTv[c].visibility = View.VISIBLE
+                    wxglSurfaceView.spotterTv[c].visibility = View.VISIBLE
                     c += 1
                 }
             }
@@ -551,10 +552,10 @@ class WXGLTextObject(
 
     private fun hideSpotter() {
         if (WXGLRadarActivity.spotterShowSelected || spotterSingleLabelTvArrInit)
-            if (glview.spotterTv.size > 0) {
+            if (wxglSurfaceView.spotterTv.size > 0) {
                 var c = 0
-                while (c < glview.spotterTv.size) {
-                    glview.spotterTv[c].visibility = View.GONE
+                while (c < wxglSurfaceView.spotterTv.size) {
+                    wxglSurfaceView.spotterTv[c].visibility = View.GONE
                     c += 1
                 }
             }
@@ -570,15 +571,15 @@ class WXGLTextObject(
     fun addTV() {
         addTVCitiesExt()
         addTVCountyLabels()
-        if (numPanes == 1) {
+        if (numberOfPanes == 1) {
             addTVObs()
         }
         addTVSpottersLabels()
-        if (numPanes == 1 && WXGLRadarActivity.spotterShowSelected) {
+        if (numberOfPanes == 1 && WXGLRadarActivity.spotterShowSelected) {
             addTVSpotter()
         }
         addTVHailLabels()
-        if (numPanes == 1) {
+        if (numberOfPanes == 1) {
             addTVHail()
         }
     }
@@ -586,15 +587,15 @@ class WXGLTextObject(
     fun hideTV() {
         hideCitiesExt()
         hideCountyLabels()
-        if (numPanes == 1) {
-        hideObs()
+        if (numberOfPanes == 1) {
+            hideObs()
         }
         hideSpottersLabels()
         hideHailLabels()
-        if (numPanes == 1 && WXGLRadarActivity.spotterShowSelected) {
+        if (numberOfPanes == 1 && WXGLRadarActivity.spotterShowSelected) {
             hideSpotter()
         }
-        if (numPanes == 1) {
+        if (numberOfPanes == 1) {
             hideHail()
         }
     }
@@ -608,24 +609,23 @@ class WXGLTextObject(
     fun addTVObs() {
         if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && obsTvArrInit) {
             val obsExtZoom = MyApplication.radarObsExtZoom.toDouble()
-            pn = ProjectionNumbers(OGLR.rid, ProjectionType.WX_OGL)
+            projectionNumbers = ProjectionNumbers(wxglRender.rid, ProjectionType.WX_OGL)
             obsLat = 0.0
             obsLon = 0.0
             val fontScaleFactorObs = 0.65f
             hideObs()
-            glview.obsAl = mutableListOf()
+            wxglSurfaceView.obsAl = mutableListOf()
             var tmpArrObs: Array<String>
             var tmpArrObsExt: Array<String>
             scale = getScale()
             oglrZoom = 1.0f
-            if (OGLR.zoom < 1.0f) {
-                oglrZoom = OGLR.zoom * 0.8f
+            if (wxglRender.zoom < 1.0f) {
+                oglrZoom = wxglRender.zoom * 0.8f
             }
-            textSize = MyApplication.textSizeSmall * oglrZoom * fontScaleFactorObs *
-                    MyApplication.radarTextSize
+            textSize = MyApplication.textSizeSmall * oglrZoom * fontScaleFactorObs * MyApplication.radarTextSize
             val obsArr = UtilityMetar.obsArr.toList()
             val obsArrExt = UtilityMetar.obsArrExt.toList()
-            if (OGLR.zoom > 0.5) {
+            if (wxglRender.zoom > 0.5) {
                 obsArr.indices.forEach {
                     if (it < obsArr.size && it < obsArrExt.size) {
                         tmpArrObs = MyApplication.colon.split(obsArr[it])
@@ -635,17 +635,17 @@ class WXGLTextObject(
                             obsLon = tmpArrObs[1].toDoubleOrNull() ?: 0.0
                         }
                         val drawText = checkButDoNotDrawText(
-                            glview.obsAl,
+                                wxglSurfaceView.obsAl,
                             obsLat,
                             obsLon * -1,
-                            MyApplication.radarColorObs,
-                            textSize
+                                MyApplication.radarColorObs,
+                                textSize
                         )
                         if (drawText) {
-                            if (OGLR.zoom > obsExtZoom) {
-                                glview.obsAl.last().text = tmpArrObsExt[2]
+                            if (wxglRender.zoom > obsExtZoom) {
+                                wxglSurfaceView.obsAl.last().text = tmpArrObsExt[2]
                             } else if (PolygonType.OBS.pref) {
-                                glview.obsAl.last().text = tmpArrObs[2]
+                                wxglSurfaceView.obsAl.last().text = tmpArrObs[2]
                             }
                         }
                     }
@@ -659,13 +659,13 @@ class WXGLTextObject(
     }
 
     private fun hideObs() {
-        glview.obsAl.indices.forEach {
-            glview.obsAl[it].visibility = View.GONE
-            rl.removeView(glview.obsAl[it])
+        wxglSurfaceView.obsAl.indices.forEach {
+            wxglSurfaceView.obsAl[it].visibility = View.GONE
+            relativeLayout.removeView(wxglSurfaceView.obsAl[it])
         }
     }
 
-    fun setOGLR(OGLR: WXGLRender) {
-        this.OGLR = OGLR
+    fun setWXGLRender(wxglRender: WXGLRender) {
+        this.wxglRender = wxglRender
     }
 }

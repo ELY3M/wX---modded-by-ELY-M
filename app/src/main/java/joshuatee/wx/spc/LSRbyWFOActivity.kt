@@ -191,7 +191,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
         get() {
             val lsrs = mutableListOf<String>()
             val numberLSR = UtilityString.getHtmlAndParseLastMatch(
-                    "http://forecast.weather.gov/product.php?site=$wfo&issuedby=$wfo&product=LSR&format=txt&version=1&glossary=0",
+                    "https://forecast.weather.gov/product.php?site=$wfo&issuedby=$wfo&product=LSR&format=txt&version=1&glossary=0",
                     "product=LSR&format=TXT&version=(.*?)&glossary"
             )
             if (numberLSR == "") {

@@ -174,8 +174,7 @@ object UtilityDownload {
             }
             "WEATHERSTORY" -> {
                 needsBitmap = false
-                bm =
-                        ("http://www.weather.gov/images/" + Location.wfo.toLowerCase() + "/wxstory/Tab2FileL.png").getImage()
+                bm = ("https://www.weather.gov/images/" + Location.wfo.toLowerCase() + "/wxstory/Tab2FileL.png").getImage()
             }
             "SWOD2" -> {
                 needsBitmap = false
@@ -331,17 +330,17 @@ object UtilityDownload {
             val textArr = UtilityUSHourly.getString(Location.currentLocation)
             text = textArr[0]
         } else if (prod == "SWPC3DAY") {
-            text = "http://services.swpc.noaa.gov/text/3-day-forecast.txt".getHtmlSep()
+            text = (MyApplication.nwsSwpcWebSitePrefix + "/text/3-day-forecast.txt").getHtmlSep()
         } else if (prod == "SWPC27DAY") {
-            text = "http://services.swpc.noaa.gov/text/27-day-outlook.txt".getHtmlSep()
+            text = (MyApplication.nwsSwpcWebSitePrefix + "/text/27-day-outlook.txt").getHtmlSep()
         } else if (prod == "SWPCWWA") {
-            text = "http://services.swpc.noaa.gov/text/advisory-outlook.txt".getHtmlSep()
+            text = (MyApplication.nwsSwpcWebSitePrefix + "/text/advisory-outlook.txt").getHtmlSep()
         } else if (prod == "SWPCHIGH") {
-            text = "http://services.swpc.noaa.gov/text/weekly.txt".getHtmlSep()
+            text = (MyApplication.nwsSwpcWebSitePrefix + "/text/weekly.txt").getHtmlSep()
         } else if (prod == "SWPCDISC") {
-            text = "http://services.swpc.noaa.gov/text/discussion.txt".getHtmlSep()
+            text = (MyApplication.nwsSwpcWebSitePrefix + "/text/discussion.txt").getHtmlSep()
         } else if (prod == "SWPC3DAYGEO") {
-            text = ("http://services.swpc.noaa.gov/text/3-day-geomag-forecast.txt").getHtmlSep()
+            text = (MyApplication.nwsSwpcWebSitePrefix + "/text/3-day-geomag-forecast.txt").getHtmlSep()
         } else if (prod.contains("MIATCP") || prod.contains("MIATCM") || prod.contains("MIATCD") || prod.contains(
                         "MIAPWS"
                 ) || prod.contains("MIAHS")
@@ -352,7 +351,7 @@ object UtilityDownload {
                 text = text.replace("<br>", " ")
             }
             text = text.replace("^<br>".toRegex(), "")
-        } else if (prod.contains("MIAT")) {
+        } else if (prod.contains("MIAT") || prod == "HFOTWOCP") {
             text = UtilityString.getHtmlAndParseSep(
                     "${MyApplication.nwsNhcWebsitePrefix}/ftp/pub/forecasts/discussion/$prod",
                     "(.*)"
@@ -437,7 +436,7 @@ object UtilityDownload {
             text =
                     ("${MyApplication.NWS_RADAR_PUB}/data/raw/aw/" + prod.toLowerCase(Locale.US) + ".cwwg..txt").getHtmlSep()
         } else if (prod.contains("NFD")) {
-            text = ("http://www.opc.ncep.noaa.gov/mobile/mobile_product.php?id=" + prod.toUpperCase(
+            text = (MyApplication.nwsOpcWebsitePrefix + "/mobile/mobile_product.php?id=" + prod.toUpperCase(
                     Locale.US
             )).getHtml()
         } else if (prod.contains("FWDDY38")) {
@@ -456,7 +455,7 @@ object UtilityDownload {
             text = ("${MyApplication.NWS_RADAR_PUB}/data/raw/fx/fxcn01.cwao..txt").getHtmlSep()
         } else if (prod.startsWith("VFD")) {
             val t2 = prod.substring(3)
-            text = ("http://www.aviationweather.gov/fcstdisc/data?cwa=K$t2").getHtmlSep()
+            text = (MyApplication.nwsAWCwebsitePrefix + "/fcstdisc/data?cwa=K$t2").getHtmlSep()
             text = text.parse("<!-- raw data starts -->(.*?)<!-- raw data ends -->")
             if (UIPreferences.nwsTextRemovelinebreaks) {
                 text = text.replace("<br> <br>".toRegex(), "<BR><BR>")
@@ -472,7 +471,7 @@ object UtilityDownload {
             text = text.parse(RegExp.pre2Pattern)
         } else if (prod.contains("PMDTHR")) {
             text = UtilityString.getHtmlAndParseSep(
-                    "http://www.cpc.noaa.gov/products/predictions/threats/threats.php",
+                    MyApplication.nwsCPCNcepWebsitePrefix + "/products/predictions/threats/threats.php",
                     "<div id=\"discDiv\">(.*?)</div>"
             )
         } else if (prod.contains("CTOF")) {
@@ -496,8 +495,7 @@ object UtilityDownload {
         val prod = prodF.toUpperCase(Locale.US)
         val t1 = prod.substring(0, 3)
         val t2 = prod.substring(3)
-        val url =
-                "http://forecast.weather.gov/product.php?site=NWS&product=$t1&issuedby=$t2&version=$version"
+        val url = "https://forecast.weather.gov/product.php?site=NWS&product=$t1&issuedby=$t2&version=$version"
         var text = UtilityString.getHtmlAndParseSep(url, RegExp.prePattern)
         text = text.replace(
                 "Graphics available at <a href=\"${MyApplication.nwsWPCwebsitePrefix}/basicwx/basicwx_wbg.php\"><u>www.wpc.ncep.noaa.gov/basicwx/basicwx_wbg.php</u></a>",

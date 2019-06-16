@@ -69,7 +69,7 @@ class ObjectForecastPackageCurrentConditions {
         val temperature = objectMetar.temperature + MyApplication.DEGREE_SYMBOL
         val windChill = objectMetar.windChill + MyApplication.DEGREE_SYMBOL
         val heatIndex = objectMetar.heatIndex + MyApplication.DEGREE_SYMBOL
-        val dewpoint = objectMetar.dewpoint + MyApplication.DEGREE_SYMBOL
+        val dewPoint = objectMetar.dewPoint + MyApplication.DEGREE_SYMBOL
         val relativeHumidity = objectMetar.relativeHumidity + "%"
         val seaLevelPressure = objectMetar.seaLevelPressure
         val windDirection = objectMetar.windDirection
@@ -83,7 +83,7 @@ class ObjectForecastPackageCurrentConditions {
         } else if (objectMetar.heatIndex != "NA") {
             stringBuffer += "($heatIndex)"
         }
-        stringBuffer += " / $dewpoint($relativeHumidity) - "
+        stringBuffer += " / $dewPoint($relativeHumidity) - "
         stringBuffer += "$seaLevelPressure - $windDirection $windSpeed"
         if (windGust != "") {
             stringBuffer += " G "

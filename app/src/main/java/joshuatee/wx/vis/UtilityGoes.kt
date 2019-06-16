@@ -85,13 +85,14 @@ object UtilityGoes {
         val html = url.getHtml().replace("\n", "").replace("\r", "")
         val imageHtml = html.parse("animationImages = \\[(.*?)\\];")
         val imageUrls = imageHtml.parseColumn("'(https.*?jpg)'")
-        val bitmaps = imageUrls.map { it.getImage() }
+        val bitmaps = imageUrls.map {
+            it.getImage()
+        }
         return UtilityImgAnim.getAnimationDrawableFromBMList(
                 context,
                 bitmaps,
                 UtilityImg.animInterval(context)
         )
-
     }
 
     val labels: List<String> = listOf(

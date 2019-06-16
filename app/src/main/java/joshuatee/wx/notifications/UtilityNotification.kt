@@ -429,7 +429,7 @@ object UtilityNotification {
                             .setAutoCancel(MyApplication.alertAutocancel)
                             .setColor(UIPreferences.colorNotif)
                             .setSound(Uri.parse(MyApplication.notifSoundUri)) // was Settings.System.DEFAULT_NOTIFICATION_URI
-                            .setPriority(notification.prio)
+                            .setPriority(notification.priority)
                             .addAction(
                                     notification.iconAction,
                                     notification.buttonStr,
@@ -458,7 +458,7 @@ object UtilityNotification {
                             .setSound(null)
                             .setAutoCancel(MyApplication.alertAutocancel)
                             .setColor(UIPreferences.colorNotif)
-                            .setPriority(notification.prio)
+                            .setPriority(notification.priority)
                             .addAction(
                                     notification.iconAction,
                                     notification.buttonStr,

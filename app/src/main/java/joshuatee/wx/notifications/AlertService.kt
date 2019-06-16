@@ -31,7 +31,7 @@ import java.util.Calendar
 import joshuatee.wx.audio.UtilityPlayListAutoDownload
 import joshuatee.wx.util.Utility
 
-// this service notifies the alarm manager to run AlertReciever ( notifications ) according to the
+// this service notifies the alarm manager to run AlertReceiver ( notifications ) according to the
 // configured interval
 //
 

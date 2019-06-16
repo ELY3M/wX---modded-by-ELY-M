@@ -113,6 +113,7 @@ object GlobalArrays {
             "miatwdep: EPAC Tropical Weather Discussion",
             "miatwsat: ATL Monthly Tropical Summary",
             "miatwsep: EPAC Monthly Tropical Summary",
+            "hfotwocp: CPAC Tropical Weather Outlook",
             "GLFLM: Lake Michigan - Open Lake Forecast",
             "GLFLS: Lake Superior - Open Lake Forecast",
             "GLFLH: Lake Huron - Open Lake Forecast",

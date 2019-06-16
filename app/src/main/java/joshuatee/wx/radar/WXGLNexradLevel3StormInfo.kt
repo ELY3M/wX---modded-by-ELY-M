@@ -38,15 +38,15 @@ internal object WXGLNexradLevel3StormInfo {
     private const val stiBaseFn = "nids_sti_tab"
 
     fun decodeAndPlot(
-        context: Context,
-        fnSuffix: String,
-        rid: String,
-        provider: ProjectionType
+            context: Context,
+            fnSuffix: String,
+            rid: String,
+            projectionType: ProjectionType
     ): List<Double> {
         val stormList = mutableListOf<Double>()
         val retStr: String
         val location = UtilityLocation.getSiteLocation(context, rid)
-        val pn = ProjectionNumbers(rid, provider)
+        val pn = ProjectionNumbers(rid, projectionType)
         WXGLDownload.getNidsTab(context, "STI", pn.radarSite.toLowerCase(), stiBaseFn + fnSuffix)
         val dis: UCARRandomAccessFile
         val posn: List<String>

@@ -34,9 +34,9 @@ class LatLon() {
     private var xStr = "0.0"
     private var yStr = "0.0"
 
-    constructor(latlon: DoubleArray) : this() {
-        this.x = latlon[0]
-        this.y = latlon[1]
+    constructor(latLon: DoubleArray) : this() {
+        this.x = latLon[0]
+        this.y = latLon[1]
         this.xStr = this.x.toString()
         this.yStr = this.y.toString()
     }

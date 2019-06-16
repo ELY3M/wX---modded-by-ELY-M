@@ -36,6 +36,7 @@ import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.ui.UtilityToolbar
+import joshuatee.wx.util.UtilityLog
 
 abstract class AudioPlayActivity : AppCompatActivity() {
 
@@ -97,6 +98,8 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                     pause.setIcon(MyApplication.ICON_PAUSE)
                     if (UIPreferences.mediaControlNotif)
                         UtilityNotification.createMediaControlNotification(applicationContext, "")
+                } else {
+                    UtilityLog.d("wx", "perm to write to storage was not granted")
                 }
             }
             R.id.action_stop -> {

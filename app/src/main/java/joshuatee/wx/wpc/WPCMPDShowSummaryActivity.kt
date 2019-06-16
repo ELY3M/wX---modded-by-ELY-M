@@ -145,9 +145,9 @@ class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
         return when (item.itemId) {
             R.id.action_share -> {
                 if (bitmaps.size > 1)
-                    UtilityShare.shareText(this, titleString, "", bitmaps)
+                    UtilityShare.shareText(this, this, titleString, "", bitmaps)
                 else if (bitmaps.size == 1)
-                    UtilityShare.shareText(this, titleString, Utility.fromHtml(text), bitmaps[0])
+                    UtilityShare.shareBitmap(this, this, titleString, bitmaps[0], Utility.fromHtml(text))
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -36,7 +36,7 @@ class ObjectNotification(
     val resultPendingIntent: PendingIntent,
     val iconAlert: Int,
     val noSummary: String,
-    val prio: Int,
+    val priority: Int,
     val color: Int,
     val iconAction: Int,
     val actionPendingIntent: PendingIntent,

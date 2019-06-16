@@ -93,14 +93,15 @@ class NhcActivity : AudioPlayActivity(), OnMenuItemClickListener {
             R.id.action_epac_twd -> showTextProduct("MIATWDEP")
             R.id.action_atl_tws -> showTextProduct("MIATWSAT")
             R.id.action_epac_tws -> showTextProduct("MIATWSEP")
+            R.id.action_cpac_two -> showTextProduct("HFOTWOCP")
             R.id.action_share -> UtilityShare.shareText(this, "", Utility.fromHtml(objNhc.html))
             R.id.action_epac_daily -> showImageProduct(
-                    "http://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/PAC/20.jpg",
+                    "https://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/PAC/20.jpg",
                     "EPAC Daily Analysis",
                     "false"
             )
             R.id.action_atl_daily -> showImageProduct(
-                    "http://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/ATL/20.jpg",
+                    "https://www.ssd.noaa.gov/PS/TROP/DATA/RT/SST/ATL/20.jpg",
                     "ATL Daily Analysis",
                     "false"
             )

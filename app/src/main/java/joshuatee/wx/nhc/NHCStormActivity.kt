@@ -74,9 +74,9 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_linear_layout_bottom_toolbar,
-            R.menu.nhc_storm
+                savedInstanceState,
+                R.layout.activity_linear_layout_bottom_toolbar,
+                R.menu.nhc_storm
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         activityArguments = intent.getStringArrayExtra(URL).toList()
@@ -111,15 +111,15 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         withContext(Dispatchers.IO) {
             url = UtilityDownload.getTextProduct(this@NhcStormActivity, product)
             listOf(
-                "_W5_NL_sm2.png",
-                "_5day_cone_with_line_and_wind_sm2.png",
-                "_W_NL_sm2.gif",
-                "_wind_probs_34_F120_sm2.png",
-                "_wind_probs_50_F120_sm2.png",
-                "_wind_probs_64_F120_sm2.png",
-                "_R_sm2.png",
-                "_S_sm2.png",
-                "_WPCQPF_sm2.png"
+                    "_W5_NL_sm2.png",
+                    "_5day_cone_with_line_and_wind_sm2.png",
+                    "_W_NL_sm2.gif",
+                    "_wind_probs_34_F120_sm2.png",
+                    "_wind_probs_50_F120_sm2.png",
+                    "_wind_probs_64_F120_sm2.png",
+                    "_R_sm2.png",
+                    "_S_sm2.png",
+                    "_WPCQPF_sm2.png"
             ).forEach { bitmaps.add((baseUrl + it).getImage()) }
             bitmaps.add("${MyApplication.nwsNhcWebsitePrefix}/tafb_latest/danger_pac_latestBW_sm3.gif".getImage())
         }
@@ -127,12 +127,12 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         html = url
         sv.smoothScrollTo(0, 0)
         bitmaps.filter { it.width > 100 }
-            .forEach { ObjectCardImage(this@NhcStormActivity, ll, it) }
+                .forEach { ObjectCardImage(this@NhcStormActivity, ll, it) }
         if (activityArguments.size > 2) {
             if (activityArguments[2] == "sound") UtilityTts.synthesizeTextAndPlay(
-                applicationContext,
-                html,
-                product
+                    applicationContext,
+                    html,
+                    product
             )
         }
     }
@@ -159,18 +159,19 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         when (item.itemId) {
             R.id.action_share -> UtilityShare.shareText(
-                this,
-                activityArguments[1],
-                Utility.fromHtml(url),
-                bitmaps
+                    this,
+                    this,
+                    activityArguments[1],
+                    Utility.fromHtml(url),
+                    bitmaps
             )
             R.id.action_MIATCPEP2 -> setProduct("MIATCP$stormId")
             R.id.action_MIATCMEP2 -> setProduct("MIATCM$stormId")
             R.id.action_MIATCDEP2 -> setProduct("MIATCD$stormId")
             R.id.action_MIAPWSEP2 -> setProduct("MIAPWS$stormId")
             R.id.action_mute_notification -> UtilityNotificationNhc.muteNotification(
-                this,
-                toolbarTitle
+                    this,
+                    toolbarTitle
             )
             else -> return super.onOptionsItemSelected(item)
         }

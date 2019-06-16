@@ -34,6 +34,7 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
 
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.GeographyType
 
 object UtilityCanadaImg {
@@ -41,8 +42,7 @@ object UtilityCanadaImg {
     internal fun getGoesAnimation(context: Context, url: String): AnimationDrawable {
         val region = url.parse("goes_(.*?)_")
         val imgType = url.parse("goes_.*?_(.*?)_")
-        val urlAnim =
-                "https://weather.gc.ca/satellite/satellite_anim_e.html?sat=goes&area=$region&type=$imgType"
+        val urlAnim = MyApplication.canadaEcSitePrefix + "/satellite/satellite_anim_e.html?sat=goes&area=$region&type=$imgType"
         val html = urlAnim.getHtml()
         val times = html.parseColumn(">([0-9]{4}/[0-9]{2}/[0-9]{2} [0-9]{2}h[0-9]{2}m)</option>")
         val frameCnt = 10
@@ -59,7 +59,7 @@ object UtilityCanadaImg {
     }
 
     private fun getRadarAnimStringArray(rid: String, duration: String): String {
-        val radHtml = ("http://weather.gc.ca/radar/index_e.html?id=$rid").getHtmlSep()
+        val radHtml = (MyApplication.canadaEcSitePrefix + "/radar/index_e.html?id=$rid").getHtmlSep()
         var durationPatMatch = "<p>Short .1hr.:</p>(.*?)</div>"
         if (duration == "long") {
             durationPatMatch = "<p>Long .3hr.:</p>(.*?)</div>"
@@ -82,14 +82,13 @@ object UtilityCanadaImg {
     ): AnimationDrawable {
         val url = getRadarAnimStringArray(radarSite, frameCntStr)
         val urls = url.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
-        val baseUrl = "http://weather.gc.ca"
         val bitmaps = mutableListOf<Bitmap>()
         urls.reverse()
         urls.asSequence().filter { it != "" }.mapTo(bitmaps) {
             getRadarBitmapOptionsApplied(
                     context,
                     radarSite,
-                    baseUrl + it.replace("detailed/", "")
+                    MyApplication.canadaEcSitePrefix + it.replace("detailed/", "")
             )
         }
         return UtilityImgAnim.getAnimationDrawableFromBMList(
@@ -102,11 +101,11 @@ object UtilityCanadaImg {
     fun getRadarBitmapOptionsApplied(context: Context, radarSite: String, url: String): Bitmap {
         val urlImg: String
         if (url == "") {
-            val radHtml = ("http://weather.gc.ca/radar/index_e.html?id=$radarSite").getHtml()
+            val radHtml = (MyApplication.canadaEcSitePrefix + "/radar/index_e.html?id=$radarSite").getHtml()
             val matchStr = "(/data/radar/.*?GIF)\""
             var summary = radHtml.parse(matchStr)
             summary = summary.replace("detailed/", "")
-            urlImg = "http://weather.gc.ca/$summary"
+            urlImg = MyApplication.canadaEcSitePrefix + "/$summary"
         } else {
             urlImg = url
         }
@@ -118,8 +117,7 @@ object UtilityCanadaImg {
         val layers = mutableListOf<Drawable>()
         bitmaps.add(urlImg.getImage())
         if (GeographyType.CITIES.pref) {
-            val cityUrl =
-                    "http://weather.gc.ca/cacheable/images/radar/layers_detailed/default_cities/" + radarSite.toLowerCase(
+            val cityUrl = MyApplication.canadaEcSitePrefix + "/cacheable/images/radar/layers_detailed/default_cities/" + radarSite.toLowerCase(
                             Locale.US
                     ) + "_towns.gif"
             val bmTmp = cityUrl.getImage()
@@ -140,9 +138,9 @@ object UtilityCanadaImg {
     }
 
     fun getRadarMosaicBitmapOptionsApplied(context: Context, sector: String): Bitmap {
-        var url = "http://weather.gc.ca/radar/index_e.html?id=$sector"
+        var url = MyApplication.canadaEcSitePrefix + "/radar/index_e.html?id=$sector"
         if (sector == "CAN") {
-            url = "http://weather.gc.ca/radar/index_e.html"
+            url = MyApplication.canadaEcSitePrefix + "/radar/index_e.html"
         }
         val radHtml = url.getHtmlSep()
         val matchStr = "(/data/radar/.*?GIF)\""
@@ -154,7 +152,7 @@ object UtilityCanadaImg {
         }
         val bitmaps = mutableListOf<Bitmap>()
         val layers = mutableListOf<Drawable>()
-        bitmaps.add(("http://weather.gc.ca/$summary").getImage())
+        bitmaps.add((MyApplication.canadaEcSitePrefix + "/$summary").getImage())
         var sectorMap = sector.toLowerCase(Locale.US)
         var offset = 100
         if (sector == "CAN") {
@@ -167,7 +165,7 @@ object UtilityCanadaImg {
             "ERN" -> sectorMap = "atl"
         }
         if (GeographyType.CITIES.pref) {
-            val cityUrl = "http://weather.gc.ca/cacheable/images/radar/layers/composite_cities/" + sectorMap + "_composite.gif"
+            val cityUrl = MyApplication.canadaEcSitePrefix + "/cacheable/images/radar/layers/composite_cities/" + sectorMap + "_composite.gif"
             val bmTmp = cityUrl.getImage()
             val bigBitmap = Bitmap.createBitmap(bmTmp.width + offset, bmTmp.height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bigBitmap)
@@ -194,9 +192,9 @@ object UtilityCanadaImg {
             duration: String
     ): AnimationDrawable {
         var sector = sectorF
-        var url = "http://weather.gc.ca/radar/index_e.html?id=$sector"
+        var url = MyApplication.canadaEcSitePrefix + "/radar/index_e.html?id=$sector"
         if (sector == "CAN") {
-            url = "http://weather.gc.ca/radar/index_e.html"
+            url = MyApplication.canadaEcSitePrefix + "/radar/index_e.html"
         }
         val radHtml = url.getHtmlSep()
         if (sector == "CAN") {
@@ -215,7 +213,7 @@ object UtilityCanadaImg {
         tmpAl = radHtml.parseColumn("src=.(/data/radar/.*?GIF)\"")
         tmpAl.forEach { urlList += ":$it" }
         val urls = urlList.split(":").dropLastWhile { it.isEmpty() }
-        val urlAl = urls.mapTo(mutableListOf()) { "http://weather.gc.ca" + it.replace("detailed/", "") }
+        val urlAl = urls.mapTo(mutableListOf()) { MyApplication.canadaEcSitePrefix + it.replace("detailed/", "") }
         urlAl.reverse()
         return UtilityImgAnim.getAnimationDrawableFromUrlList(
                 context,

@@ -21,11 +21,16 @@ import joshuatee.wx.R
 
 import androidx.core.app.NotificationCompat
 import joshuatee.wx.notifications.UtilityNotification
+import android.app.NotificationManager
+import android.media.projection.MediaProjectionManager
+import android.os.Build
 
 class TelecineService : Service() {
 
     private var running = false
     private var recordingSession: RecordingSession? = null
+    private var mediaProjectionManager: MediaProjectionManager? = null
+    private var notificationManager: NotificationManager? = null
 
     private val listener = object : RecordingSession.Listener {
         override fun onStart() {
@@ -39,17 +44,17 @@ class TelecineService : Service() {
             val title = context.getString(R.string.notification_recording_title)
             val subtitle = context.getString(R.string.notification_recording_subtitle)
             var notification: Notification? = null
-            if (android.os.Build.VERSION.SDK_INT > 20) {
+            if (Build.VERSION.SDK_INT > 20) {
                 notification = NotificationCompat.Builder(
-                    context,
-                    UtilityNotification.notiChannelStrNoSound
+                        context,
+                        UtilityNotification.notiChannelStrNoSound
                 )
-                    .setContentTitle(title)
-                    .setContentText(subtitle)
-                    .setSmallIcon(R.drawable.ic_videocam_24dp)
-                    .setColor(ContextCompat.getColor(context, R.color.primary_normal))
-                    .setAutoCancel(true)
-                    .build()
+                        .setContentTitle(title)
+                        .setContentText(subtitle)
+                        .setSmallIcon(R.drawable.ic_videocam_24dp)
+                        .setColor(ContextCompat.getColor(context, R.color.primary_normal))
+                        .setAutoCancel(true)
+                        .build()
             }
             startForeground(NOTIFICATION_ID, notification)
         }
@@ -62,6 +67,15 @@ class TelecineService : Service() {
 
         override fun onEnd() {
             stopSelf()
+        }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        if (Build.VERSION.SDK_INT > 28) {
+            mediaProjectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+            notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            send()
         }
     }
 
@@ -78,9 +92,9 @@ class TelecineService : Service() {
         val showDistanceTool = intent.getStringExtra("show_distance_tool")
         val showRecordingTools = intent.getStringExtra("show_recording_tools")
         recordingSession = RecordingSession(
-            this, listener, resultCode, data,
-            showDistanceTool == "true",
-            showRecordingTools == "true"
+                this, listener, resultCode, data,
+                showDistanceTool == "true",
+                showRecordingTools == "true"
         )
         recordingSession!!.showOverlay()
         return START_NOT_STICKY
@@ -93,6 +107,21 @@ class TelecineService : Service() {
 
     override fun onBind(intent: Intent): IBinder? {
         throw AssertionError("Not supported.")
+    }
+
+    private fun send() {
+        val label = "ScreenRecorderService"
+        val requestIDLong = System.currentTimeMillis()
+        val requestID= System.currentTimeMillis().toInt()
+        UtilityNotification.initChannels(this)
+        val notification = NotificationCompat.Builder(this, UtilityNotification.notiChannelStrNoSound)
+                .setSmallIcon(MyApplication.ICON_RADAR)
+                .setWhen(requestIDLong)
+                .setContentTitle("wX")
+                .setContentText(label)
+                .build()
+        startForeground(requestID, notification)
+        notificationManager!!.notify(requestID, notification)
     }
 
     companion object {

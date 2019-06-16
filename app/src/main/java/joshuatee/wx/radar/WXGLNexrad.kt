@@ -156,28 +156,28 @@ object WXGLNexrad {
 
     fun getTdwrFromRid(rid: String): String = closestTdwrToNexrad[rid] ?: ""
 
-    fun savePrefs(context: Context, prefPrefix: String, oglr: WXGLRender) {
-        Utility.writePref(context, prefPrefix + "_RID", oglr.rid)
-        Utility.writePref(context, prefPrefix + "_PROD", oglr.product)
-        Utility.writePref(context, prefPrefix + "_ZOOM", oglr.zoom)
-        Utility.writePref(context, prefPrefix + "_X", oglr.x)
-        Utility.writePref(context, prefPrefix + "_Y", oglr.y)
-        MyApplication.wxoglRid = oglr.rid
-        MyApplication.wxoglProd = oglr.product
-        MyApplication.wxoglZoom = oglr.zoom
-        MyApplication.wxoglX = oglr.x
-        MyApplication.wxoglY = oglr.y
+    fun savePrefs(context: Context, prefPrefix: String, wxglRender: WXGLRender) {
+        Utility.writePref(context, prefPrefix + "_RID", wxglRender.rid)
+        Utility.writePref(context, prefPrefix + "_PROD", wxglRender.product)
+        Utility.writePref(context, prefPrefix + "_ZOOM", wxglRender.zoom)
+        Utility.writePref(context, prefPrefix + "_X", wxglRender.x)
+        Utility.writePref(context, prefPrefix + "_Y", wxglRender.y)
+        MyApplication.wxoglRid = wxglRender.rid
+        MyApplication.wxoglProd = wxglRender.product
+        MyApplication.wxoglZoom = wxglRender.zoom
+        MyApplication.wxoglX = wxglRender.x
+        MyApplication.wxoglY = wxglRender.y
     }
 
-    fun savePrefs(context: Context, prefPrefix: String, idx: Int, oglr: WXGLRender) {
-        Utility.writePref(context, prefPrefix + "_RID" + idx.toString(), oglr.rid)
-        Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), oglr.product)
-        Utility.writePref(context, prefPrefix + "_ZOOM" + idx.toString(), oglr.zoom)
-        Utility.writePref(context, prefPrefix + "_X" + idx.toString(), oglr.x)
-        Utility.writePref(context, prefPrefix + "_Y" + idx.toString(), oglr.y)
+    fun savePrefs(context: Context, prefPrefix: String, idx: Int, wxglRender: WXGLRender) {
+        Utility.writePref(context, prefPrefix + "_RID" + idx.toString(), wxglRender.rid)
+        Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), wxglRender.product)
+        Utility.writePref(context, prefPrefix + "_ZOOM" + idx.toString(), wxglRender.zoom)
+        Utility.writePref(context, prefPrefix + "_X" + idx.toString(), wxglRender.x)
+        Utility.writePref(context, prefPrefix + "_Y" + idx.toString(), wxglRender.y)
     }
 
-    fun saveProductPrefs(context: Context, prefPrefix: String, idx: Int, oglr: WXGLRender) {
-        Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), oglr.product)
+    fun saveProductPrefs(context: Context, prefPrefix: String, idx: Int, wxglRender: WXGLRender) {
+        Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), wxglRender.product)
     }
 }

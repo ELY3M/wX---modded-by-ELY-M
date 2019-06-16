@@ -25,7 +25,7 @@ import joshuatee.wx.Extensions.*
 
 internal object UtilityWarningsImpact {
 
-    private const val url = "http://www.weather.gov/source/crh/impact/filelist2.json"
+    private const val url = "https://www.weather.gov/source/crh/impact/filelist2.json"
 
     // main site is http://www.weather.gov/crh/impact
 

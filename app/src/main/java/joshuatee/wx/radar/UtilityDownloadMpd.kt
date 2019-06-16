@@ -30,7 +30,6 @@ import joshuatee.wx.notifications.UtilityNotificationWpc
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
-import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityString
 
 internal object UtilityDownloadMpd {
@@ -46,13 +45,13 @@ internal object UtilityDownloadMpd {
         val currentTime1 = System.currentTimeMillis()
         val currentTimeSec = currentTime1 / 1000
         val refreshIntervalSec = (refreshInterval * 60).toLong()
-        UtilityLog.d("wx", "RADAR DOWNLOAD CHECK: " + type)
+        //UtilityLog.d("wx", "RADAR DOWNLOAD CHECK: " + type)
         if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
             // download data
             initialized = true
             val currentTime = System.currentTimeMillis()
             lastRefresh = currentTime / 1000
-            UtilityLog.d("wx", "RADAR DOWNLOAD INITIATED:" + type)
+            //UtilityLog.d("wx", "RADAR DOWNLOAD INITIATED:" + type)
             getMpd(context)
         }
     }
@@ -73,15 +72,15 @@ internal object UtilityDownloadMpd {
         }
         val locationNeedsMpd = UtilityNotificationWpc.locationNeedsMpd()
         if (PolygonType.MPD.pref || locationNeedsMpd) {
-            UtilityLog.d("wx","RADAR DOWNLOAD SET MPD: " + latLonString)
+            //UtilityLog.d("wx","RADAR DOWNLOAD SET MPD: " + latLonString)
             MyApplication.mpdLatlon.valueSet(context, latLonString)
         }
         return WatchData(numberList, htmlList)
     }
 
-    fun getListOfNumbers(context: Context): List<String> {
+    private fun getListOfNumbers(context: Context): List<String> {
         val list = UtilityString.parseColumn(MyApplication.severeDashboardMpd.value, RegExp.mpdPattern)
-        UtilityLog.d("wx", "RADAR DOWNLOAD $type:$list")
+        //UtilityLog.d("wx", "RADAR DOWNLOAD $type:$list")
         var mpdNoList = ""
         list.forEach {
             mpdNoList = "$mpdNoList$it:"
@@ -96,8 +95,7 @@ internal object UtilityDownloadMpd {
     // return the raw MPD text and the lat/lon as a list
     fun getLatLon(context: Context, number: String): List<String> {
         val html = UtilityDownload.getTextProduct(context, "WPCMPD$number")
-        val list = listOf(html, UtilityNotification.storeWatMcdLatLon(html))
         //UtilityLog.d("wx", "RADAR DOWNLOAD MPD OBJECT: " + list[1].toString())
-        return  list
+        return listOf(html, UtilityNotification.storeWatMcdLatLon(html))
     }
 }

@@ -37,7 +37,7 @@ open class ObjectCardImage {
     private val context: Context
     var img: TouchImageView2
         internal set
-    internal val lparams = TableLayout.LayoutParams(
+    internal val layoutParams = TableLayout.LayoutParams(
         TableLayout.LayoutParams.WRAP_CONTENT,
         TableLayout.LayoutParams.WRAP_CONTENT
     )
@@ -46,7 +46,7 @@ open class ObjectCardImage {
         this.context = context
         objCard = ObjectCard(context)
         img = TouchImageView2(context)
-        img.layoutParams = lparams
+        img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
         objCard.addView(img)
     }
@@ -55,7 +55,7 @@ open class ObjectCardImage {
         this.context = context
         objCard = ObjectCard(context)
         img = TouchImageView2(context)
-        img.layoutParams = lparams
+        img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
         objCard.addView(img)
         linearLayout.addView(card)
@@ -65,7 +65,7 @@ open class ObjectCardImage {
         this.context = context
         objCard = ObjectCard(context)
         img = TouchImageView2(context)
-        img.layoutParams = lparams
+        img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
         objCard.addView(img)
         linearLayout.addView(card)
@@ -84,7 +84,7 @@ open class ObjectCardImage {
         this.context = context
         objCard = ObjectCard(context)
         img = TouchImageView2(context)
-        img.layoutParams = lparams
+        img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
         objCard.addView(img)
         linearLayout.addView(card)
@@ -108,7 +108,7 @@ open class ObjectCardImage {
 
     open fun setImage(bitmap: Bitmap) {
         img = TouchImageView2(context)
-        img.layoutParams = lparams
+        img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
         objCard.addView(img)
     }

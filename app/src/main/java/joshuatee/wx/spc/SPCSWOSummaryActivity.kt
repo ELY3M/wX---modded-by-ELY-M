@@ -91,6 +91,7 @@ class SpcSwoSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.SPC_SWO_SUMMARY)
             R.id.action_share -> UtilityShare.shareText(
                     this,
+                    this,
                     "Convective Outlook Summary",
                     "",
                     bitmaps

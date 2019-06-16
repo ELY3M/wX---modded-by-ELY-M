@@ -44,7 +44,7 @@ import joshuatee.wx.util.UtilityLog
 class ObjectAlertSummary(
         private val activity: Activity,
         private val context: Context,
-        private val dynamicview: LinearLayout,
+        private val linearLayout: LinearLayout,
         private val sv: ScrollView
 ) {
 
@@ -63,11 +63,11 @@ class ObjectAlertSummary(
     val mapButtonCounty: MutableMap<Int, String> = mutableMapOf()
 
     fun updateContent(bm: Bitmap, data: String, filterEventStr: String, firstRun: Boolean) {
-        dynamicview.removeAllViews()
+        linearLayout.removeAllViews()
         sv.smoothScrollTo(0, 0)
         val cardText = ObjectCardText(context)
-        dynamicview.addView(cardText.card)
-        dynamicview.addView(ObjectCardImage(context, bm).card)
+        linearLayout.addView(cardText.card)
+        linearLayout.addView(ObjectCardImage(context, bm).card)
         totalAlertsCnt = 0
         val mapEvent = TreeMap<String, Int>()
         val mapState = TreeMap<String, Int>()
@@ -112,7 +112,6 @@ class ObjectAlertSummary(
                 )
             }
             ca.forEach { cc ->
-                //if (!cc.url.contains("KEEPALIVE")) {
                 countyArr = cc.area.split(";")
                 if (countyArr.isNotEmpty()) firstCounty = countyArr[0]
                 zoneArr = cc.zones.split(" ")
@@ -165,10 +164,9 @@ class ObjectAlertSummary(
                                 arrayOf(urlStr, "")
                         )
                     })
-                    dynamicview.addView(cText.card)
+                    linearLayout.addView(cText.card)
                     i += 1
                 }
-                //}
             }
         } catch (e: Exception) {
             UtilityLog.handleException(e)

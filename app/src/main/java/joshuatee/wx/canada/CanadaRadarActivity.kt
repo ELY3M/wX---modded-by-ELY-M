@@ -188,7 +188,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
                     if (animRan)
                         UtilityShare.shareAnimGif(this, "", animDrawable)
                     else
-                        UtilityShare.shareBitmap(this, "", bitmap)
+                        UtilityShare.shareBitmap(this, this, "", bitmap)
                 }
             }
             R.id.action_ridmap -> imageMap.toggleMap()

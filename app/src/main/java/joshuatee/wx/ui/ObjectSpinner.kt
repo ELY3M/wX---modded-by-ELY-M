@@ -65,7 +65,7 @@ class ObjectSpinner {
         fn: AdapterView.OnItemSelectedListener,
         spinnerRedId: Int,
         dataArray: List<String>,
-        inititalPosition: Int
+        initialPosition: Int
     ) {
         list = dataArray.toMutableList()
         spinner = activity.findViewById(spinnerRedId)
@@ -73,7 +73,7 @@ class ObjectSpinner {
         arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, dataArray)
         arrayAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
         spinner.adapter = arrayAdapter
-        spinner.setSelection(inititalPosition)
+        spinner.setSelection(initialPosition)
         spinner.setBackgroundColor(Color.TRANSPARENT)
         setOnItemSelectedListener(fn)
     }

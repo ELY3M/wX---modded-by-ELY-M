@@ -655,6 +655,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     } else {
                         UtilityShare.shareBitmap(
                                 this,
+                                this,
                                 oglr.rid + " (" + Utility.readPref(
                                         this@WXGLRadarActivity,
                                         "RID_LOC_" + oglr.rid,

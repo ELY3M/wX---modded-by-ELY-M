@@ -216,10 +216,7 @@ class ExternalPolygon private constructor(
         // System.out.println("Ray: " + ray.toString() + " ,Side: " + side);
         // System.out.println("Intersect point: " + intersectPoint.toString());
 
-        return if (side.isInside(intersectPoint) && ray.isInside(intersectPoint)) {
-            true
-        } else false
-
+        return side.isInside(intersectPoint) && ray.isInside(intersectPoint)
     }
 
     /**
@@ -244,9 +241,7 @@ class ExternalPolygon private constructor(
      * @return `True` if the point in bounding box, otherwise return `False`
      */
     private fun inBoundingBox(point: ExternalPoint): Boolean {
-        return if (point.x < _boundingBox.xMin || point.x > _boundingBox.xMax || point.y < _boundingBox.yMin || point.y > _boundingBox.yMax) {
-            false
-        } else true
+        return !(point.x < _boundingBox.xMin || point.x > _boundingBox.xMax || point.y < _boundingBox.yMin || point.y > _boundingBox.yMax)
     }
 
     private class BoundingBox {

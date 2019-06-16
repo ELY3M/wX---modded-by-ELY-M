@@ -58,8 +58,8 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
             null,
             false
         )
-        val turl = intent.getStringArrayExtra(URL)
-        url = turl[0]
+        val activityArguments = intent.getStringArrayExtra(URL)
+        url = activityArguments[0]
         title = url.toUpperCase()
         toolbar.subtitle = "Select a location and then use the back arrow to save."
         var imgRes = 0
@@ -138,7 +138,7 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
 
     private fun mapClicked(id: Int) {
         val sector = UtilityImageMap.canadaMap(id)
-        val cityLoc = getCityFromXML(sector)
+        val cityLoc = getCityFromXml(sector)
         Utility.writePref(this, "LOCATION_CANADA_PROV", url.toUpperCase())
         Utility.writePref(this, "LOCATION_CANADA_CITY", cityLoc)
         Utility.writePref(
@@ -175,19 +175,19 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
         }
     }
 
-    private fun getCityFromXML(token: String): String {
+    private fun getCityFromXml(token: String): String {
         val io: InputStream?
         try {
             io = resources.openRawResource(R.raw.maps)
             // if file the available for reading
             if (io != null) {
                 // prepare the file for reading
-                val inputreader = InputStreamReader(io)
-                val buffreader = BufferedReader(inputreader)
+                val inputReader = InputStreamReader(io)
+                val buffReader = BufferedReader(inputReader)
                 var line: String?
                 // read every line of the file into the line-variable, on line at the time
                 do {
-                    line = buffreader.readLine()
+                    line = buffReader.readLine()
                     if (line!!.contains(token)) {
                         return line.parse("title=\"(.*?)\"")
                     }

@@ -22,7 +22,7 @@
 package joshuatee.wx
 
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import joshuatee.wx.util.Utility
 
 class DataStorage(private var preference: String) {

@@ -130,7 +130,7 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityShare.shareBitmap(this, imageCollection.title, bitmap)
+                    UtilityShare.shareBitmap(this, this, imageCollection.title, bitmap)
                 }
             }
             else -> return super.onOptionsItemSelected(item)

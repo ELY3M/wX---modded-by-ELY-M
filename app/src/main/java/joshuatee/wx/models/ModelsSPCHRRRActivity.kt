@@ -66,13 +66,12 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener, On
     private lateinit var miStatusParam2: MenuItem
     private lateinit var drw: ObjectNavDrawer
     private lateinit var om: ObjectModel
-    // FIXME var naming turl
-    private lateinit var turl: Array<String>
+    private lateinit var activityArguments: Array<String>
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        turl = intent.getStringArrayExtra(INFO)
-        om = ObjectModel(this, turl[1], turl[0])
+        activityArguments = intent.getStringArrayExtra(INFO)
+        om = ObjectModel(this, activityArguments[1], activityArguments[0])
         if (om.numPanes == 1) {
             super.onCreate(
                     savedInstanceState,
@@ -91,7 +90,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener, On
             )
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = turl[2]
+        title = activityArguments[2]
         overlayImg.addAll(
                 Arrays.asList(
                         *TextUtils.split(
@@ -223,7 +222,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                     this,
                     ModelsSpcHrrrActivity::class.java,
                     INFO,
-                    arrayOf("2", turl[1], turl[2])
+                    arrayOf("2", activityArguments[1], activityArguments[2])
             )
             R.id.action_back -> UtilityModels.moveBack(om.spTime)
             R.id.action_forward -> UtilityModels.moveForward(om.spTime)
@@ -232,7 +231,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityModels.legacyShare(this@ModelsSpcHrrrActivity, om.animRan, om)
+                    UtilityModels.legacyShare(this@ModelsSpcHrrrActivity,this@ModelsSpcHrrrActivity, om.animRan, om)
                 }
             }
             else -> return super.onOptionsItemSelected(item)

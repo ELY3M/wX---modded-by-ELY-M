@@ -75,8 +75,6 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         objectCardVerticalText.setOnClickListener(View.OnClickListener { sv.scrollTo(0,0)})
         title = "Hourly Forecast"
         toolbar.subtitle = Location.getName(locationNumber)
-        //UtilityLog.d("wx", UtilityTimeSunMoon.getSunTimesForHomescreen())
-        //UtilityLog.d("wx", UtilityTimeSunMoon.getMoonTimesForHomescreen())
         getContent()
     }
 

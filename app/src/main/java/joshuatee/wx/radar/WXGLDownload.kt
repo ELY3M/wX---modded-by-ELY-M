@@ -230,8 +230,6 @@ class WXGLDownload {
         // experimentation has shown that L2REF and L2VEL lowest tiles are at the start of the
         // file so "Range" HTTP header is used to download just what is needed based on prod
         // requested
-        // testing of specific radar binary files
-        //return UtilityIO.readRawFile(R.raw.l2missingradials);
         if (url == "") {
             return null
         }
@@ -260,8 +258,8 @@ class WXGLDownload {
             val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, false)
             val url =
                     MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + (NEXRAD_PRODUCT_STRING[product] ?: "") + "/SI." + ridPrefix + radarSite.toLowerCase() + "/sn.last"
-            val inputstream = UtilityDownload.getInputStreamFromUrl(url)
-            inputstream?.let { UtilityIO.saveInputStream(context, it, fileName) }
+            val inputStream = UtilityDownload.getInputStreamFromUrl(url)
+            inputStream?.let { UtilityIO.saveInputStream(context, it, fileName) }
         }
     }
 }

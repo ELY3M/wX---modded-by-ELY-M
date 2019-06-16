@@ -42,7 +42,6 @@ internal object UtilityDownloadWatch {
         val refreshInterval = maxOf(Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3), 6)
         val currentTime1 = System.currentTimeMillis()
         val currentTimeSec = currentTime1 / 1000
-        // FIXME make this be something like maximum of refresh int or 5-7 min
         val refreshIntervalSec = (refreshInterval * 60).toLong()
         UtilityLog.d("wx", "RADAR DOWNLOAD CHECK: $type")
         if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
@@ -60,39 +59,36 @@ internal object UtilityDownloadWatch {
         if (html != "" ) {
             MyApplication.severeDashboardWat.valueSet(context, html)
         }
-
         val numberList = getListOfNumbers(context)
         val htmlList = mutableListOf<String>()
-
         //var watchNoList = ""
         var watchLatLonList = ""
-        var watchLatlon = ""
-        var watchLatlonTor = ""
-
+        var watchLatLon = ""
+        var watchLatLonTor = ""
         numberList.forEach {
             val watchHtml = UtilityDownload.getTextProduct(context, "SPCWAT$it")
             htmlList.add(watchHtml)
             val latLonHtml = getLatLon(it)
             watchLatLonList += UtilityNotification.storeWatMcdLatLon(latLonHtml)
             if (!watchHtml.contains("Tornado Watch")) {
-                watchLatlon += UtilityNotification.storeWatMcdLatLon(latLonHtml)
+                watchLatLon += UtilityNotification.storeWatMcdLatLon(latLonHtml)
             } else {
-                watchLatlonTor += UtilityNotification.storeWatMcdLatLon(latLonHtml)
+                watchLatLonTor += UtilityNotification.storeWatMcdLatLon(latLonHtml)
             }
         }
         if (PolygonType.MCD.pref) {
-            UtilityLog.d("wx","RADAR DOWNLOAD SET WATCH: " + watchLatLonList)
+            //UtilityLog.d("wx","RADAR DOWNLOAD SET WATCH: " + watchLatLonList)
             MyApplication.watchLatlonList.valueSet(context, watchLatLonList)
-            MyApplication.watchLatlon.valueSet(context, watchLatlon)
-            MyApplication.watchLatlonTor.valueSet(context, watchLatlonTor)
+            MyApplication.watchLatlon.valueSet(context, watchLatLon)
+            MyApplication.watchLatlonTor.valueSet(context, watchLatLonTor)
         }
         return WatchData(numberList, htmlList)
     }
 
-    fun getListOfNumbers(context: Context): List<String> {
+    private fun getListOfNumbers(context: Context): List<String> {
         val listOriginal = UtilityString.parseColumn(MyApplication.severeDashboardWat.value, RegExp.watchPattern)
         val list = listOriginal.map { String.format("%4s", it).replace(' ', '0') }
-        UtilityLog.d("wx", "RADAR DOWNLOAD $type:$list")
+        //UtilityLog.d("wx", "RADAR DOWNLOAD $type:$list")
         var watchNoList = ""
         list.forEach {
             watchNoList = "$watchNoList$it:"
@@ -100,12 +96,11 @@ internal object UtilityDownloadWatch {
         if (PolygonType.MCD.pref) {
             MyApplication.watchNoList.valueSet(context, watchNoList)
         }
-        UtilityLog.d("wx", "RADAR DOWNLOAD NO LIST $type:$watchNoList")
+        //UtilityLog.d("wx", "RADAR DOWNLOAD NO LIST $type:$watchNoList")
         return list
     }
 
     fun getLatLon(number: String): String {
-        val html = UtilityString.getHtmlAndParseLastMatch("${MyApplication.nwsSPCwebsitePrefix}/products/watch/wou$number.html", RegExp.pre2Pattern)
-        return html
+        return UtilityString.getHtmlAndParseLastMatch("${MyApplication.nwsSPCwebsitePrefix}/products/watch/wou$number.html", RegExp.pre2Pattern)
     }
 }

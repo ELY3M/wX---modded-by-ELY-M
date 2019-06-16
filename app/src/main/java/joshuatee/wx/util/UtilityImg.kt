@@ -316,6 +316,9 @@ object UtilityImg {
                 width = it.width
             }
         }
+        if ( width == 0 || height == 0 ) {
+            return getBlankBitmap()
+        }
         combinedImage = Bitmap.createBitmap(width, height, Config.ARGB_8888)
         val comboImage = Canvas(combinedImage!!)
         var workingHeight = 0f

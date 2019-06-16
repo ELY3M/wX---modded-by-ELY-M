@@ -13,7 +13,7 @@ import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
 import joshuatee.wx.util.Utility
 
-internal class PlayListAdapter(private val mDataset: MutableList<String>) :
+internal class PlayListAdapter(private val dataSet: MutableList<String>) :
     RecyclerView.Adapter<PlayListAdapter.DataObjectHolder>() {
 
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
@@ -48,7 +48,7 @@ internal class PlayListAdapter(private val mDataset: MutableList<String>) :
     }
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
-        val tmpArr = mDataset[position].split(";")
+        val tmpArr = dataSet[position].split(";")
         holder.label.text = tmpArr[0]
         holder.timeAndSize.text = tmpArr[1]
         val tmpStr = Utility.fromHtml(Utility.readPref("PLAYLIST_" + tmpArr[0], ""))
@@ -57,11 +57,11 @@ internal class PlayListAdapter(private val mDataset: MutableList<String>) :
     }
 
     fun deleteItem(index: Int) {
-        mDataset.removeAt(index)
+        dataSet.removeAt(index)
         notifyDataSetChanged()
     }
 
-    override fun getItemCount() = mDataset.size
+    override fun getItemCount() = dataSet.size
 
     interface MyClickListener {
         fun onItemClick(position: Int)

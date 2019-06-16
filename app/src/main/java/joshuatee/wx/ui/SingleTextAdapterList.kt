@@ -11,7 +11,7 @@ import joshuatee.wx.R
 
 // thanks http://www.truiton.com/2015/03/android-cardview-example/
 
-class SingleTextAdapterList(private val mDataset: MutableList<String>) :
+class SingleTextAdapterList(private val dataSet: MutableList<String>) :
         RecyclerView.Adapter<SingleTextAdapterList.DataObjectHolder>() {
 
     class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
@@ -48,17 +48,17 @@ class SingleTextAdapterList(private val mDataset: MutableList<String>) :
     }
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
-        holder.label.text = mDataset[position]
+        holder.label.text = dataSet[position]
     }
 
     fun deleteItem(index: Int) {
-        mDataset.removeAt(index)
+        dataSet.removeAt(index)
         notifyDataSetChanged()
     }
 
     fun setItem(index: Int, str: String) {
-        if (index < mDataset.size) {
-            mDataset[index] = str
+        if (index < dataSet.size) {
+            dataSet[index] = str
         }
         notifyDataSetChanged()
     }
@@ -66,13 +66,13 @@ class SingleTextAdapterList(private val mDataset: MutableList<String>) :
     // used in FavRemoveActivity for SPCMeso
     override fun toString(): String {
         var string = ""
-        mDataset.forEach { string += ":$it" }
+        dataSet.forEach { string += ":$it" }
         return "$string:"
     }
 
-    fun getItem(index: Int): String = mDataset[index]
+    fun getItem(index: Int): String = dataSet[index]
 
-    override fun getItemCount(): Int = mDataset.size
+    override fun getItemCount(): Int = dataSet.size
 
     interface MyClickListener {
         fun onItemClick(position: Int)

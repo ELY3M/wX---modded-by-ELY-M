@@ -36,7 +36,7 @@ import joshuatee.wx.util.Utility
 
 class FavRemoveActivity : BaseActivity() {
 
-    // called from various activities that need favorite manament,
+    // called from various activities that need favorite management,
     // allows one to remove from list of favorite sites and reorder
     //
     // arg1: type such as SND WFO RID
@@ -65,7 +65,7 @@ class FavRemoveActivity : BaseActivity() {
                 false
         )
         val activityArguments = intent.getStringArrayExtra(TYPE)
-        type = activityArguments[0]
+        type = activityArguments!![0]
         when (type) {
             "SND" -> {
                 prefToken = "SND_FAV"

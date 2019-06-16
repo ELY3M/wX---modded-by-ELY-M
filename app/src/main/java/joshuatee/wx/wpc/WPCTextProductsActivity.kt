@@ -60,7 +60,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     // last used product is first shown on re-entry
     //
     // Arguments
-    // 1: text produt ( lower case )
+    // 1: text product (lower case)
     //
 
     companion object {

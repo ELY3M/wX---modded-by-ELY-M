@@ -54,7 +54,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         private const val READ_REQUEST_CODE = 42
     }
 
-    private lateinit var turl: Array<String>
+    private lateinit var activityArguments: Array<String>
     private var formattedDate = ""
     private var name = ""
     private var type = ""
@@ -77,18 +77,18 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             }
         }
         showLoadFromFileMenuItem()
-        turl = intent.getStringArrayExtra(URL)
-        type = turl[0]
+        activityArguments = intent.getStringArrayExtra(URL)
+        type = activityArguments[0]
         title = "Palette Editor"
         toolbar.subtitle = WXGLNexrad.productCodeStringToName[type]
         formattedDate = UtilityTime.getDateAsString("MMdd")
-        name = if (turl[2].contains("false")) {
-            turl[1]
+        name = if (activityArguments[2].contains("false")) {
+            activityArguments[1]
         } else {
-            turl[1] + "_" + formattedDate
+            activityArguments[1] + "_" + formattedDate
         }
         palTitle.setText(name)
-        palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, type, turl[1]))
+        palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, type, activityArguments[1]))
     }
 
     private fun fabSavePalette(context: Context) {
@@ -189,12 +189,13 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                     UtilityColorPalette.getColorMapStringFromDisk(
                             this,
                             type,
-                            turl[1]
+                            activityArguments[1]
                     )
             )
             R.id.action_clear -> palContent.setText("")
             R.id.action_help -> UtilityAlertDialog.showHelpText("Not implemented yet.", this)
             R.id.action_share -> UtilityShare.shareTextAsAttachment(
+                    this,
                     this,
                     palTitle.text.toString(),
                     palContent.text.toString(),
@@ -240,7 +241,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         txtLocal = txtLocal.replace("product", "#product")
         txtLocal = txtLocal.replace("unit", "#unit")
         txtLocal = txtLocal.replace("step", "#step")
-       // txtLocal = txtLocal.trim { it <= ' ' }.replace("\\.[0-9]{1,2}".toRegex(), "")
+        // txtLocal = txtLocal.trim { it <= ' ' }.replace("\\.[0-9]{1,2}".toRegex(), "")
         txtLocal = txtLocal.replace(":", " ")
         txtLocal = txtLocal.trim { it <= ' ' }.replace(" +".toRegex(), " ")
         txtLocal = txtLocal.trim { it <= ' ' }.replace(" ".toRegex(), ",")

@@ -22,7 +22,6 @@
 package joshuatee.wx.ui
 
 import android.app.Activity
-import android.content.Context
 import android.widget.AdapterView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -30,7 +29,6 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 
 import joshuatee.wx.R
-
 
 class ObjectNavDrawer(activity: Activity, private var labels: List<String>) {
 
@@ -62,10 +60,10 @@ class ObjectNavDrawer(activity: Activity, private var labels: List<String>) {
         labels = items
     }
 
-    fun updateLists(context: Context, items: List<String>) {
+  /*  fun updateLists(context: Context, items: List<String>) {
         listView.adapter = ArrayAdapter(context, R.layout.drawer_list_item, items)
         labels = items
-    }
+    }*/
 
     constructor(activity: Activity, items: List<String>, tokens: List<String>) : this(
         activity,

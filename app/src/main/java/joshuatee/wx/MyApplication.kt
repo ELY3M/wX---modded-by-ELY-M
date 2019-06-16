@@ -28,7 +28,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Environment
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import android.provider.Settings
 import android.util.DisplayMetrics
 import android.util.TypedValue
@@ -167,6 +167,8 @@ class MyApplication : Application() {
         const val goes16Url: String = "https://cdn.star.nesdis.noaa.gov"
         const val goes16AnimUrl: String = "https://www.star.nesdis.noaa.gov"
         const val nwsApiUrl = "https://api.weather.gov"
+        const val nwsSwpcWebSitePrefix = "https://services.swpc.noaa.gov"
+        const val canadaEcSitePrefix = "https://weather.gc.ca"
         const val nwsWeatherGov: String = "https://w1.weather.gov"
         const val prefSeparator: String = " : : :"
         var uiAnimIconFrames: String = "rid"

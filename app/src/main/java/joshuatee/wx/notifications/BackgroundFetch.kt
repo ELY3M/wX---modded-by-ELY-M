@@ -46,7 +46,7 @@ import kotlinx.coroutines.*
 
 class BackgroundFetch(val context: Context) {
 
-    // This is the main code that handles notifications ( formerly in AlertReciever )
+    // This is the main code that handles notifications (formerly in AlertReceiver)
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
 
@@ -90,8 +90,6 @@ class BackgroundFetch(val context: Context) {
                     if (MyApplication.alertSpcmcdNotificationCurrent) {
                         val noMain = "SPC MCD #$mcdNumber"
                         val mcdPreModified = mcdData.htmlList[index].replace("<.*?>".toRegex(), " ")
-                        val body = mcdPreModified
-                        val summary = mcdPreModified
                         val polygonType = MCD
                         val objPI = ObjectPendingIntents(
                                 context,
@@ -111,10 +109,10 @@ class BackgroundFetch(val context: Context) {
                                     context,
                                     sound,
                                     noMain,
-                                    body,
+                                    mcdPreModified,
                                     objPI.resultPendingIntent,
                                     MyApplication.ICON_MCD,
-                                    summary,
+                                    mcdPreModified,
                                     NotificationCompat.PRIORITY_HIGH,
                                     Color.YELLOW,
                                     MyApplication.ICON_ACTION,
@@ -141,8 +139,6 @@ class BackgroundFetch(val context: Context) {
                     if (MyApplication.alertWpcmpdNotificationCurrent) {
                         val noMain = "WPC MPD #$mpdNumber"
                         val mcdPreModified = mpdData.htmlList[index].replace("<.*?>".toRegex(), " ")
-                        val body = mcdPreModified
-                        val summary = mcdPreModified
                         val polygonType = MPD
                         val objPI = ObjectPendingIntents(
                                 context,
@@ -162,10 +158,10 @@ class BackgroundFetch(val context: Context) {
                                     context,
                                     sound,
                                     noMain,
-                                    body,
+                                    mcdPreModified,
                                     objPI.resultPendingIntent,
                                     MyApplication.ICON_MPD,
-                                    summary,
+                                    mcdPreModified,
                                     NotificationCompat.PRIORITY_HIGH,
                                     Color.GREEN,
                                     MyApplication.ICON_ACTION,
@@ -193,8 +189,6 @@ class BackgroundFetch(val context: Context) {
                     if (MyApplication.alertSpcwatNotificationCurrent) {
                         val noMain = "SPC Watch #$watchNumber"
                         val mcdPreModified = watchData.htmlList[index].replace("<.*?>".toRegex(), " ")
-                        val body = mcdPreModified
-                        val summary = mcdPreModified
                         val polygonType = WATCH
                         val objPI = ObjectPendingIntents(
                                 context,
@@ -214,10 +208,10 @@ class BackgroundFetch(val context: Context) {
                                     context,
                                     sound,
                                     noMain,
-                                    body,
+                                    mcdPreModified,
                                     objPI.resultPendingIntent,
                                     MyApplication.ICON_ALERT_2,
-                                    summary,
+                                    mcdPreModified,
                                     NotificationCompat.PRIORITY_HIGH,
                                     Color.YELLOW,
                                     MyApplication.ICON_ACTION,

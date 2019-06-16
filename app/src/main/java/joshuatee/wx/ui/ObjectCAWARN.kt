@@ -34,6 +34,7 @@ import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.util.*
 
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ObjectIntent
 import kotlinx.coroutines.*
 
@@ -61,14 +62,14 @@ class ObjectCAWarn(
         listLocStatement.clear()
         try {
             bitmap = if (prov == "ca") {
-                "http://weather.gc.ca/data/warningmap/canada_e.png".getImage()
+                (MyApplication.canadaEcSitePrefix + "/data/warningmap/canada_e.png").getImage()
             } else {
-                ("http://weather.gc.ca/data/warningmap/" + prov + "_e.png").getImage()
+                (MyApplication.canadaEcSitePrefix + "/data/warningmap/" + prov + "_e.png").getImage()
             }
             val dataAsString = if (prov == "ca") {
-                "http://weather.gc.ca/warnings/index_e.html".getHtml()
+                (MyApplication.canadaEcSitePrefix + "/warnings/index_e.html").getHtml()
             } else {
-                ("http://weather.gc.ca/warnings/index_e.html?prov=$prov").getHtml()
+                (MyApplication.canadaEcSitePrefix + "/warnings/index_e.html?prov=$prov").getHtml()
             }
             listLocUrl = UtilityString.parseColumnMutable(
                 dataAsString,
@@ -124,11 +125,11 @@ class ObjectCAWarn(
             provL = listLocUrl[it].parse("report_e.html.([a-z]{2}).*?")
             val cText = ObjectCardText(context, linearLayout)
             cText.setText(Utility.fromHtml(provL.toUpperCase(Locale.US) + ": " + listLocName[it] + " " + locWarning + " " + locWatch + " " + locStatement))
-            val urlStr = "http://weather.gc.ca" + listLocUrl[it]
+            val urlStr = MyApplication.canadaEcSitePrefix + listLocUrl[it]
             val location = listLocName[it]
             cText.setOnClickListener(View.OnClickListener { getWarningDetail(urlStr, location) })
         }
-        ObjectCALegal(activity, linearLayout, "http://weather.gc.ca/warnings/index_e.html")
+        ObjectCALegal(activity, linearLayout, MyApplication.canadaEcSitePrefix + "/warnings/index_e.html")
     }
 
     val title: String get() = PROV_TO_LABEL[prov] + " (" + listLocUrl.size + ")"

@@ -110,6 +110,7 @@ class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
                 } else {
                     UtilityShare.shareBitmap(
                             this,
+                            this,
                             "Lightning Strikes " + objectNavDrawer.getLabel() + " $periodPretty",
                             bitmap
                     )

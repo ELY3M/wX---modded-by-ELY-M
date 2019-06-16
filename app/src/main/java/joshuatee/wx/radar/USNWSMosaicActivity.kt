@@ -199,6 +199,7 @@ class USNwsMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
                     } else {
                         UtilityShare.shareBitmap(
                                 this,
+                                this,
                                 "NWS mosaic",
                                 bitmap
                         )

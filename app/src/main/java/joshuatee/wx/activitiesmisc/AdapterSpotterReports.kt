@@ -34,7 +34,7 @@ import joshuatee.wx.radar.SpotterReports
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
 
-internal class AdapterSpotterReports(private val mDataset: List<SpotterReports>) :
+internal class AdapterSpotterReports(private val dataSet: List<SpotterReports>) :
     RecyclerView.Adapter<AdapterSpotterReports.DataObjectHolder>() {
 
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
@@ -67,11 +67,11 @@ internal class AdapterSpotterReports(private val mDataset: List<SpotterReports>)
     }
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
-        holder.name.text = mDataset[position].type
-        holder.time.text = mDataset[position].time
-        holder.email.text = mDataset[position].city.replace(MyApplication.newline, " ")
-        holder.phone.text = mDataset[position].lastName + ", " + mDataset[position].firstName
-        holder.summary.text = mDataset[position].narrative
+        holder.name.text = dataSet[position].type
+        holder.time.text = dataSet[position].time
+        holder.email.text = dataSet[position].city.replace(MyApplication.newline, " ")
+        holder.phone.text = dataSet[position].lastName + ", " + dataSet[position].firstName
+        holder.summary.text = dataSet[position].narrative
         holder.summary.setAsBackgroundText()
         listOf(holder.time, holder.email, holder.phone, holder.summary).forEach {
             it.setTextColor(UIPreferences.backgroundColor)
@@ -79,7 +79,7 @@ internal class AdapterSpotterReports(private val mDataset: List<SpotterReports>)
         }
     }
 
-    override fun getItemCount() = mDataset.size
+    override fun getItemCount() = dataSet.size
 
     interface MyClickListener {
         fun onItemClick(position: Int)

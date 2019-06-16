@@ -35,7 +35,7 @@ class WXJobService : JobService() {
         // Note: this is preformed on the main thread.
         try {
             BackgroundFetch(this).getContent()
-            UtilityLog.d("wx", "jobservice ran BackgroundFetch")
+            UtilityLog.d("wx", "job service ran BackgroundFetch")
         } catch (e: RejectedExecutionException) {
             UtilityLog.handleException(e)
         }

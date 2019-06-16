@@ -40,7 +40,6 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.telecine.SettingsTelecineActivity
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityLog
 
 import kotlinx.android.synthetic.main.activity_linear_layout.*
 

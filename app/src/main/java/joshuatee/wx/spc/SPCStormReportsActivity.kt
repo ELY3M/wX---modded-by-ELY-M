@@ -342,18 +342,19 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             return true
         }
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.shareText(
+            R.id.action_share_all -> UtilityShare.shareBitmap(
+                    this,
                     this,
                     "Storm Reports - $no",
-                    out.toString(),
-                    bitmap
+                    bitmap,
+                    out.toString()
             )
             R.id.action_share_text -> UtilityShare.shareText(
                     this,
                     "Storm Reports - $no",
                     out.toString()
             )
-            R.id.action_share_image -> UtilityShare.shareBitmap(this, "Storm Reports - $no", bitmap)
+            R.id.action_share_image -> UtilityShare.shareBitmap(this, this, "Storm Reports - $no", bitmap)
             R.id.action_lsrbywfo -> ObjectIntent(
                     this,
                     LsrByWfoActivity::class.java,

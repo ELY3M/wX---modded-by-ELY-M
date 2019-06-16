@@ -127,7 +127,7 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareBitmap(this, "$nwsOffice sounding", bitmap)
+            R.id.action_share -> UtilityShare.shareBitmap(this, this, "$nwsOffice sounding", bitmap)
             R.id.action_250mb -> setPlotAndGet("250")
             R.id.action_300mb -> setPlotAndGet("300")
             R.id.action_500mb -> setPlotAndGet("500")

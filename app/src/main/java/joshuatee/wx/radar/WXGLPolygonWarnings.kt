@@ -36,13 +36,13 @@ import joshuatee.wx.util.UtilityTime
 internal object WXGLPolygonWarnings {
 
     fun addGeneric(
-            provider: ProjectionType,
+            projectionType: ProjectionType,
             radarSite: String,
-            type: ObjectPolygonWarning
+            objectPolygonWarning: ObjectPolygonWarning
     ): List<Double> {
         val warningList = mutableListOf<Double>()
-        val prefToken = type.storage.value
-        val pn = ProjectionNumbers(radarSite, provider)
+        val prefToken = objectPolygonWarning.storage.value
+        val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
         var j: Int
         var pixXInit: Double
         var pixYInit: Double
@@ -52,7 +52,7 @@ internal object WXGLPolygonWarnings {
         var polyCount = -1
         polygons.forEach { polygon ->
             polyCount += 1
-            if ( type.type == PolygonWarningType.SpecialWeatherStatement || (vtecs.size > polyCount && !vtecs[polyCount].startsWith("O.EXP") && !vtecs[polyCount].startsWith("O.CAN")  )
+            if ( objectPolygonWarning.type == PolygonWarningType.SpecialWeatherStatement || (vtecs.size > polyCount && !vtecs[polyCount].startsWith("O.EXP") && !vtecs[polyCount].startsWith("O.CAN")  )
             ) {
                 val polyTmp =
                         polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
@@ -66,7 +66,7 @@ internal object WXGLPolygonWarnings {
                             it.toDoubleOrNull() ?: 0.0
                         }.toList()
                 if (y.isNotEmpty() && x.isNotEmpty()) {
-                    var tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], pn)
+                    var tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], projectionNumbers)
                     pixXInit = tmpCoords[0]
                     pixYInit = tmpCoords[1]
                     warningList.add(tmpCoords[0])
@@ -74,7 +74,7 @@ internal object WXGLPolygonWarnings {
                     if (x.size == y.size) {
                         j = 1
                         while (j < x.size) {
-                            tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[j], y[j], pn)
+                            tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[j], y[j], projectionNumbers)
                             warningList.add(tmpCoords[0])
                             warningList.add(tmpCoords[1])
                             warningList.add(tmpCoords[0])
@@ -91,17 +91,17 @@ internal object WXGLPolygonWarnings {
     }
 
     fun add(
-        provider: ProjectionType,
-        radarSite: String,
-        type: PolygonType
+            projectionType: ProjectionType,
+            radarSite: String,
+            polygonType: PolygonType
     ): List<Double> {
         val warningList = mutableListOf<Double>()
-        val prefToken = when (type) {
+        val prefToken = when (polygonType) {
             PolygonType.TOR -> MyApplication.severeDashboardTor.value
             PolygonType.TST -> MyApplication.severeDashboardTst.value
             else -> MyApplication.severeDashboardFfw.value
         }
-        val pn = ProjectionNumbers(radarSite, provider)
+        val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
         var j: Int
         var pixXInit: Double
         var pixYInit: Double
@@ -120,15 +120,15 @@ internal object WXGLPolygonWarnings {
                 val polyTmp = polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
                 val testArr = polyTmp.split(" ")
                 val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }
-                    .map {
-                        it.toDoubleOrNull() ?: 0.0
-                    }.toList()
+                        .map {
+                            it.toDoubleOrNull() ?: 0.0
+                        }.toList()
                 val x = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 != 0 }
-                    .map {
-                        it.toDoubleOrNull() ?: 0.0
-                    }.toList()
+                        .map {
+                            it.toDoubleOrNull() ?: 0.0
+                        }.toList()
                 if (y.isNotEmpty() && x.isNotEmpty()) {
-                    var tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], pn)
+                    var tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], projectionNumbers)
                     pixXInit = tmpCoords[0]
                     pixYInit = tmpCoords[1]
                     warningList.add(tmpCoords[0])
@@ -136,7 +136,7 @@ internal object WXGLPolygonWarnings {
                     if (x.size == y.size) {
                         j = 1
                         while (j < x.size) {
-                            tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[j], y[j], pn)
+                            tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[j], y[j], projectionNumbers)
                             warningList.add(tmpCoords[0])
                             warningList.add(tmpCoords[1])
                             warningList.add(tmpCoords[0])

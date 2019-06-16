@@ -40,7 +40,7 @@ internal object UtilityModelGlcfsInputOutput {
         if (timeInt > 9) {
             time = time.replace(Regex("^0"), "")
         }
-        val url = "http://www.glerl.noaa.gov/res/glcfs/fcast/$sector${om.currentParam}+$time.gif"
+        val url = "https://www.glerl.noaa.gov/res/glcfs/fcast/$sector${om.currentParam}+$time.gif"
         return url.getImage()
     }
 

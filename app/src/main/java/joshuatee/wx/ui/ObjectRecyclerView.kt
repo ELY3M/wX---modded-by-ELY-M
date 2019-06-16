@@ -29,12 +29,12 @@ import androidx.recyclerview.widget.RecyclerView
 class ObjectRecyclerView(
     context: Context,
     activity: Activity,
-    resid: Int,
+    resourceId: Int,
     list: MutableList<String>,
     fn: (Int) -> Unit
 ) {
 
-    var recyclerView: RecyclerView = activity.findViewById(resid)
+    var recyclerView: RecyclerView = activity.findViewById(resourceId)
     var ca: SingleTextAdapterList
 
     init {

@@ -1,4 +1,3 @@
-// TODO FUTURE Jetpack Compose
 // TODO base velocity legend
 // TODO Level 2 BV colormap and wrapping (Alex)
 // TODO migrate away from US govt website for Sun/Moon data do to cert issues, use external code that is Local to prevent dependencies ( prefarbly same code used in iOS wXL23)
@@ -6,43 +5,93 @@
 // TODO OkHttp 3.13 Requires Android 5+ – Square Corner Blog – Medium  https://medium.com/square-corner-blog/okhttp-3-13-requires-android-5-818bb78d07ce
 // TODO document or fix changing radar settings and impact on main screen radars
 // TODO UtilityMetar in radar has optimization related to text file loading
-// TODO color pal editor, make generic so can edit any product
 // TODO BUG - storm reports show radar doesn't show location dot for report
 // TODO enhance hourly graphics
 // TODO move off rid/wfo/sounding lat/lon/name currently in pref should be in objects (like flutter/iOS)
 // TODO SPS longpress does not always work well
 // TODO fix issue for precip radar products when there is no data
-// TODO assess impact of scoped storage: https://developer.android.com/preview/privacy/scoped-storage
 // TODO linesize - swo, wb, wbgusts, sti
 // TODO SRM - ability to add custom palette
 // TODO make location update interval configurable
 // TODO add vtec end date check to tor notif
-// TODO camelCase filenames in particular when acronyms longer then 2 chars exist
-// TODO add user accessible debug log from try-catch data
 // TODO color pal edit for SRM and L2 VEL/REF
-// TODO don't display full precision in lat/lon in settings location edit
-// TODO enhance formatting for NHC Storms
-// TODO update polygons when radar is open (in addition to background). Possibly use two sets of prefs , cloned at radar start
 // TODO color pal , allow cloning of a user created pal
 // TODO bug , SPC Meso swipe left/right takes on extra to get started
 // TODO look into tornado instead of #tornado for twitter embedded widget
 // TODO resolve activityReference issue in LocationFragment
-// TODO camelCase Myapp vars wxglrender
 // TODO https://android-developers.googleblog.com/2019/03/introducing-new-google-play-app-and.html
 // TODO put more diagnostics in settings -> about including more download stats and also rolling buffer for stacktraces
-// TODO for imageMap see if can set attributes in code so as to remove redundant layout files
-// TODO make usalerts detail layout more dynamic
-// TODO scan all obs sites - https://w1.weather.gov/xml/current_obs/seek.php?state=nd&Find=Find
-// TODO                          https://tgftp.nws.noaa.gov/data/observations/metar/stations/
+// TODO NCEP add NBM
+// TODO NCEP GFS add cref and double check other parms
 
-[ADD] - adding something new - method, file, etc. to the repo
-[REM] - remove items
-[IMP] - improvement
-[DEB] - Added temporary debug code
-[FIX] - bug fixes
-[REF] - refactor a method, group, variable, etc.
-[MER] - merge
-
+55235 2019_06_13    [FIX] NCEP HREF change from 2 to 4 runs per day
+                    [ADD] NBM to NCEP
+                    [REF] lint camelCase
+55234 2019_06_13    [FIX] UtilityImg.mergeImagesVertically if height or width == 0 return blank bitmap
+                    [FIX] NCEP
+                    --Rename the following areas:
+                    ATLPAC -> ATL-PAC
+                    NPAC -> NORTH-PAC
+                    EPAC -> EAST-PAC
+                    SPAC -> SOUTH-PAC
+                    WNATL -> WN-ATL
+                    WGOA -> WEST-GOA
+                    EGOA -> EAST-GOA
+                    NCAL-> NORTH-CAL
+                    SCAL -> SOUTH-CAL
+                    SREF: Change prob_precip_25 to prob_precip_0.25in
+                    --Remove sim_radar_comp from the following models
+                    NAM-HIRES
+                    FIREWX
+                    HRRR
+                    RAP
+                    HRW-NMMB
+                    HRW-ARW
+                    --Remove sim_radar_max from the following models
+                    FIREWX
+                    HRW-NMMB
+                    HRW-ARW
+                    --SREF/GEFS-MEAN-SPRD adad precip_ptot Total Accumulated Precipitation of Period
+55233 2019_06_12    [ADD] NCEP add HRW-ARW2, HRRR add 300_wnd, fix to 250_wnd, RAP add 200_wnd_ht
+                    [ADD] HRRR add 850_temp_mslp_precip, NAM-HIRES add ceiling
+                    [FIX] in GEFS-MEAN-SPRD rename 4 like prob_ice_25 to prob_ice_0.25in and prob_precip_100 to prob_precip_1in
+55232 2019_06_12    [FIX] NCEP work - fix run time latest detection
+                    [ADD] NCEP add new sectors US-NW, US-SW, US-NC, US-SC, US-NE and US-SE to  NAM-HIRES, HRRR, HRW-ARW, HRW-NMMB and HREF
+                    [ADD] NCEP Add American Samoa (US-SAMOA) to GFS.
+                    [FIX] NCEP HRW-ARW, HRW-NMMB, NAM-HIRES, RAP and HRRR: Change echotop to echo_top
+55231 2019_06_12    [REF] various camelCase
+55230 2019_06_11    [FIX] update utilShare to add emailTo as "" instead of defaulting to something useless
+55229 2019_06_11    [FIX] update utilShare to work with Android Q - merge images vertically instead of sharing multiple images
+55228 2019_06_11    [FIX] update utilShare to work with Android Q ( use share compat )
+55227 2019_06_10    [FIX] update utilShare to work with Android Q ( use share compat )
+55226 2019_06_10    [REF] camelCase, spelling, lint
+                    [FIX] generic image share not working in android Q, in ImageShowActivity test new share using ShareCompat.IntentBuilder.from
+55225 2019_06_09    [FIX] more work with screenshot/recorder for android Q
+55224 2019_06_09    [FIX] attempted fix for
+                    kotlin.KotlinNullPointerException:
+                      at joshuatee.wx.fragments.LocationFragment.getActivityReference (LocationFragment.kt:783)
+                      at joshuatee.wx.fragments.LocationFragment.access$getActivityReference$p (LocationFragment.kt:65)
+                      at joshuatee.wx.fragments.LocationFragment$getRadar$1$3.invokeSuspend (LocationFragment.kt:440)
+                    [FIX] fix TTS to support using Android Q by making this change in UtilityTts.kt
+                        //val musicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
+                        val musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
+                    [IMP] changes in screen record for Q
+55223 2019_06_08    [IMP] allow the settings -> notifications filtered alerts to impact what is seen on the main screen
+55222 2019_06_08    [ADD] NHC activity - add 3 graphics and access to 1 text product related to central pacific
+                    [IMP] convert many http URLs to https
+                    [FIX] text product PMDTHR was not working
+55221 2019_06_08    [FIX] remove 135 obs sites from the list of 2300+, not reporting data current from this year
+                    [IMP] for telecine service supporting screen record only fire a foreground service if Android Q or greater
+55220 2019_06_08    [FIX] for Q temporarily add <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+                    [FIX] add foreground task for screen recording - needed for Android Q - requires testing ( storage access not working in Q )
+                    [REF] lint cleanup after code analysis
+55219 2019_06_07    [IMP] implementation "androidx.preference:preference:1.0.0" add to gradle
+                    [IMP] migrate to androidx preference as prior is deprecated
+55218 2019_06_07    [IMP] change compileSdkVersion 28 to compileSdkVersion 29
+                          change buildToolsVersion '28.0.3' to buildToolsVersion '29.0.0'
+                          change targetSdkVersion 28 to targetSdkVersion 29 (NOTE: this breaks screen capture in nexrad radar for Q devices )
+                          (java.lang.SecurityException: Media projections require a foreground service of type ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION)
+                    [IMP] in settings -> notifications add "Child Abduction Emergency" (needs to impact main screen)
 55217 2019_06_06    [IMP] SDK platform tools updated to 29.0.0
                     [REF] variable renaming cont.
 55216 2019_06_06    [FIX] remove obs site KIGX from stations_us4.txt and us_metar3.txt

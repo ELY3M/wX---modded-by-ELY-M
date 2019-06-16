@@ -49,7 +49,7 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     // Arguments
     // 1: URL
     // 2: Title
-    // 3: (optional) string "true" means a whitebg is needed
+    // 3: (optional) string "true" means a white background is needed
 
     companion object {
         const val URL: String = ""
@@ -73,7 +73,7 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         img = ObjectTouchImageView(this, this, toolbar, R.id.iv)
-        val activityArguments = intent.getStringArrayExtra(URL)
+        val activityArguments: Array<String> = intent.getStringArrayExtra(URL)!!
         url = activityArguments[0]
         title = activityArguments[1]
         shareTitle = activityArguments[1]
@@ -112,7 +112,7 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareBitmap(this, shareTitle, bitmap)
+            R.id.action_share -> UtilityShare.shareBitmap(this, this, shareTitle, bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

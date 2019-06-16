@@ -56,7 +56,7 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     // However, other NWS office text products are also available from the AB menu
     // A map icon is also provided to select an office different from your current location
     //
-    // Arugments
+    // Arguments
     // 1: NWS office
     // 2: product
     //
@@ -229,23 +229,17 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
                     this,
                     WebscreenABModels::class.java,
                     WebscreenABModels.URL,
-                    arrayOf("http://www.weather.gov/" + wfo.toLowerCase(Locale.US), wfo)
+                    arrayOf("https://www.weather.gov/" + wfo.toLowerCase(Locale.US), wfo)
             )
             R.id.action_hazards -> ObjectIntent(
                     this,
                     ImageShowActivity::class.java,
                     ImageShowActivity.URL,
                     arrayOf(
-                            "http://www.weather.gov/wwamap/png/" + wfo.toLowerCase(Locale.US) + ".png",
+                            "https://www.weather.gov/wwamap/png/" + wfo.toLowerCase(Locale.US) + ".png",
                             "$wfo WWA Map"
                     )
             )
-            /* R.id.action_forecast -> ObjectIntent(
-                 this,
-                 WebscreenABModels::class.java,
-                 WebscreenABModels.URL,
-                 arrayOf(UtilityDownloadNWS.get7DayURL(Location.x, Location.y), "Local forecast")
-             )*/
             R.id.action_share -> UtilityShare.shareText(
                     this,
                     product + wfo,

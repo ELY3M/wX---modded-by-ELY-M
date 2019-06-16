@@ -101,7 +101,7 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
                 WebscreenAB::class.java,
                 WebscreenAB.URL,
                 arrayOf(
-                        "http://www.wrh.noaa.gov/mesowest/timeseries.php?sid=$obsSite",
+                        "https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=$obsSite",
                         obsSite
                 )
         )

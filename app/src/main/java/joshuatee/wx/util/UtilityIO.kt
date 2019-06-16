@@ -30,7 +30,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import joshuatee.wx.MyApplication
-import joshuatee.wx.R
 import java.io.BufferedReader
 import java.io.InputStreamReader
 

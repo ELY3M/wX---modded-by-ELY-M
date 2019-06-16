@@ -156,7 +156,7 @@ object SpotterNetworkPositionReport {
         straltitude = info[4]
         strspeed = info[5]
         strbearing = info[6]
-        strgpsprovider = info[8]
+        strgpsprovider = info[8].toString()
 
 
         Send_Location_Task()
@@ -202,7 +202,7 @@ object SpotterNetworkPositionReport {
                 `object`.put("mph", Math.round(strspeed!!.toDouble()))
                 `object`.put("dir", Math.round(strbearing!!.toDouble()))
                 `object`.put("active", 1)
-                `object`.put("gps", Integer.parseInt(strgpsprovider))
+                `object`.put("gps", Integer.parseInt(strgpsprovider.toString()))
             } catch (e: JSONException) {
                 e.printStackTrace()
             }

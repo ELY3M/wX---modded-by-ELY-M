@@ -36,8 +36,8 @@ class ObjectWidgetAfd(context: Context) {
     val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_textview_layout)
 
     init {
-        val widgetLocatioNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
-        val wfo = Utility.readPref(context, "NWS$widgetLocatioNumber", "")
+        val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
+        val wfo = Utility.readPref(context, "NWS$widgetLocationNumber", "")
         val afd = Utility.readPref(context, "AFD_WIDGET", "")
         remoteViews.setTextViewText(R.id.text1, Utility.fromHtml(afd))
         remoteViews.setTextViewTextSize(R.id.text1, TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)

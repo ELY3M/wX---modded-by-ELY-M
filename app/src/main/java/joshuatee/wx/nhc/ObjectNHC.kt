@@ -34,7 +34,7 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ObjectIntent
 
-class ObjectNhc(val context: Context, private val dynamicview: LinearLayout) {
+class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
 
     private val atlSumList = mutableListOf<String>()
     private val atlLinkList = mutableListOf<String>()
@@ -60,8 +60,12 @@ class ObjectNhc(val context: Context, private val dynamicview: LinearLayout) {
                 "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png",
                 "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png",
                 "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png",
-                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png"
+                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png",
+                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_0d0.png",
+                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_2d0.png",
+                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_5d0.png"
         ).forEach { bitmaps.add(it.getImage()) }
+
         var dataRet: ObjectNhcStormInfo
         (1 until 6).forEach {
             dataRet = UtilityNhc.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_at" + it.toString() + ".xml")
@@ -88,12 +92,12 @@ class ObjectNhc(val context: Context, private val dynamicview: LinearLayout) {
     }
 
     fun showData() {
-        dynamicview.removeAllViewsInLayout()
+        linearLayout.removeAllViewsInLayout()
         html = ""
         val muteStr = Utility.readPref(context, "NOTIF_NHC_MUTE", "")
         cNotif = ObjectCardText(context, cardNotifHeaderText + muteStr)
-        dynamicview.addView(cNotif?.card)
-        cNotif?.setOnClickListener(View.OnClickListener { clearNHCNotifBlock() })
+        linearLayout.addView(cNotif?.card)
+        cNotif?.setOnClickListener(View.OnClickListener { clearNhcNotificationBlock() })
         if (muteStr != "") {
             cNotif?.setVisibility(View.VISIBLE)
         } else {
@@ -101,13 +105,13 @@ class ObjectNhc(val context: Context, private val dynamicview: LinearLayout) {
         }
         if (atlSumList.size < 1) {
             val noAtl = "There are no tropical cyclones in the Atlantic at this time."
-            ObjectCardText(context, dynamicview, noAtl)
+            ObjectCardText(context, linearLayout, noAtl)
             html = noAtl
         } else {
             atlSumList.indices.forEach { k ->
                 if (atlImg1List[k] != "") {
                     val objStormData = ObjectNhcStormDetails(atlSumList[k])
-                    val cAtlData = ObjectCardNhcStormReportItem(context, dynamicview, objStormData)
+                    val cAtlData = ObjectCardNhcStormReportItem(context, linearLayout, objStormData)
                     html += atlSumList[k]
                     val url = atlLinkList[k]
                     val imgUrl1 = atlImg1List[k]
@@ -127,13 +131,13 @@ class ObjectNhc(val context: Context, private val dynamicview: LinearLayout) {
         }
         if (pacSumList.size < 1) {
             val noPac = "There are no tropical cyclones in the Eastern Pacific at this time."
-            ObjectCardText(context, dynamicview, noPac)
+            ObjectCardText(context, linearLayout, noPac)
             html += noPac
         } else {
             pacSumList.indices.forEach { k ->
                 if (pacImg1List[k] != "") {
                     val objStormData = ObjectNhcStormDetails(pacSumList[k])
-                    val cPacData = ObjectCardNhcStormReportItem(context, dynamicview, objStormData)
+                    val cPacData = ObjectCardNhcStormReportItem(context, linearLayout, objStormData)
                     //val cPac = ObjectCardText(context, dynamicview, Utility.fromHtml(pacSumList[k]))
                     html += pacSumList[k]
                     val url = pacLinkList[k]
@@ -156,10 +160,10 @@ class ObjectNhc(val context: Context, private val dynamicview: LinearLayout) {
     }
 
     private fun showTwoBitmaps() {
-        bitmaps.forEach { ObjectCardImage(context, dynamicview, it) }
+        bitmaps.forEach { ObjectCardImage(context, linearLayout, it) }
     }
 
-    private fun clearNHCNotifBlock() {
+    private fun clearNhcNotificationBlock() {
         Utility.writePref(context, "NOTIF_NHC_MUTE", "")
         if (cNotif != null)
             cNotif!!.setVisibility(View.GONE)

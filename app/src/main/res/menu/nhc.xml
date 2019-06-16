@@ -65,6 +65,10 @@
         android:title="EPAC Monthly Tropical Summary"
         app:showAsAction="never" />
     <item
+        android:id="@+id/action_cpac_two"
+        android:title="CPAC Tropical Weather Outlook"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/action_sst"
         android:title="SST images..."
         app:showAsAction="never">

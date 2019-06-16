@@ -78,6 +78,7 @@ class SpcFireOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_share -> UtilityShare.shareText(
                     this,
+                    this,
                     getString(UtilitySpcFireOutlook.activityTitle),
                     "",
                     bitmaps

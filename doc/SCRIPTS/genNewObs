@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+#
+obsFile=/Users/josh/StudioProjects/wX/app/src/main/res/raw/us_metar3.txt
+url=https://tgftp.nws.noaa.gov/data/observations/metar/stations/
+tmpDir=/var/tmp
+badFile=${tmpDir}/badObs
+
+while IFS= read -r line
+do
+  site=$(echo ${line}|awk '{print $1}')
+  grep -q ${site} ${badFile} 
+  if [[ $? != 0 ]]
+  then
+    echo ${line}
+  fi
+done < ${obsFile}

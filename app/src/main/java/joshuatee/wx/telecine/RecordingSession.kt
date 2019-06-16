@@ -22,7 +22,6 @@ import android.media.projection.MediaProjectionManager
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
@@ -68,6 +67,7 @@ import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
 import android.widget.Toast.LENGTH_SHORT
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.notifications.UtilityNotification
+import joshuatee.wx.util.FileProvider
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 internal class RecordingSession(
@@ -84,11 +84,11 @@ internal class RecordingSession(
     private val videoOutputRoot: File
     private val picturesOutputRoot: File
     private val videofileFormat = SimpleDateFormat(
-        "'${MyApplication.packageNameFileNameAsString}_'yyyy-MM-dd-HH-mm-ss'.mp4'",
+        "'${MyApplication.packageNameFileNameAsString}'yyyyMMddHHmmss'.mp4'",
         Locale.US
     )
     private val audiofileFormat = SimpleDateFormat(
-        "'${MyApplication.packageNameFileNameAsString}_'yyyy-MM-dd-HH-mm-ss'.jpeg'",
+        "'${MyApplication.packageNameFileNameAsString}'yyyyMMddHHmmss'.jpeg'",
         Locale.US
     )
 
@@ -153,10 +153,12 @@ internal class RecordingSession(
     }
 
     init {
-        val moviesDir = Environment.getExternalStoragePublicDirectory(DIRECTORY_MOVIES)
+        //val moviesDir = Environment.getExternalStoragePublicDirectory(DIRECTORY_MOVIES)
+        val moviesDir = context.getExternalFilesDir(DIRECTORY_MOVIES)
         videoOutputRoot = File(moviesDir, MyApplication.packageNameAsString)
         videoOutputRoot.mkdirs()
-        val picturesDir = Environment.getExternalStoragePublicDirectory(DIRECTORY_DCIM)
+        //val picturesDir = Environment.getExternalStoragePublicDirectory(DIRECTORY_DCIM)
+        val picturesDir = context.getExternalFilesDir(DIRECTORY_DCIM)
         picturesOutputRoot = File(picturesDir, MyApplication.packageNameAsString)
         picturesOutputRoot.mkdirs()
         notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -293,12 +295,19 @@ internal class RecordingSession(
             if (recorder != null) recorder!!.release()
             display!!.release()
         }
-        MediaScannerConnection.scanFile(
+        /*MediaScannerConnection.scanFile(
             context, arrayOf(outputFile!!), null
         ) { _, uri ->
-            if (uri == null) throw NullPointerException("uri == null")
+           if (uri == null) throw NullPointerException("uri == null")
             mainThread.post { showNotification(uri, null) }
-        }
+        }*/
+        val uri = FileProvider.getUriForFile(
+                context,
+                "${MyApplication.packageNameAsString}.fileprovider",
+                File(outputFile!!)
+        )
+        mainThread.post {showNotification(uri, null)}
+
     }
 
     private fun addDrawTool() {
@@ -423,9 +432,29 @@ internal class RecordingSession(
                     // write bitmap to a file
                     fos = FileOutputStream(outputFile!!)
                     croppedBitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, fos)
-                    MediaScannerConnection.scanFile(
+
+                    //val uri = Uri.fromFile(File(outputFile!!))
+                    /*val uri = FileProvider.getUriForFile(
+                            context,
+                    context.getApplicationContext()
+                            .getPackageName() + ".provider", File(outputFile!!));*/
+
+                    val uri = FileProvider.getUriForFile(
+                            context,
+                            "${MyApplication.packageNameAsString}.fileprovider",
+                            File(outputFile!!)
+                    )
+
+                    showScreenshotNotification(uri, null)
+                    /*MediaScannerConnection.scanFile(
                         context, arrayOf(outputFile!!), null
-                    ) { _, uri -> mainThread.post { showScreenshotNotification(uri, null) } }
+                    ) { _, uri ->
+                        if (uri != null) {
+                            mainThread.post { showScreenshotNotification(uri, null) }
+                        } else {
+                            UtilityLog.d("wx", "null uri on take screenshot")
+                        }
+                    }*/
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -452,18 +481,17 @@ internal class RecordingSession(
         UtilityNotification.initChannels(context)
         val requestID = System.currentTimeMillis().toInt()
         val viewIntent = Intent(ACTION_VIEW, uri)
-        val pendingViewIntent =
-            PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT)
+        val pendingViewIntent = PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT)
         var shareIntent = Intent(ACTION_SEND)
         shareIntent.type = MIME_TYPE_RECORDING
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        shareIntent.data = uri
         shareIntent = Intent.createChooser(shareIntent, null)
-        val pendingShareIntent =
-            PendingIntent.getActivity(context, requestID, shareIntent, FLAG_CANCEL_CURRENT)
+        val pendingShareIntent = PendingIntent.getActivity(context, requestID, shareIntent, FLAG_CANCEL_CURRENT)
         val deleteIntent = Intent(context, DeleteRecordingBroadcastReceiver::class.java)
         deleteIntent.data = uri
-        val pendingDeleteIntent =
-            PendingIntent.getBroadcast(context, requestID, deleteIntent, FLAG_CANCEL_CURRENT)
+        val pendingDeleteIntent = PendingIntent.getBroadcast(context, requestID, deleteIntent, FLAG_CANCEL_CURRENT)
         val title = context.getText(R.string.notification_captured_title)
         val subtitle = context.getText(R.string.notification_captured_subtitle)
         val share = context.getText(R.string.notification_captured_share)
@@ -527,25 +555,22 @@ internal class RecordingSession(
         UtilityNotification.initChannels(context)
         val requestID = System.currentTimeMillis().toInt()
         val viewIntent = Intent(ACTION_VIEW, uri)
-        val pendingViewIntent =
-            PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT)
+        val pendingViewIntent = PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT)
         var shareIntent = Intent(ACTION_SEND)
         shareIntent.type = MIME_TYPE_SCREENSHOT
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
+        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        shareIntent.data = uri
         shareIntent = Intent.createChooser(shareIntent, null)
-        val pendingShareIntent =
-            PendingIntent.getActivity(context, requestID, shareIntent, FLAG_CANCEL_CURRENT)
+        val pendingShareIntent = PendingIntent.getActivity(context, requestID, shareIntent, FLAG_CANCEL_CURRENT)
         val deleteIntent = Intent(context, DeleteRecordingBroadcastReceiver::class.java)
         deleteIntent.data = uri
-        val pendingDeleteIntent =
-            PendingIntent.getBroadcast(context, requestID, deleteIntent, FLAG_CANCEL_CURRENT)
+        val pendingDeleteIntent = PendingIntent.getBroadcast(context, requestID, deleteIntent, FLAG_CANCEL_CURRENT)
         val title = context.getText(R.string.notification_screenshot_captured_title)
         val subtitle = context.getText(R.string.notification_screenshot_captured_subtitle)
         val share = context.getText(R.string.notification_captured_share)
         val delete = context.getText(R.string.notification_captured_delete)
-        val actionShare =
-            NotificationCompat.Action.Builder(R.drawable.ic_share_24dp, share, pendingShareIntent)
-                .build()
+        val actionShare = NotificationCompat.Action.Builder(R.drawable.ic_share_24dp, share, pendingShareIntent).build()
         val actionDelete = NotificationCompat.Action.Builder(
             MyApplication.ICON_DELETE,
             delete,

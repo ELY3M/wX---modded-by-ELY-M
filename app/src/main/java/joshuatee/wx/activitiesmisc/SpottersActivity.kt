@@ -54,8 +54,8 @@ class SpottersActivity : BaseActivity() {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var ca: AdapterSpotter
-    private var spotterlist = mutableListOf<Spotter>()
-    private var spotterlist2 = mutableListOf<Spotter>()
+    private var spotterList = mutableListOf<Spotter>()
+    private var spotterList2 = mutableListOf<Spotter>()
     private lateinit var recyclerView: ObjectRecyclerViewGeneric
     private var firstTime = true
     private val titleString = "Spotters active"
@@ -68,7 +68,7 @@ class SpottersActivity : BaseActivity() {
             override fun onQueryTextSubmit(query: String) = true
 
             override fun onQueryTextChange(query: String): Boolean {
-                val filteredModelList = filter(spotterlist2, query)
+                val filteredModelList = filter(spotterList2, query)
                 if (::ca.isInitialized) {
                     ca.animateTo(filteredModelList)
                     recyclerView.scrollToPosition(0)
@@ -97,11 +97,11 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        spotterlist = withContext(Dispatchers.IO) { UtilitySpotter.data }.toMutableList()
+        spotterList = withContext(Dispatchers.IO) { UtilitySpotter.data }.toMutableList()
         markFavorites()
-        ca = AdapterSpotter(spotterlist)
+        ca = AdapterSpotter(spotterList)
         recyclerView.recyclerView.adapter = ca
-        title = spotterlist.size.toString() + " " + titleString
+        title = spotterList.size.toString() + " " + titleString
         ca.setListener(::itemClicked)
     }
 
@@ -128,13 +128,13 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun checkFavorite(position: Int) {
-        if (MyApplication.spotterFav.contains(spotterlist[position].uniq + ":")) {
+        if (MyApplication.spotterFav.contains(spotterList[position].uniq + ":")) {
             MyApplication.spotterFav =
-                    MyApplication.spotterFav.replace(spotterlist[position].uniq + ":", "")
-            spotterlist[position].lastName = spotterlist[position].lastName.replace("0FAV ", "")
+                    MyApplication.spotterFav.replace(spotterList[position].uniq + ":", "")
+            spotterList[position].lastName = spotterList[position].lastName.replace("0FAV ", "")
         } else {
-            MyApplication.spotterFav = MyApplication.spotterFav + spotterlist[position].uniq + ":"
-            spotterlist[position].lastName = "0FAV " + spotterlist[position].lastName
+            MyApplication.spotterFav = MyApplication.spotterFav + spotterList[position].uniq + ":"
+            spotterList[position].lastName = "0FAV " + spotterList[position].lastName
         }
         sortSpotters()
         ca.notifyDataSetChanged()
@@ -142,25 +142,25 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun markFavorites() {
-        spotterlist
+        spotterList
                 .filter { MyApplication.spotterFav.contains(it.uniq + ":") && !it.lastName.contains("0FAV ") }
                 .forEach { it.lastName = "0FAV " + it.lastName }
         sortSpotters()
     }
 
     private fun sortSpotters() {
-        Collections.sort(spotterlist, Comparator<Spotter> { p1, p2 ->
+        Collections.sort(spotterList, Comparator<Spotter> { p1, p2 ->
             val res = p1.lastName.compareTo(p2.lastName, ignoreCase = true)
             if (res != 0)
                 return@Comparator res
             p1.firstName.compareTo(p2.firstName, ignoreCase = true)
         })
         if (firstTime) {
-            spotterlist2 = mutableListOf()
-            spotterlist.indices.forEach { spotterlist2.add(spotterlist[it]) }
+            spotterList2 = mutableListOf()
+            spotterList.indices.forEach { spotterList2.add(spotterList[it]) }
             firstTime = false
         }
-        Collections.sort(spotterlist2, Comparator<Spotter> { p1, p2 ->
+        Collections.sort(spotterList2, Comparator<Spotter> { p1, p2 ->
             val res = p1.lastName.compareTo(p2.lastName, ignoreCase = true)
             if (res != 0)
                 return@Comparator res
@@ -186,10 +186,10 @@ class SpottersActivity : BaseActivity() {
                 WebscreenAB.URL,
                 arrayOf(
                         UtilityMap.getMapUrl(
-                                spotterlist[position].lat,
-                                spotterlist[position].lon,
+                                spotterList[position].lat,
+                                spotterList[position].lon,
                                 "9"
-                        ), spotterlist[position].lastName + ", " + spotterlist[position].firstName
+                        ), spotterList[position].lastName + ", " + spotterList[position].firstName
                 )
         )
     }
@@ -198,13 +198,13 @@ class SpottersActivity : BaseActivity() {
         val radarSite = UtilityLocation.getNearestOffice(
                 this,
                 "RADAR",
-                LatLon(spotterlist[position].lat, spotterlist[position].lon)
+                LatLon(spotterList[position].lat, spotterList[position].lon)
         )
         ObjectIntent(
                 this,
                 WXGLRadarActivity::class.java,
                 WXGLRadarActivity.RID,
-                arrayOf(radarSite, "", "N0Q", "", spotterlist[position].uniq)
+                arrayOf(radarSite, "", "N0Q", "", spotterList[position].uniq)
         )
     }
 

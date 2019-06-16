@@ -61,11 +61,11 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_image_show_navdrawer_bottom_toolbar,
-            R.menu.awcmosaic,
-            iconsEvenlySpaced = true,
-            bottomToolbar = true
+                savedInstanceState,
+                R.layout.activity_image_show_navdrawer_bottom_toolbar,
+                R.menu.awcmosaic,
+                iconsEvenlySpaced = true,
+                bottomToolbar = true
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
@@ -142,15 +142,16 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
                 } else {
                     if (animRan) {
                         UtilityShare.shareAnimGif(
-                            this,
-                            "NWS mosaic",
-                            animDrawable
+                                this,
+                                "NWS mosaic",
+                                animDrawable
                         )
                     } else {
                         UtilityShare.shareBitmap(
-                            this,
-                            "NWS mosaic",
-                            bitmap
+                                this,
+                                this,
+                                "NWS mosaic",
+                                bitmap
                         )
                     }
                 }

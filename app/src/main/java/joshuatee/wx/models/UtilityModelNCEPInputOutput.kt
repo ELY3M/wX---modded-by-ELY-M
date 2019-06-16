@@ -45,7 +45,8 @@ internal object UtilityModelNcepInputOutput {
                         + model.toUpperCase(Locale.US) + "&area=" + spinnerSectorCurrent + "&ps=area",
                 RegExp.ncepPattern2
         )
-        html = html.replace("UTC selected_cell", "Z")
+        //html = html.replace("UTC selected_cell", "Z")
+        html = html.replace("UTC", "Z").replace(" ", "")
         runCompletionDataStr.append(html.replace("Z", " UTC"))
         if (runCompletionDataStr.length > 8) {
             runCompletionDataStr.insert(8, " ")

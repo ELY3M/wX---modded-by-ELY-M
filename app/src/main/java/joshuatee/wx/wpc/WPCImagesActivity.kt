@@ -106,7 +106,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
         val getUrl: String
         title = drw.getLabel()
         when {
-            drw.getUrl().contains("http://graphical.weather.gov/images/conus/") -> {
+            drw.getUrl().contains("https://graphical.weather.gov/images/conus/") -> {
                 getUrl = drw.getUrl() + timePeriod + "_conus.png"
                 actionBack.isVisible = true
                 actionForward.isVisible = true
@@ -172,7 +172,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else
-                    UtilityShare.shareText(this, drw.getLabel(), "", bitmap)
+                    UtilityShare.shareBitmap(this, this, drw.getLabel(), bitmap)
             }
             else -> return super.onOptionsItemSelected(item)
         }

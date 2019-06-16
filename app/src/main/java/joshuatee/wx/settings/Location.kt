@@ -378,24 +378,15 @@ class Location(val context: Context, locNumInt: Int) {
                     val nwsCurrent = Utility.readPref(context, "NWS$jStr", "")
                     val ridCurrent = Utility.readPref(context, "RID$jStr", "")
                     val nwsStateCurrent = Utility.readPref(context, "NWS" + jStr + "_STATE", "")
-                    val alertNotificationCurrent =
-                        Utility.readPref(context, "ALERT" + jStr + "_NOTIFICATION", "false")
-                    val alertNotificationRadarCurrent =
-                        Utility.readPref(context, "ALERT_NOTIFICATION_RADAR$jStr", "false")
-                    val alertCcNotificationCurrent =
-                        Utility.readPref(context, "ALERT_CC" + jStr + "_NOTIFICATION", "false")
-                    val alert7Day1NotificationCurrent =
-                        Utility.readPref(context, "ALERT_7DAY_" + jStr + "_NOTIFICATION", "false")
-                    val alertNotificationSoundCurrent =
-                        Utility.readPref(context, "ALERT_NOTIFICATION_SOUND$jStr", "false")
-                    val alertNotificationMcdCurrent =
-                        Utility.readPref(context, "ALERT_NOTIFICATION_MCD$jStr", "false")
-                    val alertNotificationSwoCurrent =
-                        Utility.readPref(context, "ALERT_NOTIFICATION_SWO$jStr", "false")
-                    val alertNotificationSpcfwCurrent =
-                        Utility.readPref(context, "ALERT_NOTIFICATION_SPCFW$jStr", "false")
-                    val alertNotificationWpcmpdCurrent =
-                        Utility.readPref(context, "ALERT_NOTIFICATION_WPCMPD$jStr", "false")
+                    val alertNotificationCurrent = Utility.readPref(context, "ALERT" + jStr + "_NOTIFICATION", "false")
+                    val alertNotificationRadarCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_RADAR$jStr", "false")
+                    val alertCcNotificationCurrent = Utility.readPref(context, "ALERT_CC" + jStr + "_NOTIFICATION", "false")
+                    val alert7Day1NotificationCurrent = Utility.readPref(context, "ALERT_7DAY_" + jStr + "_NOTIFICATION", "false")
+                    val alertNotificationSoundCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_SOUND$jStr", "false")
+                    val alertNotificationMcdCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_MCD$jStr", "false")
+                    val alertNotificationSwoCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_SWO$jStr", "false")
+                    val alertNotificationSpcfwCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_SPCFW$jStr", "false")
+                    val alertNotificationWpcmpdCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_WPCMPD$jStr", "false")
                     val raw = Utility.readPref(context, "LOC" + jStr + "_TIMERAW", "")
                     val dst = Utility.readPref(context, "LOC" + jStr + "_TIMEDST", "")
                     Utility.writePref(context, "LOC" + iStr + "_TIMERAW", raw)
