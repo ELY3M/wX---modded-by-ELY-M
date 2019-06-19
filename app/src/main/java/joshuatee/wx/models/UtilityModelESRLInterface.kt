@@ -24,8 +24,8 @@ package joshuatee.wx.models
 internal object UtilityModelEsrlInterface {
 
     val models = listOf(
-        "HRRR",
-        "HRRR_AK",
+        //"HRRR",
+        //"HRRR_AK",
         "HRRR_NCEP",
         "RAP",
         "RAP_NCEP"

@@ -24,29 +24,29 @@ package joshuatee.wx.radar
 
 object UtilityWXGLTextObject {
 
-    fun hideTV(numPanes: Int, wxgltextArr: MutableList<WXGLTextObject>): Unit =
-        (0 until numPanes).forEach { wxgltextArr[it].hideTV() }
+    fun hideTV(numPanes: Int, textObjects: MutableList<WXGLTextObject>): Unit =
+        (0 until numPanes).forEach { textObjects[it].hideTV() }
 
-    fun showTV(numPanes: Int, wxgltextArr: MutableList<WXGLTextObject>): Unit =
-        (0 until numPanes).forEach { wxgltextArr[it].addTV() }
+    fun showTV(numPanes: Int, textObjects: MutableList<WXGLTextObject>): Unit =
+        (0 until numPanes).forEach { textObjects[it].addTV() }
 
-    fun updateSpotterLabels(numPanes: Int, wxgltextArr: MutableList<WXGLTextObject>) {
+    fun updateSpotterLabels(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
         (0 until numPanes).forEach {
-            wxgltextArr[it].initTVSpottersLabels()
-            wxgltextArr[it].addTVSpottersLabels()
+            textObjects[it].initTVSpottersLabels()
+            textObjects[it].addTVSpottersLabels()
         }
     }
 
-    fun updateHailLabels(numPanes: Int, wxgltextArr: MutableList<WXGLTextObject>) {
+    fun updateHailLabels(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
         (0 until numPanes).forEach {
-            wxgltextArr[it].initTVHailLabels()
-            wxgltextArr[it].addTVHailLabels()
+            textObjects[it].initTVHailLabels()
+            textObjects[it].addTVHailLabels()
         }
     }
-    fun updateObs(numPanes: Int, wxgltextArr: MutableList<WXGLTextObject>) {
+    fun updateObs(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
         (0 until numPanes).forEach {
-            wxgltextArr[it].initTVObs()
-            wxgltextArr[it].addTVObs()
+            textObjects[it].initTVObs()
+            textObjects[it].addTVObs()
         }
     }
 }

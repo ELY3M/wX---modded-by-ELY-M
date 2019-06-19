@@ -73,7 +73,7 @@ internal object UtilityNotificationSpcFireWeather {
                 ))
         ) {
             val sound = MyApplication.locations[locNumInt].sound && !inBlackout
-            val notifObj = ObjectNotification(
+            val objectNotification = ObjectNotification(
                     context,
                     sound,
                     noMain,
@@ -87,8 +87,8 @@ internal object UtilityNotificationSpcFireWeather {
                     objPI.resultPendingIntent2,
                     context.resources.getString(R.string.read_aloud)
             )
-            val noti = UtilityNotification.createNotificationBigTextWithAction(notifObj)
-            notifObj.sendNotification(context, cancelStr, 1, noti)
+            val notification = UtilityNotification.createNotificationBigTextWithAction(objectNotification)
+            objectNotification.sendNotification(context, cancelStr, 1, notification)
         }
         notifUrls += cancelStr + MyApplication.notificationStrSep
         return notifUrls

@@ -378,7 +378,7 @@ object UtilityColorPaletteGeneric {
         # where LR,LG,LB =RGB color of MinZ value
         # and HR,HG,HB =RGB color of Next line's MinZ minus one (e.g. upper end of the sections's range)
         # MinZ is the minimum dBz value in the range.
-        # Intermediate values are intepolated via HSB Interpolation
+        # Intermediate values are interpolated via HSB Interpolation
         # ND = Color for no detection generally black
         # You must specify an upper limit dBZ value as indicated by the
         # Color,93,250,250,250 line.

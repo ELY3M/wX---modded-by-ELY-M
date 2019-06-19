@@ -75,7 +75,7 @@ internal object UtilityNotificationSpc {
                             ))
                     ) {
                         val sound = MyApplication.alertNotificationSoundSpcswo && !inBlackout
-                        val notifObj = ObjectNotification(
+                        val objectNotification = ObjectNotification(
                                 context,
                                 sound,
                                 noMain,
@@ -89,8 +89,8 @@ internal object UtilityNotificationSpc {
                                 objPI.resultPendingIntent2,
                                 context.resources.getString(R.string.read_aloud)
                         )
-                        val noti = UtilityNotification.createNotificationBigTextWithAction(notifObj)
-                        notifObj.sendNotification(context, cancelStr, 1, noti)
+                        val notification = UtilityNotification.createNotificationBigTextWithAction(objectNotification)
+                        objectNotification.sendNotification(context, cancelStr, 1, notification)
                     }
                     notifUrls += cancelStr + MyApplication.notificationStrSep
                 } // end if to check if null string
@@ -101,7 +101,6 @@ internal object UtilityNotificationSpc {
 
     fun locationNeedsMcd(): Boolean {
         return (0 until Location.numLocations).any {
-            //MyApplication.locations[it].notificationMcd
             MyApplication.locations.getOrNull(it)?.notificationMcd ?: false
         }
     }
@@ -228,7 +227,7 @@ internal object UtilityNotificationSpc {
                                 )
                                 if (contains) {
                                     if (!notifUrls.contains("spcswoloc$day$locNum"))
-                                        notifUrls += sendSWONotif(
+                                        notifUrls += sendSwoNotification(
                                                 context,
                                                 locNum,
                                                 day,
@@ -346,7 +345,7 @@ internal object UtilityNotificationSpc {
                 ))
         ) {
             val sound = MyApplication.locations[locNumInt].sound && !inBlackout
-            val notifObj = ObjectNotification(
+            val objectNotification = ObjectNotification(
                     context,
                     sound,
                     noMain,
@@ -360,14 +359,14 @@ internal object UtilityNotificationSpc {
                     resultPendingIntent2,
                     context.resources.getString(R.string.read_aloud)
             )
-            val noti = UtilityNotification.createNotificationBigTextWithAction(notifObj)
-            notifObj.sendNotification(context, cancelStr, 1, noti)
+            val notification = UtilityNotification.createNotificationBigTextWithAction(objectNotification)
+            objectNotification.sendNotification(context, cancelStr, 1, notification)
         }
         notifUrls += cancelStr + sep
         return notifUrls
     }
 
-    private fun sendSWONotif(
+    private fun sendSwoNotification(
             context: Context,
             locNum: String,
             day: Int,
@@ -415,7 +414,7 @@ internal object UtilityNotificationSpc {
                 ))
         ) {
             val sound = MyApplication.locations[locNumInt].sound && !inBlackout
-            val notifObj = ObjectNotification(
+            val objectNotification = ObjectNotification(
                     context,
                     sound,
                     noMain,
@@ -429,8 +428,8 @@ internal object UtilityNotificationSpc {
                     resultPendingIntent2,
                     context.resources.getString(R.string.read_aloud)
             )
-            val noti = UtilityNotification.createNotificationBigTextWithAction(notifObj)
-            notifObj.sendNotification(context, cancelStr, 1, noti)
+            val notification = UtilityNotification.createNotificationBigTextWithAction(objectNotification)
+            objectNotification.sendNotification(context, cancelStr, 1, notification)
         }
         notifUrls += cancelStr + sep
         return notifUrls
@@ -538,7 +537,7 @@ internal object UtilityNotificationSpc {
                                 )
                                 if (contains) {
                                     if (!notifUrls.contains("spcswoloc$day$locNum"))
-                                        notifUrls += sendSWONotif(
+                                        notifUrls += sendSwoNotification(
                                                 context,
                                                 locNum,
                                                 day,

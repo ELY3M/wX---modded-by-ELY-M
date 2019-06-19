@@ -69,7 +69,8 @@
                                 android:layout_height="match_parent"
                                 android:hint="Name"
                                 android:inputType="text"
-                                android:textSize="18sp" />
+                                android:textSize="18sp"
+                                android:importantForAutofill="no" />
 
                             <EditText
                                 android:id="@+id/palContent"
@@ -77,7 +78,8 @@
                                 android:layout_height="match_parent"
                                 android:hint="Color Palette"
                                 android:inputType="textMultiLine"
-                                android:textSize="@dimen/listitem_text" />
+                                android:textSize="@dimen/listitem_text"
+                                android:importantForAutofill="no" />
 
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>

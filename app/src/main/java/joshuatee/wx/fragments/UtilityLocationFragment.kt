@@ -37,22 +37,22 @@ import joshuatee.wx.util.Utility
 object UtilityLocationFragment {
 
     private val windDirectionMap = mapOf(
-        "north" to "N",
-        "north northeast" to "NNE",
-        "northeast" to "NE",
-        "east northeast" to "ENE",
-        "east" to "E",
-        "east southeast" to "ESE",
-        "south southeast" to "SSE",
-        "southeast" to "SE",
-        "south" to "S",
-        "south southwest" to "SSW",
-        "southwest" to "SW",
-        "west southwest" to "WSW",
-        "west" to "W",
-        "west northwest" to "WNW",
-        "northwest" to "NW",
-        "north northwest" to "NNW"
+            "north" to "N",
+            "north northeast" to "NNE",
+            "northeast" to "NE",
+            "east northeast" to "ENE",
+            "east" to "E",
+            "east southeast" to "ESE",
+            "south southeast" to "SSE",
+            "southeast" to "SE",
+            "south" to "S",
+            "south southwest" to "SSW",
+            "southwest" to "SW",
+            "west southwest" to "WSW",
+            "west" to "W",
+            "west northwest" to "WNW",
+            "northwest" to "NW",
+            "north northwest" to "NNW"
     )
 
     fun extract7DayMetrics(chunk: String): String {
@@ -102,7 +102,7 @@ object UtilityLocationFragment {
     }
 
     fun setNwsIconSize(): Int =
-        (MyApplication.dm.widthPixels * (MyApplication.nwsIconSize / 100f)).toInt()
+            (MyApplication.dm.widthPixels * (MyApplication.nwsIconSize / 100f)).toInt()
 
     fun extractWindDirection(chunk: String): String {
         val windDir1 = chunk.parseLastMatch(RegExp.sevenDayWinddir1)
@@ -230,70 +230,71 @@ object UtilityLocationFragment {
         return temp
     }
 
-    fun extractCanadaWindDirection(fcst: String): String {
-        var wdir = fcst.parse(RegExp.ca7DayWinddir1)
-        if (wdir == "")
-            wdir = fcst.parse(RegExp.ca7DayWinddir2)
-        if (wdir != "")
-            wdir = " " + windDirectionMap[wdir]
-        return wdir
+    fun extractCanadaWindDirection(forecast: String): String {
+        var windDirection = forecast.parse(RegExp.ca7DayWinddir1)
+        return if (windDirection == "") {
+            windDirection = forecast.parse(RegExp.ca7DayWinddir2)
+            " " + windDirectionMap[windDirection]
+        } else {
+            " " + windDirectionMap[windDirection]
+        }
     }
 
     fun extractCanadaWindSpeed(forecast: String): String {
-        val wspdRange = UtilityString.parseMultiple(forecast, RegExp.ca7DayWindspd1, 2)
-        val wspd = forecast.parse(RegExp.ca7DayWindspd2)
+        val windSpeedRange = UtilityString.parseMultiple(forecast, RegExp.ca7DayWindspd1, 2)
+        val windSpeed = forecast.parse(RegExp.ca7DayWindspd2)
         var gust = ""
         if (forecast.contains("gusting")) {
             gust = " G " + forecast.parse(RegExp.ca7DayWindspd3)
         }
-        if (wspdRange.size > 1 && wspdRange[0] != "" && wspdRange[1] != "") {
-            return " " + wspdRange[0] + "-" + wspdRange[1] + gust + " km/h"
+        if (windSpeedRange.size > 1 && windSpeedRange[0] != "" && windSpeedRange[1] != "") {
+            return " " + windSpeedRange[0] + "-" + windSpeedRange[1] + gust + " km/h"
         }
-        return if (wspd == "") {
+        return if (windSpeed == "") {
             ""
         } else {
-            "$wspd$gust km/h"
+            "$windSpeed$gust km/h"
         }
     }
 
     fun handleIconTap(
-        strName: String,
-        oglr: WXGLRender?,
-        activityReference: Context,
-        fnRefresh: () -> Unit,
-        fnResetRadarView: () -> Unit,
-        fnGetRadars: () -> Unit
+            stringName: String,
+            wxglRender: WXGLRender?,
+            activityReference: Context,
+            fnRefresh: () -> Unit,
+            fnResetRadarView: () -> Unit,
+            fnGetRadars: () -> Unit
     ) {
         when {
-            strName.contains("Edit Location..") -> ObjectIntent(
-                activityReference,
-                SettingsLocationGenericActivity::class.java,
-                SettingsLocationGenericActivity.LOC_NUM,
-                arrayOf(Location.currentLocationStr, "")
+            stringName.contains("Edit Location..") -> ObjectIntent(
+                    activityReference,
+                    SettingsLocationGenericActivity::class.java,
+                    SettingsLocationGenericActivity.LOC_NUM,
+                    arrayOf(Location.currentLocationStr, "")
             )
-            strName.contains("Sun/Moon data") -> ObjectIntent(
-                activityReference,
-                SunMoonActivity::class.java
+            stringName.contains("Sun/Moon data") -> ObjectIntent(
+                    activityReference,
+                    SunMoonActivity::class.java
             )
-            strName.contains("Force Data Refresh") -> fnRefresh()
-            strName.contains("Radar type: Reflectivity") -> {
-                oglr?.product = "N0Q"
+            stringName.contains("Force Data Refresh") -> fnRefresh()
+            stringName.contains("Radar type: Reflectivity") -> {
+                wxglRender?.product = "N0Q"
                 fnGetRadars()
             }
-            strName.contains("Radar type: Velocity") -> {
-                oglr?.product = "N0U"
+            stringName.contains("Radar type: Velocity") -> {
+                wxglRender?.product = "N0U"
                 fnGetRadars()
             }
-            strName.contains("Reset zoom and center") -> fnResetRadarView()
+            stringName.contains("Reset zoom and center") -> fnResetRadarView()
             else -> {
-                val ridContext = strName.split(":")[0]
+                val ridContext = stringName.split(":")[0]
                 var stateContext = Utility.readPref("RID_LOC_$ridContext", "")
                 stateContext = stateContext.split(",")[0]
                 ObjectIntent(
-                    activityReference,
-                    WXGLRadarActivity::class.java,
-                    WXGLRadarActivity.RID,
-                    arrayOf(ridContext, stateContext, oglr!!.product, "")
+                        activityReference,
+                        WXGLRadarActivity::class.java,
+                        WXGLRadarActivity.RID,
+                        arrayOf(ridContext, stateContext, wxglRender!!.product, "")
                 )
             }
         }

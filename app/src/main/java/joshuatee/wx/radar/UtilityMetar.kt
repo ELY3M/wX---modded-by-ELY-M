@@ -99,7 +99,7 @@ internal object UtilityMetar {
             var tdArr: Array<String>
             var t: String
             var d: String
-            var latlon: Array<String>
+            var latLon: Array<String>
             var windDir = ""
             var windInKt = ""
             var windgustInKt = ""
@@ -201,11 +201,11 @@ internal object UtilityMetar {
                         t = UtilityMath.celsiusToFahrenheit(t.replace("M", "-"))
                         d = UtilityMath.celsiusToFahrenheit(d.replace("M", "-"))
                         obsSite = tmpArr2[0]
-                        latlon = OBS_LATLON[obsSite] ?: arrayOf("0.0", "0.0")
-                        if (latlon[0] != "0.0") {
-                            obsAl.add(latlon[0] + ":" + latlon[1] + ":" + t + "/" + d)
+                        latLon = OBS_LATLON[obsSite] ?: arrayOf("0.0", "0.0")
+                        if (latLon[0] != "0.0") {
+                            obsAl.add(latLon[0] + ":" + latLon[1] + ":" + t + "/" + d)
                             obsAlExt.add(
-                                latlon[0] + ":" + latlon[1] + ":" + t + "/" + d + " (" + obsSite + ")"
+                                latLon[0] + ":" + latLon[1] + ":" + t + "/" + d + " (" + obsSite + ")"
                                         + MyApplication.newline + pressureBlob + " - " + visBlobDisplay
                                         + MyApplication.newline + windBlob
                                         + MyApplication.newline + conditionsBlob
@@ -213,15 +213,15 @@ internal object UtilityMetar {
                             )
                             try {
                                 if (validWind) {
-                                    obsAlWb.add(latlon[0] + ":" + latlon[1] + ":" + windDir + ":" + windInKt)
-                                    val x = latlon[0].toDoubleOrNull() ?: 0.0
-                                    val y = (latlon[1].toDoubleOrNull() ?: 0.0) * -1.0
+                                    obsAlWb.add(latLon[0] + ":" + latLon[1] + ":" + windDir + ":" + windInKt)
+                                    val x = latLon[0].toDoubleOrNull() ?: 0.0
+                                    val y = (latLon[1].toDoubleOrNull() ?: 0.0) * -1.0
                                     obsAlX.add(x)
                                     obsAlY.add(y)
                                     obsAlAviationColor.add(aviationColor)
                                 }
                                 if (validWindGust) {
-                                    obsAlWbGust.add(latlon[0] + ":" + latlon[1] + ":" + windDir + ":" + windgustInKt)
+                                    obsAlWbGust.add(latLon[0] + ":" + latLon[1] + ":" + windDir + ":" + windgustInKt)
                                 }
                             } catch (e: Exception) {
                                 UtilityLog.handleException(e)

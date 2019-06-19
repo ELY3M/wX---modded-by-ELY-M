@@ -91,7 +91,7 @@ object UtilityUS {
                     val noMain = locationLabelString + title
                     val noBody = title + " " + ca.area + " " + ca.summary
                     val noSummary = title + ": " + ca.area + " " + ca.summary
-                    val objPI = ObjectPendingIntents(
+                    val objectPendingIntents = ObjectPendingIntents(
                             context,
                             USAlertsDetailActivity::class.java,
                             USAlertsDetailActivity.URL,
@@ -105,23 +105,22 @@ object UtilityUS {
                             ))
                     ) {
                         val sound = MyApplication.locations[currentLoc].sound && !inBlackout || MyApplication.locations[currentLoc].sound && tornadoWarningPresent && MyApplication.alertBlackoutTornadoCurrent
-                        val notifObj = ObjectNotification(
+                        val objectNotification = ObjectNotification(
                                 context,
                                 sound,
                                 noMain,
                                 noBody,
-                                objPI.resultPendingIntent,
+                                objectPendingIntents.resultPendingIntent,
                                 MyApplication.ICON_ALERT,
                                 noSummary,
                                 NotificationCompat.PRIORITY_HIGH,
                                 Color.BLUE,
                                 MyApplication.ICON_ACTION,
-                                objPI.resultPendingIntent2,
+                                objectPendingIntents.resultPendingIntent2,
                                 context.resources.getString(R.string.read_aloud)
                         )
-                        val noti = UtilityNotification.createNotificationBigTextWithAction(notifObj)
-                        notifObj.sendNotification(context, url, 1, noti)
-                        //notifier.notify(url, 1, noti)
+                        val notification = UtilityNotification.createNotificationBigTextWithAction(objectNotification)
+                        objectNotification.sendNotification(context, url, 1, notification)
                     }
                     notificationUrls += url + MyApplication.notificationStrSep
                 }

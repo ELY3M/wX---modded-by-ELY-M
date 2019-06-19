@@ -463,44 +463,6 @@ Display warning polygons for tornado, severe thunderstorm, and flash flood. This
         Interval can be set under settings -> Notifications.
 </string>
 
-
-    <string name="tor_warnings_label">
-Display warning polygons for tornado. This will cause a periodic task to run in the background and pull data.
-        Interval can be set under settings -> Notifications.
-</string>
-
-    <string name="svr_warnings_label">
-Display warning polygons for severe thunderstorm. This will cause a periodic task to run in the background and pull data.
-        Interval can be set under settings -> Notifications.
-</string>
-
-    <string name="eww_warnings_label">
-Display warning polygons for extreme wind. This will cause a periodic task to run in the background and pull data.
-        Interval can be set under settings -> Notifications.
-</string>
-
-    <string name="ffw_warnings_label">
-Display warning polygons for flash flood. This will cause a periodic task to run in the background and pull data.
-        Interval can be set under settings -> Notifications.
-</string>
-
-    <string name="smw_warnings_label">
-Display warning polygons for special marine. This will cause a periodic task to run in the background and pull data.
-        Interval can be set under settings -> Notifications.
-</string>
-
-
-    <string name="svs_warnings_label">
-Display polygons for severe weather statement. This will cause a periodic task to run in the background and pull data.
-        Interval can be set under settings -> Notifications.
-</string>
-
-    <string name="sps_warnings_label">
-Display polygons for special weather statement. This will cause a periodic task to run in the background and pull data.
-        Interval can be set under settings -> Notifications.
-</string>
-
-
     <string name="radar_show_watch_default_label">
 Display SPC Watch or MCD polygons. This will cause a periodic task to run in the background and pull data.
         Interval can be set under settings -> Notifications.
@@ -627,11 +589,11 @@ If a notification is clicked on it will cancel the notification.</string>
     <string name="alert_blackout_label">
 Disable sound ( if used ) between certain hours as specified.</string>
     <string name="alert_blackout_tornado_label">
-Ignore blackout if it is a local Tornado warning.</string>
+Ignore blackout (of sound) if it is a local Tornado warning.</string>
     <string name="alert_blackout_pm_np_label">
- Start of blackout.</string>
+ Start of blackout (sound, alert will still show).</string>
     <string name="alert_blackout_am_np_label">
- End of blackout. </string>
+ End of blackout (if configured sound will now resume if there is an alert). </string>
 
     <string name="tv_notif_sound_repeat_label">
  If enabled any notification that has sound configured will play the sound continusouly until the notification is acknowledged.
@@ -658,7 +620,7 @@ to download warning data.
  Check for internet connection on your device.
     </string>
     <string name="checktor_switch_label">
-Check for Severe Thunderstorm, Flash Flood,  Special Marine warnings, Special Weather Statements and Tornado warnings at the selected interval.
+Check for Severe Thunderstorm, Flash Flood,  and Tornado warnings at the selected interval.
 The text in the tab headings is then modified. This also requires a periodic job run at the notification interval
 to download warning data.
     </string>

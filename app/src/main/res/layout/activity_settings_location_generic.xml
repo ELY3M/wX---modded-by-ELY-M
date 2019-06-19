@@ -69,7 +69,8 @@
                                 android:layout_height="match_parent"
                                 android:hint="Name of location"
                                 android:inputType="text"
-                                android:textSize="18sp" />
+                                android:textSize="18sp"
+                                android:importantForAutofill="no" />
 
                             <EditText
                                 android:id="@+id/locXEt"
@@ -77,7 +78,8 @@
                                 android:layout_height="match_parent"
                                 android:hint="Latitude"
                                 android:inputType="text"
-                                android:textSize="18sp" />
+                                android:textSize="18sp"
+                                android:importantForAutofill="no" />
 
                             <EditText
                                 android:id="@+id/locYEt"
@@ -85,7 +87,8 @@
                                 android:layout_height="match_parent"
                                 android:hint="Longitude"
                                 android:inputType="text"
-                                android:textSize="18sp" />
+                                android:textSize="18sp"
+                                android:importantForAutofill="no" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 

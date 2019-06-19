@@ -36,6 +36,7 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
+import java.io.IOException
 
 object UtilityTts {
 
@@ -313,7 +314,11 @@ object UtilityTts {
         mMediaPlayer?.reset()
         val fileName = File(wxDir, FILENAME + fileNum.toString()).absolutePath
         val uri = Uri.parse("file://$fileName")
-        mMediaPlayer?.setDataSource(context, uri)
+        try {
+            mMediaPlayer?.setDataSource(context, uri)
+        } catch (e: IOException) {
+            UtilityLog.handleException(e)
+        }
         mMediaPlayer?.prepare()
         mMediaPlayer?.start()
     }

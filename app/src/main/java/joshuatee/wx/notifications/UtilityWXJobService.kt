@@ -45,7 +45,7 @@ object UtilityWXJobService {
     fun start(context: Context) {
         val alertNotificationIntervalCurrent: Int =
             Utility.readPref(context, "ALERT_NOTIFICATION_INTERVAL", -1)
-        UtilityLog.d("wx", "called start for jobservice")
+        UtilityLog.d("wx", "called start for jobService")
         if (android.os.Build.VERSION.SDK_INT > 23) {
             val serviceName = ComponentName(context, WXJobService::class.java)
             val jobInfo = JobInfo.Builder(kJobId++, serviceName)
@@ -61,7 +61,7 @@ object UtilityWXJobService {
             val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
             val result = scheduler.schedule(jobInfo)
             if (result == JobScheduler.RESULT_SUCCESS) {
-                UtilityLog.d("wx", "Job scheduled successfully! jobservice")
+                UtilityLog.d("wx", "Job scheduled successfully! jobService")
             }
         }
     }

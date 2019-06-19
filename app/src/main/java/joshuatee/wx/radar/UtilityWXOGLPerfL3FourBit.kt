@@ -48,18 +48,18 @@ internal object UtilityWXOGLPerfL3FourBit {
             numberOfRangeBins = dis.readUnsignedShort().toShort()
             dis.skipBytes(6)
             val numberOfRadials = dis.readUnsignedShort()
-            val numberOfRleHalfwords = IntArray(numberOfRadials)
+            val numberOfRleHalfWords = IntArray(numberOfRadials)
             radialStart.position(0)
             var s: Int
             var bin: Short
             var numOfBins: Int
             var u: Int
             (0..359).forEach { r ->
-                numberOfRleHalfwords[r] = dis.readUnsignedShort()
+                numberOfRleHalfWords[r] = dis.readUnsignedShort()
                 radialStart.putFloat((450 - dis.readUnsignedShort() / 10).toFloat())
                 dis.skipBytes(2)
                 s = 0
-                while (s < numberOfRleHalfwords[r] * 2) {
+                while (s < numberOfRleHalfWords[r] * 2) {
                     bin = dis.readUnsignedByte().toShort()
                     numOfBins = bin.toInt() shr 4
                     u = 0

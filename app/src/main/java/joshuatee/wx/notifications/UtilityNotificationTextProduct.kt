@@ -95,7 +95,7 @@ object UtilityNotificationTextProduct {
                 arrayOf(textBody, prod, "sound")
         )
         val sound = MyApplication.alertNotificationSoundTextProd && !inBlackout
-        val notifObj = ObjectNotification(
+        val objectNotification = ObjectNotification(
                 context,
                 sound,
                 prod,
@@ -109,7 +109,7 @@ object UtilityNotificationTextProduct {
                 objPI.resultPendingIntent2,
                 context.resources.getString(R.string.read_aloud)
         )
-        val noti = UtilityNotification.createNotificationBigTextWithAction(notifObj)
-        notifObj.sendNotification(context, firstLine, 1, noti)
+        val notification = UtilityNotification.createNotificationBigTextWithAction(objectNotification)
+        objectNotification.sendNotification(context, firstLine, 1, notification)
     }
 }

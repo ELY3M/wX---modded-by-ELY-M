@@ -72,7 +72,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:hint="LOCAL"
-                            android:inputType="text" />
+                            android:inputType="text"
+                            android:importantForAutofill="no" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -98,7 +99,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:hint="SPC"
-                            android:inputType="text" />
+                            android:inputType="text"
+                            android:importantForAutofill="no" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -124,7 +126,8 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
                             android:hint="MISC"
-                            android:inputType="text" />
+                            android:inputType="text"
+                            android:importantForAutofill="no" />
                     </LinearLayout>
 
                 </LinearLayout>

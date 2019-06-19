@@ -207,7 +207,7 @@ class WXGLTextObject(
             spotterLat = 0.0
             spotterLon = 0.0
             hideSpottersLabels()
-            wxglSurfaceView.spottersLabelAl = mutableListOf()
+            wxglSurfaceView.spotterLabels = mutableListOf()
             scale = getScale()
             oglrZoom = 1.0f
             if (wxglRender.zoom < 1.00f) {
@@ -222,7 +222,7 @@ class WXGLTextObject(
                 val spotterListCopy = UtilitySpotter.spotterList.toMutableList()
                 spotterListCopy.indices.forEach {
                     checkAndDrawText(
-                            wxglSurfaceView.spottersLabelAl,
+                            wxglSurfaceView.spotterLabels,
                             spotterListCopy[it].latD,
                             spotterListCopy[it].lonD,
                             spotterListCopy[it].lastName.replace("0FAV ", ""),
@@ -475,9 +475,9 @@ class WXGLTextObject(
     }
 
     private fun hideSpottersLabels() {
-        wxglSurfaceView.spottersLabelAl.indices.forEach {
-            wxglSurfaceView.spottersLabelAl[it].visibility = View.GONE
-            relativeLayout.removeView(wxglSurfaceView.spottersLabelAl[it])
+        wxglSurfaceView.spotterLabels.indices.forEach {
+            wxglSurfaceView.spotterLabels[it].visibility = View.GONE
+            relativeLayout.removeView(wxglSurfaceView.spotterLabels[it])
         }
     }
 
@@ -490,7 +490,9 @@ class WXGLTextObject(
             wxglSurfaceView.spotterTv = mutableListOf()
             var aa = 0
             while (aa < UtilitySpotter.spotterList.size) {
-                if (UtilitySpotter.spotterList[aa].uniq == WXGLRadarActivity.spotterId) break
+                if (UtilitySpotter.spotterList[aa].uniq == WXGLRadarActivity.spotterId) {
+                    break
+                }
                 aa += 1
             }
             var bb = 0

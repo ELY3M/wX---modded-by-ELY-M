@@ -33,7 +33,7 @@ import joshuatee.wx.util.UtilityLog
 
 import joshuatee.wx.Extensions.*
 
-// FIXME share more code with severe dashboard or nexrad radar
+// FIXME share more code with severe dashboard or radar
 internal object UtilityNotificationTornado {
 
     // the fun with support 23.2.0 continues
@@ -77,7 +77,7 @@ internal object UtilityNotificationTornado {
                     val noMain = locLabelStr + title
                     val noBody = title + " " + ca.area + " " + ca.summary
                     val noSummary = title + ": " + ca.area + " " + ca.summary
-                    val objPI = ObjectPendingIntents(
+                    val objectPendingIntents = ObjectPendingIntents(
                             context,
                             USAlertsDetailActivity::class.java,
                             USAlertsDetailActivity.URL,
@@ -89,25 +89,23 @@ internal object UtilityNotificationTornado {
                                     url
                             ))
                     ) {
-                        val sound =
-                                MyApplication.alertNotificationSoundTornadoCurrent && !inBlackout
-                        val notifObj = ObjectNotification(
+                        val sound = MyApplication.alertNotificationSoundTornadoCurrent && !inBlackout
+                        val objectNotification = ObjectNotification(
                                 context,
                                 sound,
                                 noMain,
                                 noBody,
-                                objPI.resultPendingIntent,
+                                objectPendingIntents.resultPendingIntent,
                                 MyApplication.ICON_TORNADO,
                                 noSummary,
                                 NotificationCompat.PRIORITY_HIGH,
                                 Color.RED,
                                 MyApplication.ICON_ACTION,
-                                objPI.resultPendingIntent2,
+                                objectPendingIntents.resultPendingIntent2,
                                 context.resources.getString(R.string.read_aloud)
                         )
-                        val noti = UtilityNotification.createNotificationBigTextWithAction(notifObj)
-                        notifObj.sendNotification(context, url, 1, noti)
-                        //notifier.notify(url, 1, noti)
+                        val notification = UtilityNotification.createNotificationBigTextWithAction(objectNotification)
+                        objectNotification.sendNotification(context, url, 1, notification)
                     }
                     notifUrls += url + MyApplication.notificationStrSep
                 }

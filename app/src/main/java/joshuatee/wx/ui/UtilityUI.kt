@@ -54,25 +54,24 @@ object UtilityUI {
         }
     }
 
-    fun setResDrawable(context: Context, fab: RemoteViews, ib: Int, resdraw: Int) {
+    fun setResDrawable(context: Context, fab: RemoteViews, ib: Int, resourceDrawable: Int) {
         val wrappedContext = ContextWrapper(context)
-        val d = ContextCompat.getDrawable(wrappedContext, resdraw)!!
-        val b =
-            Bitmap.createBitmap(d.intrinsicWidth, d.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val d = ContextCompat.getDrawable(wrappedContext, resourceDrawable)!!
+        val b = Bitmap.createBitmap(d.intrinsicWidth, d.intrinsicHeight, Bitmap.Config.ARGB_8888)
         val c = Canvas(b)
         d.setBounds(0, 0, c.width, c.height)
         d.draw(c)
         fab.setImageViewBitmap(ib, b)
     }
 
-    fun makeToastLegacy(context: Context, msg: String) {
+    fun makeToastLegacy(context: Context, message: String) {
         val view = View.inflate(context, R.layout.toast, null)
-        val ll: LinearLayout = view.findViewById(R.id.toast_layout_root)
-        val text: TextView = ll.findViewById(R.id.text)
-        text.text = msg
+        val linearLayout: LinearLayout = view.findViewById(R.id.toast_layout_root)
+        val text: TextView = linearLayout.findViewById(R.id.text)
+        text.text = message
         val toast = Toast(context.applicationContext)
         toast.duration = Toast.LENGTH_LONG
-        toast.view = ll
+        toast.view = linearLayout
         toast.show()
     }
 
@@ -98,13 +97,13 @@ object UtilityUI {
         }
     }
 
-    fun cardViewSetup(cv: CardView) {
-        cv.setCardBackgroundColor(UtilityTheme.primaryColorFromSelectedTheme)
-        cv.cardElevation = MyApplication.cardElevation
-        cv.setContentPadding(2, 2, 2, 2)
-        cv.radius = MyApplication.cardCorners
-        cv.useCompatPadding = true
-        cv.preventCornerOverlap = true
+    fun cardViewSetup(cardView: CardView) {
+        cardView.setCardBackgroundColor(UtilityTheme.primaryColorFromSelectedTheme)
+        cardView.cardElevation = MyApplication.cardElevation
+        cardView.setContentPadding(2, 2, 2, 2)
+        cardView.radius = MyApplication.cardCorners
+        cardView.useCompatPadding = true
+        cardView.preventCornerOverlap = true
     }
 
     fun moveUp(context: Context, prefToken: String, ridArr: MutableList<String>, pos: Int): String {
@@ -114,7 +113,6 @@ object UtilityUI {
             ridArr[pos] = tmp
         } else {
             val tmp = ridArr.last()
-            //ridArr[ridArr.size - 1] = ridArr[pos]
             ridArr[ridArr.lastIndex] = ridArr[pos]
             ridArr[0] = tmp
         }

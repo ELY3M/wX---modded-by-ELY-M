@@ -147,7 +147,7 @@ object UtilityNotificationNhc {
                 ))
         ) {
             val sound = soundPref && !inBlackout
-            val notifObj = ObjectNotification(
+            val objectNotification = ObjectNotification(
                     context,
                     sound,
                     noMain,
@@ -161,8 +161,8 @@ object UtilityNotificationNhc {
                     objPI.resultPendingIntent2,
                     context.resources.getString(R.string.read_aloud)
             )
-            val noti = UtilityNotification.createNotificationBigTextWithAction(notifObj)
-            notifObj.sendNotification(context, notifTitle, 1, noti)
+            val notification = UtilityNotification.createNotificationBigTextWithAction(objectNotification)
+            objectNotification.sendNotification(context, notifTitle, 1, notification)
         }
         notifUrls += notifTitle + MyApplication.notificationStrSep
         return notifUrls

@@ -238,7 +238,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
             ModelType.NCEP -> {
                 timeTruncate = 3
                 when (selectedItemPosition) {
-                    1 -> {
+                    4 -> {
                         model = "GFS"
                         params = UtilityModelNcepInterface.paramsGfs
                         labels = UtilityModelNcepInterface.labelsGfs
@@ -248,7 +248,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 3
                         numberRuns = 4
                     }
-                    2 -> {
+                    11 -> {
                         model = "NAM"
                         params = UtilityModelNcepInterface.paramsNam
                         labels = UtilityModelNcepInterface.labelsNam
@@ -258,7 +258,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 3
                         numberRuns = 4
                     }
-                    4 -> {
+                    15 -> {
                         model = "RAP"
                         params = UtilityModelNcepInterface.paramsRap
                         labels = UtilityModelNcepInterface.labelsRap
@@ -268,7 +268,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 1
                         numberRuns = 24
                     }
-                    0 -> {
+                    6 -> {
                         model = "HRRR"
                         params = UtilityModelNcepInterface.paramsHrrr
                         labels = UtilityModelNcepInterface.labelsHrrr
@@ -278,7 +278,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 1
                         numberRuns = 24
                     }
-                    3 -> {
+                    12 -> {
                         model = "NAM-HIRES"
                         params = UtilityModelNcepInterface.paramsNamHires
                         labels = UtilityModelNcepInterface.labelsNamHires
@@ -288,7 +288,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 1
                         numberRuns = 4
                     }
-                    5 -> {
+                    9 -> {
                         model = "HRW-NMMB"
                         params = UtilityModelNcepInterface.paramsHrwNmm
                         labels = UtilityModelNcepInterface.labelsHrwNmm
@@ -298,7 +298,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 1
                         numberRuns = 2
                     }
-                    6 -> {
+                    7 -> {
                         model = "HRW-ARW"
                         params = UtilityModelNcepInterface.paramsHrwNmm
                         labels = UtilityModelNcepInterface.labelsHrwNmm
@@ -308,7 +308,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 1
                         numberRuns = 2
                     }
-                    7 -> {
+                    3 -> {
                         model = "GEFS-SPAG"
                         params = UtilityModelNcepInterface.paramsGefsSpag
                         labels = UtilityModelNcepInterface.labelsGefsSpag
@@ -318,7 +318,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 6
                         numberRuns = 4
                     }
-                    8 -> {
+                    2 -> {
                         model = "GEFS-MEAN-SPRD"
                         params = UtilityModelNcepInterface.paramsGefsMnsprd
                         labels = UtilityModelNcepInterface.labelsGefsMnsprd
@@ -328,7 +328,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 6
                         numberRuns = 4
                     }
-                    9 -> {
+                    16 -> {
                         model = "SREF"
                         params = UtilityModelNcepInterface.paramsSref
                         labels = UtilityModelNcepInterface.labelsSref
@@ -348,7 +348,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 6
                         numberRuns = 4
                     }
-                    11 -> {
+                    14 -> {
                         model = "POLAR"
                         params = UtilityModelNcepInterface.paramsPolar
                         labels = UtilityModelNcepInterface.labelsPolar
@@ -358,7 +358,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 24
                         numberRuns = 1
                     }
-                    12 -> {
+                    17 -> {
                         model = "WW3"
                         params = UtilityModelNcepInterface.paramsWw3
                         labels = UtilityModelNcepInterface.labelsWw3
@@ -368,7 +368,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 6
                         numberRuns = 4
                     }
-                    13 -> {
+                    18 -> {
                         model = "WW3-ENP"
                         params = UtilityModelNcepInterface.paramsWw3Enp
                         labels = UtilityModelNcepInterface.labelsWw3Enp
@@ -378,7 +378,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 6
                         numberRuns = 4
                     }
-                    14 -> {
+                    19 -> {
                         model = "WW3-WNA"
                         params = UtilityModelNcepInterface.paramsWw3Wna
                         labels = UtilityModelNcepInterface.labelsWw3Wna
@@ -388,7 +388,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 6
                         numberRuns = 4
                     }
-                    15 -> {
+                    0 -> {
                         model = "ESTOFS"
                         params = UtilityModelNcepInterface.paramsEstofs
                         labels = UtilityModelNcepInterface.labelsEstofs
@@ -398,7 +398,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 1
                         numberRuns = 4
                     }
-                    16 -> {
+                    1 -> {
                         model = "FIREWX"
                         params = UtilityModelNcepInterface.paramsFirefx
                         labels = UtilityModelNcepInterface.labelsFirefx
@@ -408,7 +408,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 1
                         numberRuns = 4
                     }
-                    17 -> {
+                    8 -> {
                         model = "HRW-ARW2"
                         params = UtilityModelNcepInterface.paramsHrwArw2
                         labels = UtilityModelNcepInterface.labelsHrwArw2
@@ -418,7 +418,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 1
                         numberRuns = 2
                     }
-                    18 -> {
+                    5 -> {
                         model = "HREF"
                         params = UtilityModelNcepInterface.paramsHref
                         labels = UtilityModelNcepInterface.labelsHref
@@ -428,7 +428,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 1
                         numberRuns = 4
                     }
-                    19 -> {
+                    13 -> {
                         model = "NBM"
                         params = UtilityModelNcepInterface.paramsNbm
                         labels = UtilityModelNcepInterface.labelsNbm
@@ -504,7 +504,6 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                     }
                     3 -> {
                         model = "WRF_3KM"
-                        model = "HRRRV3"
                         params = UtilityModelNsslWrfInterface.paramsNsslWrf
                         labels = UtilityModelNsslWrfInterface.labelsNsslWrf
                         sectors = UtilityModelNsslWrfInterface.sectorsLong
@@ -516,7 +515,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
             }
             ModelType.ESRL -> {
                 when (selectedItemPosition) {
-                    3 -> {
+                    1 -> {
                         model = "RAP"
                         params = UtilityModelEsrlInterface.paramsRap
                         labels = UtilityModelEsrlInterface.labelsRap
@@ -527,7 +526,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         format = "%02d"
                         timeTruncate = 2
                     }
-                    4 -> {
+                    2 -> {
                         model = "RAP_NCEP"
                         params = UtilityModelEsrlInterface.paramsRap
                         labels = UtilityModelEsrlInterface.labelsRap
@@ -538,7 +537,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         format = "%02d"
                         timeTruncate = 2
                     }
-                    0 -> {
+                   /* 0 -> {
                         model = "HRRR"
                         params = UtilityModelEsrlInterface.paramsHrrr
                         labels = UtilityModelEsrlInterface.labelsHrrr
@@ -559,8 +558,8 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         stepAmount = 1
                         format = "%02d"
                         timeTruncate = 2
-                    }
-                    2 -> {
+                    }*/
+                    0 -> {
                         model = "HRRR_NCEP"
                         params = UtilityModelEsrlInterface.paramsHrrr
                         labels = UtilityModelEsrlInterface.labelsHrrr
