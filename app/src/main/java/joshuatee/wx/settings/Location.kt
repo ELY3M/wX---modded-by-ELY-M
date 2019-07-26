@@ -319,13 +319,13 @@ class Location(val context: Context, locNumInt: Int) {
                     UtilityLog.handleException(e)
                 }
             } else if (xStr.contains("CANADA")) {
-                var tmpLatlon = LatLonStr()
+                var tmpLatLon = LatLonStr()
                 if (xStr.length < 12) {
                     // if we are here then the user used the submenu
-                    // need to calculate lat/lon first as getrid is now coded to parse on ":" for both x/y
+                    // need to calculate lat/lon first as get rid is now coded to parse on ":" for both x/y
                     // first check if the label is present in the database
                     if (UtilityCanada.isLabelPresent(labelStr)) {
-                        tmpLatlon = UtilityCanada.getLatLonFromLabel(labelStr)
+                        tmpLatLon = UtilityCanada.getLatLonFromLabel(labelStr)
                     }
                 }
                 var prov = ""
@@ -335,15 +335,15 @@ class Location(val context: Context, locNumInt: Int) {
                 val parseId = yStr.split(":").dropLastWhile { it.isEmpty() }
                 if (parseId.isNotEmpty()) id = parseId[0]
                 if (xStr.length > 12) {
-                    tmpLatlon.latStr = parseProv[2]
-                    tmpLatlon.lonStr = parseId[1]
+                    tmpLatLon.latStr = parseProv[2]
+                    tmpLatLon.lonStr = parseId[1]
                 }
                 Utility.writePref(
                     context,
                     "LOC" + locNum + "_X",
-                    "CANADA" + ":" + prov + ":" + tmpLatlon.latStr
+                    "CANADA" + ":" + prov + ":" + tmpLatLon.latStr
                 )
-                Utility.writePref(context, "LOC" + locNum + "_Y", id + ":" + tmpLatlon.lonStr)
+                Utility.writePref(context, "LOC" + locNum + "_Y", id + ":" + tmpLatLon.lonStr)
                 setNumLocations(context, locNumToSave)
                 radarSite = UtilityCanada.getRid(xStr, yStr)
                 Utility.writePref(context, "RID$locNum", radarSite.toUpperCase(Locale.US))

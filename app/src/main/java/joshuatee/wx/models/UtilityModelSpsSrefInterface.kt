@@ -23,8 +23,6 @@ package joshuatee.wx.models
 
 import android.util.SparseArray
 
-import java.util.Arrays
-
 import joshuatee.wx.ui.ObjectMenuTitle
 import joshuatee.wx.util.Group
 
@@ -32,18 +30,18 @@ object UtilityModelSpcSrefInterface {
 
     val models: List<String> = listOf("SREF")
 
-    private val titles = Arrays.asList(
-        ObjectMenuTitle("SPC Guidance", 11),
-        ObjectMenuTitle("Overview", 24),
-        ObjectMenuTitle("Moisture", 23),
-        ObjectMenuTitle("Instability", 40),
-        ObjectMenuTitle("Kinematic", 34),
-        ObjectMenuTitle("Lift", 10),
-        ObjectMenuTitle("Precip", 43),
-        ObjectMenuTitle("Severe", 45),
-        ObjectMenuTitle("Winter", 38),
-        ObjectMenuTitle("Fire", 48),
-        ObjectMenuTitle("Aviation", 9)
+    private val titles = listOf(
+            ObjectMenuTitle("SPC Guidance", 11),
+            ObjectMenuTitle("Overview", 24),
+            ObjectMenuTitle("Moisture", 23),
+            ObjectMenuTitle("Instability", 40),
+            ObjectMenuTitle("Kinematic", 34),
+            ObjectMenuTitle("Lift", 10),
+            ObjectMenuTitle("Precip", 43),
+            ObjectMenuTitle("Severe", 45),
+            ObjectMenuTitle("Winter", 38),
+            ObjectMenuTitle("Fire", 48),
+            ObjectMenuTitle("Aviation", 9)
     )
 
     val params: List<String> = listOf(

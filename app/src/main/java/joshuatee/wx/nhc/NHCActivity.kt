@@ -60,8 +60,14 @@ class NhcActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         sv.smoothScrollTo(0, 0)
-        withContext(Dispatchers.IO) { objNhc.getData() }
-        objNhc.showData()
+        withContext(Dispatchers.IO) { objNhc.getTextData() }
+        objNhc.showTextData()
+        withContext(Dispatchers.IO) { objNhc.getAtlanticImageData()}
+        objNhc.showAtlanticImageData()
+        withContext(Dispatchers.IO) { objNhc.getPacificImageData() }
+        objNhc.showPacificImageData()
+        withContext(Dispatchers.IO) { objNhc.getCentralImageData() }
+        objNhc.showCentralImageData()
     }
 
     private fun showTextProduct(prod: String) {
@@ -137,7 +143,7 @@ class NhcActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onRestart() {
-        objNhc.handleRestartForNotif()
+        objNhc.handleRestartForNotification()
         super.onRestart()
     }
 }

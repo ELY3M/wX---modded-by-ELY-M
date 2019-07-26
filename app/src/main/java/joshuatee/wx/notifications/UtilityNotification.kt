@@ -243,8 +243,7 @@ object UtilityNotification {
             i = 0
             val url = UtilityDownloadNws.get7DayUrl(Location.getLatLon(locNumInt))
             val currentUpdateTime = System.currentTimeMillis()
-            val lastUpdateTime =
-                    Utility.readPref(context, "CC" + locNum + "_LAST_UPDATE", 0.toLong())
+            val lastUpdateTime = Utility.readPref(context, "CC" + locNum + "_LAST_UPDATE", 0.toLong())
             if (MyApplication.locations[locNumInt].ccNotification) {
                 notifUrls += url + "CC" + MyApplication.notificationStrSep
             }

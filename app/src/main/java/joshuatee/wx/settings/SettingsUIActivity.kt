@@ -316,7 +316,7 @@ class SettingsUIActivity : BaseActivity() {
                 ObjectSettingsSeekbar(
                         this,
                         this,
-                        "Homescreen text length",
+                        "Home screen text length",
                         "HOMESCREEN_TEXT_LENGTH_PREF",
                         R.string.homescreen_text_length_np_label,
                         500,

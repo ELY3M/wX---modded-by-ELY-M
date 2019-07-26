@@ -32,7 +32,7 @@ internal object UtilitySpcSwo {
         return "${MyApplication.nwsSPCwebsitePrefix}/public/state/images/" + state + "_swody" + day + ".png"
     }
 
-    fun getImageUrls(day: String, getAllImages: Boolean): List<Bitmap> {
+    fun getImages(day: String, getAllImages: Boolean): List<Bitmap> {
         val imgUrls = mutableListOf<String>()
         val bitmaps = mutableListOf<Bitmap>()
         if (day == "4-8" || day == "48" || day == "4") {
@@ -66,6 +66,35 @@ internal object UtilitySpcSwo {
             bitmaps.add(imgUrls[0].getImage())
         }
         return bitmaps
+    }
+
+    fun getUrls(day: String): List<String> {
+        val imgUrls = mutableListOf<String>()
+        if (day == "4-8" || day == "48" || day == "4") {
+            (4..8).forEach { imgUrls.add("${MyApplication.nwsSPCwebsitePrefix}/products/exper/day4-8/day" + it.toString() + "prob.gif") }
+            return imgUrls
+        }
+        val html = ("${MyApplication.nwsSPCwebsitePrefix}/products/outlook/day" + day + "otlk.html").getHtml()
+        val time = html.parse("show_tab\\(.otlk_([0-9]{4}).\\)")
+        when (day) {
+            "1" -> {
+                imgUrls.add("${MyApplication.nwsSPCwebsitePrefix}/products/outlook/day1otlk_$time.gif")
+                imgUrls.add("${MyApplication.nwsSPCwebsitePrefix}/products/outlook/day1probotlk_" + time + "_torn.gif")
+                imgUrls.add("${MyApplication.nwsSPCwebsitePrefix}/products/outlook/day1probotlk_" + time + "_hail.gif")
+                imgUrls.add("${MyApplication.nwsSPCwebsitePrefix}/products/outlook/day1probotlk_" + time + "_wind.gif")
+            }
+            "2" -> {
+                imgUrls.add("${MyApplication.nwsSPCwebsitePrefix}/products/outlook/day2otlk_$time.gif")
+                imgUrls.add("${MyApplication.nwsSPCwebsitePrefix}/products/outlook/day2probotlk_" + time + "_any.gif")
+            }
+            "3" -> {
+                imgUrls.add("${MyApplication.nwsSPCwebsitePrefix}/products/outlook/day3otlk_$time.gif")
+                imgUrls.add("${MyApplication.nwsSPCwebsitePrefix}/products/outlook/day3prob_$time.gif")
+            }
+            else -> {
+            }
+        }
+        return imgUrls
     }
 }
 

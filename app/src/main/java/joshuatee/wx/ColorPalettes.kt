@@ -46,5 +46,26 @@ internal object ColorPalettes {
             MyApplication.colorMap[it] = ObjectColorPalette(context, it.toString())
             MyApplication.colorMap[it]!!.init()
         }
+        val cm19 = ObjectColorPalette(context, "19")
+        MyApplication.colorMap[19] = cm19
+        MyApplication.colorMap[19]!!.init()
+        MyApplication.colorMap[181] = cm19
+        // below 2 composite reflectivity
+        MyApplication.colorMap[37] = cm19
+        MyApplication.colorMap[38] = cm19
+
+        // below 2 precip prod used for TDWR
+        val cm78 = ObjectColorPalette(context, "78")
+        MyApplication.colorMap[78] = cm78
+        MyApplication.colorMap[78]!!.init()
+        MyApplication.colorMap[80] = cm78
+
+        val cm41 = ObjectColorPalette(context, "41")
+        MyApplication.colorMap[41] = cm41
+        MyApplication.colorMap[41]!!.init()
+
+        val cm57 = ObjectColorPalette(context, "57")
+        MyApplication.colorMap[57] = cm57
+        MyApplication.colorMap[57]!!.init()
     }
 }

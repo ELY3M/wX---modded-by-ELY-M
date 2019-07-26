@@ -20,6 +20,7 @@ import android.graphics.Canvas
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ItemTouchHelper
+import kotlin.math.abs
 
 /**
  * An implementation of [ItemTouchHelper.Callback] that enables basic drag & drop and
@@ -83,7 +84,7 @@ internal class SimpleItemTouchHelperCallback(private val mAdapter: ItemTouchHelp
     ) {
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
             // Fade out the view as it is swiped out of the parent's bounds
-            val alpha = ALPHA_FULL - Math.abs(dX) / viewHolder.itemView.width.toFloat()
+            val alpha = ALPHA_FULL - abs(dX) / viewHolder.itemView.width.toFloat()
             viewHolder.itemView.alpha = alpha
             viewHolder.itemView.translationX = dX
         } else {

@@ -43,6 +43,7 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityLog
 
 import joshuatee.wx.NEXRAD_PRODUCT_STRING
+import joshuatee.wx.R
 
 object UtilityUSImgWX {
 
@@ -275,7 +276,7 @@ object UtilityUSImgWX {
 
     fun bitmapForColorPalette(context: Context, product: String): Bitmap {
         val fileName = "nids_dvn_" + product + "_archive"
-        UtilityIO.saveRawToInternalStorage(context, WXGLNexrad.productCodeStringToResourceFile[product]!!, fileName)
+        UtilityIO.saveRawToInternalStorage(context, WXGLNexrad.productCodeStringToResourceFile[product] ?: R.raw.dvn94, fileName)
         val layers = mutableListOf<Drawable>()
         val colorDrawable = if (MyApplication.blackBg) {
             ColorDrawable(Color.BLACK)
@@ -288,7 +289,7 @@ object UtilityUSImgWX {
                     context,
                     bitmapCanvas,
                     fileName,
-                    WXGLNexrad.productCodeStringToCode[product]!! // was product
+                    WXGLNexrad.productCodeStringToCode[product] ?: "N0Q"
             )
             layers.add(colorDrawable)
             layers.add(BitmapDrawable(context.resources, bitmapCanvas))

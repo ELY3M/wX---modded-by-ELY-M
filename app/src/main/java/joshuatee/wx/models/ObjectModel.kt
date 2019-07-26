@@ -283,7 +283,7 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         params = UtilityModelNcepInterface.paramsNamHires
                         labels = UtilityModelNcepInterface.labelsNamHires
                         sectors = UtilityModelNcepInterface.sectorsNamHires
-                        startStep = 0
+                        startStep = 1
                         endStep = 60
                         stepAmount = 1
                         numberRuns = 4
@@ -293,8 +293,8 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         params = UtilityModelNcepInterface.paramsHrwNmm
                         labels = UtilityModelNcepInterface.labelsHrwNmm
                         sectors = UtilityModelNcepInterface.sectorsHrwNmm
-                        startStep = 0
-                        endStep = 49
+                        startStep = 1
+                        endStep = 48
                         stepAmount = 1
                         numberRuns = 2
                     }
@@ -303,8 +303,8 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         params = UtilityModelNcepInterface.paramsHrwNmm
                         labels = UtilityModelNcepInterface.labelsHrwNmm
                         sectors = UtilityModelNcepInterface.sectorsHrwNmm
-                        startStep = 0
-                        endStep = 49
+                        startStep = 1
+                        endStep = 48
                         stepAmount = 1
                         numberRuns = 2
                     }
@@ -413,8 +413,8 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         params = UtilityModelNcepInterface.paramsHrwArw2
                         labels = UtilityModelNcepInterface.labelsHrwArw2
                         sectors = UtilityModelNcepInterface.sectorsHrwArw2
-                        startStep = 0
-                        endStep = 49
+                        startStep = 1
+                        endStep = 48
                         stepAmount = 1
                         numberRuns = 2
                     }

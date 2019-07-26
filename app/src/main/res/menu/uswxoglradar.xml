@@ -80,8 +80,8 @@
                 android:title="@string/label_eet"
                 app:showAsAction="never" />
             <item
-                android:id="@+id/action_vil"
-                android:title="@string/label_vil"
+                android:id="@+id/action_dvl"
+                android:title="@string/label_dvl"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_N0X"
@@ -116,6 +116,14 @@
                 android:title="@string/label_nsw"
                 app:showAsAction="ifRoom" />
             <item
+                android:id="@+id/action_ncr"
+                android:title="@string/label_ncr"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_ncz"
+                android:title="@string/label_ncz"
+                app:showAsAction="ifRoom" />
+            <item
                 android:id="@+id/action_NVW"
                 android:title="@string/label_nvw"
                 app:showAsAction="never" />
@@ -140,6 +148,49 @@
                 app:showAsAction="ifRoom" />
             <item
                 android:id="@+id/action_level2_blank"
+                android:title="@string/label_blank"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_tdwr"
+        android:title="TDWR Products"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/action_tzl"
+                android:title="@string/label_tzl"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_tr0"
+                android:title="@string/label_tr0"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_tv0"
+                android:title="@string/label_tv0"
+                app:showAsAction="never" />
+            <!--<item
+                android:id="@+id/action_dhr"
+                android:title="@string/label_dhr"
+                app:showAsAction="never" />-->
+            <item
+                android:id="@+id/action_n1p"
+                android:title="@string/label_n1p"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_ntp"
+                android:title="@string/label_ntp"
+                app:showAsAction="never" />
+            <!--<item
+                android:id="@+id/action_et"
+                android:title="@string/label_et"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_vil"
+                android:title="@string/label_vil"
+                app:showAsAction="never" />-->
+            <item
+                android:id="@+id/action_tdwr_blank"
                 android:title="@string/label_blank"
                 app:showAsAction="never" />
         </menu>

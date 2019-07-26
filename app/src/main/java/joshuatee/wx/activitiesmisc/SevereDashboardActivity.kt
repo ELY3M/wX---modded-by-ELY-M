@@ -27,6 +27,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.MyApplication
 
@@ -44,6 +45,8 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.spc.SpcMcdWatchShowActivity
 import joshuatee.wx.spc.SpcStormReportsActivity
 import joshuatee.wx.spc.UtilitySpc
+import joshuatee.wx.ui.ObjectLinearLayout
+import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityShortcut
 
@@ -61,6 +64,8 @@ class SevereDashboardActivity : BaseActivity() {
     private var tstCount = 0
     private var ffwCount = 0
     private var torCount = 0
+    private var totalImages = 0
+    private var linearLayoutHorizontalList: MutableList<ObjectLinearLayout> = mutableListOf()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.severe_dashboard, menu)
@@ -71,6 +76,7 @@ class SevereDashboardActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
+        totalImages = 0
         getContent()
     }
 
@@ -94,7 +100,7 @@ class SevereDashboardActivity : BaseActivity() {
         val wTst = SevereWarning(PolygonType.TST)
         val wFfw = SevereWarning(PolygonType.FFW)
         withContext(Dispatchers.IO) {
-            UtilityDownloadWarnings.get(this@SevereDashboardActivity)
+            UtilityDownloadWarnings.getForSevereDashboard(this@SevereDashboardActivity)
             wTor.generateString(this@SevereDashboardActivity, MyApplication.severeDashboardTor.value)
             wTst.generateString(this@SevereDashboardActivity, MyApplication.severeDashboardTst.value)
             wFfw.generateString(this@SevereDashboardActivity, MyApplication.severeDashboardFfw.value)
@@ -112,17 +118,21 @@ class SevereDashboardActivity : BaseActivity() {
             objFfw.setOnClickListener(View.OnClickListener { warningsClicked(".*?Flash Flood Warning.*?") })
         }
         withContext(Dispatchers.IO) {
-            UtilityDownloadMcd.get(this@SevereDashboardActivity)
-            UtilityDownloadWatch.get(this@SevereDashboardActivity)
-            UtilityDownloadMpd.get(this@SevereDashboardActivity)
-            snMcd.getBitmaps(MyApplication.severeDashboardMcd.value)
-            snWat.getBitmaps(MyApplication.severeDashboardWat.value)
-            snMpd.getBitmaps(MyApplication.severeDashboardMpd.value)
             bitmapArrRep.add((UtilitySpc.getStormReportsTodayUrl()).getImage())
         }
+        totalImages = bitmapArrRep.size + snMcd.bitmaps.size + snWat.bitmaps.size + snMpd.bitmaps.size
+        UtilityLog.d("Wx", totalImages.toString())
+        // FIXME should not be hardcoded
+        for (i in 0..20) {
+            linearLayoutHorizontalList.add(ObjectLinearLayout(this@SevereDashboardActivity, ll))
+        }
+        linearLayoutHorizontalList.forEach {
+            it.linearLayout.orientation = LinearLayout.HORIZONTAL
+        }
+        totalImages = 0
         if (bitmapArrRep.size > 0) {
             bitmapArrRep.indices.forEach {
-                val card = ObjectCardImage(this@SevereDashboardActivity, ll, bitmapArrRep[it])
+                val card = ObjectCardImage(this@SevereDashboardActivity, linearLayoutHorizontalList[totalImages / 2].linearLayout, bitmapArrRep[it], 2)
                 card.setOnClickListener(View.OnClickListener {
                     ObjectIntent(
                             this@SevereDashboardActivity,
@@ -131,14 +141,20 @@ class SevereDashboardActivity : BaseActivity() {
                             arrayOf("today")
                     )
                 })
+                totalImages += 1
             }
         }
-        listOf(snWat, snMcd, snMpd)
+        withContext(Dispatchers.IO) {
+            UtilityDownloadWatch.get(this@SevereDashboardActivity)
+            snWat.getBitmaps(MyApplication.severeDashboardWat.value)
+        }
+        // FIXME use method for 3 calls below
+        listOf(snWat)
                 .asSequence()
                 .filter { it.bitmaps.size > 0 }
                 .forEach { severeNotice ->
                     severeNotice.bitmaps.indices.forEach { j ->
-                        val card = ObjectCardImage(this@SevereDashboardActivity, ll, severeNotice.bitmaps[j])
+                        val card = ObjectCardImage(this@SevereDashboardActivity, linearLayoutHorizontalList[totalImages / 2].linearLayout, severeNotice.bitmaps[j], 2)
                         var cla: Class<*>? = null
                         var claStr = ""
                         val claArgStr = severeNotice.numbers[j]
@@ -168,8 +184,102 @@ class SevereDashboardActivity : BaseActivity() {
                                     arrayOf(claArgStr, "", severeNotice.toString())
                             )
                         })
+                        totalImages += 1
                     }
                 }
+
+
+        withContext(Dispatchers.IO) {
+            UtilityDownloadMcd.get(this@SevereDashboardActivity)
+            snMcd.getBitmaps(MyApplication.severeDashboardMcd.value)
+        }
+        listOf(snMcd)
+                .asSequence()
+                .filter { it.bitmaps.size > 0 }
+                .forEach { severeNotice ->
+                    severeNotice.bitmaps.indices.forEach { j ->
+                        UtilityLog.d("Wx", totalImages.toString())
+                        val card = ObjectCardImage(this@SevereDashboardActivity, linearLayoutHorizontalList[totalImages / 2].linearLayout, severeNotice.bitmaps[j], 2)
+                        var cla: Class<*>? = null
+                        var claStr = ""
+                        val claArgStr = severeNotice.numbers[j]
+                        when (severeNotice.type) {
+                            PolygonType.MCD -> {
+                                cla = SpcMcdWatchShowActivity::class.java
+                                claStr = SpcMcdWatchShowActivity.NO
+                            }
+                            PolygonType.WATCH -> {
+                                cla = SpcMcdWatchShowActivity::class.java
+                                claStr = SpcMcdWatchShowActivity.NO
+                            }
+                            PolygonType.MPD -> {
+                                cla = SpcMcdWatchShowActivity::class.java
+                                claStr = SpcMcdWatchShowActivity.NO
+                            }
+                            else -> {
+                            }
+                        }
+                        val cl = cla
+                        val clStr = claStr
+                        card.setOnClickListener(View.OnClickListener {
+                            ObjectIntent(
+                                    this@SevereDashboardActivity,
+                                    cl!!,
+                                    clStr,
+                                    arrayOf(claArgStr, "", severeNotice.toString())
+                            )
+                        })
+                        totalImages += 1
+                    }
+                }
+
+
+        withContext(Dispatchers.IO) {
+            UtilityDownloadMpd.get(this@SevereDashboardActivity)
+            snMpd.getBitmaps(MyApplication.severeDashboardMpd.value)
+        }
+        listOf(snMpd)
+                .asSequence()
+                .filter { it.bitmaps.size > 0 }
+                .forEach { severeNotice ->
+                    severeNotice.bitmaps.indices.forEach { j ->
+                        val card = ObjectCardImage(this@SevereDashboardActivity, linearLayoutHorizontalList[totalImages / 2].linearLayout, severeNotice.bitmaps[j], 2)
+                        var cla: Class<*>? = null
+                        var claStr = ""
+                        val claArgStr = severeNotice.numbers[j]
+                        when (severeNotice.type) {
+                            PolygonType.MCD -> {
+                                cla = SpcMcdWatchShowActivity::class.java
+                                claStr = SpcMcdWatchShowActivity.NO
+                            }
+                            PolygonType.WATCH -> {
+                                cla = SpcMcdWatchShowActivity::class.java
+                                claStr = SpcMcdWatchShowActivity.NO
+                            }
+                            PolygonType.MPD -> {
+                                cla = SpcMcdWatchShowActivity::class.java
+                                claStr = SpcMcdWatchShowActivity.NO
+                            }
+                            else -> {
+                            }
+                        }
+                        val cl = cla
+                        val clStr = claStr
+                        card.setOnClickListener(View.OnClickListener {
+                            ObjectIntent(
+                                    this@SevereDashboardActivity,
+                                    cl!!,
+                                    clStr,
+                                    arrayOf(claArgStr, "", severeNotice.toString())
+                            )
+                        })
+                        totalImages += 1
+                    }
+                }
+
+
+
+
         bitmaps.addAll(snWat.bitmaps)
         bitmaps.addAll(snMcd.bitmaps)
         bitmaps.addAll(snMpd.bitmaps)

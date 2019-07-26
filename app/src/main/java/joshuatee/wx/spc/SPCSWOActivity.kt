@@ -27,6 +27,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
 import joshuatee.wx.R
@@ -39,7 +40,9 @@ import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShare
 
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.activitiesmisc.ImageShowActivity
 import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.ui.ObjectLinearLayout
 import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
@@ -59,13 +62,8 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var activityArguments: Array<String>
     private var day = ""
     private var playlistProd = ""
-    // FIXME var names
-    private lateinit var c1: ObjectCardImage
-    private lateinit var c2: ObjectCardText
-    private lateinit var c3: ObjectCardImage
-    private lateinit var c4: ObjectCardImage
-    private lateinit var c5: ObjectCardImage
-    private lateinit var c6: ObjectCardImage
+    private lateinit var objectCardText: ObjectCardText
+    private var objectCardImageList: MutableList<ObjectCardImage> = mutableListOf()
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,12 +73,18 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 R.menu.spcswo
         )
         toolbarBottom.setOnMenuItemClickListener(this)
-        c1 = ObjectCardImage(this, ll)
-        c2 = ObjectCardText(this, ll, toolbar, toolbarBottom)
-        c3 = ObjectCardImage(this, ll)
-        c4 = ObjectCardImage(this, ll)
-        c5 = ObjectCardImage(this, ll)
-        c6 = ObjectCardImage(this, ll)
+        val linearLayoutHorizontalList = listOf(
+                ObjectLinearLayout(this, ll),
+                ObjectLinearLayout(this, ll),
+                ObjectLinearLayout(this, ll)
+        )
+        linearLayoutHorizontalList.forEach {
+            it.linearLayout.orientation = LinearLayout.HORIZONTAL
+        }
+        for (i in 0..4) {
+            objectCardImageList.add(ObjectCardImage(this, linearLayoutHorizontalList[i / 2].linearLayout))
+        }
+        objectCardText = ObjectCardText(this, ll, toolbar, toolbarBottom)
         activityArguments = intent.getStringArrayExtra(NO)
         day = activityArguments[0]
         title = "Day $day Convective Outlook"
@@ -128,89 +132,66 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         var textUrl = "SWODY$day"
+        var urls: List<String> = listOf("")
         if (day == "4-8") {
             textUrl = "SWOD48"
         }
         withContext(Dispatchers.IO) {
             html = UtilityDownload.getTextProduct(this@SpcSwoActivity, textUrl)
-            bitmaps = UtilitySpcSwo.getImageUrls(day, true)
+            urls = UtilitySpcSwo.getUrls(day)
+            bitmaps = urls.map { it.getImage() }
         }
-        c2.setText(Utility.fromHtml(html))
+        objectCardText.setText(Utility.fromHtml(html))
         toolbar.subtitle = html.parse("(Valid.*?)<")
         if (activityArguments[1] == "sound") {
             UtilityTts.synthesizeTextAndPlay(applicationContext, html, "spcswo")
         }
         when (day) {
             "1" -> {
-                c1.setImage(bitmaps[0])
-                c3.setImage(bitmaps[1])
-                c4.setImage(bitmaps[2])
-                c5.setImage(bitmaps[3])
-                c6.setVisibility(View.GONE)
-                listOf(
-                        c3,
-                        c4,
-                        c5
-                ).forEach { card ->
-                    card.setOnClickListener(View.OnClickListener {
-                        sv.smoothScrollTo(
-                                0,
-                                0
-                        )
-                    })
-                }
+                setImageAndClickAction(0, urls, textUrl)
+                setImageAndClickAction(1, urls, textUrl)
+                setImageAndClickAction(2, urls, textUrl)
+                setImageAndClickAction(3, urls, textUrl)
+                objectCardImageList[4].setVisibility(View.GONE)
             }
             "2" -> {
-                c1.setImage(bitmaps[0])
-                c3.setImage(bitmaps[1])
-                c4.setVisibility(View.GONE)
-                c5.setVisibility(View.GONE)
-                c6.setVisibility(View.GONE)
-                listOf(c3).forEach { card ->
-                    card.setOnClickListener(View.OnClickListener {
-                        sv.smoothScrollTo(
-                                0,
-                                0
-                        )
-                    })
-                }
+                setImageAndClickAction(0, urls, textUrl)
+                setImageAndClickAction(1, urls, textUrl)
+                for (index in 2..4)
+                    objectCardImageList[index].setVisibility(View.GONE)
             }
             "3" -> {
-                c1.setImage(bitmaps[0])
-                c3.setImage(bitmaps[1])
-                c4.setVisibility(View.GONE)
-                c5.setVisibility(View.GONE)
-                c6.setVisibility(View.GONE)
-                listOf(c3).forEach { card ->
-                    card.setOnClickListener(View.OnClickListener {
-                        sv.smoothScrollTo(
-                                0,
-                                0
-                        )
-                    })
-                }
+                setImageAndClickAction(0, urls, textUrl)
+                setImageAndClickAction(1, urls, textUrl)
+                for (index in 2..4)
+                    objectCardImageList[index].setVisibility(View.GONE)
             }
             "4-8" -> {
-                c1.setImage(bitmaps[0])
-                c3.setImage(bitmaps[1])
-                c4.setImage(bitmaps[2])
-                c5.setImage(bitmaps[3])
-                c6.setImage(bitmaps[4])
-                listOf(
-                        c3,
-                        c4,
-                        c5,
-                        c6
-                ).forEach { card ->
-                    card.setOnClickListener(View.OnClickListener {
-                        sv.smoothScrollTo(
-                                0,
-                                0
-                        )
-                    })
-                }
+                setImageAndClickAction(0, urls, textUrl)
+                setImageAndClickAction(1, urls, textUrl)
+                setImageAndClickAction(2, urls, textUrl)
+                setImageAndClickAction(3, urls, textUrl)
+                setImageAndClickAction(4, urls, textUrl)
             }
         }
+    }
+
+    private fun showImageProduct(imageUrl: String, title: String) {
+        ObjectIntent(
+                this,
+                ImageShowActivity::class.java,
+                ImageShowActivity.URL,
+                arrayOf(imageUrl, title)
+        )
+    }
+
+    private fun setImageAndClickAction(index: Int, urls: List<String>, textUrl: String) {
+        objectCardImageList[index].setImage(bitmaps[index], 2)
+        objectCardImageList[index].setOnClickListener(
+                View.OnClickListener {
+                    showImageProduct(urls[index], textUrl)
+                }
+        )
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

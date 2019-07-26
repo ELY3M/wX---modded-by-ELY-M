@@ -54,8 +54,6 @@ class AnimatedGifEncoderExternal {
 
 	private int width; // image size
 	private int height;
-	private int x = 0;
-	private int y = 0;
 	private int transparent = -1; // transparent color if given
 	private int transIndex; // transparent index in color table
 	private int repeat = -1; // no repeat
@@ -69,11 +67,9 @@ class AnimatedGifEncoderExternal {
 	private byte[] colorTab; // RGB palette
 	private final boolean[] usedEntry = new boolean[256]; // active palette entries
 	private int palSize = 7; // color table size (bits-1)
-	private int dispose = -1; // disposal code (-1 = use default)
 	private boolean closeStream = false; // close stream when finished
 	private boolean firstFrame = true;
 	private boolean sizeSet = false; // if false, get size from first frame
-	private int sample = 10; // default sample interval for quantizer
 
 	/**
 	 * Sets the delay time between each frame, or changes it for subsequent frames
@@ -86,7 +82,7 @@ class AnimatedGifEncoderExternal {
 		delay = ms / 10;
 	}
 
-	/**
+	/*
 	 * Sets the GIF frame disposal code for the last added frame and any
 	 * subsequent frames. Default is 0 if no transparent color has been set,
 	 * otherwise 2.
@@ -94,20 +90,20 @@ class AnimatedGifEncoderExternal {
 	 * @param code
 	 *          int disposal code.
 	 */
-	public void setDispose(int code) {
+	/*public void setDispose(int code) {
 		if (code >= 0) {
 			dispose = code;
 		}
-	}
+	}*/
 
 	/**
 	 * Sets the number of times the set of GIF frames should be played. Default is
 	 * 1; 0 means play indefinitely. Must be invoked before the first image is
 	 * added.
 	 *
-	 * @param iter
+	 * param iter
 	 *          int number of iterations.
-	 * @return
+	 * return
 	 */
 	public void setRepeat(int iter) {
 		if (iter >= 0) {
@@ -171,7 +167,6 @@ class AnimatedGifEncoderExternal {
 		} catch (IOException e) {
 			ok = false;
 		}
-
 		return ok;
 	}
 
@@ -193,7 +188,6 @@ class AnimatedGifEncoderExternal {
 		} catch (IOException e) {
 			ok = false;
 		}
-
 		// reset for subsequent use
 		transIndex = 0;
 		out = null;
@@ -203,41 +197,40 @@ class AnimatedGifEncoderExternal {
 		colorTab = null;
 		closeStream = false;
 		firstFrame = true;
-
 		return ok;
 	}
 
-	/**
+	/*
 	 * Sets frame rate in frames per second. Equivalent to
 	 * <code>setDelay(1000/fps)</code>.
 	 *
 	 * @param fps
 	 *          float frame rate (frames per second)
 	 */
-	public void setFrameRate(float fps) {
+	/*public void setFrameRate(float fps) {
 		if (fps != 0f) {
 			delay = (int)(100 / fps);
 		}
-	}
+	}*/
 
-	/**
+	/*
 	 * Sets quality of color quantization (conversion of images to the maximum 256
 	 * colors allowed by the GIF specification). Lower values (minimum = 1)
 	 * produce better colors, but slow processing significantly. 10 is the
 	 * default, and produces good color mapping at reasonable speeds. Values
 	 * greater than 20 do not yield significant improvements in speed.
 	 *
-	 * @param quality
+	 * param quality
 	 *          int greater than 0.
-	 * @return
+	 * return
 	 */
-	public void setQuality(int quality) {
+	/*public void setQuality(int quality) {
 		if (quality < 1)
 			quality = 1;
 		sample = quality;
-	}
+	}*/
 
-	/**
+	/*
 	 * Sets the GIF frame size. The default size is the size of the first frame
 	 * added if this method is not invoked.
 	 *
@@ -256,19 +249,19 @@ class AnimatedGifEncoderExternal {
 		sizeSet = true;
 	}
 
-	/**
+	/*
 	 * Sets the GIF frame position. The position is 0,0 by default.
 	 * Useful for only updating a section of the image
 	 *
-	 * @param w
+	 * param w
 	 *          int frame width.
-	 * @param h
+	 * param h
 	 *          int frame width.
 	 */
-	public void setPosition(int x, int y) {
+	/*public void setPosition(int x, int y) {
 		this.x = x;
 		this.y = y;
-	}
+	}*/
 
 	/**
 	 * Initiates GIF file creation on the given stream. The stream is not closed
@@ -299,6 +292,8 @@ class AnimatedGifEncoderExternal {
 		int len = pixels.length;
 		int nPix = len / 3;
 		indexedPixels = new byte[nPix];
+		// default sample interval for quantizer
+		int sample = 10;
 		NeuQuant nq = new NeuQuant(pixels, len, sample);
 		// initialize quantizer
 		colorTab = nq.process(); // create reduced palette
@@ -400,6 +395,8 @@ class AnimatedGifEncoderExternal {
 			transp = 1;
 			disp = 2; // force clear if using transparent color
 		}
+		// disposal code (-1 = use default)
+		int dispose = -1;
 		if (dispose >= 0) {
 			disp = dispose & 7; // user override
 		}
@@ -421,7 +418,9 @@ class AnimatedGifEncoderExternal {
 	 */
 	private void writeImageDesc() throws IOException {
 		out.write(0x2c); // image separator
+		int x = 0;
 		writeShort(x); // image position x,y = 0,0
+		int y = 0;
 		writeShort(y);
 		writeShort(width); // image size
 		writeShort(height);
@@ -568,7 +567,7 @@ class NeuQuant {
 
 	private static final int gammashift = 10; /* gamma = 1024 */
 
-	protected static final int gamma = (1 << gammashift);
+	//protected static final int gamma = (1 << gammashift);
 
 	private static final int betashift = 10;
 
@@ -598,8 +597,6 @@ class NeuQuant {
 	private static final int alphabiasshift = 10; /* alpha starts at 1.0 */
 
 	private static final int initalpha = (1 << alphabiasshift);
-
-	private int alphadec; /* biased by 10 bits */
 
 	/* radbias and alpharadbias used for radpower calculation */
 	private static final int radbiasshift = 8;
@@ -640,7 +637,7 @@ class NeuQuant {
 	 * Initialise network in range (0,0,0) to (255,255,255) and set parameters
 	 * -----------------------------------------------------------------------
 	 */
-	public NeuQuant(byte[] thepic, int len, int sample) {
+	NeuQuant(byte[] thepic, int len, int sample) {
 
 		int i;
 		int[] p;
@@ -742,7 +739,8 @@ class NeuQuant {
 
 		if (lengthcount < minpicturebytes)
 			samplefac = 1;
-		alphadec = 30 + ((samplefac - 1) / 3);
+		/* biased by 10 bits */
+		int alphadec = 30 + ((samplefac - 1) / 3);
 		p = thepicture;
 		pix = 0;
 		lim = lengthcount;
@@ -877,7 +875,7 @@ class NeuQuant {
 		return (best);
 	}
 
-	public byte[] process() {
+	byte[] process() {
 		learn();
 		unbiasnet();
 		inxbuild();

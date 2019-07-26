@@ -36,8 +36,7 @@ import joshuatee.wx.util.Utility
 
 import kotlin.math.*
 
-// this class implements the radial distnace tool available in single pane nexrad radar
-//
+// this class implements the radial distance tool available in single pane radar
 
 class DrawLineView : View {
 

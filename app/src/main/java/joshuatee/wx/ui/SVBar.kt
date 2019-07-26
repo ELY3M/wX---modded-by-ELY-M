@@ -31,6 +31,8 @@ import android.view.MotionEvent
 import android.view.View
 
 import joshuatee.wx.R
+import kotlin.math.min
+import kotlin.math.roundToInt
 
 class SVBar : View {
 
@@ -199,7 +201,7 @@ class SVBar : View {
         val lengthSize = MeasureSpec.getSize(measureSpec)
         val length: Int = when (lengthMode) {
             MeasureSpec.EXACTLY -> lengthSize
-            MeasureSpec.AT_MOST -> Math.min(intrinsicSize, lengthSize)
+            MeasureSpec.AT_MOST -> min(intrinsicSize, lengthSize)
             else -> intrinsicSize
         }
         val barPointerHaloRadiusx2 = mBarPointerHaloRadius * 2
@@ -275,9 +277,9 @@ class SVBar : View {
         val hsvColor = FloatArray(3)
         Color.colorToHSV(mColor, hsvColor)
         mBarPointerPosition = if (hsvColor[1] < hsvColor[2]) {
-            Math.round(mSVToPosFactor * hsvColor[1] + mBarPointerHaloRadius)
+            (mSVToPosFactor * hsvColor[1] + mBarPointerHaloRadius).roundToInt()
         } else {
-            Math.round(mSVToPosFactor * (1 - hsvColor[2]) + mBarPointerHaloRadius.toFloat() + (mBarLength / 2).toFloat())
+            (mSVToPosFactor * (1 - hsvColor[2]) + mBarPointerHaloRadius.toFloat() + (mBarLength / 2).toFloat()).roundToInt()
         }
         if (isInEditMode) {
             mBarPointerPosition = mBarLength / 2 + mBarPointerHaloRadius
@@ -328,8 +330,8 @@ class SVBar : View {
                 mIsMovingPointer = true
                 // Check whether the user pressed on the pointer
                 if (dimen >= mBarPointerHaloRadius && dimen <= mBarPointerHaloRadius + mBarLength) {
-                    mBarPointerPosition = Math.round(dimen)
-                    calculateColor(Math.round(dimen))
+                    mBarPointerPosition = dimen.roundToInt()
+                    calculateColor(dimen.roundToInt())
                     mBarPointerPaint!!.color = mColor
                     invalidate()
                 }
@@ -337,8 +339,8 @@ class SVBar : View {
             MotionEvent.ACTION_MOVE -> if (mIsMovingPointer) {
                 // Move the the pointer on the bar.
                 if (dimen >= mBarPointerHaloRadius && dimen <= mBarPointerHaloRadius + mBarLength) {
-                    mBarPointerPosition = Math.round(dimen)
-                    calculateColor(Math.round(dimen))
+                    mBarPointerPosition = dimen.roundToInt()
+                    calculateColor(dimen.roundToInt())
                     mBarPointerPaint!!.color = mColor
                     if (mPicker != null) {
                         mPicker!!.setNewCenterColor(mColor)
@@ -377,7 +379,7 @@ class SVBar : View {
      * *            float between 0 > 1
      */
     fun setSaturation(saturation: Float) {
-        mBarPointerPosition = Math.round(mSVToPosFactor * saturation + mBarPointerHaloRadius)
+        mBarPointerPosition = (mSVToPosFactor * saturation + mBarPointerHaloRadius).roundToInt()
         calculateColor(mBarPointerPosition)
         mBarPointerPaint!!.color = mColor
         // Check whether the Saturation/Value bar is added to the ColorPicker
@@ -396,10 +398,7 @@ class SVBar : View {
      * *            float between 0 > 1
      */
     fun setValue(value: Float) {
-        mBarPointerPosition = Math.round(
-            mSVToPosFactor * (1 - value)
-                    + mBarPointerHaloRadius.toFloat() + (mBarLength / 2).toFloat()
-        )
+        mBarPointerPosition = (mSVToPosFactor * (1 - value) + mBarPointerHaloRadius.toFloat() + (mBarLength / 2).toFloat()).roundToInt()
         calculateColor(mBarPointerPosition)
         mBarPointerPaint!!.color = mColor
         // Check whether the Saturation/Value bar is added to the ColorPicker

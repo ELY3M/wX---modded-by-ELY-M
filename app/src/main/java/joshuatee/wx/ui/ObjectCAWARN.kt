@@ -39,10 +39,10 @@ import joshuatee.wx.objects.ObjectIntent
 import kotlinx.coroutines.*
 
 class ObjectCAWarn(
-    private val context: Context,
-    private val activity: Activity,
-    private val linearLayout: LinearLayout,
-    private val toolbar: Toolbar
+        private val context: Context,
+        private val activity: Activity,
+        private val linearLayout: LinearLayout,
+        private val toolbar: Toolbar
 ) {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
@@ -60,40 +60,36 @@ class ObjectCAWarn(
         listLocWarning.clear()
         listLocWatch.clear()
         listLocStatement.clear()
-        try {
-            bitmap = if (prov == "ca") {
-                (MyApplication.canadaEcSitePrefix + "/data/warningmap/canada_e.png").getImage()
-            } else {
-                (MyApplication.canadaEcSitePrefix + "/data/warningmap/" + prov + "_e.png").getImage()
-            }
-            val dataAsString = if (prov == "ca") {
-                (MyApplication.canadaEcSitePrefix + "/warnings/index_e.html").getHtml()
-            } else {
-                (MyApplication.canadaEcSitePrefix + "/warnings/index_e.html?prov=$prov").getHtml()
-            }
-            listLocUrl = UtilityString.parseColumnMutable(
+        bitmap = if (prov == "ca") {
+            (MyApplication.canadaEcSitePrefix + "/data/warningmap/canada_e.png").getImage()
+        } else {
+            (MyApplication.canadaEcSitePrefix + "/data/warningmap/" + prov + "_e.png").getImage()
+        }
+        val dataAsString = if (prov == "ca") {
+            (MyApplication.canadaEcSitePrefix + "/warnings/index_e.html").getHtml()
+        } else {
+            (MyApplication.canadaEcSitePrefix + "/warnings/index_e.html?prov=$prov").getHtml()
+        }
+        listLocUrl = UtilityString.parseColumnMutable(
                 dataAsString,
                 "<tr><td><a href=\"(.*?)\">.*?</a></td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<tr>"
-            )
-            listLocName = UtilityString.parseColumnMutable(
+        )
+        listLocName = UtilityString.parseColumnMutable(
                 dataAsString,
                 "<tr><td><a href=\".*?\">(.*?)</a></td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<tr>"
-            )
-            listLocWarning = UtilityString.parseColumnMutable(
+        )
+        listLocWarning = UtilityString.parseColumnMutable(
                 dataAsString,
                 "<tr><td><a href=\".*?\">.*?</a></td>.*?<td>(.*?)</td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<tr>"
-            )
-            listLocWatch = UtilityString.parseColumnMutable(
+        )
+        listLocWatch = UtilityString.parseColumnMutable(
                 dataAsString,
                 "<tr><td><a href=\".*?\">.*?</a></td>.*?<td>.*?</td>.*?<td>(.*?)</td>.*?<td>.*?</td>.*?<tr>"
-            )
-            listLocStatement = UtilityString.parseColumnMutable(
+        )
+        listLocStatement = UtilityString.parseColumnMutable(
                 dataAsString,
                 "<tr><td><a href=\".*?\">.*?</a></td>.*?<td>.*?</td>.*?<td>.*?</td>.*?<td>(.*?)</td>.*?<tr>"
-            )
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
+        )
     }
 
     fun showData() {
@@ -135,37 +131,37 @@ class ObjectCAWarn(
     val title: String get() = PROV_TO_LABEL[prov] + " (" + listLocUrl.size + ")"
 
     private fun getWarningDetail(urlStr: String, location: String) =
-        GlobalScope.launch(uiDispatcher) {
-            var data = ""
-            withContext(Dispatchers.IO) {
-                data = UtilityCanada.getHazardsFromUrl(urlStr)
+            GlobalScope.launch(uiDispatcher) {
+                var data = ""
+                withContext(Dispatchers.IO) {
+                    data = UtilityCanada.getHazardsFromUrl(urlStr)
+                }
+                ObjectIntent(
+                        context,
+                        TextScreenActivity::class.java,
+                        TextScreenActivity.URL,
+                        arrayOf(data, location)
+                )
             }
-            ObjectIntent(
-                context,
-                TextScreenActivity::class.java,
-                TextScreenActivity.URL,
-                arrayOf(data, location)
-            )
-        }
 
     companion object {
         private val PROV_TO_LABEL = mapOf(
-            "ca" to "Canada",
-            "ab" to "Alberta",
-            "bc" to "British Columbia",
-            "mb" to "Manitoba",
-            "nb" to "New Brunswick",
-            "nl" to "Newfoundland and Labrador",
-            "ns" to "Nova Scotia",
-            "nt" to "Northwest Territories",
-            "nu" to "Nunavut",
-            "son" to "Ontario - South",
-            "non" to "Ontario - North",
-            "pei" to "Prince Edward Island",
-            "sqc" to "Quebec - South",
-            "nqc" to "Quebec - North",
-            "sk" to "Saskatchewan",
-            "yt" to "Yukon"
+                "ca" to "Canada",
+                "ab" to "Alberta",
+                "bc" to "British Columbia",
+                "mb" to "Manitoba",
+                "nb" to "New Brunswick",
+                "nl" to "Newfoundland and Labrador",
+                "ns" to "Nova Scotia",
+                "nt" to "Northwest Territories",
+                "nu" to "Nunavut",
+                "son" to "Ontario - South",
+                "non" to "Ontario - North",
+                "pei" to "Prince Edward Island",
+                "sqc" to "Quebec - South",
+                "nqc" to "Quebec - North",
+                "sk" to "Saskatchewan",
+                "yt" to "Yukon"
         )
     }
 }

@@ -40,6 +40,7 @@ import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
+import kotlin.math.max
 
 class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -83,13 +84,14 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         url = activityArguments[0]
         toolbarTitle = activityArguments[1]
         val titleArr = toolbarTitle.split(" - ")
+        title = "NHC"
         if (titleArr.size > 1) {
-            title = titleArr[1]
+            toolbar.subtitle = titleArr[1]
         }
         val imgUrl1 = activityArguments[3]
         val year = UtilityTime.year()
         var yearInString = year.toString()
-        yearInString = yearInString.substring(Math.max(yearInString.length - 2, 0))
+        yearInString = yearInString.substring(max(yearInString.length - 2, 0))
         baseUrl = imgUrl1.replace(yearInString + "_5day_cone_with_line_and_wind_sm2.png", "")
         baseUrl += yearInString
         stormId = activityArguments[5]
@@ -110,6 +112,10 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         bitmaps.clear()
         withContext(Dispatchers.IO) {
             url = UtilityDownload.getTextProduct(this@NhcStormActivity, product)
+        }
+        cTextProd.setText(Utility.fromHtml(url))
+        html = url
+        withContext(Dispatchers.IO) {
             listOf(
                     "_W5_NL_sm2.png",
                     "_5day_cone_with_line_and_wind_sm2.png",
@@ -123,9 +129,7 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
             ).forEach { bitmaps.add((baseUrl + it).getImage()) }
             bitmaps.add("${MyApplication.nwsNhcWebsitePrefix}/tafb_latest/danger_pac_latestBW_sm3.gif".getImage())
         }
-        cTextProd.setText(Utility.fromHtml(url))
-        html = url
-        sv.smoothScrollTo(0, 0)
+        //sv.smoothScrollTo(0, 0)
         bitmaps.filter { it.width > 100 }
                 .forEach { ObjectCardImage(this@NhcStormActivity, ll, it) }
         if (activityArguments.size > 2) {

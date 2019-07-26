@@ -138,8 +138,7 @@ internal object UtilityNotificationSpc {
         threatList.add("MRGL")
         val noDays = 3
         for (day in 1..noDays) {
-            val urlBlob =
-                    "${MyApplication.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt"
+            val urlBlob = "${MyApplication.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt"
             val html = urlBlob.getHtmlSep()
             val validTime = html.parse("VALID TIME ([0-9]{6}Z - [0-9]{6}Z)")
             val htmlBlob = html.parse("... CATEGORICAL ...(.*?&)&")
@@ -289,8 +288,7 @@ internal object UtilityNotificationSpc {
                         locYStr = MyApplication.locations[n - 1].y
                         locXDbl = locXStr.toDoubleOrNull() ?: 0.0
                         locYDbl = locYStr.toDoubleOrNull() ?: 0.0
-                        val contains =
-                                polygon2.contains(ExternalPoint(locXDbl.toFloat(), locYDbl.toFloat()))
+                        val contains = polygon2.contains(ExternalPoint(locXDbl.toFloat(), locYDbl.toFloat()))
                         if (contains) {
                             notifUrls += sendMcdNotification(context, locNum, mcdNoArr[z])
                         }
@@ -393,14 +391,14 @@ internal object UtilityNotificationSpc {
         val resultIntent = Intent(context, SpcSwoActivity::class.java)
         val resultIntent2 = Intent(context, SpcSwoActivity::class.java)
         var dayStrArg = day.toString()
-        if (day > 3) dayStrArg = "4-8"
+        if (day > 3)
+            dayStrArg = "4-8"
         resultIntent.putExtra(SpcSwoActivity.NO, arrayOf(dayStrArg, ""))
         resultIntent2.putExtra(SpcSwoActivity.NO, arrayOf(dayStrArg, "sound"))
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(SpcSwoActivity::class.java)
         stackBuilder.addNextIntent(resultIntent)
-        val resultPendingIntent =
-                stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+        val resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
         val resultPendingIntent2 = PendingIntent.getActivity(
                 context,
                 requestID + 1,
@@ -408,12 +406,10 @@ internal object UtilityNotificationSpc {
                 PendingIntent.FLAG_UPDATE_CURRENT
         )
         val cancelStr = "spcswoloc$day$locNum$threatLevel$validTime"
-        if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(
-                        context,
-                        cancelStr
-                ))
-        ) {
-            val sound = MyApplication.locations[locNumInt].sound && !inBlackout
+        if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
+            //val sound = MyApplication.locations[locNumInt].sound && !inBlackout
+            // MyApplication.locations.getOrNull(it)?.notificationSwo ?: false
+            val sound = (MyApplication.locations.getOrNull(locNumInt)?.sound ?: false) && !inBlackout
             val objectNotification = ObjectNotification(
                     context,
                     sound,

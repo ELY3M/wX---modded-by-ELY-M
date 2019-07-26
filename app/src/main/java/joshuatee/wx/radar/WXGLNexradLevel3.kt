@@ -83,14 +83,31 @@ class WXGLNexradLevel3 {
     }
 
     private fun init4Bit() {
-        binWord = ByteBuffer.allocateDirect(360 * 230)
-        binWord.order(ByteOrder.nativeOrder())
-        radialStart = ByteBuffer.allocateDirect(4 * 360)
-        radialStart.order(ByteOrder.nativeOrder())
+        if (productCode == 181.toShort()) {
+            binWord = ByteBuffer.allocateDirect(360 * 720)
+            binWord.order(ByteOrder.nativeOrder())
+            radialStart = ByteBuffer.allocateDirect(4 * 360)
+            radialStart.order(ByteOrder.nativeOrder())
+        } else if (productCode == 78.toShort() || productCode == 80.toShort()) {
+            binWord = ByteBuffer.allocateDirect(360 * 592)
+            binWord.order(ByteOrder.nativeOrder())
+            radialStart = ByteBuffer.allocateDirect(4 * 360)
+            radialStart.order(ByteOrder.nativeOrder())
+        } else if (productCode == 37.toShort() || productCode == 38.toShort() || productCode == 41.toShort() || productCode == 57.toShort()) {
+            binWord = ByteBuffer.allocateDirect(464 * 464)
+            binWord.order(ByteOrder.nativeOrder())
+            radialStart = ByteBuffer.allocateDirect(4 * 360)
+            radialStart.order(ByteOrder.nativeOrder())
+        } else {
+            binWord = ByteBuffer.allocateDirect(360 * 230)
+            binWord.order(ByteOrder.nativeOrder())
+            radialStart = ByteBuffer.allocateDirect(4 * 360)
+            radialStart.order(ByteOrder.nativeOrder())
+        }
     }
 
     // final argument is whether or not to handle decompression, by default true
-    fun decocodeAndPlot(context: Context, fileName: String, radarStatusStr: String) {
+    fun decodeAndPlot(context: Context, fileName: String, radarStatusStr: String) {
         try {
             val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName))
             dis.bigEndian = true
@@ -178,8 +195,8 @@ class WXGLNexradLevel3 {
     }
 
     // Used for Legacy 4bit radar - only SRM
-    fun decocodeAndPlotFourBit(context: Context, fn: String, radarStatusStr: String) {
-        init4Bit()
+    fun decodeAndPlotFourBit(context: Context, fn: String, radarStatusStr: String) {
+        //init4Bit()
         try {
             val fis = context.openFileInput(fn)
             val dis = DataInputStream(BufferedInputStream(fis))
@@ -198,6 +215,8 @@ class WXGLNexradLevel3 {
             val heightOfRadar = dis.readUnsignedShort().toShort()
             radarHeight = heightOfRadar.toInt()
             productCode = dis.readUnsignedShort().toShort()
+            // init 4 bit now depends on productCode
+            init4Bit()
             val operationalMode = dis.readUnsignedShort().toShort()
             val volumeScanPattern =  dis.readUnsignedShort()
             val seqnumber = dis.readUnsignedShort()
@@ -283,10 +302,15 @@ class WXGLNexradLevel3 {
             //final int  index_of_first_range_bin  = dis.readUnsignedShort() ;
             dis.skipBytes(32)
             dis.close()
-            numberOfRangeBins =
-                UtilityWXOGLPerfL3FourBit.decode(context, fn, radialStart, binWord)
+            if (productCode.toInt() == 37 || productCode.toInt() == 38 || productCode.toInt() == 41 || productCode.toInt() == 57) {
+                numberOfRangeBins = UtilityWXOGLPerfL3FourBit.decodeRaster(context, fn, binWord)
+            } else {
+                numberOfRangeBins = UtilityWXOGLPerfL3FourBit.decodeRadial(context, fn, radialStart, binWord)
+            }
             binSize = WXGLNexrad.getBinSize(productCode.toInt())
         } catch (e: IOException) {
+            UtilityLog.handleException(e)
+        }  catch (e: Exception) {
             UtilityLog.handleException(e)
         }
     }

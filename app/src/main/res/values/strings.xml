@@ -59,13 +59,26 @@
     <string name="label_br">N0Q: Base Reflectivity</string>
     <string name="label_bv">N0U: Base Velocity</string>
     <string name="label_srm">N0S: Storm Relative Motion Velocity</string>
-    <string name="label_eet">EET: Echo Tops</string>
-    <string name="label_vil">DVL: Vertically Integrated Liquid</string>
+    <string name="label_eet">EET: Enhanced Echo Tops</string>
+    <string name="label_dvl">DVL: Vertically Integrated Liquid</string>
     <string name="label_dsp">DSP: Digital Storm Total Accumulation</string>
     <string name="label_daa">DAA: Digital Accumulation Array</string>
     <string name="label_h0c">H0C: Hydrometeor Classification</string>
     <string name="label_l2ref">SuperRes Reflectivity</string>
     <string name="label_l2vel">SuperRes Velocity</string>
+    <string name="label_tzl">TZL: Long Range Digital Base Reflectivity</string>
+    <string name="label_tr0">TR0: Digital Base Reflectivity</string>
+    <string name="label_tv0">TV0: Digital Base Velocity</string>
+    <string name="label_dhr">DHR: Digital Hybrid Scan Reflectivity</string>
+    <string name="label_n1p">N1P: One Hour Precipitation Total</string>
+    <string name="label_ntp">NTP: Storm Total Precipitation</string>
+
+    <string name="label_ncr">NCR: Composite Reflectivity 124nm</string>
+    <string name="label_ncz">NCZ: Composite Reflectivity 248nm</string>
+
+    <string name="label_et">ET: Echo Tops</string>
+    <string name="label_vil">VIL: Vertically Integrated Liquid</string>
+
     <string name="label_a3">Animate 3 frames</string>
     <string name="label_a6">Animate 6 frames</string>
     <string name="label_a12">Animate 12 frames</string>
@@ -166,7 +179,6 @@
     <string name="notification_captured_title">wX screen recording captured.</string>
     <string name="notification_captured_subtitle">Touch to view your screen recording.</string>
     <string name="notification_captured_share">Share</string>
-    <string name="notification_captured_delete">Delete</string>
     <string name="notification_recording_title">Recording screen.</string>
     <string name="notification_recording_subtitle">Touch the clock area to stop recording.</string>
 

@@ -264,7 +264,11 @@ object UtilityCanada {
     fun getLocationHtml(location: LatLon): String {
         val prov = location.latString.split(":").dropLastWhile { it.isEmpty() }
         val id = location.lonString.split(":").dropLastWhile { it.isEmpty() }
-        return (MyApplication.canadaEcSitePrefix + "/rss/city/" + prov[1].toLowerCase(Locale.US) + "-" + id[0] + "_e.xml").getHtmlSep()
+        var data = ""
+        if (prov.size > 1 && id.isNotEmpty()) {
+            data = (MyApplication.canadaEcSitePrefix + "/rss/city/" + prov[1].toLowerCase(Locale.US) + "-" + id[0] + "_e.xml").getHtmlSep()
+        }
+        return data
     }
 
     fun getLocationUrl(x: String, y: String): String {

@@ -64,7 +64,7 @@ class SettingsColorPaletteListingActivity : BaseActivity() {
 
     override fun onRestart() {
         cardColorPalettes.indices.forEach {
-            val product = WXGLNexrad.productCodeStringToName[WXGLNexrad.colorPaletteProducts[it]]!!
+            val product = WXGLNexrad.productCodeStringToName[WXGLNexrad.colorPaletteProducts[it]] ?: "Reflectivity"
             val label = product + ": " + MyApplication.radarColorPalette[WXGLNexrad.colorPaletteProducts[it]]
             cardColorPalettes[it].setText(label)
         }

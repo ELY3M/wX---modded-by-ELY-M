@@ -74,7 +74,7 @@
         android:title="@string/label_share_and_tools"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/action_other"
+        android:id="@+id/action_l3"
         android:title="@string/label_other"
         app:showAsAction="never">
         <menu>
@@ -127,6 +127,14 @@
                 android:title="@string/label_nsw"
                 app:showAsAction="ifRoom" />
             <item
+                android:id="@+id/action_ncr"
+                android:title="@string/label_ncr"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_ncz"
+                android:title="@string/label_ncz"
+                app:showAsAction="ifRoom" />
+            <item
                 android:id="@+id/action_level3_blank"
                 android:title="@string/label_blank"
                 app:showAsAction="never" />
@@ -147,6 +155,49 @@
                 app:showAsAction="ifRoom" />
             <item
                 android:id="@+id/action_level2_blank"
+                android:title="@string/label_blank"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/action_tdwr"
+        android:title="TDWR Products"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/action_tzl"
+                android:title="@string/label_tzl"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_tr0"
+                android:title="@string/label_tr0"
+                app:showAsAction="ifRoom" />
+            <item
+                android:id="@+id/action_tv0"
+                android:title="@string/label_tv0"
+                app:showAsAction="never" />
+            <!--<item
+                android:id="@+id/action_dhr"
+                android:title="@string/label_dhr"
+                app:showAsAction="never" />-->
+            <item
+                android:id="@+id/action_n1p"
+                android:title="@string/label_n1p"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_ntp"
+                android:title="@string/label_ntp"
+                app:showAsAction="never" />
+            <!--<item
+                android:id="@+id/action_et"
+                android:title="@string/label_et"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_vil"
+                android:title="@string/label_vil"
+                app:showAsAction="never" />-->
+            <item
+                android:id="@+id/action_tdwr_blank"
                 android:title="@string/label_blank"
                 app:showAsAction="never" />
         </menu>
@@ -191,6 +242,33 @@
         </menu>
     </item>
     <item
+        android:id="@+id/action_tilt"
+        android:title="@string/label_change_tilt"
+        app:showAsAction="never">
+        <menu>
+            <item
+                android:id="@+id/action_tilt1"
+                android:title="@string/label_t1"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_tilt2"
+                android:title="@string/label_t2"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_tilt3"
+                android:title="@string/label_t3"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_tilt4"
+                android:title="@string/label_t4"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_tilt_blank"
+                android:title="@string/label_blank"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+    <item
         android:id="@+id/action_TDWR"
         android:title="@string/label_tdwr_sites"
         app:showAsAction="never" />
@@ -207,33 +285,6 @@
                 android:id="@+id/action_about"
                 android:title="@string/label_about_scan"
                 app:showAsAction="never" />
-            <item
-                android:id="@+id/action_tilt"
-                android:title="@string/label_change_tilt"
-                app:showAsAction="never">
-                <menu>
-                    <item
-                        android:id="@+id/action_tilt1"
-                        android:title="@string/label_t1"
-                        app:showAsAction="never" />
-                    <item
-                        android:id="@+id/action_tilt2"
-                        android:title="@string/label_t2"
-                        app:showAsAction="never" />
-                    <item
-                        android:id="@+id/action_tilt3"
-                        android:title="@string/label_t3"
-                        app:showAsAction="never" />
-                    <item
-                        android:id="@+id/action_tilt4"
-                        android:title="@string/label_t4"
-                        app:showAsAction="never" />
-                    <item
-                        android:id="@+id/action_tilt_blank"
-                        android:title="@string/label_blank"
-                        app:showAsAction="never" />
-                </menu>
-            </item>
             <item
                 android:id="@+id/action_radar_site_status_l3"
                 android:title="@string/action_radar_site_status_l3"

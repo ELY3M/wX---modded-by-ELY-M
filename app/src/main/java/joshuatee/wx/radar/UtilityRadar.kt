@@ -25,7 +25,7 @@ object UtilityRadar {
 
     // grep NWS_LOC UtilityPref.dart |sed "s/Utility.writePref(.NWS_LOCATION_/\"/" | sed 's/",/" to/' | sed "s/);/,/"
 
-    val soundingIdToName = mapOf(
+    /*val soundingIdToName = mapOf(
             "VBG" to "CA, Vandenberg AFB",
             "1Y7" to "AZ, Yuma",
             "76405" to "MX, La Paz",
@@ -179,7 +179,7 @@ object UtilityRadar {
             "RLX" to "WV, Charleston",
             "CYS" to "WY, Cheyenne",
             "RIW" to "WY, Riverton"
-    )
+    )*/
 
     val radarIdToName = mapOf(
             "JUA" to "PR, San Juan",
@@ -394,7 +394,7 @@ object UtilityRadar {
 
     )
 
-    val wfoSitetoLat = mapOf(
+   /* val wfoSitetoLat = mapOf(
             "ABC" to "60.79278",
             "ABQ" to "35.1027",
             "ABR" to "45.45583",
@@ -828,7 +828,7 @@ object UtilityRadar {
             "VTX" to "-119.17861",
             "VWX" to "-87.7247",
             "YUX" to "-114.65583"
-    )
+    )*/
 
     val radarSiteToLat = mapOf(
             "TYX" to "43.756",
@@ -1268,7 +1268,7 @@ object UtilityRadar {
 
             )
 
-    val soundingSiteToLat = mapOf(
+  /*  val soundingSiteToLat = mapOf(
             "76225" to "28.70",
             "76405" to "24.07",
             "76458" to "23.18",
@@ -1463,5 +1463,5 @@ object UtilityRadar {
             "WPL" to "90.20",
             "YLW" to "119.38",
             "YMO" to "80.65"
-    )
+    )*/
 }

@@ -43,9 +43,9 @@ class ObjectTouchImageView {
     constructor(
         activity: Activity,
         context: Context,
-        resid: Int
+        resourceId: Int
     ) {
-        img = activity.findViewById(resid)
+        img = activity.findViewById(resourceId)
         this.context = context
     }
 
@@ -53,8 +53,8 @@ class ObjectTouchImageView {
         activity: Activity,
         context: Context,
         toolbar: Toolbar,
-        resid: Int
-    ) : this(activity, context, resid) {
+        resourceId: Int
+    ) : this(activity, context, resourceId) {
         setOnClickListener(View.OnClickListener {
             UtilityToolbar.showHide(toolbar)
         })
@@ -65,8 +65,8 @@ class ObjectTouchImageView {
         context: Context,
         toolbar: Toolbar,
         toolbarBottom: Toolbar,
-        resid: Int
-    ) : this(activity, context, resid) {
+        resourceId: Int
+    ) : this(activity, context, resourceId) {
         setOnClickListener(View.OnClickListener {
             UtilityToolbar.showHide(toolbar, toolbarBottom)
         })
@@ -75,11 +75,11 @@ class ObjectTouchImageView {
     constructor(
         activity: Activity,
         context: Context,
-        resid: Int,
+        resourceId: Int,
         drw: ObjectNavDrawer,
         prefTokenIdx: String
     ) {
-        img = activity.findViewById(resid)
+        img = activity.findViewById(resourceId)
         this.context = context
         this.drw = drw
         this.prefTokenIdx = prefTokenIdx
@@ -90,10 +90,10 @@ class ObjectTouchImageView {
         context: Context,
         toolbar: Toolbar,
         toolbarBottom: Toolbar,
-        resid: Int,
+        resourceId: Int,
         drw: ObjectNavDrawer,
         prefTokenIdx: String
-    ) : this(activity, context, resid, drw, prefTokenIdx) {
+    ) : this(activity, context, resourceId, drw, prefTokenIdx) {
         setOnClickListener(View.OnClickListener {
             UtilityToolbar.showHide(
                 toolbar,
@@ -106,10 +106,10 @@ class ObjectTouchImageView {
         activity: Activity,
         context: Context,
         toolbar: Toolbar,
-        resid: Int,
+        resourceId: Int,
         drw: ObjectNavDrawer,
         prefTokenIdx: String
-    ) : this(activity, context, resid, drw, prefTokenIdx) {
+    ) : this(activity, context, resourceId, drw, prefTokenIdx) {
         setOnClickListener(View.OnClickListener {
             UtilityToolbar.showHide(toolbar)
         })
@@ -121,8 +121,6 @@ class ObjectTouchImageView {
         if (prefTokenIdx != "" && drw != null) {
             Utility.writePref(context, prefTokenIdx, drw!!.index)
         }
-        // FIXME implement
-        // firstRunSetZoomPosn()
     }
 
     fun setOnClickListener(listener: View.OnClickListener) {
@@ -138,7 +136,7 @@ class ObjectTouchImageView {
     }
 
     fun setMaxZoom(zoom: Float) {
-        img.setMaxZoom(zoom)
+        img.maxZoom = zoom
     }
 
     fun setZoom(zoom: Float) {
@@ -183,11 +181,6 @@ class ObjectTouchImageView {
                         MyApplication.spchrrrX = x
                         MyApplication.spchrrrY = y
                     }
-                    /*"SPCSSEO" -> {
-                        MyApplication.spcsseoZoom = z
-                        MyApplication.spcsseoX = x
-                        MyApplication.spcsseoY = y
-                    }*/
                     "WPCGEFS1" -> {
                         MyApplication.wpcgefsZoom = z
                         MyApplication.wpcgefsX = x

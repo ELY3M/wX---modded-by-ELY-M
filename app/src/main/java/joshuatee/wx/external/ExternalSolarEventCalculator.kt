@@ -21,6 +21,7 @@ import java.math.MathContext
 import java.math.RoundingMode
 import java.util.Calendar
 import java.util.TimeZone
+import kotlin.math.*
 
 //import com.luckycatlabs.sunrisesunset.Zenith;
 //import ExternalSunriseLocation;
@@ -169,19 +170,14 @@ internal class ExternalSolarEventCalculator
      * @return the suns true longitude, in `BigDecimal` form.
      */
     private fun getSunTrueLongitude(meanAnomaly: BigDecimal): BigDecimal {
-        val sinMeanAnomaly = BigDecimal(Math.sin(convertDegreesToRadians(meanAnomaly).toDouble()))
+        val sinMeanAnomaly = BigDecimal(sin(convertDegreesToRadians(meanAnomaly).toDouble()))
         val sinDoubleMeanAnomaly = BigDecimal(
-            Math.sin(
-                multiplyBy(convertDegreesToRadians(meanAnomaly), BigDecimal.valueOf(2))
-                    .toDouble()
-            )
+            sin(multiplyBy(convertDegreesToRadians(meanAnomaly), BigDecimal.valueOf(2))
+                    .toDouble())
         )
-
         val firstPart = meanAnomaly.add(multiplyBy(sinMeanAnomaly, BigDecimal("1.916")))
-        val secondPart =
-            multiplyBy(sinDoubleMeanAnomaly, BigDecimal("0.020")).add(BigDecimal("282.634"))
+        val secondPart = multiplyBy(sinDoubleMeanAnomaly, BigDecimal("0.020")).add(BigDecimal("282.634"))
         var trueLongitude = firstPart.add(secondPart)
-
         if (trueLongitude.toDouble() > 360) {
             trueLongitude = trueLongitude.subtract(BigDecimal.valueOf(360))
         }
@@ -197,25 +193,20 @@ internal class ExternalSolarEventCalculator
      * @return suns right ascension in degree-hours, in `BigDecimal` form.
      */
     private fun getRightAscension(sunTrueLong: BigDecimal): BigDecimal {
-        val tanL = BigDecimal(Math.tan(convertDegreesToRadians(sunTrueLong).toDouble()))
-
+        val tanL = BigDecimal(tan(convertDegreesToRadians(sunTrueLong).toDouble()))
         val innerParens = multiplyBy(convertRadiansToDegrees(tanL), BigDecimal("0.91764"))
-        var rightAscension = BigDecimal(Math.atan(convertDegreesToRadians(innerParens).toDouble()))
+        var rightAscension = BigDecimal(atan(convertDegreesToRadians(innerParens).toDouble()))
         rightAscension = setScale(convertRadiansToDegrees(rightAscension))
-
         if (rightAscension.toDouble() < 0) {
             rightAscension = rightAscension.add(BigDecimal.valueOf(360))
         } else if (rightAscension.toDouble() > 360) {
             rightAscension = rightAscension.subtract(BigDecimal.valueOf(360))
         }
-
         val ninety = BigDecimal.valueOf(90)
         var longitudeQuadrant = sunTrueLong.divide(ninety, 0, RoundingMode.FLOOR)
         longitudeQuadrant = longitudeQuadrant.multiply(ninety)
-
         var rightAscensionQuadrant = rightAscension.divide(ninety, 0, RoundingMode.FLOOR)
         rightAscensionQuadrant = rightAscensionQuadrant.multiply(ninety)
-
         val augend = longitudeQuadrant.subtract(rightAscensionQuadrant)
         return divideBy(rightAscension.add(augend), BigDecimal.valueOf(15))
     }
@@ -223,31 +214,25 @@ internal class ExternalSolarEventCalculator
     private fun getCosineSunLocalHour(sunTrueLong: BigDecimal, zenith: ExternalZenith): BigDecimal {
         val sinSunDeclination = getSinOfSunDeclination(sunTrueLong)
         val cosineSunDeclination = getCosineOfSunDeclination(sinSunDeclination)
-
         val zenithInRads = convertDegreesToRadians(zenith.degrees())
-        val cosineZenith = BigDecimal.valueOf(Math.cos(zenithInRads.toDouble()))
-        val sinLatitude =
-            BigDecimal.valueOf(Math.sin(convertDegreesToRadians(location.latitude).toDouble()))
-        val cosLatitude =
-            BigDecimal.valueOf(Math.cos(convertDegreesToRadians(location.latitude).toDouble()))
-
+        val cosineZenith = BigDecimal.valueOf(cos(zenithInRads.toDouble()))
+        val sinLatitude = BigDecimal.valueOf(sin(convertDegreesToRadians(location.latitude).toDouble()))
+        val cosLatitude = BigDecimal.valueOf(cos(convertDegreesToRadians(location.latitude).toDouble()))
         val sinDeclinationTimesSinLat = sinSunDeclination.multiply(sinLatitude)
         val dividend = cosineZenith.subtract(sinDeclinationTimesSinLat)
         val divisor = cosineSunDeclination.multiply(cosLatitude)
-
         return setScale(divideBy(dividend, divisor))
     }
 
     private fun getSinOfSunDeclination(sunTrueLong: BigDecimal): BigDecimal {
-        val sinTrueLongitude =
-            BigDecimal.valueOf(Math.sin(convertDegreesToRadians(sunTrueLong).toDouble()))
+        val sinTrueLongitude = BigDecimal.valueOf(sin(convertDegreesToRadians(sunTrueLong).toDouble()))
         val sinOfDeclination = sinTrueLongitude.multiply(BigDecimal("0.39782"))
         return setScale(sinOfDeclination)
     }
 
     private fun getCosineOfSunDeclination(sinSunDeclination: BigDecimal): BigDecimal {
-        val arcSinOfSinDeclination = BigDecimal.valueOf(Math.asin(sinSunDeclination.toDouble()))
-        val cosDeclination = BigDecimal.valueOf(Math.cos(arcSinOfSinDeclination.toDouble()))
+        val arcSinOfSinDeclination = BigDecimal.valueOf(asin(sinSunDeclination.toDouble()))
+        val cosDeclination = BigDecimal.valueOf(cos(arcSinOfSinDeclination.toDouble()))
         return setScale(cosDeclination)
     }
 
@@ -343,10 +328,8 @@ internal class ExternalSolarEventCalculator
         if (localTimeParam == null) {
             return null
         }
-
         // Create a clone of the input calendar so we get locale/timezone information.
         val resultTime = date.clone() as Calendar
-
         var localTime: BigDecimal = localTimeParam
         if (localTime.compareTo(BigDecimal.ZERO) == -1) {
             localTime = localTime.add(BigDecimal.valueOf(24.0))
@@ -386,7 +369,7 @@ internal class ExternalSolarEventCalculator
     }
 
     private fun getArcCosineFor(radians: BigDecimal): BigDecimal {
-        val arcCosine = BigDecimal.valueOf(Math.acos(radians.toDouble()))
+        val arcCosine = BigDecimal.valueOf(acos(radians.toDouble()))
         return setScale(arcCosine)
     }
 

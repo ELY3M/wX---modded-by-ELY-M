@@ -24,20 +24,19 @@ package joshuatee.wx.models
 import android.util.SparseArray
 import joshuatee.wx.ui.ObjectMenuTitle
 import joshuatee.wx.util.Group
-import java.util.*
 
 internal object UtilityModelWpcGefsInterface {
 
-    private val titles = Arrays.asList(
-        ObjectMenuTitle("Precip", 37),
-        ObjectMenuTitle("QPF > Annual Chance (CONUS only)", 8),
-        ObjectMenuTitle("Precip Type", 4),
-        ObjectMenuTitle("Snow Depth", 5),
-        ObjectMenuTitle("Stnd Anom Hght", 15),
-        ObjectMenuTitle("2m Temps", 21),
-        ObjectMenuTitle("Upper Level Temps", 10),
-        ObjectMenuTitle("Stnd Anom Temp", 18),
-        ObjectMenuTitle("Other", 46)
+    private val titles = listOf(
+            ObjectMenuTitle("Precip", 37),
+            ObjectMenuTitle("QPF > Annual Chance (CONUS only)", 8),
+            ObjectMenuTitle("Precip Type", 4),
+            ObjectMenuTitle("Snow Depth", 5),
+            ObjectMenuTitle("Stnd Anom Hght", 15),
+            ObjectMenuTitle("2m Temps", 21),
+            ObjectMenuTitle("Upper Level Temps", 10),
+            ObjectMenuTitle("Stnd Anom Temp", 18),
+            ObjectMenuTitle("Other", 46)
     )
 
     var shortCodes = Array(13) { Array(50) { "" } }

@@ -23,11 +23,16 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
 import androidx.appcompat.app.AlertDialog
 import android.widget.ArrayAdapter
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
+import android.util.TypedValue
+import android.widget.TextView
+import android.view.ViewGroup
+import android.view.View
 
 class ObjectDialogue {
 
@@ -41,19 +46,37 @@ class ObjectDialogue {
     constructor(context: Context, title: String, list: List<String>) {
         alertDialog = AlertDialog.Builder(context)
         alertDialog.setTitle(title)
-        arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, list)
+        //arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, list)
+        arrayAdapter = object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                val tv = view.findViewById(android.R.id.text1) as TextView
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
+                tv.setTextColor(Color.WHITE)
+                return view
+            }
+        }
         arrayAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
         alertDialog.setNegativeButton(
-            "Done"
+                "Done"
         ) { dialog, _ -> dialog.dismiss() }
     }
 
     constructor(context: Context, list: List<String>) {
         alertDialog = AlertDialog.Builder(context)
-        arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, list)
+        //arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, list)
+        arrayAdapter = object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
+            override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                val view = super.getView(position, convertView, parent)
+                val tv = view.findViewById(android.R.id.text1) as TextView
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
+                tv.setTextColor(Color.WHITE)
+                return view
+            }
+        }
         arrayAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
         alertDialog.setNegativeButton(
-            "Done"
+                "Done"
         ) { dialog, _ -> dialog.dismiss() }
     }
 
@@ -63,7 +86,7 @@ class ObjectDialogue {
         alertDialog.setMessage(text)
         alertDialog.setCancelable(false)
         alertDialog.setNegativeButton(
-            "Done"
+                "Done"
         ) { dialog, _ -> dialog.dismiss() }
         val ad = alertDialog.create()
         ad.setCanceledOnTouchOutside(true)

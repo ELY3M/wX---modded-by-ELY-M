@@ -4,7 +4,6 @@
 
 package joshuatee.wx.external
 
-import java.util.Arrays
 import java.util.LinkedHashSet
 
 class ExternalDuplicateRemover {
@@ -12,10 +11,8 @@ class ExternalDuplicateRemover {
     fun stripDuplicates(aHunk: String): String {
         val result = StringBuilder()
         val uniqueLines = LinkedHashSet<String>()
-
         val chunks = aHunk.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-        uniqueLines.addAll(Arrays.asList(*chunks))
-
+        uniqueLines.addAll(listOf(*chunks))
         for (chunk in uniqueLines) {
             result.append(chunk).append("\n")
         }

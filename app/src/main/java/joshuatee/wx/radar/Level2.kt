@@ -65,7 +65,7 @@ internal object Level2 {
         radialStartAngle: ByteBuffer,
         prod: Int,
         days: ByteBuffer,
-        msecs: ByteBuffer
+        milliSeconds: ByteBuffer
     ) {
         val velocityProd = prod == 154
         try {
@@ -83,23 +83,36 @@ internal object Level2 {
             val highReflectivity = mutableListOf<Level2Record>()
             val highVelocity = mutableListOf<Level2Record>()
             var messageOffset31: Long = 0
-            var recno = 0
+            var recordNumber = 0
             while (true) {
-                val r = Level2Record.factory(dis2, recno++, messageOffset31) ?: break
-                if (r.messageType.toInt() == 31) messageOffset31 += (r.messageSize * 2 + 12 - 2432)
-                if (r.messageType.toInt() != 1 && r.messageType.toInt() != 31) continue
-                if (vcp == 0) vcp = r.vcp.toInt()
-                if (first == null) first = r
-                if (r.messageType.toInt() == 31)
+                //val r = Level2Record.factory(dis2, recordNumber++, messageOffset31) ?: break
+                val r = Level2Record.factory(dis2, recordNumber, messageOffset31) ?: break
+                recordNumber += 1
+                if (r.messageType.toInt() == 31) {
+                    messageOffset31 += (r.messageSize * 2 + 12 - 2432)
+                }
+                if (r.messageType.toInt() != 1 && r.messageType.toInt() != 31) {
+                    continue
+                }
+                if (vcp == 0) {
+                    vcp = r.vcp.toInt()
+                }
+                if (first == null) {
+                    first = r
+                }
+                if (r.messageType.toInt() == 31) {
                     if (r.hasHighResREFData) highReflectivity.add(r)
-                if (r.hasHighResVELData) highVelocity.add(r)
+                }
+                if (r.hasHighResVELData) {
+                    highVelocity.add(r)
+                }
             }
             val numberOfRadials = 720
             var r = 1
             days.position(0)
             days.putShort(highReflectivity[r].dataJulianDate)
-            msecs.position(0)
-            msecs.putInt(highReflectivity[r].dataMsecs)
+            milliSeconds.position(0)
+            milliSeconds.putInt(highReflectivity[r].dataMsecs)
             if (!velocityProd) {
                 r = 0
                 while (r < numberOfRadials) {

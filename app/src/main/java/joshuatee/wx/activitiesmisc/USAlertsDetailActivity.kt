@@ -45,8 +45,8 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var activityArguments: Array<String>
-    private var ca = CapAlert()
-    private lateinit var objAlerts: ObjectAlertDetail
+    private var capAlert = CapAlert()
+    private lateinit var objectAlertDetail: ObjectAlertDetail
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,34 +57,34 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val tts = m.findItem(R.id.action_playlist)
         tts.isVisible = false
         toolbarBottom.setOnMenuItemClickListener(this)
-        objAlerts = ObjectAlertDetail(this, linearLayout)
+        objectAlertDetail = ObjectAlertDetail(this, linearLayout)
         activityArguments = intent.getStringArrayExtra(URL)
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        ca = withContext(Dispatchers.IO) { CapAlert.createFromUrl(activityArguments[0]) }
-        objAlerts.updateContent(ca, activityArguments[0])
-        toolbar.subtitle = objAlerts.wfoTitle
-        title = objAlerts.title
+        capAlert = withContext(Dispatchers.IO) { CapAlert.createFromUrl(activityArguments[0]) }
+        objectAlertDetail.updateContent(capAlert, activityArguments[0])
+        toolbar.subtitle = objectAlertDetail.wfoTitle
+        title = objectAlertDetail.title
         UtilityTts.conditionalPlay(
-            activityArguments,
-            1,
-            applicationContext,
-            Utility.fromHtml(ca.text),
-            "alert"
+                activityArguments,
+                1,
+                applicationContext,
+                Utility.fromHtml(capAlert.text),
+                "alert"
         )
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, ca.text, "alert", "alert")) {
+        if (audioPlayMenu(item.itemId, capAlert.text, "alert", "alert")) {
             return true
         }
         when (item.itemId) {
             R.id.action_share -> UtilityShare.shareText(
-                this,
-                ca.title + " " + ca.area,
-                Utility.fromHtml(ca.text)
+                    this,
+                    capAlert.title + " " + capAlert.area,
+                    Utility.fromHtml(capAlert.text)
             )
             else -> return super.onOptionsItemSelected(item)
         }

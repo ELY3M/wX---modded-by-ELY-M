@@ -100,21 +100,6 @@ object UtilityMath {
 
     internal fun roundToString(valueD: Double) = round(valueD.toFloat()).toInt().toString()
 
-    /*internal fun metersPerSecondtoMPH(valueDF: Double): String {
-        val valueD = valueDF * 2.23694
-        return round(valueD).toInt().toString()
-    }*/
-
-   /* internal fun metersToMileRounded(valueDF: Double): String {
-        val valueD = valueDF / 1609.34
-        return round(valueD).toInt().toString()
-    }
-
-    internal fun pressurePAtoMB(valueDF: Double): String {
-        val valueD = valueDF / 100.0
-        return round(valueD).toInt().toString()
-    }*/
-
     internal fun pressureMBtoIn(valueF: String): String {
         var value = valueF
         var tmpNum = value.toDoubleOrNull() ?: 0.0
@@ -155,6 +140,33 @@ object UtilityMath {
 
     // https://training.weather.gov/wdtd/tools/misc/beamwidth/index.htm
     fun getRadarBeamHeight(degree: Float, distance: Double): Double {
-        return 3.281 * (Math.sin(Math.toRadians(degree.toDouble())) * distance + distance * distance / 15417.82) * 1000.0
+        return 3.281 * (sin(Math.toRadians(degree.toDouble())) * distance + distance * distance / 15417.82) * 1000.0
     }
+
+    fun heatIndex(temp: String , rh: String ): String {
+        val t = temp.toDoubleOrNull() ?: 0.0
+        val r = rh.toDoubleOrNull() ?: 0.0
+        return if ( t > 80.0 && r > 40.0 ) {
+            val s1 = -42.379
+            val s2 = 2.04901523 * t
+            val s3 = 10.14333127 * r
+            val s4 = 0.22475541 * t * r
+            val s5 = 6.83783 * 10.0.pow(-3.0) * t.pow(2.0)
+            val s6 = 5.481717 * 10.0.pow(-2.0) * r.pow(2.0)
+            val s7 = 1.22874 * 10.0.pow(-3.0) * t.pow(2.0) * r
+            val s8 = 8.5282 * 10.0.pow(-4.0) * t * r.pow(2.0)
+            val s9 = 1.99 * 10.0.pow(-6.0) * t.pow(2.0) * r.pow(2.0)
+            val res1 = (s1 + s2 + s3 - s4 - s5 - s6 + s7 + s8 - s9).roundToInt().toString()
+            res1
+        } else {
+            ""
+        }
+    }
+
+    /*static String getWindChill(double tempD, double mphD )
+	{
+		double windChillD = 35.74 + 0.6215 * tempD - 35.75 * Math.pow(mphD,0.16) + 0.4275*tempD * Math.pow(mphD,0.16);
+		return "(" + UtilityMath.unitsTemp(Integer.toString((int)(Math.round(windChillD)))) + MyApplication.DEGREE_SYMBOL + ")";
+	}*/
+
 }

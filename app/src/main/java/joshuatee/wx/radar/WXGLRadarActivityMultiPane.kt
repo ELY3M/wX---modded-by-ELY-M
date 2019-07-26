@@ -139,6 +139,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private var useSinglePanePref = false
     private var landScape = false
     private var isGetContentInProgress = false
+    private lateinit var l3Menu: MenuItem
+    private lateinit var l2Menu: MenuItem
+    private lateinit var tdwrMenu: MenuItem
+    private lateinit var tiltMenu: MenuItem
+    private lateinit var tiltMenuOption4: MenuItem
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -224,6 +229,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         val menu = toolbarBottom.menu
         star = menu.findItem(R.id.action_fav)
         anim = menu.findItem(R.id.action_a)
+        tiltMenu = menu.findItem(R.id.action_tilt)
+        tiltMenuOption4 = menu.findItem(R.id.action_tilt4)
+        l3Menu = menu.findItem(R.id.action_l3)
+        l2Menu = menu.findItem(R.id.action_l2)
+        tdwrMenu = menu.findItem(R.id.action_tdwr)
         val rad3 = menu.findItem(R.id.action_radar3)
         val rad4 = menu.findItem(R.id.action_radar4)
         val quadPaneJump = menu.findItem(R.id.action_radar_4)
@@ -478,6 +488,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                         "N0U"
                 toolbar.subtitle = ""
                 setToolbarTitle()
+                adjustTiltAndProductMenus()
                 UtilityRadarUI.initWxOglGeom(
                         glv,
                         ogl,
@@ -680,7 +691,31 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         UtilityUI.immersiveMode(this as Activity)
     }
 
+    private fun adjustTiltAndProductMenus() {
+        //if (isTdwr(oglrArr[curRadar].product)) {
+        //}
+
+        if (isTdwr(oglrArr[curRadar].product)) {
+            l3Menu.isVisible = false
+            l2Menu.isVisible = false
+            tdwrMenu.isVisible = true
+            //tiltMenuOption4.isVisible = false
+            tiltMenu.isVisible = oglrArr[curRadar].product.matches(Regex("[A-Z][A-Z][0-2]"))
+        } else {
+            l3Menu.isVisible = true
+            l2Menu.isVisible = true
+            tdwrMenu.isVisible = false
+            //tiltMenuOption4.isVisible = true
+            tiltMenu.isVisible = oglrArr[curRadar].product.matches(Regex("[A-Z][0-3][A-Z]"))
+        }
+    }
+
+    private fun isTdwr(product: String): Boolean {
+        return ( product in WXGLNexrad.tdwrProductList )
+    }
+
     override fun onMenuItemClick(item: MenuItem): Boolean {
+        //adjustTiltAndProductMenus()
         UtilityUI.immersiveMode(this)
         if (inOglAnim && (item.itemId != R.id.action_fav) && (item.itemId != R.id.action_share) && (item.itemId != R.id.action_tools)) {
             inOglAnim = false
@@ -815,6 +850,10 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             R.id.action_dsp -> changeProd("DSA")
             R.id.action_daa -> changeProd("DAA")
             R.id.action_nsw -> changeProd("NSW")
+            R.id.action_n1p -> changeProd("N1P")
+            R.id.action_ntp -> changeProd("NTP")
+            R.id.action_ncr -> changeProd("NCR")
+            R.id.action_ncz -> changeProd("NCZ")
             R.id.action_l2vel -> changeProd("L2VEL")
             R.id.action_l2ref -> changeProd("L2REF")
             R.id.action_tilt1 -> changeTilt("0")
@@ -891,6 +930,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         curRadar = radarNumber
         idxIntAl = radarNumber
         setToolbarTitle()
+        adjustTiltAndProductMenus()
     }
 
     private fun ridMapSwitch(r: String) {

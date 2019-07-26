@@ -11,6 +11,7 @@ package joshuatee.wx.external
 
 import joshuatee.wx.radar.LatLon
 import java.io.Serializable
+import kotlin.math.abs
 
 /**
  *
@@ -147,9 +148,7 @@ open class ExternalGlobalCoordinates
      */
     override fun equals(obj: Any?): Boolean {
         if (obj !is ExternalGlobalCoordinates) return false
-
         val other = obj as ExternalGlobalCoordinates?
-
         return mLongitude == other!!.mLongitude && mLatitude == other.mLatitude
     }
 
@@ -158,14 +157,12 @@ open class ExternalGlobalCoordinates
      */
     override fun toString(): String {
         val buffer = StringBuffer()
-
-        buffer.append(Math.abs(mLatitude))
+        buffer.append(abs(mLatitude))
         buffer.append(if (mLatitude >= 0) 'N' else 'S')
         buffer.append(';')
-        buffer.append(Math.abs(mLongitude))
+        buffer.append(abs(mLongitude))
         buffer.append(if (mLongitude >= 0) 'E' else 'W')
         buffer.append(';')
-
         return buffer.toString()
     }
 }

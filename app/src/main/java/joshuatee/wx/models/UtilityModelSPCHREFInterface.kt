@@ -24,15 +24,13 @@ package joshuatee.wx.models
 import joshuatee.wx.ui.ObjectMenuTitle
 import android.util.SparseArray
 
-import java.util.Arrays
-
 import joshuatee.wx.util.Group
 
 internal object UtilityModelSpcHrefInterface {
 
     val models = listOf("HREF")
 
-    private val titles = Arrays.asList(
+    private val titles = listOf(
             ObjectMenuTitle("SPC Guidance", 6),
             ObjectMenuTitle("Synoptic", 6),
             ObjectMenuTitle("Severe", 12),

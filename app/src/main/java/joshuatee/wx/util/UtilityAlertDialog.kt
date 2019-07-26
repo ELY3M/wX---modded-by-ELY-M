@@ -35,6 +35,7 @@ import joshuatee.wx.ui.ObjectDialogue
 import android.webkit.WebResourceRequest
 import android.os.Build
 import android.annotation.TargetApi
+import kotlin.system.exitProcess
 
 object UtilityAlertDialog {
 
@@ -102,6 +103,6 @@ object UtilityAlertDialog {
 
 
     fun restart() {
-        System.exit(0)
+        exitProcess(0)
     }
 }

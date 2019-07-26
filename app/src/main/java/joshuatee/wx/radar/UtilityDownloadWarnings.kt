@@ -59,6 +59,29 @@ internal object UtilityDownloadWarnings {
         }
     }
 
+    fun getForSevereDashboard(context: Context) {
+        val refreshInterval = Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3)
+        val currentTime1 = System.currentTimeMillis()
+        val currentTimeSec = currentTime1 / 1000
+        val refreshIntervalSec = (refreshInterval * 60).toLong()
+
+        UtilityLog.d("wx", "RADAR DOWNLOAD CHECK: $type")
+
+        if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
+            // download data
+            initialized = true
+            val currentTime = System.currentTimeMillis()
+            lastRefresh = currentTime / 1000
+            //if (PolygonType.TST.pref) {
+            UtilityLog.d("wx", "RADAR DOWNLOAD INITIATED: $type")
+            getPolygonVtec(context)
+            //} else {
+                //UtilityDownloadRadar.clearPolygonVtec()
+            //    UtilityLog.d("wx", "RADAR DOWNLOAD INITIATED BUT PREF IS OFF - NO DOWNLOAD: $type")
+            //}
+        }
+    }
+
     // The only difference from the get method above is the absence of any preference check
     // ie - if you call this you are going to download regardless
     fun getForNotification(context: Context) {

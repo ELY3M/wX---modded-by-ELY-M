@@ -170,7 +170,7 @@ object UtilityDownload {
             }
             "SWOD1" -> {
                 needsBitmap = false
-                bm = UtilitySpcSwo.getImageUrls("1", false)[0]
+                bm = UtilitySpcSwo.getImages("1", false)[0]
             }
             "WEATHERSTORY" -> {
                 needsBitmap = false
@@ -178,15 +178,15 @@ object UtilityDownload {
             }
             "SWOD2" -> {
                 needsBitmap = false
-                bm = UtilitySpcSwo.getImageUrls("2", false)[0]
+                bm = UtilitySpcSwo.getImages("2", false)[0]
             }
             "SWOD3" -> {
                 needsBitmap = false
-                bm = UtilitySpcSwo.getImageUrls("3", false)[0]
+                bm = UtilitySpcSwo.getImages("3", false)[0]
             }
             "SWOD4" -> {
                 needsBitmap = false
-                bm = UtilitySpcSwo.getImageUrls("4", false)[0]
+                bm = UtilitySpcSwo.getImages("4", false)[0]
             }
             "SPCMESO1" -> {
                 var param = "500mb"

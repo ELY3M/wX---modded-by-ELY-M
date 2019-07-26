@@ -117,7 +117,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private val alertDialogStatusList = mutableListOf<String>()
     private var idxIntG = 0
     private var alertDialogRadarLongPress: ObjectDialogue? = null
-    private val alertDialogRadarLongpressAl = mutableListOf<String>()
+    private val alertDialogRadarLongPressAl = mutableListOf<String>()
     private var objCc = ObjectForecastPackageCurrentConditions()
     private var objHazards = ObjectForecastPackageHazards()
     private var objSevenDay = ObjectForecastPackage7Day()
@@ -522,7 +522,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
             if (progress != 50000) {
                 idxIntG = idx
                 UtilityRadarUI.addItemsToLongPress(
-                        alertDialogRadarLongpressAl,
+                        alertDialogRadarLongPressAl,
                         x,
                         y,
                         activityReference,
@@ -732,12 +732,12 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     }
 
     private fun setupAlertDialogRadarLongPress() {
-        alertDialogRadarLongPress = ObjectDialogue(activityReference, alertDialogRadarLongpressAl)
+        alertDialogRadarLongPress = ObjectDialogue(activityReference, alertDialogRadarLongPressAl)
         alertDialogRadarLongPress!!.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
             dialog.dismiss()
         })
         alertDialogRadarLongPress!!.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
-            val strName = alertDialogRadarLongpressAl[which]
+            val strName = alertDialogRadarLongPressAl[which]
             UtilityRadarUI.doLongPressAction(
                     strName,
                     activityReference,
@@ -827,6 +827,9 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     )
                 })
                 linearLayoutHazards?.addView(hazardsCards[z].card)
+            } else {
+                hazardsExpandedAl.add(false)
+                hazardsCards.add(ObjectCardText(activityReference))
             }
         }
     }

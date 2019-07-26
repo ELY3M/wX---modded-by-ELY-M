@@ -26,6 +26,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
@@ -33,6 +34,7 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardImage
+import joshuatee.wx.ui.ObjectLinearLayout
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityShortcut
 import kotlinx.coroutines.*
@@ -43,6 +45,7 @@ class SpcSwoSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val bitmaps = mutableListOf<Bitmap>()
+    private lateinit var linearLayoutHorizontalList: List<ObjectLinearLayout>
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,19 +60,27 @@ class SpcSwoSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         UtilityShortcut.hidePinIfNeeded(menu)
         title = "SPC"
         toolbar.subtitle = "Convective Outlook Summary"
+        linearLayoutHorizontalList = listOf(
+                ObjectLinearLayout(this, ll),
+                ObjectLinearLayout(this, ll),
+                ObjectLinearLayout(this, ll),
+                ObjectLinearLayout(this, ll)
+        )
+        linearLayoutHorizontalList.forEach {
+            it.linearLayout.orientation = LinearLayout.HORIZONTAL
+        }
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
             arrayOf("1", "2", "3", "4-8").forEach {
-                bitmaps.addAll(
-                        UtilitySpcSwo.getImageUrls(it, false)
-                )
+                bitmaps.addAll(UtilitySpcSwo.getImages(it, false))
             }
         }
         bitmaps.forEach { bitmap ->
-            val card = ObjectCardImage(this@SpcSwoSummaryActivity, ll, bitmap)
+            val index = bitmaps.indexOf(bitmap)
+            val card = ObjectCardImage(this@SpcSwoSummaryActivity, linearLayoutHorizontalList[index / 2].linearLayout, bitmap, 2)
             val day = if (bitmaps.indexOf(bitmap) < 3) {
                 (bitmaps.indexOf(bitmap) + 1).toString()
             } else {

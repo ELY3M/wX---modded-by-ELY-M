@@ -106,7 +106,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                     which
             )
         })
-        dialogueRadar = ObjectDialogue(this, "Select fixed location Nexrad products:", GlobalArrays.radars)
+        dialogueRadar = ObjectDialogue(this, "Select fixed location Nexrad products:", GlobalArrays.radars + GlobalArrays.tdwrRadarsForHomeScreen)
         dialogueRadar.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
             alertDialogClicked(
                     dialogueRadar,
@@ -120,10 +120,10 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         ridFav = ridFav.replace("^:".toRegex(), "")
         MyApplication.homescreenFav = ridFav
         Utility.writePref(this, prefToken, ridFav)
-        val ridArrtmp = ridFav.split(":").dropLastWhile { it.isEmpty() }
+        val tempList = ridFav.split(":").dropLastWhile { it.isEmpty() }
         if (ridFav != "") {
             ridArr.clear()
-            ridArrtmp.indices.forEach { ridArr.add(ridArrtmp[it]) }
+            tempList.indices.forEach { ridArr.add(tempList[it]) }
             if (firstTime) {
                 labels = mutableListOf()
             }
@@ -146,7 +146,10 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                     labels[k] = findPositionIMG2(ridArr[k])
                 }
                 if (labels[k] == "") {
-                    labels[k] = findPositionRadar(ridArr[k])
+                    labels[k] = findPositionRadarNexrad(ridArr[k])
+                }
+                if (labels[k] == "") {
+                    labels[k] = findPositionRadarTdwr(ridArr[k])
                 }
                 if (labels[k] == "") {
                     labels[k] = ridArr[k]
@@ -197,9 +200,9 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     private fun moveUp(pos: Int) {
         ridFav = MyApplication.homescreenFav
-        val ridArrtmp = MyApplication.colon.split(ridFav)
+        val tempList = MyApplication.colon.split(ridFav)
         ridArr.clear()
-        ridArrtmp.indices.forEach { ridArr.add(ridArrtmp[it]) }
+        tempList.indices.forEach { ridArr.add(tempList[it]) }
         if (pos != 0) {
             val tmp = ridArr[pos - 1]
             ridArr[pos - 1] = ridArr[pos]
@@ -217,9 +220,9 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     private fun moveDown(pos: Int) {
         ridFav = MyApplication.homescreenFav
-        val ridArrtmp = MyApplication.colon.split(ridFav)
+        val tempList = MyApplication.colon.split(ridFav)
         ridArr.clear()
-        ridArrtmp.indices.forEach { ridArr.add(ridArrtmp[it]) }
+        tempList.indices.forEach { ridArr.add(tempList[it]) }
         if (pos != ridArr.lastIndex) {
             val tmp = ridArr[pos + 1]
             ridArr[pos + 1] = ridArr[pos]
@@ -276,9 +279,19 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         return ""
     }
 
-    private fun findPositionRadar(key: String) = (0 until GlobalArrays.radars.size)
-            .firstOrNull { GlobalArrays.radars[it].startsWith(key.replace("NXRD-", "")) }
-            ?.let { GlobalArrays.radars[it] + " (NEXRAD)" } ?: ""
+    private fun findPositionRadarNexrad(key: String): String {
+        val allRadars = GlobalArrays.radars
+        return (0 until allRadars.size)
+                .firstOrNull { allRadars[it].startsWith(key.replace("NXRD-", "")) }
+                ?.let { allRadars[it] + " (NEXRAD)" } ?: ""
+    }
+
+    private fun findPositionRadarTdwr(key: String): String {
+        val allRadars = GlobalArrays.tdwrRadarsForHomeScreen
+        return (0 until allRadars.size)
+                .firstOrNull { allRadars[it].startsWith(key.replace("NXRD-", "")) }
+                ?.let { allRadars[it] + " (TDWR)" } ?: ""
+    }
 
     override fun onBackPressed() {
         if (ridFav != homeScreenFavOrig) {
@@ -344,7 +357,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             updateList()
             recyclerView.notifyDataSetChanged()
         } else {
-            UtilityUI.makeSnackBar(recyclerView.recyclerView, "$textProduct is already in homescreen.")
+            UtilityUI.makeSnackBar(recyclerView.recyclerView, "$textProduct is already in home screen.")
         }
     }
 } 

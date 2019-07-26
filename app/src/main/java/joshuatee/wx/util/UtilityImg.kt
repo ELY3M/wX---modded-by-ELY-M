@@ -229,11 +229,10 @@ object UtilityImg {
         }
     }
 
-    fun resizeViewSetImgInCard(bitmap: Bitmap, iv: ImageView) {
+    fun resizeViewSetImgInCard(bitmap: Bitmap, iv: ImageView, numberAcross: Int = 1) {
         val paramsIv = iv.layoutParams
-        paramsIv.width = MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()
-        paramsIv.height = (MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()) *
-                bitmap.height / bitmap.width
+        paramsIv.width = (MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()) / numberAcross
+        paramsIv.height = ((MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()) * bitmap.height / bitmap.width ) / numberAcross
         iv.layoutParams = paramsIv
         iv.setImageBitmap(bitmap)
     }

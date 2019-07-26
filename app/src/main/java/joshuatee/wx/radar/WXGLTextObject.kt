@@ -273,6 +273,7 @@ class WXGLTextObject(
         }
     }
 
+
     private fun hideHailLabels() {
         wxglSurfaceView.hailLabelAl.indices.forEach {
             wxglSurfaceView.hailLabelAl[it].visibility = View.GONE

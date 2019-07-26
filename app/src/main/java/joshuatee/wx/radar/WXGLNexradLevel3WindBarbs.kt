@@ -49,7 +49,6 @@ internal object WXGLNexradLevel3WindBarbs {
         var start: ExternalGlobalCoordinates
         var end: ExternalGlobalCoordinates
         var ec: ExternalGlobalCoordinates
-        var tmpCoords: DoubleArray
         val degreeShift = 180.00
         val arrowLength = 2.5
         val arrowSpacing = 3.0
@@ -89,9 +88,7 @@ internal object WXGLNexradLevel3WindBarbs {
                     startLength,
                     bearing
                 )
-                tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(ec, pn)
-                stormList.add(tmpCoords[0])
-                stormList.add(tmpCoords[1])
+                stormList += UtilityCanvasProjection.computeMercatorNumbers(ec, pn).toList()
                 start = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
                 ec = ecc.calculateEndingGlobalCoordinates(
                     ExternalEllipsoid.WGS84,
@@ -101,9 +98,7 @@ internal object WXGLNexradLevel3WindBarbs {
                     bearing
                 )
                 end = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
-                tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(ec, pn)
-                stormList.add(tmpCoords[0])
-                stormList.add(tmpCoords[1])
+                stormList += UtilityCanvasProjection.computeMercatorNumbers(ec, pn).toList()
                 var barbCount = length / 10
                 var halfBarb = false
                 var oneHalfBarb = false
@@ -138,7 +133,6 @@ internal object WXGLNexradLevel3WindBarbs {
                         startLength + arrowLength * nmScaleFactor,
                         bearing
                     )
-
                     // perpendicular line from main barb
                     ec = ecc.calculateEndingGlobalCoordinates(
                         ExternalEllipsoid.WGS84,
@@ -156,7 +150,6 @@ internal object WXGLNexradLevel3WindBarbs {
                         startLength + 0.80 * arrowLength * nmScaleFactor,
                         bearing
                     )
-
                     // connecting line parallel to main barb
                     ec = ecc.calculateEndingGlobalCoordinates(
                         ExternalEllipsoid.WGS84,
@@ -232,9 +225,7 @@ internal object WXGLNexradLevel3WindBarbs {
         bearing: DoubleArray
     ) {
         val startPoint = ExternalGlobalCoordinates(startEc)
-        val startCoords = UtilityCanvasProjection.computeMercatorNumbers(startEc, pn)
-        list.add(startCoords[0])
-        list.add(startCoords[1])
+        list += UtilityCanvasProjection.computeMercatorNumbers(startEc, pn).toList()
         val ec = ecc.calculateEndingGlobalCoordinates(
             ExternalEllipsoid.WGS84,
             startPoint,
@@ -242,8 +233,6 @@ internal object WXGLNexradLevel3WindBarbs {
             distance,
             bearing
         )
-        val tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(ec, pn)
-        list.add(tmpCoords[0])
-        list.add(tmpCoords[1])
+        list += UtilityCanvasProjection.computeMercatorNumbers(ec, pn).toList()
     }
 }

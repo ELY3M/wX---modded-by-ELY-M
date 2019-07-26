@@ -30,6 +30,18 @@ import joshuatee.wx.util.Utility
 
 object WXGLNexrad {
 
+    val tdwrProductList = listOf(
+            "TR0",
+            "TR1",
+            "TR2",
+            "TV0",
+            "TV1",
+            "TV2",
+            "TZL",
+            "N1P",
+            "NTP"
+    )
+
     // next 3 maps are for color palette editor
     val productCodeStringToName: Map<String, String> = mapOf(
             "94" to "Reflectivity",
@@ -67,51 +79,51 @@ object WXGLNexrad {
     val colorPaletteProducts: List<String> = listOf("94", "99", "134", "135", "159", "161", "163", "172")
 
     private val closestTdwrToNexrad: Map<String, String> = mapOf(
-        "DTX" to "DTW",
-        "LOT" to "ORD",
-        "MKX" to "MKE",
-        "MPX" to "MSP",
-        "FTG" to "DEN",
-        "BOX" to "BOS",
-        "CLE" to "LVE",
-        "EAX" to "MCI",
-        "FFC" to "ATL",
-        "FWS" to "DFW",
-        "GSP" to "CLT",
-        "HGX" to "HOU",
-        "IND" to "IDS",
-        "LIX" to "MSY",
-        "LVX" to "SDF",
-        "LSX" to "STL",
-        "NQA" to "MEM",
-        "AMX" to "MIA",
-        "OHX" to "BNA",
-        "OKX" to "JFK",
-        "TLX" to "OKC",
-        "PBZ" to "PIT",
-        "DIX" to "PHL",
-        "IWA" to "PHX",
-        "RAX" to "RDU",
-        "MTX" to "SLC",
-        "TBW" to "TPA",
-        "INX" to "TUL",
-        "ESX" to "LAS",
-        "TBW" to "TPA",
-        "JUA" to "SJU",
-        "LWX" to "DCA",
-        "ILN" to "CMH",
-        "MLB" to "MCO",
-        "ICT" to "ICT",
-        "CMH" to "CMH",
-        "CVG" to "CVG",
-        "DAL" to "DAL",
-        "DAY" to "DAY",
-        "EWR" to "EWR",
-        "FLL" to "FLL",
-        "IAD" to "IAD",
-        "IAH" to "IAH",
-        "MDW" to "MDW",
-        "PBI" to "PBI"
+            "DTX" to "DTW",
+            "LOT" to "ORD",
+            "MKX" to "MKE",
+            "MPX" to "MSP",
+            "FTG" to "DEN",
+            "BOX" to "BOS",
+            "CLE" to "LVE",
+            "EAX" to "MCI",
+            "FFC" to "ATL",
+            "FWS" to "DFW",
+            "GSP" to "CLT",
+            "HGX" to "HOU",
+            "IND" to "IDS",
+            "LIX" to "MSY",
+            "LVX" to "SDF",
+            "LSX" to "STL",
+            "NQA" to "MEM",
+            "AMX" to "MIA",
+            "OHX" to "BNA",
+            "OKX" to "JFK",
+            "TLX" to "OKC",
+            "PBZ" to "PIT",
+            "DIX" to "PHL",
+            "IWA" to "PHX",
+            "RAX" to "RDU",
+            "MTX" to "SLC",
+            "TBW" to "TPA",
+            "INX" to "TUL",
+            "ESX" to "LAS",
+            "TBW" to "TPA",
+            "JUA" to "SJU",
+            "LWX" to "DCA",
+            "ILN" to "CMH",
+            "MLB" to "MCO",
+            "ICT" to "ICT",
+            "CMH" to "CMH",
+            "CVG" to "CVG",
+            "DAL" to "DAL",
+            "DAY" to "DAY",
+            "EWR" to "EWR",
+            "FLL" to "FLL",
+            "IAD" to "IAD",
+            "IAH" to "IAH",
+            "MDW" to "MDW",
+            "PBI" to "PBI"
     )
 
     // 19    .54   124 16
@@ -127,10 +139,16 @@ object WXGLNexrad {
     // 161 N0C .13 162 256 ( bins 1200, radials 360, scale factor 999 )
     // 163 N0K .13 162 256 ( bins 1200, radials 360, scale factor 999 )
 
+    // 32 TDWR: DHR - DS.32dhr (wsr-88d also) range 124, colors 256, .54 x 1 nmi x degree
+    // 78 TDWR and NEXRAD: N1P DS.78ohp One Hour Precipitation Total range 124, colors 16, 1.1 x 1 nmi x degree
+    // 80 TDWR and NEXRAD: NTP DS.80stp Storm Total Precipitation range 124, colors 16, 1.1 x 1 nmi x degree
+    // 138 TDWR and NEXRAD: DSP DS.138dp Digital Storm Total Precipitation range 124, colors 256, 1.1 x 1 nmi x degree
+
     fun getNumberRangeBins(prodId: Int): Short = when (prodId) {
+        78, 80 -> 115
         134 -> 460
         186 -> 1390
-        182 -> 720
+        181, 182 -> 720
         135 -> 346
         99, 159, 161, 163, 170, 172 -> 1200
         else -> 460
@@ -140,19 +158,22 @@ object WXGLNexrad {
     private const val binSize13 = 0.50f
     private const val binSize08 = 0.295011f
     private const val binSize16 = 0.590022f
+    private const val binSize110 = 2.0f * binSize54
+
 
     fun getBinSize(prodId: Int): Float = when (prodId) {
         134, 135 -> binSize54
         186 -> binSize16
         159, 161, 163, 165, 99, 170, 172 -> binSize13
-        182 -> binSize08
+        181, 182 -> binSize08
+        78, 80 -> binSize110
         153, 154 -> binSize13
         else -> binSize54
     }
 
     // FIXME use different split
     fun isRidTdwr(rid: String): Boolean =
-        GlobalArrays.tdwrRadars.any { rid == MyApplication.space.split(it)[0] }
+            GlobalArrays.tdwrRadars.any { rid == MyApplication.space.split(it)[0] }
 
     fun getTdwrFromRid(rid: String): String = closestTdwrToNexrad[rid] ?: ""
 

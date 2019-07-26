@@ -68,9 +68,7 @@ import joshuatee.wx.GlobalArrays
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.util.*
-
 import joshuatee.wx.radar.SpotterNetworkPositionReport.SendPosition
-
 import kotlinx.coroutines.*
 
 class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuItemClickListener {
@@ -133,8 +131,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private lateinit var star: MenuItem
     private lateinit var anim: MenuItem
     private lateinit var tiltMenu: MenuItem
+    private lateinit var tiltMenuOption4: MenuItem
     private lateinit var l3Menu: MenuItem
     private lateinit var l2Menu: MenuItem
+    private lateinit var tdwrMenu: MenuItem
     private var delay = 0
     private val prefTokenLocation = "RID_LOC_"
     private val prefToken = "RID_FAV"
@@ -213,8 +213,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         star = menu.findItem(R.id.action_fav)
         anim = menu.findItem(R.id.action_a)
         tiltMenu = menu.findItem(R.id.action_tilt)
+        tiltMenuOption4 = menu.findItem(R.id.action_tilt4)
         l3Menu = menu.findItem(R.id.action_l3)
         l2Menu = menu.findItem(R.id.action_l2)
+        tdwrMenu = menu.findItem(R.id.action_tdwr)
         if (!UIPreferences.radarImmersiveMode) {
             val blank = menu.findItem(R.id.action_blank)
             blank.isVisible = false
@@ -230,7 +232,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             menu.findItem(R.id.action_share).title = "Share"
         delay = UtilityImg.animInterval(this)
         img = findViewById(R.id.iv)
-        img.setMaxZoom(6.0f)
+        img.maxZoom = 6.0f
         glview = WXGLSurfaceView(this, 1, numPanes, 1)
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf(img, glview))
         imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::mapToRid)
@@ -288,6 +290,20 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         )
         sp = ObjectSpinner(this, this, this, R.id.spinner1, ridArrLoc)
         checkForAutoRefresh()
+    }
+
+    private fun adjustTiltMenu() {
+        if (isTdwr()) {
+            tiltMenuOption4.isVisible = false
+            tiltMenu.isVisible = oglr.product.matches(Regex("[A-Z][A-Z][0-2]"))
+        } else {
+            tiltMenuOption4.isVisible = true
+            tiltMenu.isVisible = oglr.product.matches(Regex("[A-Z][0-3][A-Z]"))
+        }
+    }
+
+    private fun isTdwr(): Boolean {
+        return ( oglr.product in WXGLNexrad.tdwrProductList )
     }
 
     override fun onRestart() {
@@ -368,24 +384,36 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-
         if (!isGetContentInProgress) {
             isGetContentInProgress = true
             val ridIsTdwr = WXGLNexrad.isRidTdwr(oglr.rid)
             if (ridIsTdwr) {
                 l3Menu.isVisible = false
                 l2Menu.isVisible = false
+                tdwrMenu.isVisible = true
             } else {
                 l3Menu.isVisible = true
                 l2Menu.isVisible = true
+                tdwrMenu.isVisible = false
             }
-            if ((oglr.product == "N0Q" || oglr.product == "N1Q" || oglr.product == "N2Q" || oglr.product == "N3Q" || oglr.product == "L2REF") && ridIsTdwr) oglr.product =
-                    "TZL"
-            if (oglr.product == "TZL" && !ridIsTdwr) oglr.product = "N0Q"
-            if ((oglr.product == "N0U" || oglr.product == "N1U" || oglr.product == "N2U" || oglr.product == "N3U" || oglr.product == "L2VEL") && ridIsTdwr) oglr.product =
-                    "TV0"
-            if (oglr.product == "TV0" && !ridIsTdwr) oglr.product = "N0U"
+            if ((oglr.product == "N0Q" || oglr.product == "N1Q" || oglr.product == "N2Q" || oglr.product == "N3Q" || oglr.product == "L2REF") && ridIsTdwr) {
+                if (tilt == "3") {
+                    tilt = "2"
+                }
+                oglr.product = "TZL"
+            }
+            if ((oglr.product == "TZL" || oglr.product.startsWith("TR")) && !ridIsTdwr)
+                oglr.product = "N" + tilt + "Q"
+            if ((oglr.product == "N0U" || oglr.product == "N1U" || oglr.product == "N2U" || oglr.product == "N3U" || oglr.product == "L2VEL") && ridIsTdwr) {
+                if (tilt == "3") {
+                    tilt = "2"
+                }
+                oglr.product = "TV$tilt"
+            }
+            if (oglr.product.startsWith("TV") && !ridIsTdwr)
+                oglr.product = "N" + tilt + "U"
             title = oglr.product
+            adjustTiltMenu()
             if (MyApplication.ridFav.contains(":" + oglr.rid + ":"))
                 star.setIcon(MyApplication.STAR_ICON)
             else
@@ -749,6 +777,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 }
                 getContent()
             }
+            R.id.action_tr0 -> changeProd("TR$tilt", true)
+            R.id.action_tv0 -> changeProd("TV$tilt", true)
+            R.id.action_tzl -> changeProd("TZL", true)
             R.id.action_n0s -> changeProd("N" + tilt + "S", true)
             R.id.action_net -> changeProd("EET", false)
             R.id.action_N0X -> changeProd("N" + tilt + "X", true)
@@ -758,10 +789,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             R.id.action_radar_showhide -> showRadar()
             R.id.action_legend -> showLegend()
             R.id.action_about -> showRadarScanInfo()
-            R.id.action_vil -> changeProd("DVL", false)
+            R.id.action_dvl -> changeProd("DVL", false)
             R.id.action_dsp -> changeProd("DSA", false)
             R.id.action_daa -> changeProd("DAA", false)
-            R.id.action_nsw -> changeProd("NSW", false)
+            R.id.action_n1p -> changeProd("N1P", false)
+            R.id.action_ntp -> changeProd("NTP", false)
+            R.id.action_ncr -> changeProd("NCR", false)
+            R.id.action_ncz -> changeProd("NCZ", false)
+            //R.id.action_et -> changeProd("ET", false)
+            //R.id.action_vil -> changeProd("VIL", false)
             R.id.action_l2vel -> changeProd("L2VEL", false)
             R.id.action_l2ref -> changeProd("L2REF", false)
             R.id.action_tilt1 -> changeTilt("0")
@@ -811,6 +847,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
 
     private fun changeProd(prodF: String, canTilt: Boolean) {
         oglr.product = prodF
+        adjustTiltMenu()
         tiltOption = canTilt
         getContent()
     }
@@ -818,6 +855,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private fun changeTilt(tiltStr: String) {
         tilt = tiltStr
         oglr.product = oglr.product.replace("N[0-3]".toRegex(), "N$tilt")
+        if (oglr.product.startsWith("TR")) {
+            oglr.product = oglr.product.replace("TR[0-3]".toRegex(), "TR$tilt")
+        }
+        if (oglr.product.startsWith("TV")) {
+            oglr.product = oglr.product.replace("TV[0-3]".toRegex(), "TV$tilt")
+        }
         getContent()
     }
 
@@ -831,6 +874,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 prefTokenLocation,
                 prefToken
         )
+        adjustTiltMenu()
         sp.refreshData(this@WXGLRadarActivity, ridArrLoc)
     }
 
@@ -870,7 +914,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     } else {
                         oglr.rid = ridArrLoc[pos].split(" ").getOrNull(0) ?: ""
                     }
-                    tiltMenu.isVisible = tiltOption
                     if (!restarted && !(MyApplication.wxoglRememberLocation && firstRun)) {
                         img.resetZoom()
                         img.setZoom(1.0f)

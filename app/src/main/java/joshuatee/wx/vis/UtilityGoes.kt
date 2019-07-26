@@ -78,7 +78,8 @@ object UtilityGoes {
             satellite = "G17"
         }
         val url = when (sector) {
-            "FD" -> MyApplication.goes16AnimUrl + "/GOES/GOES16_FullDisk_Band.php?band=$product&length=$frameCountString"
+            // https://www.star.nesdis.noaa.gov/GOES/fulldisk_band.php?sat=G17&band=GEOCOLOR&length=12
+            "FD", "FD-G17" -> MyApplication.goes16AnimUrl + "/GOES/fulldisk_band.php?sat=$satellite&band=$product&length=$frameCountString"
             "CONUS", "CONUS-G17" -> MyApplication.goes16AnimUrl + "/GOES/conus_band.php?sat=$satellite&band=$product&length=$frameCountString"
             else -> MyApplication.goes16AnimUrl + "/GOES/sector_band.php?sat=$satellite&sector=$sector&band=$product&length=$frameCountString"
         }
@@ -150,9 +151,10 @@ object UtilityGoes {
     )
 
     val sectorToName = mapOf(
-            "FD" to "Full Disk",
-            "CONUS" to "GOES-EAST US",
-            "CONUS-G17" to "GOES-WEST US",
+            "FD" to "Full Disk: GOES-EAST",
+            "FD-G17" to " Full Disk: GOES-WEST",
+            "CONUS" to "CONUS: GOES-EAST",
+            "CONUS-G17" to "PACUS: GOES-WEST",
             "pnw" to "Pacific Northwest",
             "nr" to "Northern Rockies",
             "umv" to "Upper Mississippi Valley",

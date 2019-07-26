@@ -31,6 +31,8 @@ import android.view.MotionEvent
 import android.view.View
 
 import joshuatee.wx.R
+import kotlin.math.min
+import kotlin.math.roundToInt
 
 class SaturationBar : View {
 
@@ -222,7 +224,7 @@ class SaturationBar : View {
         val lengthSize = MeasureSpec.getSize(measureSpec)
         val length: Int = when (lengthMode) {
             MeasureSpec.EXACTLY -> lengthSize
-            MeasureSpec.AT_MOST -> Math.min(intrinsicSize, lengthSize)
+            MeasureSpec.AT_MOST -> min(intrinsicSize, lengthSize)
             else -> intrinsicSize
         }
         val barPointerHaloRadiusx2 = mBarPointerHaloRadius * 2
@@ -297,7 +299,7 @@ class SaturationBar : View {
         val hsvColor = FloatArray(3)
         Color.colorToHSV(mColor, hsvColor)
         mBarPointerPosition = if (!isInEditMode) {
-            Math.round(mSatToPosFactor * hsvColor[1] + mBarPointerHaloRadius)
+            (mSatToPosFactor * hsvColor[1] + mBarPointerHaloRadius).roundToInt()
         } else {
             mBarLength + mBarPointerHaloRadius
         }
@@ -347,8 +349,8 @@ class SaturationBar : View {
                 mIsMovingPointer = true
                 // Check whether the user pressed on (or near) the pointer
                 if (dimen >= mBarPointerHaloRadius && dimen <= mBarPointerHaloRadius + mBarLength) {
-                    mBarPointerPosition = Math.round(dimen)
-                    calculateColor(Math.round(dimen))
+                    mBarPointerPosition = dimen.roundToInt()
+                    calculateColor(dimen.roundToInt())
                     mBarPointerPaint!!.color = mColor
                     invalidate()
                 }
@@ -357,8 +359,8 @@ class SaturationBar : View {
                 if (mIsMovingPointer) {
                     // Move the the pointer on the bar.
                     if (dimen >= mBarPointerHaloRadius && dimen <= mBarPointerHaloRadius + mBarLength) {
-                        mBarPointerPosition = Math.round(dimen)
-                        calculateColor(Math.round(dimen))
+                        mBarPointerPosition = dimen.roundToInt()
+                        calculateColor(dimen.roundToInt())
                         mBarPointerPaint!!.color = mColor
                         if (mPicker != null) {
                             mPicker!!.setNewCenterColor(mColor)
@@ -405,7 +407,7 @@ class SaturationBar : View {
      * *            float between 0 > 1
      */
     fun setSaturation(saturation: Float) {
-        mBarPointerPosition = Math.round(mSatToPosFactor * saturation) + mBarPointerHaloRadius
+        mBarPointerPosition = (mSatToPosFactor * saturation).roundToInt() + mBarPointerHaloRadius
         calculateColor(mBarPointerPosition)
         mBarPointerPaint!!.color = mColor
         if (mPicker != null) {

@@ -31,9 +31,7 @@ import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectTouchImageView
-import joshuatee.wx.util.UtilityIO
-import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.util.UtilityShare
+import joshuatee.wx.util.*
 
 import kotlinx.coroutines.*
 
@@ -96,11 +94,14 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private fun loadRawBitmap() {
         bitmap = UtilityImg.loadBitmap(this, R.drawable.radar_legend, false)
         img.setBitmap(bitmap)
+        //img.resetZoom()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        UtilityLog.d("wx", url)
         bitmap = withContext(Dispatchers.IO) { url.getImage() }
         if (needsWhiteBackground) {
+            UtilityLog.d("wx", url)
             bitmap = UtilityImg.addColorBG(this@ImageShowActivity, bitmap, Color.WHITE)
         }
         img.setBitmap(bitmap)

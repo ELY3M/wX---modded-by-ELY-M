@@ -58,9 +58,8 @@ import joshuatee.wx.vis.GoesActivity
 open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListener {
 
     // All activities that need the common action bad extend this activity
-    // Provides access to vis, nexrad, AFD, hourly, rad mosiac, map of statewide alerts, observations
+    // Provides access to vis, nexrad, AFD, hourly, radar mosaic, map of statewide alerts, observations
     // settings, and about
-    //
 
     private val requestOk = 1
     protected lateinit var helpMi: MenuItem

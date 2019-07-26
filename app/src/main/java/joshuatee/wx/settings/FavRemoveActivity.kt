@@ -46,7 +46,7 @@ class FavRemoveActivity : BaseActivity() {
     }
 
     private val ridArr = mutableListOf<String>()
-    private var ridArrtmp = listOf<String>()
+    private var tempList = listOf<String>()
     private var ridFav = ""
     private var ridFavLabel = ""
     private var prefToken = ""
@@ -96,9 +96,9 @@ class FavRemoveActivity : BaseActivity() {
     }
 
     private fun updateList() {
-        ridArrtmp = ridFav.split(":").dropLastWhile { it.isEmpty() }
+        tempList = ridFav.split(":").dropLastWhile { it.isEmpty() }
         ridArr.clear()
-        (3 until ridArrtmp.size).mapTo(ridArr) { ridArrtmp[it] }
+        (3 until tempList.size).mapTo(ridArr) { tempList[it] }
         ridArrLabel = mutableListOf()
         ridArr.indices.forEach {
             when (type) {
@@ -113,9 +113,9 @@ class FavRemoveActivity : BaseActivity() {
 
     private fun moveUp(pos: Int) {
         ridFav = Utility.readPref(this, prefToken, "")
-        ridArrtmp = ridFav.split(":").dropLastWhile { it.isEmpty() }
+        tempList = ridFav.split(":").dropLastWhile { it.isEmpty() }
         ridArr.clear()
-        (3 until ridArrtmp.size).mapTo(ridArr) { ridArrtmp[it] }
+        (3 until tempList.size).mapTo(ridArr) { tempList[it] }
         if (pos != 0) {
             val tmp = ridArr[pos - 1]
             val tmp2 = ridArr[pos]
@@ -150,9 +150,9 @@ class FavRemoveActivity : BaseActivity() {
 
     private fun moveDown(pos: Int) {
         ridFav = Utility.readPref(this, prefToken, "")
-        ridArrtmp = ridFav.split(":").dropLastWhile { it.isEmpty() }
+        tempList = ridFav.split(":").dropLastWhile { it.isEmpty() }
         ridArr.clear()
-        (3 until ridArrtmp.size).mapTo(ridArr) { ridArrtmp[it] }
+        (3 until tempList.size).mapTo(ridArr) { tempList[it] }
         if (pos != ridArr.lastIndex) {
             val tmp = ridArr[pos + 1]
             val tmp2 = ridArr[pos]

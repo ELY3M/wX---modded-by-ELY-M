@@ -99,7 +99,7 @@ object UtilityCanvasStormInfo {
             val degreeShift = 180.00
             val arrowLength = 2.0
             val arrowBend = 20.0
-            val sti15IncrLen = 0.40
+            val sti15IncrementLength = 0.40
             if (posnNumbers.size == motNumbers.size && posnNumbers.size > 1) {
                 var s = 0
                 while (s < posnNumbers.size) {
@@ -184,7 +184,7 @@ object UtilityCanvasStormInfo {
                                 pn,
                                 ecArr[z],
                                 degree2 - (90.0 + stormTrackTickMarkAngleOff90),
-                                arrowLength * 1852.0 * sti15IncrLen,
+                                arrowLength * 1852.0 * sti15IncrementLength,
                                 bearing
                             )
                             drawTickMarks(
@@ -194,7 +194,7 @@ object UtilityCanvasStormInfo {
                                 pn,
                                 ecArr[z],
                                 degree2 + (90.0 - stormTrackTickMarkAngleOff90),
-                                arrowLength * 1852.0 * sti15IncrLen,
+                                arrowLength * 1852.0 * sti15IncrementLength,
                                 bearing
                             )
                             // 2nd line
@@ -205,7 +205,7 @@ object UtilityCanvasStormInfo {
                                 pn,
                                 ecArr[z],
                                 degree2 - (90.0 - stormTrackTickMarkAngleOff90),
-                                arrowLength * 1852.0 * sti15IncrLen,
+                                arrowLength * 1852.0 * sti15IncrementLength,
                                 bearing
                             )
                             drawTickMarks(
@@ -215,7 +215,7 @@ object UtilityCanvasStormInfo {
                                 pn,
                                 ecArr[z],
                                 degree2 + (90.0 + stormTrackTickMarkAngleOff90),
-                                arrowLength * 1852.0 * sti15IncrLen,
+                                arrowLength * 1852.0 * sti15IncrementLength,
                                 bearing
                             )
                         }
@@ -285,9 +285,7 @@ object UtilityCanvasStormInfo {
             distance,
             bearing
         )
-        val tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(ec, pn)
-        list.add(tmpCoords[0])
-        list.add(tmpCoords[1])
+        list += UtilityCanvasProjection.computeMercatorNumbers(ec, pn).toList()
     }
 
     private fun drawLine(
@@ -309,9 +307,6 @@ object UtilityCanvasStormInfo {
             distance,
             bearing
         )
-        val tmpCoords =
-            UtilityCanvasProjection.computeMercatorNumbers(ec.latitude, ec.longitude * -1, pn)
-        list.add(tmpCoords[0])
-        list.add(tmpCoords[1])
+        list += UtilityCanvasProjection.computeMercatorNumbers(ec.latitude, ec.longitude * -1, pn).toList()
     }
 }

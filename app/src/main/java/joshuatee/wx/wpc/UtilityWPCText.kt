@@ -25,11 +25,10 @@ import android.util.SparseArray
 
 import joshuatee.wx.util.Group
 import joshuatee.wx.ui.ObjectMenuTitle
-import java.util.*
 
 internal object UtilityWpcText {
 
-    private val titles = Arrays.asList(
+    private val titles = listOf(
             ObjectMenuTitle("General", 3),
             ObjectMenuTitle("General Forecast Discussions", 8),
             ObjectMenuTitle("Precipitation Discussions", 2),

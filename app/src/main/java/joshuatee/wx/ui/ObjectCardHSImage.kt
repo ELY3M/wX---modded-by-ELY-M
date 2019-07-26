@@ -34,7 +34,7 @@ class ObjectCardHSImage(context: Context, val product: String) : ObjectCardImage
         card.addView(img)
     }
 
-    override fun setImage(bitmap: Bitmap) {
+    fun setImage(bitmap: Bitmap) {
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
     }
 }

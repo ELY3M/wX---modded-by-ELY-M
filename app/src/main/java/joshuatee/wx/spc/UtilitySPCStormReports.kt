@@ -37,7 +37,7 @@ internal object UtilitySpcStormReports {
         var damageReport: String
         var magnitude: String
         var city: String
-        var damageHeader: String
+        //var damageHeader: String
         textArr.forEach {
             lat = ""
             lon = ""
@@ -47,7 +47,7 @@ internal object UtilitySpcStormReports {
             damageReport = ""
             magnitude = ""
             city = ""
-            damageHeader = ""
+            //damageHeader = ""
             output.setLength(0)
             if (it.contains(",F_Scale,")) {
                 output.append("Tornado Reports")
@@ -113,8 +113,8 @@ internal object UtilitySpcStormReports {
                     address,
                     city,
                     state,
-                    damageReport,
-                    damageHeader
+                    damageReport
+                    //damageHeader
                 )
             )
         }

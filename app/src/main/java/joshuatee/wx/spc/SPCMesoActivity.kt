@@ -251,7 +251,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
             } else {
                 displayData.img[it].setImageBitmap(displayData.bitmap[it])
             }
-            displayData.img[it].setMaxZoom(4f)
+            displayData.img[it].maxZoom = 4f
             animRan = false
         }
         if (!firstRun) {

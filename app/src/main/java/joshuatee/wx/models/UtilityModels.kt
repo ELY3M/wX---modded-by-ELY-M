@@ -286,17 +286,19 @@ object UtilityModels {
         val y = FloatArray(img.size)
         val z = FloatArray(img.size)
         val poi = mutableListOf<PointF>()
-        (0 until img.size).forEach {
-            z[it] = img[it].currentZoom
-            if (img[it].scrollPosition != null) {
-                poi.add(img[it].scrollPosition)
+        if (img.size > 0) {
+            (0 until img.size).forEach {
+                z[it] = img[it].currentZoom
+                if (img[it].scrollPosition != null) {
+                    poi.add(img[it].scrollPosition)
+                }
+                x[it] = poi[it].x
+                y[it] = poi[it].y
             }
-            x[it] = poi[it].x
-            y[it] = poi[it].y
+            toolbar.subtitle = str
+            (0 until img.size)
+                    .filter { !x[it].isNaN() && !y[it].isNaN() }
+                    .forEach { img[it].setZoom(z[it], x[it], y[it]) }
         }
-        toolbar.subtitle = str
-        (0 until img.size)
-                .filter { !x[it].isNaN() && !y[it].isNaN() }
-                .forEach { img[it].setZoom(z[it], x[it], y[it]) }
     }
 }

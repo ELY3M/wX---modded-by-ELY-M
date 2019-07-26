@@ -106,19 +106,19 @@ object UtilityUI {
         cardView.preventCornerOverlap = true
     }
 
-    fun moveUp(context: Context, prefToken: String, ridArr: MutableList<String>, pos: Int): String {
-        if (pos != 0) {
-            val tmp = ridArr[pos - 1]
-            ridArr[pos - 1] = ridArr[pos]
-            ridArr[pos] = tmp
+    fun moveUp(context: Context, prefToken: String, itemList: MutableList<String>, position: Int): String {
+        if (position != 0) {
+            val tmp = itemList[position - 1]
+            itemList[position - 1] = itemList[position]
+            itemList[position] = tmp
         } else {
-            val tmp = ridArr.last()
-            ridArr[ridArr.lastIndex] = ridArr[pos]
-            ridArr[0] = tmp
+            val tmp = itemList.last()
+            itemList[itemList.lastIndex] = itemList[position]
+            itemList[0] = tmp
         }
         var ridFav = ""
-        ridArr.indices.forEach {
-            ridFav = ridFav + ":" + MyApplication.semicolon.split(ridArr[it])[0]
+        itemList.indices.forEach {
+            ridFav = ridFav + ":" + MyApplication.semicolon.split(itemList[it])[0]
         }
         Utility.writePref(context, prefToken, ridFav)
         return ridFav
@@ -127,21 +127,21 @@ object UtilityUI {
     fun moveDown(
         context: Context,
         prefToken: String,
-        ridArr: MutableList<String>,
-        pos: Int
+        itemList: MutableList<String>,
+        position: Int
     ): String {
-        if (pos != ridArr.lastIndex) {
-            val tmp = ridArr[pos + 1]
-            ridArr[pos + 1] = ridArr[pos]
-            ridArr[pos] = tmp
+        if (position != itemList.lastIndex) {
+            val tmp = itemList[position + 1]
+            itemList[position + 1] = itemList[position]
+            itemList[position] = tmp
         } else {
-            val tmp = ridArr.first()
-            ridArr[0] = ridArr[pos]
-            ridArr[ridArr.lastIndex] = tmp
+            val tmp = itemList.first()
+            itemList[0] = itemList[position]
+            itemList[itemList.lastIndex] = tmp
         }
         var ridFav = ""
-        ridArr.indices.forEach {
-            ridFav = ridFav + ":" + MyApplication.semicolon.split(ridArr[it])[0]
+        itemList.indices.forEach {
+            ridFav = ridFav + ":" + MyApplication.semicolon.split(itemList[it])[0]
         }
         Utility.writePref(context, prefToken, ridFav)
         return ridFav

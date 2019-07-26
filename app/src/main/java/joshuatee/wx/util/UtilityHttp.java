@@ -1,8 +1,6 @@
 
 package joshuatee.wx.util;
 
-import java.security.cert.CertificateException;
-
 import okhttp3.OkHttpClient;
 
 import javax.net.ssl.*;
@@ -17,11 +15,11 @@ public class UtilityHttp {
             final TrustManager[] trustAllCerts = new TrustManager[]{
                     new X509TrustManager() {
                         @Override
-                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) {
                         }
 
                         @Override
-                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+                        public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) {
                         }
 
                         @Override
@@ -45,8 +43,7 @@ public class UtilityHttp {
                     return true;
                 }
             });
-            OkHttpClient okHttpClient = builder.build();
-            return okHttpClient;
+            return builder.build();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

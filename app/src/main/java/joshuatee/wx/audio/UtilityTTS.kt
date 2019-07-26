@@ -37,6 +37,7 @@ import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import java.io.IOException
+import kotlin.math.min
 
 object UtilityTts {
 
@@ -85,10 +86,7 @@ object UtilityTts {
     private fun splitInChunks(s: String, chunkSize: Int): List<String> {
         val length = s.length
         return (0..length step chunkSize).mapTo(mutableListOf()) {
-            s.substring(
-                    it,
-                    Math.min(length, it + chunkSize)
-            )
+            s.substring(it, min(length, it + chunkSize))
         }
     }
 
@@ -249,7 +247,6 @@ object UtilityTts {
         }
         txt = UtilityTtsTranslations.translateAbbreviation(txt)
         val myHashRender = HashMap<String, String>()
-        //val musicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
         val musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
         val wxDir = File(musicDir, MyApplication.packageNameAsString)
         if (!wxDir.exists() && !wxDir.mkdirs()) {
@@ -304,8 +301,6 @@ object UtilityTts {
     }
 
     private fun playMediaPlayerFile(context: Context, fileNum: Int) {
-        //val musicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
-        //val musicDir = Environment.getExternalStorageDirectory()
         val musicDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC)
         val wxDir = File(musicDir, MyApplication.packageNameAsString)
         if (!wxDir.exists() && !wxDir.mkdirs()) {
@@ -316,11 +311,14 @@ object UtilityTts {
         val uri = Uri.parse("file://$fileName")
         try {
             mMediaPlayer?.setDataSource(context, uri)
+            mMediaPlayer?.prepare()
+            mMediaPlayer?.start()
         } catch (e: IOException) {
             UtilityLog.handleException(e)
+        } catch (e: Exception) {
+            UtilityLog.handleException(e)
         }
-        mMediaPlayer?.prepare()
-        mMediaPlayer?.start()
+
     }
 
     fun conditionalPlay(

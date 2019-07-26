@@ -20,7 +20,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.UtilityUI
 
 /**
- * The drawview is the view that intercepts the MotionEvents
+ * The DrawView is the view that intercepts the MotionEvents
  * and does the actual drawing of line segments on the display.
 
  * @author Chris Lizon

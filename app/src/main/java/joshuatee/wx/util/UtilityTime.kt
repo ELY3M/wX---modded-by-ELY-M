@@ -117,8 +117,8 @@ object UtilityTime {
         return cal.time
     }
 
-    fun radarTimeL2(days2: Short, msecs2: Int): Date {
-        val sec = (days2 - 1).toLong() * 24 * 3600 * 1000 + msecs2
+    fun radarTimeL2(days: Short, milliSeconds: Int): Date {
+        val sec = (days - 1).toLong() * 24 * 3600 * 1000 + milliSeconds
         val cal = Calendar.getInstance()
         cal.timeInMillis = sec
         return cal.time

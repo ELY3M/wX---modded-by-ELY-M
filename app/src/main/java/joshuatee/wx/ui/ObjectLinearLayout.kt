@@ -27,7 +27,7 @@ import android.widget.LinearLayout
 
 class ObjectLinearLayout(context: Context, parentView: LinearLayout) {
 
-    private val linearLayout: LinearLayout = LinearLayout(context)
+    val linearLayout: LinearLayout = LinearLayout(context)
 
     init {
         linearLayout.orientation = LinearLayout.VERTICAL

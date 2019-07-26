@@ -93,17 +93,17 @@ private constructor(
             return ExternalEllipsoid(semiMajor, b, f, inverseFlattening)
         }
 
-        /**
+        /*
          * Build an Ellipsoid from the semi major axis measurement and the flattening.
          * @param semiMajor semi major axis (meters)
          * @param flattening
          * @return
          */
-        fun fromAAndF(semiMajor: Double, flattening: Double): ExternalEllipsoid {
+        /*fun fromAAndF(semiMajor: Double, flattening: Double): ExternalEllipsoid {
             val inverseF = 1.0 / flattening
             val b = (1.0 - flattening) * semiMajor
 
             return ExternalEllipsoid(semiMajor, b, flattening, inverseF)
-        }
+        }*/
     }
 }

@@ -70,7 +70,7 @@ public class UncompressInputStream extends FilterInputStream
     }
 
 
-    private byte[] one = new byte[1];
+    private final byte[] one = new byte[1];
     public synchronized int read() throws IOException
     {
 	int b = read(one, 0, 1);
@@ -87,7 +87,7 @@ public class UncompressInputStream extends FilterInputStream
 
     private int[]  tab_prefix;
     private byte[] tab_suffix;
-    private int[]  zeros = new int[256];
+    private final int[]  zeros = new int[256];
     private byte[] stack;
 
     // various state
@@ -103,8 +103,8 @@ public class UncompressInputStream extends FilterInputStream
     private int  free_ent;
 
     // input buffer
-    private byte[]  data = new byte[10000];
-    private int     bit_pos = 0, end = 0, got = 0;
+    private final byte[] data = new byte[10000];
+    private int bit_pos = 0, end = 0, got = 0;
     private boolean eof  = false;
     private static final int EXTRA = 64;
 
@@ -454,7 +454,7 @@ public class UncompressInputStream extends FilterInputStream
 
     private static final boolean debug = false;
 
-    public static void main (String args[])  throws Exception
+    public static void main (String[] args)  throws Exception
     {
 	if (args.length != 1)
 	{

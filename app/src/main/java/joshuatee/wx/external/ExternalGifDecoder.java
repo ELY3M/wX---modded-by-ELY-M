@@ -60,10 +60,7 @@ public class ExternalGifDecoder {
 	private int bgIndex; // background color index
 	private int bgColor; // background color
 	private int lastBgColor; // previous bg color
-	private int pixelAspect; // pixel aspect ratio
-	private boolean lctFlag; // local color table flag
 	private boolean interlace; // interlace flag
-	private int lctSize; // local color table size
 	private int ix;
 	private int iy;
 	private int iw;
@@ -90,38 +87,38 @@ public class ExternalGifDecoder {
 	private int frameCount;
 
 	private static class GifFrame {
-		public GifFrame(Bitmap im, int del) {
+		GifFrame(Bitmap im, int del) {
 			image = im;
 			delay = del;
 		}
 
-		public final Bitmap image;
-		public final int delay;
+		final Bitmap image;
+		final int delay;
 	}
 
-	/**
+	/*
 	 * Gets display duration for specified frame.
 	 * 
 	 * @param n
 	 *          int index of frame
 	 * @return delay in milliseconds
 	 */
-	public int getDelay(int n) {
+	/*public int getDelay(int n) {
 		delay = -1;
 		if ((n >= 0) && (n < frameCount)) {
 			delay = frames.elementAt(n).delay;
 		}
 		return delay;
-	}
+	}*/
 
-	/**
+	/*
 	 * Gets the number of frames read from file.
 	 * 
 	 * @return frame count
 	 */
-	public int getFrameCount() {
+	/*public int getFrameCount() {
 		return frameCount;
-	}
+	}*/
 
 	/**
 	 * Gets the first (or only) image read.
@@ -132,14 +129,14 @@ public class ExternalGifDecoder {
 		return getFrame(0);
 	}
 
-	/**
+	/*
 	 * Gets the "Netscape" iteration count, if any. A count of 0 means repeat indefinitiely.
 	 * 
 	 * @return iteration count if one was specified, else 1.
 	 */
-	public int getLoopCount() {
+	/*public int getLoopCount() {
 		return loopCount;
-	}
+	}*/
 
 	/**
 	 * Creates new frame image from current data (and previous frames as specified by their disposition codes).
@@ -417,7 +414,7 @@ public class ExternalGifDecoder {
 		int n = 0;
 		if (blockSize > 0) {
 			try {
-				int count = 0;
+				int count;
 				while (n < blockSize) {
 					count = in.read(block, n, blockSize - n);
 					if (count == -1) {
@@ -562,8 +559,10 @@ public class ExternalGifDecoder {
 		iw = readShort();
 		ih = readShort();
 		int packed = read();
-		lctFlag = (packed & 0x80) != 0; // 1 - local color table flag interlace
-		lctSize = (int) Math.pow(2, (packed & 0x07) + 1);
+		// local color table flag
+		boolean lctFlag = (packed & 0x80) != 0; // 1 - local color table flag interlace
+		// local color table size
+		int lctSize = (int) Math.pow(2, (packed & 0x07) + 1);
 		// 3 - sort flag
 		// 4-5 - reserved lctSize = 2 << (packed & 7); // 6-8 - local color
 		// table size
@@ -619,7 +618,8 @@ public class ExternalGifDecoder {
 		// 5 : gct sort flag
 		gctSize = 2 << (packed & 7); // 6-8 : gct size
 		bgIndex = read(); // background color index
-		pixelAspect = read(); // pixel aspect ratio
+		// pixel aspect ratio
+		int pixelAspect = read(); // pixel aspect ratio
 	}
 
 	/**

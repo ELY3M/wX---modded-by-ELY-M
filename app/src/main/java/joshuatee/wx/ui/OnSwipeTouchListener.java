@@ -19,8 +19,10 @@ public class OnSwipeTouchListener implements View.OnTouchListener {
         gestureDetector = new GestureDetector(context, new OnSwipeTouchListener.GestureListener());
     }
 
+    // keep these public contrary to what lint suggests
     public void onSwipeLeft() {}
 
+    // keep these public contrary to what lint suggests
     public void onSwipeRight() {}
 
     public boolean onTouch(View v, MotionEvent event) {

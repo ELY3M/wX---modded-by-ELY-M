@@ -40,7 +40,7 @@ import joshuatee.wx.util.*
 
 class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
 
-    // Use imagemaps to select locations for canada to save
+    // Use image maps to select locations for canada to save
     // arg1: province or territory
     //
 

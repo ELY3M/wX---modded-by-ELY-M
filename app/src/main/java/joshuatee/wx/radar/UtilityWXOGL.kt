@@ -53,7 +53,8 @@ object UtilityWXOGL {
             "HKI", "HMO", "HKM", "HWA", "APD", "ACG", "AIH", "AHG", "AKC", "ABC", "AEC", "GUA" -> "p"
             else -> "k"
         }
-        if (product == "TV0" || product == "TZL") {
+        // FIXME need TDWR method
+        if (product.startsWith("TV") || product == "TZL" || product.startsWith("TR") || product == "N1P" || product == "NTP" || product == "ET" || product == "VIL") {
             ridPrefix = ""
         }
         return ridPrefix

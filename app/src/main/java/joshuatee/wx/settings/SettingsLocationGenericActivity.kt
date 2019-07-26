@@ -353,10 +353,13 @@ class SettingsLocationGenericActivity : BaseActivity(),
 
     private fun addressSearch(type: String, address: String) = GlobalScope.launch(uiDispatcher) {
         var xyStr = listOf<String>()
-        if (type == "osm") xyStr =
-                withContext(Dispatchers.IO) { UtilityLocation.getXYFromAddressOsm(address) }
+        if (type == "osm") xyStr = withContext(Dispatchers.IO) { UtilityLocation.getXYFromAddressOsm(address) }
         locXEt.setText(xyStr[0])
         locYEt.setText(xyStr[1])
+        val xStr = locXEt.text.toString()
+        val yStr = locYEt.text.toString()
+        val labelStr = locLabelEt.text.toString()
+        saveLoc("osm", locNum, xStr, yStr, labelStr)
     }
 
     override fun onStop() {

@@ -214,7 +214,6 @@ public class ImageMap extends ImageView
 
 	/* Paint objects for drawing info bubbles */
 	private Paint textPaint;
-	private Paint textOutlinePaint;
 	private Paint bubblePaint;
 	private Paint bubbleShadowPaint;
 
@@ -266,11 +265,8 @@ public class ImageMap extends ImageView
 	// list of open info bubbles
 	private final SparseArray<Bubble> mBubbleMap = new SparseArray<>();
 
-	// changed this from local variable to class field
-	private String mapName;
-
 	// accounting for screen density
-	private float densityFactor;
+	//private float densityFactor;
 
 	/*
 	 * Constructors
@@ -295,7 +291,7 @@ public class ImageMap extends ImageView
 
 	/**
 	 * get the map name from the attributes and load areas from xml
-	 * @param attrs
+	 * param attrs
 	 */
 	private void loadAttributes(AttributeSet attrs)
 	{
@@ -305,7 +301,8 @@ public class ImageMap extends ImageView
 		this.mScaleFromOriginal = a.getBoolean(R.styleable.ImageMap_scaleFromOriginal, false);
 		this.mMaxSize = a.getFloat(R.styleable.ImageMap_maxSizeFactor, defaultMaxSize);
 
-		this.mapName = a.getString(R.styleable.ImageMap_map);
+		// changed this from local variable to class field
+		String mapName = a.getString(R.styleable.ImageMap_map);
 		if (mapName != null)
 		{
 			loadMap(mapName);
@@ -340,7 +337,7 @@ public class ImageMap extends ImageView
 					}
 					if (loading) {
 						if (tag.equalsIgnoreCase("area")) {
-							Area a=null;
+							Area a;
 							String shape = xpp.getAttributeValue(null, "shape");
 							String coords = xpp.getAttributeValue(null, "coords");
 							String id = xpp.getAttributeValue(null, "id");
@@ -393,17 +390,17 @@ public class ImageMap extends ImageView
 	/**
 	 * Create a new area and add to tracking
 	 * Changed this from private to protected!
-	 * @param shape
-	 * @param name
-	 * @param coords
-	 * @param id
-	 * @return
+	 * param shape
+	 * param name
+	 * param coords
+	 * param id
+	 * return
 	 */
 	private Area addShape(String shape, String name, String coords, String id)
 	{
 		Area a = null;
 		String rid = id.replace("@+id/", "");
-		int _id=0;
+		int _id;
 
 		/*try
 		{
@@ -460,21 +457,21 @@ public class ImageMap extends ImageView
 		mIdToArea.put(a.getId(), a);
 	}
 
-	private void addBubble(String text, int areaId)
+	/*private void addBubble(String text, int areaId)
 	{
 		if (mBubbleMap.get(areaId) == null)
 		{
 			Bubble b = new Bubble(text,areaId);
 			mBubbleMap.put(areaId,b);
 		}
-	}
+	}*/
 
-	public void showBubble(String text, int areaId)
+	/*public void showBubble(String text, int areaId)
 	{
 		mBubbleMap.clear();
 		addBubble(text,areaId);
 		invalidate();
-	}
+	}*/
 
 	/*public void showBubble(int areaId)
 	{
@@ -544,7 +541,7 @@ public class ImageMap extends ImageView
 		mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
 
 		//find out the screen density
-		densityFactor = getResources().getDisplayMetrics().density;
+		//densityFactor = getResources().getDisplayMetrics().density;
 	}
 
 	/*
@@ -602,7 +599,7 @@ public class ImageMap extends ImageView
 		textPaint.setTextAlign(Paint.Align.CENTER);
 		textPaint.setAntiAlias(true);
 
-		textOutlinePaint = new Paint();
+		Paint textOutlinePaint = new Paint();
 		textOutlinePaint.setColor(0xFF000000);
 		textOutlinePaint.setTextSize(18);
 		textOutlinePaint.setTypeface(Typeface.SERIF);
@@ -773,8 +770,8 @@ public class ImageMap extends ImageView
 	 * Set the image to new width and height
 	 * create a new scaled bitmap and dispose of the previous one
 	 * recalculate scaling factor and right and bottom bounds
-	 * @param newWidth
-	 * @param newHeight
+	 * param newWidth
+	 * param newHeight
 	 */
 	private void scaleBitmap(int newWidth, int newHeight) {
 		// Technically since we always keep aspect ratio intact
@@ -818,9 +815,8 @@ public class ImageMap extends ImageView
 	}
 
 	private void resizeBitmap(int amount) {
-		int adjustWidth = amount;
-		int adjustHeight = (int)(adjustWidth / mAspect);
-		scaleBitmap( mExpandWidth+adjustWidth, mExpandHeight+adjustHeight);
+		int adjustHeight = (int)(amount / mAspect);
+		scaleBitmap( mExpandWidth + amount, mExpandHeight + adjustHeight);
 	}
 
 	/**
@@ -829,11 +825,9 @@ public class ImageMap extends ImageView
 	@Override
 	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 		super.onSizeChanged(w, h, oldw, oldh);
-
 		// save device height width, we use it a lot of places
 		mViewHeight = h;
 		mViewWidth = w;
-
 		// fix up the image
 		setInitialImageBounds();
 	}
@@ -845,7 +839,7 @@ public class ImageMap extends ImageView
 	/**
 	 * the onDraw routine when we are using a background image
 	 *
-	 * @param canvas
+	 * param canvas
 	 */
 	private void drawMap(Canvas canvas)
 	{
@@ -984,7 +978,7 @@ public class ImageMap extends ImageView
 
 	private void onTouchDown(int id, float x, float y) {
 		// create a new touch point to track this ID
-		TouchPoint t=null;
+		TouchPoint t;
 		synchronized (mTouchPoints) {
 			// This test is a bit paranoid and research should
 			// be done sot that it can be removed. We should
@@ -1108,11 +1102,12 @@ public class ImageMap extends ImageView
 				// tracking. This is necessary for proper action
 				// on devices that support > 2 touches
 				regroupTouches();
-			} else {
+			}
+			//else {
 				// lost this ID somehow
 				// This happens sometimes due to the way some
 				// devices manage touch
-			}
+			//}
 		}
 	}
 
@@ -1306,7 +1301,7 @@ public class ImageMap extends ImageView
 	/*
 	 * move the view to this x, y
 	 */
-	private void moveTo(int x, int y) {
+	/*private void moveTo(int x, int y) {
 		mScrollLeft = x;
 		if (mScrollLeft > 0) {
 			mScrollLeft = 0;
@@ -1322,7 +1317,7 @@ public class ImageMap extends ImageView
 			mScrollTop = mBottomBound;
 		}
 		invalidate();
-	}
+	}*/
 
 	/*
 	 * move the view by this delta in X direction
@@ -1416,14 +1411,14 @@ public class ImageMap extends ImageView
 		HashMap<String,String> _values;
 		Bitmap _decoration=null;
 
-		public Area(int id, String name) {
+		Area(int id, String name) {
 			_id = id;
 			if (name != null) {
 				_name = name;
 			}
 		}
 
-		public int getId() {
+		int getId() {
 			return _id;
 		}
 
@@ -1434,7 +1429,7 @@ public class ImageMap extends ImageView
 		// all xml values for the area are passed to the object
 		// the default impl just puts them into a hashmap for
 		// retrieval later
-		public void addValue(String key, String value) {
+		void addValue(String key, String value) {
 			if (_values == null) {
 				_values = new HashMap<>();
 			}
@@ -1457,7 +1452,7 @@ public class ImageMap extends ImageView
 		// an onDraw is set up to provide an extensible way to
 		// decorate an area. When drawing remember to take the
 		// scaling and translation into account
-		public void onDraw(Canvas canvas)
+		void onDraw(Canvas canvas)
 		{
 			if (_decoration != null)
 			{
@@ -1529,7 +1524,7 @@ public class ImageMap extends ImageView
 		int left=-1;
 		int right=-1;
 
-		public PolyArea(int id, String name, String coords) {
+		PolyArea(int id, String name, String coords) {
 			super(id,name);
 
 			// split the list of coordinates into points of the
@@ -1566,7 +1561,7 @@ public class ImageMap extends ImageView
 		 */
 
 		// return area of polygon
-		public double area() {
+		double area() {
 			double sum = 0.0;
 			for (int i = 0; i < _points; i++) {
 				sum = sum + (xpoints.get(i) * ypoints.get(i+1)) - (ypoints.get(i) * xpoints.get(i+1));
@@ -1576,7 +1571,7 @@ public class ImageMap extends ImageView
 		}
 
 		// compute the centroid of the polygon
-		public void computeCentroid() {
+		void computeCentroid() {
 			double cx = 0.0, cy = 0.0;
 			for (int i = 0; i < _points; i++) {
 				cx = cx + (xpoints.get(i) + xpoints.get(i+1)) * (ypoints.get(i) * xpoints.get(i+1) - xpoints.get(i) * ypoints.get(i+1));
@@ -1738,7 +1733,7 @@ textOutlinePaint);
 			}
 		}
 
-		public boolean isInArea(float x, float y) {
+		boolean isInArea(float x, float y) {
 			boolean ret = false;
 
 			if ((x>_left) && (x<(_left+_w))) {
@@ -1814,12 +1809,12 @@ textOutlinePaint);
 	{
 		/**
 		 * Area with 'id' has been tapped
-		 * @param id
+		 * param id
 		 */
 		void onImageMapClicked(int id, ImageMap imageMap);
 		/**
 		 * Info bubble associated with area 'id' has been tapped
-		 * @param id
+		 * param id
 		 */
 		void onBubbleClicked(int id);
 	}

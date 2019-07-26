@@ -31,6 +31,8 @@ import android.view.MotionEvent
 import android.view.View
 
 import joshuatee.wx.R
+import kotlin.math.min
+import kotlin.math.roundToInt
 
 class OpacityBar : View {
 
@@ -222,7 +224,7 @@ class OpacityBar : View {
         val lengthSize = MeasureSpec.getSize(measureSpec)
         val length: Int = when (lengthMode) {
             MeasureSpec.EXACTLY -> lengthSize
-            MeasureSpec.AT_MOST -> Math.min(intrinsicSize, lengthSize)
+            MeasureSpec.AT_MOST -> min(intrinsicSize, lengthSize)
             else -> intrinsicSize
         }
         val barPointerHaloRadiusx2 = mBarPointerHaloRadius * 2
@@ -299,7 +301,7 @@ class OpacityBar : View {
         Color.colorToHSV(mColor, hsvColor)
 
         mBarPointerPosition = if (!isInEditMode) {
-            Math.round(mOpacToPosFactor * Color.alpha(mColor) + mBarPointerHaloRadius)
+            (mOpacToPosFactor * Color.alpha(mColor) + mBarPointerHaloRadius).roundToInt()
         } else {
             mBarLength + mBarPointerHaloRadius
         }
@@ -349,8 +351,8 @@ class OpacityBar : View {
                 mIsMovingPointer = true
                 // Check whether the user pressed on (or near) the pointer
                 if (dimen >= mBarPointerHaloRadius && dimen <= mBarPointerHaloRadius + mBarLength) {
-                    mBarPointerPosition = Math.round(dimen)
-                    calculateColor(Math.round(dimen))
+                    mBarPointerPosition = dimen.roundToInt()
+                    calculateColor(dimen.roundToInt())
                     mBarPointerPaint!!.color = mColor
                     invalidate()
                 }
@@ -359,8 +361,8 @@ class OpacityBar : View {
                 if (mIsMovingPointer) {
                     // Move the the pointer on the bar.
                     if (dimen >= mBarPointerHaloRadius && dimen <= mBarPointerHaloRadius + mBarLength) {
-                        mBarPointerPosition = Math.round(dimen)
-                        calculateColor(Math.round(dimen))
+                        mBarPointerPosition = dimen.roundToInt()
+                        calculateColor(dimen.roundToInt())
                         mBarPointerPaint!!.color = mColor
                         mPicker?.setNewCenterColor(mColor)
                         invalidate()
@@ -400,8 +402,7 @@ class OpacityBar : View {
      */
     var opacity: Int
         get() {
-            val opacity =
-                Math.round(mPosToOpacFactor * (mBarPointerPosition - mBarPointerHaloRadius))
+            val opacity = (mPosToOpacFactor * (mBarPointerPosition - mBarPointerHaloRadius)).roundToInt()
             return when {
                 opacity < 5 -> 0x00
                 opacity > 250 -> 0xFF
@@ -409,7 +410,7 @@ class OpacityBar : View {
             }
         }
         set(opacity) {
-            mBarPointerPosition = Math.round(mOpacToPosFactor * opacity) + mBarPointerHaloRadius
+            mBarPointerPosition = (mOpacToPosFactor * opacity).roundToInt() + mBarPointerHaloRadius
             calculateColor(mBarPointerPosition)
             mBarPointerPaint!!.color = mColor
             mPicker?.setNewCenterColor(mColor)
@@ -430,11 +431,7 @@ class OpacityBar : View {
         } else if (coord > mBarLength) {
             coord = mBarLength
         }
-
-        mColor = Color.HSVToColor(
-            Math.round(mPosToOpacFactor * coord),
-            mHSVColor
-        )
+        mColor = Color.HSVToColor((mPosToOpacFactor * coord).roundToInt(), mHSVColor)
         if (Color.alpha(mColor) > 250) {
             mColor = Color.HSVToColor(mHSVColor)
         } else if (Color.alpha(mColor) < 5) {

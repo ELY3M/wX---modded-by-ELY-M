@@ -51,7 +51,7 @@ internal object UtilityModelEsrlInterface {
         "CLE"
     )
 
-    val sectorsHrrrAk = listOf("Full")
+    //val sectorsHrrrAk = listOf("Full")
 
     val paramsHrrr = listOf(
         "1ref_sfc",

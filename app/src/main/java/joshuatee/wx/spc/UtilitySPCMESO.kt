@@ -22,7 +22,7 @@
 package joshuatee.wx.spc
 
 import android.util.SparseArray
-import java.util.Arrays
+
 import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.ObjectMenuTitle
 import joshuatee.wx.ui.ObjectSpinner
@@ -30,7 +30,7 @@ import joshuatee.wx.util.Group
 
 object UtilitySpcMeso {
 
-    private val titles = Arrays.asList(
+    private val titles = listOf(
             ObjectMenuTitle("Observations", 3),
             ObjectMenuTitle("Surface", 15),
             ObjectMenuTitle("Upper Air", 25),

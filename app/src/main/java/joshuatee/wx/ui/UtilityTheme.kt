@@ -34,11 +34,10 @@ object UtilityTheme {
     val primaryColorFromSelectedTheme: Int
         get() = MyApplication.primaryColor
 
-    fun getPrimaryColorFromSelectedTheme(context: Context, col: Int): Int {
+    fun getPrimaryColorFromSelectedTheme(context: Context, color: Int): Int {
         val attrs = intArrayOf(R.attr.colorPrimary, R.attr.colorPrimaryDark, R.attr.colorAccent)
         val ta = context.theme.obtainStyledAttributes(attrs)
-        val primaryColor = ta.getColor(col, Color.BLACK) //1 index for primaryColorDark
-        //default value for primaryColor is set to black if primaryColor not found
+        val primaryColor = ta.getColor(color, Color.BLACK) //1 index for primaryColorDark
         ta.recycle()
         return primaryColor
     }
@@ -46,16 +45,12 @@ object UtilityTheme {
     fun setPrimaryColor(context: Context) {
         val attrs = intArrayOf(R.attr.colorPrimary, R.attr.colorPrimaryDark, R.attr.colorAccent)
         val ta = context.theme.obtainStyledAttributes(attrs)
-        //TypedArray ta = MyApplication.appContext.getTheme().obtainStyledAttributes(attrs);
         if (UIPreferences.themeInt != R.style.MyCustomTheme_mixedBlue_NOAB && !UIPreferences.themeIsWhite) {
-            //&& UIPreferences.themeInt != R.style.MyCustomTheme_white_NOAB
-            //&& UIPreferences.themeInt != R.style.MyCustomTheme_whiter_NOAB) {
             MyApplication.primaryColor = ta.getColor(0, Color.BLACK) //1 index for primaryColorDark
         } else {
             MyApplication.primaryColor = ta.getColor(2, Color.BLACK) //1 index for primaryColorDark
         }
         Utility.writePref(context, "MYAPP_PRIMARY_COLOR", MyApplication.primaryColor)
-        //default value for primaryColor is set to black if primaryColor not found
         ta.recycle()
     }
 }

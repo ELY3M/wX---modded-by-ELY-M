@@ -168,7 +168,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                         }
                     } else {
                         errors = errors +
-                                "The following line does not have the correct number of command seperated entries: " +
+                                "The following line does not have the correct number of command separated entries: " +
                                 MyApplication.newline + s + MyApplication.newline
                     }
                 } catch (e: Exception) {
@@ -216,7 +216,6 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
     }
 
     override fun onBackPressed() {
-        UtilityLog.d("wx", "COLORPAL: onstop delete: " + "colormap" + type + palTitle.text.toString())
         UtilityFileManagement.deleteFile(this, "colormap" + type + palTitle.text.toString())
         super.onBackPressed()
     }

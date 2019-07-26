@@ -88,7 +88,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     var obsAl: MutableList<TextView> = mutableListOf()
     var spotterLabels = mutableListOf<TextView>()
     var spotterTv: MutableList<TextView> = mutableListOf()
-    var hailLabelAl: MutableListOf<TextView> = mutableListOf()
+    var hailLabelAl: MutableList<TextView> = mutableListOf() //was mutableListOf  //TODO TEST THIS!!!
     var hailTv: MutableList<TextView> = mutableListOf()
     var wxgltextArr: MutableList<WXGLTextObject> = mutableListOf()
     var locationFragment: Boolean = false
