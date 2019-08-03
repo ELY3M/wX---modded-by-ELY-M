@@ -110,7 +110,7 @@
     <string name="label_n0x">N0X: Differential Reflectivity</string>
     <string name="label_n0c">N0C: Correlation Coefficient</string>
     <string name="label_n0k">N0K: Specific Differential Phase</string>
-    <string name="label_nsw">NWS: Base Spectrum Width</string>
+    <string name="label_nsw">NSW: Base Spectrum Width</string>
     <string name="label_nvw">NVW: VAD wind profile</string>
     <string name="title_activity_spcfire_outlook">SPC Fire Weather Outlook</string>
     <string name="title_activity_hpcrainfall_forecast">WPC Excessive Rainfall Forecast</string>

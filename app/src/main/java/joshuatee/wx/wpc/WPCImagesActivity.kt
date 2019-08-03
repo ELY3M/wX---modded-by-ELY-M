@@ -37,6 +37,7 @@ import joshuatee.wx.ui.OnSwipeTouchListener
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
@@ -125,6 +126,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
         Utility.writePref(this@WpcImagesActivity, "WPG_IMG_FAV_URL", drw.getUrl())
         Utility.writePref(this@WpcImagesActivity, "WPG_IMG_IDX", drw.imgIdx)
         Utility.writePref(this@WpcImagesActivity, "WPG_IMG_GROUPIDX", drw.imgGroupIdx)
+        UtilityLog.d("wx", getUrl)
         bitmap = withContext(Dispatchers.IO) { getUrl.getImage() }
         img.setImageBitmap(bitmap)
         if (!firstRun) {
@@ -150,22 +152,22 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
         when (item.itemId) {
             R.id.action_forward -> {
                 timePeriod += 1
-                drw.imgIdx += 1
+                /*drw.imgIdx += 1
                 if (drw.getUrl().contains("aviationweather")) {
                     if (drw.imgIdx >= numAviationImg) {
                         drw.imgIdx = 0
                     }
-                }
+                }*/
                 getContent()
             }
             R.id.action_back -> {
                 timePeriod--
-                drw.imgIdx--
+                /*drw.imgIdx--
                 if (drw.getUrl().contains("aviationweather")) {
                     if (drw.imgIdx < 0) {
                         drw.imgIdx = numAviationImg - 1
                     }
-                }
+                }*/
                 getContent()
             }
             R.id.action_share -> {

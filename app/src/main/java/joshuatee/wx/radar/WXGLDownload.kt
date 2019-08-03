@@ -55,6 +55,8 @@ class WXGLDownload {
         val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, tdwr)
         this.radarSite = radarSite
         this.product = product
+        //UtilityLog.d("wx", product)
+        //UtilityLog.d("wx", radarSite)
         if (!product.contains("L2")) {
             val inputStream = UtilityDownload.getInputStreamFromUrl(
                     MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +

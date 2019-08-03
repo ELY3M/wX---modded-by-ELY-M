@@ -302,10 +302,10 @@ class WXGLNexradLevel3 {
             //final int  index_of_first_range_bin  = dis.readUnsignedShort() ;
             dis.skipBytes(32)
             dis.close()
-            if (productCode.toInt() == 37 || productCode.toInt() == 38 || productCode.toInt() == 41 || productCode.toInt() == 57) {
-                numberOfRangeBins = UtilityWXOGLPerfL3FourBit.decodeRaster(context, fn, binWord)
+            numberOfRangeBins = if (productCode.toInt() == 37 || productCode.toInt() == 38 || productCode.toInt() == 41 || productCode.toInt() == 57) {
+                UtilityWXOGLPerfL3FourBit.decodeRaster(context, fn, binWord)
             } else {
-                numberOfRangeBins = UtilityWXOGLPerfL3FourBit.decodeRadial(context, fn, radialStart, binWord)
+                UtilityWXOGLPerfL3FourBit.decodeRadial(context, fn, radialStart, binWord)
             }
             binSize = WXGLNexrad.getBinSize(productCode.toInt())
         } catch (e: IOException) {

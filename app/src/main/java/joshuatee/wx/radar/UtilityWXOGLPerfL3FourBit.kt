@@ -83,7 +83,7 @@ internal object UtilityWXOGLPerfL3FourBit {
             binWord: ByteBuffer
     ): Short {
         // FIXME is this used at all
-        var numberOfRangeBins = 0.toShort()
+        val numberOfRangeBins = 0.toShort()
         try {
             val fis = context.openFileInput(fn)
             val dis = DataInputStream(BufferedInputStream(fis))

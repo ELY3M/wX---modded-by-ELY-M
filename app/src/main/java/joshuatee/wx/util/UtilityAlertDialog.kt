@@ -80,8 +80,9 @@ object UtilityAlertDialog {
             context,
             "JOBSERVICE_TIME_LAST_RAN",
             ""
-        ) + "  Last background update"
-        string += MyApplication.newline + UtilityRadarUI.getLastRadarTime(context) + "  Last radar update"
+        ) + "  Last background update" + MyApplication.newline
+        string += UtilityRadarUI.getLastRadarTime(context) + "  Last radar update" + MyApplication.newline
+        string += Utility.showDiagnostics(context)
         return string
     }
 

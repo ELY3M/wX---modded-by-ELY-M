@@ -22,6 +22,8 @@
 package joshuatee.wx.radar
 
 import android.graphics.Color
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
 
 import java.nio.ByteBuffer
 
@@ -52,11 +54,14 @@ internal object UtilityWXOGLPerfRaster {
             binsPerRow = 116
             scaleFactor = 8.0f
         }
+        //UtilityLog.d("wx", numberOfRows.toString())
+        //UtilityLog.d("wx", binsPerRow.toString())
         val halfPoint = numberOfRows / 2
         while (g < numberOfRows) {
             bin = 0
             while (bin < binsPerRow) {
                 curLevel = binBuff.get(g * numberOfRows + bin).toInt()
+                //UtilityLog.d("wx", curLevel.toString())
 
                 radarBuffers.floatBuffer.putFloat(rI, (bin - halfPoint).toFloat() * scaleFactor)
                 rI += 4

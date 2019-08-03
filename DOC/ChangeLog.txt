@@ -35,7 +35,13 @@
 // TODO ADD - multipane additions for TDWR/Tilt Fix/CompRef
 // TODO BUG - in Nexrad, navigate to Nexrad EET, then go to TDWR, the tap ref product, tilt option remains gone
 // TODO BUG - many Nexrad products display tilt submenu when it should be hidden ( like precip prod ) when nexrad activity is freshly started
+// TODO Multipane proper tilt for TDWR and only show 3 tilts
 
+55266 2019_08_03    [FIX] redo uswarn to match iOS/Flutter to fix hang bug suspected of PR data
+55265 2019_08_02    [ADD] update to buildToolsVersion '29.0.1' and NDC from r19c to r20
+55264 2019_07_29    [ADD] comp ref to multipane radar
+                    [ADD] diag info in about wX
+                    [ADD] slightly better support for NDFD in WPC Img
 55263 2019_07_23    [FIX] better tilt menu management
 55262 2019_07_21    [FIX] program was crashing if WFO filter was enabled and hazard card was present on homescreen
 55261 2019_07_21    [ADD] TDWR to list of fixed radars in settings -> homescreen

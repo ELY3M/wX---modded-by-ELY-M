@@ -86,6 +86,8 @@ class ObjectOglRadarBuffers(val context: Context, var bgColor: Int) : ObjectOglB
             }
         } catch (e: OutOfMemoryError) {
             UtilityLog.handleException(e)
+        } catch (e: Exception) {
+            UtilityLog.handleException(e)
         }
     }
 }

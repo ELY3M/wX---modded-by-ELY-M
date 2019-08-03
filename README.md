@@ -20,6 +20,14 @@ https://github.com/ELY3M/wX---modded-by-ELY-M/releases
 The screenshots of the app are at 
 http://bmx3r.com/wx 
 
+==================================================================
+
+This app have been tested on Nintendo Switch and it worked very great on my Switch.  
+you need android running on your Nintendo Switch for this app to work.   
+you will need an exploitable Switch.  I feel that the newer Switch will be exploitable 
+for homebrew or Alternative OS.  
+http://bmx3r.com/wx/switch
+
 ==================================================================   
 
 ## TO DO List: 

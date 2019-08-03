@@ -34,12 +34,12 @@ import java.util.Locale
 import java.util.TreeMap
 
 import joshuatee.wx.MyApplication
-import joshuatee.wx.RegExp
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
+import joshuatee.wx.util.UtilityString
 
 class ObjectAlertSummary(
         private val activity: Activity,
@@ -78,38 +78,15 @@ class ObjectAlertSummary(
         val map = TreeMap<String, Int>()
         var i = 0
         try {
-            val m = RegExp.uswarnPattern.matcher(data)
             var html = ""
             var countyArr: List<String>
             var zoneArr: List<String>
             var firstCounty = ""
             var firstZone = ""
             val ca = mutableListOf<CapAlert>()
-            //val uswarnPattern: Pattern = Pattern.compile("<entry>.*?<id>(.+?)</id>.*?<title>(.+?)</title>.*?<summary>(.*?)</summary>.*?<cap:event>(.*?)</cap:event>.*?<cap:areaDesc>(.*?)</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>(.*?)</value>.*?<valueName>VTEC</valueName>.*?<value>(.*?)</value>.*?</entry>.*?")
-            //val idList = UtilityString.parseColumnMutable(data, "<entry>.*?<id>(.+?)</id>.*?<title>.+?</title>.*?<summary>.*?</summary>.*?<cap:event>.*?</cap:event>.*?<cap:areaDesc>.*?</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>.*?</value>.*?<valueName>VTEC</valueName>.*?<value>.*?</value>.*?</entry>.*?")
-            //val titleList = UtilityString.parseColumnMutable(data, "<entry>.*?<id>.+?</id>.*?<title>(.+?)</title>.*?<summary>.*?</summary>.*?<cap:event>.*?</cap:event>.*?<cap:areaDesc>.*?</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>.*?</value>.*?<valueName>VTEC</valueName>.*?<value>.*?</value>.*?</entry>.*?")
-            //val summaryList = UtilityString.parseColumnMutable(data, "<entry>.*?<id>.+?</id>.*?<title>.+?</title>.*?<summary>(.*?)</summary>.*?<cap:event>.*?</cap:event>.*?<cap:areaDesc>.*?</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>.*?</value>.*?<valueName>VTEC</valueName>.*?<value>.*?</value>.*?</entry>.*?")
-            //val eventList = UtilityString.parseColumnMutable(data, "<entry>.*?<id>.+?</id>.*?<title>.+?</title>.*?<summary>.*?</summary>.*?<cap:event>(.*?)</cap:event>.*?<cap:areaDesc>.*?</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>.*?</value>.*?<valueName>VTEC</valueName>.*?<value>.*?</value>.*?</entry>.*?")
-            //val areaList = UtilityString.parseColumnMutable(data, "<entry>.*?<id>.+?</id>.*?<title>.+?</title>.*?<summary>.*?</summary>.*?<cap:event>.*?</cap:event>.*?<cap:areaDesc>(.*?)</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>.*?</value>.*?<valueName>VTEC</valueName>.*?<value>.*?</value>.*?</entry>.*?")
-            //val ugcList = UtilityString.parseColumnMutable(data, "<entry>.*?<id>.+?</id>.*?<title>.+?</title>.*?<summary>.*?</summary>.*?<cap:event>.*?</cap:event>.*?<cap:areaDesc>.*?</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>(.*?)</value>.*?<valueName>VTEC</valueName>.*?<value>.*?</value>.*?</entry>.*?")
-            //val vtecList = UtilityString.parseColumnMutable(data, "<entry>.*?<id>.+?</id>.*?<title>.+?</title>.*?<summary>.*?</summary>.*?<cap:event>.*?</cap:event>.*?<cap:areaDesc>.*?</cap:areaDesc>.*?<valueName>UGC</valueName>.*?<value>.*?</value>.*?<valueName>VTEC</valueName>.*?<value>(.*?)</value>.*?</entry>.*?")
-            //for ( z in vtecList.indices ) {
-            //    ca.add(CAPAlert(idList[z], titleList[z], eventList[z], areaList[z].replace("&apos;", "'"), ugcList[z], vtecList[z]))
-            //}
-            // FIXME legacy matcher
-            //UtilityLog.d("wx", data);
-            while (m.find()) {
-                // url, title, event, area, zones, vtec
-                ca.add(
-                        CapAlert(
-                                m.group(1),
-                                m.group(2),
-                                m.group(4),
-                                m.group(5).replace("&apos;", "'"),
-                                m.group(6),
-                                m.group(7)
-                        )
-                )
+            val alerts = UtilityString.parseColumnMutable(data, "<entry>(.*?)</entry>")
+            alerts.forEach {
+                ca.add(CapAlert.initializeFromCap(it))
             }
             ca.forEach { cc ->
                 countyArr = cc.area.split(";")

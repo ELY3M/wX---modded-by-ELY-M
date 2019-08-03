@@ -25,7 +25,7 @@ import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
 
-class CapAlert {
+class CapAlert() {
 
     var text: String = ""
         private set
@@ -42,10 +42,10 @@ class CapAlert {
     var url: String = ""
         private set
     var event: String = ""
+    var effective: String  = "";
+    var expires: String  = "";
 
-    constructor()
-
-    constructor(
+    /*constructor(
         url: String,
         title: String,
         event: String,
@@ -59,21 +59,50 @@ class CapAlert {
         this.area = area
         this.zones = zones
         this.vtec = vtec
-    }
+    }*/
 
     companion object {
+
+        // used by usAlerts
+        fun initializeFromCap(eventText: String): CapAlert {
+            val obj = CapAlert()
+            obj.url = eventText.parse("<id>(.*?)</id>")
+            obj.title  = eventText.parse("<title>(.*?)</title>")
+            obj.summary = eventText.parse("<summary>(.*?)</summary>")
+            obj.instructions = eventText.parse("</description>.*?<instruction>(.*?)</instruction>.*?<areaDesc>")
+            obj.area = eventText.parse("<cap:areaDesc>(.*?)</cap:areaDesc>")
+            obj.area = obj.area.replace("&apos;", "'")
+            obj.effective = eventText.parse("<cap:effective>(.*?)</cap:effective>")
+            obj.expires = eventText.parse("<cap:expires>(.*?)</cap:expires>")
+            obj.event = eventText.parse("<cap:event>(.*?)</cap:event>")
+            obj.vtec = eventText.parse("<valueName>VTEC</valueName>.*?<value>(.*?)</value>")
+            obj.zones = eventText.parse("<valueName>UGC</valueName>.*?<value>(.*?)</value>")
+            obj.text = "<h4><b>"
+            obj.text += obj.title
+            obj.text += "</b></h4>"
+            obj.text += "<b>Counties: "
+            obj.text += obj.area
+            obj.text += "</b><br><br>"
+            obj.text += obj.summary
+            obj.text += "<br><br><br>"
+            obj.text += obj.instructions
+            obj.text += "<br><br><br>"
+            obj.summary = obj.summary.replace("<br>\\*", "<br><br>*")
+            if (UIPreferences.nwsTextRemovelinebreaks) {
+                obj.instructions = obj.instructions.replace("<br><br>", "<BR><BR>").replace("<br>", " ")
+            }
+            return obj
+        }
 
         fun createFromUrl(url: String): CapAlert {
             val expireStr = "This alert has expired"
             val obj = CapAlert()
             obj.url = url
             val html = if (url.contains("NWS-IDP-PROD")) {
-                //UtilityLog.d("wx", url)
                 UtilityDownloadNws.getStringFromUrlSep(url)
             } else {
                 url.getHtmlSep()
             }
-            //UtilityLog.d("wx", html)
             if (!html.contains("NWS-IDP-PROD")) {
                 if (html.contains(expireStr)) {
                     obj.text = expireStr
@@ -99,7 +128,6 @@ class CapAlert {
             } else {
                 obj.title = html.parse("\"headline\": \"(.*?)\"")
                 obj.summary = html.parse("\"description\": \"(.*?)\"")
-                //UtilityLog.d("wx", obj.summary)
                 obj.instructions = html.parse("\"instruction\": \"(.*?)\"")
                 obj.area = html.parse("\"areaDesc\": \"(.*?)\"")
                 obj.summary = obj.summary.replace("\\n", "\n")

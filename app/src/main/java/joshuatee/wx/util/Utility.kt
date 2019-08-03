@@ -26,29 +26,32 @@ import android.os.Build
 import androidx.preference.PreferenceManager
 import android.text.Html
 import android.content.Context
-import android.net.ConnectivityManager
+import android.content.res.Configuration
+
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.util.UtilityAlertDialog.showDialogueWithContext
 import joshuatee.wx.radar.UtilityRadar
+import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.util.UtilityAlertDialog.showDialogueWithContext
+import android.net.ConnectivityManager
+
 object Utility {
 
-    fun checkInternet(context: Context) {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val netInfo = cm.activeNetworkInfo
-        if (netInfo != null && netInfo.isConnected) {
-            UtilityLog.d("wx", "network state = true")
-
-        } else {
-            UtilityLog.d("wx", "network state = false")
-            showDialogueWithContext("No Network Connection.\nCheck your internet on your device!", context)
-            ///UtilityAlertDialog.showDialogBox("No Network Connection", R.drawable.wx, "Check your internet on your device!", context)
+    fun showDiagnostics(context: Context): String {
+        var diagnostics = ""
+        diagnostics += MyApplication.dm.widthPixels.toString() + " Screen width" + MyApplication.newline
+        diagnostics += MyApplication.dm.heightPixels.toString() + " Screen height" + MyApplication.newline
+        diagnostics += UtilityUI.statusBarHeight(context).toString() + " Status bar height" + MyApplication.newline
+        var landScape = false
+        if(context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
+            landScape = true
         }
-
+        diagnostics += landScape.toString() + " Landscape" + MyApplication.newline
+        return diagnostics
     }
-    
+
     fun getRadarSiteName(radarSite: String): String {
         return UtilityRadar.radarIdToName[radarSite] ?: ""
     }
@@ -243,6 +246,23 @@ object Utility {
             list[index]
         }
     }
+    
+    
+    fun checkInternet(context: Context) {
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = cm.activeNetworkInfo
+        if (netInfo != null && netInfo.isConnected) {
+            UtilityLog.d("wx", "network state = true")
+
+        } else {
+            UtilityLog.d("wx", "network state = false")
+            showDialogueWithContext("No Network Connection.\nCheck your internet on your device!", context)
+            ///UtilityAlertDialog.showDialogBox("No Network Connection", R.drawable.wx, "Check your internet on your device!", context)
+        }
+
+    }
+    
+    
 }
 
 
