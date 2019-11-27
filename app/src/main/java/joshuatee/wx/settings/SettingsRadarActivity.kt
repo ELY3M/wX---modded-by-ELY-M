@@ -271,6 +271,16 @@ class SettingsRadarActivity : BaseActivity() {
                 ObjectSettingsCheckBox(
                         this,
                         this,
+                        "Center radar on location",
+                        "RADAR_CENTER_ON_LOCATION",
+                        R.string.radar_center_on_location_default_label
+                ).card
+        )
+	
+        ll.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
                         "Location Heading Bug",
                         "LOCDOT_BUG", R.string.locdot_bug_label
                 ).card

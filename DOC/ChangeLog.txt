@@ -1,16 +1,9 @@
 // TODO FEATURE - Level 2 BV colormap and wrapping (Alex)
-// TODO FEATURE - alternate color picker such as https://android-arsenal.com/details/1/5609 (Jim)
-// TODO FEATURE - change code so that widget location simply follows current location selected
-// TODO FEATURE - enhance hourly graphics
 // TODO FEATURE - line size - swo, wb, wb gusts, sti
-// TODO FEATURE - SRM - ability to add custom palette
 // TODO FEATURE - make location update interval configurable
 // TODO FEATURE - add vtec end date check to tor notification
-// TODO FEATURE - color pal edit for SRM and L2 VEL/REF
 // TODO FEATURE - color pal , allow cloning of a user created pal
 // TODO https://android-developers.googleblog.com/2019/03/introducing-new-google-play-app-and.html
-// TODO FEATURE put more diagnostics in settings -> about including more download stats and also rolling buffer for stacktraces
-// TODO FEATURE 2 icons per row: SPC Thunder, SPC Fire, NHC
 // TODO FEATURE - add ability to add generic URLs to homescreen
 // TODO FEATure - in Tabs show labels in addition or instead of icons
 // TODO FEATURE - severe dashboard better formatting for vtec
@@ -19,12 +12,6 @@
 // TODO REFACTOR - UtilityMetar in radar has optimization related to text file loading
 // TODO REFACTOR - move off rid/wfo/sounding lat/lon/name currently in pref should be in objects (like flutter/iOS)
 // TODO REFACTOR - migrate away from US govt website for Sun/Moon data do to cert issues, use external code that is Local to prevent dependencies ( preferably same code used in iOS wXL23)
-// TODO BUG - base velocity legend
-// TODO BUG - document or fix changing radar settings and impact on main screen radars
-// TODO BUG - storm reports show radar doesn't show location dot for report
-// TODO BUG - SPS long press does not always work well
-// TODO BUG - fix issue for precipitation radar products when there is no data
-// TODO BUG - SPC Meso swipe left/right takes on extra to get started
 // TODO FEATURE - TDWR: DHR - DS.32dhr (wsr-88d also) range 124, colors 256, .54 x 1 nmi x degree
 // TODO FEATURE - TDWR and NEXRAD: N1P DS.78ohp One Hour Precipitation Total range 124, colors 16, 1.1 x 1 nmi x degree
 // TODO FEATURE - TDWR and NEXRAD: NTP DS.80stp Storm Total Precipitation range 124, colors 16, 1.1 x 1 nmi x degree
@@ -32,11 +19,49 @@
 // TODO FEATURE - TDWR DS.57vil range 124, colors 16, 2.2 x 2.2 nmi raster
 // TODO FEATURE - TDWR DS.p41et range 124, colors 16, 2.2 x 2.2 nmi raster
 // TODO FEATURE - option on homescreen to show comp instead of base ref
-// TODO ADD - multipane additions for TDWR/Tilt Fix/CompRef
+// TODO FEATURE - support non-standards apps for sharing such as facebook whatsapp
+// TODO FEATURE - VCP32 vs VCP35 colormap for comp ref
+// TODO [ADD] severe dash like flutter
+// TODO [ADD] red text before load and warning count in nexrad like flutter
+// TODO BUG - base velocity legend
+// TODO BUG - fix issue for precipitation radar products when there is no data
 // TODO BUG - in Nexrad, navigate to Nexrad EET, then go to TDWR, the tap ref product, tilt option remains gone
 // TODO BUG - many Nexrad products display tilt submenu when it should be hidden ( like precip prod ) when nexrad activity is freshly started
-// TODO Multipane proper tilt for TDWR and only show 3 tilts
+// [ADD] use 4bit colorpal init like flutter
+// [ADD] wpc day 1 -3 image + text
+// [FIX] remove TDWR products 78,80 and add 180 after 11/19/2019 https://www.weather.gov/media/notification/scn19-82tdwr_terminations.pdf
+// [ADD] radar file class from flutter
+// [ADD] evaluate what needs to refresh onrestart like flutter version
+// [ADD] obs map in obs site activity
 
+55282 2019_11_05
+55281 2019_10_31    [FIX] San Fran text label not correct - 37.787239,-122.4581,805235
+		            [ADD] SPC HREF update part 1
+55280 2019_10_28    [FIX] CC notif duplicate caused by non constant ID
+55279 2019_10_16    [FIX] repackage
+55278 2019_10_16    [FIX] in some files not using highlight color needed in dark theme
+55277 2019_10_05    [ADD] AS 3.5 -> 3.5.1
+                    [ADD] remove TDWR products 78,80 per https://www.weather.gov/media/notification/scn19-82tdwr_terminations.pdf
+55276 2019_09_29    [ADD] SPC Meso pw3k PW * 3kmRH
+                    [ADD] option to center radar on location
+55275 2019_09_28    [ADD] update kotlin coroutine and androidx stuff and make 2 code changes in LocationFragment and ViewPageAdapter that were not compiling as a result
+		    [ADD] modern severe dash
+55274 2019_08_31    [FIX] settings playlist bottomsheetfragment had location flag set causing entries to be invisible
+                    [ADD] NHC - add more verbiage in storm card
+                    [ADD] NHC Storm - move path grapgic to top, add qpf and arrival graphics
+55273 2019_08_24    [ADD] kotlin plugin to 1.3.50, lint fixes
+55272 2019_08_21    [FIX] update to Android Studio 3.5 which includes the usual Android Gradle Plugin update
+                    [FIX] level 3 was broke with errant skip bytes after vcp change
+55271 2019_08_20    [FIX] homescreen text objects were not working after recent change to strip out html
+55270 2019_08_19    [ADD] vcp,op-mode extraction in level3 decoder
+55269 2019_08_19    [ADD] WPC_ANALYSIS as homescreen option
+                    [ADD] update okhttp from 3.12.0 to 3.12.3 (thanks TacoTheDank for the suggestion)
+                    [FIX] remove maven {url "https://maven.google.com"}, redundant. Add commented out compile option for Java8 (thanks TacoTheDank for the suggestion)
+                    [FIX] UtilityWXOGL.showTextProducts filter out SPS with no polygon
+55268 2019_08_06    [FIX] few formatting enhancements in USalerts
+                    [FIX] typo in about wX
+                    [FIX] static shortcut for SPC Meso and SPC HREF
+55267 2019_08_04    [FIX] locfrag - strip html for all text products added on homescreen per user comment
 55266 2019_08_03    [FIX] redo uswarn to match iOS/Flutter to fix hang bug suspected of PR data
 55265 2019_08_02    [ADD] update to buildToolsVersion '29.0.1' and NDC from r19c to r20
 55264 2019_07_29    [ADD] comp ref to multipane radar

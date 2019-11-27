@@ -86,7 +86,7 @@ class SpcCompmapActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private fun selectItemNoGet(positionF: Int) {
         var position = positionF
-        for (i in (0 until UtilitySpcCompmap.urlIndex.size)) {
+        for (i in (UtilitySpcCompmap.urlIndex.indices)) {
             if (position.toString() == UtilitySpcCompmap.urlIndex[i]) {
                 position = i
                 break

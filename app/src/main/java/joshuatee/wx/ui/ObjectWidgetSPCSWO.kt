@@ -26,7 +26,6 @@ import android.widget.RemoteViews
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UtilityWidget
-import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
 import joshuatee.wx.spc.SpcSwoActivity
 
@@ -47,7 +46,7 @@ class ObjectWidgetSpcSwo(context: Context) {
                         ivList[it],
                         SpcSwoActivity.NO,
                         arrayOf(dayAsString, ""),
-                        WidgetFile.SPCSWO.action + dayAsString
+                        SPCSWO.action + dayAsString
                 )
             }
         }

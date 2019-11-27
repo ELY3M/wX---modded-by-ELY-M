@@ -103,7 +103,7 @@ internal object UtilityModelSpcHrrrInputOutput {
     }
 
     private fun getSectorCode(sectorName: String) =
-        (0 until UtilityModelSpcHrrrInterface.sectors.size)
+        (UtilityModelSpcHrrrInterface.sectors.indices)
             .firstOrNull { sectorName == UtilityModelSpcHrrrInterface.sectors[it] }
             ?.let { UtilityModelSpcHrrrInterface.sectorCodes[it] }
             ?: "S19"

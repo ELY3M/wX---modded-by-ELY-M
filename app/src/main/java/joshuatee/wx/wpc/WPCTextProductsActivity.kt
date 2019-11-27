@@ -41,14 +41,11 @@ import joshuatee.wx.activitiesmisc.ImageShowActivity
 import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.ui.ObjectSpinner
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityDownload
-import joshuatee.wx.util.UtilityFavorites
-import joshuatee.wx.util.UtilityShare
 
 import joshuatee.wx.GlobalArrays
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectNavDrawerCombo
+import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_wpctextproducts.*
@@ -97,6 +94,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
             prod = activityArguments[0]
             initProd = prod
         }
+        UtilityLog.d("wx", prod)
         textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         products = UtilityFavorites.setupFavMenuNwsText(MyApplication.nwsTextFav, prod)
         sp = ObjectSpinner(this, this, this, R.id.spinner1, products)
@@ -121,6 +119,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         }
         ridFavOld = MyApplication.nwsTextFav
+        UtilityLog.d("wx", prod)
         html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@WpcTextProductsActivity, prod) }
         textCard.setTextAndTranslate(Utility.fromHtml(html))
         UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, "wpctext")
@@ -199,7 +198,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
     private fun findPosition(key: String) =
-            (0 until GlobalArrays.nwsTextProducts.size).firstOrNull {
+            (GlobalArrays.nwsTextProducts.indices).firstOrNull {
                 GlobalArrays.nwsTextProducts[it].contains(
                         key
                 )

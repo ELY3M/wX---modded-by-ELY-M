@@ -563,7 +563,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     }
                     animTriggerDownloads = false
                 }
-                for (r in 0 until animArray.size) {
+                for (r in animArray.indices) {
                     while (inOglAnimPaused) SystemClock.sleep(delay.toLong())
                     // formerly priorTime was set at the end but that is goofed up with pause
                     priorTime = System.currentTimeMillis()
@@ -794,8 +794,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             R.id.action_dsp -> changeProd("DSA", false)
             R.id.action_daa -> changeProd("DAA", false)
             R.id.action_nsw -> changeProd("NSW", false)
-            R.id.action_n1p -> changeProd("N1P", false)
-            R.id.action_ntp -> changeProd("NTP", false)
+            //R.id.action_n1p -> changeProd("N1P", false)
+            //R.id.action_ntp -> changeProd("NTP", false)
             R.id.action_ncr -> changeProd("NCR", false)
             R.id.action_ncz -> changeProd("NCZ", false)
             //R.id.action_et -> changeProd("ET", false)

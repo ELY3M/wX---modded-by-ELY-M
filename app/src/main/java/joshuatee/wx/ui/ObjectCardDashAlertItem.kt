@@ -29,11 +29,7 @@ import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 import joshuatee.wx.UIPreferences
 
-import joshuatee.wx.activitiesmisc.CapAlert
-import joshuatee.wx.objects.TextSize
-import joshuatee.wx.util.UtilityString
-
-class ObjectCardAlertSummaryItem(context: Context) {
+class ObjectCardDashAlertItem(context: Context,val linearLayout: LinearLayout, val senderName: String,val  eventType: String,val  effectiveTime: String,val  expiresTime: String,val  areaDescription: String) {
 
     private val objCard: ObjectCard
     private val textViewTop: ObjectTextView
@@ -46,8 +42,8 @@ class ObjectCardAlertSummaryItem(context: Context) {
         val linearLayoutVertical = LinearLayout(context)
         textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
         textViewTitle = ObjectTextView(context)
-        textViewStart = ObjectTextView(context, TextSize.SMALL)
-        textViewEnd = ObjectTextView(context, TextSize.SMALL)
+        textViewStart = ObjectTextView(context)
+        textViewEnd= ObjectTextView(context)
         textViewBottom = ObjectTextView(context)
         textViewBottom.setAsBackgroundText()
         linearLayoutVertical.orientation = LinearLayout.VERTICAL
@@ -59,50 +55,22 @@ class ObjectCardAlertSummaryItem(context: Context) {
         linearLayoutVertical.addView(textViewBottom.tv)
         objCard = ObjectCard(context)
         objCard.addView(linearLayoutVertical)
+        setTextFields()
+        linearLayout.addView(objCard.card)
     }
-
 
     val card: CardView get() = objCard.card
-
-    fun setId(id: Int) {
-        objCard.card.id = id
-    }
 
     fun setListener(fn: View.OnClickListener) {
         objCard.card.setOnClickListener(fn)
     }
 
-    fun setTextFields(nwsOffice: String, nwsLoc: String, ca: CapAlert) {
-        val title: String
-        val startTime: String
-        var endTime = ""
-        if (ca.title.contains("until")) {
-            val tmpArr = UtilityString.parseMultiple(
-                ca.title,
-                "(.*?) issued (.*?) until (.*?) by (.*?)$", // changed expiring to until
-                4
-            )
-            title = tmpArr[0]
-            startTime = tmpArr[1]
-            endTime = tmpArr[2]
-        } else {
-            val tmpArr =
-                UtilityString.parseMultiple(ca.title, "(.*?) issued (.*?) by (.*?)$", 3)
-            title = tmpArr[0]
-            startTime = tmpArr[1]
-        }
-        textViewTop.text = "$nwsOffice ($nwsLoc)"
-        if (nwsOffice == "") {
-            textViewTop.tv.visibility = View.GONE
-        }
-        textViewBottom.text = ca.area
-        textViewTitle.text = title
-        textViewStart.text = "Start: $startTime"
-        if (endTime != "") {
-            textViewEnd.text = "End: $endTime"
-        } else {
-            textViewEnd.tv.visibility = View.GONE
-        }
+    private fun setTextFields() {
+        textViewTop.text = senderName
+        textViewTitle.text = eventType
+        textViewStart.text = effectiveTime.replace("T", " ").replace(Regex(":00-0[0-9]:00"), "")
+        textViewEnd.text = expiresTime.replace("T", " ").replace(Regex(":00-0[0-9]:00"), "")
+        textViewBottom.text = areaDescription
     }
 }
 

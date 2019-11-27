@@ -17,7 +17,8 @@ class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
         return tabTitles.size
     }
 
-    override fun getItem(position: Int): Fragment? {
+    //override fun getItem(position: Int): Fragment? { before 'androidx.preference:preference:1.1.0' // was 1.0.0
+    override fun getItem(position: Int): Fragment {
         if (MyApplication.simpleMode) {
             return LocationFragment()
         } else {
@@ -27,7 +28,8 @@ class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
                 2 -> return MiscFragment()
             }
         }
-        return null
+        return LocationFragment()
+        //return null
     }
 
     override fun getPageTitle(position: Int): CharSequence {

@@ -31,13 +31,13 @@ internal object UtilityModelSpcHrefInterface {
     val models = listOf("HREF")
 
     private val titles = listOf(
-            ObjectMenuTitle("SPC Guidance", 6),
-            ObjectMenuTitle("Synoptic", 6),
+            ObjectMenuTitle("SPC Guidance", 7),
+            ObjectMenuTitle("Synoptic", 8),
             ObjectMenuTitle("Severe", 12),
-            ObjectMenuTitle("Winter", 25),
-            ObjectMenuTitle("Fire", 11),
+            ObjectMenuTitle("Winter", 26),
+            ObjectMenuTitle("Fire", 12),
             ObjectMenuTitle("Precipitation", 16),
-            ObjectMenuTitle("Storm Attributes", 26)
+            ObjectMenuTitle("Storm Attributes", 24)
     )
 
     var shortCodes = Array(13) { Array(30) { "" } }
@@ -96,15 +96,16 @@ internal object UtilityModelSpcHrefInterface {
             "guidance_hail_spchazcal_024h",
             "guidance_tor_spchazcal_024h",
             "guidance_wind_spchazcal_024h",
+            "guidance_hrefct_004h", // NEW 10/19
 
             "500w_mean,500h_mean",
             "700w_mean,700h_mean",
             "850w_mean,850h_mean",
             "sfct_mean,10mwind_mean,mslp_mean",
             "sfctd_mean,10mwind_mean,mslp_mean",
-            // NEW
             "cloudcover_low_mean,cloudcover_mid_mean,cloudcover_high_mean",
-            // END NEW
+            "pwat_mean", // NEW 10/19
+            "pwat_prob050080", // NEW 10/19
 
             "sbcape_max,sfc500shear_mean",
             "sbcape_mean,sfc500shear_mean",
@@ -137,7 +138,7 @@ internal object UtilityModelSpcHrefInterface {
             "snowfall_024h_prob08",
             "snowfall_024h_prob12",
             "snowfall_024h_ps",
-            // new
+            "viswnd_prob0025035", // NEW 10/19
             "frzrfram_003h_mean",
             "frzrqpf_003h_max",
             "frzrqpf_003h_mean",
@@ -145,13 +146,13 @@ internal object UtilityModelSpcHrefInterface {
             "frzrfram_024h_mean",
             "frzrqpf_024h_max",
             "frzrqpf_024h_mean",
-            // end new
 
             "fosberg_max",
             "fosberg_mean",
             "fosberg_prob050",
             "fosberg_prob075",
             "10mwindhm_mean_mph_fill,10mwind_mean_mph",
+            "10mgust_max_mph_fill,10mwind_mean_mph", // NEW 10/19
             "sfcrh_mean",
             "rhwnd_prob1030",
             "rhwnd_prob1515",
@@ -182,30 +183,22 @@ internal object UtilityModelSpcHrefInterface {
             "cref_members namnest",
             "cref_pb40_members",
             "cref_ps",
-
-            "ref1km_004hmax_nh40",
-            "ref1km_004hmax_pb40_members",
-            "ref1kmmucape_004hmax_nh40_fill",
-
+            "ref1km_003hmax_nh40",
+            "ref1km_003hmax_pb40_members",
             "ref1km_024hmax_nh40",
             "ref1km_024hmax_pb40_members",
-            "ref1kmmucape_024hmax_nh40_fill",
-
-            "uh25_004hmax_max",
-            "uh25_004hmax_nh075_fill",
-            "uh25_004hmax_nh150_fill",
-            "uh25_004hmax_pb075_members,uh25_003hmax_nh075",
-            "uh25_004hmax_pb150_members,uh25_003hmax_nh150",
-
+            "uh25_003hmax_max",
+            "uh25_003hmax_nh075_fill",
+            "uh25_003hmax_nh150_fill",
+            "uh25_003hmax_pb075_members,uh25_003hmax_nh075",
+            "uh25_003hmax_pb150_members,uh25_003hmax_nh150",
             "uh25_024hmax_max,uh25_024hmax_nh075",
             "uh25_024hmax_nh075_fill",
             "uh25_024hmax_nh150_fill",
             "uh25_024hmax_pb075_members,uh25_024hmax_nh075",
             "uh25_024hmax_pb150_members,uh25_024hmax_nh150",
-
-            "wspd_004hmax_max",
-            "wspd_004hmax_pb30_members",
-
+            "wspd_003hmax_max",
+            "wspd_003hmax_pb30_members",
             "wspd_024hmax_max",
             "wspd_024hmax_pb30_members"
     )
@@ -217,15 +210,16 @@ internal object UtilityModelSpcHrefInterface {
             "24-hr HREF/SREF Calibrated: Hail",
             "24-hr HREF/SREF Calibrated: Tornado",
             "24-hr HREF/SREF Calibrated: Wind",
+            "4-hr HREF Calibrated: Thunder", // NEW 10/19
 
             "500 mb Height/Wind",
             "700 mb Height/Wind",
             "850 mb Height/Wind",
             "2m AGL Temperature/MSLP/Wind",
             "2m AGL Dew Point/MSLP/Wind",
-            // NEW
             "Cloud Cover: mean",
-            // END NEW
+            "Precipitable Water: mean", // NEW 10/19
+            "Precipitable Water: CP[>0.5, <0.8]", // NEW 10/19
 
             "Surface Based CAPE: max",
             "Surface Based CAPE: mean",
@@ -258,7 +252,7 @@ internal object UtilityModelSpcHrefInterface {
             "24-hr Snowfall: P[>8\"]",
             "24-hr Snowfall: P[>12\"]",
             "24-hr Snowfall: stamps",
-            // new
+            "Blizzard: CP[Vis, 10-m Vh] w/ snow", // NEW 10/19
             "3-hr Freezing Rain: FRAM mean",
             "3-hr Freezing Rain: QPF max",
             "3-hr Freezing Rain: QPF mean",
@@ -266,13 +260,13 @@ internal object UtilityModelSpcHrefInterface {
             "24-hr Freezing Rain: FRAM mean",
             "24-hr Freezing Rain: QPF max",
             "24-hr Freezing Rain: QPF mean",
-            // end new
 
             "Fosberg Index: max",
             "Fosberg Index: mean",
             "Fosberg Index: P[>50]",
             "Fosberg Index: P[>75]",
             "10 m AGL Wind (Hourly Max): mean",
+            "10 m AGL Gust: mean", // NEW 10/19
             "Relative Humidity: mean",
             "Relative Humidity and Wind: CP[RH<10%, V>30mph]",
             "Relative Humidity and Wind: CP[RH<15%, V>15mph]",
@@ -303,40 +297,28 @@ internal object UtilityModelSpcHrefInterface {
             "Reflectivity: namnest",
             "Reflectivity: PB[>40]",
             "Reflectivity: stamps",
-
-            "4-hr max Reflectivity: max",
-            "4-hr max Reflectivity: PB[>40]",
-            "4-hr max Reflectivity: NP[>40, MUCAPE>50]",
-
+            "3-hr max Reflectivity: max",
+            "3-hr max Reflectivity: PB[>40]",
             "24-hr max Reflectivity: max",
             "24-hr max Reflectivity: PB[>40]",
-            "24-hr max Reflectivity: NP[>40, MUCAPE>50]",
-
-
-            "4-hr max Updraft Helicity (2-5 km): max",
-            "4-hr max Updraft Helicity (2-5 km): NP[>75]",
-            "4-hr max Updraft Helicity (2-5 km): NP[>150]",
-            "4-hr max Updraft Helicity (2-5 km): PB[>75]",
-            "4-hr max Updraft Helicity (2-5 km): PB[>150]",
-
+            "3-hr max Updraft Helicity (2-5 km): max",
+            "3-hr max Updraft Helicity (2-5 km): NP[>75]",
+            "3-hr max Updraft Helicity (2-5 km): NP[>150]",
+            "3-hr max Updraft Helicity (2-5 km): PB[>75]",
+            "3-hr max Updraft Helicity (2-5 km): PB[>150]",
             "24-hr max Updraft Helicity (2-5 km): max",
             "24-hr max Updraft Helicity (2-5 km): NP[>75]",
             "24-hr max Updraft Helicity (2-5 km): NP[>150]",
             "24-hr max Updraft Helicity (2-5 km): PB[>75]",
             "24-hr max Updraft Helicity (2-5 km): PB[>150]",
-
-            "4-hr max Updraft: max",
-            "4-hr max Updraft: PB[>20]",
-
+            "3-hr max Updraft: max",
+            "3-hr max Updraft: PB[>20]",
             "24-hr max Updraft: max",
             "24-hr max Updraft: PB[>20]",
-
-            "4-hr max Wind Speed: max",
-            "4-hr max Wind Speed: PB[>30]",
-
+            "3-hr max Wind Speed: max",
+            "3-hr max Wind Speed: PB[>30]",
             "24-hr max Wind Speed: max",
             "24-hr max Wind Speed: PB[>30]",
-
             "10m 3-hr max Wind Speed: max PB[>30]",
             "10m 3-hr max Wind Speed: PB[>30]",
             "10m 24-hr max Wind Speed: max",

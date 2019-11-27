@@ -229,6 +229,12 @@ class Location(val context: Context, locNumInt: Int) {
 
         fun getLatLon(locNum: Int): LatLon = LatLon(getX(locNum), getY(locNum))
 
+        fun getIdentifier(locNum: Int): String {
+            val lat = MyApplication.locations.getOrNull(locNum)?.x ?: ""
+            val lon = MyApplication.locations.getOrNull(locNum)?.y ?: ""
+            return "LAT" + lat + "LON" + lon
+        }
+
         val locationIndex: Int get() = currentLocation
 
         fun isUS(locationNumber: Int): Boolean =

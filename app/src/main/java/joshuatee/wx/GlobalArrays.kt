@@ -164,7 +164,8 @@ object GlobalArrays {
             "SPCMESO3: Favorite #3 (ttd)",
             "SPCMESO4: Favorite #4 (rgnlrad)",
             "SPCMESO5: Favorite #5 (lllr)",
-            "SPCMESO6: Favorite #6 (laps)"
+            "SPCMESO6: Favorite #6 (laps)",
+            "WPC_ANALYSIS: WPC Analysis, Radar, Warnings"
     )
 
     val tdwrRadars: List<String> = listOf(

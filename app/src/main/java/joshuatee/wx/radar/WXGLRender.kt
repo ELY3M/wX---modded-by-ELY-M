@@ -131,6 +131,7 @@ class WXGLRender(private val context: Context) : Renderer {
     private var chunkCount = 0
     private var totalBins = 0
     private var totalBinsOgl = 0
+    private var gpsLatLonTransformed = floatArrayOf(0.0f, 0.0f)
     var displayHold: Boolean = false
     private var sizeHandle = 0
     private var iTexture: Int = 0
@@ -532,7 +533,12 @@ class WXGLRender(private val context: Context) : Renderer {
         GLES20.glEnableVertexAttribArray(colorHandle)
         matrixProjectionAndView = matrixProjectionAndViewOrig
         Matrix.multiplyMM(matrixProjectionAndView, 0, matrixProjection, 0, matrixView, 0)
-        Matrix.translateM(matrixProjectionAndView, 0, x, y, 0f)
+        //Matrix.translateM(matrixProjectionAndView, 0, x, y, 0f)
+        if (!MyApplication.wxoglCenterOnLocation) {
+            Matrix.translateM(matrixProjectionAndView, 0, x, y, 0f)
+        } else {
+            Matrix.translateM(matrixProjectionAndView, 0, gpsLatLonTransformed[0] * zoom, gpsLatLonTransformed[1] * zoom, 0f)
+        }
         Matrix.scaleM(matrixProjectionAndView, 0, zoom, zoom, 1f)
         GLES20.glUniformMatrix4fv(
                 GLES20.glGetUniformLocation(
@@ -1162,7 +1168,11 @@ class WXGLRender(private val context: Context) : Renderer {
         Matrix.setLookAtM(matrixView, 0, 0f, 0f, 1f, 0f, 0f, 0f, 0f, 1.0f, 0.0f)
         Matrix.multiplyMM(matrixProjectionAndView, 0, matrixProjection, 0, matrixView, 0)
         Matrix.multiplyMM(matrixProjectionAndViewOrig, 0, matrixProjection, 0, matrixView, 0)
-        Matrix.translateM(matrixProjectionAndView, 0, x, y, 0f)
+        if (!MyApplication.wxoglCenterOnLocation) {
+            Matrix.translateM(matrixProjectionAndView, 0, x, y, 0f)
+        } else {
+            Matrix.translateM(matrixProjectionAndView, 0, gpsLatLonTransformed[0] * zoom, gpsLatLonTransformed[1] * zoom, 0f)
+        }
         Matrix.scaleM(matrixProjectionAndView, 0, zoom, zoom, 1f)
     }
 
@@ -1436,8 +1446,21 @@ class WXGLRender(private val context: Context) : Renderer {
 
         if (MyApplication.locdotFollowsGps) {
             locIconBuffers.lenInit = locationDotBuffers.lenInit
+	    //joshuas change//
+	    val gpsCoords = UtilityCanvasProjection.computeMercatorNumbers(gpsX, gpsY, projectionNumbers)
+            gpsLatLonTransformed[0] = -gpsCoords[0].toFloat()
+            gpsLatLonTransformed[1] = gpsCoords[1].toFloat()
+
+
             UtilityWXOGLPerf.genLocdot(locIconBuffers, projectionNumbers, gpsX, gpsY)
-            //location bug//
+            
+	    
+	    
+	    
+	    
+	    
+	    
+	    //location bug//
             if (MyApplication.locdotBug) {
                 locBugBuffers.lenInit = 0f
                 UtilityWXOGLPerf.genLocdot(locBugBuffers, projectionNumbers, gpsX, gpsY)

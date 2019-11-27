@@ -19,62 +19,49 @@
 
 */
 
-package joshuatee.wx.nhc
+package joshuatee.wx.ui
 
 import android.content.Context
 import android.graphics.Color
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
+
+import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 
-import joshuatee.wx.ui.ObjectCard
-import joshuatee.wx.ui.ObjectTextView
-
-// FIXME does not match filename
-class ObjectCardNhcStormReportItem(context: Context, linearLayout: LinearLayout, stormData: ObjectNhcStormDetails) {
+class ObjectCardBlackHeaderText(context: Context, val linearLayout: LinearLayout, val text: String) {
 
     private val objCard: ObjectCard
     private val textViewTop: ObjectTextView
-    private val textViewTime: ObjectTextView
-    private val textViewMovement: ObjectTextView
-    private val textViewPressure: ObjectTextView
-    private val textViewWindSpeed: ObjectTextView
-    private val textViewBottom: ObjectTextView
 
     init {
         val linearLayoutVertical = LinearLayout(context)
         textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
-        textViewTime = ObjectTextView(context)
-        textViewMovement = ObjectTextView(context)
-        textViewPressure = ObjectTextView(context)
-        textViewWindSpeed = ObjectTextView(context)
-        textViewBottom = ObjectTextView(context)
-        textViewBottom.setAsBackgroundText()
         linearLayoutVertical.orientation = LinearLayout.VERTICAL
         linearLayoutVertical.gravity = Gravity.CENTER_VERTICAL
         linearLayoutVertical.addView(textViewTop.tv)
-        linearLayoutVertical.addView(textViewTime.tv)
-        linearLayoutVertical.addView(textViewMovement.tv)
-        linearLayoutVertical.addView(textViewPressure.tv)
-        linearLayoutVertical.addView(textViewWindSpeed.tv)
-        linearLayoutVertical.addView(textViewBottom.tv)
         objCard = ObjectCard(context)
         objCard.addView(linearLayoutVertical)
-        textViewTop.text = stormData.name + " (" + stormData.type + ") " + stormData.center
-        textViewTime.text = stormData.dateTime
-        textViewMovement.text = "Moving: " + stormData.movement
-        textViewPressure.text = "Min pressure: " + stormData.pressure
-        textViewWindSpeed.text = "Max sustained: " + stormData.wind
-        textViewBottom.text = stormData.headline + " " + stormData.wallet + " " + stormData.atcf
         linearLayout.addView(objCard.card)
+        setTextHeader()
     }
 
     val card: CardView get() = objCard.card
 
     fun setListener(fn: View.OnClickListener) {
         objCard.card.setOnClickListener(fn)
+    }
+
+    private fun setTextHeader() {
+        textViewTop.text = text
+        textViewTop.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeLarge)
+        textViewTop.setPadding(20,20,20,20)
+        textViewTop.setTextColor(UIPreferences.textHighlightColor)
+        textViewTop.tv.setBackgroundColor(Color.BLACK)
+        textViewTop.tv.setTextColor(Color.WHITE)
     }
 }
 

@@ -33,6 +33,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import joshuatee.wx.ui.ObjectTextView
+import joshuatee.wx.util.UtilityLog
 
 class BottomSheetFragment : BottomSheetDialogFragment() {
 

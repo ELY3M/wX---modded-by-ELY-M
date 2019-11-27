@@ -22,8 +22,6 @@
 package joshuatee.wx.radar
 
 import android.graphics.Color
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityLog
 
 import java.nio.ByteBuffer
 

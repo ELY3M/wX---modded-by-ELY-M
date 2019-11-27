@@ -230,7 +230,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     private fun itemSelected(position: Int) {
         val bottomSheetFragment = BottomSheetFragment()
         bottomSheetFragment.position = position
-        bottomSheetFragment.usedForLocation = true
+        bottomSheetFragment.usedForLocation = false
         bottomSheetFragment.fnList = listOf(::playItem, ::viewItem, ::deleteItem, ::moveUpItem, ::moveDownItem)
         bottomSheetFragment.labelList = listOf("Play Item", "View Item", "Delete Item", "Move Up", "Move Down")
         bottomSheetFragment.actContext = this

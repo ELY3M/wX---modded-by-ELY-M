@@ -43,7 +43,7 @@ import joshuatee.wx.ui.ObjectImageMap
 
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
-
+import kotlin.math.roundToInt
 
 internal object UtilityRadarUI {
 
@@ -165,9 +165,9 @@ internal object UtilityRadarUI {
                         6
                 ) + " miles from " + wxglRender.rid
         )
+/*
 
-
-
+	//Ely's mod 
         //get msl and AGL here
         val radarheight = WXGLNexradLevel3.radarHeight
         val distance = UtilityStringExternal.truncate(distRidKm.toString(), 4).toDouble()
@@ -187,12 +187,12 @@ internal object UtilityRadarUI {
 
         alertDialogRadarLongpressAl.add("Beam Height MSL: "+UtilityStringExternal.truncate(heightMSL.toString(), 6)+" ft, AGL: "+UtilityStringExternal.truncate(heightAGL.toString(), 6)+" ft")
 
+*/
 
-
-        //val distance = UtilityStringExternal.truncate(distRidKm.toString(), 4).toDouble()
-        //val heightAgl = UtilityMath.getRadarBeamHeight(oglr.radarL3Object.degree, distRidKm)
-        //val heightMsl = (wxglRender.radarL3Object.radarHeight + heightAgl)
-        //alertDialogRadarLongpressAl.add("Beam Height MSL: " + heightMsl.roundToInt().toString() + " ft, AGL: " + heightAgl.roundToInt().toString() + " ft")
+	//joshua's MSL+AGL Beam Height//
+        val heightAgl = UtilityMath.getRadarBeamHeight(wxglRender.radarL3Object.degree, distRidKm)
+        val heightMsl = (wxglRender.radarL3Object.radarHeight + heightAgl)
+        alertDialogRadarLongpressAl.add("Beam Height MSL: " + heightMsl.roundToInt().toString() + " ft, AGL: " + heightAgl.roundToInt().toString() + " ft")
         wxglRender.ridNewList.mapTo(alertDialogRadarLongpressAl) {
             "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.getRadarSiteName(it.name)
         }

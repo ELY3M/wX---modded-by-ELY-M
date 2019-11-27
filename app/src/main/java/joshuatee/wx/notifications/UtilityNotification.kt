@@ -241,7 +241,11 @@ object UtilityNotification {
             locLabel = " current conditions"
             locLabelStr = "(" + Location.getName(locNumInt) + ")" + locLabel
             i = 0
-            val url = UtilityDownloadNws.get7DayUrl(Location.getLatLon(locNumInt))
+            //val url = UtilityDownloadNws.get7DayUrl(Location.getLatLon(locNumInt))
+            val url = Location.getIdentifier(locNumInt)
+            // url above is used as the token for notifications and currenlty looks like
+            // https://api.weather.gov/gridpoints/DTX/x,y/forecast
+            // problem is if network is down it will be a non deterministic value so we need something different
             val currentUpdateTime = System.currentTimeMillis()
             val lastUpdateTime = Utility.readPref(context, "CC" + locNum + "_LAST_UPDATE", 0.toLong())
             if (MyApplication.locations[locNumInt].ccNotification) {
@@ -317,6 +321,7 @@ object UtilityNotification {
                             noSummary,
                             NotificationCompat.PRIORITY_HIGH
                     )
+                    UtilityLog.d("wx","WX CC " + url)
                     notifier.notify(url + "CC", 1, noti)
                 }
                 if (MyApplication.locations[locNumInt].sevenDayNotification) {

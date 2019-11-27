@@ -83,7 +83,7 @@ class BackgroundFetch(val context: Context) {
             MyApplication.severeDashboardTst.valueSet(context, "")
             MyApplication.severeDashboardFfw.valueSet(context, "")
         }
-        if (MyApplication.alertSpcmcdNotificationCurrent || MyApplication.checkspc || PolygonType.MCD.pref || locationNeedsMcd) {
+        if (MyApplication.alertSpcmcdNotificationCurrent || MyApplication.checkspc || MCD.pref || locationNeedsMcd) {
             try {
                 val mcdData = UtilityDownloadMcd.getMcd(context)
                 mcdData.numberList.forEachIndexed { index, mcdNumber ->
@@ -132,7 +132,7 @@ class BackgroundFetch(val context: Context) {
             MyApplication.severeDashboardMcd.valueSet(context, "")
             // end of if to test if alerts_spcmcd are enabled
         }
-        if (MyApplication.alertWpcmpdNotificationCurrent || MyApplication.checkwpc || PolygonType.MPD.pref || locationNeedsWpcMpd) {
+        if (MyApplication.alertWpcmpdNotificationCurrent || MyApplication.checkwpc || MPD.pref || locationNeedsWpcMpd) {
             try {
                 val mpdData = UtilityDownloadMpd.getMpd(context)
                 mpdData.numberList.forEachIndexed { index, mpdNumber ->
@@ -182,7 +182,7 @@ class BackgroundFetch(val context: Context) {
             MyApplication.severeDashboardMpd.valueSet(context, "")
             // end of if to test if alerts_wpcmpd are enabled
         }
-        if (MyApplication.alertSpcwatNotificationCurrent || MyApplication.checkspc || PolygonType.MCD.pref) {
+        if (MyApplication.alertSpcwatNotificationCurrent || MyApplication.checkspc || MCD.pref) {
             try {
                 val watchData = UtilityDownloadWatch.getWatch(context)
                 watchData.numberList.forEachIndexed { index, watchNumber ->

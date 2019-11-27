@@ -224,6 +224,8 @@ class WXGLDownload {
         val fnPrevSize = tmpArr[tmpArr.size - 4].toIntOrNull() ?: 1
         val ratio = fnSize.toFloat() / fnPrevSize.toFloat()
         if (ratio < 0.75) fn = fnPrev
+        //UtilityLog.d("wx", ratio.toString())
+        //UtilityLog.d("wx", baseUrl + fn)
         return baseUrl + fn
     }
 

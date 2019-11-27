@@ -27,7 +27,6 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.getImage
-import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
 import joshuatee.wx.audio.UtilityTts
@@ -69,7 +68,9 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var goesSector = ""
     private var toolbarTitle = ""
     private val bitmaps = mutableListOf<Bitmap>()
+    private lateinit var topBitmap: Bitmap
     private var baseUrl = ""
+    private var baseUrlShort = ""
     private lateinit var cTextProd: ObjectCardText
 
     @SuppressLint("MissingSuperCall")
@@ -91,6 +92,8 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val imgUrl1 = activityArguments[3]
         val year = UtilityTime.year()
         var yearInString = year.toString()
+        val yearInStringFull = year.toString()
+        val yearInStringShort = yearInString.substring(2)
         yearInString = yearInString.substring(max(yearInString.length - 2, 0))
         baseUrl = imgUrl1.replace(yearInString + "_5day_cone_with_line_and_wind_sm2.png", "")
         baseUrl += yearInString
@@ -103,33 +106,38 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (goesId.length < 2) {
             goesId = "0$goesId"
         }
-        cTextProd = ObjectCardText(this, ll, toolbar, toolbarBottom)
         product = "MIATCP$stormId"
+        baseUrlShort = baseUrl.replace(yearInStringFull, "") + yearInStringShort
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         bitmaps.clear()
+        withContext(Dispatchers.IO) { topBitmap = (baseUrl + "_5day_cone_with_line_and_wind_sm2.png").getImage() }
+        ObjectCardImage(this@NhcStormActivity, ll, topBitmap)
         withContext(Dispatchers.IO) {
             url = UtilityDownload.getTextProduct(this@NhcStormActivity, product)
         }
+        cTextProd = ObjectCardText(this@NhcStormActivity, ll, toolbar, toolbarBottom)
         cTextProd.setText(Utility.fromHtml(url))
         html = url
         withContext(Dispatchers.IO) {
             listOf(
-                    "_W5_NL_sm2.png",
-                    "_5day_cone_with_line_and_wind_sm2.png",
-                    "_W_NL_sm2.gif",
+                    "_key_messages.png",
+                    "WPCQPF_sm2.gif",
+                    "_earliest_reasonable_toa_34_sm2.png",
+                    "_most_likely_toa_34_sm2.png",
                     "_wind_probs_34_F120_sm2.png",
                     "_wind_probs_50_F120_sm2.png",
-                    "_wind_probs_64_F120_sm2.png",
-                    "_R_sm2.png",
-                    "_S_sm2.png",
-                    "_WPCQPF_sm2.png"
-            ).forEach { bitmaps.add((baseUrl + it).getImage()) }
-            bitmaps.add("${MyApplication.nwsNhcWebsitePrefix}/tafb_latest/danger_pac_latestBW_sm3.gif".getImage())
+                    "_wind_probs_64_F120_sm2.png"
+            ).forEach {
+                var url = baseUrl
+                if (it == "WPCQPF_sm2.gif"){
+                    url = baseUrlShort
+                }
+                bitmaps.add((url + it).getImage())
+            }
         }
-        //sv.smoothScrollTo(0, 0)
         bitmaps.filter { it.width > 100 }
                 .forEach { ObjectCardImage(this@NhcStormActivity, ll, it) }
         if (activityArguments.size > 2) {
@@ -153,6 +161,12 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun setProduct(productF: String) {
+        /*ObjectIntent(
+                this@NhcStormActivity,
+                WpcTextProductsActivity::class.java,
+                WpcTextProductsActivity.URL,
+                arrayOf(productF)
+        )*/
         product = productF
         getText()
     }

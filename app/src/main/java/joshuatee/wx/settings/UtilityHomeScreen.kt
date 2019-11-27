@@ -133,14 +133,15 @@ internal object UtilityHomeScreen {
         }
 
         listOf(
-            "FMAP12",
-            "FMAP24",
-            "FMAP36",
-            "FMAP48",
-            "FMAP3D",
-            "FMAP4D",
-            "FMAP5D",
-            "FMAP6D"
+                "FMAP12",
+                "FMAP24",
+                "FMAP36",
+                "FMAP48",
+                "FMAP3D",
+                "FMAP4D",
+                "FMAP5D",
+                "FMAP6D",
+                "WPC_ANALYSIS"
         ).forEach {
             MyApplication.HM_CLASS[it] = WpcImagesActivity::class.java
             MyApplication.HM_CLASS_ARGS[it] = arrayOf("")

@@ -482,11 +482,17 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
     private fun getTextProduct(productString: String) = GlobalScope.launch(uiDispatcher) {
         val productIndex = productString.toIntOrNull() ?: 0
-        val longText = withContext(Dispatchers.IO) {
+        val longTextDownload = withContext(Dispatchers.IO) {
             UtilityDownload.getTextProduct(
                     MyApplication.appContext,
                     hsTextAl[productIndex].product
             ).replace("<br>AREA FORECAST DISCUSSION", "AREA FORECAST DISCUSSION")
+        }
+        UtilityLog.d("wx", hsTextAl[productIndex].product)
+        //val longText = Utility.fromHtml(longTextDownload)
+        var longText = longTextDownload
+        if (hsTextAl[productIndex].product=="NFDOFFN31" || hsTextAl[productIndex].product=="NFDOFFN32") {
+            longText = Utility.fromHtml(longTextDownload)
         }
         hsTextAl[productIndex].setTextLong(longText)
         val shortText = UtilityStringExternal.truncate(longText, UIPreferences.homescreenTextLength)
@@ -778,7 +784,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
     private var mActivity: FragmentActivity? = null
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) { // was Context? before 'androidx.preference:preference:1.1.0' // was 1.0.0
         super.onAttach(context)
         if (context is FragmentActivity) {
             mActivity = context
@@ -810,7 +816,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         hazardsExpandedAl.clear()
         hazardsCards.clear()
         objHazards.titles.indices.forEach { z ->
-            //UtilityLog.d("wx", objHazards.titles[z])
             if (UtilityNotificationTools.nwsLocalAlertNotFiltered(activityReference, objHazards.titles[z])) {
                 hazardsExpandedAl.add(false)
                 hazardsCards.add(ObjectCardText(activityReference))

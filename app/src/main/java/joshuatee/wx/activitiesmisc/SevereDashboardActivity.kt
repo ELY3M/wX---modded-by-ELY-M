@@ -39,13 +39,10 @@ import joshuatee.wx.radar.UtilityDownloadMcd
 import joshuatee.wx.radar.UtilityDownloadMpd
 import joshuatee.wx.radar.UtilityDownloadWatch
 import joshuatee.wx.radar.UtilityDownloadWarnings
-import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectCardImage
-import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.spc.SpcMcdWatchShowActivity
 import joshuatee.wx.spc.SpcStormReportsActivity
 import joshuatee.wx.spc.UtilitySpc
-import joshuatee.wx.ui.ObjectLinearLayout
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityShortcut
@@ -80,14 +77,14 @@ class SevereDashboardActivity : BaseActivity() {
         getContent()
     }
 
-    private fun warningsClicked(filter: String) {
+  /*  private fun warningsClicked(filter: String) {
         ObjectIntent(
                 this@SevereDashboardActivity,
                 USWarningsWithRadarActivity::class.java,
                 USWarningsWithRadarActivity.URL,
                 arrayOf(filter, "us")
         )
-    }
+    }*/
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         // FIXME var naming
@@ -96,7 +93,7 @@ class SevereDashboardActivity : BaseActivity() {
         val snMcd = SevereNotice(PolygonType.MCD)
         val snMpd = SevereNotice(PolygonType.MPD)
         ll.removeAllViews()
-        val wTor = SevereWarning(PolygonType.TOR)
+        /*val wTor = SevereWarning(PolygonType.TOR)
         val wTst = SevereWarning(PolygonType.TST)
         val wFfw = SevereWarning(PolygonType.FFW)
         withContext(Dispatchers.IO) {
@@ -116,7 +113,7 @@ class SevereDashboardActivity : BaseActivity() {
         if (wFfw.count > 0) {
             val objFfw = ObjectCardText(this@SevereDashboardActivity, ll, wFfw.text)
             objFfw.setOnClickListener(View.OnClickListener { warningsClicked(".*?Flash Flood Warning.*?") })
-        }
+        }*/
         withContext(Dispatchers.IO) {
             bitmapArrRep.add((UtilitySpc.getStormReportsTodayUrl()).getImage())
         }
@@ -284,6 +281,45 @@ class SevereDashboardActivity : BaseActivity() {
         bitmaps.addAll(snMcd.bitmaps)
         bitmaps.addAll(snMpd.bitmaps)
         bitmaps.addAll(bitmapArrRep)
+
+        val wTor = SevereWarning(PolygonType.TOR)
+        val wTst = SevereWarning(PolygonType.TST)
+        val wFfw = SevereWarning(PolygonType.FFW)
+        withContext(Dispatchers.IO) {
+            UtilityDownloadWarnings.getForSevereDashboard(this@SevereDashboardActivity)
+            wTor.generateString(this@SevereDashboardActivity, MyApplication.severeDashboardTor.value)
+            wTst.generateString(this@SevereDashboardActivity, MyApplication.severeDashboardTst.value)
+            wFfw.generateString(this@SevereDashboardActivity, MyApplication.severeDashboardFfw.value)
+        }
+        listOf(wTor, wTst, wFfw).forEach { warn ->
+            if (warn.count > 0) {
+                ObjectCardBlackHeaderText(this@SevereDashboardActivity, ll, "(" + warn.count + ") " + warn.getName())
+                warn.effectiveList.forEachIndexed { index, event ->
+                    val data = warn.warnings[index]
+                    //let vtecIsCurrent = UtilityTime.isVtecCurrent(data);
+                    if (!data.startsWith("O.EXP")) {
+                        val objectCardDashAlertItem = ObjectCardDashAlertItem(
+                                this@SevereDashboardActivity,
+                                ll,
+                                warn.senderNameList[index],
+                                warn.eventList[index],
+                                warn.effectiveList[index],
+                                warn.expiresList[index],
+                                warn.areaDescList[index]
+                        )
+                        objectCardDashAlertItem.setListener(View.OnClickListener {
+                            val url = warn.idList[index]
+                            ObjectIntent(
+                                    this@SevereDashboardActivity,
+                                    USAlertsDetailActivity::class.java,
+                                    USAlertsDetailActivity.URL,
+                                    arrayOf("https://api.weather.gov/alerts/" + url, "")
+                            )
+                        })
+                    }
+                }
+            }
+        }
         tstCount = wTst.count
         ffwCount = wFfw.count
         torCount = wTor.count

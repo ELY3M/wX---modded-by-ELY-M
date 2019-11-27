@@ -778,6 +778,7 @@ class MyApplication : Application() {
         var radarStiLineSize: Int = 0
         var radarSwoLineSize: Int = 0
         var radarWbLineSize: Int = 0
+        var wxoglCenterOnLocation: Boolean = false
 
         private fun initRadarPreferences() {
             radarLocationUpdateInterval = getInitialPreference("RADAR_LOCATION_UPDATE_INTERVAL", 10)
@@ -814,6 +815,7 @@ class MyApplication : Application() {
             radarShowLegend = getInitialPreference("RADAR_SHOW_LEGEND", "false")
             radarShowLegendWidth = getInitialPreference("RADAR_SHOW_LEGEND_WIDTH", 50)
             radarShowLegendTextSize = getInitialPreference("RADAR_SHOW_LEGEND_TEXTSIZE", 30)
+	    wxoglCenterOnLocation = getInitialPreference("RADAR_CENTER_ON_LOCATION", "false")
             drawtoolSize = getInitialPreference("DRAWTOOL_SIZE", 4)
             radarObsExtZoom = getInitialPreference("RADAR_OBS_EXT_ZOOM", 7)
             radarSpotterSize = getInitialPreference("RADAR_SPOTTER_SIZE", 4)

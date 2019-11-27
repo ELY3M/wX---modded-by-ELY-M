@@ -53,7 +53,6 @@ import joshuatee.wx.activitiesmisc.WebscreenABModels
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.UtilityToolbar
-import joshuatee.wx.MyApplication
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 import joshuatee.wx.util.UtilityFileManagement
@@ -148,7 +147,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         val activityArguments = intent.getStringArrayExtra(RID)
-        if (activityArguments.size > 3 ) {
+        if (activityArguments != null && activityArguments.size > 3 ) {
             if (activityArguments[3] == "true") {
                 dontSavePref = true
                 useSinglePanePref = true
@@ -157,13 +156,12 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         if(resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
             landScape = true
         }
-        numPanes = activityArguments[2].toIntOrNull() ?: 0
+        numPanes = activityArguments!![2].toIntOrNull() ?: 0
         numPanesArr = (0 until numPanes).toList()
         UtilityFileManagement.deleteCacheFiles(this)
         isGetContentInProgress = false
         var widthDivider = 1
         var heightDivider = 2
-        //var heightDivider = 1
         val layoutType: Int
         if (numPanes == 2) {
             if (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent) {
@@ -586,7 +584,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 animArray[z] = oglrArr[z].rdDownload.getRadarFilesForAnimation(this@WXGLRadarActivityMultiPane, frameCount)
                         .toTypedArray()
                 try {
-                    (0 until animArray[z].size).forEach { r ->
+                    (animArray[z].indices).forEach { r ->
                         fh = File(this@WXGLRadarActivityMultiPane.filesDir, animArray[z][r])
                         this@WXGLRadarActivityMultiPane.deleteFile((z + 1).toString() + oglrArr[z].product + "nexrad_anim" + r.toString())
                         if (!fh.renameTo(
@@ -616,7 +614,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                                 )
                                         .toTypedArray()
                         try {
-                            (0 until animArray[z].size).forEach { r ->
+                            (animArray[z].indices).forEach { r ->
                                 fh = File(this@WXGLRadarActivityMultiPane.filesDir, animArray[z][r])
                                 this@WXGLRadarActivityMultiPane.deleteFile((z + 1).toString() + oglrArr[z].product + "nexrad_anim" + r.toString())
                                 if (!fh.renameTo(
@@ -637,7 +635,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     }
                     animTriggerDownloads = false
                 }
-                for (r in 0 until animArray[0].size) {
+                for (r in animArray[0].indices) {
                     while (inOglAnimPaused) SystemClock.sleep(delay.toLong())
                     // formerly priorTime was set at the end but that is goofed up with pause
                     priorTime = System.currentTimeMillis()
@@ -851,8 +849,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             R.id.action_dsp -> changeProd("DSA")
             R.id.action_daa -> changeProd("DAA")
             R.id.action_nsw -> changeProd("NSW")
-            R.id.action_n1p -> changeProd("N1P")
-            R.id.action_ntp -> changeProd("NTP")
+            //R.id.action_n1p -> changeProd("N1P")
+            //R.id.action_ntp -> changeProd("NTP")
             R.id.action_ncr -> changeProd("NCR")
             R.id.action_ncz -> changeProd("NCZ")
             R.id.action_l2vel -> changeProd("L2VEL")

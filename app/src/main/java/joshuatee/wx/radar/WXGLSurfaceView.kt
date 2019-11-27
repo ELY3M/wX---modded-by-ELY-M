@@ -39,7 +39,6 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityLog
 
 import kotlin.math.*
 

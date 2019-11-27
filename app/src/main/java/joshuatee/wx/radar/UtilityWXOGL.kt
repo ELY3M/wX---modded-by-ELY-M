@@ -155,16 +155,26 @@ object UtilityWXOGL {
                 html += it.storage.value
             }
         }
-        val urlList = html.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"")
+        // val warningLatLonPattern: Pattern = Pattern.compile("\"coordinates\":\\[\\[(.*?)\\]\\]\\}")
+        // discard  "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3771044",            "type": "Feature",            "geometry": null,
+        // Special Weather Statements can either have a polygon or maybe not, need to strip out those w/o polygon
+        val urlList = html.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"").toMutableList()
+        val urlListCopy = urlList.toMutableList()
+        urlListCopy.forEach {
+            //if (html.contains(Regex("\"id\"\\: ." + it + "\",            \"type\": \"Feature\",            \"geometry\": null"))) {
+            if (html.contains(Regex("\"id\"\\: ." + it + "\",\\s*\"type\": \"Feature\",\\s*\"geometry\": null"))) {
+                urlList.remove(it)
+            }
+        }
         html = html.replace("\n", "")
         html = html.replace(" ", "")
-        val polygonArr = html.parseColumn(RegExp.warningLatLonPattern)
+        val polygons = html.parseColumn(RegExp.warningLatLonPattern)
         var retStr = ""
         var testArr: List<String>
         var q = 0
         var notFound = true
         var polyCount = -1
-        polygonArr.forEach { polys ->
+        polygons.forEach { polys ->
             polyCount += 1
             //if (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith("0.CAN")) {
             //if (true) {

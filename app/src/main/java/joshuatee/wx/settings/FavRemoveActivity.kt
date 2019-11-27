@@ -218,7 +218,7 @@ class FavRemoveActivity : BaseActivity() {
     }
 
     private fun findCanadaRadarSiteLabel(rid: String) =
-            (0 until GlobalArrays.canadaRadars.size).firstOrNull {
+            (GlobalArrays.canadaRadars.indices).firstOrNull {
                 GlobalArrays.canadaRadars[it].contains(
                         rid
                 )

@@ -45,7 +45,7 @@ object UtilityImgAnim {
             if (radarAl.size >= frameCount) {
                 (radarAl.size - frameCount until radarAl.size).mapTo(retAl) { radarAl[it] }
             } else {
-                (0 until radarAl.size).mapTo(retAl) { radarAl[it] }
+                (radarAl.indices).mapTo(retAl) { radarAl[it] }
             }
         } catch (e: Exception) {
             UtilityLog.handleException(e)

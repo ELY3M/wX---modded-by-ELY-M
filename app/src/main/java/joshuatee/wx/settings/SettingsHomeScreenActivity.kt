@@ -238,7 +238,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         Utility.writePref(this, prefToken, ridFav)
     }
 
-    private fun findPositionTEXT(key: String) = (0 until GlobalArrays.nwsTextProducts.size)
+    private fun findPositionTEXT(key: String) = (GlobalArrays.nwsTextProducts.indices)
             .firstOrNull {
                 GlobalArrays.nwsTextProducts[it].startsWith(
                         key.toLowerCase().replace(
@@ -250,7 +250,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             ?.let { GlobalArrays.nwsTextProducts[it] }
             ?: ""
 
-    private fun findPositionIMG(key: String) = (0 until GlobalArrays.nwsImageProducts.size)
+    private fun findPositionIMG(key: String) = (GlobalArrays.nwsImageProducts.indices)
             .firstOrNull { GlobalArrays.nwsImageProducts[it].startsWith(key.replace("IMG-", "")) }
             ?.let { GlobalArrays.nwsImageProducts[it] }
             ?: ""
@@ -268,7 +268,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                     ?: ""
 
     private fun findPositionAFD(key: String): String {
-        (0 until GlobalArrays.wfos.size).forEach {
+        (GlobalArrays.wfos.indices).forEach {
             if (GlobalArrays.wfos[it].startsWith(key.replace("TXT-AFD", ""))) {
                 return "AFD " + GlobalArrays.wfos[it]
             }
@@ -281,14 +281,14 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     private fun findPositionRadarNexrad(key: String): String {
         val allRadars = GlobalArrays.radars
-        return (0 until allRadars.size)
+        return (allRadars.indices)
                 .firstOrNull { allRadars[it].startsWith(key.replace("NXRD-", "")) }
                 ?.let { allRadars[it] + " (NEXRAD)" } ?: ""
     }
 
     private fun findPositionRadarTdwr(key: String): String {
         val allRadars = GlobalArrays.tdwrRadarsForHomeScreen
-        return (0 until allRadars.size)
+        return (allRadars.indices)
                 .firstOrNull { allRadars[it].startsWith(key.replace("NXRD-", "")) }
                 ?.let { allRadars[it] + " (TDWR)" } ?: ""
     }

@@ -43,7 +43,7 @@
     <string name="title_activity_settings_ui">User Interface Settings</string>
     <string name="title_activity_text_screen">wX</string>
     <string name="about_wx">wX is an efficient and configurable method to access weather content from the NWS,
-        Environment Cananda, NSSL WRF, and Blitzortung.org.
+        Environment Canada, NSSL WRF, and blitzortung.org.
         Additional software and tools are used from Telecine, GraphView,
         bzip2, TouchImageView, OkHttp, ImageMap, HoloColorPicker, and OpenStreetMaps.
         Software is provided \"as is\". Use at your own risk. Use for educational purposes and non-commercial purposes only.

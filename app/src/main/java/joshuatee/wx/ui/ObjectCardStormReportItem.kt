@@ -42,7 +42,7 @@ class ObjectCardStormReportItem(context: Context) {
 
     init {
         val linearLayoutVertical = LinearLayout(context)
-        textViewTop = ObjectTextView(context, Color.BLUE)
+        textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
         textViewTitle = ObjectTextView(context)
         textViewBottom = ObjectTextView(context)
         textViewBottom.setAsBackgroundText()

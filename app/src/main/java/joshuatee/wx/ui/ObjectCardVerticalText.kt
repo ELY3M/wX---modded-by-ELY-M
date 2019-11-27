@@ -79,7 +79,7 @@ class ObjectCardVerticalText(context: Context, numColumns: Int) {
 
     fun setText(textArr: List<String>) {
         if (textArr.size == tvArr.size) {
-            (0 until textArr.size).forEach { tvArr[it].text = textArr[it] }
+            (textArr.indices).forEach { tvArr[it].text = textArr[it] }
         }
     }
 

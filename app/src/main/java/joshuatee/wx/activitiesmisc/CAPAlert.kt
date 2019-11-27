@@ -25,7 +25,7 @@ import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
 
-class CapAlert() {
+class CapAlert {
 
     var text: String = ""
         private set
@@ -42,8 +42,8 @@ class CapAlert() {
     var url: String = ""
         private set
     var event: String = ""
-    var effective: String  = "";
-    var expires: String  = "";
+    var effective: String  = ""
+    var expires: String  = ""
 
     /*constructor(
         url: String,
