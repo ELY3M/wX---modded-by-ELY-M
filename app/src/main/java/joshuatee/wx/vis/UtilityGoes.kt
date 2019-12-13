@@ -114,7 +114,8 @@ object UtilityGoes {
             "11.2 um (Band 14) Longwave Window - IR",
             "12.3 um (Band 15) Dirty Longwave Window - IR",
             "13.3 um (Band 16) CO2 Longwave - IR",
-            "AirMass - RGB composite based on the data from IR and WV"
+            "AirMass - RGB composite based on the data from IR and WV",
+            "Sandwich RGB - Bands 3 and 13 combo"
     )
 
     val codes: List<String> = listOf(
@@ -135,7 +136,8 @@ object UtilityGoes {
             "14",
             "15",
             "16",
-            "AirMass"
+            "AirMass",
+            "Sandwich"
     )
 
     private val sectorsInGoes17: List<String> = listOf(

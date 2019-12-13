@@ -40,7 +40,7 @@ internal class SevereWarning(private val type: PolygonType) {
     var count = 0
         private set
 
-    var collapsed = false
+    //var collapsed = false
     var idList = listOf<String>()
     var areaDescList = listOf<String>()
     var effectiveList = listOf<String>()
@@ -49,13 +49,9 @@ internal class SevereWarning(private val type: PolygonType) {
     var senderNameList = listOf<String>()
     var warnings = listOf<String>()
 
-    fun toggleCollapsed() {
-        if (collapsed) {
-            collapsed = false
-        } else {
-            collapsed = true
-        }
-    }
+    //fun toggleCollapsed() {
+    //    collapsed = !collapsed
+    //}
 
     fun getName(): String {
         var name = ""

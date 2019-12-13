@@ -171,10 +171,10 @@ object UtilityDownloadNws {
         return forecastUrl.getNwsHtml()
     }
 
-    fun get7DayUrl(latLon: LatLon): String {
-        val pointsData = getLocationPointData(latLon)
-        return pointsData.parse("\"forecast\": \"(.*?)\"")
-    }
+    //fun get7DayUrl(latLon: LatLon): String {
+    //    val pointsData = getLocationPointData(latLon)
+    //    return pointsData.parse("\"forecast\": \"(.*?)\"")
+    //}
 
     private fun getLocationPointData(latLon: LatLon): String {
         val url = MyApplication.nwsApiUrl + "/points/" + latLon.latString + "," + latLon.lonString

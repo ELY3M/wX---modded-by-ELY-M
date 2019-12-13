@@ -43,9 +43,5 @@ class DataStorage(private var preference: String) {
         editor.putString(preference, newValue)
         editor.apply()
     }
-
-    /*fun valueGet(): String {
-        return storedVal
-    }*/
 }
 

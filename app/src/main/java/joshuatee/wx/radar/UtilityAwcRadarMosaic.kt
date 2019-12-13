@@ -103,6 +103,11 @@ object UtilityAwcRadarMosaic {
             baseAddOn = "sat/us/"
             imageType = ".jpg"
             topUrlAddOn = "&type=" + product.replace("sat_", "")
+        } else if (product.startsWith("rad_")) {
+            baseAddOnTopUrl = "radar/"
+            baseAddOn = "radar/"
+            imageType = ".gif"
+            topUrlAddOn = "&type=" + product.replace("rad_", "")
         }
         val productUrl = "https://www.aviationweather.gov/" + baseAddOnTopUrl + "plot?region=" + sector + topUrlAddOn
         val html = productUrl.getHtml()

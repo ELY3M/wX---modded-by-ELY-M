@@ -281,7 +281,7 @@ object UtilityCanada {
 
     fun getStatus(html: String): String = html.parse("<b>Observed at:</b>(.*?)<br/>")
 
-    fun getRid(x: String, y: String): String {
+    fun getRadarSite(x: String, y: String): String {
         val url = (MyApplication.canadaEcSitePrefix + "/city/pages/"
                 + x.split(":").dropLastWhile { it.isEmpty() }[1].toLowerCase(Locale.US) + "-"
                 + y.split(":").dropLastWhile { it.isEmpty() }[0] + "_metric_e.html")

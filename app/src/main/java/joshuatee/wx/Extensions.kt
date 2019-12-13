@@ -42,6 +42,10 @@ fun String.truncate(size: Int): String {
     return UtilityStringExternal.truncate(this, size)
 }
 
+//fun String.removeHtml(): String {
+//    return UtilityString.removeHtml(this)
+//}
+
 fun String.parse(pattern: Pattern): String {
     return UtilityString.parse(this, pattern)
 }
@@ -70,9 +74,9 @@ fun String.getHtml(): String {
     }
 }
 
-fun String.getHtmlUnsafe(): String {
-    return UtilityDownload.getStringFromUrlUnsafe(this)
-}
+//fun String.getHtmlUnsafe(): String {
+//    return UtilityDownload.getStringFromUrlUnsafe(this)
+//}
 
 fun String.getNwsHtml(): String {
     return UtilityDownloadNws.getStringFromUrl(this)

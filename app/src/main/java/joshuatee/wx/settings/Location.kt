@@ -351,7 +351,7 @@ class Location(val context: Context, locNumInt: Int) {
                 )
                 Utility.writePref(context, "LOC" + locNum + "_Y", id + ":" + tmpLatLon.lonStr)
                 setNumLocations(context, locNumToSave)
-                radarSite = UtilityCanada.getRid(xStr, yStr)
+                radarSite = UtilityCanada.getRadarSite(xStr, yStr)
                 Utility.writePref(context, "RID$locNum", radarSite.toUpperCase(Locale.US))
                 Utility.writePref(context, "NWS" + locNum + "_STATE", prov)
                 Utility.writePref(context, "ZONE$locNum", "")

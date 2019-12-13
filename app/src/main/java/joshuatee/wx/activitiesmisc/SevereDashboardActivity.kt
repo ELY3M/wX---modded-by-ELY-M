@@ -43,7 +43,6 @@ import joshuatee.wx.spc.SpcMcdWatchShowActivity
 import joshuatee.wx.spc.SpcStormReportsActivity
 import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.ui.*
-import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityShortcut
 
@@ -77,15 +76,6 @@ class SevereDashboardActivity : BaseActivity() {
         getContent()
     }
 
-  /*  private fun warningsClicked(filter: String) {
-        ObjectIntent(
-                this@SevereDashboardActivity,
-                USWarningsWithRadarActivity::class.java,
-                USWarningsWithRadarActivity.URL,
-                arrayOf(filter, "us")
-        )
-    }*/
-
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         // FIXME var naming
         val bitmapArrRep = mutableListOf<Bitmap>()
@@ -93,32 +83,10 @@ class SevereDashboardActivity : BaseActivity() {
         val snMcd = SevereNotice(PolygonType.MCD)
         val snMpd = SevereNotice(PolygonType.MPD)
         ll.removeAllViews()
-        /*val wTor = SevereWarning(PolygonType.TOR)
-        val wTst = SevereWarning(PolygonType.TST)
-        val wFfw = SevereWarning(PolygonType.FFW)
-        withContext(Dispatchers.IO) {
-            UtilityDownloadWarnings.getForSevereDashboard(this@SevereDashboardActivity)
-            wTor.generateString(this@SevereDashboardActivity, MyApplication.severeDashboardTor.value)
-            wTst.generateString(this@SevereDashboardActivity, MyApplication.severeDashboardTst.value)
-            wFfw.generateString(this@SevereDashboardActivity, MyApplication.severeDashboardFfw.value)
-        }
-        if (wTor.count > 0) {
-            val objTor = ObjectCardText(this@SevereDashboardActivity, ll, wTor.text)
-            objTor.setOnClickListener(View.OnClickListener { warningsClicked(".*?Tornado Warning.*?") })
-        }
-        if (wTst.count > 0) {
-            val objTst = ObjectCardText(this@SevereDashboardActivity, ll, wTst.text)
-            objTst.setOnClickListener(View.OnClickListener { warningsClicked(".*?Severe Thunderstorm Warning.*?") })
-        }
-        if (wFfw.count > 0) {
-            val objFfw = ObjectCardText(this@SevereDashboardActivity, ll, wFfw.text)
-            objFfw.setOnClickListener(View.OnClickListener { warningsClicked(".*?Flash Flood Warning.*?") })
-        }*/
         withContext(Dispatchers.IO) {
             bitmapArrRep.add((UtilitySpc.getStormReportsTodayUrl()).getImage())
         }
         totalImages = bitmapArrRep.size + snMcd.bitmaps.size + snWat.bitmaps.size + snMpd.bitmaps.size
-        UtilityLog.d("Wx", totalImages.toString())
         // FIXME should not be hardcoded
         for (i in 0..20) {
             linearLayoutHorizontalList.add(ObjectLinearLayout(this@SevereDashboardActivity, ll))
@@ -151,7 +119,12 @@ class SevereDashboardActivity : BaseActivity() {
                 .filter { it.bitmaps.size > 0 }
                 .forEach { severeNotice ->
                     severeNotice.bitmaps.indices.forEach { j ->
-                        val card = ObjectCardImage(this@SevereDashboardActivity, linearLayoutHorizontalList[totalImages / 2].linearLayout, severeNotice.bitmaps[j], 2)
+                        val card = ObjectCardImage(
+                                this@SevereDashboardActivity,
+                                linearLayoutHorizontalList[totalImages / 2].linearLayout,
+                                severeNotice.bitmaps[j],
+                                2
+                        )
                         var cla: Class<*>? = null
                         var claStr = ""
                         val claArgStr = severeNotice.numbers[j]
@@ -195,8 +168,12 @@ class SevereDashboardActivity : BaseActivity() {
                 .filter { it.bitmaps.size > 0 }
                 .forEach { severeNotice ->
                     severeNotice.bitmaps.indices.forEach { j ->
-                        UtilityLog.d("Wx", totalImages.toString())
-                        val card = ObjectCardImage(this@SevereDashboardActivity, linearLayoutHorizontalList[totalImages / 2].linearLayout, severeNotice.bitmaps[j], 2)
+                        val card = ObjectCardImage(
+                                this@SevereDashboardActivity,
+                                linearLayoutHorizontalList[totalImages / 2].linearLayout,
+                                severeNotice.bitmaps[j],
+                                2
+                        )
                         var cla: Class<*>? = null
                         var claStr = ""
                         val claArgStr = severeNotice.numbers[j]
@@ -240,7 +217,12 @@ class SevereDashboardActivity : BaseActivity() {
                 .filter { it.bitmaps.size > 0 }
                 .forEach { severeNotice ->
                     severeNotice.bitmaps.indices.forEach { j ->
-                        val card = ObjectCardImage(this@SevereDashboardActivity, linearLayoutHorizontalList[totalImages / 2].linearLayout, severeNotice.bitmaps[j], 2)
+                        val card = ObjectCardImage(
+                                this@SevereDashboardActivity,
+                                linearLayoutHorizontalList[totalImages / 2].linearLayout,
+                                severeNotice.bitmaps[j],
+                                2
+                        )
                         var cla: Class<*>? = null
                         var claStr = ""
                         val claArgStr = severeNotice.numbers[j]
@@ -273,15 +255,10 @@ class SevereDashboardActivity : BaseActivity() {
                         totalImages += 1
                     }
                 }
-
-
-
-
         bitmaps.addAll(snWat.bitmaps)
         bitmaps.addAll(snMcd.bitmaps)
         bitmaps.addAll(snMpd.bitmaps)
         bitmaps.addAll(bitmapArrRep)
-
         val wTor = SevereWarning(PolygonType.TOR)
         val wTst = SevereWarning(PolygonType.TST)
         val wFfw = SevereWarning(PolygonType.FFW)
@@ -293,7 +270,11 @@ class SevereDashboardActivity : BaseActivity() {
         }
         listOf(wTor, wTst, wFfw).forEach { warn ->
             if (warn.count > 0) {
-                ObjectCardBlackHeaderText(this@SevereDashboardActivity, ll, "(" + warn.count + ") " + warn.getName())
+                ObjectCardBlackHeaderText(
+                        this@SevereDashboardActivity,
+                        ll,
+                        "(" + warn.count + ") " + warn.getName()
+                )
                 warn.effectiveList.forEachIndexed { index, event ->
                     val data = warn.warnings[index]
                     //let vtecIsCurrent = UtilityTime.isVtecCurrent(data);
@@ -313,7 +294,7 @@ class SevereDashboardActivity : BaseActivity() {
                                     this@SevereDashboardActivity,
                                     USAlertsDetailActivity::class.java,
                                     USAlertsDetailActivity.URL,
-                                    arrayOf("https://api.weather.gov/alerts/" + url, "")
+                                    arrayOf("https://api.weather.gov/alerts/$url", "")
                             )
                         })
                     }
@@ -348,7 +329,13 @@ class SevereDashboardActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, this, "Severe Dashboard", "", bitmaps)
+            R.id.action_share -> UtilityShare.shareText(
+                    this,
+                    this,
+                    "Severe Dashboard",
+                    "",
+                    bitmaps
+            )
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.SevereDashboard)
             else -> return super.onOptionsItemSelected(item)
         }

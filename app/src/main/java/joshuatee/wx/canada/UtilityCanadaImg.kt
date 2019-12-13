@@ -60,18 +60,19 @@ object UtilityCanadaImg {
 
     private fun getRadarAnimStringArray(rid: String, duration: String): String {
         val radHtml = (MyApplication.canadaEcSitePrefix + "/radar/index_e.html?id=$rid").getHtmlSep()
-        var durationPatMatch = "<p>Short .1hr.:</p>(.*?)</div>"
+        var durationPattern = "<p>Short .1hr.:</p>(.*?)</div>"
         if (duration == "long") {
-            durationPatMatch = "<p>Long .3hr.:</p>(.*?)</div>"
+            durationPattern = "<p>Long .3hr.:</p>(.*?)</div>"
         }
-        val radarHtml1Hr = radHtml.parse(durationPatMatch)
+        val radarHtml1Hr = radHtml.parse(durationPattern)
         var urlList = ""
-        var tmpAl = radarHtml1Hr.parseColumn("display='(.*?)'&amp;")
-        tmpAl.forEach {
-            urlList += ":/data/radar/detailed/temp_image/$rid/$it.GIF"
+        var timeStamps = radarHtml1Hr.parseColumn("display='(.*?)'&amp;")
+        val radarSiteCode = (timeStamps.first()).split("_")[0]
+        timeStamps.forEach {
+            urlList += ":/data/radar/detailed/temp_image/$radarSiteCode/$it.GIF"
         }
-        tmpAl = radHtml.parseColumn("src=.(/data/radar/.*?GIF)\"")
-        tmpAl.forEach { urlList += ":$it" }
+        timeStamps = radHtml.parseColumn("src=.(/data/radar/.*?GIF)\"")
+        timeStamps.forEach { urlList += ":$it" }
         return urlList
     }
 

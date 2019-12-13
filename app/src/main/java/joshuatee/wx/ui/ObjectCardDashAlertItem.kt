@@ -22,14 +22,21 @@
 package joshuatee.wx.ui
 
 import android.content.Context
-import android.graphics.Color
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 import joshuatee.wx.UIPreferences
 
-class ObjectCardDashAlertItem(context: Context,val linearLayout: LinearLayout, val senderName: String,val  eventType: String,val  effectiveTime: String,val  expiresTime: String,val  areaDescription: String) {
+class ObjectCardDashAlertItem(
+        context: Context,
+        val linearLayout: LinearLayout,
+        private val senderName: String,
+        private val eventType: String,
+        private val effectiveTime: String,
+        private val expiresTime: String,
+        private val areaDescription: String
+) {
 
     private val objCard: ObjectCard
     private val textViewTop: ObjectTextView

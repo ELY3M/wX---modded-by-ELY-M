@@ -40,7 +40,7 @@ object UtilityTime {
         val outputFormat = SimpleDateFormat("MM-dd h:mm a", Locale.US)
         try {
             val date = inputFormat.parse(time)
-            returnTime = outputFormat.format(date)
+            returnTime = outputFormat.format(date!!)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -55,7 +55,7 @@ object UtilityTime {
         var t: Long = 0
         (1 until 4).forEach {
             try {
-                parsed = format.parse(time)
+                parsed = format.parse(time)!!
                 t = parsed.time
             } catch (e: Exception) {
                 UtilityLog.handleException(e)
@@ -73,7 +73,7 @@ object UtilityTime {
         var t: Long = 0
         (1 until 4).forEach {
             try {
-                parsed = format.parse(time)
+                parsed = format.parse(time)!!
                 t = parsed.time
             } catch (e: Exception) {
                 UtilityLog.handleException(e)
@@ -129,7 +129,7 @@ object UtilityTime {
 
     fun year(): Int = Calendar.getInstance().get(Calendar.YEAR)
 
-    fun month(): Int = Calendar.getInstance().get(Calendar.MONTH) + 1
+    //fun month(): Int = Calendar.getInstance().get(Calendar.MONTH) + 1
 
     fun day(): Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 

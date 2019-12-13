@@ -75,7 +75,6 @@ object UtilitySpcMeso {
     }
 
     internal fun moveBack(spinner: ObjectSpinner) {
-        val originalValue = spinner[swipePosition]
         if (spinner.size() > 3) {
             if (swipePosition >= spinner.size()) {
                 swipePosition = spinner.size() - 1
@@ -89,11 +88,6 @@ object UtilitySpcMeso {
                 swipePosition = spinner.size() - 1
             }
             spinner.setSelection(swipePosition)
-        }
-        val newValue = spinner[swipePosition]
-        //spinner.setSelection("Mixing Ratio / Theta1")
-        if (newValue == originalValue) {
-            // FIXME find a better way to handle this method and above
         }
     }
 

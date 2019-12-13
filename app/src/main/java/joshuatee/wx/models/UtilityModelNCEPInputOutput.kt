@@ -64,8 +64,8 @@ internal object UtilityModelNcepInputOutput {
     }
 
     fun getImage(om: ObjectModel, time: String): Bitmap {
-        val imgUrl: String = when {
-            om.model == "GFS" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(
+        val imgUrl: String = when (om.model) {
+            "GFS" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(
                     Locale.US
             ) + "/" + om.run.replace(
                     "Z",
@@ -75,7 +75,7 @@ internal object UtilityModelNcepInputOutput {
                     Locale.US
             ) + "_" +
                     om.sector.toLowerCase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
-            om.model == "HRRR" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(
+            "HRRR" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(
                     Locale.US
             ) + "/" + om.run.replace(
                     "Z",

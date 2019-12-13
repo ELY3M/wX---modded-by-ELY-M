@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
 
 package joshuatee.wx.fragments
 
@@ -33,6 +34,7 @@ import joshuatee.wx.radar.WXGLRender
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.SettingsLocationGenericActivity
 import joshuatee.wx.util.Utility
+import java.util.*
 
 object UtilityLocationFragment {
 
@@ -125,7 +127,7 @@ object UtilityLocationFragment {
         return if (retStr == "") {
             ""
         } else {
-            val ret = windDirectionMap[retStr.toLowerCase()]
+            val ret = windDirectionMap[retStr.toLowerCase(Locale.US)]
             if (ret != null) {
                 " $ret"
             } else {
@@ -230,14 +232,15 @@ object UtilityLocationFragment {
         return temp
     }
 
-    fun extractCanadaWindDirection(forecast: String): String {
-        var windDirection = forecast.parse(RegExp.ca7DayWinddir1)
-        return if (windDirection == "") {
-            windDirection = forecast.parse(RegExp.ca7DayWinddir2)
-            " " + windDirectionMap[windDirection]
-        } else {
-            " " + windDirectionMap[windDirection]
+    fun extractCanadaWindDirection(chunk: String): String {
+        var windDirection = chunk.parse(RegExp.ca7DayWinddir1)
+        if (windDirection == "") {
+            windDirection = chunk.parse(RegExp.ca7DayWinddir2)
         }
+        if (windDirection != "") {
+            windDirection = " " + (windDirectionMap[windDirection] ?: "")
+        }
+        return windDirection
     }
 
     fun extractCanadaWindSpeed(forecast: String): String {
@@ -273,8 +276,8 @@ object UtilityLocationFragment {
                     arrayOf(Location.currentLocationStr, "")
             )
             stringName.contains("Sun/Moon data") -> ObjectIntent(
-                    activityReference,
-                    SunMoonActivity::class.java
+                activityReference,
+                SunMoonActivity::class.java
             )
             stringName.contains("Force Data Refresh") -> fnRefresh()
             stringName.contains("Radar type: Reflectivity") -> {

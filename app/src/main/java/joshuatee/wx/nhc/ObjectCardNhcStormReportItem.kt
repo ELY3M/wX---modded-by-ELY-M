@@ -22,7 +22,6 @@
 package joshuatee.wx.nhc
 
 import android.content.Context
-import android.graphics.Color
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
@@ -32,7 +31,6 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
 
-// FIXME does not match filename
 class ObjectCardNhcStormReportItem(context: Context, linearLayout: LinearLayout, stormData: ObjectNhcStormDetails) {
 
     private val objCard: ObjectCard

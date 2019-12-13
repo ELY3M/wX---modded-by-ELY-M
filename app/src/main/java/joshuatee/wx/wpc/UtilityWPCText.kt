@@ -39,7 +39,8 @@ internal object UtilityWpcText {
             ObjectMenuTitle("SPC", 8),
             ObjectMenuTitle("NHC", 7),
             ObjectMenuTitle("Great Lakes", 7),
-            ObjectMenuTitle("Space Weather", 6)
+            ObjectMenuTitle("Space Weather", 6),
+            ObjectMenuTitle("Canada", 11)
     )
 
     val labels = listOf(
@@ -143,16 +144,27 @@ internal object UtilityWpcText {
 
             "swpc3day: NOAA Geomagnetic Activity Observation and Forecast",
             "swpc3daygeo: NOAA Geomagnetic Activity Probabilities",
-
             "swpchigh: Weekly Highlights and Forecasts",
             "swpc27day: 27-day Space Weather Outlook Table",
             "swpcdisc: Forecast Discussion",
-            "swpcwwa: Advisory Outlook"
+            "swpcwwa: Advisory Outlook",
+
+            "focn45: Significant Weather Discussion, PASPC",
+            "fxcn01_d1-3_west: FXCN01_D1-3_WEST",
+            "fxcn01_d4-7_west: FXCN01_D4-7_WEST",
+            "fxcn01_d1-3_east: FXCN01_D1-3_EAST",
+            "fxcn01_d4-7_east: FXCN01_D4-7_EAST",
+            "awcn11: Weather Summary S. Manitoba",
+            "awcn12: Weather Summary N. Manitoba",
+            "awcn13: Weather Summary S. Saskatchewan",
+            "awcn14: Weather Summary N. Saskatchewan",
+            "awcn15: Weather Summary S. Alberta",
+            "awcn16: Weather Summary N. Alberta"
     )
 
     val groups = SparseArray<Group>()
-    var shortCodes = Array(12) { Array(39) { "" } }
-    var longCodes = Array(12) { Array(39) { "" } }
+    var shortCodes = Array(13) { Array(39) { "" } }
+    var longCodes = Array(13) { Array(39) { "" } }
 
     internal fun createData() {
         var k = 0

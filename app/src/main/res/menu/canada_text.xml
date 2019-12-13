@@ -45,8 +45,20 @@
         android:title="Significant Weather Discussion, PASPC"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_fxcn01"
-        android:title="FXCN01"
+        android:id="@+id/action_fxcn01_d13_west"
+        android:title="FXCN01 D1-3 West"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_fxcn01_d47_west"
+        android:title="FXCN01 D4-7 West"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_fxcn01_d13_east"
+        android:title="FXCN01 D1-3 East"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_fxcn01_d47_east"
+        android:title="FXCN01 D4-7 East"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_uv"

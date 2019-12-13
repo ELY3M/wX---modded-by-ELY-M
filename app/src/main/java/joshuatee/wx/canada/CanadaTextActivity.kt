@@ -49,9 +49,9 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_linear_layout_bottom_toolbar,
-            R.menu.canada_text
+                savedInstanceState,
+                R.layout.activity_linear_layout_bottom_toolbar,
+                R.menu.canada_text
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         objectCardText = ObjectCardText(this, ll, toolbar, toolbarBottom)
@@ -66,11 +66,11 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         sv.smoothScrollTo(0, 0)
         withContext(Dispatchers.IO) {
             html =
-                if (product != "https://weather.gc.ca/forecast/public_bulletins_e.html?Bulletin=fpcn48.cwao") {
-                    UtilityDownload.getTextProduct(this@CanadaTextActivity, product)
-                } else {
-                    UtilityString.getHtmlAndParseSep(product, "<pre>(.*?)</pre>")
-                }
+                    if (product != "https://weather.gc.ca/forecast/public_bulletins_e.html?Bulletin=fpcn48.cwao") {
+                        UtilityDownload.getTextProduct(this@CanadaTextActivity, product)
+                    } else {
+                        UtilityString.getHtmlAndParseSep(product, "<pre>(.*?)</pre>")
+                    }
         }
         objectCardText.setTextAndTranslate(Utility.fromHtml(html))
         Utility.writePref(this@CanadaTextActivity, "CA_TEXT_LASTUSED", product)
@@ -87,10 +87,13 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 return true
             }
             R.id.action_focn45 -> setProdAndDescription(
-                "focn45",
-                "Significant Weather Discussion, PASPC"
+                    "focn45",
+                    "Significant Weather Discussion, PASPC"
             )
-            R.id.action_fxcn01 -> setProdAndDescription("fxcn01", "FXCN01")
+            R.id.action_fxcn01_d13_west -> setProdAndDescription("fxcn01_d1-3_west", "FXCN01 D1-3 WEST")
+            R.id.action_fxcn01_d47_west -> setProdAndDescription("fxcn01_d4-7_west", "FXCN01 D4-7 WEST")
+            R.id.action_fxcn01_d13_east -> setProdAndDescription("fxcn01_d1-3_east", "FXCN01 D1-3 EAST")
+            R.id.action_fxcn01_d47_east -> setProdAndDescription("fxcn01_d4-7_east", "FXCN01 D4-7 EAST")
             R.id.action_uv -> setProdAndDescription("fpcn48", "FPCN48")
             R.id.action_s_mb -> setProdAndDescription("awcn11", "Weather Summary S. Manitoba")
             R.id.action_n_mb -> setProdAndDescription("awcn12", "Weather Summary N. Manitoba")

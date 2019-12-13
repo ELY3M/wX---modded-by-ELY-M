@@ -18,12 +18,14 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
 
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
 import joshuatee.wx.R
@@ -34,15 +36,14 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.Location
 import kotlinx.coroutines.*
 
-import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
-
 class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var content = ""
     private var contentFull = ""
-    private lateinit var objectCardText: ObjectCardText
-    private var data = listOf("", "")
+    private lateinit var card0: ObjectCardText
+    private var dataA = ""
+    private var dataB = ""
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,25 +55,30 @@ class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
         toolbarBottom.setOnMenuItemClickListener(this)
         val menu = toolbarBottom.menu
         menu.findItem(R.id.action_playlist).isVisible = false
-        objectCardText = ObjectCardText(this, ll, toolbar, toolbarBottom)
-        getContent()
+        val linearLayout: LinearLayout = findViewById(R.id.ll)
+        card0 = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
+        //getContent()
+        contentFull = UtilitySunMoon.getData(Location.locationIndex)
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
-            content = UtilitySunMoon.getExtendedData(Location.locationIndex)
-            contentFull = UtilitySunMoon.getFullDates()
+            //content = UtilitySunMoon.getExtendedData(Location.locationIndex)
+            contentFull = UtilitySunMoon.getData(Location.locationIndex)
         }
-        data = UtilitySunMoon.parseData(content)
-        title = data[0]
+        //val (A, B) = UtilitySunMoon.parseData(content)
+        //dataA = A
+        //dataB = B
+        title = dataA
         toolbar.subtitle = Location.name
-        objectCardText.setText(data[1] + MyApplication.newline + MyApplication.newline + contentFull)
+        card0.setText(contentFull)
     }
 
+    //FIXME matchup texts.
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, data[1], "sunmoon", "sunmoon")) return true
+        if (audioPlayMenu(item.itemId, dataB, "sunmoon", "sunmoon")) return true
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, data[0], data[1])
+            R.id.action_share -> UtilityShare.shareText(this, dataA, dataB)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

@@ -34,6 +34,7 @@ import joshuatee.wx.util.UtilityIO
 
 import joshuatee.wx.GlobalArrays
 import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
 
@@ -131,6 +132,15 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_lastused -> showObsSite(Utility.readPref(prefToken, ""))
+            R.id.action_map -> {
+                val url = "https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.toLowerCase()
+                ObjectIntent(
+                        this,
+                        WebscreenAB::class.java,
+                        WebscreenAB.URL,
+                        arrayOf(url, "Observations near " + Location.wfo)
+                )
+            }
             else -> return super.onOptionsItemSelected(item)
         }
         return true

@@ -18,89 +18,165 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
 
 package joshuatee.wx.activitiesmisc
 
 import joshuatee.wx.MyApplication
+import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.settings.Location
-import joshuatee.wx.util.*
-import joshuatee.wx.Extensions.*
 
+import org.shredzone.commons.suncalc.MoonTimes
+import org.shredzone.commons.suncalc.SunTimes
+import org.shredzone.commons.suncalc.MoonIllumination
+import org.shredzone.commons.suncalc.MoonPhase
+import java.util.*
+
+
+
+//TODO use SunCalc Lib instead of a website!!!
+//FIXME the whole website is broke!!!
 object UtilitySunMoon {
 
-    /*
-    http://api.usno.navy.mil/rstt/oneday?date=3/10/2016&coords=41.89N,82.48E&tz=5
-    http://aa.usno.navy.mil/data/docs/api.php#rstt
-    http://aa.usno.navy.mil/data/docs/RS_OneDay.php
-    http://api.usno.navy.mil/rstt/oneday?date=today&coords=42.26,-83.73&tz=-5*/
 
-    fun getExtendedData(currentLoc: Int): String {
-        val tzOffset: String
-        var x = ""
-        var y = ""
+    fun getData(currentLoc: Int): String {
+        //val tzOffset: String
+        var x = 0.0
+        var y = 0.0
         if (Location.isUS(currentLoc)) {
-            x = Location.x
-            y = Location.y
+            x = Location.x.toDouble()
+            y = Location.y.toDouble()
         } else {
             val tmpX = MyApplication.colon.split(Location.x)
             val tmpY = MyApplication.colon.split(Location.y)
             if (tmpX.size > 2 && tmpY.size > 1) {
-                x = tmpX[2]
-                y = tmpY[1]
+                x = tmpX[2].toDouble()
+                y = tmpY[1].toDouble()
             }
         }
-        val timeZone = UtilityTime.getDateAsString("Z")
-        tzOffset = timeZone.substring(0, 3) + "." + timeZone.substring(3, 5)
-        val url = "${MyApplication.sunMoonDataUrl}/rstt/oneday?date=today&coords=$x,$y&tz=$tzOffset"
-        return url.getHtmlUnsafe()
+        //val timeZone = UtilityTime.getDateAsString("Z")
+        //tzOffset = timeZone.substring(0, 3) + "." + timeZone.substring(3, 5)
+        //val url = "https://api.usno.navy.mil/rstt/oneday?date=today&coords=$x,$y&tz=$tzOffset"
+        //return url.getHtmlUnsafe()
+
+
+        val now: Date = Date()
+        val suntimes: SunTimes = SunTimes.compute()
+                .on(now)       // set a date
+                .at(x, y)   // set a location
+                .execute()     // get the results
+
+        //sun rise/set
+        val astronomical = SunTimes.compute().twilight(SunTimes.Twilight.ASTRONOMICAL).on(now).at(x, y).execute()
+        val nautical = SunTimes.compute().twilight(SunTimes.Twilight.NAUTICAL).on(now).at(x, y).execute()
+        val civil = SunTimes.compute().twilight(SunTimes.Twilight.CIVIL).on(now).at(x, y).execute()
+
+
+        //moon rise/set
+
+        val moontimes: MoonTimes = MoonTimes.compute()
+                .on(now)       // set a date
+                .at(x, y)   // set a location
+                .execute();     // get the results
+
+        //The phase angle is the angle sun-moon-earth,
+        //0 = full phase, 180 = new.
+
+        val illumination = MoonIllumination.compute().on(now).timezone(TimeZone.getDefault()).execute()
+        val phase = illumination.phase
+        val moonFracillum = illumination.fraction * 100
+        val moonangle = illumination.angle
+        val normalized = phase + 180.0
+        val moonage = 29.0 * (normalized / 360.0) + 1.0
+
+
+        val moonphase = MoonPhase.compute().on(now).timezone(TimeZone.getDefault()).execute()
+        val test = moonphase.time
+
+
+        val header = "Sun/Moon Data" + MyApplication.newline
+        var content = "Astronomical Rise: " + astronomical.rise + MyApplication.newline
+        content += "Nautical Rise: " + nautical.rise + MyApplication.newline
+        content += "Civil Rise: " + civil.rise + MyApplication.newline
+        content += "SunRise: " + suntimes.rise + MyApplication.newline
+        content += "Sun Upper Transit: " + suntimes.noon + MyApplication.newline
+        content += "SunSet: " + suntimes.set + MyApplication.newline
+        content += "Civil Set: " + civil.set + MyApplication.newline
+        content += "Nautical Set: " + nautical.set + MyApplication.newline
+        content += "Astronomical Set: " + astronomical.set + MyApplication.newline
+
+        content += "MoonRise: " + moontimes.rise + MyApplication.newline
+        //FIXME find out if can get moon upper transit
+        content += "MoonSet: " + moontimes.set + MyApplication.newline
+
+        content += "Moon Age: " + UtilityStringExternal.truncate(moonage.toString(), 5) + MyApplication.newline
+        content += "Moon Illumination: " + UtilityStringExternal.truncate(moonFracillum.toString(),5) + "%" + MyApplication.newline
+
+        //get current moon phase
+        val getCurrentPhase = getPhase(moonage)
+        content += getCurrentPhase + " is the current phase" + MyApplication.newline
+
+
+
+        return content
+
     }
 
-    fun parseData(contentF: String): List<String> {
-        var content = contentF
-        val sunDataChunk = content.parse("sundata\":\\[(.*?)\\]")
-        val moonDataChunk = content.parse("moondata.:\\[(.*?)\\]")
-        val moonPhaseChunk = content.parse("closestphase.:\\{(.*?)\\}")
-        val moonFracillum = content.parse("fracillum\":\"(.*?)%")
-        val moonCurrentPhase = content.parse("curphase\":\"(.*?)\"")
-        val sunTwilight = sunDataChunk.parse(" \\{\"phen\":\"BC\", \"time\":\"(.*?)\"\\}")
-        val sunRise = sunDataChunk.parse(" \\{\"phen\":\"R\", \"time\":\"(.*?)\"\\}")
-        val sunUpperTransit = sunDataChunk.parse(" \\{\"phen\":\"U\", \"time\":\"(.*?)\"\\}")
-        val sunSet = sunDataChunk.parse(" \\{\"phen\":\"S\", \"time\":\"(.*?)\"\\}")
-        val sunEndTwilight = sunDataChunk.parse(" \\{\"phen\":\"EC\", \"time\":\"(.*?)\"\\}")
-        val moonRise = moonDataChunk.parse(" \\{\"phen\":\"R\", \"time\":\"(.*?)\"\\}")
-        val moonUpperTransit = moonDataChunk.parse(" \\{\"phen\":\"U\", \"time\":\"(.*?)\"\\}")
-        val moonSet = moonDataChunk.parse(" \\{\"phen\":\"S\", \"time\":\"(.*?)\"\\}")
-        val header = "Sun/Moon Data"
-        content = sunTwilight + " Sun Twilight" + MyApplication.newline + sunRise + " Sunrise" +
-                MyApplication.newline + sunUpperTransit + " Sun Upper Transit" +
-                MyApplication.newline + sunSet + " Sunset" + MyApplication.newline +
-                sunEndTwilight + " Sun Twilight End" + MyApplication.newline +
-                MyApplication.newline + moonRise + " Moonrise" + MyApplication.newline +
-                moonUpperTransit + " Moon Upper Transit" + MyApplication.newline + moonSet +
-                " Moonset" + MyApplication.newline + MyApplication.newline +
-                moonPhaseChunk.replace("\"time\"", "").replace("\"date\"", "").replace(
-                    "\"",
-                    ""
-                ).replace(":", " ").replace(",", "") + MyApplication.newline + moonFracillum +
-                "% Moon fracillum" + MyApplication.newline + moonCurrentPhase +
-                " is the current phase" + MyApplication.newline
-        return listOf(header, content)
-    }
 
-    fun getFullDates(): String {
-        val url = "${MyApplication.sunMoonDataUrl}/moon/phase?date=" + UtilityTime.month().toString() + "/" + UtilityTime.day().toString() + "/" + UtilityTime.year().toString() + "&nump=99"
-        val text = url.getHtmlUnsafe()
-        var fullText = ""
-        val phases = text.parseColumn("\"phase\":\"(.*?)\"")
-        val dates = text.parseColumn("\"date\":\"(.*?)\"")
-        val times = text.parseColumn("\"time\":\"(.*?)\"")
-        phases.forEachIndexed { index, _ ->
-            fullText += if (phases[index].contains("Full Moon")) {
-                dates[index] + " " + times[index] + " " + phases[index] + "  <-----" + MyApplication.newline
-            } else {
-                dates[index] + " " + times[index] + " " + phases[index] + MyApplication.newline
-            }
+    private fun getPhase(age: Double): String {
+        if (age > 27 || age < 3) {
+            return "New Moon"
         }
-        return fullText
+
+        if (age > 4 && age < 10) {
+            return "Waxing Crescent"
+        }
+
+        if (age > 11 && age < 17) {
+            return "Full Moon"
+        }
+
+        return if (age > 19 && age < 25) {
+            "Waning Crescent"
+        } else "Unknown"
+
     }
+
+
+    private fun getPhaseTest(age: Double): String {
+        if (age >= 29 || age <= 1) {
+            return "New"
+        }
+
+        if (age >= 7 && age <= 8) {
+            return "First Quarter"
+        }
+
+        if (age >= 14 && age <= 15) {
+            return "Full"
+        }
+
+        if (age >= 21 && age <= 22) {
+            return "Waning Crescent"
+        }
+
+        if (age > 1 && age < 7) {
+            return "Crescent Concave"
+        }
+
+        if (age > 8 && age < 14) {
+            return "Crescente Gibosa"
+        }
+
+        if (age > 15 && age < 21) {
+            return "Minguante Gibosa"
+        }
+
+        return if (age > 22 && age < 29) {
+            "Waning Crescent"
+        } else ""
+
+    }
+
+
 }

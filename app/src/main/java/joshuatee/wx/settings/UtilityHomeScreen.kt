@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//modded by ELY M.
 
 package joshuatee.wx.settings
 
@@ -37,7 +38,6 @@ internal object UtilityHomeScreen {
             "CC: Current Conditions",
             "CC2: Current Conditions with image",
             "HAZ: Hazards",
-            //"7DAY: 7 Day Forecast",
             "7DAY2: 7 Day Forecast with images",
             "AFDLOC: Area Forecast Discussion",
             "HWOLOC: Hazardous Weather Outlook",
