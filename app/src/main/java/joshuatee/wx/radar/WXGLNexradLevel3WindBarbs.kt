@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -33,14 +33,15 @@ internal object WXGLNexradLevel3WindBarbs {
     fun decodeAndPlot(
             rid: String,
             projectionType: ProjectionType,
-            isGust: Boolean
+            isGust: Boolean,
+            index: Int
     ): List<Double> {
         val stormList = mutableListOf<Double>()
         val pn = ProjectionNumbers(rid, projectionType)
         val arrWb = if (!isGust) {
-            UtilityMetar.obsArrWb
+            UtilityMetar.metarDataList[index].obsArrWb
         } else {
-            UtilityMetar.obsArrWbGust
+            UtilityMetar.metarDataList[index].obsArrWbGust
         }
         var degree: Double
         var nm: Double

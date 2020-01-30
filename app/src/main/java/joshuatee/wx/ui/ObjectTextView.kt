@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -47,11 +47,11 @@ class ObjectTextView(val context: Context) {
             tv.gravity = value
         }
 
-    var maxLines: Int
+    /*var maxLines: Int
         get() = tv.maxLines
         set(value) {
             tv.maxLines = value
-        }
+        }*/
 
     init {
         tv = AppCompatTextView(context)
@@ -65,7 +65,7 @@ class ObjectTextView(val context: Context) {
     }
 
     constructor(context: Context, color: Int) : this(context) {
-        setTextColor(color)
+        this.color = color
     }
 
     constructor(view: View, resId: Int) : this(view.context) {
@@ -73,42 +73,54 @@ class ObjectTextView(val context: Context) {
     }
 
     constructor(view: View, resId: Int, color: Int) : this(view, resId) {
-        setTextColor(color)
+        this.color = color
     }
 
     constructor(view: View, resId: Int, size: TextSize) : this(view.context, size) {
         tv = view.findViewById(resId)
+        refreshTextSize(size)
+    }
+
+    constructor(view: View, resId: Int, color: Int, size: TextSize) : this(view.context, size) {
+        tv = view.findViewById(resId)
+        this.color = color
+        refreshTextSize(size)
     }
 
     constructor(context: Context, size: TextSize) : this(context) {
+        refreshTextSize(size)
+    }
+
+    fun refreshTextSize(size: TextSize) {
         when (size) {
             TextSize.SMALL -> tv.setTextSize(
-                TypedValue.COMPLEX_UNIT_PX,
-                MyApplication.textSizeSmall
+                    TypedValue.COMPLEX_UNIT_PX,
+                    MyApplication.textSizeSmall
             )
             TextSize.MEDIUM -> tv.setTextSize(
-                TypedValue.COMPLEX_UNIT_PX,
-                MyApplication.textSizeNormal
+                    TypedValue.COMPLEX_UNIT_PX,
+                    MyApplication.textSizeNormal
             )
             TextSize.LARGE -> tv.setTextSize(
-                TypedValue.COMPLEX_UNIT_PX,
-                MyApplication.textSizeLarge
+                    TypedValue.COMPLEX_UNIT_PX,
+                    MyApplication.textSizeLarge
             )
         }
     }
 
-    fun setTextColor(color: Int) {
-        tv.setTextColor(color)
+    fun setTextSize(size: TextSize) {
+        refreshTextSize(size)
     }
 
-    fun setTextSize(unit: Int, size: Float) {
-        tv.setTextSize(unit, size)
-    }
+    var color: Int
+        get() = tv.currentTextColor
+        set(newValue) {
+            tv.setTextColor(newValue)
+        }
 
     fun setAsBackgroundText() {
         setAsSmallText()
         tv.setTextColor(UIPreferences.textSmallThemeColor)
-        //tv.setTextAppearance(context, UIPreferences.smallTextTheme)
     }
 
     fun setAsSmallText() {

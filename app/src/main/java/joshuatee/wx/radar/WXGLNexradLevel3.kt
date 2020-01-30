@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,12 +26,12 @@ import java.io.DataInputStream
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.util.Date
 
 import android.content.Context
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.*
+import java.util.*
 
 class WXGLNexradLevel3 internal constructor() {
 
@@ -101,7 +101,7 @@ class WXGLNexradLevel3 internal constructor() {
     }
 
     // final argument is whether or not to handle decompression, by default true
-    fun decodeAndPlot(context: Context, fileName: String, radarStatusStr: String) {
+    fun decodeAndPlot(context: Context, fileName: String, site: String, radarStatusStr: String) {
         try {
             val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName))
             dis.bigEndian = true
@@ -124,8 +124,6 @@ class WXGLNexradLevel3 internal constructor() {
             val volumeCoveragePattern = dis.readUnsignedShort().toShort()
             val sequenceNumber = dis.readUnsignedShort().toShort()
             val volumeScanNumber = dis.readUnsignedShort().toShort()
-            UtilityLog.d("wx", operationalMode.toString())
-            UtilityLog.d("wx", volumeCoveragePattern.toString())
             //dis.skipBytes(6)
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()
@@ -139,7 +137,10 @@ class WXGLNexradLevel3 internal constructor() {
                     longitudeOfRadar,
                     volumeCoveragePattern.toInt()
             )
-            Utility.writePref(context, "WX_RADAR_CURRENT_INFO$radarStatusStr", radarInfo)
+            // Generally speaking radarStatusStr will be blank string for single pane or homescreen
+            // and "1", "2", "3", or "4" for multi-pane
+            WXGLNexrad.writeRadarInfo(context, radarStatusStr, radarInfo)
+            WXGLNexrad.writeRadarInfo(context, radarStatusStr + site.toUpperCase(Locale.US), radarInfo)
             timestamp = radarInfo
             // Apr 2016
             // Because the scale for storm total precip ( 172 ) is stored as a float in halfwords 33/34
@@ -206,8 +207,6 @@ class WXGLNexradLevel3 internal constructor() {
             val volumeCoveragePattern = dis.readUnsignedShort().toShort()
             val sequenceNumber = dis.readUnsignedShort().toShort()
             val volumeScanNumber = dis.readUnsignedShort().toShort()
-            //UtilityLog.d("wx", operationalMode.toString())
-            //UtilityLog.d("wx", volumeCoveragePattern.toString())
             //dis.skipBytes(6)
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()
@@ -224,7 +223,7 @@ class WXGLNexradLevel3 internal constructor() {
                     longitudeOfRadar,
                     volumeCoveragePattern.toInt()
             )
-            Utility.writePref(context, "WX_RADAR_CURRENT_INFO$radarStatusStr", radarInfo)
+            WXGLNexrad.writeRadarInfo(context, radarStatusStr, radarInfo)
             timestamp = radarInfo
             /*final short  p1                        = (short) dis.readUnsignedShort();
         final short        p2                        = (short) dis.readUnsignedShort();

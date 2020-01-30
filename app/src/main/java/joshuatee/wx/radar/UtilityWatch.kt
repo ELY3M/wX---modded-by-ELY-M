@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -40,10 +40,10 @@ internal object UtilityWatch {
         val warningList = mutableListOf<Double>()
         var prefToken = ""
         when (type) {
-            PolygonType.MCD -> prefToken = MyApplication.mcdLatlon.value
-            PolygonType.WATCH -> prefToken = MyApplication.watchLatlon.value
-            PolygonType.WATCH_TORNADO -> prefToken = MyApplication.watchLatlonTor.value
-            PolygonType.MPD -> prefToken = MyApplication.mpdLatlon.value
+            PolygonType.MCD -> prefToken = MyApplication.mcdLatLon.value
+            PolygonType.WATCH -> prefToken = MyApplication.watchLatLon.value
+            PolygonType.WATCH_TORNADO -> prefToken = MyApplication.watchLatLonTor.value
+            PolygonType.MPD -> prefToken = MyApplication.mpdLatLon.value
             else -> {
             }
         }
@@ -97,22 +97,22 @@ internal object UtilityWatch {
             PolygonType.WATCH -> {
                 textWatNoList = MyApplication.watchNoList.value
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
-                watchLatLon = MyApplication.watchLatlonList.value
+                watchLatLon = MyApplication.watchLatLonList.value
             }
             PolygonType.MCD -> {
                 textWatNoList = MyApplication.mcdNoList.value
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
-                watchLatLon = MyApplication.mcdLatlon.value
+                watchLatLon = MyApplication.mcdLatLon.value
             }
             PolygonType.MPD -> {
                 textWatNoList = MyApplication.mpdNoList.value
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
-                watchLatLon = MyApplication.mpdLatlon.value
+                watchLatLon = MyApplication.mpdLatLon.value
             }
             else -> {
                 textWatNoList = MyApplication.watchNoList.value
                 mcdNoArr = MyApplication.colon.split(textWatNoList)
-                watchLatLon = MyApplication.watchLatlonList.value
+                watchLatLon = MyApplication.watchLatLonList.value
             }
         }
         val latLonArr = MyApplication.colon.split(watchLatLon)

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,9 +22,6 @@
 package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
 
 import android.os.Bundle
 import android.view.View
@@ -37,6 +34,7 @@ import joshuatee.wx.MyApplication
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.util.*
+import java.util.*
 
 class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
 
@@ -53,14 +51,14 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
-            savedInstanceState,
-            R.layout.activity_settings_location_canada_map,
-            null,
-            false
+                savedInstanceState,
+                R.layout.activity_settings_location_canada_map,
+                null,
+                false
         )
         val activityArguments = intent.getStringArrayExtra(URL)
-        url = activityArguments[0]
-        title = url.toUpperCase()
+        url = activityArguments!![0]
+        title = url.toUpperCase(Locale.US)
         toolbar.subtitle = "Select a location and then use the back arrow to save."
         var imgRes = 0
         var imgMap = 0
@@ -139,14 +137,15 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
     private fun mapClicked(id: Int) {
         val sector = UtilityImageMap.canadaMap(id)
         val cityLoc = getCityFromXml(sector)
-        Utility.writePref(this, "LOCATION_CANADA_PROV", url.toUpperCase())
+        Utility.writePref(this, "LOCATION_CANADA_PROV", url.toUpperCase(Locale.US))
         Utility.writePref(this, "LOCATION_CANADA_CITY", cityLoc)
         Utility.writePref(
-            this,
-            "LOCATION_CANADA_ID",
-            sector.split("_".toRegex()).dropLastWhile { it.isEmpty() }[1]
+                this,
+                "LOCATION_CANADA_ID",
+                sector.split("_".toRegex()).dropLastWhile { it.isEmpty() }[1]
         )
-        toolbar.subtitle = url.toUpperCase() + ", " + cityLoc
+        toolbar.subtitle = url.toUpperCase(Locale.US) + ", " + cityLoc
+        finish()
     }
 
     override fun onClick(v: View) {
@@ -157,18 +156,18 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
 
     private fun hideAllMaps() {
         listOf(
-            R.id.map_ab,
-            R.id.map_bc,
-            R.id.map_mb,
-            R.id.map_nl,
-            R.id.map_ns,
-            R.id.map_nt,
-            R.id.map_nu,
-            R.id.map_on,
-            R.id.map_pe,
-            R.id.map_qc,
-            R.id.map_sk,
-            R.id.map_yt
+                R.id.map_ab,
+                R.id.map_bc,
+                R.id.map_mb,
+                R.id.map_nl,
+                R.id.map_ns,
+                R.id.map_nt,
+                R.id.map_nu,
+                R.id.map_on,
+                R.id.map_pe,
+                R.id.map_qc,
+                R.id.map_sk,
+                R.id.map_yt
         ).forEach {
             val map: ImageMap = findViewById(it)
             map.visibility = View.GONE
@@ -176,26 +175,12 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
     }
 
     private fun getCityFromXml(token: String): String {
-        val io: InputStream?
-        try {
-            io = resources.openRawResource(R.raw.maps)
-            // if file the available for reading
-            if (io != null) {
-                // prepare the file for reading
-                val inputReader = InputStreamReader(io)
-                val buffReader = BufferedReader(inputReader)
-                var line: String?
-                // read every line of the file into the line-variable, on line at the time
-                do {
-                    line = buffReader.readLine()
-                    if (line!!.contains(token)) {
-                        return line.parse("title=\"(.*?)\"")
-                    }
-                    // do something with the line
-                } while (line != null)
+        val data = UtilityIO.readTextFileFromRaw(this@SettingsLocationCanadaMapActivity.resources, R.raw.maps)
+        val lines = data.split(MyApplication.newline)
+        lines.forEach {
+            if (it.contains(token)) {
+                return it.parse("title=\"(.*?)\"")
             }
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
         }
         return ""
     }

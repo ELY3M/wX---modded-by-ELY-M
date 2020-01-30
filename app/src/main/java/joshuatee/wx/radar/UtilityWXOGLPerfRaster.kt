@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -52,14 +52,11 @@ internal object UtilityWXOGLPerfRaster {
             binsPerRow = 116
             scaleFactor = 8.0f
         }
-        //UtilityLog.d("wx", numberOfRows.toString())
-        //UtilityLog.d("wx", binsPerRow.toString())
         val halfPoint = numberOfRows / 2
         while (g < numberOfRows) {
             bin = 0
             while (bin < binsPerRow) {
                 curLevel = binBuff.get(g * numberOfRows + bin).toInt()
-                //UtilityLog.d("wx", curLevel.toString())
 
                 radarBuffers.floatBuffer.putFloat(rI, (bin - halfPoint).toFloat() * scaleFactor)
                 rI += 4

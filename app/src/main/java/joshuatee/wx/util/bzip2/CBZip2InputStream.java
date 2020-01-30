@@ -77,6 +77,7 @@ import java.io.IOException;
  *
  * @author <a href="mailto:keiron@aftexsw.com">Keiron Liddle</a>
  */
+@SuppressWarnings("AccessStaticViaInstance")
 public class CBZip2InputStream extends InputStream implements BZip2Constants {
   private static final int START_BLOCK_STATE = 1;
   private static final int RAND_PART_A_STATE = 2;
@@ -113,7 +114,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
   private int nInUse;
 
   private final char[] seqToUnseq = new char[256];
-  private final char[] unseqToSeq = new char[256];
+  //private final char[] unseqToSeq = new char[256];
 
   private final char[] selector = new char[Companion.MAX_SELECTORS];
   private final char[] selectorMtf = new char[Companion.MAX_SELECTORS];
@@ -148,15 +149,14 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
   private int j2;
   private char z;
 
-  public CBZip2InputStream() {
-  }
-
+  //public CBZip2InputStream() {
+  //}
 
   public CBZip2InputStream(InputStream zStream) {
     setStream(zStream);
   }
 
-  public CBZip2InputStream(InputStream zStream, boolean skip) throws IOException {
+  /*public CBZip2InputStream(InputStream zStream, boolean skip) throws IOException {
     if (skip) {
       byte[] bzString = new byte[2];
       int ret = zStream.read(bzString);
@@ -164,7 +164,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
           throw new IOException("End of stream reached skipping bytes");
     }
     setStream(zStream);
-  }
+  }*/
   /**
    * Added 5-30-2006 to allow for resetting of the input used
    * by this object. This saves in memory allocation costs
@@ -199,8 +199,6 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
     }
   }
 
-
-
   /**
    * Reads the stream.
    * @throws BZip2ReadException if there is a problem.  InputStream does
@@ -212,18 +210,18 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
     } else {
       int retChar = currentChar;
       switch (currentState) {
-        case START_BLOCK_STATE:
-          break;
-        case RAND_PART_A_STATE:
-          break;
+        //case START_BLOCK_STATE:
+        //  break;
+        //case RAND_PART_A_STATE:
+        //  break;
         case RAND_PART_B_STATE:
           setupRandPartB();
           break;
         case RAND_PART_C_STATE:
           setupRandPartC();
           break;
-        case NO_RAND_PART_A_STATE:
-          break;
+        //case NO_RAND_PART_A_STATE:
+        //  break;
         case NO_RAND_PART_B_STATE:
           setupNoRandPartB();
           break;
@@ -893,10 +891,10 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
     }
   }
 
-  private void cadvise() {
-    System.out.println("CRC Error");
+  //private void cadvise() {
+  //  System.out.println("CRC Error");
     //throw new CCoruptionError();
-  }
+  //}
 
   private void cadvise(String msg) {
     throw new BZip2ReadException(msg);
@@ -913,7 +911,7 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
     for (i = 0; i < 256; i++) {
       if (inUse[i]) {
         seqToUnseq[nInUse] = (char) i;
-        unseqToSeq[i] = (char) nInUse;
+        //unseqToSeq[i] = (char) nInUse;
         nInUse++;
       }
     }

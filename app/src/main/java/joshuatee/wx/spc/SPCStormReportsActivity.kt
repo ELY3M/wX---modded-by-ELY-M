@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -110,7 +110,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val playlistMi = menu.findItem(R.id.action_playlist)
         playlistMi.isVisible = false
         val activityArguments = intent.getStringArrayExtra(NO)
-        no = activityArguments[0]
+        no = activityArguments!![0]
         val cal = Calendar.getInstance()
         pYear = cal.get(Calendar.YEAR)
         pMonth = cal.get(Calendar.MONTH)
@@ -134,6 +134,11 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             getContent()
         }
         getContent()
+    }
+
+    override fun onRestart() {
+        getContent()
+        super.onRestart()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
@@ -171,13 +176,13 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             cal.set(Calendar.MONTH, 2)
             cal.set(Calendar.DAY_OF_MONTH, 23)
             stDatePicker.datePicker.minDate = cal.timeInMillis - 1000
-            stDatePicker.datePicker.maxDate = System.currentTimeMillis()
+            stDatePicker.datePicker.maxDate = UtilityTime.currentTimeMillis()
             stDatePicker.setCanceledOnTouchOutside(true)
             stDatePicker.show()
         })
         c0.resetZoom()
         val c1 = ObjectCardText(this@SpcStormReportsActivity, linearLayout)
-        c1.setVisibility(View.GONE)
+        c1.visibility = View.GONE
         c1.setOnClickListener(View.OnClickListener {
             filter = "All"
             displayData()
@@ -223,7 +228,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         var mapOut = mapState.toString()
         mapOut = mapOut.replace("[{}]".toRegex(), "")
-        c1.setText(mapOut)
+        c1.text = mapOut
         out.insert(0, Utility.fromHtml("<br><b>" + mapOut + MyApplication.newline + "</b><br>"))
         if (firstRun) {
             stateArray = mapState.keys.toList()
@@ -237,9 +242,9 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         title = "($stormCnt) Storm Reports"
         toolbar.subtitle = no
         if (stormCnt > 0) {
-            c1.setVisibility(View.VISIBLE)
+            c1.visibility = View.VISIBLE
         } else {
-            c1.setVisibility(View.GONE)
+            c1.visibility = View.GONE
         }
     }
 

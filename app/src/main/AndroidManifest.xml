@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55287"
-    android:versionName="55287"
+    android:versionCode="55341"
+    android:versionName="55341"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -534,6 +534,11 @@
   <activity
       android:name=".settings.SettingsRadarActivity"
       android:label="Radar Settings"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".settings.SettingsAboutActivity"
+      android:label="About wX"
       android:parentActivityName="WX" >
   </activity>
   <activity

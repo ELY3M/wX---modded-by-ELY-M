@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,7 +26,6 @@ import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.view.View
@@ -122,12 +121,6 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         override fun onReceive(ctxt: Context, intent: Intent) {
             updateList()
         }
-    }
-
-    override fun onResume() {
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(onBroadcast, IntentFilter("locationadded"))
-        super.onResume()
     }
 
     private fun updateTitle() {

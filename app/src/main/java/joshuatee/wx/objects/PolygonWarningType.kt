@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -42,31 +42,7 @@ enum class PolygonWarningType constructor(
         var initialColor: Int
 ) {
 
-    // FIXME all pref Vars should be hanled in object and use product code
 
-    /*
-
-
-        private const val torUrl = baseUrl + "Tornado%20Warning"
-    private const val svrURl = baseUrl + "Severe%20Thunderstorm%20Warning"
-    private const val ffwUrl = baseUrl + "Flash%20Flood%20Warning"
-    private const val ewwUrl = baseUrl + "Extreme%20Wind%20Warning"
-    private const val smwUrl = baseUrl + "Special%20Marine%20Warning"
-    private const val svsUrl = baseUrl + "Severe%20Weather%20Statement"
-    private const val spsUrl = baseUrl + "Special%20Weather%20Statement"
-
-            val wEww = SevereWarning(PolygonType.EWW)
-            val wFfw = SevereWarning(PolygonType.FFW)
-            val wSmw = SevereWarning(PolygonType.SMW)
-            val wSvs = SevereWarning(PolygonType.SVS)
-
-            radarColorEww = getInitialPreference("RADAR_COLOR_EWW", Color.GRAY)
-            radarColorFfw = getInitialPreference("RADAR_COLOR_FFW", Color.GREEN)
-            radarColorSmw = getInitialPreference("RADAR_COLOR_SMW", Color.CYAN)
-            radarColorSvs = getInitialPreference("RADAR_COLOR_SVS", Color.rgb(255, 203, 103))
-            radarColorSps = getInitialPreference("RADAR_COLOR_SPS", Color.rgb(255, 204, 102))
-
-    */
 
 
     

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -31,6 +31,9 @@ import joshuatee.wx.util.Utility
 object WXGLNexrad {
 
     val tdwrProductList = listOf(
+            "TZ0",
+            "TZ1",
+            "TZ2",
             "TR0",
             "TR1",
             "TR2",
@@ -154,7 +157,7 @@ object WXGLNexrad {
         78, 80 -> 115
         134 -> 460
         186 -> 1390
-        181, 182 -> 720
+        180, 181, 182 -> 720
         135 -> 346
         99, 159, 161, 163, 170, 172 -> 1200
         else -> 460
@@ -171,7 +174,7 @@ object WXGLNexrad {
         134, 135 -> binSize54
         186 -> binSize16
         159, 161, 163, 165, 99, 170, 172 -> binSize13
-        181, 182 -> binSize08
+        180, 181, 182 -> binSize08
         78, 80 -> binSize110
         153, 154 -> binSize13
         else -> binSize54
@@ -206,5 +209,21 @@ object WXGLNexrad {
 
     fun saveProductPrefs(context: Context, prefPrefix: String, idx: Int, wxglRender: WXGLRender) {
         Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), wxglRender.product)
+    }
+
+    fun getRadarInfo(context: Context, pane: String): String {
+        return Utility.readPref(context, "WX_RADAR_CURRENT_INFO$pane", "")
+    }
+
+    fun writeRadarInfo(context: Context, pane: String, info: String) {
+        Utility.writePref(context, "WX_RADAR_CURRENT_INFO$pane", info)
+    }
+
+    fun writeRadarTimeForWidget(context: Context, time: String) {
+        Utility.writePref(context, "WX_RADAR_CURRENT_INFO_WIDGET_TIME", time)
+    }
+
+    fun readRadarTimeForWidget(context: Context): String {
+        return Utility.readPref(context, "WX_RADAR_CURRENT_INFO_WIDGET_TIME", "")
     }
 }

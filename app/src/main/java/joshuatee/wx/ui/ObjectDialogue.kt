@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -46,13 +46,13 @@ class ObjectDialogue {
     constructor(context: Context, title: String, list: List<String>) {
         alertDialog = AlertDialog.Builder(context)
         alertDialog.setTitle(title)
-        //arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, list)
         arrayAdapter = object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent)
                 val tv = view.findViewById(android.R.id.text1) as TextView
                 tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
                 tv.setTextColor(Color.WHITE)
+                tv.setPadding(20,10,20,10)
                 return view
             }
         }
@@ -64,13 +64,13 @@ class ObjectDialogue {
 
     constructor(context: Context, list: List<String>) {
         alertDialog = AlertDialog.Builder(context)
-        //arrayAdapter = ArrayAdapter(context, R.layout.simple_spinner_item, list)
         arrayAdapter = object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent)
                 val tv = view.findViewById(android.R.id.text1) as TextView
                 tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
                 tv.setTextColor(Color.WHITE)
+                tv.setPadding(20,10,20,10)
                 return view
             }
         }

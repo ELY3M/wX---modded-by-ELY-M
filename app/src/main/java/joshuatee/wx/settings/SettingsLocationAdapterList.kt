@@ -9,6 +9,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.external.UtilityStringExternal
+import joshuatee.wx.objects.TextSize
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
 
@@ -22,8 +23,8 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
-        val text1 = ObjectTextView(itemView, R.id.text1)
-        val currentConditions = ObjectTextView(itemView, R.id.currentConditions)
+        val text1 = ObjectTextView(itemView, R.id.text1, TextSize.MEDIUM)
+        val currentConditions = ObjectTextView(itemView, R.id.currentConditions, TextSize.SMALL)
         val text2 = ObjectTextView(itemView, R.id.text2)
         val text3 = ObjectTextView(itemView, R.id.text3)
         val objCard = ObjectCard(itemView, R.id.cv1)
@@ -67,16 +68,11 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
         }
         holder.text1.text = Location.getName(position)
         if (UtilityLocation.hasAlerts(position)) {
-            holder.text1.setTextColor(UIPreferences.textHighlightColor)
+            holder.text1.color = UIPreferences.textHighlightColor
         } else {
-            holder.text1.setTextColor(UIPreferences.backgroundColor)
+            holder.text1.color = UIPreferences.backgroundColor
         }
-
-
         holder.currentConditions.text = Location.getObservation(position)
-        //holder.currentConditions.tv.visibility = View.INVISIBLE
-
-
         if (nonUs)
             holder.text2.text =
                 """${UtilityStringExternal.truncate(lat, 6)} , ${UtilityStringExternal.truncate(

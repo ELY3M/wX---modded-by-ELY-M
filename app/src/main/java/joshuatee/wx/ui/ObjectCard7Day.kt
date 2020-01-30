@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,7 +26,6 @@ import android.graphics.Bitmap
 import android.view.View
 import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
-import androidx.core.widget.TextViewCompat
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
@@ -52,11 +51,11 @@ class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7
             MyApplication.paddingSmall,
             0
         )
-        TextViewCompat.setAutoSizeTextTypeWithDefaults(
-            topLineText.tv,
-            TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM
-        )
-        topLineText.maxLines = 1
+        //TextViewCompat.setAutoSizeTextTypeWithDefaults(
+        //    topLineText.tv,
+        //    TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM
+        //)
+        //topLineText.maxLines = 1
         bottomLineText = ObjectTextView(context)
         bottomLineText.setPadding(
             MyApplication.padding,
@@ -117,6 +116,15 @@ class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7
 
     fun setOnClickListener(fn: View.OnClickListener) {
         objCard.setOnClickListener(fn)
+    }
+
+    fun refreshTextSize() {
+        topLineText.refreshTextSize(TextSize.MEDIUM)
+        bottomLineText.refreshTextSize(TextSize.MEDIUM)
+        //TextViewCompat.setAutoSizeTextTypeWithDefaults(
+        //        topLineText.tv,
+        //        TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM
+        //)
     }
 
     val card: CardView get() = objCard.card

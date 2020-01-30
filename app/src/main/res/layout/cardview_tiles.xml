@@ -1,5 +1,5 @@
 <!--
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -33,6 +33,19 @@
             android:layout_height="wrap_content"
             android:contentDescription="Tiles"
             android:scaleType="fitXY" />
+
+        <!--<TextView
+            android:id="@+id/ivText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/iv"
+            android:layout_alignTop="@+id/iv"
+            android:layout_alignRight="@+id/iv"
+            android:layout_alignBottom="@+id/iv"
+            android:layout_margin="1dp"
+            android:gravity="top"
+            android:text="Test Test Test Test Test Test "
+            android:textColor="#000000" />-->
 
     </RelativeLayout>
 

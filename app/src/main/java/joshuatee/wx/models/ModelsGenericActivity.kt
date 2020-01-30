@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,6 +24,7 @@ package joshuatee.wx.models
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.content.res.Configuration
+import android.view.KeyEvent
 
 import java.util.Locale
 
@@ -32,6 +33,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import androidx.core.view.GravityCompat
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
@@ -98,9 +100,9 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         title = activityArguments!![2]
-        val m = toolbarBottom.menu
-        miStatusParam1 = m.findItem(R.id.action_status_param1)
-        miStatusParam2 = m.findItem(R.id.action_status_param2)
+        val menu = toolbarBottom.menu
+        miStatusParam1 = menu.findItem(R.id.action_status_param1)
+        miStatusParam2 = menu.findItem(R.id.action_status_param2)
         if (om.numPanes < 2) {
             fab1 = ObjectFab(
                     this,
@@ -112,23 +114,23 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
                     this,
                     R.id.fab2,
                     View.OnClickListener { UtilityModels.moveForward(om.spTime) })
-            m.findItem(R.id.action_img1).isVisible = false
-            m.findItem(R.id.action_img2).isVisible = false
+            menu.findItem(R.id.action_img1).isVisible = false
+            menu.findItem(R.id.action_img2).isVisible = false
             if (UIPreferences.fabInModels) {
-                val leftArrow = m.findItem(R.id.action_back)
-                val rightArrow = m.findItem(R.id.action_forward)
+                val leftArrow = menu.findItem(R.id.action_back)
+                val rightArrow = menu.findItem(R.id.action_forward)
                 leftArrow.isVisible = false
                 rightArrow.isVisible = false
             }
-            fab1?.setVisibility(View.GONE)
-            fab2?.setVisibility(View.GONE)
+            fab1?.visibility = View.GONE
+            fab2?.visibility = View.GONE
             miStatusParam2.isVisible = false
         } else {
-            m.findItem(R.id.action_multipane).isVisible = false
+            menu.findItem(R.id.action_multipane).isVisible = false
         }
-        miStatus = m.findItem(R.id.action_status)
+        miStatus = menu.findItem(R.id.action_status)
         miStatus.title = "in through"
-        m.findItem(R.id.action_map).isVisible = false
+        menu.findItem(R.id.action_map).isVisible = false
         om.spTime = ObjectSpinner(this, this, this, R.id.spinner_time)
         om.displayData = DisplayData(this, this, om.numPanes, om.spTime)
         spRun = ObjectSpinner(this, this, this, R.id.spinner_run)
@@ -140,7 +142,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
             drw.drawerLayout.closeDrawer(drw.listView)
-            om.displayData.param[om.curImg] = drw.getToken(position)
+            om.displayData.param[om.curImg] = drw.tokens[position]
             om.displayData.paramLabel[om.curImg] = drw.getLabel(position)
             UtilityModels.getContent(this, om, listOf(""), uiDispatcher)
         }
@@ -177,8 +179,9 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item))
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true
+        }
         when (item.itemId) {
             R.id.action_back -> UtilityModels.moveBack(om.spTime)
             R.id.action_forward -> UtilityModels.moveForward(om.spTime)
@@ -447,6 +450,30 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
             24 -> (0..23).forEach { spRun.add(String.format(Locale.US, "%02d", it) + "Z") }
         }
         spRun.notifyDataSetChanged()
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        return when (keyCode) {
+            KeyEvent.KEYCODE_J -> {
+                if (event.isCtrlPressed) {
+                    UtilityModels.moveBack(om.spTime)
+                }
+                true
+            }
+            KeyEvent.KEYCODE_K -> {
+                if (event.isCtrlPressed) {
+                    UtilityModels.moveForward(om.spTime)
+                }
+                true
+            }
+            KeyEvent.KEYCODE_D -> {
+                if (event.isCtrlPressed) {
+                    drw.drawerLayout.openDrawer(GravityCompat.START)
+                }
+                true
+            }
+            else -> super.onKeyUp(keyCode, event)
+        }
     }
 }
 

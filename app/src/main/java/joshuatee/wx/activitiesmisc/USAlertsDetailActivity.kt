@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -52,18 +52,25 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_usalertsdetail, R.menu.shared_tts)
         title = ""
-        ObjectCard(this, R.id.cv1)
-        val m = toolbarBottom.menu
-        val tts = m.findItem(R.id.action_playlist)
+        ObjectCard(this, R.id.cardView)
+        val menu = toolbarBottom.menu
+        val tts = menu.findItem(R.id.action_playlist)
         tts.isVisible = false
         toolbarBottom.setOnMenuItemClickListener(this)
         objectAlertDetail = ObjectAlertDetail(this, linearLayout)
-        activityArguments = intent.getStringArrayExtra(URL)
+        activityArguments = intent.getStringArrayExtra(URL)!!
         getContent()
     }
 
+    override fun onRestart() {
+        getContent()
+        super.onRestart()
+    }
+
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        capAlert = withContext(Dispatchers.IO) { CapAlert.createFromUrl(activityArguments[0]) }
+        capAlert = withContext(Dispatchers.IO) {
+            CapAlert.createFromUrl(activityArguments[0])
+        }
         objectAlertDetail.updateContent(capAlert, activityArguments[0])
         toolbar.subtitle = objectAlertDetail.wfoTitle
         title = objectAlertDetail.title

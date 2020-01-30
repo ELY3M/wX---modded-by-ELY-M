@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M.
 
 package joshuatee.wx.fragments
 
@@ -27,7 +26,6 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityString
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
-import joshuatee.wx.activitiesmisc.SunMoonActivity
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.radar.WXGLRender
@@ -274,10 +272,6 @@ object UtilityLocationFragment {
                     SettingsLocationGenericActivity::class.java,
                     SettingsLocationGenericActivity.LOC_NUM,
                     arrayOf(Location.currentLocationStr, "")
-            )
-            stringName.contains("Sun/Moon data") -> ObjectIntent(
-                activityReference,
-                SunMoonActivity::class.java
             )
             stringName.contains("Force Data Refresh") -> fnRefresh()
             stringName.contains("Radar type: Reflectivity") -> {

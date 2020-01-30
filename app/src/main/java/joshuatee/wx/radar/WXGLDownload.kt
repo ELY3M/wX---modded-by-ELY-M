@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -55,8 +55,6 @@ class WXGLDownload {
         val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, tdwr)
         this.radarSite = radarSite
         this.product = product
-        //UtilityLog.d("wx", product)
-        //UtilityLog.d("wx", radarSite)
         if (!product.contains("L2")) {
             val inputStream = UtilityDownload.getInputStreamFromUrl(
                     MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +
@@ -209,6 +207,7 @@ class WXGLDownload {
         return fileList
     }
 
+    // TODO refactor variable names
     fun getLevel2Url(radarSite: String): String {
         var fn: String
         val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, false).toUpperCase(Locale.US)
@@ -223,9 +222,9 @@ class WXGLDownload {
         val fnSize = tmpArr[tmpArr.size - 2].toIntOrNull() ?: 1
         val fnPrevSize = tmpArr[tmpArr.size - 4].toIntOrNull() ?: 1
         val ratio = fnSize.toFloat() / fnPrevSize.toFloat()
-        if (ratio < 0.75) fn = fnPrev
-        //UtilityLog.d("wx", ratio.toString())
-        //UtilityLog.d("wx", baseUrl + fn)
+        if (ratio < 0.75) {
+            fn = fnPrev
+        }
         return baseUrl + fn
     }
 
@@ -261,7 +260,9 @@ class WXGLDownload {
         fun getNidsTab(context: Context, product: String, radarSite: String, fileName: String) {
             val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, false)
             val url =
-                    MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + (NEXRAD_PRODUCT_STRING[product] ?: "") + "/SI." + ridPrefix + radarSite.toLowerCase() + "/sn.last"
+                    MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +
+                            (NEXRAD_PRODUCT_STRING[product] ?: "") + "/SI." + ridPrefix +
+                            radarSite.toLowerCase(Locale.US) + "/sn.last"
             val inputStream = UtilityDownload.getInputStreamFromUrl(url)
             inputStream?.let { UtilityIO.saveInputStream(context, it, fileName) }
         }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -57,6 +57,9 @@ val NEXRAD_PRODUCT_STRING: Map<String, String> = mapOf(
         "EET" to "DS.135et",
         "DSPFIXME" to "DS.138dp",
 	"MDA" to "DS.141md",
+        "TZ0" to "DS.180z0",
+        "TZ1" to "DS.180z1",
+        "TZ2" to "DS.180z2",
         "TR0" to "DS.181r0",
         "TR1" to "DS.181r1",
         "TR2" to "DS.181r2",

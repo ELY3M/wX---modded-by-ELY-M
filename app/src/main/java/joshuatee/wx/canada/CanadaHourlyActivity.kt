@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -46,14 +46,19 @@ class CanadaHourlyActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        locNumInt = (intent.getStringExtra(LOC_NUM).toIntOrNull() ?: 0) - 1
+        locNumInt = (intent.getStringExtra(LOC_NUM)!!.toIntOrNull() ?: 0) - 1
         c0 = ObjectCardText(this, ll, toolbar)
         ObjectCALegal(this, ll, UtilityCanadaHourly.getUrl(Location.locationIndex))
         title = Location.getName(locNumInt) + " hourly forecast"
         getContent()
     }
 
+    override fun onRestart() {
+        getContent()
+        super.onRestart()
+    }
+
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        c0.setText(withContext(Dispatchers.IO) { UtilityCanadaHourly.getString(locNumInt) })
+        c0.text = withContext(Dispatchers.IO) { UtilityCanadaHourly.getString(locNumInt) }
     }
 }

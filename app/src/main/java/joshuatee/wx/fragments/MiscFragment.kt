@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -44,6 +44,7 @@ import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.radar.WXGLRadarActivityMultiPane
 import joshuatee.wx.util.Utility
 import joshuatee.wx.wpc.WpcImagesActivity
+import joshuatee.wx.wpc.WpcRainfallForecastActivity
 import joshuatee.wx.wpc.WpcTextProductsActivity
 
 class MiscFragment : Fragment() {
@@ -252,8 +253,16 @@ class MiscFragment : Fragment() {
                     resources.getString(R.string.help_wpcgefs),
                     "wpcgefs", "WPC GEFS"
             )
+            hm["wpc_rainfall"] = TileObject(
+                    R.drawable.wpc_rainfall,
+                    WpcRainfallForecastActivity::class.java,
+                    "",
+                    arrayOf(),
+                    resources.getString(R.string.help_wpc_rainfall),
+                    "wpc_rainfall", "WPC RAINFALL"
+            )
             val tileOrder =
-                    "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:"
+                    "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:wpc_rainfall:"
 
             var miscPref: String = Utility.readPref("FRAGMENT_MISC_ORDER", tileOrder)
             if (!miscPref.contains("wxoglquad")) {
@@ -280,6 +289,12 @@ class MiscFragment : Fragment() {
                 miscPref += "wpcgefs:"
                 Utility.writePref("FRAGMENT_MISC_ORDER", miscPref)
             }
+            miscPref = Utility.readPref("FRAGMENT_MISC_ORDER", tileOrder)
+            if (!miscPref.contains("wpc_rainfall")) {
+                miscPref += "wpc_rainfall:"
+                Utility.writePref("FRAGMENT_MISC_ORDER", miscPref)
+            }
+            //UtilityLog.d("wx", "MISC: "  + miscPref)
             val tileOrderArr = MyApplication.colon.split(miscPref)
             return tileOrderArr
                     .filterNot { it.contains("model_cod") || it.contains("model_wrf") || it.contains("model_ncar_ensemble") }

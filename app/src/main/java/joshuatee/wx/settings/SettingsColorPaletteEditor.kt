@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,6 +30,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
@@ -77,7 +78,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             }
         }
         showLoadFromFileMenuItem()
-        activityArguments = intent.getStringArrayExtra(URL)
+        activityArguments = intent.getStringArrayExtra(URL)!!
         type = activityArguments[0]
         title = "Palette Editor"
         toolbar.subtitle = WXGLNexrad.productCodeStringToName[type]
@@ -88,7 +89,9 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             activityArguments[1] + "_" + formattedDate
         }
         palTitle.setText(name)
+        palTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeLarge)
         palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, type, activityArguments[1]))
+        palContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
     }
 
     private fun fabSavePalette(context: Context) {
@@ -296,8 +299,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
     private fun readTextFromUri(uri: Uri): String {
         val content = UtilityIO.readTextFromUri(this, uri)
-        val uriArr =
-                uri.lastPathSegment!!.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        val uriArr = uri.lastPathSegment!!.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         var fileName = "map"
         if (uriArr.isNotEmpty()) {
             fileName = uriArr.last()

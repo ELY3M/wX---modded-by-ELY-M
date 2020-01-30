@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -42,17 +42,18 @@ import androidx.core.app.NotificationCompat
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityTime
 
 internal object UtilityNotificationSpc {
 
     fun sendSwoNotifications(context: Context, inBlackout: Boolean): String {
         var notifUrls = ""
-        if (MyApplication.alertSpcswoNotificationCurrent) {
+        if (MyApplication.alertSpcSwoNotification) {
             val urls = arrayOf("SWODY1", "SWODY2", "SWODY3")
             var test: Boolean
             (urls.indices).forEach {
                 val threatLevel = UtilitySpc.checkSpcDayX(context, urls[it])
-                test = if (MyApplication.alertSpcswoSlightNotificationCurrent) {
+                test = if (MyApplication.alertSpcSwoSlightNotification) {
                     threatLevel[0] == "high" || threatLevel[0] == "modt" || threatLevel[0] == "enh" || threatLevel[0] == "slight"
                 } else {
                     threatLevel[0] == "high" || threatLevel[0] == "modt" || threatLevel[0] == "enh"
@@ -245,7 +246,7 @@ internal object UtilityNotificationSpc {
     }
 
     fun sendMcdLocationNotifications(context: Context): String {
-        val textMcd = MyApplication.mcdLatlon.value
+        val textMcd = MyApplication.mcdLatLon.value
         val textMcdNoList = MyApplication.mcdNoList.value
         val x = mutableListOf<Double>()
         val y = mutableListOf<Double>()
@@ -309,7 +310,7 @@ internal object UtilityNotificationSpc {
         val noBody: String
         val noSummary: String
         val locLabelStr: String
-        val requestID = System.currentTimeMillis().toInt()
+        val requestID = UtilityTime.currentTimeMillis().toInt()
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         locLabelStr = "($locLabel) "
         var mcdPre = UtilityDownload.getTextProduct(context, "SPCMCD$mdNo")
@@ -379,7 +380,7 @@ internal object UtilityNotificationSpc {
         val noBody: String
         val noSummary: String
         val locLabelStr: String
-        val requestID = System.currentTimeMillis().toInt()
+        val requestID = UtilityTime.currentTimeMillis().toInt()
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         locLabelStr = "($locLabel) "
         val dayStr = "SWODY$day"

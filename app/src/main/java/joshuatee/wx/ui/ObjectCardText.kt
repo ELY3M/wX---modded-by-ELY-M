@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -34,6 +34,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.audio.UtilityTtsTranslations
 import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.objects.TextSize
 
 class ObjectCardText(private val context: Context) {
 
@@ -75,7 +76,7 @@ class ObjectCardText(private val context: Context) {
             linearLayout: LinearLayout,
             toolbar: Toolbar,
             toolbarBottom: Toolbar,
-            text: String
+            textValue: String
     ) : this(context) {
         linearLayout.addView(card)
         setOnClickListener(View.OnClickListener {
@@ -84,7 +85,8 @@ class ObjectCardText(private val context: Context) {
                     toolbarBottom
             )
         })
-        setText(text)
+        //setText(text)
+        text = textValue
     }
 
     constructor(
@@ -131,6 +133,15 @@ class ObjectCardText(private val context: Context) {
     ) {
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
+        tv.isFocusable = false
+        linearLayout.addView(card)
+    }
+
+    constructor(context: Context, linearLayout: LinearLayout, text: String, textSize: TextSize) : this(
+            context,
+            text
+    ) {
+        refreshTextSize(textSize)
         tv.isFocusable = false
         linearLayout.addView(card)
     }
@@ -245,13 +256,19 @@ class ObjectCardText(private val context: Context) {
         tv.text = localText
     }
 
-    fun setText(text: String) {
-        tv.text = text
-    }
+    //fun setText(text: String) {
+    //    tv.text = text
+    //}
 
-    fun setText(text: CharSequence) {
-        tv.text = text.toString()
-    }
+    var text: String
+        get() = tv.text.toString()
+        set(newValue) {
+            tv.text = newValue
+        }
+
+    //fun setText(text: CharSequence) {
+    //    tv.text = text.toString()
+   // }
 
     fun center() {
         tv.gravity = Gravity.CENTER
@@ -271,12 +288,31 @@ class ObjectCardText(private val context: Context) {
 
     val card: CardView get() = objCard.card
 
-    fun setVisibility(visibility: Int) {
-        objCard.setVisibility(visibility)
-    }
+    var visibility: Int
+        get() = objCard.visibility
+        set(newValue) {
+            objCard.visibility = newValue
+        }
 
     fun setOnClickListener(fn: View.OnClickListener) {
         tv.setOnClickListener(fn)
+    }
+
+    fun refreshTextSize(size: TextSize) {
+        when (size) {
+            TextSize.SMALL -> tv.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    MyApplication.textSizeSmall
+            )
+            TextSize.MEDIUM -> tv.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    MyApplication.textSizeNormal
+            )
+            TextSize.LARGE -> tv.setTextSize(
+                    TypedValue.COMPLEX_UNIT_PX,
+                    MyApplication.textSizeLarge
+            )
+        }
     }
 
     companion object {

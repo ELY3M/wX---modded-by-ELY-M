@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,6 +26,7 @@ import java.util.Locale
 
 import android.os.Bundle
 import android.content.res.Configuration
+import android.view.KeyEvent
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import android.view.View
@@ -81,7 +82,7 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        activityArguments = intent.getStringArrayExtra(INFO)
+        activityArguments = intent.getStringArrayExtra(INFO)!!
         om = ObjectModel(this, activityArguments[1], activityArguments[0])
         if (om.numPanes == 1) {
             super.onCreate(
@@ -107,7 +108,6 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
         star = menu.findItem(R.id.action_fav)
         star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         title = activityArguments[2]
-        val m = toolbarBottom.menu
         if (om.numPanes < 2) {
             fab1 = ObjectFab(
                     this,
@@ -119,19 +119,19 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                     this,
                     R.id.fab2,
                     OnClickListener { UtilityModels.moveForward(om.spTime) })
-            m.findItem(R.id.action_img1).isVisible = false
-            m.findItem(R.id.action_img2).isVisible = false
+            menu.findItem(R.id.action_img1).isVisible = false
+            menu.findItem(R.id.action_img2).isVisible = false
             if (UIPreferences.fabInModels) {
-                m.findItem(R.id.action_back).isVisible = false
-                m.findItem(R.id.action_forward).isVisible = false
+                menu.findItem(R.id.action_back).isVisible = false
+                menu.findItem(R.id.action_forward).isVisible = false
             }
-            fab1?.setVisibility(View.GONE)
-            fab2?.setVisibility(View.GONE)
+            fab1?.visibility = View.GONE
+            fab2?.visibility = View.GONE
             miStatusParam2.isVisible = false
         } else {
-            m.findItem(R.id.action_multipane).isVisible = false
+            menu.findItem(R.id.action_multipane).isVisible = false
         }
-        miStatus = m.findItem(R.id.action_status)
+        miStatus = menu.findItem(R.id.action_status)
         miStatus.title = "in through"
         om.spTime = ObjectSpinner(this, this, this, R.id.spinner_time)
         om.displayData = DisplayData(this, this, om.numPanes, om.spTime)
@@ -368,6 +368,24 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                     om.prefParamLabel + it.toString(),
                     "[MN]:500MB Height~Wind~Temp~Isotach"
             )
+        }
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        return when (keyCode) {
+            KeyEvent.KEYCODE_J -> {
+                if (event.isCtrlPressed) {
+                    UtilityModels.moveBack(om.spTime)
+                }
+                true
+            }
+            KeyEvent.KEYCODE_K -> {
+                if (event.isCtrlPressed) {
+                    UtilityModels.moveForward(om.spTime)
+                }
+                true
+            }
+            else -> super.onKeyUp(keyCode, event)
         }
     }
 }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -54,9 +54,7 @@ object UtilityWidget {
         val intentHome = Intent("android.intent.action.MAIN")
         intentHome.addCategory("android.intent.category.HOME")
         try {
-            val str =
-                localPackageManager.resolveActivity(intentHome, PackageManager.MATCH_DEFAULT_ONLY)
-                    .activityInfo.packageName
+            val str = localPackageManager.resolveActivity(intentHome, PackageManager.MATCH_DEFAULT_ONLY)!!.activityInfo.packageName
             context.grantUriPermission(str, imgUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
@@ -190,7 +188,7 @@ object UtilityWidget {
         activityStringArr: Array<String>,
         actionString: String
     ) {
-        val requestID = System.currentTimeMillis().toInt()
+        val requestID = UtilityTime.currentTimeMillis().toInt()
         val intent = Intent(context, activity)
         intent.putExtra(activityFlag, activityStringArr)
         intent.action = actionString
@@ -210,7 +208,7 @@ object UtilityWidget {
         activityString: String,
         actionString: String
     ) {
-        val requestID = System.currentTimeMillis().toInt()
+        val requestID = UtilityTime.currentTimeMillis().toInt()
         val intent = Intent(context, activity)
         intent.putExtra(activityFlag, activityString)
         intent.action = actionString
@@ -228,7 +226,7 @@ object UtilityWidget {
         layoutItem: Int,
         actionString: String
     ) {
-        val requestID = System.currentTimeMillis().toInt()
+        val requestID = UtilityTime.currentTimeMillis().toInt()
         val intent = Intent(context, activity)
         intent.action = actionString
         val stackBuilder = TaskStackBuilder.create(context)

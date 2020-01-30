@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -41,13 +41,14 @@ import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.*
 import android.graphics.Bitmap
 import java.nio.FloatBuffer
 import java.nio.ShortBuffer
 
 
-class WXGLRender(private val context: Context) : Renderer {
+class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
     // The is the OpenGL rendering engine that is used on the main screen and the main radar interface
     // The goal is to be highly performant and configurable as such this module relies on C code accessed via JNI extensively
@@ -122,6 +123,8 @@ class WXGLRender(private val context: Context) : Renderer {
     private val wbCircleBuffers = ObjectOglBuffers(PolygonType.WIND_BARB_CIRCLE, zoomToHideMiscFeatures)
     private val conusRadarBuffers = ObjectOglBuffers()
     private val genericWarningBuffers = mutableListOf<ObjectOglBuffers>()
+    private var wpcFrontBuffersList = mutableListOf<ObjectOglBuffers>()
+    private var wpcFrontPaints = mutableListOf<Int>()
     private val colorSwo = IntArray(5)
     private var breakSize15 = 15000
     private val breakSizeRadar = 15000
@@ -155,7 +158,7 @@ class WXGLRender(private val context: Context) : Renderer {
                     it.draw(projectionNumbers)
                 }
             }
-            if (locationDotBuffers.isInitialized && MyApplication.locdotFollowsGps) {
+            if (locationDotBuffers.isInitialized && MyApplication.locationDotFollowsGps) {
                 locIconBuffers.lenInit = 0f //was locationDotBuffers.lenInit
                 UtilityWXOGLPerf.genLocdot(locIconBuffers, projectionNumbers, gpsX, gpsY)
             }
@@ -178,13 +181,15 @@ class WXGLRender(private val context: Context) : Renderer {
         }
     private var prod = "N0Q"
     private var defaultLineWidth = 1.0f  //was 2.0f
-    private var warnLineWidth = 2.0f
-    private var watmcdLineWidth = 2.0f
+    // TODO - the below 2 vars should come directly from MyApp
+    //private var warnLineWidth = 2.0f
+    //private var watmcdLineWidth = 2.0f
     private var ridPrefixGlobal = ""
     private var bgColorFRed = 0.0f
     private var bgColorFGreen = 0.0f
     private var bgColorFBlue = 0.0f
     val ortInt: Int = 400
+    var zoomScreenScaleFactor = 1.0
     private val provider = ProjectionType.WX_OGL
     // this controls if the projection is mercator (nexrad) or 4326 / rectangular
     // after you zoom out past a certain point you need to hide the nexrad, show the mosaic
@@ -206,8 +211,8 @@ class WXGLRender(private val context: Context) : Renderer {
         bgColorFGreen = Color.green(MyApplication.nexradRadarBackgroundColor) / 255.0f
         bgColorFBlue = Color.blue(MyApplication.nexradRadarBackgroundColor) / 255.0f
         defaultLineWidth = MyApplication.radarDefaultLinesize.toFloat()
-        warnLineWidth = MyApplication.radarWarnLinesize.toFloat()
-        watmcdLineWidth = MyApplication.radarWatmcdLinesize.toFloat()
+        //warnLineWidth = MyApplication.radarWarnLineSize.toFloat()
+        //watmcdLineWidth = MyApplication.radarWatchMcdLineSize.toFloat()
         try {
             triangleIndexBuffer = ByteBuffer.allocateDirect(12 * breakSize15)
             lineIndexBuffer = ByteBuffer.allocateDirect(4 * breakSizeLine)
@@ -230,12 +235,15 @@ class WXGLRender(private val context: Context) : Renderer {
         MyApplication.radarWarningPolygons.forEach {
             genericWarningBuffers.add(ObjectOglBuffers(it))
         }
+        if (UtilityUI.isTablet()) {
+            zoomScreenScaleFactor = 2.0
+        }
     }
 
     fun initializeGeometry() {
         totalBins = 0
-        // fixme method for tdwr
-        if (prod.startsWith("TV") || prod == "TZL" || prod.startsWith("TR") || prod == "N1P" || prod == "NTP" || prod == "ET" || prod == "VIL") {
+        // FIXME method for tdwr
+        if (prod.startsWith("TV") || prod == "TZL" || prod.startsWith("TR") || prod.startsWith("TZ") || prod == "N1P" || prod == "NTP" || prod == "ET" || prod == "VIL") {
             tdwr = true
             val oldRid = this.rid
             if (this.rid == "") {
@@ -254,8 +262,7 @@ class WXGLRender(private val context: Context) : Renderer {
         totalBins = 0
         // added to allow animations to skip a frame and continue
         // fixme method for tdwr
-        //UtilityLog.d("Wx", product)
-        if (product.startsWith("TV") || product == "TZL" || product.startsWith("TR") || product == "N1P" || product == "NTP" || product == "ET" || product == "VIL") {
+        if (product.startsWith("TV") || product == "TZL" || product.startsWith("TR") || prod.startsWith("TZ") || product == "N1P" || product == "NTP" || product == "ET" || product == "VIL") {
             tdwr = true
             val oldRid = this.rid
             if (this.rid == "") {
@@ -279,7 +286,7 @@ class WXGLRender(private val context: Context) : Renderer {
         try {
             when {
                 product.contains("L2") -> {
-                    rdL2.decocodeAndPlot(
+                    rdL2.decodeAndPlot(
                             context,
                             radarBuffers.fn,
                             prod,
@@ -381,6 +388,7 @@ class WXGLRender(private val context: Context) : Renderer {
                     radarL3Object.decodeAndPlot(
                             context,
                             radarBuffers.fn,
+                            rid,
                             radarStatusStr
                     )
                     radarBuffers.extractL3Data(radarL3Object)
@@ -480,7 +488,6 @@ class WXGLRender(private val context: Context) : Renderer {
         radarBuffers.setToPositionZero()
         tdwr = false
         totalBinsOgl = totalBins
-        //UtilityLog.d("wx", "TOTAL chunk: " + chunkCount.toString() + " " + totalBins + " " + breakSize15)
     }
 
     override fun onSurfaceCreated(gl: GL10, config: EGLConfig) {
@@ -546,7 +553,7 @@ class WXGLRender(private val context: Context) : Renderer {
                         "uMVPMatrix"
                 ), 1, false, matrixProjectionAndView, 0
         )
-	//UtilityLog.d("wx", chunkCount.toString())
+
 	
         //show/hide radar
         UtilityLog.d("radarshow", "showradar: " + MyApplication.radarShowRadar)
@@ -558,7 +565,6 @@ class WXGLRender(private val context: Context) : Renderer {
                 6 * (totalBinsOgl - it * breakSizeRadar)
             }
             try {
-                //UtilityLog.d("wx", it.toString() + " " + breakSizeRadar.toString())
                 radarBuffers.floatBuffer.position(it * breakSizeRadar * 32)
                 GLES20.glVertexAttribPointer(
                         positionHandle,
@@ -577,7 +583,6 @@ class WXGLRender(private val context: Context) : Renderer {
                         0,
                         radarBuffers.colorBuffer.slice()
                 )
-                //UtilityLog.d("Wx", radarChunkCnt.toString())
                 triangleIndexBuffer.position(0)
                 GLES20.glDrawElements(
                         GLES20.GL_TRIANGLES,
@@ -634,10 +639,10 @@ class WXGLRender(private val context: Context) : Renderer {
                     drawPolygons(it, 16)
                 }
             }
-
-            if (zoom > wbCircleBuffers.scaleCutOff) {
-                drawTriangles(wbCircleBuffers)
-            }
+            listOf(wbCircleBuffers).forEach {
+                if (zoom > it.scaleCutOff) {
+                    drawTriangles(it)
+                }
 
             GLES20.glLineWidth(defaultLineWidth)
 
@@ -652,7 +657,7 @@ class WXGLRender(private val context: Context) : Renderer {
             }
 
 
-            if (MyApplication.locdotFollowsGps) {
+            if (MyApplication.locationDotFollowsGps) {
                 locIconBuffers.chunkCount = 1
                 drawLocation(locIconBuffers)
             } else {
@@ -678,7 +683,7 @@ class WXGLRender(private val context: Context) : Renderer {
         } //displayhold
 
 
-        GLES20.glLineWidth(warnLineWidth)
+        GLES20.glLineWidth(MyApplication.radarWarnLineSize)
         listOf(warningTstBuffers, warningFfwBuffers, warningTorBuffers).forEach {
             drawPolygons(
                     it,
@@ -690,13 +695,23 @@ class WXGLRender(private val context: Context) : Renderer {
             if (it.warningType!!.isEnabled) {
                 drawPolygons(it, 8)
             }
-	}
+        }
 
-        GLES20.glLineWidth(watmcdLineWidth)
-        listOf(mpdBuffers, mcdBuffers, watchBuffers, watchTornadoBuffers, swoBuffers).forEach { drawPolygons(it, 8) }
+        GLES20.glLineWidth(MyApplication.radarWatchMcdLineSize)
+        listOf(
+                mpdBuffers,
+                mcdBuffers,
+                watchBuffers,
+                watchTornadoBuffers,
+                swoBuffers
+        ).forEach { drawPolygons(it, 8) }
 
-
-
+        if (zoom < (0.50 / zoomScreenScaleFactor)) {
+            GLES20.glLineWidth(MyApplication.radarWatchMcdLineSize)
+            wpcFrontBuffersList.forEach { drawElement(it) }
+        }
+    }
+    
 
 
         //TODO try to use real plotting without adding usa map....
@@ -1363,7 +1378,6 @@ class WXGLRender(private val context: Context) : Renderer {
     fun constructGenericWarningLines() {
         genericWarningBuffers.forEach {
             if (it.warningType!!.isEnabled) {
-                //UtilityLog.d("wx", it.warningType!!.type.productCode)
                 constructGenericLines(it)
             } else {
                 deconstructGenericLines(it)
@@ -1374,7 +1388,7 @@ class WXGLRender(private val context: Context) : Renderer {
     fun constructLocationDot(locXCurrent: String, locYCurrentF: String, archiveMode: Boolean) {
         var locYCurrent = locYCurrentF
         var locmarkerAl = mutableListOf<Double>()
-        if (MyApplication.locdotFollowsGps) {
+        if (MyApplication.locationDotFollowsGps) {
             locationDotBuffers.lenInit = 0f
         } else {
             locationDotBuffers.lenInit = MyApplication.radarLocdotSize.toFloat()
@@ -1385,7 +1399,7 @@ class WXGLRender(private val context: Context) : Renderer {
         if (PolygonType.LOCDOT.pref) {
             locmarkerAl = UtilityLocation.latLonAsDouble
         }
-        if (MyApplication.locdotFollowsGps || archiveMode) {
+        if (MyApplication.locationDotFollowsGps || archiveMode) {
             locmarkerAl.add(x)
             locmarkerAl.add(y)
             gpsX = x
@@ -1427,7 +1441,7 @@ class WXGLRender(private val context: Context) : Renderer {
                 MyApplication.radarColorLocdot)
 
 
-        /* not needed .. if have custom location icon
+        /* not needed .. have custom location icon
         if (MyApplication.radarUseJni) {
             Jni.colorGen(
                     locCircleBuffers.colorBuffer,
@@ -1444,9 +1458,8 @@ class WXGLRender(private val context: Context) : Renderer {
         */
 
 
-        if (MyApplication.locdotFollowsGps) {
+        if (MyApplication.locationDotFollowsGps) {
             locIconBuffers.lenInit = locationDotBuffers.lenInit
-	    //joshuas change//
 	    val gpsCoords = UtilityCanvasProjection.computeMercatorNumbers(gpsX, gpsY, projectionNumbers)
             gpsLatLonTransformed[0] = -gpsCoords[0].toFloat()
             gpsLatLonTransformed[1] = gpsCoords[1].toFloat()
@@ -1519,7 +1532,7 @@ class WXGLRender(private val context: Context) : Renderer {
         spotterBuffers.isInitialized = false //leave it at false or the app will crash randomly
         spotterBuffers.lenInit = MyApplication.radarSpotterSize.toFloat()
         spotterBuffers.triangleCount = 6
-        UtilitySpotter.data
+        UtilitySpotter.get(context)
         spotterBuffers.xList = UtilitySpotter.x
         spotterBuffers.yList = UtilitySpotter.y
         constructTriangles(spotterBuffers)
@@ -1626,7 +1639,6 @@ class WXGLRender(private val context: Context) : Renderer {
             else -> {
                 if (buffers.warningType != null) {
                     fList = WXGLPolygonWarnings.addGeneric(provider, rid, buffers.warningType!!).toList()
-                    //UtilityLog.d("wx", "SPS: " + fList)
                 }
             }
         }
@@ -1687,14 +1699,14 @@ class WXGLRender(private val context: Context) : Renderer {
     }
 
     fun constructWBLines() {
-        val fWb = WXGLNexradLevel3WindBarbs.decodeAndPlot(rid, provider, false)
+        val fWb = WXGLNexradLevel3WindBarbs.decodeAndPlot(rid, provider, false, paneNumber)
         constructGenericLinesShort(wbBuffers, fWb)
         constructWBLinesGusts()
         constructWBCircle()
     }
 
     private fun constructWBLinesGusts() {
-        val fWbGusts = WXGLNexradLevel3WindBarbs.decodeAndPlot(rid, provider, true)
+        val fWbGusts = WXGLNexradLevel3WindBarbs.decodeAndPlot(rid, provider, true, paneNumber)
         constructGenericLinesShort(wbGustsBuffers, fWbGusts)
     }
 
@@ -1704,15 +1716,68 @@ class WXGLRender(private val context: Context) : Renderer {
         deconstructWBCircle()
     }
 
+    fun constructWpcFronts() {
+        wpcFrontBuffersList = mutableListOf()
+        wpcFrontPaints = mutableListOf()
+        var tmpCoords: DoubleArray
+        UtilityWpcFronts.fronts.forEach { _ ->
+            val buff = ObjectOglBuffers()
+            buff.breakSize = 30000
+            buff.chunkCount = 1
+            wpcFrontBuffersList.add(buff)
+        }
+        UtilityWpcFronts.fronts.indices.forEach { z ->
+            val front = UtilityWpcFronts.fronts[z]
+            //val totalBins = front.coordinates.size / 2
+            wpcFrontBuffersList[z].count = front.coordinates.size * 2
+            wpcFrontBuffersList[z].initialize(
+                    4 * wpcFrontBuffersList[z].count,
+                    0,
+                    3 * wpcFrontBuffersList[z].count
+            )
+            wpcFrontBuffersList[z].isInitialized = true
+            when (front.type) {
+                FrontTypeEnum.COLD -> wpcFrontPaints.add(Color.rgb(0, 127, 255))
+                FrontTypeEnum.WARM -> wpcFrontPaints.add(Color.rgb(255, 0, 0))
+                FrontTypeEnum.STNRY -> wpcFrontPaints.add(Color.rgb(0, 127, 255))
+                FrontTypeEnum.STNRY_WARM -> wpcFrontPaints.add(Color.rgb(255, 0, 0))
+                FrontTypeEnum.OCFNT -> wpcFrontPaints.add(Color.rgb(255, 0, 255))
+                FrontTypeEnum.TROF -> wpcFrontPaints.add(Color.rgb(254, 216, 177))
+            }
+            //UtilityLog.d("wx", front.toString())
+            for (j in 0 until front.coordinates.size step 2) {
+                if ( j < front.coordinates.size - 1) { // stationary front workaround
+                    tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(front.coordinates[j].lat, front.coordinates[j].lon, projectionNumbers)
+                    wpcFrontBuffersList[z].putFloat(tmpCoords[0].toFloat())
+                    wpcFrontBuffersList[z].putFloat((tmpCoords[1] * -1.0f).toFloat())
+                    wpcFrontBuffersList[z].putColor(Color.red(wpcFrontPaints[z]).toByte())
+                    wpcFrontBuffersList[z].putColor(Color.green(wpcFrontPaints[z]).toByte())
+                    wpcFrontBuffersList[z].putColor(Color.blue(wpcFrontPaints[z]).toByte())
+                    tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(front.coordinates[j + 1].lat, front.coordinates[j + 1].lon, projectionNumbers)
+                    wpcFrontBuffersList[z].putFloat(tmpCoords[0].toFloat())
+                    wpcFrontBuffersList[z].putFloat((tmpCoords[1] * -1.0f).toFloat())
+                    wpcFrontBuffersList[z].putColor(Color.red(wpcFrontPaints[z]).toByte())
+                    wpcFrontBuffersList[z].putColor(Color.green(wpcFrontPaints[z]).toByte())
+                    wpcFrontBuffersList[z].putColor(Color.blue(wpcFrontPaints[z]).toByte())
+                }
+            }
+        }
+    }
+
+    fun deconstructWpcFronts() {
+        wpcFrontBuffersList = mutableListOf()
+    }
+
+
     private fun deconstructWBLinesGusts() {
         wbGustsBuffers.isInitialized = false
     }
 
     private fun constructWBCircle() {
         wbCircleBuffers.lenInit = MyApplication.radarAviationSize.toFloat()
-        wbCircleBuffers.xList = UtilityMetar.x
-        wbCircleBuffers.yList = UtilityMetar.y
-        wbCircleBuffers.colorIntArray = UtilityMetar.obsArrAviationColor
+        wbCircleBuffers.xList = UtilityMetar.metarDataList[paneNumber].x
+        wbCircleBuffers.yList = UtilityMetar.metarDataList[paneNumber].y
+        wbCircleBuffers.colorIntArray = UtilityMetar.metarDataList[paneNumber].obsArrAviationColor
         wbCircleBuffers.count = wbCircleBuffers.xList.size
         wbCircleBuffers.triangleCount = 6
         wbCircleBuffers.initialize(
@@ -1737,7 +1802,9 @@ class WXGLRender(private val context: Context) : Renderer {
         colorSwo[3] = Color.YELLOW
         colorSwo[4] = Color.rgb(0, 100, 0)
         var tmpCoords: DoubleArray
-        val fSize = (0..4).filter { hashSwo[it] != null }.sumBy { hashSwo[it]!!.size }
+        val fSize = (0..4).filter { hashSwo[it] != null }.sumBy {
+            hashSwo[it]!!.size
+        }
         swoBuffers.breakSize = 15000
         swoBuffers.chunkCount = 1
         val totalBinsSwo = fSize / 4

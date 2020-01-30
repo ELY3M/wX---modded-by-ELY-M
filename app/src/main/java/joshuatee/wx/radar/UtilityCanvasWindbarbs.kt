@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -45,12 +45,13 @@ object UtilityCanvasWindbarbs {
         provider: ProjectionType,
         bitmap: Bitmap,
         radarSite: String,
-        isGust: Boolean
+        isGust: Boolean,
+        index: Int
     ) {
         val textSize = 22
-        UtilityMetar.getStateMetarArrayForWXOGL(context, radarSite)
-        val wbCircleXArr = UtilityMetar.x
-        val wbCircleYArr = UtilityMetar.y
+        UtilityMetar.getStateMetarArrayForWXOGL(context, radarSite, 5)
+        val wbCircleXArr = UtilityMetar.metarDataList[index].x
+        val wbCircleYArr = UtilityMetar.metarDataList[index].y
         var mercator = false
         if (provider !== ProjectionType.NWS_MOSAIC) {
             mercator = true
@@ -75,9 +76,9 @@ object UtilityCanvasWindbarbs {
         val stormList = mutableListOf<Double>()
         val stormListArr: FloatArray
         val arrWb = if (!isGust) {
-            UtilityMetar.obsArrWb
+            UtilityMetar.metarDataList[index].obsArrWb
         } else {
-            UtilityMetar.obsArrWbGust
+            UtilityMetar.metarDataList[index].obsArrWbGust
         }
         try {
             var locXDbl = 0.0
@@ -234,16 +235,16 @@ object UtilityCanvasWindbarbs {
         canvas.drawLines(stormListArr, paint)
         // draw aviation circle on top
         wbCircleXArr.indices.forEach { k ->
-            if (UtilityMetar.obsArrAviationColor.size > k) {
+            if (UtilityMetar.metarDataList[index].obsArrAviationColor.size > k) {
                 if (mercator) {
-                    paint.color = UtilityMetar.obsArrAviationColor[k]
+                    paint.color = UtilityMetar.metarDataList[index].obsArrAviationColor[k]
                     tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(
                         wbCircleXArr[k],
                         wbCircleYArr[k],
                         pn
                     )
                 } else {
-                    paint.color = UtilityMetar.obsArrAviationColor[k]
+                    paint.color = UtilityMetar.metarDataList[index].obsArrAviationColor[k]
                     tmpCoords = UtilityCanvasProjection.compute4326Numbers(
                         wbCircleXArr[k],
                         wbCircleYArr[k],

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -186,8 +186,21 @@ open class ObjectOglBuffers() {
             if (!MyApplication.radarUseJni)
                 UtilityWXOGLPerf.genMarkerList(buffers, pn, buffers.xList, buffers.yList)
             else
-                Jni.genTriangle(buffers.floatBuffer, buffers.indexBuffer, pn.xFloat, pn.yFloat, pn.xCenter.toFloat(), pn.yCenter.toFloat(),
-                        pn.oneDegreeScaleFactorFloat, buffers.xList, buffers.yList, buffers.count, buffers.lenInit, buffers.colorBuffer, buffers.colorArray)
+                Jni.genTriangle(
+                    buffers.floatBuffer,
+                    buffers.indexBuffer,
+                    pn.xFloat,
+                    pn.yFloat,
+                    pn.xCenter.toFloat(),
+                    pn.yCenter.toFloat(),
+                    pn.oneDegreeScaleFactorFloat,
+                    buffers.xList,
+                    buffers.yList,
+                    buffers.count,
+                    buffers.lenInit,
+                    buffers.colorBuffer,
+                    buffers.colorArray
+                )
         }
 
         // HI
@@ -195,8 +208,21 @@ open class ObjectOglBuffers() {
             if (!MyApplication.radarUseJni)
                 UtilityWXOGLPerf.genMarkerList(buffers, pn, buffers.xList, buffers.yList)
             else
-                Jni.genTriangleUp(buffers.floatBuffer, buffers.indexBuffer, pn.xFloat, pn.yFloat, pn.xCenter.toFloat(), pn.yCenter.toFloat(),
-                        pn.oneDegreeScaleFactorFloat, buffers.xList, buffers.yList, buffers.count, buffers.lenInit, buffers.colorBuffer, buffers.colorArray)
+                Jni.genTriangleUp(
+                    buffers.floatBuffer,
+                    buffers.indexBuffer,
+                    pn.xFloat,
+                    pn.yFloat,
+                    pn.xCenter.toFloat(),
+                    pn.yCenter.toFloat(),
+                    pn.oneDegreeScaleFactorFloat,
+                    buffers.xList,
+                    buffers.yList,
+                    buffers.count,
+                    buffers.lenInit,
+                    buffers.colorBuffer,
+                    buffers.colorArray
+                )
         }
 
         // LOCDOT, SPOTTER

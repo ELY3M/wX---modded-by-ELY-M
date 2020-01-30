@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -37,6 +37,7 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
+import java.util.*
 
 class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
@@ -118,7 +119,7 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         listOf(listCity, listIds, listSort).forEach { it.clear() }
         listCity.add("..Back to state list")
         listIds.add("..Back to state list")
-        lines.filterTo(listSort) { it.startsWith(provSelected.toUpperCase()) }
+        lines.filterTo(listSort) { it.startsWith(provSelected.toUpperCase(Locale.US)) }
         listSort.sort()
         listSort.forEach {
             val tmpArr = it.split(",")
@@ -133,7 +134,7 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_lastused -> showObsSite(Utility.readPref(prefToken, ""))
             R.id.action_map -> {
-                val url = "https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.toLowerCase()
+                val url = "https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.toLowerCase(Locale.US)
                 ObjectIntent(
                         this,
                         WebscreenAB::class.java,

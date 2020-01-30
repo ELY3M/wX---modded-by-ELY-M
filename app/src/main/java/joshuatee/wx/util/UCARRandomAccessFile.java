@@ -76,7 +76,7 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 
 	private static final boolean debugLeaks = false;
 	private static final boolean debugAccess = false;
-	private static final Set<String> allFiles = new HashSet<>();
+	//private static final Set<String> allFiles = new HashSet<>();
 	private static final List<String> openFiles = Collections.synchronizedList(new ArrayList<String>());
 	static private final AtomicInteger debug_nseeks = new AtomicInteger();
 	static private final AtomicLong debug_nbytes = new AtomicLong();
@@ -249,14 +249,12 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 	 */
 	public UCARRandomAccessFile(String location, String mode, int bufferSize) throws IOException {
 		this.location = location;
-		if (debugLeaks) {
-			allFiles.add(location);
-		}
-
+		//if (debugLeaks) {
+			//allFiles.add(location);
+		//}
 		this.file = new java.io.RandomAccessFile(location, mode);
 		this.readonly = mode.equals("r");
 		init(bufferSize);
-
 		if (debugLeaks) {
 			openFiles.add(location);
 			if (showOpen) System.out.println("  open " + location);

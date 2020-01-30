@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M.
 
 package joshuatee.wx.ui
 
@@ -33,8 +32,7 @@ import joshuatee.wx.objects.TextSize
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.ObjectForecastPackageCurrentConditions
 
-// FIXME rename
-class ObjectCardCC(context: Context, version: Int) {
+class ObjectCardCurrentConditions(context: Context, version: Int) {
 
     private val objCard: ObjectCard
     private var imageView = ObjectImageView(context)
@@ -100,6 +98,12 @@ class ObjectCardCC(context: Context, version: Int) {
 
     val card: CardView get() = objCard.card
 
+    fun refreshTextSize() {
+        textViewTop.refreshTextSize(TextSize.MEDIUM)
+        textViewMiddle.refreshTextSize(TextSize.SMALL)
+        textViewBottom.refreshTextSize(TextSize.SMALL)
+    }
+
     fun setStatus(text: String) {
         textViewBottom.text = text
     }
@@ -125,7 +129,6 @@ class ObjectCardCC(context: Context, version: Int) {
             } else {
                 alertDialogStatusAl.clear()
                 alertDialogStatusAl.add("Edit Location...")
-                alertDialogStatusAl.add("Sun/Moon data...")
                 alertDialogStatusAl.add("Force Data Refresh...")
                 if (MyApplication.locDisplayImg && Location.isUS) {
                     alertDialogStatusAl.add("Radar type: Reflectivity")

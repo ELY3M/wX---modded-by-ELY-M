@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -38,6 +38,21 @@ fun String.condenseSpace(): String {
     return this.replace("\\s+".toRegex(), " ")
 }
 
+fun String.removeSingleLineBreaks(): String {
+    return this.replace("\n\n", "ABZXCZ13").replace("\n", " ").replace("ABZXCZ13", "\n\n")
+}
+
+fun String.removeBreaks(): String {
+    return this.replace(" <br>", " ")
+}
+
+fun String.removeLineBreaks(): String {
+        return this
+                .replace("\n", "ABC123")
+                .replace("ABC123ABC123", "\n")
+                .replace("ABC123", "")
+}
+
 fun String.truncate(size: Int): String {
     return UtilityStringExternal.truncate(this, size)
 }
@@ -46,7 +61,15 @@ fun String.truncate(size: Int): String {
 //    return UtilityString.removeHtml(this)
 //}
 
+fun String.insert(index: Int, string: String): String {
+    return StringBuilder(this).insert(index, string).toString()
+}
+
 fun String.parse(pattern: Pattern): String {
+    return UtilityString.parse(this, pattern)
+}
+
+fun String.parseFirst(pattern: String): String {
     return UtilityString.parse(this, pattern)
 }
 

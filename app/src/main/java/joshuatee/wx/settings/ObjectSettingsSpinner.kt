@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,6 +23,8 @@ package joshuatee.wx.settings
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.ColorStateList
+import android.os.Build
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -39,7 +41,6 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 
@@ -83,9 +84,9 @@ class ObjectSettingsSpinner(
         ll.gravity = Gravity.CENTER_VERTICAL
         ll.addView(tv)
         val spinner = Spinner(context)
-        if (android.os.Build.VERSION.SDK_INT > 20) {
+        if (Build.VERSION.SDK_INT > 20) {
             if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
-                UtilityUI.setupSpinner(spinner, false)
+                setupSpinner(spinner, false)
             }
         }
         val dataAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, spinnerArr)
@@ -128,6 +129,19 @@ class ObjectSettingsSpinner(
     }
 
     val card: CardView get() = objCard.card
+
+    companion object {
+
+        fun setupSpinner(spinner: Spinner, light: Boolean) {
+            var tint = ColorStateList.valueOf(UIPreferences.colorBlack)
+            if (light) {
+                tint = ColorStateList.valueOf(UIPreferences.colorOffwhiteToolbar)
+            }
+            if (Build.VERSION.SDK_INT > 20) {
+                spinner.backgroundTintList = tint
+            }
+        }
+    }
 }
 
 

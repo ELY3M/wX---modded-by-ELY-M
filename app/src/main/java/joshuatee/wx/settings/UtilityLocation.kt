@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,7 +29,9 @@ import android.location.Location
 import android.location.LocationManager
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
-import joshuatee.wx.*
+
+import joshuatee.wx.MyApplication
+import joshuatee.wx.GlobalArrays
 import joshuatee.wx.radar.LatLon
 
 import joshuatee.wx.radar.RID
@@ -39,7 +41,9 @@ import joshuatee.wx.util.UtilityTime
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
 import kotlinx.coroutines.*
+import java.util.*
 
 object UtilityLocation {
 
@@ -91,11 +95,14 @@ object UtilityLocation {
                 context,
                 android.Manifest.permission.ACCESS_COARSE_LOCATION
             ) == PackageManager.PERMISSION_GRANTED
-        )
+        ) {
             for (i in providers.indices.reversed()) {
                 l = lm.getLastKnownLocation(providers[i])
                 if (l != null) break
             }
+        } else {
+            UtilityLog.d("wx", "WARNING: permission not granted for roaming location")
+        }
         val gps = DoubleArray(2)
         l?.let {
             gps[0] = it.latitude
@@ -198,12 +205,12 @@ object UtilityLocation {
         val x: String
         val y: String
         if (officeType == "RID") {
-            x = Utility.getRadarSiteX(site.toUpperCase())
-            y = addChar + Utility.getRadarSiteY(site.toUpperCase())
+            x = Utility.getRadarSiteX(site.toUpperCase(Locale.US))
+            y = addChar + Utility.getRadarSiteY(site.toUpperCase(Locale.US))
         } else {
-            x = Utility.readPref(context, officeType + "_" + site.toUpperCase() + "_X", "0.0")
+            x = Utility.readPref(context, officeType + "_" + site.toUpperCase(Locale.US) + "_X", "0.0")
             y =
-                    addChar + Utility.readPref(context, officeType + "_" + site.toUpperCase() + "_Y", "0.0")
+                    addChar + Utility.readPref(context, officeType + "_" + site.toUpperCase(Locale.US) + "_Y", "0.0")
         }
         return LatLon(x, y)
     }

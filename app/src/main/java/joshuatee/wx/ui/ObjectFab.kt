@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -61,12 +61,14 @@ class ObjectFab {
         fab.setOnClickListener(fn)
     }
 
-    fun setVisibility(vis: Int) {
-        when (vis) {
-            View.GONE -> fab.hide()
-            View.VISIBLE -> fab.show()
+    var visibility: Int
+        get() = fab.visibility
+        set(newValue) {
+            when (newValue) {
+                View.GONE -> fab.hide()
+                View.VISIBLE -> fab.show()
+            }
         }
-    }
 
     fun fabSetResDrawable(context: Context, resourceDrawable: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -50,8 +50,12 @@ class USWarningsImpactActivity : BaseActivity() {
         getContent()
     }
 
+    // TODO onrestart
+
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        warningsList = withContext(Dispatchers.IO) { UtilityWarningsImpact.data }
+        warningsList = withContext(Dispatchers.IO) {
+            UtilityWarningsImpact.data
+        }
         warningsListSorted = warningsList.sortedWith(compareByDescending { it.title })
         val ca = AdapterUSWarningsImpact(warningsListSorted)
         recyclerView.recyclerView.adapter = ca

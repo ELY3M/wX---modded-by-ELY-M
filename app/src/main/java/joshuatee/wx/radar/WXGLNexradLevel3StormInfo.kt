@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -32,6 +32,7 @@ import joshuatee.wx.util.*
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
 import joshuatee.wx.settings.UtilityLocation
+import java.util.*
 
 internal object WXGLNexradLevel3StormInfo {
 
@@ -47,7 +48,7 @@ internal object WXGLNexradLevel3StormInfo {
         val retStr: String
         val location = UtilityLocation.getSiteLocation(context, rid)
         val pn = ProjectionNumbers(rid, projectionType)
-        WXGLDownload.getNidsTab(context, "STI", pn.radarSite.toLowerCase(), stiBaseFn + fnSuffix)
+        WXGLDownload.getNidsTab(context, "STI", pn.radarSite.toLowerCase(Locale.US), stiBaseFn + fnSuffix)
         val dis: UCARRandomAccessFile
         val posn: List<String>
         val motion: List<String>
@@ -55,7 +56,6 @@ internal object WXGLNexradLevel3StormInfo {
             dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, stiBaseFn + fnSuffix))
             dis.bigEndian = true
             retStr = UtilityLevel3TextProduct.read(dis)
-            //UtilityLog.d("wx", retStr)
             posn = retStr.parseColumn(RegExp.stiPattern1)
             motion = retStr.parseColumn(RegExp.stiPattern2)
         } catch (e: Exception) {
@@ -69,9 +69,7 @@ internal object WXGLNexradLevel3StormInfo {
         motion.map { it.replace("NEW", "0/ 0").replace("/ ", "/").replace("\\s+".toRegex(), " ") }
             .forEach { motionStr += it.replace("/", " ") }
         val posnNumbers = posnStr.parseColumnAll(RegExp.stiPattern3)
-        //UtilityLog.d("wx", posnNumbers.toString())
         val motNumbers = motionStr.parseColumnAll(RegExp.stiPattern3)
-        //UtilityLog.d("wx", motNumbers.toString())
         var degree: Double
         var nm: Double
         var degree2: Double

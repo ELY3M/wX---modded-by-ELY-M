@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -119,8 +119,10 @@ object UtilityNotification {
                                     cancelStr
                             ))
                     ) {
-                        val sound =
-                                MyApplication.locations[locNumInt].sound && !inBlackout || MyApplication.locations[locNumInt].sound && MyApplication.alertBlackoutTornadoCurrent
+                        val sound = MyApplication.locations[locNumInt].sound
+                                && !inBlackout
+                                || MyApplication.locations[locNumInt].sound
+                                && MyApplication.alertBlackoutTornado
                         val notifObj = ObjectNotification(
                                 context,
                                 sound,
@@ -191,7 +193,7 @@ object UtilityNotification {
                 }
                 val stackBuilder2 = TaskStackBuilder.create(context)
                 if (Location.isUS(locNumInt)) {
-
+                    stackBuilder2.addParentStack(WX::class.java)
                 } else {
                     stackBuilder2.addParentStack(CanadaRadarActivity::class.java)
                 }
@@ -242,7 +244,7 @@ object UtilityNotification {
             // url above is used as the token for notifications and currenlty looks like
             // https://api.weather.gov/gridpoints/DTX/x,y/forecast
             // problem is if network is down it will be a non deterministic value so we need something different
-            val currentUpdateTime = System.currentTimeMillis()
+            val currentUpdateTime = UtilityTime.currentTimeMillis()
             val lastUpdateTime = Utility.readPref(context, "CC" + locNum + "_LAST_UPDATE", 0.toLong())
             if (MyApplication.locations[locNumInt].ccNotification) {
                 notifUrls += url + "CC" + MyApplication.notificationStrSep
@@ -254,7 +256,7 @@ object UtilityNotification {
                 val objCc = ObjectForecastPackageCurrentConditions(context, locNumInt)
                 val objHazards = ObjectForecastPackageHazards(locNumInt)
                 val objSevenDay = ObjectForecastPackage7Day(locNumInt)
-                val updateTime = System.currentTimeMillis()
+                val updateTime = UtilityTime.currentTimeMillis()
                 Utility.writePref(context, "CC" + locNum + "_LAST_UPDATE", updateTime)
                 if (locNum == widgetLocNum && widgetsEnabled) {
                     UtilityWidget.widgetDownloadData(context, objCc, objSevenDay, objHazards)
@@ -403,6 +405,7 @@ object UtilityNotification {
                 NotificationCompat.Builder(context, notiChannelStrNoSound)
                         .setContentTitle(noMain)
                         .setSmallIcon(iconRadar)
+                        .setSound(null)
                         .setAutoCancel(MyApplication.alertAutocancel)
                         .setColor(UIPreferences.colorNotif)
                         .setLargeIcon(bitmap)
@@ -494,7 +497,7 @@ object UtilityNotification {
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(WX::class.java)
         stackBuilder.addNextIntent(resultIntent)
-        val requestID = System.currentTimeMillis().toInt()
+        val requestID = UtilityTime.currentTimeMillis().toInt()
         val resultPendingIntent =
                 stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
         val resultPendingIntent2 = PendingIntent.getService(
@@ -613,6 +616,7 @@ object UtilityNotification {
                     NotificationCompat.Builder(context, notiChannelStrNoSound)
                             .setContentTitle(noMain)
                             .setContentText(noBody)
+                            .setSound(null)
                             .setColor(UIPreferences.colorNotif)
                             .setContentIntent(resultPendingIntent)
                             .setOnlyAlertOnce(true)

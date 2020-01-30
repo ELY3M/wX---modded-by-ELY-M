@@ -82,7 +82,7 @@ internal class StackRemoteViewsFactory(private val context: Context) :
         )
         if (position != 0) {
             val tempStrArr = MyApplication.colonSpace.split(day)
-            if (tempStrArr != null && tempStrArr.size > 1) {
+            if (tempStrArr.size > 1) {
                 t1 = tempStrArr[0].replace(":", " ") + " (" +
                         UtilityLocationFragment.extractTemperature(tempStrArr[1]) +
                         MyApplication.DEGREE_SYMBOL +

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -88,7 +88,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         img = ObjectTouchImageView(this, this, R.id.iv)
         img.setOnClickListener(this)
         val activityArguments = intent.getStringArrayExtra(RID)
-        radarSite = activityArguments[0]
+        radarSite = activityArguments!![0]
         imageType = activityArguments[1]
         if (radarSite == "NAT") {
             radarSite = "CAN"

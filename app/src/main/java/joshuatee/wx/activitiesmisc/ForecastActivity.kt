@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -60,7 +60,7 @@ class ForecastActivity : BaseActivity() {
     private var objSevenDay = ObjectForecastPackage7Day()
     private var ccTime = ""
     private var radarTime = ""
-    private lateinit var cardCC: ObjectCardCC
+    private lateinit var cardCC: ObjectCardCurrentConditions
     private lateinit var linearLayoutForecast: ObjectLinearLayout
     private lateinit var linearLayoutHazards: ObjectLinearLayout
     private val hazardCards = mutableListOf<ObjectCardText>()
@@ -69,15 +69,20 @@ class ForecastActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // FIXME activity_linear_layout need ll to be renamed to linearLayout, need to asses which activities are using it
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        activityArguments = intent.getStringArrayExtra(URL)
+        activityArguments = intent.getStringArrayExtra(URL)!!
         latLon = LatLon(activityArguments[0], activityArguments[1])
         title = "Forecast for"
         toolbar.subtitle = latLon.latString + "," + latLon.lonString
-        cardCC = ObjectCardCC(this, 2)
+        cardCC = ObjectCardCurrentConditions(this, 2)
         ll.addView(cardCC.card)
         linearLayoutHazards = ObjectLinearLayout(this, ll)
         linearLayoutForecast = ObjectLinearLayout(this, ll)
         getContent()
+    }
+
+    override fun onRestart() {
+        getContent()
+        super.onRestart()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
@@ -96,10 +101,6 @@ class ForecastActivity : BaseActivity() {
             // 7day
             //
             objSevenDay.icons.mapTo(bitmaps) { UtilityNws.getIcon(this@ForecastActivity, it) }
-            //
-            // hazards
-            //
-            //hazardRaw = objHazards!!.hazards
         }
         //
         // CC
@@ -125,7 +126,7 @@ class ForecastActivity : BaseActivity() {
         val cardSunrise = ObjectCardText(this@ForecastActivity)
         cardSunrise.center()
         try {
-            cardSunrise.setText(
+            cardSunrise.text = (
                     UtilityTimeSunMoon.getSunriseSunset(
                             this@ForecastActivity,
                             Location.currentLocationStr
@@ -156,7 +157,7 @@ class ForecastActivity : BaseActivity() {
             hazardCards[z].setPaddingAmount(MyApplication.paddingSettings)
             hazardCards[z].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
             hazardCards[z].setTextColor(UIPreferences.textHighlightColor)
-            hazardCards[z].setText(objHazards.titles[z].toUpperCase(Locale.US))
+            hazardCards[z].text = (objHazards.titles[z].toUpperCase(Locale.US))
             hazardCards[z].setOnClickListener(View.OnClickListener {
                 ObjectIntent(
                         this@ForecastActivity,

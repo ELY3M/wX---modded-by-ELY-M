@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -28,6 +28,7 @@ import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
 import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.GlobalArrays
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
@@ -35,10 +36,7 @@ import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.ObjectNavDrawerCombo
 import joshuatee.wx.ui.OnSwipeTouchListener
 import joshuatee.wx.ui.UtilityToolbar
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.util.UtilityLog
-import joshuatee.wx.util.UtilityShare
+import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_wpcimages.*
@@ -58,6 +56,9 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
     private lateinit var actionBack: MenuItem
     private lateinit var actionForward: MenuItem
     private lateinit var drw: ObjectNavDrawerCombo
+    private lateinit var activityArguments: Array<String>
+    private var calledFromHomeScreen = false
+    private var homeScreenId = ""
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +80,13 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
                 if (img.currentZoom < 1.01f) showPrevImg()
             }
         })
+        activityArguments = intent.getStringArrayExtra(URL)!!
+        activityArguments.let {
+            if (activityArguments.size > 1 && activityArguments[0] == "HS") {
+                homeScreenId = activityArguments[1]
+                calledFromHomeScreen = true
+            }
+        }
         val menu = toolbarBottom.menu
         actionBack = menu.findItem(R.id.action_back)
         actionForward = menu.findItem(R.id.action_forward)
@@ -103,33 +111,45 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
         getContent()
     }
 
+    override fun onRestart() {
+        getContent()
+        super.onRestart()
+    }
+
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         val getUrl: String
-        title = drw.getLabel()
-        when {
-            drw.getUrl().contains("https://graphical.weather.gov/images/conus/") -> {
-                getUrl = drw.getUrl() + timePeriod + "_conus.png"
-                actionBack.isVisible = true
-                actionForward.isVisible = true
+        if (!calledFromHomeScreen) {
+            title = "Images"
+            toolbar.subtitle = drw.getLabel()
+            when {
+                drw.getUrl().contains("https://graphical.weather.gov/images/conus/") -> {
+                    getUrl = drw.getUrl() + timePeriod + "_conus.png"
+                    actionBack.isVisible = true
+                    actionForward.isVisible = true
+                }
+                drw.getUrl().contains("aviationweather") -> {
+                    actionBack.isVisible = true
+                    actionForward.isVisible = true
+                    getUrl = drw.getUrl()
+                }
+                else -> {
+                    actionBack.isVisible = false
+                    actionForward.isVisible = false
+                    getUrl = drw.getUrl()
+                }
             }
-            drw.getUrl().contains("aviationweather") -> {
-                actionBack.isVisible = true
-                actionForward.isVisible = true
-                getUrl = drw.getUrl()
-            }
-            else -> {
-                actionBack.isVisible = false
-                actionForward.isVisible = false
-                getUrl = drw.getUrl()
-            }
+            Utility.writePref(this@WpcImagesActivity, "WPG_IMG_FAV_URL", drw.getUrl())
+            Utility.writePref(this@WpcImagesActivity, "WPG_IMG_IDX", drw.imgIdx)
+            Utility.writePref(this@WpcImagesActivity, "WPG_IMG_GROUPIDX", drw.imgGroupIdx)
+            bitmap = withContext(Dispatchers.IO) { getUrl.getImage() }
+        } else {
+            title = "Images"
+            toolbar.subtitle = GlobalArrays.nwsImageProducts.findLast { it.startsWith("$homeScreenId:") }!!.split(":")[1]
+            bitmap = withContext(Dispatchers.IO) { UtilityDownload.getImageProduct(this@WpcImagesActivity, homeScreenId) }
+            calledFromHomeScreen = false
         }
-        Utility.writePref(this@WpcImagesActivity, "WPG_IMG_FAV_URL", drw.getUrl())
-        Utility.writePref(this@WpcImagesActivity, "WPG_IMG_IDX", drw.imgIdx)
-        Utility.writePref(this@WpcImagesActivity, "WPG_IMG_GROUPIDX", drw.imgGroupIdx)
-        UtilityLog.d("wx", getUrl)
-        bitmap = withContext(Dispatchers.IO) { getUrl.getImage() }
         img.setImageBitmap(bitmap)
-        if (!firstRun) {
+        if (!firstRun && activityArguments.size < 2) {
             img.setZoom("WPCIMG")
             firstRun = true
         }
@@ -148,26 +168,13 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
-        //val numAviationImg = 14
         when (item.itemId) {
             R.id.action_forward -> {
                 timePeriod += 1
-                /*drw.imgIdx += 1
-                if (drw.getUrl().contains("aviationweather")) {
-                    if (drw.imgIdx >= numAviationImg) {
-                        drw.imgIdx = 0
-                    }
-                }*/
                 getContent()
             }
             R.id.action_back -> {
                 timePeriod--
-                /*drw.imgIdx--
-                if (drw.getUrl().contains("aviationweather")) {
-                    if (drw.imgIdx < 0) {
-                        drw.imgIdx = numAviationImg - 1
-                    }
-                }*/
                 getContent()
             }
             R.id.action_share -> {
@@ -191,7 +198,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
     }
 
     override fun onStop() {
-        if (imageLoaded) {
+        if (imageLoaded && activityArguments.size < 2) {
             UtilityImg.imgSavePosnZoom(this, img, "WPCIMG")
         }
         super.onStop()

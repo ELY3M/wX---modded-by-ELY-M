@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,34 +30,36 @@ internal object UtilityCitiesExtended {
 
     private var initialized = false
     var cities = mutableListOf<CityExt>()
+    var cityLabels = mutableListOf<String>()
+    var cityLat = mutableListOf<Double>()
+    var cityLon = mutableListOf<Double>()
 
     fun create(context: Context) {
         if (!initialized) {
             cities = mutableListOf()
             initialized = true
             val text: String
+            var latitude: Double
+            var longitude: Double
             val lines: List<String>
-            var tmpArr: Array<String>
+            var tokens: Array<String>
             val xmlFileInputStream = context.resources.openRawResource(R.raw.cityall)
             text = UtilityIO.readTextFile(xmlFileInputStream)
             lines = text.split("\n").dropLastWhile { it.isEmpty() }
             lines.forEach {
-                tmpArr = MyApplication.comma.split(it)
-                if (tmpArr.size > 3) {
-                    cities.add(
-                            CityExt(
-                                    tmpArr[0], tmpArr[1].toDoubleOrNull()
-                                    ?: 0.0, (tmpArr[2].replace("-", "")).toDoubleOrNull() ?: 0.0
-                            )
+                tokens = MyApplication.comma.split(it)
+                latitude = tokens[2].toDoubleOrNull() ?: 0.0
+                longitude = (tokens[3].replace("-", "")).toDoubleOrNull() ?: 0.0
+                if (tokens.size > 4) {
+                    cities.add(CityExt(tokens[0], tokens[1], latitude, longitude)
                     )
                 } else {
-                    cities.add(
-                            CityExt(
-                                    tmpArr[0], tmpArr[1].toDoubleOrNull()
-                                    ?: 0.0, (tmpArr[2].replace("-", "")).toDoubleOrNull() ?: 0.0
-                            )
+                    cities.add(CityExt(tokens[0], tokens[1], latitude, longitude)
                     )
                 }
+                cityLabels.add(tokens[1].trim() + ", " + tokens[0])
+                cityLat.add(latitude)
+                cityLon.add(longitude)
             }
         }
     }

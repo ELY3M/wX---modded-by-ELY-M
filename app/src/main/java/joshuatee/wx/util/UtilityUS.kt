@@ -104,7 +104,11 @@ object UtilityUS {
                                     url
                             ))
                     ) {
-                        val sound = MyApplication.locations[currentLoc].sound && !inBlackout || MyApplication.locations[currentLoc].sound && tornadoWarningPresent && MyApplication.alertBlackoutTornadoCurrent
+                        val sound = MyApplication.locations[currentLoc].sound
+                                && !inBlackout
+                                || MyApplication.locations[currentLoc].sound
+                                && tornadoWarningPresent
+                                && MyApplication.alertBlackoutTornado
                         val objectNotification = ObjectNotification(
                                 context,
                                 sound,

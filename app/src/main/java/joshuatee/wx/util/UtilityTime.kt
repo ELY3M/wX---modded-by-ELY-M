@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -129,6 +129,8 @@ object UtilityTime {
 
     fun year(): Int = Calendar.getInstance().get(Calendar.YEAR)
 
+    fun getYear(): Int = Calendar.getInstance().get(Calendar.YEAR)
+
     //fun month(): Int = Calendar.getInstance().get(Calendar.MONTH) + 1
 
     fun day(): Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
@@ -195,5 +197,9 @@ object UtilityTime {
         val dateFormatGmt = SimpleDateFormat("yyMMddHHmm", Locale.US)
         dateFormatGmt.timeZone = TimeZone.getTimeZone("GMT")
         return dateFormatGmt.format(Date())
+    }
+
+    fun currentTimeMillis(): Long {
+        return System.currentTimeMillis()
     }
 }

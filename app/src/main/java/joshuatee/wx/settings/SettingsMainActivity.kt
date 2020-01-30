@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -134,12 +134,7 @@ class SettingsMainActivity : BaseActivity() {
             )
         })
         cardAbout.setOnClickListener(View.OnClickListener {
-            ObjectIntent(
-                    this,
-                    TextScreenActivity::class.java,
-                    TextScreenActivity.URL,
-                    arrayOf(UtilityAlertDialog.showVersion(this, this), "About wX")
-            )
+            ObjectIntent(this, SettingsAboutActivity::class.java)
         })
         listOf(
                 cardAbout.card,
@@ -263,8 +258,8 @@ class SettingsMainActivity : BaseActivity() {
     override fun onStop() {
         super.onStop()
         MyApplication.initPreferences(this)
-        val restartNotif = Utility.readPref(this, "RESTART_NOTIF", "false")
-        if (restartNotif == "true") {
+        val restartNotification = Utility.readPref(this, "RESTART_NOTIF", "false")
+        if (restartNotification == "true") {
             UtilityWXJobService.startService(this)
             Utility.writePref(this, "RESTART_NOTIF", "false")
         }

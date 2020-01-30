@@ -11,6 +11,7 @@ import android.view.View;
  * Detects left and right swipes across a view.
  */
 
+@SuppressWarnings("WeakerAccess")
 public class OnSwipeTouchListener implements View.OnTouchListener {
 
     private final GestureDetector gestureDetector;

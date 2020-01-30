@@ -71,10 +71,9 @@ class DrawView : View {
         isFocusable = true
         isFocusableInTouchMode = true
         this.setOnTouchListener(drawListener)
-        paint.color = MyApplication.drawToolColor // was Color.RED
+        paint.color = MyApplication.drawToolColor
         paint.isAntiAlias = true
-        //paint.setStrokeWidth(4.5f); // was 3.0f
-        paint.strokeWidth = MyApplication.drawtoolSize.toFloat() // was 3.0f
+        paint.strokeWidth = MyApplication.drawToolSize.toFloat()
     }
 
     /**Called when the system is painting the view to the screen

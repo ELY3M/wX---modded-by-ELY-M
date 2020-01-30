@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -65,15 +65,15 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val playlistMi = menu.findItem(R.id.action_playlist)
         playlistMi.isVisible = false
         toolbarBottom.setOnMenuItemClickListener(this)
-        activityArguments = intent.getStringArrayExtra(URL)
+        activityArguments = intent.getStringArrayExtra(URL)!!
         url = activityArguments[0]
         title = activityArguments[1]
         textCard = ObjectCardText(this, ll, toolbar, toolbarBottom)
         if (!url.startsWith("http")) {
             if (url.contains("<")) {
-                textCard.setText(Utility.fromHtml(url))
+                textCard.text = Utility.fromHtml(url)
             } else {
-                textCard.setText(url)
+                textCard.text = url
             }
             html = url
         } else {

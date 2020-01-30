@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -21,38 +21,27 @@
 
 package joshuatee.wx.ui
 
+import joshuatee.wx.R
+
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Build
-import com.google.android.material.snackbar.Snackbar
-import androidx.cardview.widget.CardView
+import android.util.TypedValue
 import android.view.View
 import android.widget.*
 import androidx.core.content.ContextCompat
-
+import com.google.android.material.snackbar.Snackbar
 import joshuatee.wx.MyApplication
-import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.util.Utility
-import android.util.TypedValue
+
+import kotlin.math.*
 
 object UtilityUI {
-
-    // called from LOCFRAG and ObjectSettingsSpinner
-    fun setupSpinner(spinner: Spinner, light: Boolean) {
-        var tint = ColorStateList.valueOf(UIPreferences.colorBlack)
-        if (light) {
-            tint = ColorStateList.valueOf(UIPreferences.colorOffwhiteToolbar)
-        }
-        if (Build.VERSION.SDK_INT > 20) {
-            spinner.backgroundTintList = tint
-        }
-    }
 
     fun setResDrawable(context: Context, fab: RemoteViews, ib: Int, resourceDrawable: Int) {
         val wrappedContext = ContextWrapper(context)
@@ -84,6 +73,7 @@ object UtilityUI {
         val fgColor = Color.WHITE
         val bgColor = Color.BLACK
         tv.setTextColor(fgColor)
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
         viewSnack.setBackgroundColor(bgColor)
         snack.show()
     }
@@ -95,15 +85,6 @@ object UtilityUI {
                         View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or
                         View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         }
-    }
-
-    fun cardViewSetup(cardView: CardView) {
-        cardView.setCardBackgroundColor(UtilityTheme.primaryColorFromSelectedTheme)
-        cardView.cardElevation = MyApplication.cardElevation
-        cardView.setContentPadding(2, 2, 2, 2)
-        cardView.radius = MyApplication.cardCorners
-        cardView.useCompatPadding = true
-        cardView.preventCornerOverlap = true
     }
 
     fun moveUp(context: Context, prefToken: String, itemList: MutableList<String>, position: Int): String {
@@ -168,5 +149,13 @@ object UtilityUI {
 
     fun spToPx(sp: Int, context: Context): Float {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp.toFloat(), context.resources.displayMetrics)
+    }
+
+    fun isTablet(): Boolean {
+        val displayMetrics = MyApplication.dm
+        val wInches = displayMetrics.widthPixels / displayMetrics.densityDpi
+        val hInches = displayMetrics.heightPixels / displayMetrics.densityDpi
+        val screenDiagonal = sqrt(wInches.toDouble().pow(2.0) + hInches.toDouble().pow(2.0))
+        return (screenDiagonal >= 7.0)
     }
 }

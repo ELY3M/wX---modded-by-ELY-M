@@ -1,5 +1,5 @@
 <!-- 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -18,48 +18,65 @@
 
  -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ctc="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/toolbar_bottom"
-        layout="@layout/widget_toolbar_bottom" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@id/toolbar_bottom"
-        android:orientation="vertical">
+        <include
+            android:id="@+id/toolbar_bottom"
+            layout="@layout/widget_toolbar_bottom" />
 
-        <include layout="@layout/widget_toolbar_top_with_spinner" />
-
-        <ScrollView
-            android:id="@+id/scrollView"
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:scrollbars="none">
+            android:layout_above="@id/toolbar_bottom"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
+            <include layout="@layout/widget_toolbar_top_with_spinner" />
+
+            <ScrollView
+                android:id="@+id/scrollView"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="@dimen/padding_ll"
-                android:stretchColumns="*" />
+                android:layout_height="fill_parent"
+                android:scrollbars="none">
 
-        </ScrollView>
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/padding_ll"
+                    android:stretchColumns="*" />
 
-        <joshuatee.wx.util.ImageMap
-            android:id="@+id/map"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/cwa"
-            ctc:map="cwamap" />
+            </ScrollView>
 
-    </LinearLayout>
-</RelativeLayout>
+            <joshuatee.wx.util.ImageMap
+                android:id="@+id/map"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/cwa"
+                ctc:map="cwamap" />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/left_drawer"
+        android:layout_width="360dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/primary_dark_blue"
+        android:choiceMode="singleChoice"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="0dp" />
+</androidx.drawerlayout.widget.DrawerLayout>
 
  
 

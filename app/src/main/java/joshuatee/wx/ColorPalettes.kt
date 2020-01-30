@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -32,6 +32,7 @@ internal object ColorPalettes {
         MyApplication.colorMap[94] = cm94
         MyApplication.colorMap[94]!!.init()
         MyApplication.colorMap[153] = cm94
+        MyApplication.colorMap[180] = cm94
         MyApplication.colorMap[186] = cm94
         val cm99 = ObjectColorPalette(context, "99")
         MyApplication.colorMap[99] = cm99
@@ -53,19 +54,5 @@ internal object ColorPalettes {
         // below 2 composite reflectivity
         MyApplication.colorMap[37] = cm19
         MyApplication.colorMap[38] = cm19
-
-        // below 2 precip prod used for TDWR
-        val cm78 = ObjectColorPalette(context, "78")
-        MyApplication.colorMap[78] = cm78
-        MyApplication.colorMap[78]!!.init()
-        MyApplication.colorMap[80] = cm78
-
-        val cm41 = ObjectColorPalette(context, "41")
-        MyApplication.colorMap[41] = cm41
-        MyApplication.colorMap[41]!!.init()
-
-        val cm57 = ObjectColorPalette(context, "57")
-        MyApplication.colorMap[57] = cm57
-        MyApplication.colorMap[57]!!.init()
     }
 }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -91,8 +91,7 @@ class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 bitmaps.add(imageUrl.getImage())
             }
             if (mpdList.size == 1) {
-                imageUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd" +
-                        mpdNumbers[0] + ".gif"
+                imageUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd" + mpdNumbers[0] + ".gif"
                 titleString = "MPD " + mpdNumbers[0]
                 product = "WPCMPD" + mpdNumbers[0]
                 text = UtilityDownload.getTextProduct(this@WpcMpdShowSummaryActivity, product)

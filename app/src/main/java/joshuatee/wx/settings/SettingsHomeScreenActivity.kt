@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,20 +24,18 @@ package joshuatee.wx.settings
 import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.os.Bundle
-import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-
-import java.util.Locale
-
+import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.R
-import joshuatee.wx.MyApplication
-import joshuatee.wx.util.UtilityAlertDialog
-
 import joshuatee.wx.GlobalArrays
-
+import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityAlertDialog
+import joshuatee.wx.wpc.UtilityWpcText
+import java.util.*
+
 
 class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
@@ -77,42 +75,46 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         dialogueMain = ObjectDialogue(
                 this,
                 "Select text products:",
-                UtilityHomeScreen.localChoicesText + GlobalArrays.nwsTextProducts
+                UtilityHomeScreen.localChoicesText + UtilityWpcText.labels
         )
-        dialogueMain.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
+        dialogueMain.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             alertDialogClicked(
                     dialogueMain,
                     "TXT-",
                     which
             )
+            dialog.dismiss()
         })
         dialogueImages = ObjectDialogue(
                 this,
                 "Select image products:",
                 UtilityHomeScreen.localChoicesImg + GlobalArrays.nwsImageProducts
         )
-        dialogueImages.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
+        dialogueImages.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             alertDialogClicked(
                     dialogueImages,
                     "",
                     which
             )
+            dialog.dismiss()
         })
         dialogueAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
-        dialogueAfd.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
+        dialogueAfd.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             alertDialogClicked(
                     dialogueAfd,
                     "TXT-" + "AFD",
                     which
             )
+            dialog.dismiss()
         })
         dialogueRadar = ObjectDialogue(this, "Select fixed location Nexrad products:", GlobalArrays.radars + GlobalArrays.tdwrRadarsForHomeScreen)
-        dialogueRadar.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
+        dialogueRadar.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             alertDialogClicked(
                     dialogueRadar,
                     "NXRD-",
                     which
             )
+            dialog.dismiss()
         })
     }
 
@@ -238,16 +240,16 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         Utility.writePref(this, prefToken, ridFav)
     }
 
-    private fun findPositionTEXT(key: String) = (GlobalArrays.nwsTextProducts.indices)
+    private fun findPositionTEXT(key: String) = (UtilityWpcText.labels.indices)
             .firstOrNull {
-                GlobalArrays.nwsTextProducts[it].startsWith(
-                        key.toLowerCase().replace(
+                UtilityWpcText.labels[it].startsWith(
+                        key.toLowerCase(Locale.US).replace(
                                 "txt-",
                                 ""
                         )
                 )
             }
-            ?.let { GlobalArrays.nwsTextProducts[it] }
+            ?.let { UtilityWpcText.labels[it] }
             ?: ""
 
     private fun findPositionIMG(key: String) = (GlobalArrays.nwsImageProducts.indices)
@@ -343,13 +345,14 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         var textProduct = token + strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)
         if (token == "") {
             textProduct = if (textProduct != "RADAR") {
-                "IMG-" + textProduct.toUpperCase()
+                "IMG-" + textProduct.toUpperCase(Locale.US)
             } else {
-                "OGL-" + textProduct.toUpperCase()
+                "OGL-" + textProduct.toUpperCase(Locale.US)
             }
         }
         ridFav = MyApplication.homescreenFav
-        if (!ridFav.contains(":$textProduct")) {
+        val homeScreenList = ridFav.split(":")
+        if (!homeScreenList.contains(textProduct)) {
             ridFav = "$ridFav:$textProduct"
             Utility.writePref(this, prefToken, ridFav)
             MyApplication.homescreenFav = ridFav

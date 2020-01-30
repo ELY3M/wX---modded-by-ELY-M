@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -102,8 +102,8 @@ internal object UtilityWXOGLPerfL3FourBit {
             var bin: Short
             var numOfBins: Int
             var u: Int
-            var totalPerRow = 0
-            (0 until numberOfRows).forEach { r ->
+            var totalPerRow: Int
+            (0 until numberOfRows).forEach { _ ->
                 val numberOfBytes = dis.readUnsignedShort()
                 totalPerRow = 0
                 s = 0

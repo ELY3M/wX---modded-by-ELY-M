@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -69,8 +69,9 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.cab, menu)
         helpMi = menu.findItem(R.id.action_help)
-        if (MyApplication.helpMode)
+        if (MyApplication.helpMode) {
             helpMi.title = helpStr
+        }
         return true
     }
 
@@ -167,27 +168,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
             }
             R.id.action_cloud -> openVis(item.itemId)
             R.id.action_radar -> openNexradRadar(this, item.itemId)
-            R.id.action_forecast -> {
-                if (MyApplication.helpMode) {
-                    showHelpCAB(item.itemId)
-                } else {
-                    if (Location.isUS) {
-                        ObjectIntent(
-                                this,
-                                HourlyActivity::class.java,
-                                HourlyActivity.LOC_NUM,
-                                Location.currentLocationStr
-                        )
-                    } else {
-                        ObjectIntent(
-                                this,
-                                CanadaHourlyActivity::class.java,
-                                CanadaHourlyActivity.LOC_NUM,
-                                Location.currentLocationStr
-                        )
-                    }
-                }
-            }
+            R.id.action_forecast -> openHourly(item.itemId)
             R.id.action_afd -> openAfd(item.itemId)
             R.id.action_dashboard -> openDashboard(item.itemId)
             R.id.action_spotters -> ObjectIntent(this, SpottersActivity::class.java)
@@ -378,5 +359,36 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                 ObjectIntent(this, CanadaAlertsActivity::class.java)
             }
         }
+    }
+
+    fun openHourly(itemID: Int) {
+        if (MyApplication.helpMode) {
+            showHelpCAB(itemID)
+        } else {
+            if (Location.isUS) {
+                ObjectIntent(
+                        this,
+                        HourlyActivity::class.java,
+                        HourlyActivity.LOC_NUM,
+                        Location.currentLocationStr
+                )
+            } else {
+                ObjectIntent(
+                        this,
+                        CanadaHourlyActivity::class.java,
+                        CanadaHourlyActivity.LOC_NUM,
+                        Location.currentLocationStr
+                )
+            }
+        }
+    }
+
+    fun openActivity(context: Context, activityName: String) {
+        ObjectIntent(
+                context,
+                MyApplication.HM_CLASS[activityName]!!,
+                MyApplication.HM_CLASS_ID[activityName]!!,
+                MyApplication.HM_CLASS_ARGS[activityName]!!
+        )
     }
 }

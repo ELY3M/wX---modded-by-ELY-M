@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -44,7 +44,7 @@ class ObjectCALegal(context: Context, linearLayout: LinearLayout, url: String) {
                 Uri.parse(url)
             )
         })
-        c1.setText(context.resources.getText(R.string.main_screen_ca_disclaimor))
+        c1.text = context.resources.getText(R.string.main_screen_ca_disclaimor).toString()
         linearLayout.addView(c1.card)
     }
 }

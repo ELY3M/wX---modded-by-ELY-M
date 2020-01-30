@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -34,6 +34,7 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
+import joshuatee.wx.wpc.UtilityWpcText
 
 class FavAddActivity : BaseActivity() {
 
@@ -50,15 +51,14 @@ class FavAddActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
-        type = intent.getStringArrayExtra(TYPE)[0]
+        type = intent.getStringArrayExtra(TYPE)!![0]
         title = "Add $type"
         when (type) {
             "SND" -> {
                 prefToken = "SND_FAV"
                 val tmpArr = mutableListOf<String>()
                 GlobalArrays.soundingSites.indices.forEach {
-                    var tmpLoc =
-                            Utility.readPref(this, "NWS_LOCATION_" + GlobalArrays.soundingSites[it], "")
+                    var tmpLoc = Utility.readPref(this, "NWS_LOCATION_" + GlobalArrays.soundingSites[it], "")
                     if (tmpLoc == "") {
                         tmpLoc = Utility.readPref(
                                 this,
@@ -84,7 +84,7 @@ class FavAddActivity : BaseActivity() {
             }
             "NWSTEXT" -> {
                 prefToken = "NWS_TEXT_FAV"
-                data = GlobalArrays.nwsTextProducts
+                data = UtilityWpcText.labels
             }
             "SREF" -> {
                 prefToken = "SREF_FAV"
@@ -154,7 +154,7 @@ class FavAddActivity : BaseActivity() {
             "NWSTEXT" -> MyApplication.nwsTextFav = fav
             "SREF" -> MyApplication.srefFav = fav
             "SPCMESO" -> {
-                MyApplication.spcmesoFav = fav
+                MyApplication.spcMesoFav = fav
                 MyApplication.spcmesoLabelFav = favLabel
             }
         }

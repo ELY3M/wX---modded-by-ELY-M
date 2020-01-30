@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,26 +27,18 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.RegExp
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityNotificationWpc
+import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityString
 
 internal object UtilityDownloadMpd {
 
-    private var initialized = false
-    private var lastRefresh = 0.toLong()
     const val type = "MPD"
+    var timer = DownloadTimer(type)
 
     fun get(context: Context) {
-        val refreshInterval = maxOf(Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3), 6)
-        val currentTime1 = System.currentTimeMillis()
-        val currentTimeSec = currentTime1 / 1000
-        val refreshIntervalSec = (refreshInterval * 60).toLong()
-        if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
-            initialized = true
-            val currentTime = System.currentTimeMillis()
-            lastRefresh = currentTime / 1000
+        if (timer.isRefreshNeeded(context)) {
             getMpd(context)
         }
     }
@@ -66,7 +58,7 @@ internal object UtilityDownloadMpd {
         }
         val locationNeedsMpd = UtilityNotificationWpc.locationNeedsMpd()
         if (PolygonType.MPD.pref || locationNeedsMpd) {
-            MyApplication.mpdLatlon.valueSet(context, latLonString)
+            MyApplication.mpdLatLon.valueSet(context, latLonString)
         }
         return WatchData(numberList, htmlList)
     }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -61,8 +61,6 @@ object UtilitySpcMeso {
             spinner.setSelection(swipePosition)
         }
         val newValue = spinner[swipePosition]
-        //UtilityLog.d("wx", originalValue)
-        //UtilityLog.d("wx", newValue)
         if (newValue == originalValue) {
             if (spinner.size() > 3) {
                 swipePosition += 1
@@ -157,7 +155,7 @@ object UtilitySpcMeso {
     internal fun setParamFromFav(token: String): List<String> {
         var param = ""
         var label = ""
-        val tmpArr = MyApplication.spcmesoFav.split(":").dropLastWhile { it.isEmpty() }
+        val tmpArr = MyApplication.spcMesoFav.split(":").dropLastWhile { it.isEmpty() }
         val tmpArrLabel = MyApplication.spcmesoLabelFav.split(":").dropLastWhile { it.isEmpty() }
         when (token) {
             "SPCMESO1" ->

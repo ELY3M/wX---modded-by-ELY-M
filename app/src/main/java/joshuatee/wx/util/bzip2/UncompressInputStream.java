@@ -46,6 +46,8 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import joshuatee.wx.util.UtilityTime;
+
 
 /**
  * This class decompresses an input stream containing data compressed with
@@ -467,7 +469,7 @@ public class UncompressInputStream extends FilterInputStream
 
 	byte[] buf = new byte[100000];
 	int tot = 0;
-	long beg = System.currentTimeMillis();
+	long beg = UtilityTime.INSTANCE.currentTimeMillis();
 
 	while (true)
 	{
@@ -477,7 +479,7 @@ public class UncompressInputStream extends FilterInputStream
 	    tot += got;
 	}
 
-	long end = System.currentTimeMillis();
+	long end =  UtilityTime.INSTANCE.currentTimeMillis();
 	System.err.println("Decompressed " + tot + " bytes");
 	System.err.println("Time: " + (end-beg)/1000. + " seconds");
     }

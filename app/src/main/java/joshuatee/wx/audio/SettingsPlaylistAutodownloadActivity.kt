@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -71,9 +71,9 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
                 MyApplication.ICON_DELETE,
                 View.OnClickListener { deleteFAB() })
         ridFav = Utility.readPref(this, prefToken, "")
-        val c = Calendar.getInstance()
-        hour = c.get(Calendar.HOUR_OF_DAY)
-        minute = c.get(Calendar.MINUTE)
+        val calendar = Calendar.getInstance()
+        hour = calendar.get(Calendar.HOUR_OF_DAY)
+        minute = calendar.get(Calendar.MINUTE)
         updateList()
         recyclerView = ObjectRecyclerView(this, this, R.id.card_list, ridArr, ::pickItem)
     }

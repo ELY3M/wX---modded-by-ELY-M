@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -145,11 +145,21 @@ object UtilityDownload {
                 needsBitmap = false
                 bm = UtilityGoes.getImage("02", "CONUS")
             }
-            "FMAP" -> url = "${MyApplication.nwsWPCwebsitePrefix}/noaa/noaa.gif"
+            "USWARN" -> url = "https://forecast.weather.gov/wwamap/png/US.png"
+            "AKWARN" -> url = "https://forecast.weather.gov/wwamap/png/ak.png"
+            "HIWARN" -> url = "https://forecast.weather.gov/wwamap/png/hi.png"
+            "FMAP" -> url = "${MyApplication.nwsWPCwebsitePrefix}/noaa/noaad1.gif"
+            "FMAPD2" -> url = "${MyApplication.nwsWPCwebsitePrefix}/noaa/noaad2.gif"
+            "FMAPD3" -> url = "${MyApplication.nwsWPCwebsitePrefix}/noaa/noaad3.gif"
             "FMAP12" -> url = "${MyApplication.nwsWPCwebsitePrefix}/basicwx/92fwbg.gif"
             "FMAP24" -> url = "${MyApplication.nwsWPCwebsitePrefix}/basicwx/94fwbg.gif"
             "FMAP36" -> url = "${MyApplication.nwsWPCwebsitePrefix}/basicwx/96fwbg.gif"
             "FMAP48" -> url = "${MyApplication.nwsWPCwebsitePrefix}/basicwx/98fwbg.gif"
+            "FMAP72" -> url = MyApplication.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf072.gif"
+            "FMAP96" -> url = MyApplication.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf096.gif"
+            "FMAP120" -> url = MyApplication.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf120.gif"
+            "FMAP144" -> url = MyApplication.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf144.gif"
+            "FMAP168" -> url = MyApplication.nwsWPCwebsitePrefix + "/medr/display/wpcwx+frontsf168.gif"
             "FMAP3D" -> url = "${MyApplication.nwsWPCwebsitePrefix}/medr/9jhwbg_conus.gif"
             "FMAP4D" -> url = "${MyApplication.nwsWPCwebsitePrefix}/medr/9khwbg_conus.gif"
             "FMAP5D" -> url = "${MyApplication.nwsWPCwebsitePrefix}/medr/9lhwbg_conus.gif"
@@ -177,6 +187,10 @@ object UtilityDownload {
                 needsBitmap = false
                 bm = ("https://www.weather.gov/images/" + Location.wfo.toLowerCase(Locale.US) + "/wxstory/Tab2FileL.png").getImage()
             }
+            "WFOWARNINGS" -> {
+                needsBitmap = false
+                bm = ("https://www.weather.gov/wwamap/png/" + Location.wfo.toLowerCase(Locale.US) + ".png").getImage()
+            }
             "SWOD2" -> {
                 needsBitmap = false
                 bm = UtilitySpcSwo.getImages("2", false)[0]
@@ -191,7 +205,7 @@ object UtilityDownload {
             }
             "SPCMESO1" -> {
                 var param = "500mb"
-                tmpArr = MyApplication.spcmesoFav.split(":").dropLastWhile { it.isEmpty() }
+                tmpArr = MyApplication.spcMesoFav.split(":").dropLastWhile { it.isEmpty() }
                 if (tmpArr.size > 3) {
                     param = tmpArr[3]
                 }
@@ -208,7 +222,7 @@ object UtilityDownload {
             }
             "SPCMESO2" -> {
                 var param = "pmsl"
-                tmpArr = MyApplication.spcmesoFav.split(":")
+                tmpArr = MyApplication.spcMesoFav.split(":")
                 if (tmpArr.size > 4) param = tmpArr[4]
                 needsBitmap = false
                 bm = UtilitySpcMesoInputOutput.getImage(
@@ -223,7 +237,7 @@ object UtilityDownload {
             }
             "SPCMESO3" -> {
                 var param = "ttd"
-                tmpArr = MyApplication.spcmesoFav.split(":")
+                tmpArr = MyApplication.spcMesoFav.split(":")
                 if (tmpArr.size > 5) param = tmpArr[5]
                 needsBitmap = false
                 bm = UtilitySpcMesoInputOutput.getImage(
@@ -238,7 +252,7 @@ object UtilityDownload {
             }
             "SPCMESO4" -> {
                 var param = "rgnlrad"
-                tmpArr = MyApplication.spcmesoFav.split(":")
+                tmpArr = MyApplication.spcMesoFav.split(":")
                 if (tmpArr.size > 6) param = tmpArr[6]
                 needsBitmap = false
                 bm = UtilitySpcMesoInputOutput.getImage(
@@ -253,7 +267,7 @@ object UtilityDownload {
             }
             "SPCMESO5" -> {
                 var param = "lllr"
-                tmpArr = MyApplication.spcmesoFav.split(":")
+                tmpArr = MyApplication.spcMesoFav.split(":")
                 if (tmpArr.size > 7) param = tmpArr[7]
                 needsBitmap = false
                 bm = UtilitySpcMesoInputOutput.getImage(
@@ -268,7 +282,7 @@ object UtilityDownload {
             }
             "SPCMESO6" -> {
                 var param = "laps"
-                tmpArr = MyApplication.spcmesoFav.split(":")
+                tmpArr = MyApplication.spcMesoFav.split(":")
                 if (tmpArr.size > 8) param = tmpArr[8]
                 needsBitmap = false
                 bm = UtilitySpcMesoInputOutput.getImage(
@@ -328,6 +342,19 @@ object UtilityDownload {
         } else if (prod == "HOURLY") {
             val textArr = UtilityUSHourly.getString(Location.currentLocation)
             text = textArr[0]
+        } else if (prod == "QPF94E") {
+            val textUrl = "https://www.wpc.ncep.noaa.gov/qpf/ero.php?opt=curr&day=" + "1"
+            val html = textUrl.getHtmlSep()
+            // occurences of " <br>" requires removeBreaks()
+            text = UtilityString.extractPre(html).removeSingleLineBreaks().removeBreaks()
+        } else if (prod == "QPF98E") {
+            val textUrl = "https://www.wpc.ncep.noaa.gov/qpf/ero.php?opt=curr&day=" + "2"
+            val html = textUrl.getHtmlSep()
+            text = UtilityString.extractPre(html).removeSingleLineBreaks().removeBreaks()
+        } else if (prod == "QPF99E") {
+            val textUrl = "https://www.wpc.ncep.noaa.gov/qpf/ero.php?opt=curr&day=" + "3"
+            val html = textUrl.getHtmlSep()
+            text = UtilityString.extractPre(html).removeSingleLineBreaks().removeBreaks()
         } else if (prod == "SWPC3DAY") {
             text = (MyApplication.nwsSwpcWebSitePrefix + "/text/3-day-forecast.txt").getHtmlSep()
         } else if (prod == "SWPC27DAY") {
@@ -370,13 +397,19 @@ object UtilityDownload {
                 text = text.replace("<br>", " ")
             }
         } else if (prod.startsWith("SCCNS")) {
-            text = UtilityString.getHtmlAndParseSep(
+            /*text = UtilityString.getHtmlAndParseSep(
                     "${MyApplication.nwsWPCwebsitePrefix}/discussions/nfd" + prod.toLowerCase(Locale.US).replace(
                             "ns",
                             ""
                     ) + ".html", RegExp.pre2Pattern
             )
-            text = text.replace("^<br><br>".toRegex(), "")
+            text = text.replace("^<br><br>".toRegex(), "")*/
+            val url = "${MyApplication.nwsWPCwebsitePrefix}/discussions/nfd" + prod.toLowerCase(Locale.US).replace(
+                    "ns",
+                    ""
+            ) + ".html"
+            text = url.getHtmlSep()
+            text = UtilityString.extractPre(text)
             if (UIPreferences.nwsTextRemovelinebreaks) {
                 text = text.replace("<br><br>", "<BR><BR>")
                 text = text.replace("<br>", " ")
@@ -454,7 +487,7 @@ object UtilityDownload {
             text = ("http://collaboration.cmc.ec.gc.ca/cmc/cmop/FXCN/").getHtmlSep()
             val dateList = UtilityString.parseColumn(text, "href=\"([0-9]{8})/\"")
             val dateString = dateList.last()
-            val daysAndRegion = prod.replace("FXCN01_", "").toLowerCase()
+            val daysAndRegion = prod.replace("FXCN01_", "").toLowerCase(Locale.US)
             text = ("http://collaboration.cmc.ec.gc.ca/cmc/cmop/FXCN/" + dateString + "/fx_" + daysAndRegion + "_" + dateString + "00.html")
                     .getHtml()
                     .replace(MyApplication.newline + MyApplication.newline, MyApplication.newline)
@@ -479,18 +512,59 @@ object UtilityDownload {
                     MyApplication.nwsCPCNcepWebsitePrefix + "/products/predictions/threats/threats.php",
                     "<div id=\"discDiv\">(.*?)</div>"
             )
+            text = text.removeBreaks()
+            UtilityLog.d("wx", text)
+        } else if (prod.contains("USHZD37")) {
+            val textUrl = "https://www.wpc.ncep.noaa.gov/threats/threats.php"
+            text = textUrl.getHtmlSep()
+            text = text.parse("<div class=.haztext.>(.*?)</div>")
+        } else if (prod.contains("PMD30D")) {
+            val textUrl = "https://tgftp.nws.noaa.gov/data/raw/fx/fxus07.kwbc.pmd.30d.txt"
+            text = textUrl.getHtmlSep()
+            text = text.removeLineBreaks()
+        } else if (prod.contains("PMD90D")) {
+            val textUrl = "https://tgftp.nws.noaa.gov/data/raw/fx/fxus05.kwbc.pmd.90d.txt"
+            text = textUrl.getHtmlSep()
+            text = text.removeLineBreaks()
+        } else if (prod.contains("PMDHCO")) {
+            val textUrl = "https://tgftp.nws.noaa.gov/data/raw/fx/fxhw40.kwbc.pmd.hco.txt"
+            text = textUrl.getHtmlSep()
+        } else if (prod.startsWith("RWR")) {
+            val product = prod.substring(0, 3)
+            val location = prod.substring(3).replace("%", "")
+            val locationName = Utility.getWfoSiteName(location)
+            val state = locationName.split(",")[0]
+            //final masterHtml = await ("https://www.weather.gov/" + location + "/textproducts").getHtmlSep();
+            val url = "https://forecast.weather.gov/product.php?site=$location&issuedby=$state&product=$product"
+            // https://forecast.weather.gov/product.php?site=ILX&issuedby=IL&product=RWR
+            text = url.getHtmlSep()
+            text = UtilityString.extractPreLsr(text)
+            text = text.replace("<br>", "\n")
+        } else if (prod.startsWith("CLI")) {
+            //val product = prod.substring(0, 3)
+            val location = prod.substring(3, 6).replace("%", "")
+            val wfo = prod.substring(6).replace("%", "")
+            // TODO each WFO has multiple locations for this product
+            text =  "https://forecast.weather.gov/product.php?site=$wfo&product=CLI&issuedby=$location".getHtmlSep()
+            text = UtilityString.extractPreLsr(text)
+            text = text.replace("<br>", "\n")
         } else if (prod.contains("CTOF")) {
             text = "Celsius to Fahrenheit table" + MyApplication.newline + UtilityMath.celsiusToFahrenheitTable()
         } else {
             val t1 = prod.substring(0, 3)
             var t2 = prod.substring(3)
             t2 = t2.replace("%", "")
-            val html = (MyApplication.nwsApiUrl + "/products/types/$t1/locations/$t2").getNwsHtml()
+            val url = MyApplication.nwsApiUrl + "/products/types/$t1/locations/$t2"
+            val html = url.getNwsHtml()
             val urlProd = html.parse("\"id\": \"(.*?)\"")
             val prodHtml = (MyApplication.nwsApiUrl + "/products/$urlProd").getNwsHtml()
             text = UtilityString.parseAcrossLines(prodHtml, "\"productText\": \"(.*?)\\}")
-            text = text.replace("\\n\\n", "<BR>")
-            text = text.replace("\\n", " ")
+            if (!prod.startsWith("RTP")) {
+                text = text.replace("\\n\\n", "<BR>")
+                text = text.replace("\\n", " ")
+            } else {
+                text = text.replace("\\n", "\n")
+            }
         }
         UtilityPlayList.checkAndSave(context, prod, text)
         return text

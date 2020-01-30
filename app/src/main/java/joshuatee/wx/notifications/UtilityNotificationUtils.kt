@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -48,7 +48,9 @@ object UtilityNotificationUtils {
             retStatus = true
         }
         if (!issuedStr.contains(token)) {
-            val tokenCnt = (0 until issuedStr.length).count { issuedStr[it] == ',' }
+            val tokenCnt = (0 until issuedStr.length).count {
+                issuedStr[it] == ','
+            }
             val issuedStrOrig = issuedStr
             val maxCnt = 40
             if (tokenCnt > maxCnt) {

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -41,12 +41,13 @@ internal object UtilityModelEsrlInputOutput {
         val htmlRunstatus: String = when (model) {
             "HRRR_AK" -> ("$urlBase/alaska/").getHtml()
             // https://rapidrefresh.noaa.gov/RAP/Welcome.cgi?dsKey=rap_jet&domain=full&run_time=23+Nov+2018+-+08Z
-            "RAP_NCEP" -> ("$urlBase/RAP/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
+            "RAP_NCEP" -> ("$urlBase/RAP/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US)
+                    + "_jet&domain=full").getHtml()
             "RAP" -> ("$urlBase/RAP/").getHtml()
-            "HRRR_NCEP" -> ("$urlBase/hrrr/HRRR/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
-            else -> ("$urlBase/" + model.toLowerCase(Locale.US) + "/" + model + "/Welcome.cgi?dsKey=" + model.toLowerCase(
-                Locale.US
-            ) + "_jet&domain=full").getHtml()
+            "HRRR_NCEP" -> ("$urlBase/hrrr/HRRR/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US)
+                    + "_jet&domain=full").getHtml()
+            else -> ("$urlBase/" + model.toLowerCase(Locale.US) + "/" + model + "/Welcome.cgi?dsKey="
+                    + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
         }
         val oldRunTimes: List<String>
         var html = htmlRunstatus.parse(RegExp.eslHrrrPattern1)
@@ -55,10 +56,18 @@ internal object UtilityModelEsrlInputOutput {
         var day = html.parse(RegExp.eslHrrrPattern4)
         var hour = html.parse(RegExp.eslHrrrPattern5)
         var monthStr = html.parse(RegExp.eslHrrrPattern6)
-        monthStr = monthStr.replace("Jan", "01").replace("Feb", "02").replace("Mar", "03")
-            .replace("Apr", "04")
-            .replace("May", "05").replace("Jun", "06").replace("Jul", "07").replace("Aug", "08")
-            .replace("Sep", "09").replace("Oct", "10").replace("Nov", "11").replace("Dec", "12")
+        monthStr = monthStr.replace("Jan", "01")
+                .replace("Feb", "02")
+                .replace("Mar", "03")
+                .replace("Apr", "04")
+                .replace("May", "05")
+                .replace("Jun", "06")
+                .replace("Jul", "07")
+                .replace("Aug", "08")
+                .replace("Sep", "09")
+                .replace("Oct", "10")
+                .replace("Nov", "11")
+                .replace("Dec", "12")
         html = year + monthStr + day + hour
         runData.listRunAdd(html)
         runData.mostRecentRun = html
@@ -71,12 +80,18 @@ internal object UtilityModelEsrlInputOutput {
                 day = oldRunTimes[i].parse(RegExp.eslHrrrPattern4)
                 hour = oldRunTimes[i].parse(RegExp.eslHrrrPattern5)
                 monthStr = oldRunTimes[i].parse(RegExp.eslHrrrPattern6)
-                monthStr = monthStr.replace("Jan", "01").replace("Feb", "02").replace("Mar", "03")
-                    .replace("Apr", "04")
-                    .replace("May", "05").replace("Jun", "06").replace("Jul", "07")
-                    .replace("Aug", "08")
-                    .replace("Sep", "09").replace("Oct", "10").replace("Nov", "11")
-                    .replace("Dec", "12")
+                monthStr = monthStr.replace("Jan", "01")
+                        .replace("Feb", "02")
+                        .replace("Mar", "03")
+                        .replace("Apr", "04")
+                        .replace("May", "05")
+                        .replace("Jun", "06")
+                        .replace("Jul", "07")
+                        .replace("Aug", "08")
+                        .replace("Sep", "09")
+                        .replace("Oct", "10")
+                        .replace("Nov", "11")
+                        .replace("Dec", "12")
                 runData.listRunAdd(year + monthStr + day + hour)
                 i += 1
             }
@@ -108,19 +123,24 @@ internal object UtilityModelEsrlInputOutput {
             }
             "HRRR_AK" -> {
             }
-            "RAP", "RAP_NCEP" -> if (om.sectorInt == 0 || om.sectorInt == 1) {
-            } else if (om.sectorInt == 9) { // AK
-                sector = "alaska"
-            } else if (om.sectorInt == 10) { // AK Zoom
-                sector = "a1"
-                paramTmp = paramTmp.replace("_", "_$sector")
-            } else if (om.sectorInt == 11) { // HI
-                sector = "r1"
-                paramTmp = paramTmp.replace("_", "_$sector")
-            } else if (om.sectorInt < 9) {
-                sector = "t" + (om.sectorInt - 1).toString()
-                paramTmp = paramTmp.replace("_", "_$sector")
-            }
+            "RAP", "RAP_NCEP" ->
+                when (om.sectorInt) {
+                    9 -> {
+                        sector = "alaska"
+                    }
+                    10 -> { // AK Zoom
+                        sector = "a1"
+                        paramTmp = paramTmp.replace("_", "_$sector")
+                    }
+                    11 -> { // HI
+                        sector = "r1"
+                        paramTmp = paramTmp.replace("_", "_$sector")
+                    }
+                    in 2..8 -> {
+                        sector = "t" + (om.sectorInt - 1).toString()
+                        paramTmp = paramTmp.replace("_", "_$sector")
+                    }
+                }
         }
         val param = paramTmp
         var parentModel = om.model.replace("HRRR_AK", "alaska")

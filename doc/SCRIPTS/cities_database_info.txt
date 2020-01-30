@@ -1,4 +1,4 @@
-https://www.census.gov/geo/maps-data/data/gazetteer2010.html
+https://www.census.gov/geographies/reference-files/time-series/geo/gazetteer-files.2010.html
 
 Column 1	USPS	United States Postal Service State Abbreviation
 Column 2	GEOID	Geographic Identifier - fully concatenated geographic code (State FIPS and Place FIPS)

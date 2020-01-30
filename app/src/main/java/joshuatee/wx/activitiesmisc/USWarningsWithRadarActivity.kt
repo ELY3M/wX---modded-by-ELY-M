@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -84,7 +84,7 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
         toolbarBottom.setOnMenuItemClickListener(this)
         toolbar.setOnClickListener { toolbar.showOverflowMenu() }
         val activityArguments = intent.getStringArrayExtra(URL)
-        turlLocal[0] = activityArguments[0]
+        turlLocal[0] = activityArguments!![0]
         turlLocal[1] = activityArguments[1]
         objectAlertSummary = ObjectAlertSummary(this, this, linearLayout, scrollView)
         objectNavDrawer = ObjectNavDrawer(this, objectAlertSummary.filterArray.toList())
@@ -157,6 +157,11 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
             toastStr = Location.locationSave(this@USWarningsWithRadarActivity, locNumToSaveStr, x, y, state + "_" + county)
         }
         UtilityUI.makeSnackBar(linearLayout, toastStr)
+    }
+
+    override fun onRestart() {
+        getContent()
+        super.onRestart()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {

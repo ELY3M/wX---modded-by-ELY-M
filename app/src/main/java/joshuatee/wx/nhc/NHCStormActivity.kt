@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -81,7 +81,7 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 R.menu.nhc_storm
         )
         toolbarBottom.setOnMenuItemClickListener(this)
-        activityArguments = intent.getStringArrayExtra(URL).toList()
+        activityArguments = intent.getStringArrayExtra(URL)!!.toList()
         url = activityArguments[0]
         toolbarTitle = activityArguments[1]
         val titleArr = toolbarTitle.split(" - ")
@@ -111,6 +111,8 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
         getContent()
     }
 
+    // TODO onrestart
+
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         bitmaps.clear()
         withContext(Dispatchers.IO) { topBitmap = (baseUrl + "_5day_cone_with_line_and_wind_sm2.png").getImage() }
@@ -119,7 +121,7 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
             url = UtilityDownload.getTextProduct(this@NhcStormActivity, product)
         }
         cTextProd = ObjectCardText(this@NhcStormActivity, ll, toolbar, toolbarBottom)
-        cTextProd.setText(Utility.fromHtml(url))
+        cTextProd.text = Utility.fromHtml(url)
         html = url
         withContext(Dispatchers.IO) {
             listOf(
@@ -139,7 +141,9 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
             }
         }
         bitmaps.filter { it.width > 100 }
-                .forEach { ObjectCardImage(this@NhcStormActivity, ll, it) }
+                .forEach {
+                    ObjectCardImage(this@NhcStormActivity, ll, it)
+                }
         if (activityArguments.size > 2) {
             if (activityArguments[2] == "sound") UtilityTts.synthesizeTextAndPlay(
                     applicationContext,
@@ -152,21 +156,15 @@ class NhcStormActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun getText() = GlobalScope.launch(uiDispatcher) {
         url = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@NhcStormActivity, product) }
         if (url.contains("<")) {
-            cTextProd.setText(Utility.fromHtml(url))
+            cTextProd.text = Utility.fromHtml(url)
         } else {
-            cTextProd.setText(url)
+            cTextProd.text = url
         }
         html = url
-        sv.smoothScrollTo(0, 0)
+        scrollView.smoothScrollTo(0, 0)
     }
 
     private fun setProduct(productF: String) {
-        /*ObjectIntent(
-                this@NhcStormActivity,
-                WpcTextProductsActivity::class.java,
-                WpcTextProductsActivity.URL,
-                arrayOf(productF)
-        )*/
         product = productF
         getText()
     }

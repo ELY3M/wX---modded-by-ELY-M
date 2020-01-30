@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,8 +22,10 @@
 package joshuatee.wx.ui
 
 import android.content.Context
+import android.util.TypedValue
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import joshuatee.wx.MyApplication
 
 import joshuatee.wx.util.Utility
 
@@ -58,6 +60,10 @@ class ObjectCardHSText(context: Context, val product: String) {
         } else {
             tv.text = text
         }
+    }
+
+    fun refreshTextSize() {
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
     }
 
     fun setTextLong(text: String) {

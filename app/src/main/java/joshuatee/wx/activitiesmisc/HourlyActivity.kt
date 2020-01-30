@@ -22,6 +22,7 @@
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -44,6 +45,7 @@ import kotlinx.coroutines.*
 
 class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
+    //
     // This activity is accessible from the action bar and provides hourly forecast for the current location
     // Possible improvements: better text formatting ( possibly color ), proper handling of "nil", graphs
     //
@@ -68,22 +70,29 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             true
         )
         toolbarBottom.setOnMenuItemClickListener(this)
-        locationNumber = (intent.getStringExtra(LOC_NUM).toIntOrNull() ?: 0) - 1
-        objectCard = ObjectCard(this, R.color.black, R.id.cv1)
-        cv1.visibility = View.GONE
+        locationNumber = (intent.getStringExtra(LOC_NUM)!!.toIntOrNull() ?: 0) - 1
+        objectCard = ObjectCard(this, R.color.black, R.id.graphCard)
+        graphCard.visibility = View.GONE
         objectCardVerticalText = ObjectCardVerticalText(this, 5, linearLayout, toolbar)
-        objectCardVerticalText.setOnClickListener(View.OnClickListener { sv.scrollTo(0,0)})
+        objectCardVerticalText.setOnClickListener(View.OnClickListener { scrollView.scrollTo(0,0)})
         title = "Hourly Forecast"
         toolbar.subtitle = Location.getName(locationNumber)
         getContent()
     }
 
+    override fun onRestart() {
+        getContent()
+        super.onRestart()
+    }
+
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        val result1 = async(Dispatchers.IO) { UtilityUSHourly.getString(locationNumber) }
-        htmlShare = result1.await()
-        val result2 = async(Dispatchers.IO) { UtilityUSHourly.getStringForActivity(htmlShare[1]) }
-        hourlyData = result2.await()
-        cv1.visibility = View.VISIBLE
+        htmlShare = withContext(Dispatchers.IO) {
+            UtilityUSHourly.getString(locationNumber)
+        }
+        hourlyData = withContext(Dispatchers.IO) {
+            UtilityUSHourly.getStringForActivity(htmlShare[1])
+        }
+        graphCard.visibility = View.VISIBLE
         objectCardVerticalText.setText(
             listOf(
                 hourlyData.time,
@@ -93,6 +102,8 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
                 hourlyData.conditions
             )
         )
+        // For ChromeOS
+        //objectCardVerticalText.card.requestFocus()
         plotData()
     }
 
@@ -116,7 +127,9 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             dataPoints.add(DataPoint(time.toDouble(), temp.toDouble()))
         }
         val series = LineGraphSeries(dataPoints.toTypedArray())
+        series.color = Color.BLACK
         graph.viewport.isXAxisBoundsManual = true
+        graph.viewport.backgroundColor = Color.LTGRAY
         graph.viewport.setMinX(0.0)
         graph.viewport.setMaxX(160.0)
         graph.gridLabelRenderer.numHorizontalLabels = 10

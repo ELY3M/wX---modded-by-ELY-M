@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -85,7 +85,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             objectCardImageList.add(ObjectCardImage(this, linearLayoutHorizontalList[i / 2].linearLayout))
         }
         objectCardText = ObjectCardText(this, ll, toolbar, toolbarBottom)
-        activityArguments = intent.getStringArrayExtra(NO)
+        activityArguments = intent.getStringArrayExtra(NO)!!
         day = activityArguments[0]
         title = "Day $day Convective Outlook"
         val menu = toolbarBottom.menu
@@ -130,6 +130,11 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         getContent()
     }
 
+    override fun onRestart() {
+        getContent()
+        super.onRestart()
+    }
+
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         var textUrl = "SWODY$day"
         var urls: List<String> = listOf("")
@@ -141,7 +146,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             urls = UtilitySpcSwo.getUrls(day)
             bitmaps = urls.map { it.getImage() }
         }
-        objectCardText.setText(Utility.fromHtml(html))
+        objectCardText.text = Utility.fromHtml(html)
         toolbar.subtitle = html.parse("(Valid.*?)<")
         if (activityArguments[1] == "sound") {
             UtilityTts.synthesizeTextAndPlay(applicationContext, html, "spcswo")
@@ -152,19 +157,19 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 setImageAndClickAction(1, urls, textUrl)
                 setImageAndClickAction(2, urls, textUrl)
                 setImageAndClickAction(3, urls, textUrl)
-                objectCardImageList[4].setVisibility(View.GONE)
+                objectCardImageList[4].visibility = View.GONE
             }
             "2" -> {
                 setImageAndClickAction(0, urls, textUrl)
                 setImageAndClickAction(1, urls, textUrl)
                 for (index in 2..4)
-                    objectCardImageList[index].setVisibility(View.GONE)
+                    objectCardImageList[index].visibility = View.GONE
             }
             "3" -> {
                 setImageAndClickAction(0, urls, textUrl)
                 setImageAndClickAction(1, urls, textUrl)
                 for (index in 2..4)
-                    objectCardImageList[index].setVisibility(View.GONE)
+                    objectCardImageList[index].visibility = View.GONE
             }
             "4-8" -> {
                 setImageAndClickAction(0, urls, textUrl)

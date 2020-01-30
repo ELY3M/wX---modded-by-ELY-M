@@ -1,5 +1,5 @@
 <!-- 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -33,7 +33,7 @@
         <include layout="@layout/widget_toolbar_top" />
 
         <ScrollView
-            android:id="@+id/sv"
+            android:id="@+id/scrollView"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:fillViewport="true"
@@ -47,7 +47,7 @@
                 android:padding="@dimen/padding_ll">
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cv1"
+                    android:id="@+id/graphCard"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center">

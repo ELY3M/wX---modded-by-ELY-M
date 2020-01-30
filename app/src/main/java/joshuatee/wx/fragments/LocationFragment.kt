@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -20,7 +20,6 @@
 */
 //modded by ELY M.
 //hail size texts
-//OBS text fix
 
 package joshuatee.wx.fragments
 
@@ -28,21 +27,17 @@ import android.content.*
 import java.util.Locale
 
 import android.graphics.Bitmap
+import android.graphics.Typeface
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.View.OnClickListener
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.ScrollView
-import android.widget.Spinner
-import android.widget.AdapterView.OnItemSelectedListener
 import androidx.fragment.app.Fragment
 import androidx.cardview.widget.CardView
 
@@ -61,12 +56,13 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.notifications.UtilityNotificationTools
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.objects.TextSize
 import joshuatee.wx.radar.*
 import joshuatee.wx.ui.*
 import joshuatee.wx.vis.GoesActivity
 import kotlinx.coroutines.*
 
-class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
+class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
 
     // Displays the main content when wX is first opened including current conditions
     // hazards, 7 days and radar ( option )
@@ -74,31 +70,30 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var scrollView: ScrollView
-    private lateinit var spinner: Spinner
+    private lateinit var locationDialogue: ObjectDialogue
+    private lateinit var locationLabel: ObjectCardText
     private var lastRefresh = 0.toLong()
     private var currentConditionsTime = ""
     private var radarTime = ""
+    // FIXME see if the 2 vars below can be removed
     private var x = ""
     private var y = ""
-    private var ts = ""
     private var glviewInitialized = false
-    private var currentLoc = -1
     private var sevenDayExtShown = false
-    private lateinit var dataAdapter: ArrayAdapter<String>
     private lateinit var intent: Intent
-    private var locationCard: CardView? = null
-    private var cardCC: ObjectCardCC? = null
+    private var cardCC: ObjectCardCurrentConditions? = null
     private lateinit var linearLayout: LinearLayout
     private val helpForecastGenericStatus = 1
     private val helpCurrentGeneric = 2
     private val helpForecastGeneric = 3
     private var homescreenFavLocal = ""
     private val cardViews = mutableListOf<CardView>()
+    private var sevenDayCards = mutableListOf<ObjectCard7Day>()
     private val hsTextAl = mutableListOf<ObjectCardHSText>()
     private val hsImages = mutableListOf<ObjectCardHSImage>()
     private var oglrArr = mutableListOf<WXGLRender>()
     private var glviewArr = mutableListOf<WXGLSurfaceView>()
-    private var wxgltextArr = mutableListOf<WXGLTextObject>()
+    private var wxglTextArr = mutableListOf<WXGLTextObject>()
     private var numRadars = 0
     private var oldRidArr = Array(2) { "" }
     private val radarLocationChangedAl = mutableListOf<Boolean>()
@@ -124,6 +119,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private var locationChangedSevenDay = false
     private var locationChangedHazards = false
     private var numPanesArr = listOf<Int>()
+    private var cardSunrise: ObjectCardText? = null
 
     private fun addDynamicCards() {
         var ccAdded = false
@@ -133,7 +129,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         oldRidArr = Array(numRadars) { "" }
         val rlArr = mutableListOf<RelativeLayout>()
         glviewArr.clear()
-        wxgltextArr.clear()
+        wxglTextArr.clear()
         var index = 0
         homeScreenTokens.forEach { tok ->
             val widthDivider = 1
@@ -153,7 +149,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     day7Added = true
                 }
             } else if (tok == "OGL-RADAR") {
-                oglrArr.add(WXGLRender(activityReference))
+                oglrArr.add(WXGLRender(activityReference, 4))
                 oglrIdx = oglrCount
                 oglrCount += 1
                 cardViews.add(ObjectCard(activityReference).card)
@@ -163,18 +159,19 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 radarLocationChangedAl.add(false)
                 glviewArr[index].idx = index
                 rlArr.add(RelativeLayout(activityReference))
-                wxgltextArr.add(
+                wxglTextArr.add(
                         WXGLTextObject(
                                 activityReference,
                                 rlArr[index],
                                 glviewArr[index],
                                 oglrArr[index],
-                                numPanes
+                                numPanes,
+                                4
                         )
                 )
-                glviewArr[index].wxgltextArr = wxgltextArr
+                glviewArr[index].wxgltextArr = wxglTextArr
                 glviewArr[index].locationFragment = true
-                wxgltextArr[index].initTV(activityReference)
+                wxglTextArr[index].initializeTextLabels(activityReference)
                 rlArr[index].addView(glviewArr[index])
                 cardViews.last().addView(rlArr[index])
                 cardViews.last().layoutParams = RelativeLayout.LayoutParams(
@@ -194,7 +191,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 hsImages.add(hsImageTmp)
                 setImageOnClick()
             } else if (tok.contains("NXRD-")) {
-                oglrArr.add(WXGLRender(activityReference))
+                oglrArr.add(WXGLRender(activityReference, 4))
                 oglrCount += 1
                 cardViews.add(ObjectCard(activityReference).card)
                 glviewArr.add(WXGLSurfaceView(activityReference, widthDivider, numPanes, 1))
@@ -203,18 +200,19 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 oldRidArr[index] = ""
                 radarLocationChangedAl.add(false)
                 rlArr.add(RelativeLayout(activityReference))
-                wxgltextArr.add(
+                wxglTextArr.add(
                         WXGLTextObject(
                                 activityReference,
                                 rlArr[index],
                                 glviewArr[index],
                                 oglrArr[index],
-                                numPanes
+                                numPanes,
+                                4 // FIXME
                         )
                 )
-                glviewArr[index].wxgltextArr = wxgltextArr
+                glviewArr[index].wxgltextArr = wxglTextArr
                 glviewArr[index].locationFragment = true
-                wxgltextArr[index].initTV(activityReference)
+                wxglTextArr[index].initializeTextLabels(activityReference)
                 rlArr[index].addView(glviewArr[index])
                 cardViews.last().addView(rlArr[index])
                 cardViews.last().layoutParams = RelativeLayout.LayoutParams(
@@ -241,23 +239,37 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 else
                     inflater.inflate(R.layout.fragment_location, container, false)
         homescreenFavLocal = MyApplication.homescreenFav
-        if (homescreenFavLocal.contains("TXT-CC") || homescreenFavLocal.contains("TXT-HAZ") || homescreenFavLocal.contains(
-                        "TXT-7DAY"
-                )
-        )
+        if (homescreenFavLocal.contains("TXT-CC")
+                || homescreenFavLocal.contains("TXT-HAZ")
+                || homescreenFavLocal.contains("TXT-7DAY")
+        ) {
             needForecastData = true
-        spinner = view.findViewById(R.id.spinner1)
-        if (android.os.Build.VERSION.SDK_INT > 20) {
-            if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
-                UtilityUI.setupSpinner(spinner, false)
-            }
         }
-        dataAdapter = ArrayAdapter(activityReference, R.layout.simple_spinner_item, Location.listOf)
-        dataAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
+
+        // The dialogue that opens when the user wants to change location
+        locationDialogue = ObjectDialogue(activityReference, "Select location:", Location.listOf)
+        locationDialogue.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, locationIndex ->
+            changeLocation(locationIndex)
+            dialog.dismiss()
+        })
+
+        // The main LL that holds all content
         linearLayout = view.findViewById(R.id.ll)
-        locationCard = view.findViewById(R.id.cv1)
+
+        // The button the user will tape so change location
+        locationLabel = ObjectCardText(activityReference, linearLayout, Location.name, TextSize.MEDIUM)
+        var locationLabelPadding = 20
+        if (UtilityUI.isTablet()) {
+            locationLabelPadding = 10
+        }
+        locationLabel.tv.setPadding(locationLabelPadding,locationLabelPadding,locationLabelPadding,locationLabelPadding)
+        locationLabel.setTextColor(UIPreferences.textHighlightColor)
+        locationLabel.setOnClickListener(OnClickListener {
+            locationDialogue.show()
+        })
+
         if (homescreenFavLocal.contains("TXT-CC2")) {
-            cardCC = ObjectCardCC(activityReference, 2)
+            cardCC = ObjectCardCurrentConditions(activityReference, 2)
             cardCC?.setListener(
                     alertDialogStatus,
                     alertDialogStatusList,
@@ -266,7 +278,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     ::showHelp
             )
         } else {
-            cardCC = ObjectCardCC(activityReference, 1)
+            cardCC = ObjectCardCurrentConditions(activityReference, 1)
         }
         if (homescreenFavLocal.contains("TXT-7DAY")) {
             linearLayoutForecast = LinearLayout(activityReference)
@@ -295,78 +307,69 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         it,
                         oglrArr,
                         glviewArr,
-                        wxgltextArr,
+                        wxglTextArr,
                         changeListener
                 )
             }
         }
         scrollView = view.findViewById(R.id.sv)
-        spinner.adapter = dataAdapter
-        spinner.onItemSelectedListener = this
-        spinner.setSelection(currentLoc)
         return view
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        currentLoc = Location.currentLocation
-        if (currentLoc > Location.numLocations)
-            currentLoc = Location.numLocations - 1
-        else
-            currentLoc -= 1
-    }
-
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        if (currentLoc != pos) {
-            locationChangedHazards = true
-            locationChangedSevenDay = true
-            if (pos != Location.numLocations) {
-                currentLoc = pos
-                Utility.writePref(activityReference, "CURRENT_LOC_FRAGMENT", (pos + 1).toString())
-                Location.currentLocationStr = (pos + 1).toString()
-                x = Location.x
-                y = Location.y
-                if (oglrIdx != -1)
-                    radarLocationChangedAl[oglrIdx] = false
-                if (MyApplication.locDisplayImg && oglrIdx != -1) {
-                    glviewArr[oglrIdx].scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
-                    oglrArr[oglrIdx].setViewInitial(
-                            MyApplication.wxoglSize.toFloat() / 10.0f,
-                            0.0f,
-                            0.0f
-                    )
-                }
-                hsImages.forEach { it.resetZoom() }
-                setImageOnClick()
-                getContent()
-            } else {
-                ObjectIntent(
-                        activityReference,
-                        SettingsLocationGenericActivity::class.java,
-                        SettingsLocationGenericActivity.LOC_NUM,
-                        arrayOf((pos + 1).toString(), "")
+    private fun changeLocation(pos: Int) {
+        locationChangedHazards = true
+        locationChangedSevenDay = true
+        if (pos != Location.numLocations) {
+            Utility.writePref(activityReference, "CURRENT_LOC_FRAGMENT", (pos + 1).toString())
+            Location.currentLocationStr = (pos + 1).toString()
+            x = Location.x
+            y = Location.y
+            if (oglrIdx != -1)
+                radarLocationChangedAl[oglrIdx] = false
+            if (MyApplication.locDisplayImg && oglrIdx != -1) {
+                glviewArr[oglrIdx].scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
+                oglrArr[oglrIdx].setViewInitial(
+                        MyApplication.wxoglSize.toFloat() / 10.0f,
+                        0.0f,
+                        0.0f
                 )
-                spinner.setSelection(currentLoc)
             }
-        } // end check if current loc is pos
+            hsImages.forEach {
+                it.resetZoom()
+            }
+            setImageOnClick()
+            getContent()
+        } else {
+            ObjectIntent(
+                    activityReference,
+                    SettingsLocationGenericActivity::class.java,
+                    SettingsLocationGenericActivity.LOC_NUM,
+                    arrayOf((pos + 1).toString(),
+                            ""
+                    )
+            )
+        }
+        locationLabel.text = Location.name
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>) {}
-
-    private fun getContent() {
-        locationCard?.let { UtilityUI.cardViewSetup(it) }
+    fun getContent() {
+        locationLabel.text = Location.name
         sevenDayExtShown = false
         if (needForecastData) {
             getForecastData()
         }
-        hsTextAl.indices.forEach { getTextProduct(it.toString()) }
-        hsImages.indices.forEach { getImageProduct(it.toString()) }
+        hsTextAl.indices.forEach {
+            getTextProduct(it.toString())
+        }
+        hsImages.indices.forEach {
+            getImageProduct(it.toString())
+        }
         x = Location.x
         y = Location.y
         if (MyApplication.locDisplayImg) {
             getAllRadars()
         }
-        val currentTime = System.currentTimeMillis()
+        val currentTime = UtilityTime.currentTimeMillis()
         lastRefresh = currentTime / 1000
         Utility.writePref(activityReference, "LOC_LAST_UPDATE", lastRefresh)
     }
@@ -374,12 +377,23 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     override fun onResume() {
         super.onResume()
         if (glviewInitialized) {
-            glviewArr.forEach { it.onResume() }
+            glviewArr.forEach {
+                it.onResume()
+            }
         }
-        LocalBroadcastManager.getInstance(activityReference)
-                .registerReceiver(onBroadcast, IntentFilter("locationadded"))
-        updateSpinner()
-        val currentTime = System.currentTimeMillis()
+        cardCC?.refreshTextSize()
+        locationLabel.refreshTextSize(TextSize.MEDIUM)
+        locationLabel.text = Location.name
+        sevenDayCards.forEach{ it.refreshTextSize() }
+        cardSunrise?.refreshTextSize(TextSize.MEDIUM)
+        hsTextAl.forEach{
+            it.refreshTextSize()
+        }
+        hazardsCards.forEach{
+            it.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
+        }
+        // TODO use a Timer class to handle the data refresh stuff
+        val currentTime = UtilityTime.currentTimeMillis()
         val currentTimeSec = currentTime / 1000
         val refreshIntervalSec = (UIPreferences.refreshLocMin * 60).toLong()
         val xOld = x
@@ -392,7 +406,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                             it,
                             oglrArr,
                             glviewArr,
-                            wxgltextArr,
+                            wxglTextArr,
                             changeListener
                     )
                 }
@@ -412,6 +426,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     }
 
     private fun getRadar(idx: Int) = GlobalScope.launch(uiDispatcher) {
+        var radarTimeStampLocal = ""
         if (oglrIdx != -1)
             if (!radarLocationChangedAl[oglrIdx])
                 oglrArr[oglrIdx].rid = Location.rid
@@ -429,7 +444,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 idx,
                 oldRidArr,
                 oglrArr,
-                wxgltextArr,
+                wxglTextArr,
                 numPanesArr,
                 null,
                 glviewArr,
@@ -452,29 +467,68 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         false
                 )
             }
+            if (idx == oglrIdx) {
+                radarTimeStampLocal = getRadarTimeStampForHomescreen(oglrArr[oglrIdx].rid)
+            }
         }
-        if (Location.isUS) {
-        if (PolygonType.SPOTTER_LABELS.pref) {
-            UtilityWXGLTextObject.updateSpotterLabels(numRadars, wxgltextArr)
+        // recent adds Jan 2020
+        withContext(Dispatchers.IO) {
+            UtilityDownloadWarnings.get(activityReference)
         }
-        //}
+        if (!oglrArr[idx].product.startsWith("2")) {
+            UtilityRadarUI.plotWarningPolygons(glviewArr[idx], oglrArr[idx], false)
+        }
 
-        //FIXME - make obs texts work on multi radars on home screen and multi-pane
-        //update OBS texts
-        if (PolygonType.OBS.pref) {
-            UtilityWXGLTextObject.updateObs(numRadars, wxgltextArr)
+        if (PolygonType.MCD.pref) {
+            withContext(Dispatchers.IO) {
+                UtilityDownloadMcd.get(activityReference)
+                UtilityDownloadWatch.get(activityReference)
+            }
+            if (!oglrArr[idx].product.startsWith("2")) {
+                UtilityRadarUI.plotMcdWatchPolygons(glviewArr[idx], oglrArr[idx], false)
+            }
         }
 
-        //update hail size texts
-	    //TODO test this with multi radars and panes!
-        if (PolygonType.HAIL_LABELS.pref) {
-            UtilityWXGLTextObject.updateHailLabels(numRadars, wxgltextArr)
+        if (PolygonType.MPD.pref) {
+            withContext(Dispatchers.IO) {
+                UtilityDownloadMpd.get(activityReference)
+            }
+            if (!oglrArr[idx].product.startsWith("2")) {
+                UtilityRadarUI.plotMpdPolygons(glviewArr[idx], oglrArr[idx], false)
+            }
+        }
+        // end recent adds Jan 2020
+
+        // don't enable until more stable
+        /*if (MyApplication.radarShowWpcFronts) {
+            withContext(Dispatchers.IO) {
+                UtilityWpcFronts.get(activityReference)
+            }
+            if (!oglrArr[idx].product.startsWith("2")) {
+                UtilityRadarUI.plotWpcFronts(glviewArr[idx], oglrArr[idx], false)
+            }
+            UtilityWXGLTextObject.updateWpcFronts(numPanesArr.size, wxgltextArr)
+        }*/
+
+        // NOTE: below was backed out, data structures for these features only support one radar site
+        // so locfrag and multi-pane don't current support. Would be nice to fix someday.
+        // Showextras a few lines above was changed from false to true along with few lines added below
+        // some time ago there were crashes caused by this additional content but I don't recall the details
+        // guess it's worth another try to see if the issue back then was fixed in the various re-writes that have
+        // occured since
+        if (Location.isUS && idx == 0) {
+            if (PolygonType.OBS.pref) {
+                UtilityWXGLTextObject.updateObs(numRadars, wxglTextArr)
+            }
+            if (PolygonType.SPOTTER_LABELS.pref) {
+                UtilityWXGLTextObject.updateSpotterLabels(numRadars, wxglTextArr)
+            }
+	    if (PolygonType.HAIL_LABELS.pref) {
+            UtilityWXGLTextObject.updateHailLabels(numRadars, wxglTextArr)
 	    }
-	    
-	    
             glviewArr[idx].requestRender()
             if (idx == oglrIdx) {
-                radarTime = radarTimeStamp
+                radarTime = radarTimeStampLocal
                 cardCC?.setStatus(currentConditionsTime + radarTime)
             }
         }
@@ -488,8 +542,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     hsTextAl[productIndex].product
             ).replace("<br>AREA FORECAST DISCUSSION", "AREA FORECAST DISCUSSION")
         }
-        UtilityLog.d("wx", hsTextAl[productIndex].product)
-        //val longText = Utility.fromHtml(longTextDownload)
         var longText = longTextDownload
         if (hsTextAl[productIndex].product=="NFDOFFN31" || hsTextAl[productIndex].product=="NFDOFFN32") {
             longText = Utility.fromHtml(longTextDownload)
@@ -498,17 +550,20 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         val shortText = UtilityStringExternal.truncate(longText, UIPreferences.homescreenTextLength)
         hsTextAl[productIndex].setTextShort(shortText)
         hsTextAl[productIndex].setText(shortText)
+        if (hsTextAl[productIndex].product == "HOURLY") {
+            hsTextAl[productIndex].tv.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
+        }
     }
 
     private fun getImageProduct(productString: String) = GlobalScope.launch(uiDispatcher) {
         val productIndex = productString.toIntOrNull() ?: 0
-        val b = withContext(Dispatchers.IO) {
+        val bitmap = withContext(Dispatchers.IO) {
             UtilityDownload.getImageProduct(
                     MyApplication.appContext,
                     hsImages[productIndex].product
             )
         }
-        hsImages[productIndex].setImage(b)
+        hsImages[productIndex].setImage(bitmap)
     }
 
     private fun showHelp(helpItem: Int) {
@@ -537,34 +592,32 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         alertDialogRadarLongPress!!
                 )
             } else {
-                (0 until numRadars).forEach { wxgltextArr[it].addTV() }
+                (0 until numRadars).forEach {
+                    wxglTextArr[it].addTextLabels()
+                }
             }
         }
     }
 
-    private val radarTimeStamp: String
-        get() {
-            ts = ""
-            val info = Utility.readPref("WX_RADAR_CURRENT_INFO", "")
-            val tmpArr = MyApplication.space.split(info)
-            if (tmpArr.size > 3)
-                ts = tmpArr[3]
-
-            return if (oglrIdx != -1)
-                " " + oglrArr[idxIntG].rid + ": " + ts
-            else
-                ""
+    private fun getRadarTimeStampForHomescreen(radarSite: String): String {
+        var ts = ""
+        val tokens = WXGLNexrad.getRadarInfo(activityReference, radarSite).split(" ")
+        if (tokens.size > 3) {
+            ts = tokens[3]
         }
+        return if (oglrIdx != -1) {
+            " " + oglrArr[idxIntG].rid + ": " + ts
+        } else {
+            ""
+        }
+    }
 
-    private fun getRadarTimeStamp(str: String, j: Int): String {
-        ts = ""
-        val tmpArr = MyApplication.space.split(str)
-        if (tmpArr.size > 3)
-            ts = tmpArr[3]
-        return oglrArr[j].rid + ": " + ts + " (" + Utility.readPref(
-                "RID_LOC_" + oglrArr[j].rid,
-                ""
-        ) + ")"
+    private fun getRadarTimeStamp(string: String, j: Int): String {
+        var ts = ""
+        val tokens = string.split(" ")
+        if (tokens.size > 3)
+            ts = tokens[3]
+        return oglrArr[j].rid + ": " + ts + " (" + Utility.readPref("RID_LOC_" + oglrArr[j].rid, "") + ")"
     }
 
     private fun getGPSFromDouble() {
@@ -574,30 +627,11 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
 
     override fun onPause() {
         if (glviewInitialized) {
-            glviewArr.forEach { it.onPause() }
+            glviewArr.forEach {
+                it.onPause()
+            }
         }
-        LocalBroadcastManager.getInstance(activityReference).unregisterReceiver(onBroadcast)
         super.onPause()
-    }
-
-    private val onBroadcast = object : BroadcastReceiver() {
-        override fun onReceive(ctxt: Context, intent: Intent) {
-            updateSpinner()
-        }
-    }
-
-    private fun updateSpinner() {
-        lastRefresh = Utility.readPref(activityReference, "LOC_LAST_UPDATE", 0.toLong())
-        dataAdapter = ArrayAdapter(
-                activityReference,
-                android.R.layout.simple_spinner_item,
-                Location.listOf
-        )
-        dataAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
-        // fix for 2 or more loc deleted
-        currentLoc = Location.currentLocation
-        spinner.adapter = dataAdapter
-        spinner.setSelection(Location.currentLocation)
     }
 
     private fun setImageOnClick() {
@@ -658,16 +692,13 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
     private fun resetAllGlview() {
         glviewArr.indices.forEach {
             UtilityRadarUI.resetGlview(glviewArr[it], oglrArr[it])
-            wxgltextArr[it].addTV()
+            wxglTextArr[it].addTextLabels()
         }
     }
 
     private fun radarTimestamps(): List<String> {
         return (0 until glviewArr.size).mapTo(mutableListOf()) {
-            getRadarTimeStamp(
-                    oglrArr[it].radarL3Object.timestamp,
-                    it
-            )
+            getRadarTimeStamp(oglrArr[it].radarL3Object.timestamp, it)
         }
     }
 
@@ -680,7 +711,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         hazardsCards[0].setPaddingAmount(MyApplication.paddingSettings)
         hazardsCards[0].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
         hazardsCards[0].setTextColor(UIPreferences.textHighlightColor)
-        hazardsCards[0].setText(hazUrl)
+        hazardsCards[0].text = hazUrl
         val expandIndexCa = 0
         val hazUrlCa = objHazards.hazards
         val hazardsSumCa = objHazards.getHazardsShort()
@@ -691,7 +722,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         TypedValue.COMPLEX_UNIT_PX,
                         MyApplication.textSizeSmall
                 )
-                hazardsCards[expandIndexCa].setText(Utility.fromHtml(hazUrlCa))
+                hazardsCards[expandIndexCa].text = Utility.fromHtml(hazUrlCa)
                 hazardsExpandedAl[expandIndexCa] = true
             } else {
                 hazardsCards[expandIndexCa].setTextColor(UIPreferences.textHighlightColor)
@@ -699,7 +730,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         TypedValue.COMPLEX_UNIT_PX,
                         MyApplication.textSizeNormal
                 )
-                hazardsCards[expandIndexCa].setText(hazardsSumCa)
+                hazardsCards[expandIndexCa].text = hazardsSumCa
                 hazardsExpandedAl[expandIndexCa] = false
                 scrollView.smoothScrollTo(0, 0)
             }
@@ -774,11 +805,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         }
         radarLocationChangedAl[idxIntG] = true
         glviewArr[idxIntG].scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
-        oglrArr[idxIntG].setViewInitial(
-                MyApplication.wxoglSize.toFloat() / 10.0f,
-                0.0f,
-                0.0f
-        )
+        oglrArr[idxIntG].setViewInitial(MyApplication.wxoglSize.toFloat() / 10.0f, 0.0f, 0.0f)
         getRadar(idxIntG)
     }
 
@@ -822,7 +849,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 hazardsCards[z].setPaddingAmount(MyApplication.paddingSettings)
                 hazardsCards[z].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
                 hazardsCards[z].setTextColor(UIPreferences.textHighlightColor)
-                hazardsCards[z].setText(objHazards.titles[z].toUpperCase(Locale.US))
+                hazardsCards[z].text = objHazards.titles[z].toUpperCase(Locale.US)
                 hazardsCards[z].setOnClickListener(OnClickListener {
                     ObjectIntent(
                             activityReference,
@@ -857,13 +884,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                     bitmapForCurrentConditions = if (Location.isUS) {
                         UtilityNws.getIcon(activityReference, objCc.iconUrl)
                     } else {
-                        UtilityNws.getIcon(
-                                activityReference,
-                                UtilityCanada.translateIconNameCurrentConditions(
-                                        objCc.data,
-                                        objCc.status
-                                )
-                        )
+                        UtilityNws.getIcon(activityReference, UtilityCanada.translateIconNameCurrentConditions(objCc.data, objCc.status))
                     }
                 }
             } catch (e: Exception) {
@@ -925,6 +946,7 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         if (isAdded) {
             if (homescreenFavLocal.contains("TXT-7DAY")) {
                 linearLayoutForecast?.removeAllViewsInLayout()
+                sevenDayCards = mutableListOf()
                 val day7Arr = objSevenDay.forecastList
                 bitmaps.forEachIndexed { index, bitmap ->
                     val c7day = ObjectCard7Day(activityReference, bitmap, Location.isUS, index, day7Arr)
@@ -935,11 +957,12 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                         )
                     })
                     linearLayoutForecast?.addView(c7day.card)
+                    sevenDayCards.add(c7day)
                 }
                 // sunrise card
-                val cardSunrise = ObjectCardText(activityReference)
-                cardSunrise.center()
-                cardSunrise.setOnClickListener(OnClickListener {
+                cardSunrise = ObjectCardText(activityReference)
+                cardSunrise!!.center()
+                cardSunrise!!.setOnClickListener(OnClickListener {
                     scrollView.smoothScrollTo(
                             0,
                             0
@@ -947,24 +970,24 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
                 })
                 try {
                     if (Location.isUS) {
-                        cardSunrise.setText(
+                        cardSunrise!!.text = (
                                 UtilityTimeSunMoon.getSunriseSunset(
                                         activityReference,
                                         Location.currentLocationStr
                                 ) + MyApplication.newline + UtilityTime.gmtTime()
-                        )
+                                )
                     } else {
-                        cardSunrise.setText(
+                        cardSunrise!!.text = (
                                 UtilityTimeSunMoon.getSunriseSunset(
                                         activityReference,
                                         Location.currentLocationStr
                                 ) + MyApplication.newline + UtilityTime.gmtTime()
-                        )
+                                )
                     }
                 } catch (e: Exception) {
                     UtilityLog.handleException(e)
                 }
-                linearLayoutForecast?.addView(cardSunrise.card)
+                linearLayoutForecast?.addView(cardSunrise!!.card)
             }
             //
             // Canada legal card
@@ -989,7 +1012,6 @@ class LocationFragment : Fragment(), OnItemSelectedListener, OnClickListener {
         }
         withContext(Dispatchers.IO) {
             try {
-                //objHazards = Utility.getCurrentHazards(Location.currentLocation)
                 objHazards = if (Location.isUS(Location.currentLocation)) {
                     ObjectForecastPackageHazards(Location.currentLocation)
                 } else {

@@ -1,5 +1,5 @@
 <!-- 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -35,9 +35,9 @@
         android:icon="@drawable/ic_access_alarm_24dp"
         android:title="Manage auto-downloads"
         app:showAsAction="always" />
-    <item
+    <!--<item
         android:id="@+id/action_downloadall"
         android:icon="@drawable/ic_get_app_24dp"
         android:title="Download All"
-        app:showAsAction="always" />
+        app:showAsAction="always" />-->
 </menu>

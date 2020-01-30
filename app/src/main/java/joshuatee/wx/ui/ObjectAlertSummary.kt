@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -35,6 +35,7 @@ import java.util.TreeMap
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.activitiesmisc.CapAlert
+import joshuatee.wx.activitiesmisc.ImageShowActivity
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.util.Utility
@@ -62,12 +63,21 @@ class ObjectAlertSummary(
     @SuppressLint("UseSparseArrays")
     val mapButtonCounty: MutableMap<Int, String> = mutableMapOf()
 
-    fun updateContent(bm: Bitmap, data: String, filterEventStr: String, firstRun: Boolean) {
+    fun updateContent(bitmap: Bitmap, data: String, filterEventStr: String, firstRun: Boolean) {
         linearLayout.removeAllViews()
         sv.smoothScrollTo(0, 0)
         val cardText = ObjectCardText(context)
         linearLayout.addView(cardText.card)
-        linearLayout.addView(ObjectCardImage(context, bm).card)
+        val objectCardImageView = ObjectCardImage(context, bitmap)
+        objectCardImageView.setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                    context,
+                    ImageShowActivity::class.java,
+                    ImageShowActivity.URL,
+                    arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "US Alerts", "true")
+            )
+        })
+        linearLayout.addView(objectCardImageView.card)
         totalAlertsCnt = 0
         val mapEvent = TreeMap<String, Int>()
         val mapState = TreeMap<String, Int>()
@@ -155,14 +165,14 @@ class ObjectAlertSummary(
         filter = filter.replace("[|*?.]".toRegex(), " ")
         //filter = filter.replace("\\||\\*|\\?|\\.".toRegex(), " ")
         if (mapOut.isNotEmpty())
-            cardText.setText(
+            cardText.text = (
                     "Filter: " + filter.replace(
                             "\\^".toRegex(),
                             ""
                     ) + " (" + i + ")" + MyApplication.newline + mapOut
             )
         else
-            cardText.setText("Filter: " + filter.replace("\\^".toRegex(), "") + " (" + i + ")")
+            cardText.text = ("Filter: " + filter.replace("\\^".toRegex(), "") + " (" + i + ")")
         if (firstRun) {
             val filterArray1 = mapEvent.keys.toList()
             val filterArray1Label = mutableListOf<String>()

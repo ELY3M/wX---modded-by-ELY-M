@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -40,6 +40,7 @@ import androidx.core.content.ContextCompat
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.MyApplication
+import joshuatee.wx.radar.WXGLNexrad
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.TouchImageView2
 
@@ -78,7 +79,7 @@ object UtilityImg {
     fun getBlankBitmap(): Bitmap = Bitmap.createBitmap(10, 10, Config.ARGB_8888)
 
     fun getBitmapRemoveBG(imgUrl: String, color: Int): Bitmap =
-        eraseBG(imgUrl.getImage(), color)
+            eraseBG(imgUrl.getImage(), color)
 
     fun getBitmapAddWhiteBG(context: Context, imgUrl: String): Bitmap {
         val layers = mutableListOf<Drawable>()
@@ -99,9 +100,9 @@ object UtilityImg {
 
     fun imgRestorePosnZoom(context: Context, img: TouchImageView2, prefStr: String) {
         img.setZoom(
-            Utility.readPref(context, prefStr + "_ZOOM", 1.0f),
-            Utility.readPref(context, prefStr + "_X", 0.5f),
-            Utility.readPref(context, prefStr + "_Y", 0.5f)
+                Utility.readPref(context, prefStr + "_ZOOM", 1.0f),
+                Utility.readPref(context, prefStr + "_X", 0.5f),
+                Utility.readPref(context, prefStr + "_Y", 0.5f)
         )
     }
 
@@ -153,7 +154,7 @@ object UtilityImg {
                 BitmapFactory.decodeStream(inputStream)
             else
                 BitmapFactory.decodeStream(inputStream, null, options)
-                    ?: getBlankBitmap()
+                        ?: getBlankBitmap()
         } catch (e: OutOfMemoryError) {
             UtilityLog.handleException(e)
             return getBlankBitmap()
@@ -167,10 +168,10 @@ object UtilityImg {
         return bitmap
     }
 
-    fun animInterval(context: Context): Int = 50 * Utility.readPref(context, "ANIM_INTERVAL", 15)
+    fun animInterval(context: Context): Int = 50 * Utility.readPref(context, "ANIM_INTERVAL", MyApplication.animationIntervalDefault)
 
     fun bitmapToLayerDrawable(context: Context, bitmap: Bitmap): LayerDrawable =
-        LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
+            LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
 
     fun layerDrawableToBitmap(layers: MutableList<Drawable>): Bitmap {
         val drawable = LayerDrawable(layers.toTypedArray())
@@ -220,8 +221,8 @@ object UtilityImg {
             val pixels = IntArray(size)
             src.getPixels(pixels, 0, width, 0, 0, width, height)
             (0 until size)
-                .filter { pixels[it] == color }
-                .forEach { pixels[it] = 0 }
+                    .filter { pixels[it] == color }
+                    .forEach { pixels[it] = 0 }
             b.setPixels(pixels, 0, width, 0, 0, width, height)
             b
         } catch (e: OutOfMemoryError) {
@@ -275,7 +276,7 @@ object UtilityImg {
     }
 
     fun drawTextToBitmapForNexrad(context: Context, bitmap: Bitmap): Bitmap {
-        val radarStatus = Utility.readPref(context, "WX_RADAR_CURRENT_INFO_WIDGET_TIME", "")
+        val radarStatus = WXGLNexrad.readRadarTimeForWidget(context)
         try {
             val scale = context.resources.displayMetrics.density
             val canvas = Canvas(bitmap)

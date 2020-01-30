@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,14 +23,13 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.graphics.Color
-import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
 
-import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.objects.TextSize
 
 class ObjectCardBlackHeaderText(context: Context, val linearLayout: LinearLayout, val text: String) {
 
@@ -57,9 +56,9 @@ class ObjectCardBlackHeaderText(context: Context, val linearLayout: LinearLayout
 
     private fun setTextHeader() {
         textViewTop.text = text
-        textViewTop.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeLarge)
+        textViewTop.setTextSize(TextSize.LARGE)
         textViewTop.setPadding(20,20,20,20)
-        textViewTop.setTextColor(UIPreferences.textHighlightColor)
+        textViewTop.color = UIPreferences.textHighlightColor
         textViewTop.tv.setBackgroundColor(Color.BLACK)
         textViewTop.tv.setTextColor(Color.WHITE)
     }

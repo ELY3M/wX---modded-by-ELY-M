@@ -117,6 +117,9 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         checkfiles(R.drawable.hail4, "hail4.png")
         checkfiles(R.drawable.hailbig, "hailbig.png")
 
+        checkpalfiles(R.raw.colormap19, "colormap19.txt")
+        checkpalfiles(R.raw.colormap30, "colormap30.txt")
+        checkpalfiles(R.raw.colormap56, "colormap56.txt")
         checkpalfiles(R.raw.colormap134cod, "colormap134cod.txt")
         checkpalfiles(R.raw.colormap135cod, "colormap135cod.txt")
         checkpalfiles(R.raw.colormap159cod, "colormap159cod.txt")

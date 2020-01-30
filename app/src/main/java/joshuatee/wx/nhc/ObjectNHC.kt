@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -113,9 +113,9 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
         linearLayout.addView(notificationCard?.card)
         notificationCard?.setOnClickListener(View.OnClickListener { clearNhcNotificationBlock() })
         if (muteStr != "") {
-            notificationCard?.setVisibility(View.VISIBLE)
+            notificationCard?.visibility = View.VISIBLE
         } else {
-            notificationCard?.setVisibility(View.GONE)
+            notificationCard?.visibility = View.GONE
         }
         if (atlSumList.size < 1) {
             val noAtl = "There are no tropical cyclones in the Atlantic at this time."
@@ -186,7 +186,7 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
     private fun clearNhcNotificationBlock() {
         Utility.writePref(context, "NOTIF_NHC_MUTE", "")
         if (notificationCard != null) {
-            notificationCard!!.setVisibility(View.GONE)
+            notificationCard!!.visibility = View.GONE
         }
     }
 
@@ -194,10 +194,10 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
         val muteStr = Utility.readPref(context, "NOTIF_NHC_MUTE", "")
         if (notificationCard != null) {
             if (muteStr != "") {
-                notificationCard!!.setText(cardNotificationHeaderText + muteStr)
-                notificationCard!!.setVisibility(View.VISIBLE)
+                notificationCard!!.text = cardNotificationHeaderText + muteStr
+                notificationCard!!.visibility = View.VISIBLE
             } else {
-                notificationCard!!.setVisibility(View.GONE)
+                notificationCard!!.visibility = View.GONE
             }
         }
     }

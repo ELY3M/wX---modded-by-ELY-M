@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,7 +30,9 @@ class ObjectMenuTitle(var title: String, var count: Int) {
                 return 0
             }
             var sum = 0
-            (0 until index).forEach { sum += titles[it].count }
+            (0 until index).forEach {
+                sum += titles[it].count
+            }
             return sum
         }
     }

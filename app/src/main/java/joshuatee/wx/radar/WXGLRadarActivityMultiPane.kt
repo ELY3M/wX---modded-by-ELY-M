@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -53,23 +53,18 @@ import joshuatee.wx.activitiesmisc.WebscreenABModels
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.UtilityToolbar
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityAlertDialog
-import joshuatee.wx.util.UtilityFileManagement
-import joshuatee.wx.util.UtilityImageMap
-import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.settings.SettingsRadarActivity
 import joshuatee.wx.ui.ObjectImageMap
-import joshuatee.wx.util.UtilityShare
 
 import joshuatee.wx.Extensions.*
 
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.radar.SpotterNetworkPositionReport.SendPosition
+import joshuatee.wx.util.*
 import kotlinx.coroutines.*
+import joshuatee.wx.radar.SpotterNetworkPositionReport.SendPosition
+
 
 class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListener {
 
@@ -258,7 +253,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         numPanesArr.forEach {
             glviewArr.add(WXGLSurfaceView(this, widthDivider, numPanes, heightDivider))
             glviewArr[it].idxInt = it
-            oglrArr.add(WXGLRender(this))
+            oglrArr.add(WXGLRender(this, it))
             oglrArr[it].radarStatusStr = (it + 1).toString()
             oglrArr[it].indexString = (it + 1).toString()
         }
@@ -323,17 +318,21 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::mapToRid)
         oglInView = true
         numPanesArr.forEach {
+            var initialRadarSite = activityArguments[0]
+            if (activityArguments[0] == "") {
+                initialRadarSite = joshuatee.wx.settings.Location.rid
+            }
             if (!useSinglePanePref) {
                 oglrArr[it].rid = Utility.readPref(
                         this,
                         prefPrefix + "_RID" + (it + 1).toString(),
-                        activityArguments[0]
+                        initialRadarSite
                 )
             } else {
                 oglrArr[it].rid = Utility.readPref(
                         this,
                         prefPrefix + "_RID",
-                        activityArguments[0]
+                        initialRadarSite
                 )
             }
         }
@@ -402,9 +401,9 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             }
         }
         numPanesArr.forEach {
-            wxgltextArr.add(WXGLTextObject(this, rlArr[it], glviewArr[it], oglrArr[it], numPanes))
+            wxgltextArr.add(WXGLTextObject(this, rlArr[it], glviewArr[it], oglrArr[it], numPanes, it))
             glviewArr[it].wxgltextArr = wxgltextArr
-            wxgltextArr[it].initTV(this)
+            wxgltextArr[it].initializeTextLabels(this)
         }
         if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) {
             getContentSerial()
@@ -457,8 +456,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         restartedZoom = true
         numPanesArr.forEach {
             if (imageMap.map.visibility == View.GONE) {
-                wxgltextArr[it].initTV(this)
-                wxgltextArr[it].addTV()
+                wxgltextArr[it].initializeTextLabels(this)
+                wxgltextArr[it].addTextLabels()
             }
         }
         // spotter code is serialized for now
@@ -471,7 +470,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         super.onRestart()
     }
 
-    private fun getContent(glv: WXGLSurfaceView, ogl: WXGLRender, z: Int) =
+    private fun getContent(glview: WXGLSurfaceView, oglr: WXGLRender, z: Int) =
             GlobalScope.launch(uiDispatcher) {
                 if ((oglrArr[z].product == "N0Q" || oglrArr[z].product == "N1Q" || oglrArr[z].product == "N2Q" || oglrArr[z].product == "N3Q" || oglrArr[z].product == "L2REF") && WXGLNexrad.isRidTdwr(
                                 oglrArr[z].rid
@@ -489,8 +488,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 setToolbarTitle()
                 adjustTiltAndProductMenus()
                 UtilityRadarUI.initWxOglGeom(
-                        glv,
-                        ogl,
+                        glview,
+                        oglr,
                         z,
                         oldRidArr,
                         oglrArr,
@@ -503,7 +502,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 )
                 withContext(Dispatchers.IO) {
                     UtilityRadarUI.plotRadar(
-                            ogl,
+                            oglr,
                             "",
                             this@WXGLRadarActivityMultiPane,
                             ::getGpsFromDouble,
@@ -524,25 +523,24 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                         numPanes,
                         wxgltextArr
                 )
-            //FIXME make obs texts work proper on multi-pane
-            if (PolygonType.OBS.pref) UtilityWXGLTextObject.updateObs(
-                    numPanes,
-                    wxgltextArr
-            )
-	    //TODO test me in multi-pane
-            if (PolygonType.HAIL_LABELS.pref) UtilityWXGLTextObject.updateHailLabels(
-                    numPanes,
-                    wxgltextArr
-            )
-                glv.requestRender()
+                if (PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) {
+                    UtilityWXGLTextObject.updateObs(numPanes, wxgltextArr)
+                }
+		
+	    	//TODO test me in multi-pane
+            	if (PolygonType.HAIL_LABELS.pref) UtilityWXGLTextObject.updateHailLabels(
+                    	numPanes,
+                    	wxgltextArr
+            	)
+                glview.requestRender()
                 setSubTitle()
                 animRan = false
 
                 withContext(Dispatchers.IO) {
                     UtilityDownloadWarnings.get(this@WXGLRadarActivityMultiPane)
                 }
-                if (!ogl.product.startsWith("2")) {
-                    UtilityRadarUI.plotWarningPolygons(glv, ogl, false)
+                if (!oglr.product.startsWith("2")) {
+                    UtilityRadarUI.plotWarningPolygons(glview, oglr, false)
                 }
 
                 if (PolygonType.MCD.pref) {
@@ -550,8 +548,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                         UtilityDownloadMcd.get(this@WXGLRadarActivityMultiPane)
                         UtilityDownloadWatch.get(this@WXGLRadarActivityMultiPane)
                     }
-                    if (!ogl.product.startsWith("2")) {
-                        UtilityRadarUI.plotMcdWatchPolygons(glv, ogl, false)
+                    if (!oglr.product.startsWith("2")) {
+                        UtilityRadarUI.plotMcdWatchPolygons(glview, oglr, false)
                     }
                 }
 
@@ -559,11 +557,19 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     withContext(Dispatchers.IO) {
                         UtilityDownloadMpd.get(this@WXGLRadarActivityMultiPane)
                     }
-                    if (!ogl.product.startsWith("2")) {
-                        UtilityRadarUI.plotMpdPolygons(glv, ogl, false)
+                    if (!oglr.product.startsWith("2")) {
+                        UtilityRadarUI.plotMpdPolygons(glview, oglr, false)
                     }
                 }
-
+                if (MyApplication.radarShowWpcFronts) {
+                    withContext(Dispatchers.IO) {
+                        UtilityWpcFronts.get(this@WXGLRadarActivityMultiPane)
+                    }
+                    if (!oglr.product.startsWith("2")) {
+                        UtilityRadarUI.plotWpcFronts(glview, oglr, false)
+                    }
+                    UtilityWXGLTextObject.updateWpcFronts(numPanes, wxgltextArr)
+                }
                 UtilityRadarUI.updateLastRadarTime(this@WXGLRadarActivityMultiPane)
             }
 
@@ -638,7 +644,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 for (r in animArray[0].indices) {
                     while (inOglAnimPaused) SystemClock.sleep(delay.toLong())
                     // formerly priorTime was set at the end but that is goofed up with pause
-                    priorTime = System.currentTimeMillis()
+                    priorTime = UtilityTime.currentTimeMillis()
                     // added because if paused and then another icon life vel/ref it won't load correctly, likely
                     // timing issue
                     if (!inOglAnim) break
@@ -663,7 +669,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                         progressUpdate((r + 1).toString(), (animArray[0].size).toString())
                     }
                     numPanesArr.forEach { glviewArr[it].requestRender() }
-                    timeMilli = System.currentTimeMillis()
+                    timeMilli = UtilityTime.currentTimeMillis()
                     if ((timeMilli - priorTime) < delay)
                         SystemClock.sleep(delay - ((timeMilli - priorTime)))
                     if (!inOglAnim)
@@ -691,20 +697,15 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     private fun adjustTiltAndProductMenus() {
-        //if (isTdwr(oglrArr[curRadar].product)) {
-        //}
-
         if (isTdwr(oglrArr[curRadar].product)) {
             l3Menu.isVisible = false
             l2Menu.isVisible = false
             tdwrMenu.isVisible = true
-            //tiltMenuOption4.isVisible = false
             tiltMenu.isVisible = oglrArr[curRadar].product.matches(Regex("[A-Z][A-Z][0-2]"))
         } else {
             l3Menu.isVisible = true
             l2Menu.isVisible = true
             tdwrMenu.isVisible = false
-            //tiltMenuOption4.isVisible = true
             tiltMenu.isVisible = oglrArr[curRadar].product.matches(Regex("[A-Z][0-3][A-Z]"))
         }
     }
@@ -714,7 +715,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        //adjustTiltAndProductMenus()
         UtilityUI.immersiveMode(this)
         if (inOglAnim && (item.itemId != R.id.action_fav) && (item.itemId != R.id.action_share) && (item.itemId != R.id.action_tools)) {
             inOglAnim = false
@@ -969,8 +969,9 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
     private fun showRadarScanInfo() {
         var scanInfo = ""
+        val infoArr = Array(numPanes) { "" }
         numPanesArr.forEach {
-            infoArr[it] = Utility.readPref(this, "WX_RADAR_CURRENT_INFO" + (it + 1).toString(), "")
+            infoArr[it] = WXGLNexrad.getRadarInfo(this,(it + 1).toString())
             scanInfo = scanInfo + infoArr[it] + MyApplication.newline + MyApplication.newline
         }
         UtilityAlertDialog.showHelpText(scanInfo, this)
@@ -1016,7 +1017,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                         alertDialogRadarLongPress!!
                 )
             } else {
-                numPanesArr.forEach { wxgltextArr[it].addTV() }
+                numPanesArr.forEach { wxgltextArr[it].addTextLabels() }
             }
         }
     }
@@ -1031,7 +1032,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                         animTriggerDownloads = true
                     } else {
                         getContentSerial()
-                        //numPanesArr.forEach { getContentSingleThreaded(glviewArr[it], oglrArr[it], it) }
                     }
                 }
                 loopCount += 1
@@ -1121,14 +1121,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     private fun getGpsFromDouble() {
-        try {
-            latlonArr[0] = latD.toString()
-            latlonArr[1] = lonD.toString()
-            locXCurrent = latlonArr[0]
-            locYCurrent = latlonArr[1]
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
+        locXCurrent = latD.toString()
+        locYCurrent = lonD.toString()
     }
 
     private fun getLatLon() = LatLon(locXCurrent, locYCurrent)
@@ -1225,61 +1219,61 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     private fun setSubTitle() {
+        val infoArr = Array(numPanes) { "" }
         if (numPanes == 4) {
             numPanesArr.forEach {
-                infoArr[it] =
-                        Utility.readPref(this, "WX_RADAR_CURRENT_INFO" + (it + 1).toString(), "")
+                infoArr[it] = WXGLNexrad.getRadarInfo(this,(it + 1).toString())
             }
-            tmpArr1 = MyApplication.space.split(infoArr[0])
-            tmpArr2 = MyApplication.space.split(infoArr[1])
-            tmpArr3 = MyApplication.space.split(infoArr[2])
-            tmpArr4 = MyApplication.space.split(infoArr[3])
-            if (tmpArr1.size > 3 && tmpArr2.size > 3 && tmpArr3.size > 3 && tmpArr4.size > 3)
-                toolbar.subtitle = tmpArr1[3] + "/" + tmpArr2[3] + "/" + tmpArr3[3] + "/" +
-                        tmpArr4[3]
-            else
+            val tmpArr1 = infoArr[0].split(" ")
+            val tmpArr2 = infoArr[1].split(" ")
+            val tmpArr3 = infoArr[2].split(" ")
+            val tmpArr4 = infoArr[3].split(" ")
+            if (tmpArr1.size > 3 && tmpArr2.size > 3 && tmpArr3.size > 3 && tmpArr4.size > 3) {
+                toolbar.subtitle = tmpArr1[3] + "/" + tmpArr2[3] + "/" + tmpArr3[3] + "/" + tmpArr4[3]
+            } else {
                 toolbar.subtitle = ""
+            }
         } else if (numPanes == 2) {
             numPanesArr.forEach {
-                infoArr[it] =
-                        Utility.readPref(this, "WX_RADAR_CURRENT_INFO" + (it + 1).toString(), "")
+                infoArr[it] = WXGLNexrad.getRadarInfo(this,(it + 1).toString())
             }
-            tmpArr1 = MyApplication.space.split(infoArr[0])
-            tmpArr2 = MyApplication.space.split(infoArr[1])
-            if (tmpArr1.size > 3 && tmpArr2.size > 3)
+            val tmpArr1 = infoArr[0].split(" ")
+            val tmpArr2 = infoArr[1].split(" ")
+            if (tmpArr1.size > 3 && tmpArr2.size > 3) {
                 toolbar.subtitle = tmpArr1[3] + "/" + tmpArr2[3]
-            else
+            } else {
                 toolbar.subtitle = ""
+            }
         }
     }
 
     // used for animations - BUG: code is not used as animations are not working across all 4 ( commented out code not working )
     private fun setSubTitle(a: String, b: String) {
+        val infoAnim = Array(numPanes) { "" }
         if (numPanes == 4) {
             numPanesArr.forEach {
-                infoAnim[it] =
-                        Utility.readPref(this, "WX_RADAR_CURRENT_INFO" + (it + 1).toString(), "")
+                infoAnim[it] = WXGLNexrad.getRadarInfo(this,(it + 1).toString())
             }
-            tmpArr1 = MyApplication.space.split(infoAnim[0])
-            tmpArr2 = MyApplication.space.split(infoAnim[1])
-            tmpArr3 = MyApplication.space.split(infoAnim[2])
-            tmpArr4 = MyApplication.space.split(infoAnim[3])
-            if (tmpArr1.size > 3 && tmpArr2.size > 3 && tmpArr3.size > 3 && tmpArr4.size > 3)
-                toolbar.subtitle = tmpArr1[3] + "/" + tmpArr2[3] + "/" + tmpArr3[3] + "/" +
-                        tmpArr4[3] + "(" + a + "/" + b + ")"
-            else
+            val tmpArr1 = infoAnim[0].split(" ")
+            val tmpArr2 = infoAnim[1].split(" ")
+            val tmpArr3 = infoAnim[2].split(" ")
+            val tmpArr4 = infoAnim[3].split(" ")
+            if (tmpArr1.size > 3 && tmpArr2.size > 3 && tmpArr3.size > 3 && tmpArr4.size > 3) {
+                toolbar.subtitle = tmpArr1[3] + "/" + tmpArr2[3] + "/" + tmpArr3[3] + "/" + tmpArr4[3] + "(" + a + "/" + b + ")"
+            } else {
                 toolbar.subtitle = ""
+            }
         } else if (numPanes == 2) {
             numPanesArr.forEach {
-                infoAnim[it] =
-                        Utility.readPref(this, "WX_RADAR_CURRENT_INFO" + (it + 1).toString(), "")
+                infoAnim[it] = WXGLNexrad.getRadarInfo(this,(it + 1).toString())
             }
-            tmpArr1 = MyApplication.space.split(infoAnim[0])
-            tmpArr2 = MyApplication.space.split(infoAnim[1])
-            if (tmpArr1.size > 3 && tmpArr2.size > 3)
+            val tmpArr1 = infoAnim[0].split(" ")
+            val tmpArr2 = infoAnim[1].split(" ")
+            if (tmpArr1.size > 3 && tmpArr2.size > 3) {
                 toolbar.subtitle = tmpArr1[3] + "/" + tmpArr2[3] + "/" + "(" + a + "/" + b + ")"
-            else
+            } else {
                 toolbar.subtitle = ""
+            }
         }
     }
 

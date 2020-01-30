@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,13 +27,14 @@ import android.graphics.drawable.AnimationDrawable
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.util.UtilityImgAnim
+import java.util.*
 
 internal object UtilityModelGlcfsInputOutput {
 
     fun getImage(om: ObjectModel, timeF: String): Bitmap {
         var sector = ""
         if (om.sector.split(" ").size > 1) {
-            sector = om.sector.split(" ")[1].substring(0, 1).toLowerCase()
+            sector = om.sector.split(" ")[1].substring(0, 1).toLowerCase(Locale.US)
         }
         var time = timeF.replace("00", "0")
         val timeInt = time.toIntOrNull() ?: 0

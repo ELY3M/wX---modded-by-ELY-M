@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -49,51 +49,15 @@ class ObjectColorPalette(val context: Context, private val colormapCode: String)
         when (colormapCode) {
             "19" -> {
                 setupBuffers(16)
-                try {
-                    UtilityColorPalette19.generate()
-                } catch (e: Exception) {
-                    UtilityLog.handleException(e)
-                }
+                UtilityColorPalette4bitGeneric.generate(context, colormapCode)
             }
             "30" -> {
                 setupBuffers(16)
-                try {
-                    UtilityColorPalette30.generate()
-                } catch (e: Exception) {
-                    UtilityLog.handleException(e)
-                }
-            }
-            "41" -> {
-                setupBuffers(16)
-                try {
-                    UtilityColorPalette41.generate()
-                } catch (e: Exception) {
-                    UtilityLog.handleException(e)
-                }
+                UtilityColorPalette4bitGeneric.generate(context, colormapCode)
             }
             "56" -> {
                 setupBuffers(16)
-                try {
-                    UtilityColorPalette56.generate()
-                } catch (e: Exception) {
-                    UtilityLog.handleException(e)
-                }
-            }
-            "57" -> {
-                setupBuffers(16)
-                try {
-                    UtilityColorPalette57.generate()
-                } catch (e: Exception) {
-                    UtilityLog.handleException(e)
-                }
-            }
-            "78" -> {
-                setupBuffers(16)
-                try {
-                    UtilityColorPalette78.generate()
-                } catch (e: Exception) {
-                    UtilityLog.handleException(e)
-                }
+                UtilityColorPalette4bitGeneric.generate(context, colormapCode)
             }
             "165" -> {
                 setupBuffers(256)

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -50,8 +50,9 @@ import kotlinx.android.synthetic.main.activity_afd.*
 
 class LsrByWfoActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClickListener {
 
+    //
     // The primary purpose of this activity is to view all recent LSR by WFO
-    // Arugments
+    // Arguments
     // 1: NWS office
     // 2: product ( always LSR )
     //
@@ -80,9 +81,10 @@ class LsrByWfoActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         val activityArguments = intent.getStringArrayExtra(URL)
-        wfo = activityArguments[0]
-        if (wfo == "")
+        wfo = activityArguments!![0]
+        if (wfo == "") {
             wfo = "OUN"
+        }
         prod = if (activityArguments[1] == "")
             MyApplication.wfoTextFav
         else
@@ -115,8 +117,9 @@ class LsrByWfoActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, wfoProd.toString(), prod, prod + wfo))
+        if (audioPlayMenu(item.itemId, wfoProd.toString(), prod, prod + wfo)) {
             return true
+        }
         when (item.itemId) {
             R.id.action_fav -> toggleFavorite()
             R.id.action_map -> imageMap.toggleMap()
@@ -184,7 +187,9 @@ class LsrByWfoActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
         ridFavOld = MyApplication.wfoFav
         wfoProd = withContext(Dispatchers.IO) { lsrFromWfo }
         linearLayout.removeAllViewsInLayout()
-        wfoProd.forEach { ObjectCardText(this@LsrByWfoActivity, linearLayout, Utility.fromHtml(it)) }
+        wfoProd.forEach {
+            ObjectCardText(this@LsrByWfoActivity, linearLayout, Utility.fromHtml(it))
+        }
     }
 
     private val lsrFromWfo: List<String>

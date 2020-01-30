@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,30 +27,17 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.RegExp
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityNotificationSpc
+import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityDownload
-import joshuatee.wx.util.UtilityLog
-import joshuatee.wx.util.UtilityString
+import joshuatee.wx.util.*
 
 internal object UtilityDownloadMcd {
 
-    private var initialized = false
-    private var lastRefresh = 0.toLong()
     const val type = "MCD"
+    var timer = DownloadTimer(type)
 
     fun get(context: Context) {
-        val refreshInterval = maxOf(Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3), 6)
-        val currentTime1 = System.currentTimeMillis()
-        val currentTimeSec = currentTime1 / 1000
-        val refreshIntervalSec = (refreshInterval * 60).toLong()
-        //UtilityLog.d("wx", "RADAR DOWNLOAD CHECK: $type")
-        if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
-            // download data
-            initialized = true
-            val currentTime = System.currentTimeMillis()
-            lastRefresh = currentTime / 1000
-            UtilityLog.d("wx", "RADAR DOWNLOAD INITIATED:$type")
+        if (timer.isRefreshNeeded(context)) {
             getMcd(context)
         }
     }
@@ -70,15 +57,13 @@ internal object UtilityDownloadMcd {
         }
         val locationNeedsMcd = UtilityNotificationSpc.locationNeedsMcd()
         if (PolygonType.MCD.pref || locationNeedsMcd) {
-            //UtilityLog.d("wx","RADAR DOWNLOAD SET: " + latLonString)
-            MyApplication.mcdLatlon.valueSet(context, latLonString)
+            MyApplication.mcdLatLon.valueSet(context, latLonString)
         }
         return WatchData(numberList, htmlList)
     }
 
     private fun getListOfNumbers(context: Context): List<String> {
         val list = UtilityString.parseColumn(MyApplication.severeDashboardMcd.value, RegExp.mcdPatternAlertr)
-        //UtilityLog.d("wx", "RADAR DOWNLOAD $type:$list")
         var mcdNoList = ""
         list.forEach {
             mcdNoList = "$mcdNoList$it:"

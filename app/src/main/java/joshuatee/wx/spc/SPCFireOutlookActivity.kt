@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -42,7 +42,7 @@ import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 class SpcFireOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private val bitmaps = mutableListOf<Bitmap>()
+    private var bitmaps = mutableListOf<Bitmap>()
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,8 +58,18 @@ class SpcFireOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         getContent()
     }
 
+    override fun onRestart() {
+        getContent()
+        super.onRestart()
+    }
+
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        withContext(Dispatchers.IO) { UtilitySpcFireOutlook.imageUrls.mapTo(bitmaps) { it.getImage() } }
+        bitmaps = mutableListOf()
+        withContext(Dispatchers.IO) {
+            UtilitySpcFireOutlook.imageUrls.mapTo(bitmaps) {
+                it.getImage()
+            }
+        }
         bitmaps.forEach { bitmap ->
             val card = ObjectCardImage(this@SpcFireOutlookActivity, ll, bitmap)
             val prod = UtilitySpcFireOutlook.textProducts[bitmaps.indexOf(bitmap)]

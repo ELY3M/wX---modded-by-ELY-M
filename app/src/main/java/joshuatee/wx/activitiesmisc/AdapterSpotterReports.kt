@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,7 +22,6 @@
 package joshuatee.wx.activitiesmisc
 
 import androidx.recyclerview.widget.RecyclerView
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +29,7 @@ import android.view.ViewGroup
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.objects.TextSize
 import joshuatee.wx.radar.SpotterReports
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
@@ -40,7 +40,7 @@ internal class AdapterSpotterReports(private val dataSet: List<SpotterReports>) 
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
-        val name = ObjectTextView(itemView, R.id.name, UIPreferences.textHighlightColor)
+        val name = ObjectTextView(itemView, R.id.name, UIPreferences.textHighlightColor, TextSize.MEDIUM)
         val email = ObjectTextView(itemView, R.id.email)
         val time = ObjectTextView(itemView, R.id.time)
         val phone = ObjectTextView(itemView, R.id.phone)
@@ -74,8 +74,8 @@ internal class AdapterSpotterReports(private val dataSet: List<SpotterReports>) 
         holder.summary.text = dataSet[position].narrative
         holder.summary.setAsBackgroundText()
         listOf(holder.time, holder.email, holder.phone, holder.summary).forEach {
-            it.setTextColor(UIPreferences.backgroundColor)
-            it.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+            it.color = UIPreferences.backgroundColor
+            it.setTextSize(TextSize.SMALL)
         }
     }
 

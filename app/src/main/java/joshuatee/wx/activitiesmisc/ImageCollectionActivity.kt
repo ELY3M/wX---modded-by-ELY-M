@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -65,7 +65,7 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
                 iconsEvenlySpaced = true,
                 bottomToolbar = true
         )
-        activityArguments = intent.getStringArrayExtra(TYPE)
+        activityArguments = intent.getStringArrayExtra(TYPE)!!
         imageCollection = MyApplication.imageCollectionMap[activityArguments[0]]!!
         toolbarBottom.setOnMenuItemClickListener(this)
         val menu = toolbarBottom.menu
@@ -90,18 +90,25 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
         getContent()
     }
 
+    override fun onRestart() {
+        getContent()
+        super.onRestart()
+    }
+
     private fun getContentFixThis() {
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         toolbar.subtitle = drw.getLabel()
-        if (drw.getUrl().contains("jma") && imageCollection.title == "GOESFD") {
+        if (drw.url.contains("jma") && imageCollection.title == "GOESFD") {
             actionAnimate.isVisible = true
         }
-        val result = async(Dispatchers.IO) { drw.getUrl().getImage() }
+        val result = async(Dispatchers.IO) {
+            drw.url.getImage()
+        }
         bitmap = result.await()
-        if (drw.getUrl().contains("large_latestsfc.gif")) {
+        if (drw.url.contains("large_latestsfc.gif")) {
             img.setMaxZoom(16f)
         } else {
             img.setMaxZoom(4f)
@@ -150,7 +157,7 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
         animDrawable = withContext(Dispatchers.IO) {
             UtilityGoesFullDisk.getAnimation(
                     this@ImageCollectionActivity,
-                    drw.getUrl()
+                    drw.url
             )
         }
         UtilityImgAnim.startAnimation(animDrawable, img)

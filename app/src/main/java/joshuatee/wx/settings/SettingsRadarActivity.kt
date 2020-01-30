@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -210,8 +210,8 @@ class SettingsRadarActivity : BaseActivity() {
         )
         ll.addView(gpsSw.card)
         gpsSw.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, _ ->
-            MyApplication.locdotFollowsGps = compoundButton.isChecked
-            if (MyApplication.locdotFollowsGps != Utility.readPref(
+            MyApplication.locationDotFollowsGps = compoundButton.isChecked
+            if (MyApplication.locationDotFollowsGps != Utility.readPref(
                             this,
                             "LOCDOT_FOLLOWS_GPS",
                             "false"
@@ -225,48 +225,6 @@ class SettingsRadarActivity : BaseActivity() {
                 Utility.writePref(this, "LOCDOT_FOLLOWS_GPS", "false")
             }
         })
-	/*
-        ll.addView(ObjectSettingsCheckBox(this, this, "Location Heading Bug", "LOCDOT_BUG", R.string.locdot_bug_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Black background", "NWS_RADAR_BG_BLACK", R.string.nws_black_bg_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show Conus Radar", "CONUS_RADAR", R.string.conus_radar_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show counties", "RADAR_SHOW_COUNTY", R.string.show_county_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show county labels", "RADAR_COUNTY_LABELS", R.string.show_county_labels_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Counties - use hires data", "RADAR_COUNTY_HIRES", R.string.county_hires_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "States - use hires data", "RADAR_STATE_HIRES", R.string.state_hires_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show storm tracks", "RADAR_SHOW_STI", R.string.show_sti_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show Hail index", "RADAR_SHOW_HI", R.string.show_hi_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show Hail labels", "WXOGL_HAIL_LABEL", R.string.show_hi_label_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show TVS", "RADAR_SHOW_TVS", R.string.show_tvs_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Show Day 1 Conv Otlk", "RADAR_SHOW_SWO", R.string.show_swo_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Screen on, auto refresh", "RADAR_AUTOREFRESH", R.string.autorefresh_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Multi-pane: share lat/lon/zoom", "DUALPANE_SHARE_POSN", R.string.dualpaneshareposn_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Remember location", "WXOGL_REMEMBER_LOCATION", R.string.rememberloc_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Launch app directly to radar", "LAUNCH_TO_RADAR", R.string.launch_to_radar_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Use JNI for radar (beta)", "RADAR_USE_JNI", R.string.radar_use_jni_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Enable multipurpose radar icons", "WXOGL_ICONS_LEVEL2", R.string.radar_icons_level2_label).card)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Enable userpoints icons on radar", "RADAR_USERPOINTS", R.string.radar_userpoints).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Animation interval", "ANIM_INTERVAL", R.string.anim_np_label, 15, 1, 15).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Default line size", "RADAR_DEFAULT_LINESIZE", R.string.default_linesize_np_label, 1, 1, 10).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Warning line size", "RADAR_WARN_LINESIZE", R.string.warn_linesize_np_label, 4, 1, 10).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Watch/MCD line size", "RADAR_WATMCD_LINESIZE", R.string.watmcd_linesize_np, 4, 1, 10).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Location dot size", "RADAR_LOCDOT_SIZE", R.string.locdot_size_np, 10, 1, 75).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Location icon size", "RADAR_LOCICON_SIZE", R.string.locicon_size_np, 75, 1, 530).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Location Bug size", "RADAR_LOCBUG_SIZE", R.string.locbug_size_np, 75, 1, 530).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Userpoints icon size", "RADAR_USERPOINT_SIZE", R.string.userpoints_size_np, 75, 1, 530).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Hail marker size", "RADAR_HI_SIZE", R.string.hi_size_np, 75, 1, 530).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Hail Text size", "RADAR_HI_TEXT_SIZE", R.string.hi_textsize_np, (MyApplication.radarTextSize * 10).toInt(), 1, 20).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "TVS icon size", "RADAR_TVS_SIZE", R.string.tvs_size_np, 75, 1, 530).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "WXOGL initial view size", "WXOGL_SIZE", R.string.wxogl_size_np, 8, 5, 25).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Refresh interval", "RADAR_REFRESH_INTERVAL", R.string.wxogl_refresh_interval_label, 3, 1, 15).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Storm spotter size", "RADAR_SPOTTER_SIZE", R.string.spotter_size_label, 4, 1, 50).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Aviation dot size", "RADAR_AVIATION_SIZE", R.string.aviation_size_label, 7, 1, 50).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Text size", "RADAR_TEXT_SIZE", R.string.text_size_label, (MyApplication.radarTextSize * 10).toInt(), 4, 20).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Draw tool line size", "DRAWTOOL_SIZE", R.string.drawtool_size_label, 4, 1, 20).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Color Legend width", "RADAR_SHOW_LEGEND_WIDTH", R.string.showlegendwidth, 50, 1, 100).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Color Legend text size", "RADAR_SHOW_LEGEND_TEXTSIZE", R.string.showlegendtextsize, 30, 1, 100).card)
-        ll.addView(ObjectSettingsNumberPicker(this, this, "Detailed observations Zoom", "RADAR_OBS_EXT_ZOOM", R.string.obs_ext_zoom_label, 7, 1, 10).card)
-	*/
-
         ll.addView(
                 ObjectSettingsCheckBox(
                         this,
@@ -276,7 +234,6 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.radar_center_on_location_default_label
                 ).card
         )
-	
         ll.addView(
                 ObjectSettingsCheckBox(
                         this,
@@ -442,6 +399,15 @@ class SettingsRadarActivity : BaseActivity() {
                 ObjectSettingsCheckBox(
                         this,
                         this,
+                        "Show WPC Fronts and pressure highs and lows",
+                        "RADAR_SHOW_WPC_FRONTS",
+                        R.string.radar_show_wpc_fronts_label
+                ).card
+        )	
+        ll.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        this,
                         "Enable userpoints icons on radar",
                         "RADAR_USERPOINTS",
                         R.string.radar_userpoints
@@ -453,8 +419,8 @@ class SettingsRadarActivity : BaseActivity() {
                         this,
                         "Animation interval",
                         "ANIM_INTERVAL",
-                        R.string.anim_np_label,
-                        15,
+                        R.string.animation_interval_np_label,
+                        MyApplication.animationIntervalDefault,
                         1,
                         15
                 ).card
@@ -478,7 +444,7 @@ class SettingsRadarActivity : BaseActivity() {
                         "Warning line size",
                         "RADAR_WARN_LINESIZE",
                         R.string.warn_linesize_np_label,
-                        4,
+                        MyApplication.radarWarnLineSizeDefault,
                         1,
                         10
                 ).card
@@ -490,7 +456,7 @@ class SettingsRadarActivity : BaseActivity() {
                         "MCD/MPD/Watch line size",
                         "RADAR_WATMCD_LINESIZE",
                         R.string.watmcd_linesize_np,
-                        4,
+                        MyApplication.radarWatchMcdLineSizeDefault,
                         1,
                         10
                 ).card
@@ -574,12 +540,83 @@ class SettingsRadarActivity : BaseActivity() {
                         "Location marker size",
                         "RADAR_LOCDOT_SIZE",
                         R.string.locdot_size_np,
-                        8,
+                        MyApplication.radarLocationDotSizeDefault,
                         1,
                         50
                 ).card
         )
-
+		ll.addView(
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Location icon size",
+                        "RADAR_LOCICON_SIZE",
+                        R.string.locicon_size_np,
+                        75,
+                        1,
+                        530
+                ).card
+        )
+		ll.addView(
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Location bug size",
+                        "RADAR_LOCBUG_SIZE",
+                        R.string.locbug_size_np,
+                        75,
+                        1,
+                        530
+                ).card
+        )		
+		ll.addView(
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Hail icon size",
+                        "RADAR_HI_SIZE",
+                        R.string.hi_size_np,
+                        75,
+                        1,
+                        530
+                ).card
+        )
+		ll.addView(
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Hail Text size",
+                        "RADAR_HI_TEXT_SIZE",
+                        R.string.hi_size_np,
+                        (MyApplication.radarHiTextSize * 10).toInt(),
+                        1,
+                        20
+                ).card
+        )		
+        ll.addView(
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "TVS icon size",
+                        "RADAR_TVS_SIZE",
+                        R.string.tvs_size_np,
+                        75,
+                        1,
+                        530
+                ).card
+        )
+        ll.addView(
+                ObjectSettingsSeekbar(
+                        this,
+                        this,
+                        "Userpoints icon size",
+                        "RADAR_USERPOINT_SIZE",
+                        R.string.userpoints_size_np,
+                        75,
+                        1,
+                        530
+                ).card
+        )	
         ll.addView(
                 ObjectSettingsSeekbar(
                         this,
@@ -592,14 +629,7 @@ class SettingsRadarActivity : BaseActivity() {
                         530
                 ).card
         )
-
-        ll.addView(ObjectSettingsSeekbar(this, this, "Location dot size", "RADAR_LOCDOT_SIZE", R.string.locdot_size_np, 10, 1, 75).card)
-        ll.addView(ObjectSettingsSeekbar(this, this, "Location icon size", "RADAR_LOCICON_SIZE", R.string.locicon_size_np, 75, 1, 530).card)
-        ll.addView(ObjectSettingsSeekbar(this, this, "Location Bug size", "RADAR_LOCBUG_SIZE", R.string.locbug_size_np, 75, 1, 530).card)
-        ll.addView(ObjectSettingsSeekbar(this, this, "Userpoints icon size", "RADAR_USERPOINT_SIZE", R.string.userpoints_size_np, 75, 1, 530).card)
-        ll.addView(ObjectSettingsSeekbar(this, this, "Hail marker size", "RADAR_HI_SIZE", R.string.hi_size_np, 75, 1, 530).card)
-        ll.addView(ObjectSettingsSeekbar(this, this, "Hail Text size", "RADAR_HI_TEXT_SIZE", R.string.hi_textsize_np, (MyApplication.radarHiTextSize * 10).toInt(), 1, 20).card)
-        ll.addView(ObjectSettingsSeekbar(this, this, "TVS icon size", "RADAR_TVS_SIZE", R.string.tvs_size_np, 75, 1, 530).card)
+	
 
         ll.addView(
                 ObjectSettingsSeekbar(
@@ -608,7 +638,7 @@ class SettingsRadarActivity : BaseActivity() {
                         "WXOGL initial view size",
                         "WXOGL_SIZE",
                         R.string.wxogl_size_np,
-                        8,
+                        MyApplication.wxoglSizeDefault,
                         5,
                         25
                 ).card
@@ -632,7 +662,7 @@ class SettingsRadarActivity : BaseActivity() {
                         "Storm spotter size",
                         "RADAR_SPOTTER_SIZE",
                         R.string.spotter_size_label,
-                        4,
+                        MyApplication.radarSpotterSizeDefault,
                         1,
                         50
                 ).card
@@ -644,7 +674,7 @@ class SettingsRadarActivity : BaseActivity() {
                         "Aviation dot size",
                         "RADAR_AVIATION_SIZE",
                         R.string.aviation_size_label,
-                        7,
+                        MyApplication.radarAviationSizeDefault,
                         1,
                         50
                 ).card

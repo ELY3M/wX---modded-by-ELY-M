@@ -1,5 +1,5 @@
 <!-- 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -48,18 +48,6 @@
     <item
         android:id="@+id/action_notif_text_prod"
         android:title="@string/notif_add"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_low1"
-        android:title="Significant Surface Low Tracks"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_low2"
-        android:title="Low Tracks and Clusters"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_qpferf"
-        android:title="Excessive Rainfall Forecast"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_mpd"

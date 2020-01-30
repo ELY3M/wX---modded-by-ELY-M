@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -33,6 +33,7 @@ import joshuatee.wx.GlobalArrays
 import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
+import joshuatee.wx.wpc.UtilityWpcText
 
 class FavRemoveActivity : BaseActivity() {
 
@@ -195,7 +196,7 @@ class FavRemoveActivity : BaseActivity() {
             "RID" -> tmpLoc = shortCode + ": " +
                     Utility.readPref(this, prefTokenLocation + shortCode, "")
             "NWSTEXT" -> tmpLoc =
-                    GlobalArrays.nwsTextProducts[UtilityFavorites.findPositionNwsText(shortCode)]
+                    UtilityWpcText.labels[UtilityFavorites.findPositionNwsText(shortCode)]
             "SREF" -> tmpLoc = shortCode
             "RIDCA" -> tmpLoc = findCanadaRadarSiteLabel(shortCode)
             "SPCMESO" -> tmpLoc = findSpcMesoLabel(shortCode)
@@ -211,7 +212,7 @@ class FavRemoveActivity : BaseActivity() {
             "NWSTEXT" -> MyApplication.nwsTextFav = fav
             "SREF" -> MyApplication.srefFav = fav
             "SPCMESO" -> {
-                MyApplication.spcmesoFav = fav
+                MyApplication.spcMesoFav = fav
                 MyApplication.spcmesoLabelFav = favLabel
             }
         }

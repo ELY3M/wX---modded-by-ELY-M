@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -39,6 +39,7 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 import joshuatee.wx.RegExp
 import joshuatee.wx.settings.UtilityLocation
+import java.util.*
 
 object UtilityCanvasStormInfo {
 
@@ -51,7 +52,7 @@ object UtilityCanvasStormInfo {
         radarSite: String
     ) {
         val textSize = 22
-        WXGLDownload.getNidsTab(context, "STI", radarSite.toLowerCase(), stiBaseFn + "")
+        WXGLDownload.getNidsTab(context, "STI", radarSite.toLowerCase(Locale.US), stiBaseFn + "")
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.FILL

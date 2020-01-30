@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -37,10 +37,7 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.ObjectSpinner
 import joshuatee.wx.ui.TouchImageView2
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityImg
-import joshuatee.wx.util.UtilityImgAnim
-import joshuatee.wx.util.UtilityShare
+import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
 object UtilityModels {
@@ -84,8 +81,8 @@ object UtilityModels {
                         )
                     }
                     if (UIPreferences.fabInModels && om.numPanes < 2) {
-                        om.fab1?.setVisibility(View.VISIBLE)
-                        om.fab2?.setVisibility(View.VISIBLE)
+                        om.fab1?.visibility = View.VISIBLE
+                        om.fab2?.visibility = View.VISIBLE
                     }
                     om.firstRun = true
                 }
@@ -190,7 +187,7 @@ object UtilityModels {
         // realTimeGmt - the time in GMT as related to the current model run looking forward in hours
         val realTimeGmt = runInt + timeInt
         val tz = TimeZone.getDefault()
-        val now = Date(System.currentTimeMillis())
+        val now = Date(UtilityTime.currentTimeMillis())
         // offsetFromUtc , example for EDT -14400 ( in seconds )
         val offsetFromUtc = tz.getOffset(now.time) / 1000
         val realTime = realTimeGmt + offsetFromUtc / 60 / 60

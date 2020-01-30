@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -54,7 +54,7 @@ object UtilityWXOGL {
             else -> "k"
         }
         // FIXME need TDWR method
-        if (product.startsWith("TV") || product == "TZL" || product.startsWith("TR") || product == "N1P" || product == "NTP" || product == "ET" || product == "VIL") {
+        if (product.startsWith("TV") || product == "TZL" || product.startsWith("TZ") || product == "N1P" || product == "NTP" || product == "ET" || product == "VIL") {
             ridPrefix = ""
         }
         return ridPrefix

@@ -24,6 +24,7 @@ import joshuatee.wx.notifications.UtilityNotification
 import android.app.NotificationManager
 import android.media.projection.MediaProjectionManager
 import android.os.Build
+import joshuatee.wx.util.UtilityTime
 
 class TelecineService : Service() {
 
@@ -111,8 +112,8 @@ class TelecineService : Service() {
 
     private fun send() {
         val label = "ScreenRecorderService"
-        val requestIDLong = System.currentTimeMillis()
-        val requestID= System.currentTimeMillis().toInt()
+        val requestIDLong = UtilityTime.currentTimeMillis()
+        val requestID= UtilityTime.currentTimeMillis().toInt()
         UtilityNotification.initChannels(this)
         val notification = NotificationCompat.Builder(this, UtilityNotification.notiChannelStrNoSound)
                 .setSmallIcon(MyApplication.ICON_RADAR)

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -67,8 +67,12 @@ internal object UtilityCanvas {
                 UtilityString.parseColumnMutable(warningHTML, RegExp.warningLatLonPattern)
             val vtecs = warningHTML.parseColumn(RegExp.warningVtecPattern)
             warningAl.forEachIndexed { i, warn ->
+                UtilityLog.d("wx", vtecs[i])
                 warningAl[i] =
                     warn.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
+                if (vtecs[i].startsWith("O.EXP") || vtecs[i].startsWith("O.CAN")) {
+                    warningAl.removeAt(i)
+                }
             }
             canvasDrawWarningsNewApi(warningAl, vtecs, canvas, wallPath, paint, provider.isMercator, pn)
         }
@@ -156,7 +160,7 @@ internal object UtilityCanvas {
         paint.color = MyApplication.radarColorLocdot
 
         //custom locationdot//
-        if (MyApplication.locdotFollowsGps) {
+        if (MyApplication.locationDotFollowsGps) {
             val locationicon: Bitmap = BitmapFactory.decodeFile(MyApplication.FilesPath + "location.png");
             val locationiconresized: Bitmap = Bitmap.createScaledBitmap(locationicon, MyApplication.radarLocIconSize, MyApplication.radarLocIconSize, false)
             canvas.drawBitmap(locationiconresized, pixXInit.toFloat(), pixYInit.toFloat(), null)
@@ -187,10 +191,10 @@ internal object UtilityCanvas {
         paint.color = polyType.color
         var prefToken = ""
         when (polyType) {
-            PolygonType.MCD -> prefToken = MyApplication.mcdLatlon.value
-            PolygonType.MPD -> prefToken = MyApplication.mpdLatlon.value
-            PolygonType.WATCH -> prefToken = MyApplication.watchLatlon.value
-            PolygonType.WATCH_TORNADO -> prefToken = MyApplication.watchLatlonTor.value
+            PolygonType.MCD -> prefToken = MyApplication.mcdLatLon.value
+            PolygonType.MPD -> prefToken = MyApplication.mpdLatLon.value
+            PolygonType.WATCH -> prefToken = MyApplication.watchLatLon.value
+            PolygonType.WATCH_TORNADO -> prefToken = MyApplication.watchLatLonTor.value
             else -> {
             }
         }

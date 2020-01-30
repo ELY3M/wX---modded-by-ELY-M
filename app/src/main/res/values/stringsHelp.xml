@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?><!--
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -18,6 +18,15 @@
 -->
 <!-- modded by ELY M. -->
 <resources>
+
+    <string name="radar_show_wpc_fronts_label">
+          Show WPC Fronts and pressure highs and lows. The data is not realtime but rather forecast data from NWS WPC.
+         You can long press (press and hold) in nexrad radar and you will see the timestamp for the current data. For example "WPC Fronts: 0107 1200Z"
+         would indicate Janunary 7, 12:00 in GMT. Blue is for cold fronts and high pressure centers. Red is for warm fronts and low
+         pressure centers. Light brown is for troughs which could be a trough, outflow boundary, squall line, or dry line. Stationary fronts
+         are alternating red and blue. Occluded fronts are pink.
+
+</string>
 
     <string name="radar_center_on_location_default_label">
           If location marker follows GPS is enabled this will keep the radar centered on your current location when enabled.
@@ -322,6 +331,13 @@ GOES product viewer: This is same activity used by the cloud icon in the action 
 US lightning strikes: An image showing recent lightning strikes CONUS wide. For legacy reasons a long press for this icon will give access to beta features.
 </string>
 
+    <string name="help_wpc_rainfall">
+     Show three graphics for WPC Excessive Rainfall products. If you tap on a graphic it will show the related text
+        product. From the WPC Website: "In the Excessive Rainfall Outlooks, the Weather Prediction Center (WPC)
+        forecasts the probability that rainfall will exceed flash flood guidance (FFG) within
+        40 kilometers (25 miles) of a point."
+</string>
+
 
     <string name="help_twitter">
 Twitter widgets: Content is shown for state or Canadian province wx and tornado search via the 2 right most icons in the bottom row.
@@ -423,7 +439,6 @@ download playlist - download all text products in playlist\n
 edit location" - edit current location\n
 edit location Chicago - edit the current location and change the loction to Chicago\n
 add location Chicago - add Chicago as a new location and change the current location to this new location\n
-add location roaming - add a "roaming" location and turn on alerts as well\n\n
 
 NOTE: While commands such as “spc day 2” are still supported, due to issues with voice recognition in Android it’s preferred to use “day 2”.
 </string>
@@ -504,8 +519,8 @@ Show Conus Radar when you zoom out to the whole map.
     <string name="conus_radar_zoom_label">
 Allows one to change the zoom of the conus radar viewing.</string>
 
-      <string name="anim_np_label">
-Animation speed. Lower is faster. Default is 5.
+    <string name="animation_interval_np_label">
+Animation speed. Lower is faster. Default is 8.
       </string>
 
     <string name="default_linesize_np_label">
@@ -713,8 +728,7 @@ This activity can be used to add or modify an existing location. To add a new lo
         check icon to save the location.
             Additionally, you can touch the GPS icon to populate the lat/lon fields if you have location services enabled.
             You should see two popup messages, one at the start and one after the location has been saved. On this screen you can
-        also toggle notifications on or off for this specific location. If the location label is \"ROAMING\" and alerts are turned on then at eacho notification
-        interval it will check the distance moved ( if any ) and then if a certain distance has passed it will update the location. Please keep in mind that the "ROAMING" feature is still in BETA.</string>
+        also toggle notifications on or off for this specific location. </string>
 
     <string name="show_county_label">
 Enable counties to be displayed.</string>

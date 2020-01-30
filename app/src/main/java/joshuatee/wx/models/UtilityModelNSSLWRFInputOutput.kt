@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -31,6 +31,7 @@ import joshuatee.wx.util.UtilityTime
 import joshuatee.wx.util.UtilityImg
 
 import joshuatee.wx.Extensions.*
+import java.util.*
 
 internal object UtilityModelNsslWrfInputOutput {
 
@@ -62,7 +63,7 @@ internal object UtilityModelNsslWrfInputOutput {
         val sector = UtilityModelNsslWrfInterface.sectors[sectorIndex]
         val baseLayerUrl = "https://cams.nssl.noaa.gov/graphics/blank_maps/spc_$sector.png"
         var modelPostfix = "_nssl"
-        var model = om.model.toLowerCase()
+        var model = om.model.toLowerCase(Locale.US)
         if (om.model == "HRRRV3") {
             modelPostfix = ""
         }
@@ -77,7 +78,8 @@ internal object UtilityModelNsslWrfInputOutput {
             val hour = om.run.substring(8, 10)
             val url =
                 baseUrl + "/graphics/models/" + model + modelPostfix + "/" + year + "/" + month + "/" +
-                        day + "/" + hour + "00/f" + time + "00/" + om.currentParam + ".spc_" + sector.toLowerCase() + ".f" + time + "00.png"
+                        day + "/" + hour + "00/f" + time + "00/" + om.currentParam + ".spc_" +
+                        sector.toLowerCase(Locale.US) + ".f" + time + "00.png"
             val baseLayer = baseLayerUrl.getImage()
             val prodLayer = url.getImage()
             return UtilityImg.addColorBG(

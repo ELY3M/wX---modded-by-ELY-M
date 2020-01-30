@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -59,7 +59,7 @@ class BackgroundFetch(val context: Context) {
         val locationNeedsSpcFw = UtilityNotificationSpcFireWeather.locationNeedsSpcFireWeather()
         val locationNeedsWpcMpd = UtilityNotificationWpc.locationNeedsMpd()
         (1..Location.numLocations).forEach {
-            val requestID = System.currentTimeMillis().toInt()
+            val requestID = UtilityTime.currentTimeMillis().toInt()
             notificationUrls += UtilityNotification.send(context, it.toString(), requestID + 1)
         }
         MyApplication.radarWarningPolygons.forEach {
@@ -69,10 +69,10 @@ class BackgroundFetch(val context: Context) {
                 it.storage.valueSet(context, "")
             }
         }
-        if (MyApplication.alertTornadoNotificationCurrent || MyApplication.checktor || PolygonType.TST.pref) {
+        if (MyApplication.alertTornadoNotification || MyApplication.checktor || PolygonType.TST.pref) {
             try {
                 UtilityDownloadWarnings.getForNotification(context)
-                if (MyApplication.alertTornadoNotificationCurrent) {
+                if (MyApplication.alertTornadoNotification) {
                     notificationUrls += UtilityNotificationTornado.checkAndSend(context, MyApplication.severeDashboardTor.value)
                 }
             } catch (e: Exception) {
@@ -83,11 +83,11 @@ class BackgroundFetch(val context: Context) {
             MyApplication.severeDashboardTst.valueSet(context, "")
             MyApplication.severeDashboardFfw.valueSet(context, "")
         }
-        if (MyApplication.alertSpcmcdNotificationCurrent || MyApplication.checkspc || MCD.pref || locationNeedsMcd) {
+        if (MyApplication.alertSpcMcdNotification || MyApplication.checkspc || MCD.pref || locationNeedsMcd) {
             try {
                 val mcdData = UtilityDownloadMcd.getMcd(context)
                 mcdData.numberList.forEachIndexed { index, mcdNumber ->
-                    if (MyApplication.alertSpcmcdNotificationCurrent) {
+                    if (MyApplication.alertSpcMcdNotification) {
                         val noMain = "SPC MCD #$mcdNumber"
                         val mcdPreModified = mcdData.htmlList[index].replace("<.*?>".toRegex(), " ")
                         val polygonType = MCD
@@ -132,11 +132,11 @@ class BackgroundFetch(val context: Context) {
             MyApplication.severeDashboardMcd.valueSet(context, "")
             // end of if to test if alerts_spcmcd are enabled
         }
-        if (MyApplication.alertWpcmpdNotificationCurrent || MyApplication.checkwpc || MPD.pref || locationNeedsWpcMpd) {
+        if (MyApplication.alertWpcMpdNotification || MyApplication.checkwpc || MPD.pref || locationNeedsWpcMpd) {
             try {
                 val mpdData = UtilityDownloadMpd.getMpd(context)
                 mpdData.numberList.forEachIndexed { index, mpdNumber ->
-                    if (MyApplication.alertWpcmpdNotificationCurrent) {
+                    if (MyApplication.alertWpcMpdNotification) {
                         val noMain = "WPC MPD #$mpdNumber"
                         val mcdPreModified = mpdData.htmlList[index].replace("<.*?>".toRegex(), " ")
                         val polygonType = MPD
@@ -182,11 +182,11 @@ class BackgroundFetch(val context: Context) {
             MyApplication.severeDashboardMpd.valueSet(context, "")
             // end of if to test if alerts_wpcmpd are enabled
         }
-        if (MyApplication.alertSpcwatNotificationCurrent || MyApplication.checkspc || MCD.pref) {
+        if (MyApplication.alertSpcWatchNotification || MyApplication.checkspc || MCD.pref) {
             try {
                 val watchData = UtilityDownloadWatch.getWatch(context)
                 watchData.numberList.forEachIndexed { index, watchNumber ->
-                    if (MyApplication.alertSpcwatNotificationCurrent) {
+                    if (MyApplication.alertSpcWatchNotification) {
                         val noMain = "SPC Watch #$watchNumber"
                         val mcdPreModified = watchData.htmlList[index].replace("<.*?>".toRegex(), " ")
                         val polygonType = WATCH
@@ -233,16 +233,16 @@ class BackgroundFetch(val context: Context) {
         }
         LocalBroadcastManager.getInstance(context).sendBroadcast(Intent("notifran"))
         notificationUrls += UtilityNotificationSpc.sendSwoNotifications(context, inBlackout)
-        if (MyApplication.alertNhcEpacNotificationCurrent || MyApplication.alertNhcAtlNotificationCurrent)
+        if (MyApplication.alertNhcEpacNotification || MyApplication.alertNhcAtlNotification)
             notificationUrls += UtilityNotificationNhc.send(
                     context,
-                    MyApplication.alertNhcEpacNotificationCurrent,
-                    MyApplication.alertNhcAtlNotificationCurrent
+                    MyApplication.alertNhcEpacNotification,
+                    MyApplication.alertNhcAtlNotification
             )
 
         // send 7day and current conditions notifications for locations
         (1..Location.numLocations).forEach {
-            val requestID = System.currentTimeMillis().toInt()
+            val requestID = UtilityTime.currentTimeMillis().toInt()
             notificationUrls += UtilityNotification.sendNotificationCurrentConditions(
                     context,
                     it.toString(),
@@ -250,7 +250,7 @@ class BackgroundFetch(val context: Context) {
                     requestID + 1
             )
         }
-        // check of any text prod notifs
+        // check for any text prod notifications
         UtilityNotificationTextProduct.notifyOnAll(context)
         if (locationNeedsMcd) {
             notificationUrls += UtilityNotificationSpc.sendMcdLocationNotifications(context)

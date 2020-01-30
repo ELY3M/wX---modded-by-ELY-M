@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -31,6 +31,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import joshuatee.wx.ui.ObjectTextView
 
@@ -59,8 +60,11 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             textViewList.add(item)
             item.setPadding(60, 30, 0, 30)
             item.gravity = Gravity.CENTER_HORIZONTAL
-            item.setTextColor(Color.BLACK)
-            item.tv.setOnClickListener { fnList[index](position); dismiss() }
+            item.color = Color.BLACK
+            item.tv.setOnClickListener {
+                fnList[index](position)
+                dismiss()
+            }
             linearLayout.addView(item.tv)
         }
         return fragmentView
@@ -74,6 +78,12 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             textViewList[3].tv.visibility = View.INVISIBLE
         }
         initView()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val behavior = BottomSheetBehavior.from(requireView().parent as View)
+        behavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     private fun initView() {

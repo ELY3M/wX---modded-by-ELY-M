@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,14 +22,13 @@
 package joshuatee.wx.activitiesmisc
 
 import androidx.recyclerview.widget.RecyclerView
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.objects.TextSize
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
 
@@ -65,8 +64,8 @@ internal class AdapterUSWarningsImpact(private val dataSet: List<ObjectImpactGra
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
         holder.title.text = dataSet[position].title
-        holder.title.setTextColor(UIPreferences.textHighlightColor)
-        holder.title.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+        holder.title.color = UIPreferences.textHighlightColor
+        holder.title.setTextSize(TextSize.SMALL)
         holder.cities.text = dataSet[position].cities
         holder.population.text = dataSet[position].population
         listOf(holder.cities, holder.population).forEach {

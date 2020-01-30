@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,12 +27,14 @@ import joshuatee.wx.radar.UtilityMetar
 import joshuatee.wx.MyApplication
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.radar.RID
-
-import java.util.Date
-import java.util.Calendar
+import java.util.*
 
 internal class ObjectMetar(context: Context, location: LatLon) {
 
+
+    //
+    // This is used to show the current conditions on the main screen of the app
+    //
 
 /*
  ANN ARBOR MUNICIPAL AIRPORT, MI, United States (KARB) 42-13N 083-45W 251M
@@ -81,11 +83,19 @@ internal class ObjectMetar(context: Context, location: LatLon) {
     private var metarSkyCondition = ""
     private var metarWeatherCondition = ""
 
+    //
+    // Capitalize the first letter of each word in the current condition string
+    //
     private fun capitalizeString(string: String): String {
+        UtilityLog.d("wx", "CC1: $string")
         val tokens = string.split(" ")
         var newString = ""
-        tokens.forEach { newString += it.capitalize() + " " }
-        return newString.trimEnd()
+        tokens.forEach {
+            newString += it.capitalize() + " "
+        }
+        val stringToReturn = newString.trimEnd()
+        UtilityLog.d("wx", "CC2: $stringToReturn")
+        return stringToReturn
     }
 
     private fun changeDegreeUnits(value: String): String {
@@ -127,7 +137,6 @@ internal class ObjectMetar(context: Context, location: LatLon) {
             timeOfDay = "day"
         }
         val conditionModified = condition.split(";")[0]
-        //UtilityLog.d("wx", conditionModified)
         val shortCondition = UtilityMetarConditions.iconFromCondition[conditionModified] ?: ""
         return MyApplication.nwsApiUrl + "/icons/land/$timeOfDay/$shortCondition?size=medium"
     }
@@ -157,7 +166,7 @@ internal class ObjectMetar(context: Context, location: LatLon) {
         metarWeatherCondition = metarData.parse("Weather: (.*?)" + MyApplication.newline)
         metarSkyCondition = capitalizeString(metarSkyCondition)
         metarWeatherCondition = capitalizeString(metarWeatherCondition)
-        condition = if (metarWeatherCondition == "") {
+        condition = if (metarWeatherCondition == "" || metarWeatherCondition.contains("Inches Of Snow On Ground")) {
             metarSkyCondition
         } else {
             metarWeatherCondition

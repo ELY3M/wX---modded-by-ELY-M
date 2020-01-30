@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -33,6 +33,7 @@ import android.view.ViewGroup
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.objects.TextSize
 import joshuatee.wx.radar.Spotter
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
@@ -43,7 +44,7 @@ internal class AdapterSpotter(private val dataSet: MutableList<Spotter>) :
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
-        val name = ObjectTextView(itemView, R.id.name, UIPreferences.textHighlightColor)
+        val name = ObjectTextView(itemView, R.id.name, UIPreferences.textHighlightColor, TextSize.MEDIUM)
         val email = ObjectTextView(itemView, R.id.email)
         val time = ObjectTextView(itemView, R.id.time)
         val phone = ObjectTextView(itemView, R.id.phone)

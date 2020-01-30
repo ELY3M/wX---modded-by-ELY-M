@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -31,7 +31,9 @@ import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectTouchImageView
-import joshuatee.wx.util.*
+import joshuatee.wx.util.UtilityIO
+import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.UtilityShare
 
 import kotlinx.coroutines.*
 
@@ -94,14 +96,16 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private fun loadRawBitmap() {
         bitmap = UtilityImg.loadBitmap(this, R.drawable.radar_legend, false)
         img.setBitmap(bitmap)
-        //img.resetZoom()
+    }
+
+    override fun onRestart() {
+        getContent()
+        super.onRestart()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        UtilityLog.d("wx", url)
         bitmap = withContext(Dispatchers.IO) { url.getImage() }
         if (needsWhiteBackground) {
-            UtilityLog.d("wx", url)
             bitmap = UtilityImg.addColorBG(this@ImageShowActivity, bitmap, Color.WHITE)
         }
         img.setBitmap(bitmap)

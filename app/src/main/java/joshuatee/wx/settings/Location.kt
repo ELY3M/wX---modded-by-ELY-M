@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,8 +22,6 @@
 package joshuatee.wx.settings
 
 import android.content.Context
-import android.content.Intent
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import joshuatee.wx.MyApplication
 import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.objects.LatLonStr
@@ -79,24 +77,15 @@ class Location(val context: Context, locNumInt: Int) {
         wfo = Utility.readPref(context, "NWS$jStr", "")
         rid = Utility.readPref(context, "RID$jStr", "")
         nwsStateCurrent = Utility.readPref(context, "NWS" + jStr + "_STATE", "")
-        alertNotificationCurrent =
-            Utility.readPref(context, "ALERT" + jStr + "_NOTIFICATION", "false")
-        alertNotificationRadarCurrent =
-            Utility.readPref(context, "ALERT_NOTIFICATION_RADAR$jStr", "false")
-        alertCcNotificationCurrent =
-            Utility.readPref(context, "ALERT_CC" + jStr + "_NOTIFICATION", "false")
-        alertSevenDayNotificationCurrent =
-            Utility.readPref(context, "ALERT_7DAY_" + jStr + "_NOTIFICATION", "false")
-        alertNotificationSoundCurrent =
-            Utility.readPref(context, "ALERT_NOTIFICATION_SOUND$jStr", "false")
-        alertNotificationMcdCurrent =
-            Utility.readPref(context, "ALERT_NOTIFICATION_MCD$jStr", "false")
-        alertNotificationSwoCurrent =
-            Utility.readPref(context, "ALERT_NOTIFICATION_SWO$jStr", "false")
-        alertNotificationSpcfwCurrent =
-            Utility.readPref(context, "ALERT_NOTIFICATION_SPCFW$jStr", "false")
-        alertNotificationWpcmpdCurrent =
-            Utility.readPref(context, "ALERT_NOTIFICATION_WPCMPD$jStr", "false")
+        alertNotificationCurrent = Utility.readPref(context, "ALERT" + jStr + "_NOTIFICATION", "false")
+        alertNotificationRadarCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_RADAR$jStr", "false")
+        alertCcNotificationCurrent = Utility.readPref(context, "ALERT_CC" + jStr + "_NOTIFICATION", "false")
+        alertSevenDayNotificationCurrent = Utility.readPref(context, "ALERT_7DAY_" + jStr + "_NOTIFICATION", "false")
+        alertNotificationSoundCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_SOUND$jStr", "false")
+        alertNotificationMcdCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_MCD$jStr", "false")
+        alertNotificationSwoCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_SWO$jStr", "false")
+        alertNotificationSpcfwCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_SPCFW$jStr", "false")
+        alertNotificationWpcmpdCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_WPCMPD$jStr", "false")
         raw = Utility.readPref(context, "LOC" + jStr + "_TIMERAW", "")
         dst = Utility.readPref(context, "LOC" + jStr + "_TIMEDST", "")
         state = Utility.readPref(context, "NWS_LOCATION_$wfo", "").split(",")[0]
@@ -265,8 +254,6 @@ class Location(val context: Context, locNumInt: Int) {
             val wfo = pointData.parse("\"cwa\": \"(.*?)\"")
             var radarStation = pointData.parse("\"radarStation\": \"(.*?)\"")
             radarStation = UtilityString.getLastXChars(radarStation, 3)
-            //print(wfo);
-            //print(radarStation);
             return listOf(wfo, radarStation)
         }
 
@@ -359,10 +346,15 @@ class Location(val context: Context, locNumInt: Int) {
                 Utility.writePref(context, "NWS$locNum", "")
             }
             refreshLocationData(context)
-            LocalBroadcastManager.getInstance(context).sendBroadcast(Intent("locationadded"))
+            setCurrentLocationStr(context, locNum)
             return "Saving location $locNum as $labelStr ($xStr,$yStr) " + wfo.toUpperCase(
                 Locale.US
             ) + "(" + radarSite.toUpperCase(Locale.US) + ")"
+        }
+
+        private fun setCurrentLocationStr(context: Context, locNum: String) {
+            Utility.writePref(context, "CURRENT_LOC_FRAGMENT", locNum)
+            currentLocationStr = locNum
         }
 
         fun deleteLocation(context: Context, locToDeleteStr: String) {

@@ -164,10 +164,6 @@ internal object UtilityWXOGLPerfL2 {
                     Log.i("wx", "got EOFException")
                     break // assume this is ok
                 }
-                /* UtilityLog.d("wx","reading compressed bytes "
-                        + numCompBytes + " input starts at "
-                        + inputRaf.getFilePointer() + "; output starts at " + outputRaf.getFilePointer());
-                UtilityLog.d("wx","decomp bytes " + Long.toString(byte_cnt));*/
                 /*
 				 * For some stupid reason, the last block seems to
 				 * have the number of bytes negated.  So, we just

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -152,10 +152,6 @@ object UtilityColorPaletteGeneric {
                 }
             }
         } // end loop over lines
-        //UtilityLog.d("wx", dbzAl.toString())
-        //UtilityLog.d("wx", rAl.toString())
-        //UtilityLog.d("wx", gAl.toString())
-        //UtilityLog.d("wx", bAl.toString())
         var low: Int
         var high: Int
         var lowColor: Int
@@ -224,7 +220,6 @@ object UtilityColorPaletteGeneric {
                                 highColor,
                                 j.toDouble() / (diff * scale).toDouble()
                         )
-                        //UtilityLog.d("wx", ((j).toDouble() / (diff * scale).toDouble()).toString() + " " + j.toString() + " " + diff.toString())
                         if (colorMapR.hasRemaining()) {
                             colorMapR.put(Color.red(colorInt).toByte())
                         }
@@ -235,19 +230,11 @@ object UtilityColorPaletteGeneric {
                             colorMapB.put(Color.blue(colorInt).toByte())
                         }
                     } else if (scale == 2) {
-                        /*colorInt = UtilityNexradColors.interpolateColor(
-                            lowColor,
-                            highColor,
-                            (j * scale - 1).toDouble() / (diff * scale).toDouble()
-                        )*/
-
                         colorInt = UtilityNexradColors.interpolateColor(
                                 lowColor,
                                 highColor,
                                 (j * scale - 1).toDouble() / (diff * scale).toDouble()
                         )
-                        //UtilityLog.d("wx", ((j * scale - 1).toDouble() / (diff * scale).toDouble()).toString())
-                        //UtilityLog.d("wx", ((j * scale).toDouble() / (diff * scale).toDouble()).toString())
                         colorInt2 = UtilityNexradColors.interpolateColor(
                                 lowColor,
                                 highColor,

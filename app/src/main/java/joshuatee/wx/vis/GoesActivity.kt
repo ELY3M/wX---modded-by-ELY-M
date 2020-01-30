@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -64,7 +64,7 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
-        activityArguments = intent.getStringArrayExtra(RID)
+        activityArguments = intent.getStringArrayExtra(RID)!!
         drw = ObjectNavDrawer(this, UtilityGoes.labels, UtilityGoes.codes)
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, "")
         img.setMaxZoom(8f)
@@ -83,7 +83,9 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
         writePrefs()
         toolbar.title = UtilityGoes.sectorToName[sector] ?: ""
         toolbar.subtitle = drw.getLabel()
-        bitmap = withContext(Dispatchers.IO) { UtilityGoes.getImage(drw.getUrl(), sector) }
+        bitmap = withContext(Dispatchers.IO) {
+            UtilityGoes.getImage(drw.url, sector)
+        }
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn(prefImagePosition)
         if (oldSector != sector) {
@@ -194,7 +196,7 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
         animDrawable = withContext(Dispatchers.IO) {
             UtilityGoes.getAnimation(
                     this@GoesActivity,
-                    drw.getUrl(),
+                    drw.url,
                     sector,
                     frameCount
             )

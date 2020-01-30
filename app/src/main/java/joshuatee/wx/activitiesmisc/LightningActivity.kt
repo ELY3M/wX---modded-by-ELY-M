@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -77,10 +77,17 @@ class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
         getContent()
     }
 
+    override fun onRestart() {
+        getContent()
+        super.onRestart()
+    }
+
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         title = "Lightning " + objectNavDrawer.getLabel()
         toolbar.subtitle = periodPretty
-        bitmap = withContext(Dispatchers.IO) { UtilityLightning.getImage(objectNavDrawer.getUrl(), period) }
+        bitmap = withContext(Dispatchers.IO) {
+            UtilityLightning.getImage(objectNavDrawer.url, period)
+        }
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn("LIGHTNING")
         Utility.writePref(this@LightningActivity, "LIGHTNING_PERIOD", period)

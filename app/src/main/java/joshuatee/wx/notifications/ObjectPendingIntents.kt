@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -26,6 +26,7 @@ import android.app.PendingIntent
 import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
+import joshuatee.wx.util.UtilityTime
 
 class ObjectPendingIntents {
 
@@ -46,7 +47,7 @@ class ObjectPendingIntents {
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(cl)
         stackBuilder.addNextIntent(resultIntent)
-        val requestID = System.currentTimeMillis().toInt()
+        val requestID = UtilityTime.currentTimeMillis().toInt()
         resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
         resultPendingIntent2 = PendingIntent.getActivity(
             context,
@@ -62,7 +63,7 @@ class ObjectPendingIntents {
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(cl)
         stackBuilder.addNextIntent(resultIntent)
-        val requestID = System.currentTimeMillis().toInt()
+        val requestID = UtilityTime.currentTimeMillis().toInt()
         resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
         resultPendingIntent2 = PendingIntent.getActivity(
             context,

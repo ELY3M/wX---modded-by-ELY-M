@@ -1,5 +1,5 @@
 <!-- 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -76,7 +76,7 @@
                                 android:id="@+id/locXEt"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:hint="Latitude"
+                                android:hint="Latitude, you are not required to enter."
                                 android:inputType="text"
                                 android:textSize="18sp"
                                 android:importantForAutofill="no" />
@@ -85,7 +85,7 @@
                                 android:id="@+id/locYEt"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:hint="Longitude"
+                                android:hint="Longitude, you are not required to enter."
                                 android:inputType="text"
                                 android:textSize="18sp"
                                 android:importantForAutofill="no" />

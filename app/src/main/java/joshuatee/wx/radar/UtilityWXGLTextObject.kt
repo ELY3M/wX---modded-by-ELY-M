@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -24,16 +24,17 @@ package joshuatee.wx.radar
 
 object UtilityWXGLTextObject {
 
+    // FIXME naming and use more
     fun hideTV(numPanes: Int, textObjects: MutableList<WXGLTextObject>): Unit =
-        (0 until numPanes).forEach { textObjects[it].hideTV() }
+        (0 until numPanes).forEach { textObjects[it].hideTextLabels() }
 
     fun showTV(numPanes: Int, textObjects: MutableList<WXGLTextObject>): Unit =
-        (0 until numPanes).forEach { textObjects[it].addTV() }
+        (0 until numPanes).forEach { textObjects[it].addTextLabels() }
 
     fun updateSpotterLabels(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
         (0 until numPanes).forEach {
-            textObjects[it].initTVSpottersLabels()
-            textObjects[it].addTVSpottersLabels()
+	    ///textObjects[it].initTVSpottersLabels()  //is this needed????  test for bugs
+            textObjects[it].addTextLabelsSpottersLabels()
         }
     }
 
@@ -45,8 +46,14 @@ object UtilityWXGLTextObject {
     }
     fun updateObs(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
         (0 until numPanes).forEach {
-            textObjects[it].initTVObs()
-            textObjects[it].addTVObs()
+            textObjects[it].initializeTextLabelsObservations()
+            textObjects[it].addTextLabelsObservations()
+        }
+    }
+
+    fun updateWpcFronts(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
+        (0 until numPanes).forEach {
+            textObjects[it].addWpcPressureCenters()
         }
     }
 }

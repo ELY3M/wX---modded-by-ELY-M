@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -53,7 +53,7 @@ class WebscreenABModels : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_webview_toolbar, null, false)
         val activityArguments = intent.getStringArrayExtra(URL)
-        val url = activityArguments[0]
+        val url = activityArguments!![0]
         title = activityArguments[1]
         val webSettings = webview.settings
         webSettings.javaScriptEnabled = true

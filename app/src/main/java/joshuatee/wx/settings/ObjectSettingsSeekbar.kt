@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -37,7 +37,6 @@ import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
-import joshuatee.wx.util.UtilityLog
 
 internal class ObjectSettingsSeekbar(
         context: Context,
@@ -92,7 +91,6 @@ internal class ObjectSettingsSeekbar(
         ll.orientation = LinearLayout.VERTICAL
         ll.gravity = Gravity.CENTER_VERTICAL
         ll.addView(tv)
-        //UtilityLog.d("wx", "INITVALUE " + pref + ": " + initValue)
         seekBar = SeekBar(context)
         seekBar.max = highValue - lowValue
         seekBar.progress = convert(initValue)
@@ -114,7 +112,6 @@ internal class ObjectSettingsSeekbar(
             }
 
             override fun onStopTrackingTouch(seekBar: SeekBar) {
-                UtilityLog.d("wx", "STOP: " + seekBar.progress.toString())
                 val newVal = convertForSave(seekBar.progress)
                 when (pref) {
                     "RADAR_TEXT_SIZE" -> Utility.writePref(context, pref, newVal / 10.0f)

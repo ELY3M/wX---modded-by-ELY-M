@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -25,12 +25,17 @@ package joshuatee.wx.settings
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.activitiesmisc.LightningActivity
+import joshuatee.wx.activitiesmisc.USWarningsWithRadarActivity
 import joshuatee.wx.canada.CanadaRadarActivity
+import joshuatee.wx.models.ModelsGenericActivity
+import joshuatee.wx.nhc.NhcActivity
 import joshuatee.wx.radar.AwcRadarMosaicActivity
 import joshuatee.wx.radar.USNwsMosaicActivity
+import joshuatee.wx.radar.WXGLRadarActivityMultiPane
 import joshuatee.wx.spc.*
 import joshuatee.wx.vis.GoesActivity
 import joshuatee.wx.wpc.WpcImagesActivity
+import joshuatee.wx.wpc.WpcTextProductsActivity
 
 internal object UtilityHomeScreen {
 
@@ -49,7 +54,8 @@ internal object UtilityHomeScreen {
     val localChoicesImg = listOf(
             "RADAR: Local NEXRAD Radar",
             "CARAIN: Local CA Radar",
-            "WEATHERSTORY: Local NWS Weather Story"
+            "WEATHERSTORY: Local NWS Weather Story",
+            "WFOWARNINGS: Local NWS Office Warnings"
     )
 
     fun setupMap() {
@@ -67,6 +73,31 @@ internal object UtilityHomeScreen {
             MyApplication.HM_CLASS_ARGS[token] = arrayOf(token, "1", "SPCMESO")
             MyApplication.HM_CLASS_ID[token] = SpcMesoActivity.INFO
         }
+
+        MyApplication.HM_CLASS["RADAR_DUAL_PANE"] = WXGLRadarActivityMultiPane::class.java
+        MyApplication.HM_CLASS_ID["RADAR_DUAL_PANE"] = WXGLRadarActivityMultiPane.RID
+        MyApplication.HM_CLASS_ARGS["RADAR_DUAL_PANE"] = arrayOf("", "", "2")
+
+        MyApplication.HM_CLASS["RADAR_QUAD_PANE"] = WXGLRadarActivityMultiPane::class.java
+        MyApplication.HM_CLASS_ID["RADAR_QUAD_PANE"] = WXGLRadarActivityMultiPane.RID
+        MyApplication.HM_CLASS_ARGS["RADAR_QUAD_PANE"] = arrayOf("", "", "4")
+
+        MyApplication.HM_CLASS["WPCIMG"] = WpcImagesActivity::class.java
+        MyApplication.HM_CLASS_ID["WPCIMG"] = WpcImagesActivity.URL
+        MyApplication.HM_CLASS_ARGS["WPCIMG"] = arrayOf()
+
+        MyApplication.HM_CLASS["WPCTEXT"] = WpcTextProductsActivity::class.java
+        MyApplication.HM_CLASS_ID["WPCTEXT"] = WpcTextProductsActivity.URL
+        MyApplication.HM_CLASS_ARGS["WPCTEXT"] = arrayOf("pmdspd", "Short Range Forecast Discussion")
+
+        MyApplication.HM_CLASS["NHC"] = NhcActivity::class.java
+        MyApplication.HM_CLASS_ID["NHC"] = NhcActivity.URL
+        MyApplication.HM_CLASS_ARGS["NHC"] = arrayOf()
+
+
+        MyApplication.HM_CLASS["MODEL_NCEP"] = ModelsGenericActivity::class.java
+        MyApplication.HM_CLASS_ID["MODEL_NCEP"] = ModelsGenericActivity.INFO
+        MyApplication.HM_CLASS_ARGS["MODEL_NCEP"] = arrayOf("1", "NCEP", "NCEP")
 
         MyApplication.HM_CLASS["SPC_TST"] = SpcThunderStormOutlookActivity::class.java
         MyApplication.HM_CLASS_ARGS["SPC_TST"] = arrayOf("")
@@ -118,34 +149,50 @@ internal object UtilityHomeScreen {
             MyApplication.HM_CLASS_ID["RAD_2KM"] = AwcRadarMosaicActivity.URL
         }
 
-        MyApplication.HM_CLASS["QPF1"] = WpcImagesActivity::class.java
-        MyApplication.HM_CLASS_ARGS["QPF1"] = arrayOf("")
-        MyApplication.HM_CLASS_ID["QPF1"] = WpcImagesActivity.URL
-
-        MyApplication.HM_CLASS["FMAP"] = WpcImagesActivity::class.java
-        MyApplication.HM_CLASS_ARGS["FMAP"] = arrayOf("")
-        MyApplication.HM_CLASS_ID["FMAP"] = WpcImagesActivity.URL
-
-        listOf("QPF2", "QPF3", "QPF1-2", "QPF1-3", "QPF4-5", "QPF6-7", "QPF1-5", "QPF1-7").forEach {
-            MyApplication.HM_CLASS[it] = WpcImagesActivity::class.java
-            MyApplication.HM_CLASS_ARGS[it] = arrayOf("")
-            MyApplication.HM_CLASS_ID[it] = WpcImagesActivity.URL
-        }
-
         listOf(
+                "FMAP",
+                "FMAPD2",
+                "FMAPD3",
                 "FMAP12",
                 "FMAP24",
                 "FMAP36",
                 "FMAP48",
+                "FMAP72",
+                "FMAP96",
+                "FMAP120",
+                "FMAP144",
+                "FMAP168",
                 "FMAP3D",
                 "FMAP4D",
                 "FMAP5D",
                 "FMAP6D",
-                "WPC_ANALYSIS"
+                "WPC_ANALYSIS",
+                "QPF1",
+                "QPF2",
+                "QPF3",
+                "QPF1-2",
+                "QPF1-3",
+                "QPF4-5",
+                "QPF6-7",
+                "QPF1-5",
+                "QPF1-7"
         ).forEach {
             MyApplication.HM_CLASS[it] = WpcImagesActivity::class.java
-            MyApplication.HM_CLASS_ARGS[it] = arrayOf("")
+            MyApplication.HM_CLASS_ARGS[it] = arrayOf("HS", it)
             MyApplication.HM_CLASS_ID[it] = WpcImagesActivity.URL
+        }
+
+        listOf(
+                "USWARN",
+                "AKWARN",
+                "HIWARN"
+        ).forEach {
+            MyApplication.HM_CLASS[it] = USWarningsWithRadarActivity::class.java
+            MyApplication.HM_CLASS_ARGS[it] = arrayOf(
+                    ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?",
+                    "us"
+            )
+            MyApplication.HM_CLASS_ID[it] = USWarningsWithRadarActivity.URL
         }
     }
 }

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -77,7 +77,9 @@ class SettingsColorsActivity : BaseActivity() {
 
         mapColorToPref.keys.asSequence().sorted()
             .mapTo(colorObjects) { ObjectSettingsColorLabel(this, it, mapColorToPref[it]!!) }
-        colorObjects.forEach { ll.addView(it.card) }
+        colorObjects.forEach {
+            ll.addView(it.card)
+        }
     }
 
     override fun onRestart() {
@@ -93,7 +95,9 @@ class SettingsColorsActivity : BaseActivity() {
 
     private fun setColorOnButtons() {
         MyApplication.initPreferences(this)
-        colorObjects.forEach { it.refreshColor() }
+        colorObjects.forEach {
+            it.refreshColor()
+        }
     }
 }
 

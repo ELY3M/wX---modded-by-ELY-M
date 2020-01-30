@@ -71,7 +71,7 @@ class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
         //dataB = B
         title = dataA
         toolbar.subtitle = Location.name
-        card0.setText(contentFull)
+        card0.setTextAndTranslate(contentFull)
     }
 
     //FIXME matchup texts.

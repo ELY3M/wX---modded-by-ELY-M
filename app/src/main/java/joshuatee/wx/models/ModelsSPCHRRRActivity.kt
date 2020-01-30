@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -29,6 +29,7 @@ import java.util.Locale
 
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.text.TextUtils
+import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
@@ -69,7 +70,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener, On
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        activityArguments = intent.getStringArrayExtra(INFO)
+        activityArguments = intent.getStringArrayExtra(INFO)!!
         om = ObjectModel(this, activityArguments[1], activityArguments[0])
         if (om.numPanes == 1) {
             super.onCreate(
@@ -99,9 +100,9 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                                 ), ":"
                         ))
         )
-        val m = toolbarBottom.menu
-        miStatusParam1 = m.findItem(R.id.action_status_param1)
-        miStatusParam2 = m.findItem(R.id.action_status_param2)
+        val menu = toolbarBottom.menu
+        miStatusParam1 = menu.findItem(R.id.action_status_param1)
+        miStatusParam2 = menu.findItem(R.id.action_status_param2)
         if (om.numPanes < 2) {
             fab1 = ObjectFab(
                     this,
@@ -113,19 +114,19 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                     this,
                     R.id.fab2,
                     View.OnClickListener { UtilityModels.moveForward(om.spTime) })
-            m.findItem(R.id.action_img1).isVisible = false
-            m.findItem(R.id.action_img2).isVisible = false
+            menu.findItem(R.id.action_img1).isVisible = false
+            menu.findItem(R.id.action_img2).isVisible = false
             if (UIPreferences.fabInModels) {
-                m.findItem(R.id.action_back).isVisible = false
-                m.findItem(R.id.action_forward).isVisible = false
+                menu.findItem(R.id.action_back).isVisible = false
+                menu.findItem(R.id.action_forward).isVisible = false
             }
-            fab1?.setVisibility(View.GONE)
-            fab2?.setVisibility(View.GONE)
+            fab1?.visibility = View.GONE
+            fab2?.visibility = View.GONE
             miStatusParam2.isVisible = false
         } else {
-            m.findItem(R.id.action_multipane).isVisible = false
+            menu.findItem(R.id.action_multipane).isVisible = false
         }
-        miStatus = m.findItem(R.id.action_status)
+        miStatus = menu.findItem(R.id.action_status)
         miStatus.title = "in through"
         om.spTime = ObjectSpinner(this, this, this, R.id.spinner_time)
         om.displayData = DisplayData(this, this, om.numPanes, om.spTime)
@@ -148,7 +149,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener, On
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
             drw.drawerLayout.closeDrawer(drw.listView)
-            om.displayData.param[om.curImg] = drw.getToken(position)
+            om.displayData.param[om.curImg] = drw.tokens[position]
             om.displayData.paramLabel[om.curImg] = drw.getLabel(position)
             UtilityModels.getContent(this, om, overlayImg, uiDispatcher)
         }
@@ -314,6 +315,24 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener, On
             Utility.writePref(this, om.prefRunPosn, om.spTime.selectedItemPosition)
         }
         super.onStop()
+    }
+
+    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        return when (keyCode) {
+            KeyEvent.KEYCODE_J -> {
+                if (event.isCtrlPressed) {
+                    UtilityModels.moveBack(om.spTime)
+                }
+                true
+            }
+            KeyEvent.KEYCODE_K -> {
+                if (event.isCtrlPressed) {
+                    UtilityModels.moveForward(om.spTime)
+                }
+                true
+            }
+            else -> super.onKeyUp(keyCode, event)
+        }
     }
 }
 

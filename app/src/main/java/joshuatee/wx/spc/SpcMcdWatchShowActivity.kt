@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -30,8 +30,10 @@ import android.view.View
 import android.view.ContextMenu.ContextMenuInfo
 
 import joshuatee.wx.R
+import joshuatee.wx.activitiesmisc.ImageShowActivity
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
+import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectCardImage
@@ -72,7 +74,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         toolbarBottom.setOnMenuItemClickListener(this)
         objectCardImage = ObjectCardImage(this, ll)
         objectCardText = ObjectCardText(this, ll, toolbar, toolbarBottom)
-        activityArguments = intent.getStringArrayExtra(NO)
+        activityArguments = intent.getStringArrayExtra(NO)!!
         number = activityArguments[0]
         when (activityArguments[2]) {
             "MCD" -> objectWatchProduct = ObjectWatchProduct(PolygonType.MCD, number)
@@ -87,9 +89,17 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) { objectWatchProduct.getData(this@SpcMcdWatchShowActivity) }
-        objectCardText.setText(Utility.fromHtml(objectWatchProduct.text))
+        objectCardText.text = Utility.fromHtml(objectWatchProduct.text)
         toolbar.subtitle = objectWatchProduct.textForSubtitle
         objectCardImage.setImage(objectWatchProduct.bitmap)
+        objectCardImage.setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                    this@SpcMcdWatchShowActivity,
+                    ImageShowActivity::class.java,
+                    ImageShowActivity.URL,
+                    arrayOf(objectWatchProduct.imgUrl, objectWatchProduct.title, "true")
+            )
+        })
         registerForContextMenu(objectCardImage.img)
         UtilityTts.conditionalPlay(
                 activityArguments,

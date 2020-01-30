@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -44,7 +44,7 @@ import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 class SpcSwoSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private val bitmaps = mutableListOf<Bitmap>()
+    private var bitmaps = mutableListOf<Bitmap>()
     private lateinit var linearLayoutHorizontalList: List<ObjectLinearLayout>
 
     @SuppressLint("MissingSuperCall")
@@ -60,19 +60,26 @@ class SpcSwoSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         UtilityShortcut.hidePinIfNeeded(menu)
         title = "SPC"
         toolbar.subtitle = "Convective Outlook Summary"
+        getContent()
+    }
+
+    override fun onRestart() {
+        getContent()
+        super.onRestart()
+    }
+
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        ll.removeAllViews()
         linearLayoutHorizontalList = listOf(
-                ObjectLinearLayout(this, ll),
-                ObjectLinearLayout(this, ll),
-                ObjectLinearLayout(this, ll),
-                ObjectLinearLayout(this, ll)
+                ObjectLinearLayout(this@SpcSwoSummaryActivity, ll),
+                ObjectLinearLayout(this@SpcSwoSummaryActivity, ll),
+                ObjectLinearLayout(this@SpcSwoSummaryActivity, ll),
+                ObjectLinearLayout(this@SpcSwoSummaryActivity, ll)
         )
         linearLayoutHorizontalList.forEach {
             it.linearLayout.orientation = LinearLayout.HORIZONTAL
         }
-        getContent()
-    }
-
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        bitmaps = mutableListOf()
         withContext(Dispatchers.IO) {
             arrayOf("1", "2", "3", "4-8").forEach {
                 bitmaps.addAll(UtilitySpcSwo.getImages(it, false))

@@ -1,39 +1,174 @@
-// TODO FEATURE - Level 2 BV colormap and wrapping (Alex)
-// TODO FEATURE - line size - swo, wb, wb gusts, sti
-// TODO FEATURE - make location update interval configurable
-// TODO FEATURE - add vtec end date check to tor notification
-// TODO FEATURE - color pal , allow cloning of a user created pal
-// TODO https://android-developers.googleblog.com/2019/03/introducing-new-google-play-app-and.html
-// TODO FEATURE - add ability to add generic URLs to homescreen
-// TODO FEATure - in Tabs show labels in addition or instead of icons
-// TODO FEATURE - severe dashboard better formatting for vtec
-// TODO FEATURE - add more TDWR products including TVS/Meso (Lee)
-// TODO REFACTOR - OkHttp 3.13 Requires Android 5+ – Square Corner Blog – Medium  https://medium.com/square-corner-blog/okhttp-3-13-requires-android-5-818bb78d07ce
-// TODO REFACTOR - UtilityMetar in radar has optimization related to text file loading
-// TODO REFACTOR - move off rid/wfo/sounding lat/lon/name currently in pref should be in objects (like flutter/iOS)
-// TODO REFACTOR - migrate away from US govt website for Sun/Moon data do to cert issues, use external code that is Local to prevent dependencies ( preferably same code used in iOS wXL23)
-// TODO FEATURE - TDWR: DHR - DS.32dhr (wsr-88d also) range 124, colors 256, .54 x 1 nmi x degree
-// TODO FEATURE - TDWR and NEXRAD: N1P DS.78ohp One Hour Precipitation Total range 124, colors 16, 1.1 x 1 nmi x degree
-// TODO FEATURE - TDWR and NEXRAD: NTP DS.80stp Storm Total Precipitation range 124, colors 16, 1.1 x 1 nmi x degree
-// TODO FEATURE - TDWR and NEXRAD: DSP DS.138dp Digital Storm Total Precipitation range 124, colors 256, 1.1 x 1 nmi x degree
-// TODO FEATURE - TDWR DS.57vil range 124, colors 16, 2.2 x 2.2 nmi raster
-// TODO FEATURE - TDWR DS.p41et range 124, colors 16, 2.2 x 2.2 nmi raster
-// TODO FEATURE - option on homescreen to show comp instead of base ref
-// TODO FEATURE - support non-standards apps for sharing such as facebook whatsapp
-// TODO FEATURE - VCP32 vs VCP35 colormap for comp ref
-// TODO [ADD] severe dash like flutter
-// TODO [ADD] red text before load and warning count in nexrad like flutter
-// TODO BUG - base velocity legend
-// TODO BUG - fix issue for precipitation radar products when there is no data
-// TODO BUG - in Nexrad, navigate to Nexrad EET, then go to TDWR, the tap ref product, tilt option remains gone
-// TODO BUG - many Nexrad products display tilt submenu when it should be hidden ( like precip prod ) when nexrad activity is freshly started
-// TODO [ADD] use 4bit colorpal init like flutter
-// TODO [ADD] wpc day 1 -3 image + text
-// TODO [FIX] TDWR: add 180 after 11/19/2019 https://www.weather.gov/media/notification/scn19-82tdwr_terminations.pdf
+// TODO [ADD] Level 2 BV colormap and wrapping (Alex)
+// TODO [FIX] base velocity legend
+// TODO [ADD] line size - swo, wb, wb gusts, sti
+// TODO [REF] OkHttp 3.13 Requires Android 5+ – Square Corner Blog – Medium  https://medium.com/square-corner-blog/okhttp-3-13-requires-android-5-818bb78d07ce
+// TODO [REF] move off rid/wfo/sounding lat/lon/name currently in pref should be in objects (like flutter/iOS)
+// TODO [FIX] Canada - some radars have changed code names (need to change maps.xml as well)
 // TODO [ADD] radar file class from flutter
-// TODO [ADD] evaluate what needs to refresh onrestart like flutter version
+// TODO [FIX] roaming location needs background GPS perm for Android 10 (API 29)
+// TODO [ADD] warning counts in nexrad
+// TODO [ADD] textual obs in fixed radars on homescreen
 
-55287 2019_12_06
+55341 2020_01_30
+55340 2020_01_30    [REF] use methods in WXGLNexrad to read/write radar info in pref
+                    [FIX] FragmentPagerAdapter deprecated in ViewPagerAdapter.kt
+                    [REF] lint cleanup
+55339 2020_01_29    [FIX] on homescreen if more then one nexrad timestemp in cc box is not correct
+55338 2020_01_28    [ADD] in settings -> location if choose Canada location via map return to location screen after tapping on map
+                    [REF] various code cleanup
+                    [ADD] minor visual enhancements in location edit
+                    [ADD] keyboard shortcut for chromebook refresh button on main screen
+                    [ADD] enable textual observations on main screen nexrad radar tied to location (not additional nexrad via settings -> homescreen)
+55337 2020_01_28    [ADD] RadarFileGeometry (wip)
+                    [FIX] add @Synchronized to readMetarData() in UtilityMetar - BackgroundFetch is using along wit main screen
+55336 2020_01_27    [REF] lint cleanup
+                    [ADD] fix radar legend pnd - LIFR was not pink
+                    [ADD] RadarFileGeometry (wip)
+                    [FIX] Obs not working multiplane
+55335 2020_01_27    [FIX] hardcore hourly graph background
+55334 2020_01_26    [REF] various code cleanup and var rename for readability
+                    [ADD] change Hourly graph to a black line
+                    [ADD] code cleanup and comments
+                    [ADD] UtilityMetar - start to use a persistent metar data var after reading in from file - WIP
+                    [ADD] enhance radar obs to support multipane
+55333 2020_01_25    [FIX] in hourly have text card request focus (chromebook)
+                    [ADD] com.squareup.okhttp3:okhttp:3.12.3 -> com.squareup.okhttp3:okhttp:3.12.8
+55332 2020_01_25    [FIX] In national text activity combine the first two subsections into one section as they are basically the same
+                    [FIX] reconcile  utilPref2 for items that don't need to be set here - WIP
+                    [REF] various variable camelCase/rename in MyApp
+55331 2020_01_25    [FIX] on tablet reduce padding around location label on main screen
+                    [ADD] CLI product in WFO (significant due to subsites per WFO)
+55330 2020_01_25    [ADD] convert WFO Text viewer to use navigation drawer for products and submenu for actions
+                    [ADD] add keyboard shortcuts for WFO Viewer - "ctrl-?" to see
+55329 2020_01_24    [ADD] slightly decrease default text size on tablet
+                    [ADD] RWR text product in WFO text viewer ( circle around i )
+                    [ADD] in WFO text viewer do monospace for RTP and RWR
+                    [ADD] usalerts tap image for dedicated image viewer
+                    [ADD] change animation interval (default) from 15 to 8
+                    [FIX] three PMD text products that were not working 30/90 day CPC, etc
+                    [FIX] clarify that PMDTHR is Day 8-14 US Hazards Outlook
+                    [ADD] https://www.wpc.ncep.noaa.gov/threats/threats.php US Day 3-7 Hazards Outlook
+55328 2020_01_23    [REF] lint cleanup
+                    [FIX] when radar center on GPS is enabled the x/y was getting goofed up, most apparent when cities shown
+55327 2020_01_23    [FIX] onrestart wpc rainfall was not clearing views
+                    [FIX] wpc rainfall discussion formatting
+                    [ADD] update kbd shortcuts legend in radar
+55326 2020_01_22    [FIX] bugfix in recent adds
+55325 2020_01_22    [FIX] crash in wpc fronts - one off in array bounds
+                    [ADD] KEYCODE_REFRESH main screen and in radar
+                    [ADD] radar controls with arrow keys
+55324 2020_01_22    [FIX] NCEP make GFS default
+                    [ADD] keyCode diag in about -> wX
+                    [ADD] ctrl-m for menu in main screen, radar, location edit
+55323 2020_01_22    [FIX] for help on main screen and in radar use alt-? (chromeOS wants shift-?)
+                    [ADD] change UI_ANIM_ICON_FRAMES from 6 to 10
+                    [FIX] in radar keyboard shortcut for animation was not stopping
+55322 2020_01_21    [FIX] add explicit sound=null for CC and radar notification
+                    [ADD] remove setting wxoglSize in UtilPref2, change default to 13 and then 8 for tablet
+                    [ADD] keyboard shortcuts ctrl-j / k in all model activities
+55321 2020_01_21    [ADD] keyboard shortcuts in radar
+                    [ADD] ctrl-? on main screen shows shortcuts
+                    [FIX] remove mention of ROAMING in settings -> location -> edit unless feature is fixed
+55320 2020_01_21    [FIX] change NCEP shortcut from N to M as Chrome OS owns N (new chrome window)
+                    [FIX] change NHC shortcut from T to O as Chrome OS owns it
+                    [FIX] remove shortcut for ctrl-W (warnings) (chomeOS owns it)
+55319 2020_01_20    [ADD] keyboard shortcuts for dual/quad pane radar (ctrl-2 and ctrl-4)
+                    [ADD] list of keyboard shortcuts in settings -> about
+                    [FIX] change a few shortcuts to match iOS/swift port
+                    [FIX] bottom sheet is not fully expanded in some screens (force expand)
+55318 2020_01_20    [FIX] if radar alert is enabled for local alerts, if you tap on radar alert and hit back button it now takes to main screen
+55317 2020_01_19    [REF] lint and code cleanup
+                    [FIX] obs that show "XX Inches of Snow on Ground"
+                    [ADD] SingleTextAdapterList used by ObjectRecyclerView now uses dynamic font size - nws obs, fav add/change
+55316 2020_01_19    [FIX] spotter report label does not clear when single/double click - does for pan
+                    [REF] better method names in radar text class
+                    [FIX] nexrad raster was not showing on first load
+55315 2020_01_19    [FIX] if edit current location name and return to main screen label was not updated
+                    [FIX] add more vertical padding in object dialogue
+                    [ADD] wpc fronts - only show if zoomed out
+                    [ADD] make snackbar text size respect text size setting
+55314 2020_01_18    [REF] various refactor
+                    [FIX] remove currentLoc from Locfrag, not needed and was causing a bug
+                    [ADD] more space in object diaglogue
+                    [FIX] radar color palette text size
+                    [FIX] hourly font size
+55313 2020_01_18    [ADD] for tablet have default radar sizes be smaller: locdot, spotter, aviation dot
+                    [ADD] playlist - when adding item, download it
+                    [ADD] On main screen replace spinner with ObjectTextCard and ObjectDialogue
+55312 2020_01_18    [FIX] some UI cards (spotter) such as playlist don't respect text size
+                    [FIX] public interface OnTouchImageViewListener { (needs to stay despite lint)
+55311 2020_01_18    [ADD] release notes button in settings -> about
+                    [ADD] test code to see if tablet
+                    [ADD] if tablet adjust tiles per row, NWS image size, text size to something more appropriate
+55310 2020_01_18    [FIX] wpc front crash with stationary front in some circumstances
+                    [FIX] wpc storm summary text product was not working
+                    [FIX] lint cleanup
+                    [ADD] hourly homescreen widget is now monospaced
+                    [ADD] enhanced "about wX" with FAQ viewer and email developer button
+                    [ADD] in location add, update lat/lon hint to indicate that you are not required to enter
+55309 2020_01_17    [FIX] disable wpc fronts on main screen until more stable
+55308 2020_01_17    [ADD] change wpc fronts to draw lines instead of polygons
+                    [FIX] main screen current conditions text size was not correct after dynamic change support
+55307 2020_01_16    [REF] convert from System.currentTimeMillis() to UtilityTime.currentTimeMillis()
+                    [REF] prune comments
+55306 2020_01_15    [ADD] android-ndk-r20b to android-ndk-r21
+                    [ADD] convert settings location edit to use cityall instead of old DB so now 29k cities instead of 400
+                    [ADD] formatting enhancement in USAlertsDetail
+55305 2020_01_15    [ADD] update ext city doco, insert new cityall file with states
+                    [ADD] use city ext database in settings -> location search function
+55304 2020_01_14    [REF] lint cleanup
+		            [FIX] WPC Fronts - add array bounds check in high/low
+		            [FIX] WPC Fronts - handle case where LOW/HIGH spans 3 lines
+		            [ADD] after adding new location automatically switch to it on main screen
+		            [ADD] in Playlist download all when activity is started and onrestart, remove Download All icon
+		                  from bottom toolbar
+		            [FIX] cityall.txt, UtilityCities - change detroit to something that works
+		            [ADD] wpc day 1-3 image + text - add to MISC tab and remove from WPC Text submenu
+		            [FIX] Move the following from the National text product viewer submenu to the National Image viewer
+		                  in the first section: "Significant Surface Low Tracks", "Low Tracks and Clusters",
+55303 2020_01_11    [FIX] onrestart for spc conv sum was not working
+                    [ADD] WPC Fronts support in homescreen nexrad and multipane
+                    [ADD] DownloadTimer ( to be used in UtilityDownload* mcd/wat/warn/swo/spotter etc )
+                    [ADD] DownloadTimer use for WPC Fronts, Wat, MCD, MPD
+                    [ADD] add warn/wat data refresh if radars used on main screen now that timer is in place to prevent concurrent download
+55302 2020_01_10    [ADD] reset download timers for warnings/wat/mcd/mpd etc if changes made in settings -> radar
+55301 2020_01_10    [FIX] remove from global arrays: "qpfpfd: QPF Discussion" (no longer an active text product)
+                    [REF] replace GlobalArrays.nwsTextProducts with UtilityWpcText.labels
+55300 2020_01_09    [ADD] wpc mpd can tap on image to show imageviewer
+                    [ADD] more help data for new WPC Fronts option
+                    [ADD] onrestart in numerous activities
+                    [ADD] when selecting a canadian city go back to edit screen and immediatelty save
+                    [ADD] WPC Rainfall disc enhance
+55299 2020_01_07    [FIX] wpc fronts - trof is now dashed line
+55298 2020_01_06    [ADD] in settings homescreen and playlist close dialog after tapping on item
+                    [FIX] WPC Fronts - cold front make 0,127,255 not 0,0,255
+                    [ADD] hourly homescreen widget is now monospaced and uses day of week
+55297 2020_01_06    [FIX] wpc fronts - few for loop bugs on cold/warm front creation
+55296 2020_01_06    [FIX] decrease line width for wpc fronts to match watch/mcd
+                    [FIX] wpc fronts - bug fix on loop math in render
+55295 2020_01_05    [FIX] lint and wpc not updating on every radar change
+                    [REF] add 2020 in copyright
+55294 2020_01_05    [FIX] better font size transitions on main screen after changing in settings UI - part 1
+                    [ADD] WPC Fronts framework for nexrad radar
+55293 2019_12_30    [FIX] Fulldisk global viewer - remove first two images
+55292 2019_12_29    [ADD] USWarn in Severe Dash and as homescreen option
+55291 2019_12_29    [ADD] additional WPC Forecast maps in National Images and in homescreen
+		            [FIX] for WPC images on homescreen, tapping on them now opens National images and display image tapped on
+		            [FIX] National images, show label as subtitle since they are so long in certain cases
+55290 2019_12_23    [REF] lint cleanup
+                    [ADD] use 4bit colorpal init like flutter (add framework)
+                    [FIX] retire colormap for 41/57/78/80
+                    [REF] Cleanup in SevereDashboard
+55289 2019_12_22    [ADD] update android-ndk-r20 to android-ndk-r20b
+                    [ADD] update org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50 to org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.61
+                    [ADD] update org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1 to org.jetbrains.kotlinx:kotlinx-coroutines-core:1.2.1
+                    [ADD] update org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1 to org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1
+                    [ADD] WFO warnings image to homescreen
+                    [ADD] better obs data in us_metar3.txt stations_us4.txt via getObs.py
+55288 2019_12_17    [FIX] anim for TZ0 was not working
+55287 2019_12_17    [REF] lint and code cleanup
+		            [FIX] radar mosaic was showing expired warnings
+		            [ADD] TZ0 replaces TR0 in TDWR (16 to 256 bits for color)
 55286 2019_12_03    [FIX] AWC mosaic animations not working for all products
                     [ADD] "Sandwich" to GOES activity
 55285 2019_12_01    [FIX] Canada forecasts were showing null when no wind data, port code from iOS/Swift

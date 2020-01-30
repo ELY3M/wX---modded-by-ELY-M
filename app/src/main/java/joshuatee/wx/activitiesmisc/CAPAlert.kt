@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -130,8 +130,12 @@ class CapAlert {
                 obj.summary = html.parse("\"description\": \"(.*?)\"")
                 obj.instructions = html.parse("\"instruction\": \"(.*?)\"")
                 obj.area = html.parse("\"areaDesc\": \"(.*?)\"")
-                obj.summary = obj.summary.replace("\\n", "\n")
-                obj.instructions = obj.instructions.replace("\\n", "\n")
+                //obj.summary = obj.summary.replace("\\n", "\n")
+                obj.summary = obj.summary.replace("\\n\\n", "ABC123")
+                obj.summary = obj.summary.replace("\\n", " ")
+                obj.summary = obj.summary.replace("ABC123", "\n\n")
+                //obj.instructions = obj.instructions.replace("\\n", "\n")
+                obj.instructions = obj.instructions.replace("\\n", " ")
                 obj.text = "<h4><b>"
                 obj.text += obj.title
                 obj.text += "</b></h4>"
@@ -148,6 +152,7 @@ class CapAlert {
                 obj.instructions = obj.instructions.replace("<br><br>", "<BR><BR>")
                 obj.instructions = obj.instructions.replace("<br>", " ")
             }
+
             return obj
         }
     }

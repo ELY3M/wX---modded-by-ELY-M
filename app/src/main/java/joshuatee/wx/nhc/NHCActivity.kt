@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -43,6 +43,11 @@ import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class NhcActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
+    // URL is not really used save in the homescreen map since most other activities have a var
+    companion object {
+        const val URL: String = ""
+    }
+
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var objNhc: ObjectNhc
 
@@ -59,7 +64,7 @@ class NhcActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        sv.smoothScrollTo(0, 0)
+        scrollView.smoothScrollTo(0, 0)
         withContext(Dispatchers.IO) { objNhc.getTextData() }
         objNhc.showTextData()
         withContext(Dispatchers.IO) { objNhc.getAtlanticImageData()}

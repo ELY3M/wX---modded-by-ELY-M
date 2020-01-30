@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -44,6 +44,7 @@ import joshuatee.wx.ui.ObjectImageMap
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 import kotlin.math.roundToInt
+import joshuatee.wx.Extensions.*
 
 internal object UtilityRadarUI {
 
@@ -193,6 +194,12 @@ internal object UtilityRadarUI {
         val heightAgl = UtilityMath.getRadarBeamHeight(wxglRender.radarL3Object.degree, distRidKm)
         val heightMsl = (wxglRender.radarL3Object.radarHeight + heightAgl)
         alertDialogRadarLongpressAl.add("Beam Height MSL: " + heightMsl.roundToInt().toString() + " ft, AGL: " + heightAgl.roundToInt().toString() + " ft")
+        if (MyApplication.radarShowWpcFronts) {
+            var wpcFrontsTimeStamp = Utility.readPref("WPC_FRONTS_TIMESTAMP", "")
+            wpcFrontsTimeStamp = wpcFrontsTimeStamp.replace(UtilityTime.getYear().toString(), "")
+            wpcFrontsTimeStamp = wpcFrontsTimeStamp.insert(4, " ")
+            alertDialogRadarLongpressAl.add(MyApplication.newline + "WPC Fronts: " + wpcFrontsTimeStamp)
+        }
         wxglRender.ridNewList.mapTo(alertDialogRadarLongpressAl) {
             "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.getRadarSiteName(it.name)
         }
@@ -370,7 +377,7 @@ internal object UtilityRadarUI {
                 } else
                     wxglRender.deconstructHWEXTLines()
             }).start()
-            wxgltextArr[z].addTV()
+            wxgltextArr[z].addTextLabels()
             oldRidArr[z] = oglrArr[z].rid
         }
 
@@ -400,10 +407,10 @@ internal object UtilityRadarUI {
             wxglRender.constructGenericWarningLines()
             wxglSurfaceView.requestRender()
         }).start()
-        if (MyApplication.locdotFollowsGps) {
+        if (MyApplication.locationDotFollowsGps) {
             fnGps()
         }
-        if (PolygonType.LOCDOT.pref || MyApplication.locdotFollowsGps) {
+        if (PolygonType.LOCDOT.pref || MyApplication.locationDotFollowsGps) {
             val latLon = fnGetLatLon()
             wxglRender.constructLocationDot(latLon.latString, latLon.lonString, archiveMode)
         } else {
@@ -491,6 +498,21 @@ internal object UtilityRadarUI {
         }).start()
     }
 
+    fun plotWpcFronts(
+            wxglSurfaceView: WXGLSurfaceView,
+            wxglRender: WXGLRender,
+            archiveMode: Boolean = false
+    ) {
+        Thread(Runnable {
+            if (MyApplication.radarShowWpcFronts && !archiveMode) {
+                wxglRender.constructWpcFronts()
+            } else {
+                wxglRender.deconstructWpcFronts()
+            }
+            wxglSurfaceView.requestRender()
+        }).start()
+    }
+
     fun plotRadar(
             wxglRender: WXGLRender,
             urlString: String,
@@ -503,6 +525,10 @@ internal object UtilityRadarUI {
             archiveMode: Boolean = false
     ) {
         wxglRender.constructPolygons("", urlString, true)
+        // work-around for a bug in which raster doesn't show on first launch
+        if (wxglRender.product == "NCR" || wxglRender.product == "NCZ") {
+            wxglRender.constructPolygons("", urlString, true)
+        }
         if ((PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) && !archiveMode)
             wxglRender.constructSpotters()
         else
@@ -519,33 +545,40 @@ internal object UtilityRadarUI {
             wxglRender.constructTvs()
         else
             wxglRender.deconstructTvs()
-        if (MyApplication.locdotFollowsGps && !archiveMode) {
+        if (MyApplication.locationDotFollowsGps && !archiveMode) {
             fnGps()
         }
-        if (PolygonType.LOCDOT.pref || archiveMode || MyApplication.locdotFollowsGps) {
+        if (PolygonType.LOCDOT.pref || archiveMode || MyApplication.locationDotFollowsGps) {
             val latLon = fnGetLatLon()
             wxglRender.constructLocationDot(latLon.latString, latLon.lonString, archiveMode)
         } else {
             wxglRender.deconstructLocationDot()
         }
+        if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && !archiveMode) {
+            UtilityMetar.getStateMetarArrayForWXOGL(context, wxglRender.rid, wxglRender.paneNumber)
+        }
+        if (PolygonType.WIND_BARB.pref && !archiveMode) {
+            wxglRender.constructWBLines()
+        } else {
+            wxglRender.deconstructWBLines()
+        }
         //if (showExtras) {
-            if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && !archiveMode) {
-                UtilityMetar.getStateMetarArrayForWXOGL(context, wxglRender.rid)
+            /*if ((PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) && !archiveMode) {
+                UtilityMetar.getStateMetarArrayForWXOGL(context, wxglRender.rid, wxglRender.paneNumber)
             }
             if (PolygonType.WIND_BARB.pref && !archiveMode) {
                 wxglRender.constructWBLines()
             } else {
                 wxglRender.deconstructWBLines()
-            }
+            }*/
             if (PolygonType.SWO.pref && !archiveMode) {
-                UtilitySwoD1.get()
+                UtilitySwoD1.get(context)
                 wxglRender.constructSwoLines()
             } else {
                 wxglRender.deconstructSwoLines()
             }
-        //} //showExtras
+        //}
     }
-
 
     fun resetGlview(wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender) {
         wxglSurfaceView.scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f

@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -90,6 +90,10 @@ class LatLon() {
             yStr = newValue
             y = newValue.toDoubleOrNull() ?: 0.0
         }
+
+    override fun toString(): String {
+        return "$latString:$lonString"
+    }
 
     companion object {
 

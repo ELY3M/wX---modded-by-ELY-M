@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -23,92 +23,47 @@ package joshuatee.wx.radar
 
 import android.content.Context
 import joshuatee.wx.MyApplication
+import joshuatee.wx.objects.DownloadTimer
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.PolygonWarningType
-import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownloadNws
-import joshuatee.wx.util.UtilityLog
 
 internal object UtilityDownloadWarnings {
 
-    private var initialized = false
-    private var lastRefresh = 0.toLong()
-
     const val type = "WARNINGS"
+    var timer = DownloadTimer(type)
+
+    private const val baseUrl = "https://api.weather.gov/alerts/active?event="
+    private const val tstormUrl = baseUrl + "Severe%20Thunderstorm%20Warning"
+    private const val ffwUrl = baseUrl + "Flash%20Flood%20Warning"
+    private const val tornadoUrl = baseUrl + "Tornado%20Warning"
+    // Below is for testing
+    //val ffwUrl = baseUrl + "Flood%20Warning"
 
     fun get(context: Context) {
-        val refreshInterval = Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3)
-        val currentTime1 = System.currentTimeMillis()
-        val currentTimeSec = currentTime1 / 1000
-        val refreshIntervalSec = (refreshInterval * 60).toLong()
-
-        UtilityLog.d("wx", "RADAR DOWNLOAD CHECK: $type")
-
-        if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
-            // download data
-            initialized = true
-            val currentTime = System.currentTimeMillis()
-            lastRefresh = currentTime / 1000
+        if (timer.isRefreshNeeded(context)) {
             if (PolygonType.TST.pref) {
-                UtilityLog.d("wx", "RADAR DOWNLOAD INITIATED: $type")
                 getPolygonVtec(context)
-            } else {
-                //UtilityDownloadRadar.clearPolygonVtec()
-                UtilityLog.d("wx", "RADAR DOWNLOAD INITIATED BUT PREF IS OFF - NO DOWNLOAD: $type")
             }
         }
     }
 
     fun getForSevereDashboard(context: Context) {
-        val refreshInterval = Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3)
-        val currentTime1 = System.currentTimeMillis()
-        val currentTimeSec = currentTime1 / 1000
-        val refreshIntervalSec = (refreshInterval * 60).toLong()
-
-        UtilityLog.d("wx", "RADAR DOWNLOAD CHECK: $type")
-
-        if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
-            // download data
-            initialized = true
-            val currentTime = System.currentTimeMillis()
-            lastRefresh = currentTime / 1000
-            //if (PolygonType.TST.pref) {
-            UtilityLog.d("wx", "RADAR DOWNLOAD INITIATED: $type")
+        if (timer.isRefreshNeeded(context)) {
             getPolygonVtec(context)
-            //} else {
-                //UtilityDownloadRadar.clearPolygonVtec()
-            //    UtilityLog.d("wx", "RADAR DOWNLOAD INITIATED BUT PREF IS OFF - NO DOWNLOAD: $type")
-            //}
         }
     }
 
     // The only difference from the get method above is the absence of any preference check
     // ie - if you call this you are going to download regardless
     fun getForNotification(context: Context) {
-        val refreshInterval = Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3)
-        val currentTime1 = System.currentTimeMillis()
-        val currentTimeSec = currentTime1 / 1000
-        val refreshIntervalSec = (refreshInterval * 60).toLong()
-        UtilityLog.d("wx", "RADAR DOWNLOAD CHECK via NOTIFICATION: $type")
-        if (currentTimeSec > lastRefresh + refreshIntervalSec || !initialized) {
-            // download data
-            initialized = true
-            val currentTime = System.currentTimeMillis()
-            lastRefresh = currentTime / 1000
-            UtilityLog.d("wx", "RADAR DOWNLOAD INITIATED via NOTIFICATION: $type")
+        if (timer.isRefreshNeeded(context)) {
             getPolygonVtec(context)
         }
     }
 
-    private const val baseUrl = "https://api.weather.gov/alerts/active?event="
-    private const val tstormURl = baseUrl + "Severe%20Thunderstorm%20Warning"
-    private const val ffwUrl = baseUrl + "Flash%20Flood%20Warning"
-    // Below is for testing
-    //val ffwUrl = baseUrl + "Flood%20Warning"
-    private const val tornadoUrl = baseUrl + "Tornado%20Warning"
-
     private fun getPolygonVtec(context: Context) {
-        val tstData = UtilityDownloadNws.getStringFromUrlNoAcceptHeader(tstormURl)
+        val tstData = UtilityDownloadNws.getStringFromUrlNoAcceptHeader(tstormUrl)
         if (tstData != "") {
             MyApplication.severeDashboardTst.valueSet(context, tstData)
         }

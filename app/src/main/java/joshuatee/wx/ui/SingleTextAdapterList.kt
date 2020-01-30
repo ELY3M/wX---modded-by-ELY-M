@@ -4,12 +4,10 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
-
-// thanks http://www.truiton.com/2015/03/android-cardview-example/
+import joshuatee.wx.objects.TextSize
 
 class SingleTextAdapterList(private val dataSet: MutableList<String>) :
         RecyclerView.Adapter<SingleTextAdapterList.DataObjectHolder>() {
@@ -17,7 +15,7 @@ class SingleTextAdapterList(private val dataSet: MutableList<String>) :
     class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
             View.OnClickListener {
 
-        val label: TextView = itemView.findViewById(R.id.singletext)
+        val label = ObjectTextView(itemView, R.id.singletext, TextSize.MEDIUM)
 
         init {
             ObjectCard(itemView, R.id.cv1)

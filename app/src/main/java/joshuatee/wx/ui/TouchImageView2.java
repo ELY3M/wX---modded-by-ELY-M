@@ -37,6 +37,7 @@ import joshuatee.wx.R;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import joshuatee.wx.MyApplication;
+import joshuatee.wx.util.UtilityTime;
 
 public class TouchImageView2 extends AppCompatImageView {
 
@@ -855,18 +856,15 @@ public class TouchImageView2 extends AppCompatImageView {
     private int setViewSize(int mode, int size, int drawableWidth) {
         int viewSize;
         switch (mode) {
-            case MeasureSpec.EXACTLY:
-                viewSize = size;
-                break;
-
+            //case MeasureSpec.EXACTLY:
+            //    viewSize = size;
+            //    break;
             case MeasureSpec.AT_MOST:
                 viewSize = Math.min(drawableWidth, size);
                 break;
-
             case MeasureSpec.UNSPECIFIED:
                 viewSize = drawableWidth;
                 break;
-
             default:
                 viewSize = size;
                 break;
@@ -1016,6 +1014,7 @@ public class TouchImageView2 extends AppCompatImageView {
         }
     }
 
+    // this needs to stay public despite what lint says
     public interface OnTouchImageViewListener {
         void onMove();
     }
@@ -1187,7 +1186,7 @@ public class TouchImageView2 extends AppCompatImageView {
 
         DoubleTapZoom(float targetZoom, float focusX, float focusY, boolean stretchImageToSuper) {
             setState(State.ANIMATE_ZOOM);
-            startTime = System.currentTimeMillis();
+            startTime =  UtilityTime.INSTANCE.currentTimeMillis();
             this.startZoom = normalizedScale;
             this.targetZoom = targetZoom;
             this.stretchImageToSuper = stretchImageToSuper;
@@ -1257,7 +1256,7 @@ public class TouchImageView2 extends AppCompatImageView {
          * return
          */
         private float interpolate() {
-            long currTime = System.currentTimeMillis();
+            long currTime =  UtilityTime.INSTANCE.currentTimeMillis();
             float elapsed = (currTime - startTime) / ZOOM_TIME;
             elapsed = Math.min(1f, elapsed);
             return interpolator.getInterpolation(elapsed);

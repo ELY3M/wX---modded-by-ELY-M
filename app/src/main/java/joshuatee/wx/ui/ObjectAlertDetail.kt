@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,13 +22,13 @@
 package joshuatee.wx.ui
 
 import android.content.Context
-import android.util.TypedValue
 import android.widget.LinearLayout
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.activitiesmisc.CapAlert
+import joshuatee.wx.objects.TextSize
 import joshuatee.wx.util.UtilityString
 
 class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
@@ -82,7 +82,7 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
         var wfo = ""
         if (capAlert.text.contains("This alert has expired")) {
             objectTextViews[0].text = capAlert.text
-            objectTextViews[0].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeLarge)
+            objectTextViews[0].setTextSize(TextSize.LARGE)
         } else {
             if (!url.contains("NWS-IDP-PROD")) {
                 if (capAlert.title.contains("until")) {
@@ -138,7 +138,7 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
             objectTextViews[0].text = context.resources.getString(R.string.uswarn_start_time, startTime)
             objectTextViews[1].text = context.resources.getString(R.string.uswarn_end_time, endTime)
             objectTextViews[2].text = capAlert.area
-            objectTextViews[2].setTextColor(UIPreferences.textHighlightColor)
+            objectTextViews[2].color = UIPreferences.textHighlightColor
             objectTextViews[3].text = capAlert.summary
             objectTextViews[4].text = capAlert.instructions
         }

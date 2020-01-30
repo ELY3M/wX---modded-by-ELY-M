@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -37,12 +37,10 @@ import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.notifications.UtilityNotificationTextProduct
 import joshuatee.wx.settings.FavAddActivity
 import joshuatee.wx.settings.FavRemoveActivity
-import joshuatee.wx.activitiesmisc.ImageShowActivity
 import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.ui.ObjectSpinner
 
-import joshuatee.wx.GlobalArrays
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectNavDrawerCombo
 import joshuatee.wx.util.*
@@ -87,14 +85,13 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         notifToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
-        activityArguments = intent.getStringArrayExtra(URL)
+        activityArguments = intent.getStringArrayExtra(URL)!!
         if (activityArguments[0] == "pmdspd") {
             prod = MyApplication.wpcTextFav
         } else {
             prod = activityArguments[0]
             initProd = prod
         }
-        UtilityLog.d("wx", prod)
         textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         products = UtilityFavorites.setupFavMenuNwsText(MyApplication.nwsTextFav, prod)
         sp = ObjectSpinner(this, this, this, R.id.spinner1, products)
@@ -119,7 +116,6 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         }
         ridFavOld = MyApplication.nwsTextFav
-        UtilityLog.d("wx", prod)
         html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@WpcTextProductsActivity, prod) }
         textCard.setTextAndTranslate(Utility.fromHtml(html))
         UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, "wpctext")
@@ -147,27 +143,6 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
                 updateSubmenuNotifText()
             }
             R.id.action_mpd -> ObjectIntent(this, WpcMpdShowSummaryActivity::class.java)
-            R.id.action_qpferf -> ObjectIntent(this, WpcRainfallForecastActivity::class.java)
-            R.id.action_low1 -> ObjectIntent(
-                    this,
-                    ImageShowActivity::class.java,
-                    ImageShowActivity.URL,
-                    arrayOf(
-                            "${MyApplication.nwsWPCwebsitePrefix}/wwd/lowtrack_circles.gif",
-                            "Significant Surface Low Tracks"
-                    )
-            )
-            R.id.action_low2 -> {
-                ObjectIntent(
-                        this,
-                        ImageShowActivity::class.java,
-                        ImageShowActivity.URL,
-                        arrayOf(
-                                "${MyApplication.nwsWPCwebsitePrefix}/lowtracks/lowtrack_ensembles.gif",
-                                "Low Tracks and Clusters"
-                        )
-                )
-            }
             R.id.action_share -> UtilityShare.shareText(this, prod, Utility.fromHtml(html))
             else -> return super.onOptionsItemSelected(item)
         }
@@ -198,8 +173,8 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
     private fun findPosition(key: String) =
-            (GlobalArrays.nwsTextProducts.indices).firstOrNull {
-                GlobalArrays.nwsTextProducts[it].contains(
+            (UtilityWpcText.labels.indices).firstOrNull {
+                UtilityWpcText.labels[it].contains(
                         key
                 )
             }
@@ -209,7 +184,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         if (ridFavOld != MyApplication.nwsTextFav) {
             products = UtilityFavorites.setupFavMenuNwsText(
                     MyApplication.nwsTextFav,
-                    GlobalArrays.nwsTextProducts[findPosition(prod)]
+                    UtilityWpcText.labels[findPosition(prod)]
             )
             sp.refreshData(this, products)
         }
@@ -226,7 +201,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         prod = drw.getUrl()
         products = UtilityFavorites.setupFavMenuNwsText(
                 MyApplication.nwsTextFav,
-                GlobalArrays.nwsTextProducts[findPosition(prod)]
+                UtilityWpcText.labels[findPosition(prod)]
         )
         sp.refreshData(this, products)
     }

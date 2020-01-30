@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -41,7 +41,6 @@ import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 import joshuatee.wx.util.UtilityFileManagement
-import joshuatee.wx.util.UtilityLog
 
 import kotlinx.android.synthetic.main.activity_recyclerview_toolbar_with_twofab.*
 
@@ -73,7 +72,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                 null,
                 false
         )
-        type = intent.getStringArrayExtra(TYPE)[0]
+        type = intent.getStringArrayExtra(TYPE)!![0]
         toolbar.subtitle = WXGLNexrad.productCodeStringToName[type]
         title = MyApplication.radarColorPalette[type]
         prefToken = "RADAR_COLOR_PALETTE_$type"
@@ -131,7 +130,6 @@ class SettingsColorPaletteActivity : BaseActivity() {
                     }
                     val prefArr =
                             MyApplication.radarColorPaletteList["99"]!!.split(":").dropLastWhile { it.isEmpty() }
-                    UtilityLog.d("Wx", "COLORPAL INIT: " + MyApplication.radarColorPaletteList["99"]!!)
                     prefArr.asSequence().filter { it != "" }.mapTo(allItems) {
                         TileObjectColorPalette(
                                 it,
@@ -148,7 +146,6 @@ class SettingsColorPaletteActivity : BaseActivity() {
                         allItems.add(TileObjectColorPalette(it, toolbar, prefToken, cg, type, true))
                     }
                     val prefArr = MyApplication.radarColorPaletteList[type]!!.split(":").dropLastWhile { it.isEmpty() }
-                    UtilityLog.d("Wx", "COLORPAL INIT: " + MyApplication.radarColorPaletteList[type]!!)
                     prefArr.asSequence().filter { it != "" }.mapTo(allItems) {
                         TileObjectColorPalette(
                                 it,
@@ -165,7 +162,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
             allItems.forEach {
                 if (MyApplication.radarColorPalette[type] == it.colorMapLabel && it.builtin) {
                     builtinStr = "true"
-                    fab2.setVisibility(View.GONE)
+                    fab2.visibility = View.GONE
                     fab1.fab.setImageDrawable(
                             ContextCompat.getDrawable(
                                     this@SettingsColorPaletteActivity,
@@ -248,11 +245,11 @@ class SettingsColorPaletteActivity : BaseActivity() {
         globalPosition = position
         if (rowListItem[position].builtin) {
             builtinStr = "true"
-            fab2.setVisibility(View.GONE)
+            fab2.visibility = View.GONE
             fab1.fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_add_box_24dp))
         } else {
             builtinStr = "false"
-            fab2.setVisibility(View.VISIBLE)
+            fab2.visibility = View.VISIBLE
             fab1.fab.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_reorder_24dp))
         }
         if (rowListItem[position].prefToken == "RADAR_COLOR_PALETTE_$type") {

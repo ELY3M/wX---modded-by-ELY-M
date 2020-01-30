@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -27,6 +27,7 @@ import android.view.MenuItem
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.GlobalArrays
+import joshuatee.wx.wpc.UtilityWpcText
 
 object UtilityFavorites {
 
@@ -161,7 +162,7 @@ object UtilityFavorites {
         }
         Utility.writePref(context, "SPCMESO_FAV", ridFav)
         Utility.writePref(context, "SPCMESO_LABEL_FAV", ridFavLabel)
-        MyApplication.spcmesoFav = ridFav
+        MyApplication.spcMesoFav = ridFav
         MyApplication.spcmesoLabelFav = ridFavLabel
     }
 
@@ -209,14 +210,14 @@ object UtilityFavorites {
             if (it == 1 || it == 2)
                 ridArrLoc[it] = ridArr[it]
             else
-                ridArrLoc[it] = GlobalArrays.nwsTextProducts[findPositionNwsText(ridArr[it])]
+                ridArrLoc[it] = UtilityWpcText.labels[findPositionNwsText(ridArr[it])]
         }
         return ridArrLoc.toList()
     }
 
     fun findPositionNwsText(key: String): Int =
-        GlobalArrays.nwsTextProducts.indices.firstOrNull {
-            GlobalArrays.nwsTextProducts[it].contains(
+            UtilityWpcText.labels.indices.firstOrNull {
+                UtilityWpcText.labels[it].contains(
                 key
             )
         }

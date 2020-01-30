@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -48,9 +48,13 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.settings.BottomSheetFragment
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
+import joshuatee.wx.wpc.UtilityWpcText
+import kotlinx.coroutines.*
+import java.util.*
 
 class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val ridArr = mutableListOf<String>()
     private var ridFav = ""
     private val prefToken = "PLAYLIST"
@@ -76,24 +80,26 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             fabPause.fabSetResDrawable(this, MyApplication.ICON_PAUSE)
         }
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
-        diaAfd.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
+        diaAfd.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             val strName = diaAfd.getItem(which)
             ridFav = ridFav + ":" + "AFD" +
-                    strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase()
+                    strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)
             Utility.writePref(this, prefToken, ridFav)
             MyApplication.playlistStr = ridFav
-            ridArr.add(getLongString("AFD" + strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase()))
-            ca.notifyDataSetChanged()
+            ridArr.add(getLongString("AFD" + strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)))
+            getContent()
+            dialog.dismiss()
         })
-        diaMain = ObjectDialogue(this, "Select text products:", GlobalArrays.nwsTextProducts)
-        diaMain.setSingleChoiceItems(DialogInterface.OnClickListener { _, which ->
+        diaMain = ObjectDialogue(this, "Select text products:", UtilityWpcText.labels)
+        diaMain.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             val strName = diaMain.getItem(which)
             ridFav = ridFav + ":" +
-                    strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase()
+                    strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)
             Utility.writePref(this, prefToken, ridFav)
-            ridArr.add(getLongString(strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase()))
-            ca.notifyDataSetChanged()
+            ridArr.add(getLongString(strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)))
             MyApplication.playlistStr = ridFav
+            getContent()
+            dialog.dismiss()
         })
         toolbar.subtitle = "Tap item to play, view, delete or move."
         ridFav = Utility.readPref(this, prefToken, "")
@@ -102,6 +108,15 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         ca = PlayListAdapter(ridArr)
         recyclerView.recyclerView.adapter = ca
         ca.setListener(::itemSelected)
+        getContent()
+    }
+
+    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        withContext(Dispatchers.IO) {
+            UtilityPlayList.downloadAll(this@SettingsPlaylistActivity)
+        }
+        updateListNoInit()
+        ca.notifyDataSetChanged()
     }
 
     private fun updateList() {
@@ -119,13 +134,6 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_downloadall -> ObjectIntent(
-                    this,
-                    DownloadPlaylistService::class.java,
-                    DownloadPlaylistService.URL,
-                    "false",
-                    true
-            )
             R.id.action_autodownload -> ObjectIntent(
                     this,
                     SettingsPlaylistAutodownloadActivity::class.java
@@ -138,7 +146,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     override fun onRestart() {
-        //updateListNoInit()
+        updateListNoInit()
         ca.notifyDataSetChanged()
         super.onRestart()
     }

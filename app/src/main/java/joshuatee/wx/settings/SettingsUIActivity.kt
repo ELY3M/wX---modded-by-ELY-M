@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -259,7 +259,7 @@ class SettingsUIActivity : BaseActivity() {
                         "UI elevation height",
                         "ELEVATION_PREF",
                         R.string.elevation_np_label,
-                        0,
+                        MyApplication.elevationPrefDefault,
                         0,
                         30
                 ).card
@@ -271,7 +271,7 @@ class SettingsUIActivity : BaseActivity() {
                         "NWS icon size",
                         "NWS_ICON_SIZE_PREF",
                         R.string.nws_icon_size_np_label,
-                        20,
+                        UIPreferences.nwsIconSizeDefault,
                         1,
                         50
                 ).card
@@ -295,7 +295,7 @@ class SettingsUIActivity : BaseActivity() {
                         "Image tiles per row",
                         "UI_TILES_PER_ROW",
                         R.string.tiles_per_row_label,
-                        3,
+                        UIPreferences.tilesPerRowDefault,
                         3,
                         10
                 ).card
@@ -307,7 +307,7 @@ class SettingsUIActivity : BaseActivity() {
                         "Animation - frames for toolbar icon",
                         "UI_ANIM_ICON_FRAMES",
                         R.string.np_anim_generic_label,
-                        6,
+                        10,
                         2,
                         40
                 ).card
@@ -331,7 +331,7 @@ class SettingsUIActivity : BaseActivity() {
                         "Text size",
                         "TEXTVIEW_FONT_SIZE",
                         R.string.textview_fontsize_np_label,
-                        16,
+                        UIPreferences.normalTextSizeDefault,
                         12,
                         25
                 ).card

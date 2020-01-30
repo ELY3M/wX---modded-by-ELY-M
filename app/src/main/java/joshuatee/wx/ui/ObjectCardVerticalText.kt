@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -22,12 +22,14 @@
 package joshuatee.wx.ui
 
 import android.content.Context
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
+import joshuatee.wx.MyApplication
 
 class ObjectCardVerticalText(context: Context, numColumns: Int) {
 
@@ -53,7 +55,6 @@ class ObjectCardVerticalText(context: Context, numColumns: Int) {
             )
             ll.addView(llv)
             tvArr.add(TextView(context))
-            //tvArr[it].gravity = Gravity.CENTER_HORIZONTAL
             tvArr[it].gravity = Gravity.START
             tvArr[it].layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -79,7 +80,12 @@ class ObjectCardVerticalText(context: Context, numColumns: Int) {
 
     fun setText(textArr: List<String>) {
         if (textArr.size == tvArr.size) {
-            (textArr.indices).forEach { tvArr[it].text = textArr[it] }
+            (textArr.indices).forEach {
+                tvArr[it].text = textArr[it]
+            }
+            (textArr.indices).forEach {
+                tvArr[it].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+            }
         }
     }
 

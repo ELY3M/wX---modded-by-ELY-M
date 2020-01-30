@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -68,9 +68,9 @@ object UtilitySpcMesoInputOutput {
             )
         }
         if (showRadar) {
-            val bitmapradar = radImgUrl.getImage()
+            val bitmapRadar = radImgUrl.getImage()
             bitmap = UtilityImg.eraseBG(bitmap, -1)
-            drawables.add(BitmapDrawable(context.resources, bitmapradar))
+            drawables.add(BitmapDrawable(context.resources, bitmapRadar))
         }
         drawables.add(BitmapDrawable(context.resources, bitmap))
         if (showOutlook) {

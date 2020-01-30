@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -161,8 +161,8 @@ object UtilityCanvasMain {
             UtilityCanvas.addLocationDotForCurrentLocation(scaleType, bitmapCanvas, radarSite)
         }
         if (PolygonType.WIND_BARB.pref && windBarbProvider) {
-            UtilityCanvasWindbarbs.draw(context, scaleType, bitmapCanvas, radarSite, true)
-            UtilityCanvasWindbarbs.draw(context, scaleType, bitmapCanvas, radarSite, false)
+            UtilityCanvasWindbarbs.draw(context, scaleType, bitmapCanvas, radarSite, true, 5)
+            UtilityCanvasWindbarbs.draw(context, scaleType, bitmapCanvas, radarSite, false, 5)
         }
         if (PolygonType.STI.pref && stormMotionProvider) {
             UtilityCanvasStormInfo.drawNexRadStormMotion(context, scaleType, bitmapCanvas, radarSite)

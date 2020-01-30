@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -93,15 +93,14 @@ class SettingsLocationCanadaActivity : BaseActivity() {
                 Utility.readPref(this, "LOCATION_CANADA_CITY", "") + " " +
                 Utility.readPref(this, "LOCATION_CANADA_ID", "")
         toolbar.subtitle = "Selected: $locStr"
+        finish()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
             val html = UtilityCanada.getProvidenceHtml(provSelected)
-            listIds =
-                html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-(.*?)_metric_e.html\">.*?</a></li>")
-            listCity =
-                html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-.*?_metric_e.html\">(.*?)</a></li>")
+            listIds = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-(.*?)_metric_e.html\">.*?</a></li>")
+            listCity = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-.*?_metric_e.html\">(.*?)</a></li>")
         }
         recyclerView.refreshList(listCity.distinct().toMutableList())
         cityDisplay = true

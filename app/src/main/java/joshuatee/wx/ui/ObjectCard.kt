@@ -1,6 +1,6 @@
 /*
 
-    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019  joshua.tee@gmail.com
+    Copyright 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020  joshua.tee@gmail.com
 
     This file is part of wX.
 
@@ -78,9 +78,11 @@ class ObjectCard {
         card.setCardBackgroundColor(color)
     }
 
-    fun setVisibility(vis: Int) {
-        card.visibility = vis
-    }
+    var visibility: Int
+        get() = card.visibility
+        set(newValue) {
+            card.visibility = newValue
+        }
 
     fun addView(v: View) {
         card.addView(v)
