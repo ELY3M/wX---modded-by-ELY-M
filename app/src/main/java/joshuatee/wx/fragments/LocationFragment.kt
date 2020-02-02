@@ -613,11 +613,12 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
     }
 
     private fun getRadarTimeStamp(string: String, j: Int): String {
-        var ts = ""
+        var timestamp = ""
         val tokens = string.split(" ")
-        if (tokens.size > 3)
-            ts = tokens[3]
-        return oglrArr[j].rid + ": " + ts + " (" + Utility.readPref("RID_LOC_" + oglrArr[j].rid, "") + ")"
+        if (tokens.size > 3) {
+            timestamp = tokens[3]
+        }
+        return oglrArr[j].rid + ": " + timestamp + " (" + Utility.getRadarSiteName(oglrArr[j].rid) + ")"
     }
 
     private fun getGPSFromDouble() {
@@ -645,10 +646,7 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
                     System.arraycopy(argsOrig, 0, args, 0, argsOrig.size)
                     args.indices.forEach { z ->
                         if (args[z] == "WFO_FOR_SND")
-                            args[z] = UtilityLocation.getNearestSnd(
-                                    activityReference,
-                                    LatLon(Location.x, Location.y)
-                            )
+                            args[z] = UtilityLocation.getNearestSnd(LatLon(Location.x, Location.y))
                         if (args[z] == "WFO_FOR_GOES")
                             args[z] = Location.wfo.toLowerCase(Locale.US)
                         if (args[z] == "STATE_LOWER")
@@ -659,8 +657,8 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
                             args[z] = Location.rid
                         if (args[z] == "ONEK")
                             args[z] = Utility.readPref("COD_1KM_" + Location.rid, "")
-                        if (args[z] == "TWOK")
-                            args[z] = Utility.readPref("STATE_CODE_" + Location.state, "")
+                        //if (args[z] == "TWOK")
+                        //    args[z] = Utility.readPref("STATE_CODE_" + Location.state, "")
                     }
                     if (cl != null && id != null) {
                         intent = Intent(activityReference, cl)

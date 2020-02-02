@@ -41,13 +41,13 @@ internal object WXGLNexradLevel3StormInfo {
     fun decodeAndPlot(
             context: Context,
             fnSuffix: String,
-            rid: String,
+            radarSite: String,
             projectionType: ProjectionType
     ): List<Double> {
         val stormList = mutableListOf<Double>()
         val retStr: String
-        val location = UtilityLocation.getSiteLocation(context, rid)
-        val pn = ProjectionNumbers(rid, projectionType)
+        val location = UtilityLocation.getSiteLocation(radarSite)
+        val pn = ProjectionNumbers(radarSite, projectionType)
         WXGLDownload.getNidsTab(context, "STI", pn.radarSite.toLowerCase(Locale.US), stiBaseFn + fnSuffix)
         val dis: UCARRandomAccessFile
         val posn: List<String>

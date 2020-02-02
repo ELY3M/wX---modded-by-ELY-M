@@ -49,6 +49,7 @@ import joshuatee.wx.settings.SettingsMainActivity
 import joshuatee.wx.audio.SettingsPlaylistActivity
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.AwcRadarMosaicActivity
+import joshuatee.wx.settings.SettingsAboutActivity
 import joshuatee.wx.spc.SpcSoundingsActivity
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
@@ -230,12 +231,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                 }
             }
             //not removing about - ELY M.
-            R.id.action_about -> ObjectIntent(
-                    this,
-                    TextScreenActivity::class.java,
-                    TextScreenActivity.URL,
-                    arrayOf(UtilityAlertDialog.showVersion(this, this), "About wX")
-            )
+            R.id.action_about -> ObjectIntent(this, SettingsAboutActivity::class.java)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

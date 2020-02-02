@@ -21,7 +21,6 @@
 
 package joshuatee.wx.util
 
-import android.content.Context
 import joshuatee.wx.MyApplication
 // FIXME see if this external can be removed
 import joshuatee.wx.external.ExternalDuplicateRemover
@@ -30,10 +29,10 @@ import joshuatee.wx.Extensions.*
 
 object UtilityVtec {
 
-    fun getStormCount(context: Context, textTor: String): Int {
+    fun getStormCount(textTor: String): Int {
         var dashboardStrTor = ""
         var nwsLoc = ""
-        var wfos: List<String>
+        var offices: List<String>
         var wfo: String
         val vtecPattern = "([A-Z0]{1}\\.[A-Z]{3}\\.[A-Z]{4}\\.[A-Z]{2}\\.[A-Z]\\.[0-9]{4}\\.[0-9]{6}T[0-9]{4}Z\\-[0-9]{6}T[0-9]{4}Z)"
         val stormList = textTor.parseColumn(vtecPattern)
@@ -41,11 +40,11 @@ object UtilityVtec {
             val vtecIsCurrent = UtilityTime.isVtecCurrent(it)
             if (!it.startsWith("O.EXP") && vtecIsCurrent) {
                 dashboardStrTor += it
-                wfos = it.split(".")
-                if (wfos.size > 1) {
-                    wfo = wfos[2]
+                offices = it.split(".")
+                if (offices.size > 1) {
+                    wfo = offices[2]
                     wfo = wfo.replace("^[KP]".toRegex(), "")
-                    nwsLoc = Utility.readPref(context, "NWS_LOCATION_$wfo", "")
+                    nwsLoc = Utility.getWfoSiteName(wfo)
                 }
                 dashboardStrTor += "  " + nwsLoc + MyApplication.newline
             }

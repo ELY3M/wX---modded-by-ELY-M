@@ -73,8 +73,24 @@ object Utility {
         return UtilityRadar.radarSiteToLon[radarSite] ?: ""
     }
 
+    fun getWfoSiteX(site: String): String {
+        return UtilityRadar.wfoSiteToLat[site] ?: ""
+    }
+
+    fun getWfoSiteY(site: String): String {
+        return UtilityRadar.wfoSiteToLon[site] ?: ""
+    }
+
     fun getWfoSiteName(wfo: String): String {
         return UtilityRadar.wfoIdToName[wfo] ?: ""
+    }
+
+    fun getSoundingSiteX(site: String): String {
+        return UtilityRadar.soundingSiteToLat[site] ?: ""
+    }
+
+    fun getSoundingSiteY(site: String): String {
+        return UtilityRadar.soundingSiteToLon[site] ?: ""
     }
 
    /* fun getWfoSiteLatLon(wfo: String): LatLon {
@@ -89,7 +105,7 @@ object Utility {
         return LatLon(lat, lon)
     }*/
 
-    /*  fun getSoundingSiteName(wfo: String): String {
+     fun getSoundingSiteName(wfo: String): String {
           var site = UtilityRadar.wfoIdToName[wfo] ?: ""
           if (site == "") {
               site = UtilityRadar.soundingIdToName[wfo] ?: ""
@@ -97,14 +113,14 @@ object Utility {
           return site
       }
 
-      fun generateSoundingNameList(): List<String> {
-          val list = mutableListOf<String>()
-          GlobalArrays.soundingSites.sorted()
-          GlobalArrays.soundingSites.forEach {
-              list.add(it + ": " + getSoundingSiteName(it))
-          }
-          return list
-      }*/
+    /* fun generateSoundingNameList(): List<String> {
+        val list = mutableListOf<String>()
+        GlobalArrays.soundingSites.sorted()
+        GlobalArrays.soundingSites.forEach {
+            list.add(it + ": " + getSoundingSiteName(it))
+        }
+        return list
+    }*/
 
     fun getVersion(context: Context): String {
         var version = ""

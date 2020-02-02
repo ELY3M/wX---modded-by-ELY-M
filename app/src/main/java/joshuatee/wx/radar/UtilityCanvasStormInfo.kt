@@ -70,7 +70,7 @@ object UtilityCanvasStormInfo {
         val stormList = mutableListOf<Double>()
         val stormListArr: FloatArray
         val retStr: String
-        val location = UtilityLocation.getSiteLocation(context, radarSite)
+        val location = UtilityLocation.getSiteLocation(radarSite)
         try {
             val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, stiBaseFn + ""))
             dis.bigEndian = true

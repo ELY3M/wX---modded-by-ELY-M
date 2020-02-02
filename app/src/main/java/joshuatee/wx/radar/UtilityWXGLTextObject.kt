@@ -26,24 +26,21 @@ object UtilityWXGLTextObject {
 
     // FIXME naming and use more
     fun hideTV(numPanes: Int, textObjects: MutableList<WXGLTextObject>): Unit =
-        (0 until numPanes).forEach { textObjects[it].hideTextLabels() }
+        (0 until numPanes).forEach {
+            textObjects[it].hideTextLabels()
+        }
 
     fun showTV(numPanes: Int, textObjects: MutableList<WXGLTextObject>): Unit =
-        (0 until numPanes).forEach { textObjects[it].addTextLabels() }
+        (0 until numPanes).forEach {
+            textObjects[it].addTextLabels()
+        }
 
     fun updateSpotterLabels(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
         (0 until numPanes).forEach {
-	    ///textObjects[it].initTVSpottersLabels()  //is this needed????  test for bugs
             textObjects[it].addTextLabelsSpottersLabels()
         }
     }
 
-    fun updateHailLabels(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
-        (0 until numPanes).forEach {
-            textObjects[it].initTVHailLabels()
-            textObjects[it].addTVHailLabels()
-        }
-    }
     fun updateObs(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
         (0 until numPanes).forEach {
             textObjects[it].initializeTextLabelsObservations()
@@ -56,4 +53,12 @@ object UtilityWXGLTextObject {
             textObjects[it].addWpcPressureCenters()
         }
     }
+        
+    fun updateHailLabels(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
+        (0 until numPanes).forEach {
+            textObjects[it].initTVHailLabels()
+            textObjects[it].addTVHailLabels()
+        }
+    }
+    
 }

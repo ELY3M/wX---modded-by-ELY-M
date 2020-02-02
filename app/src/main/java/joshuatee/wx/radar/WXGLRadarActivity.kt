@@ -66,6 +66,7 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
 
 import joshuatee.wx.GlobalArrays
+import joshuatee.wx.activitiesmisc.SevereDashboardActivity
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.util.*
@@ -137,7 +138,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private lateinit var l2Menu: MenuItem
     private lateinit var tdwrMenu: MenuItem
     private var delay = 0
-    private val prefTokenLocation = "RID_LOC_"
     private val prefToken = "RID_FAV"
     private var frameCountGlobal = 0
     private var locXCurrent = ""
@@ -287,7 +287,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 this,
                 MyApplication.ridFav,
                 oglr.rid,
-                prefTokenLocation,
                 prefToken
         )
         sp = ObjectSpinner(this, this, this, R.id.spinner1, ridArrLoc)
@@ -334,7 +333,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     this,
                     MyApplication.ridFav,
                     oglr.rid,
-                    prefTokenLocation,
                     prefToken
             )
             sp.refreshData(this@WXGLRadarActivity, ridArrLoc)
@@ -491,7 +489,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             if (!oglr.product.startsWith("2")) {
                 UtilityRadarUI.plotWarningPolygons(glview, oglr, archiveMode)
             }
-
+            val tstCount = UtilityVtec.getStormCount(MyApplication.severeDashboardTst.value)
+            val torCount = UtilityVtec.getStormCount(MyApplication.severeDashboardTor.value)
+            val ffwCount = UtilityVtec.getStormCount(MyApplication.severeDashboardFfw.value)
+            if (MyApplication.radarWarnings) {
+                title = oglr.product + " (" + tstCount.toString() + "," + torCount.toString() + "," + ffwCount.toString() + ")"
+            }
             if (PolygonType.MCD.pref && !archiveMode) {
                 withContext(Dispatchers.IO) {
                     UtilityDownloadMcd.get(this@WXGLRadarActivity)
@@ -685,22 +688,14 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                         )
                         UtilityShare.shareAnimGif(
                                 this,
-                                oglr.rid + " (" + Utility.readPref(
-                                        this@WXGLRadarActivity,
-                                        "RID_LOC_" + oglr.rid,
-                                        ""
-                                ) + ") " + oglr.product,
+                                oglr.rid + " (" + Utility.getRadarSiteName(oglr.rid) + ") " + oglr.product,
                                 animDrawable
                         )
                     } else {
                         UtilityShare.shareBitmap(
                                 this,
                                 this,
-                                oglr.rid + " (" + Utility.readPref(
-                                        this@WXGLRadarActivity,
-                                        "RID_LOC_" + oglr.rid,
-                                        ""
-                                ) + ") " + oglr.product,
+                                oglr.rid + " (" + Utility.getRadarSiteName(oglr.rid) + ") " + oglr.product,
                                 UtilityUSImgWX.layeredImgFromFile(
                                         applicationContext,
                                         oglr.rid,
@@ -821,7 +816,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 this,
                 MyApplication.ridFav,
                 oglr.rid,
-                prefTokenLocation,
                 prefToken
         )
         adjustTiltMenu()
@@ -830,8 +824,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
 
     private fun toggleFavorite() {
         val ridFav = UtilityFavorites.toggleFavoriteString(this, oglr.rid, star, prefToken)
-        ridArrLoc =
-                UtilityFavorites.setupFavMenu(this, ridFav, oglr.rid, prefTokenLocation, prefToken)
+        ridArrLoc = UtilityFavorites.setupFavMenu(this, ridFav, oglr.rid, prefToken)
         sp.refreshData(this@WXGLRadarActivity, ridArrLoc)
     }
 

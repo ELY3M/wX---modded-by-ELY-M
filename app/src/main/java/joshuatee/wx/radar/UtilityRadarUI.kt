@@ -219,7 +219,7 @@ internal object UtilityRadarUI {
             alertDialogRadarLongpressAl.add("Show Spotter Info")
         }
         alertDialogRadarLongpressAl.add("Show current radar status message: " + wxglRender.rid)
-	    val getridpoint: String = UtilityLocation.getNearestRadarSite(context, LatLon(pointX.toString(), pointY.toString()))
+	    val getridpoint: String = UtilityLocation.getNearestRadarSite(LatLon(pointX.toString(), pointY.toString()))
 	    alertDialogRadarLongpressAl.add("Show nearest radar status message: " + getridpoint)
 	    alertDialogRadarLongpressAl.add("userpoint info: " + latLonTitle)
         alertDialogRadarLongpressAl.add("Add userpoint for: " + latLonTitle)
@@ -614,7 +614,7 @@ internal object UtilityRadarUI {
         var radarStatus = withContext(Dispatchers.IO) {
             val pointX = glview.newY.toDouble()
             val pointY = glview.newX * -1.0
-            getrid = UtilityLocation.getNearestRadarSite(context, LatLon(pointX.toString(), pointY.toString())
+            getrid = UtilityLocation.getNearestRadarSite(LatLon(pointX.toString(), pointY.toString())
             )
             UtilityLog.d("wx", "point: x: "+pointX+ "y: "+pointY)
             UtilityLog.d("wx", "radar status on point: "+getrid)

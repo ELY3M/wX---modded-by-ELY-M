@@ -35,18 +35,19 @@ import joshuatee.wx.ui.BaseActivity
 
 import kotlinx.android.synthetic.main.activity_webview_toolbar.*
 
-class WebscreenAB : BaseActivity() {
+class WebView : BaseActivity() {
 
+    //
     // This is a general purpose activity used to view web pages.
     // Toolbar is displayed ( thus AB ie ActionBar (old name) in activity name )
     // arg0 URL
     // arg1 Title
+    //
 
     companion object {
         const val URL: String = ""
     }
 
-    // added to support webview history, this var and block below it
     private var url = ""
 
     override fun onBackPressed() {
@@ -73,23 +74,13 @@ class WebscreenAB : BaseActivity() {
         if (url.startsWith("http")) {
             webview.loadUrl(url)
         } else {
-            if (url.contains("twitter"))
-                webview.loadDataWithBaseURL("fake://not/needed", url, "text/html", "utf-8", null)
-            else
-                webview.loadData(url, "text/html", null)
+            webview.loadData(url, "text/html", null)
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
         R.id.action_browser -> {
-            var urlExt = url
-            if (url.contains("https://twitter.com/search?q=%23tornado")) {
-                urlExt = "https://twitter.com/hashtag/tornado"
-            }
-            if (url.contains("https://twitter.com/wunderground")) {
-                urlExt = "https://twitter.com/wunderground"
-            }
-            ObjectIntent(this, Intent.ACTION_VIEW, Uri.parse(urlExt))
+            ObjectIntent(this, Intent.ACTION_VIEW, Uri.parse(url))
             true
         }
         else -> super.onOptionsItemSelected(item)

@@ -194,11 +194,11 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 }
             })
         }
-        favListLabel = UtilityFavorites.setupFavMenuSpcMeso(
+        favListLabel = UtilityFavorites.setupFavoriteMenuSpc(
                 MyApplication.spcmesoLabelFav,
                 displayData.paramLabel[curImg]
         )
-        favListParm = UtilityFavorites.setupFavMenuSpcMeso(
+        favListParm = UtilityFavorites.setupFavoriteMenuSpc(
                 MyApplication.spcMesoFav,
                 displayData.param[curImg]
         )
@@ -224,11 +224,11 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
     }
 
     override fun onRestart() {
-        favListLabel = UtilityFavorites.setupFavMenuSpcMeso(
+        favListLabel = UtilityFavorites.setupFavoriteMenuSpc(
                 MyApplication.spcmesoLabelFav,
                 displayData.paramLabel[curImg]
         )
-        favListParm = UtilityFavorites.setupFavMenuSpcMeso(
+        favListParm = UtilityFavorites.setupFavoriteMenuSpc(
                 MyApplication.spcMesoFav,
                 displayData.param[curImg]
         )
@@ -505,11 +505,11 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 displayData.paramLabel[curImg],
                 star
         )
-        favListLabel = UtilityFavorites.setupFavMenuSpcMeso(
+        favListLabel = UtilityFavorites.setupFavoriteMenuSpc(
                 MyApplication.spcmesoLabelFav,
                 displayData.paramLabel[curImg]
         )
-        favListParm = UtilityFavorites.setupFavMenuSpcMeso(
+        favListParm = UtilityFavorites.setupFavoriteMenuSpc(
                 MyApplication.spcMesoFav,
                 displayData.param[curImg]
         )
@@ -553,11 +553,11 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
     private fun refreshSpinner() {
-        favListLabel = UtilityFavorites.setupFavMenuSpcMeso(
+        favListLabel = UtilityFavorites.setupFavoriteMenuSpc(
                 MyApplication.spcmesoLabelFav,
                 displayData.paramLabel[curImg]
         )
-        favListParm = UtilityFavorites.setupFavMenuSpcMeso(
+        favListParm = UtilityFavorites.setupFavoriteMenuSpc(
                 MyApplication.spcMesoFav,
                 displayData.param[curImg]
         )

@@ -332,8 +332,8 @@ internal object UtilityMetar {
     // Used for nexrad radar when obs site is turn on
     //
     //
-    private fun getObservationSites(context: Context, rid: String): String {
-        val radarLocation = UtilityLocation.getSiteLocation(context, rid)
+    private fun getObservationSites(context: Context, radarSite: String): String {
+        val radarLocation = UtilityLocation.getSiteLocation(radarSite)
         val obsListSb = StringBuilder(100)
         readMetarData(context)
         /*val text = UtilityIO.readTextFileFromRaw(context.resources, R.raw.us_metar3)

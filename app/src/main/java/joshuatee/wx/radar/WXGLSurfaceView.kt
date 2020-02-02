@@ -223,7 +223,6 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
         newY = test2.toFloat() + (-oglrCurrent.y / mScaleFactor + diffY) / ppd
         newY = (180 / PI * (2 * atan(exp(newY * PI / 180)) - PI / 2)).toFloat()
         oglrCurrent.ridNewList = UtilityLocation.getNearestRid(
-            context,
             LatLon(newY.toString(), (newX * -1).toString()),
             5
         )

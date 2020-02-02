@@ -29,7 +29,6 @@ import joshuatee.wx.ui.ObjectMenuTitle
 internal object UtilityWpcText {
 
     private val titles = listOf(
-            //ObjectMenuTitle("General", 3),
             ObjectMenuTitle("General Forecast Discussions", 11),
             ObjectMenuTitle("Precipitation Discussions", 2),
             ObjectMenuTitle("Hazards", 7),

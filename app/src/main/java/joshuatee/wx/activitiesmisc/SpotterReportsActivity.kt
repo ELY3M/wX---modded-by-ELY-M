@@ -59,7 +59,6 @@ class SpotterReportsActivity : BaseActivity() {
 
     private fun itemSelected(position: Int) {
         val radarSite = UtilityLocation.getNearestOffice(
-            this,
             "RADAR",
             LatLon(
                 UtilitySpotter.spotterReports[position].lat,

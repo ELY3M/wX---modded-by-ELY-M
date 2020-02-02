@@ -27,9 +27,9 @@ import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.objects.LatLonStr
 import joshuatee.wx.radar.LatLon
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityLog
 import java.util.*
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.GlobalDictionaries
 import joshuatee.wx.util.UtilityString
 
 // implement up/down mini fab in settings
@@ -88,7 +88,7 @@ class Location(val context: Context, locNumInt: Int) {
         alertNotificationWpcmpdCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_WPCMPD$jStr", "false")
         raw = Utility.readPref(context, "LOC" + jStr + "_TIMERAW", "")
         dst = Utility.readPref(context, "LOC" + jStr + "_TIMEDST", "")
-        state = Utility.readPref(context, "NWS_LOCATION_$wfo", "").split(",")[0]
+        state = Utility.getWfoSiteName(wfo).split(",")[0]
         observation = Utility.readPref(context, "LOC" + jStr + "_OBSERVATION", "")
         isUS = us(x)
         addToListOfNames(name)
@@ -282,35 +282,22 @@ class Location(val context: Context, locNumInt: Int) {
             var radarSite = ""
             if (us(xStr)) {
                 setNumLocations(context, locNumToSave)
-                try {
-                    val wfoAndRadar =  getWfoRadarSiteFromPoint(LatLon(xStr, yStr))
-                    wfo = wfoAndRadar[0]
-                    radarSite = wfoAndRadar[1]
-                    if (wfo == "") {
-                        wfo =
-                                UtilityLocation.getNearestOffice(context, "WFO", LatLon(xStr, yStr))
-                                        .toLowerCase(Locale.US)
-                    }
-                    if (radarSite == "") {
-                        radarSite = UtilityLocation.getNearestOffice(context, "RADAR", LatLon(xStr, yStr))
-                    }
-                    // CT shows mosaic not nexrad so the old way is needed
-                    if (radarSite == "") {
-                        radarSite = Utility.readPref(
-                            context,
-                            "NWS_RID_" + wfo.toUpperCase(Locale.US),
-                            ""
-                        )
-                    }
-                    Utility.writePref(context, "RID$locNum", radarSite.toUpperCase(Locale.US))
-                    Utility.writePref(
-                        context,
-                        "NWS$locNum",
-                            wfo.toUpperCase(Locale.US)
-                    )
-                } catch (e: Exception) {
-                    UtilityLog.handleException(e)
+                val wfoAndRadar =  getWfoRadarSiteFromPoint(LatLon(xStr, yStr))
+                wfo = wfoAndRadar[0]
+                radarSite = wfoAndRadar[1]
+                if (wfo == "") {
+                    wfo = UtilityLocation.getNearestOffice( "WFO", LatLon(xStr, yStr)).toLowerCase(Locale.US)
                 }
+                if (radarSite == "") {
+                    radarSite = UtilityLocation.getNearestOffice( "RADAR", LatLon(xStr, yStr))
+                }
+                // CT shows mosaic not nexrad so the old way is needed
+                if (radarSite == "") {
+                    radarSite = GlobalDictionaries.wfoToRadarSite[wfo.toUpperCase(Locale.US)] ?: ""
+                }
+                Utility.writePref(context, "RID$locNum", radarSite.toUpperCase(Locale.US))
+                Utility.writePref(context, "NWS$locNum", wfo.toUpperCase(Locale.US)
+                )
             } else if (xStr.contains("CANADA")) {
                 var tmpLatLon = LatLonStr()
                 if (xStr.length < 12) {
@@ -326,7 +313,9 @@ class Location(val context: Context, locNumInt: Int) {
                 if (parseProv.isNotEmpty()) prov = parseProv[1]
                 var id = ""
                 val parseId = yStr.split(":").dropLastWhile { it.isEmpty() }
-                if (parseId.isNotEmpty()) id = parseId[0]
+                if (parseId.isNotEmpty()) {
+                    id = parseId[0]
+                }
                 if (xStr.length > 12) {
                     tmpLatLon.latStr = parseProv[2]
                     tmpLatLon.lonStr = parseId[1]

@@ -121,7 +121,7 @@ class ObjectAlertSummary(
                     val nwsLoc: String
                     if (cc.vtec.length > 15 && cc.event != "Special Weather Statement") {
                         nwsOffice = cc.vtec.substring(8, 11)
-                        nwsLoc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "MI")
+                        nwsLoc = Utility.getWfoSiteName(nwsOffice)
                     } else {
                         nwsOffice = ""
                         nwsLoc = ""

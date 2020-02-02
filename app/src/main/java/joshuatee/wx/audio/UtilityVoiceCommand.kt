@@ -33,7 +33,6 @@ import joshuatee.wx.settings.Location
 import joshuatee.wx.spc.SpcMesoActivity
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.MyApplication
-import joshuatee.wx.activitiesmisc.WebscreenAB
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.settings.SettingsLocationGenericActivity
 import joshuatee.wx.spc.SpcSwoActivity
@@ -60,7 +59,7 @@ object UtilityVoiceCommand {
             var validRid = true
             if (tokens.size > 1) {
                 radarSite = tokens[1].toUpperCase(Locale.US)
-                if (Utility.readPrefWithNull(context, "RID_LOC_$radarSite", null) == null) {
+                if (Utility.getRadarSiteName(radarSite) == "") {
                     validRid = false
                 }
             }
@@ -182,27 +181,6 @@ object UtilityVoiceCommand {
                     USNwsMosaicActivity::class.java,
                     USNwsMosaicActivity.URL,
                     arrayOf("")
-            )
-        } else if (vrString.contains("Twitter")) {
-            var stateCodeCurrent: String = Utility.readPref(context, "STATE_CODE", "")
-            if (tokens.size > 1) {
-                vrString = vrString.replace("Twitter ", "")
-                vrString = vrString.replace(" ", "+")
-                stateCodeCurrent = Utility.readPref(context, "STATE_LOOKUP_$vrString", "")
-            }
-            val twitterStateId = Utility.readPref(context, "STATE_TW_ID_$stateCodeCurrent", "")
-            ObjectIntent(
-                    context,
-                    WebscreenAB::class.java,
-                    WebscreenAB.URL,
-                    arrayOf(
-                            "<a class=\"twitter-timeline\" data-dnt=\"true\" href=\"https://twitter.com/search?q=%23" + stateCodeCurrent.toLowerCase(
-                                    Locale.US
-                            ) + "wx\" data-widget-id=\"" + twitterStateId + "\" data-chrome=\"noscrollbar noheader nofooter noborders  \" data-tweet-limit=20>Tweets about \"#" + stateCodeCurrent.toLowerCase(
-                                    Locale.US
-                            ) + "wx\"</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\"://platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script>",
-                            "twitter: " + stateCodeCurrent.toLowerCase(Locale.US)
-                    )
             )
         } else if (vrString.contains("map")) {
             if (tokens.size > 1) {

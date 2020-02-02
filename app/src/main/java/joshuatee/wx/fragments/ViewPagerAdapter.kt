@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentPagerAdapter
 import joshuatee.wx.MyApplication
 
 //class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
-class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     val tabTitles: Array<String> = arrayOf("LOCAL", "SPC", "MISC")
 

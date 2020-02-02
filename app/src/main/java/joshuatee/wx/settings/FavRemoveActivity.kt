@@ -37,10 +37,12 @@ import joshuatee.wx.wpc.UtilityWpcText
 
 class FavRemoveActivity : BaseActivity() {
 
+    //
     // called from various activities that need favorite management,
     // allows one to remove from list of favorite sites and reorder
     //
     // arg1: type such as SND WFO RID
+    //
 
     companion object {
         const val TYPE: String = ""
@@ -56,6 +58,7 @@ class FavRemoveActivity : BaseActivity() {
     private var ridArrLabel = mutableListOf<String>()
     private lateinit var recyclerView: ObjectRecyclerView
     private var type = ""
+    private val initialValue = " : : "
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,7 +92,7 @@ class FavRemoveActivity : BaseActivity() {
                 prefTokenLabel = "SPCMESO_LABEL_FAV"
             }
         }
-        ridFav = Utility.readPref(this, prefToken, " : : :")
+        ridFav = Utility.readPref(this, prefToken, UtilityFavorites.initialValue)
         title = "Modify $type"
         toolbar.subtitle = "Tap item to delete or move."
         updateList()
@@ -101,13 +104,13 @@ class FavRemoveActivity : BaseActivity() {
         ridArr.clear()
         (3 until tempList.size).mapTo(ridArr) { tempList[it] }
         ridArrLabel = mutableListOf()
-        ridArr.indices.forEach {
+        ridArr.forEach {
             when (type) {
-                "NWSTEXT" -> ridArrLabel.add(getFullString(ridArr[it]))
-                "SREF" -> ridArrLabel.add(ridArr[it])
-                "RIDCA" -> ridArrLabel.add(findCanadaRadarSiteLabel(ridArr[it]))
-                "SPCMESO" -> ridArrLabel.add(findSpcMesoLabel(ridArr[it]))
-                else -> ridArrLabel.add(getFullString(ridArr[it]))
+                "NWSTEXT" -> ridArrLabel.add(getFullString(it))
+                "SREF" -> ridArrLabel.add(it)
+                "RIDCA" -> ridArrLabel.add(findCanadaRadarSiteLabel(it))
+                "SPCMESO" -> ridArrLabel.add(findSpcMesoLabel(it))
+                else -> ridArrLabel.add(getFullString(it))
             }
         }
     }
@@ -134,16 +137,20 @@ class FavRemoveActivity : BaseActivity() {
         }
         when (type) {
             "SPCMESO" -> {
-                ridFav = " : : "
-                ridArr.indices.forEach { ridFav += ":" + ridArr[it] }
+                ridFav = initialValue
+                ridArr.forEach {
+                    ridFav += ":$it"
+                }
                 Utility.writePref(this, prefToken, "$ridFav:")
-                ridFavLabel = " : : "
+                ridFavLabel = initialValue
                 ridFavLabel += recyclerView.toString()
                 Utility.writePref(this, prefTokenLabel, ridFavLabel)
             }
             else -> {
-                ridFav = " : : "
-                ridArr.indices.forEach { ridFav += ":" + ridArr[it] }
+                ridFav = initialValue
+                ridArr.forEach {
+                    ridFav += ":$it"
+                }
                 Utility.writePref(this, prefToken, "$ridFav:")
             }
         }
@@ -168,12 +175,14 @@ class FavRemoveActivity : BaseActivity() {
             ridArr[ridArr.lastIndex] = tmp
             recyclerView.setItem(ridArr.lastIndex, getFullString(tmp))
         }
-        ridFav = " : : "
-        ridArr.indices.forEach { ridFav = ridFav + ":" + ridArr[it] }
+        ridFav = initialValue
+        ridArr.forEach {
+            ridFav += ":$it"
+        }
         Utility.writePref(this, prefToken, "$ridFav:")
         when (type) {
             "SPCMESO" -> {
-                ridFavLabel = " : : "
+                ridFavLabel = initialValue
                 ridFavLabel += recyclerView.toString()
                 Utility.writePref(this, prefTokenLabel, ridFavLabel)
             }
@@ -181,27 +190,17 @@ class FavRemoveActivity : BaseActivity() {
     }
 
     private fun getFullString(shortCode: String): String {
-        var tmpLoc = ""
+        var fullName = ""
         when (type) {
-            "SND" -> {
-                tmpLoc = Utility.readPref(this, "NWS_LOCATION_$shortCode", "")
-                tmpLoc = if (tmpLoc == "") {
-                    shortCode + ": " + Utility.readPref(this, "NWS_SOUNDINGLOCATION_$shortCode", "")
-                } else {
-                    "$shortCode: $tmpLoc"
-                }
-            }
-            "WFO" -> tmpLoc = shortCode + ": " +
-                    Utility.readPref(this, prefTokenLocation + shortCode, "")
-            "RID" -> tmpLoc = shortCode + ": " +
-                    Utility.readPref(this, prefTokenLocation + shortCode, "")
-            "NWSTEXT" -> tmpLoc =
-                    UtilityWpcText.labels[UtilityFavorites.findPositionNwsText(shortCode)]
-            "SREF" -> tmpLoc = shortCode
-            "RIDCA" -> tmpLoc = findCanadaRadarSiteLabel(shortCode)
-            "SPCMESO" -> tmpLoc = findSpcMesoLabel(shortCode)
+            "SND" -> fullName = Utility.getSoundingSiteName(shortCode)
+            "WFO" -> fullName = shortCode + ": " + Utility.getWfoSiteName(shortCode)
+            "RID" -> fullName = shortCode + ": " + Utility.getRadarSiteName(shortCode)
+            "NWSTEXT" -> fullName = UtilityWpcText.labels[UtilityFavorites.findPositionNwsText(shortCode)]
+            "SREF" -> fullName = shortCode
+            "RIDCA" -> fullName = findCanadaRadarSiteLabel(shortCode)
+            "SPCMESO" -> fullName = findSpcMesoLabel(shortCode)
         }
-        return tmpLoc
+        return fullName
     }
 
     private fun saveMyApp(fav: String, favLabel: String) {
@@ -251,7 +250,7 @@ class FavRemoveActivity : BaseActivity() {
                 ridFav = Utility.readPref(this, prefToken, " : :")
                 ridFav = ridFav.replace(ridArr[position] + ":", "")
                 recyclerView.deleteItem(position)
-                ridFavLabel = " : : "
+                ridFavLabel = initialValue
                 ridFavLabel += recyclerView.toString()
                 Utility.writePref(this, prefToken, ridFav)
                 Utility.writePref(this, prefTokenLabel, ridFavLabel)

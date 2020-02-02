@@ -52,7 +52,7 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.radar.WXGLNexrad
 import joshuatee.wx.radar.LatLon
-import joshuatee.wx.activitiesmisc.WebscreenAB
+import joshuatee.wx.activitiesmisc.WebView
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.Location
@@ -208,8 +208,8 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 stormCard.setListener(View.OnClickListener {
                     ObjectIntent(
                             this@SpcStormReportsActivity,
-                            WebscreenAB::class.java,
-                            WebscreenAB.URL,
+                            WebView::class.java,
+                            WebView.URL,
                             arrayOf(UtilityMap.getMapUrl(xStr, yStr, "10"), "$xStr,$yStr")
                     )
                 })
@@ -286,7 +286,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val index = v.id
         val x = storms[index].lat
         val y = storms[index].lon
-        val radarSite = UtilityLocation.getNearestOffice(this, "RADAR", LatLon(x, y))
+        val radarSite = UtilityLocation.getNearestOffice("RADAR", LatLon(x, y))
         menu.add(0, v.id, 0, "Show L2REF from $radarSite")
         menu.add(0, v.id, 0, "Show L2VEL from $radarSite")
     }
@@ -304,7 +304,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         var x = storms[id].lat
         var y = storms[id].lon
         var time = storms[id].time
-        var radarSite = UtilityLocation.getNearestOffice(this, "RADAR", LatLon(x, y))
+        var radarSite = UtilityLocation.getNearestOffice("RADAR", LatLon(x, y))
         time = UtilityStringExternal.truncate(time, 3)
         if (prod == "TR0" || prod == "TV0") {
             radarSite = WXGLNexrad.getTdwrFromRid(radarSite)

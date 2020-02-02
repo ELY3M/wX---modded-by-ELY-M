@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55341"
-    android:versionName="55341"
+    android:versionCode="55349"
+    android:versionName="55349"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -203,11 +203,11 @@
       android:parentActivityName="WX" >
   </activity>
   <activity
-      android:name=".activitiesmisc.WebscreenAB"
+      android:name=".activitiesmisc.WebView"
       android:parentActivityName="WX" >
   </activity>
   <activity
-      android:name=".activitiesmisc.WebscreenABState"
+      android:name=".activitiesmisc.WebViewTwitter"
       android:parentActivityName="WX" >
   </activity>
   <activity

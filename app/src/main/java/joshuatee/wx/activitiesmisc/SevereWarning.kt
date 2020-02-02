@@ -92,7 +92,7 @@ internal class SevereWarning(private val type: PolygonType) {
                 if (vtecComponents.size > 1) {
                     wfo = vtecComponents[2]
                     wfo = wfo.replace("^[KP]".toRegex(), "")
-                    wfoLocation = Utility.readPref(context, "NWS_LOCATION_$wfo", "")
+                    wfoLocation = Utility.getWfoSiteName(wfo)
                 }
                 text += "  " + wfoLocation + MyApplication.newline
             }

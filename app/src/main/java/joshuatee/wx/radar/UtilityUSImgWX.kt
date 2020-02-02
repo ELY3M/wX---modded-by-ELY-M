@@ -42,7 +42,7 @@ import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityLog
 
-import joshuatee.wx.NEXRAD_PRODUCT_STRING
+import joshuatee.wx.GlobalDictionaries
 import joshuatee.wx.R
 
 object UtilityUSImgWX {
@@ -73,7 +73,7 @@ object UtilityUSImgWX {
             inputStream = UtilityDownload.getInputStreamFromUrl(
                     MyApplication.NWS_RADAR_PUB
                             + "SL.us008001/DF.of/DC.radar/"
-                            + NEXRAD_PRODUCT_STRING[product]
+                            + GlobalDictionaries.NEXRAD_PRODUCT_STRING[product]
                             + "/SI." + ridPrefix + radarSite.toLowerCase(
                             Locale.US
                     ) + "/sn.last"
@@ -162,10 +162,7 @@ object UtilityUSImgWX {
         val colorDrawable = ColorDrawable(MyApplication.nexradRadarBackgroundColor)
         var bitmapCanvas = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
         if (!prod.contains("L2")) {
-            if (prod.contains("N0R") || prod.contains("N0S") || prod.contains("N0V") || prod.contains(
-                            "TR"
-                    )
-            ) {
+            if (prod.contains("N0R") || prod.contains("N0S") || prod.contains("N0V") || prod.contains("TR")) {
                 UtilityNexradRadial4Bit.decodeAndPlot(
                         context,
                         bitmapCanvas,

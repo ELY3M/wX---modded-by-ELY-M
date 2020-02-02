@@ -285,7 +285,7 @@ object UtilityLocationFragment {
             stringName.contains("Reset zoom and center") -> fnResetRadarView()
             else -> {
                 val ridContext = stringName.split(":")[0]
-                var stateContext = Utility.readPref("RID_LOC_$ridContext", "")
+                var stateContext = Utility.getRadarSiteName(ridContext)
                 stateContext = stateContext.split(",")[0]
                 ObjectIntent(
                         activityReference,

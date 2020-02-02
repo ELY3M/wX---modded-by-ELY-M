@@ -63,7 +63,7 @@ object UtilityDownload {
         var bitmap: Bitmap = UtilityImg.getBlankBitmap()
         try {
             if (!UIPreferences.useAwcRadarMosaic) {
-                val ridLoc = Utility.readPref(context, "RID_LOC_$radarSite", "")
+                val ridLoc = Utility.getRadarSiteName(radarSite)
                 val nwsLocationArr = ridLoc.split(",").dropLastWhile { it.isEmpty() }
                 val state = nwsLocationArr[0]
                 var k = Utility.readPref(context, "WIDGET_RADAR_LEVEL", "1km")
@@ -311,10 +311,7 @@ object UtilityDownload {
             }
             "SND" -> {
                 needsBitmap = false
-                bm = UtilitySpcSoundings.getImage(
-                        context,
-                        UtilityLocation.getNearestSnd(context, Location.latLon)
-                )
+                bm = UtilitySpcSoundings.getImage(context, UtilityLocation.getNearestSnd(Location.latLon))
             }
             "STRPT" -> url = UtilitySpc.getStormReportsTodayUrl()
             else -> {

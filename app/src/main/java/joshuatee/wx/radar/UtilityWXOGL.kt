@@ -38,7 +38,7 @@ import joshuatee.wx.util.UtilityLog
 
 import joshuatee.wx.Extensions.*
 
-import joshuatee.wx.NEXRAD_PRODUCT_STRING
+import joshuatee.wx.GlobalDictionaries
 import joshuatee.wx.RegExp
 
 object UtilityWXOGL {
@@ -80,9 +80,9 @@ object UtilityWXOGL {
         val ridPrefix = getRidPrefix(radarSite, product)
         val file: File
         val inputStream = UtilityDownload.getInputStreamFromUrl(
-                MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" + NEXRAD_PRODUCT_STRING[product] + "/SI." + ridPrefix + radarSite.toLowerCase(
-                        Locale.US
-                ) + "/sn.last"
+                MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/"
+                        + GlobalDictionaries.NEXRAD_PRODUCT_STRING[product]
+                        + "/SI." + ridPrefix + radarSite.toLowerCase(Locale.US) + "/sn.last"
         )
         if (inputStream != null) {
             UtilityIO.saveInputStream(context, inputStream, l3BaseFn + indexString + "_d")

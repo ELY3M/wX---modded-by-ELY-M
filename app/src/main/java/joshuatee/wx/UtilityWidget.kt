@@ -42,9 +42,9 @@ import joshuatee.wx.util.*
 
 object UtilityWidget {
 
-    private fun uriShareAndGenerate(context: Context, fn: String): Uri {
+    private fun uriShareAndGenerate(context: Context, fileName: String): Uri {
         val dir = File(context.filesDir.toString() + "/shared")
-        val file = File(dir, fn)
+        val file = File(dir, fileName)
         val imgUri = FileProvider.getUriForFile(
             context,
             "${MyApplication.packageNameAsString}.fileprovider",

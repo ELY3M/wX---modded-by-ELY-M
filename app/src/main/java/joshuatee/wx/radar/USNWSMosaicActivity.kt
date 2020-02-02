@@ -75,26 +75,21 @@ class USNwsMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListen
         } else {
             if (activityArguments.isNotEmpty() && activityArguments[0] == "location") {
                 val rid1 = Location.rid
-                val ridLoc = Utility.readPref(this, "RID_LOC_$rid1", "")
+                val ridLoc = Utility.getRadarSiteName(rid1)
                 val nwsLocationArr = ridLoc.split(",").dropLastWhile { it.isEmpty() }
                 val state = nwsLocationArr.getOrNull(0) ?: ""
-                nwsRadarMosaicSectorLabelCurrent =
-                        UtilityUSImgNwsMosaic.getSectorFromState(state)
-                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNwsMosaic.getSectorLabelFromCode(
-                        nwsRadarMosaicSectorLabelCurrent
-                )
+                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNwsMosaic.getSectorFromState(state)
+                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNwsMosaic.getSectorLabelFromCode(nwsRadarMosaicSectorLabelCurrent)
                 doNotSavePref = true
             } else if (activityArguments.isNotEmpty() && activityArguments[0] == "widget") {
                 val widgetLocNum = Utility.readPref(this, "WIDGET_LOCATION", "1")
                 val rid1 = Location.getRid(this, widgetLocNum)
-                val ridLoc = Utility.readPref(this, "RID_LOC_$rid1", "")
+                val ridLoc = Utility.getRadarSiteName(rid1)
                 val nwsLocationArr = ridLoc.split(",").dropLastWhile { it.isEmpty() }
-                val state = Utility.readPref(this, "STATE_CODE_" + nwsLocationArr.getOrNull(0), "")
-                nwsRadarMosaicSectorLabelCurrent =
-                        UtilityUSImgNwsMosaic.getSectorFromState(state)
-                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNwsMosaic.getSectorLabelFromCode(
-                        nwsRadarMosaicSectorLabelCurrent
-                )
+                //val state = Utility.readPref(this, "STATE_CODE_" + nwsLocationArr.getOrNull(0), "")
+                val state = nwsLocationArr.getOrNull(0) ?: ""
+                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNwsMosaic.getSectorFromState(state)
+                nwsRadarMosaicSectorLabelCurrent = UtilityUSImgNwsMosaic.getSectorLabelFromCode(nwsRadarMosaicSectorLabelCurrent)
             } else {
                 nwsRadarMosaicSectorLabelCurrent = Utility.readPref(
                         this,

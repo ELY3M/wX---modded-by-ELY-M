@@ -76,14 +76,14 @@ object WXGLNexradLevel3HailIndex {
         }
 */
 
-    fun decodeAndPlot(context: Context, rid: String, fnSuffix: String): List<Double> {
+    fun decodeAndPlot(context: Context, radarSite: String, fnSuffix: String): List<Double> {
         val stormList = mutableListOf<Double>()
         val retStr: String
-        val location = UtilityLocation.getSiteLocation(context, rid)
+        val location = UtilityLocation.getSiteLocation(radarSite)
         //make sure we clear the list or we get duplicate texts
         hailList.clear()
         //File("/sdcard/wX/hail2").copyTo(File("/data/user/0/joshuatee.wx/files/nids_hi_tab0"), true);
-        WXGLDownload.getNidsTab(context, "HI", rid, hiBaseFn + fnSuffix)
+        WXGLDownload.getNidsTab(context, "HI", radarSite, hiBaseFn + fnSuffix)
         val dis: UCARRandomAccessFile
         val posn: List<String>
         val hailPercent: List<String>

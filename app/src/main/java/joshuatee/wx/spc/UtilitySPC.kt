@@ -33,8 +33,7 @@ import joshuatee.wx.RegExp
 
 object UtilitySpc {
 
-    fun getStormReportsTodayUrl(): String =
-            "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/" + "today" + ".gif"
+    fun getStormReportsTodayUrl(): String = "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/" + "today" + ".gif"
 
     internal val thunderStormOutlookImages: List<Bitmap>
         get() {
@@ -75,7 +74,7 @@ object UtilitySpc {
         return listOf(returnStr, html)
     }
 
-    fun checkSpc(context: Context): List<String> {
+    fun checkSpc(): List<String> {
         var tabStr = ""
         val tabStrSpc: String
         var mdPresent = false
@@ -90,17 +89,19 @@ object UtilitySpc {
         if (MyApplication.checkspc) {
             if (!MyApplication.severeDashboardMcd.value.contains(MyApplication.MD_COMP)) {
                 mdPresent = true
-                val al = MyApplication.severeDashboardMcd.value
-                        .parseColumn(RegExp.mcdPatternUtilspc)
+                val al = MyApplication.severeDashboardMcd.value.parseColumn(RegExp.mcdPatternUtilspc)
                 mdCount = al.size
-                al.forEach { dashboardStrMcd += ":$it" }
+                al.forEach {
+                    dashboardStrMcd += ":$it"
+                }
             }
             if (!MyApplication.severeDashboardWat.value.contains(MyApplication.WATCH_COMP)) {
                 watchPresent = true
-                val al =
-                        MyApplication.severeDashboardWat.value.parseColumn(RegExp.watchPattern)
+                val al = MyApplication.severeDashboardWat.value.parseColumn(RegExp.watchPattern)
                 watchCount = al.size
-                al.forEach { dashboardStrWat += ":$it" }
+                al.forEach {
+                    dashboardStrWat += ":$it"
+                }
             }
         }
         if (MyApplication.checkwpc) {
@@ -108,38 +109,44 @@ object UtilitySpc {
                 mpdPresent = true
                 val al = MyApplication.severeDashboardMpd.value.parseColumn(RegExp.mpdPattern)
                 mpdCount = al.size
-                al.forEach { dashboardStrMpd += ":$it" }
+                al.forEach {
+                    dashboardStrMpd += ":$it"
+                }
             }
         }
         var label = MyApplication.tabHeaders[1]
         if (watchPresent || mdPresent || mpdPresent) {
-            if (watchPresent)
-                label = "$label W($watchCount)"
-            if (mdPresent)
-                label = "$label M($mdCount)"
-            if (mpdPresent)
-                label = "$label P($mpdCount)"
+            if (watchPresent) {
+                label += " W($watchCount)"
+            }
+            if (mdPresent) {
+                label += " M($mdCount)"
+            }
+            if (mpdPresent) {
+                label += " P($mpdCount)"
+            }
             tabStrSpc = label
         } else {
             tabStrSpc = MyApplication.tabHeaders[1]
         }
         // US Warn
-        var uswarnPresent = false
+        var usWarnPresent = false
         var torCount = 0
-        var tstormCount = 0
+        var tStormCount = 0
         var floodCount = 0
         if (MyApplication.checktor) {
-            tstormCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardTst.value)
-            torCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardTor.value)
-            floodCount = UtilityVtec.getStormCount(context, MyApplication.severeDashboardFfw.value)
-            if (tstormCount > 0 || torCount > 0 || floodCount > 0) {
-                uswarnPresent = true
+            tStormCount = UtilityVtec.getStormCount(MyApplication.severeDashboardTst.value)
+            torCount = UtilityVtec.getStormCount(MyApplication.severeDashboardTor.value)
+            floodCount = UtilityVtec.getStormCount(MyApplication.severeDashboardFfw.value)
+            if (tStormCount > 0 || torCount > 0 || floodCount > 0) {
+                usWarnPresent = true
             }
         }
-        tabStr = if (uswarnPresent)
-            tabStr + "  " + MyApplication.tabHeaders[2] + " W(" + tstormCount + "," + torCount + "," + floodCount + ")"
-        else
+        tabStr = if (usWarnPresent) {
+            tabStr + "  " + MyApplication.tabHeaders[2] + " W(" + tStormCount + "," + torCount + "," + floodCount + ")"
+        } else {
             MyApplication.tabHeaders[2]
+        }
         return listOf(tabStrSpc, tabStr)
     }
 }

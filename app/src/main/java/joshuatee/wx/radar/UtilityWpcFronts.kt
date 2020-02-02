@@ -91,7 +91,6 @@ object UtilityWpcFronts {
                 val numberOfTriangles = floor(distance / length).toInt()
                 // construct two lines which will consist of adding 4 points
                 for (pointNumber in 1 until numberOfTriangles step 2) {
-                    //for (int pointNumber = 1; pointNumber < numberOfTriangles; pointNumber += 2) {
                     val x1 = coordinates[0] + ((coordinates2[0] - coordinates[0]) * length * pointNumber) / distance
                     val y1 = coordinates[1] + ((coordinates2[1] - coordinates[1]) * length * pointNumber) / distance
                     val x3 = coordinates[0] + ((coordinates2[0] - coordinates[0]) * length * (pointNumber + 1)) / distance
@@ -118,7 +117,6 @@ object UtilityWpcFronts {
             length = 0.2
         }
         for (index in startIndex until tokens.size step indexIncrement) {
-            //for (int index = startIndex; index < tokens.length; index += indexIncrement) {
             val coordinates = parseLatLon(tokens[index])
             if (index < (tokens.size - 1)) {
                 val coordinates2 = parseLatLon(tokens[index + 1])
@@ -126,7 +124,6 @@ object UtilityWpcFronts {
                 val numberOfTriangles = floor(distance / length).toInt()
                 // construct two lines which will consist of adding 4 points
                 for (pointNumber in 1 until numberOfTriangles step 4) {
-                    //for (int pointNumber = 1; pointNumber < numberOfTriangles; pointNumber += 4) {
                     val x1 = coordinates[0] + ((coordinates2[0] - coordinates[0]) * length * pointNumber) / distance
                     val y1 = coordinates[1] + ((coordinates2[1] - coordinates[1]) * length * pointNumber) / distance
                     val center1 = coordinates[0] + ((coordinates2[0] - coordinates[0]) * length * (pointNumber + 0.5)) / distance
@@ -142,7 +139,6 @@ object UtilityWpcFronts {
                     val angle = atan2(yDiff, xDiff) * 180.0 / PI
                     val sliceStart = ((slices * angle) / 180.0).toInt()
                     for (i in sliceStart until slices + sliceStart + 1 step 1) {
-                        //for (int i = sliceStart; i <= slices + sliceStart; i++) {
                         val x = rotation * length * cos(step * i) + center1
                         val y = rotation * length * sin(step * i) + center2
                         front.coordinates.add(LatLon(x, y))
@@ -195,14 +191,11 @@ object UtilityWpcFronts {
         return if (string.length != 7) {
             listOf(0.0, 0.0)
         } else {
-            val lat = (string.substring(0, 2) + "." + string.substring(2, 3)).toDoubleOrNull()
-                    ?: 0.0
+            val lat = (string.substring(0, 2) + "." + string.substring(2, 3)).toDoubleOrNull() ?: 0.0
             val lon: Double = if (string[3] == '0') {
-                (string.substring(4, 6) + "." + string.substring(6, 7)).toDoubleOrNull()
-                        ?: 0.0
+                (string.substring(4, 6) + "." + string.substring(6, 7)).toDoubleOrNull() ?: 0.0
             } else {
-                (string.substring(3, 6) + "." + string.substring(6, 7)).toDoubleOrNull()
-                        ?: 0.0
+                (string.substring(3, 6) + "." + string.substring(6, 7)).toDoubleOrNull() ?: 0.0
             }
             listOf(lat, lon)
         }
@@ -224,9 +217,7 @@ object UtilityWpcFronts {
                     MyApplication.sep)
             html = html.replace(MyApplication.sep, MyApplication.newline)
             val lines = html.split(MyApplication.newline).toMutableList()
-            //lines.indices.forEach { index ->
             for (index in lines.indices) {
-                //var data = lines[index]
                 if (index < lines.size - 1) {
                     // Handle lines that wrap around, check to see if lines don't start
                     // with a known character
@@ -266,7 +257,6 @@ object UtilityWpcFronts {
                             }
                         }
                         "LOWS" -> {
-                            //for (int index = 0; index < tokens.length; index += 2) {
                             for (typeIndex in 0 until tokens.size step 2) {
                                 if (typeIndex + 1 < tokens.size) {
                                     val coordinates = parseLatLon(tokens[typeIndex + 1])
@@ -278,9 +268,7 @@ object UtilityWpcFronts {
                         "COLD" -> {
                             val front = Fronts(FrontTypeEnum.COLD)
                             addFrontData(front, tokens)
-                            //UtilityLog.d("Wx", front.toString())
                             addColdFrontTriangles(front, tokens)
-                            //addWarmFrontSemicircles(front, tokens)
                             fronts.add(front)
                         }
                         "STNRY" -> {
@@ -313,9 +301,6 @@ object UtilityWpcFronts {
                         }
                     }
                 }
-                //initialized = true
-                //val currentTime = UtilityTime.currentTimeMillis()
-                //lastRefresh = currentTime / 1000
             }
         }
     }

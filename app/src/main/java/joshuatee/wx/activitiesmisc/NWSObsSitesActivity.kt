@@ -100,8 +100,8 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         updateButton()
         ObjectIntent(
                 this@NwsObsSitesActivity,
-                WebscreenAB::class.java,
-                WebscreenAB.URL,
+                WebView::class.java,
+                WebView.URL,
                 arrayOf(
                         "https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=$obsSite",
                         obsSite
@@ -137,8 +137,8 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
                 val url = "https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.toLowerCase(Locale.US)
                 ObjectIntent(
                         this,
-                        WebscreenAB::class.java,
-                        WebscreenAB.URL,
+                        WebView::class.java,
+                        WebView.URL,
                         arrayOf(url, "Observations near " + Location.wfo)
                 )
             }

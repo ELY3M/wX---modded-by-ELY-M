@@ -104,7 +104,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         miDay6Img.isVisible = false
         miDay7Img.isVisible = false
         miDay8Img.isVisible = false
-        if (day == "1") {
+        if (day == "1" || day == "2") {
             miProbabilistic.isVisible = false
         } else {
             miTornado.isVisible = false
@@ -152,18 +152,12 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             UtilityTts.synthesizeTextAndPlay(applicationContext, html, "spcswo")
         }
         when (day) {
-            "1" -> {
+            "1", "2" -> {
                 setImageAndClickAction(0, urls, textUrl)
                 setImageAndClickAction(1, urls, textUrl)
                 setImageAndClickAction(2, urls, textUrl)
                 setImageAndClickAction(3, urls, textUrl)
                 objectCardImageList[4].visibility = View.GONE
-            }
-            "2" -> {
-                setImageAndClickAction(0, urls, textUrl)
-                setImageAndClickAction(1, urls, textUrl)
-                for (index in 2..4)
-                    objectCardImageList[index].visibility = View.GONE
             }
             "3" -> {
                 setImageAndClickAction(0, urls, textUrl)

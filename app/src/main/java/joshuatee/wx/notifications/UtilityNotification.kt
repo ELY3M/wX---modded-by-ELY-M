@@ -147,11 +147,7 @@ object UtilityNotification {
                 val url2: String
                 var nws1StateCurrent = ""
                 if (Location.isUS(locNumInt)) {
-                    val nwsLocation = Utility.readPref(
-                            context,
-                            "NWS_LOCATION_" + MyApplication.locations[locNumInt].wfo,
-                            ""
-                    )
+                    val nwsLocation = Utility.getWfoSiteName(MyApplication.locations[locNumInt].wfo)
                     val nwsLocationArr = MyApplication.comma.split(nwsLocation)
                     nws1StateCurrent = nwsLocationArr[0]
                 }
@@ -171,11 +167,9 @@ object UtilityNotification {
                             ""
                     )
                 }
-                locLabelStr = "(" + Location.getName(locNumInt) + ") " +
-                        Location.getRid(locNumInt) + " Radar"
+                locLabelStr = "(" + Location.getName(locNumInt) + ") " + Location.getRid(locNumInt) + " Radar"
                 noMain = locLabelStr
-                val notifier2 =
-                        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val notifier2 = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 val noti2: Notification
                 val resultIntent2: Intent
                 if (Location.isUS(locNumInt)) {
@@ -521,7 +515,7 @@ object UtilityNotification {
         val notifCurrent = "true"
         val txt: String
         txt = if (notifCurrent.startsWith("t")) {
-            val tabStr = UtilitySpc.checkSpc(context)
+            val tabStr = UtilitySpc.checkSpc()
             "" + tabStr[0] + " " + tabStr[1].replace("MISC", "")
         } else {
             ""

@@ -32,6 +32,7 @@ import android.view.MenuItem
 import android.view.ContextMenu.ContextMenuInfo
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.GlobalDictionaries
 
 import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
@@ -42,7 +43,6 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectAlertSummary
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.UtilityUI
-import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.util.UtilityImg
 import kotlinx.coroutines.*
@@ -121,7 +121,7 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     }
 
     private fun radarInterface(id: Int) {
-        val radarSite = Utility.readPref(this@USWarningsWithRadarActivity, "NWS_RID_" + objectAlertSummary.mapButtonNws[id], "")
+        val radarSite = GlobalDictionaries.wfoToRadarSite[objectAlertSummary.mapButtonNws[id]] ?: ""
         ObjectIntent(
                 this@USWarningsWithRadarActivity,
                 WXGLRadarActivity::class.java,

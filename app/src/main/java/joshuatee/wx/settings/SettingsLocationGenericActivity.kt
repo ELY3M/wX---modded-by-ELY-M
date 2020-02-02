@@ -45,7 +45,7 @@ import joshuatee.wx.R
 import joshuatee.wx.canada.UtilityCitiesCanada
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.activitiesmisc.WebscreenAB
+import joshuatee.wx.activitiesmisc.WebView
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.UtilityCitiesExtended
@@ -479,16 +479,16 @@ class SettingsLocationGenericActivity : BaseActivity(),
                     if (Location.us(xStr)) {
                         ObjectIntent(
                                 this,
-                                WebscreenAB::class.java,
-                                WebscreenAB.URL,
+                                WebView::class.java,
+                                WebView.URL,
                                 arrayOf(UtilityMap.getMapUrl(xStr, yStr, "9"), "wX")
                         )
                     } else {
                         val addressForMap = locLabelEt.text.toString()
                         ObjectIntent(
                                 this,
-                                WebscreenAB::class.java,
-                                WebscreenAB.URL,
+                                WebView::class.java,
+                                WebView.URL,
                                 arrayOf(UtilityMap.getMapUrlFromStreetAddress(addressForMap), "wX")
                         )
                     }

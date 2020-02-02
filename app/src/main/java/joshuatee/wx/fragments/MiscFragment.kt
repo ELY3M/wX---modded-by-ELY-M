@@ -163,18 +163,15 @@ class MiscFragment : Fragment() {
             )
             hm["twitter_state"] = TileObject(
                     R.drawable.twstate,
-                    WebscreenABState::class.java,
+                    WebViewTwitter::class.java,
                     "",
                     arrayOf(),
                     resources.getString(R.string.help_twitter),
                     "twitter_state", "Twitter state"
             )
             hm["twitter_tornado"] = TileObject(
-                    R.drawable.twtornado, WebscreenAB::class.java, WebscreenAB.URL,
-                    arrayOf(
-                            "<html><meta name=\"viewport\" content=\"width=device-width, user-scalable=no\" /> <body width=\"100%\"><div><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+\"://platform.twitter.com/widgets.js\";fjs.parentNode.insertBefore(js,fjs);}}(document,\"script\",\"twitter-wjs\");</script><html><a class=\"twitter-timeline\" data-dnt=\"true\" href=\"https://twitter.com/search?q=%23tornado\" data-widget-id=\"406096257220763648\" data-chrome=\"noscrollbar noheader nofooter noborders \" data-tweet-limit=20>Tweets about \"#tornado\"</a></div></body></html>",
-                            "#tornado"
-                    ),
+                    R.drawable.twtornado, WebView::class.java, WebView.URL,
+                    arrayOf("https://mobile.twitter.com/hashtag/tornado", "#tornado"),
                     resources.getString(R.string.help_twitter), "twitter_tornado", "Twitter tornado"
             )
             hm["opc"] = TileObject(

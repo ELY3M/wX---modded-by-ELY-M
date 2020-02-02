@@ -50,6 +50,7 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     // 1: URL
     // 2: Title
     // 3: (optional) string "true" means a white background is needed
+    //
 
     companion object {
         const val URL: String = ""

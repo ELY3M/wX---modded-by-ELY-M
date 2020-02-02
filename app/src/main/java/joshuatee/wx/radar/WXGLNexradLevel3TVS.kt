@@ -39,10 +39,10 @@ internal object WXGLNexradLevel3TVS {
 
     private const val tvsBaseFn = "nids_tvs_tab"
 
-    fun decodeAndPlot(context: Context, rid: String, fnSuffix: String): List<Double> {
+    fun decodeAndPlot(context: Context, radarSite: String, fnSuffix: String): List<Double> {
         val stormList = mutableListOf<Double>()
-        val location = UtilityLocation.getSiteLocation(context, rid)
-        WXGLDownload.getNidsTab(context, "TVS", rid, tvsBaseFn + fnSuffix)
+        val location = UtilityLocation.getSiteLocation(radarSite)
+        WXGLDownload.getNidsTab(context, "TVS", radarSite, tvsBaseFn + fnSuffix)
         val dis: UCARRandomAccessFile
         try {
             dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, tvsBaseFn + fnSuffix))
@@ -64,9 +64,9 @@ internal object WXGLNexradLevel3TVS {
         val bearing = DoubleArray(2)
         var start: ExternalGlobalCoordinates
         var ec: ExternalGlobalCoordinates
-        tvs.indices.forEach {
+        tvs.forEach {
             val ecc = ExternalGeodeticCalculator()
-            tmpStr = tvs[it].parse(RegExp.tvsPattern2)
+            tmpStr = it.parse(RegExp.tvsPattern2)
             tmpStrArr = MyApplication.slash.split(tmpStr)
             retStr += tmpStr
             degree = tmpStrArr[0].replace(" ", "").toIntOrNull() ?: 0

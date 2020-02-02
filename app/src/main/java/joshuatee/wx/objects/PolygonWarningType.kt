@@ -30,12 +30,7 @@ import android.graphics.Color
 // TODO setup datastructures in myApp that are Maps based for example a Map of PolygonWarningType: boolean ( for enablement )
 
 // NWS default colors: https://www.weather.gov/bro/mapcolors
-// BETTER NWS default colors: https://www.weather.gov/help-map
-
-// TODO DSW Dust%20Storm%20Warning
-// TODO SQW Snow%20Squall%20Warning
-//
-
+// NWS default colors: https://www.weather.gov/help-map
 enum class PolygonWarningType constructor(
         var productCode: String,
         var urlToken: String,

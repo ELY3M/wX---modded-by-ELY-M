@@ -38,7 +38,7 @@ internal object UtilityModelEsrlInputOutput {
 
     fun getRunTime(model: String, param: String): RunTimeData {
         val runData = RunTimeData()
-        val htmlRunstatus: String = when (model) {
+        val htmlRunStatus: String = when (model) {
             "HRRR_AK" -> ("$urlBase/alaska/").getHtml()
             // https://rapidrefresh.noaa.gov/RAP/Welcome.cgi?dsKey=rap_jet&domain=full&run_time=23+Nov+2018+-+08Z
             "RAP_NCEP" -> ("$urlBase/RAP/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US)
@@ -50,8 +50,8 @@ internal object UtilityModelEsrlInputOutput {
                     + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
         }
         val oldRunTimes: List<String>
-        var html = htmlRunstatus.parse(RegExp.eslHrrrPattern1)
-        oldRunTimes = htmlRunstatus.parseColumn(RegExp.eslHrrrPattern2)
+        var html = htmlRunStatus.parse(RegExp.eslHrrrPattern1)
+        oldRunTimes = htmlRunStatus.parseColumn(RegExp.eslHrrrPattern2)
         var year = html.parse(RegExp.eslHrrrPattern3)
         var day = html.parse(RegExp.eslHrrrPattern4)
         var hour = html.parse(RegExp.eslHrrrPattern5)
@@ -71,7 +71,7 @@ internal object UtilityModelEsrlInputOutput {
         html = year + monthStr + day + hour
         runData.listRunAdd(html)
         runData.mostRecentRun = html
-        runData.imageCompleteInt = UtilityString.parseAndCount(htmlRunstatus, ".($param).") - 3
+        runData.imageCompleteInt = UtilityString.parseAndCount(htmlRunStatus, ".($param).") - 3
         runData.imageCompleteStr = runData.imageCompleteInt.toString()
         if (html != "") {
             var i = 0
@@ -181,8 +181,9 @@ internal object UtilityModelEsrlInputOutput {
 
     fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
         if (om.spinnerTimeValue == -1) return AnimationDrawable()
-        val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) {
-            getImage(om, om.spTime.list[it].split(" ").getOrNull(0) ?: "")
+        val timeList = om.spTime.list.toMutableList()
+        val bmAl = (om.spinnerTimeValue until timeList.size).mapTo(mutableListOf()) {
+            getImage(om, timeList[it].split(" ").getOrNull(0) ?: "")
         }
         return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
     }

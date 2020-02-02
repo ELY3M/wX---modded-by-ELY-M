@@ -69,7 +69,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     private var initProd = ""
     private var products = listOf<String>()
     private lateinit var star: MenuItem
-    private lateinit var notifToggle: MenuItem
+    private lateinit var notificationToggle: MenuItem
     private var ridFavOld = ""
     private lateinit var textCard: ObjectCardText
     private lateinit var sp: ObjectSpinner
@@ -84,7 +84,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
-        notifToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
+        notificationToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
         activityArguments = intent.getStringArrayExtra(URL)!!
         if (activityArguments[0] == "pmdspd") {
             prod = MyApplication.wpcTextFav
@@ -108,7 +108,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        updateSubmenuNotifText()
+        updateSubmenuNotificationText()
         scrollView.smoothScrollTo(0, 0)
         if (MyApplication.nwsTextFav.contains(":$prod:")) {
             star.setIcon(MyApplication.STAR_ICON)
@@ -140,7 +140,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
                         linearLayout,
                         prod.toUpperCase(Locale.US)
                 )
-                updateSubmenuNotifText()
+                updateSubmenuNotificationText()
             }
             R.id.action_mpd -> ObjectIntent(this, WpcMpdShowSummaryActivity::class.java)
             R.id.action_share -> UtilityShare.shareText(this, prod, Utility.fromHtml(html))
@@ -206,11 +206,11 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         sp.refreshData(this, products)
     }
 
-    private fun updateSubmenuNotifText() {
+    private fun updateSubmenuNotificationText() {
         if (UtilityNotificationTextProduct.check(prod.toUpperCase(Locale.US))) {
-            notifToggle.title = resources.getString(R.string.notif_remove)
+            notificationToggle.title = resources.getString(R.string.notif_remove)
         } else {
-            notifToggle.title = resources.getString(R.string.notif_add)
+            notificationToggle.title = resources.getString(R.string.notif_add)
         }
     }
 

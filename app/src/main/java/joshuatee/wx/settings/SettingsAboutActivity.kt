@@ -31,7 +31,7 @@ import android.view.View
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.activitiesmisc.WebscreenAB
+import joshuatee.wx.activitiesmisc.WebView
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectCardText
@@ -68,8 +68,8 @@ class SettingsAboutActivity : AudioPlayActivity(), OnMenuItemClickListener {
         faqButton.setOnClickListener(View.OnClickListener {
             ObjectIntent(
                     this,
-                    WebscreenAB::class.java,
-                    WebscreenAB.URL,
+                    WebView::class.java,
+                    WebView.URL,
                     arrayOf(faqUrl, "wX Frequently Asked Questions")
             )
         })
@@ -79,8 +79,8 @@ class SettingsAboutActivity : AudioPlayActivity(), OnMenuItemClickListener {
         releaseNotesButton.setOnClickListener(View.OnClickListener {
             ObjectIntent(
                     this,
-                    WebscreenAB::class.java,
-                    WebscreenAB.URL,
+                    WebView::class.java,
+                    WebView.URL,
                     arrayOf(releaseNotesUrl, "wX Frequently Asked Questions")
             )
         })
@@ -100,8 +100,8 @@ class SettingsAboutActivity : AudioPlayActivity(), OnMenuItemClickListener {
         iOSVersion.setOnClickListener(View.OnClickListener {
             ObjectIntent(
                     this,
-                    WebscreenAB::class.java,
-                    WebscreenAB.URL,
+                    WebView::class.java,
+                    WebView.URL,
                     arrayOf(iOSUrl, "wXL23 for iOS")
             )
         })

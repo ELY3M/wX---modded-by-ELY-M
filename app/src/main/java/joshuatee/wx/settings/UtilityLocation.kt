@@ -22,7 +22,6 @@
 
 package joshuatee.wx.settings
 
-import java.util.Collections
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
@@ -111,7 +110,7 @@ object UtilityLocation {
         return gps
     }
 
-    fun getNearestOffice(context: Context, officeType: String, location: LatLon): String {
+    fun getNearestOffice(officeType: String, location: LatLon): String {
         var officeArray = GlobalArrays.radars
         var prefToken = "RID"
         if (officeType == "WFO") {
@@ -121,7 +120,7 @@ object UtilityLocation {
         val sites = mutableListOf<RID>()
         officeArray.forEach {
             val labelArr = it.split(":")
-            sites.add(RID(labelArr[0], getSiteLocation(context, labelArr[0], prefToken)))
+            sites.add(RID(labelArr[0], getSiteLocation(labelArr[0], prefToken)))
         }
         var shortestDistance = 30000.00
         var currentDistance: Double
@@ -136,15 +135,15 @@ object UtilityLocation {
         return sites[bestRid].name
     }
 
-    fun getNearestRid(context: Context, location: LatLon, cnt: Int): List<RID> {
+    fun getNearestRid(location: LatLon, count: Int): List<RID> {
         val radarSites = mutableListOf<RID>()
         GlobalArrays.radars.forEach {
             val labels = it.split(":")
-            radarSites.add(RID(labels[0], getSiteLocation(context, labels[0])))
+            radarSites.add(RID(labels[0], getSiteLocation(labels[0])))
         }
         GlobalArrays.tdwrRadars.forEach {
             val labels = it.split(" ")
-            radarSites.add(RID(labels[0], getSiteLocation(context, labels[0])))
+            radarSites.add(RID(labels[0], getSiteLocation(labels[0])))
         }
         var currentDistance: Double
         radarSites.forEach {
@@ -152,18 +151,18 @@ object UtilityLocation {
             it.distance = currentDistance.toInt()
         }
         Collections.sort(radarSites, RID.DESCENDING_COMPARATOR)
-        return radarSites.subList(0, cnt)
+        return radarSites.subList(0, count)
     }
 
-    fun getNearestRadarSite(context: Context, location: LatLon): String {
+    fun getNearestRadarSite(location: LatLon): String {
         val radarSites = mutableListOf<RID>()
         GlobalArrays.radars.forEach {
             val labels = it.split(":")
-            radarSites.add(RID(labels[0], getSiteLocation(context, labels[0])))
+            radarSites.add(RID(labels[0], getSiteLocation(labels[0])))
         }
         GlobalArrays.tdwrRadars.forEach {
             val labels = it.split(" ")
-            radarSites.add(RID(labels[0], getSiteLocation(context, labels[0])))
+            radarSites.add(RID(labels[0], getSiteLocation(labels[0])))
         }
         var shortestDistance = 10000.00
         var currentDistance: Double
@@ -180,8 +179,8 @@ object UtilityLocation {
         return radarSites[bestRid].name
     }
 
-    fun getNearestSnd(context: Context, location: LatLon): String {
-        val sites = GlobalArrays.soundingSites.map { RID(it, getSiteLocation(context, it, "SND")) }
+    fun getNearestSnd(location: LatLon): String {
+        val sites = GlobalArrays.soundingSites.map { RID(it, getSiteLocation(it, "SND")) }
         var shortestDistance = 1000.00
         var currentDistance: Double
         var bestRid = -1
@@ -197,20 +196,31 @@ object UtilityLocation {
         return sites[bestRid].name
     }
 
-    fun getSiteLocation(context: Context, site: String, officeType: String = "RID"): LatLon {
+    fun getSiteLocation(site: String, officeType: String = "RID"): LatLon {
+        // SND, NWS, or RID
         var addChar = "-"
         if (officeType == "NWS") {
             addChar = ""
         } // WFO
         val x: String
         val y: String
-        if (officeType == "RID") {
-            x = Utility.getRadarSiteX(site.toUpperCase(Locale.US))
-            y = addChar + Utility.getRadarSiteY(site.toUpperCase(Locale.US))
-        } else {
-            x = Utility.readPref(context, officeType + "_" + site.toUpperCase(Locale.US) + "_X", "0.0")
-            y =
-                    addChar + Utility.readPref(context, officeType + "_" + site.toUpperCase(Locale.US) + "_Y", "0.0")
+        when (officeType) {
+            "RID" -> {
+                x = Utility.getRadarSiteX(site.toUpperCase(Locale.US))
+                y = addChar + Utility.getRadarSiteY(site.toUpperCase(Locale.US))
+            }
+            "NWS" -> {
+                x = Utility.getWfoSiteX(site.toUpperCase(Locale.US))
+                y = addChar + Utility.getWfoSiteY(site.toUpperCase(Locale.US))
+            }
+            "SND" -> {
+                x = Utility.getSoundingSiteX(site.toUpperCase(Locale.US))
+                y = addChar + Utility.getSoundingSiteY(site.toUpperCase(Locale.US))
+            }
+            else -> {
+                x = "0.0"
+                y = "-0.0"
+            }
         }
         return LatLon(x, y)
     }
@@ -247,14 +257,14 @@ object UtilityLocation {
         linearLayout: LinearLayout,
         uiDispatcher: CoroutineDispatcher
     ) = GlobalScope.launch(uiDispatcher) {
-        var toastStr = ""
+        var toastString = ""
         withContext(Dispatchers.IO) {
             val locNumIntCurrent = joshuatee.wx.settings.Location.numLocations + 1
             val locNumToSaveStr = locNumIntCurrent.toString()
-            val loc = Utility.readPref(context, "NWS_LOCATION_$nwsOffice", "")
-            val addrSend = loc.replace(" ", "+")
-            val xyStr = getXYFromAddressOsm(addrSend)
-            toastStr = joshuatee.wx.settings.Location.locationSave(
+            val loc = Utility.getWfoSiteName(nwsOffice)
+            val addressToSend = loc.replace(" ", "+")
+            val xyStr = getXYFromAddressOsm(addressToSend)
+            toastString = joshuatee.wx.settings.Location.locationSave(
                 context,
                 locNumToSaveStr,
                 xyStr[0],
@@ -262,7 +272,7 @@ object UtilityLocation {
                 loc
             )
         }
-        UtilityUI.makeSnackBar(linearLayout, toastStr)
+        UtilityUI.makeSnackBar(linearLayout, toastString)
     }
 
     fun hasAlerts(locNum: Int): Boolean = MyApplication.locations[locNum].notification

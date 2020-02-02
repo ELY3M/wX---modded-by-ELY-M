@@ -277,22 +277,24 @@ object UtilityModels {
     fun setSubtitleRestoreIMGXYZOOM(
             img: MutableList<TouchImageView2>,
             toolbar: Toolbar,
-            str: String
+            string: String
     ) {
         val x = FloatArray(img.size)
         val y = FloatArray(img.size)
         val z = FloatArray(img.size)
-        val poi = mutableListOf<PointF>()
+        val point = mutableListOf<PointF>()
         if (img.size > 0) {
             (0 until img.size).forEach {
                 z[it] = img[it].currentZoom
                 if (img[it].scrollPosition != null) {
-                    poi.add(img[it].scrollPosition)
+                    point.add(img[it].scrollPosition)
+                } else {
+                    point.add(PointF(0.5f, 0.5f))
                 }
-                x[it] = poi[it].x
-                y[it] = poi[it].y
+                x[it] = point[it].x
+                y[it] = point[it].y
             }
-            toolbar.subtitle = str
+            toolbar.subtitle = string
             (0 until img.size)
                     .filter { !x[it].isNaN() && !y[it].isNaN() }
                     .forEach { img[it].setZoom(z[it], x[it], y[it]) }

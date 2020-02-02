@@ -24,9 +24,9 @@ package joshuatee.wx.settings
 import android.content.Context
 import androidx.preference.PreferenceManager
 
-object UtilityPref2 {
+object UtilityStorePreferences {
 
-    fun prefInitSetDefaults(context: Context) {
+    fun setDefaults(context: Context) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = preferences.edit()
         val value = preferences.getString("ALERT1_NOTIFICATION", null)

@@ -129,8 +129,7 @@ class SpottersActivity : BaseActivity() {
 
     private fun checkFavorite(position: Int) {
         if (MyApplication.spotterFav.contains(spotterList[position].uniq + ":")) {
-            MyApplication.spotterFav =
-                    MyApplication.spotterFav.replace(spotterList[position].uniq + ":", "")
+            MyApplication.spotterFav = MyApplication.spotterFav.replace(spotterList[position].uniq + ":", "")
             spotterList[position].lastName = spotterList[position].lastName.replace("0FAV ", "")
         } else {
             MyApplication.spotterFav = MyApplication.spotterFav + spotterList[position].uniq + ":"
@@ -144,7 +143,9 @@ class SpottersActivity : BaseActivity() {
     private fun markFavorites() {
         spotterList
                 .filter { MyApplication.spotterFav.contains(it.uniq + ":") && !it.lastName.contains("0FAV ") }
-                .forEach { it.lastName = "0FAV " + it.lastName }
+                .forEach {
+                    it.lastName = "0FAV " + it.lastName
+                }
         sortSpotters()
     }
 
@@ -182,8 +183,8 @@ class SpottersActivity : BaseActivity() {
     private fun showItemOnMap(position: Int) {
         ObjectIntent(
                 this,
-                WebscreenAB::class.java,
-                WebscreenAB.URL,
+                WebView::class.java,
+                WebView.URL,
                 arrayOf(
                         UtilityMap.getMapUrl(
                                 spotterList[position].lat,
@@ -196,7 +197,6 @@ class SpottersActivity : BaseActivity() {
 
     private fun showItemOnRadar(position: Int) {
         val radarSite = UtilityLocation.getNearestOffice(
-                this,
                 "RADAR",
                 LatLon(spotterList[position].lat, spotterList[position].lon)
         )

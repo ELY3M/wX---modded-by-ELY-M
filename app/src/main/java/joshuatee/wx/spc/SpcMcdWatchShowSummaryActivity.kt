@@ -193,12 +193,7 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
         wfos.filter{ !it.contains("<BR>") }.forEach {
-            menu.add(0, v.id, 0, "Add location: $it - " + Utility.readPref(
-                    this,
-                    "NWS_LOCATION_$it",
-                    ""
-            )
-            )
+            menu.add(0, v.id, 0, "Add location: $it - " + Utility.getWfoSiteName(it))
         }
     }
 

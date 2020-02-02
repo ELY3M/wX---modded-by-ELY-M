@@ -82,7 +82,6 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     private lateinit var notificationToggle: MenuItem
     private lateinit var star: MenuItem
     private lateinit var locationList: List<String>
-    private val prefTokenLocation = "NWS_LOCATION_"
     private val prefToken = "WFO_FAV"
     private var ridFavOld = ""
     private var version = 0
@@ -123,14 +122,7 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         version = 1
         oldProduct = ""
         oldWfo = ""
-        locationList = UtilityFavorites.setupFavMenu(
-                this,
-                MyApplication.wfoFav,
-                wfo,
-                prefTokenLocation,
-                prefToken
-        )
-
+        locationList = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, wfo, prefToken)
         spinner = ObjectSpinner(this, this, this, R.id.spinner1, locationList)
         imageMap = ObjectImageMap(
                 this,
@@ -158,7 +150,6 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
                     this,
                     MyApplication.wfoFav,
                     wfo,
-                    prefTokenLocation,
                     prefToken
             )
             spinner.refreshData(this, locationList)
@@ -195,14 +186,11 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
                 UtilityDownload.getTextProduct(this@AfdActivity, product + wfo + originalWfo)
             }
         }
-
         title = product +  wfo
-
         // restore the WFO as CLI modifies to a sub-region
         if (product == "CLI") {
             wfo = originalWfo
         }
-
         toolbar.subtitle = UtilityWfoText.codeToName[product]
         cardList.forEach {
             linearLayout.removeView(it)
@@ -212,19 +200,16 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         if (html == "") {
             html = "None issued by this office recently."
         }
-
         if (fixedWidthProducts.contains(product)) {
             textCard.setTextAndTranslate(html)
         } else {
             textCard.setTextAndTranslate(Utility.fromHtml(html))
         }
-
         if (fixedWidthProducts.contains(product)) {
             textCard.tv.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
         } else {
             textCard.tv.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
         }
-
         UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, product)
         if (activityArguments[1] == "") {
             Utility.writePref(this@AfdActivity, "WFO_TEXT_FAV", product)
@@ -295,19 +280,13 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         wfo = loc.toUpperCase(Locale.US)
         originalWfo = wfo
         mapShown = false
-        locationList = UtilityFavorites.setupFavMenu(
-                this,
-                MyApplication.wfoFav,
-                wfo,
-                prefTokenLocation,
-                prefToken
-        )
+        locationList = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, wfo, prefToken)
         spinner.refreshData(this, locationList)
     }
 
     private fun toggleFavorite() {
         val ridFav = UtilityFavorites.toggleFavoriteString(this, wfo, star, prefToken)
-        locationList = UtilityFavorites.setupFavMenu(this, ridFav, wfo, prefTokenLocation, prefToken)
+        locationList = UtilityFavorites.setupFavMenu(this, ridFav, wfo, prefToken)
         spinner.refreshData(this, locationList)
     }
 
@@ -359,7 +338,9 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         wfoListPerState.clear()
         GlobalArrays.wfos
                 .filter { it.contains(state) }
-                .forEach { wfoListPerState.add(MyApplication.space.split(it)[0].replace(":", "")) }
+                .forEach {
+                    wfoListPerState.add(MyApplication.space.split(it)[0].replace(":", ""))
+                }
         wfoListPerState.sort()
     }
 

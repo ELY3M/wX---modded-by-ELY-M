@@ -97,7 +97,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private var restartedZoom = false
     private var inOglAnim = false
     private var inOglAnimPaused = false
-    private var infoArr = Array(2) { "" }
     private var oglInView = true
     private var oglrArr = mutableListOf<WXGLRender>()
     private var glviewArr = mutableListOf<WXGLSurfaceView>()
@@ -111,12 +110,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private var frameCountGlobal = 0
     private var locXCurrent = ""
     private var locYCurrent = ""
-    private var infoAnim = Array(2) { "" }
-    private var tmpArr1 = Array(2) { "" }
-    private var tmpArr2 = Array(2) { "" }
-    private var tmpArr3 = Array(2) { "" }
-    private var tmpArr4 = Array(2) { "" }
-    private val latlonArr = mutableListOf("", "")
     private var latD = 0.0
     private var lonD = 0.0
     private var locationManager: LocationManager? = null
@@ -129,7 +122,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private var wxgltextArr = mutableListOf<WXGLTextObject>()
     private lateinit var act: Activity
     private var alertDialogRadarLongPress: ObjectDialogue? = null
-    private var dontSavePref = false
+    private var doNotSavePref = false
     private var useSinglePanePref = false
     private var landScape = false
     private var isGetContentInProgress = false
@@ -144,7 +137,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         val activityArguments = intent.getStringArrayExtra(RID)
         if (activityArguments != null && activityArguments.size > 3 ) {
             if (activityArguments[3] == "true") {
-                dontSavePref = true
+                doNotSavePref = true
                 useSinglePanePref = true
             }
         }
@@ -200,9 +193,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         UtilityUI.immersiveMode(this as Activity)
         locXCurrent = joshuatee.wx.settings.Location.x
         locYCurrent = joshuatee.wx.settings.Location.y
-        infoAnim = Array(numPanes) { "" }
         oldRidArr = Array(numPanes) { "" }
-        infoArr = Array(numPanes) { "" }
         if (numPanes == 4) {
             widthDivider = 2
             prefPrefix = "WXOGL_QUADPANE"
@@ -759,11 +750,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                         )
                         UtilityShare.shareAnimGif(
                                 this,
-                                oglrArr[curRadar].rid + " (" + Utility.readPref(
-                                        this,
-                                        "RID_LOC_" + oglrArr[curRadar].rid,
-                                        ""
-                                )
+                                oglrArr[curRadar].rid + " (" + Utility.getRadarSiteName(oglrArr[curRadar].rid)
                                         + ") " + oglrArr[curRadar].product, animDrawable
                         )
                     } else {
@@ -771,11 +758,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                                 this,
                                 this,
                                 oglrArr[curRadar].rid +
-                                        " (" + Utility.readPref(
-                                        this,
-                                        "RID_LOC_" + oglrArr[curRadar].rid,
-                                        ""
-                                ) + ") "
+                                        " (" + Utility.getRadarSiteName(oglrArr[curRadar].rid) + ") "
                                         + oglrArr[curRadar].product,
                                 UtilityUSImgWX.layeredImgFromFile(
                                         applicationContext,
@@ -879,7 +862,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 }
             }
             R.id.action_radar_4 -> {
-                if (!dontSavePref) {
+                if (!doNotSavePref) {
                     numPanesArr.forEach { WXGLNexrad.savePrefs(this, prefPrefix, it + 1, oglrArr[it]) }
                 } else {
                     numPanesArr.forEach { WXGLNexrad.saveProductPrefs(this, prefPrefix, it + 1, oglrArr[it]) }
@@ -980,10 +963,14 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
     override fun onStop() {
         super.onStop()
-        if (!dontSavePref) {
-            numPanesArr.forEach { WXGLNexrad.savePrefs(this, prefPrefix, it + 1, oglrArr[it]) }
+        if (!doNotSavePref) {
+            numPanesArr.forEach {
+                WXGLNexrad.savePrefs(this, prefPrefix, it + 1, oglrArr[it])
+            }
         } else {
-            numPanesArr.forEach { WXGLNexrad.saveProductPrefs(this, prefPrefix, it + 1, oglrArr[it]) }
+            numPanesArr.forEach {
+                WXGLNexrad.saveProductPrefs(this, prefPrefix, it + 1, oglrArr[it])
+            }
         }
         // otherwise cpu will spin with no fix but to kill app
         inOglAnim = false

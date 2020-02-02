@@ -21,11 +21,12 @@
 
 package joshuatee.wx.audio
 
+import android.annotation.SuppressLint
 import java.util.Locale
 
 object UtilityTtsTranslations {
 
-    // FIXME rename method arg
+    @SuppressLint
     internal fun translateAbbreviation(sF: String): String {
         // http://www.spc.noaa.gov/misc/acronyms.html
         val s = sF.replace("...", " ")
@@ -62,11 +63,13 @@ object UtilityTtsTranslations {
         return translateAbbreviationChunk(s)
     }
 
+    @SuppressLint
     fun translateAbbreviationsForVisual(sF: String): String {
         val s = sF.replace("&nbsp", " ")
         return translateAbbreviationChunk(s)
     }
 
+    @SuppressLint
     private fun translateAbbreviationChunk(sF: String): String {
         var s = sF.toUpperCase(Locale.US)
         s = s.replace(" SVR ", " severe ")

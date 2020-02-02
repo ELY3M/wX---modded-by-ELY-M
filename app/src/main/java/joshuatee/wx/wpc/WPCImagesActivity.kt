@@ -73,11 +73,15 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
         img.setOnClickListener(this)
         img.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeLeft() {
-                if (img.currentZoom < 1.01f) showNextImg()
+                if (img.currentZoom < 1.01f) {
+                    showNextImg()
+                }
             }
 
             override fun onSwipeRight() {
-                if (img.currentZoom < 1.01f) showPrevImg()
+                if (img.currentZoom < 1.01f) {
+                    showPrevImg()
+                }
             }
         })
         activityArguments = intent.getStringArrayExtra(URL)!!

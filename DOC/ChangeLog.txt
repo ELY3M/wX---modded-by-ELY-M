@@ -3,13 +3,33 @@
 // TODO [ADD] line size - swo, wb, wb gusts, sti
 // TODO [REF] OkHttp 3.13 Requires Android 5+ – Square Corner Blog – Medium  https://medium.com/square-corner-blog/okhttp-3-13-requires-android-5-818bb78d07ce
 // TODO [REF] move off rid/wfo/sounding lat/lon/name currently in pref should be in objects (like flutter/iOS)
+// TODO       NWS_LOCATION RID_LOC
 // TODO [FIX] Canada - some radars have changed code names (need to change maps.xml as well)
 // TODO [ADD] radar file class from flutter
+// TODO [FIX] select radar from main screen via icon brings up zoomed out view UtilityLocationFragment
 // TODO [FIX] roaming location needs background GPS perm for Android 10 (API 29)
-// TODO [ADD] warning counts in nexrad
 // TODO [ADD] textual obs in fixed radars on homescreen
+// TODO [ADD] use ENUM instead of RID_FAV WFO_FAV SND_FAV (util/UtilityFavorites)
+// TODO [FIX] dual/quad pane radar don't take up the entire screen on chomeOS
+// TODO [REF] migrate off WebscreenABModels?
 
-55341 2020_01_30
+55349 2020_02_02    [REF] utilFav/SettingsHomeScreen refactoring
+                    [REF] lint cleanup
+55348 2020_02_02    [REF] utilFav/SettingsHomeScreen refactoring
+55347 2020_02_01    [ADD] move to normal twitter w/o tokens
+55346 2020_02_01    [REF] remove un-needed pref storage in util pref
+                    [FIX] twitter activity wasn't going to state of current location
+55345 2020_02_01    [REF] remove un-needed pref storage in util pref
+55344 2020_02_01    [REF] remove un-needed pref storage in util pref
+55343 2020_02_01    [ADD] in nexrad radar if show warnings show count in upper left, tap on count goes to severe dashboard - WIP
+                    [FIX] non tst/tor/ffw warnings were not being downloaded outside of backgroundFetch
+                    [REF] WIP - move off rid/wfo/sounding lat/lon/name currently in pref should be in objects (like flutter/iOS)
+                    [REF] remove un-needed pref storage in util pref
+55342 2020_01_31    [FIX] prelaunch report: at joshuatee.wx.models.UtilityModels.setSubtitleRestoreIMGXYZOOM(UtilityModels.kt:292)
+                        java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
+                    [FIX] prelaunch report: at joshuatee.wx.models.UtilityModelEsrlInputOutput.getAnimation(UtilityModelEsrlInputOutput.kt:185)
+                        java.lang.IndexOutOfBoundsException: Invalid index 37, size is 37 a
+55341 2020_01_30    [ADD] additional graphics for SPC Convective Outlook Day 2
 55340 2020_01_30    [REF] use methods in WXGLNexrad to read/write radar info in pref
                     [FIX] FragmentPagerAdapter deprecated in ViewPagerAdapter.kt
                     [REF] lint cleanup
@@ -24,7 +44,7 @@
 55336 2020_01_27    [REF] lint cleanup
                     [ADD] fix radar legend pnd - LIFR was not pink
                     [ADD] RadarFileGeometry (wip)
-                    [FIX] Obs not working multiplane
+                    [FIX] Obs not working multipane
 55335 2020_01_27    [FIX] hardcore hourly graph background
 55334 2020_01_26    [REF] various code cleanup and var rename for readability
                     [ADD] change Hourly graph to a black line

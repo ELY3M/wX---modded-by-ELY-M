@@ -40,26 +40,10 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (Utility.readPrefWithNull(this, "NWS_UNR_X", null) == null) {
-            UtilityPref.prefInitStateCode(this)
-            UtilityPref.prefInitStateCodeLookup(this)
-            UtilityPref.prefInitNWSXY(this)
-            UtilityPref.prefInitRIDXY(this)
-            UtilityPref.prefInitRIDXY2(this)
-            UtilityPref.prefInitNWSLoc(this)
-            UtilityPref2.prefInitSetDefaults(this)
-            UtilityPref3.prefInitRIDLoc(this)
-            UtilityPref.prefInitBig(this)
-            UtilityPref.prefInitTwitterCA(this)
-            UtilityPref4.prefInitSoundingSites(this)
+        if (Utility.readPrefWithNull(this, "LOC1_LABEL", null) == null) {
+            UtilityLog.d("wx", "INIT PREF")
+            UtilityStorePreferences.setDefaults(this)
         }
-        if (Utility.readPrefWithNull(
-                this,
-                "SND_LIX_X",
-                null
-            ) == null
-        ) UtilityPref4.prefInitSoundingSitesLoc(this)
         MyApplication.initPreferences(this)
         Location.refreshLocationData(this)
         UtilityWXJobService.startService(this)
@@ -149,7 +133,7 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
             ObjectIntent(this, WX::class.java)
         } else {
             val wfo = Location.wfo
-            val state = Utility.readPref(this, "NWS_LOCATION_$wfo", "").split(",")[0]
+            val state = Utility.getWfoSiteName(wfo).split(",")[0]
             val radarSite = Location.getRid(this, Location.currentLocationStr)
             ObjectIntent(
                 this,
