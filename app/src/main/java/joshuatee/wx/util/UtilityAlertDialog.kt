@@ -80,7 +80,7 @@ object UtilityAlertDialog {
         val alert = AlertDialog.Builder(context)
         alert.setTitle(title)
         alert.setIcon(icon)
-        alert.setMessage(message).setCancelable(true).setPositiveButton("OK") { dialog, id -> dialog.cancel() }
+        alert.setMessage(message).setCancelable(true).setPositiveButton("OK") { dialog, _ -> dialog.cancel() }
         alert.create().show()
     }
 

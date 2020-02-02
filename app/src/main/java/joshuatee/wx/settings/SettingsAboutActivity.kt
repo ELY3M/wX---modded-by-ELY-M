@@ -29,6 +29,7 @@ import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
+import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.activitiesmisc.WebView
@@ -47,7 +48,8 @@ class SettingsAboutActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var keyCodeDiag = ""
     private val faqUrl = "https://docs.google.com/document/d/1OQrviP10XBvQZ7QKh5R4bsd72ZKffK5f0ISRuCaSk5k/edit?usp=sharing"
     private val iOSUrl = "https://apps.apple.com/us/app/wxl23/id1171250052"
-    private val releaseNotesUrl = "https://docs.google.com/document/d/1A7rvP3QrJg0QqoEtKgU4B_VqLkjECijb4CFtXyNQNAM/edit?usp=sharing"
+    //private val releaseNotesUrl = "https://docs.google.com/document/d/1A7rvP3QrJg0QqoEtKgU4B_VqLkjECijb4CFtXyNQNAM/edit?usp=sharing"
+    private val releaseNotesUrl = "https://github.com/ELY3M/wX---modded-by-ELY-M/blob/master/README.md"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,7 +92,7 @@ class SettingsAboutActivity : AudioPlayActivity(), OnMenuItemClickListener {
         emailButton.setOnClickListener(View.OnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:")
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("joshua.tee@gmail.com"))
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(MyApplication.emailAsString))
             intent.putExtra(Intent.EXTRA_SUBJECT, "")
             startActivity(Intent.createChooser(intent, "Send Email"))
         })
