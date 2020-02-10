@@ -23,11 +23,8 @@ package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
 
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import android.view.View
 import joshuatee.wx.MyApplication
 
@@ -42,6 +39,7 @@ import kotlinx.coroutines.*
 
 class SettingsLocationRecyclerViewActivity : BaseActivity() {
 
+    //
     // Activity to manage ( add, delete, edit ) all locations
     //
 
@@ -112,29 +110,16 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         super.onRestart()
     }
 
-    override fun onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(onBroadcast)
-        super.onPause()
-    }
-
-    private val onBroadcast = object : BroadcastReceiver() {
-        override fun onReceive(ctxt: Context, intent: Intent) {
-            updateList()
-        }
-    }
-
     private fun updateTitle() {
         title = "Locations"
     }
 
     private fun itemSelected(position: Int) {
-        val bottomSheetFragment = BottomSheetFragment()
-        bottomSheetFragment.position = position
-        bottomSheetFragment.usedForLocation = true
-        bottomSheetFragment.fnList = listOf(::edit, ::delete, ::moveUp, ::moveDown)
+        // FIXME
+        val bottomSheetFragment = BottomSheetFragment(this, position, Location.getName(position), true)
+        //val bottomSheetFragment = BottomSheetFragment(this, position, ca.getItem(position), true)
+        bottomSheetFragment.functions = listOf(::edit, ::delete, ::moveUp, ::moveDown)
         bottomSheetFragment.labelList = listOf("Edit Location", "Delete Location", "Move Up", "Move Down")
-        bottomSheetFragment.actContext = this
-        bottomSheetFragment.topLabel = Location.getName(position)
         bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
     }
 

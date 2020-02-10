@@ -403,7 +403,7 @@ class SettingsRadarActivity : BaseActivity() {
                         "RADAR_SHOW_WPC_FRONTS",
                         R.string.radar_show_wpc_fronts_label
                 ).card
-        )	
+        )
         ll.addView(
                 ObjectSettingsCheckBox(
                         this,
@@ -545,7 +545,7 @@ class SettingsRadarActivity : BaseActivity() {
                         50
                 ).card
         )
-		ll.addView(
+        ll.addView(
                 ObjectSettingsSeekbar(
                         this,
                         this,
@@ -686,7 +686,7 @@ class SettingsRadarActivity : BaseActivity() {
                         "Text size",
                         "RADAR_TEXT_SIZE",
                         R.string.text_size_label,
-                        (MyApplication.radarTextSize * 10).toInt(),
+                        (MyApplication.radarTextSizeDefault * 10).toInt(),
                         4,
                         20
                 ).card

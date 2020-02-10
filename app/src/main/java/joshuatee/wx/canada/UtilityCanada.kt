@@ -233,16 +233,19 @@ object UtilityCanada {
         else if (s.contains("Ice Crystals") || s.contains("Ice Pellets"))
             newName = "ip"
         val time = day1.parse(" ([0-9]{1,2}:[0-9]{2} [AP]M) ")
-        val timeArr = MyApplication.colon.split(time)
+        val timeArr = time.split(":")
         var hour: Int
         var daytime = true
         if (timeArr.isNotEmpty()) {
             hour = timeArr[0].toIntOrNull() ?: 0
             if (time.contains("AM"))
-                if (hour < 8) daytime = false
+                if (hour < 8)
+                    daytime = false
             if (time.contains("PM")) {
-                if (hour == 12) hour = 0
-                if (hour > 6) daytime = false
+                if (hour == 12)
+                    hour = 0
+                if (hour > 6)
+                    daytime = false
             }
         }
         if (!daytime) {

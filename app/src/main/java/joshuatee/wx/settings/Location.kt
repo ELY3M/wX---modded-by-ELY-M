@@ -100,11 +100,7 @@ class Location(val context: Context, locNumInt: Int) {
         Utility.writePref(context, "LOC" + iStr + "_TIMEDST", dst)
         Utility.writePref(context, "ALERT" + iStr + "_NOTIFICATION", alertNotificationCurrent)
         Utility.writePref(context, "ALERT_CC" + iStr + "_NOTIFICATION", alertCcNotificationCurrent)
-        Utility.writePref(
-            context,
-            "ALERT_7DAY_" + iStr + "_NOTIFICATION",
-            alertSevenDayNotificationCurrent
-        )
+        Utility.writePref(context, "ALERT_7DAY_" + iStr + "_NOTIFICATION", alertSevenDayNotificationCurrent)
         Utility.writePref(context, "ALERT_NOTIFICATION_SOUND$iStr", alertNotificationSoundCurrent)
         Utility.writePref(context, "ALERT_NOTIFICATION_MCD$iStr", alertNotificationMcdCurrent)
         Utility.writePref(context, "ALERT_NOTIFICATION_SWO$iStr", alertNotificationSwoCurrent)
@@ -142,9 +138,9 @@ class Location(val context: Context, locNumInt: Int) {
 
     val notificationSwo: Boolean get() = alertNotificationSwoCurrent.startsWith("t")
 
-    val notificationSpcfw: Boolean get() = alertNotificationSpcfwCurrent.startsWith("t")
+    val notificationSpcFw: Boolean get() = alertNotificationSpcfwCurrent.startsWith("t")
 
-    val notificationWpcmpd: Boolean get() = alertNotificationWpcmpdCurrent.startsWith("t")
+    val notificationWpcMpd: Boolean get() = alertNotificationWpcmpdCurrent.startsWith("t")
 
     companion object {
         var numLocations: Int = 1
@@ -175,8 +171,8 @@ class Location(val context: Context, locNumInt: Int) {
         }
 
         private fun initNumLocations(context: Context) {
-            val numLocs = Utility.readPref(context, "LOC_NUM_INT", 1)
-            setNumLocations(context, numLocs)
+            val numberOfLocations = Utility.readPref(context, "LOC_NUM_INT", 1)
+            setNumLocations(context, numberOfLocations)
         }
 
         private fun setNumLocations(context: Context, numLocations: Int) {
@@ -437,11 +433,7 @@ class Location(val context: Context, locNumInt: Int) {
             // blank out for next loc add
             Utility.writePref(context, "ALERT" + locNumIntCurrentStr + "_NOTIFICATION", "false")
             Utility.writePref(context, "ALERT_CC" + locNumIntCurrentStr + "_NOTIFICATION", "false")
-            Utility.writePref(
-                context,
-                "ALERT_7DAY_" + locNumIntCurrentStr + "_NOTIFICATION",
-                "false"
-            )
+            Utility.writePref(context, "ALERT_7DAY_" + locNumIntCurrentStr + "_NOTIFICATION", "false")
             Utility.writePref(context, "ALERT_NOTIFICATION_SOUND$locNumIntCurrentStr", "false")
             Utility.writePref(context, "ALERT_NOTIFICATION_RADAR$locNumIntCurrentStr", "false")
             Utility.writePref(context, "ALERT_NOTIFICATION_MCD$locNumIntCurrentStr", "false")

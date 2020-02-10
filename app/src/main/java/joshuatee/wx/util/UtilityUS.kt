@@ -53,8 +53,7 @@ object UtilityUS {
     private fun findObsName(context: Context, obsShortCode: String): String {
         var locationName = ""
         try {
-            val xmlFileInputStream = context.resources.openRawResource(R.raw.stations_us4)
-            val text = UtilityIO.readTextFile(xmlFileInputStream)
+            val text = UtilityIO.readTextFileFromRaw(context.resources, R.raw.stations_us4)
             val lines = text.split("\n").dropLastWhile { it.isEmpty() }
             val tmpArr: List<String>
             val tmp = lines.lastOrNull { it.contains(",$obsShortCode") } ?: ""

@@ -29,8 +29,8 @@ import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 
-
 object UtilitySpotter {
+
     internal var spotterList = mutableListOf<Spotter>()
     private var reportsList = mutableListOf<SpotterReports>()
     var timer = DownloadTimer("SPOTTER")

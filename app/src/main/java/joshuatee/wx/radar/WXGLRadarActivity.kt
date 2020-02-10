@@ -53,7 +53,6 @@ import android.view.KeyEvent
 import joshuatee.wx.R
 import joshuatee.wx.activitiesmisc.ImageShowActivity
 import joshuatee.wx.activitiesmisc.TextScreenActivity
-import joshuatee.wx.activitiesmisc.WebscreenABModels
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.telecine.TelecineService
 import joshuatee.wx.MyApplication
@@ -67,6 +66,7 @@ import joshuatee.wx.UIPreferences
 
 import joshuatee.wx.GlobalArrays
 import joshuatee.wx.activitiesmisc.SevereDashboardActivity
+import joshuatee.wx.activitiesmisc.WebView
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.util.*
@@ -145,7 +145,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private var urlStr = ""
     private var fixedSite = false
     private lateinit var rl: RelativeLayout
-    //private val latlonArr = mutableListOf("", "")
     private var latD = 0.0
     private var lonD = 0.0
     private var locationManager: LocationManager? = null
@@ -172,6 +171,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 bottomToolbar = true
         )
         toolbarBottom.setOnMenuItemClickListener(this)
+        toolbar.setOnClickListener {
+            ObjectIntent(this, SevereDashboardActivity::class.java)
+        }
         UtilityUI.immersiveMode(this as Activity)
         if (UIPreferences.radarStatusBarTransparent && Build.VERSION.SDK_INT >= 21) {
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -281,7 +283,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             oglr.product = MyApplication.wxoglProd
             oglr.setViewInitial(MyApplication.wxoglZoom, MyApplication.wxoglX, MyApplication.wxoglY)
         }
-        if (MyApplication.radarShowLegend) showLegend()
+        if (MyApplication.radarShowLegend) {
+            showLegend()
+        }
         title = oglr.product
         ridArrLoc = UtilityFavorites.setupFavMenu(
                 this,
@@ -504,7 +508,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     UtilityRadarUI.plotMcdWatchPolygons(glview, oglr, archiveMode)
                 }
             }
-
             if (PolygonType.MPD.pref && !archiveMode) {
                 withContext(Dispatchers.IO) {
                     UtilityDownloadMpd.get(this@WXGLRadarActivity)
@@ -718,20 +721,22 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             R.id.action_radar_4 -> showMultipaneRadar("4")
             R.id.action_radar_site_status_l3 -> ObjectIntent(
                     this,
-                    WebscreenABModels::class.java,
-                    WebscreenABModels.URL,
+                    WebView::class.java,
+                    WebView.URL,
                     arrayOf(
                             "http://radar3pub.ncep.noaa.gov",
-                            resources.getString(R.string.action_radar_site_status_l3)
+                            resources.getString(R.string.action_radar_site_status_l3),
+                            "extended"
                     )
             )
             R.id.action_radar_site_status_l2 -> ObjectIntent(
                     this,
-                    WebscreenABModels::class.java,
-                    WebscreenABModels.URL,
+                    WebView::class.java,
+                    WebView.URL,
                     arrayOf(
                             "http://radar2pub.ncep.noaa.gov",
-                            resources.getString(R.string.action_radar_site_status_l2)
+                            resources.getString(R.string.action_radar_site_status_l2),
+                            "extended"
                     )
             )
             R.id.action_n0q, R.id.action_n0q_menu  -> getReflectivity()
@@ -809,8 +814,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         getContent()
     }
 
-    private fun ridMapSwitch(r: String) {
-        oglr.rid = r
+    private fun ridMapSwitch(radarSite: String) {
+        oglr.rid = radarSite
         mapShown = false
         ridArrLoc = UtilityFavorites.setupFavMenu(
                 this,
@@ -1146,7 +1151,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         //val txt = withContext(Dispatchers.IO) { UtilityWXOGL.getVwp(this@WXGLRadarActivity, oglr.rid) }
         //ObjectIntent(this@WXGLRadarActivity, TextScreenActivity::class.java, TextScreenActivity.URL, arrayOf(txt, oglr.rid + " VAD Wind Profile"))
         var vmpurl = "https://weather.cod.edu/satrad/nexrad/index.php?type="+oglr.rid+"-NVW"
-        ObjectIntent(this@WXGLRadarActivity, WebscreenABModels::class.java, WebscreenABModels.URL, arrayOf(vmpurl, oglr.rid + " VAD Wind Profile"))
+        ObjectIntent(this@WXGLRadarActivity, WebView::class.java, WebView.URL, arrayOf(vmpurl, oglr.rid + " VAD Wind Profile"))
 
     }
 

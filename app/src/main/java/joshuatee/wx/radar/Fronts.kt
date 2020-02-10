@@ -31,5 +31,4 @@ class Fronts(var type: FrontTypeEnum) {
         }
         return string
     }
-
 }

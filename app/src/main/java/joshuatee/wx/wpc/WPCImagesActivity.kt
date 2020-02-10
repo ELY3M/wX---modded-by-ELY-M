@@ -62,13 +62,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_wpcimages,
-                R.menu.wpcimages,
-                iconsEvenlySpaced = true,
-                bottomToolbar = true
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_wpcimages, R.menu.wpcimages, iconsEvenlySpaced = true, bottomToolbar = true)
         toolbarBottom.setOnMenuItemClickListener(this)
         img.setOnClickListener(this)
         img.setOnTouchListener(object : OnSwipeTouchListener(this) {

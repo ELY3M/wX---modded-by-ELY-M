@@ -78,8 +78,7 @@ object UtilityImg {
 
     fun getBlankBitmap(): Bitmap = Bitmap.createBitmap(10, 10, Config.ARGB_8888)
 
-    fun getBitmapRemoveBG(imgUrl: String, color: Int): Bitmap =
-            eraseBG(imgUrl.getImage(), color)
+    fun getBitmapRemoveBG(imgUrl: String, color: Int): Bitmap = eraseBG(imgUrl.getImage(), color)
 
     fun getBitmapAddWhiteBG(context: Context, imgUrl: String): Bitmap {
         val layers = mutableListOf<Drawable>()
@@ -124,11 +123,6 @@ object UtilityImg {
                     MyApplication.spchrrrX = x
                     MyApplication.spchrrrY = y
                 }
-                /*"SPCSSEO" -> {
-                    MyApplication.spcsseoZoom = z
-                    MyApplication.spcsseoX = x
-                    MyApplication.spcsseoY = y
-                }*/
                 "WPCGEFS1" -> {
                     MyApplication.wpcgefsZoom = z
                     MyApplication.wpcgefsX = x
@@ -170,8 +164,7 @@ object UtilityImg {
 
     fun animInterval(context: Context): Int = 50 * Utility.readPref(context, "ANIM_INTERVAL", MyApplication.animationIntervalDefault)
 
-    fun bitmapToLayerDrawable(context: Context, bitmap: Bitmap): LayerDrawable =
-            LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
+    fun bitmapToLayerDrawable(context: Context, bitmap: Bitmap): LayerDrawable = LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
 
     fun layerDrawableToBitmap(layers: MutableList<Drawable>): Bitmap {
         val drawable = LayerDrawable(layers.toTypedArray())

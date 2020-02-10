@@ -82,20 +82,31 @@ internal object UtilityWXOGLPerfL3FourBit {
             fn: String,
             binWord: ByteBuffer
     ): Short {
-        // FIXME is this used at all
         val numberOfRangeBins = 0.toShort()
         try {
             val fis = context.openFileInput(fn)
             val dis = DataInputStream(BufferedInputStream(fis))
             dis.skipBytes(172)
-            val iCoordinateStart = dis.readUnsignedShort()
+
+            /*val iCoordinateStart = dis.readUnsignedShort()
             val jCoordinateStart = dis.readUnsignedShort()
             val xScaleInt = dis.readUnsignedShort()
             val xScaleFractional = dis.readUnsignedShort()
             val yScaleInt = dis.readUnsignedShort()
-            val yScaleFractional = dis.readUnsignedShort()
+            val yScaleFractional = dis.readUnsignedShort()*/
+
+            dis.readUnsignedShort()
+            dis.readUnsignedShort()
+            dis.readUnsignedShort()
+            dis.readUnsignedShort()
+            dis.readUnsignedShort()
+            dis.readUnsignedShort()
+
             val numberOfRows = dis.readUnsignedShort()
-            val packingDescriptor = dis.readUnsignedShort()
+
+            //val packingDescriptor = dis.readUnsignedShort()
+            dis.readUnsignedShort()
+
             // 464 rows in NCR
             // 232 rows in NCZ
             var s: Int

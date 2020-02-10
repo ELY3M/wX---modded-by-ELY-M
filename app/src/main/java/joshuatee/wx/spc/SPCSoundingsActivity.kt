@@ -70,7 +70,7 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv)
-        nwsOffice = UtilityLocation.getNearestSnd(Location.latLon)
+        nwsOffice = UtilityLocation.getNearestSoundingSite(Location.latLon)
         locations = UtilityFavorites.setupFavMenu(this, MyApplication.sndFav, nwsOffice, prefToken)
         objectSpinner = ObjectSpinner(this, this, this, R.id.spinner1, locations)
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))

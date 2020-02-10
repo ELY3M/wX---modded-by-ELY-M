@@ -26,6 +26,7 @@ import joshuatee.wx.R
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -157,5 +158,12 @@ object UtilityUI {
         val hInches = displayMetrics.heightPixels / displayMetrics.densityDpi
         val screenDiagonal = sqrt(wInches.toDouble().pow(2.0) + hInches.toDouble().pow(2.0))
         return (screenDiagonal >= 7.0)
+    }
+
+    fun isLandScape(context: Context): Boolean {
+        if(context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            return true
+        }
+        return false
     }
 }

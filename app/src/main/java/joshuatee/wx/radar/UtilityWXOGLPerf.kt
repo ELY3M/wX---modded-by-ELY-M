@@ -64,11 +64,11 @@ internal object UtilityWXOGLPerf {
             val buf = ByteArray(compressedFileSize.toInt())
             dis.read(buf)
             dis.close()
-            val decompStream = compression.decompress(ByteArrayInputStream(buf))
-            val dis2 = DataInputStream(BufferedInputStream(decompStream))
+            val decompressedStream = compression.decompress(ByteArrayInputStream(buf))
+            val dis2 = DataInputStream(BufferedInputStream(decompressedStream))
             dis2.skipBytes(30)
             var r = 0
-            var numberOfRleHalfwords: Int
+            var numberOfRleHalfWords: Int
             radarBuffers.colormap.redValues.put(0, Color.red(radarBuffers.bgColor).toByte())
             radarBuffers.colormap.greenValues.put(0, Color.green(radarBuffers.bgColor).toByte())
             radarBuffers.colormap.blueValues.put(0, Color.blue(radarBuffers.bgColor).toByte())
@@ -91,12 +91,12 @@ internal object UtilityWXOGLPerf {
             var angle0 = 0f
             val numberOfRadials = 360
             while (r < numberOfRadials) {
-                numberOfRleHalfwords = dis2.readUnsignedShort()
+                numberOfRleHalfWords = dis2.readUnsignedShort()
                 angle = 450f - dis2.readUnsignedShort() / 10f
                 dis2.skipBytes(2)
                 if (r < numberOfRadials - 1) {
                     dis2.mark(100000)
-                    dis2.skipBytes(numberOfRleHalfwords + 2)
+                    dis2.skipBytes(numberOfRleHalfWords + 2)
                     angleNext = 450f - dis2.readUnsignedShort() / 10f
                     dis2.reset()
                 }
@@ -109,7 +109,7 @@ internal object UtilityWXOGLPerf {
                 else
                     angle0
                 bin = 0
-                while (bin < numberOfRleHalfwords) {
+                while (bin < numberOfRleHalfWords) {
                     try {
                         curLevel =
                             (dis2.readUnsignedByte() and 0xFF).toByte() // was dis2!!.readUnsignedByte().toInt()

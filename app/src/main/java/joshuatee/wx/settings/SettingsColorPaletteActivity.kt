@@ -111,8 +111,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                     allItems.add(TileObjectColorPalette("AF", toolbar, prefToken, cg, type, true))
                     allItems.add(TileObjectColorPalette("EAK", toolbar, prefToken, cg, type, true))
 		    allItems.add(TileObjectColorPalette("ELY", toolbar, prefToken, cg, type, true))
-                    val prefArr =
-                            MyApplication.radarColorPaletteList["94"]!!.split(":").dropLastWhile { it.isEmpty() }
+                    val prefArr = MyApplication.radarColorPaletteList["94"]!!.split(":").dropLastWhile { it.isEmpty() }
                     prefArr.asSequence().filter { it != "" }.mapTo(allItems) {
                         TileObjectColorPalette(
                                 it,
@@ -128,8 +127,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                     listOf("CODENH", "AF", "EAK", "ELY", "ELYENH").forEach {
                         allItems.add(TileObjectColorPalette(it, toolbar, prefToken, cg, type, true))
                     }
-                    val prefArr =
-                            MyApplication.radarColorPaletteList["99"]!!.split(":").dropLastWhile { it.isEmpty() }
+                    val prefArr = MyApplication.radarColorPaletteList["99"]!!.split(":").dropLastWhile { it.isEmpty() }
                     prefArr.asSequence().filter { it != "" }.mapTo(allItems) {
                         TileObjectColorPalette(
                                 it,
@@ -230,7 +228,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                         MyApplication.radarColorPalette[type]
                 )
                 Utility.commitPref(this@SettingsColorPaletteActivity)
-                rowListItem[globalPosition].tb.title = MyApplication.radarColorPalette[type]
+                rowListItem[globalPosition].toolbar.title = MyApplication.radarColorPalette[type]
                 UtilityColorPaletteGeneric.loadColorMap(this, type)
                 rowListItem = allItemList
                 rcAdapter = TileAdapterColorPalette(rowListItem, UIPreferences.tilesPerRow)
@@ -259,7 +257,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                     rowListItem[position].prefToken,
                     MyApplication.radarColorPalette[type]
             )
-            rowListItem[position].tb.title = MyApplication.radarColorPalette[type]
+            rowListItem[position].toolbar.title = MyApplication.radarColorPalette[type]
             UtilityColorPaletteGeneric.loadColorMap(this, type)
         } else {
             MyApplication.radarColorPalette[type] = rowListItem[position].colorMapLabel
@@ -268,7 +266,7 @@ class SettingsColorPaletteActivity : BaseActivity() {
                     rowListItem[position].prefToken,
                     MyApplication.radarColorPalette[type]
             )
-            rowListItem[position].tb.title = MyApplication.radarColorPalette[type]
+            rowListItem[position].toolbar.title = MyApplication.radarColorPalette[type]
             UtilityColorPaletteGeneric.loadColorMap(this, type)
         }
     }

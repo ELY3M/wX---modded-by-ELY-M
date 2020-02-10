@@ -23,28 +23,33 @@
 
 package joshuatee.wx.radar
 
-import android.content.Context
+/*import android.content.Context
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import java.io.BufferedInputStream
 import java.io.DataInputStream
 import java.io.IOException
-import java.nio.ByteBuffer
+import java.nio.ByteBuffer*/
 
 import joshuatee.wx.R
 
-class RadarGeometryFile//initialize()
-(var context: Context, var fileId: Int, var count: Int, var preferenceToken: String, var showItemDefault: Boolean) {
+class RadarGeometryFile(
+        //var context: Context,
+        //var fileId: Int,
+        //var count: Int,
+        //var preferenceToken: String,
+        //var showItemDefault: Boolean
+) {
 
-    var byteBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
+    /*var byteBuffer: ByteBuffer = ByteBuffer.allocateDirect(0)
     var initialized = false
     var showItem: Boolean
 
     init {
         showItem = if (showItemDefault) {
-            Utility.readPref(preferenceToken, "true").startsWith("t")
+            Utility.readPref(context, preferenceToken, "true").startsWith("t")
         } else {
-            Utility.readPref(preferenceToken, "false").startsWith("t")
+            Utility.readPref(context, preferenceToken, "false").startsWith("t")
         }
         if (showItem) {
             //initialize()
@@ -53,9 +58,9 @@ class RadarGeometryFile//initialize()
 
     fun initializeIfNeeded() {
         showItem = if (showItemDefault) {
-            Utility.readPref(preferenceToken, "true").startsWith("t")
+            Utility.readPref(context, preferenceToken, "true").startsWith("t")
         } else {
-            Utility.readPref(preferenceToken, "false").startsWith("t")
+            Utility.readPref(context, preferenceToken, "false").startsWith("t")
         }
         if (showItem && !initialized) {
             //initialize()
@@ -154,5 +159,5 @@ class RadarGeometryFile//initialize()
                 byTypes[it] = byType(context, it)
             }
         }
-    }
+    }*/
 }

@@ -121,8 +121,7 @@ object UtilityTimeSunMoon {
         }
         val location = ExternalSunriseLocation(lat, lon)
         val calculator = ExternalSunriseSunsetCalculator(location, TimeZone.getDefault())
-        val officialSunriseCal =
-                calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
+        val officialSunriseCal = calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
         val officialSunsetCal = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance())
         val srTime: String
         val ssTime: String

@@ -215,6 +215,13 @@ object WXGLNexrad {
         return Utility.readPref(context, "WX_RADAR_CURRENT_INFO$pane", "")
     }
 
+    // for Location Fragment as there seem to be quite a few
+    // at joshuatee.wx.fragments.LocationFragment.getActivityReference (LocationFragment.kt:833)
+    // kotlin.KotlinNullPointerException:
+    fun getRadarInfo(pane: String): String {
+        return Utility.readPref("WX_RADAR_CURRENT_INFO$pane", "")
+    }
+
     fun writeRadarInfo(context: Context, pane: String, info: String) {
         Utility.writePref(context, "WX_RADAR_CURRENT_INFO$pane", info)
     }

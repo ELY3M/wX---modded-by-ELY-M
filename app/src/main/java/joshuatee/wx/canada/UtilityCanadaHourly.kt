@@ -31,43 +31,33 @@ import joshuatee.wx.settings.Location
 internal object UtilityCanadaHourly {
 
     fun getString(locNumInt: Int): String {
-        val htmlUrl = MyApplication.canadaEcSitePrefix + "/forecast/hourly/" + MyApplication.colon.split(
-            Location.getX(locNumInt)
-        )[1].toLowerCase(Locale.US) + "-" + MyApplication.colon.split(Location.getY(locNumInt))[0] + "_metric_e.html"
+        val htmlUrl = MyApplication.canadaEcSitePrefix + "/forecast/hourly/" + (Location.getX(locNumInt).split(":"))[1].toLowerCase(Locale.US) + "-" + (Location.getY(locNumInt).split(":"))[0] + "_metric_e.html"
         val html = htmlUrl.getHtml()
         val header = "Time   Temp   Summary   PrecipChance   Wind   Humindex"
         return header + parse(html)
     }
 
     fun getUrl(locNumInt: Int) =
-            MyApplication.canadaEcSitePrefix + "/forecast/hourly/" + MyApplication.colon.split(Location.getX(locNumInt))[1].toLowerCase(
-            Locale.US
-        ) + "-" + MyApplication.colon.split(Location.getY(locNumInt))[0] + "_metric_e.html"
+            MyApplication.canadaEcSitePrefix + "/forecast/hourly/" + (Location.getX(locNumInt).split(":"))[1].toLowerCase(
+            Locale.US) + "-" + (Location.getY(locNumInt).split(":"))[0] + "_metric_e.html"
 
     private fun parse(htmlF: String): String {
         var hourly = ""
         val html = htmlF.parse("<tbody>(.*?)</tbody>")
-        val timeAl =
-            html.parseColumn("<tr>.*?<td.*?>(.*?)</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
-        val tempAl =
-            html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>(.*?)</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
-        val currCondAl =
-            html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>(.*?)</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
-        val popsAl =
-            html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>(.*?)</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
-        val windDirAl =
-            html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">(.*?)</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
-        val windSpeedAl =
-            html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>(.*?)<br />.*?<td.*?>.*?</td>.*?</tr>")
-        val humindexAl =
-            html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>(.*?)</td>.*?</tr>")
+        val timeAl = html.parseColumn("<tr>.*?<td.*?>(.*?)</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
+        val tempAl = html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>(.*?)</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
+        val currCondAl = html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>(.*?)</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
+        val popsAl = html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>(.*?)</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
+        val windDirAl = html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">(.*?)</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
+        val windSpeedAl = html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>(.*?)<br />.*?<td.*?>.*?</td>.*?</tr>")
+        val humIndexAl = html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>(.*?)</td>.*?</tr>")
         val space = "   "
-        var humindex: String
+        var humIndex: String
         timeAl.indices.forEach {
-            humindex = humindexAl[it].replace("<abbr.*?>".toRegex(), "")
-            humindex = humindex.replace("</abbr>", "")
+            humIndex = humIndexAl[it].replace("<abbr.*?>".toRegex(), "")
+            humIndex = humIndex.replace("</abbr>", "")
             hourly += MyApplication.newline + timeAl[it] + space + tempAl[it] + space + currCondAl[it]
-            hourly += space + popsAl[it] + space + windDirAl[it] + windSpeedAl[it] + space + humindex
+            hourly += space + popsAl[it] + space + windDirAl[it] + windSpeedAl[it] + space + humIndex
         }
         return hourly
     }

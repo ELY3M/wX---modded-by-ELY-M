@@ -343,7 +343,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
     }
 
     private fun addressSearch(address: String) = GlobalScope.launch(uiDispatcher) {
-        val xyStr = withContext(Dispatchers.IO) { UtilityLocation.getXYFromAddressOsm(address) }
+        val xyStr = withContext(Dispatchers.IO) { UtilityLocation.getLatLonFromAddress(address) }
         locXEt.setText(xyStr[0])
         locYEt.setText(xyStr[1])
         val xStr = locXEt.text.toString()
@@ -607,7 +607,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
         var toastStr = ""
         var goodLocation = false
         withContext(Dispatchers.IO) {
-            xyStr = UtilityLocation.getXYFromAddressOsm(address)
+            xyStr = UtilityLocation.getLatLonFromAddress(address)
             if (xyStr.size > 1) {
                 toastStr = Location.locationSave(this@SettingsLocationGenericActivity, locNum, xyStr[0], xyStr[1], labelStr)
                 goodLocation = true

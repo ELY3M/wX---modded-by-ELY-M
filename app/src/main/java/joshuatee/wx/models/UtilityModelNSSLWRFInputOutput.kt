@@ -40,9 +40,8 @@ internal object UtilityModelNsslWrfInputOutput {
     val runTime: RunTimeData
         get() {
             val runData = RunTimeData()
-            val htmlRunstatus = (baseUrl).getHtml()
-            val html =
-                htmlRunstatus.parse("\\{model: \"fv3_nssl\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",)")
+            val htmlRunStatus = (baseUrl).getHtml()
+            val html = htmlRunStatus.parse("\\{model: \"fv3_nssl\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",)")
             val day = html.parse("rd:.(.*?),.*?").replace("\"", "")
             val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")
             val mostRecentRun = day + time
@@ -93,7 +92,9 @@ internal object UtilityModelNsslWrfInputOutput {
     }
 
     fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        if (om.spinnerTimeValue == -1) {
+            return AnimationDrawable()
+        }
         val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) {
             getImage(context, om, om.spTime.list[it].split(" ").getOrNull(0) ?: "")
         }

@@ -28,6 +28,7 @@ import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
 import android.view.ContextMenu.ContextMenuInfo
+import android.widget.LinearLayout
 
 import joshuatee.wx.R
 import joshuatee.wx.activitiesmisc.ImageShowActivity
@@ -38,7 +39,9 @@ import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
@@ -63,6 +66,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var objectCardImage: ObjectCardImage
     private lateinit var objectCardText: ObjectCardText
     private lateinit var objectWatchProduct: ObjectWatchProduct
+    private var tabletInLandscape = false
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +76,14 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 R.menu.spcmcdshowdetail
         )
         toolbarBottom.setOnMenuItemClickListener(this)
-        objectCardImage = ObjectCardImage(this, ll)
+        tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
+        //tabletInLandscape = UtilityUI.isLandScape(this)
+        if (tabletInLandscape) {
+            ll.orientation = LinearLayout.HORIZONTAL
+            objectCardImage = ObjectCardImage(this, ll, UtilityImg.getBlankBitmap(), 2)
+        } else {
+            objectCardImage = ObjectCardImage(this, ll)
+        }
         objectCardText = ObjectCardText(this, ll, toolbar, toolbarBottom)
         activityArguments = intent.getStringArrayExtra(NO)!!
         number = activityArguments[0]
@@ -91,7 +102,11 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         withContext(Dispatchers.IO) { objectWatchProduct.getData(this@SpcMcdWatchShowActivity) }
         objectCardText.text = Utility.fromHtml(objectWatchProduct.text)
         toolbar.subtitle = objectWatchProduct.textForSubtitle
-        objectCardImage.setImage(objectWatchProduct.bitmap)
+        if (tabletInLandscape) {
+            objectCardImage.setImage(objectWatchProduct.bitmap, 2)
+        } else {
+            objectCardImage.setImage(objectWatchProduct.bitmap)
+        }
         objectCardImage.setOnClickListener(View.OnClickListener {
             ObjectIntent(
                     this@SpcMcdWatchShowActivity,

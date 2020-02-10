@@ -36,10 +36,10 @@ import joshuatee.wx.util.UtilityLog
 
 internal class TileObjectColorPalette(
     val colorMapLabel: String,
-    val tb: Toolbar,
+    val toolbar: Toolbar,
     val prefToken: String,
     context: Context,
-    prod: String,
+    product: String,
     val builtin: Boolean
 ) {
 
@@ -49,28 +49,23 @@ internal class TileObjectColorPalette(
         val oldMap: String
         val bitmap: Bitmap
         var textColor = Color.WHITE
-        if (builtin) textColor = Color.YELLOW
-        if (UtilityFileManagement.internalFileExist(
-                context,
-                "colormap" + prod + this.colorMapLabel
-            )
-        ) {
-            bitmapWithText = UtilityIO.bitmapFromInternalStorage(
-                context,
-                "colormap" + prod + this.colorMapLabel
-            )
+        if (builtin) {
+            textColor = Color.YELLOW
+        }
+        if (UtilityFileManagement.internalFileExist(context, "colormap" + product + this.colorMapLabel)) {
+            bitmapWithText = UtilityIO.bitmapFromInternalStorage(context, "colormap" + product + this.colorMapLabel)
         } else {
-            oldMap = MyApplication.radarColorPalette[prod]!!
-            MyApplication.radarColorPalette[prod] = colorMapLabel
+            oldMap = MyApplication.radarColorPalette[product]!!
+            MyApplication.radarColorPalette[product] = colorMapLabel
             try {
-                UtilityColorPaletteGeneric.loadColorMap(context, prod)
+                UtilityColorPaletteGeneric.loadColorMap(context, product)
             } catch (e: Exception) {
                 UtilityLog.handleException(e)
             }
-            bitmap = UtilityUSImgWX.bitmapForColorPalette(context, prod)
+            bitmap = UtilityUSImgWX.bitmapForColorPalette(context, product)
             bitmapWithText = UtilityImg.drawTextToBitmap(context, bitmap, colorMapLabel, textColor)
-            UtilityIO.bitmapToInternalStorage(context, bitmapWithText, "colormap$prod$colorMapLabel")
-            MyApplication.radarColorPalette[prod] = oldMap
+            UtilityIO.bitmapToInternalStorage(context, bitmapWithText, "colormap$product$colorMapLabel")
+            MyApplication.radarColorPalette[product] = oldMap
         }
     }
 }

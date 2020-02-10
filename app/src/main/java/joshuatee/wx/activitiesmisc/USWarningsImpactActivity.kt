@@ -67,7 +67,7 @@ class USWarningsImpactActivity : BaseActivity() {
                         this@USWarningsImpactActivity,
                         ImageShowActivity::class.java,
                         ImageShowActivity.URL,
-                        arrayOf(warningsListSorted[position].imgFile, warningsListSorted[position].title)
+                        arrayOf(warningsListSorted[position].imageUrl, warningsListSorted[position].title)
                 )
             }
         })

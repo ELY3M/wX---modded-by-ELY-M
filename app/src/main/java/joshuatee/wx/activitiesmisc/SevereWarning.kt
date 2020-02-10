@@ -21,7 +21,6 @@
 
 package joshuatee.wx.activitiesmisc
 
-import android.content.Context
 import joshuatee.wx.MyApplication
 import joshuatee.wx.external.ExternalDuplicateRemover
 import joshuatee.wx.objects.PolygonType
@@ -31,16 +30,17 @@ import joshuatee.wx.RegExp
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityTime
 
-// encapsulates VTEC data and count for tst,tor, or ffw
-
 internal class SevereWarning(private val type: PolygonType) {
+
+    //
+    // encapsulates VTEC data and count for tst,tor, or ffw
+    //
 
     var text = ""
         private set
     var count = 0
         private set
 
-    //var collapsed = false
     var idList = listOf<String>()
     var areaDescList = listOf<String>()
     var effectiveList = listOf<String>()
@@ -48,10 +48,6 @@ internal class SevereWarning(private val type: PolygonType) {
     var eventList = listOf<String>()
     var senderNameList = listOf<String>()
     var warnings = listOf<String>()
-
-    //fun toggleCollapsed() {
-    //    collapsed = !collapsed
-    //}
 
     fun getName(): String {
         var name = ""
@@ -64,7 +60,7 @@ internal class SevereWarning(private val type: PolygonType) {
         return name
     }
 
-    fun generateString(context: Context, html: String) {
+    fun generateString(html: String) {
         var vtecComponents: List<String>
         var wfo: String
         var wfoLocation = ""
@@ -100,8 +96,7 @@ internal class SevereWarning(private val type: PolygonType) {
         val remover = ExternalDuplicateRemover()
         text = remover.stripDuplicates(text)
         text = "(" + text.split(MyApplication.newline).dropLastWhile { it.isEmpty() }.size +
-                ") " + label + MyApplication.newline +
-                text.replace((MyApplication.newline + "$").toRegex(), "")
+                ") " + label + MyApplication.newline + text.replace((MyApplication.newline + "$").toRegex(), "")
     }
 }
 

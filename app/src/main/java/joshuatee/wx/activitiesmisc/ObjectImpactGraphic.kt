@@ -25,7 +25,7 @@ internal class ObjectImpactGraphic(
     var title: String,
     var cities: String,
     var population: String,
-    var imgFile: String
+    var imageUrl: String
 ) {
 
     companion object {
@@ -36,7 +36,7 @@ internal class ObjectImpactGraphic(
         this.title = title.replace("^.*?Sev".toRegex(), "Sev")
         this.cities = "Cities: " + cities.replace("\"", "")
         this.population = "Population: " + population.replace("\"", "")
-        this.imgFile = baseImageUrl + imgFile.replace("\"", "").replace("file:", "")
+        this.imageUrl = baseImageUrl + imageUrl.replace("\"", "").replace("file:", "")
     }
 }
 

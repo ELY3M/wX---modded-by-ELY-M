@@ -35,19 +35,15 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import joshuatee.wx.ui.ObjectTextView
 
-class BottomSheetFragment : BottomSheetDialogFragment() {
+class BottomSheetFragment(private val actContext: Context, val position: Int, private val topLabel: String, private val usedForLocation: Boolean) : BottomSheetDialogFragment() {
 
-    lateinit  var linearLayout: LinearLayout
-    lateinit  var label: TextView
-    lateinit  var edit: TextView
-    lateinit  var delete: TextView
-    var position = -1
-    lateinit var actContext: Context
-    lateinit var fnList: List<(Int) -> Unit>
+    lateinit var linearLayout: LinearLayout
+    lateinit var label: TextView
+    lateinit var edit: TextView
+    lateinit var delete: TextView
+    lateinit var functions: List<(Int) -> Unit>
     lateinit var labelList: List<String>
-    lateinit var topLabel: String
     private var textViewList = mutableListOf<ObjectTextView>()
-    var usedForLocation = false
 
     private var fragmentView: View? = null
 
@@ -62,7 +58,7 @@ class BottomSheetFragment : BottomSheetDialogFragment() {
             item.gravity = Gravity.CENTER_HORIZONTAL
             item.color = Color.BLACK
             item.tv.setOnClickListener {
-                fnList[index](position)
+                functions[index](position)
                 dismiss()
             }
             linearLayout.addView(item.tv)

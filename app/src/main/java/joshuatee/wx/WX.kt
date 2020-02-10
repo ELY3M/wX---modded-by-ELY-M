@@ -249,7 +249,9 @@ class WX : CommonActionBarFragment() {
             }
             KeyEvent.KEYCODE_L -> {
                 if (event.isCtrlPressed) {
-                    openActivity(this, "LTG")
+                    //openActivity(this, "LTG")
+                    val currentFragment = supportFragmentManager.fragments.first() as LocationFragment
+                    currentFragment.showLocations()
                 }
                 return true
             }

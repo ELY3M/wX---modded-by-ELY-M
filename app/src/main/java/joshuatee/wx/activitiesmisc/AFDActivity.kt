@@ -93,7 +93,7 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     private lateinit var spinner: ObjectSpinner
     private lateinit var drw: ObjectNavDrawer
     private var originalWfo = ""
-    private val fixedWidthProducts = listOf("RTP", "RWR", "CLI")
+    private val fixedWidthProducts = listOf("RTP", "RWR", "CLI", "RVA")
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -172,8 +172,6 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         if (wfo != oldWfo) {
             version = 1
         }
-
-
         html = withContext(Dispatchers.IO) {
             if (product != "CLI") {
                 if (version == 1) {
@@ -203,7 +201,8 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         if (fixedWidthProducts.contains(product)) {
             textCard.setTextAndTranslate(html)
         } else {
-            textCard.setTextAndTranslate(Utility.fromHtml(html))
+            //textCard.setTextAndTranslate(Utility.fromHtml(html))
+            textCard.setTextAndTranslate(html)
         }
         if (fixedWidthProducts.contains(product)) {
             textCard.tv.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
@@ -248,9 +247,9 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.AFD)
             R.id.action_website -> ObjectIntent(
                     this,
-                    WebscreenABModels::class.java,
-                    WebscreenABModels.URL,
-                    arrayOf("https://www.weather.gov/" + wfo.toLowerCase(Locale.US), wfo)
+                    WebView::class.java,
+                    WebView.URL,
+                    arrayOf("https://www.weather.gov/" + wfo.toLowerCase(Locale.US), wfo, "extended")
             )
             R.id.action_hazards -> ObjectIntent(
                     this,

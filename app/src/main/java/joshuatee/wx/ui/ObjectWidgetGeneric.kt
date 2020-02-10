@@ -46,6 +46,8 @@ class ObjectWidgetGeneric(context: Context, val type: WidgetFile) {
                         remoteViews,
                         WpcImagesActivity::class.java,
                         R.id.iv,
+                        WpcImagesActivity.URL,
+                        arrayOf(""),
                         type.action
                 )
                 SPCMESO -> UtilityWidget.setupIntent(

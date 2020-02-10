@@ -121,9 +121,8 @@ object UtilityShortcut {
                             )
                     )
                     .build()
-            val pinnedShortcutCallbackIntent = mShortcutManager.createShortcutResultIntent(shortcut)
-            val successCallback =
-                    PendingIntent.getBroadcast(context, 0, pinnedShortcutCallbackIntent, 0)
+            val pinnedShortcutCallbackIntent = mShortcutManager!!.createShortcutResultIntent(shortcut)
+            val successCallback = PendingIntent.getBroadcast(context, 0, pinnedShortcutCallbackIntent, 0)
             mShortcutManager.requestPinShortcut(shortcut, successCallback.intentSender)
 
         }

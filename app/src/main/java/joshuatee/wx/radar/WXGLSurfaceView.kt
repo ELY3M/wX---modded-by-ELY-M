@@ -222,7 +222,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
         val test2 = 180 / PI * log(tan(PI / 4 + centerX * (PI / 180) / 2), E)
         newY = test2.toFloat() + (-oglrCurrent.y / mScaleFactor + diffY) / ppd
         newY = (180 / PI * (2 * atan(exp(newY * PI / 180)) - PI / 2)).toFloat()
-        oglrCurrent.ridNewList = UtilityLocation.getNearestRid(
+        oglrCurrent.ridNewList = UtilityLocation.getNearestRadarSite(
             LatLon(newY.toString(), (newX * -1).toString()),
             5
         )

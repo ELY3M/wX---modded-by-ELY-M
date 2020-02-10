@@ -40,7 +40,7 @@ internal object UtilityNotificationWpc {
 
     fun locationNeedsMpd(): Boolean {
         return (0 until Location.numLocations).any {
-            MyApplication.locations.getOrNull(it)?.notificationWpcmpd ?: false
+            MyApplication.locations.getOrNull(it)?.notificationWpcMpd ?: false
         }
     }
 
@@ -79,7 +79,7 @@ internal object UtilityNotificationWpc {
                 val polygon2 = poly2.build()
                 for (n in 1..Location.numLocations) {
                     locNum = n.toString()
-                    if (MyApplication.locations[n - 1].notificationWpcmpd) {
+                    if (MyApplication.locations[n - 1].notificationWpcMpd) {
                         // if location is watching for MCDs pull ib lat/lon and interate over polygons
                         // call secondary method to send notification if required
                         locXDbl = MyApplication.locations[n - 1].x.toDoubleOrNull() ?: 0.0

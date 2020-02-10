@@ -122,8 +122,13 @@ class WXGLNexradLevel3 internal constructor() {
             productCode = dis.readUnsignedShort().toShort()
             val operationalMode = dis.readUnsignedShort().toShort()
             val volumeCoveragePattern = dis.readUnsignedShort().toShort()
-            val sequenceNumber = dis.readUnsignedShort().toShort()
-            val volumeScanNumber = dis.readUnsignedShort().toShort()
+
+            //val sequenceNumber = dis.readUnsignedShort().toShort()
+            //val volumeScanNumber = dis.readUnsignedShort().toShort()
+
+            dis.readUnsignedShort().toShort()
+            dis.readUnsignedShort().toShort()
+
             //dis.skipBytes(6)
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()
@@ -149,7 +154,10 @@ class WXGLNexradLevel3 internal constructor() {
 
             //dis.skipBytes(14)
             dis.skipBytes(10)
-            val elevationNumber = dis.readUnsignedShort()
+
+            //val elevationNumber = dis.readUnsignedShort()
+            dis.readUnsignedShort()
+
             val elevationAngle = dis.readShort()
             degree = elevationAngle.toInt() / 10f
 
@@ -205,8 +213,13 @@ class WXGLNexradLevel3 internal constructor() {
             init4Bit()
             val operationalMode = dis.readUnsignedShort().toShort()
             val volumeCoveragePattern = dis.readUnsignedShort().toShort()
-            val sequenceNumber = dis.readUnsignedShort().toShort()
-            val volumeScanNumber = dis.readUnsignedShort().toShort()
+
+            //val sequenceNumber = dis.readUnsignedShort().toShort()
+            //val volumeScanNumber = dis.readUnsignedShort().toShort()
+
+            dis.readUnsignedShort().toShort()
+            dis.readUnsignedShort().toShort()
+
             //dis.skipBytes(6)
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()

@@ -34,17 +34,11 @@ import joshuatee.wx.ui.UtilityUI
 class VoiceCommandActivity : Activity() {
 
     private val requestOk = 1
-    private var nws1Current = ""
-    private var nws1StateCurrent = ""
-    private var radarSite = ""
     private lateinit var mainView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainView = findViewById(android.R.id.content)
-        nws1Current = Location.wfo
-        nws1StateCurrent = Location.state
-        radarSite = Location.rid
         if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying) {
             UtilityTts.mMediaPlayer!!.stop()
             UtilityTts.ttsIsPaused = true
@@ -69,9 +63,9 @@ class VoiceCommandActivity : Activity() {
                     this,
                     mainView,
                     address,
-                    radarSite,
-                    nws1Current,
-                    nws1StateCurrent
+                    Location.rid,
+                    Location.wfo,
+                    Location.state
             )
             if (!gotHit) {
                 finish()

@@ -67,7 +67,6 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
     var animRan: Boolean = false
     var firstRun: Boolean = false
     var imageLoaded: Boolean = false
-
     lateinit var miStatusParam1: MenuItem
     lateinit var miStatusParam2: MenuItem
     var fab1: ObjectFab? = null
@@ -537,28 +536,6 @@ class ObjectModel(val context: Context, var prefModel: String, numPanesStr: Stri
                         format = "%02d"
                         timeTruncate = 2
                     }
-                   /* 0 -> {
-                        model = "HRRR"
-                        params = UtilityModelEsrlInterface.paramsHrrr
-                        labels = UtilityModelEsrlInterface.labelsHrrr
-                        sectors = UtilityModelEsrlInterface.sectorsHrrr
-                        startStep = 0
-                        endStep = 36
-                        stepAmount = 1
-                        format = "%02d"
-                        timeTruncate = 2
-                    }
-                    1 -> {
-                        model = "HRRR_AK"
-                        params = UtilityModelEsrlInterface.paramsHrrr
-                        labels = UtilityModelEsrlInterface.labelsHrrr
-                        sectors = UtilityModelEsrlInterface.sectorsHrrrAk
-                        startStep = 0
-                        endStep = 36
-                        stepAmount = 1
-                        format = "%02d"
-                        timeTruncate = 2
-                    }*/
                     0 -> {
                         model = "HRRR_NCEP"
                         params = UtilityModelEsrlInterface.paramsHrrr

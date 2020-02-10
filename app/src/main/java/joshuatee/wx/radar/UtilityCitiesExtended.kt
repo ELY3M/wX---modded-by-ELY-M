@@ -38,14 +38,11 @@ internal object UtilityCitiesExtended {
         if (!initialized) {
             cities = mutableListOf()
             initialized = true
-            val text: String
             var latitude: Double
             var longitude: Double
-            val lines: List<String>
             var tokens: Array<String>
-            val xmlFileInputStream = context.resources.openRawResource(R.raw.cityall)
-            text = UtilityIO.readTextFile(xmlFileInputStream)
-            lines = text.split("\n").dropLastWhile { it.isEmpty() }
+            val text = UtilityIO.readTextFileFromRaw(context.resources, R.raw.cityall)
+            val lines = text.split("\n").dropLastWhile { it.isEmpty() }
             lines.forEach {
                 tokens = MyApplication.comma.split(it)
                 latitude = tokens[2].toDoubleOrNull() ?: 0.0

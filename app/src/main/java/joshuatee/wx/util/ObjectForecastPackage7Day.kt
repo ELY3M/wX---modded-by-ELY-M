@@ -76,7 +76,9 @@ class ObjectForecastPackage7Day {
     private fun getIcons7Day(html: String): String {
         val iconAl = html.parseColumn("\"icon\": \"(.*?)\",")
         var iconList = ""
-        iconAl.forEach { iconList += "$it!" }
+        iconAl.forEach {
+            iconList += "$it!"
+        }
         return iconList
     }
 

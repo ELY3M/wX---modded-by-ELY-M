@@ -59,13 +59,14 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
         isFocusableInTouchMode = true
     }
 
-    private fun setColorWithBuffers(prodId: Int, index: Int, strokeWidth: Int) {
+    private fun setColorWithBuffers(prodId: Int, index: Int) {
         myPaint.color = Color.rgb(
             MyApplication.colorMap[prodId]!!.redValues.get(index).toInt() and 0xFF,
             MyApplication.colorMap[prodId]!!.greenValues.get(index).toInt() and 0xFF,
             MyApplication.colorMap[prodId]!!.blueValues.get(index).toInt() and 0xFF
         )
-        myPaint.strokeWidth = strokeWidth.toFloat()
+	///TODO  this should not be hard coded :(  
+        myPaint.strokeWidth = 10.0f
     }
 
     public override fun onDraw(canvas: Canvas) {
@@ -79,7 +80,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
         val startHeight = MyApplication.actionBarHeight.toFloat()
         val width = MyApplication.radarShowLegendWidth.toFloat() //was 50f
         val widthStarting = 0f
-        val strokeWidth = 10
+        //val strokeWidth = 10
         val textFromLegend = 10f
         val heightFudge = 30f
         val screenHeight = MyApplication.dm.heightPixels.toFloat()
@@ -90,7 +91,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
         when (product) {
             "N0Q", "L2REF", "TZL" -> {
                 (0 until 256).forEach {
-                    setColorWithBuffers(94, 255 - it, strokeWidth)
+                    setColorWithBuffers(94, 255 - it)
                     canvas.drawRect(
                         widthStarting,
                         it * scaledHeight + startHeight,
@@ -115,11 +116,10 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     }
                 }
             }
-
             //TODO figure out how to read pal files//
             "N0U", "L2VEL", "TV0" -> {
                 (0 until 256).forEach {
-                    setColorWithBuffers(99, 255 - it, strokeWidth)
+                    setColorWithBuffers(99, 255 - it)
                     canvas.drawRect(
                         widthStarting,
                         it * scaledHeight + startHeight,
@@ -157,7 +157,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
             }
             "DVL" -> {
                 (0 until 256).forEach {
-                    setColorWithBuffers(134, 255 - it, strokeWidth)
+                    setColorWithBuffers(134, 255 - it)
                     canvas.drawRect(
                         widthStarting,
                         it * scaledHeight + startHeight,
@@ -185,7 +185,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
             "EET" -> {
                 scaledHeight = (screenHeight - 2 * startHeight) / 70f
                 (0..70).forEach {
-                    setColorWithBuffers(135, 70 - it, strokeWidth)
+                    setColorWithBuffers(135, 70 - it)
                     canvas.drawRect(
                         widthStarting,
                         it * scaledHeight + startHeight,
@@ -212,7 +212,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
             }
             "N0X" -> {
                 (0 until 256).forEach {
-                    setColorWithBuffers(159, 255 - it, strokeWidth)
+                    setColorWithBuffers(159, 255 - it)
                     canvas.drawRect(
                         widthStarting,
                         it * scaledHeight + startHeight,
@@ -237,7 +237,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
             }
             "N0C" -> {
                 (0 until 256).forEach {
-                    setColorWithBuffers(161, 255 - it, strokeWidth)
+                    setColorWithBuffers(161, 255 - it)
                     canvas.drawRect(
                         widthStarting,
                         it * scaledHeight + startHeight,
@@ -267,7 +267,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
             }
             "N0K" -> {
                 (0 until 256).forEach {
-                    setColorWithBuffers(163, 255 - it, strokeWidth)
+                    setColorWithBuffers(163, 255 - it)
                     canvas.drawRect(
                         widthStarting,
                         it * scaledHeight + startHeight,
@@ -293,7 +293,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
             "H0C" -> {
                 scaledHeight = (screenHeight - 2 * startHeight) / 160f
                 (0..159).forEach {
-                    setColorWithBuffers(165, 160 - it, strokeWidth)
+                    setColorWithBuffers(165, 160 - it)
                     canvas.drawRect(
                         widthStarting,
                         it * scaledHeight + startHeight,
@@ -320,7 +320,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
             }
             "DSA", "DAA" -> {
                 (0 until 256).forEach {
-                    setColorWithBuffers(172, 255 - it, strokeWidth)
+                    setColorWithBuffers(172, 255 - it)
                     canvas.drawRect(
                         widthStarting,
                         it * scaledHeight + startHeight,

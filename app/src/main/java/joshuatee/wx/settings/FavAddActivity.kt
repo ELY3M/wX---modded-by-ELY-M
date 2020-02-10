@@ -53,7 +53,7 @@ class FavAddActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
         type = intent.getStringArrayExtra(TYPE)!![0]
-        title = "Add $type"
+        var verboseTitle = ""
         when (type) {
             "SND" -> {
                 prefToken = "SND_FAV"
@@ -62,34 +62,42 @@ class FavAddActivity : BaseActivity() {
                     list.add("$it " + Utility.getSoundingSiteName(it))
                 }
                 data = list.toList()
+                verboseTitle = "sounding site"
             }
             "RIDCA" -> {
                 prefToken = "RID_CA_FAV"
                 data = GlobalArrays.canadaRadars
+                verboseTitle = "radar site"
             }
             "WFO" -> {
                 prefToken = "WFO_FAV"
                 data = GlobalArrays.wfos
+                verboseTitle = "NWS office"
             }
             "RID" -> {
                 prefToken = "RID_FAV"
                 data = GlobalArrays.radars + GlobalArrays.tdwrRadars
+                verboseTitle = "radar site"
             }
             "NWSTEXT" -> {
                 prefToken = "NWS_TEXT_FAV"
                 data = UtilityWpcText.labels
+                verboseTitle = "text product"
             }
             "SREF" -> {
                 prefToken = "SREF_FAV"
                 data = UtilityModelSpcSrefInterface.params
+                verboseTitle = "parameter"
             }
             "SPCMESO" -> {
                 prefToken = "SPCMESO_FAV"
                 prefTokenLabel = "SPCMESO_LABEL_FAV"
                 data = UtilitySpcMeso.labels
                 dataTokens = UtilitySpcMeso.params
+                verboseTitle = "parameter"
             }
         }
+        title = "Add $verboseTitle"
         ObjectRecyclerView(this, this, R.id.card_list, data.toMutableList(), ::itemClicked)
     }
 

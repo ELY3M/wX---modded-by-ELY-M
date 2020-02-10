@@ -27,10 +27,11 @@ package joshuatee.wx.radar
 //#uniq,icon,live camera,reportAt,lat,lon,callsign,active,moving,dir,phone,email,freq,note,first,last
 
 class Spotter internal constructor(uniq: String, icon: String, camera: String, reportAt: String, lat: String, lon: String, callsign: String, active: String, moving: String, dir: String, phone: String, email: String, freq: String, note: String, firstName: String, lastName: String) {
-    var uniq: String = ""
+    var unique: String = ""
     var camera: String = ""
     var icon: String = ""
     var reportAt: String = ""
+    // FIXME use LatLon instead
     var lat: String = ""
     var lon: String = ""
     var callsign: String = ""
@@ -50,7 +51,7 @@ class Spotter internal constructor(uniq: String, icon: String, camera: String, r
         private set
 
     init {
-        this.uniq = uniq
+        this.unique = unique
         this.camera = camera
         this.icon = icon
         this.reportAt = reportAt

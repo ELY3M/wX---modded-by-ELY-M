@@ -58,13 +58,7 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_image_show_navdrawer_bottom_toolbar,
-                R.menu.imagecollection,
-                iconsEvenlySpaced = true,
-                bottomToolbar = true
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer_bottom_toolbar, R.menu.imagecollection, iconsEvenlySpaced = true, bottomToolbar = true)
         activityArguments = intent.getStringArrayExtra(TYPE)!!
         imageCollection = MyApplication.imageCollectionMap[activityArguments[0]]!!
         toolbarBottom.setOnMenuItemClickListener(this)
@@ -104,10 +98,7 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
         if (drw.url.contains("jma") && imageCollection.title == "GOESFD") {
             actionAnimate.isVisible = true
         }
-        val result = async(Dispatchers.IO) {
-            drw.url.getImage()
-        }
-        bitmap = result.await()
+        bitmap = withContext(Dispatchers.IO) { drw.url.getImage() }
         if (drw.url.contains("large_latestsfc.gif")) {
             img.setMaxZoom(16f)
         } else {
@@ -155,10 +146,7 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
 
     private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
         animDrawable = withContext(Dispatchers.IO) {
-            UtilityGoesFullDisk.getAnimation(
-                    this@ImageCollectionActivity,
-                    drw.url
-            )
+            UtilityGoesFullDisk.getAnimation(this@ImageCollectionActivity, drw.url)
         }
         UtilityImgAnim.startAnimation(animDrawable, img)
     }

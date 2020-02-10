@@ -87,15 +87,12 @@ internal class ObjectMetar(context: Context, location: LatLon) {
     // Capitalize the first letter of each word in the current condition string
     //
     private fun capitalizeString(string: String): String {
-        UtilityLog.d("wx", "CC1: $string")
         val tokens = string.split(" ")
         var newString = ""
         tokens.forEach {
             newString += it.capitalize() + " "
         }
-        val stringToReturn = newString.trimEnd()
-        UtilityLog.d("wx", "CC2: $stringToReturn")
-        return stringToReturn
+        return newString.trimEnd()
     }
 
     private fun changeDegreeUnits(value: String): String {
@@ -181,8 +178,7 @@ internal class ObjectMetar(context: Context, location: LatLon) {
         if (metarDataList.size > 2) {
             val localStatus = metarDataList[1].split("/")
             if (localStatus.size > 1) {
-                conditionsTimeStr =
-                    UtilityTime.convertFromUtcForMetar(localStatus[1].replace(" UTC", ""))
+                conditionsTimeStr = UtilityTime.convertFromUtcForMetar(localStatus[1].replace(" UTC", ""))
             }
         }
         seaLevelPressure = changePressureUnits(seaLevelPressure)

@@ -63,12 +63,7 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-            savedInstanceState,
-            R.layout.activity_hourly,
-            R.menu.shared_multigraphics,
-            true
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_hourly, R.menu.shared_multigraphics, true)
         toolbarBottom.setOnMenuItemClickListener(this)
         locationNumber = (intent.getStringExtra(LOC_NUM)!!.toIntOrNull() ?: 0) - 1
         objectCard = ObjectCard(this, R.color.black, R.id.graphCard)

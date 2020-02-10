@@ -124,7 +124,8 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
     private fun addDynamicCards() {
         var ccAdded = false
         var day7Added = false
-        val homeScreenTokens = MyApplication.colon.split(homescreenFavLocal)
+        //val homeScreenTokens = MyApplication.colon.split(homescreenFavLocal)
+        val homeScreenTokens = homescreenFavLocal.split(":").dropLastWhile { it.isEmpty() }
         numRadars = homeScreenTokens.count { it == "OGL-RADAR" || it.contains("NXRD-") }
         oldRidArr = Array(numRadars) { "" }
         val rlArr = mutableListOf<RelativeLayout>()
@@ -601,7 +602,7 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
 
     private fun getRadarTimeStampForHomescreen(radarSite: String): String {
         var ts = ""
-        val tokens = WXGLNexrad.getRadarInfo(activityReference, radarSite).split(" ")
+        val tokens = WXGLNexrad.getRadarInfo(radarSite).split(" ")
         if (tokens.size > 3) {
             ts = tokens[3]
         }
@@ -646,7 +647,7 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
                     System.arraycopy(argsOrig, 0, args, 0, argsOrig.size)
                     args.indices.forEach { z ->
                         if (args[z] == "WFO_FOR_SND")
-                            args[z] = UtilityLocation.getNearestSnd(LatLon(Location.x, Location.y))
+                            args[z] = UtilityLocation.getNearestSoundingSite(LatLon(Location.x, Location.y))
                         if (args[z] == "WFO_FOR_GOES")
                             args[z] = Location.wfo.toLowerCase(Locale.US)
                         if (args[z] == "STATE_LOWER")
@@ -655,8 +656,8 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
                             args[z] = Location.state
                         if (args[z] == "RID_FOR_CA")
                             args[z] = Location.rid
-                        if (args[z] == "ONEK")
-                            args[z] = Utility.readPref("COD_1KM_" + Location.rid, "")
+                        //if (args[z] == "ONEK")
+                        //   args[z] = Utility.readPref(activityReference,"COD_1KM_" + Location.rid, "")
                         //if (args[z] == "TWOK")
                         //    args[z] = Utility.readPref("STATE_CODE_" + Location.state, "")
                     }
@@ -1043,6 +1044,10 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
                 }
             }
         }
+    }
+
+    fun showLocations() {
+        locationDialogue.show()
     }
 }
 

@@ -98,8 +98,8 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
 	    //not removing this - ELY M. 
             R.id.action_forecast_webpage -> ObjectIntent(
                 this,
-                WebscreenABModels::class.java,
-                WebscreenABModels.URL,
+                WebView::class.java,
+                WebView.URL,
                 arrayOf(
                     "http://forecast.weather.gov/MapClick.php?lon=" + Location.latLon.lonString + "&lat=" + Location.latLon.latString,
                     "Local forecast"

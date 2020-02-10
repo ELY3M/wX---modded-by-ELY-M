@@ -90,9 +90,9 @@ object UtilityFavorites {
         return returnList.toList()
     }
 
-    fun setupFavMenuCanada(ridFav: String, nwsOffice: String): List<String> {
-        val favorites = MyApplication.colon.split(ridFav)
-        favorites[0] = nwsOffice
+    fun setupFavMenuCanada(favoriteString: String, value: String): List<String> {
+        val favorites = favoriteString.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
+        favorites[0] = value
         favorites[1] = ADD_STR
         favorites[2] = MODIFY_STR
         val returnList = MutableList(favorites.size) { "" }

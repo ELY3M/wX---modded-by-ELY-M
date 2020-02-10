@@ -42,7 +42,7 @@ import android.net.ConnectivityManager
 
 object Utility {
 
-    fun showDiagnostics(context: Context): String {
+    private fun showDiagnostics(context: Context): String {
         var diagnostics = ""
         diagnostics += MyApplication.dm.widthPixels.toString() + " Screen width" + MyApplication.newline
         diagnostics += MyApplication.dm.heightPixels.toString() + " Screen height" + MyApplication.newline
@@ -279,7 +279,7 @@ object Utility {
         }
         var string = activity.resources.getString(R.string.about_wx) +
                 MyApplication.newline + version + MyApplication.newline + MyApplication.newline +
-                showMainScreenShortCuts()
+                "Use alt-? on the main screen and in nexrad radar to show keyboard shortcuts"
         string += MyApplication.newline + MyApplication.newline + "Diagnostics information:" + MyApplication.newline
         string += readPref(
                 context,
@@ -306,7 +306,7 @@ object Utility {
                 "Ctrl-n: NCEP Models" + MyApplication.newline +
                 "Ctrl-h: Hourly" + MyApplication.newline +
                 "Ctrl-o: NHC" + MyApplication.newline +
-                "Ctrl-l: Lightning" + MyApplication.newline +
+                "Ctrl-l: Show locations" + MyApplication.newline +
                 "Ctrl-i: National images" + MyApplication.newline +
                 "Ctrl-z: National text discussions" + MyApplication.newline +
                 "Ctrl-j: Previous tab" + MyApplication.newline +

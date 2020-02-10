@@ -305,13 +305,9 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     }
 
     private fun prodClicked(position: Int) {
-        val bottomSheetFragment = BottomSheetFragment()
-        bottomSheetFragment.position = position
-        bottomSheetFragment.usedForLocation = false
-        bottomSheetFragment.fnList = listOf(::deleteItem, ::moveUp, ::moveDown)
+        val bottomSheetFragment = BottomSheetFragment(this, position, recyclerView.getItem(position), false)
+        bottomSheetFragment.functions = listOf(::deleteItem, ::moveUp, ::moveDown)
         bottomSheetFragment.labelList = listOf("Delete Item", "Move Up", "Move Down")
-        bottomSheetFragment.actContext = this
-        bottomSheetFragment.topLabel = recyclerView.getItem(position)
         bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
     }
 

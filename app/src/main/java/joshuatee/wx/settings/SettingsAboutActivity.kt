@@ -72,7 +72,7 @@ class SettingsAboutActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     this,
                     WebView::class.java,
                     WebView.URL,
-                    arrayOf(faqUrl, "wX Frequently Asked Questions")
+                    arrayOf(faqUrl, "Frequently Asked Questions")
             )
         })
         val releaseNotesButton = ObjectCardText(this, ll, toolbar, toolbarBottom)
@@ -83,7 +83,7 @@ class SettingsAboutActivity : AudioPlayActivity(), OnMenuItemClickListener {
                     this,
                     WebView::class.java,
                     WebView.URL,
-                    arrayOf(releaseNotesUrl, "wX Frequently Asked Questions")
+                    arrayOf(releaseNotesUrl, "Release Notes")
             )
         })
         val emailButton = ObjectCardText(this, ll, toolbar, toolbarBottom)
@@ -108,7 +108,8 @@ class SettingsAboutActivity : AudioPlayActivity(), OnMenuItemClickListener {
             )
         })
         textCard = ObjectCardText(this, ll, toolbar, toolbarBottom)
-        textCard.text = keyCodeDiag + " " + Utility.showVersion(this, this)
+        textCard.text = Utility.showVersion(this, this)
+        html = Utility.showVersion(this, this)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

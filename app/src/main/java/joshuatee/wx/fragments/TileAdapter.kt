@@ -58,7 +58,9 @@ internal class TileAdapter(
             }
         }
         var prefSave = ""
-        itemList.forEach { prefSave = prefSave + it.objectTagStr + ":" }
+        itemList.forEach {
+            prefSave = prefSave + it.objectTagStr + ":"
+        }
         Utility.writePref(context, this.prefVar, prefSave)
         notifyItemMoved(fromPosition, toPosition)
         return true

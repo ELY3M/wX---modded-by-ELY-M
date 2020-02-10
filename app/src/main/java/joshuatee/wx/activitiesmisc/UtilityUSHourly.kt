@@ -43,7 +43,7 @@ object UtilityUSHourly {
         var conditionData = "Condition" + MyApplication.newline
         startTimes.indices.forEach {
             val time = translateTime(startTimes[it])
-            val temperature = Utility.safeGet(temperatures, it)
+            val temperature = Utility.safeGet(temperatures, it).replace("\"","")
             val windSpeed = Utility.safeGet(windSpeeds, it).replace(" to ", "-")
             val windDirection = Utility.safeGet(windDirections, it)
             val shortForecast = Utility.safeGet(shortForecasts, it)
@@ -97,7 +97,7 @@ object UtilityUSHourly {
             val time = translateTime(startTime[it].replace(Regex("-0[0-9]:00"), ""))
             content += String.format("%-8s", time)
             if (temperature.size > it) {
-                content += String.format("%-5s", temperature[it])
+                content += String.format("%-5s", temperature[it].replace("\"",""))
             }
             if (windSpeed.size > it) {
                 content += String.format("%-9s", windSpeed[it])

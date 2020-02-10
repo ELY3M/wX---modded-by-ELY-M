@@ -119,8 +119,7 @@ class ObjectWidgetCC(context: Context) {
             val scaleFactor = MyApplication.deviceScale / 3.0f * 1.25f
             val matrix = Matrix()
             matrix.postRotate(windBardRotate, 100f, 100f)
-            var rotatedWb =
-                    Bitmap.createBitmap(wbIcon, 0, 0, wbIcon.width, wbIcon.height, matrix, true)
+            var rotatedWb = Bitmap.createBitmap(wbIcon, 0, 0, wbIcon.width, wbIcon.height, matrix, true)
             rotatedWb = Bitmap.createScaledBitmap(
                     rotatedWb,
                     (wbIcon.width * scaleFactor).toInt(),

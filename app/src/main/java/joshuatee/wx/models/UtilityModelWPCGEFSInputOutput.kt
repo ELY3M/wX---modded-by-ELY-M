@@ -63,14 +63,15 @@ internal object UtilityModelWpcGefsInputOutput {
         if (om.sector == "AK") {
             sectorAdd = "_ak"
         }
-        val imgUrl =
-                "${MyApplication.nwsWPCwebsitePrefix}/exper/gefs/" + om.run + "/GEFS_" +
+        val imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/exper/gefs/" + om.run + "/GEFS_" +
                         om.currentParam + "_" + om.run + "Z_f" + time + sectorAdd + ".gif"
         return imgUrl.getImage()
     }
 
     fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        if (om.spinnerTimeValue == -1) {
+            return AnimationDrawable()
+        }
         val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) {
             getImage(om, om.spTime.list[it].split(" ").getOrNull(0) ?: "")
         }

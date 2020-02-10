@@ -57,8 +57,7 @@ internal class AdapterUSWarningsImpact(private val dataSet: List<ObjectImpactGra
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.cardview_uswarningsimpact, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.cardview_uswarningsimpact, parent, false)
         return DataObjectHolder(view)
     }
 

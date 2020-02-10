@@ -43,14 +43,10 @@ internal object UtilityModelSpcHrrrInputOutput {
     val runTime: RunTimeData
         get() {
             val runData = RunTimeData()
-            val htmlRunstatus =
-                "${MyApplication.nwsSPCwebsitePrefix}/exper/hrrr/data/hrrr3/latestHour.php".getHtml()
-            val html =
-                htmlRunstatus.parse(".*?.LatestFile.: .s[0-9]{2}/R([0-9]{10})_F[0-9]{3}_V[0-9]{10}_S[0-9]{2}_.*?.gif..*?")
-            runData.imageCompleteStr =
-                htmlRunstatus.parse(".*?.LatestFile.: .s[0-9]{2}/R[0-9]{10}_F([0-9]{3})_V[0-9]{10}_S[0-9]{2}_.*?.gif..*?")
-            runData.validTime =
-                htmlRunstatus.parse(".*?.LatestFile.: .s[0-9]{2}/R[0-9]{10}_F[0-9]{3}_V([0-9]{10})_S[0-9]{2}_.*?.gif..*?")
+            val htmlRunStatus = "${MyApplication.nwsSPCwebsitePrefix}/exper/hrrr/data/hrrr3/latestHour.php".getHtml()
+            val html = htmlRunStatus.parse(".*?.LatestFile.: .s[0-9]{2}/R([0-9]{10})_F[0-9]{3}_V[0-9]{10}_S[0-9]{2}_.*?.gif..*?")
+            runData.imageCompleteStr = htmlRunStatus.parse(".*?.LatestFile.: .s[0-9]{2}/R[0-9]{10}_F([0-9]{3})_V[0-9]{10}_S[0-9]{2}_.*?.gif..*?")
+            runData.validTime = htmlRunStatus.parse(".*?.LatestFile.: .s[0-9]{2}/R[0-9]{10}_F[0-9]{3}_V([0-9]{10})_S[0-9]{2}_.*?.gif..*?")
             runData.listRunClear()
             runData.listRunAdd(html)
             runData.listRunAddAll(UtilityTime.genModelRuns(html, 1))
@@ -69,8 +65,7 @@ internal object UtilityModelSpcHrrrInputOutput {
         val bitmapAl = mutableListOf<Bitmap>()
         val layersAl = mutableListOf<Drawable>()
         overlayImg.forEach {
-            imgUrl = layerUrl + getSectorCode(om.sector).toLowerCase(Locale.US) + "/" + it + "/" +
-                    it + ".gif"
+            imgUrl = layerUrl + getSectorCode(om.sector).toLowerCase(Locale.US) + "/" + it + "/" + it + ".gif"
             bitmapAl.add(UtilityImg.eraseBG(imgUrl.getImage(), -1))
         }
         imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/hrrr/data/hrrr3/" +
@@ -89,7 +84,9 @@ internal object UtilityModelSpcHrrrInputOutput {
         om: ObjectModel,
         overlayImg: List<String>
     ): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        if (om.spinnerTimeValue == -1) {
+            return AnimationDrawable()
+        }
         val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) { k ->
             getImage(
                 context,

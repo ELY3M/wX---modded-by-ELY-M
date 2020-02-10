@@ -70,30 +70,43 @@ class FavRemoveActivity : BaseActivity() {
         )
         val activityArguments = intent.getStringArrayExtra(TYPE)
         type = activityArguments!![0]
+        var verboseTitle = ""
         when (type) {
             "SND" -> {
                 prefToken = "SND_FAV"
                 prefTokenLocation = "NWS_LOCATION_"
+                verboseTitle = "sounding sites"
             }
             "WFO" -> {
                 prefToken = "WFO_FAV"
                 prefTokenLocation = "NWS_LOCATION_"
+                verboseTitle = "NWS offices"
             }
             "RID" -> {
                 prefToken = "RID_FAV"
                 prefTokenLocation = "RID_LOC_"
+                verboseTitle = "radar sites"
             }
-            "NWSTEXT" -> prefToken = "NWS_TEXT_FAV"
-            "SREF" -> prefToken = "SREF_FAV"
-            "RIDCA" -> prefToken = "RID_CA_FAV"
-            "RIDAU" -> prefToken = "RID_AU_FAV"
+            "NWSTEXT" -> {
+                prefToken = "NWS_TEXT_FAV"
+                verboseTitle = "text products"
+            }
+            "SREF" -> {
+                prefToken = "SREF_FAV"
+                verboseTitle = "parameters"
+            }
+            "RIDCA" -> {
+                prefToken = "RID_CA_FAV"
+                verboseTitle = "radar sites"
+            }
             "SPCMESO" -> {
                 prefToken = "SPCMESO_FAV"
                 prefTokenLabel = "SPCMESO_LABEL_FAV"
+                verboseTitle = "parameters"
             }
         }
         ridFav = Utility.readPref(this, prefToken, UtilityFavorites.initialValue)
-        title = "Modify $type"
+        title = "Modify $verboseTitle"
         toolbar.subtitle = "Tap item to delete or move."
         updateList()
         recyclerView = ObjectRecyclerView(this, this, R.id.card_list, ridArrLabel, ::itemClicked)
@@ -234,13 +247,9 @@ class FavRemoveActivity : BaseActivity() {
     }
 
     private fun itemClicked(position: Int) {
-        val bottomSheetFragment = BottomSheetFragment()
-        bottomSheetFragment.position = position
-        bottomSheetFragment.usedForLocation = false
-        bottomSheetFragment.fnList = listOf(::deleteItem, ::moveUpItem, ::moveDownItem)
+        val bottomSheetFragment = BottomSheetFragment(this, position, recyclerView.getItem(position), false)
+        bottomSheetFragment.functions = listOf(::deleteItem, ::moveUpItem, ::moveDownItem)
         bottomSheetFragment.labelList = listOf("Delete Item", "Move Up", "Move Down")
-        bottomSheetFragment.actContext = this
-        bottomSheetFragment.topLabel = recyclerView.getItem(position)
         bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
     }
 

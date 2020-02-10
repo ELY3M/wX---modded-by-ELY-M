@@ -40,6 +40,10 @@ class ObjectRecyclerViewGeneric(context: Context, activity: Activity, resourceId
     fun scrollToPosition(position: Int) {
         recyclerView.scrollToPosition(position)
     }
+
+    //fun getItem(index: Int): String {
+
+    //}
 }
 
 

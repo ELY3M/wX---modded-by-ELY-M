@@ -178,6 +178,7 @@ class MyApplication : Application() {
         const val nwsApiUrl = "https://api.weather.gov"
         const val nwsSwpcWebSitePrefix = "https://services.swpc.noaa.gov"
         const val canadaEcSitePrefix = "https://weather.gc.ca"
+	const val tgftpSitePrefix = "https://tgftp.nws.noaa.gov"
         const val nwsWeatherGov: String = "https://w1.weather.gov"
         const val prefSeparator: String = " : : :"
         const val sep = "ABC123"
@@ -766,6 +767,7 @@ class MyApplication : Application() {
         var radarSpotterSize: Int = 0
         var radarAviationSize: Int = 0
         var radarTextSize: Float = 0f
+	var radarTextSizeDefault: Float = 1.0f
         var radarUserPointSize: Int = 0
         var radarLocdotSize: Int = 0
         var radarLocIconSize: Int = 0
@@ -845,7 +847,7 @@ class MyApplication : Application() {
             radarObsExtZoom = getInitialPreference("RADAR_OBS_EXT_ZOOM", 7)
             radarSpotterSize = getInitialPreference("RADAR_SPOTTER_SIZE", radarSpotterSizeDefault)
             radarAviationSize = getInitialPreference("RADAR_AVIATION_SIZE", radarAviationSizeDefault)
-            radarTextSize = getInitialPreference("RADAR_TEXT_SIZE", 1.0f)
+            radarTextSize = getInitialPreference("RADAR_TEXT_SIZE", radarTextSizeDefault)
             radarUserPointSize = getInitialPreference("RADAR_USERPOINT_SIZE", 100)
             radarLocdotSize = getInitialPreference("RADAR_LOCDOT_SIZE", radarLocationDotSizeDefault)
             radarLocIconSize = getInitialPreference("RADAR_LOCICON_SIZE", 100)

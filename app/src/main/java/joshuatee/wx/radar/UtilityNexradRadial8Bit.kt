@@ -65,11 +65,20 @@ internal object UtilityNexradRadial8Bit {
             // index 4 is radar height
             // index 0,1 is lat as Int
             // index 2,3 is long as Int
-            val latitudeOfRadar = dis.readInt() / 1000.0
-            val longitudeOfRadar = dis.readInt() / 1000.0
-            val heightOfRadar = dis.readUnsignedShort().toShort()
+
+            //val latitudeOfRadar = dis.readInt() / 1000.0
+            //val longitudeOfRadar = dis.readInt() / 1000.0
+            //val heightOfRadar = dis.readUnsignedShort().toShort()
+
+            dis.readInt() / 1000.0
+            dis.readInt() / 1000.0
+            dis.readUnsignedShort().toShort()
+
             val productCode = dis.readUnsignedShort().toShort()
-            val operationalMode = dis.readUnsignedShort().toShort()
+
+            //val operationalMode = dis.readUnsignedShort().toShort()
+            dis.readUnsignedShort().toShort()
+
             dis.skipBytes(6)
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()

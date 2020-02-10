@@ -32,7 +32,10 @@ import joshuatee.wx.util.UtilityString
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
+import joshuatee.wx.activitiesmisc.ImageShowActivity
 import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.ui.ObjectLinearLayout
+import joshuatee.wx.ui.UtilityUI
 
 class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
 
@@ -54,6 +57,15 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
     private var notificationCard: ObjectCardText? = null
     private val cardNotificationHeaderText = "Currently blocked storm notifications, tap this text to clear all blocks "
     var html: String = ""
+    private var numberOfImages = 0
+    private var imagesPerRow = 2
+    private val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout>()
+
+    init {
+        if (UtilityUI.isLandScape(context)) {
+            imagesPerRow = 3
+        }
+    }
 
     fun getTextData() {
         var dataRet: ObjectNhcStormInfo
@@ -104,6 +116,30 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
                 "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_5d0.png"
         ).forEach { bitmapsCentral.add(it.getImage()) }
     }
+
+    private val imageList = listOf(
+            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png",
+            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png",
+            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png",
+            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png",
+            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png",
+            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png",
+            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_0d0.png",
+            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_2d0.png",
+            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_5d0.png"
+    )
+
+    private val titleList = listOf(
+            "Atlantic Tropical Cyclones and Disturbances ",
+            "ATL: Two-Day Graphical Tropical Weather Outlook",
+            "ATL: Five-Day Graphical Tropical Weather Outlook",
+            "EPAC Tropical Cyclones and Disturbances ",
+            "EPAC: Two-Day Graphical Tropical Weather Outlook",
+            "EPAC: Five-Day Graphical Tropical Weather Outlook",
+            "CPAC Tropical Cyclones and Disturbances ",
+            "CPAC: Two-Day Graphical Tropical Weather Outlook",
+            "CPAC: Five-Day Graphical Tropical Weather Outlook"
+    )
 
     fun showTextData() {
         linearLayout.removeAllViewsInLayout()
@@ -172,15 +208,78 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
     }
 
     fun showAtlanticImageData() {
-        bitmapsAtlantic.forEach { ObjectCardImage(context, linearLayout, it) }
+        bitmapsAtlantic.forEach {
+            val objectCardImage: ObjectCardImage
+            if (numberOfImages % imagesPerRow == 0) {
+                val objectLinearLayout = ObjectLinearLayout(context, linearLayout)
+                objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
+                horizontalLinearLayouts.add(objectLinearLayout)
+                objectCardImage = ObjectCardImage(context, objectLinearLayout.linearLayout, it, imagesPerRow)
+            } else {
+                objectCardImage = ObjectCardImage(context, horizontalLinearLayouts.last().linearLayout, it, imagesPerRow)
+            }
+            numberOfImages += 1
+            val url = imageList[numberOfImages - 1]
+            val title = titleList[numberOfImages - 1]
+            objectCardImage.setOnClickListener(View.OnClickListener {
+                ObjectIntent(
+                        context,
+                        ImageShowActivity::class.java,
+                        ImageShowActivity.URL,
+                        arrayOf(url, title)
+                )
+            })
+        }
     }
 
     fun showPacificImageData() {
-        bitmapsPacific.forEach { ObjectCardImage(context, linearLayout, it) }
+        bitmapsPacific.forEach {
+            val objectCardImage: ObjectCardImage
+            if (numberOfImages % imagesPerRow == 0) {
+                val objectLinearLayout = ObjectLinearLayout(context, linearLayout)
+                objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
+                horizontalLinearLayouts.add(objectLinearLayout)
+                objectCardImage = ObjectCardImage(context, objectLinearLayout.linearLayout, it, imagesPerRow)
+            } else {
+                objectCardImage = ObjectCardImage(context, horizontalLinearLayouts.last().linearLayout, it, imagesPerRow)
+            }
+            numberOfImages += 1
+            val url = imageList[numberOfImages - 1]
+            val title = titleList[numberOfImages - 1]
+            objectCardImage.setOnClickListener(View.OnClickListener {
+                ObjectIntent(
+                        context,
+                        ImageShowActivity::class.java,
+                        ImageShowActivity.URL,
+                        arrayOf(url, title)
+                )
+            })
+        }
     }
 
     fun showCentralImageData() {
-        bitmapsCentral.forEach { ObjectCardImage(context, linearLayout, it) }
+        bitmapsCentral.forEach {
+            val objectCardImage: ObjectCardImage
+            if (numberOfImages % imagesPerRow == 0) {
+                val objectLinearLayout = ObjectLinearLayout(context, linearLayout)
+                objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
+                horizontalLinearLayouts.add(objectLinearLayout)
+                objectCardImage = ObjectCardImage(context, objectLinearLayout.linearLayout, it, imagesPerRow)
+            } else {
+                objectCardImage = ObjectCardImage(context, horizontalLinearLayouts.last().linearLayout, it, imagesPerRow)
+            }
+            numberOfImages += 1
+            val url = imageList[numberOfImages - 1]
+            val title = titleList[numberOfImages - 1]
+            objectCardImage.setOnClickListener(View.OnClickListener {
+                ObjectIntent(
+                        context,
+                        ImageShowActivity::class.java,
+                        ImageShowActivity.URL,
+                        arrayOf(url, title)
+                )
+            })
+        }
     }
 
     private fun clearNhcNotificationBlock() {

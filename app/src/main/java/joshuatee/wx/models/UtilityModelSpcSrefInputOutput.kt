@@ -45,7 +45,9 @@ internal object UtilityModelSpcSrefInputOutput {
                 runData.listRunAdd(latestRunAl[0])
             }
             if (result.isNotEmpty()) {
-                result.forEach { runData.listRunAdd(it) }
+                result.forEach {
+                    runData.listRunAdd(it)
+                }
             }
             runData.imageCompleteStr = tmpTxt
             runData.mostRecentRun = tmpTxt.parseLastMatch(RegExp.srefPattern1)
@@ -61,7 +63,9 @@ internal object UtilityModelSpcSrefInputOutput {
     }
 
     fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        if (om.spinnerTimeValue == -1) {
+            return AnimationDrawable()
+        }
         val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) {
             getImage(context, om, om.spTime.list[it].split(" ").getOrNull(0) ?: "")
         }

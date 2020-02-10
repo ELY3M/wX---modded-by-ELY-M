@@ -146,7 +146,7 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
             val county = objectAlertSummary.mapButtonCounty[id]
             if (zone!!.length > 3) {
                 coord = if (zone.matches("[A-Z][A-Z]C.*?".toRegex())) {
-                    UtilityLocation.getXYFromAddressOsm(county + "," + zone.substring(0, 2))
+                    UtilityLocation.getLatLonFromAddress(county + "," + zone.substring(0, 2))
                 } else {
                     UtilityDownloadNws.getLatLonForZone(zone)
                 }

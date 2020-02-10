@@ -100,16 +100,15 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
             }
         }
         title = "Canada"
-        imageMap =
-                ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
+        imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
         imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::mapToCanadaRadarSite)
-        ridFav = Utility.readPref(this, "RID_CA_FAV", " : : :")
+        ridFav = Utility.readPref(this, "RID_CA_FAV", MyApplication.prefSeparator)
         ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, radarSite)
         objectSpinner = ObjectSpinner(this, this, this, R.id.spinner1, ridArrLoc)
     }
 
     override fun onRestart() {
-        ridFav = Utility.readPref(this, "RID_CA_FAV", " : : :")
+        ridFav = Utility.readPref(this, "RID_CA_FAV", MyApplication.prefSeparator)
         ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, radarSite)
         objectSpinner.refreshData(this, ridArrLoc)
         super.onRestart()
@@ -207,11 +206,11 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         getContent()
     }
 
-    private fun ridMapSwitch(r: String) {
+    private fun ridMapSwitch(radarSite: String) {
         imageType = "rad"
-        radarSite = r
+        this.radarSite = radarSite
         img.resetZoom()
-        ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, r)
+        ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, radarSite)
         objectSpinner.refreshData(this, ridArrLoc)
     }
 

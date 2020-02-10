@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55349"
-    android:versionName="55349"
+    android:versionCode="55360"
+    android:versionName="55360"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -581,10 +581,6 @@
   <activity
       android:name=".settings.SettingsHomeScreenActivity"
       android:label="Manage Home Screen"
-      android:parentActivityName="WX" >
-  </activity>
-  <activity
-      android:name=".activitiesmisc.WebscreenABModels"
       android:parentActivityName="WX" >
   </activity>
   <activity

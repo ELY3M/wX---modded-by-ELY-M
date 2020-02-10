@@ -121,15 +121,17 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     private fun updateList() {
         MyApplication.playlistStr = ridFav
-        val tempList = MyApplication.colon.split(ridFav)
+        val tempList = ridFav.split(":")
         ridArr.clear()
         (1 until tempList.size).mapTo(ridArr) { getLongString(tempList[it]) }
     }
 
     private fun updateListNoInit() {
         MyApplication.playlistStr = ridFav
-        val tempList = MyApplication.colon.split(ridFav)
-        (1 until tempList.size).forEach { ridArr[it - 1] = getLongString(tempList[it]) }
+        val tempList = ridFav.split(":")
+        (1 until tempList.size).forEach {
+            ridArr[it - 1] = getLongString(tempList[it])
+        }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -236,13 +238,10 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun itemSelected(position: Int) {
-        val bottomSheetFragment = BottomSheetFragment()
-        bottomSheetFragment.position = position
-        bottomSheetFragment.usedForLocation = false
-        bottomSheetFragment.fnList = listOf(::playItem, ::viewItem, ::deleteItem, ::moveUpItem, ::moveDownItem)
+        // FIXME use recyclerView.getItem(position)
+        val bottomSheetFragment = BottomSheetFragment(this, position, ridArr[position], false)
+        bottomSheetFragment.functions = listOf(::playItem, ::viewItem, ::deleteItem, ::moveUpItem, ::moveDownItem)
         bottomSheetFragment.labelList = listOf("Play Item", "View Item", "Delete Item", "Move Up", "Move Down")
-        bottomSheetFragment.actContext = this
-        bottomSheetFragment.topLabel = ridArr[position]
         bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
     }
 

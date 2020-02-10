@@ -46,6 +46,10 @@ fun String.removeBreaks(): String {
     return this.replace(" <br>", " ")
 }
 
+fun String.removeHtml(): String {
+    return this.replace(Regex("\\<[^>]*>"),"")
+}
+
 fun String.removeLineBreaks(): String {
         return this
                 .replace("\n", "ABC123")
@@ -92,6 +96,14 @@ fun String.getImage(): Bitmap {
 fun String.getHtml(): String {
     return if (Build.VERSION.SDK_INT > 20) {
         UtilityDownload.getStringFromUrl(this)
+    } else {
+        UtilityDownload.getStringFromUrlUnsafe(this)
+    }
+}
+
+fun String.getHtmlWithNewLine(): String {
+    return if (Build.VERSION.SDK_INT > 20) {
+        UtilityDownload.getStringFromUrlWithNewLine(this)
     } else {
         UtilityDownload.getStringFromUrlUnsafe(this)
     }

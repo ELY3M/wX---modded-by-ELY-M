@@ -46,7 +46,9 @@ internal object UtilityModelGlcfsInputOutput {
     }
 
     fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        if (om.spinnerTimeValue == -1) {
+            return AnimationDrawable()
+        }
         val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) {
             getImage(om, om.spTime.list[it].split(" ").getOrNull(0) ?: "")
         }

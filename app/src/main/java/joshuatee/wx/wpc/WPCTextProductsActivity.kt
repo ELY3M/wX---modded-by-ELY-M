@@ -116,8 +116,11 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         }
         ridFavOld = MyApplication.nwsTextFav
-        html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@WpcTextProductsActivity, prod) }
-        textCard.setTextAndTranslate(Utility.fromHtml(html))
+        html = withContext(Dispatchers.IO) {
+            UtilityDownload.getTextProduct(this@WpcTextProductsActivity, prod)
+        }
+        //textCard.setTextAndTranslate(Utility.fromHtml(html))
+        textCard.setTextAndTranslate(html)
         UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, "wpctext")
         if (initProd != prod) {
             Utility.writePref(this@WpcTextProductsActivity, "WPC_TEXT_FAV", prod)

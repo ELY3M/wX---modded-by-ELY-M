@@ -1,4 +1,4 @@
-// TODO [ADD] Level 2 BV colormap and wrapping (Alex)
+// TODO [ADD] Level 2 BV colormap and wrapping (Alex)a
 // TODO [FIX] base velocity legend
 // TODO [ADD] line size - swo, wb, wb gusts, sti
 // TODO [REF] OkHttp 3.13 Requires Android 5+ – Square Corner Blog – Medium  https://medium.com/square-corner-blog/okhttp-3-13-requires-android-5-818bb78d07ce
@@ -11,9 +11,35 @@
 // TODO [ADD] textual obs in fixed radars on homescreen
 // TODO [ADD] use ENUM instead of RID_FAV WFO_FAV SND_FAV (util/UtilityFavorites)
 // TODO [FIX] dual/quad pane radar don't take up the entire screen on chomeOS
-// TODO [REF] migrate off WebscreenABModels?
+// TODO [REF] move off MyApplication.colon.split MyApplication.colon.space
+// TODO       miscPref.split(":").dropLastWhile { it.isEmpty() }
+// TODO [ADD] use Smaller images on larger screens
+// TODO [REF] use LatLon in Spotter, SpotterReports and other places that have lat and lon
 
-55349 2020_02_02    [REF] utilFav/SettingsHomeScreen refactoring
+55360 2020_02_09
+55359 2020_02_09    [REF] lint
+                    [ADD] CPC 3 month temp/precip outlook in WPC Images
+                    [ADD] NHC change format to severe dashboard including tap on image to open in dedicated fashion
+                    [ADD] re-architect Severe Dashboard image handling, if Landscape show 3 images per row
+55358 2020_02_08    [ADD] substantial revamp of utilDownload, WFO text, national text with regards to data download and presentation
+55357 2020_02_08    [REF] lint (utilDownload)
+                    [ADD] substantial revamp of utilDownload, WFO text, national text with regards to data download and presentation
+55356 2020_02_08    [REF] migrate off WebscreenABModels
+                    [FIX] use alternative sources for text products: WFO: AFD, SPC Convective Outlooks, Short Range disc
+55355 2020_02_06    [FIX] hourly now has quotes around temp
+                    [ADD] keyboard shortcut for location selector on main screen
+55354 2020_02_06    [ADD] have WebView respect TextSize setting
+55353 2020_02_05    [REF] misc refactor
+                    [ADD] SpcMcdWatchShowActivity - if tablet in landscape change orientation of linearLayout
+55352 2020_02_04    [FIX] settings -> radar -> text size, default value was changing
+                    [ADD] settings -> UI -> text size - size of text in card changes as you move along slider
+                    [FIX] don't show - show warnings - in radar long press unless warnings are enabled
+                    [FIX] LocationFragment - don't pass context when querying radar time
+55351 2020_02_04    [FIX] WPCImage widget had to have launch updated to use flags (would crash otherwise)
+55350 2020_02_04    [FIX] update google doc links to point to published versions in settings -> about
+                    [FIX] in SettingsLocationRecyclerViewActivity remove broadcastReceiver that is not needed
+                    [REF] bottom sheet refactor to move more stuff into constructor
+55349 2020_02_03    [REF] utilFav/SettingsHomeScreen refactoring
                     [REF] lint cleanup
 55348 2020_02_02    [REF] utilFav/SettingsHomeScreen refactoring
 55347 2020_02_01    [ADD] move to normal twitter w/o tokens

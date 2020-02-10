@@ -38,10 +38,10 @@ object UtilityString {
     }
 
     fun extractPreLsr(html: String): String {
-        val seperator = "ABC123E"
-        val htmlOneLine = html.replace(MyApplication.newline, seperator)
+        val separator = "ABC123E"
+        val htmlOneLine = html.replace(MyApplication.newline, separator)
         val parsedText = htmlOneLine.parse(RegExp.prePattern)
-        return parsedText.replace(seperator, MyApplication.newline)
+        return parsedText.replace(separator, MyApplication.newline)
     }
 
     internal fun capitalizeString(string: String): String {
@@ -62,16 +62,11 @@ object UtilityString {
         return String(chars)
     }
 
-    //fun removeHtml(text: String): String {
-    //    return Utility.fromHtml(text)
-    //}
-
     fun getHtmlAndParse(url: String, match: String): String = url.getHtml().parse(match)
 
     fun getHtmlAndParse(url: String, pattern: Pattern): String = url.getHtml().parse(pattern)
 
-    fun getHtmlAndParseLastMatch(url: String, match: String): String =
-        url.getHtml().parseLastMatch(match)
+    fun getHtmlAndParseLastMatch(url: String, match: String): String = url.getHtml().parseLastMatch(match)
 
     fun getHtmlAndParseLastMatch(url: String, pattern: Pattern): String = url.getHtml().parseLastMatch(pattern)
 
@@ -293,6 +288,5 @@ object UtilityString {
         else -> s
     }
 
-    fun addPeriodBeforeLastTwoChars(string: String): String =
-        StringBuilder(string).insert(string.length - 2, ".").toString()
+    fun addPeriodBeforeLastTwoChars(string: String): String = StringBuilder(string).insert(string.length - 2, ".").toString()
 }

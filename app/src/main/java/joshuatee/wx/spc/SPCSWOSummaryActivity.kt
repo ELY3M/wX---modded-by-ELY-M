@@ -94,12 +94,7 @@ class SpcSwoSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
                 "4-8"
             }
             card.setOnClickListener(View.OnClickListener {
-                ObjectIntent(
-                        this@SpcSwoSummaryActivity,
-                        SpcSwoActivity::class.java,
-                        SpcSwoActivity.NO,
-                        arrayOf(day, "")
-                )
+                ObjectIntent(this@SpcSwoSummaryActivity, SpcSwoActivity::class.java, SpcSwoActivity.NO, arrayOf(day, ""))
             })
         }
     }
@@ -107,13 +102,7 @@ class SpcSwoSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.SPC_SWO_SUMMARY)
-            R.id.action_share -> UtilityShare.shareText(
-                    this,
-                    this,
-                    "Convective Outlook Summary",
-                    "",
-                    bitmaps
-            )
+            R.id.action_share -> UtilityShare.shareText(this, this, "Convective Outlook Summary", "", bitmaps)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

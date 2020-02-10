@@ -61,12 +61,13 @@ object UIPreferences {
     var useAwcRadarMosaic: Boolean = false
     var nwsIconSizeDefault = 20
     var normalTextSizeDefault = 16
+    var normalTextSize: Int = 16
 
     fun initPreferences(context: Context) {
         if (UtilityUI.isTablet()) {
             normalTextSizeDefault = 18
         }
-        val normalTextSize = Utility.readPref(context, "TEXTVIEW_FONT_SIZE", normalTextSizeDefault) // 14 16 21
+        normalTextSize = Utility.readPref(context, "TEXTVIEW_FONT_SIZE", normalTextSizeDefault) // 14 16 21
         MyApplication.textSizeSmall = UtilityUI.spToPx(normalTextSize - 2, context)
         MyApplication.textSizeNormal = UtilityUI.spToPx(normalTextSize, context)
         MyApplication.textSizeLarge = UtilityUI.spToPx(normalTextSize + 5, context)

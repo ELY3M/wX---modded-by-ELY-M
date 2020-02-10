@@ -108,7 +108,7 @@ object UtilityWpcFronts {
     }
 
     private fun addWarmFrontSemicircles(front: Fronts, tokens: List<String>) {
-        var length = 0.4 // size of trianle
+        var length = 0.4 // size of triangle
         var startIndex = 0
         var indexIncrement = 1
         if (front.type == FrontTypeEnum.OCFNT) {

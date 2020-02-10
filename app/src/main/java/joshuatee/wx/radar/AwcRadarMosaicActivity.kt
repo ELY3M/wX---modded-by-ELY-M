@@ -73,8 +73,8 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, objectNavDrawer, "")
         img.setMaxZoom(8.0f)
         img.setListener(this, objectNavDrawer, ::getContentFixThis)
-        sector = Utility.readPref(prefTokenSector, sector)
-        product = Utility.readPref(prefTokenProduct, product)
+        sector = Utility.readPref(this, prefTokenSector, sector)
+        product = Utility.readPref(this, prefTokenProduct, product)
         objectNavDrawer.index = UtilityAwcRadarMosaic.sectors.indexOf(sector)
         objectNavDrawer.setListener(::getContentFixThis)
         toolbarBottom.setOnClickListener { objectNavDrawer.drawerLayout.openDrawer(objectNavDrawer.listView) }

@@ -35,7 +35,7 @@ internal object UtilityWpcImages {
             ObjectMenuTitle("QPF", 27),
             ObjectMenuTitle("Snow / Ice", 21),
             ObjectMenuTitle("National Digital Forecast Database", 15),
-            ObjectMenuTitle("CPC Outlooks", 22),
+            ObjectMenuTitle("CPC Outlooks", 24),
             ObjectMenuTitle("Aviation", 16),
             ObjectMenuTitle("Space Weather", 3)
     )
@@ -152,6 +152,8 @@ internal object UtilityWpcImages {
             "Week 3-4 Outlooks - Precipitation ( Experimental )",
             "One Month Outlook - Temperature",
             "One Month Outlook - Precipitation",
+            "Three Month Outlook - Temperature",
+            "Three Month Outlook - Precipitation",
             "US Monthly Drought Outlook",
             "US Seasonal Drought Outlook",
             "US Drought Monitor",
@@ -297,6 +299,10 @@ internal object UtilityWpcImages {
             "${MyApplication.nwsCPCNcepWebsitePrefix}/products/predictions/WK34/gifs/WK34prcp.gif",
             "${MyApplication.nwsCPCNcepWebsitePrefix}/products/predictions/30day/off15_temp.gif",
             "${MyApplication.nwsCPCNcepWebsitePrefix}/products/predictions/30day/off15_prcp.gif",
+
+            "${MyApplication.nwsCPCNcepWebsitePrefix}/products/predictions/long_range/lead01/off01_temp.gif",
+            "${MyApplication.nwsCPCNcepWebsitePrefix}/products/predictions/long_range/lead01/off01_prcp.gif",
+
             "${MyApplication.nwsCPCNcepWebsitePrefix}/products/expert_assessment/month_drought.png",
             "${MyApplication.nwsCPCNcepWebsitePrefix}/products/expert_assessment/sdohomeweb.png",
             "https://droughtmonitor.unl.edu/data/png/current/current_usdm.png",

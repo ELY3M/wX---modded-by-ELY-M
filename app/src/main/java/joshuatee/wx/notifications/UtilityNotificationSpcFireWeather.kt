@@ -40,7 +40,7 @@ internal object UtilityNotificationSpcFireWeather {
 
     fun locationNeedsSpcFireWeather(): Boolean {
         return (0 until Location.numLocations).any {
-            MyApplication.locations.getOrNull(it)?.notificationSpcfw ?: false
+            MyApplication.locations.getOrNull(it)?.notificationSpcFw ?: false
         }
     }
 
@@ -188,7 +188,7 @@ internal object UtilityNotificationSpcFireWeather {
                         val polygon2 = poly2.build()
                         for (n in 1..Location.numLocations) {
                             locNum = n.toString()
-                            if (MyApplication.locations.getOrNull(n - 1)?.notificationSpcfw == true) {
+                            if (MyApplication.locations.getOrNull(n - 1)?.notificationSpcFw == true) {
                                 // if location is watching for MCDs pull ib lat/lon and interate over polygons
                                 // call secondary method to send notif if required
                                 locXDbl = MyApplication.locations[n - 1].x.toDoubleOrNull() ?: 0.0

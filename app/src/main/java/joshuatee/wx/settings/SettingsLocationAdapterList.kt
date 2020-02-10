@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.external.UtilityStringExternal
@@ -20,8 +19,7 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
         private var myClickListener: MyClickListener? = null
     }
 
-    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         val text1 = ObjectTextView(itemView, R.id.text1, TextSize.MEDIUM)
         val currentConditions = ObjectTextView(itemView, R.id.currentConditions, TextSize.SMALL)
@@ -47,8 +45,7 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.cardview_settingslocation, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.cardview_settingslocation, parent, false)
         return DataObjectHolder(view)
     }
 
@@ -59,8 +56,8 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
         if (Location.isUS(position)) {
             nonUs = false
         } else {
-            val latArr = MyApplication.colon.split(Location.getX(position))
-            val lonArr = MyApplication.colon.split(Location.getY(position))
+            val latArr = Location.getX(position).split(":")
+            val lonArr = Location.getY(position).split(":")
             if (latArr.size > 2 && lonArr.size > 1) {
                 lat = latArr[2]
                 lon = lonArr[1]
@@ -103,6 +100,8 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
     }
 
     override fun getItemCount() = dataSet.size
+
+    fun getItem(index: Int): String = dataSet[index]
 
     interface MyClickListener {
         fun onItemClick(position: Int)

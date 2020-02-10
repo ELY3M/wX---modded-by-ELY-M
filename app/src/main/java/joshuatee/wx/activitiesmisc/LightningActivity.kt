@@ -40,6 +40,13 @@ import kotlinx.coroutines.*
 
 class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
 
+    //
+    // Used to view lighting data
+    //
+    // Arguments
+    // 1: URL TODO what is this arg for?
+    //
+
     companion object {
         const val URL: String = ""
     }
@@ -54,13 +61,7 @@ class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_image_show_navdrawer_bottom_toolbar,
-                R.menu.lightning_activity,
-                iconsEvenlySpaced = true,
-                bottomToolbar = true
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer_bottom_toolbar, R.menu.lightning_activity, iconsEvenlySpaced = true, bottomToolbar = true)
         toolbarBottom.setOnMenuItemClickListener(this)
         toolbar.setOnClickListener { toolbar.showOverflowMenu() }
         objectNavDrawer = ObjectNavDrawer(this, UtilityLightning.labels, UtilityLightning.urls)

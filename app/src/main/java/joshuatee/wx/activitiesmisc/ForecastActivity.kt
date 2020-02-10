@@ -44,9 +44,11 @@ import kotlinx.android.synthetic.main.activity_linear_layout.*
 
 class ForecastActivity : BaseActivity() {
 
+    //
     // long press in radar and select 7 day forecast from arbitrary point
     // arg0  lat
     // arg1  lon
+    //
 
     companion object {
         const val URL: String = ""

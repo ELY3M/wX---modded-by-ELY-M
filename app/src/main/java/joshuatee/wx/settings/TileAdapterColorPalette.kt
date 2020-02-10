@@ -45,12 +45,12 @@ internal class TileAdapterColorPalette(
     }
 
     override fun onBindViewHolder(holder: RecyclerViewHoldersColorPalette, position: Int) {
-        val bm = itemList[position].bitmapWithText
-        val paramsIv = holder.iv.layoutParams
-        paramsIv.width = MyApplication.dm.widthPixels / tilesPerRow
-        paramsIv.height = paramsIv.width * bm.height / bm.width
-        holder.iv.layoutParams = paramsIv
-        holder.iv.setImageBitmap(bm)
+        val bitmap = itemList[position].bitmapWithText
+        val layoutParams = holder.imageView.layoutParams
+        layoutParams.width = MyApplication.dm.widthPixels / tilesPerRow
+        layoutParams.height = layoutParams.width * bitmap.height / bitmap.width
+        holder.imageView.layoutParams = layoutParams
+        holder.imageView.setImageBitmap(bitmap)
     }
 
     override fun getItemCount() = this.itemList.size
@@ -58,11 +58,11 @@ internal class TileAdapterColorPalette(
     internal inner class RecyclerViewHoldersColorPalette(itemView: View) :
         RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-        val iv: ImageView
+        val imageView: ImageView
 
         init {
             itemView.setOnClickListener(this)
-            iv = itemView.findViewById(R.id.iv)
+            imageView = itemView.findViewById(R.id.iv)
             ObjectCard(itemView, R.color.primary_blue, R.id.card_view)
             itemView.setOnClickListener(this)
         }

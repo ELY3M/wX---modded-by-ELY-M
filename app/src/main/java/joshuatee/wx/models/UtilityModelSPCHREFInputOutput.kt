@@ -39,9 +39,8 @@ internal object UtilityModelSpcHrefInputOutput {
     val runTime: RunTimeData
         get() {
             val runData = RunTimeData()
-            val htmlRunstatus = "${MyApplication.nwsSPCwebsitePrefix}/exper/href/".getHtml()
-            val html =
-                htmlRunstatus.parse("\\{model: \"href\",product: \"500mb_mean\",sector: \"conus\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",\\})")
+            val htmlRunStatus = "${MyApplication.nwsSPCwebsitePrefix}/exper/href/".getHtml()
+            val html = htmlRunStatus.parse("\\{model: \"href\",product: \"500mb_mean\",sector: \"conus\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",\\})")
             val day = html.parse("rd:.(.*?),.*?").replace("\"", "")
             val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")
             val mostRecentRun = day + time
@@ -58,7 +57,9 @@ internal object UtilityModelSpcHrefInputOutput {
             UtilityModelSpcHrefInterface.sectorsLong.indexOf(om.sector)
         }
         val sector = UtilityModelSpcHrefInterface.sectors[sectorIndex]
-        if (om.run.length < 10) return UtilityImg.getBlankBitmap()
+        if (om.run.length < 10) {
+            return UtilityImg.getBlankBitmap()
+        }
         val year = om.run.substring(0, 4)
         val month = om.run.substring(4, 6)
         val day = om.run.substring(6, 8)
@@ -83,14 +84,20 @@ internal object UtilityModelSpcHrefInputOutput {
             urlArr.add(url)
         }
         urlArr.add("${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/blank_maps/$sector.png")
-        urlArr.forEach { bitmapArr.add(it.getImage()) }
+        urlArr.forEach {
+            bitmapArr.add(it.getImage())
+        }
         val layers = mutableListOf<Drawable>()
-        bitmapArr.forEach { layers.add(BitmapDrawable(context.resources, it)) }
+        bitmapArr.forEach {
+            layers.add(BitmapDrawable(context.resources, it))
+        }
         return UtilityImg.layerDrawableToBitmap(layers)
     }
 
     fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        if (om.spinnerTimeValue == -1) {
+            return AnimationDrawable()
+        }
         val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) {
             getImage(context, om, om.spTime.list[it].split(" ").getOrNull(0) ?: "")
         }

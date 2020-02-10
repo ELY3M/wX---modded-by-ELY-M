@@ -36,20 +36,17 @@ internal object UtilityCountyLabels {
     fun create(context: Context) {
         if (!initialized) {
             initialized = true
-            val text: String
-            val lines: List<String>
-            var tmpArr: Array<String>
-            val xmlFileInputStream = context.resources.openRawResource(R.raw.gaz_counties_national)
-            text = UtilityIO.readTextFile(xmlFileInputStream)
-            lines = text.split("\n").dropLastWhile { it.isEmpty() }
+            var tokens: Array<String>
+            val text = UtilityIO.readTextFileFromRaw(context.resources, R.raw.gaz_counties_national)
+            val lines = text.split("\n").dropLastWhile { it.isEmpty() }
             countyName = Array(lines.size) { "" }
             countyLat = DoubleArray(lines.size)
             countyLon = DoubleArray(lines.size)
             lines.indices.forEach {
-                tmpArr = MyApplication.comma.split(lines[it])
-                countyName[it] = tmpArr[1]
-                countyLat[it] = tmpArr[2].toDoubleOrNull() ?: 0.0
-                countyLon[it] = -1.0 * (tmpArr[3].toDoubleOrNull() ?: 0.0)
+                tokens = MyApplication.comma.split(lines[it])
+                countyName[it] = tokens[1]
+                countyLat[it] = tokens[2].toDoubleOrNull() ?: 0.0
+                countyLon[it] = -1.0 * (tokens[3].toDoubleOrNull() ?: 0.0)
             }
         }
     }

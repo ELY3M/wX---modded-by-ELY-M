@@ -68,8 +68,7 @@ internal class AdapterSpotter(private val dataSet: MutableList<Spotter>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.cardview_spotter, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.cardview_spotter, parent, false)
         return DataObjectHolder(view)
     }
 

@@ -40,7 +40,7 @@ internal object UtilityColorPalette4bitGeneric {
             "56" -> R.raw.colormap56
             else -> R.raw.colormap19
         }
-        val text = UtilityIO.readTextFile(context.resources.openRawResource(cmFileInt))
+        val text = UtilityIO.readTextFileFromRaw(context.resources, cmFileInt)
         val lines = text.split("\n")
         lines.forEach {
             if (it.contains(",")) {

@@ -37,14 +37,10 @@ import joshuatee.wx.util.UtilityShare
 
 import kotlinx.coroutines.*
 
-/**
- *
- * This is a general purpose activity used to view one image. URL and title are passed in via extras
- *
- */
-
 class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
+    //
+    // This is a general purpose activity used to view one image. URL and title are passed in via extras
     //
     // Arguments
     // 1: URL
@@ -66,12 +62,7 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-            savedInstanceState,
-            R.layout.activity_image_show_bottom_toolbar,
-            R.menu.image_show_activity,
-            true
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_image_show_bottom_toolbar, R.menu.image_show_activity, true)
         toolbarBottom.setOnMenuItemClickListener(this)
         img = ObjectTouchImageView(this, this, toolbar, R.id.iv)
         val activityArguments: Array<String> = intent.getStringArrayExtra(URL)!!

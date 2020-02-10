@@ -135,6 +135,7 @@ internal object UtilityHomeScreen {
         MyApplication.HM_CLASS_ARGS["CARAIN"] = arrayOf("RID_FOR_CA", "rad")
         MyApplication.HM_CLASS_ID["CARAIN"] = CanadaRadarActivity.RID
 
+        // FIXME this one should be removed
         MyApplication.HM_CLASS["RAD_1KM"] = SpcSoundingsActivity::class.java
         MyApplication.HM_CLASS_ARGS["RAD_1KM"] = arrayOf("1km", "rad", "ONEK", "STATE_UPPER")
         MyApplication.HM_CLASS_ID["RAD_1KM"] = SpcSoundingsActivity.URL

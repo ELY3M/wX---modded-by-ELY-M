@@ -30,8 +30,10 @@ import android.view.MenuItem
 import android.webkit.WebViewClient
 
 import joshuatee.wx.R
+import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.BaseActivity
+import joshuatee.wx.ui.UtilityUI
 
 import kotlinx.android.synthetic.main.activity_webview_toolbar.*
 
@@ -70,6 +72,17 @@ class WebView : BaseActivity() {
         title = activityArguments[1]
         val webSettings = webview.settings
         webSettings.javaScriptEnabled = true
+        if (activityArguments.size > 2) {
+            webSettings.builtInZoomControls = true
+            webSettings.displayZoomControls = false
+            webSettings.useWideViewPort = true
+            webSettings.loadWithOverviewMode = true
+        }
+        if (UtilityUI.isTablet()) {
+            webSettings.textZoom = (120 * (UIPreferences.normalTextSize.toDouble() / UIPreferences.normalTextSizeDefault.toDouble())).toInt()
+        } else {
+            webSettings.textZoom = (100 * (UIPreferences.normalTextSize.toDouble() / UIPreferences.normalTextSizeDefault.toDouble())).toInt()
+        }
         webview.webViewClient = WebViewClient()
         if (url.startsWith("http")) {
             webview.loadUrl(url)

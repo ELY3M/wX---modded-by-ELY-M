@@ -31,7 +31,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 
 import joshuatee.wx.R
-import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.activitiesmisc.*
 import joshuatee.wx.models.ModelsGenericActivity
@@ -258,9 +257,7 @@ class MiscFragment : Fragment() {
                     resources.getString(R.string.help_wpc_rainfall),
                     "wpc_rainfall", "WPC RAINFALL"
             )
-            val tileOrder =
-                    "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:wpc_rainfall:"
-
+            val tileOrder = "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:wpc_rainfall:"
             var miscPref: String = Utility.readPref("FRAGMENT_MISC_ORDER", tileOrder)
             if (!miscPref.contains("wxoglquad")) {
                 miscPref += "wxoglquad:"
@@ -291,8 +288,8 @@ class MiscFragment : Fragment() {
                 miscPref += "wpc_rainfall:"
                 Utility.writePref("FRAGMENT_MISC_ORDER", miscPref)
             }
-            //UtilityLog.d("wx", "MISC: "  + miscPref)
-            val tileOrderArr = MyApplication.colon.split(miscPref)
+            //val tileOrderArr = MyApplication.colon.split(miscPref)
+            val tileOrderArr = miscPref.split(":").dropLastWhile { it.isEmpty() }
             return tileOrderArr
                     .filterNot { it.contains("model_cod") || it.contains("model_wrf") || it.contains("model_ncar_ensemble") }
                     .mapTo(mutableListOf()) { hm[it]!! }

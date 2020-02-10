@@ -38,6 +38,10 @@ class SpotterReportsActivity : BaseActivity() {
 
     // TODO onrestart
 
+    //
+    // Show active spotter reports
+    //
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(

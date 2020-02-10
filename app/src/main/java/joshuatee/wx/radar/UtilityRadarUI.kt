@@ -195,7 +195,7 @@ internal object UtilityRadarUI {
         val heightMsl = (wxglRender.radarL3Object.radarHeight + heightAgl)
         alertDialogRadarLongpressAl.add("Beam Height MSL: " + heightMsl.roundToInt().toString() + " ft, AGL: " + heightAgl.roundToInt().toString() + " ft")
         if (MyApplication.radarShowWpcFronts) {
-            var wpcFrontsTimeStamp = Utility.readPref("WPC_FRONTS_TIMESTAMP", "")
+            var wpcFrontsTimeStamp = Utility.readPref(context,"WPC_FRONTS_TIMESTAMP", "")
             wpcFrontsTimeStamp = wpcFrontsTimeStamp.replace(UtilityTime.getYear().toString(), "")
             wpcFrontsTimeStamp = wpcFrontsTimeStamp.insert(4, " ")
             alertDialogRadarLongpressAl.add(MyApplication.newline + "WPC Fronts: " + wpcFrontsTimeStamp)
@@ -204,7 +204,9 @@ internal object UtilityRadarUI {
             "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.getRadarSiteName(it.name)
         }
         val obsSite = UtilityMetar.findClosestObservation(context, wxglSurfaceView.latLon)
-        alertDialogRadarLongpressAl.add("Show Warning text")
+        if (MyApplication.radarWarnings) {
+            alertDialogRadarLongpressAl.add("Show Warning text")
+        }
         if (MyApplication.radarWatMcd) {
             alertDialogRadarLongpressAl.add("Show Watch text")
             alertDialogRadarLongpressAl.add("Show MCD text")
@@ -219,9 +221,9 @@ internal object UtilityRadarUI {
             alertDialogRadarLongpressAl.add("Show Spotter Info")
         }
         alertDialogRadarLongpressAl.add("Show current radar status message: " + wxglRender.rid)
-	    val getridpoint: String = UtilityLocation.getNearestRadarSite(LatLon(pointX.toString(), pointY.toString()))
-	    alertDialogRadarLongpressAl.add("Show nearest radar status message: " + getridpoint)
-	    alertDialogRadarLongpressAl.add("userpoint info: " + latLonTitle)
+	val getridpoint: String = UtilityLocation.getNearestRadarSite(LatLon(pointX.toString(), pointY.toString()))
+	alertDialogRadarLongpressAl.add("Show nearest radar status message: " + getridpoint)
+	alertDialogRadarLongpressAl.add("userpoint info: " + latLonTitle)
         alertDialogRadarLongpressAl.add("Add userpoint for: " + latLonTitle)
         alertDialogRadarLongpressAl.add("Delete userpoint for: " + latLonTitle)
         alertDialogRadarLongpressAl.add("Delete all userpoints")

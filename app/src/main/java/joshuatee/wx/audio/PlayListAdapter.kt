@@ -19,11 +19,7 @@ internal class PlayListAdapter(private val dataSet: MutableList<String>) :
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
-        val label = ObjectTextView(
-                itemView, R.id.singletext,
-                UIPreferences.textHighlightColor,
-                TextSize.MEDIUM
-        )
+        val label = ObjectTextView(itemView, R.id.singletext, UIPreferences.textHighlightColor, TextSize.MEDIUM)
         val contentPreview = ObjectTextView(itemView, R.id.text2)
         val timeAndSize = ObjectTextView(itemView, R.id.timeandsize, TextSize.SMALL)
 
@@ -46,8 +42,7 @@ internal class PlayListAdapter(private val dataSet: MutableList<String>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
-        val view =
-            LayoutInflater.from(parent.context).inflate(R.layout.cardview_playlist, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.cardview_playlist, parent, false)
         return DataObjectHolder(view)
     }
 

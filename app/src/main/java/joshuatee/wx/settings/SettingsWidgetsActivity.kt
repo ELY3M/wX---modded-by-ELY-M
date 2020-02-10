@@ -177,7 +177,6 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                         15
                 ).card
         )
-        //val abSwitch: SwitchCompat = findViewById(R.id.ab_switch)
         abSwitch.setOnCheckedChangeListener(this)
         abSwitch.isChecked = Utility.readPref(this, "WIDGETS_ENABLED", "false").startsWith("t")
     }
@@ -197,12 +196,11 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
     override fun onStop() {
         super.onStop()
         MyApplication.initPreferences(this)
-        restartNotifs(this)
+        restartNotifications(this)
     }
 
-    private fun restartNotifs(context: Context) {
-        val restartNotif = Utility.readPref(context, "RESTART_NOTIF", "false")
-        if (restartNotif == "true") {
+    private fun restartNotifications(context: Context) {
+        if (Utility.readPref(context, "RESTART_NOTIF", "false") == "true") {
             UtilityWXJobService.startService(this)
             Utility.writePref(context, "RESTART_NOTIF", "false")
         }

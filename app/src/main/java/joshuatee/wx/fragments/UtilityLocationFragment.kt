@@ -101,8 +101,7 @@ object UtilityLocationFragment {
         }
     }
 
-    fun setNwsIconSize(): Int =
-            (MyApplication.dm.widthPixels * (MyApplication.nwsIconSize / 100f)).toInt()
+    fun setNwsIconSize(): Int = (MyApplication.dm.widthPixels * (MyApplication.nwsIconSize / 100f)).toInt()
 
     fun extractWindDirection(chunk: String): String {
         val windDir1 = chunk.parseLastMatch(RegExp.sevenDayWinddir1)
@@ -184,49 +183,71 @@ object UtilityLocationFragment {
 
     fun extractCanadaTemperature(blob: String): String {
         var temp = blob.parse(RegExp.ca7DayTemp1)
-        if (temp != "") return temp.replace("minus ", "-")
+        if (temp != "")
+            return temp.replace("minus ", "-")
         temp = blob.parse(RegExp.ca7DayTemp2)
-        if (temp != "") return temp.replace("minus ", "-")
+        if (temp != "")
+            return temp.replace("minus ", "-")
         temp = blob.parse(RegExp.ca7DayTemp3)
-        if (temp != "") return temp.replace("minus ", "-")
+        if (temp != "")
+            return temp.replace("minus ", "-")
         temp = blob.parse(RegExp.ca7DayTemp4)
-        if (temp != "") return temp
+        if (temp != "")
+            return temp
         temp = blob.parse(RegExp.ca7DayTemp5)
-        if (temp != "") return temp
+        if (temp != "")
+            return temp
         temp = blob.parse(RegExp.ca7DayTemp6)
-        if (temp != "") return temp.replace("minus ", "-")
+        if (temp != "")
+            return temp.replace("minus ", "-")
         temp = blob.parse(RegExp.ca7DayTemp7)
-        if (temp != "") return temp
+        if (temp != "")
+            return temp
         temp = blob.parse(RegExp.ca7DayTemp8)
-        if (temp != "") return temp.replace("minus ", "-")
+        if (temp != "")
+            return temp.replace("minus ", "-")
         temp = blob.parse(RegExp.ca7DayTemp9)
-        if (temp != "") return temp.replace("minus ", "-")
+        if (temp != "")
+            return temp.replace("minus ", "-")
         temp = blob.parse(RegExp.ca7DayTemp10)
-        if (temp != "") return temp.replace("minus ", "-")
+        if (temp != "")
+            return temp.replace("minus ", "-")
         temp = blob.parse(RegExp.ca7DayTemp11)
-        if (temp != "") return "0"
+        if (temp != "")
+            return "0"
         temp = blob.parse(RegExp.ca7DayTemp12)
-        if (temp != "") return temp
+        if (temp != "")
+            return temp
         temp = blob.parse(RegExp.ca7DayTemp13)
-        if (temp != "") return temp
+        if (temp != "")
+            return temp
         temp = blob.parse(RegExp.ca7DayTemp14)
-        if (temp != "") return temp
+        if (temp != "")
+            return temp
         temp = blob.parse(RegExp.ca7DayTemp15)
-        if (temp != "") return temp
+        if (temp != "")
+            return temp
         temp = blob.parse(RegExp.ca7DayTemp16)
-        if (temp != "") return "0"
+        if (temp != "")
+            return "0"
         temp = blob.parse(RegExp.ca7DayTemp17)
-        if (temp != "") return "0"
+        if (temp != "")
+            return "0"
         temp = blob.parse(RegExp.ca7DayTemp18)
-        if (temp != "") return temp
+        if (temp != "")
+            return temp
         temp = blob.parse(RegExp.ca7DayTemp19)
-        if (temp != "") return temp
+        if (temp != "")
+            return temp
         temp = blob.parse(RegExp.ca7DayTemp20)
-        if (temp != "") return "0"
+        if (temp != "")
+            return "0"
         temp = blob.parse(RegExp.ca7DayTemp21)
-        if (temp != "") return temp
+        if (temp != "")
+            return temp
         temp = blob.parse(RegExp.ca7DayTemp22)
-        if (temp != "") return "0"
+        if (temp != "")
+            return "0"
         return temp
     }
 

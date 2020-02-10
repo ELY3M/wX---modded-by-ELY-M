@@ -26,7 +26,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.Extensions.getImage
 
@@ -39,11 +38,12 @@ import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
+import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
+
 class WpcRainfallForecastActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmaps = mutableListOf<Bitmap>()
-    private lateinit var linearLayout: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +55,6 @@ class WpcRainfallForecastActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         title = getString(UtilityWpcRainfallForecast.activityTitle)
-        linearLayout = findViewById(R.id.ll)
         getContent()
     }
 
@@ -65,7 +64,7 @@ class WpcRainfallForecastActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        linearLayout.removeAllViews()
+        ll.removeAllViews()
         bitmaps = mutableListOf()
         withContext(Dispatchers.IO) {
             UtilityWpcRainfallForecast.imageUrls.forEach {
@@ -73,7 +72,7 @@ class WpcRainfallForecastActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
             }
         }
         bitmaps.indices.forEach {
-            val card = ObjectCardImage(this@WpcRainfallForecastActivity, linearLayout, bitmaps[it])
+            val card = ObjectCardImage(this@WpcRainfallForecastActivity, ll, bitmaps[it])
             val prodTitleLocal = UtilityWpcRainfallForecast.productLabels[it] + " - " + getString(UtilityWpcRainfallForecast.activityTitle)
             var prodTextUrlLocal = ""
             withContext(Dispatchers.IO) {
