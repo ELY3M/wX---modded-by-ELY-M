@@ -17,81 +17,129 @@
     You should have received a copy of the GNU General Public License
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
-*/
+ */
 
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.os.Bundle
+import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.widget.Toolbar
+import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
+import joshuatee.wx.activitiesmisc.ImageShowActivity
+import joshuatee.wx.audio.AudioPlayActivity
+import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardImage
+import joshuatee.wx.ui.ObjectCardText
+import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.util.UtilityDownload
+import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
-import joshuatee.wx.wpc.WpcTextProductsActivity
 import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
-class SpcFireOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
+class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
+
+    // show a fire outlook for a specific day
+    //
+    // Arguments
+    //
+    // 1: day
+    //
+
+    companion object {
+        const val NUMBER: String = ""
+    }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private var bitmaps = mutableListOf<Bitmap>()
+    private var textProduct = ""
+    private var imageUrl = ""
+    private var bitmap = UtilityImg.getBlankBitmap()
+    private lateinit var activityArguments: Array<String>
+    private lateinit var objectCardImage: ObjectCardImage
+    private lateinit var objectCardText: ObjectCardText
+    private var tabletInLandscape = false
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(
                 savedInstanceState,
                 R.layout.activity_linear_layout_bottom_toolbar,
-                R.menu.shared_multigraphics,
-                true
+                R.menu.spcmcdshowdetail
         )
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = "SPC"
-        toolbar.subtitle = "Fire Weather Outlook"
+        tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
+        if (tabletInLandscape) {
+            ll.orientation = LinearLayout.HORIZONTAL
+            objectCardImage = ObjectCardImage(this, ll, UtilityImg.getBlankBitmap(), 2)
+        } else {
+            objectCardImage = ObjectCardImage(this, ll)
+        }
+        objectCardText = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        activityArguments = intent.getStringArrayExtra(NUMBER)!!
+        textProduct = activityArguments[0]
+        imageUrl = activityArguments[1]
+        title = "Fire Weather Outlook"
+        toolbar.subtitle = "SPC $textProduct"
         getContent()
-    }
-
-    override fun onRestart() {
-        getContent()
-        super.onRestart()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        bitmaps = mutableListOf()
-        withContext(Dispatchers.IO) {
-            UtilitySpcFireOutlook.imageUrls.mapTo(bitmaps) {
-                it.getImage()
-            }
+        bitmap = withContext(Dispatchers.IO) { imageUrl.getImage() }
+        objectCardText.text = withContext(Dispatchers.IO) {
+            UtilityDownload.getTextProduct(this@SpcFireOutlookActivity, textProduct)
         }
-        bitmaps.forEach { bitmap ->
-            val card = ObjectCardImage(this@SpcFireOutlookActivity, ll, bitmap)
-            val prod = UtilitySpcFireOutlook.textProducts[bitmaps.indexOf(bitmap)]
-            card.setOnClickListener(View.OnClickListener {
-                ObjectIntent(
-                        this@SpcFireOutlookActivity,
-                        WpcTextProductsActivity::class.java,
-                        WpcTextProductsActivity.URL,
-                        arrayOf(prod)
-                )
-            })
+        if (tabletInLandscape) {
+            objectCardImage.setImage(bitmap, 2)
+        } else {
+            objectCardImage.setImage(bitmap)
         }
+        objectCardImage.setOnClickListener(View.OnClickListener {
+            ObjectIntent(
+                    this@SpcFireOutlookActivity,
+                    ImageShowActivity::class.java,
+                    ImageShowActivity.URL,
+                    arrayOf(imageUrl, textProduct, "true")
+            )
+        })
+        UtilityTts.conditionalPlay(
+                activityArguments,
+                1,
+                applicationContext,
+                objectCardText.text,
+                textProduct
+        )
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
+        if (audioPlayMenu(item.itemId, objectCardText.text, textProduct, textProduct)) {
+            return true
+        }
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(
+            R.id.action_share_all -> UtilityShare.shareBitmap(
                     this,
                     this,
-                    getString(UtilitySpcFireOutlook.activityTitle),
-                    "",
-                    bitmaps
+                    textProduct,
+                    bitmap,
+                    objectCardText.text
+            )
+            R.id.action_share_text -> UtilityShare.shareText(
+                    this,
+                    textProduct,
+                    objectCardText.text
+            )
+            R.id.action_share_url -> UtilityShare.shareText(this, textProduct, textProduct)
+            R.id.action_share_image -> UtilityShare.shareBitmap(
+                    this,
+                    this,
+                    textProduct,
+                    bitmap
             )
             else -> return super.onOptionsItemSelected(item)
         }

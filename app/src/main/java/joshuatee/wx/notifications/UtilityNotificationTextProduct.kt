@@ -35,6 +35,7 @@ import joshuatee.wx.activitiesmisc.TextScreenActivity
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
+import joshuatee.wx.util.UtilityLog
 
 object UtilityNotificationTextProduct {
 
@@ -60,20 +61,28 @@ object UtilityNotificationTextProduct {
 
     internal fun notifyOnAll(context: Context) {
         var textProdChunk: String
-        var textProdFirstline = ""
-        var arrTmp: List<String>
+        var textProdFirstLine = ""
+        val matchSize = 250
+        //var arrTmp: List<String>
         TextUtils.split(MyApplication.notifTextProdStr, ":").forEach { s ->
             if (s != "") {
                 textProdChunk = UtilityDownload.getTextProduct(context, s)
-                arrTmp = textProdChunk.split("<BR>").dropLastWhile { it.isEmpty() }
-                if (arrTmp.size > 1)
-                    textProdFirstline = arrTmp[0]
+                //arrTmp = textProdChunk.split("<BR>").dropLastWhile { it.isEmpty() }
+                //if (arrTmp.size > 1)
+                //    textProdFirstline = arrTmp[0]
+                if (textProdChunk.length > matchSize) {
+                    textProdFirstLine = textProdChunk.substring(0, matchSize - 2)
+                } else {
+                    textProdFirstLine = textProdChunk
+                }
+                UtilityLog.d("wx", "FIRSTLINE: " + textProdFirstLine)
                 // compare the first line to a stored first line, if not execute first block
-                if (textProdFirstline != "")
-                    if (textProdFirstline != Utility.readPref(context, PREF_TOKEN + "_" + s, "")) {
-                        send(context, s, textProdFirstline, textProdChunk)
-                        Utility.writePref(context, PREF_TOKEN + "_" + s, textProdFirstline)
+                if (textProdFirstLine != "") {
+                    if (textProdFirstLine != Utility.readPref(context, PREF_TOKEN + "_" + s, "")) {
+                        send(context, s, textProdFirstLine, textProdChunk)
+                        Utility.writePref(context, PREF_TOKEN + "_" + s, textProdFirstLine)
                     }
+                }
             }
         }
     }

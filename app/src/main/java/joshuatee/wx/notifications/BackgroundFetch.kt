@@ -94,7 +94,7 @@ class BackgroundFetch(val context: Context) {
                         val objPI = ObjectPendingIntents(
                                 context,
                                 SpcMcdWatchShowActivity::class.java,
-                                SpcMcdWatchShowActivity.NO,
+                                SpcMcdWatchShowActivity.NUMBER,
                                 arrayOf(mcdNumber, "", polygonType.toString()),
                                 arrayOf(mcdNumber, "sound", polygonType.toString())
                         )
@@ -143,7 +143,7 @@ class BackgroundFetch(val context: Context) {
                         val objPI = ObjectPendingIntents(
                                 context,
                                 SpcMcdWatchShowActivity::class.java,
-                                SpcMcdWatchShowActivity.NO,
+                                SpcMcdWatchShowActivity.NUMBER,
                                 arrayOf(mpdNumber, "", polygonType.toString()),
                                 arrayOf(mpdNumber, "sound", polygonType.toString())
                         )
@@ -193,7 +193,7 @@ class BackgroundFetch(val context: Context) {
                         val objPI = ObjectPendingIntents(
                                 context,
                                 SpcMcdWatchShowActivity::class.java,
-                                SpcMcdWatchShowActivity.NO,
+                                SpcMcdWatchShowActivity.NUMBER,
                                 arrayOf(watchNumber, "", polygonType.toString()),
                                 arrayOf(watchNumber, "sound", polygonType.toString())
                         )

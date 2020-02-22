@@ -98,64 +98,16 @@ class SevereDashboardActivity : BaseActivity() {
         val snWat = SevereNotice(PolygonType.WATCH)
         val snMcd = SevereNotice(PolygonType.MCD)
         val snMpd = SevereNotice(PolygonType.MPD)
-        ll.removeAllViews()
         withContext(Dispatchers.IO) {
             bitmaps.add((UtilityDownload.getImageProduct(this@SevereDashboardActivity, "USWARN")))
         }
         withContext(Dispatchers.IO) {
             bitmaps.add((UtilitySpc.getStormReportsTodayUrl()).getImage())
         }
-        numberOfImages = 0
-        if (bitmaps.size > 0) {
-            bitmaps.indices.forEach {
-                val card: ObjectCardImage
-                if (numberOfImages % imagesPerRow == 0) {
-                    val objectLinearLayout = ObjectLinearLayout(this@SevereDashboardActivity, ll)
-                    objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
-                    horizontalLinearLayouts.add(objectLinearLayout)
-                    card = ObjectCardImage(
-                            this@SevereDashboardActivity,
-                            objectLinearLayout.linearLayout,
-                            bitmaps[it],
-                            imagesPerRow
-                    )
-                } else {
-                    card = ObjectCardImage(
-                            this@SevereDashboardActivity,
-                            horizontalLinearLayouts.last().linearLayout,
-                            bitmaps[it],
-                            imagesPerRow)
-                }
-                if (it == 0) {
-                    card.setOnClickListener(View.OnClickListener {
-                        ObjectIntent(
-                                this@SevereDashboardActivity,
-                                USWarningsWithRadarActivity::class.java,
-                                USWarningsWithRadarActivity.URL,
-                                arrayOf(
-                                        ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?",
-                                        "us"
-                                )
-                        )
-                    })
-                } else {
-                    card.setOnClickListener(View.OnClickListener {
-                        ObjectIntent(
-                                this@SevereDashboardActivity,
-                                SpcStormReportsActivity::class.java,
-                                SpcStormReportsActivity.NO,
-                                arrayOf("today")
-                        )
-                    })
-                }
-                numberOfImages += 1
-            }
-        }
         withContext(Dispatchers.IO) {
             UtilityDownloadWatch.get(this@SevereDashboardActivity)
             snWat.getBitmaps(MyApplication.severeDashboardWat.value)
         }
-        showItems(snWat)
         withContext(Dispatchers.IO) {
             UtilityDownloadMcd.get(this@SevereDashboardActivity)
             snMcd.getBitmaps(MyApplication.severeDashboardMcd.value)
@@ -165,6 +117,53 @@ class SevereDashboardActivity : BaseActivity() {
             UtilityDownloadMpd.get(this@SevereDashboardActivity)
             snMpd.getBitmaps(MyApplication.severeDashboardMpd.value)
         }
+        ll.removeAllViews()
+        numberOfImages = 0
+        listOf(0,1).forEach {
+            val card: ObjectCardImage
+            if (numberOfImages % imagesPerRow == 0) {
+                val objectLinearLayout = ObjectLinearLayout(this@SevereDashboardActivity, ll)
+                objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
+                horizontalLinearLayouts.add(objectLinearLayout)
+                card = ObjectCardImage(
+                        this@SevereDashboardActivity,
+                        objectLinearLayout.linearLayout,
+                        bitmaps[it],
+                        imagesPerRow
+                )
+            } else {
+                card = ObjectCardImage(
+                        this@SevereDashboardActivity,
+                        horizontalLinearLayouts.last().linearLayout,
+                        bitmaps[it],
+                        imagesPerRow)
+            }
+            if (it == 0) {
+                card.setOnClickListener(View.OnClickListener {
+                    ObjectIntent(
+                            this@SevereDashboardActivity,
+                            USWarningsWithRadarActivity::class.java,
+                            USWarningsWithRadarActivity.URL,
+                            arrayOf(
+                                    ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?",
+                                    "us"
+                            )
+                    )
+                })
+            } else {
+                card.setOnClickListener(View.OnClickListener {
+                    ObjectIntent(
+                            this@SevereDashboardActivity,
+                            SpcStormReportsActivity::class.java,
+                            SpcStormReportsActivity.NO,
+                            arrayOf("today")
+                    )
+                })
+            }
+            numberOfImages += 1
+        }
+        showItems(snWat)
+        showItems(snMcd)
         showItems(snMpd)
         bitmaps.addAll(snWat.bitmaps)
         bitmaps.addAll(snMcd.bitmaps)
@@ -268,7 +267,7 @@ class SevereDashboardActivity : BaseActivity() {
                             ObjectIntent(
                                     this@SevereDashboardActivity,
                                     SpcMcdWatchShowActivity::class.java,
-                                    SpcMcdWatchShowActivity.NO,
+                                    SpcMcdWatchShowActivity.NUMBER,
                                     arrayOf(number, "", severeNotice.toString())
                             )
                         })

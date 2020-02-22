@@ -33,6 +33,7 @@ import android.view.View
 import android.view.View.OnClickListener
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.LinearLayout
 
 import joshuatee.wx.R
 import joshuatee.wx.settings.FavAddActivity
@@ -48,6 +49,7 @@ import joshuatee.wx.util.UtilityAlertDialog
 import joshuatee.wx.util.UtilityFavorites
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.radar.VideoRecordActivity
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.UtilityString
 import kotlinx.coroutines.*
 
@@ -100,6 +102,10 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                     iconsEvenlySpaced = false,
                     bottomToolbar = true
             )
+            val linearLayout: LinearLayout = findViewById(R.id.linearLayout)
+            if (UtilityUI.isLandScape(this)) {
+                linearLayout.orientation = LinearLayout.HORIZONTAL
+            }
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         val menu = toolbarBottom.menu

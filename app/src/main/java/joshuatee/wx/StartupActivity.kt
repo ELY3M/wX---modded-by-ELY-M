@@ -41,7 +41,6 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Utility.readPrefWithNull(this, "LOC1_LABEL", null) == null) {
-            UtilityLog.d("wx", "INIT PREF")
             UtilityStorePreferences.setDefaults(this)
         }
         MyApplication.initPreferences(this)

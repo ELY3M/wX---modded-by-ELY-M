@@ -21,13 +21,12 @@
 
 package joshuatee.wx.nhc
 
-// FIXME naming
 class ObjectNhcStormInfo internal constructor(
     val title: String,
     val summary: String,
     val url: String,
-    val img1: String,
-    val img2: String,
+    val image1: String,
+    val image2: String,
     val wallet: String
 )
 

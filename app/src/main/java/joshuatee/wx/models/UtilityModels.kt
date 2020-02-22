@@ -63,13 +63,15 @@ object UtilityModels {
                     }
                 }
                 (0 until om.numPanes).forEach {
-                    if (om.numPanes > 1)
-                        UtilityImg.resizeViewSetImgByHeight(
+                    if (om.numPanes > 1) {
+                        UtilityImg.resizeViewAndSetImage(
+                                context,
                                 om.displayData.bitmap[it],
                                 om.displayData.img[it]
                         )
-                    else
+                    } else {
                         om.displayData.img[it].setImageBitmap(om.displayData.bitmap[it])
+                    }
                 }
                 om.animRan = false
                 if (!om.firstRun) {

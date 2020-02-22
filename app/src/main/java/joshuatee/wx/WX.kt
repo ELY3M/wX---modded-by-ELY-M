@@ -46,7 +46,7 @@ class WX : CommonActionBarFragment() {
 
     private var backButtonCounter = 0
     private lateinit var vpa: ViewPagerAdapter
-    private lateinit var miVr: MenuItem
+    private lateinit var voiceRecognitionIcon: MenuItem
     private var tabIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,8 +57,9 @@ class WX : CommonActionBarFragment() {
         UtilityTheme.setPrimaryColor(this)
         val toolbarBottom: Toolbar = findViewById(R.id.toolbar_bottom)
         view = findViewById(android.R.id.content)
-        if (android.os.Build.VERSION.SDK_INT > 20)
+        if (android.os.Build.VERSION.SDK_INT > 20) {
             toolbarBottom.elevation = MyApplication.elevationPref
+        }
         if (MyApplication.iconsEvenSpaced) {
             UtilityToolbar.setupEvenlyDistributedToolbar(this, toolbarBottom, R.menu.cab)
         } else {
@@ -70,16 +71,14 @@ class WX : CommonActionBarFragment() {
         toolbarBottom.setOnMenuItemClickListener(this)
         toolbarBottom.setOnClickListener { toolbarBottom.showOverflowMenu() }
         val menu = toolbarBottom.menu
-        helpMi = menu.findItem(R.id.action_help)
-        miVr = menu.findItem(R.id.action_vr)
-        miVr.isVisible = MyApplication.vrButton
-        if (MyApplication.helpMode) helpMi.title = helpStr
+        voiceRecognitionIcon = menu.findItem(R.id.action_vr)
+        voiceRecognitionIcon.isVisible = MyApplication.vrButton
         val fab = ObjectFab(
                 this,
                 this,
                 R.id.fab,
                 MyApplication.ICON_RADAR,
-                OnClickListener { openNexradRadar(this, 0) })
+                OnClickListener { openNexradRadar(this) })
         if (UIPreferences.mainScreenRadarFab) {
             val radarMi = menu.findItem(R.id.action_radar)
             radarMi.isVisible = false
@@ -157,11 +156,7 @@ class WX : CommonActionBarFragment() {
 
     override fun onRestart() {
         super.onRestart()
-        miVr.isVisible = MyApplication.vrButton
-        if (MyApplication.helpMode)
-            helpMi.title = helpStr
-        else
-            helpMi.title = "Help"
+        voiceRecognitionIcon.isVisible = MyApplication.vrButton
         backButtonCounter = 0
         refreshDynamicContent()
     }
@@ -170,31 +165,31 @@ class WX : CommonActionBarFragment() {
         when (keyCode) {
             KeyEvent.KEYCODE_R -> {
                 if (event.isCtrlPressed) {
-                    openNexradRadar(this, 0)
+                    openNexradRadar(this)
                 }
                 return true
             }
             KeyEvent.KEYCODE_A -> {
                 if (event.isCtrlPressed) {
-                    openAfd(0)
+                    openAfd()
                 }
                 return true
             }
             KeyEvent.KEYCODE_S -> {
                 if (event.isCtrlPressed) {
-                    openSettings(0)
+                    openSettings()
                 }
                 return true
             }
             KeyEvent.KEYCODE_C -> {
                 if (event.isCtrlPressed) {
-                    openVis(0)
+                    openVis()
                 }
                 return true
             }
             KeyEvent.KEYCODE_D -> {
                 if (event.isCtrlPressed) {
-                    openDashboard(0)
+                    openDashboard()
                 }
                 return true
             }
@@ -210,12 +205,6 @@ class WX : CommonActionBarFragment() {
                 }
                 return true
             }
-            //KeyEvent.KEYCODE_W -> {
-            //    if (event.isCtrlPressed) {
-            //        openActivity(this, "USWARN")
-            //    }
-            //    return true
-            //}
             KeyEvent.KEYCODE_E -> {
                 if (event.isCtrlPressed) {
                     openActivity(this, "SPCMESO1")
@@ -237,7 +226,7 @@ class WX : CommonActionBarFragment() {
             }
             KeyEvent.KEYCODE_H -> {
                 if (event.isCtrlPressed) {
-                    openHourly(0)
+                    openHourly()
                 }
                 return true
             }
@@ -249,7 +238,6 @@ class WX : CommonActionBarFragment() {
             }
             KeyEvent.KEYCODE_L -> {
                 if (event.isCtrlPressed) {
-                    //openActivity(this, "LTG")
                     val currentFragment = supportFragmentManager.fragments.first() as LocationFragment
                     currentFragment.showLocations()
                 }

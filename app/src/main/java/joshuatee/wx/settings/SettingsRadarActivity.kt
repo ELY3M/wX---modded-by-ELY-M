@@ -688,7 +688,7 @@ class SettingsRadarActivity : BaseActivity() {
                         R.string.text_size_label,
                         (MyApplication.radarTextSizeDefault * 10).toInt(),
                         4,
-                        20
+                        40
                 ).card
         )
         ll.addView(

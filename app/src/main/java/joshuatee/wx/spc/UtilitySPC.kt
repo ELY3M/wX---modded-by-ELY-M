@@ -43,6 +43,14 @@ object UtilitySpc {
             return dates.map { "$url/imgs/enh_$it.gif".getImage() }
         }
 
+    internal val thunderStormOutlookUrls: List<String>
+        get() {
+            val url = "${MyApplication.nwsSPCwebsitePrefix}/products/exper/enhtstm"
+            val html = url.getHtml()
+            val dates = html.parseColumn("OnClick.\"show_tab\\(.([0-9]{4}).\\)\".*?")
+            return dates.map { "$url/imgs/enh_$it.gif" }
+        }
+
     fun checkSpcDayX(context: Context, prod: String): List<String> {
         val highStr = "THERE IS A HIGH RISK OF"
         val modtStr = "THERE IS A MODERATE RISK OF"

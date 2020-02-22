@@ -69,7 +69,6 @@ class ForecastActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        // FIXME activity_linear_layout need ll to be renamed to linearLayout, need to asses which activities are using it
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         activityArguments = intent.getStringArrayExtra(URL)!!
         latLon = LatLon(activityArguments[0], activityArguments[1])
@@ -129,16 +128,12 @@ class ForecastActivity : BaseActivity() {
         cardSunrise.center()
         try {
             cardSunrise.text = (
-                    UtilityTimeSunMoon.getSunriseSunset(
-                            this@ForecastActivity,
-                            Location.currentLocationStr
-                    ) + MyApplication.newline + UtilityTime.gmtTime()
+                    UtilityTimeSunMoon.getSunriseSunset(this@ForecastActivity, Location.currentLocationStr, false) + MyApplication.newline + UtilityTime.gmtTime()
             )
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
         linearLayoutForecast.addView(cardSunrise.card)
-
         //
         // hazards
         //

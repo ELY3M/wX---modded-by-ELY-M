@@ -22,7 +22,6 @@
 package joshuatee.wx.nhc
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.view.View
 import android.widget.LinearLayout
 import joshuatee.wx.ui.ObjectCardImage
@@ -30,8 +29,6 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityString
 
-import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
 import joshuatee.wx.activitiesmisc.ImageShowActivity
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectLinearLayout
@@ -39,107 +36,45 @@ import joshuatee.wx.ui.UtilityUI
 
 class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
 
-    private val atlSumList = mutableListOf<String>()
-    private val atlLinkList = mutableListOf<String>()
-    private val atlImg1List = mutableListOf<String>()
-    private val atlImg2List = mutableListOf<String>()
-    private val atlWalletList = mutableListOf<String>()
-    private val atlTitleList = mutableListOf<String>()
-    private val pacSumList = mutableListOf<String>()
-    private val pacLinkList = mutableListOf<String>()
-    private val pacImg1List = mutableListOf<String>()
-    private val pacImg2List = mutableListOf<String>()
-    private val pacWalletList = mutableListOf<String>()
-    private val pacTitleList = mutableListOf<String>()
-    private val bitmapsAtlantic = mutableListOf<Bitmap>()
-    private val bitmapsPacific = mutableListOf<Bitmap>()
-    private val bitmapsCentral = mutableListOf<Bitmap>()
     private var notificationCard: ObjectCardText? = null
     private val cardNotificationHeaderText = "Currently blocked storm notifications, tap this text to clear all blocks "
     var html: String = ""
     private var numberOfImages = 0
     private var imagesPerRow = 2
     private val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout>()
+    val regionMap: MutableMap<NhcOceanEnum, ObjectNhcRegionSummary> = mutableMapOf()
 
     init {
         if (UtilityUI.isLandScape(context)) {
             imagesPerRow = 3
         }
+        NhcOceanEnum.values().forEach {
+            regionMap[it] = ObjectNhcRegionSummary(it)
+        }
     }
 
     fun getTextData() {
-        var dataRet: ObjectNhcStormInfo
-        (1 until 6).forEach {
-            dataRet = UtilityNhc.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_at" + it.toString() + ".xml")
-            if (dataRet.title != "") {
-                atlSumList.add(dataRet.summary)
-                atlLinkList.add(UtilityString.getNwsPre(dataRet.url))
-                atlImg1List.add(dataRet.img1)
-                atlImg2List.add(dataRet.img2)
-                atlWalletList.add(dataRet.wallet)
-                atlTitleList.add(dataRet.title.replace("NHC Atlantic Wallet", ""))
-            }
-        }
-        (1 until 6).forEach {
-            dataRet = UtilityNhc.getHurricaneInfo("${MyApplication.nwsNhcWebsitePrefix}/nhc_ep" + it.toString() + ".xml")
-            if (dataRet.title != "") {
-                pacSumList.add(dataRet.summary)
-                pacLinkList.add(UtilityString.getNwsPre(dataRet.url))
-                pacImg1List.add(dataRet.img1)
-                pacImg2List.add(dataRet.img2)
-                pacWalletList.add(dataRet.wallet)
-                pacTitleList.add(dataRet.title.replace("NHC Eastern Pacific Wallet", ""))
+        NhcOceanEnum.values().forEach { type ->
+            if (type != NhcOceanEnum.CPAC) {
+                var stormInfo: ObjectNhcStormInfo
+                (1 until 6).forEach {
+                    stormInfo = UtilityNhc.getHurricaneInfo(regionMap[type]!!.baseUrl + it.toString() + ".xml")
+                    if (stormInfo.title != "") {
+                        regionMap[type]!!.storms.add(
+                                ObjectNhcStormInfo(
+                                        stormInfo.title.replace(regionMap[type]!!.replaceString, ""),
+                                        stormInfo.summary,
+                                        UtilityString.getNwsPre(stormInfo.url),
+                                        stormInfo.image1,
+                                        stormInfo.image2,
+                                        stormInfo.wallet
+                                )
+                        )
+                    }
+                }
             }
         }
     }
-
-    fun getAtlanticImageData() {
-        listOf(
-                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png",
-                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png",
-                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png"
-        ).forEach { bitmapsAtlantic.add(it.getImage()) }
-    }
-
-    fun getPacificImageData() {
-        listOf(
-                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png",
-                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png",
-                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png"
-        ).forEach { bitmapsPacific.add(it.getImage()) }
-    }
-
-    fun getCentralImageData() {
-        listOf(
-                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_0d0.png",
-                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_2d0.png",
-                "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_5d0.png"
-        ).forEach { bitmapsCentral.add(it.getImage()) }
-    }
-
-    private val imageList = listOf(
-            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png",
-            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_2d0.png",
-            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_5d0.png",
-            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png",
-            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_2d0.png",
-            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_5d0.png",
-            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_0d0.png",
-            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_2d0.png",
-            "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_cpac_5d0.png"
-    )
-
-    private val titleList = listOf(
-            "Atlantic Tropical Cyclones and Disturbances ",
-            "ATL: Two-Day Graphical Tropical Weather Outlook",
-            "ATL: Five-Day Graphical Tropical Weather Outlook",
-            "EPAC Tropical Cyclones and Disturbances ",
-            "EPAC: Two-Day Graphical Tropical Weather Outlook",
-            "EPAC: Five-Day Graphical Tropical Weather Outlook",
-            "CPAC Tropical Cyclones and Disturbances ",
-            "CPAC: Two-Day Graphical Tropical Weather Outlook",
-            "CPAC: Five-Day Graphical Tropical Weather Outlook"
-    )
 
     fun showTextData() {
         linearLayout.removeAllViewsInLayout()
@@ -153,21 +88,21 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
         } else {
             notificationCard?.visibility = View.GONE
         }
-        if (atlSumList.size < 1) {
+        if (regionMap[NhcOceanEnum.ATL]!!.storms.size < 1) {
             val noAtl = "There are no tropical cyclones in the Atlantic at this time."
             ObjectCardText(context, linearLayout, noAtl)
             html = noAtl
         } else {
-            atlSumList.indices.forEach { k ->
-                if (atlImg1List[k] != "") {
-                    val objStormData = ObjectNhcStormDetails(atlSumList[k])
+            regionMap[NhcOceanEnum.ATL]!!.storms.forEach {
+                if (it.image1 != "") {
+                    val objStormData = ObjectNhcStormDetails(it.summary)
                     val cAtlData = ObjectCardNhcStormReportItem(context, linearLayout, objStormData)
-                    html += atlSumList[k]
-                    val url = atlLinkList[k]
-                    val imgUrl1 = atlImg1List[k]
-                    val imgUrl2 = atlImg2List[k]
-                    val title = atlTitleList[k]
-                    val wallet = atlWalletList[k]
+                    html += it.summary
+                    val url = it.url
+                    val imgUrl1 = it.image1
+                    val imgUrl2 = it.image2
+                    val title = it.title
+                    val wallet = it.wallet
                     cAtlData.setListener(View.OnClickListener {
                         ObjectIntent(
                                 context,
@@ -179,21 +114,21 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
                 }
             }
         }
-        if (pacSumList.size < 1) {
+        if (regionMap[NhcOceanEnum.EPAC]!!.storms.size < 1) {
             val noPac = "There are no tropical cyclones in the Eastern Pacific at this time."
             ObjectCardText(context, linearLayout, noPac)
             html += noPac
         } else {
-            pacSumList.indices.forEach { k ->
-                if (pacImg1List[k] != "") {
-                    val objStormData = ObjectNhcStormDetails(pacSumList[k])
+            regionMap[NhcOceanEnum.ATL]!!.storms.forEach {
+                if (it.image1 != "") {
+                    val objStormData = ObjectNhcStormDetails(it.summary)
                     val cPacData = ObjectCardNhcStormReportItem(context, linearLayout, objStormData)
-                    html += pacSumList[k]
-                    val url = pacLinkList[k]
-                    val imgUrl1 = pacImg1List[k]
-                    val imgUrl2 = pacImg2List[k]
-                    val title = pacTitleList[k]
-                    val wallet = pacWalletList[k]
+                    html += it.summary
+                    val url = it.url
+                    val imgUrl1 = it.image1
+                    val imgUrl2 = it.image2
+                    val title = it.title
+                    val wallet = it.wallet
                     cPacData.setListener(View.OnClickListener {
                         ObjectIntent(
                                 context,
@@ -207,76 +142,24 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
         }
     }
 
-    fun showAtlanticImageData() {
-        bitmapsAtlantic.forEach {
+    fun showImageData(region: NhcOceanEnum) {
+        regionMap[region]!!.bitmaps.forEachIndexed { index, bitmap ->
             val objectCardImage: ObjectCardImage
             if (numberOfImages % imagesPerRow == 0) {
                 val objectLinearLayout = ObjectLinearLayout(context, linearLayout)
                 objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
                 horizontalLinearLayouts.add(objectLinearLayout)
-                objectCardImage = ObjectCardImage(context, objectLinearLayout.linearLayout, it, imagesPerRow)
+                objectCardImage = ObjectCardImage(context, objectLinearLayout.linearLayout, bitmap, imagesPerRow)
             } else {
-                objectCardImage = ObjectCardImage(context, horizontalLinearLayouts.last().linearLayout, it, imagesPerRow)
+                objectCardImage = ObjectCardImage(context, horizontalLinearLayouts.last().linearLayout, bitmap, imagesPerRow)
             }
             numberOfImages += 1
-            val url = imageList[numberOfImages - 1]
-            val title = titleList[numberOfImages - 1]
             objectCardImage.setOnClickListener(View.OnClickListener {
                 ObjectIntent(
                         context,
                         ImageShowActivity::class.java,
                         ImageShowActivity.URL,
-                        arrayOf(url, title)
-                )
-            })
-        }
-    }
-
-    fun showPacificImageData() {
-        bitmapsPacific.forEach {
-            val objectCardImage: ObjectCardImage
-            if (numberOfImages % imagesPerRow == 0) {
-                val objectLinearLayout = ObjectLinearLayout(context, linearLayout)
-                objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
-                horizontalLinearLayouts.add(objectLinearLayout)
-                objectCardImage = ObjectCardImage(context, objectLinearLayout.linearLayout, it, imagesPerRow)
-            } else {
-                objectCardImage = ObjectCardImage(context, horizontalLinearLayouts.last().linearLayout, it, imagesPerRow)
-            }
-            numberOfImages += 1
-            val url = imageList[numberOfImages - 1]
-            val title = titleList[numberOfImages - 1]
-            objectCardImage.setOnClickListener(View.OnClickListener {
-                ObjectIntent(
-                        context,
-                        ImageShowActivity::class.java,
-                        ImageShowActivity.URL,
-                        arrayOf(url, title)
-                )
-            })
-        }
-    }
-
-    fun showCentralImageData() {
-        bitmapsCentral.forEach {
-            val objectCardImage: ObjectCardImage
-            if (numberOfImages % imagesPerRow == 0) {
-                val objectLinearLayout = ObjectLinearLayout(context, linearLayout)
-                objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
-                horizontalLinearLayouts.add(objectLinearLayout)
-                objectCardImage = ObjectCardImage(context, objectLinearLayout.linearLayout, it, imagesPerRow)
-            } else {
-                objectCardImage = ObjectCardImage(context, horizontalLinearLayouts.last().linearLayout, it, imagesPerRow)
-            }
-            numberOfImages += 1
-            val url = imageList[numberOfImages - 1]
-            val title = titleList[numberOfImages - 1]
-            objectCardImage.setOnClickListener(View.OnClickListener {
-                ObjectIntent(
-                        context,
-                        ImageShowActivity::class.java,
-                        ImageShowActivity.URL,
-                        arrayOf(url, title)
+                        regionMap[region]!!.getTitle(index)
                 )
             })
         }

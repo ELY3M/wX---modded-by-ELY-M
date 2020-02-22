@@ -19,25 +19,10 @@
 
  */
 
-package joshuatee.wx.wpc
+package joshuatee.wx.nhc
 
-import joshuatee.wx.MyApplication
-import joshuatee.wx.R
-
-internal object UtilityWpcRainfallForecast {
-
-    val productCode = listOf(
-            "QPF94E",
-            "QPF98E",
-            "QPF99E"
-    )
-
-    val imageUrls = listOf(
-            "${MyApplication.nwsWPCwebsitePrefix}/qpf/94ewbg.gif",
-            "${MyApplication.nwsWPCwebsitePrefix}/qpf/98ewbg.gif",
-            "${MyApplication.nwsWPCwebsitePrefix}/qpf/99ewbg.gif"
-    )
-
-    const val activityTitle = R.string.title_activity_hpcrainfall_forecast
+enum class NhcOceanEnum {
+    ATL,
+    EPAC,
+    CPAC
 }
-

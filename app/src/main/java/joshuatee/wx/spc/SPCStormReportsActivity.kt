@@ -47,16 +47,13 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.settings.UtilityLocation
-import joshuatee.wx.ui.ObjectCardImage
-import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.radar.WXGLNexrad
 import joshuatee.wx.radar.LatLon
 import joshuatee.wx.activitiesmisc.WebView
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.settings.Location
-import joshuatee.wx.ui.ObjectCardStormReportItem
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
@@ -161,7 +158,20 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         toolbar.subtitle = no
         val linearLayout: LinearLayout = findViewById(R.id.linearLayout)
         linearLayout.removeAllViews()
+
+        var verticalLinearLayout = LinearLayout(this@SpcStormReportsActivity)
+        /*if (UtilityUI.isTablet() && UtilityUI.isLandScape(this@SpcStormReportsActivity)) {
+            linearLayout.orientation = LinearLayout.HORIZONTAL
+            verticalLinearLayout = LinearLayout(this@SpcStormReportsActivity)
+            linearLayout.addView(verticalLinearLayout)
+        }*/
+
+
         val c0 = ObjectCardImage(this@SpcStormReportsActivity, linearLayout, bitmap)
+        //if (UtilityUI.isTablet() && UtilityUI.isLandScape(this@SpcStormReportsActivity)) {
+        //    c0 = ObjectCardImage(this@SpcStormReportsActivity, linearLayout, bitmap, 2)
+        //}
+
         c0.setOnClickListener(View.OnClickListener {
             val stDatePicker = DatePickerDialog(
                     this,
@@ -181,9 +191,14 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             stDatePicker.show()
         })
         c0.resetZoom()
-        val c1 = ObjectCardText(this@SpcStormReportsActivity, linearLayout)
-        c1.visibility = View.GONE
-        c1.setOnClickListener(View.OnClickListener {
+        val objectCardText: ObjectCardText
+        //if (UtilityUI.isLandScape(this@SpcStormReportsActivity) && UtilityUI.isTablet()) {
+        //    objectCardText = ObjectCardText(this@SpcStormReportsActivity, verticalLinearLayout)
+        //} else {
+            objectCardText = ObjectCardText(this@SpcStormReportsActivity, linearLayout)
+        //}
+        objectCardText.visibility = View.GONE
+        objectCardText.setOnClickListener(View.OnClickListener {
             filter = "All"
             displayData()
         })
@@ -228,7 +243,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         var mapOut = mapState.toString()
         mapOut = mapOut.replace("[{}]".toRegex(), "")
-        c1.text = mapOut
+        objectCardText.text = mapOut
         out.insert(0, Utility.fromHtml("<br><b>" + mapOut + MyApplication.newline + "</b><br>"))
         if (firstRun) {
             stateArray = mapState.keys.toList()
@@ -242,9 +257,9 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         title = "($stormCnt) Storm Reports"
         toolbar.subtitle = no
         if (stormCnt > 0) {
-            c1.visibility = View.VISIBLE
+            objectCardText.visibility = View.VISIBLE
         } else {
-            c1.visibility = View.GONE
+            objectCardText.visibility = View.GONE
         }
     }
 

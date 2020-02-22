@@ -156,7 +156,7 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
                 ObjectIntent(
                         this@SpcMcdWatchShowSummaryActivity,
                         SpcMcdWatchShowActivity::class.java,
-                        SpcMcdWatchShowActivity.NO,
+                        SpcMcdWatchShowActivity.NUMBER,
                         arrayOf(mcdNumbers[mcdIndex], "", polygonType.toString())
                 )
             })

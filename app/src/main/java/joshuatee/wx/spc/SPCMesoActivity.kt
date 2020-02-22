@@ -31,6 +31,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
+import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getHtml
 
 import joshuatee.wx.MyApplication
@@ -44,6 +45,7 @@ import joshuatee.wx.ui.OnSwipeTouchListener
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.settings.FavAddActivity
 import joshuatee.wx.settings.FavRemoveActivity
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 import joshuatee.wx.util.UtilityFavorites
@@ -125,6 +127,10 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
                     iconsEvenlySpaced = false,
                     bottomToolbar = true
             )
+            val linearLayout: LinearLayout = findViewById(R.id.linearLayout)
+            if (UtilityUI.isLandScape(this)) {
+                linearLayout.orientation = LinearLayout.HORIZONTAL
+            }
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         prefModel = activityArguments[2]
@@ -194,14 +200,8 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 }
             })
         }
-        favListLabel = UtilityFavorites.setupFavoriteMenuSpc(
-                MyApplication.spcmesoLabelFav,
-                displayData.paramLabel[curImg]
-        )
-        favListParm = UtilityFavorites.setupFavoriteMenuSpc(
-                MyApplication.spcMesoFav,
-                displayData.param[curImg]
-        )
+        favListLabel = UtilityFavorites.setupFavoriteMenuSpc(MyApplication.spcmesoLabelFav, displayData.paramLabel[curImg])
+        favListParm = UtilityFavorites.setupFavoriteMenuSpc(MyApplication.spcMesoFav, displayData.param[curImg])
         sp = ObjectSpinner(this, this, this, R.id.spinner1, favListLabel)
         UtilitySpcMeso.createData()
         drw = ObjectNavDrawerCombo(
@@ -249,7 +249,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
         }
         (0 until numPanes).forEach {
             if (numPanes > 1) {
-                UtilityImg.resizeViewSetImgByHeight(displayData.bitmap[it], displayData.img[it])
+                UtilityImg.resizeViewAndSetImage(this@SpcMesoActivity, displayData.bitmap[it], displayData.img[it])
             } else {
                 displayData.img[it].setImageBitmap(displayData.bitmap[it])
             }

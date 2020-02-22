@@ -27,7 +27,7 @@ import joshuatee.wx.settings.Location
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.external.ExternalPolygon
-import joshuatee.wx.spc.SpcFireOutlookActivity
+import joshuatee.wx.spc.SpcFireOutlookSummaryActivity
 import joshuatee.wx.util.UtilityString
 
 import android.content.Context
@@ -65,7 +65,7 @@ internal object UtilityNotificationSpcFireWeather {
         detailRaw = detailRaw.replace("&nbsp".toRegex(), " ")
         noBody = detailRaw
         noSummary = noBody
-        val objPI = ObjectPendingIntents(context, SpcFireOutlookActivity::class.java)
+        val objPI = ObjectPendingIntents(context, SpcFireOutlookSummaryActivity::class.java)
         val cancelStr = "spcfwloc$day$locNum$threatLevel$validTime"
         if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(
                         context,

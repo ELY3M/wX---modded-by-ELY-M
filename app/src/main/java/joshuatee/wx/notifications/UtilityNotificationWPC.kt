@@ -115,7 +115,7 @@ internal object UtilityNotificationWpc {
         val objectPendingIntents = ObjectPendingIntents(
                 context,
                 SpcMcdWatchShowActivity::class.java,
-                SpcMcdWatchShowActivity.NO,
+                SpcMcdWatchShowActivity.NUMBER,
                 arrayOf(mdNo, "", polygonType.toString()),
                 arrayOf(mdNo, "sound", polygonType.toString())
         )

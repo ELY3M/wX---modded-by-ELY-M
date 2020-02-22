@@ -57,7 +57,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     //
 
     companion object {
-        const val NO: String = ""
+        const val NUMBER: String = ""
     }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
@@ -85,7 +85,7 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
             objectCardImage = ObjectCardImage(this, ll)
         }
         objectCardText = ObjectCardText(this, ll, toolbar, toolbarBottom)
-        activityArguments = intent.getStringArrayExtra(NO)!!
+        activityArguments = intent.getStringArrayExtra(NUMBER)!!
         number = activityArguments[0]
         when (activityArguments[2]) {
             "MCD" -> objectWatchProduct = ObjectWatchProduct(PolygonType.MCD, number)

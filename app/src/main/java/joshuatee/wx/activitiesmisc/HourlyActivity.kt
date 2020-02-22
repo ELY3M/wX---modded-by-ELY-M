@@ -41,6 +41,7 @@ import kotlinx.android.synthetic.main.activity_hourly.*
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.DefaultLabelFormatter
+import com.jjoe64.graphview.GraphView
 import kotlinx.coroutines.*
 
 class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
@@ -123,6 +124,7 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         }
         val series = LineGraphSeries(dataPoints.toTypedArray())
         series.color = Color.BLACK
+        val graph: GraphView = findViewById(R.id.graph)
         graph.viewport.isXAxisBoundsManual = true
         graph.viewport.backgroundColor = Color.LTGRAY
         graph.viewport.setMinX(0.0)

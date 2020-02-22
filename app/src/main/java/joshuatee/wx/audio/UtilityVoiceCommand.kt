@@ -101,25 +101,25 @@ object UtilityVoiceCommand {
                     vrString.contains("1") -> ObjectIntent(
                             context,
                             SpcSwoActivity::class.java,
-                            SpcSwoActivity.NO,
+                            SpcSwoActivity.NUMBER,
                             arrayOf("1", "sound")
                     )
                     vrString.contains("2") -> ObjectIntent(
                             context,
                             SpcSwoActivity::class.java,
-                            SpcSwoActivity.NO,
+                            SpcSwoActivity.NUMBER,
                             arrayOf("2", "sound")
                     )
                     vrString.contains("3") -> ObjectIntent(
                             context,
                             SpcSwoActivity::class.java,
-                            SpcSwoActivity.NO,
+                            SpcSwoActivity.NUMBER,
                             arrayOf("3", "sound")
                     )
                     else -> ObjectIntent(
                             context,
                             SpcSwoActivity::class.java,
-                            SpcSwoActivity.NO,
+                            SpcSwoActivity.NUMBER,
                             arrayOf("4-8", "sound")
                     )
                 }
@@ -127,7 +127,7 @@ object UtilityVoiceCommand {
                 ObjectIntent(
                         context,
                         SpcSwoActivity::class.java,
-                        SpcSwoActivity.NO,
+                        SpcSwoActivity.NUMBER,
                         arrayOf("1", "sound")
                 )
             }
@@ -135,28 +135,28 @@ object UtilityVoiceCommand {
             ObjectIntent(
                     context,
                     SpcSwoActivity::class.java,
-                    SpcSwoActivity.NO,
+                    SpcSwoActivity.NUMBER,
                     arrayOf("1", "sound")
             )
         } else if (vrString.contains("day 2")) {
             ObjectIntent(
                     context,
                     SpcSwoActivity::class.java,
-                    SpcSwoActivity.NO,
+                    SpcSwoActivity.NUMBER,
                     arrayOf("2", "sound")
             )
         } else if (vrString.contains("day 3")) {
             ObjectIntent(
                     context,
                     SpcSwoActivity::class.java,
-                    SpcSwoActivity.NO,
+                    SpcSwoActivity.NUMBER,
                     arrayOf("3", "sound")
             )
         } else if (vrString.contains("day 4")) {
             ObjectIntent(
                     context,
                     SpcSwoActivity::class.java,
-                    SpcSwoActivity.NO,
+                    SpcSwoActivity.NUMBER,
                     arrayOf("4-8", "sound")
             )
         } else if (vrString.contains("add")) {

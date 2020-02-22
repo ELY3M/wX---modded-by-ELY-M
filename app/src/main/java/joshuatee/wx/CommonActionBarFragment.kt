@@ -49,52 +49,30 @@ import joshuatee.wx.settings.SettingsMainActivity
 import joshuatee.wx.audio.SettingsPlaylistActivity
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.AwcRadarMosaicActivity
-import joshuatee.wx.settings.SettingsAboutActivity
 import joshuatee.wx.spc.SpcSoundingsActivity
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityAlertDialog
 import joshuatee.wx.vis.GoesActivity
+import joshuatee.wx.settings.SettingsAboutActivity
 
 open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListener {
 
+    //
     // All activities that need the common action bad extend this activity
     // Provides access to vis, nexrad, AFD, hourly, radar mosaic, map of statewide alerts, observations
     // settings, and about
+    //
 
     private val requestOk = 1
-    protected lateinit var helpMi: MenuItem
-    protected val helpStr: String = "Help is on"
     lateinit var view: View
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.cab, menu)
-        helpMi = menu.findItem(R.id.action_help)
-        if (MyApplication.helpMode) {
-            helpMi.title = helpStr
-        }
         return true
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_help -> {
-                if (MyApplication.helpMode) {
-                    MyApplication.helpMode = false
-                    UtilityUI.makeSnackBar(
-                            view,
-                            "Help mode is now disabled. Select again to turn on."
-                    )
-                    helpMi.title = "Help"
-                } else {
-                    MyApplication.helpMode = true
-                    UtilityUI.makeSnackBar(
-                            view,
-                            "Help mode is now enabled. Select again to turn off. Tap any icon to see help text."
-                    )
-                    helpMi.title = helpStr
-                }
-            }
 	    //not removing this - ELY M. 
             R.id.action_forecast_webpage -> ObjectIntent(
                 this,
@@ -106,128 +84,104 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                 )
             )
             R.id.action_alert -> {
-                if (MyApplication.helpMode) {
-                    showHelpCAB(item.itemId)
+                if (Location.isUS) {
+                    ObjectIntent(
+                            this,
+                            USWarningsWithRadarActivity::class.java,
+                            USWarningsWithRadarActivity.URL,
+                            arrayOf(
+                                    ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?",
+                                    "us"
+                            )
+                    )
                 } else {
-                    if (Location.isUS) {
-                        ObjectIntent(
-                                this,
-                                USWarningsWithRadarActivity::class.java,
-                                USWarningsWithRadarActivity.URL,
-                                arrayOf(
-                                        ".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?",
-                                        "us"
-                                )
-                        )
-                    } else {
-                        ObjectIntent(this, CanadaAlertsActivity::class.java)
-                    }
+                    ObjectIntent(this, CanadaAlertsActivity::class.java)
                 }
             }
             R.id.action_observations -> {
-                if (MyApplication.helpMode) {
-                    showHelpCAB(item.itemId)
-                } else {
-                    if (Location.isUS) {
-                        ObjectIntent(
-                                this,
-                                ImageCollectionActivity::class.java,
-                                ImageCollectionActivity.TYPE,
-                                arrayOf("OBSERVATIONS")
-                        )
-                    } else {
-                        ObjectIntent(
-                                this,
-                                ImageShowActivity::class.java,
-                                ImageShowActivity.URL,
-                                arrayOf(
-                                        "http://weather.gc.ca/data/wxoimages/wocanmap0_e.jpg",
-                                        "Observations"
-                                )
-                        )
-                    }
-                }
-            }
-            R.id.action_playlist -> {
-                if (MyApplication.helpMode) {
-                    showHelpCAB(item.itemId)
-                } else {
-                    ObjectIntent(this, SettingsPlaylistActivity::class.java)
-                }
-            }
-            R.id.action_soundings -> {
-                if (MyApplication.helpMode) {
-                    showHelpCAB(item.itemId)
-                } else {
-                    if (Location.isUS) ObjectIntent(
+                if (Location.isUS) {
+                    ObjectIntent(
                             this,
-                            SpcSoundingsActivity::class.java,
-                            SpcSoundingsActivity.URL,
-                            arrayOf(Location.wfo, "")
+                            ImageCollectionActivity::class.java,
+                            ImageCollectionActivity.TYPE,
+                            arrayOf("OBSERVATIONS")
+                    )
+                } else {
+                    ObjectIntent(
+                            this,
+                            ImageShowActivity::class.java,
+                            ImageShowActivity.URL,
+                            arrayOf(
+                                    "http://weather.gc.ca/data/wxoimages/wocanmap0_e.jpg",
+                                    "Observations"
+                            )
                     )
                 }
             }
-            R.id.action_cloud -> openVis(item.itemId)
-            R.id.action_radar -> openNexradRadar(this, item.itemId)
-            R.id.action_forecast -> openHourly(item.itemId)
-            R.id.action_afd -> openAfd(item.itemId)
-            R.id.action_dashboard -> openDashboard(item.itemId)
+            R.id.action_playlist -> {
+                ObjectIntent(this, SettingsPlaylistActivity::class.java)
+            }
+            R.id.action_soundings -> {
+                if (Location.isUS) ObjectIntent(
+                        this,
+                        SpcSoundingsActivity::class.java,
+                        SpcSoundingsActivity.URL,
+                        arrayOf(Location.wfo, "")
+                )
+            }
+            R.id.action_cloud -> openVis()
+            R.id.action_radar -> openNexradRadar(this)
+            R.id.action_forecast -> openHourly()
+            R.id.action_afd -> openAfd()
+            R.id.action_dashboard -> openDashboard()
             R.id.action_spotters -> ObjectIntent(this, SpottersActivity::class.java)
-            R.id.action_settings -> openSettings(item.itemId)
+            R.id.action_settings -> openSettings()
             R.id.action_radar_mosaic -> {
-                if (MyApplication.helpMode) {
-                    showHelpCAB(item.itemId)
-                } else {
-                    if (Location.isUS) {
-                        if (!UIPreferences.useAwcRadarMosaic) {
-                            ObjectIntent(
-                                    this,
-                                    USNwsMosaicActivity::class.java,
-                                    USNwsMosaicActivity.URL,
-                                    arrayOf("location")
-                            )
-                        } else {
-                            ObjectIntent(
-                                    this,
-                                    AwcRadarMosaicActivity::class.java,
-                                    AwcRadarMosaicActivity.URL,
-                                    arrayOf("")
-                            )
-                        }
-                    } else {
-                        val prov = Utility.readPref(
-                                this,
-                                "NWS" + Location.currentLocationStr + "_STATE",
-                                ""
-                        )
+                if (Location.isUS) {
+                    if (!UIPreferences.useAwcRadarMosaic) {
                         ObjectIntent(
                                 this,
-                                CanadaRadarActivity::class.java,
-                                CanadaRadarActivity.RID,
-                                arrayOf(UtilityCanada.getECSectorFromProv(prov), "rad")
+                                USNwsMosaicActivity::class.java,
+                                USNwsMosaicActivity.URL,
+                                arrayOf("location")
+                        )
+                    } else {
+                        ObjectIntent(
+                                this,
+                                AwcRadarMosaicActivity::class.java,
+                                AwcRadarMosaicActivity.URL,
+                                arrayOf("")
                         )
                     }
+                } else {
+                    val prov = Utility.readPref(
+                            this,
+                            "NWS" + Location.currentLocationStr + "_STATE",
+                            ""
+                    )
+                    ObjectIntent(
+                            this,
+                            CanadaRadarActivity::class.java,
+                            CanadaRadarActivity.RID,
+                            arrayOf(UtilityCanada.getECSectorFromProv(prov), "rad")
+                    )
                 }
             }
             R.id.action_vr -> {
-                if (MyApplication.helpMode) {
-                    showHelpCAB(item.itemId)
-                } else {
-                    if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying) {
-                        UtilityTts.mMediaPlayer!!.stop()
-                        UtilityTts.ttsIsPaused = true
-                    }
-                    val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-                    i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US")
-                    try {
-                        startActivityForResult(i, requestOk)
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                                this,
-                                "Error initializing speech to text engine.",
-                                Toast.LENGTH_LONG
-                        ).show()
-                    }
+                if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying) {
+                    UtilityTts.mMediaPlayer!!.stop()
+                    UtilityTts.ttsIsPaused = true
+                }
+                val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+                i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US")
+                try {
+                    startActivityForResult(i, requestOk)
+                } catch (e: Exception) {
+                    Toast.makeText(
+                            this,
+                            "Error initializing speech to text engine.",
+                            Toast.LENGTH_LONG
+                    ).show()
                 }
             }
             //not removing about - ELY M.
@@ -236,24 +190,6 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
         }
         return true
     }
-
-    private fun showHelpCAB(helpItem: Int) {
-        when (helpItem) {
-            R.id.action_alert -> showHelpTextCAB(resources.getString(R.string.help_uswarn))
-            R.id.action_cloud -> showHelpTextCAB(resources.getString(R.string.help_cloud))
-            R.id.action_radar -> showHelpTextCAB(resources.getString(R.string.help_radar))
-            R.id.action_afd -> showHelpTextCAB(resources.getString(R.string.help_afd))
-            R.id.action_dashboard -> showHelpTextCAB(resources.getString(R.string.help_severe_dashboard))
-            R.id.action_forecast -> showHelpTextCAB(resources.getString(R.string.help_hourly_forecast))
-            R.id.action_settings -> showHelpTextCAB(resources.getString(R.string.help_settings))
-            R.id.action_radar_mosaic -> showHelpTextCAB(resources.getString(R.string.help_goes_radar_mosaic))
-            R.id.action_vr -> showHelpTextCAB(resources.getString(R.string.help_vr))
-            R.id.action_playlist -> showHelpTextCAB(resources.getString(R.string.help_playlist))
-            R.id.action_soundings -> showHelpTextCAB(resources.getString(R.string.help_soundings))
-        }
-    }
-
-    private fun showHelpTextCAB(helpStr: String) = UtilityAlertDialog.showHelpText(helpStr, this)
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -272,110 +208,86 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
         }
     }
 
-    fun openNexradRadar(context: Context, itemID: Int) {
-        if (MyApplication.helpMode) {
-            showHelpCAB(itemID)
-        } else {
-            if (Location.isUS) {
-                if (!UIPreferences.dualpaneRadarIcon) {
-                    ObjectIntent(
-                            context,
-                            WXGLRadarActivity::class.java,
-                            WXGLRadarActivity.RID,
-                            arrayOf(Location.rid, "")
-                    )
-                } else {
-                    ObjectIntent(
-                            context,
-                            WXGLRadarActivityMultiPane::class.java,
-                            WXGLRadarActivityMultiPane.RID,
-                            arrayOf(Location.rid, "", "2")
-                    )
-                }
+    fun openNexradRadar(context: Context) {
+        if (Location.isUS) {
+            if (!UIPreferences.dualpaneRadarIcon) {
+                ObjectIntent(
+                        context,
+                        WXGLRadarActivity::class.java,
+                        WXGLRadarActivity.RID,
+                        arrayOf(Location.rid, "")
+                )
             } else {
                 ObjectIntent(
                         context,
-                        CanadaRadarActivity::class.java,
-                        CanadaRadarActivity.RID,
-                        arrayOf(Location.rid, "rad")
+                        WXGLRadarActivityMultiPane::class.java,
+                        WXGLRadarActivityMultiPane.RID,
+                        arrayOf(Location.rid, "", "2")
                 )
             }
+        } else {
+            ObjectIntent(
+                    context,
+                    CanadaRadarActivity::class.java,
+                    CanadaRadarActivity.RID,
+                    arrayOf(Location.rid, "rad")
+            )
         }
     }
 
-    fun openAfd(itemID: Int) {
-        if (MyApplication.helpMode) {
-            showHelpCAB(itemID)
+    fun openAfd() {
+        if (Location.isUS) {
+            ObjectIntent(
+                    this,
+                    AfdActivity::class.java,
+                    AfdActivity.URL,
+                    arrayOf(Location.wfo, "")
+            )
         } else {
-            if (Location.isUS) {
-                ObjectIntent(
-                        this,
-                        AfdActivity::class.java,
-                        AfdActivity.URL,
-                        arrayOf(Location.wfo, "")
-                )
-            } else {
-                ObjectIntent(this, CanadaTextActivity::class.java)
-            }
+            ObjectIntent(this, CanadaTextActivity::class.java)
         }
     }
 
-    fun openSettings(itemID: Int) {
-        if (MyApplication.helpMode) {
-            showHelpCAB(itemID)
+    fun openSettings() {
+        ObjectIntent(this, SettingsMainActivity::class.java)
+    }
+
+    fun openVis() {
+        if (Location.isUS) {
+            ObjectIntent(this, GoesActivity::class.java, GoesActivity.RID, arrayOf(""))
         } else {
-            ObjectIntent(this, SettingsMainActivity::class.java)
+            ObjectIntent(
+                    this,
+                    CanadaRadarActivity::class.java,
+                    CanadaRadarActivity.RID,
+                    arrayOf(Location.rid, "vis")
+            )
         }
     }
 
-    fun openVis(itemID: Int) {
-        if (MyApplication.helpMode) {
-            showHelpCAB(itemID)
+    fun openDashboard() {
+        if (Location.isUS) {
+            ObjectIntent(this, SevereDashboardActivity::class.java)
         } else {
-            if (Location.isUS) {
-                ObjectIntent(this, GoesActivity::class.java, GoesActivity.RID, arrayOf(""))
-            } else {
-                ObjectIntent(
-                        this,
-                        CanadaRadarActivity::class.java,
-                        CanadaRadarActivity.RID,
-                        arrayOf(Location.rid, "vis")
-                )
-            }
+            ObjectIntent(this, CanadaAlertsActivity::class.java)
         }
     }
 
-    fun openDashboard(itemID: Int) {
-        if (MyApplication.helpMode) {
-            showHelpCAB(itemID)
+    fun openHourly() {
+        if (Location.isUS) {
+            ObjectIntent(
+                    this,
+                    HourlyActivity::class.java,
+                    HourlyActivity.LOC_NUM,
+                    Location.currentLocationStr
+            )
         } else {
-            if (Location.isUS) {
-                ObjectIntent(this, SevereDashboardActivity::class.java)
-            } else {
-                ObjectIntent(this, CanadaAlertsActivity::class.java)
-            }
-        }
-    }
-
-    fun openHourly(itemID: Int) {
-        if (MyApplication.helpMode) {
-            showHelpCAB(itemID)
-        } else {
-            if (Location.isUS) {
-                ObjectIntent(
-                        this,
-                        HourlyActivity::class.java,
-                        HourlyActivity.LOC_NUM,
-                        Location.currentLocationStr
-                )
-            } else {
-                ObjectIntent(
-                        this,
-                        CanadaHourlyActivity::class.java,
-                        CanadaHourlyActivity.LOC_NUM,
-                        Location.currentLocationStr
-                )
-            }
+            ObjectIntent(
+                    this,
+                    CanadaHourlyActivity::class.java,
+                    CanadaHourlyActivity.LOC_NUM,
+                    Location.currentLocationStr
+            )
         }
     }
 

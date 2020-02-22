@@ -55,9 +55,9 @@ class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // Show summary of WPC MPD or show detail of only one is active
     // Closely based off SPC MCD equivalent
 
-    companion object {
-        private const val NO = ""
-    }
+    //companion object {
+    //    private const val NO = ""
+    //}
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var imageUrl = ""
@@ -73,9 +73,6 @@ class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.shared_tts)
         toolbarBottom.setOnMenuItemClickListener(this)
-        // FIXME make number = intent.getStringArrayExtra(NO)[0]
-        val no = intent.getStringExtra(NO)
-        imageUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/images/mcd$no.gif"
         url = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd.php"
         title = titleString
         getContent()
@@ -103,7 +100,7 @@ class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 ObjectIntent(
                         this@WpcMpdShowSummaryActivity,
                         SpcMcdWatchShowActivity::class.java,
-                        SpcMcdWatchShowActivity.NO,
+                        SpcMcdWatchShowActivity.NUMBER,
                         arrayOf(mpdNumbers[mpdIndex], "", PolygonType.MPD.toString())
                 )
             })
@@ -139,8 +136,9 @@ class WpcMpdShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, text, product, product))
+        if (audioPlayMenu(item.itemId, text, product, product)) {
             return true
+        }
         return when (item.itemId) {
             R.id.action_share -> {
                 if (bitmaps.size > 1)

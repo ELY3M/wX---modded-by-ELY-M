@@ -13,10 +13,38 @@
 // TODO [FIX] dual/quad pane radar don't take up the entire screen on chomeOS
 // TODO [REF] move off MyApplication.colon.split MyApplication.colon.space
 // TODO       miscPref.split(":").dropLastWhile { it.isEmpty() }
-// TODO [ADD] use Smaller images on larger screens
+// TODO [REF] reduce use of RegExp class
 // TODO [REF] use LatLon in Spotter, SpotterReports and other places that have lat and lon
+// TODO [ADD] storm reports - optimization for landscape
+// TODO [ADD] us alerts - optimization for landscape
+// TODO [FIX] chromeOS: text size for observations in nexrad
+// TODO [REF] rename AfdActivity to WfoText
+// TODO [FIX] hitting this? https://stackoverflow.com/questions/54120745/android-9-0-notificationmanager-notify-throwing-java-lang-securityexception
 
-55360 2020_02_09
+55370 2020_02_20
+55369 2020_02_18    [FIX] text product notifications were dependent on "<BR>"
+55368 2020_02_17    [FIX] attempt for hourly onrestart needs to reset graph
+                    [FIX] text product notifications were dependent on "<BR>"
+55367 2020_02_15    [ADD] remove help option from main menu in favor of offline documentation and FAQ
+55366 2020_02_15    [ADD] for multipane SPC Meso/Models if in landscape have images side by side
+55365 2020_02_15    [FIX] fire weather header
+                    [ADD] SPC SWO for landscape ( 4 wide )
+55364 2020_02_15    [FIX] settings -> about crash when hit share icon (set share text to about)
+                    [REF] rename SpcFireOutlookActivity to SpcFireOutlookSummaryActivity
+                    [ADD] dedicated SpcFireOutlookActivity activity to show graphic and text
+                    [REF] objectNhc refactor
+                    [ADD] enhance WPC Rainfall forecast, support landscape, use dedicate image/text viewer for each day
+                    [ADD] SPC Summary support landscape and use generic LinearLayout code
+55363 2020_02_14    [FIX] SpcSwoSummaryActivity - onrestart don't remove views until new images are downloaded
+                    [ADD] WIP - not done - SPC Storm reports optimize for large landscape
+                    [REF] remove redundant code in UtilityTimeSunMoon
+                    [ADD] text product by state - temp and precip table, example RTPWI
+                    [ADD] increase max text size in settings -> radar from 20 to 40
+55362 2020_02_13    [ADD] SPC Thunder Storm outlook - multiple images per row (and tap on image to enter dedicated image viewer)
+                    [ADD] SPC Fire weather outlook - multiple images per row
+55361 2020_02_12    [FIX] locfrag radar warn/watch - check for activityReferenceWithNull != null before proceed
+                    [FIX] OnSwipeTouchListener(java) check for nulls in onFling
+55360 2020_02_10    [FIX] removeLineBreaks was changing newline to nothing instead of single space
 55359 2020_02_09    [REF] lint
                     [ADD] CPC 3 month temp/precip outlook in WPC Images
                     [ADD] NHC change format to severe dashboard including tap on image to open in dedicated fashion
@@ -24,7 +52,7 @@
 55358 2020_02_08    [ADD] substantial revamp of utilDownload, WFO text, national text with regards to data download and presentation
 55357 2020_02_08    [REF] lint (utilDownload)
                     [ADD] substantial revamp of utilDownload, WFO text, national text with regards to data download and presentation
-55356 2020_02_08    [REF] migrate off WebscreenABModels
+55356 2020_02_08    [REF] migrate off Web screenABModels
                     [FIX] use alternative sources for text products: WFO: AFD, SPC Convective Outlooks, Short Range disc
 55355 2020_02_06    [FIX] hourly now has quotes around temp
                     [ADD] keyboard shortcut for location selector on main screen

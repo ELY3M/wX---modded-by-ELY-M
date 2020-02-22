@@ -186,6 +186,7 @@ object UtilityMetarConditions {
             "Light Drizzle" to "minus_ra",
             "Heavy Drizzle" to "minus_ra",
             "Light Rain Fog/Mist" to "minus_ra",
+            "Light Rain Mist" to "minus_ra",
             "Drizzle Fog/Mist" to "minus_ra",
             "Light Drizzle Fog/Mist" to "minus_ra",
             "Heavy Drizzle Fog/Mist" to "minus_ra",

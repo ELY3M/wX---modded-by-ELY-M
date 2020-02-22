@@ -83,12 +83,7 @@
         android:orderInCategory="99"
         android:title="@string/action_settings"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/action_help"
-        android:orderInCategory="99"
-        android:title="@string/help_menu_item"
-        app:showAsAction="never" />
-	
+
     <item
         android:id="@+id/action_about"
         android:orderInCategory="100"

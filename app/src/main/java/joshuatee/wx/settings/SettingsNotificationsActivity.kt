@@ -52,10 +52,8 @@ class SettingsNotificationsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         toolbar.subtitle = "Please tap on text for additional help."
-        val cardSound =
-                ObjectCardText(this, ll, "Notification sound chooser", MyApplication.textSizeNormal, MyApplication.paddingSettings)
-        val cardWFOFilter =
-                ObjectCardText(this, ll, "WFO notification filter", MyApplication.textSizeNormal, MyApplication.paddingSettings)
+        val cardSound = ObjectCardText(this, ll, "Notification sound chooser", MyApplication.textSizeNormal, MyApplication.paddingSettings)
+        val cardWFOFilter = ObjectCardText(this, ll, "WFO notification filter", MyApplication.textSizeNormal, MyApplication.paddingSettings)
         ObjectCardText(
                 this,
                 ll,
@@ -322,7 +320,8 @@ class SettingsNotificationsActivity : BaseActivity() {
 
     private fun notifSoundPicker() {
         var uri: Uri? = null
-        if (MyApplication.notifSoundUri != "") uri = Uri.parse(MyApplication.notifSoundUri)
+        if (MyApplication.notifSoundUri != "")
+            uri = Uri.parse(MyApplication.notifSoundUri)
         val intent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER)
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION)
         intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone")

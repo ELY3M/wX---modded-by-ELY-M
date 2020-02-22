@@ -126,8 +126,9 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item))
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true
+        }
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.GOES16)
             R.id.action_a12 -> getAnimate(12)
@@ -171,8 +172,9 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
             R.id.action_share -> {
                 if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
-                } else
+                } else {
                     UtilityShare.shareBitmap(this, this, drw.getLabel(), bitmap)
+                }
             }
             else -> return super.onOptionsItemSelected(item)
         }

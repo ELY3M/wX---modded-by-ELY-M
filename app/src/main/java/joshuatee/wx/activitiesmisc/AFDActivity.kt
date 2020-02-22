@@ -118,6 +118,10 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         } else {
             activityArguments[1]
         }
+        if (product.startsWith("RTP") && product.length == 5) {
+            val state = Utility.getWfoSiteName(wfo).split(",")[0]
+            product = "RTP$state"
+        }
         title = product
         version = 1
         oldProduct = ""
@@ -136,11 +140,18 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
     }
 
     private fun getContentFixThis() {
-        if (drw.token == "CLI") {
-            product = drw.token
-            checkForCliSite()
-        } else {
-            getProduct(drw.token)
+        when (drw.token) {
+            "CLI" -> {
+                product = drw.token
+                checkForCliSite()
+            }
+            "RTPZZ" -> {
+                val state = Utility.getWfoSiteName(wfo).split(",")[0]
+                getProduct(drw.token.replace("ZZ", state))
+            }
+            else -> {
+                getProduct(drw.token)
+            }
         }
     }
 
@@ -173,18 +184,26 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
             version = 1
         }
         html = withContext(Dispatchers.IO) {
-            if (product != "CLI") {
-                if (version == 1) {
-                    UtilityDownload.getTextProduct(this@AfdActivity, product + wfo)
-                } else {
-                    UtilityDownload.getTextProduct(product + wfo, version)
+            when {
+                product == "CLI" -> {
+                    UtilityDownload.getTextProduct(this@AfdActivity, product + wfo + originalWfo)
                 }
-            } else {
-                // encode issuing WFO and site for CLI
-                UtilityDownload.getTextProduct(this@AfdActivity, product + wfo + originalWfo)
+                product.startsWith("RTP") && product.length == 5 -> {
+                    UtilityDownload.getTextProduct(this@AfdActivity, product)
+                }
+                else -> {
+                    if (version == 1) {
+                        UtilityDownload.getTextProduct(this@AfdActivity, product + wfo)
+                    } else {
+                        UtilityDownload.getTextProduct(product + wfo, version)
+                    }
+                }
             }
         }
-        title = product +  wfo
+        title = when {
+            product.startsWith("RTP") && product.length == 5 -> product
+            else -> product + wfo
+        }
         // restore the WFO as CLI modifies to a sub-region
         if (product == "CLI") {
             wfo = originalWfo
@@ -198,20 +217,24 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         if (html == "") {
             html = "None issued by this office recently."
         }
-        if (fixedWidthProducts.contains(product)) {
+        if (fixedWidthProducts.contains(product) || product.startsWith("RTP")) {
             textCard.setTextAndTranslate(html)
         } else {
             //textCard.setTextAndTranslate(Utility.fromHtml(html))
             textCard.setTextAndTranslate(html)
         }
-        if (fixedWidthProducts.contains(product)) {
+        if (fixedWidthProducts.contains(product) || product.startsWith("RTP")) {
             textCard.tv.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
         } else {
             textCard.tv.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
         }
         UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, product)
         if (activityArguments[1] == "") {
-            Utility.writePref(this@AfdActivity, "WFO_TEXT_FAV", product)
+            if (product.startsWith("RTP") && product.length == 5) {
+                Utility.writePref(this@AfdActivity, "WFO_TEXT_FAV", "RTPZZ")
+            } else {
+                Utility.writePref(this@AfdActivity, "WFO_TEXT_FAV", product)
+            }
             MyApplication.wfoTextFav = product
         }
         oldProduct = product
@@ -307,6 +330,10 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
                 else -> {
                     wfo = locationList[pos].split(" ").getOrNull(0) ?: ""
                     originalWfo = wfo
+                    if (product.startsWith("RTP") && product.length == 5) {
+                        val state = Utility.getWfoSiteName(wfo).split(",")[0]
+                        product = "RTP$state"
+                    }
                     if (product == "CLI") {
                         checkForCliSite()
                     } else {

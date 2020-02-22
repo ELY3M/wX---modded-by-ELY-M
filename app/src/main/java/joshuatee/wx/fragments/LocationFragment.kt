@@ -62,8 +62,9 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.vis.GoesActivity
 import kotlinx.coroutines.*
 
-class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
+class LocationFragment : Fragment()  {
 
+    //
     // Displays the main content when wX is first opened including current conditions
     // hazards, 7 days and radar ( option )
     //
@@ -83,9 +84,6 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
     private lateinit var intent: Intent
     private var cardCC: ObjectCardCurrentConditions? = null
     private lateinit var linearLayout: LinearLayout
-    private val helpForecastGenericStatus = 1
-    private val helpCurrentGeneric = 2
-    private val helpForecastGeneric = 3
     private var homescreenFavLocal = ""
     private val cardViews = mutableListOf<CardView>()
     private var sevenDayCards = mutableListOf<ObjectCard7Day>()
@@ -274,9 +272,7 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
             cardCC?.setListener(
                     alertDialogStatus,
                     alertDialogStatusList,
-                    ::radarTimestamps,
-                    helpCurrentGeneric,
-                    ::showHelp
+                    ::radarTimestamps
             )
         } else {
             cardCC = ObjectCardCurrentConditions(activityReference, 1)
@@ -286,20 +282,6 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
             linearLayoutForecast?.orientation = LinearLayout.VERTICAL
         }
         addDynamicCards()
-        cardCC?.let { objectCardCC ->
-            objectCardCC.textViewTop.setOnClickListener(OnClickListener {
-                if (Location.isUS) {
-                    if (MyApplication.helpMode) {
-                        showHelp(helpCurrentGeneric)
-                    }
-                }
-            })
-            objectCardCC.textViewBottom.setOnClickListener(OnClickListener {
-                if (MyApplication.helpMode) {
-                    showHelp(helpForecastGenericStatus)
-                }
-            })
-        }
         getContent()
         if (MyApplication.locDisplayImg) {
             glviewArr.indices.forEach {
@@ -421,11 +403,6 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
         }
     }
 
-    override fun onClick(v2: View) {
-        if (MyApplication.helpMode)
-            showHelp(v2.id)
-    }
-
     private fun getRadar(idx: Int) = GlobalScope.launch(uiDispatcher) {
         var radarTimeStampLocal = ""
         if (oglrIdx != -1)
@@ -473,14 +450,16 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
             }
         }
         // recent adds Jan 2020
-        withContext(Dispatchers.IO) {
-            UtilityDownloadWarnings.get(activityReference)
-        }
-        if (!oglrArr[idx].product.startsWith("2")) {
-            UtilityRadarUI.plotWarningPolygons(glviewArr[idx], oglrArr[idx], false)
+        if (MyApplication.radarWarnings && activityReferenceWithNull != null) {
+            withContext(Dispatchers.IO) {
+                UtilityDownloadWarnings.get(activityReference)
+            }
+            if (!oglrArr[idx].product.startsWith("2")) {
+                UtilityRadarUI.plotWarningPolygons(glviewArr[idx], oglrArr[idx], false)
+            }
         }
 
-        if (PolygonType.MCD.pref) {
+        if (PolygonType.MCD.pref && activityReferenceWithNull != null) {
             withContext(Dispatchers.IO) {
                 UtilityDownloadMcd.get(activityReference)
                 UtilityDownloadWatch.get(activityReference)
@@ -490,7 +469,7 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
             }
         }
 
-        if (PolygonType.MPD.pref) {
+        if (PolygonType.MPD.pref && activityReferenceWithNull != null) {
             withContext(Dispatchers.IO) {
                 UtilityDownloadMpd.get(activityReference)
             }
@@ -513,10 +492,10 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
 
         // NOTE: below was backed out, data structures for these features only support one radar site
         // so locfrag and multi-pane don't current support. Would be nice to fix someday.
-        // Showextras a few lines above was changed from false to true along with few lines added below
+        // Show extras a few lines above was changed from false to true along with few lines added below
         // some time ago there were crashes caused by this additional content but I don't recall the details
         // guess it's worth another try to see if the issue back then was fixed in the various re-writes that have
-        // occured since
+        // occurred since
         if (Location.isUS && idx == 0) {
             if (PolygonType.OBS.pref) {
                 UtilityWXGLTextObject.updateObs(numRadars, wxglTextArr)
@@ -565,18 +544,6 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
             )
         }
         hsImages[productIndex].setImage(bitmap)
-    }
-
-    private fun showHelp(helpItem: Int) {
-        when (helpItem) {
-            helpForecastGenericStatus -> showHelpText(resources.getString(R.string.help_forecast_generic_status))
-            helpCurrentGeneric -> showHelpText(resources.getString(R.string.help_current_generic))
-            helpForecastGeneric -> showHelpText(resources.getString(R.string.help_forecast_generic))
-        }
-    }
-
-    private fun showHelpText(helpStr: String) {
-        UtilityAlertDialog.showHelpText(helpStr, activityReference)
     }
 
     private val changeListener = object : WXGLSurfaceView.OnProgressChangeListener {
@@ -822,21 +789,6 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
         mActivity = null
     }
 
-    // FIXME change to return context and use getContext in API greater then 22
-    // FIXME duplicate for 2 other areas
-
-    private val activityReference: FragmentActivity
-        get() {
-            if (mActivity == null) {
-                mActivity = if (android.os.Build.VERSION.SDK_INT >= 23 ) {
-                    activity
-                } else {
-                    activity
-                }
-            }
-            return mActivity!!
-        }
-
     private fun setupHazardCards() {
         linearLayoutHazards?.removeAllViews()
         hazardsExpandedAl.clear()
@@ -972,14 +924,16 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
                         cardSunrise!!.text = (
                                 UtilityTimeSunMoon.getSunriseSunset(
                                         activityReference,
-                                        Location.currentLocationStr
+                                        Location.currentLocationStr,
+                                        false
                                 ) + MyApplication.newline + UtilityTime.gmtTime()
                                 )
                     } else {
                         cardSunrise!!.text = (
                                 UtilityTimeSunMoon.getSunriseSunset(
                                         activityReference,
-                                        Location.currentLocationStr
+                                        Location.currentLocationStr,
+                                        false
                                 ) + MyApplication.newline + UtilityTime.gmtTime()
                                 )
                     }
@@ -1049,5 +1003,32 @@ class LocationFragment : Fragment(), OnClickListener { // OnItemSelectedListener
     fun showLocations() {
         locationDialogue.show()
     }
+
+    // FIXME change to return context and use getContext in API greater then 22
+    // FIXME duplicate for 2 other areas
+
+    private val activityReference: FragmentActivity
+        get() {
+            if (mActivity == null) {
+                mActivity = if (android.os.Build.VERSION.SDK_INT >= 23 ) {
+                    activity
+                } else {
+                    activity
+                }
+            }
+            return mActivity!!
+        }
+
+    private val activityReferenceWithNull: FragmentActivity?
+        get() {
+            if (mActivity == null) {
+                mActivity = if (android.os.Build.VERSION.SDK_INT >= 23 ) {
+                    activity
+                } else {
+                    activity
+                }
+            }
+            return mActivity
+        }
 }
 

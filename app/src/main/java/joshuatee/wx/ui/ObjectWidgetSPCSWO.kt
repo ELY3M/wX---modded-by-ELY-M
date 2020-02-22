@@ -44,7 +44,7 @@ class ObjectWidgetSpcSwo(context: Context) {
                         remoteViews,
                         SpcSwoActivity::class.java,
                         ivList[it],
-                        SpcSwoActivity.NO,
+                        SpcSwoActivity.NUMBER,
                         arrayOf(dayAsString, ""),
                         SPCSWO.action + dayAsString
                 )

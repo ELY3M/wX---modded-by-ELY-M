@@ -43,6 +43,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.radar.WXGLNexrad
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.TouchImageView2
+import joshuatee.wx.ui.UtilityUI
 
 object UtilityImg {
 
@@ -88,6 +89,7 @@ object UtilityImg {
         return layerDrawableToBitmap(layers)
     }
 
+    // FIXME rename Posn to Position
     fun firstRunSetZoomPosn(firstRunF: Boolean, img: TouchImageView2, pref: String): Boolean {
         var firstRun = firstRunF
         if (!firstRun) {
@@ -231,12 +233,28 @@ object UtilityImg {
         iv.setImageBitmap(bitmap)
     }
 
-    fun resizeViewSetImgByHeight(bitmap: Bitmap, iv: ImageView) {
-        val paramsIv = iv.layoutParams
+    fun resizeViewAndSetImage(context: Context, bitmap: Bitmap, imageView: ImageView) {
+        if (UtilityUI.isLandScape(context)) {
+            resizeViewSetImgByWidth(bitmap, imageView)
+        } else {
+            resizeViewSetImgByHeight(bitmap, imageView)
+        }
+    }
+
+    private fun resizeViewSetImgByHeight(bitmap: Bitmap, imageView: ImageView) {
+        val paramsIv = imageView.layoutParams
         paramsIv.height = MyApplication.dm.heightPixels / 2
         paramsIv.width = paramsIv.height * bitmap.width / bitmap.height
-        iv.layoutParams = paramsIv
-        iv.setImageBitmap(bitmap)
+        imageView.layoutParams = paramsIv
+        imageView.setImageBitmap(bitmap)
+    }
+
+    private fun resizeViewSetImgByWidth(bitmap: Bitmap, imageView: ImageView) {
+        val paramsIv = imageView.layoutParams
+        paramsIv.width = MyApplication.dm.widthPixels / 2
+        paramsIv.height = paramsIv.width * bitmap.width / bitmap.height
+        imageView.layoutParams = paramsIv
+        imageView.setImageBitmap(bitmap)
     }
 
     fun scaleBitmap(bitmap: Bitmap, wantedWidth: Int, wantedHeight: Int): Bitmap {
@@ -248,7 +266,7 @@ object UtilityImg {
         return output
     }
 
-    fun drawTextToBitmap(context: Context, bitmap: Bitmap, mText: String, textColor: Int): Bitmap {
+    fun drawTextToBitmap(context: Context, bitmap: Bitmap, text: String, textColor: Int): Bitmap {
         try {
             val scale = context.resources.displayMetrics.density
             val canvas = Canvas(bitmap)
@@ -257,10 +275,10 @@ object UtilityImg {
             paint.textSize = (12 * scale).toInt().toFloat()
             paint.setShadowLayer(1f, 0f, 1f, Color.DKGRAY)
             val bounds = Rect()
-            paint.getTextBounds(mText, 0, mText.length, bounds)
+            paint.getTextBounds(text, 0, text.length, bounds)
             val x = (bitmap.width - bounds.width()) / 6
             val y = 15
-            canvas.drawText(mText, x * scale, y * scale, paint)
+            canvas.drawText(text, x * scale, y * scale, paint)
             return bitmap
         } catch (e: Exception) {
             UtilityLog.handleException(e)
@@ -289,8 +307,8 @@ object UtilityImg {
         }
     }
 
-    fun vectorDrawableToBitmap(context: Context, resdraw: Int, color: Int): Bitmap {
-        val d = ContextCompat.getDrawable(context, resdraw)!!
+    fun vectorDrawableToBitmap(context: Context, resourceDrawable: Int, color: Int): Bitmap {
+        val d = ContextCompat.getDrawable(context, resourceDrawable)!!
         DrawableCompat.setTint(d, color)
         val b = Bitmap.createBitmap(d.intrinsicWidth, d.intrinsicHeight, Config.ARGB_8888)
         val c = Canvas(b)

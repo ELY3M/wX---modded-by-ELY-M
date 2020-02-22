@@ -36,8 +36,8 @@ class ObjectCardCurrentConditions(context: Context, version: Int) {
 
     private val objCard: ObjectCard
     private var imageView = ObjectImageView(context)
-    val textViewTop: ObjectTextView
-    val textViewBottom: ObjectTextView
+    private val textViewTop: ObjectTextView
+    private val textViewBottom: ObjectTextView
     private val textViewMiddle: ObjectTextView
 
     init {
@@ -119,25 +119,19 @@ class ObjectCardCurrentConditions(context: Context, version: Int) {
     fun setListener(
         alertDialogStatus: ObjectDialogue?,
         alertDialogStatusAl: MutableList<String>,
-        radarTimestamps: () -> List<String>,
-        helpCurrentGeneric: Int,
-        fn: (Int) -> Unit
+        radarTimestamps: () -> List<String>
     ) {
         imageView.image.setOnClickListener {
-            if (MyApplication.helpMode) {
-                fn(helpCurrentGeneric)
-            } else {
-                alertDialogStatusAl.clear()
-                alertDialogStatusAl.add("Edit Location...")
-                alertDialogStatusAl.add("Force Data Refresh...")
-                if (MyApplication.locDisplayImg && Location.isUS) {
-                    alertDialogStatusAl.add("Radar type: Reflectivity")
-                    alertDialogStatusAl.add("Radar type: Velocity")
-                    alertDialogStatusAl.add("Reset zoom and center")
-                    alertDialogStatusAl += radarTimestamps()
-                }
-                alertDialogStatus?.show()
+            alertDialogStatusAl.clear()
+            alertDialogStatusAl.add("Edit Location...")
+            alertDialogStatusAl.add("Force Data Refresh...")
+            if (MyApplication.locDisplayImg && Location.isUS) {
+                alertDialogStatusAl.add("Radar type: Reflectivity")
+                alertDialogStatusAl.add("Radar type: Velocity")
+                alertDialogStatusAl.add("Reset zoom and center")
+                alertDialogStatusAl += radarTimestamps()
             }
+            alertDialogStatus?.show()
         }
     }
 

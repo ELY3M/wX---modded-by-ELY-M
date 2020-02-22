@@ -333,7 +333,6 @@ object UtilityDownload {
     fun getTextProduct(context: Context, prodF: String): String {
         var text: String
         val prod = prodF.toUpperCase(Locale.US)
-
         when {
             prod == "AFDLOC" -> {
                 text = getTextProduct(context, "afd" + Location.wfo.toLowerCase(Locale.US))
@@ -353,19 +352,18 @@ object UtilityDownload {
             }
             prod == "QPF94E" -> {
                 val textUrl = "https://www.wpc.ncep.noaa.gov/qpf/ero.php?opt=curr&day=" + "1"
-                val html = textUrl.getHtmlSep()
-                // occurences of " <br>" requires removeBreaks()
-                text = UtilityString.extractPre(html).removeSingleLineBreaks().removeBreaks()
+                val html = textUrl.getHtmlWithNewLine()
+                text = UtilityString.extractPre(html).removeHtml()
             }
             prod == "QPF98E" -> {
                 val textUrl = "https://www.wpc.ncep.noaa.gov/qpf/ero.php?opt=curr&day=" + "2"
-                val html = textUrl.getHtmlSep()
-                text = UtilityString.extractPre(html).removeSingleLineBreaks().removeBreaks()
+                val html = textUrl.getHtmlWithNewLine()
+                text = UtilityString.extractPre(html).removeHtml()
             }
             prod == "QPF99E" -> {
                 val textUrl = "https://www.wpc.ncep.noaa.gov/qpf/ero.php?opt=curr&day=" + "3"
-                val html = textUrl.getHtmlSep()
-                text = UtilityString.extractPre(html).removeSingleLineBreaks().removeBreaks()
+                val html = textUrl.getHtmlWithNewLine()
+                text = UtilityString.extractPre(html).removeHtml()
             }
             prod == "SWPC3DAY" -> {
                 text = (MyApplication.nwsSwpcWebSitePrefix + "/text/3-day-forecast.txt").getHtmlWithNewLine()
@@ -471,17 +469,17 @@ object UtilityDownload {
             prod.contains("FWDDY1") -> {
                 val url = "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/fwdy1.html"
                 text = url.getHtmlWithNewLine()
-                text = UtilityString.extractPre(text).removeLineBreaks()
+                text = UtilityString.extractPre(text).removeLineBreaks().removeHtml()
             }
             prod.contains("FWDDY2") -> {
                 val url = "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/fwdy2.html"
                 text = url.getHtmlWithNewLine()
-                text = UtilityString.extractPre(text).removeLineBreaks()
+                text = UtilityString.extractPre(text).removeLineBreaks().removeHtml()
             }
             prod.contains("FWDDY38") -> {
                 val url = "${MyApplication.nwsSPCwebsitePrefix}/products/exper/fire_wx/"
                 text = url.getHtmlWithNewLine()
-                text = UtilityString.extractPre(text).removeLineBreaks()
+                text = UtilityString.extractPre(text).removeLineBreaks().removeHtml()
             }
             prod.startsWith("FXCN01") -> {
                 text = ("http://collaboration.cmc.ec.gc.ca/cmc/cmop/FXCN/").getHtmlSep()
@@ -543,7 +541,6 @@ object UtilityDownload {
                 val location = prod.substring(3).replace("%", "")
                 val locationName = Utility.getWfoSiteName(location)
                 val state = locationName.split(",")[0]
-                //final masterHtml = await ("https://www.weather.gov/" + location + "/textproducts").getHtmlSep();
                 val url = "https://forecast.weather.gov/product.php?site=$location&issuedby=$state&product=$product"
                 // https://forecast.weather.gov/product.php?site=ILX&issuedby=IL&product=RWR
                 text = url.getHtmlSep()
@@ -551,7 +548,7 @@ object UtilityDownload {
                 text = text.replace("<br>", "\n")
             }
             prod.startsWith("NSH")
-                    || prod.startsWith("RTP") -> {
+                    || (prod.startsWith("RTP") && prod.length == 6) -> {
                 val product = prod.substring(0, 3)
                 val location = prod.substring(3).replace("%", "")
                 val url = "https://forecast.weather.gov/product.php?site=$location&issuedby=$location&product=$product"
@@ -560,8 +557,18 @@ object UtilityDownload {
                 text = UtilityString.extractPreLsr(text)
                 text = text.replace("<br>", "\n")
             }
+            prod.startsWith("RTP") && prod.length == 5 -> {
+                val product = prod.substring(0, 3)
+                val location = prod.substring(3, 5).replace("%", "")
+                val url = MyApplication.nwsApiUrl + "/products/types/$product/locations/$location"
+                val html = url.getNwsHtml()
+                val urlProd = html.parse("\"id\": \"(.*?)\"")
+                val prodHtml = (MyApplication.nwsApiUrl + "/products/$urlProd").getNwsHtml()
+                text = UtilityString.parseAcrossLines(prodHtml, "\"productText\": \"(.*?)\\}")
+                text = text.replace("\\n\\n", "\n")
+                text = text.replace("\\n", "\n")
+            }
             prod.startsWith("CLI") -> {
-                //val product = prod.substring(0, 3)
                 val location = prod.substring(3, 6).replace("%", "")
                 val wfo = prod.substring(6).replace("%", "")
                 // TODO each WFO has multiple locations for this product
@@ -573,15 +580,12 @@ object UtilityDownload {
                 text = "Celsius to Fahrenheit table" + MyApplication.newline + UtilityMath.celsiusToFahrenheitTable()
             }
             else -> {
-
                 // Feb 8 2020 Sat
                 // The NWS API for text products has been unstable Since Wed Feb 5
                 // resorting to alternatives
-
                 val t1 = prod.substring(0, 3)
                 var t2 = prod.substring(3)
                 t2 = t2.replace("%", "")
-
                 if (useNwsApi) {
                     val url = MyApplication.nwsApiUrl + "/products/types/$t1/locations/$t2"
                     val html = url.getNwsHtml()
@@ -642,13 +646,9 @@ object UtilityDownload {
                                     "&format=txt&version=1&glossary=0"
                             val html = url.getHtmlWithNewLine()
                             text = UtilityString.extractPreLsr(html).removeLineBreaks().removeHtml()
-                            //val html = url.getHtmlSep().replace("<br>", MyApplication.newline)
-                            //text = UtilityString.extractPreLsr(html).removeLineBreaks()
                         }
                     }
                 }
-
-
             }
         }
         UtilityPlayList.checkAndSave(context, prod, text)

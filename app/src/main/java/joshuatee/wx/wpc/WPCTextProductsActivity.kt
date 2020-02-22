@@ -119,7 +119,6 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         html = withContext(Dispatchers.IO) {
             UtilityDownload.getTextProduct(this@WpcTextProductsActivity, prod)
         }
-        //textCard.setTextAndTranslate(Utility.fromHtml(html))
         textCard.setTextAndTranslate(html)
         UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, "wpctext")
         if (initProd != prod) {

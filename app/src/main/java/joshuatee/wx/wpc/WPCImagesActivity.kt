@@ -165,7 +165,9 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_forward -> {
                 timePeriod += 1

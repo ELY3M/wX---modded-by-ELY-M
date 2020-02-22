@@ -64,7 +64,7 @@ internal object UtilityHomeScreen {
             val token = "SWOD$number"
             MyApplication.HM_CLASS[token] = SpcSwoActivity::class.java
             MyApplication.HM_CLASS_ARGS[token] = arrayOf(number, "")
-            MyApplication.HM_CLASS_ID[token] = SpcSwoActivity.NO
+            MyApplication.HM_CLASS_ID[token] = SpcSwoActivity.NUMBER
         }
         (1..6).forEach {
             val number = it.toString()

@@ -58,9 +58,10 @@ class ObjectWidgetCC(context: Context) {
         if (Location.isUS(widgetLocationNumberAsInteger)) {
             remoteViews.setTextViewText(
                     R.id.location,
-                    Location.getName(widgetLocationNumberAsInteger) + " " + UtilityTimeSunMoon.getSunriseSunsetShort(
+                    Location.getName(widgetLocationNumberAsInteger) + " " + UtilityTimeSunMoon.getSunriseSunset(
                             context,
-                            (widgetLocationNumberAsInteger + 1).toString()
+                            (widgetLocationNumberAsInteger + 1).toString(),
+                            true
                     )
             )
             remoteViews.setTextColor(R.id.location, MyApplication.widgetTextColor)

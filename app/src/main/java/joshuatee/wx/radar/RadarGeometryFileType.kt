@@ -21,7 +21,7 @@
 
 package joshuatee.wx.radar
 
-enum class RadarGeometryFileType {
+/*enum class RadarGeometryFileType {
     stateLines,
     countyLines,
     highways,
@@ -29,4 +29,4 @@ enum class RadarGeometryFileType {
     highwaysExtended,
     mexicoLines,
     canadaLines,
-}
+}*/

@@ -36,7 +36,7 @@ import joshuatee.wx.models.ModelsSpcSrefActivity
 import joshuatee.wx.models.ModelsSpcHrefActivity
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.spc.SpcCompmapActivity
-import joshuatee.wx.spc.SpcFireOutlookActivity
+import joshuatee.wx.spc.SpcFireOutlookSummaryActivity
 import joshuatee.wx.spc.SpcMcdWatchShowSummaryActivity
 import joshuatee.wx.spc.SpcMesoActivity
 import joshuatee.wx.spc.SpcSwoActivity
@@ -75,35 +75,33 @@ class SpcFragment : Fragment() {
                     ModelsSpcSrefActivity::class.java,
                     ModelsSpcSrefActivity.INFO,
                     arrayOf("1", "SPCSREF", "SPCSREF"),
-                    resources.getString(R.string.help_spc_sref),
                     "spcsref", "SREF"
             )
             hm["spcsummary"] = TileObject(
                     R.drawable.spc_sum, SpcSwoSummaryActivity::class.java, "",
-                    arrayOf(), resources.getString(R.string.help_spc_swo_summary), "spcsummary", "Convective Summary by Image"
+                    arrayOf(), "spcsummary", "Convective Summary by Image"
             )
             hm["spcswod1"] = TileObject(
-                    R.drawable.day1, SpcSwoActivity::class.java, SpcSwoActivity.NO,
-                    arrayOf("1", ""), resources.getString(R.string.help_spc_swo_detail), "spcswod1", "Day 1"
+                    R.drawable.day1, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
+                    arrayOf("1", ""),  "spcswod1", "Day 1"
             )
             hm["spcswod2"] = TileObject(
-                    R.drawable.day2, SpcSwoActivity::class.java, SpcSwoActivity.NO,
-                    arrayOf("2", ""), resources.getString(R.string.help_spc_swo_detail), "spcswod2", "Day 2"
+                    R.drawable.day2, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
+                    arrayOf("2", ""),  "spcswod2", "Day 2"
             )
             hm["spcswod3"] = TileObject(
-                    R.drawable.day3, SpcSwoActivity::class.java, SpcSwoActivity.NO,
-                    arrayOf("3", ""), resources.getString(R.string.help_spc_swo_detail), "spcswod3", "Day 3"
+                    R.drawable.day3, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
+                    arrayOf("3", ""),  "spcswod3", "Day 3"
             )
             hm["spcswod48"] = TileObject(
-                    R.drawable.day48, SpcSwoActivity::class.java, SpcSwoActivity.NO,
-                    arrayOf("4-8", ""), resources.getString(R.string.help_spc_swo_detail), "spcswod48", "Day 4 through 8"
+                    R.drawable.day48, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
+                    arrayOf("4-8", ""),  "spcswod48", "Day 4 through 8"
             )
             hm["spcstormrpt1"] = TileObject(
                     R.drawable.report_today,
                     SpcStormReportsActivity::class.java,
                     SpcStormReportsActivity.NO,
                     arrayOf("today"),
-                    resources.getString(R.string.help_spc_storm_reports),
                     "spcstormrpt1", "Storm reports today"
             )
             hm["spcstormrpt2"] = TileObject(
@@ -111,7 +109,6 @@ class SpcFragment : Fragment() {
                     SpcStormReportsActivity::class.java,
                     SpcStormReportsActivity.NO,
                     arrayOf("yesterday"),
-                    resources.getString(R.string.help_spc_storm_reports),
                     "spcstormrpt2", "Storm reports yesterday"
             )
             hm["spcmcd"] = TileObject(
@@ -119,7 +116,6 @@ class SpcFragment : Fragment() {
                     SpcMcdWatchShowSummaryActivity::class.java,
                     SpcMcdWatchShowSummaryActivity.NO,
                     arrayOf("mcd"),
-                    resources.getString(R.string.help_spc_mcd),
                     "spcmcd", "MCD"
             )
             hm["spcwat"] = TileObject(
@@ -127,7 +123,6 @@ class SpcFragment : Fragment() {
                     SpcMcdWatchShowSummaryActivity::class.java,
                     SpcMcdWatchShowSummaryActivity.NO,
                     arrayOf("wat"),
-                    resources.getString(R.string.help_spc_watches),
                     "spcwat", "Watches"
             )
             hm["spcmeso"] = TileObject(
@@ -135,27 +130,25 @@ class SpcFragment : Fragment() {
                     SpcMesoActivity::class.java,
                     SpcMesoActivity.INFO,
                     arrayOf("", "1", "SPCMESO"),
-                    resources.getString(R.string.help_spc_mesoanalysis),
                     "spcmeso", "Mesoanalysis"
             )
             hm["spcfire"] = TileObject(
-                    R.drawable.fire_outlook, SpcFireOutlookActivity::class.java, "",
-                    arrayOf(""), resources.getString(R.string.help_spc_fire_weather), "spcfire", "Fire outlooks"
+                    R.drawable.fire_outlook, SpcFireOutlookSummaryActivity::class.java, "",
+                    arrayOf(""), "spcfire", "Fire outlooks"
             )
             hm["spctstorm"] = TileObject(
                     R.drawable.tstorm, SpcThunderStormOutlookActivity::class.java, "",
-                    arrayOf(), resources.getString(R.string.help_spc_tstorm), "spctstorm", "Thunderstorm outlooks"
+                    arrayOf(), "spctstorm", "Thunderstorm outlooks"
             )
             hm["spccompmap"] = TileObject(
                     R.drawable.spccompmap, SpcCompmapActivity::class.java, "",
-                    arrayOf(), resources.getString(R.string.help_spc_compmap), "spccompmap", "Compmap"
+                    arrayOf(), "spccompmap", "Compmap"
             )
             hm["spchrrr"] = TileObject(
                     R.drawable.spchrrr,
                     ModelsSpcHrrrActivity::class.java,
                     "",
                     arrayOf("1", "SPCHRRR", "SPC HRRR"),
-                    resources.getString(R.string.help_spchrrr_models),
                     "spchrrr", "HRRR"
             )
             hm["spchref"] = TileObject(
@@ -163,7 +156,6 @@ class SpcFragment : Fragment() {
                     ModelsSpcHrefActivity::class.java,
                     "",
                     arrayOf("1", "SPCHREF", "SPC HREF"),
-                    resources.getString(R.string.help_spchref_models),
                     "spchref", "HREF"
             )
             val tileOrder = "spcsref:spcsummary:spcswod1:spcswod2:spcswod3:spcswod48:spcstormrpt1:spcstormrpt2:spcmcd:spcwat:spcmeso:spcfire:spctstorm:spccompmap:"
@@ -180,7 +172,6 @@ class SpcFragment : Fragment() {
                 spcPref += "spchref:"
                 Utility.writePref("FRAGMENT_SPC_ORDER", spcPref)
             }
-            //val tileOrderArr = MyApplication.colon.split(spcPref)
             val tileOrderArr = spcPref.split(":").dropLastWhile { it.isEmpty() }
             return tileOrderArr
                     .filterNot { it.contains("modeltt") }.filterNot { it.contains("spcsseo") }

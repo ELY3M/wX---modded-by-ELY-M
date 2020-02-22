@@ -31,7 +31,7 @@ import java.io.DataInputStream
 import java.io.IOException
 import java.nio.ByteBuffer*/
 
-import joshuatee.wx.R
+//import joshuatee.wx.R
 
 class RadarGeometryFile(
         //var context: Context,

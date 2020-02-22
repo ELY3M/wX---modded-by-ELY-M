@@ -48,7 +48,7 @@
             <include layout="@layout/widget_toolbar_top_with_spinner" />
 
             <LinearLayout
-                android:id="@+id/ll"
+                android:id="@+id/linearLayout"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"

@@ -240,7 +240,6 @@ object UtilityWpcFronts {
                             lines[index] =  lines[index]  + lines[index + 2]
                         }
                     }
-
                 }
                 val tokens = lines[index].trim().split(" ").toMutableList()
                 if (tokens.size > 1) {

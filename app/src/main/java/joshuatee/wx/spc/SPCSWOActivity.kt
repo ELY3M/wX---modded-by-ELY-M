@@ -43,17 +43,22 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.activitiesmisc.ImageShowActivity
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectLinearLayout
+import joshuatee.wx.ui.UtilityUI
 import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
+    //
     // show SWO for Day X as specified in extra
+    // Arguments
+    //
+    // 1: day
     //
 
     companion object {
-        const val NO: String = ""
+        const val NUMBER: String = ""
     }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
@@ -64,6 +69,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var playlistProd = ""
     private lateinit var objectCardText: ObjectCardText
     private var objectCardImageList: MutableList<ObjectCardImage> = mutableListOf()
+    private var imagesPerRow = 2
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,20 +78,25 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 R.layout.activity_linear_layout_bottom_toolbar,
                 R.menu.spcswo
         )
-        toolbarBottom.setOnMenuItemClickListener(this)
-        val linearLayoutHorizontalList = listOf(
-                ObjectLinearLayout(this, ll),
-                ObjectLinearLayout(this, ll),
-                ObjectLinearLayout(this, ll)
-        )
-        linearLayoutHorizontalList.forEach {
-            it.linearLayout.orientation = LinearLayout.HORIZONTAL
+        if (UtilityUI.isLandScape(this) && UtilityUI.isTablet()) {
+            imagesPerRow = 4
         }
-        for (i in 0..4) {
-            objectCardImageList.add(ObjectCardImage(this, linearLayoutHorizontalList[i / 2].linearLayout))
+        toolbarBottom.setOnMenuItemClickListener(this)
+        var numberOfImages = 0
+        val horizontalLinearLayouts: MutableList<ObjectLinearLayout> = mutableListOf()
+        for (index in 0..4) {
+            if (numberOfImages % imagesPerRow == 0) {
+                val objectLinearLayout = ObjectLinearLayout(this, ll)
+                objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
+                horizontalLinearLayouts.add(objectLinearLayout)
+                objectCardImageList.add(ObjectCardImage(this, objectLinearLayout.linearLayout))
+            } else {
+                objectCardImageList.add(ObjectCardImage(this, horizontalLinearLayouts.last().linearLayout))
+            }
+            numberOfImages += 1
         }
         objectCardText = ObjectCardText(this, ll, toolbar, toolbarBottom)
-        activityArguments = intent.getStringArrayExtra(NO)!!
+        activityArguments = intent.getStringArrayExtra(NUMBER)!!
         day = activityArguments[0]
         title = "Day $day Convective Outlook"
         val menu = toolbarBottom.menu
@@ -146,9 +157,8 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             urls = UtilitySpcSwo.getUrls(day)
             bitmaps = urls.map { it.getImage() }
         }
-        //objectCardText.text = Utility.fromHtml(html)
         objectCardText.text = html
-        toolbar.subtitle = html.parse("(Valid.*?)<")
+        toolbar.subtitle = html.parse("(Valid.*?Z - [0-9]{6}Z)")
         if (activityArguments[1] == "sound") {
             UtilityTts.synthesizeTextAndPlay(applicationContext, html, "spcswo")
         }
@@ -186,7 +196,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun setImageAndClickAction(index: Int, urls: List<String>, textUrl: String) {
-        objectCardImageList[index].setImage(bitmaps[index], 2)
+        objectCardImageList[index].setImage(bitmaps[index], imagesPerRow)
         objectCardImageList[index].setOnClickListener(
                 View.OnClickListener {
                     showImageProduct(urls[index], textUrl)

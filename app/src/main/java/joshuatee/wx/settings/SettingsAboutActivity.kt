@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
 
 package joshuatee.wx.settings
 
@@ -42,11 +43,9 @@ import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class SettingsAboutActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
-    private lateinit var activityArguments: Array<String>
     private var html = ""
     private lateinit var textCard: ObjectCardText
-    private var keyCodeDiag = ""
-    private val faqUrl = "https://docs.google.com/document/d/1OQrviP10XBvQZ7QKh5R4bsd72ZKffK5f0ISRuCaSk5k/edit?usp=sharing"
+    private val faqUrl = "https://docs.google.com/document/u/1/d/e/2PACX-1vQVkTWlnpRZCSn-ZI7tNLMDHUq-oWp9i1bf8e1yFf1ebEA2CFMapVUsALGJASj2aNhEMYAwBMs4GstL/pub"
     private val iOSUrl = "https://apps.apple.com/us/app/wxl23/id1171250052"
     //private val releaseNotesUrl = "https://docs.google.com/document/d/1A7rvP3QrJg0QqoEtKgU4B_VqLkjECijb4CFtXyNQNAM/edit?usp=sharing"
     private val releaseNotesUrl = "https://github.com/ELY3M/wX---modded-by-ELY-M/blob/master/README.md"
@@ -119,8 +118,8 @@ class SettingsAboutActivity : AudioPlayActivity(), OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_share -> UtilityShare.shareText(
                 this,
-                activityArguments[1],
-                Utility.fromHtml(html)
+                "About wX",
+                html
             )
             else -> return super.onOptionsItemSelected(item)
         }

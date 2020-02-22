@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55360"
-    android:versionName="55360"
+    android:versionCode="55370"
+    android:versionName="55370"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -280,12 +280,22 @@
       android:parentActivityName="WX" >
   </activity>
   <activity
+      android:name=".spc.SpcFireOutlookSummaryActivity"
+      android:label="@string/title_activity_spcfire_outlook"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
       android:name=".spc.SpcFireOutlookActivity"
       android:label="@string/title_activity_spcfire_outlook"
       android:parentActivityName="WX" >
   </activity>
   <activity
       android:name=".wpc.WpcRainfallForecastActivity"
+      android:label="@string/title_activity_hpcrainfall_forecast"
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
+      android:name=".wpc.WpcRainfallForecastSummaryActivity"
       android:label="@string/title_activity_hpcrainfall_forecast"
       android:parentActivityName="WX" >
   </activity>

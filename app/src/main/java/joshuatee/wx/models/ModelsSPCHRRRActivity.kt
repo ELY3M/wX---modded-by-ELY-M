@@ -34,6 +34,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.LinearLayout
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
@@ -42,6 +43,7 @@ import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.ObjectSpinner
 import joshuatee.wx.radar.VideoRecordActivity
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
@@ -88,6 +90,10 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                     iconsEvenlySpaced = false,
                     bottomToolbar = true
             )
+            val linearLayout: LinearLayout = findViewById(R.id.linearLayout)
+            if (UtilityUI.isLandScape(this)) {
+                linearLayout.orientation = LinearLayout.HORIZONTAL
+            }
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         title = activityArguments[2]

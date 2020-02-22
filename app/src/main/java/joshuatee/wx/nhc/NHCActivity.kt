@@ -67,12 +67,10 @@ class NhcActivity : AudioPlayActivity(), OnMenuItemClickListener {
         scrollView.smoothScrollTo(0, 0)
         withContext(Dispatchers.IO) { objNhc.getTextData() }
         objNhc.showTextData()
-        withContext(Dispatchers.IO) { objNhc.getAtlanticImageData()}
-        objNhc.showAtlanticImageData()
-        withContext(Dispatchers.IO) { objNhc.getPacificImageData() }
-        objNhc.showPacificImageData()
-        withContext(Dispatchers.IO) { objNhc.getCentralImageData() }
-        objNhc.showCentralImageData()
+        NhcOceanEnum.values().forEach {
+            withContext(Dispatchers.IO) { objNhc.regionMap[it]!!.getImages() }
+            objNhc.showImageData(it)
+        }
     }
 
     private fun showTextProduct(prod: String) {

@@ -26,11 +26,18 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.graphics.Bitmap
 import android.view.MenuItem
+import android.view.View
+import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
+import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
+import joshuatee.wx.activitiesmisc.ImageShowActivity
+import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardImage
+import joshuatee.wx.ui.ObjectLinearLayout
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
@@ -38,8 +45,14 @@ import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class SpcThunderStormOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
+    //
+    // SPC Thunderstorm Outlooks
+    //
+
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var bitmaps = listOf<Bitmap>()
+    private var urls = listOf<String>()
+    private var imagesPerRow = 2
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,9 +62,12 @@ class SpcThunderStormOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickLi
                 R.menu.shared_multigraphics,
                 true
         )
+        if (UtilityUI.isLandScape(this)) {
+            imagesPerRow = 3
+        }
         toolbarBottom.setOnMenuItemClickListener(this)
-        title = "SPC"
-        toolbar.subtitle = "Thunderstorm Outlook"
+        toolbar.subtitle = "SPC"
+        title = "Thunderstorm Outlooks"
         getContent()
     }
 
@@ -61,12 +77,44 @@ class SpcThunderStormOutlookActivity : BaseActivity(), Toolbar.OnMenuItemClickLi
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        ll.removeAllViews()
-        bitmaps = withContext(Dispatchers.IO) {
-            UtilitySpc.thunderStormOutlookImages
+        urls = withContext(Dispatchers.IO) {
+            UtilitySpc.thunderStormOutlookUrls
         }
-        bitmaps.forEach {
-            ObjectCardImage(this@SpcThunderStormOutlookActivity, ll, it)
+        bitmaps = withContext(Dispatchers.IO) {
+            urls.map { it.getImage() }
+        }
+        ll.removeAllViews()
+        var numberOfImages = 0
+        val horizontalLinearLayouts: MutableList<ObjectLinearLayout> = mutableListOf()
+        bitmaps.forEachIndexed { index, bitmap ->
+            val objectCardImage: ObjectCardImage
+            if (numberOfImages % imagesPerRow == 0) {
+                val objectLinearLayout = ObjectLinearLayout(this@SpcThunderStormOutlookActivity, ll)
+                objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
+                horizontalLinearLayouts.add(objectLinearLayout)
+                objectCardImage = ObjectCardImage(
+                        this@SpcThunderStormOutlookActivity,
+                        objectLinearLayout.linearLayout,
+                        bitmap,
+                        imagesPerRow
+                )
+            } else {
+                objectCardImage = ObjectCardImage(
+                        this@SpcThunderStormOutlookActivity,
+                        horizontalLinearLayouts.last().linearLayout,
+                        bitmap,
+                        imagesPerRow
+                )
+            }
+            objectCardImage.setOnClickListener(View.OnClickListener {
+                ObjectIntent(
+                        this@SpcThunderStormOutlookActivity,
+                        ImageShowActivity::class.java,
+                        ImageShowActivity.URL,
+                        arrayOf(urls[index], "")
+                )
+            })
+            numberOfImages += 1
         }
     }
 
