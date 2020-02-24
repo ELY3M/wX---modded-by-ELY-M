@@ -612,6 +612,15 @@ class WXGLTextObject(
                             color
                     )
                 }
+
+                ///Fix to hide the wpc pressure center texts from conus radar.
+                if (MyApplication.radarConusRadar) {
+                    if (wxglRender.zoom < (MyApplication.radarConusRadarZoom / 1000.0).toFloat()) {
+                        hideWpcPressureCenters()
+                    }
+                }
+                //
+
             } else {
                 hideWpcPressureCenters()
             }

@@ -643,6 +643,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 if (zoom > it.scaleCutOff) {
                     drawTriangles(it)
                 }
+            }
 
             GLES20.glLineWidth(defaultLineWidth)
 
@@ -661,7 +662,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 locIconBuffers.chunkCount = 1
                 drawLocation(locIconBuffers)
             } else {
-	    //drawTriangles(wbCircleBuffers)
+	        //drawTriangles(wbCircleBuffers)
             //GLES20.glLineWidth(defaultLineWidth)
             // FIXME use new configurable
             GLES20.glLineWidth(MyApplication.radarGpsCircleLineSize.toFloat())
@@ -669,7 +670,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             }
 
 
-        if (MyApplication.locdotBug) {
+        if (MyApplication.locdotBug)  {
             Log.i(TAG, "bearing: " + WXGLRadarActivity.bearingCurrent)
             Log.i(TAG, "speed: " + WXGLRadarActivity.speedCurrent)
             if (WXGLRadarActivity.speedCurrent >= 0.43) {
@@ -679,8 +680,6 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             }
         }
 
-
-        } //displayhold
 
 
         GLES20.glLineWidth(MyApplication.radarWarnLineSize)
@@ -706,11 +705,15 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 swoBuffers
         ).forEach { drawPolygons(it, 8) }
 
-        if (zoom < (0.50 / zoomScreenScaleFactor)) {
+
+            if (zoom < (0.50 / zoomScreenScaleFactor)) {
             GLES20.glLineWidth(MyApplication.radarWatchMcdLineSize)
             wpcFrontBuffersList.forEach { drawElement(it) }
         }
-    }
+
+
+
+    } //displayhold
     
 
 
