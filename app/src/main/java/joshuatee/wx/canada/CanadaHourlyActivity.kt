@@ -22,6 +22,7 @@
 package joshuatee.wx.canada
 
 import android.annotation.SuppressLint
+import android.graphics.Typeface
 import android.os.Bundle
 
 import joshuatee.wx.R
@@ -60,5 +61,6 @@ class CanadaHourlyActivity : BaseActivity() {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         c0.text = withContext(Dispatchers.IO) { UtilityCanadaHourly.getString(locNumInt) }
+        c0.tv.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
     }
 }

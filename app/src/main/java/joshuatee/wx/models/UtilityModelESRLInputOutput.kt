@@ -31,8 +31,6 @@ import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityString
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityLog
 
 internal object UtilityModelEsrlInputOutput {
 

@@ -63,6 +63,7 @@ internal object UtilitySpcStormReports {
                     output.append(lineChunks[1])
                     output.append(" ")
                     output.append(lineChunks[2])
+                    // FIXME get rid of HTML
                     output.append("<font color=")
                     output.append(UIPreferences.highlightColorStr)
                     output.append("> ")

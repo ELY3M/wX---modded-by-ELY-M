@@ -27,7 +27,7 @@ import android.app.Notification
 import android.app.TaskStackBuilder
 import android.content.Intent
 import android.graphics.Color
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
+//import androidx.localbroadcastmanager.content.LocalBroadcastManager
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.notifications.ObjectNotification
@@ -62,7 +62,7 @@ class DownloadPlaylistService : IntentService("DownloadPlaylistService") {
             val notification = UtilityNotification.createNotificationBigTextWithAction(notificationObj)
             notificationObj.sendNotification(this, url, 1, notification)
         }
-        LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("playlistdownloaded"))
+        //LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("playlistdownloaded"))
     }
 } 
 

@@ -20,8 +20,29 @@
 // TODO [FIX] chromeOS: text size for observations in nexrad
 // TODO [REF] rename AfdActivity to WfoText
 // TODO [FIX] hitting this? https://stackoverflow.com/questions/54120745/android-9-0-notificationmanager-notify-throwing-java-lang-securityexception
+// TODO [FIX] chromeOS - multipane radar toolbar is not fully transparent
+// TODO [FIX] change animation interval to animation speed
+// TODO [FIX] update PlayList to be more like iOS
+// TODO [ADD] playlist onrestart does not get new content
+// TODO [ADD] playlist should use WPCText instead of textviewer
+// TODO [ADD] playlist should show more text
 
-55370 2020_02_20
+55375 2020_03_04
+55374 2020_03_04    [ADD] 'com.google.android.material:material:1.0.0' to 1.1.0
+55373 2020_03_03    [ADD] gradle plugin update
+                    [REF] misc lint
+                    [FIX] playlist allows duplicate entry
+                    [FIX] remove LocalBroadcastManager in playlist
+                    [ADD] alerts to us alerts in main submenu
+                    [ADD] framework for ObjectImageSummary
+                    [ADD] 'com.google.android.material:material:1.0.0' to 1.1.0 (backed-out)
+                    [ADD] "org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.61" to 1.3.70
+55372 2020_02_27    [FIX] Canadian hourly
+                    [ADD] main menu change from Hourly to Hourly Forecast
+                    [FIX] whitespace issue in some text products
+55371 2020_02_25    [ADD] in UIPreferences use flutter/dart blue for highlight (14, 71, 161)
+55370 2020_02_25    [ADD] android studio update to 3.6
+                    [ADD] in UIPreferences use flutter/dart blue for highlight (88, 121, 169)
 55369 2020_02_18    [FIX] text product notifications were dependent on "<BR>"
 55368 2020_02_17    [FIX] attempt for hourly onrestart needs to reset graph
                     [FIX] text product notifications were dependent on "<BR>"

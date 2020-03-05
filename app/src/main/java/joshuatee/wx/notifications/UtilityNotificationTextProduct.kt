@@ -35,7 +35,6 @@ import joshuatee.wx.activitiesmisc.TextScreenActivity
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
-import joshuatee.wx.util.UtilityLog
 
 object UtilityNotificationTextProduct {
 
@@ -70,12 +69,11 @@ object UtilityNotificationTextProduct {
                 //arrTmp = textProdChunk.split("<BR>").dropLastWhile { it.isEmpty() }
                 //if (arrTmp.size > 1)
                 //    textProdFirstline = arrTmp[0]
-                if (textProdChunk.length > matchSize) {
-                    textProdFirstLine = textProdChunk.substring(0, matchSize - 2)
+                textProdFirstLine = if (textProdChunk.length > matchSize) {
+                    textProdChunk.substring(0, matchSize - 2)
                 } else {
-                    textProdFirstLine = textProdChunk
+                    textProdChunk
                 }
-                UtilityLog.d("wx", "FIRSTLINE: " + textProdFirstLine)
                 // compare the first line to a stored first line, if not execute first block
                 if (textProdFirstLine != "") {
                     if (textProdFirstLine != Utility.readPref(context, PREF_TOKEN + "_" + s, "")) {

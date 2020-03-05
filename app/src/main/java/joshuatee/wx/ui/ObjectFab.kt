@@ -26,6 +26,8 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Build
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.core.content.ContextCompat
@@ -72,7 +74,10 @@ class ObjectFab {
 
     fun fabSetResDrawable(context: Context, resourceDrawable: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            fab.setImageDrawable(ContextCompat.getDrawable(context, resourceDrawable))
+            val drawable = ContextCompat.getDrawable(context, resourceDrawable)
+            //drawable!!.mutate().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
+            //drawable!!.mutate().colorFilter
+            fab.setImageDrawable(drawable)
         } else {
             val d = ContextCompat.getDrawable(context, resourceDrawable)!!
             val b = Bitmap.createBitmap(
@@ -88,8 +93,9 @@ class ObjectFab {
     }
 
     private fun setupFAB(context: Context, icon: Int) {
-        if (UIPreferences.themeIsWhite) fab.backgroundTintList =
-                ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+        if (UIPreferences.themeIsWhite) {
+            fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+        }
         fabSetResDrawable(context, icon)
         if (Build.VERSION.SDK_INT > 20) {
             fab.elevation = MyApplication.fabElevation
@@ -99,8 +105,7 @@ class ObjectFab {
 
     private fun setupFAB(context: Context) {
         if (UIPreferences.themeIsWhite) {
-            fab.backgroundTintList =
-                    ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+            fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
         }
         if (Build.VERSION.SDK_INT > 20) {
             fab.elevation = MyApplication.fabElevation

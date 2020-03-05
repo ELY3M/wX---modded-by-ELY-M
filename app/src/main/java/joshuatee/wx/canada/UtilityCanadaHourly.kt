@@ -27,13 +27,16 @@ import joshuatee.wx.MyApplication
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.Location
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
 
 internal object UtilityCanadaHourly {
 
     fun getString(locNumInt: Int): String {
         val htmlUrl = MyApplication.canadaEcSitePrefix + "/forecast/hourly/" + (Location.getX(locNumInt).split(":"))[1].toLowerCase(Locale.US) + "-" + (Location.getY(locNumInt).split(":"))[0] + "_metric_e.html"
         val html = htmlUrl.getHtml()
-        val header = "Time   Temp   Summary   PrecipChance   Wind   Humindex"
+        //val header = "Time   Temp  Summary   PrecipChance   Wind"
+        val header = "Time    Temp  Summary                  Precip   Wind"
         return header + parse(html)
     }
 
@@ -41,25 +44,34 @@ internal object UtilityCanadaHourly {
             MyApplication.canadaEcSitePrefix + "/forecast/hourly/" + (Location.getX(locNumInt).split(":"))[1].toLowerCase(
             Locale.US) + "-" + (Location.getY(locNumInt).split(":"))[0] + "_metric_e.html"
 
-    private fun parse(htmlF: String): String {
-        var hourly = ""
-        val html = htmlF.parse("<tbody>(.*?)</tbody>")
-        val timeAl = html.parseColumn("<tr>.*?<td.*?>(.*?)</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
-        val tempAl = html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>(.*?)</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
-        val currCondAl = html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>(.*?)</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
-        val popsAl = html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>(.*?)</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
-        val windDirAl = html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">(.*?)</abbr>.*?<br />.*?<td.*?>.*?</td>.*?</tr>")
-        val windSpeedAl = html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>(.*?)<br />.*?<td.*?>.*?</td>.*?</tr>")
-        val humIndexAl = html.parseColumn("<tr>.*?<td.*?>.*?</td>.*?<td.*?>.*?</td>.*?<div class=\"media.body\">.*?<p>.*?</p>.*?</div>.*?<td.*?>.*?</td>.*?<abbr title=\".*?\">.*?</abbr>.*?<br />.*?<td.*?>(.*?)</td>.*?</tr>")
+    private fun parse(htmlFullPage: String): String {
+        var string = ""
+        val html = htmlFullPage.parse("<tbody>(.*?)</tbody>")
+        val times = html.parseColumn("<td headers=.header1. class=.text-center.>([0-9]{2}:[0-9]{2})</td>")
+        val temperatures = html.parseColumn("<td headers=.header2. class=.text-center.>(.*?)</td>")
+        val currentConditions = html.parseColumn("</span><div class=.media-body.><p>(.*?)</p></div>")
+        val precipChances = html.parseColumn("<td headers=.header4. class=.text-center.>(.*?)</td>")
+        val winds = html.parseColumn("<abbr title=(.*?.>.*?<.abbr>..[0-9]{2})<br>").toMutableList()
+        //let feelsLikeTemps = html.parseColumn("<td headers=.header7. class=.text-center.>(.*?)</td>")
         val space = "   "
-        var humIndex: String
-        timeAl.indices.forEach {
-            humIndex = humIndexAl[it].replace("<abbr.*?>".toRegex(), "")
-            humIndex = humIndex.replace("</abbr>", "")
-            hourly += MyApplication.newline + timeAl[it] + space + tempAl[it] + space + currCondAl[it]
-            hourly += space + popsAl[it] + space + windDirAl[it] + windSpeedAl[it] + space + humIndex
+        UtilityLog.d("wx", winds.toString())
+        winds.indices.forEach {
+            val cleanString = removeSpecialCharsFromString(winds[it])
+            winds[it] = cleanString.parse(">(.*?)<") + " " + cleanString.parse(".*?([0-9]{1,3})")
         }
-        return hourly
+        times.indices.forEach {
+            string += MyApplication.newline + times[it] + space +
+                    Utility.safeGet(temperatures, it).padEnd(3, ' ')  + space +
+                    Utility.safeGet(currentConditions, it).padEnd(22, ' ') + space +
+                    Utility.safeGet(precipChances, it).padEnd(6, ' ')  + space +
+                    Utility.safeGet(winds, it)
+        }
+        return string
+    }
+
+    private fun removeSpecialCharsFromString(text: String): String {
+        //val okayChars = setOf("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890+-=().!_<>")
+        return text.filter { it.isLetterOrDigit() || it.isWhitespace() || it == '>' || it == '<' }
     }
 }
 

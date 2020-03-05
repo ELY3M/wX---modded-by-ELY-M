@@ -23,7 +23,6 @@ package joshuatee.wx.util
 
 import android.content.Context
 import android.text.format.DateFormat
-import joshuatee.wx.MyApplication
 import joshuatee.wx.external.ExternalSunriseLocation
 import joshuatee.wx.external.ExternalSunriseSunsetCalculator
 import joshuatee.wx.radar.RID

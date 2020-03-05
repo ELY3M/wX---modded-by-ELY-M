@@ -55,6 +55,7 @@ fun String.removeLineBreaks(): String {
                 .replace("\n", "ABC123")
                 .replace("ABC123ABC123", "\n")
                 .replace("ABC123", " ")
+                .replace("  ", " ")
 }
 
 fun String.truncate(size: Int): String {

@@ -158,7 +158,7 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun sortSpotters() {
-        Collections.sort(spotterList, Comparator<Spotter> { p1, p2 ->
+        Collections.sort(spotterList, Comparator { p1, p2 ->
             val res = p1.lastName.compareTo(p2.lastName, ignoreCase = true)
             if (res != 0)
                 return@Comparator res
@@ -169,7 +169,7 @@ class SpottersActivity : BaseActivity() {
             spotterList.indices.forEach { spotterList2.add(spotterList[it]) }
             firstTime = false
         }
-        Collections.sort(spotterList2, Comparator<Spotter> { p1, p2 ->
+        Collections.sort(spotterList2, Comparator { p1, p2 ->
             val res = p1.lastName.compareTo(p2.lastName, ignoreCase = true)
             if (res != 0)
                 return@Comparator res
