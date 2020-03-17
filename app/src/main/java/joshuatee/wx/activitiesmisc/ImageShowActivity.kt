@@ -98,7 +98,7 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         bitmap = withContext(Dispatchers.IO) { url.getImage() }
         if (needsWhiteBackground) {
-            bitmap = UtilityImg.addColorBG(this@ImageShowActivity, bitmap, Color.WHITE)
+            bitmap = UtilityImg.addColorBackground(this@ImageShowActivity, bitmap, Color.WHITE)
         }
         img.setBitmap(bitmap)
     }

@@ -35,54 +35,41 @@ import joshuatee.wx.util.UtilityTime
 
 internal object WXGLPolygonWarnings {
 
-    fun addGeneric(
-            projectionType: ProjectionType,
-            radarSite: String,
-            objectPolygonWarning: ObjectPolygonWarning
-    ): List<Double> {
+    fun addGeneric(projectionType: ProjectionType, radarSite: String, objectPolygonWarning: ObjectPolygonWarning): List<Double> {
         val warningList = mutableListOf<Double>()
         val prefToken = objectPolygonWarning.storage.value
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
-        var j: Int
-        var pixXInit: Double
-        var pixYInit: Double
         val html = prefToken.replace("\n", "").replace(" ", "")
         val polygons = html.parseColumn(RegExp.warningLatLonPattern)
         val vtecs = html.parseColumn(RegExp.warningVtecPattern)
-        var polyCount = -1
+        var polygonCount = -1
         polygons.forEach { polygon ->
-            polyCount += 1
-            if ( objectPolygonWarning.type == PolygonWarningType.SpecialWeatherStatement || (vtecs.size > polyCount && !vtecs[polyCount].startsWith("O.EXP") && !vtecs[polyCount].startsWith("O.CAN")  )
+            polygonCount += 1
+            if (objectPolygonWarning.type == PolygonWarningType.SpecialWeatherStatement
+                    || (vtecs.size > polygonCount
+                            && !vtecs[polygonCount].startsWith("O.EXP")
+                            && !vtecs[polygonCount].startsWith("O.CAN"))
             ) {
-                val polyTmp =
-                        polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
+                val polyTmp = polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
                 val testArr = polyTmp.split(" ")
-                val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }
+                val y = testArr.asSequence().filterIndexed { index: Int, _: String -> index and 1 == 0 }
                         .map {
                             it.toDoubleOrNull() ?: 0.0
                         }.toList()
-                val x = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 != 0 }
+                val x = testArr.asSequence().filterIndexed { index: Int, _: String -> index and 1 != 0 }
                         .map {
                             it.toDoubleOrNull() ?: 0.0
                         }.toList()
                 if (y.isNotEmpty() && x.isNotEmpty()) {
-                    var tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], projectionNumbers)
-                    pixXInit = tmpCoords[0]
-                    pixYInit = tmpCoords[1]
-                    warningList.add(tmpCoords[0])
-                    warningList.add(tmpCoords[1])
+                    val startCoordinates = UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], projectionNumbers).toMutableList()
+                    warningList += startCoordinates
                     if (x.size == y.size) {
-                        j = 1
-                        while (j < x.size) {
-                            tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[j], y[j], projectionNumbers)
-                            warningList.add(tmpCoords[0])
-                            warningList.add(tmpCoords[1])
-                            warningList.add(tmpCoords[0])
-                            warningList.add(tmpCoords[1])
-                            j += 1
+                        for (index in 1 until x.size) {
+                            val coordinates = UtilityCanvasProjection.computeMercatorNumbers(x[index], y[index], projectionNumbers).toMutableList()
+                            warningList += coordinates
+                            warningList += coordinates
                         }
-                        warningList.add(pixXInit)
-                        warningList.add(pixYInit)
+                        warningList += startCoordinates
                     }
                 }
             }
@@ -90,11 +77,7 @@ internal object WXGLPolygonWarnings {
         return warningList
     }
 
-    fun add(
-            projectionType: ProjectionType,
-            radarSite: String,
-            polygonType: PolygonType
-    ): List<Double> {
+    fun add(projectionType: ProjectionType, radarSite: String, polygonType: PolygonType): List<Double> {
         val warningList = mutableListOf<Double>()
         val prefToken = when (polygonType) {
             PolygonType.TOR -> MyApplication.severeDashboardTor.value
@@ -102,49 +85,38 @@ internal object WXGLPolygonWarnings {
             else -> MyApplication.severeDashboardFfw.value
         }
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
-        var j: Int
-        var pixXInit: Double
-        var pixYInit: Double
         val html = prefToken.replace("\n", "").replace(" ", "")
         val polygons = html.parseColumn(RegExp.warningLatLonPattern)
         val vtecs = html.parseColumn(RegExp.warningVtecPattern)
-        var polyCount = -1
+        var polygonCount = -1
         polygons.forEach { polygon ->
-            polyCount += 1
+            polygonCount += 1
             //val vtecIsCurrent = UtilityTime.isVtecCurrent(vtecAl[polyCount])
-            if (vtecs.size > polyCount
-                    && !vtecs[polyCount].startsWith("O.EXP")
-                    && !vtecs[polyCount].startsWith("O.CAN")
-                    && UtilityTime.isVtecCurrent(vtecs[polyCount])
+            if (vtecs.size > polygonCount
+                    && !vtecs[polygonCount].startsWith("O.EXP")
+                    && !vtecs[polygonCount].startsWith("O.CAN")
+                    && UtilityTime.isVtecCurrent(vtecs[polygonCount])
             ) {
                 val polyTmp = polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
                 val testArr = polyTmp.split(" ")
-                val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }
+                val y = testArr.asSequence().filterIndexed { index: Int, _: String -> index and 1 == 0 }
                         .map {
                             it.toDoubleOrNull() ?: 0.0
                         }.toList()
-                val x = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 != 0 }
+                val x = testArr.asSequence().filterIndexed { index: Int, _: String -> index and 1 != 0 }
                         .map {
                             it.toDoubleOrNull() ?: 0.0
                         }.toList()
                 if (y.isNotEmpty() && x.isNotEmpty()) {
-                    var tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], projectionNumbers)
-                    pixXInit = tmpCoords[0]
-                    pixYInit = tmpCoords[1]
-                    warningList.add(tmpCoords[0])
-                    warningList.add(tmpCoords[1])
+                    val startCoordinates = UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], projectionNumbers).toMutableList()
+                    warningList += startCoordinates
                     if (x.size == y.size) {
-                        j = 1
-                        while (j < x.size) {
-                            tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[j], y[j], projectionNumbers)
-                            warningList.add(tmpCoords[0])
-                            warningList.add(tmpCoords[1])
-                            warningList.add(tmpCoords[0])
-                            warningList.add(tmpCoords[1])
-                            j += 1
+                        for (index in 1 until x.size) {
+                            val coordinates = UtilityCanvasProjection.computeMercatorNumbers(x[index], y[index], projectionNumbers).toMutableList()
+                            warningList += coordinates
+                            warningList += coordinates
                         }
-                        warningList.add(pixXInit)
-                        warningList.add(pixYInit)
+                        warningList += startCoordinates
                     }
                 }
             }

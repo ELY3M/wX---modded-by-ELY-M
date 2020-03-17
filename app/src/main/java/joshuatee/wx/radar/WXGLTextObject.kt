@@ -81,6 +81,7 @@ class WXGLTextObject(
     private var oglrZoom = 0.toFloat()
     private var textSize = 0.toFloat()
     private var projectionNumbers: ProjectionNumbers
+    private val textViewFudgeFactor = 4.05f
 
     init {
         this.maxCitiesPerGlview = maxCitiesPerGlview / numberOfPanes
@@ -160,7 +161,7 @@ class WXGLTextObject(
     }
 
     private fun getScale() =
-            8.1f * wxglRender.zoom / MyApplication.deviceScale * (glviewWidth / 800.0f * MyApplication.deviceScale) / MyApplication.TEXTVIEW_MAGIC_FUDGE_FACTOR
+            8.1f * wxglRender.zoom / MyApplication.deviceScale * (glviewWidth / 800.0f * MyApplication.deviceScale) / textViewFudgeFactor
 
     private fun addTextLabelsCountyLabels() {
         if (MyApplication.radarCountyLabels && countyLabelsTvArrInit) {

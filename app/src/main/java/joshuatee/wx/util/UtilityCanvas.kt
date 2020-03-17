@@ -161,6 +161,7 @@ internal object UtilityCanvas {
 
         //custom locationdot//
         if (MyApplication.locationDotFollowsGps) {
+            UtilityLog.d("wx", "Path to location.png: "+MyApplication.FilesPath + "location.png")
             val locationicon: Bitmap = BitmapFactory.decodeFile(MyApplication.FilesPath + "location.png");
             val locationiconresized: Bitmap = Bitmap.createScaledBitmap(locationicon, MyApplication.radarLocIconSize, MyApplication.radarLocIconSize, false)
             canvas.drawBitmap(locationiconresized, pixXInit.toFloat(), pixYInit.toFloat(), null)

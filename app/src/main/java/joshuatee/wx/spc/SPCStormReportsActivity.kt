@@ -25,9 +25,7 @@ import android.annotation.SuppressLint
 import java.util.Calendar
 import java.util.Locale
 import java.util.TreeMap
-import java.util.regex.Pattern
 
-import android.app.Activity
 import android.os.Bundle
 import android.app.DatePickerDialog
 import android.content.res.Configuration
@@ -81,47 +79,42 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var monthStr = ""
     private var dayStr = ""
     private var yearStr = ""
-    private var pYear = 0
-    private var pMonth = 0
-    private var pDay = 0
-    private var cYear = 0
-    private var cMonth = 0
-    private var cDay = 0
+    private var year = 0
+    private var month = 0
+    private var day = 0
+    private var previousYear = 0
+    private var previousMonth = 0
+    private var previousDay = 0
     private var stateArray = listOf<String>()
     private var firstRun = true
     private var filter = "All"
     private var text = ""
     private var bitmap = UtilityImg.getBlankBitmap()
-    private lateinit var br: Pattern
+    // FIXME get rid of this and create a method to iterate over storm reports
     private val out = StringBuilder(5000)
-    private var storms = mutableListOf<StormReport>()
+    private var stormReports = mutableListOf<StormReport>()
     private lateinit var objectNavDrawer: ObjectNavDrawer
-    private lateinit var activity: Activity
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_show_navdrawer_bottom_toolbar, R.menu.spc_stormreports)
         toolbarBottom.setOnMenuItemClickListener(this)
-        activity = this
-        val menu = toolbarBottom.menu
-        val playlistMi = menu.findItem(R.id.action_playlist)
-        playlistMi.isVisible = false
+        toolbarBottom.menu.findItem(R.id.action_playlist).isVisible = false
         val activityArguments = intent.getStringArrayExtra(NO)
         no = activityArguments!![0]
         val cal = Calendar.getInstance()
-        pYear = cal.get(Calendar.YEAR)
-        pMonth = cal.get(Calendar.MONTH)
-        pDay = cal.get(Calendar.DAY_OF_MONTH)
+        year = cal.get(Calendar.YEAR)
+        month = cal.get(Calendar.MONTH)
+        day = cal.get(Calendar.DAY_OF_MONTH)
         if (no == "yesterday") {
-            pDay -= 1
+            day -= 1
         }
-        cYear = pYear
-        cMonth = pMonth
-        cDay = pDay
+        previousYear = year
+        previousMonth = month
+        previousDay = day
         updateIowaMesoData()
         imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/$no.gif"
         textUrl = "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/$no.csv"
-        br = Pattern.compile("<br>")
         stateArray = listOf("")
         objectNavDrawer = ObjectNavDrawer(this, stateArray)
         objectNavDrawer.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
@@ -150,33 +143,19 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun displayData() {
-        // Time,F_Scale,Location,County,State,Lat,Lon,Comments ( Speed / Size )
         out.setLength(0)
-        val textArr = br.split(text)
+        val linesOfData = text.split("<br>").dropLastWhile { it.isEmpty() }
         mapState.clear()
         title = "Storm Reports"
         toolbar.subtitle = no
         val linearLayout: LinearLayout = findViewById(R.id.linearLayout)
         linearLayout.removeAllViews()
-
-        var verticalLinearLayout = LinearLayout(this@SpcStormReportsActivity)
-        /*if (UtilityUI.isTablet() && UtilityUI.isLandScape(this@SpcStormReportsActivity)) {
-            linearLayout.orientation = LinearLayout.HORIZONTAL
-            verticalLinearLayout = LinearLayout(this@SpcStormReportsActivity)
-            linearLayout.addView(verticalLinearLayout)
-        }*/
-
-
-        val c0 = ObjectCardImage(this@SpcStormReportsActivity, linearLayout, bitmap)
-        //if (UtilityUI.isTablet() && UtilityUI.isLandScape(this@SpcStormReportsActivity)) {
-        //    c0 = ObjectCardImage(this@SpcStormReportsActivity, linearLayout, bitmap, 2)
-        //}
-
-        c0.setOnClickListener(View.OnClickListener {
+        val objectCardImage = ObjectCardImage(this@SpcStormReportsActivity, linearLayout, bitmap)
+        objectCardImage.setOnClickListener(View.OnClickListener {
             val stDatePicker = DatePickerDialog(
                     this,
                     pDateSetListener,
-                    pYear, pMonth, pDay
+                    year, month, day
             )
             val cal = Calendar.getInstance()
             cal.set(
@@ -190,36 +169,32 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             stDatePicker.setCanceledOnTouchOutside(true)
             stDatePicker.show()
         })
-        c0.resetZoom()
-        val objectCardText: ObjectCardText
-        //if (UtilityUI.isLandScape(this@SpcStormReportsActivity) && UtilityUI.isTablet()) {
-        //    objectCardText = ObjectCardText(this@SpcStormReportsActivity, verticalLinearLayout)
-        //} else {
-            objectCardText = ObjectCardText(this@SpcStormReportsActivity, linearLayout)
-        //}
+        objectCardImage.resetZoom()
+        val objectCardText = ObjectCardText(this@SpcStormReportsActivity, linearLayout)
         objectCardText.visibility = View.GONE
         objectCardText.setOnClickListener(View.OnClickListener {
             filter = "All"
             displayData()
         })
-        storms = UtilitySpcStormReports.processData(textArr.toList())
+        stormReports = UtilitySpcStormReports.process(linesOfData)
         var stormCnt = -3
-        storms.forEachIndexed { k, s ->
-            if (filter == "All" || s.state == filter || s.text.contains("<H2>") || s.text == "Tornado Reports" || s.text == "Wind Reports" || s.text == "Hail Reports") {
+        stormReports.forEachIndexed { k, stormReport ->
+            val isHeader =  stormReport.title == "Tornado Reports" || stormReport.title == "Wind Reports" || stormReport.title == "Hail Reports"
+            if (filter == "All" || stormReport.state == filter || isHeader ) {
                 stormCnt += 1
-                if (s.state != "") {
-                    val freq3 = mapState[s.state]
-                    mapState[s.state] = if (freq3 == null) 1 else freq3 + 1
+                if (stormReport.state != "") {
+                    val freq3 = mapState[stormReport.state]
+                    mapState[stormReport.state] = if (freq3 == null) 1 else freq3 + 1
                 }
                 val stormCard = ObjectCardStormReportItem(this@SpcStormReportsActivity)
                 stormCard.setId(k)
                 linearLayout.addView(stormCard.card)
-                stormCard.setTextFields(s)
-                if (!s.text.contains("<H2>")) {
+                stormCard.setTextFields(stormReport)
+                if (!isHeader) {
                     registerForContextMenu(stormCard.card)
                 }
-                val xStr = s.lat
-                val yStr = s.lon
+                val xStr = stormReport.lat
+                val yStr = stormReport.lon
                 stormCard.setListener(View.OnClickListener {
                     ObjectIntent(
                             this@SpcStormReportsActivity,
@@ -228,10 +203,8 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
                             arrayOf(UtilityMap.getMapUrl(xStr, yStr, "10"), "$xStr,$yStr")
                     )
                 })
-                if (s.text.contains("(") && s.text.contains(")")) {
-
-                } else {
-                    stormCard.setTextHeader(s)
+                if (!(stormReport.description.contains("(") && stormReport.description.contains(")"))) {
+                    stormCard.setTextHeader(stormReport)
                     stormCard.setListener(View.OnClickListener {
                         scrollView.smoothScrollTo(
                                 0,
@@ -250,7 +223,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             val stateArrayLabel = mutableListOf<String>()
             stateArray.indices.forEach { stateArrayLabel.add(stateArray[it] + ": " + mapState[stateArray[it]]) }
             if (stateArrayLabel.size > 0) {
-                objectNavDrawer.updateLists(activity, stateArrayLabel)
+                objectNavDrawer.updateLists(this@SpcStormReportsActivity, stateArrayLabel)
             }
             firstRun = false
         }
@@ -264,15 +237,15 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private val pDateSetListener =
-            DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
-                pYear = year
-                pMonth = monthOfYear
-                pDay = dayOfMonth
+            DatePickerDialog.OnDateSetListener { _, yearinDate, monthOfYear, dayOfMonth ->
+                year = yearinDate
+                month = monthOfYear
+                day = dayOfMonth
                 updateDisplay()
             }
 
     private fun updateDisplay() {
-        if (cMonth != pMonth || cYear != pYear || cDay != pDay) {
+        if (previousMonth != month || previousYear != year || previousDay != day) {
             updateIowaMesoData()
             no = date + "_rpts"
             imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/$no.gif"
@@ -280,9 +253,9 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             firstRun = true
             filter = "All"
             getContent()
-            cYear = pYear
-            cMonth = pMonth
-            cDay = pDay
+            previousYear = year
+            previousMonth = month
+            previousDay = day
         }
     }
 
@@ -299,8 +272,8 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
         super.onCreateContextMenu(menu, v, menuInfo)
         val index = v.id
-        val x = storms[index].lat
-        val y = storms[index].lon
+        val x = stormReports[index].lat
+        val y = stormReports[index].lon
         val radarSite = UtilityLocation.getNearestOffice("RADAR", LatLon(x, y))
         menu.add(0, v.id, 0, "Show L2REF from $radarSite")
         menu.add(0, v.id, 0, "Show L2VEL from $radarSite")
@@ -308,26 +281,26 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         when {
-            (item.title as String).contains("Show L2REF") -> radarProdShow(item.itemId, "L2REF")
-            (item.title as String).contains("Show L2VEL") -> radarProdShow(item.itemId, "L2VEL")
+            item.title.contains("Show L2REF") -> radarProdShow(item.itemId, "L2REF")
+            item.title.contains("Show L2VEL") -> radarProdShow(item.itemId, "L2VEL")
             else -> return false
         }
         return true
     }
 
     private fun radarProdShow(id: Int, prod: String) {
-        var x = storms[id].lat
-        var y = storms[id].lon
-        var time = storms[id].time
+        var x = stormReports[id].lat
+        var y = stormReports[id].lon
+        var time = stormReports[id].time
         var radarSite = UtilityLocation.getNearestOffice("RADAR", LatLon(x, y))
         time = UtilityStringExternal.truncate(time, 3)
         if (prod == "TR0" || prod == "TV0") {
             radarSite = WXGLNexrad.getTdwrFromRid(radarSite)
         }
-        if ((storms[id].time.toIntOrNull() ?: 0) < 1000) {
-            monthStr = String.format(Locale.US, "%02d", pMonth + 1)
-            dayStr = String.format(Locale.US, "%02d", pDay + 1)
-            yearStr = pYear.toString()
+        if ((stormReports[id].time.toIntOrNull() ?: 0) < 1000) {
+            monthStr = String.format(Locale.US, "%02d", month + 1)
+            dayStr = String.format(Locale.US, "%02d", day + 1)
+            yearStr = year.toString()
             yearStr = yearStr.substring(2, 4)
             date = yearStr + monthStr + dayStr
             iowaMesoStr = "20$yearStr$monthStr$dayStr"
@@ -346,9 +319,9 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun updateIowaMesoData() {
-        monthStr = String.format(Locale.US, "%02d", pMonth + 1)
-        dayStr = String.format(Locale.US, "%02d", pDay)
-        yearStr = pYear.toString()
+        monthStr = String.format(Locale.US, "%02d", month + 1)
+        dayStr = String.format(Locale.US, "%02d", day)
+        yearStr = year.toString()
         yearStr = yearStr.substring(2, 4)
         date = yearStr + monthStr + dayStr
         iowaMesoStr = "20$yearStr$monthStr$dayStr"

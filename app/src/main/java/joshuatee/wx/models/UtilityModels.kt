@@ -156,24 +156,23 @@ object UtilityModels {
     }
 
     fun moveForward(spinnerTime: ObjectSpinner) {
-        var timeTmp = spinnerTime.selectedItemPosition
-        timeTmp += 1
-        if (timeTmp == spinnerTime.size()) {
-            timeTmp = 0
+        var time = spinnerTime.selectedItemPosition + 1
+        if (time == spinnerTime.size()) {
+            time = 0
         }
-        spinnerTime.setSelection(timeTmp)
+        spinnerTime.setSelection(time)
     }
 
     fun moveBack(spinnerTime: ObjectSpinner) {
-        var timeTmp = spinnerTime.selectedItemPosition
-        timeTmp -= 1
-        if (timeTmp == -1) {
-            timeTmp = spinnerTime.size() - 1
+        var time = spinnerTime.selectedItemPosition - 1
+        if (time == -1) {
+            time = spinnerTime.lastIndex
         }
-        spinnerTime.setSelection(timeTmp)
+        spinnerTime.setSelection(time)
     }
 
-    fun parmInArray(arr: List<String>, parm: String): Boolean = arr.contains(parm)
+    // FIXME don't need this - to simple
+    fun parameterInList(list: List<String>, parameter: String): Boolean = list.contains(parameter)
 
     fun convertTimeRunToTimeString(runStr: String, timeStrF: String, showDate: Boolean): String {
         var timeStr = timeStrF

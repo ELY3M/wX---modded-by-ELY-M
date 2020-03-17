@@ -31,11 +31,6 @@
         android:title="@string/stop_audio"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_playlist"
-        android:icon="@drawable/ic_queue_24dp"
-        android:title="@string/label_playlist"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/action_fav"
         android:icon="@drawable/ic_star_outline_24dp"
         android:title="@string/label_toggle_favorite"
@@ -46,11 +41,12 @@
         android:title="@string/label_share"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_notif_text_prod"
-        android:title="@string/notif_add"
+        android:id="@+id/action_playlist"
+        android:icon="@drawable/ic_queue_24dp"
+        android:title="@string/label_playlist"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_mpd"
-        android:title="Mesoscale Precipitation Discussions"
+        android:id="@+id/action_notif_text_prod"
+        android:title="@string/notif_add"
         app:showAsAction="never" />
 </menu>

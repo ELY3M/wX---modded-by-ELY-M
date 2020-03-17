@@ -99,7 +99,7 @@ class WXGLDownload {
         } else {
             getLevel2FilesForAnimation(
                     context,
-                    MyApplication.nwsRadarLevel2Pub + ridPrefix.toUpperCase(Locale.US) + radarSite.toUpperCase(
+                    nwsRadarLevel2Pub + ridPrefix.toUpperCase(Locale.US) + radarSite.toUpperCase(
                             Locale.US
                     ) + "/",
                     frameCount
@@ -213,7 +213,7 @@ class WXGLDownload {
     fun getLevel2Url(radarSite: String): String {
         var fn: String
         val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, false).toUpperCase(Locale.US)
-        val baseUrl = MyApplication.nwsRadarLevel2Pub + ridPrefix + radarSite + "/"
+        val baseUrl = nwsRadarLevel2Pub + ridPrefix + radarSite + "/"
         val tmpArr = (baseUrl + "dir.list").getHtmlSep().replace("<br>", " ").split(" ")
                 .dropLastWhile { it.isEmpty() }
         if (tmpArr.size < 4) {
@@ -259,6 +259,9 @@ class WXGLDownload {
     }
 
     companion object {
+
+        const val nwsRadarLevel2Pub: String = "https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
+
         fun getNidsTab(context: Context, product: String, radarSite: String, fileName: String) {
             val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, false)
             val url = MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/" +

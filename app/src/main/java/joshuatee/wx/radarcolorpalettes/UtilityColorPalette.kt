@@ -22,20 +22,18 @@
 
 package joshuatee.wx.radarcolorpalettes
 
-import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.util.Log
 import androidx.core.content.ContextCompat
 import joshuatee.wx.MyApplication
 import joshuatee.wx.RegExp
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityIO
+import joshuatee.wx.util.UtilityLog
 import java.io.*
 
 object UtilityColorPalette {
 
-    val TAG: String = "joshuatee ColorPalette"
 
     //TODO Where is one for SRM (code 56)
     //TODO make color table for SRM
@@ -43,7 +41,7 @@ object UtilityColorPalette {
     fun getColorMapStringFromDisk(context: Context, prod: String, code: String): String {
 
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED|| ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-            Log.i(TAG, "stupid permission!!!!!!!!!!!!!!!")
+            UtilityLog.d("wx", "stupid permission!!!!!!!!!!!!!!!")
         }
 
         //TODO TESTING scan dir for *_94.txt files....
@@ -118,7 +116,7 @@ object UtilityColorPalette {
             text = UtilityIO.readTextFile(getpalfile)
             //Log.i(TAG, palfile + ": " + text + "\n")
         } catch (e: IOException) {
-            Log.i(TAG, "failed to open file "+palfile+"\nopenpalfile error: "+e.message)
+            UtilityLog.d("wx", "failed to open file "+palfile+"\nopenpalfile error: "+e.message)
             }
         return text
     }

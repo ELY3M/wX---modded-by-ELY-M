@@ -112,7 +112,7 @@ class SevereDashboardActivity : BaseActivity() {
             UtilityDownloadMcd.get(this@SevereDashboardActivity)
             snMcd.getBitmaps(MyApplication.severeDashboardMcd.value)
         }
-        showItems(snMcd)
+        //showItems(snMcd)
         withContext(Dispatchers.IO) {
             UtilityDownloadMpd.get(this@SevereDashboardActivity)
             snMpd.getBitmaps(MyApplication.severeDashboardMpd.value)

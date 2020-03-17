@@ -22,7 +22,7 @@
 package joshuatee.wx.spc
 
 class StormReport(
-    val text: String = "",
+    val title: String = "",
     val lat: String = "",
     val lon: String = "",
     val time: String = "",
@@ -30,8 +30,7 @@ class StormReport(
     val address: String = "",
     val city: String = "",
     val state: String = "",
-    val damageReport: String = ""
-    //val damageHeader: String = ""
+    val description: String = ""
 )
 
 

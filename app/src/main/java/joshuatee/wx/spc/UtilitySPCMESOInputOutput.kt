@@ -63,13 +63,13 @@ object UtilitySpcMesoInputOutput {
             drawables.add(
                 BitmapDrawable(
                     context.resources,
-                    UtilityImg.eraseBG(topographyImgUrl.getImage(), -1)
+                    UtilityImg.eraseBackground(topographyImgUrl.getImage(), -1)
                 )
             )
         }
         if (showRadar) {
             val bitmapRadar = radImgUrl.getImage()
-            bitmap = UtilityImg.eraseBG(bitmap, -1)
+            bitmap = UtilityImg.eraseBackground(bitmap, -1)
             drawables.add(BitmapDrawable(context.resources, bitmapRadar))
         }
         drawables.add(BitmapDrawable(context.resources, bitmap))
@@ -77,7 +77,7 @@ object UtilitySpcMesoInputOutput {
             drawables.add(
                 BitmapDrawable(
                     context.resources,
-                    UtilityImg.eraseBG(outlookImgUrl.getImage(), -1)
+                    UtilityImg.eraseBackground(outlookImgUrl.getImage(), -1)
                 )
             )
         }
@@ -85,7 +85,7 @@ object UtilitySpcMesoInputOutput {
             drawables.add(
                 BitmapDrawable(
                     context.resources,
-                    UtilityImg.eraseBG(watchWarningImgUrl.getImage(), -1)
+                    UtilityImg.eraseBackground(watchWarningImgUrl.getImage(), -1)
                 )
             )
         }

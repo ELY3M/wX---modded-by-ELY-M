@@ -77,7 +77,6 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         )
         toolbarBottom.setOnMenuItemClickListener(this)
         tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
-        //tabletInLandscape = UtilityUI.isLandScape(this)
         if (tabletInLandscape) {
             ll.orientation = LinearLayout.HORIZONTAL
             objectCardImage = ObjectCardImage(this, ll, UtilityImg.getBlankBitmap(), 2)

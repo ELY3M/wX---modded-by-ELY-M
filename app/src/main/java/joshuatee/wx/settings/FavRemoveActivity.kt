@@ -208,7 +208,14 @@ class FavRemoveActivity : BaseActivity() {
             "SND" -> fullName = Utility.getSoundingSiteName(shortCode)
             "WFO" -> fullName = shortCode + ": " + Utility.getWfoSiteName(shortCode)
             "RID" -> fullName = shortCode + ": " + Utility.getRadarSiteName(shortCode)
-            "NWSTEXT" -> fullName = UtilityWpcText.labels[UtilityFavorites.findPositionNwsText(shortCode)]
+            "NWSTEXT" -> {
+                val index = UtilityFavorites.findPositionNwsText(shortCode)
+                fullName = if (index != -1) {
+                    UtilityWpcText.labels[index]
+                } else {
+                    shortCode
+                }
+            }
             "SREF" -> fullName = shortCode
             "RIDCA" -> fullName = findCanadaRadarSiteLabel(shortCode)
             "SPCMESO" -> fullName = findSpcMesoLabel(shortCode)
@@ -232,10 +239,10 @@ class FavRemoveActivity : BaseActivity() {
 
     private fun findCanadaRadarSiteLabel(rid: String) =
             (GlobalArrays.canadaRadars.indices).firstOrNull {
-                GlobalArrays.canadaRadars[it].contains(
-                        rid
-                )
-            }
+                        GlobalArrays.canadaRadars[it].contains(
+                                rid
+                        )
+                    }
                     ?.let { GlobalArrays.canadaRadars[it].replace(":", "") }
                     ?: rid
 

@@ -24,31 +24,26 @@ package joshuatee.wx
 
 import android.app.Activity
 import android.content.Context
-import android.speech.RecognizerIntent
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.content.Intent
+import android.speech.RecognizerIntent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.activitiesmisc.*
-
-import joshuatee.wx.radar.USNwsMosaicActivity
+import joshuatee.wx.audio.SettingsPlaylistActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.audio.UtilityVoiceCommand
-import joshuatee.wx.canada.CanadaAlertsActivity
-import joshuatee.wx.canada.CanadaHourlyActivity
-import joshuatee.wx.canada.CanadaRadarActivity
-import joshuatee.wx.canada.CanadaTextActivity
-import joshuatee.wx.canada.UtilityCanada
+import joshuatee.wx.canada.*
+import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.radar.AwcRadarMosaicActivity
+import joshuatee.wx.radar.USNwsMosaicActivity
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.radar.WXGLRadarActivityMultiPane
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.SettingsMainActivity
-import joshuatee.wx.audio.SettingsPlaylistActivity
-import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.radar.AwcRadarMosaicActivity
 import joshuatee.wx.spc.SpcSoundingsActivity
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
@@ -70,6 +65,16 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
         menuInflater.inflate(R.menu.cab, menu)
         return true
     }
+
+    /*override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val item = menu.findItem(R.id.action_alert)
+        if (Location.isUS) {
+            item.title = "US Alerts"
+        } else {
+            item.title = "Canadian Alerts"
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }*/
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {

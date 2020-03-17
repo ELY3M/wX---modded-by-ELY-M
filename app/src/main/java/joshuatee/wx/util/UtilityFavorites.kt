@@ -38,7 +38,7 @@ object UtilityFavorites {
 
     // TODO refactor method/var names
 
-    private fun checkAndCorrectFavorites(context: Context, value: String, prefToken: String) {
+    private fun checkAndCorrect(context: Context, value: String, prefToken: String) {
         if (value.contains("::")) {
             val newFav = value.replace(":{2,}".toRegex(), ":")
             savePref(context, newFav, prefToken)
@@ -58,13 +58,13 @@ object UtilityFavorites {
         }
     }
 
-    fun setupFavMenu(
+    fun setupMenu(
         context: Context,
         favoriteString: String,
         value: String,
         prefToken: String
     ): List<String> {
-        checkAndCorrectFavorites(context, favoriteString, prefToken)
+        checkAndCorrect(context, favoriteString, prefToken)
         var favorites = favoriteString.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
         if (favorites.size < 3) {
             favorites = MutableList(3) { "" }
@@ -90,7 +90,7 @@ object UtilityFavorites {
         return returnList.toList()
     }
 
-    fun setupFavMenuCanada(favoriteString: String, value: String): List<String> {
+    fun setupMenuCanada(favoriteString: String, value: String): List<String> {
         val favorites = favoriteString.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
         favorites[0] = value
         favorites[1] = ADD_STR
@@ -106,7 +106,7 @@ object UtilityFavorites {
         return returnList.toList()
     }
 
-    fun toggleFavorite(context: Context, value: String, star: MenuItem, prefToken: String) {
+    fun toggle(context: Context, value: String, star: MenuItem, prefToken: String) {
         var favoriteString = Utility.readPref(context, prefToken, initialValue)
         if (favoriteString.contains(value)) {
             favoriteString = favoriteString.replace("$value:", "")
@@ -126,7 +126,7 @@ object UtilityFavorites {
     }
 
     // mirror of method above save it returns the string
-    fun toggleFavoriteString(
+    fun toggleString(
         context: Context,
         value: String,
         star: MenuItem,
@@ -151,7 +151,7 @@ object UtilityFavorites {
         return favoriteString
     }
 
-    fun toggleFavoriteSpcMeso(context: Context, value: String, label: String, star: MenuItem) {
+    fun toggleSpcMeso(context: Context, value: String, label: String, star: MenuItem) {
         var favoriteString = Utility.readPref(context, "SPCMESO_FAV", initialValue)
         var favoriteLabelString = Utility.readPref(context, "SPCMESO_LABEL_FAV", initialValue)
         if (favoriteString.contains(value)) {
@@ -173,7 +173,7 @@ object UtilityFavorites {
     // returns a List with the value at the start followed by two constant values (add/modify)
     // followed by each token in the string as list items
     // If somehow the input colon separated string is to small correct it in this method
-    fun setupFavoriteMenuSpc(favoriteString: String, value: String): List<String> {
+    fun setupMenuSpc(favoriteString: String, value: String): List<String> {
         var favorites = favoriteString.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
         if (favorites.size < 3) {
             favorites = MutableList(3) { "" }
@@ -184,26 +184,31 @@ object UtilityFavorites {
         return favorites.toList()
     }
 
-    fun setupFavMenuNwsText(favoriteString: String, value: String): List<String> {
+    fun setupMenuNwsText(favoriteString: String, value: String): List<String> {
         val favorites = favoriteString.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
         favorites[0] = value
         favorites[1] = ADD_STR
         favorites[2] = MODIFY_STR
         val returnList = MutableList(favorites.size) { "" }
         favorites.indices.forEach {
-            if (it == 1 || it == 2)
+            if (it == 1 || it == 2) {
                 returnList[it] = favorites[it]
-            else
-                returnList[it] = UtilityWpcText.labels[findPositionNwsText(favorites[it])]
+            } else {
+                val index = findPositionNwsText(favorites[it])
+                if (index == -1) {
+                    returnList[it] = value
+                } else {
+                    returnList[it] = UtilityWpcText.labels[findPositionNwsText(favorites[it])]
+                }
+            }
         }
         return returnList.toList()
     }
 
-    fun findPositionNwsText(key: String): Int =
-            UtilityWpcText.labels.indices.firstOrNull {
-                UtilityWpcText.labels[it].contains(
-                key
-            )
-        }
-            ?: 0
+    fun findPositionNwsText(key: String): Int {
+        val index = UtilityWpcText.labels.indices.firstOrNull {
+            UtilityWpcText.labels[it].startsWith(key)
+        } ?: -1
+        return index
+    }
 }

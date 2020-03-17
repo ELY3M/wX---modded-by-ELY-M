@@ -32,11 +32,9 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import androidx.core.app.ActivityCompat
-//import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import joshuatee.wx.GlobalArrays
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.activitiesmisc.TextScreenActivity
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.settings.BottomSheetFragment
@@ -46,11 +44,12 @@ import joshuatee.wx.wpc.UtilityWpcText
 import kotlinx.coroutines.*
 import java.util.*
 import joshuatee.wx.R
+import joshuatee.wx.wpc.WpcTextProductsActivity
 
 class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private val ridArr = mutableListOf<String>()
+    private val playListItems = mutableListOf<String>()
     private var ridFav = ""
     private val prefToken = "PLAYLIST"
     private lateinit var ca: PlayListAdapter
@@ -82,7 +81,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
                 ridFav = "$ridFav:$product"
                 Utility.writePref(this, prefToken, ridFav)
                 MyApplication.playlistStr = ridFav
-                ridArr.add(getLongString(product))
+                playListItems.add(getLongString(product))
                 getContent()
                 dialog.dismiss()
             } else {
@@ -98,7 +97,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             if (!ridFav.contains(product)) {
                 ridFav = "$ridFav:$product"
                 Utility.writePref(this, prefToken, ridFav)
-                ridArr.add(getLongString(product))
+                playListItems.add(getLongString(product))
                 MyApplication.playlistStr = ridFav
                 getContent()
                 dialog.dismiss()
@@ -112,7 +111,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         ridFav = Utility.readPref(this, prefToken, "")
         updateList()
         val recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
-        ca = PlayListAdapter(ridArr)
+        ca = PlayListAdapter(playListItems)
         recyclerView.recyclerView.adapter = ca
         ca.setListener(::itemSelected)
         getContent()
@@ -129,24 +128,21 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     private fun updateList() {
         MyApplication.playlistStr = ridFav
         val tempList = ridFav.split(":")
-        ridArr.clear()
-        (1 until tempList.size).mapTo(ridArr) { getLongString(tempList[it]) }
+        playListItems.clear()
+        (1 until tempList.size).mapTo(playListItems) { getLongString(tempList[it]) }
     }
 
     private fun updateListNoInit() {
         MyApplication.playlistStr = ridFav
         val tempList = ridFav.split(":")
         (1 until tempList.size).forEach {
-            ridArr[it - 1] = getLongString(tempList[it])
+            playListItems[it - 1] = getLongString(tempList[it])
         }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_autodownload -> ObjectIntent(
-                    this,
-                    SettingsPlaylistAutodownloadActivity::class.java
-            )
+            R.id.action_autodownload -> ObjectIntent(this, SettingsPlaylistAutodownloadActivity::class.java)
             R.id.action_add -> diaMain.show()
             R.id.action_afd -> diaAfd.show()
             else -> return super.onOptionsItemSelected(item)
@@ -155,28 +151,9 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     override fun onRestart() {
-        updateListNoInit()
-        ca.notifyDataSetChanged()
+        getContent()
         super.onRestart()
     }
-
-   /* private val onBroadcast = object : BroadcastReceiver() {
-        override fun onReceive(ctxt: Context, intent: Intent) {
-            updateListNoInit()
-            ca.notifyDataSetChanged()
-        }
-    }
-*/
-  /*  override fun onResume() {
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(onBroadcast, IntentFilter("playlistdownloaded"))
-        super.onResume()
-    }*/
-
-  /*  override fun onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(onBroadcast)
-        super.onPause()
-    }*/
 
     private fun getLongString(code: String) = "$code;" + Utility.readPref(
             this,
@@ -246,7 +223,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     private fun itemSelected(position: Int) {
         // FIXME use recyclerView.getItem(position)
-        val bottomSheetFragment = BottomSheetFragment(this, position, ridArr[position], false)
+        val bottomSheetFragment = BottomSheetFragment(this, position, playListItems[position], false)
         bottomSheetFragment.functions = listOf(::playItem, ::viewItem, ::deleteItem, ::moveUpItem, ::moveDownItem)
         bottomSheetFragment.labelList = listOf("Play Item", "View Item", "Delete Item", "Move Up", "Move Down")
         bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
@@ -254,38 +231,29 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     private fun deleteItem(position: Int) {
         ridFav = Utility.readPref(this, prefToken, "")
-        ridFav = ridFav.replace(":" + MyApplication.semicolon.split(ridArr[position])[0], "")
+        ridFav = ridFav.replace(":" + MyApplication.semicolon.split(playListItems[position])[0], "")
         Utility.writePref(this, prefToken, ridFav)
-        Utility.removePref(
-                this,
-                "PLAYLIST_" + MyApplication.semicolon.split(ridArr[position])[0]
-        )
+        Utility.removePref(this, "PLAYLIST_" + MyApplication.semicolon.split(playListItems[position])[0])
         ca.deleteItem(position)
         MyApplication.playlistStr = ridFav
     }
 
     private fun moveDownItem(position: Int) {
-        MyApplication.playlistStr = UtilityUI.moveDown(this, prefToken, ridArr, position)
+        MyApplication.playlistStr = UtilityUI.moveDown(this, prefToken, playListItems, position)
         ca.notifyDataSetChanged()
     }
 
     private fun moveUpItem(position: Int) {
-        MyApplication.playlistStr = UtilityUI.moveUp(this, prefToken, ridArr, position)
+        MyApplication.playlistStr = UtilityUI.moveUp(this, prefToken, playListItems, position)
         ca.notifyDataSetChanged()
     }
 
     private fun viewItem(position: Int) {
         ObjectIntent(
                 this,
-                TextScreenActivity::class.java,
-                TextScreenActivity.URL,
-                arrayOf(
-                        Utility.readPref(
-                                this,
-                                "PLAYLIST_" + MyApplication.semicolon.split(ridArr[position])[0],
-                                ""
-                        ), ridArr[position]
-                )
+                WpcTextProductsActivity::class.java,
+                WpcTextProductsActivity.URL,
+                arrayOf(playListItems[position].split(";")[0].toLowerCase(Locale.US))
         )
     }
 

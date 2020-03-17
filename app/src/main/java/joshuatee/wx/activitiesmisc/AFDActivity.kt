@@ -126,7 +126,7 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         version = 1
         oldProduct = ""
         oldWfo = ""
-        locationList = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, wfo, prefToken)
+        locationList = UtilityFavorites.setupMenu(this, MyApplication.wfoFav, wfo, prefToken)
         spinner = ObjectSpinner(this, this, this, R.id.spinner1, locationList)
         imageMap = ObjectImageMap(
                 this,
@@ -157,7 +157,7 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
 
     override fun onRestart() {
         if (ridFavOld != MyApplication.wfoFav) {
-            locationList = UtilityFavorites.setupFavMenu(
+            locationList = UtilityFavorites.setupMenu(
                     this,
                     MyApplication.wfoFav,
                     wfo,
@@ -302,13 +302,13 @@ class AfdActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClick
         wfo = loc.toUpperCase(Locale.US)
         originalWfo = wfo
         mapShown = false
-        locationList = UtilityFavorites.setupFavMenu(this, MyApplication.wfoFav, wfo, prefToken)
+        locationList = UtilityFavorites.setupMenu(this, MyApplication.wfoFav, wfo, prefToken)
         spinner.refreshData(this, locationList)
     }
 
     private fun toggleFavorite() {
-        val ridFav = UtilityFavorites.toggleFavoriteString(this, wfo, star, prefToken)
-        locationList = UtilityFavorites.setupFavMenu(this, ridFav, wfo, prefToken)
+        val ridFav = UtilityFavorites.toggleString(this, wfo, star, prefToken)
+        locationList = UtilityFavorites.setupMenu(this, ridFav, wfo, prefToken)
         spinner.refreshData(this, locationList)
     }
 

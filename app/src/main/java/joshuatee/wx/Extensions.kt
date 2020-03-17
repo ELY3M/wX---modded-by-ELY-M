@@ -38,13 +38,13 @@ fun String.condenseSpace(): String {
     return this.replace("\\s+".toRegex(), " ")
 }
 
-fun String.removeSingleLineBreaks(): String {
+/*fun String.removeSingleLineBreaks(): String {
     return this.replace("\n\n", "ABZXCZ13").replace("\n", " ").replace("ABZXCZ13", "\n\n")
 }
 
 fun String.removeBreaks(): String {
     return this.replace(" <br>", " ")
-}
+}*/
 
 fun String.removeHtml(): String {
     return this.replace(Regex("\\<[^>]*>"),"")

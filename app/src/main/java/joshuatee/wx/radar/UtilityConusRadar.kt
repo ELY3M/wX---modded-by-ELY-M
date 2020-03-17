@@ -429,7 +429,7 @@ object UtilityConusRadar {
         var bitmap = imgUrl.getImage()
         var bitmapCanvas = UtilityImg.getBlankBitmap()
         //if (MyApplication.blackBg) {
-        bitmap = UtilityImg.eraseBG(bitmap, -1)
+        bitmap = UtilityImg.eraseBackground(bitmap, -1)
         //}
         if (bitmap.height > 10) {
             bitmapCanvas = Bitmap.createBitmap(3400, 3400, Bitmap.Config.ARGB_8888)
@@ -513,7 +513,7 @@ object UtilityConusRadar {
         val imgUrl = "${MyApplication.nwsRadarWebsitePrefix}/Conus/RadarImg/latest_radaronly.gif"
         val layers = mutableListOf<Drawable>()
         var bitmap = imgUrl.getImage()
-        bitmap = UtilityImg.eraseBG(bitmap, -1)
+        bitmap = UtilityImg.eraseBackground(bitmap, -1)
         layers.add(BitmapDrawable(context.resources, bitmap))
         saveImage(bitmap)
     }

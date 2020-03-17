@@ -71,14 +71,14 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv)
         nwsOffice = UtilityLocation.getNearestSoundingSite(Location.latLon)
-        locations = UtilityFavorites.setupFavMenu(this, MyApplication.sndFav, nwsOffice, prefToken)
+        locations = UtilityFavorites.setupMenu(this, MyApplication.sndFav, nwsOffice, prefToken)
         objectSpinner = ObjectSpinner(this, this, this, R.id.spinner1, locations)
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
         imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToSnd)
     }
 
     override fun onRestart() {
-        locations = UtilityFavorites.setupFavMenu(this, MyApplication.sndFav, nwsOffice, prefToken)
+        locations = UtilityFavorites.setupMenu(this, MyApplication.sndFav, nwsOffice, prefToken)
         objectSpinner.refreshData(this, locations)
         super.onRestart()
     }
@@ -105,7 +105,7 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
                     "${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/",
                     "/obswx/maps/" + upperAir + "_([0-9]{6}_[0-9]{2}).gif"
             )
-            bitmap = UtilityImg.getBitmapAddWhiteBG(this@SpcSoundingsActivity, imgUrl + "_" + date + ".gif")
+            bitmap = UtilityImg.getBitmapAddWhiteBackground(this@SpcSoundingsActivity, imgUrl + "_" + date + ".gif")
         }
         img.img.visibility = View.VISIBLE
         img.setBitmap(bitmap)
@@ -146,14 +146,14 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
     private fun mapSwitch(loc: String) {
         nwsOffice = loc
         mapShown = false
-        locations = UtilityFavorites.setupFavMenu(this, MyApplication.sndFav, nwsOffice, prefToken)
+        locations = UtilityFavorites.setupMenu(this, MyApplication.sndFav, nwsOffice, prefToken)
         objectSpinner.refreshData(this, locations)
         img.resetZoom()
     }
 
     private fun toggleFavorite() {
-        val ridFav = UtilityFavorites.toggleFavoriteString(this, nwsOffice, star, prefToken)
-        locations = UtilityFavorites.setupFavMenu(this, ridFav, nwsOffice, prefToken)
+        val ridFav = UtilityFavorites.toggleString(this, nwsOffice, star, prefToken)
+        locations = UtilityFavorites.setupMenu(this, ridFav, nwsOffice, prefToken)
         objectSpinner.refreshData(this, locations)
     }
 

@@ -38,6 +38,8 @@ object UtilityDownloadNws {
     private const val USER_AGENT_STR =
         "Android ${MyApplication.packageNameAsString} ${MyApplication.emailAsString}"
 
+    var forecastZone = ""
+
     fun getHazardData(url: String): String {
         return getStringFromUrlJson(url)
     }
@@ -168,6 +170,8 @@ object UtilityDownloadNws {
     fun get7DayData(latLon: LatLon): String {
         val pointsData = getLocationPointData(latLon)
         val forecastUrl = pointsData.parse("\"forecast\": \"(.*?)\"")
+        // set static var at object level for use elsewhere
+        forecastZone = forecastUrl
         return forecastUrl.getNwsHtml()
     }
 

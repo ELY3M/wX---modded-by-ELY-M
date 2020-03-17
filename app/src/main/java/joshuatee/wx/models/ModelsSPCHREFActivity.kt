@@ -250,7 +250,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                     om.prefParamLabel + it.toString(),
                     om.displayData.paramLabel[it]
             )
-            if (!UtilityModels.parmInArray(
+            if (!UtilityModels.parameterInList(
                             UtilityModelSpcHrefInterface.params,
                             om.displayData.param[it]
                     )

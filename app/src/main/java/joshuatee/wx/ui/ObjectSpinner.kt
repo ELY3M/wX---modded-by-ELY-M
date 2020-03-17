@@ -148,8 +148,9 @@ class ObjectSpinner {
 
     val selectedItemPosition: Int get() = spinner.selectedItemPosition
 
-    val selectedItem: Any
-        get() = spinner.selectedItem ?: 0
+    val selectedItem: Any get() = spinner.selectedItem ?: 0
+
+    val lastIndex: Int get() = list.lastIndex
 
     fun addAll(tmpList: List<String>) {
         list.clear()
@@ -172,10 +173,10 @@ class ObjectSpinner {
 
     fun size(): Int = arrayAdapter.count
 
-    operator fun get(idx: Int): String = list[idx]
+    operator fun get(index: Int): String = list[index]
 
-    operator fun set(idx: Int, value: String) {
-        list[idx] = value
+    operator fun set(index: Int, value: String) {
+        list[index] = value
     }
 
     private fun setupSpinner() {

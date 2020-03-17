@@ -64,9 +64,9 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private lateinit var activityArguments: Array<String>
-    private var prod = ""
+    private var product = ""
     private var html = ""
-    private var initProd = ""
+    private var initialProduct = ""
     private var products = listOf<String>()
     private lateinit var star: MenuItem
     private lateinit var notificationToggle: MenuItem
@@ -87,13 +87,13 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         notificationToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
         activityArguments = intent.getStringArrayExtra(URL)!!
         if (activityArguments[0] == "pmdspd") {
-            prod = MyApplication.wpcTextFav
+            product = MyApplication.wpcTextFav
         } else {
-            prod = activityArguments[0]
-            initProd = prod
+            product = activityArguments[0]
+            initialProduct = product
         }
         textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        products = UtilityFavorites.setupFavMenuNwsText(MyApplication.nwsTextFav, prod)
+        products = UtilityFavorites.setupMenuNwsText(MyApplication.nwsTextFav, product)
         sp = ObjectSpinner(this, this, this, R.id.spinner1, products)
         UtilityWpcText.createData()
         drw = ObjectNavDrawerCombo(
@@ -110,20 +110,20 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         updateSubmenuNotificationText()
         scrollView.smoothScrollTo(0, 0)
-        if (MyApplication.nwsTextFav.contains(":$prod:")) {
+        if (MyApplication.nwsTextFav.contains(":$product:")) {
             star.setIcon(MyApplication.STAR_ICON)
         } else {
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         }
         ridFavOld = MyApplication.nwsTextFav
         html = withContext(Dispatchers.IO) {
-            UtilityDownload.getTextProduct(this@WpcTextProductsActivity, prod)
+            UtilityDownload.getTextProduct(this@WpcTextProductsActivity, product)
         }
         textCard.setTextAndTranslate(html)
         UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, "wpctext")
-        if (initProd != prod) {
-            Utility.writePref(this@WpcTextProductsActivity, "WPC_TEXT_FAV", prod)
-            MyApplication.wpcTextFav = prod
+        if (initialProduct != product) {
+            Utility.writePref(this@WpcTextProductsActivity, "WPC_TEXT_FAV", product)
+            MyApplication.wpcTextFav = product
         }
     }
 
@@ -131,7 +131,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
             drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, html, prod, prod)) {
+        if (audioPlayMenu(item.itemId, html, product, product)) {
             return true
         }
         when (item.itemId) {
@@ -140,12 +140,11 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
                 UtilityNotificationTextProduct.toggle(
                         this,
                         linearLayout,
-                        prod.toUpperCase(Locale.US)
+                        product.toUpperCase(Locale.US)
                 )
                 updateSubmenuNotificationText()
             }
-            R.id.action_mpd -> ObjectIntent(this, WpcMpdShowSummaryActivity::class.java)
-            R.id.action_share -> UtilityShare.shareText(this, prod, Utility.fromHtml(html))
+            R.id.action_share -> UtilityShare.shareText(this, product, Utility.fromHtml(html))
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -166,7 +165,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
                     arrayOf("NWSTEXT")
             )
             else -> {
-                prod = products[position].split(":").getOrNull(0) ?: ""
+                product = products[position].split(":").getOrNull(0) ?: ""
                 getContent()
             }
         }
@@ -184,9 +183,9 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
 
     override fun onRestart() {
         if (ridFavOld != MyApplication.nwsTextFav) {
-            products = UtilityFavorites.setupFavMenuNwsText(
+            products = UtilityFavorites.setupMenuNwsText(
                     MyApplication.nwsTextFav,
-                    UtilityWpcText.labels[findPosition(prod)]
+                    UtilityWpcText.labels[findPosition(product)]
             )
             sp.refreshData(this, products)
         }
@@ -194,22 +193,22 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     }
 
     private fun toggleFavorite() {
-        UtilityFavorites.toggleFavorite(this, prod, star, "NWS_TEXT_FAV")
-        products = UtilityFavorites.setupFavMenuNwsText(MyApplication.nwsTextFav, prod)
+        UtilityFavorites.toggle(this, product, star, "NWS_TEXT_FAV")
+        products = UtilityFavorites.setupMenuNwsText(MyApplication.nwsTextFav, product)
         sp.refreshData(this, products)
     }
 
     private fun changeProduct() {
-        prod = drw.getUrl()
-        products = UtilityFavorites.setupFavMenuNwsText(
+        product = drw.getUrl()
+        products = UtilityFavorites.setupMenuNwsText(
                 MyApplication.nwsTextFav,
-                UtilityWpcText.labels[findPosition(prod)]
+                UtilityWpcText.labels[findPosition(product)]
         )
         sp.refreshData(this, products)
     }
 
     private fun updateSubmenuNotificationText() {
-        if (UtilityNotificationTextProduct.check(prod.toUpperCase(Locale.US))) {
+        if (UtilityNotificationTextProduct.check(product.toUpperCase(Locale.US))) {
             notificationToggle.title = resources.getString(R.string.notif_remove)
         } else {
             notificationToggle.title = resources.getString(R.string.notif_add)

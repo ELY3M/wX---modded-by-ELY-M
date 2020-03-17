@@ -314,12 +314,12 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener,
                     om.displayData.paramLabel[0]
             )
         }
-        if (!UtilityModels.parmInArray(om.params, om.displayData.param[0])) {
+        if (!UtilityModels.parameterInList(om.params, om.displayData.param[0])) {
             om.displayData.param[0] = om.params[0]
             om.displayData.paramLabel[0] = om.labels[0]
         }
         if (om.numPanes > 1)
-            if (!UtilityModels.parmInArray(om.params, om.displayData.param[1])) {
+            if (!UtilityModels.parameterInList(om.params, om.displayData.param[1])) {
                 om.displayData.param[1] = om.params[0]
                 om.displayData.paramLabel[1] = om.labels[0]
             }

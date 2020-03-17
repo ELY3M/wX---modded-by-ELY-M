@@ -129,7 +129,7 @@ object UtilityCanadaImg {
         }
         (0 until layerCnt).forEach {
             val drawable = if (it == 1) {
-                BitmapDrawable(context.resources, UtilityImg.eraseBG(bitmaps[it], -1))
+                BitmapDrawable(context.resources, UtilityImg.eraseBackground(bitmaps[it], -1))
             } else {
                 BitmapDrawable(context.resources, bitmaps[it])
             }
@@ -177,7 +177,7 @@ object UtilityCanadaImg {
             val drawable = if (j == 1) {
                 BitmapDrawable(
                         context.resources,
-                        UtilityImg.eraseBG(bitmaps[j], -1)
+                        UtilityImg.eraseBackground(bitmaps[j], -1)
                 ) // was -16777216
             } else {
                 BitmapDrawable(context.resources, bitmaps[j])

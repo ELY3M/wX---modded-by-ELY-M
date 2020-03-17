@@ -79,7 +79,7 @@ object UtilityImgAnim {
     ): AnimationDrawable {
         var delay = delayF
         val animDrawable = AnimationDrawable()
-        val bmAl = urlAl.mapTo(mutableListOf()) { UtilityImg.getBitmapAddWhiteBG(context, it) }
+        val bmAl = urlAl.mapTo(mutableListOf()) { UtilityImg.getBitmapAddWhiteBackground(context, it) }
         bmAl.forEachIndexed { i, it ->
             if (it.width > 10) {
                 if (i == bmAl.lastIndex) {

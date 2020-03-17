@@ -23,15 +23,13 @@ package joshuatee.wx.radar
 
 import android.annotation.SuppressLint
 import android.content.Context
-
+import joshuatee.wx.Extensions.getHtmlSep
+import joshuatee.wx.Extensions.parse
+import joshuatee.wx.Extensions.parseColumn
 import joshuatee.wx.MyApplication
-import joshuatee.wx.util.UtilityLog
-import joshuatee.wx.util.UtilityString
-
-import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.DownloadTimer
 
-internal object UtilitySwoD1 {
+internal object UtilitySwoDayOne {
 
     var timer = DownloadTimer("SWO")
 
@@ -40,7 +38,7 @@ internal object UtilitySwoD1 {
 
     fun get(context: Context) {
         if (timer.isRefreshNeeded(context)) {
-            var retStr: String
+            //var retStr: String
             /*	... CATEGORICAL ...
 
 		SLGT   26488256 27058145 27138124 27337986
@@ -59,49 +57,28 @@ internal object UtilitySwoD1 {
 		&&*/
             val threatList = listOf("HIGH", "MDT", "ENH", "SLGT", "MRGL")
             val day = 1
-            val urlBlob = "${MyApplication.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt"
-            val html = urlBlob.getHtmlSep()
-            val htmlBlob = html.parse("... CATEGORICAL ...(.*?&)&") // was (.*?)&&
+            val html = ("${MyApplication.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt").getHtmlSep()
+            val htmlChunk = html.parse("... CATEGORICAL ...(.*?&)&") // was (.*?)&&
             threatList.indices.forEach { it ->
-                retStr = ""
+                var data = ""
                 val threatLevelCode = threatList[it]
-                val htmlList = htmlBlob.parseColumn(threatLevelCode.substring(1) + "(.*?)[A-Z&]")
+                val htmlList = htmlChunk.parseColumn(threatLevelCode.substring(1) + "(.*?)[A-Z&]")
                 val warningList = mutableListOf<Double>()
-                htmlList.indices.forEach { h ->
-                    val coords = htmlList[h].parseColumn("([0-9]{8}).*?")
-                    var xStrTmp: String
-                    var yStrTmp: String
-                    coords.forEach { temp ->
-                        xStrTmp = temp.substring(0, 4)
-                        yStrTmp = temp.substring(4, 8)
-                        if (yStrTmp.matches("^0".toRegex())) {
-                            yStrTmp = yStrTmp.replace("^0".toRegex(), "")
-                            yStrTmp += "0"
-                        }
-                        xStrTmp = UtilityString.addPeriodBeforeLastTwoChars(xStrTmp)
-                        yStrTmp = UtilityString.addPeriodBeforeLastTwoChars(yStrTmp)
-                        try {
-                            var tmpDbl = yStrTmp.toDoubleOrNull() ?: 0.0
-                            if (tmpDbl < 40.00) {
-                                tmpDbl += 100
-                                yStrTmp = tmpDbl.toString()
-                            }
-                        } catch (e: Exception) {
-                            UtilityLog.handleException(e)
-                        }
-                        retStr = "$retStr$xStrTmp $yStrTmp "
+                htmlList.forEach { polygon ->
+                    val coordinates = polygon.parseColumn("([0-9]{8}).*?")
+                    coordinates.forEach { coordinate ->
+                            data += LatLon(coordinate).print()
                     }
-                    retStr += ":"
-                    retStr = retStr.replace(" :", ":")
+                    data += ":"
+                    data = data.replace(" :", ":")
                 }
-                val tmpArr = MyApplication.colon.split(retStr)
-                var testArr: Array<String>
-                tmpArr.forEach { warn ->
-                    testArr = MyApplication.space.split(warn)
-                    val x = testArr.filterIndexed { idx: Int, _: String -> idx and 1 == 0 }.map {
+                val polygons = data.split(":").dropLastWhile { it.isEmpty() }
+                polygons.forEach { polygon ->
+                    val numbers = MyApplication.space.split(polygon)
+                    val x = numbers.filterIndexed { index: Int, _: String -> index and 1 == 0 }.map {
                         it.toDoubleOrNull() ?: 0.0
                     }
-                    val y = testArr.filterIndexed { idx: Int, _: String -> idx and 1 != 0 }.map {
+                    val y = numbers.filterIndexed { index: Int, _: String -> index and 1 != 0 }.map {
                         (it.toDoubleOrNull() ?: 0.0) * -1.0
                     }
                     if (x.isNotEmpty() && y.isNotEmpty()) {

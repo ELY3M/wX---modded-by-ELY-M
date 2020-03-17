@@ -163,6 +163,7 @@ object WXGLNexrad {
         else -> 460
     }
 
+    const val radarLocationUpdateDistanceInMeters = 30.0f
     private const val binSize54 = 2.0f
     private const val binSize13 = 0.50f
     private const val binSize08 = 0.295011f

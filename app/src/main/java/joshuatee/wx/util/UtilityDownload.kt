@@ -425,8 +425,7 @@ object UtilityDownload {
             }
             prod.contains("WPCMPD") -> {
                 val no = prod.substring(6)
-                val textUrl =
-                        "${MyApplication.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd_multi.php?md=$no"
+                val textUrl = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd_multi.php?md=$no"
                 text = UtilityString.getHtmlAndParseSep(textUrl, RegExp.pre2Pattern)
                 text = text.replace("^<br>".toRegex(), "")
                 text = text.replace("^ <br>".toRegex(), "")

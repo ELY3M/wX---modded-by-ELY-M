@@ -279,7 +279,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener, On
                     om.prefParamLabel + it.toString(),
                     om.displayData.paramLabel[it]
             )
-            if (!UtilityModels.parmInArray(om.params, om.displayData.param[it])) {
+            if (!UtilityModels.parameterInList(om.params, om.displayData.param[it])) {
                 om.displayData.param[it] = om.params[0]
                 om.displayData.paramLabel[it] = om.labels[0]
             }

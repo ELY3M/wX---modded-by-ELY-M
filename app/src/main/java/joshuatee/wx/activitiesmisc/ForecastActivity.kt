@@ -25,6 +25,8 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.TypedValue
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import joshuatee.wx.MyApplication
 
@@ -66,6 +68,11 @@ class ForecastActivity : BaseActivity() {
     private lateinit var linearLayoutForecast: ObjectLinearLayout
     private lateinit var linearLayoutHazards: ObjectLinearLayout
     private val hazardCards = mutableListOf<ObjectCardText>()
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.adhoc_forecast, menu)
+        return true
+    }
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,7 +136,7 @@ class ForecastActivity : BaseActivity() {
         try {
             cardSunrise.text = (
                     UtilityTimeSunMoon.getSunriseSunset(this@ForecastActivity, Location.currentLocationStr, false) + MyApplication.newline + UtilityTime.gmtTime()
-            )
+                    )
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -164,6 +171,23 @@ class ForecastActivity : BaseActivity() {
                 )
             })
             linearLayoutHazards.addView(hazardCards[z].card)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_save -> {
+                saveLocation()
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
+    }
+
+    private fun saveLocation() = GlobalScope.launch(uiDispatcher) {
+        withContext(Dispatchers.IO) {
+            val message = Location.locationSave(this@ForecastActivity, latLon)
+            UtilityUI.makeSnackBar(ll, message)
         }
     }
 }

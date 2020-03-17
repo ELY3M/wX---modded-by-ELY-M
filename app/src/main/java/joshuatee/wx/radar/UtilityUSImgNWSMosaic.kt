@@ -179,7 +179,7 @@ object UtilityUSImgNwsMosaic {
         )
         urls.forEach {
             if (MyApplication.blackBg && sector != "alaska") {
-                bitmaps.add(UtilityImg.getBitmapRemoveBG(baseUrl + it, -1))
+                bitmaps.add(UtilityImg.getBitmapRemoveBackground(baseUrl + it, -1))
             } else {
                 bitmaps.add((baseUrl + it).getImage())
             }
@@ -228,7 +228,7 @@ object UtilityUSImgNwsMosaic {
         var bitmap = imgUrl.getImage()
         var bitmapCanvas = UtilityImg.getBlankBitmap()
         if (MyApplication.blackBg) {
-            bitmap = UtilityImg.eraseBG(bitmap, -1)
+            bitmap = UtilityImg.eraseBackground(bitmap, -1)
         }
         if (bitmap.height > 10) {
             bitmapCanvas = Bitmap.createBitmap(bitmap.width, bitmap.height, Config.ARGB_8888)

@@ -16,6 +16,8 @@ import joshuatee.wx.util.Utility
 internal class PlayListAdapter(private val dataSet: MutableList<String>) :
     RecyclerView.Adapter<PlayListAdapter.DataObjectHolder>() {
 
+    private val maxLength = 400
+
     internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
 
@@ -47,11 +49,11 @@ internal class PlayListAdapter(private val dataSet: MutableList<String>) :
     }
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
-        val tmpArr = dataSet[position].split(";")
-        holder.label.text = tmpArr[0]
-        holder.timeAndSize.text = tmpArr[1]
-        val tmpStr = Utility.fromHtml(Utility.readPref("PLAYLIST_" + tmpArr[0], ""))
-        holder.contentPreview.text = tmpStr.replace(MyApplication.newline, " ")
+        val dataList = dataSet[position].split(";")
+        holder.label.text = dataList[0]
+        holder.timeAndSize.text = dataList[1]
+        val tmpStr = Utility.fromHtml(Utility.readPref("PLAYLIST_" + dataList[0], ""))
+        holder.contentPreview.text = tmpStr.replace(MyApplication.newline, " ").take(maxLength)
         holder.contentPreview.setAsBackgroundText()
     }
 

@@ -38,6 +38,8 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ObjectIntent
 import kotlinx.coroutines.*
 
+// FIXME rename class
+
 class ObjectCAWarn(
         private val context: Context,
         private val activity: Activity,
@@ -98,31 +100,33 @@ class ObjectCAWarn(
         var locWarning: String
         var locWatch: String
         var locStatement: String
-        var provL: String
+        //var provL: String
         listLocUrl.indices.forEach {
             locWarning = listLocWarning[it]
             locWatch = listLocWatch[it]
             locStatement = listLocStatement[it]
             if (locWarning.contains("href")) {
-                locWarning += "(Warning)"
+                //locWarning += "(Warning)"
+                locWarning = locWarning.parse("class=.wb-inv.>(.*?)</span>")
                 locWarning = locWarning.replace("</.*?>".toRegex(), "")
                 locWarning = locWarning.replace("<.*?>".toRegex(), "")
             }
             if (locWatch.contains("href")) {
-                locWatch += "(Watch)"
+                //locWatch += "(Watch)"
+                locWatch = locWatch.parse("class=.wb-inv.>(.*?)</span>")
                 locWatch = locWatch.replace("</.*?>".toRegex(), "")
                 locWatch = locWatch.replace("<*?>>".toRegex(), "")
             }
             if (locStatement.contains("href")) {
-                locStatement += "(Statement)"
+                //locStatement += "(Statement)"
+                locStatement = locStatement.parse("class=.wb-inv.>(.*?)</span>")
                 locStatement = locStatement.replace("</.*?>".toRegex(), "")
                 locStatement = locStatement.replace("<.*?>".toRegex(), "")
             }
-            provL = listLocUrl[it].parse("report_e.html.([a-z]{2}).*?")
+            val province = listLocUrl[it].parse("report_e.html.([a-z]{2}).*?")
             val cText = ObjectCardText(context, linearLayout)
             cText.text = (Utility.fromHtml(
-                    provL.toUpperCase(Locale.US) + ": " + listLocName[it] + " "
-                            + locWarning + " " + locWatch + " " + locStatement
+                    province.toUpperCase(Locale.US) + ": " + locWarning + " " + locWatch + " " + locStatement
             ))
             val urlStr = MyApplication.canadaEcSitePrefix + listLocUrl[it]
             val location = listLocName[it]

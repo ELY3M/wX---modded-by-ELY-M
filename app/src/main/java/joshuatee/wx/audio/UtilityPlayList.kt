@@ -35,36 +35,35 @@ object UtilityPlayList {
 
     private const val FORMAT_TIME_STR = "MM-dd HH:mm"
 
-    fun add(context: Context, view: View, prodF: String, text: String) {
-        val prod = prodF.toUpperCase(Locale.US)
-        if (!MyApplication.playlistStr.contains(prod)) {
-            Utility.writePref(context, "PLAYLIST", MyApplication.playlistStr + ":" + prod)
-            MyApplication.playlistStr = MyApplication.playlistStr + ":" + prod
-            UtilityUI.makeSnackBar(view, prod + " saved to playlist: " + text.length)
+    fun add(context: Context, view: View, product: String, text: String) {
+        val productUpperCase = product.toUpperCase(Locale.US)
+        if (!MyApplication.playlistStr.contains(productUpperCase)) {
+            Utility.writePref(context, "PLAYLIST", MyApplication.playlistStr + ":" + productUpperCase)
+            MyApplication.playlistStr = MyApplication.playlistStr + ":" + productUpperCase
+            UtilityUI.makeSnackBar(view, productUpperCase + " saved to playlist: " + text.length)
         } else {
-            UtilityUI.makeSnackBar(view, prod + " already in playlist: " + text.length)
+            UtilityUI.makeSnackBar(view, productUpperCase + " already in playlist: " + text.length)
         }
         val formattedDate = UtilityTime.getDateAsString(FORMAT_TIME_STR)
-        Utility.writePref(context, "PLAYLIST_$prod", text)
-        Utility.writePref(context, "PLAYLIST_" + prod + "_TIME", formattedDate)
+        Utility.writePref(context, "PLAYLIST_$productUpperCase", text)
+        Utility.writePref(context, "PLAYLIST_" + productUpperCase + "_TIME", formattedDate)
     }
 
-    fun checkAndSave(context: Context, prodF: String, text: String) {
-        val prod = prodF.toUpperCase(Locale.US)
+    fun checkAndSave(context: Context, product: String, text: String) {
+        val productUpperCase = product.toUpperCase(Locale.US)
         val formattedDate = UtilityTime.getDateAsString(FORMAT_TIME_STR)
-        if (MyApplication.playlistStr.contains(prod)) {
-            Utility.writePref(context, "PLAYLIST_$prod", text)
-            Utility.writePref(context, "PLAYLIST_" + prod + "_TIME", formattedDate)
+        if (MyApplication.playlistStr.contains(productUpperCase)) {
+            Utility.writePref(context, "PLAYLIST_$productUpperCase", text)
+            Utility.writePref(context, "PLAYLIST_" + productUpperCase + "_TIME", formattedDate)
         }
     }
 
     internal fun downloadAll(context: Context): String {
         var resultStr = ""
         val arr = MyApplication.colon.split(MyApplication.playlistStr)
-        var text: String
         val formattedDate = UtilityTime.getDateAsString(FORMAT_TIME_STR)
         (1 until arr.size).forEach {
-            text = UtilityDownload.getTextProduct(context, arr[it])
+            var text = UtilityDownload.getTextProduct(context, arr[it])
             if (arr[it].contains("SWO")) {
                 text = text.substring(text.indexOf('>') + 1)
                 text = text.replace("^<br>".toRegex(), "")

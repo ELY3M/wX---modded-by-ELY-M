@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55375"
-    android:versionName="55375"
+    android:versionCode="55379"
+    android:versionName="55379"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -59,6 +59,7 @@
      android:supportsRtl="false"
      android:resizeableActivity="true"
      android:usesCleartextTraffic="true"
+     android:requestLegacyExternalStorage="true"
      >
 
   <activity
@@ -307,10 +308,6 @@
   <activity
       android:name=".radar.USNwsMosaicActivity"
       android:label="@string/title_activity_nwsmosaic"
-      android:parentActivityName="WX" >
-  </activity>
-  <activity
-      android:name=".wpc.WpcMpdShowSummaryActivity"
       android:parentActivityName="WX" >
   </activity>
   <activity

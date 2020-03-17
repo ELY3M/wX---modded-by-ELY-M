@@ -42,6 +42,10 @@ import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.PolygonWarningType
 import joshuatee.wx.radar.*
+import joshuatee.wx.radar.UtilityDownloadMcd
+import joshuatee.wx.radar.UtilityDownloadMpd
+import joshuatee.wx.radar.UtilityDownloadWarnings
+import joshuatee.wx.radar.UtilityDownloadWatch
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityHomeScreen
@@ -71,14 +75,6 @@ class MyApplication : Application() {
         editor = preferences.edit()
         preferencesTelecine = getSharedPreferences("telecine", Context.MODE_PRIVATE)
         contentResolverLocal = contentResolver
-        comma = Pattern.compile(",")
-        bang = Pattern.compile("!")
-        space = Pattern.compile(" ")
-        colon = Pattern.compile(":")
-        colonSpace = Pattern.compile(": ")
-        semicolon = Pattern.compile(";")
-        period = Pattern.compile("\\.")
-        slash = Pattern.compile("/")
         val res = resources
         dm = res.displayMetrics
         deviceScale = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1f, dm)
@@ -97,13 +93,11 @@ class MyApplication : Application() {
                 res.getDimension(R.dimen.padding_dynamic_tv_small),
                 dm
         ).toInt()
-
         // FIXME needed? dup in UIpref
         val normalTextSize = getInitialPreference("TEXTVIEW_FONT_SIZE", 16) // 14 16 21
         textSizeSmall = UtilityUI.spToPx(normalTextSize - 2, this)
         textSizeNormal = UtilityUI.spToPx(normalTextSize, this)
         textSizeLarge = UtilityUI.spToPx(normalTextSize + 5, this)
-
         lLpadding = res.getDimension(R.dimen.padding_ll)
         // Calculate ActionBar height
         val tv = TypedValue()
@@ -138,14 +132,11 @@ class MyApplication : Application() {
                 .readTimeout(15, TimeUnit.SECONDS)
                 .addInterceptor(okHttp3Interceptor)
                 .build()
-
         UtilityTts.initTts(applicationContext)
         UtilityCities.initCitiesArray()
-
         if (!loadedBuffers) {
             initBuffers(this)
         }
-
         httpClientUnsafe = UtilityHttp.getUnsafeOkHttpClient()
         imageCollectionMap = ObjectImagesCollection.initialize()
     }
@@ -178,27 +169,21 @@ class MyApplication : Application() {
         const val nwsApiUrl = "https://api.weather.gov"
         const val nwsSwpcWebSitePrefix = "https://services.swpc.noaa.gov"
         const val canadaEcSitePrefix = "https://weather.gc.ca"
-	const val tgftpSitePrefix = "https://tgftp.nws.noaa.gov"
+        const val tgftpSitePrefix = "https://tgftp.nws.noaa.gov"
         const val nwsWeatherGov: String = "https://w1.weather.gov"
         const val prefSeparator: String = " : : :"
         const val sep = "ABC123"
         const val pre2Pattern = "<pre>(.*?)</pre>"
-
         var uiAnimIconFrames: String = "rid"
-
         const val WIDGET_FILE_BAK: String = "BAK"
-
         val HM_CLASS: MutableMap<String, Class<*>> = mutableMapOf()
         val HM_CLASS_ARGS: MutableMap<String, Array<String>> = mutableMapOf()
         val HM_CLASS_ID: MutableMap<String, String> = mutableMapOf()
-
         var imageCollectionMap: MutableMap<String, ObjectImagesCollection> = mutableMapOf()
         init {
             UtilityHomeScreen.setupMap()
         }
-
         var primaryColor: Int = 0
-        const val TEXTVIEW_MAGIC_FUDGE_FACTOR: Float = 4.05f
         var deviceScale: Float = 0f
         var httpClient: OkHttpClient? = null
         var httpClientUnsafe: OkHttpClient? = null
@@ -240,8 +225,6 @@ class MyApplication : Application() {
         var unitsM: Boolean = false
         var unitsF: Boolean = false
         var locDisplayImg: Boolean = false
-        var comma: Pattern = Pattern.compile("")
-        var bang: Pattern = Pattern.compile("")
         var alertOnlyOnce: Boolean = false
         var drawToolColor: Int = 0
         var widgetTextColor: Int = 0
@@ -254,7 +237,7 @@ class MyApplication : Application() {
         var wxoglSize: Int = 0
         var wxoglSizeDefault = 13
         var wxoglRememberLocation: Boolean = false
-        var wxoglRadarAutorefresh: Boolean = false
+        var wxoglRadarAutoRefresh: Boolean = false
         var wfoFav: String = ""
         var ridFav: String = ""
         var sndFav: String = ""
@@ -267,7 +250,6 @@ class MyApplication : Application() {
         var notifSoundUri: String = ""
         var homescreenFav: String = ""
         const val HOMESCREEN_FAV_DEFAULT: String = "TXT-CC2:TXT-HAZ:OGL-RADAR:TXT-7DAY2"
-        const val HOMESCREEN_FAV_DEFAULT_CA: String = "TXT-CC2:TXT-HAZ:IMG-CARAIN:TXT-7DAY2"
         var alertNotificationSoundTornadoCurrent: Boolean = false
         var alertNotificationSoundSpcmcd: Boolean = false
         var alertNotificationSoundWpcmpd: Boolean = false
@@ -295,12 +277,12 @@ class MyApplication : Application() {
         var playlistStr: String = ""
         var notifTextProdStr: String = ""
         var newline: String = ""
-        var space: Pattern = Pattern.compile("")
-        var colon: Pattern = Pattern.compile("")
-        var colonSpace: Pattern = Pattern.compile("")
-        var semicolon: Pattern = Pattern.compile("")
-        var period: Pattern = Pattern.compile("")
-        var slash: Pattern = Pattern.compile("")
+        var space: Pattern = Pattern.compile(" ")
+        var colon: Pattern = Pattern.compile(":")
+        var colonSpace: Pattern = Pattern.compile(": ")
+        var semicolon: Pattern = Pattern.compile(";")
+        var slash: Pattern = Pattern.compile("/")
+        var comma: Pattern = Pattern.compile(",")
         var spinnerLayout: Int = R.layout.spinner_row_blue
         var actionBarHeight: Int = 0
         var wxoglZoom: Float = 0f
@@ -352,9 +334,6 @@ class MyApplication : Application() {
         const val ICON_FORWARD: Int = R.drawable.ic_keyboard_arrow_right_24dp
         const val ICON_SKIP_BACK: Int = R.drawable.ic_skip_previous_24dp
         const val ICON_SKIP_FORWARD: Int = R.drawable.ic_skip_next_24dp
-        const val MD_COMP: String = "<center>No Mesoscale Discussions are currently in effect."
-        const val WATCH_COMP: String = "<center><strong>No watches are currently valid"
-        const val MPD_COMP: String = "No MPDs are currently in effect."
         var spchrrrZoom: Float = 0f
         var spchrrrX: Float = 0f
         var spchrrrY: Float = 0f
@@ -367,7 +346,6 @@ class MyApplication : Application() {
         var paddingSmall: Int = 0
         var tabHeaders: Array<String> = arrayOf("", "", "")
         var radarLocationUpdateInterval = 10
-        const val radarLocationUpdateDistanceInMeters = 30
 
         fun initPreferences(context: Context) {
             initRadarPreferences()
@@ -406,7 +384,7 @@ class MyApplication : Application() {
             if (UtilityUI.isTablet()) {
                 UIPreferences.nwsIconSizeDefault = 6
             }
-            nwsIconSize = preferences.getInt("NWS_ICON_SIZE_PREF", UIPreferences.nwsIconSizeDefault) // was 24 10-27-2018
+            nwsIconSize = preferences.getInt("NWS_ICON_SIZE_PREF", UIPreferences.nwsIconSizeDefault)
             uiAnimIconFrames = getInitialPreferenceString("UI_ANIM_ICON_FRAMES", "10")
             blackBg = getInitialPreference("NWS_RADAR_BG_BLACK", "")
             widgetPreventTap = getInitialPreference("UI_WIDGET_PREVENT_TAP", "")
@@ -428,7 +406,7 @@ class MyApplication : Application() {
             }
             wxoglSize = getInitialPreference("WXOGL_SIZE", wxoglSizeDefault)
             wxoglRememberLocation = getInitialPreference("WXOGL_REMEMBER_LOCATION", "false")
-            wxoglRadarAutorefresh = getInitialPreference("RADAR_AUTOREFRESH", "false")
+            wxoglRadarAutoRefresh = getInitialPreference("RADAR_AUTOREFRESH", "false")
             wfoFav = getInitialPreferenceString("WFO_FAV", prefSeparator)
             ridFav = getInitialPreferenceString("RID_FAV", prefSeparator)
             sndFav = getInitialPreferenceString("SND_FAV", prefSeparator)
@@ -529,7 +507,6 @@ class MyApplication : Application() {
         var loadedBuffers: Boolean = false
 
         fun initBuffers(context: Context) {
-            UtilityLog.d("wx", "initBuffers ran")
             loadedBuffers = true
             ColorPalettes.init(context)
             initRadarGeometryAll(context)
@@ -606,7 +583,9 @@ class MyApplication : Application() {
 
         private fun initRadarGeometryAll(context: Context) {
             initGenericRadarWarnings(context)
-            GeographyType.values().forEach { initRadarGeometryByType(context, it) }
+            GeographyType.values().forEach {
+                initRadarGeometryByType(context, it)
+            }
         }
 
         fun initGenericRadarWarnings(context: Context) {
@@ -766,7 +745,7 @@ class MyApplication : Application() {
         var radarSpotterSize: Int = 0
         var radarAviationSize: Int = 0
         var radarTextSize: Float = 0f
-	var radarTextSizeDefault: Float = 1.0f
+        var radarTextSizeDefault: Float = 1.0f
         var radarUserPointSize: Int = 0
         var radarLocdotSize: Int = 0
         var radarLocIconSize: Int = 0
@@ -876,7 +855,7 @@ class MyApplication : Application() {
             UtilityDownloadWatch.timer.resetTimer()
             UtilityMetar.timer.resetTimer()
             UtilitySpotter.timer.resetTimer()
-            UtilitySwoD1.timer.resetTimer()
+            UtilitySwoDayOne.timer.resetTimer()
         }
 
         private fun getInitialPreference(pref: String, initValue: Int): Int {

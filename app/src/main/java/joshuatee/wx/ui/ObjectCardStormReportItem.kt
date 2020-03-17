@@ -69,11 +69,11 @@ class ObjectCardStormReportItem(context: Context) {
     fun setTextFields(stormReport: StormReport) {
         textViewTop.text = stormReport.state + ", " + stormReport.city + " " + stormReport.time
         textViewTitle.text = stormReport.address
-        textViewBottom.text = stormReport.magnitude + " - " + stormReport.damageReport
+        textViewBottom.text = stormReport.magnitude + " - " + stormReport.description
     }
 
     fun setTextHeader(stormReport: StormReport) {
-        textViewTop.text = stormReport.text.toUpperCase(Locale.US)
+        textViewTop.text = stormReport.title.toUpperCase(Locale.US)
         textViewTop.setTextSize(TextSize.LARGE)
         textViewTop.setPadding(20,20,20,20)
         textViewTop.color = UIPreferences.textHighlightColor

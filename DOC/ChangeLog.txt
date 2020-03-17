@@ -10,6 +10,7 @@
 // TODO [FIX] roaming location needs background GPS perm for Android 10 (API 29)
 // TODO [ADD] textual obs in fixed radars on homescreen
 // TODO [ADD] use ENUM instead of RID_FAV WFO_FAV SND_FAV (util/UtilityFavorites)
+// TODO [ADD] look into magnification gestures
 // TODO [FIX] dual/quad pane radar don't take up the entire screen on chomeOS
 // TODO [REF] move off MyApplication.colon.split MyApplication.colon.space
 // TODO       miscPref.split(":").dropLastWhile { it.isEmpty() }
@@ -19,15 +20,32 @@
 // TODO [ADD] us alerts - optimization for landscape
 // TODO [FIX] chromeOS: text size for observations in nexrad
 // TODO [REF] rename AfdActivity to WfoText
+// TODO [ADD] ability to step through animations
 // TODO [FIX] hitting this? https://stackoverflow.com/questions/54120745/android-9-0-notificationmanager-notify-throwing-java-lang-securityexception
 // TODO [FIX] chromeOS - multipane radar toolbar is not fully transparent
 // TODO [FIX] change animation interval to animation speed
 // TODO [FIX] update PlayList to be more like iOS
-// TODO [ADD] playlist onrestart does not get new content
-// TODO [ADD] playlist should use WPCText instead of textviewer
-// TODO [ADD] playlist should show more text
 
-55375 2020_03_04
+55379 2020_03_17    [REF] misc for readability
+                    [ADD] Canadian locations - have alerts act like US on front screen
+                    [ADD] add save location button in adhoc location accessed via nexrad long press
+                    [FIX] Canadian Warnings detailed formatting minor improvement
+                    [REF] minor optimizations in MyApp
+                    [REF] minor optimizations in SPC Storm reports
+                    [ADD] playlist now uses WPCText instead of textviewer when viewing items
+55378 2020_03_15    [REF] misc
+                    [ADD] prp for future move to targetSdkVersion to 30 from 29 in build.gradle
+                    [ADD] remove MPD summary link from WPC Text, users should go to severe dashboard
+                    [ADD] in WPC Text, move add to playlist to submenu above add notification - similar to WFO text
+                    [REF] remove WpcMpdShowSummaryActivity.kt
+55377 2020_03_10    [ADD] forecast zone to settings -> About
+55376 2020_03_07    [FIX] Canadian warnings formatting improvements
+                    [FIX] more minor tweaks for issues after updating to MDC 1.1.0
+                    [REF] misc cleanup/refactor
+                    [FIX] nexrad radar, button titles were not changing when animating
+55375 2020_03_05    [FIX] crash in severedashboard when attempting to share when MCDs are present
+                    [FIX] playList onrestart was not working
+                    [ADD] playList show more text in preview
 55374 2020_03_04    [ADD] 'com.google.android.material:material:1.0.0' to 1.1.0
 55373 2020_03_03    [ADD] gradle plugin update
                     [REF] misc lint

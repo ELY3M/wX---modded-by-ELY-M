@@ -21,104 +21,54 @@
 
 package joshuatee.wx.spc
 
-import joshuatee.wx.UIPreferences
-
 internal object UtilitySpcStormReports {
 
-    fun processData(textArr: List<String>): MutableList<StormReport> {
-        val output = StringBuilder()
-        val outAl = mutableListOf<StormReport>()
-        var lineChunks: List<String>
-        var lat: String
-        var lon: String
-        var state: String
-        var time: String
-        var address: String
-        var damageReport: String
-        var magnitude: String
-        var city: String
-        //var damageHeader: String
-        textArr.forEach {
-            lat = ""
-            lon = ""
-            state = ""
-            time = ""
-            address = ""
-            damageReport = ""
-            magnitude = ""
-            city = ""
-            //damageHeader = ""
-            output.setLength(0)
-            if (it.contains(",F_Scale,")) {
-                output.append("Tornado Reports")
-            } else if (it.contains(",Speed,")) {
-                output.append("Wind Reports")
-            } else if (it.contains(",Size,")) {
-                output.append("Hail Reports")
+    fun process(linesOfData: List<String>): MutableList<StormReport> {
+        val stormReports = mutableListOf<StormReport>()
+        linesOfData.forEach { line ->
+            val items: List<String>
+            var title = ""
+            var lat = ""
+            var lon = ""
+            var state = ""
+            var time = ""
+            var address = ""
+            var description = ""
+            var magnitude = ""
+            var city = ""
+            if (line.contains(",F_Scale,")) {
+                title = "Tornado Reports"
+            } else if (line.contains(",Speed,")) {
+                title = "Wind Reports"
+            } else if (line.contains(",Size,")) {
+                title = "Hail Reports"
             } else {
-                lineChunks = it.split(",")
-                if (lineChunks.size > 7) {
-                    output.append(lineChunks[0])
-                    output.append(" ")
-                    output.append(lineChunks[1])
-                    output.append(" ")
-                    output.append(lineChunks[2])
-                    // FIXME get rid of HTML
-                    output.append("<font color=")
-                    output.append(UIPreferences.highlightColorStr)
-                    output.append("> ")
-                    output.append(lineChunks[3])
-                    output.append(" ")
-                    output.append(lineChunks[4])
-                    output.append("</font>  ")
-                    output.append(lineChunks[5])
-                    output.append(" ")
-                    output.append(lineChunks[6])
-                    output.append("<br>")
-                    output.append("<i>")
-                    output.append(lineChunks[7])
-                    output.append("</i>")
-
-                    // 0 - GMT time
-                    // 1 - unit
-                    // 2 - address
-                    // 3 - City
-                    // 4 - State
-                    // 5 - X
-                    // 6 - Y
-                    // 7 - description (WFO)
-
-                    //x = lineArr[5]
-                    //y = lineArr[6]
-                    //time = lineArr[0]
-                    //state = lineArr[4]
-
-                    time = lineChunks[0]
-                    magnitude = lineChunks[1]
-                    address = lineChunks[2]
-                    city = lineChunks[3]
-                    state = lineChunks[4]
-                    lat = lineChunks[5]
-                    lon = lineChunks[6]
-                    damageReport = lineChunks[7]
+                items = line.split(",")
+                if (items.size > 7) {
+                    time = items[0]
+                    magnitude = items[1]
+                    address = items[2]
+                    city = items[3]
+                    state = items[4]
+                    lat = items[5]
+                    lon = items[6]
+                    description = items[7]
                 }
             }
-            //outAl.add(StormReport(output.toString(), lat, lon, time, state))
-            outAl.add(
-                StormReport(
-                    output.toString(),
-                    lat,
-                    lon,
-                    time,
-                    magnitude,
-                    address,
-                    city,
-                    state,
-                    damageReport
-                    //damageHeader
-                )
+            stormReports.add(
+                    StormReport(
+                            title,
+                            lat,
+                            lon,
+                            time,
+                            magnitude,
+                            address,
+                            city,
+                            state,
+                            description
+                    )
             )
         }
-        return outAl
+        return stormReports
     }
 }

@@ -53,8 +53,6 @@ object UIPreferences {
     var smallTextTheme: Int = 0
     var textHighlightColor: Int = 0
     var textSmallThemeColor: Int = 0
-    // FIXME get rid of this
-    var highlightColorStr: String = ""
     var themeIsWhite: Boolean = true
     var hideTopToolbar: Boolean = false
     var mainScreenRadarFab: Boolean = false
@@ -103,14 +101,12 @@ object UIPreferences {
             textHighlightColor = Color.BLUE
             //textHighlightColor = Color.rgb(14, 71, 161)
             backgroundColor = Color.BLACK
-            highlightColorStr = "blue"
             themeIsWhite = true
         } else {
             smallTextTheme = android.R.style.TextAppearance_Small
             textSmallThemeColor = Color.LTGRAY
             textHighlightColor = Color.YELLOW
             backgroundColor = Color.WHITE
-            highlightColorStr = "yellow"
             themeIsWhite = false
         }
     }

@@ -23,12 +23,13 @@ package joshuatee.wx.spc
 
 import android.content.Context
 import android.graphics.Bitmap
+import joshuatee.wx.Extensions.condenseSpace
+import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.Extensions.parse
+import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityImg
-
-import joshuatee.wx.Extensions.*
-import joshuatee.wx.MyApplication
 
 internal class ObjectWatchProduct(type: PolygonType, productNumber: String) {
 

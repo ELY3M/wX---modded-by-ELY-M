@@ -200,8 +200,8 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
                 }
             })
         }
-        favListLabel = UtilityFavorites.setupFavoriteMenuSpc(MyApplication.spcmesoLabelFav, displayData.paramLabel[curImg])
-        favListParm = UtilityFavorites.setupFavoriteMenuSpc(MyApplication.spcMesoFav, displayData.param[curImg])
+        favListLabel = UtilityFavorites.setupMenuSpc(MyApplication.spcmesoLabelFav, displayData.paramLabel[curImg])
+        favListParm = UtilityFavorites.setupMenuSpc(MyApplication.spcMesoFav, displayData.param[curImg])
         sp = ObjectSpinner(this, this, this, R.id.spinner1, favListLabel)
         UtilitySpcMeso.createData()
         drw = ObjectNavDrawerCombo(
@@ -224,11 +224,11 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
     }
 
     override fun onRestart() {
-        favListLabel = UtilityFavorites.setupFavoriteMenuSpc(
+        favListLabel = UtilityFavorites.setupMenuSpc(
                 MyApplication.spcmesoLabelFav,
                 displayData.paramLabel[curImg]
         )
-        favListParm = UtilityFavorites.setupFavoriteMenuSpc(
+        favListParm = UtilityFavorites.setupMenuSpc(
                 MyApplication.spcMesoFav,
                 displayData.param[curImg]
         )
@@ -499,17 +499,17 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
     }
 
     private fun toggleFavorite() {
-        UtilityFavorites.toggleFavoriteSpcMeso(
+        UtilityFavorites.toggleSpcMeso(
                 this,
                 displayData.param[curImg],
                 displayData.paramLabel[curImg],
                 star
         )
-        favListLabel = UtilityFavorites.setupFavoriteMenuSpc(
+        favListLabel = UtilityFavorites.setupMenuSpc(
                 MyApplication.spcmesoLabelFav,
                 displayData.paramLabel[curImg]
         )
-        favListParm = UtilityFavorites.setupFavoriteMenuSpc(
+        favListParm = UtilityFavorites.setupMenuSpc(
                 MyApplication.spcMesoFav,
                 displayData.param[curImg]
         )
@@ -553,11 +553,11 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener,
     override fun onNothingSelected(parent: AdapterView<*>) {}
 
     private fun refreshSpinner() {
-        favListLabel = UtilityFavorites.setupFavoriteMenuSpc(
+        favListLabel = UtilityFavorites.setupMenuSpc(
                 MyApplication.spcmesoLabelFav,
                 displayData.paramLabel[curImg]
         )
-        favListParm = UtilityFavorites.setupFavoriteMenuSpc(
+        favListParm = UtilityFavorites.setupMenuSpc(
                 MyApplication.spcMesoFav,
                 displayData.param[curImg]
         )

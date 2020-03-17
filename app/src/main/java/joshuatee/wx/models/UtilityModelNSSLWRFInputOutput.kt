@@ -81,7 +81,7 @@ internal object UtilityModelNsslWrfInputOutput {
                         sector.toLowerCase(Locale.US) + ".f" + time + "00.png"
             val baseLayer = baseLayerUrl.getImage()
             val prodLayer = url.getImage()
-            return UtilityImg.addColorBG(
+            return UtilityImg.addColorBackground(
                 context,
                 UtilityImg.mergeImages(context, prodLayer, baseLayer),
                 Color.WHITE

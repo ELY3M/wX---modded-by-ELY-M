@@ -56,7 +56,7 @@ internal object UtilityModelSpcSrefInputOutput {
 
     fun getImage(context: Context, om: ObjectModel, time: String): Bitmap {
         val run = om.run.replace("z", "")
-        return UtilityImg.getBitmapAddWhiteBG(
+        return UtilityImg.getBitmapAddWhiteBackground(
             context,
             "${MyApplication.nwsSPCwebsitePrefix}/exper/sref/gifs/$run/${om.currentParam}$time.gif"
         )

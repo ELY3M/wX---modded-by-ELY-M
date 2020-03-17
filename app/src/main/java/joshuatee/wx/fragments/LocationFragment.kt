@@ -53,6 +53,7 @@ import joshuatee.wx.util.*
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.activitiesmisc.TextScreenActivity
 import joshuatee.wx.notifications.UtilityNotificationTools
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
@@ -678,30 +679,18 @@ class LocationFragment : Fragment()  {
         hazardsCards[0].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
         hazardsCards[0].setTextColor(UIPreferences.textHighlightColor)
         hazardsCards[0].text = hazUrl
-        val expandIndexCa = 0
         val hazUrlCa = objHazards.hazards
-        val hazardsSumCa = objHazards.getHazardsShort()
         hazardsCards[0].setOnClickListener(OnClickListener {
-            if (!hazardsExpandedAl[expandIndexCa]) {
-                hazardsCards[expandIndexCa].setTextColor(UIPreferences.backgroundColor)
-                hazardsCards[expandIndexCa].setTextSize(
-                        TypedValue.COMPLEX_UNIT_PX,
-                        MyApplication.textSizeSmall
-                )
-                hazardsCards[expandIndexCa].text = Utility.fromHtml(hazUrlCa)
-                hazardsExpandedAl[expandIndexCa] = true
-            } else {
-                hazardsCards[expandIndexCa].setTextColor(UIPreferences.textHighlightColor)
-                hazardsCards[expandIndexCa].setTextSize(
-                        TypedValue.COMPLEX_UNIT_PX,
-                        MyApplication.textSizeNormal
-                )
-                hazardsCards[expandIndexCa].text = hazardsSumCa
-                hazardsExpandedAl[expandIndexCa] = false
-                scrollView.smoothScrollTo(0, 0)
-            }
+            ObjectIntent(
+                    activityReference,
+                    TextScreenActivity::class.java,
+                    TextScreenActivity.URL,
+                    arrayOf(Utility.fromHtml(hazUrlCa), hazUrl)
+            )
         })
-        linearLayoutHazards?.addView(hazardsCards[0].card)
+        if (!hazUrl.startsWith("NO WATCHES OR WARNINGS IN EFFECT")) {
+            linearLayoutHazards?.addView(hazardsCards[0].card)
+        }
     }
 
     private fun setupAlertDialogStatus() {

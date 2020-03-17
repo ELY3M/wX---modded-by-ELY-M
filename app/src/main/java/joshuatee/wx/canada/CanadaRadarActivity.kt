@@ -103,13 +103,13 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
         imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::mapToCanadaRadarSite)
         ridFav = Utility.readPref(this, "RID_CA_FAV", MyApplication.prefSeparator)
-        ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, radarSite)
+        ridArrLoc = UtilityFavorites.setupMenuCanada(ridFav, radarSite)
         objectSpinner = ObjectSpinner(this, this, this, R.id.spinner1, ridArrLoc)
     }
 
     override fun onRestart() {
         ridFav = Utility.readPref(this, "RID_CA_FAV", MyApplication.prefSeparator)
-        ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, radarSite)
+        ridArrLoc = UtilityFavorites.setupMenuCanada(ridFav, radarSite)
         objectSpinner.refreshData(this, ridArrLoc)
         super.onRestart()
     }
@@ -210,7 +210,7 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
         imageType = "rad"
         this.radarSite = radarSite
         img.resetZoom()
-        ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, radarSite)
+        ridArrLoc = UtilityFavorites.setupMenuCanada(ridFav, radarSite)
         objectSpinner.refreshData(this, ridArrLoc)
     }
 
@@ -274,8 +274,8 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnItemSelect
     }
 
     private fun toggleFavorite() {
-        ridFav = UtilityFavorites.toggleFavoriteString(this, radarSite, star, "RID_CA_FAV")
-        ridArrLoc = UtilityFavorites.setupFavMenuCanada(ridFav, radarSite)
+        ridFav = UtilityFavorites.toggleString(this, radarSite, star, "RID_CA_FAV")
+        ridArrLoc = UtilityFavorites.setupMenuCanada(ridFav, radarSite)
         objectSpinner.refreshData(this, ridArrLoc)
     }
 

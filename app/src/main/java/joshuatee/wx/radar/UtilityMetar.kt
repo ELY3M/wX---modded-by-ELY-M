@@ -62,63 +62,41 @@ internal object UtilityMetar {
             val obsList = getObservationSites(context, rid)
             // https://www.aviationweather.gov/metar/data?ids=KDTW%2CKARB&format=raw&date=&hours=0
             val html = "${MyApplication.nwsAWCwebsitePrefix}/adds/metars/index?submit=1&station_ids=$obsList&chk_metars=on".getHtml()
-            val metarArrTmp = html.parseColumn("<FONT FACE=\"Monospace,Courier\">(.*?)</FONT><BR>")
-            val metarArr = condenseObs(metarArrTmp)
+            val metarsTmp = html.parseColumn("<FONT FACE=\"Monospace,Courier\">(.*?)</FONT><BR>")
+            val metars = condenseObs(metarsTmp)
             if (!initializedObsMap) {
                 val text = UtilityIO.readTextFileFromRaw(context.resources, R.raw.us_metar3)
                 val lines = text.split("\n").dropLastWhile { it.isEmpty() }
                 var tokens: List<String>
-                lines.forEach {
-                    tokens = it.split(" ")
+                lines.forEach { line ->
+                    tokens = line.split(" ")
                     obsLatLon[tokens[0]] = arrayOf(tokens[1], tokens[2])
                 }
                 initializedObsMap = true
             }
-            var tmpArr2: Array<String>
-            var obsSite: String
-            var tmpBlob: String
-            var pressureBlob: String
-            var windBlob: String
-            var conditionsBlob: String
-            var timeBlob = ""
-            var visBlob: String
-            var visBlobDisplay: String
-            var visBlobArr: Array<String>
-            var visInt: Int
-            var aviationColor: Int
-            var tdArr: Array<String>
-            var t: String
-            var d: String
-            var latLon: Array<String>
-            var windDir = ""
-            var windInKt = ""
-            var windGustInKt = ""
-            var windDirD: Double
-            var validWind: Boolean
-            var validWindGust: Boolean
-            metarArr.forEach { z ->
-                validWind = false
-                validWindGust = false
+            metars.forEach { z ->
+                var validWind = false
+                var validWindGust = false
                 if ((z.startsWith("K") || z.startsWith("P")) && !z.contains("NIL")) {
-                    tmpArr2 = MyApplication.space.split(z)
-                    tmpBlob = z.parse(RegExp.patternMetarWxogl1) // ".*? (M{0,1}../M{0,1}..) .*?"
-                    tdArr = MyApplication.slash.split(tmpBlob)
+                    val tmpArr2 = MyApplication.space.split(z)
+                    val tmpBlob = z.parse(RegExp.patternMetarWxogl1) // ".*? (M{0,1}../M{0,1}..) .*?"
+                    val tdArr = MyApplication.slash.split(tmpBlob)
+                    var timeBlob = ""
                     if (tmpArr2.size > 1) {
                         timeBlob = tmpArr2[1]
                     }
-                    pressureBlob = z.parse(RegExp.patternMetarWxogl2) // ".*? A([0-9]{4})"
-                    windBlob = z.parse(RegExp.patternMetarWxogl3) // "AUTO ([0-9].*?KT) .*?"
+                    var pressureBlob = z.parse(RegExp.patternMetarWxogl2) // ".*? A([0-9]{4})"
+                    var windBlob = z.parse(RegExp.patternMetarWxogl3) // "AUTO ([0-9].*?KT) .*?"
                     if (windBlob == "") {
                         windBlob = z.parse(RegExp.patternMetarWxogl4)
                     }
-                    conditionsBlob =
-                        z.parse(RegExp.patternMetarWxogl5) // "SM (.*?) M{0,1}[0-9]{2}/"
-                    visBlob = z.parse(" ([0-9].*?SM) ")
-                    visBlobArr = MyApplication.space.split(visBlob)
-                    visBlobDisplay = visBlobArr.last()
+                    val conditionsBlob = z.parse(RegExp.patternMetarWxogl5) // "SM (.*?) M{0,1}[0-9]{2}/"
+                    var visBlob = z.parse(" ([0-9].*?SM) ")
+                    val visBlobArr = MyApplication.space.split(visBlob)
+                    val visBlobDisplay = visBlobArr.last()
                     visBlob = visBlobArr.last().replace("SM", "")
                     // might have 1/2 or 1/4 , just call it zero
-                    visInt = when {
+                    val visInt = when {
                         visBlob.contains("/") -> 0
                         visBlob != "" -> visBlob.toIntOrNull() ?: 0
                         else -> 20000
@@ -142,7 +120,7 @@ internal object UtilityMetar {
                     } else {
                         ovcInt
                     }
-                    aviationColor = Color.GREEN
+                    var aviationColor = Color.GREEN
                     if (visInt > 5 && lowestCig > 3000) {
                         aviationColor = Color.GREEN
                     }
@@ -161,60 +139,55 @@ internal object UtilityMetar {
                     // IFR 	1 mi or more but less than 3 mi 	and/or 500 ft or more but less than 1,000 ft
                     // Low IFR 	< 1 mi 	and/or < 500 ft
                     if (pressureBlob.length == 4) {
-                        pressureBlob =
-                            StringBuilder(pressureBlob).insert(pressureBlob.length - 2, ".")
-                                .toString()
+                        pressureBlob = StringBuilder(pressureBlob).insert(pressureBlob.length - 2, ".").toString()
                         pressureBlob = UtilityMath.unitsPressure(pressureBlob)
                     }
                     // 19011G16KT
                     // 18011KT
+                    var windDir = ""
+                    var windInKt = ""
+                    var windGustInKt = ""
                     if (windBlob.contains("KT") && windBlob.length == 7) {
                         validWind = true
                         windDir = windBlob.substring(0, 3)
                         windInKt = windBlob.substring(3, 5)
-                        windDirD = windDir.toDoubleOrNull() ?: 0.0
-                        windBlob = windDir + " (" + UtilityMath.convertWindDir(windDirD) + ") " +
-                                windInKt + " kt"
+                        val windDirD = windDir.toDoubleOrNull() ?: 0.0
+                        windBlob = windDir + " (" + UtilityMath.convertWindDir(windDirD) + ") " + windInKt + " kt"
                     } else if (windBlob.contains("KT") && windBlob.length == 10) {
                         validWind = true
                         validWindGust = true
                         windDir = windBlob.substring(0, 3)
                         windInKt = windBlob.substring(3, 5)
                         windGustInKt = windBlob.substring(6, 8)
-                        windDirD = windDir.toDoubleOrNull() ?: 0.0
-                        windBlob = windDir + " (" + UtilityMath.convertWindDir(windDirD) + ") " +
-                                windInKt + " G " + windGustInKt + " kt"
+                        val windDirD = windDir.toDoubleOrNull() ?: 0.0
+                        windBlob = windDir + " (" + UtilityMath.convertWindDir(windDirD) + ") " + windInKt + " G " + windGustInKt + " kt"
                     }
                     if (tdArr.size > 1) {
-                        t = tdArr[0]
-                        d = tdArr[1]
-                        t = UtilityMath.celsiusToFahrenheit(t.replace("M", "-"))
-                        d = UtilityMath.celsiusToFahrenheit(d.replace("M", "-"))
-                        obsSite = tmpArr2[0]
-                        latLon = obsLatLon[obsSite] ?: arrayOf("0.0", "0.0")
+                        var temperature = tdArr[0]
+                        var dewPoint = tdArr[1]
+                        temperature = UtilityMath.celsiusToFahrenheit(temperature.replace("M", "-"))
+                        dewPoint = UtilityMath.celsiusToFahrenheit(dewPoint.replace("M", "-"))
+                        val obsSite = tmpArr2[0]
+                        val latLon = obsLatLon[obsSite] ?: arrayOf("0.0", "0.0")
                         if (latLon[0] != "0.0") {
-                            obsAl.add(latLon[0] + ":" + latLon[1] + ":" + t + "/" + d)
+                            obsAl.add(latLon[0] + ":" + latLon[1] + ":" + temperature + "/" + dewPoint)
                             obsAlExt.add(
-                                latLon[0] + ":" + latLon[1] + ":" + t + "/" + d + " (" + obsSite + ")"
+                                latLon[0] + ":" + latLon[1] + ":" + temperature + "/" + dewPoint + " (" + obsSite + ")"
                                         + MyApplication.newline + pressureBlob + " - " + visBlobDisplay
                                         + MyApplication.newline + windBlob
                                         + MyApplication.newline + conditionsBlob
                                         + MyApplication.newline + timeBlob
                             )
-                            try {
-                                if (validWind) {
-                                    obsAlWb.add(latLon[0] + ":" + latLon[1] + ":" + windDir + ":" + windInKt)
-                                    val x = latLon[0].toDoubleOrNull() ?: 0.0
-                                    val y = (latLon[1].toDoubleOrNull() ?: 0.0) * -1.0
-                                    obsAlX.add(x)
-                                    obsAlY.add(y)
-                                    obsAlAviationColor.add(aviationColor)
-                                }
-                                if (validWindGust) {
-                                    obsAlWbGust.add(latLon[0] + ":" + latLon[1] + ":" + windDir + ":" + windGustInKt)
-                                }
-                            } catch (e: Exception) {
-                                UtilityLog.handleException(e)
+                            if (validWind) {
+                                obsAlWb.add(latLon[0] + ":" + latLon[1] + ":" + windDir + ":" + windInKt)
+                                val x = latLon[0].toDoubleOrNull() ?: 0.0
+                                val y = (latLon[1].toDoubleOrNull() ?: 0.0) * -1.0
+                                obsAlX.add(x)
+                                obsAlY.add(y)
+                                obsAlAviationColor.add(aviationColor)
+                            }
+                            if (validWindGust) {
+                                obsAlWbGust.add(latLon[0] + ":" + latLon[1] + ":" + windDir + ":" + windGustInKt)
                             }
                         }
                     }
@@ -242,13 +215,6 @@ internal object UtilityMetar {
     // Method below is similar, please see comments below for more information
     //
     fun findClosestMetar(context: Context, location: LatLon): String {
-        /*val text = UtilityIO.readTextFileFromRaw(context.resources, R.raw.us_metar3)
-        val lines = text.split("\n").dropLastWhile { it.isEmpty() }
-        val metarSites = mutableListOf<RID>()
-        lines.indices.forEach {
-            val tokens = lines[it].split(" ")
-            metarSites.add(RID(tokens[0], LatLon(tokens[1], tokens[2])))
-        }*/
         readMetarData(context)
         var shortestDistance = 1000.00
         var currentDistance: Double
@@ -297,14 +263,6 @@ internal object UtilityMetar {
     }
 
     fun findClosestObservation(context: Context, location: LatLon): RID {
-        //UtilityLog.d("wx", "OBS1: " + UtilityTime.currentTimeMillis())
-        /*val metarDataRaw = UtilityIO.readTextFileFromRaw(context.resources, R.raw.us_metar3)
-        val metarDataAsList = metarDataRaw.split("\n").dropLastWhile { it.isEmpty() }
-        val metarSites = mutableListOf<RID>()
-        metarDataAsList.indices.forEach {
-            val tokens = metarDataAsList[it].split(" ")
-            metarSites.add(RID(tokens[0], LatLon(tokens[1], tokens[2])))
-        }*/
         readMetarData(context)
         var shortestDistance = 1000.00
         var currentDistance: Double
@@ -316,7 +274,6 @@ internal object UtilityMetar {
                 bestRid = it
             }
         }
-        //UtilityLog.d("wx", "OBS2: " + UtilityTime.currentTimeMillis())
         // In the unlikely event no closest site is found just return the first one
         return if (bestRid == -1) {
             metarSites[0]
@@ -336,13 +293,6 @@ internal object UtilityMetar {
         val radarLocation = UtilityLocation.getSiteLocation(radarSite)
         val obsListSb = StringBuilder(100)
         readMetarData(context)
-        /*val text = UtilityIO.readTextFileFromRaw(context.resources, R.raw.us_metar3)
-        val lines = text.split("\n").dropLastWhile { it.isEmpty() }
-        val obsSites = mutableListOf<RID>()
-        lines.forEach {
-            val tokens = it.split(" ")
-            obsSites.add(RID(tokens[0], LatLon(tokens[1], tokens[2])))
-        }*/
         val obsSiteRange = 200.0
         var currentDistance: Double
         metarSites.indices.forEach {

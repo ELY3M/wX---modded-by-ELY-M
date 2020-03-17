@@ -1798,7 +1798,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     }
 
     fun constructSwoLines() {
-        val hashSwo = UtilitySwoD1.HASH_SWO.toMap()
+        val hashSwo = UtilitySwoDayOne.HASH_SWO.toMap()
         colorSwo[0] = Color.MAGENTA
         colorSwo[1] = Color.RED
         colorSwo[2] = Color.rgb(255, 140, 0)

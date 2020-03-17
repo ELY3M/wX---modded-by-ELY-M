@@ -23,12 +23,14 @@ package joshuatee.wx.radar
 
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.util.UtilityMath
+import joshuatee.wx.util.UtilityString
 import kotlin.math.acos
 import kotlin.math.cos
 import kotlin.math.sin
 
 class LatLon() {
 
+    // FIXME match with swift latNum / lonNum
     private var x = 0.0
     private var y = 0.0
     private var xStr = "0.0"
@@ -53,6 +55,24 @@ class LatLon() {
         this.yStr = yStr
         this.x = this.xStr.toDoubleOrNull() ?: 0.0
         this.y = this.yStr.toDoubleOrNull() ?: 0.0
+    }
+
+    constructor(temp: String) : this() {
+        this.xStr = temp.substring(0, 4)
+        this.yStr = temp.substring(4, 8)
+        if (this.yStr.matches("^0".toRegex())) {
+            this.yStr = this.yStr.replace("^0".toRegex(), "")
+            this.yStr += "0"
+        }
+        this.xStr = UtilityString.addPeriodBeforeLastTwoChars(this.xStr)
+        this.yStr = UtilityString.addPeriodBeforeLastTwoChars(this.yStr)
+        var tmpDbl = yStr.toDoubleOrNull() ?: 0.0
+        if (tmpDbl < 40.00) {
+            tmpDbl += 100
+            this.yStr = tmpDbl.toString()
+        }
+        this.x = xStr.toDoubleOrNull() ?: 0.0
+        this.y = yStr.toDoubleOrNull() ?: 0.0
     }
 
     var lat: Double
@@ -93,6 +113,10 @@ class LatLon() {
 
     override fun toString(): String {
         return "$latString:$lonString"
+    }
+
+    fun print(): String {
+        return latString + " " + lonString + " "
     }
 
     companion object {

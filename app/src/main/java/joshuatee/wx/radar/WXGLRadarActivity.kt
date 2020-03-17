@@ -25,7 +25,6 @@ package joshuatee.wx.radar
 import android.annotation.SuppressLint
 import java.io.File
 
-import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -130,8 +129,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private var ridArrLoc = listOf<String>()
     private lateinit var imageMap: ObjectImageMap
     private var mapShown = false
-    private lateinit var star: MenuItem
-    private lateinit var anim: MenuItem
+    private lateinit var starButton: MenuItem
+    private lateinit var animateButton: MenuItem
     private lateinit var tiltMenu: MenuItem
     private lateinit var tiltMenuOption4: MenuItem
     private lateinit var l3Menu: MenuItem
@@ -155,11 +154,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private val numPanes = 1
     private var numPanesArr = listOf<Int>()
     private var wxgltextArr = mutableListOf<WXGLTextObject>()
-    private lateinit var act: Activity
     // TODO rename this
     private lateinit var sp: ObjectSpinner
     private var alertDialogRadarLongPress: ObjectDialogue? = null
     private var isGetContentInProgress = false
+    private val animateButtonPlayString = "Animate Frames"
+    private val animateButtonStopString = "Stop animation"
+    private val pauseButtonString = "Pause animation"
+    private val starButtonString = "Toggle favorite"
+    private val resumeButtonString = "Resume animation"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -174,12 +177,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         toolbar.setOnClickListener {
             ObjectIntent(this, SevereDashboardActivity::class.java)
         }
-        UtilityUI.immersiveMode(this as Activity)
+        UtilityUI.immersiveMode(this)
         if (UIPreferences.radarStatusBarTransparent && Build.VERSION.SDK_INT >= 21) {
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.statusBarColor = Color.TRANSPARENT
         }
-        act = this
         spotterShowSelected = false
         isGetContentInProgress = false
         locXCurrent = joshuatee.wx.settings.Location.x
@@ -214,8 +216,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         latD = latLonArrD[0]
         lonD = latLonArrD[1]
         val menu = toolbarBottom.menu
-        star = menu.findItem(R.id.action_fav)
-        anim = menu.findItem(R.id.action_a)
+        starButton = menu.findItem(R.id.action_fav)
+        animateButton = menu.findItem(R.id.action_a)
         tiltMenu = menu.findItem(R.id.action_tilt)
         tiltMenuOption4 = menu.findItem(R.id.action_tilt4)
         l3Menu = menu.findItem(R.id.action_l3)
@@ -251,7 +253,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 glviewArr,
                 oglr,
                 oglrArr,
-                act,
+                this,
                 toolbar,
                 toolbarBottom,
                 changeListener,
@@ -287,7 +289,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             showLegend()
         }
         title = oglr.product
-        ridArrLoc = UtilityFavorites.setupFavMenu(
+        ridArrLoc = UtilityFavorites.setupMenu(
                 this,
                 MyApplication.ridFav,
                 oglr.rid,
@@ -311,15 +313,22 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         return ( oglr.product in WXGLNexrad.tdwrProductList )
     }
 
+    private fun setStarButton() {
+        if (MyApplication.ridFav.contains(":" + oglr.rid + ":")) {
+            starButton.setIcon(MyApplication.STAR_ICON)
+        } else {
+            starButton.setIcon(MyApplication.STAR_OUTLINE_ICON)
+        }
+        starButton.title = starButtonString
+    }
+
     override fun onRestart() {
         delay = UtilityImg.animInterval(this)
         inOglAnim = false
         inOglAnimPaused = false
-        if (MyApplication.ridFav.contains(":$oglr.rid:"))
-            star.setIcon(MyApplication.STAR_ICON)
-        else
-            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-        anim.setIcon(MyApplication.ICON_PLAY)
+        setStarButton()
+        animateButton.setIcon(MyApplication.ICON_PLAY)
+        animateButton.title = animateButtonPlayString
         restarted = true
         restartedZoom = true
         numPanesArr.forEach {
@@ -333,20 +342,20 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         if (glview.toolbarsHidden) {
             getContent()
         } else {
-            ridArrLoc = UtilityFavorites.setupFavMenu(
+            ridArrLoc = UtilityFavorites.setupMenu(
                     this,
                     MyApplication.ridFav,
                     oglr.rid,
                     prefToken
             )
-            sp.refreshData(this@WXGLRadarActivity, ridArrLoc)
+            sp.refreshData(this, ridArrLoc)
         }
         checkForAutoRefresh()
         super.onRestart()
     }
 
     private fun checkForAutoRefresh() {
-        if (MyApplication.wxoglRadarAutorefresh) {
+        if (MyApplication.wxoglRadarAutoRefresh) {
             mInterval = 60000 * Utility.readPref(this, "RADAR_REFRESH_INTERVAL", 3)
             locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             if (ContextCompat.checkSelfPermission(
@@ -364,7 +373,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                             LocationManager.GPS_PROVIDER,
                             //20000.toLong(),
                             (MyApplication.radarLocationUpdateInterval * 1000).toLong(),
-                            MyApplication.radarLocationUpdateDistanceInMeters.toFloat(),
+                            WXGLNexrad.radarLocationUpdateDistanceInMeters,
                             locationListener
                     )
                 }
@@ -418,10 +427,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 oglr.product = "N" + tilt + "U"
             title = oglr.product
             adjustTiltMenu()
-            if (MyApplication.ridFav.contains(":" + oglr.rid + ":"))
-                star.setIcon(MyApplication.STAR_ICON)
-            else
-                star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+            setStarButton()
             toolbar.subtitle = ""
             if (!oglr.product.startsWith("2")) {
                 UtilityRadarUI.initWxOglGeom(
@@ -641,7 +647,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        UtilityUI.immersiveMode(this as Activity)
+        UtilityUI.immersiveMode(this)
         // This code is mostly dupicated below in the keyboard shortcut area
         if (inOglAnim && (item.itemId != R.id.action_fav) && (item.itemId != R.id.action_share) && (item.itemId != R.id.action_tools)) {
             inOglAnim = false
@@ -650,11 +656,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             // otherwise the new selection might overwrite in the OGLR object - hack
             // (revert) 2016_08 have this apply to Level 3 in addition to Level 2
             if (oglr.product.contains("L2")) SystemClock.sleep(2000)
-            if (MyApplication.ridFav.contains(":$oglr.rid:"))
-                star.setIcon(MyApplication.STAR_ICON)
-            else
-                star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-            anim.setIcon(MyApplication.ICON_PLAY)
+            setStarButton()
+            animateButton.setIcon(MyApplication.ICON_PLAY)
+            animateButton.title = animateButtonPlayString
             getContent()
             if (item.itemId == R.id.action_a) return true
         }
@@ -761,8 +765,9 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
             //R.id.action_ntp -> changeProd("NTP", false)
             R.id.action_ncr -> changeProd("NCR", false)
             R.id.action_ncz -> changeProd("NCZ", false)
-            //R.id.action_et -> changeProd("ET", false)
-            //R.id.action_vil -> changeProd("VIL", false)
+            //I need those!  ELY M. 
+	        R.id.action_et -> changeProd("ET", false)
+            R.id.action_vil -> changeProd("VIL", false)
             R.id.action_l2vel -> changeProd("L2VEL", false)
             R.id.action_l2ref -> changeProd("L2REF", false)
             R.id.action_tilt1 -> changeTilt("0")
@@ -787,8 +792,10 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     }
 
     private fun animateRadar(frameCount: Int) {
-        anim.setIcon(MyApplication.ICON_STOP)
-        star.setIcon(MyApplication.ICON_PAUSE)
+        animateButton.setIcon(MyApplication.ICON_STOP)
+        animateButton.title = animateButtonStopString
+        starButton.setIcon(MyApplication.ICON_PAUSE)
+        starButton.title = pauseButtonString
         getAnimate(frameCount)
     }
 
@@ -817,7 +824,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private fun ridMapSwitch(radarSite: String) {
         oglr.rid = radarSite
         mapShown = false
-        ridArrLoc = UtilityFavorites.setupFavMenu(
+        ridArrLoc = UtilityFavorites.setupMenu(
                 this,
                 MyApplication.ridFav,
                 oglr.rid,
@@ -828,21 +835,22 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     }
 
     private fun toggleFavorite() {
-        val ridFav = UtilityFavorites.toggleFavoriteString(this, oglr.rid, star, prefToken)
-        ridArrLoc = UtilityFavorites.setupFavMenu(this, ridFav, oglr.rid, prefToken)
+        val ridFav = UtilityFavorites.toggleString(this, oglr.rid, starButton, prefToken)
+        ridArrLoc = UtilityFavorites.setupMenu(this, ridFav, oglr.rid, prefToken)
         sp.refreshData(this@WXGLRadarActivity, ridArrLoc)
     }
 
     private fun showRadarScanInfo() {
         val info = WXGLNexrad.getRadarInfo(this@WXGLRadarActivity,"")
-        UtilityAlertDialog.showHelpText(info, this as Activity)
+        UtilityAlertDialog.showHelpText(info, this)
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         if (ridArrLoc.size > 2) {
             inOglAnim = false
             inOglAnimPaused = false
-            anim.setIcon(MyApplication.ICON_PLAY)
+            animateButton.setIcon(MyApplication.ICON_PLAY)
+            animateButton.title = animateButtonPlayString
             when (pos) {
                 1 -> ObjectIntent(
                         this,
@@ -878,7 +886,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 firstTime = false
             }
         }
-        UtilityUI.immersiveMode(this as Activity)
+        UtilityUI.immersiveMode(this)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>) {}
@@ -1045,14 +1053,14 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         alertDialogRadarLongPress = ObjectDialogue(this@WXGLRadarActivity, alertDialogStatusAl)
         alertDialogRadarLongPress!!.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
             dialog.dismiss()
-            UtilityUI.immersiveMode(act)
+            UtilityUI.immersiveMode(this@WXGLRadarActivity)
         })
         alertDialogRadarLongPress!!.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             val strName = alertDialogStatusAl[which]
             UtilityRadarUI.doLongPressAction(
                     strName,
                     this@WXGLRadarActivity,
-                    act,
+                    this@WXGLRadarActivity,
                     glview,
                     oglr,
                     uiDispatcher,
@@ -1072,7 +1080,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
         val diaTdwr = ObjectDialogue(this@WXGLRadarActivity, GlobalArrays.tdwrRadars)
         diaTdwr.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
             dialog.dismiss()
-            UtilityUI.immersiveMode(act)
+            UtilityUI.immersiveMode(this@WXGLRadarActivity)
         })
         diaTdwr.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             val strName = GlobalArrays.tdwrRadars[which]
@@ -1100,7 +1108,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     RelativeLayout.LayoutParams.WRAP_CONTENT
             )
             rLParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1)
-            legend = ViewColorLegend(this as Activity, oglr.product)
+            legend = ViewColorLegend(this, oglr.product)
             rl.addView(legend, rLParams)
             MyApplication.radarShowLegend = true
             Utility.writePref(this, "RADAR_SHOW_LEGEND", "true")
@@ -1119,7 +1127,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         )
         rLParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 1)
-        legend = ViewColorLegend(this as Activity, oglr.product)
+        legend = ViewColorLegend(this, oglr.product)
         rl.addView(legend, rLParams)
     }
 
@@ -1190,10 +1198,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
     private fun actionToggleFavorite() {
         if (inOglAnim) {
             inOglAnimPaused = if (!inOglAnimPaused) {
-                star.setIcon(MyApplication.ICON_PLAY)
+                starButton.setIcon(MyApplication.ICON_PLAY)
+                starButton.title = resumeButtonString
                 true
             } else {
-                star.setIcon(MyApplication.ICON_PAUSE)
+                starButton.setIcon(MyApplication.ICON_PAUSE)
+                starButton.title = pauseButtonString
                 false
             }
         } else {
@@ -1255,12 +1265,12 @@ class WXGLRadarActivity : VideoRecordActivity(), OnItemSelectedListener, OnMenuI
                     // if an L2 anim is in process sleep for 1 second to let the current decode/render finish
                     // otherwise the new selection might overwrite in the OGLR object - hack
                     // (revert) 2016_08 have this apply to Level 3 in addition to Level 2
-                    if (oglr.product.contains("L2")) SystemClock.sleep(2000)
-                    if (MyApplication.ridFav.contains(":$oglr.rid:"))
-                        star.setIcon(MyApplication.STAR_ICON)
-                    else
-                        star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-                    anim.setIcon(MyApplication.ICON_PLAY)
+                    if (oglr.product.contains("L2")) {
+                        SystemClock.sleep(2000)
+                    }
+                    setStarButton()
+                    animateButton.setIcon(MyApplication.ICON_PLAY)
+                    animateButton.title = animateButtonPlayString
                     getContent()
                 }
                 if (event.isCtrlPressed) {

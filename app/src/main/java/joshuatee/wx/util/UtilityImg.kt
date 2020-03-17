@@ -70,7 +70,7 @@ object UtilityImg {
         return layerDrawableToBitmap(layers)
     }
 
-    fun addColorBG(context: Context, imageA: Bitmap, color: Int): Bitmap {
+    fun addColorBackground(context: Context, imageA: Bitmap, color: Int): Bitmap {
         val layers = mutableListOf<Drawable>()
         layers.add(ColorDrawable(color))
         layers.add(BitmapDrawable(context.resources, imageA))
@@ -79,9 +79,9 @@ object UtilityImg {
 
     fun getBlankBitmap(): Bitmap = Bitmap.createBitmap(10, 10, Config.ARGB_8888)
 
-    fun getBitmapRemoveBG(imgUrl: String, color: Int): Bitmap = eraseBG(imgUrl.getImage(), color)
+    fun getBitmapRemoveBackground(imgUrl: String, color: Int): Bitmap = eraseBackground(imgUrl.getImage(), color)
 
-    fun getBitmapAddWhiteBG(context: Context, imgUrl: String): Bitmap {
+    fun getBitmapAddWhiteBackground(context: Context, imgUrl: String): Bitmap {
         val layers = mutableListOf<Drawable>()
         val bitmap = imgUrl.getImage()
         layers.add(ColorDrawable(Color.WHITE))
@@ -206,7 +206,7 @@ object UtilityImg {
         return bitmap
     }
 
-    fun eraseBG(src: Bitmap, color: Int): Bitmap {
+    fun eraseBackground(src: Bitmap, color: Int): Bitmap {
         val width = src.width
         val height = src.height
         return try {

@@ -25,7 +25,6 @@ package joshuatee.wx.radar
 import android.annotation.SuppressLint
 import java.io.File
 
-import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -43,8 +42,6 @@ import android.view.WindowManager
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.os.Handler
-import android.util.Log
-
 import joshuatee.wx.*
 
 import joshuatee.wx.activitiesmisc.ImageShowActivity
@@ -82,7 +79,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         const val RID: String = ""
     }
 
-    private var TAG = "joshuatee-WXGLRadarActivityMultiPane"
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var numPanes = 4
     private var numPanesArr = listOf<Int>()
@@ -103,8 +99,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private var oldRidArr = Array(2) { "" }
     private lateinit var imageMap: ObjectImageMap
     private var mapShown = false
-    private lateinit var star: MenuItem
-    private lateinit var anim: MenuItem
+    private lateinit var pauseButton: MenuItem
+    private lateinit var animateButton: MenuItem
     private var delay = 0
     private var frameCountGlobal = 0
     private var locXCurrent = ""
@@ -119,7 +115,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private var prefPrefix = "WXOGL_DUALPANE"
     private var rlArr = mutableListOf<RelativeLayout>()
     private var wxgltextArr = mutableListOf<WXGLTextObject>()
-    private lateinit var act: Activity
     private var alertDialogRadarLongPress: ObjectDialogue? = null
     private var doNotSavePref = false
     private var useSinglePanePref = false
@@ -130,6 +125,10 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private lateinit var tdwrMenu: MenuItem
     private lateinit var tiltMenu: MenuItem
     private lateinit var tiltMenuOption4: MenuItem
+    private val animateButtonPlayString = "Animate Frames"
+    private val animateButtonStopString = "Stop animation"
+    private val pauseButtonString = "Pause animation"
+    private val resumeButtonString = "Resume animation"
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -186,8 +185,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             )
         }
         toolbarBottom.setOnMenuItemClickListener(this)
-        act = this
-        UtilityUI.immersiveMode(this as Activity)
+        UtilityUI.immersiveMode(this)
         locXCurrent = joshuatee.wx.settings.Location.x
         locYCurrent = joshuatee.wx.settings.Location.y
         oldRidArr = Array(numPanes) { "" }
@@ -196,9 +194,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             prefPrefix = "WXOGL_QUADPANE"
         } else if (numPanes == 2 && landScape) {
             widthDivider = 2
-        }
-        if (MyApplication.checkinternet) {
-            Utility.checkInternet(this@WXGLRadarActivityMultiPane)
         }
         if (useSinglePanePref) {
             prefPrefix = "WXOGL"
@@ -209,8 +204,9 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         latD = latLonListAsDoubles[0]
         lonD = latLonListAsDoubles[1]
         val menu = toolbarBottom.menu
-        star = menu.findItem(R.id.action_fav)
-        anim = menu.findItem(R.id.action_a)
+        pauseButton = menu.findItem(R.id.action_fav)
+        pauseButton.title = pauseButtonString
+        animateButton = menu.findItem(R.id.action_a)
         tiltMenu = menu.findItem(R.id.action_tilt)
         tiltMenuOption4 = menu.findItem(R.id.action_tilt4)
         l3Menu = menu.findItem(R.id.action_l3)
@@ -289,7 +285,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     glviewArr,
                     oglrArr[it],
                     oglrArr,
-                    act,
+                    this@WXGLRadarActivityMultiPane,
                     toolbar,
                     toolbarBottom,
                     changeListener
@@ -374,7 +370,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     private fun checkForAutoRefresh() {
-        if (MyApplication.wxoglRadarAutorefresh) {
+        if (MyApplication.wxoglRadarAutoRefresh) {
             mInterval = 60000 * Utility.readPref(this, "RADAR_REFRESH_INTERVAL", 3)
             locationManager = this.getSystemService(Context.LOCATION_SERVICE) as LocationManager
             if (ContextCompat.checkSelfPermission(
@@ -391,7 +387,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     locationManager?.requestLocationUpdates(
                             LocationManager.GPS_PROVIDER,
                             (MyApplication.radarLocationUpdateInterval * 1000).toLong(),
-                            MyApplication.radarLocationUpdateDistanceInMeters.toFloat(),
+                            WXGLNexrad.radarLocationUpdateDistanceInMeters,
                             locationListener
                     )
                 }
@@ -401,7 +397,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             startRepeatingTask()
         }
         if (MyApplication.sn_locationreport) {
-            Log.i(TAG, "starting location report")
+            UtilityLog.d("wx", "starting location report")
             sn_Handler_m = Handler()
             start_sn_reporting()
         }
@@ -412,7 +408,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         delay = UtilityImg.animInterval(this)
         inOglAnim = false
         inOglAnimPaused = false
-        anim.setIcon(MyApplication.ICON_PLAY)
+        animateButton.setIcon(MyApplication.ICON_PLAY)
+        animateButton.title = animateButtonPlayString
         restartedZoom = true
         numPanesArr.forEach {
             if (imageMap.map.visibility == View.GONE) {
@@ -653,7 +650,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        UtilityUI.immersiveMode(this as Activity)
+        UtilityUI.immersiveMode(this)
     }
 
     private fun adjustTiltAndProductMenus() {
@@ -685,7 +682,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             if (oglrArr[0].product.contains("L2") || oglrArr[1].product.contains("L2")) SystemClock.sleep(
                     2000
             )
-            anim.setIcon(MyApplication.ICON_PLAY)
+            animateButton.setIcon(MyApplication.ICON_PLAY)
+            animateButton.title = animateButtonPlayString
             // spotter code is serialized for now
             if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) {
                 getContentSerial()
@@ -822,10 +820,12 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             R.id.action_fav -> {
                 if (inOglAnim) {
                     inOglAnimPaused = if (!inOglAnimPaused) {
-                        star.setIcon(MyApplication.ICON_PLAY)
+                        pauseButton.setIcon(MyApplication.ICON_PLAY)
+                        pauseButton.title = resumeButtonString
                         true
                     } else {
-                        star.setIcon(MyApplication.ICON_PAUSE)
+                        pauseButton.setIcon(MyApplication.ICON_PAUSE)
+                        pauseButton.title = pauseButtonString
                         false
                     }
                 }
@@ -864,8 +864,10 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     private fun animateRadar(frameCount: Int) {
-        anim.setIcon(MyApplication.ICON_STOP)
-        star.setIcon(MyApplication.ICON_PAUSE)
+        animateButton.setIcon(MyApplication.ICON_STOP)
+        animateButton.title = animateButtonStopString
+        pauseButton.setIcon(MyApplication.ICON_PAUSE)
+        pauseButton.title = pauseButtonString
         getAnimate(frameCount)
     }
 
@@ -899,7 +901,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             if (oglrArr[0].product.contains("L2") || oglrArr[1].product.contains("L2")) SystemClock.sleep(
                     2000
             )
-            anim.setIcon(MyApplication.ICON_PLAY)
+            animateButton.setIcon(MyApplication.ICON_PLAY)
+            animateButton.title = animateButtonPlayString
         }
 
         if (MyApplication.dualpaneshareposn) {
@@ -1015,7 +1018,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private val sn_handler = Handler()
     private val sn_reporter: Runnable = object : Runnable {
         override fun run() {
-            Log.d(TAG, "SendPosition(this@WXGLRadarActivityMultiPane) on lat: "+latD+" lon: "+lonD)
+            UtilityLog.d("wx", "SendPosition(this@WXGLRadarActivityMultiPane) on lat: "+latD+" lon: "+lonD)
             SendPosition(this@WXGLRadarActivityMultiPane)
 
             sn_handler.postDelayed(this, sn_Interval.toLong())
@@ -1097,14 +1100,14 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         alertDialogRadarLongPress = ObjectDialogue(this@WXGLRadarActivityMultiPane, alertDialogStatusAl)
         alertDialogRadarLongPress!!.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
             dialog.dismiss()
-            UtilityUI.immersiveMode(act)
+            UtilityUI.immersiveMode(this)
         })
         alertDialogRadarLongPress!!.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             val strName = alertDialogStatusAl[which]
             UtilityRadarUI.doLongPressAction(
                     strName,
                     this@WXGLRadarActivityMultiPane,
-                    act,
+                    this,
                     glviewArr[idxIntAl],
                     oglrArr[idxIntAl],
                     uiDispatcher,
@@ -1134,7 +1137,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         val diaTdwr = ObjectDialogue(this@WXGLRadarActivityMultiPane, GlobalArrays.tdwrRadars)
         diaTdwr.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
             dialog.dismiss()
-            UtilityUI.immersiveMode(act)
+            UtilityUI.immersiveMode(this)
         })
         diaTdwr.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             val strName = GlobalArrays.tdwrRadars[which]
