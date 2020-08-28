@@ -28,7 +28,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.MenuItem
@@ -43,6 +42,7 @@ import joshuatee.wx.radar.WXGLNexrad
 import joshuatee.wx.radarcolorpalettes.UtilityColorPalette
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCard
+import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.util.*
 import java.io.File
@@ -51,7 +51,7 @@ import kotlinx.android.synthetic.main.activity_settings_color_palette_editor.*
 class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
     companion object {
-        const val URL: String = ""
+        const val URL = ""
         private const val READ_REQUEST_CODE = 42
     }
 
@@ -59,15 +59,11 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
     private var formattedDate = ""
     private var name = ""
     private var type = ""
+    private var typeAsInt = 0
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_settings_color_palette_editor,
-                R.menu.settings_color_palette_editor,
-                true
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_settings_color_palette_editor, R.menu.settings_color_palette_editor, true)
         toolbarBottom.setOnMenuItemClickListener(this)
         ObjectFab(this, this, R.id.fab, View.OnClickListener { fabSavePalette(this) })
         ObjectCard(this, R.id.cv1)
@@ -80,17 +76,14 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         showLoadFromFileMenuItem()
         activityArguments = intent.getStringArrayExtra(URL)!!
         type = activityArguments[0]
+        typeAsInt = type.toIntOrNull() ?: 94
         title = "Palette Editor"
-        toolbar.subtitle = WXGLNexrad.productCodeStringToName[type]
+        toolbar.subtitle = WXGLNexrad.productCodeStringToName[typeAsInt]
         formattedDate = UtilityTime.getDateAsString("MMdd")
-        name = if (activityArguments[2].contains("false")) {
-            activityArguments[1]
-        } else {
-            activityArguments[1] + "_" + formattedDate
-        }
+        name = if (activityArguments[2].contains("false")) activityArguments[1] else activityArguments[1] + "_" + formattedDate
         palTitle.setText(name)
         palTitle.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeLarge)
-        palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, type, activityArguments[1]))
+        palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, activityArguments[1]))
         palContent.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
     }
 
@@ -101,78 +94,48 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             var textToSave = palContent.text.toString()
             textToSave = textToSave.replace(",,".toRegex(), ",")
             palContent.setText(textToSave)
-            Utility.writePref(
-                    context,
-                    "RADAR_COLOR_PAL_" + type + "_" + palTitle.text.toString(),
-                    textToSave
-            )
-            if (!MyApplication.radarColorPaletteList[type]!!.contains(palTitle.text.toString())) {
-                MyApplication.radarColorPaletteList[type] = MyApplication.radarColorPaletteList[type]!! +
-                        ":" + palTitle.text.toString()
-                Utility.writePref(
-                        context,
-                        "RADAR_COLOR_PALETTE_" + type + "_LIST",
-                        MyApplication.radarColorPaletteList[type]!!
-                )
+            Utility.writePref(context, "RADAR_COLOR_PAL_" + type + "_" + palTitle.text.toString(), textToSave)
+            if (!MyApplication.radarColorPaletteList[typeAsInt]!!.contains(palTitle.text.toString())) {
+                MyApplication.radarColorPaletteList[typeAsInt] = MyApplication.radarColorPaletteList[typeAsInt]!! + ":" + palTitle.text.toString()
+                Utility.writePref(context, "RADAR_COLOR_PALETTE_" + type + "_LIST", MyApplication.radarColorPaletteList[typeAsInt]!!)
             }
             savepalfile(palTitle.text.toString()+"_"+type+".txt", textToSave)
             toolbar.subtitle = "Last saved: $date"
         } else {
-            UtilityAlertDialog.showHelpText(errorCheck, this)
+            ObjectDialogue(this, errorCheck)
         }
         val fileName = "colormap" + type + palTitle.text.toString()
-        if (UtilityFileManagement.internalFileExist(context, fileName)) {
-            UtilityFileManagement.deleteFile(context, fileName)
-        }
+        if (UtilityFileManagement.internalFileExist(context, fileName)) UtilityFileManagement.deleteFile(context, fileName)
     }
 
     private fun checkMapForErrors(): String {
-        var text = palContent.text.toString()
-        text = convertPalette(text)
+        val text = convertPalette(palContent.text.toString())
         palContent.setText(text)
         val lines = text.split("\n".toRegex()).dropLastWhile { it.isEmpty() }
-        var tmpArr: List<String>
         var errors = ""
-        var priorVal = -200.0
-        var lineCnt = 0
-        lines.forEach { s ->
-            if (s.contains("olor") && !s.contains("#")) {
-                tmpArr = if (s.contains(","))
-                    s.split(",")
-                else
-                    s.split(" ")
-                lineCnt += 1
+        var priorValue = -200.0
+        var lineCount = 0
+        lines.forEach { line ->
+            if (line.contains("olor") && !line.contains("#")) {
+                val list = if (line.contains(",")) line.split(",") else line.split(" ")
+                lineCount += 1
                 try {
-                    if (tmpArr.size > 4) {
-                        if (priorVal >= (tmpArr[1].toDoubleOrNull() ?: 0.0)) { // was toIntOrNull
-                            errors = errors +
-                                    "The following lines do not have dbz values in increasing order: " +
-                                    MyApplication.newline + priorVal + " " + tmpArr[1] +
-                                    MyApplication.newline
+                    if (list.size > 4) {
+                        if (priorValue >= (list[1].toDoubleOrNull() ?: 0.0)) {
+                            errors += "The following lines do not have dbz values in increasing order: " + MyApplication.newline + priorValue + " " + list[1] + MyApplication.newline
                         }
-                        priorVal = tmpArr[1].toDoubleOrNull() ?: 0.0
-                        if ((tmpArr[2].toDoubleOrNull() ?: 0.0) > 255 || (tmpArr[2].toDoubleOrNull()
-                                        ?: 0.0) < 0
-                        ) {
-                            errors = errors + "Red value must be between 0 and 255: " +
-                                    MyApplication.newline + s + MyApplication.newline
+                        priorValue = list[1].toDoubleOrNull() ?: 0.0
+                        if ((list[2].toDoubleOrNull() ?: 0.0) > 255 || (list[2].toDoubleOrNull() ?: 0.0) < 0) {
+                            errors = errors + "Red value must be between 0 and 255: " + MyApplication.newline + line + MyApplication.newline
                         }
-                        if ((tmpArr[3].toDoubleOrNull() ?: 0.0) > 255 || (tmpArr[3].toDoubleOrNull()
-                                        ?: 0.0) < 0
-                        ) {
-                            errors = errors + "Green value must be between 0 and 255: " +
-                                    MyApplication.newline + s + MyApplication.newline
+                        if ((list[3].toDoubleOrNull() ?: 0.0) > 255 || (list[3].toDoubleOrNull() ?: 0.0) < 0) {
+                            errors += "Green value must be between 0 and 255: " + MyApplication.newline + line + MyApplication.newline
                         }
-                        if ((tmpArr[4].toDoubleOrNull() ?: 0.0) > 255 || (tmpArr[4].toDoubleOrNull()
-                                        ?: 0.0) < 0
-                        ) {
-                            errors = errors + "Blue value must be between 0 and 255: " +
-                                    MyApplication.newline + s + MyApplication.newline
+                        if ((list[4].toDoubleOrNull() ?: 0.0) > 255 || (list[4].toDoubleOrNull() ?: 0.0) < 0) {
+                            errors += "Blue value must be between 0 and 255: " + MyApplication.newline + line + MyApplication.newline
                         }
                     } else {
-                        errors = errors +
-                                "The following line does not have the correct number of command separated entries: " +
-                                MyApplication.newline + s + MyApplication.newline
+                        errors += "The following line does not have the correct number of command separated entries: " + MyApplication.newline + line + MyApplication.newline
                     }
                 } catch (e: Exception) {
                     errors += "Problem parsing number."
@@ -180,39 +143,19 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                 }
             }
         }
-        if (lineCnt < 2) {
-            errors += "Not enough lines present."
-        }
+        if (lineCount < 2) errors += "Not enough lines present."
         return errors
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_reset -> palContent.setText(
-                    UtilityColorPalette.getColorMapStringFromDisk(
-                            this,
-                            type,
-                            activityArguments[1]
-                    )
-            )
+            R.id.action_reset -> palContent.setText(UtilityColorPalette.getColorMapStringFromDisk(this, typeAsInt, activityArguments[1]))
             R.id.action_clear -> palContent.setText("")
-            R.id.action_help -> UtilityAlertDialog.showHelpText("Not implemented yet.", this)
-            R.id.action_share -> UtilityShare.shareTextAsAttachment(
-                    this,
-                    this,
-                    palTitle.text.toString(),
-                    palContent.text.toString(),
-                    "wX_colormap_" + palTitle.text.toString() + ".txt"
-            )
+            R.id.action_help -> ObjectDialogue(this,"Not implemented yet.")
+            R.id.action_share -> UtilityShare.textAsAttachment(this, this, palTitle.text.toString(), palContent.text.toString(), "wX_colormap_" + palTitle.text.toString() + ".txt")
             R.id.action_load -> loadSettings()
-            R.id.action_website -> ObjectIntent.showWeb(
-                    this,
-                    "http://almanydesigns.com/grx/reflectivity/"
-            )
-            R.id.action_website2 -> ObjectIntent.showWeb(
-                    this,
-                    "http://www.usawx.com/grradarexamples.htm"
-            )
+            R.id.action_website -> ObjectIntent.showWeb(this, "http://almanydesigns.com/grx/reflectivity/")
+            R.id.action_website2 -> ObjectIntent.showWeb(this, "http://www.usawx.com/grradarexamples.htm")
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -224,18 +167,12 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun showLoadFromFileMenuItem() {
-        val menu = toolbarBottom.menu
-        val miLoadFromFile = menu.findItem(R.id.action_load)
-        miLoadFromFile.isVisible = Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT
+        toolbarBottom.menu.findItem(R.id.action_load).isVisible = true
     }
 
-    private fun loadSettings() {
-        performFileSearch()
-    }
+    private fun loadSettings() { performFileSearch() }
 
-    private fun displaySettings(txt: String) {
-        palContent.setText(txt)
-    }
+    private fun displaySettings(txt: String) { palContent.setText(txt) }
 
     private fun convertPalette(txt: String): String {
         var txtLocal = Utility.fromHtml(txt)
@@ -243,15 +180,12 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         txtLocal = txtLocal.replace("product", "#product")
         txtLocal = txtLocal.replace("unit", "#unit")
         txtLocal = txtLocal.replace("step", "#step")
-        // txtLocal = txtLocal.trim { it <= ' ' }.replace("\\.[0-9]{1,2}".toRegex(), "")
         txtLocal = txtLocal.replace(":", " ")
         txtLocal = txtLocal.trim { it <= ' ' }.replace(" +".toRegex(), " ")
         txtLocal = txtLocal.trim { it <= ' ' }.replace(" ".toRegex(), ",")
         txtLocal = txtLocal.replace("\\s".toRegex(), "")
         val lines = txtLocal.split(MyApplication.newline.toRegex()).dropLastWhile { it.isEmpty() }
-        if (lines.size < 3) {
-            txtLocal = txtLocal.replace("Color", MyApplication.newline + "Color")
-        }
+        if (lines.size < 3) txtLocal = txtLocal.replace("Color", MyApplication.newline + "Color")
         txtLocal = txtLocal.replace("Step", MyApplication.newline + "#Step")
         txtLocal = txtLocal.replace("Units", MyApplication.newline + "#Units")
         txtLocal = txtLocal.replace("ND", MyApplication.newline + "#ND")
@@ -263,19 +197,17 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
      * Fires an intent to spin up the "file chooser" UI and select an image.
      */
     private fun performFileSearch() {
-        if (Build.VERSION.SDK_INT > 18) {
-            // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file browser.
-            val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-            // Filter to only show results that can be "opened", such as a
-            // file (as opposed to a list of contacts or timezones)
-            intent.addCategory(Intent.CATEGORY_OPENABLE)
-            // Filter to show only images, using the image MIME data type.
-            // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
-            // To search for all documents available via installed storage providers,
-            // it would be "*/*".
-            intent.type = "*/*"
-            startActivityForResult(intent, READ_REQUEST_CODE)
-        }
+        // ACTION_OPEN_DOCUMENT is the intent to choose a file via the system's file browser.
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        // Filter to only show results that can be "opened", such as a
+        // file (as opposed to a list of contacts or timezones)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        // Filter to show only images, using the image MIME data type.
+        // If one wanted to search for ogg vorbis files, the type would be "audio/ogg".
+        // To search for all documents available via installed storage providers,
+        // it would be "*/*".
+        intent.type = "*/*"
+        startActivityForResult(intent, READ_REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
@@ -301,9 +233,7 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         val content = UtilityIO.readTextFromUri(this, uri)
         val uriArr = uri.lastPathSegment!!.split("/".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         var fileName = "map"
-        if (uriArr.isNotEmpty()) {
-            fileName = uriArr.last()
-        }
+        if (uriArr.isNotEmpty()) fileName = uriArr.last()
         fileName = fileName.replace(".txt", "").replace(".pal", "")
         name = fileName + "_" + formattedDate
         palTitle.setText(name)

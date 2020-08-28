@@ -39,12 +39,9 @@ import joshuatee.wx.wpc.UtilityWpcText
 
 class FavAddActivity : BaseActivity() {
 
-    companion object {
-        const val TYPE: String = ""
-    }
+    companion object { const val TYPE = "" }
 
     private var prefToken = ""
-    private var prefTokenLabel = ""
     private var data = listOf<String>()
     private var dataTokens = listOf<String>()
     private var type = ""
@@ -58,9 +55,7 @@ class FavAddActivity : BaseActivity() {
             "SND" -> {
                 prefToken = "SND_FAV"
                 val list = mutableListOf<String>()
-                GlobalArrays.soundingSites.forEach {
-                    list.add("$it " + Utility.getSoundingSiteName(it))
-                }
+                GlobalArrays.soundingSites.forEach { list.add("$it " + Utility.getSoundingSiteName(it)) }
                 data = list.toList()
                 verboseTitle = "sounding site"
             }
@@ -91,7 +86,6 @@ class FavAddActivity : BaseActivity() {
             }
             "SPCMESO" -> {
                 prefToken = "SPCMESO_FAV"
-                prefTokenLabel = "SPCMESO_LABEL_FAV"
                 data = UtilitySpcMeso.labels
                 dataTokens = UtilitySpcMeso.params
                 verboseTitle = "parameter"
@@ -103,61 +97,52 @@ class FavAddActivity : BaseActivity() {
 
     private fun itemClicked(position: Int) {
         val item = data[position]
-        var ridFav = Utility.readPref(this, prefToken, UtilityFavorites.initialValue)
-        var ridFavLabel = ""
-        val tmpArr: List<String>
-        when (type) {
+        var favoriteString = Utility.readPref(this, prefToken, UtilityFavorites.initialValue)
+        val tmpArr = when (type) {
             "SPCMESO" -> {
-                ridFavLabel = Utility.readPref(this, prefTokenLabel, UtilityFavorites.initialValue)
-                tmpArr = if (dataTokens[position].contains(":")) {
+                if (dataTokens[position].contains(":")) {
                     dataTokens[position].split(":").dropLastWhile { it.isEmpty() }
                 } else {
                     dataTokens[position].split(" ").dropLastWhile { it.isEmpty() }
                 }
             }
             "SND" -> {
-                tmpArr = if (GlobalArrays.soundingSites[position].contains(":")) {
+                if (GlobalArrays.soundingSites[position].contains(":")) {
                     GlobalArrays.soundingSites[position].split(":").dropLastWhile { it.isEmpty() }
                 } else {
                     GlobalArrays.soundingSites[position].split(" ").dropLastWhile { it.isEmpty() }
                 }
             }
             else -> {
-                tmpArr = if (data[position].contains(":")) {
+                if (data[position].contains(":")) {
                     data[position].split(":").dropLastWhile { it.isEmpty() }
                 } else {
                     data[position].split(" ").dropLastWhile { it.isEmpty() }
                 }
             }
         }
-        if (!ridFav.contains(tmpArr[0])) {
-            when (type) {
-                "SPCMESO" -> {
-                    ridFav += UtilitySpcMeso.params[position] + ":"
-                    ridFavLabel += UtilitySpcMeso.labels[position] + ":"
-                    Utility.writePref(this, prefTokenLabel, ridFavLabel)
-                }
-                else -> ridFav += tmpArr[0] + ":"
+        if (!favoriteString.contains(tmpArr[0])) {
+            favoriteString += when (type) {
+                "SPCMESO" -> UtilitySpcMeso.params[position] + ":"
+                else -> tmpArr[0] + ":"
             }
-            Utility.writePref(this, prefToken, ridFav)
-            saveMyApp(ridFav, ridFavLabel)
+            Utility.writePref(this, prefToken, favoriteString)
+            saveMyApp(favoriteString)
             toolbar.subtitle = "Last added: $item"
         } else {
             toolbar.subtitle = "Already added: $item"
         }
     }
 
-    private fun saveMyApp(fav: String, favLabel: String) {
+    private fun saveMyApp(favorite: String) {
         when (type) {
-            "SND" -> MyApplication.sndFav = fav
-            "WFO" -> MyApplication.wfoFav = fav
-            "RID" -> MyApplication.ridFav = fav
-            "NWSTEXT" -> MyApplication.nwsTextFav = fav
-            "SREF" -> MyApplication.srefFav = fav
-            "SPCMESO" -> {
-                MyApplication.spcMesoFav = fav
-                MyApplication.spcmesoLabelFav = favLabel
-            }
+            "SND" -> MyApplication.sndFav = favorite
+            "WFO" -> MyApplication.wfoFav = favorite
+            "RID" -> MyApplication.ridFav = favorite
+            "NWSTEXT" -> MyApplication.nwsTextFav = favorite
+            "SREF" -> MyApplication.srefFav = favorite
+            "SPCMESO" -> MyApplication.spcMesoFav = favorite
+            "RIDCA" -> MyApplication.caRidFav = favorite
         }
     }
 }

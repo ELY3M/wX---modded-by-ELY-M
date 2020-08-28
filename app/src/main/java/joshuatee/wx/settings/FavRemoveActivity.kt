@@ -44,30 +44,23 @@ class FavRemoveActivity : BaseActivity() {
     // arg1: type such as SND WFO RID
     //
 
-    companion object {
-        const val TYPE: String = ""
-    }
+    // FIXME this is nasty, works but has not been touched in years
 
-    private val ridArr = mutableListOf<String>()
-    private var tempList = listOf<String>()
-    private var ridFav = ""
-    private var ridFavLabel = ""
+    companion object { const val TYPE = "" }
+
+    private var favorites = mutableListOf<String>()
+    private var favoriteString = ""
     private var prefToken = ""
-    private var prefTokenLabel = ""
     private var prefTokenLocation = ""
-    private var ridArrLabel = mutableListOf<String>()
-    private lateinit var recyclerView: ObjectRecyclerView
+    private var labels = mutableListOf<String>()
+    private lateinit var objectRecyclerView: ObjectRecyclerView
     private var type = ""
     private val initialValue = " : : "
+    private val startIndex = 3
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_recyclerview_toolbar,
-                null,
-                false
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
         val activityArguments = intent.getStringArrayExtra(TYPE)
         type = activityArguments!![0]
         var verboseTitle = ""
@@ -101,160 +94,119 @@ class FavRemoveActivity : BaseActivity() {
             }
             "SPCMESO" -> {
                 prefToken = "SPCMESO_FAV"
-                prefTokenLabel = "SPCMESO_LABEL_FAV"
                 verboseTitle = "parameters"
             }
         }
-        ridFav = Utility.readPref(this, prefToken, UtilityFavorites.initialValue)
+        favoriteString = Utility.readPref(this, prefToken, UtilityFavorites.initialValue)
         title = "Modify $verboseTitle"
         toolbar.subtitle = "Tap item to delete or move."
         updateList()
-        recyclerView = ObjectRecyclerView(this, this, R.id.card_list, ridArrLabel, ::itemClicked)
+        objectRecyclerView = ObjectRecyclerView(this, this, R.id.card_list, labels, ::itemClicked)
     }
 
     private fun updateList() {
-        tempList = ridFav.split(":").dropLastWhile { it.isEmpty() }
-        ridArr.clear()
-        (3 until tempList.size).mapTo(ridArr) { tempList[it] }
-        ridArrLabel = mutableListOf()
-        ridArr.forEach {
+        val tempList = favoriteString.split(":").dropLastWhile { it.isEmpty() }
+        favorites.clear()
+        favorites = (startIndex until tempList.size).map{ tempList[it] }.toMutableList()
+        labels = mutableListOf()
+        favorites.forEach {
             when (type) {
-                "NWSTEXT" -> ridArrLabel.add(getFullString(it))
-                "SREF" -> ridArrLabel.add(it)
-                "RIDCA" -> ridArrLabel.add(findCanadaRadarSiteLabel(it))
-                "SPCMESO" -> ridArrLabel.add(findSpcMesoLabel(it))
-                else -> ridArrLabel.add(getFullString(it))
+                "NWSTEXT" -> labels.add(getFullString(it))
+                "SREF" -> labels.add(it)
+                "RIDCA" -> labels.add(findCanadaRadarSiteLabel(it))
+                "SPCMESO" -> labels.add(findSpcMesoLabel(it))
+                else -> labels.add(getFullString(it))
             }
         }
     }
 
-    private fun moveUp(pos: Int) {
-        ridFav = Utility.readPref(this, prefToken, "")
-        tempList = ridFav.split(":").dropLastWhile { it.isEmpty() }
-        ridArr.clear()
-        (3 until tempList.size).mapTo(ridArr) { tempList[it] }
-        if (pos != 0) {
-            val tmp = ridArr[pos - 1]
-            val tmp2 = ridArr[pos]
-            ridArr[pos - 1] = tmp2
-            recyclerView.setItem(pos - 1, recyclerView.getItem(pos))
-            ridArr[pos] = tmp
-            recyclerView.setItem(pos, getFullString(tmp))
+    // FIXME this needs to be redone with consolidation of homescreen, settings-location activity as well
+    private fun moveUp(position: Int) {
+        favoriteString = Utility.readPref(this, prefToken, "")
+        val tempList = favoriteString.split(":").dropLastWhile { it.isEmpty() }
+        favorites.clear()
+        favorites = (startIndex until tempList.size).map { tempList[it] }.toMutableList()
+        if (position != 0) {
+            val tmp = favorites[position - 1]
+            val tmp2 = favorites[position]
+            favorites[position - 1] = tmp2
+            objectRecyclerView.setItem(position - 1, objectRecyclerView.getItem(position))
+            favorites[position] = tmp
+            objectRecyclerView.setItem(position, getFullString(tmp))
         } else {
-            val tmp = ridArr.last()
-            val tmp2 = ridArr[pos]
-            ridArr[ridArr.lastIndex] = tmp2
-            recyclerView.setItem(ridArr.lastIndex, recyclerView.getItem(pos))
-            ridArr[0] = tmp
-            recyclerView.setItem(0, getFullString(tmp))
+            val tmp = favorites.last()
+            val tmp2 = favorites[position]
+            favorites[favorites.lastIndex] = tmp2
+            objectRecyclerView.setItem(favorites.lastIndex, objectRecyclerView.getItem(position))
+            favorites[0] = tmp
+            objectRecyclerView.setItem(0, getFullString(tmp))
         }
-        when (type) {
-            "SPCMESO" -> {
-                ridFav = initialValue
-                ridArr.forEach {
-                    ridFav += ":$it"
-                }
-                Utility.writePref(this, prefToken, "$ridFav:")
-                ridFavLabel = initialValue
-                ridFavLabel += recyclerView.toString()
-                Utility.writePref(this, prefTokenLabel, ridFavLabel)
-            }
-            else -> {
-                ridFav = initialValue
-                ridArr.forEach {
-                    ridFav += ":$it"
-                }
-                Utility.writePref(this, prefToken, "$ridFav:")
-            }
-        }
+        favoriteString = initialValue
+        favorites.forEach { favoriteString += ":$it" }
+        Utility.writePref(this, prefToken, "$favoriteString:")
     }
 
     private fun moveDown(pos: Int) {
-        ridFav = Utility.readPref(this, prefToken, "")
-        tempList = ridFav.split(":").dropLastWhile { it.isEmpty() }
-        ridArr.clear()
-        (3 until tempList.size).mapTo(ridArr) { tempList[it] }
-        if (pos != ridArr.lastIndex) {
-            val tmp = ridArr[pos + 1]
-            val tmp2 = ridArr[pos]
-            ridArr[pos + 1] = tmp2
-            recyclerView.setItem(pos + 1, recyclerView.getItem(pos))
-            ridArr[pos] = tmp
-            recyclerView.setItem(pos, getFullString(tmp))
+        favoriteString = Utility.readPref(this, prefToken, "")
+        val tempList = favoriteString.split(":").dropLastWhile { it.isEmpty() }
+        favorites.clear()
+        favorites = (startIndex until tempList.size).map { tempList[it] }.toMutableList()
+        if (pos != favorites.lastIndex) {
+            val tmp = favorites[pos + 1]
+            val tmp2 = favorites[pos]
+            favorites[pos + 1] = tmp2
+            objectRecyclerView.setItem(pos + 1, objectRecyclerView.getItem(pos))
+            favorites[pos] = tmp
+            objectRecyclerView.setItem(pos, getFullString(tmp))
         } else {
-            val tmp = ridArr[0]
-            ridArr[0] = ridArr[pos]
-            recyclerView.setItem(0, recyclerView.getItem(pos))
-            ridArr[ridArr.lastIndex] = tmp
-            recyclerView.setItem(ridArr.lastIndex, getFullString(tmp))
+            val tmp = favorites[0]
+            favorites[0] = favorites[pos]
+            objectRecyclerView.setItem(0, objectRecyclerView.getItem(pos))
+            favorites[favorites.lastIndex] = tmp
+            objectRecyclerView.setItem(favorites.lastIndex, getFullString(tmp))
         }
-        ridFav = initialValue
-        ridArr.forEach {
-            ridFav += ":$it"
-        }
-        Utility.writePref(this, prefToken, "$ridFav:")
-        when (type) {
-            "SPCMESO" -> {
-                ridFavLabel = initialValue
-                ridFavLabel += recyclerView.toString()
-                Utility.writePref(this, prefTokenLabel, ridFavLabel)
-            }
-        }
+        favoriteString = initialValue
+        favorites.forEach { favoriteString += ":$it" }
+        Utility.writePref(this, prefToken, "$favoriteString:")
     }
 
     private fun getFullString(shortCode: String): String {
-        var fullName = ""
-        when (type) {
-            "SND" -> fullName = Utility.getSoundingSiteName(shortCode)
-            "WFO" -> fullName = shortCode + ": " + Utility.getWfoSiteName(shortCode)
-            "RID" -> fullName = shortCode + ": " + Utility.getRadarSiteName(shortCode)
-            "NWSTEXT" -> {
-                val index = UtilityFavorites.findPositionNwsText(shortCode)
-                fullName = if (index != -1) {
-                    UtilityWpcText.labels[index]
-                } else {
-                    shortCode
-                }
-            }
-            "SREF" -> fullName = shortCode
-            "RIDCA" -> fullName = findCanadaRadarSiteLabel(shortCode)
-            "SPCMESO" -> fullName = findSpcMesoLabel(shortCode)
+        return when (type) {
+            "SND" -> Utility.getSoundingSiteName(shortCode)
+            "WFO" -> shortCode + ": " + Utility.getWfoSiteName(shortCode)
+            "RID" -> shortCode + ": " + Utility.getRadarSiteName(shortCode)
+            "NWSTEXT" -> shortCode + ": " + UtilityWpcText.getLabel(shortCode)
+            "SREF" -> shortCode
+            "RIDCA" -> findCanadaRadarSiteLabel(shortCode)
+            "SPCMESO" -> findSpcMesoLabel(shortCode)
+            else -> ""
         }
-        return fullName
     }
 
-    private fun saveMyApp(fav: String, favLabel: String) {
+    private fun saveMyApp(favorite: String) {
         when (type) {
-            "SND" -> MyApplication.sndFav = fav
-            "WFO" -> MyApplication.wfoFav = fav
-            "RID" -> MyApplication.ridFav = fav
-            "NWSTEXT" -> MyApplication.nwsTextFav = fav
-            "SREF" -> MyApplication.srefFav = fav
-            "SPCMESO" -> {
-                MyApplication.spcMesoFav = fav
-                MyApplication.spcmesoLabelFav = favLabel
-            }
+            "SND" -> MyApplication.sndFav = favorite
+            "WFO" -> MyApplication.wfoFav = favorite
+            "RID" -> MyApplication.ridFav = favorite
+            "NWSTEXT" -> MyApplication.nwsTextFav = favorite
+            "SREF" -> MyApplication.srefFav = favorite
+            "SPCMESO" -> MyApplication.spcMesoFav = favorite
+            "RIDCA" -> MyApplication.caRidFav = favorite
         }
     }
 
     private fun findCanadaRadarSiteLabel(rid: String) =
             (GlobalArrays.canadaRadars.indices).firstOrNull {
-                        GlobalArrays.canadaRadars[it].contains(
-                                rid
-                        )
-                    }
-                    ?.let { GlobalArrays.canadaRadars[it].replace(":", "") }
-                    ?: rid
+                        GlobalArrays.canadaRadars[it].contains(rid)
+                    }?.let { GlobalArrays.canadaRadars[it].replace(":", "") } ?: rid
 
     private fun findSpcMesoLabel(rid: String): String {
         val index = UtilitySpcMeso.params.indexOf(rid)
-        if (index == -1)
-            return UtilitySpcMeso.labels[0]
-        return UtilitySpcMeso.labels[index]
+        return if (index == -1) UtilitySpcMeso.labels[0] else UtilitySpcMeso.labels[index]
     }
 
     private fun itemClicked(position: Int) {
-        val bottomSheetFragment = BottomSheetFragment(this, position, recyclerView.getItem(position), false)
+        val bottomSheetFragment = BottomSheetFragment(this, position, objectRecyclerView.getItem(position), false)
         bottomSheetFragment.functions = listOf(::deleteItem, ::moveUpItem, ::moveDownItem)
         bottomSheetFragment.labelList = listOf("Delete Item", "Move Up", "Move Down")
         bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
@@ -263,33 +215,30 @@ class FavRemoveActivity : BaseActivity() {
     private fun deleteItem(position: Int) {
         when (type) {
             "SPCMESO" -> {
-                ridFav = Utility.readPref(this, prefToken, " : :")
-                ridFav = ridFav.replace(ridArr[position] + ":", "")
-                recyclerView.deleteItem(position)
-                ridFavLabel = initialValue
-                ridFavLabel += recyclerView.toString()
-                Utility.writePref(this, prefToken, ridFav)
-                Utility.writePref(this, prefTokenLabel, ridFavLabel)
-                saveMyApp(ridFav, ridFavLabel)
+                favoriteString = Utility.readPref(this, prefToken, " : :")
+                favoriteString = favoriteString.replace(favorites[position] + ":", "")
+                objectRecyclerView.deleteItem(position)
+                Utility.writePref(this, prefToken, favoriteString)
+                saveMyApp(favoriteString)
             }
             else -> {
-                ridFav = Utility.readPref(this, prefToken, " : :")
-                ridFav = ridFav.replace(ridArr[position] + ":", "")
-                recyclerView.deleteItem(position)
-                Utility.writePref(this, prefToken, ridFav)
-                saveMyApp(ridFav, ridFavLabel)
+                favoriteString = Utility.readPref(this, prefToken, " : :")
+                favoriteString = favoriteString.replace(favorites[position] + ":", "")
+                objectRecyclerView.deleteItem(position)
+                Utility.writePref(this, prefToken, favoriteString)
+                saveMyApp(favoriteString)
             }
         }
     }
 
     private fun moveUpItem(position: Int) {
         moveUp(position)
-        saveMyApp(ridFav, ridFavLabel)
+        saveMyApp(favoriteString)
     }
 
     private fun moveDownItem(position: Int) {
         moveDown(position)
-        saveMyApp(ridFav, ridFavLabel)
+        saveMyApp(favoriteString)
     }
 }
 

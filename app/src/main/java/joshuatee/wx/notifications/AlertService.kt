@@ -31,6 +31,7 @@ import java.util.Calendar
 import joshuatee.wx.audio.UtilityPlayListAutoDownload
 import joshuatee.wx.util.Utility
 
+//
 // this service notifies the alarm manager to run AlertReceiver ( notifications ) according to the
 // configured interval
 //
@@ -38,19 +39,15 @@ import joshuatee.wx.util.Utility
 class AlertService : IntentService("AlertService") {
 
     override fun onHandleIntent(intent: Intent?) {
-        val alertNotificationIntervalCurrent =
-            Utility.readPref(this, "ALERT_NOTIFICATION_INTERVAL", -1)
-        val service = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val cal = Calendar.getInstance()
-        val intent = Intent(this, AlertReceiver::class.java)
-        val pending = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT)
-        service.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            cal.timeInMillis,
-            (alertNotificationIntervalCurrent * 1000 * 60).toLong(),
-            pending
-        )
-        UtilityPlayListAutoDownload.setAllAlarms(this)
+        val alertNotificationIntervalCurrent = Utility.readPref(this, "ALERT_NOTIFICATION_INTERVAL", -1)
+        if (alertNotificationIntervalCurrent < 121) {
+            val service = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val cal = Calendar.getInstance()
+            val intentLocal = Intent(this, AlertReceiver::class.java)
+            val pending = PendingIntent.getBroadcast(this, 0, intentLocal, PendingIntent.FLAG_CANCEL_CURRENT)
+            service.setInexactRepeating(AlarmManager.RTC_WAKEUP, cal.timeInMillis, (alertNotificationIntervalCurrent * 1000 * 60).toLong(), pending)
+            UtilityPlayListAutoDownload.setAllAlarms(this)
+        }
     }
 } 
 

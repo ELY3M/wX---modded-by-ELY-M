@@ -16,11 +16,13 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import joshuatee.wx.objects.DownloadTimer
 import java.text.SimpleDateFormat
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
-import okhttp3.MediaType
+
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -30,12 +32,11 @@ import kotlinx.coroutines.*
 
 
 
-
 object SpotterNetworkPositionReport {
     var TAG = "joshuatee-SpotterNetworkPositionReport"
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     var success: Boolean = false
-
+    val timer = DownloadTimer("SPOTTERGPSREPORT")
     var key: String = MyApplication.sn_key
     var lat: Double = 0.0
     var lon: Double = 0.0
@@ -66,10 +67,16 @@ object SpotterNetworkPositionReport {
     private var location: Location? = null
 
     private val locationListener: LocationListener = object : LocationListener {
+
         override fun onLocationChanged(location: Location) {
-            GetLocation(location)
-            Log.i(TAG, "onLocationChanged lat: "+location.latitude+ " lon: "+location.longitude)
-        }
+            //FIXME!!!!  TESTING
+            if (timer.isRefreshNeeded(MyApplication.appContext)) {
+                GetLocation(location)
+                Log.i(TAG, "onLocationChanged lat: " + location.latitude + " lon: " + location.longitude)
+            } else {
+                Log.i(TAG, "Timer not run out!!!!")
+            }
+            }
 
         override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
 
@@ -186,11 +193,12 @@ object SpotterNetworkPositionReport {
 
 
 
+
     fun Send_Location_Task() = GlobalScope.launch(uiDispatcher) {
         var success: Boolean = false
             withContext(Dispatchers.IO) {
             val sh = OkHttpClient()
-            val JSON = MediaType.parse("application/json; charset=utf-8")
+            val JSON = "application/json; charset=utf-8".toMediaTypeOrNull()
             val url = "https://www.spotternetwork.org/positions/update"
             val `object` = JSONObject()
             try {
@@ -221,7 +229,7 @@ object SpotterNetworkPositionReport {
             var jsonStr: String? = null
             try {
                 response = sh.newCall(request).execute()
-                jsonStr = response!!.body()!!.string()
+                jsonStr = response!!.body!!.string()
             } catch (e: IOException) {
                 e.printStackTrace()
             }

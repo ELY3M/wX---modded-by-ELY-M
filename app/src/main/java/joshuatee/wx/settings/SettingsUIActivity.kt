@@ -25,16 +25,21 @@ package joshuatee.wx.settings
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.view.MenuItem
+import androidx.core.app.NavUtils
 
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCard
+import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
+import joshuatee.wx.util.UtilityLog
 
 import kotlinx.android.synthetic.main.activity_settings_ui.*
+import kotlinx.android.synthetic.main.activity_settings_ui.linearLayout
 
 class SettingsUIActivity : BaseActivity() {
 
@@ -47,23 +52,34 @@ class SettingsUIActivity : BaseActivity() {
             "gray",
             "white",
             "whiteNew",
+            "allWhite",
             "orange",
-	        "BlackAqua"
+	    "BlackAquaNew",
+	    "BlackAqua"
     )
     private val textSizeArr = mutableListOf<String>()
     private var tilesPerRowStart = 0
+    private var navDrawerMainScreen = false
+    private var navDrawerMainScreenOnRight = true
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_ui, null, false)
         toolbar.subtitle = "Please tap on text for additional help."
-        ObjectCard(this, R.id.cv_tab_labels)
         tilesPerRowStart = UIPreferences.tilesPerRow
+        navDrawerMainScreen = UIPreferences.navDrawerMainScreen
+        navDrawerMainScreenOnRight = UIPreferences.navDrawerMainScreenOnRight
+        val textSize = MyApplication.textSizeLarge
+        val padding = MyApplication.paddingSettings
+        if (UIPreferences.navDrawerMainScreen) {
+            val cardNavDrawer = ObjectCardText(this, "Navigation Drawer Configuration", textSize, SettingsNavDrawerActivity::class.java, padding)
+            linearLayout.addView(cardNavDrawer.card)
+        }
+        ObjectCard(this, R.id.cv_tab_labels)
         setupEditText()
         (0 until 20).forEach { textSizeArr.add(((it + 1) * 50).toString()) }
         linearLayout.addView(
                 ObjectSettingsSpinner(
-                        this,
                         this,
                         "Theme (restarts app)",
                         "THEME_BLUE",
@@ -75,6 +91,21 @@ class SettingsUIActivity : BaseActivity() {
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
+                        "Use navigation drawer on main screen",
+                        "NAV_DRAWER_MAIN_SCREEN",
+                        R.string.nav_drawer_main_screen_label
+                ).card
+        )
+        linearLayout.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Navigation drawer on main screen is on right side",
+                        "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT",
+                        R.string.nav_drawer_main_screen_on_right_label
+                ).card
+        )
+        linearLayout.addView(
+                ObjectSettingsCheckBox(
                         this,
                         "Icons evenly spaced",
                         "UI_ICONS_EVENLY_SPACED",
@@ -84,7 +115,6 @@ class SettingsUIActivity : BaseActivity() {
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        this,
                         "Fullscreen mode",
                         "FULLSCREEN_MODE",
                         R.string.fullscreen_mode_label
@@ -92,7 +122,6 @@ class SettingsUIActivity : BaseActivity() {
         )
         linearLayout.addView(
                 ObjectSettingsCheckBox(
-                        this,
                         this,
                         "Lock toolbars",
                         "LOCK_TOOLBARS",
@@ -102,7 +131,6 @@ class SettingsUIActivity : BaseActivity() {
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        this,
                         "Simple mode (restarts app)",
                         "SIMPLE_MODE",
                         R.string.simple_mode_label
@@ -110,7 +138,6 @@ class SettingsUIActivity : BaseActivity() {
         )
         linearLayout.addView(
                 ObjectSettingsCheckBox(
-                        this,
                         this,
                         "Hide top toolbar (restarts app)",
                         "HIDE_TOP_TOOLBAR",
@@ -120,7 +147,6 @@ class SettingsUIActivity : BaseActivity() {
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        this,
                         "Use fahrenheit",
                         "UNITS_F",
                         R.string.units_f_label
@@ -128,7 +154,6 @@ class SettingsUIActivity : BaseActivity() {
         )
         linearLayout.addView(
                 ObjectSettingsCheckBox(
-                        this,
                         this,
                         "Use millibars",
                         "UNITS_M",
@@ -138,7 +163,6 @@ class SettingsUIActivity : BaseActivity() {
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        this,
                         "Reduce size of tile images",
                         "TILE_IMAGE_DOWNSIZE",
                         R.string.tile_img_resize_label
@@ -146,7 +170,6 @@ class SettingsUIActivity : BaseActivity() {
         )
         linearLayout.addView(
                 ObjectSettingsCheckBox(
-                        this,
                         this,
                         "Use FAB in models",
                         "FAB_IN_MODELS",
@@ -156,7 +179,6 @@ class SettingsUIActivity : BaseActivity() {
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        this,
                         "NWS Text, remove line breaks",
                         "NWS_TEXT_REMOVELINEBREAKS",
                         R.string.nws_text_removelinebreak_label
@@ -164,7 +186,6 @@ class SettingsUIActivity : BaseActivity() {
         )
         linearLayout.addView(
                 ObjectSettingsCheckBox(
-                        this,
                         this,
                         "Radar: transparent toolbars",
                         "RADAR_TOOLBAR_TRANSPARENT",
@@ -174,7 +195,6 @@ class SettingsUIActivity : BaseActivity() {
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        this,
                         "Radar: transparent status bar",
                         "RADAR_STATUSBAR_TRANSPARENT",
                         R.string.radar_statusbar_transparent_label
@@ -182,7 +202,6 @@ class SettingsUIActivity : BaseActivity() {
         )
         linearLayout.addView(
                 ObjectSettingsCheckBox(
-                        this,
                         this,
                         "Radar: immersive mode",
                         "RADAR_IMMERSIVE_MODE",
@@ -192,7 +211,6 @@ class SettingsUIActivity : BaseActivity() {
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        this,
                         "Record screen for sharing",
                         "RECORD_SCREEN_SHARE",
                         R.string.record_screen_share_label
@@ -200,7 +218,6 @@ class SettingsUIActivity : BaseActivity() {
         )
         linearLayout.addView(
                 ObjectSettingsCheckBox(
-                        this,
                         this,
                         "Prevent accidental exit",
                         "PREF_PREVENT_ACCIDENTAL_EXIT",
@@ -210,7 +227,6 @@ class SettingsUIActivity : BaseActivity() {
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        this,
                         "Show VR button on main screen",
                         "VR_BUTTON",
                         R.string.vr_button_label
@@ -218,7 +234,6 @@ class SettingsUIActivity : BaseActivity() {
         )
         linearLayout.addView(
                 ObjectSettingsCheckBox(
-                        this,
                         this,
                         "WFO - remember location",
                         "WFO_REMEMBER_LOCATION",
@@ -228,7 +243,6 @@ class SettingsUIActivity : BaseActivity() {
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        this,
                         "Main screen radar button (requires restart)",
                         "UI_MAIN_SCREEN_RADAR_FAB",
                         R.string.mainscreen_radar_button
@@ -236,7 +250,6 @@ class SettingsUIActivity : BaseActivity() {
         )
         linearLayout.addView(
                 ObjectSettingsCheckBox(
-                        this,
                         this,
                         "Widgets: prevent opening app on tap",
                         "UI_WIDGET_PREVENT_TAP",
@@ -246,15 +259,94 @@ class SettingsUIActivity : BaseActivity() {
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        this,
                         "Use the AWC Radar mosaic images instead of the main NWS images.",
                         "USE_AWC_RADAR_MOSAIC",
                         R.string.ui_awc_radar_mosaic
                 ).card
         )
+
         linearLayout.addView(
-                ObjectSettingsSeekbar(
+                ObjectSettingsCheckBox(
                         this,
+                        "Check for SPC MCD/Watches",
+                        "CHECKSPC",
+                        R.string.checkspc_switch_label
+                ).card
+        )
+        linearLayout.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Check for WPC MPDs",
+                        "CHECKWPC",
+                        R.string.checkwpc_switch_label
+                ).card
+        )
+        linearLayout.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Check for TOR,TST,FFW",
+                        "CHECKTOR",
+                        R.string.checktor_switch_label
+                ).card
+        )
+        linearLayout.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Media control notification",
+                        "MEDIA_CONTROL_NOTIF",
+                        R.string.media_control_notif_tv
+                ).card
+        )
+        linearLayout.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Dual-pane radar from main screen",
+                        "DUALPANE_RADAR_ICON",
+                        R.string.dualpane_radar_icon_tv
+                ).card
+        )
+        linearLayout.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Translate abbreviations",
+                        "TRANSLATE_TEXT",
+                        R.string.translate_text_label
+                ).card
+        )
+       	linearLayout.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Check for Internet on startup",
+                        "CHECKINTERNET",
+                        R.string.checkinternet_switch_label
+                ).card
+        )	
+        linearLayout.addView(
+                ObjectSettingsSeekBar(
+                        this,
+                        "Refresh interval for location in minutes",
+                        "REFRESH_LOC_MIN",
+                        R.string.refresh_loc_min_np_label,
+                        10,
+                        0,
+                        120
+                ).card
+        )
+        linearLayout.addView(
+                ObjectSettingsSeekBar(
+                        this,
+                        "Text to speech speed, requires app restart",
+                        "TTS_SPEED_PREF",
+                        R.string.tts_speed_np_label,
+                        10,
+                        1,
+                        20
+                ).card
+        )
+
+
+        linearLayout.addView(
+                ObjectSettingsSeekBar(
                         this,
                         "UI elevation height",
                         "ELEVATION_PREF",
@@ -265,8 +357,7 @@ class SettingsUIActivity : BaseActivity() {
                 ).card
         )
         linearLayout.addView(
-                ObjectSettingsSeekbar(
-                        this,
+                ObjectSettingsSeekBar(
                         this,
                         "NWS icon size",
                         "NWS_ICON_SIZE_PREF",
@@ -277,8 +368,7 @@ class SettingsUIActivity : BaseActivity() {
                 ).card
         )
         linearLayout.addView(
-                ObjectSettingsSeekbar(
-                        this,
+                ObjectSettingsSeekBar(
                         this,
                         "Card corner radius",
                         "CARD_CORNER_RADIUS",
@@ -289,8 +379,7 @@ class SettingsUIActivity : BaseActivity() {
                 ).card
         )
         linearLayout.addView(
-                ObjectSettingsSeekbar(
-                        this,
+                ObjectSettingsSeekBar(
                         this,
                         "Image tiles per row",
                         "UI_TILES_PER_ROW",
@@ -301,8 +390,7 @@ class SettingsUIActivity : BaseActivity() {
                 ).card
         )
         linearLayout.addView(
-                ObjectSettingsSeekbar(
-                        this,
+                ObjectSettingsSeekBar(
                         this,
                         "Animation - frames for toolbar icon",
                         "UI_ANIM_ICON_FRAMES",
@@ -313,8 +401,7 @@ class SettingsUIActivity : BaseActivity() {
                 ).card
         )
         linearLayout.addView(
-                ObjectSettingsSeekbar(
-                        this,
+                ObjectSettingsSeekBar(
                         this,
                         "Home screen text length",
                         "HOMESCREEN_TEXT_LENGTH_PREF",
@@ -325,8 +412,7 @@ class SettingsUIActivity : BaseActivity() {
                 ).card
         )
         linearLayout.addView(
-                ObjectSettingsSeekbar(
-                        this,
+                ObjectSettingsSeekBar(
                         this,
                         "Text size",
                         "TEXTVIEW_FONT_SIZE",
@@ -347,6 +433,7 @@ class SettingsUIActivity : BaseActivity() {
         Utility.writePref(this, "TAB2_HEADER", et2.text.toString())
         Utility.writePref(this, "TAB3_HEADER", et3.text.toString())
         MyApplication.initPreferences(this)
+        //UtilityLog.d("Wx", "ONSTOP")
     }
 
     private fun setupEditText() {
@@ -362,9 +449,31 @@ class SettingsUIActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if (UIPreferences.tilesPerRow != tilesPerRowStart)
-            UtilityAlertDialog.restart()
-        else
-            super.onBackPressed()
+        UIPreferences.navDrawerMainScreen = Utility.readPref(this, "NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")
+        UIPreferences.navDrawerMainScreenOnRight = Utility.readPref(this, "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", "true").startsWith("t")
+        if ((UIPreferences.tilesPerRow != tilesPerRowStart)
+                || (UIPreferences.navDrawerMainScreen != navDrawerMainScreen)
+                || (UIPreferences.navDrawerMainScreenOnRight != navDrawerMainScreenOnRight)
+        )
+            UtilityAlertDialog.restart() else super.onBackPressed()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                UtilityLog.d("wx", "DEBUG - home")
+                UIPreferences.navDrawerMainScreen = Utility.readPref(this, "NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")
+                UIPreferences.navDrawerMainScreenOnRight = Utility.readPref(this, "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", "true").startsWith("t")
+                if ((UIPreferences.tilesPerRow != tilesPerRowStart)
+                        || (UIPreferences.navDrawerMainScreen != navDrawerMainScreen)
+                        || (UIPreferences.navDrawerMainScreenOnRight != navDrawerMainScreenOnRight)
+                )
+                    UtilityAlertDialog.restart()
+                else
+                    NavUtils.navigateUpFromSameTask(this)
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
     }
 }

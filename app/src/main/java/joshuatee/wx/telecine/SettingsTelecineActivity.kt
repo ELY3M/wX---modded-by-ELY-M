@@ -9,8 +9,6 @@ joshua.tee@gmail.com
 package joshuatee.wx.telecine
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
@@ -27,27 +25,24 @@ class SettingsTelecineActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
         val vidSize = listOf("100", "75", "50")
         val vidSpinner = ObjectSettingsSpinner(
-            this as Context,
-            this as Activity,
+            this,
             "Video Size",
             "video-size",
             "100",
             R.string.widget_nexrad_size_label,
             vidSize
         )
-        ll.addView(vidSpinner.card)
-        ll.addView(
+        linearLayout.addView(vidSpinner.card)
+        linearLayout.addView(
             ObjectSettingsCheckBox(
-                this,
                 this,
                 "Three Second Countdown",
                 "show-countdown",
                 R.string.loc1_radar_label
             ).card
         )
-        ll.addView(
+        linearLayout.addView(
             ObjectSettingsCheckBox(
-                this,
                 this,
                 "Recording Notification",
                 "recording-notification",

@@ -24,41 +24,34 @@ package joshuatee.wx.wpc
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
-import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectCardImage
-import joshuatee.wx.ui.ObjectLinearLayout
-import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
-class WpcRainfallForecastSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
+class WpcRainfallForecastSummaryActivity : BaseActivity() {
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private var bitmaps = mutableListOf<Bitmap>()
+    private val uiDispatcher = Dispatchers.Main
+    private var bitmaps = listOf<Bitmap>()
     private var imagesPerRow = 2
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.shared_multigraphics, menu)
+        return true
+    }
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_linear_layout_bottom_toolbar,
-                R.menu.shared_multigraphics,
-                true
-        )
-        if (UtilityUI.isLandScape(this)) {
-            imagesPerRow = 3
-        }
-        toolbarBottom.setOnMenuItemClickListener(this)
+        super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.shared_multigraphics, false)
+        if (UtilityUI.isLandScape(this)) imagesPerRow = 3
         title = "Excessive Rainfall Outlooks"
         toolbar.subtitle = "WPC"
         getContent()
@@ -70,59 +63,22 @@ class WpcRainfallForecastSummaryActivity : BaseActivity(), Toolbar.OnMenuItemCli
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        bitmaps = mutableListOf()
-        withContext(Dispatchers.IO) {
-            UtilityWpcRainfallForecast.imageUrls.forEach {
-                bitmaps.add(it.getImage())
-            }
-        }
-        ll.removeAllViews()
-        var numberOfImages = 0
-        val horizontalLinearLayouts: MutableList<ObjectLinearLayout> = mutableListOf()
-        bitmaps.forEachIndexed { index, bitmap ->
-            val textProduct = UtilityWpcRainfallForecast.productCode[index]
-            val imageUrl = UtilityWpcRainfallForecast.imageUrls[index]
-            val day = (index + 1).toString()
-            val objectCardImage: ObjectCardImage
-            if (numberOfImages % imagesPerRow == 0) {
-                val objectLinearLayout = ObjectLinearLayout(this@WpcRainfallForecastSummaryActivity, ll)
-                objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
-                horizontalLinearLayouts.add(objectLinearLayout)
-                objectCardImage = ObjectCardImage(
-                        this@WpcRainfallForecastSummaryActivity,
-                        objectLinearLayout.linearLayout,
-                        bitmap,
-                        imagesPerRow
-                )
-            } else {
-                objectCardImage = ObjectCardImage(
-                        this@WpcRainfallForecastSummaryActivity,
-                        horizontalLinearLayouts.last().linearLayout,
-                        bitmap,
-                        imagesPerRow
-                )
-            }
+        bitmaps = withContext(Dispatchers.IO) { UtilityWpcRainfallForecast.urls.map { it.getImage() } }
+        linearLayout.removeAllViews()
+        val objectImageSummary = ObjectImageSummary(this@WpcRainfallForecastSummaryActivity, linearLayout, bitmaps)
+        objectImageSummary.objectCardImages.forEachIndexed { index, objectCardImage ->
             objectCardImage.setOnClickListener(View.OnClickListener {
-                ObjectIntent(
-                        this@WpcRainfallForecastSummaryActivity,
-                        WpcRainfallForecastActivity::class.java,
-                        WpcRainfallForecastActivity.NUMBER,
-                        arrayOf(textProduct, imageUrl, day)
-                )
+                val textProduct = UtilityWpcRainfallForecast.productCode[index]
+                val imageUrl = UtilityWpcRainfallForecast.urls[index]
+                val day = (index + 1).toString()
+                ObjectIntent(this@WpcRainfallForecastSummaryActivity, WpcRainfallForecastActivity::class.java, WpcRainfallForecastActivity.NUMBER, arrayOf(textProduct, imageUrl, day))
             })
-            numberOfImages += 1
         }
     }
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(
-                    this,
-                    this,
-                    getString(UtilityWpcRainfallForecast.activityTitle),
-                    "",
-                    bitmaps
-            )
+            R.id.action_share -> UtilityShare.text(this, this, getString(UtilityWpcRainfallForecast.activityTitle), "", bitmaps)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

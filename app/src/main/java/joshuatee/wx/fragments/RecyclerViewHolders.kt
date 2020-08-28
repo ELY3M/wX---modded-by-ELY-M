@@ -15,24 +15,20 @@ import joshuatee.wx.ui.ObjectCard
 internal class RecyclerViewHolders(itemView: View, private val itemList: List<TileObject>) :
     RecyclerView.ViewHolder(itemView), View.OnClickListener, ItemTouchHelperViewHolder {
 
-    val iv: ImageView
+    val imageView: ImageView
 
     init {
         itemView.setOnClickListener(this)
         ObjectCard(itemView, R.color.primary_blue, R.id.card_view)
-        iv = itemView.findViewById(R.id.iv)
+        imageView = itemView.findViewById(R.id.iv)
         itemView.setOnClickListener(this)
     }
 
     // following 2 methods available via implements ItemTouchHelperViewHolder
 
-    override fun onItemSelected() {
-        (itemView as CardView).setCardBackgroundColor(Color.RED)
-    }
+    override fun onItemSelected() { (itemView as CardView).setCardBackgroundColor(Color.RED) }
 
-    override fun onItemClear() {
-        (itemView as CardView).setCardBackgroundColor(0)
-    }
+    override fun onItemClear() { (itemView as CardView).setCardBackgroundColor(0) }
 
     override fun onClick(view: View) {
         val intent = Intent(view.context, itemList[adapterPosition].activity)

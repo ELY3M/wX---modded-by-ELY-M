@@ -36,16 +36,15 @@ import androidx.core.app.ShareCompat.IntentBuilder
 
 object UtilityShare {
 
-    fun shareTextAsAttachment(activity: Activity, context: Context, subject: String, text: String, filename: String) {
+    fun prepTextForShare(text: String): String {
+        return text.replace(MyApplication.newline, MyApplication.newline + MyApplication.newline)
+    }
+
+    fun textAsAttachment(activity: Activity, context: Context, subject: String, text: String, filename: String) {
         val dir = File(context.filesDir.toString() + "/shared")
-        if (!dir.mkdirs())
-            UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
+        if (!dir.mkdirs()) UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
         val file = File(dir, filename)
-        val imgUri = FileProvider.getUriForFile(
-            context,
-            "${MyApplication.packageNameAsString}.fileprovider",
-            file
-        )
+        val imgUri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", file)
         var fos: FileOutputStream? = null
         try {
             fos = FileOutputStream(file)
@@ -74,7 +73,7 @@ object UtilityShare {
         activity.startActivity(Intent.createChooser(sharingIntent, "Share via"))
     }
 
-    fun shareText(context: Context, subject: String, text: String) {
+    fun text(context: Context, subject: String, text: String) {
         val formattedDate = UtilityTime.getDateAsString("yyyy-MM-dd HH:mm:ss")
         val sharingIntent = Intent(Intent.ACTION_SEND)
         sharingIntent.type = "text/plain"
@@ -83,21 +82,16 @@ object UtilityShare {
         context.startActivity(Intent.createChooser(sharingIntent, "Share via"))
     }
 
-    fun shareText(activity: Activity, context: Context, subject: String, text: String, bitmaps: List<Bitmap>) {
+    fun text(activity: Activity, context: Context, subject: String, text: String, bitmaps: List<Bitmap>) {
         val bitmap = UtilityImg.mergeImagesVertically(bitmaps)
-        shareBitmap(activity, context, subject, bitmap, text)
+        bitmap(activity, context, subject, bitmap, text)
     }
 
-    fun shareBitmap(activity: Activity, context: Context, subject: String, bitmap: Bitmap, text: String = "") {
+    fun bitmap(activity: Activity, context: Context, subject: String, bitmap: Bitmap, text: String = "") {
         val dir = File(context.filesDir.toString() + "/shared")
-        if (!dir.mkdirs())
-            UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
+        if (!dir.mkdirs()) UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
         val file = File(dir, "img1.png")
-        val imgUri = FileProvider.getUriForFile(
-                context,
-                "${MyApplication.packageNameAsString}.fileprovider",
-                file
-        )
+        val imgUri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", file)
         try {
             val fos = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
@@ -123,7 +117,7 @@ object UtilityShare {
     internal var animDrawablePublic: AnimationDrawable? = null
     internal var subjectPublic: String? = null
 
-    fun shareAnimGif(context: Context, subject: String, animDrawable: AnimationDrawable) {
+    fun animGif(context: Context, subject: String, animDrawable: AnimationDrawable) {
         UtilityUI.makeToastLegacy(context, "Creating animated gif")
         animDrawablePublic = animDrawable
         subjectPublic = subject

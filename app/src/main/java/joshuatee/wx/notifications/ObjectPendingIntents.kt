@@ -26,6 +26,7 @@ import android.app.PendingIntent
 import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
+import joshuatee.wx.nhc.ObjectNhcStormDetails
 import joshuatee.wx.util.UtilityTime
 
 class ObjectPendingIntents {
@@ -33,13 +34,7 @@ class ObjectPendingIntents {
     var resultPendingIntent: PendingIntent
     var resultPendingIntent2: PendingIntent
 
-    constructor(
-        context: Context,
-        cl: Class<*>,
-        classFlag: String,
-        classArgs1: Array<String>,
-        classArgs2: Array<String>
-    ) {
+    constructor(context: Context, cl: Class<*>, classFlag: String, classArgs1: Array<String>, classArgs2: Array<String>) {
         val resultIntent = Intent(context, cl)
         val resultIntent2 = Intent(context, cl)
         resultIntent.putExtra(classFlag, classArgs1)
@@ -49,12 +44,20 @@ class ObjectPendingIntents {
         stackBuilder.addNextIntent(resultIntent)
         val requestID = UtilityTime.currentTimeMillis().toInt()
         resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
-        resultPendingIntent2 = PendingIntent.getActivity(
-            context,
-            requestID + 1,
-            resultIntent2,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT)
+    }
+
+    constructor(context: Context, cl: Class<*>, classFlag: String, classArgs1: ObjectNhcStormDetails) {
+        val resultIntent = Intent(context, cl)
+        val resultIntent2 = Intent(context, cl)
+        resultIntent.putExtra(classFlag, classArgs1)
+        resultIntent2.putExtra(classFlag, classArgs1)
+        val stackBuilder = TaskStackBuilder.create(context)
+        stackBuilder.addParentStack(cl)
+        stackBuilder.addNextIntent(resultIntent)
+        val requestID = UtilityTime.currentTimeMillis().toInt()
+        resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+        resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
     internal constructor(context: Context, cl: Class<*>) {
@@ -65,12 +68,7 @@ class ObjectPendingIntents {
         stackBuilder.addNextIntent(resultIntent)
         val requestID = UtilityTime.currentTimeMillis().toInt()
         resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
-        resultPendingIntent2 = PendingIntent.getActivity(
-            context,
-            requestID + 1,
-            resultIntent2,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 }
 

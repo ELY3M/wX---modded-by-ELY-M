@@ -25,83 +25,63 @@ import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
-import androidx.cardview.widget.CardView
+import joshuatee.wx.Extensions.parseMultiple
+import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.objects.TextSize
-import joshuatee.wx.util.UtilityString
 
 class ObjectCardAlertSummaryItem(context: Context) {
 
-    private val objCard: ObjectCard
-    private val textViewTop: ObjectTextView
-    private val textViewTitle: ObjectTextView
-    private val textViewStart: ObjectTextView
-    private val textViewEnd: ObjectTextView
-    private val textViewBottom: ObjectTextView
+    private val objectCard = ObjectCard(context)
+    private val textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
+    private val textViewTitle = ObjectTextView(context)
+    private val textViewStart = ObjectTextView(context, TextSize.SMALL)
+    private val textViewEnd = ObjectTextView(context, TextSize.SMALL)
+    private val textViewBottom = ObjectTextView(context, backgroundText = true)
+    val radarButton = ObjectButton(context,"Radar", MyApplication.ICON_RADAR_BLACK)
+    val detailsButton = ObjectButton(context,"Details", MyApplication.ICON_CURRENT_BLACK)
 
     init {
-        val linearLayoutVertical = LinearLayout(context)
-        textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
-        textViewTitle = ObjectTextView(context)
-        textViewStart = ObjectTextView(context, TextSize.SMALL)
-        textViewEnd = ObjectTextView(context, TextSize.SMALL)
-        textViewBottom = ObjectTextView(context)
-        textViewBottom.setAsBackgroundText()
-        linearLayoutVertical.orientation = LinearLayout.VERTICAL
-        linearLayoutVertical.gravity = Gravity.CENTER_VERTICAL
-        linearLayoutVertical.addView(textViewTop.tv)
-        linearLayoutVertical.addView(textViewTitle.tv)
-        linearLayoutVertical.addView(textViewStart.tv)
-        linearLayoutVertical.addView(textViewEnd.tv)
-        linearLayoutVertical.addView(textViewBottom.tv)
-        objCard = ObjectCard(context)
-        objCard.addView(linearLayoutVertical)
+        val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
+        objectLinearLayout.addViews(listOf(textViewTop.tv, textViewTitle.tv, textViewStart.tv, textViewEnd.tv, textViewBottom.tv))
+        val linearLayoutHorizontal = LinearLayout(context)
+        val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        linearLayoutHorizontal.layoutParams = layoutParams
+        linearLayoutHorizontal.addView(radarButton.card)
+        linearLayoutHorizontal.addView(detailsButton.card)
+        objectLinearLayout.addView(linearLayoutHorizontal)
+        objectCard.addView(objectLinearLayout)
     }
 
+    val card get() = objectCard.card
 
-    val card: CardView get() = objCard.card
+    fun setId(id: Int) { objectCard.card.id = id }
 
-    fun setId(id: Int) {
-        objCard.card.id = id
-    }
+    fun setListener(fn: View.OnClickListener) = objectCard.card.setOnClickListener(fn)
 
-    fun setListener(fn: View.OnClickListener) {
-        objCard.card.setOnClickListener(fn)
-    }
-
-    fun setTextFields(nwsOffice: String, nwsLoc: String, ca: CapAlert) {
+    fun setTextFields(office: String, location: String, capAlert: CapAlert) {
         val title: String
         val startTime: String
-        var endTime = ""
-        if (ca.title.contains("until")) {
-            val tmpArr = UtilityString.parseMultiple(
-                ca.title,
-                "(.*?) issued (.*?) until (.*?) by (.*?)$", // changed expiring to until
-                4
-            )
-            title = tmpArr[0]
-            startTime = tmpArr[1]
-            endTime = tmpArr[2]
+        val endTime: String
+        if (capAlert.title.contains("until")) {
+            val items = capAlert.title.parseMultiple("(.*?) issued (.*?) until (.*?) by (.*?)$",  4)
+            title = items[0]
+            startTime = items[1]
+            endTime = items[2]
         } else {
-            val tmpArr =
-                UtilityString.parseMultiple(ca.title, "(.*?) issued (.*?) by (.*?)$", 3)
-            title = tmpArr[0]
-            startTime = tmpArr[1]
+            val items = capAlert.title.parseMultiple("(.*?) issued (.*?) by (.*?)$", 3)
+            title = items[0]
+            startTime = items[1]
+            endTime = ""
         }
-        textViewTop.text = "$nwsOffice ($nwsLoc)"
-        if (nwsOffice == "") {
-            textViewTop.tv.visibility = View.GONE
-        }
-        textViewBottom.text = ca.area
+        textViewTop.text = "$office ($location)"
+        if (office == "") textViewTop.tv.visibility = View.GONE
+        textViewBottom.text = capAlert.area
         textViewTitle.text = title
         textViewStart.text = "Start: $startTime"
-        if (endTime != "") {
-            textViewEnd.text = "End: $endTime"
-        } else {
-            textViewEnd.tv.visibility = View.GONE
-        }
+        if (endTime != "") textViewEnd.text = "End: $endTime" else textViewEnd.tv.visibility = View.GONE
     }
 }
 

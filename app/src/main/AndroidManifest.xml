@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55379"
-    android:versionName="55379"
+    android:versionCode="55506"
+    android:versionName="55506"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -54,7 +54,7 @@
      android:icon="@mipmap/ic_launcher_elys"
      android:label="@string/app_name"
      android:largeHeap="true"
-     android:theme="@style/MyCustomTheme_ActionBar"
+     android:theme="@style/MyCustomTheme_NOAB"
      android:name="MyApplication"
      android:supportsRtl="false"
      android:resizeableActivity="true"
@@ -78,7 +78,7 @@
       android:name="joshuatee.wx.WX"
       android:label="@string/app_name"
       android:launchMode="singleTop"
-      android:theme="@style/MyCustomTheme_ActionBar"
+      android:theme="@style/MyCustomTheme_whiter_NOAB"
       >
   </activity>
   <activity
@@ -190,7 +190,7 @@
   </activity>
   <activity
       android:name=".radar.AwcRadarMosaicActivity"
-      android:label="AWC Radar Mosaics"
+      android:label=""
       android:parentActivityName="WX" >
   </activity>
   <activity
@@ -226,7 +226,7 @@
   </activity>
   <activity
       android:name=".spc.SpcStormReportsActivity"
-      android:label="@string/title_activity_storm_reports"
+      android:label=""
       android:parentActivityName="WX" >
   </activity>
   <activity
@@ -311,7 +311,7 @@
       android:parentActivityName="WX" >
   </activity>
   <activity
-      android:name=".activitiesmisc.AfdActivity"
+      android:name=".activitiesmisc.WfoTextActivity"
       android:label=""
       android:parentActivityName="WX" >
   </activity>
@@ -499,6 +499,11 @@
       android:parentActivityName="WX" >
   </activity>
   <activity
+      android:name=".settings.SettingsNavDrawerActivity"
+      android:label=""
+      android:parentActivityName="WX" >
+  </activity>
+  <activity
       android:name=".canada.CanadaRadarActivity"
       android:parentActivityName="WX" >
   </activity>
@@ -560,6 +565,10 @@
   <activity
       android:name=".radar.WXGLRadarActivityMultiPane"
       android:parentActivityName="WX" >
+  </activity>
+  <activity
+         android:name=".radar.UtilityConusRadar"
+         android:parentActivityName="WX" >
   </activity>
   <activity
       android:name=".spc.SpcSwoActivity"
@@ -656,7 +665,6 @@
       android:name="joshuatee.wx.notifications.WXJobService"
       android:permission="android.permission.BIND_JOB_SERVICE"
       android:exported="true"/>
-
 
  </application>
 </manifest>

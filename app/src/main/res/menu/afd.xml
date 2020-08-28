@@ -69,58 +69,6 @@
         android:id="@+id/action_forward"
         android:title="Forward"
         app:showAsAction="never" />
-    <!--<item
-        android:id="@+id/action_afd"
-        android:title="Area Forecast Discussion"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_vfd"
-        android:title="Aviation only AFD"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_hwo"
-        android:title="Hazardous Weather Outlook"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_sps"
-        android:title="Special Weather Statement"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_rva"
-        android:title="Hydrologic Summary"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_esf"
-        android:title="Hydrologic Outlook"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_rtp"
-        android:title="Regional Temp/Precip Summary"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_rwr"
-        android:title="Regional Weather Roundup"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_fwf"
-        android:title="Fire Weather Forecast"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_pns"
-        android:title="Public Information Statement"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_lsr"
-        android:title="Local Storm Report"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_rer"
-        android:title="Record Event Report"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_nsh"
-        android:title="Nearshore Marine Forecast"
-        app:showAsAction="never" />-->
     <item
         android:id="@+id/action_website"
         android:title="NWS Office website"
@@ -129,10 +77,6 @@
         android:id="@+id/action_hazards"
         android:title="NWS Office hazards map"
         app:showAsAction="never" />
-    <!--<item
-        android:id="@+id/action_forecast"
-        android:title="Current location forecast website"
-        app:showAsAction="never" />-->
 </menu>
 
 

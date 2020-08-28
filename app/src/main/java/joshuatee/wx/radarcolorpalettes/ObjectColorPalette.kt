@@ -22,12 +22,13 @@
 package joshuatee.wx.radarcolorpalettes
 
 import android.content.Context
+import android.graphics.Color
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 import joshuatee.wx.util.UtilityLog
 
-class ObjectColorPalette(val context: Context, private val colormapCode: String) {
+class ObjectColorPalette(val context: Context, private val colormapCode: Int) {
 
     var redValues: ByteBuffer = ByteBuffer.allocateDirect(16)
         private set
@@ -45,35 +46,53 @@ class ObjectColorPalette(val context: Context, private val colormapCode: String)
         blueValues.order(ByteOrder.nativeOrder())
     }
 
-    fun init() {
+    fun position(index: Int) {
+        redValues.position(index)
+        blueValues.position(index)
+        greenValues.position(index)
+    }
+
+    fun putInt(colorAsInt: Int) {
+        try {
+            redValues.put(Color.red(colorAsInt).toByte())
+            greenValues.put(Color.green(colorAsInt).toByte())
+            blueValues.put(Color.blue(colorAsInt).toByte())
+        } catch (e: Exception) { UtilityLog.handleException(e) }
+    }
+
+    private fun putBytes(redByte: Int, greenByte: Int, blueByte: Int) {
+        if (redValues.hasRemaining()) redValues.put(redByte.toByte())
+        if (greenValues.hasRemaining()) greenValues.put(greenByte.toByte())
+        if (blueValues.hasRemaining()) blueValues.put(blueByte.toByte())
+    }
+
+    // comma separated r,g,b (4bit)
+    fun putLine(line: String) {
+        val colors = line.split(",")
+        putBytes(colors[0].toInt(), colors[1].toInt(), colors[2].toInt())
+    }
+
+    fun putLine(objectColorPaletteLine: ObjectColorPaletteLine) {
+        putBytes(objectColorPaletteLine.red, objectColorPaletteLine.green, objectColorPaletteLine.blue)
+    }
+
+    fun initialize() {
         when (colormapCode) {
-            "19" -> {
+            19, 30, 56 -> {
                 setupBuffers(16)
                 UtilityColorPalette4bitGeneric.generate(context, colormapCode)
             }
-            "30" -> {
-                setupBuffers(16)
-                UtilityColorPalette4bitGeneric.generate(context, colormapCode)
-            }
-            "56" -> {
-                setupBuffers(16)
-                UtilityColorPalette4bitGeneric.generate(context, colormapCode)
-            }
-            "165" -> {
+            165 -> {
                 setupBuffers(256)
                 try {
                     UtilityColorPalette165.loadColorMap(context)
-                } catch (e: Exception) {
-                    UtilityLog.handleException(e)
-                }
+                } catch (e: Exception) { UtilityLog.handleException(e) }
             }
             else -> {
                 setupBuffers(256)
                 try {
                     UtilityColorPaletteGeneric.loadColorMap(context, colormapCode)
-                } catch (e: Exception) {
-                    UtilityLog.handleException(e)
-                }
+                } catch (e: Exception) { UtilityLog.handleException(e) }
             }
         }
     }

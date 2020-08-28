@@ -19,14 +19,6 @@ import joshuatee.wx.util.UtilityLog
 import java.util.Collections.singleton
 import java.io.*
 import java.nio.charset.Charset
-import android.content.Context
-import android.net.ConnectivityManager
-import joshuatee.wx.ui.ObjectAlertDetail
-import joshuatee.wx.ui.UtilityUI
-import joshuatee.wx.ui.UtilityUI.makeToastLegacy
-import joshuatee.wx.util.UtilityAlertDialog.showDialogBox
-import joshuatee.wx.util.UtilityAlertDialog.showDialogueWithContext
-import joshuatee.wx.util.UtilityAlertDialog.showHelpText
 
 
 class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCallback {
@@ -40,15 +32,11 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Utility.readPrefWithNull(this, "LOC1_LABEL", null) == null) {
-            UtilityStorePreferences.setDefaults(this)
-        }
+        if (Utility.readPrefWithNull(this, "LOC1_LABEL", null) == null) UtilityStorePreferences.setDefaults(this)
         MyApplication.initPreferences(this)
         Location.refreshLocationData(this)
         UtilityWXJobService.startService(this)
-        if (UIPreferences.mediaControlNotif) {
-            UtilityNotification.createMediaControlNotification(applicationContext, "")
-        }
+        if (UIPreferences.mediaControlNotif) UtilityNotification.createMediaControlNotification(applicationContext, "")
 
 
         //storage permission so we can run checkfiles for custom icons//
@@ -126,7 +114,7 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
         checkpalfiles(R.raw.colormapownvel, "colormapownvel.txt")
         checkpalfiles(R.raw.colormapownenhvel, "colormapownenhvel.txt")
         //need to run it again
-        ColorPalettes.init(applicationContext)
+        ColorPalettes.initialize(applicationContext)
 
         if (Utility.readPref(this, "LAUNCH_TO_RADAR", "false") == "false") {
             ObjectIntent(this, WX::class.java)
@@ -134,14 +122,7 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
             val wfo = Location.wfo
             val state = Utility.getWfoSiteName(wfo).split(",")[0]
             val radarSite = Location.getRid(this, Location.currentLocationStr)
-            ObjectIntent(
-                this,
-                WXGLRadarActivity::class.java,
-                WXGLRadarActivity.RID,
-                arrayOf(radarSite, state)
-            )
-
-
+            ObjectIntent.showRadar(this, arrayOf(radarSite, state))
         }
 
     }

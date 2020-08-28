@@ -25,7 +25,6 @@ package joshuatee.wx.radar
 import android.app.Activity
 import android.content.Context
 import android.opengl.GLSurfaceView
-import android.os.Build
 import androidx.appcompat.widget.Toolbar
 import android.util.AttributeSet
 import android.view.GestureDetector
@@ -50,22 +49,21 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     // pinch zoom, drag, double/single tap, and long press are all handled here
 
     companion object {
-        var scaleFactorGlobal: Float = 1.0f
+        var scaleFactorGlobal = 1.0f
             private set
     }
 
-    var idx: Int = 0
+    var index = 0
     private var listener: OnProgressChangeListener? = null
-    var fullScreen: Boolean = false
+    var fullScreen = false
     var toolbar: Toolbar? = null
     var toolbarBottom: Toolbar? = null
-    var archiveMode: Boolean = false
-    var toolbarsHidden: Boolean = false
-        private set
+    var archiveMode = false
+    private var toolbarsHidden = false
     private var mScaleFactor = 1.0f
-    var newX: Float = 0.0f
+    var newX = 0.0f
         private set
-    var newY: Float = 0.0f
+    var newY = 0.0f
         private set
     private var centerX = 0.0f
     private var centerY = 0.0f
@@ -73,62 +71,52 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
     private var yPos = 0.0f
     private var xMiddle = 0.0f
     private var yMiddle = 0.0f
-    private val mScaleDetector: ScaleGestureDetector
-    private val mGestureDetector: GestureDetector
+    private val scaleDetector: ScaleGestureDetector
+    private val gestureDetector: GestureDetector
     private var numPanes = 0
-    private var oglr = mutableListOf<WXGLRender>()
-    private lateinit var oglrCurrent: WXGLRender
+    private var wxglRenders = mutableListOf<WXGLRender>()
+    private lateinit var wxglRender: WXGLRender
     private var density = 0.0f
-    private var wxgl = mutableListOf<WXGLSurfaceView>()
-    var idxInt: Int = 0
+    private var wxglSurfaceViews = mutableListOf<WXGLSurfaceView>()
+    var idxInt = 0
     private var widthDivider = 0
     private var heightDivider = 2
-    var citiesExtAl: MutableList<TextView> = mutableListOf()
-    var countyLabelsAl: MutableList<TextView> = mutableListOf()
-    var obsAl: MutableList<TextView> = mutableListOf()
-    var pressureCenterLabelAl: MutableList<TextView> = mutableListOf()
-    var spotterLabels = mutableListOf<TextView>()
-    var spotterTv = mutableListOf<TextView>()
-    var hailLabelAl = mutableListOf<TextView>()
-    var hailTv = mutableListOf<TextView>()
-    var wxgltextArr: MutableList<WXGLTextObject> = mutableListOf()
-    var locationFragment: Boolean = false
-    private var act: Activity? = null
+    val cities = mutableListOf<TextView>()
+    val countyLabels= mutableListOf<TextView>()
+    val observations = mutableListOf<TextView>()
+    val pressureCenterLabels = mutableListOf<TextView>()
+    val spotterLabels = mutableListOf<TextView>()
+    val spotterTextView = mutableListOf<TextView>()
+    var hailLabels = mutableListOf<TextView>()
+    var hailTextView = mutableListOf<TextView>()
+    var wxglTextObjects = mutableListOf<WXGLTextObject>()
+    var locationFragment = false
+    private var activity: Activity? = null
 
     constructor(context: Context, widthDivider: Int, numPanes: Int, heightDivider: Int) : super(context) {
         this.widthDivider = widthDivider
         this.heightDivider = heightDivider
         this.numPanes = numPanes
-        mGestureDetector = GestureDetector(context, this)
-        mScaleDetector = ScaleGestureDetector(context, ScaleListener())
+        gestureDetector = GestureDetector(context, this)
+        scaleDetector = ScaleGestureDetector(context, ScaleListener())
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        mGestureDetector = GestureDetector(context, this)
-        mScaleDetector = ScaleGestureDetector(context, ScaleListener())
+        gestureDetector = GestureDetector(context, this)
+        scaleDetector = ScaleGestureDetector(context, ScaleListener())
     }
 
-    // FIXME variable naming is bad
-    fun setRenderVar(
-            wxglRender: WXGLRender,
-            OGLR_r: MutableList<WXGLRender>,
-            wxglR: MutableList<WXGLSurfaceView>
-    ) {
-        oglr = OGLR_r
-        oglrCurrent = wxglRender
-        wxgl = wxglR
+    fun setRenderVar(wxglRender: WXGLRender, wxglRenders: MutableList<WXGLRender>, wxglSurfaceViews: MutableList<WXGLSurfaceView>) {
+        this.wxglRenders = wxglRenders
+        this.wxglRender = wxglRender
+        this.wxglSurfaceViews = wxglSurfaceViews
     }
 
-    fun setRenderVar(
-            wxglRender: WXGLRender,
-            OGLR_r: MutableList<WXGLRender>,
-            wxglR: MutableList<WXGLSurfaceView>,
-            activity: Activity
-    ) {
-        oglr = OGLR_r
-        oglrCurrent = wxglRender
-        wxgl = wxglR
-        act = activity
+    fun setRenderVar(wxglRender: WXGLRender, wxglRenders: MutableList<WXGLRender>, wxglSurfaceViews: MutableList<WXGLSurfaceView>, activity: Activity) {
+        this.wxglRenders = wxglRenders
+        this.wxglRender = wxglRender
+        this.wxglSurfaceViews = wxglSurfaceViews
+        this.activity = activity
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -136,26 +124,23 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
             MotionEvent.ACTION_DOWN -> {
                 if (!locationFragment) {
                     (0 until numPanes).forEach {
-                        wxgltextArr[it].hideTextLabels()
-                        oglr[it].displayHold = true
+                        wxglTextObjects[it].hideLabels()
+                        wxglRenders[it].displayHold = true
                     }
                 }
-                if (numPanes == 1 && fullScreen || numPanes > 1) {
-                    UtilityUI.immersiveMode(act!!)
-                }
+                if (numPanes == 1 && fullScreen || numPanes > 1) UtilityUI.immersiveMode(activity!!)
             }
-            MotionEvent.ACTION_MOVE -> {
-            }
+            MotionEvent.ACTION_MOVE -> {}
             MotionEvent.ACTION_UP -> {
-                listener?.onProgressChanged(50000, idx, idxInt)
+                listener?.onProgressChanged(50000, index, idxInt)
                 (0 until numPanes).forEach {
-                    oglr[it].displayHold = false
-                    wxgl[it].requestRender()
+                    wxglRenders[it].displayHold = false
+                    wxglSurfaceViews[it].requestRender()
                 }
             }
         }
-        var retVal = mScaleDetector.onTouchEvent(event)
-        retVal = mGestureDetector.onTouchEvent(event) || retVal
+        var retVal = scaleDetector.onTouchEvent(event)
+        retVal = gestureDetector.onTouchEvent(event) || retVal
         return retVal || super.onTouchEvent(event)
     }
 
@@ -165,19 +150,19 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
             mScaleFactor *= detector.scaleFactor
             if (MyApplication.dualpaneshareposn) {
                 (0 until numPanes).forEach {
-                    oglr[it].x = oglr[it].x * (mScaleFactor / oldScaleFactor)
-                    oglr[it].y = oglr[it].y * (mScaleFactor / oldScaleFactor)
-                    oglr[it].zoom = mScaleFactor
+                    wxglRenders[it].x *= (mScaleFactor / oldScaleFactor)
+                    wxglRenders[it].y *= (mScaleFactor / oldScaleFactor)
+                    wxglRenders[it].zoom = mScaleFactor
                 }
             } else {
-                oglrCurrent.x = oglrCurrent.x * (mScaleFactor / oldScaleFactor)
-                oglrCurrent.y = oglrCurrent.y * (mScaleFactor / oldScaleFactor)
-                oglrCurrent.zoom = mScaleFactor
+                wxglRender.x *= (mScaleFactor / oldScaleFactor)
+                wxglRender.y *= (mScaleFactor / oldScaleFactor)
+                wxglRender.zoom = mScaleFactor
             }
             if (MyApplication.dualpaneshareposn) {
                 (0 until numPanes).forEach {
-                    wxgl[it].mScaleFactor = mScaleFactor
-                    wxgl[it].requestRender()
+                    wxglSurfaceViews[it].mScaleFactor = mScaleFactor
+                    wxglSurfaceViews[it].requestRender()
                 }
             } else {
                 requestRender()
@@ -187,76 +172,57 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
         }
     }
 
-    override fun onDown(event: MotionEvent): Boolean {
-        return true
-    }
+    override fun onDown(event: MotionEvent) = true
 
-    override fun onFling(
-        event1: MotionEvent,
-        event2: MotionEvent,
-        velocityX: Float,
-        velocityY: Float
-    ): Boolean {
-        return true
-    }
+    override fun onFling(event1: MotionEvent, event2: MotionEvent, velocityX: Float, velocityY: Float) = true
 
     override fun onLongPress(event: MotionEvent) {
         if (fullScreen) {
             toolbar!!.visibility = View.VISIBLE
-            if (!archiveMode)
-                toolbarBottom!!.visibility = View.VISIBLE
+            if (!archiveMode) toolbarBottom!!.visibility = View.VISIBLE
         }
-        density = (oglrCurrent.ortInt * 2).toFloat() / width
+        density = (wxglRender.ortInt * 2).toFloat() / width
         xPos = event.x
         yPos = event.y
         xMiddle = (width / 2).toFloat()
         yMiddle = (height / 2).toFloat()
         val diffX = density * (xMiddle - xPos) / mScaleFactor
         val diffY = density * (yMiddle - yPos) / mScaleFactor
-        val xStr = Utility.getRadarSiteX(oglrCurrent.rid)
-        val yStr = Utility.getRadarSiteY(oglrCurrent.rid)
+        val xStr = Utility.getRadarSiteX(wxglRender.rid)
+        val yStr = Utility.getRadarSiteY(wxglRender.rid)
         centerX = xStr.toFloatOrNull() ?: 0.0f
         centerY = yStr.toFloatOrNull() ?: 0.0f
-        val ppd = oglrCurrent.oneDegreeScaleFactor
-        newX = centerY + (oglrCurrent.x / mScaleFactor + diffX) / ppd
+        val ppd = wxglRender.oneDegreeScaleFactor
+        newX = centerY + (wxglRender.x / mScaleFactor + diffX) / ppd
         val test2 = 180 / PI * log(tan(PI / 4 + centerX * (PI / 180) / 2), E)
-        newY = test2.toFloat() + (-oglrCurrent.y / mScaleFactor + diffY) / ppd
+        newY = test2.toFloat() + (-wxglRender.y / mScaleFactor + diffY) / ppd
         newY = (180 / PI * (2 * atan(exp(newY * PI / 180)) - PI / 2)).toFloat()
-        oglrCurrent.ridNewList = UtilityLocation.getNearestRadarSite(
-            LatLon(newY.toString(), (newX * -1).toString()),
-            5
-        )
-        listener?.onProgressChanged(idx, idx, idxInt)
+        wxglRender.ridNewList = UtilityLocation.getNearestRadarSites(LatLon(newY.toString(), (newX * -1).toString()), 5)
+        listener?.onProgressChanged(index, index, idxInt)
     }
 
-    override fun onScroll(
-        e1: MotionEvent,
-        e2: MotionEvent,
-        distanceX: Float,
-        distanceY: Float
-    ): Boolean {
-        //UtilityLog.d("wx", distanceX.toString() + " " + distanceY.toString())
+    override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
         var panned = false
         if (!locationFragment && !MyApplication.wxoglCenterOnLocation) {
             if (distanceX != 0f) {
                 if (MyApplication.dualpaneshareposn) {
-                    (0 until numPanes).forEach { oglr[it].x += -1.0f * distanceX }
+                    (0 until numPanes).forEach { wxglRenders[it].x += -1.0f * distanceX }
                 } else {
-                    oglrCurrent.x += -1.0f * distanceX
+                    wxglRender.x += -1.0f * distanceX
                 }
                 panned = true
             }
             if (distanceY != 0f) {
                 if (MyApplication.dualpaneshareposn) {
-                    (0 until numPanes).forEach { oglr[it].y += distanceY }
+                    (0 until numPanes).forEach { wxglRenders[it].y += distanceY }
                 } else {
-                    oglrCurrent.y += distanceY
+                    wxglRender.y += distanceY
                 }
                 panned = true
             }
             if (panned) {
                 if (MyApplication.dualpaneshareposn) {
-                    (0 until numPanes).forEach { wxgl[it].requestRender() }
+                    (0 until numPanes).forEach { wxglSurfaceViews[it].requestRender() }
                 } else {
                     requestRender()
                 }
@@ -272,32 +238,28 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
         return panned
     }
 
-    fun onScrollByKeyboard(
-            distanceX: Float,
-            distanceY: Float
-    ) {
-        //UtilityLog.d("wx", distanceX.toString() + " " + distanceY.toString())
+    fun onScrollByKeyboard(distanceX: Float, distanceY: Float) {
         var panned = false
         if (!locationFragment) {
             if (distanceX != 0f) {
                 if (MyApplication.dualpaneshareposn) {
-                    (0 until numPanes).forEach { oglr[it].x += -1.0f * distanceX }
+                    (0 until numPanes).forEach { wxglRenders[it].x += -1.0f * distanceX }
                 } else {
-                    oglrCurrent.x += -1.0f * distanceX
+                    wxglRender.x += -1.0f * distanceX
                 }
                 panned = true
             }
             if (distanceY != 0f) {
                 if (MyApplication.dualpaneshareposn) {
-                    (0 until numPanes).forEach { oglr[it].y += distanceY }
+                    (0 until numPanes).forEach { wxglRenders[it].y += distanceY }
                 } else {
-                    oglrCurrent.y += distanceY
+                    wxglRender.y += distanceY
                 }
                 panned = true
             }
             if (panned) {
                 if (MyApplication.dualpaneshareposn) {
-                    (0 until numPanes).forEach { wxgl[it].requestRender() }
+                    (0 until numPanes).forEach { wxglSurfaceViews[it].requestRender() }
                 } else {
                     requestRender()
                 }
@@ -314,12 +276,40 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
 
     override fun onShowPress(event: MotionEvent) {}
 
-    override fun onSingleTapUp(event: MotionEvent): Boolean {
-        return true
+    override fun onSingleTapUp(event: MotionEvent) = true
+
+    // used only if center on location enabled
+    fun resetView() {
+        density = (wxglRender.ortInt * 2).toFloat() / width
+        xMiddle = (width / 2).toFloat()
+        yMiddle = (height / 2).toFloat()
+        val zoomFactor = 1.0f
+        if (MyApplication.wxoglCenterOnLocation) {
+            if (MyApplication.dualpaneshareposn && !locationFragment) {
+                mScaleFactor *= zoomFactor
+                (0 until numPanes).forEach {
+                    wxglRenders[it].setViewInitial(mScaleFactor, wxglRenders[it].x * zoomFactor, wxglRenders[it].y * zoomFactor)
+                    wxglSurfaceViews[it].mScaleFactor = mScaleFactor
+                    wxglSurfaceViews[it].requestRender()
+                }
+            } else {
+                mScaleFactor *= zoomFactor
+                wxglRender.setViewInitial(mScaleFactor, wxglRender.x * zoomFactor, wxglRender.y * zoomFactor)
+                requestRender()
+            }
+
+            scaleFactorGlobal = mScaleFactor
+            if (fullScreen || numPanes > 1) {
+                toolbar!!.visibility = View.VISIBLE
+                toolbarsHidden = false
+                if (!archiveMode) toolbarBottom!!.visibility = View.VISIBLE
+            }
+            listener?.onProgressChanged(50000, index, idxInt)
+        }
     }
 
     override fun onDoubleTap(event: MotionEvent): Boolean {
-        density = (oglrCurrent.ortInt * 2).toFloat() / width
+        density = (wxglRender.ortInt * 2).toFloat() / width
         xPos = event.x
         yPos = event.y
         xMiddle = (width / 2).toFloat()
@@ -329,20 +319,20 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
             if (MyApplication.dualpaneshareposn && !locationFragment) {
                 mScaleFactor *= 2.0f
                 (0 until numPanes).forEach {
-                    oglr[it].setViewInitial(
+                    wxglRenders[it].setViewInitial(
                             mScaleFactor,
-                            oglr[it].x * 2.0f + (xPos - xMiddle) * -2.0f * density,
-                            oglr[it].y * 2.0f + (yMiddle - yPos) * -2.0f * density
+                            wxglRenders[it].x * 2.0f + (xPos - xMiddle) * -2.0f * density,
+                            wxglRenders[it].y * 2.0f + (yMiddle - yPos) * -2.0f * density
                     )
-                    wxgl[it].mScaleFactor = mScaleFactor
-                    wxgl[it].requestRender()
+                    wxglSurfaceViews[it].mScaleFactor = mScaleFactor
+                    wxglSurfaceViews[it].requestRender()
                 }
             } else {
                 mScaleFactor *= 2.0f
-                oglrCurrent.setViewInitial(
+                wxglRender.setViewInitial(
                         mScaleFactor,
-                        oglrCurrent.x * 2.0f + (xPos - xMiddle) * -2.0f * density,
-                        oglrCurrent.y * 2.0f + (yMiddle - yPos) * -2.0f * density
+                        wxglRender.x * 2.0f + (xPos - xMiddle) * -2.0f * density,
+                        wxglRender.y * 2.0f + (yMiddle - yPos) * -2.0f * density
                 )
                 requestRender()
             }
@@ -350,123 +340,94 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
             if (MyApplication.dualpaneshareposn && !locationFragment) {
                 mScaleFactor *= 2.0f
                 (0 until numPanes).forEach {
-                    oglr[it].setViewInitial(
-                            mScaleFactor,
-                            oglr[it].x * 2.0f,
-                            oglr[it].y * 2.0f
-                    )
-                    wxgl[it].mScaleFactor = mScaleFactor
-                    wxgl[it].requestRender()
+                    wxglRenders[it].setViewInitial(mScaleFactor, wxglRenders[it].x * 2.0f, wxglRenders[it].y * 2.0f)
+                    wxglSurfaceViews[it].mScaleFactor = mScaleFactor
+                    wxglSurfaceViews[it].requestRender()
                 }
             } else {
                 mScaleFactor *= 2.0f
-                oglrCurrent.setViewInitial(
-                        mScaleFactor,
-                        oglrCurrent.x * 2.0f,
-                        oglrCurrent.y * 2.0f
-                )
+                wxglRender.setViewInitial(mScaleFactor, wxglRender.x * 2.0f, wxglRender.y * 2.0f)
                 requestRender()
             }
         }
-
-
         scaleFactorGlobal = mScaleFactor
         if (fullScreen || numPanes > 1) {
             toolbar!!.visibility = View.VISIBLE
             toolbarsHidden = false
-            if (!archiveMode)
-                toolbarBottom!!.visibility = View.VISIBLE
+            if (!archiveMode) toolbarBottom!!.visibility = View.VISIBLE
         }
-        listener?.onProgressChanged(50000, idx, idxInt)
+        listener?.onProgressChanged(50000, index, idxInt)
         return true
     }
 
-    fun zoomInByKey() {
-        density = (oglrCurrent.ortInt * 2).toFloat() / width
-        //xPos = 0f
-        //yPos = 0f
-        //xMiddle = (width / 2).toFloat()
-        //yMiddle = (height / 2).toFloat()
+    fun zoomInByKey(paneScaleFactor: Float = 1.0f) {
+        density = (wxglRender.ortInt * 2).toFloat() / width
+        mScaleFactor *= ( 2.0f * (1.0f * paneScaleFactor))
         if (MyApplication.dualpaneshareposn && !locationFragment) {
-            mScaleFactor *= 2.0f
+            //mScaleFactor *= 2.0f
             (0 until numPanes).forEach {
-                oglr[it].setViewInitial(
-                        mScaleFactor,
-                        oglr[it].x * 2.0f,
-                        oglr[it].y * 2.0f
-                )
-                wxgl[it].mScaleFactor = mScaleFactor
-                wxgl[it].requestRender()
+                wxglRenders[it].setViewInitial(mScaleFactor, wxglRenders[it].x * 2.0f, wxglRenders[it].y * 2.0f)
+                wxglSurfaceViews[it].mScaleFactor = mScaleFactor
+                wxglSurfaceViews[it].requestRender()
             }
         } else {
-            mScaleFactor *= 2.0f
-            oglrCurrent.setViewInitial(
-                    mScaleFactor,
-                    oglrCurrent.x * 2.0f,
-                    oglrCurrent.y * 2.0f
-            )
+            //mScaleFactor *= 2.0f
+            wxglRender.setViewInitial(mScaleFactor, wxglRender.x * 2.0f, wxglRender.y * 2.0f)
             requestRender()
         }
         scaleFactorGlobal = mScaleFactor
         if (fullScreen || numPanes > 1) {
             toolbar!!.visibility = View.VISIBLE
             toolbarsHidden = false
-            if (!archiveMode)
-                toolbarBottom!!.visibility = View.VISIBLE
+            if (!archiveMode) toolbarBottom!!.visibility = View.VISIBLE
         }
     }
 
-    override fun onDoubleTapEvent(event: MotionEvent): Boolean {
-        return true
-    }
+    override fun onDoubleTapEvent(event: MotionEvent) = true
 
     override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
         mScaleFactor /= 2.0f
         if (MyApplication.dualpaneshareposn && !locationFragment) {
             (0 until numPanes).forEach {
-                oglr[it].setViewInitial(mScaleFactor, oglr[it].x / 2.0f, oglr[it].y / 2.0f)
-                wxgl[it].mScaleFactor = mScaleFactor
-                wxgl[it].requestRender()
+                wxglRenders[it].setViewInitial(mScaleFactor, wxglRenders[it].x / 2.0f, wxglRenders[it].y / 2.0f)
+                wxglSurfaceViews[it].mScaleFactor = mScaleFactor
+                wxglSurfaceViews[it].requestRender()
             }
         } else {
-            oglrCurrent.setViewInitial(mScaleFactor, oglrCurrent.x / 2.0f, oglrCurrent.y / 2.0f)
+            wxglRender.setViewInitial(mScaleFactor, wxglRender.x / 2.0f, wxglRender.y / 2.0f)
             requestRender()
         }
         scaleFactorGlobal = mScaleFactor
         if (fullScreen || numPanes > 1) {
             toolbar!!.visibility = View.VISIBLE
             toolbarsHidden = false
-            if (!archiveMode)
-                toolbarBottom!!.visibility = View.VISIBLE
+            if (!archiveMode) toolbarBottom!!.visibility = View.VISIBLE
         }
-        listener?.onProgressChanged(50000, idx, idxInt)
+        listener?.onProgressChanged(50000, index, idxInt)
         return true
     }
 
-    fun zoomOutByKey() {
-        mScaleFactor /= 2.0f
+    fun zoomOutByKey(paneScaleFactor: Float = 1.0f) {
+        mScaleFactor /= (2.0f / (1.0f * paneScaleFactor))
         if (MyApplication.dualpaneshareposn && !locationFragment) {
             (0 until numPanes).forEach {
-                oglr[it].setViewInitial(mScaleFactor, oglr[it].x / 2.0f, oglr[it].y / 2.0f)
-                wxgl[it].mScaleFactor = mScaleFactor
-                wxgl[it].requestRender()
+                wxglRenders[it].setViewInitial(mScaleFactor, wxglRenders[it].x / 2.0f, wxglRenders[it].y / 2.0f)
+                wxglSurfaceViews[it].mScaleFactor = mScaleFactor
+                wxglSurfaceViews[it].requestRender()
             }
         } else {
-            oglrCurrent.setViewInitial(mScaleFactor, oglrCurrent.x / 2.0f, oglrCurrent.y / 2.0f)
+            wxglRender.setViewInitial(mScaleFactor, wxglRender.x / 2.0f, wxglRender.y / 2.0f)
             requestRender()
         }
         scaleFactorGlobal = mScaleFactor
         if (fullScreen || numPanes > 1) {
             toolbar!!.visibility = View.VISIBLE
             toolbarsHidden = false
-            if (!archiveMode)
-                toolbarBottom!!.visibility = View.VISIBLE
+            if (!archiveMode) toolbarBottom!!.visibility = View.VISIBLE
         }
     }
 
-    fun setOnProgressChangeListener(l: OnProgressChangeListener) {
-        listener = l
-    }
+    fun setOnProgressChangeListener(l: OnProgressChangeListener) { listener = l }
 
     interface OnProgressChangeListener {
         fun onProgressChanged(progress: Int, idx: Int, idxInt: Int)
@@ -484,23 +445,18 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
             }
         } else {
             width =
-                if (Build.VERSION.SDK_INT >= 19 && (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent))
+                if (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent)
                     MyApplication.dm.widthPixels / widthDivider
                 else
                     MyApplication.dm.widthPixels / widthDivider
-            if (Build.VERSION.SDK_INT >= 19 && (UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent)) {
-                //height = MyApplication.dm.heightPixels / heightDivider + UtilityUI.statusBarHeight(context)
+            if ((UIPreferences.radarImmersiveMode || UIPreferences.radarToolbarTransparent)) {
                 height = MyApplication.dm.heightPixels / heightDivider
                 if (numPanes == 2) {
-                    //height = MyApplication.dm.heightPixels / heightDivider - UtilityUI.statusBarHeight(context) / 2
                     height = MyApplication.dm.heightPixels / heightDivider
                 }
             } else {
                 height = MyApplication.dm.heightPixels / heightDivider - MyApplication.actionBarHeight
             }
-            //if (Build.VERSION.SDK_INT >= 19 && UIPreferences.radarToolbarTransparent && !UIPreferences.radarImmersiveMode && numPanes == 4)
-            //    height = MyApplication.dm.heightPixels / heightDivider - UtilityUI.statusBarHeight(context) / 2
-
             this.setMeasuredDimension(width, height)
         }
     }

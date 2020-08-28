@@ -68,11 +68,7 @@ internal object UtilityColor {
         "NEXRAD_RADAR_BACKGROUND_COLOR" -> Color.BLACK
         else -> {
             var color = Color.BLACK
-            MyApplication.radarWarningPolygons.forEach {
-                if (it.prefTokenColor == prefVal) {
-                    color = it.color
-                }
-            }
+            MyApplication.radarWarningPolygons.forEach { if (it.prefTokenColor == prefVal) color = it.color }
             color
         }
     }

@@ -22,10 +22,10 @@
 package joshuatee.wx.spc
 
 import android.util.SparseArray
+import joshuatee.wx.Extensions.safeGet
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.ObjectMenuTitle
-import joshuatee.wx.ui.ObjectSpinner
 import joshuatee.wx.util.Group
 
 object UtilitySpcMeso {
@@ -35,8 +35,8 @@ object UtilitySpcMeso {
             ObjectMenuTitle("Surface", 15),
             ObjectMenuTitle("Upper Air", 25),
             ObjectMenuTitle("Thermodynamics", 19),
-            ObjectMenuTitle("Wind Shear", 18),
-            ObjectMenuTitle("Composite Indices", 21),
+            ObjectMenuTitle("Wind Shear", 19),
+            ObjectMenuTitle("Composite Indices", 22),
             ObjectMenuTitle("Multi-Parameter Fields", 10),
             ObjectMenuTitle("Heavy Rain", 8),
             ObjectMenuTitle("Winter Weather", 14),
@@ -45,51 +45,43 @@ object UtilitySpcMeso {
             ObjectMenuTitle("Beta", 10)
     )
 
-    var swipePosition = 0
+    fun getLabelFromParam(param: String): String {
+        val index = params.indexOf(param)
+        return if (index == -1 ) "" else labels[index]
+    }
 
-    internal fun moveForward(spinner: ObjectSpinner) {
-        val originalValue = spinner[swipePosition]
-        if (spinner.size() > 3) {
-            swipePosition += if (swipePosition == 0) {
+    internal fun moveForward(list: List<String>): Int {
+        val param = list.safeGet(0)
+        if (list.size > 3) {
+            var swipePosition = list.lastIndexOf(param)
+            swipePosition += 1
+            if (swipePosition == 1) return 3
+            return if (list.size > swipePosition) {
+                swipePosition
+            } else {
                 3
-            } else {
-                1
             }
-            if (swipePosition >= spinner.size()) {
-                swipePosition = 0
-            }
-            spinner.setSelection(swipePosition)
-        }
-        val newValue = spinner[swipePosition]
-        if (newValue == originalValue) {
-            if (spinner.size() > 3) {
-                swipePosition += 1
-                if (swipePosition >= spinner.size()) {
-                    swipePosition = 0
-                }
-                spinner.setSelection(swipePosition)
-            }
+        } else {
+            return 0
         }
     }
 
-    internal fun moveBack(spinner: ObjectSpinner) {
-        if (spinner.size() > 3) {
-            if (swipePosition >= spinner.size()) {
-                swipePosition = spinner.size() - 1
-            }
-            if (swipePosition == 3) {
-                swipePosition = 0
+    internal fun moveBack(list: List<String>): Int {
+        val param = list.safeGet(0)
+        return if (list.size > 3) {
+            var swipePosition = list.lastIndexOf(param)
+            swipePosition -= 1
+            if (swipePosition > 2) {
+                swipePosition
             } else {
-                swipePosition -= 1
+                list.size - 1
             }
-            if (swipePosition == -1) {
-                swipePosition = spinner.size() - 1
-            }
-            spinner.setSelection(swipePosition)
+        } else {
+            0
         }
     }
 
-    const val defaultSector: String = "19"
+    const val defaultSector = "19"
 
     val sectorMap = mapOf(
             "19" to "US",
@@ -110,7 +102,7 @@ object UtilitySpcMeso {
             "mcon",
             "thea",
             "mxth",
-            "temp_chg",
+            //"temp_chg",
             "dwpt_chg",
             "mixr_chg",
             "thte_chg",
@@ -152,64 +144,25 @@ object UtilitySpcMeso {
             "tadv"
     )
 
-    internal fun setParamFromFav(token: String): List<String> {
+    internal fun setParamFromFav(token: String): String {
         var param = ""
-        var label = ""
         val tmpArr = MyApplication.spcMesoFav.split(":").dropLastWhile { it.isEmpty() }
-        val tmpArrLabel = MyApplication.spcmesoLabelFav.split(":").dropLastWhile { it.isEmpty() }
         when (token) {
-            "SPCMESO1" ->
-                if (tmpArr.size > 3) {
-                    param = tmpArr[3]
-                    label = tmpArrLabel[3]
-                } else {
-                    param = "500mb"
-                    label = "500mb Analysis"
-                }
-            "SPCMESO2" -> if (tmpArr.size > 4) {
-                param = tmpArr[4]
-                label = tmpArrLabel[4]
-            } else {
-                param = "pmsl"
-                label = "MSL Pressure/Wind"
-            }
-            "SPCMESO3" -> if (tmpArr.size > 5) {
-                param = tmpArr[5]
-                label = tmpArrLabel[5]
-            } else {
-                param = "ttd"
-                label = "Temp/Dewpt/Wind"
-            }
-            "SPCMESO4" -> if (tmpArr.size > 6) {
-                param = tmpArr[6]
-                label = tmpArrLabel[6]
-            } else {
-                param = "rgnlrad"
-                label = "Radar"
-            }
-            "SPCMESO5" -> if (tmpArr.size > 7) {
-                param = tmpArr[7]
-                label = tmpArrLabel[7]
-            } else {
-                param = "lllr"
-                label = "Low-Level Lapse Rates"
-            }
-            "SPCMESO6" -> if (tmpArr.size > 8) {
-                param = tmpArr[8]
-                label = tmpArrLabel[8]
-            } else {
-                param = "laps"
-                label = "Mid-Level Lapse Rates"
-            }
+            "SPCMESO1" -> param = if (tmpArr.size > 3) tmpArr[3] else "500mb"
+            "SPCMESO2" -> param = if (tmpArr.size > 4) tmpArr[4] else "pmsl"
+            "SPCMESO3" -> param = if (tmpArr.size > 5) tmpArr[5] else "ttd"
+            "SPCMESO4" -> param = if (tmpArr.size > 6) tmpArr[6] else "rgnlrad"
+            "SPCMESO5" -> param = if (tmpArr.size > 7) tmpArr[7] else "lllr"
+            "SPCMESO6" -> param = if (tmpArr.size > 8) tmpArr[8] else "laps"
         }
-        return listOf(param, label)
+        return param
     }
 
     var shortCodes: Array<Array<String>> = Array(12) { Array(25) { "" } }
     var longCodes: Array<Array<String>> = Array(12) { Array(25) { "" } }
     internal val groups = SparseArray<Group>()
 
-    internal fun createData() {
+    internal fun create() {
         var k = 0
         titles.indices.forEach { index ->
             val group = Group(titles[index].title)
@@ -304,6 +257,7 @@ object UtilitySpcMeso {
             "effh",
             "srh3",
             "srh1",
+            "srh5", // may 2020
             "llsr",
             "mlsr",
             "ulsr",
@@ -313,10 +267,12 @@ object UtilitySpcMeso {
             "srh3_chg",
             "shr1_chg",
             "shr6_chg",
+
             "scp",
             "lscp",
             "stor",
             "stpc",
+            "stpc5", // may 2020
             "sigt1",
             "sigt2",
             "nstp",
@@ -456,6 +412,7 @@ object UtilitySpcMeso {
             "3-hour Most-Unstable CAPE Change",
             "3-hour Low-Level LR Change",
             "6-hour Mid-Level LR Change",
+
             "Bulk Shear - Effective",
             "Bulk Shear - Sfc-6km",
             "Bulk Shear - Sfc-8km",
@@ -465,6 +422,7 @@ object UtilitySpcMeso {
             "SR Helicity - Effective",
             "SR Helicity - Sfc-3km",
             "SR Helicity - Sfc-1km",
+            "SR Helicity - Sfc-500m", // may 2020
             "SR Wind - Sfc-2km",
             "SR Wind - 4-6km",
             "SR Wind - 9-11km",
@@ -479,6 +437,7 @@ object UtilitySpcMeso {
             "Supercell Composite (left-moving)",
             "Sgfnt Tornado (fixed layer)",
             "Sgfnt Tornado (effective layer)",
+            "Sgfnt Tornado (0-500m SRH)", // may 2020
             "Cond. Prob. Sigtor (Eqn 1)",
             "Cond. Prob. Sigtor (Eqn 2)",
             "Non-Supercell Tornado",

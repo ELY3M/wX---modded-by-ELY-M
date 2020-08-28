@@ -29,29 +29,28 @@ import joshuatee.wx.Extensions.*
 
 object UtilityVtec {
 
-    fun getStormCount(textTor: String): Int {
-        var dashboardStrTor = ""
-        var nwsLoc = ""
-        var offices: List<String>
-        var wfo: String
+    fun getStormCount(data: String): Int {
+        var dashboardString = ""
         val vtecPattern = "([A-Z0]{1}\\.[A-Z]{3}\\.[A-Z]{4}\\.[A-Z]{2}\\.[A-Z]\\.[0-9]{4}\\.[0-9]{6}T[0-9]{4}Z\\-[0-9]{6}T[0-9]{4}Z)"
-        val stormList = textTor.parseColumn(vtecPattern)
-        stormList.forEach {
-            val vtecIsCurrent = UtilityTime.isVtecCurrent(it)
-            if (!it.startsWith("O.EXP") && vtecIsCurrent) {
-                dashboardStrTor += it
-                offices = it.split(".")
-                if (offices.size > 1) {
-                    wfo = offices[2]
-                    wfo = wfo.replace("^[KP]".toRegex(), "")
-                    nwsLoc = Utility.getWfoSiteName(wfo)
+        data.parseColumn(vtecPattern).forEach { vtec ->
+            val vtecIsCurrent = UtilityTime.isVtecCurrent(vtec)
+            if (!vtec.startsWith("O.EXP") && vtecIsCurrent) {
+                dashboardString += vtec
+                val offices = vtec.split(".")
+                val officeLabel = if (offices.size > 1) {
+                    val wfo = offices[2].replace("^[KP]".toRegex(), "")
+                    Utility.getWfoSiteName(wfo)
+                } else {
+                    ""
                 }
-                dashboardStrTor += "  " + nwsLoc + MyApplication.newline
+                dashboardString += "  " + officeLabel + MyApplication.newline
             }
         }
-        dashboardStrTor = ExternalDuplicateRemover().stripDuplicates(dashboardStrTor)
-        return dashboardStrTor.split(MyApplication.newline).dropLastWhile { it.isEmpty() }.size
+        dashboardString = ExternalDuplicateRemover().stripDuplicates(dashboardString)
+        return dashboardString.split(MyApplication.newline).dropLastWhile { it.isEmpty() }.size
     }
+
+    fun getStormCountGeneric(data: String) = data.parseColumn("(NWS-IDP-PROD-)").size
 }
 
 

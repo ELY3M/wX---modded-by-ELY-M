@@ -8,7 +8,6 @@ joshua.tee@gmail.com
 
 package joshuatee.wx.telecine
 
-import android.app.Notification
 import android.app.Service
 import android.content.Context
 import android.content.Intent
@@ -35,40 +34,26 @@ class TelecineService : Service() {
 
     private val listener = object : RecordingSession.Listener {
         override fun onStart() {
-            if (MyApplication.telecineSwitchShowTouches) {
-                Settings.System.putInt(MyApplication.contentResolverLocal, SHOW_TOUCHES, 1)
-            }
-            if (!MyApplication.telecineSwitchRecordingNotification) {
-                return
-            }
+            if (MyApplication.telecineSwitchShowTouches) Settings.System.putInt(MyApplication.contentResolverLocal, SHOW_TOUCHES, 1)
+            if (!MyApplication.telecineSwitchRecordingNotification) return
             val context = applicationContext
             val title = context.getString(R.string.notification_recording_title)
             val subtitle = context.getString(R.string.notification_recording_subtitle)
-            var notification: Notification? = null
-            if (Build.VERSION.SDK_INT > 20) {
-                notification = NotificationCompat.Builder(
-                        context,
-                        UtilityNotification.notiChannelStrNoSound
-                )
-                        .setContentTitle(title)
-                        .setContentText(subtitle)
-                        .setSmallIcon(R.drawable.ic_videocam_24dp)
-                        .setColor(ContextCompat.getColor(context, R.color.primary_normal))
-                        .setAutoCancel(true)
-                        .build()
-            }
+            val notification = NotificationCompat.Builder(context, UtilityNotification.notiChannelStrNoSound)
+                    .setContentTitle(title)
+                    .setContentText(subtitle)
+                    .setSmallIcon(R.drawable.ic_videocam_24dp)
+                    .setColor(ContextCompat.getColor(context, R.color.primary_normal))
+                    .setAutoCancel(true)
+                    .build()
             startForeground(NOTIFICATION_ID, notification)
         }
 
         override fun onStop() {
-            if (MyApplication.telecineSwitchShowTouches) {
-                Settings.System.putInt(MyApplication.contentResolverLocal, SHOW_TOUCHES, 0)
-            }
+            if (MyApplication.telecineSwitchShowTouches) Settings.System.putInt(MyApplication.contentResolverLocal, SHOW_TOUCHES, 0)
         }
 
-        override fun onEnd() {
-            stopSelf()
-        }
+        override fun onEnd() { stopSelf() }
     }
 
     override fun onCreate() {
@@ -81,22 +66,14 @@ class TelecineService : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        if (running) {
-            return START_NOT_STICKY
-        }
+        if (running) return START_NOT_STICKY
         running = true
         val resultCode = intent.getIntExtra(EXTRA_RESULT_CODE, 0)
         val data = intent.getParcelableExtra<Intent>(EXTRA_DATA)
-        if (resultCode == 0 || data == null) {
-            throw IllegalStateException("Result code or data missing.")
-        }
+        if (resultCode == 0 || data == null) throw IllegalStateException("Result code or data missing.")
         val showDistanceTool = intent.getStringExtra("show_distance_tool")
         val showRecordingTools = intent.getStringExtra("show_recording_tools")
-        recordingSession = RecordingSession(
-                this, listener, resultCode, data,
-                showDistanceTool == "true",
-                showRecordingTools == "true"
-        )
+        recordingSession = RecordingSession(this, listener, resultCode, data, showDistanceTool == "true", showRecordingTools == "true")
         recordingSession!!.showOverlay()
         return START_NOT_STICKY
     }
@@ -106,9 +83,7 @@ class TelecineService : Service() {
         super.onDestroy()
     }
 
-    override fun onBind(intent: Intent): IBinder? {
-        throw AssertionError("Not supported.")
-    }
+    override fun onBind(intent: Intent): IBinder? { throw AssertionError("Not supported.") }
 
     private fun send() {
         val label = "ScreenRecorderService"

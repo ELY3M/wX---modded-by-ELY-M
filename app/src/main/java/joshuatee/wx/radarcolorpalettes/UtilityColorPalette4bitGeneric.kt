@@ -29,29 +29,16 @@ import joshuatee.wx.util.UtilityIO
 
 internal object UtilityColorPalette4bitGeneric {
 
-    fun generate(context: Context, product: String) {
-        val radarColorPaletteCode = product.toInt()
-        MyApplication.colorMap[radarColorPaletteCode]!!.redValues.position(0)
-        MyApplication.colorMap[radarColorPaletteCode]!!.greenValues.position(0)
-        MyApplication.colorMap[radarColorPaletteCode]!!.blueValues.position(0)
-        val cmFileInt: Int = when (product) {
-            "19" -> R.raw.colormap19
-            "30" -> R.raw.colormap30
-            "56" -> R.raw.colormap56
+    fun generate(context: Context, product: Int) {
+        MyApplication.colorMap[product]!!.position(0)
+        val fileId = when (product) {
+            19 -> R.raw.colormap19
+            30 -> R.raw.colormap30
+            56 -> R.raw.colormap56
             else -> R.raw.colormap19
         }
-        val text = UtilityIO.readTextFileFromRaw(context.resources, cmFileInt)
-        val lines = text.split("\n")
-        lines.forEach {
-            if (it.contains(",")) {
-                val colors = it.split(",")
-                val red = colors[0].toInt().toByte()
-                val green = colors[1].toInt().toByte()
-                val blue = colors[2].toInt().toByte()
-                MyApplication.colorMap[radarColorPaletteCode]!!.redValues.put(red)
-                MyApplication.colorMap[radarColorPaletteCode]!!.greenValues.put(green)
-                MyApplication.colorMap[radarColorPaletteCode]!!.blueValues.put(blue)
-            }
+        UtilityIO.readTextFileFromRaw(context.resources, fileId).split("\n").forEach { line ->
+            if (line.contains(",")) MyApplication.colorMap[product]!!.putLine(line)
         }
     }
 }

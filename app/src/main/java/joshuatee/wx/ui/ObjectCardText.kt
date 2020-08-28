@@ -22,13 +22,14 @@
 package joshuatee.wx.ui
 
 import android.content.Context
+import android.graphics.Typeface
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import androidx.cardview.widget.CardView
+import joshuatee.wx.Extensions.setPadding
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
@@ -36,70 +37,35 @@ import joshuatee.wx.audio.UtilityTtsTranslations
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.TextSize
 
-class ObjectCardText(private val context: Context) {
+class ObjectCardText(context: Context) {
 
-    private val objCard = ObjectCard(context)
-    val tv: TextView = TextView(context)
+    private val objectCard = ObjectCard(context)
+    val tv = TextView(context)
     var padding = MyApplication.padding
 
     init {
         textViewSetup(this)
         tv.setTextIsSelectable(true)
         tv.isFocusable = false
-        objCard.addView(tv)
+        objectCard.addView(tv)
     }
 
-    constructor(
-            context: Context,
-            linearLayout: LinearLayout
-    ) : this(context) {
+    constructor(context: Context, linearLayout: LinearLayout) : this(context) { linearLayout.addView(card) }
+
+    constructor(context: Context, linearLayout: LinearLayout, toolbar: Toolbar, toolbarBottom: Toolbar) : this(context) {
         linearLayout.addView(card)
+        setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
     }
 
-    constructor(
-            context: Context,
-            linearLayout: LinearLayout,
-            toolbar: Toolbar,
-            toolbarBottom: Toolbar
-    ) : this(context) {
+    constructor(context: Context, linearLayout: LinearLayout, toolbar: Toolbar, toolbarBottom: Toolbar, textValue: String) : this(context) {
         linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener {
-            UtilityToolbar.showHide(
-                    toolbar,
-                    toolbarBottom
-            )
-        })
-    }
-
-    constructor(
-            context: Context,
-            linearLayout: LinearLayout,
-            toolbar: Toolbar,
-            toolbarBottom: Toolbar,
-            textValue: String
-    ) : this(context) {
-        linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener {
-            UtilityToolbar.showHide(
-                    toolbar,
-                    toolbarBottom
-            )
-        })
-        //setText(text)
+        setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
         text = textValue
     }
 
-    constructor(
-            context: Context,
-            linearLayout: LinearLayout,
-            toolbar: Toolbar
-    ) : this(context) {
+    constructor(context: Context, linearLayout: LinearLayout, toolbar: Toolbar) : this(context) {
         linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener {
-            UtilityToolbar.showHide(
-                    toolbar
-            )
-        })
+        setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar) })
     }
 
     constructor(context: Context, text: String) : this(context) {
@@ -121,7 +87,7 @@ class ObjectCardText(private val context: Context) {
 
     constructor(context: Context, text: String, textSize: Float, padding: Int) : this(context, text) {
         tv.text = text
-        tv.setPadding(padding, padding, padding, padding)
+        tv.setPadding(padding)
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
     }
@@ -152,7 +118,7 @@ class ObjectCardText(private val context: Context) {
             textSize
     ) {
         this.padding = padding
-        tv.setPadding(padding, padding, padding, padding)
+        tv.setPadding(padding)
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
@@ -164,16 +130,11 @@ class ObjectCardText(private val context: Context) {
             text
     ) {
         this.padding = padding
-        tv.setPadding(padding, padding, padding, padding)
+        tv.setPadding(padding)
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
-        setOnClickListener(View.OnClickListener {
-            ObjectIntent(
-                    context,
-                    clazz
-            )
-        })
+        setOnClickListener(View.OnClickListener { ObjectIntent(context, clazz) })
     }
 
     constructor(context: Context, text: String, textSize: Float, clazz: Class<*>) : this(
@@ -183,21 +144,10 @@ class ObjectCardText(private val context: Context) {
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
-        setOnClickListener(View.OnClickListener {
-            ObjectIntent(
-                    context,
-                    clazz
-            )
-        })
+        setOnClickListener(View.OnClickListener { ObjectIntent(context, clazz) })
     }
 
-    constructor(
-            context: Context,
-            linearLayout: LinearLayout,
-            text: String,
-            textSize: Float,
-            clazz: Class<*>
-    ) : this(
+    constructor(context: Context, linearLayout: LinearLayout, text: String, textSize: Float, clazz: Class<*>) : this(
             context,
             text,
             textSize,
@@ -207,137 +157,75 @@ class ObjectCardText(private val context: Context) {
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
         linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener {
-            ObjectIntent(
-                    context,
-                    clazz
-            )
-        })
+        setOnClickListener(View.OnClickListener { ObjectIntent(context, clazz) })
     }
 
-    constructor(
-            context: Context,
-            linearLayout: LinearLayout,
-            text: String,
-            textSize: Float,
-            clazz: Class<*>,
-            padding: Int
-    ) : this(
+    constructor(context: Context, linearLayout: LinearLayout, text: String, textSize: Float, clazz: Class<*>, padding: Int) : this(
             context,
             text,
             textSize,
             clazz
     ) {
         this.padding = padding
-        tv.setPadding(padding, padding, padding, padding)
+        tv.setPadding(padding)
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
         linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener {
-            ObjectIntent(
-                    context,
-                    clazz
-            )
-        })
+        setOnClickListener(View.OnClickListener { ObjectIntent(context, clazz) })
     }
 
     fun setPaddingAmount(padding: Int) {
         this.padding = padding
-        tv.setPadding(padding, padding, padding, padding)
+        tv.setPadding(padding)
     }
 
     fun setTextAndTranslate(text: String) {
-        val localText = if (UIPreferences.translateText) {
-            UtilityTtsTranslations.translateAbbreviationsForVisual(text)
-        } else {
-            text
-        }
+        val localText = if (UIPreferences.translateText) UtilityTtsTranslations.translateAbbreviationsForVisual(text) else text
         tv.text = localText
     }
 
-    //fun setText(text: String) {
-    //    tv.text = text
-    //}
-
-    var text: String
+    var text
         get() = tv.text.toString()
-        set(newValue) {
-            tv.text = newValue
+        set(newValue) { tv.text = newValue }
+
+    fun center() { tv.gravity = Gravity.CENTER }
+
+    fun setTextColor(color: Int) = tv.setTextColor(color)
+
+    fun setTextSize(type: Int, size: Float) = tv.setTextSize(type, size)
+
+    fun typefaceMono() { tv.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL) }
+
+    fun typefaceDefault() { tv.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL) }
+
+    val card get() = objectCard.card
+
+    var visibility
+        get() = objectCard.visibility
+        set(newValue) { objectCard.visibility = newValue }
+
+    fun setOnClickListener(fn: View.OnClickListener) = tv.setOnClickListener(fn)
+
+    fun refreshTextSize(size: TextSize) = when (size) {
+            TextSize.SMALL -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+            TextSize.MEDIUM -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
+            TextSize.LARGE -> tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeLarge)
         }
-
-    //fun setText(text: CharSequence) {
-    //    tv.text = text.toString()
-   // }
-
-    fun center() {
-        tv.gravity = Gravity.CENTER
-    }
-
-    fun setTextColor(color: Int) {
-        tv.setTextColor(color)
-    }
-
-    fun setTextSize(type: Int, size: Float) {
-        tv.setTextSize(type, size)
-    }
-
-    fun lightText() {
-        tv.setTextAppearance(context, UIPreferences.smallTextTheme)
-    }
-
-    val card: CardView get() = objCard.card
-
-    var visibility: Int
-        get() = objCard.visibility
-        set(newValue) {
-            objCard.visibility = newValue
-        }
-
-    fun setOnClickListener(fn: View.OnClickListener) {
-        tv.setOnClickListener(fn)
-    }
-
-    fun refreshTextSize(size: TextSize) {
-        when (size) {
-            TextSize.SMALL -> tv.setTextSize(
-                    TypedValue.COMPLEX_UNIT_PX,
-                    MyApplication.textSizeSmall
-            )
-            TextSize.MEDIUM -> tv.setTextSize(
-                    TypedValue.COMPLEX_UNIT_PX,
-                    MyApplication.textSizeNormal
-            )
-            TextSize.LARGE -> tv.setTextSize(
-                    TypedValue.COMPLEX_UNIT_PX,
-                    MyApplication.textSizeLarge
-            )
-        }
-    }
 
     companion object {
-        fun textViewSetup(tvTmp: TextView) {
-            tvTmp.setPadding(
-                    MyApplication.padding,
-                    MyApplication.padding,
-                    MyApplication.padding,
-                    MyApplication.padding
-            )
-            tvTmp.gravity = Gravity.START
-            tvTmp.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
-            tvTmp.setTextColor(UIPreferences.backgroundColor)
+        fun textViewSetup(textView: TextView) {
+            textView.setPadding(MyApplication.padding)
+            textView.gravity = Gravity.START
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+            textView.setTextColor(UIPreferences.backgroundColor)
         }
 
-        fun textViewSetup(objCardText: ObjectCardText) {
-            objCardText.tv.setPadding(
-                    objCardText.padding,
-                    objCardText.padding,
-                    objCardText.padding,
-                    objCardText.padding
-            )
-            objCardText.tv.gravity = Gravity.START
-            objCardText.tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
-            objCardText.tv.setTextColor(UIPreferences.backgroundColor)
+        fun textViewSetup(objectCardText: ObjectCardText) {
+            objectCardText.tv.setPadding(objectCardText.padding)
+            objectCardText.tv.gravity = Gravity.START
+            objectCardText.tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+            objectCardText.tv.setTextColor(UIPreferences.backgroundColor)
         }
     }
 }

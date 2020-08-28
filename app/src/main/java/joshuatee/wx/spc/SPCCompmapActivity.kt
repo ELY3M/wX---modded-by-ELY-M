@@ -24,9 +24,9 @@ package joshuatee.wx.spc
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.content.res.Configuration
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.AdapterView
-import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
@@ -37,24 +37,24 @@ import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
-class SpcCompmapActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
+class SpcCompmapActivity : BaseActivity() {
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private var layerStr = ""
     private lateinit var img: ObjectTouchImageView
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var drw: ObjectNavDrawer
     private var paramList = mutableListOf<String>()
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.shared_multigraphics, menu)
+        return true
+    }
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-            savedInstanceState,
-            R.layout.activity_image_show_navdrawer_bottom_toolbar,
-            R.menu.shared_multigraphics,
-            true
-        )
-        toolbarBottom.setOnMenuItemClickListener(this)
+        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.shared_multigraphics, false)
+        //toolbarBottom.setOnMenuItemClickListener(this)
         paramList = UtilitySpcCompmap.labels.toMutableList()
         drw = ObjectNavDrawer(this, paramList)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
@@ -80,10 +80,8 @@ class SpcCompmapActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun setupInitLayerString() {
-        val tmpArr = layerStr.split(":").dropLastWhile { it.isEmpty() }
-        tmpArr.forEach {
-            selectItemNoGet(it.replace("a", "").toIntOrNull() ?: 0)
-        }
+        val items = layerStr.split(":").dropLastWhile { it.isEmpty() }
+        items.forEach { selectItemNoGet(it.replace("a", "").toIntOrNull() ?: 0) }
     }
 
     private fun selectItemNoGet(positionF: Int) {
@@ -96,9 +94,7 @@ class SpcCompmapActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         }
         drw.listView.setItemChecked(position, false)
         drw.drawerLayout.closeDrawer(drw.listView)
-        if (!paramList[position].contains("(on)")) {
-            paramList[position] = "(on) " + paramList[position]
-        }
+        if (!paramList[position].contains("(on)")) paramList[position] = "(on) " + paramList[position]
     }
 
     override fun onRestart() {
@@ -123,15 +119,12 @@ class SpcCompmapActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean =
-        drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
+    //override fun onOptionsItemSelected(item: MenuItem) = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true
-        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareBitmap(this, this, "SPC Compmap", bitmap)
+            R.id.action_share -> UtilityShare.bitmap(this, this, "SPC Compmap", bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

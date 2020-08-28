@@ -40,8 +40,8 @@ object UtilityNotificationTextProduct {
 
     const val PREF_TOKEN: String = "NOTIF_TEXT_PROD"
 
-    fun toggle(context: Context, view: View, prodF: String) {
-        val prod = prodF.toUpperCase(Locale.US)
+    fun toggle(context: Context, view: View, prodOriginal: String) {
+        val prod = prodOriginal.toUpperCase(Locale.US)
         if (!MyApplication.notifTextProdStr.contains(prod)) {
             Utility.writePref(context, PREF_TOKEN, MyApplication.notifTextProdStr + ":" + prod)
             MyApplication.notifTextProdStr = MyApplication.notifTextProdStr + ":" + prod
@@ -54,22 +54,16 @@ object UtilityNotificationTextProduct {
         }
     }
 
-    fun showAll(): String = MyApplication.notifTextProdStr
+    fun showAll() = MyApplication.notifTextProdStr
 
-    fun check(prod: String): Boolean = MyApplication.notifTextProdStr.contains(prod)
+    fun check(prod: String) = MyApplication.notifTextProdStr.contains(prod)
 
     internal fun notifyOnAll(context: Context) {
-        var textProdChunk: String
-        var textProdFirstLine = ""
         val matchSize = 250
-        //var arrTmp: List<String>
         TextUtils.split(MyApplication.notifTextProdStr, ":").forEach { s ->
             if (s != "") {
-                textProdChunk = UtilityDownload.getTextProduct(context, s)
-                //arrTmp = textProdChunk.split("<BR>").dropLastWhile { it.isEmpty() }
-                //if (arrTmp.size > 1)
-                //    textProdFirstline = arrTmp[0]
-                textProdFirstLine = if (textProdChunk.length > matchSize) {
+                val textProdChunk = UtilityDownload.getTextProduct(context, s)
+                val textProdFirstLine = if (textProdChunk.length > matchSize) {
                     textProdChunk.substring(0, matchSize - 2)
                 } else {
                     textProdChunk
@@ -85,16 +79,11 @@ object UtilityNotificationTextProduct {
         }
     }
 
-    private fun send(
-            context: Context,
-            prod: String,
-            firstLine: String,
-            textBody: String
-    ) {
+    private fun send(context: Context, prod: String, firstLine: String, textBody: String) {
         val noBody = Utility.fromHtml(textBody)
         val noSummary = Utility.fromHtml(textBody)
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
-        val objPI = ObjectPendingIntents(
+        val objectPendingIntents = ObjectPendingIntents(
                 context,
                 TextScreenActivity::class.java,
                 TextScreenActivity.URL,
@@ -107,13 +96,13 @@ object UtilityNotificationTextProduct {
                 sound,
                 prod,
                 noBody,
-                objPI.resultPendingIntent,
-                MyApplication.ICON_CURRENT,
+                objectPendingIntents.resultPendingIntent,
+                MyApplication.ICON_CURRENT_WHITE,
                 noSummary,
                 NotificationCompat.PRIORITY_HIGH,
                 Color.YELLOW,
                 MyApplication.ICON_ACTION,
-                objPI.resultPendingIntent2,
+                objectPendingIntents.resultPendingIntent2,
                 context.resources.getString(R.string.read_aloud)
         )
         val notification = UtilityNotification.createNotificationBigTextWithAction(objectNotification)

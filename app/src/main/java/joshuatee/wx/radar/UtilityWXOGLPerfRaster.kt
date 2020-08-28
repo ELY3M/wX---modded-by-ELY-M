@@ -27,16 +27,11 @@ import java.nio.ByteBuffer
 
 internal object UtilityWXOGLPerfRaster {
 
-    fun genRaster(radarBuffers: ObjectOglRadarBuffers, binBuff: ByteBuffer): Int {
+    fun generate(radarBuffers: ObjectOglRadarBuffers, binBuff: ByteBuffer): Int {
         radarBuffers.colormap.redValues.put(0, Color.red(radarBuffers.bgColor).toByte())
         radarBuffers.colormap.greenValues.put(0, Color.green(radarBuffers.bgColor).toByte())
         radarBuffers.colormap.blueValues.put(0, Color.blue(radarBuffers.bgColor).toByte())
         var totalBins = 0
-        var g = 0
-        var bin: Int
-        var cI = 0
-        var rI = 0
-        var curLevel: Int
         // 464 is bins per row for NCR (37)
         // 232 for long range NCZ (38)
         var numberOfRows = 464
@@ -46,47 +41,33 @@ internal object UtilityWXOGLPerfRaster {
             numberOfRows = 232
             binsPerRow = 232
             scaleFactor = 8.0f
-        }
-        if (radarBuffers.productCode.toInt() == 41 || radarBuffers.productCode.toInt() == 57) {
+        } else if (radarBuffers.productCode.toInt() == 41 || radarBuffers.productCode.toInt() == 57) {
             numberOfRows = 116
             binsPerRow = 116
             scaleFactor = 8.0f
         }
         val halfPoint = numberOfRows / 2
-        while (g < numberOfRows) {
-            bin = 0
-            while (bin < binsPerRow) {
-                curLevel = binBuff.get(g * numberOfRows + bin).toInt()
+        for (rowNumber in 0 until numberOfRows) {
+            for (bin in 0 until binsPerRow) {
+                val curLevel = binBuff.get(rowNumber * numberOfRows + bin).toInt()
+                radarBuffers.floatBuffer.putFloat( (bin - halfPoint).toFloat() * scaleFactor)
+                radarBuffers.floatBuffer.putFloat( (rowNumber - halfPoint).toFloat() * scaleFactor * -1.0f)
 
-                radarBuffers.floatBuffer.putFloat(rI, (bin - halfPoint).toFloat() * scaleFactor)
-                rI += 4
-                radarBuffers.floatBuffer.putFloat(rI, (g - halfPoint).toFloat() * scaleFactor * -1.0f)
-                rI += 4
+                radarBuffers.floatBuffer.putFloat( (bin - halfPoint).toFloat() * scaleFactor)
+                radarBuffers.floatBuffer.putFloat( (rowNumber + 1 - halfPoint).toFloat() * scaleFactor * -1.0f)
 
-                radarBuffers.floatBuffer.putFloat(rI, (bin - halfPoint).toFloat() * scaleFactor)
-                rI += 4
-                radarBuffers.floatBuffer.putFloat(rI, (g + 1 - halfPoint).toFloat() * scaleFactor * -1.0f)
-                rI += 4
+                radarBuffers.floatBuffer.putFloat( (bin + 1 - halfPoint).toFloat() * scaleFactor)
+                radarBuffers.floatBuffer.putFloat( (rowNumber + 1 - halfPoint).toFloat() * scaleFactor * -1.0f)
 
-                radarBuffers.floatBuffer.putFloat(rI, (bin + 1 - halfPoint).toFloat() * scaleFactor)
-                rI += 4
-                radarBuffers.floatBuffer.putFloat(rI, (g + 1 - halfPoint).toFloat() * scaleFactor * -1.0f)
-                rI += 4
-
-                radarBuffers.floatBuffer.putFloat(rI, (bin + 1 - halfPoint).toFloat() * scaleFactor)
-                rI += 4
-                radarBuffers.floatBuffer.putFloat(rI, (g  - halfPoint).toFloat() * scaleFactor * -1.0f)
-                rI += 4
-
+                radarBuffers.floatBuffer.putFloat( (bin + 1 - halfPoint).toFloat() * scaleFactor)
+                radarBuffers.floatBuffer.putFloat( (rowNumber  - halfPoint).toFloat() * scaleFactor * -1.0f)
                 (0..3).forEach { _ ->
-                    radarBuffers.colorBuffer.put(cI++, radarBuffers.colormap.redValues.get(curLevel and 0xFF))
-                    radarBuffers.colorBuffer.put(cI++, radarBuffers.colormap.greenValues.get(curLevel and 0xFF))
-                    radarBuffers.colorBuffer.put(cI++, radarBuffers.colormap.blueValues.get(curLevel and 0xFF))
+                    radarBuffers.colorBuffer.put(radarBuffers.colormap.redValues.get(curLevel and 0xFF))
+                    radarBuffers.colorBuffer.put(radarBuffers.colormap.greenValues.get(curLevel and 0xFF))
+                    radarBuffers.colorBuffer.put(radarBuffers.colormap.blueValues.get(curLevel and 0xFF))
                 }
                 totalBins += 1
-                bin += 1
             }
-            g += 1
         }
         return totalBins
     }

@@ -44,7 +44,7 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
     //
 
     companion object {
-        const val INFO: String = ""
+        const val INFO = ""
     }
 
     private var color = 0
@@ -52,10 +52,7 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
     private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB)
-            setTheme(R.style.MyCustomTheme_NOAB)
-        else
-            setTheme(UIPreferences.themeInt)
+        if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) setTheme(R.style.MyCustomTheme_NOAB) else setTheme(UIPreferences.themeInt)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings_color_picker)
         toolbar = findViewById(R.id.toolbar_top)
@@ -77,12 +74,10 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
         buttonDefault.setOnClickListener {
             picker.oldCenterColor = color
             Utility.writePref(this, prefVal, color)
-            toolbar.subtitle = "(" + Color.red(color) + "," + Color.green(color) + "," +
-                    Color.blue(color) + ")"
+            toolbar.subtitle = "(" + Color.red(color) + "," + Color.green(color) + "," + Color.blue(color) + ")"
         }
         val currColorViaPref = Utility.readPref(this, prefVal, color)
-        toolbar.subtitle = "(" + Color.red(currColorViaPref) + "," + Color.green(currColorViaPref) +
-                "," + Color.blue(currColorViaPref) + ")"
+        toolbar.subtitle = "(" + Color.red(currColorViaPref) + "," + Color.green(currColorViaPref) + "," + Color.blue(currColorViaPref) + ")"
     }
 
     override fun onColorChanged(color: Int) {

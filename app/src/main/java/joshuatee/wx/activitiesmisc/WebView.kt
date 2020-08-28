@@ -46,17 +46,12 @@ class WebView : BaseActivity() {
     // arg1 Title
     //
 
-    companion object {
-        const val URL: String = ""
-    }
+    companion object { const val URL = "" }
 
     private var url = ""
 
     override fun onBackPressed() {
-        if (webview.canGoBack())
-            webview.goBack()
-        else
-            super.onBackPressed()
+        if (webview.canGoBack()) webview.goBack() else super.onBackPressed()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -23,18 +23,18 @@ package joshuatee.wx.util
 
 object UtilityCities {
 
-    private const val num = 345
-    internal val CITY_OBJ = arrayOfNulls<City>(num)
-    val cities: Array<String> = Array(num) { "" }
-    val lat: DoubleArray = DoubleArray(num)
-    val lon: DoubleArray = DoubleArray(num)
+    private const val numberOfCities = 345
+    internal val list = arrayOfNulls<City>(numberOfCities)
+    val cities = Array(numberOfCities) { "" }
+    val lat = DoubleArray(numberOfCities)
+    val lon = DoubleArray(numberOfCities)
 
-    fun initCitiesArray() {
-        loadCitiesArray()
-        (0 until num).forEach { CITY_OBJ[it] = City(cities[it], lat[it], lon[it]) }
+    fun initialize() {
+        load()
+        list.indices.forEach { list[it] = City(cities[it], lat[it], lon[it]) }
     }
 
-    private fun loadCitiesArray() {
+    private fun load() {
         cities[0] = "Anchorage, AK"
         cities[1] = "Fairbanks, AK"
         cities[2] = "Juneau, AK"

@@ -23,30 +23,26 @@ package joshuatee.wx.activitiesmisc
 
 import java.util.Locale
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.webkit.WebViewClient
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 
 import joshuatee.wx.R
-import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectSpinner
 
 import joshuatee.wx.GlobalArrays
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.settings.Location
-import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 
 import kotlinx.android.synthetic.main.activity_webview_toolbar_state.*
 
-class WebViewTwitter : BaseActivity(), OnItemSelectedListener {
+class WebViewTwitter : BaseActivity() {
 
     //
     // WebView for twitter weather tags
@@ -67,20 +63,20 @@ class WebViewTwitter : BaseActivity(), OnItemSelectedListener {
     )
     private var sectorList = listOf<String>()
     private var sector = ""
-    private lateinit var sp: ObjectSpinner
     val prefToken = "STATE_CODE"
 
     override fun onBackPressed() {
-        if (webview.canGoBack()) {
-            webview.goBack()
-        } else {
-            super.onBackPressed()
-        }
+        if (webview.canGoBack()) webview.goBack() else super.onBackPressed()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.webscreen_ab_state, menu)
         return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.action_sector).title = sector
+        return super.onPrepareOptionsMenu(menu)
     }
 
     @SuppressLint("SetJavaScriptEnabled", "MissingSuperCall")
@@ -89,8 +85,6 @@ class WebViewTwitter : BaseActivity(), OnItemSelectedListener {
         title = "Twitter"
         sectorList = GlobalArrays.states + canadianSectors
         sector = Utility.readPref(this, prefToken, Location.state)
-        sp = ObjectSpinner(this, this, this, R.id.spinner1, sectorList)
-        sp.setSelection(findPosition(sector.toLowerCase(Locale.US)))
         val webSettings = webview.settings
         webSettings.javaScriptEnabled = true
         if (UtilityUI.isTablet()) {
@@ -99,26 +93,26 @@ class WebViewTwitter : BaseActivity(), OnItemSelectedListener {
             webSettings.textZoom = (100 * (UIPreferences.normalTextSize.toDouble() / UIPreferences.normalTextSizeDefault.toDouble())).toInt()
         }
         webview.webViewClient = WebViewClient()
+        getContent()
     }
 
-    private fun findPosition(key: String) =
-        (0 until sp.size()).firstOrNull { sp[it].toLowerCase(Locale.US).startsWith("$key:") }
-            ?: 0
+    fun getContent(index: Int) {
+        invalidateOptionsMenu()
+        sector = sectorList[index].split(":")[0]
+        getContent()
+    }
 
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        sector = sectorList[pos].split(":")[0]
+    fun getContent() {
+        invalidateOptionsMenu()
         Utility.writePref(this, prefToken, sector)
         var url = "https://mobile.twitter.com/hashtag/" + sector.toLowerCase(Locale.US)
-        if (sector.length == 2) {
-            url += "wx"
-        }
+        if (sector.length == 2) url += "wx"
         webview.loadUrl(url)
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>) {}
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
+        when (item.itemId) {
+            R.id.action_sector -> genericDialog(sectorList) { getContent(it) }
             R.id.action_browser -> {
                 var tail = "wx"
                 var stateTmp = sector.toLowerCase(Locale.US)
@@ -128,14 +122,23 @@ class WebViewTwitter : BaseActivity(), OnItemSelectedListener {
                         stateTmp = stateTmp.replace("wx", "")
                     }
                 }
-                ObjectIntent(
-                    this,
-                    Intent.ACTION_VIEW,
-                    Uri.parse("http://twitter.com/hashtag/$stateTmp$tail")
-                )
-                true
+                ObjectIntent(this, Intent.ACTION_VIEW, Uri.parse("http://twitter.com/hashtag/$stateTmp$tail"))
             }
-            else -> super.onOptionsItemSelected(item)
+            else -> return super.onOptionsItemSelected(item)
         }
+        return true
+    }
+
+    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
+        val objectDialogue = ObjectDialogue(this, list)
+        objectDialogue.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
+            dialog.dismiss()
+            UtilityUI.immersiveMode(this)
+        })
+        objectDialogue.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+            fn(which)
+            dialog.dismiss()
+        })
+        objectDialogue.show()
     }
 }

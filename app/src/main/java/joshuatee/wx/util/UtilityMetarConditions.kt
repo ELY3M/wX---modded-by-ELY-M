@@ -24,7 +24,7 @@ package joshuatee.wx.util
 object UtilityMetarConditions {
 
     // https://www.weather.gov/forecast-icons
-    val iconFromCondition: Map<String, String> = mapOf(
+    val iconFromCondition = mapOf(
             //"" to "skc",
             "Mostly Clear" to "few",
 
@@ -284,14 +284,12 @@ object UtilityMetarConditions {
 
             "Thunder In The Vicinity And Heavy Rain and Mist" to "tsra",
 
-
             "Freezing With Thunder Rain And Mist" to "tsra",
             "Heavy Rain With Thunder" to "tsra",
             "Heavy Rain With Thunder In The Vicinity" to "tsra",
             "Light Rain With Thunder" to "tsra",
-
-
-            //"Thunderstorm in Vicinity" to "scttsra",
+            "Light Rain With Thunder In The Vicinity" to "tsra",
+            "Rain With Thunder In The Vicinity" to "tsra",
 
             "Thunderstorm in Vicinity" to "hi_tsra",
             "Thunder In The Vicinity" to "hi_tsra",

@@ -23,18 +23,18 @@ package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
 import joshuatee.wx.notifications.UtilityWXJobService
+import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.ui.ObjectRecyclerViewGeneric
 import joshuatee.wx.ui.UtilityUI
-import joshuatee.wx.util.ObjectForecastPackageCurrentConditions
+import joshuatee.wx.util.ObjectCurrentConditions
 import kotlinx.coroutines.*
 
 class SettingsLocationRecyclerViewActivity : BaseActivity() {
@@ -44,97 +44,77 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     //
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private val locations = mutableListOf<String>()
+    private var locations = mutableListOf<String>()
     private lateinit var recyclerView: ObjectRecyclerViewGeneric
-    private lateinit var ca: SettingsLocationAdapterList
-    private var currentConditions = mutableListOf<ObjectForecastPackageCurrentConditions>()
+    private lateinit var settingsLocationAdapterList: SettingsLocationAdapterList
+    private var currentConditions = mutableListOf<ObjectCurrentConditions>()
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_settings_location_recyclerview,
-                null,
-                false
-        )
-        ObjectFab(this, this, R.id.fab_add, View.OnClickListener { addItemFab() })
+        super.onCreate(savedInstanceState, R.layout.activity_settings_location_recyclerview, null, false)
+        ObjectFab(this, this, R.id.fab_add, View.OnClickListener { addLocation() })
         toolbar.subtitle = "Tap location to edit, delete, or move."
         updateList()
         recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
-        ca = SettingsLocationAdapterList(locations)
-        recyclerView.recyclerView.adapter = ca
+        settingsLocationAdapterList = SettingsLocationAdapterList(locations)
+        recyclerView.recyclerView.adapter = settingsLocationAdapterList
         updateTitle()
-        ca.setListener(::itemSelected)
+        settingsLocationAdapterList.setListener(::itemSelected)
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         currentConditions.clear()
         withContext(Dispatchers.IO) {
-            for (index in MyApplication.locations.indices) {
-                currentConditions.add(ObjectForecastPackageCurrentConditions(this@SettingsLocationRecyclerViewActivity, index))
-                currentConditions[index].formatCurrentConditions()
+            MyApplication.locations.indices.forEach { index ->
+                val objectForecastPackageCurrentConditions = ObjectCurrentConditions(this@SettingsLocationRecyclerViewActivity, index)
+                currentConditions.add(objectForecastPackageCurrentConditions)
+                objectForecastPackageCurrentConditions.format()
             }
         }
         updateListWithCurrentConditions()
-        ca.notifyDataSetChanged()
+        settingsLocationAdapterList.notifyDataSetChanged()
     }
 
     private fun updateList() {
-        val locNumIntCurrent = Location.numLocations
-        locations.clear()
-        // FIXME this activity needs to be cleaned up
-        (0 until locNumIntCurrent).forEach {
-            val btnStr = ""
-            locations.add(btnStr)
-            MyApplication.locations[it].updateObservation("")
-        }
+        locations = MutableList(Location.numLocations) { "" }
+        MyApplication.locations.forEach { it.updateObservation("") }
     }
 
     private fun updateListWithCurrentConditions() {
-        val locNumIntCurrent = Location.numLocations
         locations.clear()
-        (0 until locNumIntCurrent).forEach {
-            MyApplication.locations[it].updateObservation(currentConditions[it].topLine)
-            locations.add(currentConditions[it].topLine)
+        MyApplication.locations.forEachIndexed { index, location ->
+            location.updateObservation(currentConditions[index].topLine)
+            locations.add(currentConditions[index].topLine)
         }
     }
 
     override fun onRestart() {
         updateList()
-        ca = SettingsLocationAdapterList(locations)
-        recyclerView.recyclerView.adapter = ca
+        settingsLocationAdapterList = SettingsLocationAdapterList(locations)
+        recyclerView.recyclerView.adapter = settingsLocationAdapterList
         updateTitle()
         Location.refreshLocationData(this)
         getContent()
         super.onRestart()
     }
 
-    private fun updateTitle() {
-        title = "Locations"
-    }
+    private fun updateTitle() { title = "Locations" }
 
     private fun itemSelected(position: Int) {
-        // FIXME
         val bottomSheetFragment = BottomSheetFragment(this, position, Location.getName(position), true)
-        //val bottomSheetFragment = BottomSheetFragment(this, position, ca.getItem(position), true)
         bottomSheetFragment.functions = listOf(::edit, ::delete, ::moveUp, ::moveDown)
         bottomSheetFragment.labelList = listOf("Edit Location", "Delete Location", "Move Up", "Move Down")
         bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
     }
 
-    private fun edit(position: Int) {
-        val locStrPass = (position + 1).toString()
-        val intent = Intent(this, SettingsLocationGenericActivity::class.java)
-        intent.putExtra(SettingsLocationGenericActivity.LOC_NUM, arrayOf(locStrPass, ""))
-        startActivity(intent)
-    }
+    private fun edit(position: Int) { ObjectIntent.showLocationEdit(this, arrayOf((position + 1).toString(), "")) }
 
     private fun delete(position: Int) {
-        if (ca.itemCount > 1) {
-            Location.deleteLocation(this, (position + 1).toString())
-            ca.deleteItem(position)
-            ca.notifyDataSetChanged()
+        if (settingsLocationAdapterList.itemCount > 1) {
+            Location.delete(this, (position + 1).toString())
+            settingsLocationAdapterList.deleteItem(position)
+            settingsLocationAdapterList.notifyDataSetChanged()
             updateTitle()
             UtilityWXJobService.startService(this)
         } else {
@@ -146,36 +126,31 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         if (position > 0) {
             val locA = Location(this, position - 1)
             val locB = Location(this, position)
-            locA.saveLocationToNewSlot(position)
-            locB.saveLocationToNewSlot(position - 1)
+            locA.saveToNewSlot(position)
+            locB.saveToNewSlot(position - 1)
         } else {
             val locA = Location(this, Location.numLocations - 1)
             val locB = Location(this, 0)
-            locA.saveLocationToNewSlot(0)
-            locB.saveLocationToNewSlot(Location.numLocations - 1)
+            locA.saveToNewSlot(0)
+            locB.saveToNewSlot(Location.numLocations - 1)
         }
-        ca.notifyDataSetChanged()
+        settingsLocationAdapterList.notifyDataSetChanged()
     }
 
     private fun moveDown(position: Int) {
         if (position < Location.numLocations - 1) {
             val locA = Location(this, position)
             val locB = Location(this, position + 1)
-            locA.saveLocationToNewSlot(position + 1)
-            locB.saveLocationToNewSlot(position)
+            locA.saveToNewSlot(position + 1)
+            locB.saveToNewSlot(position)
         } else {
             val locA = Location(this, position)
             val locB = Location(this, 0)
-            locA.saveLocationToNewSlot(0)
-            locB.saveLocationToNewSlot(position)
+            locA.saveToNewSlot(0)
+            locB.saveToNewSlot(position)
         }
-        ca.notifyDataSetChanged()
+        settingsLocationAdapterList.notifyDataSetChanged()
     }
 
-    private fun addItemFab() {
-        val locationStringToPass = (locations.size + 1).toString()
-        val intent = Intent(this, SettingsLocationGenericActivity::class.java)
-        intent.putExtra(SettingsLocationGenericActivity.LOC_NUM, arrayOf(locationStringToPass, ""))
-        startActivity(intent)
-    }
+    private fun addLocation() { ObjectIntent.showLocationEdit(this, arrayOf((locations.size + 1).toString(), "")) }
 } 

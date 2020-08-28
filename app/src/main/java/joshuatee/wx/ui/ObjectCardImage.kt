@@ -27,82 +27,68 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TableLayout
 import androidx.appcompat.widget.Toolbar
-import androidx.cardview.widget.CardView
 
 import joshuatee.wx.util.UtilityImg
 
 open class ObjectCardImage {
 
-    private val objCard: ObjectCard
+    private val objectCard: ObjectCard
     private val context: Context
     var img: TouchImageView2
         internal set
-    internal val layoutParams = TableLayout.LayoutParams(
-        TableLayout.LayoutParams.WRAP_CONTENT,
-        TableLayout.LayoutParams.WRAP_CONTENT
-    )
+    internal val layoutParams = TableLayout.LayoutParams(TableLayout.LayoutParams.WRAP_CONTENT, TableLayout.LayoutParams.WRAP_CONTENT)
 
     constructor(context: Context, bitmap: Bitmap) {
         this.context = context
-        objCard = ObjectCard(context)
+        objectCard = ObjectCard(context)
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
-        objCard.addView(img)
+        objectCard.addView(img)
     }
 
     constructor(context: Context, linearLayout: LinearLayout, bitmap: Bitmap, numberAcross: Int = 1) {
         this.context = context
-        objCard = ObjectCard(context)
+        objectCard = ObjectCard(context)
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
-        objCard.addView(img)
+        objectCard.addView(img)
         linearLayout.addView(card)
     }
 
     constructor(context: Context, linearLayout: LinearLayout, toolbar: Toolbar, bitmap: Bitmap) {
         this.context = context
-        objCard = ObjectCard(context)
+        objectCard = ObjectCard(context)
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
-        objCard.addView(img)
+        objectCard.addView(img)
         linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener {
-            UtilityToolbar.showHide(toolbar)
-        })
+        setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar) })
     }
 
-    constructor(
-        context: Context,
-        linearLayout: LinearLayout,
-        toolbar: Toolbar,
-        toolbarBottom: Toolbar,
-        bitmap: Bitmap
-    ) {
+    constructor(context: Context, linearLayout: LinearLayout, toolbar: Toolbar, toolbarBottom: Toolbar, bitmap: Bitmap) {
         this.context = context
-        objCard = ObjectCard(context)
+        objectCard = ObjectCard(context)
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
-        objCard.addView(img)
+        objectCard.addView(img)
         linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener {
-            UtilityToolbar.showHide(toolbar, toolbarBottom)
-        })
+        setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
     }
 
     constructor(context: Context) {
         this.context = context
         img = TouchImageView2(context)
-        objCard = ObjectCard(context)
+        objectCard = ObjectCard(context)
     }
 
     constructor(context: Context, linearLayout: LinearLayout) {
         this.context = context
         img = TouchImageView2(context)
-        objCard = ObjectCard(context)
+        objectCard = ObjectCard(context)
         linearLayout.addView(card)
     }
 
@@ -110,24 +96,18 @@ open class ObjectCardImage {
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
-        objCard.addView(img)
+        objectCard.addView(img)
     }
 
-    fun resetZoom() {
-        img.resetZoom()
-    }
+    fun resetZoom() = img.resetZoom()
 
-    val card: CardView get() = objCard.card
+    val card get() = objectCard.card
 
-    var visibility: Int
-        get() = objCard.visibility
-        set(newValue) {
-            objCard.visibility = newValue
-        }
+    var visibility
+        get() = objectCard.visibility
+        set(newValue) { objectCard.visibility = newValue }
 
-    fun setOnClickListener(fn: View.OnClickListener) {
-        img.setOnClickListener(fn)
-    }
+    fun setOnClickListener(fn: View.OnClickListener) = img.setOnClickListener(fn)
 }
 
 

@@ -31,12 +31,6 @@
         android:title="@string/label_share"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_pin"
-        android:icon="@drawable/ic_touch_app_24dp"
-        android:title="@string/label_pin"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/action_rad_rala"
         android:title="Reflectivity"
         app:showAsAction="never" />

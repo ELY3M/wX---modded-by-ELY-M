@@ -28,9 +28,6 @@ import androidx.appcompat.app.AlertDialog
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
-import joshuatee.wx.MyApplication
-import joshuatee.wx.radar.UtilityRadarUI
-import joshuatee.wx.R
 import joshuatee.wx.ui.ObjectDialogue
 import android.webkit.WebResourceRequest
 import android.os.Build
@@ -39,14 +36,10 @@ import kotlin.system.exitProcess
 
 object UtilityAlertDialog {
 
-    fun showHelpText(helpStr: String, activity: Activity) {
-        ObjectDialogue(activity, helpStr)
-    }
-
-    fun showHelpTextWeb(helpStr: String, activity: Activity) {
+    fun showHelpTextWeb(help: String, activity: Activity) {
         val alert = AlertDialog.Builder(activity)
         val wv = WebView(activity)
-        wv.loadUrl(helpStr)
+        wv.loadUrl(help)
         wv.webViewClient = object : WebViewClient() {
             @SuppressWarnings("deprecation")
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {

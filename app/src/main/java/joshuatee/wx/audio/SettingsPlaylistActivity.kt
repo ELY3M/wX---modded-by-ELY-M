@@ -44,12 +44,11 @@ import joshuatee.wx.wpc.UtilityWpcText
 import kotlinx.coroutines.*
 import java.util.*
 import joshuatee.wx.R
-import joshuatee.wx.wpc.WpcTextProductsActivity
 
 class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private val playListItems = mutableListOf<String>()
+    private val uiDispatcher = Dispatchers.Main
+    private var playListItems = mutableListOf<String>()
     private var ridFav = ""
     private val prefToken = "PLAYLIST"
     private lateinit var ca: PlayListAdapter
@@ -59,20 +58,16 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_recyclerview_playlist,
-                R.menu.settings_playlist,
-                true
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_playlist, R.menu.settings_playlist, true)
         toolbarBottom.setOnMenuItemClickListener(this)
         ObjectFab(this, this, R.id.fab, View.OnClickListener { playAll() })
-        fabPause = ObjectFab(this, this, R.id.fab3, View.OnClickListener { playItemFAB() })
-        if (UtilityTts.mMediaPlayer != null && !UtilityTts.mMediaPlayer!!.isPlaying) {
-            fabPause.fabSetResDrawable(this, MyApplication.ICON_PAUSE_PRESSED)
+        fabPause = ObjectFab(this, this, R.id.fab3, View.OnClickListener { playItemFab() })
+        val icon = if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying) {
+            MyApplication.ICON_PAUSE_PRESSED
         } else {
-            fabPause.fabSetResDrawable(this, MyApplication.ICON_PAUSE)
+            MyApplication.ICON_PAUSE_WHITE
         }
+        fabPause.fabSetResDrawable(this, icon)
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
         diaAfd.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
             val name = diaAfd.getItem(which)
@@ -114,13 +109,12 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         ca = PlayListAdapter(playListItems)
         recyclerView.recyclerView.adapter = ca
         ca.setListener(::itemSelected)
+        UtilityTts.initTts(this)
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        withContext(Dispatchers.IO) {
-            UtilityPlayList.downloadAll(this@SettingsPlaylistActivity)
-        }
+        withContext(Dispatchers.IO) { UtilityPlayList.downloadAll(this@SettingsPlaylistActivity) }
         updateListNoInit()
         ca.notifyDataSetChanged()
     }
@@ -128,16 +122,13 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     private fun updateList() {
         MyApplication.playlistStr = ridFav
         val tempList = ridFav.split(":")
-        playListItems.clear()
-        (1 until tempList.size).mapTo(playListItems) { getLongString(tempList[it]) }
+        playListItems = (1 until tempList.size).map { getLongString(tempList[it]) }.toMutableList()
     }
 
     private fun updateListNoInit() {
         MyApplication.playlistStr = ridFav
         val tempList = ridFav.split(":")
-        (1 until tempList.size).forEach {
-            playListItems[it - 1] = getLongString(tempList[it])
-        }
+        (1 until tempList.size).forEach { playListItems[it - 1] = getLongString(tempList[it]) }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -167,11 +158,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
                 if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     true
                 } else {
-                    ActivityCompat.requestPermissions(
-                            this,
-                            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                            1
-                    )
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
                     false
                 }
             } else {
@@ -179,11 +166,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             }
         }
 
-    override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String>,
-            grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             1 -> {
                 // If request is cancelled, the result arrays are empty.
@@ -193,36 +176,28 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         }
     }
 
-    private fun playItemFAB() {
-        if (UtilityTts.mMediaPlayer != null) {
-            UtilityTts.playMediaPlayer(1)
-        }
-        if (UtilityTts.mMediaPlayer != null && !UtilityTts.mMediaPlayer!!.isPlaying) {
-            fabPause.fabSetResDrawable(this, MyApplication.ICON_PAUSE_PRESSED)
+    private fun playItemFab() {
+        if (UtilityTts.mediaPlayer != null) UtilityTts.playMediaPlayer(1)
+        val icon = if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying) {
+            MyApplication.ICON_PAUSE_PRESSED
         } else {
-            fabPause.fabSetResDrawable(this, MyApplication.ICON_PAUSE)
+            MyApplication.ICON_PAUSE
         }
-        if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying) {
-            if (UIPreferences.mediaControlNotif) {
-                UtilityNotification.createMediaControlNotification(applicationContext, "")
-            }
+        fabPause.fabSetResDrawable(this, icon)
+        if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying && UIPreferences.mediaControlNotif) {
+            UtilityNotification.createMediaControlNotification(applicationContext, "")
         }
     }
 
     private fun playAll() {
         fabPause.fabSetResDrawable(this, MyApplication.ICON_PAUSE)
-        if (isStoragePermissionGranted) {
-            UtilityTts.synthesizeTextAndPlayPlaylist(this, 1)
-        }
-        if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying) {
-            if (UIPreferences.mediaControlNotif) {
-                UtilityNotification.createMediaControlNotification(applicationContext, "")
-            }
+        if (isStoragePermissionGranted) UtilityTts.synthesizeTextAndPlayPlaylist(this, 1)
+        if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying && UIPreferences.mediaControlNotif) {
+            UtilityNotification.createMediaControlNotification(applicationContext, "")
         }
     }
 
     private fun itemSelected(position: Int) {
-        // FIXME use recyclerView.getItem(position)
         val bottomSheetFragment = BottomSheetFragment(this, position, playListItems[position], false)
         bottomSheetFragment.functions = listOf(::playItem, ::viewItem, ::deleteItem, ::moveUpItem, ::moveDownItem)
         bottomSheetFragment.labelList = listOf("Play Item", "View Item", "Delete Item", "Move Up", "Move Down")
@@ -231,9 +206,9 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     private fun deleteItem(position: Int) {
         ridFav = Utility.readPref(this, prefToken, "")
-        ridFav = ridFav.replace(":" + MyApplication.semicolon.split(playListItems[position])[0], "")
+        ridFav = ridFav.replace(":" + playListItems[position].split(";").dropLastWhile { it.isEmpty() }[0], "")
         Utility.writePref(this, prefToken, ridFav)
-        Utility.removePref(this, "PLAYLIST_" + MyApplication.semicolon.split(playListItems[position])[0])
+        Utility.removePref(this, "PLAYLIST_" + playListItems[position].split(";").dropLastWhile { it.isEmpty() }[0])
         ca.deleteItem(position)
         MyApplication.playlistStr = ridFav
     }
@@ -249,12 +224,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun viewItem(position: Int) {
-        ObjectIntent(
-                this,
-                WpcTextProductsActivity::class.java,
-                WpcTextProductsActivity.URL,
-                arrayOf(playListItems[position].split(";")[0].toLowerCase(Locale.US))
-        )
+        ObjectIntent.showWpcText(this, arrayOf(playListItems[position].split(";")[0].toLowerCase(Locale.US)))
     }
 
     private fun playItem(position: Int) {

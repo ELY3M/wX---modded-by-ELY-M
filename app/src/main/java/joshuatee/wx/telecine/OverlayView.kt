@@ -41,8 +41,8 @@ internal class OverlayView private constructor(
     showRecordingTools: Boolean
 ) : FrameLayout(context), View.OnClickListener {
 
-    private val distancetoolView: View
-    private val drawtoolView: View
+    private val distanceToolView: View
+    private val drawToolView: View
     private val buttonsView: View
     private val startView: View
     private val stopView: View
@@ -67,9 +67,9 @@ internal class OverlayView private constructor(
          * this callback. It will reappear once the screenshot has been saved.
          */
 
-        fun onDrawtool()
+        fun onDrawTool()
 
-        fun onDistancetool()
+        fun onDistanceTool()
 
         /** Called when screenshot is clicked. This view will hide itself completely before invoking
          * this callback. It will reappear once the screenshot has been saved.
@@ -82,34 +82,30 @@ internal class OverlayView private constructor(
             View.inflate(context, R.layout.telecine_overlay_view, this)
         else
             View.inflate(context, R.layout.telecine_overlay_jellybean_view, this)
-        distancetoolView = findViewById(R.id.record_overlay_distancetool)
-        drawtoolView = findViewById(R.id.record_overlay_drawtool)
+        distanceToolView = findViewById(R.id.record_overlay_distancetool)
+        drawToolView = findViewById(R.id.record_overlay_drawtool)
         buttonsView = findViewById(R.id.record_overlay_buttons)
         val cancelView: View = findViewById(R.id.record_overlay_cancel)
         startView = findViewById(R.id.record_overlay_start)
         stopView = findViewById(R.id.record_overlay_stop)
         val screenshotView: View = findViewById(R.id.record_overlay_screenshot)
         recordingView = findViewById(R.id.record_overlay_recording)
-        animationWidth = if (showRecordingTools)
-            R.dimen.overlay_width
-        else
-            R.dimen.overlay_jellybean_width
-        distancetoolView.setOnClickListener(this)
-        drawtoolView.setOnClickListener(this)
+        animationWidth = if (showRecordingTools) R.dimen.overlay_width else R.dimen.overlay_jellybean_width
+        distanceToolView.setOnClickListener(this)
+        drawToolView.setOnClickListener(this)
         screenshotView.setOnClickListener(this)
         cancelView.setOnClickListener(this)
         startView.setOnClickListener(this)
-        if (!showDistanceTool)
-            distancetoolView.visibility = View.GONE
+        if (!showDistanceTool) distanceToolView.visibility = View.GONE
         if (!showRecordingTools) {
             screenshotView.visibility = View.GONE
             startView.visibility = View.GONE
-            distancetoolView.visibility = View.VISIBLE
-            drawtoolView.background = UtilityImg.bitmapToLayerDrawable(
+            distanceToolView.visibility = View.VISIBLE
+            drawToolView.background = UtilityImg.bitmapToLayerDrawable(
                 context,
                 UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_edit_24dp, Color.YELLOW)
             )
-            distancetoolView.background = UtilityImg.bitmapToLayerDrawable(
+            distanceToolView.background = UtilityImg.bitmapToLayerDrawable(
                 context,
                 UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_adjust_24dp, Color.YELLOW)
             )
@@ -119,16 +115,14 @@ internal class OverlayView private constructor(
             )
         }
         if (getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL) {
-            animationWidth =
-                -animationWidth // Account for animating in from the other side of screen.
+            animationWidth = -animationWidth // Account for animating in from the other side of screen.
         }
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         translationX = animationWidth.toFloat()
-        animate().translationX(0f).setDuration(DURATION_ENTER_EXIT.toLong()).interpolator =
-            DecelerateInterpolator()
+        animate().translationX(0f).setDuration(DURATION_ENTER_EXIT.toLong()).interpolator = DecelerateInterpolator()
     }
 
     override fun onClick(view: View) {
@@ -139,19 +133,11 @@ internal class OverlayView private constructor(
                 val centerY = (startView.y + startView.height / 2).toInt()
                 val reveal = createCircularReveal(recordingView, centerX, centerY, 0f, width / 2f)
                 reveal.addListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        buttonsView.visibility = View.GONE
-                    }
+                    override fun onAnimationEnd(animation: Animator) { buttonsView.visibility = View.GONE }
                 })
                 reveal.start()
                 postDelayed(
-                    {
-                        if (MyApplication.telecineSwitchShowCountdown) {
-                            showCountDown()
-                        } else {
-                            countdownComplete()
-                        }
-                    },
+                    { if (MyApplication.telecineSwitchShowCountdown) showCountDown() else countdownComplete() },
                     (if (MyApplication.telecineSwitchShowCountdown) COUNTDOWN_DELAY else NON_COUNTDOWN_DELAY).toLong()
                 )
             }
@@ -161,12 +147,12 @@ internal class OverlayView private constructor(
                 .withEndAction { listener.onCancel() }
             R.id.record_overlay_screenshot -> listener.onScreenshot()
             R.id.record_overlay_drawtool -> {
-                drawtoolView.isActivated = !drawtoolView.isActivated
-                listener.onDrawtool()
+                drawToolView.isActivated = !drawToolView.isActivated
+                listener.onDrawTool()
             }
             R.id.record_overlay_distancetool -> {
-                distancetoolView.isActivated = !distancetoolView.isActivated
-                listener.onDistancetool()
+                distanceToolView.isActivated = !distanceToolView.isActivated
+                listener.onDistanceTool()
             }
         }
     }
@@ -184,18 +170,13 @@ internal class OverlayView private constructor(
     }
 
     private fun countdownComplete() {
-        recordingView.animate().alpha(0f).setDuration(COUNTDOWN_DELAY.toLong())
-            .withEndAction { startRecording() }
+        recordingView.animate().alpha(0f).setDuration(COUNTDOWN_DELAY.toLong()).withEndAction { startRecording() }
     }
 
     private fun countdown(countdownArr: Array<String>, index: Int) {
         postDelayed({
             recordingView.text = countdownArr[index]
-            if (index < countdownArr.lastIndex) {
-                countdown(countdownArr, index + 1)
-            } else {
-                countdownComplete()
-            }
+            if (index < countdownArr.lastIndex) countdown(countdownArr, index + 1) else countdownComplete()
         }, COUNTDOWN_DELAY.toLong())
     }
 
@@ -217,9 +198,7 @@ internal class OverlayView private constructor(
             val width = res.getDimensionPixelSize(R.dimen.overlay_width)
             var height = res.getDimensionPixelSize(R.dimen.overlay_height)
             // TODO Remove explicit "M" comparison when M is released.
-            if (Build.VERSION.SDK_INT > LOLLIPOP_MR1 || "M" == Build.VERSION.RELEASE) {
-                height = res.getDimensionPixelSize(R.dimen.overlay_height_m)
-            }
+            if (Build.VERSION.SDK_INT > LOLLIPOP_MR1 || "M" == Build.VERSION.RELEASE) height = res.getDimensionPixelSize(R.dimen.overlay_height_m)
             val layoutFlag: Int = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
             } else {

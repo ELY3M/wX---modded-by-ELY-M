@@ -21,16 +21,13 @@
 
 #include "level2GenRadials.h"
 
-JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_level2GenRadials(JNIEnv * env, jclass clazz, jobject rad_buff, jobject color_buff, jobject bin_buff, jobject radial_start, jint number_of_radials, jint num_range_bins, jfloat bin_size, jboolean bg_color, jobject colormap_r, jobject colormap_g, jobject colormap_b, int product_code){
-
+JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_level2GenRadials(JNIEnv * env, jclass clazz, jobject rad_buff, jobject color_buff, jobject bin_buff, jobject radial_start, jint number_of_radials, jint num_range_bins, jfloat bin_size, jboolean bg_color, jobject colormap_r, jobject colormap_g, jobject colormap_b, int product_code) {
 	unsigned char* c_r = (*env)->GetDirectBufferAddress(env,colormap_r);
 	unsigned char* c_g = (*env)->GetDirectBufferAddress(env,colormap_g);
 	unsigned char* c_b = (*env)->GetDirectBufferAddress(env,colormap_b);
-
 	c_r[0] = bg_color;
 	c_g[0] = bg_color;
 	c_b[0] = bg_color;
-
 	int total_bins = 0;
 	int g = 0;
 	float angle;
@@ -41,52 +38,46 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_level2GenRadials(JNIEnv * env, jcla
 	int bin = 0;
 	int color_for = 0;
 	double W_180_DIV_PI = 180.0 / M_PI;
-
 	jfloat* rBuff = (*env)->GetDirectBufferAddress(env,rad_buff);
 	jbyte* cBuff = (*env)->GetDirectBufferAddress(env,color_buff);
 	jbyte* bBuff = (*env)->GetDirectBufferAddress(env,bin_buff);
 	jfloat* radial_start_angle = (*env)->GetDirectBufferAddress(env,radial_start);
-
 	int r_i = 0;
 	int c_i = 0;
 	int b_i = 0;
-
 	int cur_level;
 	float bin_size_times_level_count;
-
-	for (g = 0; g<number_of_radials; g++) {
+	for (g = 0; g < number_of_radials; g++) {
 		angle = radial_start_angle[g];
 		level = (unsigned char)bBuff[b_i];
 		level_count = 0;
 		bin_start = 4.0f;
-
         if ( g < (number_of_radials - 1)) {
 		    angle_v = radial_start_angle[g + 1];
 		} else {
 	        angle_v = radial_start_angle[0];
 		}
-
-		for (bin = 0; bin<num_range_bins; bin++) {
+		for (bin = 0; bin < num_range_bins; bin++) {
 			cur_level = (unsigned char)bBuff[b_i];
 			b_i++;
-			if ( cur_level == level ){
+			if (cur_level == level) {
 				level_count++;
 			} else {
 				bin_size_times_level_count = bin_size * level_count;
 
-				rBuff[r_i++] = bin_start * cos((angle_v)/(W_180_DIV_PI));
-				rBuff[r_i++] = bin_start * sin((angle_v)/(W_180_DIV_PI));
+				rBuff[r_i++] = bin_start * cos((angle_v) / (W_180_DIV_PI));
+				rBuff[r_i++] = bin_start * sin((angle_v) / (W_180_DIV_PI));
 
-				rBuff[r_i++] = (bin_start + (bin_size_times_level_count )) * cos((angle_v)/(W_180_DIV_PI));
-				rBuff[r_i++] = (bin_start + (bin_size_times_level_count )) * sin((angle_v)/(W_180_DIV_PI));
+				rBuff[r_i++] = (bin_start + (bin_size_times_level_count )) * cos((angle_v) / (W_180_DIV_PI));
+				rBuff[r_i++] = (bin_start + (bin_size_times_level_count )) * sin((angle_v) / (W_180_DIV_PI));
 
-				rBuff[r_i++] = (bin_start + (bin_size_times_level_count)) * cos(angle/(W_180_DIV_PI));
-				rBuff[r_i++] = (bin_start + (bin_size_times_level_count)) * sin(angle/(W_180_DIV_PI));
+				rBuff[r_i++] = (bin_start + (bin_size_times_level_count)) * cos(angle / (W_180_DIV_PI));
+				rBuff[r_i++] = (bin_start + (bin_size_times_level_count)) * sin(angle / (W_180_DIV_PI));
 
-				rBuff[r_i++] = bin_start * cos(angle/(W_180_DIV_PI));
-				rBuff[r_i++] = bin_start * sin(angle/(W_180_DIV_PI));
+				rBuff[r_i++] = bin_start * cos(angle / (W_180_DIV_PI));
+				rBuff[r_i++] = bin_start * sin(angle / (W_180_DIV_PI));
 
-				for (color_for = 0; color_for<4; color_for++) {
+				for (color_for = 0; color_for < 4; color_for++) {
 					cBuff[c_i++] = (jbyte)c_r[level];
 					cBuff[c_i++] = (jbyte)c_g[level];
 					cBuff[c_i++] = (jbyte)c_b[level];

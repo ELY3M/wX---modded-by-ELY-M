@@ -43,38 +43,25 @@ object UtilityToolbar {
         }
     }
 
-    /*fun transparentToolbars(context: Context, toolbar: Toolbar) {
-        if (UIPreferences.radarToolbarTransparent) {
-            toolbar.background.mutate().alpha = 0
-            toolbar.background.alpha = 0
-            toolbar.setBackgroundColor(ContextCompat.getColor(context, android.R.color.transparent))
-        }
-    }*/
-
     fun fullScreenMode(toolbar: Toolbar, toolbarBottom: Toolbar) {
-        if (android.os.Build.VERSION.SDK_INT > 20) {
-            toolbar.elevation = MyApplication.elevationPref
-            toolbarBottom.elevation = MyApplication.elevationPref
-
-        }
+        toolbar.elevation = MyApplication.elevationPref
+        toolbarBottom.elevation = MyApplication.elevationPref
         if (MyApplication.fullscreenMode) {
             toolbar.visibility = View.GONE
             toolbarBottom.visibility = View.GONE
         }
     }
 
-    fun fullScreenMode(activity: VideoRecordActivity) {
-        fullScreenMode(activity.toolbar, activity.toolbarBottom)
-    }
+    fun fullScreenMode(activity: VideoRecordActivity) = fullScreenMode(activity.toolbar, activity.toolbarBottom)
 
     fun fullScreenMode(toolbar: Toolbar) {
-        if (android.os.Build.VERSION.SDK_INT > 20) toolbar.elevation = MyApplication.elevationPref
+        toolbar.elevation = MyApplication.elevationPref
         if (MyApplication.fullscreenMode) toolbar.visibility = View.GONE
     }
 
     // overload to simply set elevation
     fun fullScreenMode(toolbar: Toolbar, blank: Boolean) {
-        if (android.os.Build.VERSION.SDK_INT > 20) toolbar.elevation = MyApplication.elevationPref
+        toolbar.elevation = MyApplication.elevationPref
     }
 
     fun showHide(toolbar: Toolbar, toolbarBottom: Toolbar) {
@@ -91,10 +78,7 @@ object UtilityToolbar {
 
     fun showHide(toolbar: Toolbar) {
         if (!MyApplication.lockToolbars) {
-            if (toolbar.isShown)
-                toolbar.visibility = View.GONE
-            else
-                toolbar.visibility = View.VISIBLE
+            if (toolbar.isShown) toolbar.visibility = View.GONE else toolbar.visibility = View.VISIBLE
         }
     }
 
@@ -136,10 +120,9 @@ object UtilityToolbar {
                 // Create layout params for the ActionMenuView
                 val params = ActionMenuView.LayoutParams(itemWidth, LayoutParams.WRAP_CONTENT)
                 // Loop through the children
-                (0 until innerChildCount)
-                    .map { childView.getChildAt(it) }
-                    .filterIsInstance<ActionMenuItemView>()
-                    .forEach { it.layoutParams = params }
+                (0 until innerChildCount).map { childView.getChildAt(it) }.filterIsInstance<ActionMenuItemView>().forEach {
+                    it.layoutParams = params
+                }
             }
         }
     }

@@ -24,40 +24,31 @@ package joshuatee.wx.radar
 
 object UtilityWXGLTextObject {
 
-    // FIXME naming and use more
-    fun hideTV(numPanes: Int, textObjects: MutableList<WXGLTextObject>): Unit =
-        (0 until numPanes).forEach {
-            textObjects[it].hideTextLabels()
-        }
+    fun hideLabels(numPanes: Int, textObjects: MutableList<WXGLTextObject>): Unit =
+        (0 until numPanes).forEach { textObjects[it].hideLabels() }
 
-    fun showTV(numPanes: Int, textObjects: MutableList<WXGLTextObject>): Unit =
-        (0 until numPanes).forEach {
-            textObjects[it].addTextLabels()
-        }
+    fun showLabels(numPanes: Int, textObjects: MutableList<WXGLTextObject>): Unit =
+        (0 until numPanes).forEach { textObjects[it].addLabels() }
 
     fun updateSpotterLabels(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
-        (0 until numPanes).forEach {
-            textObjects[it].addTextLabelsSpottersLabels()
-        }
+        (0 until numPanes).forEach { textObjects[it].addSpottersLabels() }
     }
 
-    fun updateObs(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
+    fun updateObservations(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
         (0 until numPanes).forEach {
-            textObjects[it].initializeTextLabelsObservations()
-            textObjects[it].addTextLabelsObservations()
+            textObjects[it].initializeObservations()
+            textObjects[it].addObservations()
         }
     }
 
     fun updateWpcFronts(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
-        (0 until numPanes).forEach {
-            textObjects[it].addWpcPressureCenters()
-        }
+        (0 until numPanes).forEach { textObjects[it].addWpcPressureCenters() }
     }
         
     fun updateHailLabels(numPanes: Int, textObjects: MutableList<WXGLTextObject>) {
         (0 until numPanes).forEach {
-            textObjects[it].initTVHailLabels()
-            textObjects[it].addTVHailLabels()
+            textObjects[it].initializeHailLabels()
+            textObjects[it].addHailLabels()
         }
     }
     

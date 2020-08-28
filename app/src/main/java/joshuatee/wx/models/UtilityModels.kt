@@ -26,7 +26,7 @@ import android.content.Context
 import android.graphics.PointF
 import android.view.View
 import androidx.appcompat.widget.Toolbar
-import android.widget.ArrayAdapter
+import joshuatee.wx.Extensions.startAnimation
 
 import java.sql.Date
 import java.util.Calendar
@@ -35,40 +35,23 @@ import java.util.TimeZone
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.external.UtilityStringExternal
-import joshuatee.wx.ui.ObjectSpinner
 import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
 object UtilityModels {
 
-    fun getContent(
-            context: Context,
-            om: ObjectModel,
-            overlayImg: List<String>,
-            uiDispatcher: CoroutineDispatcher
-    ): Job =
+    fun getContentNonSpinner(context: Context, om: ObjectModelNoSpinner, overlayImg: List<String>, uiDispatcher: CoroutineDispatcher): Job =
             GlobalScope.launch(uiDispatcher) {
-                om.run = om.spRun.selectedItem.toString()
-                om.time = om.spTime.selectedItem.toString()
-                om.sector = om.spSector.selectedItem.toString()
-                om.sectorInt = om.spSector.selectedItemPosition
+                om.sectorInt = om.sectors.indexOf(om.sector)
                 if (om.truncateTime) {
                     om.time = UtilityStringExternal.truncate(om.time, om.timeTruncate)
                 }
                 writePrefs(context, om)
-                withContext(Dispatchers.IO) {
-                    (0 until om.numPanes).forEach {
-                        om.displayData.bitmap[it] = om.getImage(it, overlayImg)
-                    }
-                }
+                withContext(Dispatchers.IO) { (0 until om.numPanes).forEach { om.displayData.bitmap[it] = om.getImage(it, overlayImg) } }
                 (0 until om.numPanes).forEach {
                     if (om.numPanes > 1) {
-                        UtilityImg.resizeViewAndSetImage(
-                                context,
-                                om.displayData.bitmap[it],
-                                om.displayData.img[it]
-                        )
+                        UtilityImg.resizeViewAndSetImage(context, om.displayData.bitmap[it], om.displayData.img[it])
                     } else {
                         om.displayData.img[it].setImageBitmap(om.displayData.bitmap[it])
                     }
@@ -76,11 +59,7 @@ object UtilityModels {
                 om.animRan = false
                 if (!om.firstRun) {
                     (0 until om.numPanes).forEach {
-                        UtilityImg.imgRestorePosnZoom(
-                                context,
-                                om.displayData.img[it],
-                                om.modelProvider + om.numPanes.toString() + it.toString()
-                        )
+                        UtilityImg.imgRestorePosnZoom(context, om.displayData.img[it], om.modelProvider + om.numPanes.toString() + it.toString())
                     }
                     if (UIPreferences.fabInModels && om.numPanes < 2) {
                         om.fab1?.visibility = View.VISIBLE
@@ -92,27 +71,7 @@ object UtilityModels {
                 om.imageLoaded = true
             }
 
-    fun getAnimate(
-            om: ObjectModel,
-            overlayImg: List<String>,
-            uiDispatcher: CoroutineDispatcher
-    ): Job =
-            GlobalScope.launch(uiDispatcher) {
-                withContext(Dispatchers.IO) {
-                    (0 until om.numPanes).forEach {
-                        om.displayData.animDrawable[it] = om.getAnimate(it, overlayImg)
-                    }
-                }
-                (0 until om.numPanes).forEach {
-                    UtilityImgAnim.startAnimation(
-                            om.displayData.animDrawable[it],
-                            om.displayData.img[it]
-                    )
-                }
-                om.animRan = true
-            }
-
-    private fun updateToolbarLabels(om: ObjectModel) {
+    private fun updateToolbarLabels(om: ObjectModelNoSpinner) {
         if (om.numPanes > 1) {
             setSubtitleRestoreIMGXYZOOM(
                     om.displayData.img,
@@ -127,55 +86,45 @@ object UtilityModels {
         }
     }
 
-    private fun writePrefs(context: Context, om: ObjectModel) {
+
+    fun getAnimate(om: ObjectModelNoSpinner, overlayImg: List<String>, uiDispatcher: CoroutineDispatcher): Job =
+            GlobalScope.launch(uiDispatcher) {
+                withContext(Dispatchers.IO) {
+                    (0 until om.numPanes).forEach { om.displayData.animDrawable[it] = om.getAnimate(it, overlayImg) }
+                }
+                (0 until om.numPanes).forEach { om.displayData.animDrawable[it].startAnimation(om.displayData.img[it]) }
+                om.animRan = true
+            }
+
+    private fun writePrefs(context: Context, om: ObjectModelNoSpinner) {
         Utility.writePref(context, om.prefSector, om.sector)
         (0 until om.numPanes).forEach {
             Utility.writePref(context, om.prefParam + it.toString(), om.displayData.param[it])
-            Utility.writePref(
-                    context,
-                    om.prefParamLabel + it.toString(),
-                    om.displayData.paramLabel[it]
-            )
+            Utility.writePref(context, om.prefParamLabel + it.toString(), om.displayData.paramLabel[it])
         }
     }
 
-    fun legacyShare(activity: Activity, context: Context, animRan: Boolean, om: ObjectModel) {
+    fun legacyShare(activity: Activity, context: Context, animRan: Boolean, om: ObjectModelNoSpinner) {
         if (animRan)
-            UtilityShare.shareAnimGif(
+            UtilityShare.animGif(
                     context,
-                    om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.spTime.selectedItem.toString(),
+                    om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.timeIndex.toString(),
                     om.displayData.animDrawable[0]
             )
         else
-            UtilityShare.shareBitmap(
+            UtilityShare.bitmap(
                     activity,
                     context,
-                    om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.spTime.selectedItem.toString(),
+                    om.prefModel + " " + om.displayData.paramLabel[0] + " " + om.timeIndex.toString(),
                     om.displayData.bitmap[0]
             )
     }
 
-    fun moveForward(spinnerTime: ObjectSpinner) {
-        var time = spinnerTime.selectedItemPosition + 1
-        if (time == spinnerTime.size()) {
-            time = 0
-        }
-        spinnerTime.setSelection(time)
-    }
-
-    fun moveBack(spinnerTime: ObjectSpinner) {
-        var time = spinnerTime.selectedItemPosition - 1
-        if (time == -1) {
-            time = spinnerTime.lastIndex
-        }
-        spinnerTime.setSelection(time)
-    }
-
     // FIXME don't need this - to simple
-    fun parameterInList(list: List<String>, parameter: String): Boolean = list.contains(parameter)
+    fun parameterInList(list: List<String>, parameter: String) = list.contains(parameter)
 
-    fun convertTimeRunToTimeString(runStr: String, timeStrF: String, showDate: Boolean): String {
-        var timeStr = timeStrF
+    fun convertTimeRunToTimeString(runStr: String, timeStringOriginal: String, showDate: Boolean): String {
+        var timeStr = timeStringOriginal
         // in response to timeStr coming in as the following on rare occasions we need to truncate
         // 000 Wed 8pm
         // example input GFS 06Z would have repeated calls to this method as follows
@@ -196,9 +145,7 @@ object UtilityModels {
         var amPm: String
         if (hourOfDay > 11) {
             amPm = "pm"
-            if (hourOfDay > 12) {
-                hourOfDay -= 12
-            }
+            if (hourOfDay > 12) hourOfDay -= 12
         } else {
             amPm = "am"
         }
@@ -213,10 +160,7 @@ object UtilityModels {
         val hourOfDayLocal = calendar.get(Calendar.HOUR_OF_DAY)
         val calendar2 = Calendar.getInstance()
         calendar2.set(Calendar.HOUR_OF_DAY, runInt)
-        calendar2.add(
-                Calendar.HOUR_OF_DAY,
-                timeInt + offsetFromUtc / 60 / 60
-        ) // was 2*offsetFromUtc/60/60
+        calendar2.add(Calendar.HOUR_OF_DAY, timeInt + offsetFromUtc / 60 / 60) // was 2*offsetFromUtc/60/60
         val dayOfMonth = calendar2.get(Calendar.DAY_OF_MONTH)
         val month = 1 + calendar2.get(Calendar.MONTH)
         if (runInt >= 0 && runInt < -offsetFromUtc / 60 / 60 && hourOfDayLocal - offsetFromUtc / 60 / 60 >= 24) {
@@ -231,8 +175,7 @@ object UtilityModels {
             Calendar.THURSDAY -> futureDay = "Thu"
             Calendar.FRIDAY -> futureDay = "Fri"
             0 -> futureDay = "Sat"
-            else -> {
-            }
+            else -> {}
         }
         return if (showDate) {
             "$futureDay  $hourOfDay$amPm ($month/$dayOfMonth)"
@@ -241,16 +184,9 @@ object UtilityModels {
         }
     }
 
-    fun updateTime(
-            runF: String,
-            modelCurrentTimeF: String,
-            listTime: MutableList<String>,
-            dataAdapterTime: ArrayAdapter<String>,
-            prefix: String,
-            showDate: Boolean
-    ) {
-        var run = runF
-        var modelCurrentTime = modelCurrentTimeF
+    fun updateTime(runOriginal: String, modelCurrentTimeF: String, listTime: MutableList<String>, prefix: String, showDate: Boolean) {
+        var run = runOriginal.replace("Z", "").replace("z", "")
+        val modelCurrentTime = modelCurrentTimeF.replace("Z", "").replace("z", "")
         // run is the current run , ie 12Z
         // modelCurrentTime is the most recent model run
         // listTime is a list of all times for a model ... 000 , 003,006, etc
@@ -258,28 +194,19 @@ object UtilityModels {
         // prefix allows us to handle times such as f000 ( SPC SREF )
         // in response to time_str coming in as the following on rare occasions we need to truncate
         // 000 Wed 8pm
-        var tmpStr: String
-        run = run.replace("Z", "")
-        run = run.replace("z", "")
-        modelCurrentTime = modelCurrentTime.replace("Z", "")
-        modelCurrentTime = modelCurrentTime.replace("z", "")
         if (modelCurrentTime != "") {
             if ((run.toIntOrNull() ?: 0) > (modelCurrentTime.toIntOrNull() ?: 0)) {
                 run = ((run.toIntOrNull() ?: 0) - 24).toString()
             }
             (0 until listTime.size).forEach {
-                tmpStr = MyApplication.space.split(listTime[it])[0].replace(prefix, "")
+                val tmpStr = MyApplication.space.split(listTime[it])[0].replace(prefix, "")
                 listTime[it] = prefix + tmpStr + " " + convertTimeRunToTimeString(run, tmpStr, showDate)
             }
-            dataAdapterTime.notifyDataSetChanged()
+            //dataAdapterTime.notifyDataSetChanged()
         }
     }
 
-    fun setSubtitleRestoreIMGXYZOOM(
-            img: MutableList<TouchImageView2>,
-            toolbar: Toolbar,
-            string: String
-    ) {
+    fun setSubtitleRestoreIMGXYZOOM(img: MutableList<TouchImageView2>, toolbar: Toolbar, string: String) {
         val x = FloatArray(img.size)
         val y = FloatArray(img.size)
         val z = FloatArray(img.size)
@@ -296,9 +223,9 @@ object UtilityModels {
                 y[it] = point[it].y
             }
             toolbar.subtitle = string
-            (0 until img.size)
-                    .filter { !x[it].isNaN() && !y[it].isNaN() }
-                    .forEach { img[it].setZoom(z[it], x[it], y[it]) }
+            (0 until img.size).filter { !x[it].isNaN() && !y[it].isNaN() }.forEach {
+                img[it].setZoom(z[it], x[it], y[it])
+            }
         }
     }
 }

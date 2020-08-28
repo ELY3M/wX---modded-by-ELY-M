@@ -25,13 +25,7 @@ import joshuatee.wx.activitiesmisc.UtilityOpcImages
 import joshuatee.wx.activitiesmisc.UtilityObservations
 import joshuatee.wx.vis.UtilityGoesFullDisk
 
-class ObjectImagesCollection(
-        var title: String,
-        var urls: List<String>,
-        var labels: List<String>,
-        val prefTokenIdx: String,
-        val prefImagePosition: String
-) {
+class ObjectImagesCollection(val title: String, val urls: List<String>, val labels: List<String>, val prefTokenIdx: String, val prefImagePosition: String) {
 
     companion object {
         fun initialize(): MutableMap<String, ObjectImagesCollection> {

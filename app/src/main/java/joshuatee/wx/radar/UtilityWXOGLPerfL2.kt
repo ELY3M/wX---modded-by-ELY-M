@@ -37,29 +37,18 @@ internal object UtilityWXOGLPerfL2 {
      */
     private const val FILE_HEADER_SIZE = 24
 
-    fun writeDecodedFile(
-        context: Context,
-        fn: String,
-        radialStart: ByteBuffer,
-        binWord: ByteBuffer,
-        days: ByteBuffer,
-        msecs: ByteBuffer
-    ) {
+    fun writeDecodedFile(context: Context, fileName: String, radialStart: ByteBuffer, binWord: ByteBuffer, days: ByteBuffer, milliSeconds: ByteBuffer) {
         radialStart.position(0)
         binWord.position(0)
         days.position(0)
-        msecs.position(0)
+        milliSeconds.position(0)
         try {
-            val fos = context.openFileOutput(fn, Context.MODE_PRIVATE)
+            val fos = context.openFileOutput(fileName, Context.MODE_PRIVATE)
             val wChannel = fos.channel
-            while (days.hasRemaining())
-                wChannel.write(days)
-            while (msecs.hasRemaining())
-                wChannel.write(msecs)
-            while (radialStart.hasRemaining())
-                wChannel.write(radialStart)
-            while (binWord.hasRemaining())
-                wChannel.write(binWord)
+            while (days.hasRemaining()) wChannel.write(days)
+            while (milliSeconds.hasRemaining()) wChannel.write(milliSeconds)
+            while (radialStart.hasRemaining()) wChannel.write(radialStart)
+            while (binWord.hasRemaining()) wChannel.write(binWord)
             wChannel.close()
             fos.close()
         } catch (e: Exception) {
@@ -67,29 +56,18 @@ internal object UtilityWXOGLPerfL2 {
         }
     }
 
-    fun readDecodedFile(
-        context: Context,
-        fn: String,
-        radialStart: ByteBuffer,
-        binWord: ByteBuffer,
-        days: ByteBuffer,
-        msecs: ByteBuffer
-    ) {
+    fun readDecodedFile(context: Context, fileName: String, radialStart: ByteBuffer, binWord: ByteBuffer, days: ByteBuffer, milliSeconds: ByteBuffer) {
         radialStart.position(0)
         binWord.position(0)
         days.position(0)
-        msecs.position(0)
+        milliSeconds.position(0)
         try {
-            val file = File(context.filesDir, fn)
+            val file = File(context.filesDir, fileName)
             val rChannel = FileInputStream(file).channel
-            while (days.hasRemaining())
-                rChannel.read(days)
-            while (msecs.hasRemaining())
-                rChannel.read(msecs)
-            while (radialStart.hasRemaining())
-                rChannel.read(radialStart)
-            while (binWord.hasRemaining())
-                rChannel.read(binWord)
+            while (days.hasRemaining()) rChannel.read(days)
+            while (milliSeconds.hasRemaining()) rChannel.read(milliSeconds)
+            while (radialStart.hasRemaining()) rChannel.read(radialStart)
+            while (binWord.hasRemaining()) rChannel.read(binWord)
             rChannel.close()
         } catch (e: Exception) {
             UtilityLog.handleException(e)
@@ -98,11 +76,11 @@ internal object UtilityWXOGLPerfL2 {
 
     fun level2Decompress(context: Context, srcPath: String, dstPath: String, productCode: Int) {
         try {
-            val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, srcPath))
-            dis.bigEndian = true
-            dis.seek(0)
-            val dis2 = uncompress(context, dis, dstPath, productCode)
-            dis.close()
+            val ucarRandomAccessFile = UCARRandomAccessFile(UtilityIO.getFilePath(context, srcPath))
+            ucarRandomAccessFile.bigEndian = true
+            ucarRandomAccessFile.seek(0)
+            val dis2 = uncompress(context, ucarRandomAccessFile, dstPath, productCode)
+            ucarRandomAccessFile.close()
             dis2.close()
         } catch (e: Exception) {
             UtilityLog.handleException(e)
@@ -123,18 +101,10 @@ internal object UtilityWXOGLPerfL2 {
      * @throws IOException on read error
      */
     @Throws(IOException::class)
-    private fun uncompress(
-        context: Context,
-        inputRaf: UCARRandomAccessFile,
-        ufilename: String,
-        productCode: Int
-    ): UCARRandomAccessFile {
+    private fun uncompress(context: Context, inputRaf: UCARRandomAccessFile, ufilename: String, productCode: Int): UCARRandomAccessFile {
         val outputRaf = UCARRandomAccessFile(File(context.filesDir, ufilename).absolutePath, "rw")
         outputRaf.bigEndian = true
-        val loopCntBreak = if (productCode == 153)
-            5
-        else
-            11
+        val loopCntBreak = if (productCode == 153) 5 else 11
         val refDecompSize = 827040
         val velDecompSize = 460800
         var loopCnt = 0
@@ -142,12 +112,7 @@ internal object UtilityWXOGLPerfL2 {
             inputRaf.seek(0)
             val header = ByteArray(FILE_HEADER_SIZE)
             val bytesRead = inputRaf.read(header)
-            if (bytesRead != header.size) {
-                throw IOException(
-                    "Error reading NEXRAD2 header -- got " +
-                            bytesRead + " rather than" + header.size
-                )
-            }
+            if (bytesRead != header.size) throw IOException("Error reading NEXRAD2 header -- got " + bytesRead + " rather than" + header.size)
             outputRaf.write(header)
             var eof = false
             var numCompBytes: Int
@@ -157,9 +122,7 @@ internal object UtilityWXOGLPerfL2 {
             while (!eof) {
                 try {
                     numCompBytes = inputRaf.readInt()
-                    if (numCompBytes == -1) {
-                        break
-                    }
+                    if (numCompBytes == -1) break
                 } catch (ee: EOFException) {
                     Log.i("wx", "got EOFException")
                     break // assume this is ok

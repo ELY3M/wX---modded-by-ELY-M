@@ -24,8 +24,7 @@ package joshuatee.wx
 
 object GlobalDictionaries {
 
-    // FIXME rename
-    val NEXRAD_PRODUCT_STRING: Map<String, String> = mapOf(
+    val nexradProductString = mapOf(
             "N0R" to "DS.p19r0",
             "N1R" to "DS.p19r1",
             "N2R" to "DS.p19r2",
@@ -97,7 +96,7 @@ object GlobalDictionaries {
             "VWP" to "DS.48vwp"
     )
 
-    val wfoToRadarSite: Map<String, String> = mapOf(
+    val wfoToRadarSite = mapOf(
             "ABQ" to "ABX",
             "ABR" to "ABR",
             "AFC" to "AHG",

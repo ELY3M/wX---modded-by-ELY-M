@@ -24,13 +24,7 @@ package joshuatee.wx.objects
 import joshuatee.wx.MyApplication
 import java.nio.ByteBuffer
 
-enum class GeographyType constructor(
-    var relativeBuffer: ByteBuffer,
-    var count: Int,
-    var color: Int,
-    var pref: Boolean,
-    var lineWidth: Int
-) {
+enum class GeographyType constructor(var relativeBuffer: ByteBuffer, var count: Int, var color: Int, var pref: Boolean, var lineWidth: Int) {
 
     STATE_LINES(
         MyApplication.stateRelativeBuffer,
@@ -68,13 +62,7 @@ enum class GeographyType constructor(
         MyApplication.radarHwExtLineSize
     ),
     CITIES(ByteBuffer.allocate(0), 0, MyApplication.radarColorCity, MyApplication.radarCities, 0),
-    COUNTY_LABELS(
-        ByteBuffer.allocate(0),
-        0,
-        MyApplication.radarColorCountyLabels,
-        MyApplication.radarCountyLabels, 
-        0
-    ),
+    COUNTY_LABELS(ByteBuffer.allocate(0), 0, MyApplication.radarColorCountyLabels, MyApplication.radarCountyLabels, 0),
     NONE(ByteBuffer.allocateDirect(0), 0, 0, false, 0);
 
     // FIXME refresh rest of values

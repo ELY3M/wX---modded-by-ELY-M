@@ -33,8 +33,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_Level2Decompress
-  (JNIEnv * , jclass, jstring, jstring ,jobject,jobject, jint);
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_Level2Decompress(JNIEnv *, jclass, jstring, jstring, jobject, jobject, jint);
 
 #ifdef __cplusplus
 }

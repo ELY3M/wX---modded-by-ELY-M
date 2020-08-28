@@ -12,8 +12,7 @@ import joshuatee.wx.objects.TextSize
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
 
-internal class SettingsLocationAdapterList(private val dataSet: MutableList<String>) :
-    RecyclerView.Adapter<SettingsLocationAdapterList.DataObjectHolder>() {
+internal class SettingsLocationAdapterList(private val dataSet: MutableList<String>) : RecyclerView.Adapter<SettingsLocationAdapterList.DataObjectHolder>() {
 
     companion object {
         private var myClickListener: MyClickListener? = null
@@ -23,25 +22,19 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
 
         val text1 = ObjectTextView(itemView, R.id.text1, TextSize.MEDIUM)
         val currentConditions = ObjectTextView(itemView, R.id.currentConditions, TextSize.SMALL)
-        val text2 = ObjectTextView(itemView, R.id.text2)
-        val text3 = ObjectTextView(itemView, R.id.text3)
-        val objCard = ObjectCard(itemView, R.id.cv1)
+        val text2 = ObjectTextView(itemView, R.id.text2, backgroundText = true)
+        //val text3 = ObjectTextView(itemView, R.id.text3, backgroundText = true)
 
         init {
+            ObjectCard(itemView, R.id.cv1)
             itemView.setOnClickListener(this)
         }
 
-        override fun onClick(v: View) {
-            myClickListener!!.onItemClick(adapterPosition)
-        }
+        override fun onClick(v: View) { myClickListener!!.onItemClick(adapterPosition) }
     }
 
     fun setListener(fn: (Int) -> Unit) {
-        myClickListener = object : MyClickListener {
-            override fun onItemClick(position: Int) {
-                fn(position)
-            }
-        }
+        myClickListener = object : MyClickListener { override fun onItemClick(position: Int) { fn(position) } }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
@@ -65,31 +58,20 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
         }
         holder.text1.text = Location.getName(position)
         if (UtilityLocation.hasAlerts(position)) {
-            holder.text1.color = UIPreferences.textHighlightColor
-        } else {
-            holder.text1.color = UIPreferences.backgroundColor
+            holder.text1.text = Location.getName(position) + " +Alert"
         }
+        holder.text1.color = UIPreferences.textHighlightColor
+        //} else {
+        //    holder.text1.color = UIPreferences.backgroundColor
+        //}
         holder.currentConditions.text = Location.getObservation(position)
-        if (nonUs)
-            holder.text2.text =
-                """${UtilityStringExternal.truncate(lat, 6)} , ${UtilityStringExternal.truncate(
-                    lon,
-                    6
-                )}"""
-        else
-            holder.text2.text = "${UtilityStringExternal.truncate(
-                Location.getX(position),
-                6
-            )} , ${UtilityStringExternal.truncate(Location.getY(position), 6)}"
-        holder.text2.setAsBackgroundText()
         if (nonUs) {
-            holder.text3.text =
-                "RID: ${Location.getRid(position)} ${UtilityLocation.hasAlerts(position)}"
+            //holder.text2.text = "${UtilityStringExternal.truncate(lat, 6)} , ${UtilityStringExternal.truncate(lon, 6)}"
+            holder.text2.text = "RID: ${Location.getRid(position)} ${UtilityLocation.hasAlerts(position)} (${UtilityStringExternal.truncate(lat, 6)} , ${UtilityStringExternal.truncate(lon, 6)})"
         } else {
-            holder.text3.text =
-                "WFO: ${Location.getWfo(position)}  RID: ${Location.getRid(position)}"
+            //holder.text2.text = "${UtilityStringExternal.truncate(Location.getX(position), 6)} , ${UtilityStringExternal.truncate(Location.getY(position), 6)}"
+            holder.text2.text = "WFO: ${Location.getWfo(position)}  RID: ${Location.getRid(position)} (${UtilityStringExternal.truncate(Location.getX(position), 6)} , ${UtilityStringExternal.truncate(Location.getY(position), 6)})"
         }
-        holder.text3.setAsBackgroundText()
     }
 
     fun deleteItem(index: Int) {
@@ -101,9 +83,7 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
 
     override fun getItemCount() = dataSet.size
 
-    fun getItem(index: Int): String = dataSet[index]
+    fun getItem(index: Int) = dataSet[index]
 
-    interface MyClickListener {
-        fun onItemClick(position: Int)
-    }
+    interface MyClickListener { fun onItemClick(position: Int) }
 }

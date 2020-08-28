@@ -23,7 +23,9 @@ package joshuatee.wx.objects
 
 import android.content.Context
 import joshuatee.wx.DataStorage
+import joshuatee.wx.MyApplication
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityVtec
 
 class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
 
@@ -37,9 +39,46 @@ class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
         isEnabled = Utility.readPref(context, prefTokenEnabled, "false").startsWith("t")
     }
 
-    val name: String get() = type.urlToken.replace("%20", " ")
-    val prefTokenEnabled: String get() = "RADAR_SHOW_" + type.productCode
-    val prefTokenColor: String get() = "RADAR_COLOR_" + type.productCode
-    private val prefTokenStorage: String get() = "SEVERE_DASHBOARD_" + type.productCode
+    val name get() = type.urlToken.replace("%20", " ")
+
+    val prefTokenEnabled get() = "RADAR_SHOW_" + type.productCode
+
+    val prefTokenColor get() = "RADAR_COLOR_" + type.productCode
+
+    private val prefTokenStorage get() = "SEVERE_DASHBOARD_" + type.productCode
+
+    companion object {
+        private var polygonDataByType = mutableMapOf<PolygonWarningType, ObjectPolygonWarning>()
+
+        private val polygonList = listOf(
+                PolygonWarningType.SpecialMarineWarning,
+                PolygonWarningType.SnowSquallWarning,
+                PolygonWarningType.DustStormWarning,
+                PolygonWarningType.SpecialWeatherStatement
+        )
+
+        fun areAnyEnabled(): Boolean {
+            var anyEnabled = false
+            polygonList.forEach { if (polygonDataByType[it]!!.isEnabled) anyEnabled = true }
+            return anyEnabled
+        }
+
+        fun load(context: Context) {
+            polygonList.forEach { polygonDataByType[it] = ObjectPolygonWarning(context, it) }
+        }
+
+        fun isCountNonZero(): Boolean {
+            val tstCount = UtilityVtec.getStormCount(MyApplication.severeDashboardTst.value)
+            val torCount = UtilityVtec.getStormCount(MyApplication.severeDashboardTor.value)
+            val ffwCount = UtilityVtec.getStormCount(MyApplication.severeDashboardFfw.value)
+            var count = tstCount + torCount + ffwCount
+            polygonList.forEach {
+                if (polygonDataByType[it]!!.isEnabled) {
+                    count += UtilityVtec.getStormCountGeneric(polygonDataByType[it]!!.storage.value)
+                }
+            }
+            return count > 0
+        }
+    }
 }
 

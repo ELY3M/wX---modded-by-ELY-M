@@ -27,7 +27,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/action_add"
-        android:icon="@drawable/ic_add_box_24dp"
+        android:icon="@drawable/ic_add2_box_24dp"
         android:title="Add"
         app:showAsAction="always" />
     <item

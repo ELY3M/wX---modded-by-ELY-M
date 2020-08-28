@@ -31,6 +31,8 @@ class BootBroadcastReceiver : BroadcastReceiver() {
     // without the app needing to be started
 
     override fun onReceive(context: Context, intentF: Intent) {
-        UtilityWXJobService.startService(context)
+        when (intentF.action) {
+            Intent.ACTION_BOOT_COMPLETED -> UtilityWXJobService.startService(context)
+        }
     }
 }

@@ -13,16 +13,14 @@ import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
 import joshuatee.wx.util.Utility
 
-internal class PlayListAdapter(private val dataSet: MutableList<String>) :
-    RecyclerView.Adapter<PlayListAdapter.DataObjectHolder>() {
+internal class PlayListAdapter(private val dataSet: MutableList<String>) : RecyclerView.Adapter<PlayListAdapter.DataObjectHolder>() {
 
     private val maxLength = 400
 
-    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
         val label = ObjectTextView(itemView, R.id.singletext, UIPreferences.textHighlightColor, TextSize.MEDIUM)
-        val contentPreview = ObjectTextView(itemView, R.id.text2)
+        val contentPreview = ObjectTextView(itemView, R.id.text2, backgroundText = true)
         val timeAndSize = ObjectTextView(itemView, R.id.timeandsize, TextSize.SMALL)
 
         init {
@@ -30,17 +28,11 @@ internal class PlayListAdapter(private val dataSet: MutableList<String>) :
             itemView.setOnClickListener(this)
         }
 
-        override fun onClick(v: View) {
-            myClickListener!!.onItemClick(adapterPosition)
-        }
+        override fun onClick(v: View) { myClickListener!!.onItemClick(adapterPosition) }
     }
 
     fun setListener(fn: (Int) -> Unit) {
-        myClickListener = object : MyClickListener {
-            override fun onItemClick(position: Int) {
-                fn(position)
-            }
-        }
+        myClickListener = object : MyClickListener { override fun onItemClick(position: Int) { fn(position) } }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
@@ -49,12 +41,11 @@ internal class PlayListAdapter(private val dataSet: MutableList<String>) :
     }
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
-        val dataList = dataSet[position].split(";")
-        holder.label.text = dataList[0]
-        holder.timeAndSize.text = dataList[1]
-        val tmpStr = Utility.fromHtml(Utility.readPref("PLAYLIST_" + dataList[0], ""))
-        holder.contentPreview.text = tmpStr.replace(MyApplication.newline, " ").take(maxLength)
-        holder.contentPreview.setAsBackgroundText()
+        val items = dataSet[position].split(";")
+        holder.label.text = items[0]
+        holder.timeAndSize.text = items[1]
+        val string = Utility.fromHtml(Utility.readPref("PLAYLIST_" + items[0], ""))
+        holder.contentPreview.text = string.replace(MyApplication.newline, " ").take(maxLength)
     }
 
     fun deleteItem(index: Int) {
@@ -64,9 +55,7 @@ internal class PlayListAdapter(private val dataSet: MutableList<String>) :
 
     override fun getItemCount() = dataSet.size
 
-    interface MyClickListener {
-        fun onItemClick(position: Int)
-    }
+    interface MyClickListener { fun onItemClick(position: Int) }
 
     companion object {
         private var myClickListener: MyClickListener? = null

@@ -33,6 +33,6 @@ class SpotterReports internal constructor(
     val city: String
 ) {
 
-    val lastName: String = lastName.replace("^ ".toRegex(), "")
+    val lastName = lastName.replace("^ ".toRegex(), "")
 
 }

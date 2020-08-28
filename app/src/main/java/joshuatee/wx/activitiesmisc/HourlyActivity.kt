@@ -24,9 +24,9 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
@@ -44,28 +44,31 @@ import com.jjoe64.graphview.DefaultLabelFormatter
 import com.jjoe64.graphview.GraphView
 import kotlinx.coroutines.*
 
-class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
+class HourlyActivity : BaseActivity() {
 
     //
     // This activity is accessible from the action bar and provides hourly forecast for the current location
-    // Possible improvements: better text formatting ( possibly color ), proper handling of "nil", graphs
+    //
+    // arg0 location number ( "1" being first saved location )
     //
 
-    companion object {
-        const val LOC_NUM: String = ""
-    }
+    companion object { const val LOC_NUM = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private var htmlShare = listOf<String>()
     private lateinit var objectCard: ObjectCard
     private lateinit var objectCardVerticalText: ObjectCardVerticalText
     private var hourlyData = ObjectHourly()
     private var locationNumber = 0
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.hourly_top, menu)
+        return true
+    }
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_hourly, R.menu.shared_multigraphics, true)
-        toolbarBottom.setOnMenuItemClickListener(this)
+        super.onCreate(savedInstanceState, R.layout.activity_hourly, R.menu.shared_multigraphics, false)
         locationNumber = (intent.getStringExtra(LOC_NUM)!!.toIntOrNull() ?: 0) - 1
         objectCard = ObjectCard(this, R.color.black, R.id.graphCard)
         graphCard.visibility = View.GONE
@@ -82,32 +85,16 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        htmlShare = withContext(Dispatchers.IO) {
-            UtilityUSHourly.getString(locationNumber)
-        }
-        hourlyData = withContext(Dispatchers.IO) {
-            UtilityUSHourly.getStringForActivity(htmlShare[1])
-        }
+        htmlShare = withContext(Dispatchers.IO) { UtilityUSHourly.getString(locationNumber) }
+        hourlyData = withContext(Dispatchers.IO) { UtilityUSHourly.getStringForActivity(htmlShare[1]) }
         graphCard.visibility = View.VISIBLE
-        objectCardVerticalText.setText(
-            listOf(
-                hourlyData.time,
-                hourlyData.temp,
-                hourlyData.windSpeed,
-                hourlyData.windDir,
-                hourlyData.conditions
-            )
-        )
-        // For ChromeOS
-        //objectCardVerticalText.card.requestFocus()
+        objectCardVerticalText.setText(listOf(hourlyData.time, hourlyData.temp, hourlyData.windSpeed, hourlyData.windDir, hourlyData.conditions))
         plotData()
     }
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> if (htmlShare.size > 1) {
-                UtilityShare.shareText(this, "Hourly", htmlShare[1])
-            }
+            R.id.action_share -> if (htmlShare.size > 1) UtilityShare.text(this, "Hourly", htmlShare[1])
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -116,11 +103,9 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private fun plotData() {
         val linesOfData = hourlyData.temp.split(MyApplication.newline).dropLastWhile { it.isEmpty() }
         val dataPoints = mutableListOf<DataPoint>()
-        var time = 0
         (1 until linesOfData.lastIndex).forEach {
             val temp = linesOfData[it].toIntOrNull() ?: 0
-            time += 1
-            dataPoints.add(DataPoint(time.toDouble(), temp.toDouble()))
+            dataPoints.add(DataPoint(it.toDouble(), temp.toDouble()))
         }
         val series = LineGraphSeries(dataPoints.toTypedArray())
         series.color = Color.BLACK
@@ -134,11 +119,7 @@ class HourlyActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
             override fun formatLabel(value: Double, isValueX: Boolean): String {
                 return if (isValueX) {
                     // show normal x values
-                    if ((value.toInt() % 10) == 0) {
-                        super.formatLabel(value, isValueX)
-                    } else {
-                        ""
-                    }
+                    if ((value.toInt() % 10) == 0) super.formatLabel(value, isValueX) else ""
                 } else {
                     // show currency for y values
                     super.formatLabel(value, isValueX)

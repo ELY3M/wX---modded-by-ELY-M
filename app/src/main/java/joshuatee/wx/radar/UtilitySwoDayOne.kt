@@ -31,7 +31,7 @@ import joshuatee.wx.objects.DownloadTimer
 
 internal object UtilitySwoDayOne {
 
-    var timer = DownloadTimer("SWO")
+    val timer = DownloadTimer("SWO")
 
     @SuppressLint("UseSparseArrays")
     val HASH_SWO = mutableMapOf<Int, List<Double>>()
@@ -59,28 +59,22 @@ internal object UtilitySwoDayOne {
             val day = 1
             val html = ("${MyApplication.nwsSPCwebsitePrefix}/products/outlook/KWNSPTSDY" + day.toString() + ".txt").getHtmlSep()
             val htmlChunk = html.parse("... CATEGORICAL ...(.*?&)&") // was (.*?)&&
-            threatList.indices.forEach { it ->
+            threatList.indices.forEach { threatIndex ->
                 var data = ""
-                val threatLevelCode = threatList[it]
+                val threatLevelCode = threatList[threatIndex]
                 val htmlList = htmlChunk.parseColumn(threatLevelCode.substring(1) + "(.*?)[A-Z&]")
                 val warningList = mutableListOf<Double>()
                 htmlList.forEach { polygon ->
                     val coordinates = polygon.parseColumn("([0-9]{8}).*?")
-                    coordinates.forEach { coordinate ->
-                            data += LatLon(coordinate).print()
-                    }
+                    coordinates.forEach { coordinate -> data += LatLon(coordinate).print() }
                     data += ":"
                     data = data.replace(" :", ":")
                 }
                 val polygons = data.split(":").dropLastWhile { it.isEmpty() }
                 polygons.forEach { polygon ->
                     val numbers = MyApplication.space.split(polygon)
-                    val x = numbers.filterIndexed { index: Int, _: String -> index and 1 == 0 }.map {
-                        it.toDoubleOrNull() ?: 0.0
-                    }
-                    val y = numbers.filterIndexed { index: Int, _: String -> index and 1 != 0 }.map {
-                        (it.toDoubleOrNull() ?: 0.0) * -1.0
-                    }
+                    val x = numbers.filterIndexed { index: Int, _: String -> index and 1 == 0 }.map { it.toDoubleOrNull() ?: 0.0 }
+                    val y = numbers.filterIndexed { index: Int, _: String -> index and 1 != 0 }.map { (it.toDoubleOrNull() ?: 0.0) * -1.0 }
                     if (x.isNotEmpty() && y.isNotEmpty()) {
                         warningList.add(x[0])
                         warningList.add(y[0])
@@ -100,7 +94,7 @@ internal object UtilitySwoDayOne {
                         warningList.add(x.last())
                         warningList.add(y[x.lastIndex])
                     }
-                    HASH_SWO[it] = warningList
+                    HASH_SWO[threatIndex] = warningList
                 }
             }
         }

@@ -32,9 +32,8 @@ class ObjectNhcRegionSummary(region: NhcOceanEnum) {
     var urls: List<String>
     var titles: List<String>
     var bitmaps = listOf<Bitmap>()
-    var storms = mutableListOf<ObjectNhcStormInfo>()
-    var replaceString: String
-    var baseUrl: String
+    private var replaceString: String
+    private var baseUrl: String
 
     init {
         when (region) {
@@ -83,13 +82,9 @@ class ObjectNhcRegionSummary(region: NhcOceanEnum) {
         }
     }
 
-    fun getImages() {
-        bitmaps = urls.map {it.getImage()}
-    }
+    fun getImages() { bitmaps = urls.map { it.getImage() } }
 
-    fun getTitle(index: Int): Array<String> {
-        return arrayOf(urls[index], titles[index])
-    }
+    fun getTitle(index: Int) = arrayOf(urls[index], titles[index])
 }
 
 

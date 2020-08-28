@@ -1,32 +1,269 @@
-// TODO [ADD] Level 2 BV colormap and wrapping (Alex)a
-// TODO [FIX] base velocity legend
-// TODO [ADD] line size - swo, wb, wb gusts, sti
-// TODO [REF] OkHttp 3.13 Requires Android 5+ – Square Corner Blog – Medium  https://medium.com/square-corner-blog/okhttp-3-13-requires-android-5-818bb78d07ce
-// TODO [REF] move off rid/wfo/sounding lat/lon/name currently in pref should be in objects (like flutter/iOS)
-// TODO       NWS_LOCATION RID_LOC
-// TODO [FIX] Canada - some radars have changed code names (need to change maps.xml as well)
-// TODO [ADD] radar file class from flutter
-// TODO [FIX] select radar from main screen via icon brings up zoomed out view UtilityLocationFragment
-// TODO [FIX] roaming location needs background GPS perm for Android 10 (API 29)
-// TODO [ADD] textual obs in fixed radars on homescreen
-// TODO [ADD] use ENUM instead of RID_FAV WFO_FAV SND_FAV (util/UtilityFavorites)
-// TODO [ADD] look into magnification gestures
-// TODO [FIX] dual/quad pane radar don't take up the entire screen on chomeOS
-// TODO [REF] move off MyApplication.colon.split MyApplication.colon.space
-// TODO       miscPref.split(":").dropLastWhile { it.isEmpty() }
-// TODO [REF] reduce use of RegExp class
-// TODO [REF] use LatLon in Spotter, SpotterReports and other places that have lat and lon
-// TODO [ADD] storm reports - optimization for landscape
-// TODO [ADD] us alerts - optimization for landscape
+// TODO [FIX] Canada - some radars have changed code names - need to change maps.xml as well
+// TODO [FIX] dual/quad pane radar don't take up the entire screen on chromeOS
 // TODO [FIX] chromeOS: text size for observations in nexrad
-// TODO [REF] rename AfdActivity to WfoText
-// TODO [ADD] ability to step through animations
-// TODO [FIX] hitting this? https://stackoverflow.com/questions/54120745/android-9-0-notificationmanager-notify-throwing-java-lang-securityexception
-// TODO [FIX] chromeOS - multipane radar toolbar is not fully transparent
-// TODO [FIX] change animation interval to animation speed
-// TODO [FIX] update PlayList to be more like iOS
+// TODO [FIX] storm reports - having location follow gps breaks the location marker
+// TODO [REF] WXGLRender rename rid to radarSite
+// TODO [REF] rename files/classes in radar folder
+// TODO [ADD] Remove all non nws embedded websites
+// TODO [ADD] for alert closest radar use polygon center like mcd
+// TODO [ADD] certain GOES regions like CONUS have additional products (GLM, DMW)
+// TODO [FIX] NSSL WRF needs better runtime detection (reference C++ code)
+// TODO [FIX] in nexrad, long press and select top entry - should not do anything
+// TODO [FIX] remove NWS Obs site KEKM since it goes offline from 9pm-6am every day (reported by user)
+// TODO [FIX] look into nexrad pan scaled to zoom (user request)
+// TODO [FIX] look into removing state in city textual label in nexrad (user request)
 
-55379 2020_03_17    [REF] misc for readability
+55506 2020_08_24    [REF] com.google.android.material:material:1.2.0 (from 1.1.0) org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.0 (from 1.3.72), and others
+                    [FIX] give build process more memory
+55505 2020_07_10    [FIX] NHC storm graphics not working for storms IDs over 5
+55504 2020_06_24    [FIX] icon for WFO text notif
+                    [ADD] update kotlin plugin to 1.3.72-release-Studio4.0-5
+55503 2020_06_12    [ADD] GOES products DayCloudPhase NightMicrophysics, see https://www.star.nesdis.noaa.gov/GOES/index.php for description
+                    [FIX] share legacy bitmap from nexrad single pane when level3 text products like storm motion are enabled
+                    [FIX] in settingsNavDrawer on exit restart app regardless
+55502 2020_06_11    [ADD] storm reports show filter in header text
+                    [REF] misc
+                    [FIX] if GPS is on but location marker is not, GPS circle will not have dot in center
+                    [ADD] WIP - SettingsNavDrawerActivity - make items in main nav drawer be configurable (to hide)
+55501 2020_06_11    [ADD] if using nav drawer on main screen, with the top items in dark background you can now tap on anywhere in the row even blank space to the right of the text to activate the item
+55500 2020_06_10    try #2 for all activities in 498
+55499 2020_06_10    try #2 for SPC SWO
+55498 2020_06_10    [FIX] (did not work) remove HTML formatting for SPC SWO share text/WFO Text/Text Screen/WPC Text (Utility.fromHtml(html) to html)
+55497 2020_06_08    [FIX] MCD/MPD/WAT viewer radar icon was not working for watch
+55496 2020_06_08    [REF] refactor to some code added earlier today
+55495 2020_06_08    [ADD] for MCD/WAT/MPD/Alert - don't include tdwr in closest radar computation
+55494 2020_06_08    [ADD] for MCD/WAT/MPD, use center of polygon to detect radar site
+                    [ADD] in severe dashboard use better radar site selection when tapping on radar icon for warning
+55493 2020_06_08    [ADD] show radar icon in SPC MCD, WPC MPD, and SPC Watch (not optimal radar selection but close, will be improved)
+55492 2020_06_08    [ADD] show radar icon in US Alerts if polygon present
+55491 2020_06_08    [FIX] NHC notifications were not sending at every update interval
+55490 2020_06_07    [FIX] NHC notifications were not sending at every update interval
+                    [ADD] NHC Storm detail additional graphic for flash flood risk
+55489 2020_06_07    [REF] misc
+                    [ADD] org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.71 to org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72
+                    [ADD] onrestart in NHC
+                    [ADD] In Image Viewer move custom title to subtitle to fit more text
+                    [ADD] additional local wfo text products 'HLS', 'MWW', 'CFW', 'FFA'
+55488 2020_06_01    [REF] misc
+                    [ADD] additional NHC text products that require fixed width
+                    [ADD] SPC HREF 24-hr STP Calibrated: Tornado
+                    [ADD] 1-hr HREF Calibrated: Thunder
+                    [ADD] 24-hr HREF Calibrated: Thunder
+                    [ADD] settings -> Color - make background all black
+55487 2020_05_30    [ADD] increase font size in settings main screen
+55486 2020_05_30    [ADD] move "delete old radar files" from Settings into Settings -> About. You should never need this command.
+55485 2020_05_30    [ADD] NHC text products MIATWSAT / EP are now fixed-width font with newlines not stripped
+                    [ADD] new SPC Meso param SR Helicity - Sfc-500m (srh5)
+                    [ADD] new SPC Meso param Sgfnt Tornado (0-500m SRH) (stpc5)
+                    [ADD] move all config options in settings (top level) into settings - UI
+55484 2020_05_30    [REF] misc
+                    [FIX] single pane radar was not at correct zoom level if position not remembered
+55483 2020_05_29    [REF] misc
+55482 2020_05_29    [REF] misc
+                    [FIX] Spc hrrr/href no sector by default showing
+                    [FIX] Spc hrrr/href/sref default model time was not optimal
+                    [REF] rationalize fav management, move to common method for setup starting with wpc text
+55481 2020_05_28    [ADD] Android Studio update to 4.0 with associated gradle updates
+                    [ADD] update ndk from r21 to r21c
+55477 2020_05_28    [REF] misc
+                    [FIX] one typo in help - thanks to Travis for pointing out
+                    [ADD] more verbose text prod labels for some canadian text products
+55476 2020_05_27    [REF] misc
+                    [REF] remove roaming location feature
+                    [FIX] implement separate timer for SevereDashboard and Radar. If warnings disabled they can essentially be overriden
+                    by going into the radar activity before severe dashboard
+                    [REF] rename layout IDs for spotter report card
+55475 2020_05_26    [FIX] possible fix joshuatee.wx.notifications.UtilityNotificationSpc.sendMcdLocationNotifications (UtilityNotificationSpc.kt:182) java.lang.ArrayIndexOutOfBoundsException:
+                    [REF] remove unused xml layout and drawables
+                    [REF] remove useless relative layouts in xml: hourly, spc swo state, cardview_spotter
+                    [REF] change menu option label from Pin to Add shortcut to home screen
+                    [FIX] (needs test) Android share text does not preserve line breaks
+55474 2020_05_25    [REF] misc
+55473 2020_05_24    [FIX] add try/catch to at joshuatee.wx.radarcolorpalettes.ObjectColorPalette.putInt
+55472 2020_05_24    [FIX] if in settings -> UI , toggle the new nav drawer and use the top arrow instead of the bottom, it will crash
+55471 2020_05_24    [FIX] VR button missing needs themed color ic_mic_24dp
+                    [FIX] add conditional TTS init in MyApp if notifications use TTS
+55470 2020_05_24    [ADD] ref colormap "nws" which has been in iOS version for some time
+                    [ADD] title/subtitle in SPC Meso
+                    [FIX] nexrad: animate and then long press to switch site does not stop animate
+                    [FIX] nexrad: enter single pane radar, zoom out, tape dual pane, exit - use upper right selector to switch site
+                    [FIX] nexrad Kotlin hide map on getcontent
+55469 2020_05_23    [REF] misc
+55468 2020_05_23    [FIX] pre SDK26 vis crashes after change in prior release
+55467 2020_05_23    [ADD] GOES, remove bottom toolbar
+55466 2020_05_23    [REF] significant refactor in colormap
+55465 2020_05_23    [FIX] wfo notification filter all white
+                    [FIX] all white Canada legal disclaimer
+                    [FIX] Twitter state selector
+                    [ADD] obs site move to top toolbar, if no last used, use closest
+55464 2020_05_23    [ADD] remove spinner from CA radar
+55463 2020_05_22    [REF] misc
+55462 2020_05_22    [FIX] SPC Meso swipe left/right when no favs
+                    [FIX] redo SPC Meso fav management to not use labels
+55461 2020_05_22    [REF] misc
+55460 2020_05_22    [ADD] in model switch to invalidate for top toolbar textual items
+55459 2020_05_22    [FIX] SPC Meso, show param instead of label due to space constraints
+                    [FIX] SPC Meso, add back swipe left/right
+                    [FIX] nexrad single pane, only show radar ID due to lack of room in top toolbar
+55458 2020_05_21    [FIX] nexrad reset view in mapswitch
+55457 2020_05_21    [ADD] WFOText, SPC SWO State, Sounding, LSR by WFO, SPC Meso, WPC Text, Nexrad to dialog
+55456 2020_05_21    [REF] dialogue functions in model code using lambda (move to common ui code, pass context)
+55455 2020_05_21    [FIX] ctrl j/k in models needs to be reversed
+                    [REF] for various dictionaries (myapp) related to color pal, use Int instead of String for key. Impacts colormap editor stuff as well
+55454 2020_05_21    [FIX] Ncep prior runs not showing up
+55453 2020_05_21    [FIX] NCEP GFS change one sector to "WEST-ATL"
+                    [FIX] NCEP models , after change model reset time to 1
+                    [FIX] NCEP models does not show time pretty label after switch model or product
+55452 2020_05_21    [FIX] NCEP models FABs need all white icons
+                    [FIX] NCEP model swipe left/right not working
+55451 2020_05_20    [FIX] correct obs icon on misc tab
+                    [ADD] WIP - model rewrite (fixes)
+                    [REF] colorpal, use Int instead of String for product code
+55450 2020_05_20    [ADD] WIP - model rewrite
+55449 2020_05_20    [ADD] WIP - model rewrite (not SPC SREF yet)
+55448 2020_05_20    [FIX] revert changes in SPC HRRR/HREF/SREF
+55447 2020_05_19    [ADD] allWhite theme - SPC HREF/SREF fix
+                    [FIX] obs icon not correct in new nav drawer
+55446 2020_05_19    [ADD] allWhite theme - Tts pause icon is yellow when activated
+                    [ADD] allWhite theme - drawer background
+                    [ADD] allWhite theme - Icons us alerts/severe dash
+                    [ADD] allWhite theme - SPC HRRR fix
+                    [FIX] Android warning share text formatting
+55445 2020_05_19    [ADD] nhc storm 3 wide if tablet
+                    [REF] utilNws icon
+                    [ADD] allWhite theme - bottom sheet support
+                    [ADD] allWhite theme - alert dialogue
+55444 2020_05_18    [ADD] allWhite theme
+55443 2020_05_18    [ADD] allWhite theme
+                    [FIX] nexrad toolbar for all white theme
+                    [FIX] LSR by WFO via SPC Storm reports formatting was corrected
+55442 2020_05_18    [ADD] allWhite theme
+                    [ADD] in multiple activities move playlist off main toolbar to submenu
+55441 2020_05_18    [ADD] allWhite theme - wip
+55440 2020_05_17    [ADD] NHC Storm - QPF graphic
+                    [ADD] remove bottom toolbar in WPC Images and settings about
+55439 2020_05_17    [ADD] Radar mosaic - remove bottom toolbars
+55438 2020_05_17    [ADD] NHC Storm move to json data source per https://www.weather.gov/media/notification/scn20-25tropical_javascrpt.pdf
+                    [ADD] remove un-needed toolbar options in NHC and NHC Storm and remove bottom toolbar
+55437 2020_05_16    [FIX] disable WPC Fronts in multipane due to crash, lower pressure centers still show
+55436 2020_05_16    [REF] misc
+                    [ADD] Freeze Warning to WFO warning filter list
+                    [ADD] NHC Storm use intent.getSerializableExtra("StormData") as ObjectNhcStormDetails
+                    [ADD] NHC Storm - if select additional text products from submenu, invoke WPC Text viewer
+                    [FIX] at joshuatee.wx.radar.UtilityRadarUI.addItemsToLongPress (UtilityRadarUI.kt:106)
+                           out of bounds with insert extension
+55435 2020_05_16    [REF] misc
+                    [ADD] 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3' to 1.3.6 (and 2nd one)
+55434 2020_05_15    [ADD] option in settings UI to have main screen nav drawer open from right side
+                    [FIX] prevent leak in TTS for AudioPlayActivity
+55433 2020_05_13    [ADD] onrestart to settings - about
+                    [REF] delete UtilityHttp.java
+                    [ADD] in Spotter activity remove phone number/email as they are not available on https://www.spotternetwork.org/ w/o member login
+55432 2020_05_13    [REF] misc
+55431 2020_05_12    [ADD] in radar settings if location dot follows GPS also keep screen on and perform refresh
+55430 2020_05_11    [FIX] AWC radar mosaic sectors were off by one
+                    [ADD] if notif interval set to 121, cancel all background processing (if Android 7.0 or higher - API 24)
+                    [REF] mv AfdActivity.kt WfoTextActivity.kt
+55429 2020_05_11    [REF] move WXGLDownload to static
+55428 2020_05_09    [FIX] in httpInterceptor in myApp, close response within loop per bug report okhttp
+55427 2020_05_09    [FIX] nexrad images via share not working
+                    [ADD] if settings - notification - interval is set to 121 don't set service on program start
+55426 2020_05_09    [REF] wip - utilDownload - move base get to utilNetworkIO
+                    [FIX] android keyboard shortcut for stop animate not working
+55425 2020_05_09    [ADD] migrate "com.squareup.okhttp3:okhttp:3.14.8"  to "com.squareup.okhttp3:okhttp:4.6.0"
+55424 2020_05_09    [REF] remove legacy png for icons in folders like app/src/main/res/drawable-xhdpi
+55423 2020_05_09    [REF] remove Obsolete SDK_INT Version Check
+                    [REF] move values-v21/styles.xml to values/styles.xml
+55422 2020_05_09    [ADD] In settings location, condense the number of lines, make the top line blue, indicate active alerts with text "*Alerts" at end of name
+                    [REF] BREAKING MAJOR CHANGE move minSdkVersion 16 -> 21
+                    [REF] move "com.squareup.okhttp3:okhttp:3.12.8" to "com.squareup.okhttp3:okhttp:3.14.8" (with a quick plan to move to 4.6 soon)
+55421 2020_05_08    [FIX] TTS bug when starting voice in one activity and moving to another and starting a new voice (do not check ttsInit in initTts)
+55420 2020_05_07    [ADD] test then backout update to minsdk to 21 and okhttp to 3.14.x / 4.6.0
+                    [FIX] if radar center on location, text labels are not in the correct spot
+55419 2020_05_06    [ADD] Java8 support for Java/Kotlin needed for upcoming okhttp update
+55418 2020_05_06    [FIX] nexrad long press was not showing warnings if only SPS - add generic count method in utilVtec
+                    [FIX] nexrad multipane remove cntrl - up arrow/down arrow as it's not working correctly
+                    [ADD] NHC for homescreen (2/5 day ATL,EPAC,CPAC)
+                    [ADD] GOES-17 cak / sea - central SE AK
+55417 2020_05_05    [REF] misc
+                    [ADD] nexrad long press - don't show warnings text entry if no warnings present
+                    [ADD] NCEP MAG models - add Composite Radar Reflectivity into a number of models
+55416 2020_04_30    [ADD] move initTts out of MyApp and into AudioPlayActivity
+55415 2020_04_30    [FIX] nexrad controls keyboard zoom in/out in multipane - attempt #2
+55414 2020_04_30    [REF] misc
+                    [ADD] androidx.preference:preference:1.1.0 to 1.1.1
+                    [FIX] revert as didn't work: [ADD] nexrad radar zoom-out/in keyboard controls switch from ctrl to alt (up/down arrows)
+55412 2020_04_29    [ADD] nexrad radar zoom-out/in keyboard controls switch from ctrl to alt (up/down arrows)
+                    [ADD] warning/watch stats in nav drawer header if configured
+55411 2020_04_29    [REF] misc
+                    [FIX] wxglradar - fix issue when switching via map to new location
+55410 2020_04_28    [REF] ObjectIntent
+55409 2020_04_28    [ADD] remove bottom toolbar to save real estate in lightning
+                    [FIX] nexrad multipane keyboard zoom out/in needs scale factor tied to number of panes
+                    [FIX] WFO text viewer - product by state formatting was not optimal
+55408 2020_04_27    [ADD] WIP - new UI option (ObjectIntent optimizations)
+                    [FIX] NCEP MAG GFS Composite Radar Reflectivity was not working
+                    [ADD] remove bottom toolbar to save real estate in OPC/Goes Global/WPC Rainfall summary/Observations/SPC Compmap
+                          SPC Convective Outlook summaries/SPC Fire summaries/SPC thunderstorm summaries/us alerts
+55407 2020_04_27    [FIX] SPC Convective outlook - title is more descriptive when image shown alone
+	 	            [ADD] theme support for new navbar
+55406 2020_04_26    [FIX] storm reports - having location follow gps breaks the location marker
+55405 2020_04_26    [FIX] remove location in save in US Alerts as OSM is not going to work anymore
+                    [FIX] remove all services dependant on OSM: MCD location save, VR location save, fallback location search
+55404 2020_04_26    [ADD] WIP - new UI option
+55403 2020_04_26    [ADD] WIP - new UI option
+55402 2020_04_26    [ADD] better formatting in NHC Storm detail
+                    [ADD] onrestart to NHC Storm detail (refresh data when resume)
+                    [ADD] some keyboard commands to multipane radar
+55401 2020_04_25    [FIX] NHC EPAC storms were not showing
+55400 2020_04_25    [REF] misc
+                    [FIX] NCEP MAG HRRR animation was not working
+                    [FIX] NCEP MAG - remove WW3-ENP WW3-WNA
+55399 2020_04_25    [REF] misc
+55398 2020_04_25    [REF] misc
+55397 2020_04_19    [ADD] Android Studio/gradle update
+                    [ADD] long press radar - only show selections if count is active ( like flutter )
+                    [ADD] simplify settings radar verbiages
+55396 2020_04_17    [REF] translate ExternalGeodeticCalculator to kotlin
+55395 2020_04_16    [REF] misc for readability
+                    [FIX] WIP TTS speech speed was not working (requires app restart after change)
+                    [ADD] kotlin plugin 1.3.71 -> 1.3.72
+55394 2020_04_13    [REF] misc for readability
+55393 2020_04_12    [REF] misc for readability
+                    [FIX] crash and off by one issue in radar icon in severe dashboard
+                    [REF] remove LatLonStr
+                    [FIX] Canada radar - if zoomed in on local site and then choose mosaic, reset zoom/position
+                    [ADD] hourly - remove bottom toolbar, move share icon to top
+                    [FIX] AFD - prior text products not formatting well
+                    [ADD] enhance dynamic line size changes in nexrad radar for warning, watch, SWO
+55392 2020_04_07    [REF] misc for readability
+55391 2020_04_06    [FIX] remove line breaks in WPC Excessive rainfall text products
+55390 2020_04_05    [REF] misc for readability
+                    [ADD] nexrad radar - line size for wind barbs, storm tracks, and convective outlines now configurable
+55389 2020_04_03    [REF] misc for readability
+55388 2020_04_01    [REF] misc for readability
+                    [ADD] severedashboard and uswarning - add radar/details button in warning cards
+55387 2020_03_29    [REF] misc for readability
+55386 2020_03_29    [REF] misc for readability
+                    [FIX] java.lang.IndexOutOfBoundsException: at joshuatee.wx.radar.WXGLRender.constructWpcFronts (WXGLRender.kt:1187)
+                    [FIX] kotlin.KotlinNullPointerException: at joshuatee.wx.fragments.LocationFragment$getRadar$1$5.invokeSuspend (LocationFragment.kt:463)
+55385 2020_03_27    [REF] misc for readability
+55384 2020_03_26    [REF] misc for readability - notifications dir
+55383 2020_03_26    [REF] misc for readability
+                    [FIX] typo - base spectrum width label changed to NSW - was NWS
+55382 2020_03_25    [REF] make use of ObjectImageSummary in SPC Fire/tstorm
+                    [REF] misc for readability
+                    [ADD] monospace for certain national text products
+55381 2020_03_24    [REF] misc for readability
+                    [FIX] in nexrad with transparent toolbars, show toolbar background when map is shown
+                    [ADD] minor padding change in current conditions card
+                    [ADD] minor formatting changes in warning impact graphics
+                    [ADD] kotlin plugin 1.3.70 -> 1.3.71
+                    [FIX] crash in radar mosaic when radar warnings enabled under some circumstances
+55380 2020_03_20    [REF] misc for readability
+                    [ADD] minor formatting enhancement in spotter reports (light gray for description)
+                    [ADD] In SevereDashboard, octagon icon main screen - you can now press and hold on a warning for a menu, menu allows one to show nexrad radar
+55379 2020_03_18    [REF] misc for readability
                     [ADD] Canadian locations - have alerts act like US on front screen
                     [ADD] add save location button in adhoc location accessed via nexrad long press
                     [FIX] Canadian Warnings detailed formatting minor improvement

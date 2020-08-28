@@ -26,25 +26,19 @@ import joshuatee.wx.objects.ProjectionType
 
 class ProjectionNumbers {
 
-    var scale: Double = 0.0
-    var scaleFloat: Float = 0.0f
-    var oneDegreeScaleFactor: Double = 0.0
-    var x: String = "0.0"
-    var y: String = "0.0"
-    var xCenter: Double = 0.0
-    var yCenter: Double = 0.0
-    var polygonWidth: Double = 2.0
-    var radarSite: String = ""
+    var scale = 0.0
+    var scaleFloat = 0.0f
+    var oneDegreeScaleFactor = 0.0
+    var x = "0.0"
+    var y = "0.0"
+    var xCenter = 0.0
+    var yCenter = 0.0
+    var polygonWidth = 2.0
+    var radarSite = ""
 
     constructor()
 
-    constructor(
-        scale: Double,
-        lat: String,
-        lon: String,
-        xImageCenterPixels: Double,
-        yImageCenterPixels: Double
-    ) {
+    constructor(scale: Double, lat: String, lon: String, xImageCenterPixels: Double, yImageCenterPixels: Double) {
         this.scale = scale
         scaleFloat = scale.toFloat()
         x = lat
@@ -54,11 +48,11 @@ class ProjectionNumbers {
         oneDegreeScaleFactor = UtilityMath.pixPerDegreeLon(xDbl, scale)
     }
 
-    constructor(radarSite: String, provider: ProjectionType) {
+    constructor(radarSite: String, projectionType: ProjectionType) {
         this.radarSite = radarSite
         xCenter = 0.0
         yCenter = 0.0
-        when (provider) {
+        when (projectionType) {
             ProjectionType.NWS_MOSAIC -> {
                 scale = 55.50
                 xCenter = 1700.0
@@ -104,19 +98,19 @@ class ProjectionNumbers {
         scaleFloat = scale.toFloat()
     }
 
-    val oneDegreeScaleFactorFloat: Float
+    val oneDegreeScaleFactorFloat
         get() = oneDegreeScaleFactor.toFloat()
 
-    val xDbl: Double
+    val xDbl
         get() = x.toDoubleOrNull() ?: 0.0
 
-    val xFloat: Float
+    val xFloat
         get() = x.toFloatOrNull() ?: 0.0f
 
-    val yDbl: Double
+    val yDbl
         get() = y.toDoubleOrNull() ?: 0.0
 
-    val yFloat: Float
+    val yFloat
         get() = y.toFloatOrNull() ?: 0.0f
 }
 

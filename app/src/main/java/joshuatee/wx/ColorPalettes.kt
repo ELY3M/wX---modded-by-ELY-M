@@ -26,30 +26,30 @@ import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 
 internal object ColorPalettes {
 
-    fun init(context: Context) {
-        val colorMapIntArr = listOf(30, 56, 134, 135, 159, 161, 163, 165)
-        val cm94 = ObjectColorPalette(context, "94")
+    fun initialize(context: Context) {
+        val productCodes = listOf(30, 56, 134, 135, 159, 161, 163, 165)
+        val cm94 = ObjectColorPalette(context, 94)
         MyApplication.colorMap[94] = cm94
-        MyApplication.colorMap[94]!!.init()
+        MyApplication.colorMap[94]!!.initialize()
         MyApplication.colorMap[153] = cm94
         MyApplication.colorMap[180] = cm94
         MyApplication.colorMap[186] = cm94
-        val cm99 = ObjectColorPalette(context, "99")
+        val cm99 = ObjectColorPalette(context, 99)
         MyApplication.colorMap[99] = cm99
-        MyApplication.colorMap[99]!!.init()
+        MyApplication.colorMap[99]!!.initialize()
         MyApplication.colorMap[154] = cm99
         MyApplication.colorMap[182] = cm99
-        val cm172 = ObjectColorPalette(context, "172")
+        val cm172 = ObjectColorPalette(context, 172)
         MyApplication.colorMap[172] = cm172
-        MyApplication.colorMap[172]!!.init()
+        MyApplication.colorMap[172]!!.initialize()
         MyApplication.colorMap[170] = cm172
-        colorMapIntArr.forEach {
-            MyApplication.colorMap[it] = ObjectColorPalette(context, it.toString())
-            MyApplication.colorMap[it]!!.init()
+        productCodes.forEach {
+            MyApplication.colorMap[it] = ObjectColorPalette(context, it)
+            MyApplication.colorMap[it]!!.initialize()
         }
-        val cm19 = ObjectColorPalette(context, "19")
+        val cm19 = ObjectColorPalette(context, 19)
         MyApplication.colorMap[19] = cm19
-        MyApplication.colorMap[19]!!.init()
+        MyApplication.colorMap[19]!!.initialize()
         MyApplication.colorMap[181] = cm19
         // below 2 composite reflectivity
         MyApplication.colorMap[37] = cm19

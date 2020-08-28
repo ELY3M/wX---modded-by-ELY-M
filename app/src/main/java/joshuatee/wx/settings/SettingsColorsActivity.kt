@@ -23,6 +23,7 @@
 package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 
 import joshuatee.wx.MyApplication
@@ -35,11 +36,12 @@ import kotlinx.android.synthetic.main.activity_linear_layout.*
 
 class SettingsColorsActivity : BaseActivity() {
 
-    private val colorObjects = mutableListOf<ObjectSettingsColorLabel>()
+    private var objectSettingsColorLabels = listOf<ObjectSettingsColorLabel>()
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
+        linearLayout.setBackgroundColor(Color.BLACK)
         val mapColorToPref = mutableMapOf(
             "Highway color" to "RADAR_COLOR_HW",
             "Secondary Highway color" to "RADAR_COLOR_HW_EXT",
@@ -70,16 +72,9 @@ class SettingsColorsActivity : BaseActivity() {
             "NWS Forecast Icon Bottom color" to "NWS_ICON_BOTTOM_COLOR",
             "Nexrad Radar Background color" to "NEXRAD_RADAR_BACKGROUND_COLOR"
         )
-
-        MyApplication.radarWarningPolygons.forEach {
-            mapColorToPref[it.name + " color"] = it.prefTokenColor
-        }
-
-        mapColorToPref.keys.asSequence().sorted()
-            .mapTo(colorObjects) { ObjectSettingsColorLabel(this, it, mapColorToPref[it]!!) }
-        colorObjects.forEach {
-            ll.addView(it.card)
-        }
+        MyApplication.radarWarningPolygons.forEach { mapColorToPref[it.name + " color"] = it.prefTokenColor }
+        objectSettingsColorLabels = mapColorToPref.keys.sorted().map { ObjectSettingsColorLabel(this, it, mapColorToPref[it]!!) }
+        objectSettingsColorLabels.forEach { linearLayout.addView(it.card) }
     }
 
     override fun onRestart() {
@@ -95,9 +90,7 @@ class SettingsColorsActivity : BaseActivity() {
 
     private fun setColorOnButtons() {
         MyApplication.initPreferences(this)
-        colorObjects.forEach {
-            it.refreshColor()
-        }
+        objectSettingsColorLabels.forEach { it.refreshColor() }
     }
 }
 

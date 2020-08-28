@@ -38,11 +38,7 @@ class Widget : AppWidgetProvider() {
         super.onEnabled(context)
     }
 
-    override fun onUpdate(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
-    ) {
+    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         UtilityWidget.update(context, CCLegacy)
     }
 
@@ -59,7 +55,7 @@ class Widget : AppWidgetProvider() {
     }
 
     companion object {
-        const val WIDGET_IDS_KEY: String = "mywidgetproviderwidgetids"
+        const val WIDGET_IDS_KEY = "mywidgetproviderwidgetids"
         private const val WIDGET_DATA_KEY = "mywidgetproviderwidgetdata"
     }
 } 

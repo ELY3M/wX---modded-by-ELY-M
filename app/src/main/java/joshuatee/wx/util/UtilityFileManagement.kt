@@ -39,29 +39,21 @@ object UtilityFileManagement {
         return fileList
     }
 
-    fun deleteFile(context: Context, fn: String) {
-        context.deleteFile(fn)
+    fun deleteFile(context: Context, fileName: String) {
+        context.deleteFile(fileName)
     }
 
-    fun internalFileExist(context: Context, path: String): Boolean {
-        val file = context.getFileStreamPath(path)
-        return file.exists()
-    }
+    fun internalFileExist(context: Context, path: String) = context.getFileStreamPath(path).exists()
 
     fun moveFile(context: Context, src: String, target: String) {
-        val fh = File(context.filesDir, src)
-        if (!fh.renameTo(File(context.filesDir, target))) {
-            UtilityLog.d("wx", "Problem moving file to $target")
-        }
+        val file = File(context.filesDir, src)
+        if (!file.renameTo(File(context.filesDir, target))) UtilityLog.d("wx", "Problem moving file to $target")
     }
 
     fun moveFile(context: Context, src: String, target: String, moveSize: Int) {
-        val fh = File(context.filesDir, src)
-        if (fh.length() > moveSize) {
-            if (!fh.renameTo(File(context.filesDir, target))) UtilityLog.d(
-                "wx",
-                "Problem moving file to $target"
-            )
+        val file = File(context.filesDir, src)
+        if (file.length() > moveSize) {
+            if (!file.renameTo(File(context.filesDir, target))) UtilityLog.d("wx", "Problem moving file to $target")
         }
     }
 }

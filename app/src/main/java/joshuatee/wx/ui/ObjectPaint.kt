@@ -27,7 +27,7 @@ import joshuatee.wx.MyApplication
 
 class ObjectPaint {
 
-    val paint: Paint = Paint()
+    val paint = Paint()
 
     init {
         paint.color = MyApplication.nwsIconTextColor

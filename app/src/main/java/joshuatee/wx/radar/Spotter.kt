@@ -27,27 +27,27 @@ package joshuatee.wx.radar
 //#uniq,icon,live camera,reportAt,lat,lon,callsign,active,moving,dir,phone,email,freq,note,first,last
 
 class Spotter internal constructor(uniq: String, icon: String, camera: String, reportAt: String, lat: String, lon: String, callsign: String, active: String, moving: String, dir: String, phone: String, email: String, freq: String, note: String, firstName: String, lastName: String) {
-    var unique: String = ""
-    var camera: String = ""
-    var icon: String = ""
-    var reportAt: String = ""
+    var unique = ""
+    var camera = ""
+    var icon = ""
+    var reportAt = ""
     // FIXME use LatLon instead
-    var lat: String = ""
-    var lon: String = ""
-    var callsign: String = ""
-    var active: String = ""
-    var moving: String = ""
-    var dir: String = ""
-    var phone: String = ""
-    var email: String = ""
-    var freq: String = ""
-    var note: String = ""
-    var firstName: String = ""
-    var lastName: String = ""
+    var lat = ""
+    var lon = ""
+    var callsign = ""
+    var active = ""
+    var moving = ""
+    var dir = ""
+    var phone = ""
+    var email = ""
+    var freq = ""
+    var note = ""
+    var firstName = ""
+    var lastName = ""
 
-    var latD: Double = 0.0
+    var latD = 0.0
         private set
-    var lonD: Double = 0.0
+    var lonD = 0.0
         private set
 
     init {
@@ -66,15 +66,14 @@ class Spotter internal constructor(uniq: String, icon: String, camera: String, r
         this.freq = freq
         this.note = note
         this.firstName = firstName
-        this.lastName = lastName.replace("^ ".toRegex(), "")
+        //this.lastName = lastName.replace("^ ".toRegex(), "")
+	this.lastName = lastName
 
         latD = lat.toDoubleOrNull() ?: 0.0
         lonD = -1.0 * (lon.toDoubleOrNull() ?: 0.0)
     }
 
-    override fun toString(): String {
-        return "$firstName $lastName"
-    }
+    override fun toString() = "$firstName $lastName"
 }
 
 

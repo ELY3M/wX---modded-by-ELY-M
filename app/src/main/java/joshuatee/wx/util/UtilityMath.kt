@@ -29,17 +29,9 @@ import kotlin.math.*
 
 object UtilityMath {
 
-    fun distanceOfLine(x1: Double, y1: Double, x2: Double, y2: Double): Double {
-        return sqrt((x2 - x1).pow(2.0) + (y2 - y1).pow(2.0))
-    }
+    fun distanceOfLine(x1: Double, y1: Double, x2: Double, y2: Double) = sqrt((x2 - x1).pow(2.0) + (y2 - y1).pow(2.0))
 
-    fun computeTipPoint(
-            x0: Double,
-            y0: Double,
-            x1: Double,
-            y1: Double,
-            right: Boolean
-    ): List<Double> {
+    fun computeTipPoint(x0: Double, y0: Double, x1: Double, y1: Double, right: Boolean): List<Double> {
         val dx = x1 - x0
         val dy = y1 - y0
         val length = sqrt(dx * dx + dy * dy)
@@ -61,25 +53,14 @@ object UtilityMath {
         return listOf(rx, ry)
     }
 
-    fun computeMiddishPoint(
-            x0: Double,
-            y0: Double,
-            x1: Double,
-            y1: Double,
-            fraction: Double
-    ): List<Double> {
-        return listOf(x0 + fraction * (x1 - x0) , y0 + fraction * (y1 - y0))
-    }
+    fun computeMidPoint(x0: Double, y0: Double, x1: Double, y1: Double, fraction: Double) = listOf(x0 + fraction * (x1 - x0) , y0 + fraction * (y1 - y0))
 
     // 42.98888 to 42.99
     fun latLonFix(x: String): String {
         val dblX = x.toDoubleOrNull() ?: 0.0
         var newX = "0.0"
         try {
-            newX = String.format(Locale.US, "%.2f", dblX)
-            newX = newX.replace("00$".toRegex(), "")
-            newX = newX.replace("0$".toRegex(), "")
-            newX = newX.replace("\\.$".toRegex(), "")
+            newX = String.format(Locale.US, "%.2f", dblX).replace("00$".toRegex(), "").replace("0$".toRegex(), "").replace("\\.$".toRegex(), "")
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -87,103 +68,58 @@ object UtilityMath {
     }
 
     // convert polar cords to rect
-    fun toRect(r: Float, t: Float): FloatArray = floatArrayOf(
-            (r * cos(t / (180.00f / PI))).toFloat(),
-            (r * sin(t / (180.00f / PI))).toFloat()
-    )
+    fun toRect(r: Float, t: Float) = floatArrayOf((r * cos(t / (180.00f / PI))).toFloat(), (r * sin(t / (180.00f / PI))).toFloat())
 
-    fun unitsPressure(valueF: String): String {
-        var value = valueF
-        var tmpNum = value.toDoubleOrNull() ?: 0.0
-        if (MyApplication.unitsM) {
-            tmpNum *= 33.8637526
-            value = String.format(Locale.US, "%.2f", tmpNum) + " mb"
+    fun unitsPressure(value: String): String {
+        var num = value.toDoubleOrNull() ?: 0.0
+        return if (MyApplication.unitsM) {
+            num *= 33.8637526
+            String.format(Locale.US, "%.2f", num) + " mb"
         } else {
-            value = String.format(Locale.US, "%.2f", tmpNum) + " in"
+            String.format(Locale.US, "%.2f", num) + " in"
         }
-        return value
     }
 
-    fun celsiusToFahrenheit(valueF: String): String {
-        var value = valueF
-        var tmpNum: Double
-        if (MyApplication.unitsF) {
-            tmpNum = value.toDoubleOrNull() ?: 0.0
-            tmpNum = tmpNum * 9 / 5 + 32
-            value = round(tmpNum).toInt().toString()
+    fun celsiusToFahrenheit(value: String) = if (MyApplication.unitsF) {
+            round(((value.toDoubleOrNull() ?: 0.0) * 9 / 5 + 32)).toInt().toString()
+        } else {
+            value
         }
-        return value
-    }
 
-    internal fun fahrenheitToCelsius(valueDF: Double): String {
-        val valueD = (valueDF - 32) * 5 / 9
-        return round(valueD).toInt().toString()
-    }
+    internal fun fahrenheitToCelsius(value: Double) = round(((value - 32) * 5 / 9)).toInt().toString()
 
-    private fun celsiusToFahrenheitAsInt(valueF: Int): String {
-        var value = valueF
-        var retVal = ""
-        if (MyApplication.unitsF) {
-            value = value * 9 / 5 + 32
-            retVal = round(value.toFloat()).toString()
-        }
-        return retVal
-    }
+    // used by celsiusToFahrenheitTable only
+    private fun celsiusToFahrenheitAsInt(value: Int) = round((value * 9 / 5 + 32).toFloat()).toString()
 
     fun celsiusToFahrenheitTable(): String {
         var table = ""
         val cInit = -40
-        for (z in 40 downTo cInit) {
-            val f = celsiusToFahrenheitAsInt(z)
-            table += z.toString() + "  " + f + MyApplication.newline
-        }
+        for (z in 40 downTo cInit) { table += z.toString() + "  " + celsiusToFahrenheitAsInt(z) + MyApplication.newline }
         return table
     }
 
-    internal fun roundToString(valueD: Double) = round(valueD.toFloat()).toInt().toString()
+    internal fun roundToString(value: Double) = round(value.toFloat()).toInt().toString()
 
-    internal fun pressureMBtoIn(valueF: String): String {
-        var value = valueF
-        var tmpNum = value.toDoubleOrNull() ?: 0.0
-        tmpNum /= 33.8637526
-        value = String.format(Locale.US, "%.2f", tmpNum)
-        return "$value in"
-    }
+    internal fun pressureMBtoIn(value: String) = String.format(Locale.US, "%.2f", ((value.toDoubleOrNull() ?: 0.0) / 33.8637526)) + " in"
 
     fun pixPerDegreeLon(centerX: Double, factor: Double): Double {
         val radius = 180 / PI * (1 / cos(Math.toRadians(30.51))) * factor
         return radius * (PI / 180) * cos(Math.toRadians(centerX))
     }
 
-    fun deg2rad(deg: Double): Double = deg * PI / 180.0
+    fun deg2rad(deg: Double) = deg * PI / 180.0
 
-    fun rad2deg(rad: Double): Double = rad * 180.0 / PI
+    fun rad2deg(rad: Double) = rad * 180.0 / PI
 
     fun convertWindDir(direction: Double): String {
-        var dirStr = ""
-        if (direction > 337.5 || direction <= 22.5)
-            dirStr = "N"
-        else if (direction > 22.5 && direction <= 67.5)
-            dirStr = "NE"
-        else if (direction > 67.5 && direction <= 112.5)
-            dirStr = "E"
-        else if (direction > 112.5 && direction <= 157.5)
-            dirStr = "SE"
-        else if (direction > 157.5 && direction <= 202.5)
-            dirStr = "S"
-        else if (direction > 202.5 && direction <= 247.5)
-            dirStr = "SW"
-        else if (direction > 247.5 && direction <= 292.5)
-            dirStr = "W"
-        else if (direction > 292.5 && direction <= 337.5)
-            dirStr = "NW"
-        return dirStr
+        val windDirections = listOf("N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW", "N")
+        val normalizedDirection = direction.toInt() % 360
+        val listIndex = round((normalizedDirection.toDouble() / 22.5)).toInt()
+        return windDirections[listIndex]
     }
 
     // https://training.weather.gov/wdtd/tools/misc/beamwidth/index.htm
-    fun getRadarBeamHeight(degree: Float, distance: Double): Double {
-        return 3.281 * (sin(Math.toRadians(degree.toDouble())) * distance + distance * distance / 15417.82) * 1000.0
-    }
+    fun getRadarBeamHeight(degree: Float, distance: Double) = 3.281 * (sin(Math.toRadians(degree.toDouble())) * distance + distance * distance / 15417.82) * 1000.0
 
     fun heatIndex(temp: String , rh: String ): String {
         val t = temp.toDoubleOrNull() ?: 0.0
@@ -204,11 +140,4 @@ object UtilityMath {
             ""
         }
     }
-
-    /*static String getWindChill(double tempD, double mphD )
-	{
-		double windChillD = 35.74 + 0.6215 * tempD - 35.75 * Math.pow(mphD,0.16) + 0.4275*tempD * Math.pow(mphD,0.16);
-		return "(" + UtilityMath.unitsTemp(Integer.toString((int)(Math.round(windChillD)))) + MyApplication.DEGREE_SYMBOL + ")";
-	}*/
-
 }

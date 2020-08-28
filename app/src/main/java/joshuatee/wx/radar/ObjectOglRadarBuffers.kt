@@ -31,11 +31,11 @@ import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 
 class ObjectOglRadarBuffers(val context: Context, var bgColor: Int) : ObjectOglBuffers() {
 
-    var fn: String = "nids"
-    var numberOfRadials: Int = 360
-    var binSize: Float = 0f
-    var numRangeBins: Int = 0
-    var productCode: Short = 94.toShort()
+    var fileName = "nids"
+    var numberOfRadials = 360
+    var binSize = 0f
+    var numRangeBins = 0
+    var productCode = 94.toShort()
 
     val colormap: ObjectColorPalette
         get() = MyApplication.colorMap[productCode.toInt()]!!
@@ -52,13 +52,7 @@ class ObjectOglRadarBuffers(val context: Context, var bgColor: Int) : ObjectOglB
         numRangeBins = rd.numberOfRangeBins
     }
 
-    fun setProductCodeFromString(product: String) {
-        productCode = if (product == "L2REF") {
-            153.toShort()
-        } else {
-            154.toShort()
-        }
-    }
+    fun setProductCodeFromString(product: String) { productCode = if (product == "L2REF") 153.toShort() else 154.toShort() }
 
     override fun setToPositionZero() {
         floatBuffer.order(ByteOrder.nativeOrder())
@@ -70,19 +64,11 @@ class ObjectOglRadarBuffers(val context: Context, var bgColor: Int) : ObjectOglB
     fun initialize() {
         try {
             if (productCode == 37.toShort() || productCode == 38.toShort() || productCode == 41.toShort() || productCode == 57.toShort()) {
-                if (floatBuffer.capacity() < 32 * 464 * 464) {
-                    floatBuffer = ByteBuffer.allocateDirect(32 * 464 * 464) // was 4*8
-                }
-                if (colorBuffer.capacity() < 12 * 464 * 464) {
-                    colorBuffer = ByteBuffer.allocateDirect(12 * 464 * 464)  // was 16
-                }
+                if (floatBuffer.capacity() < 32 * 464 * 464) floatBuffer = ByteBuffer.allocateDirect(32 * 464 * 464) // was 4*8
+                if (colorBuffer.capacity() < 12 * 464 * 464) colorBuffer = ByteBuffer.allocateDirect(12 * 464 * 464)  // was 16
             } else {
-                if (floatBuffer.capacity() < 32 * numberOfRadials * numRangeBins) {
-                    floatBuffer = ByteBuffer.allocateDirect(32 * numberOfRadials * numRangeBins) // was 4*8
-                }
-                if (colorBuffer.capacity() < 12 * numberOfRadials * numRangeBins) {
-                    colorBuffer = ByteBuffer.allocateDirect(12 * numberOfRadials * numRangeBins)  // was 16
-                }
+                if (floatBuffer.capacity() < 32 * numberOfRadials * numRangeBins) floatBuffer = ByteBuffer.allocateDirect(32 * numberOfRadials * numRangeBins) // was 4*8
+                if (colorBuffer.capacity() < 12 * numberOfRadials * numRangeBins) colorBuffer = ByteBuffer.allocateDirect(12 * numberOfRadials * numRangeBins)  // was 16
             }
         } catch (e: OutOfMemoryError) {
             UtilityLog.handleException(e)

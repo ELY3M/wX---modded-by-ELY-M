@@ -25,83 +25,32 @@ package joshuatee.wx.objects
 import android.graphics.Color
 import joshuatee.wx.MyApplication
 
-enum class PolygonType constructor(
-        var color: Int,
-        private val typeAsString: String,
-        var pref: Boolean,
-        var size: Float
-) {
+enum class PolygonType constructor(var color: Int, private val typeAsString: String, var pref: Boolean, var size: Float) {
 
-    MCD(MyApplication.radarColorMcd, "MCD", MyApplication.radarWatMcd, 0.0f),
-    MPD(MyApplication.radarColorMpd, "MPD", MyApplication.radarMpd, 0.0f),
-    WATCH(MyApplication.radarColorTstormWatch, "WATCH", MyApplication.radarWatMcd, 0.0f),
-    WATCH_TORNADO(
-            MyApplication.radarColorTorWatch,
-            "WATCH_TORNADO",
-            MyApplication.radarWatMcd,
-            0.0f
-    ),
-    TST(MyApplication.radarColorTstorm, "TST", MyApplication.radarWarnings, 0.0f),
-    TOR(MyApplication.radarColorTor, "TOR", MyApplication.radarWarnings, 0.0f),
-    FFW(MyApplication.radarColorFfw, "FFW", MyApplication.radarWarnings, 0.0f),
-    SPOTTER(
-            MyApplication.radarColorSpotter,
-            "SPOTTER",
-            MyApplication.radarSpotters,
-            MyApplication.radarSpotterSize.toFloat()
-    ),
-    SPOTTER_LABELS(
-            MyApplication.radarColorSpotter,
-            "SPOTTER_LABELS",
-            MyApplication.radarSpottersLabel,
-            0.0f
-    ),
+    MCD(MyApplication.radarColorMcd, "MCD", MyApplication.radarWatMcd, MyApplication.radarWatchMcdLineSize),
+    MPD(MyApplication.radarColorMpd, "MPD", MyApplication.radarMpd, MyApplication.radarWatchMcdLineSize),
+    WATCH(MyApplication.radarColorTstormWatch, "WATCH", MyApplication.radarWatMcd, MyApplication.radarWatchMcdLineSize),
+    WATCH_TORNADO(MyApplication.radarColorTorWatch, "WATCH_TORNADO", MyApplication.radarWatMcd, MyApplication.radarWatchMcdLineSize),
+    TST(MyApplication.radarColorTstorm, "TST", MyApplication.radarWarnings, MyApplication.radarWarnLineSize),
+    TOR(MyApplication.radarColorTor, "TOR", MyApplication.radarWarnings, MyApplication.radarWarnLineSize),
+    FFW(MyApplication.radarColorFfw, "FFW", MyApplication.radarWarnings, MyApplication.radarWarnLineSize),
+    SPOTTER(MyApplication.radarColorSpotter, "SPOTTER", MyApplication.radarSpotters, MyApplication.radarSpotterSize.toFloat()),
+    SPOTTER_LABELS(MyApplication.radarColorSpotter, "SPOTTER_LABELS", MyApplication.radarSpottersLabel, 0.0f),
     WIND_BARB_GUSTS(Color.RED, "WIND_BARB_GUSTS", MyApplication.radarObsWindbarbs, MyApplication.radarWbLineSize.toFloat()),
-    WIND_BARB(
-            MyApplication.radarColorObsWindbarbs,
-            "WIND_BARB",
-            MyApplication.radarObsWindbarbs,
-            MyApplication.radarWbLineSize.toFloat()
-            //MyApplication.radarAviationSize.toFloat()
-    ),
-    WIND_BARB_CIRCLE(
-            MyApplication.radarColorObsWindbarbs,
-            "WIND_BARB_CIRCLE",
-            MyApplication.radarObsWindbarbs,
-            MyApplication.radarAviationSize.toFloat()
-    ),
-    LOCDOT(
-            MyApplication.radarColorLocdot,
-            "LOCDOT",
-            MyApplication.radarLocDot,
-            MyApplication.radarLocdotSize.toFloat()
-    ),
+    WIND_BARB(MyApplication.radarColorObsWindbarbs, "WIND_BARB", MyApplication.radarObsWindbarbs, MyApplication.radarWbLineSize.toFloat()),
+    WIND_BARB_CIRCLE(MyApplication.radarColorObsWindbarbs, "WIND_BARB_CIRCLE", MyApplication.radarObsWindbarbs, MyApplication.radarAviationSize.toFloat()),
+    LOCDOT(MyApplication.radarColorLocdot, "LOCDOT", MyApplication.radarLocDot, MyApplication.radarLocdotSize.toFloat()),
     STI(MyApplication.radarColorSti, "STI", MyApplication.radarSti, MyApplication.radarStiLineSize.toFloat()),
-    TVS(
-            MyApplication.radarColorTor,
-            "TVS",
-            MyApplication.radarTvs,
-            MyApplication.radarTvsSize.toFloat()
-    ),
-    HI(
-            MyApplication.radarColorHi,
-            "HI",
-            MyApplication.radarHi,
-            MyApplication.radarHiSize.toFloat()
-    ),
-    HAIL_LABELS(
-    	MyApplication.radarColorHi, 
-	"HAILSIZE_LABELS", 
-	MyApplication.radarHailSizeLabel, 
-	0.0f
-    ),
+    TVS(MyApplication.radarColorTor, "TVS", MyApplication.radarTvs, MyApplication.radarTvsSize.toFloat()),
+    HI(MyApplication.radarColorHi, "HI", MyApplication.radarHi, MyApplication.radarHiSize.toFloat()),
+    HAIL_LABELS(MyApplication.radarColorHiText, "HAILSIZE_LABELS", MyApplication.radarHailSizeLabel, MyApplication.radarHiTextSize.toFloat()),
     OBS(MyApplication.radarColorObs, "OBS", MyApplication.radarObs, 0.0f),
     SWO(MyApplication.radarColorHi, "SWO", MyApplication.radarSwo, MyApplication.radarSwoLineSize.toFloat()),
     USERPOINTS(0, "USERPOINTS", MyApplication.radarUserPoints, 0.0f),
     CONUS(0, "CONUS", MyApplication.radarConusRadar, 0.0f),
     NONE(0, "", false, 0.0f);
 
-    override fun toString(): String = typeAsString
+    override fun toString() = typeAsString
 
     companion object {
         fun refresh() {
@@ -116,12 +65,15 @@ enum class PolygonType constructor(
             SPOTTER.pref = MyApplication.radarSpotters
             SPOTTER_LABELS.pref = MyApplication.radarSpottersLabel
             WIND_BARB_GUSTS.pref = MyApplication.radarObsWindbarbs
+            WIND_BARB_GUSTS.size = MyApplication.radarWbLineSize.toFloat()
             WIND_BARB.pref = MyApplication.radarObsWindbarbs
+            WIND_BARB.size = MyApplication.radarWbLineSize.toFloat()
             WIND_BARB_CIRCLE.pref = MyApplication.radarObsWindbarbs
             LOCDOT.pref = MyApplication.radarLocDot
             STI.pref = MyApplication.radarSti
             TVS.pref = MyApplication.radarTvs
             HI.pref = MyApplication.radarHi
+	    HAIL_LABELS.pref = MyApplication.radarHailSizeLabel
             OBS.pref = MyApplication.radarObs
             SWO.pref = MyApplication.radarSwo
             USERPOINTS.pref = MyApplication.radarUserPoints
@@ -139,10 +91,19 @@ enum class PolygonType constructor(
             WIND_BARB_CIRCLE.color = MyApplication.radarColorObsWindbarbs
             LOCDOT.color = MyApplication.radarColorLocdot
             STI.color = MyApplication.radarColorSti
+            STI.size = MyApplication.radarStiLineSize.toFloat()
             TVS.color = MyApplication.radarColorTor
             HI.color = MyApplication.radarColorHi
             OBS.color = MyApplication.radarColorObs
             SWO.color = MyApplication.radarColorHi
+            SWO.size = MyApplication.radarSwoLineSize.toFloat()
+            MCD.size = MyApplication.radarWatchMcdLineSize
+            MPD.size = MyApplication.radarWatchMcdLineSize
+            WATCH.size = MyApplication.radarWatchMcdLineSize
+            WATCH_TORNADO.size = MyApplication.radarWatchMcdLineSize
+            TST.size = MyApplication.radarWarnLineSize
+            TOR.size = MyApplication.radarWarnLineSize
+            FFW.size = MyApplication.radarWarnLineSize
         }
     }
 }

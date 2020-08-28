@@ -53,16 +53,10 @@ object UtilityUSHourly {
             windDirData += windDirection + MyApplication.newline
             conditionData += shortenConditions(shortForecast) + MyApplication.newline
         }
-        return ObjectHourly(
-                timeData,
-                tempData,
-                windSpeedData,
-                windDirData,
-                conditionData
-        )
+        return ObjectHourly(timeData, tempData, windSpeedData, windDirData, conditionData)
     }
 
-    private fun shortenConditions(str: String) = str.replace("Showers And Thunderstorms", "Sh/Tst")
+    private fun shortenConditions(string: String) = string.replace("Showers And Thunderstorms", "Sh/Tst")
             .replace("Chance", "Chc")
             .replace("Slight", "Slt")
             .replace("Light", "Lgt")
@@ -74,15 +68,9 @@ object UtilityUSHourly {
             .replace("Freezing", "Frz")
             .replace("T-storms", "Tst")
 
-    fun getString(locNum: Int): List<String> {
-        val html = UtilityDownloadNws.getHourlyData(Location.getLatLon(locNum))
-        val header = String.format("%-7s", "Time") + " " + String.format(
-                "%-5s",
-                "Temp"
-        ) + String.format("%-9s", "WindSpd") + String.format(
-                "%-8s",
-                "WindDir"
-        ) + MyApplication.newline
+    fun getString(locationNumber: Int): List<String> {
+        val html = UtilityDownloadNws.getHourlyData(Location.getLatLon(locationNumber))
+        val header = String.format("%-7s", "Time") + " " + String.format("%-5s", "Temp") + String.format("%-9s", "WindSpd") + String.format("%-8s", "WindDir") + MyApplication.newline
         return listOf(header + parse(html), html)
     }
 
@@ -96,18 +84,10 @@ object UtilityUSHourly {
         startTime.indices.forEach {
             val time = translateTime(startTime[it].replace(Regex("-0[0-9]:00"), ""))
             content += String.format("%-8s", time)
-            if (temperature.size > it) {
-                content += String.format("%-5s", temperature[it].replace("\"",""))
-            }
-            if (windSpeed.size > it) {
-                content += String.format("%-9s", windSpeed[it])
-            }
-            if (windDirection.size > it) {
-                content += String.format("%-7s", windDirection[it])
-            }
-            if (shortForecast.size > it) {
-                content += String.format("%-12s", shortenConditions(shortForecast[it]))
-            }
+            if (temperature.size > it) content += String.format("%-5s", temperature[it].replace("\"",""))
+            if (windSpeed.size > it) content += String.format("%-9s", windSpeed[it])
+            if (windDirection.size > it) content += String.format("%-7s", windDirection[it])
+            if (shortForecast.size > it) content += String.format("%-12s", shortenConditions(shortForecast[it]))
             content += MyApplication.newline
         }
         return content
@@ -120,9 +100,9 @@ object UtilityUSHourly {
         val day = originalTimeComponents[2].toIntOrNull() ?: 0
         val hour = originalTimeComponents[3].replace(":00:00", "").toIntOrNull() ?: 0
         val hourString = hour.toString()
-        val c = Calendar.getInstance()
-        c.set(year - 1900, month - 1, day, 0, 0)
-        val dayOfTheWeek = when (c.get(Calendar.DAY_OF_WEEK)) {
+        val calendar = Calendar.getInstance()
+        calendar.set(year - 1900, month - 1, day, 0, 0)
+        val dayOfTheWeek = when (calendar.get(Calendar.DAY_OF_WEEK)) {
             6 -> "Mon"
             7 -> "Tue"
             1 -> "Wed"
@@ -132,7 +112,7 @@ object UtilityUSHourly {
             5 -> "Sun"
             else -> ""
         }
-        return ("$dayOfTheWeek $hourString")
+        return "$dayOfTheWeek $hourString"
     }
 }
 

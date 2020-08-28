@@ -37,7 +37,6 @@ object RegExp {
     val nws7DayTemp9: Pattern = Pattern.compile("emperature rising to near (-?[0-9]{1,3}) ")
     val nws7DayTemp10: Pattern = Pattern.compile("High near (-?[0-9]{1,3}),")
     val nws7DayTemp11: Pattern = Pattern.compile("Low around (-?[0-9]{1,3}),")
-
     val sevenDayWind1: Pattern = Pattern.compile("wind ([0-9]*) to ([0-9]*) mph")
     val sevenDayWind2: Pattern = Pattern.compile("wind around ([0-9]*) mph")
     val sevenDayWind3: Pattern = Pattern.compile("with gusts as high as ([0-9]*) mph")
@@ -59,7 +58,6 @@ object RegExp {
     val patternMetarWxogl3: Pattern = Pattern.compile("AUTO ([0-9].*?KT) .*?")
     val patternMetarWxogl4: Pattern = Pattern.compile("Z ([0-9].*?KT) .*?")
     val patternMetarWxogl5: Pattern = Pattern.compile("SM (.*?) M?[0-9]{2}/")
-
     val utilnxanimPattern1: Pattern = Pattern.compile(">(sn.[0-9]{4})</a>")
     val utilnxanimPattern2: Pattern = Pattern.compile(".*?([0-9]{2}-[A-Za-z]{3}-[0-9]{4} [0-9]{2}:[0-9]{2}).*?")
     val stiPattern1: Pattern = Pattern.compile("AZ/RAN(.*?)V")
@@ -71,11 +69,6 @@ object RegExp {
     val hiPattern4: Pattern = Pattern.compile("[0-9]*\\.?[0-9]+")
     val tvsPattern1: Pattern = Pattern.compile("P {2}TVS(.{20})")
     val tvsPattern2: Pattern = Pattern.compile(".{9}(.{7})")
-    val utilNhcPattern1: Pattern = Pattern.compile("<title>(.*?)</title>")
-    val utilNhcPattern2: Pattern = Pattern.compile("<nhc:Cyclone>(.*?)</nhc:Cyclone>")
-    val utilNhcPattern3: Pattern = Pattern.compile("<link>.*?(https://www.nhc.noaa.gov/text/refresh/MIATCP[AE][TP][0-9].shtml/.*?shtml).*?</link>")
-    val utilNhcPattern4: Pattern = Pattern.compile("<nhc:wallet>(.*?)</nhc:wallet>")
-    val utilNhcPattern5: Pattern = Pattern.compile("<img src=.(.*?png).")
     val srefPattern1: Pattern = Pattern.compile("([0-9]{2}z)")
     val srefPattern2: Pattern = Pattern.compile("([0-9]{10}z</a>&nbsp in through <b>f[0-9]{3})")
     val srefPattern3: Pattern = Pattern.compile("<tr><td class=.previous.><a href=sref.php\\?run=[0-9]{10}&id=SREF_H5__>([0-9]{10}z)</a></td></tr>")
@@ -87,7 +80,6 @@ object RegExp {
     val eslHrrrPattern4: Pattern = Pattern.compile("([0-9]{2}) \\w{3} [0-9]{4} - [0-9]{2}Z")
     val eslHrrrPattern5: Pattern = Pattern.compile("[0-9]{2} \\w{3} [0-9]{4} - ([0-9]{2})Z")
     val eslHrrrPattern6: Pattern = Pattern.compile("[0-9]{2} (\\w{3}) [0-9]{4} - [0-9]{2}Z")
-
     val ca7DayTemp1: Pattern = Pattern.compile("Temperature falling to (minus [0-9]{1,2}) this")
     val ca7DayTemp2: Pattern = Pattern.compile("Low (minus [0-9]{1,2})\\.")
     val ca7DayTemp3: Pattern = Pattern.compile("High (minus [0-9]{1,2})\\.")
@@ -115,7 +107,6 @@ object RegExp {
     val ca7DayWindspd1: Pattern = Pattern.compile("([0-9]{2,3}) to ([0-9]{2,3}) km/h")
     val ca7DayWindspd2: Pattern = Pattern.compile("( [0-9]{2,3}) km/h")
     val ca7DayWindspd3: Pattern = Pattern.compile("gusting to ([0-9]{2,3})")
-
     val warningVtecPattern: Pattern = Pattern.compile("([A-Z0]\\.[A-Z]{3}\\.[A-Z]{4}\\.[A-Z]{2}\\.[A-Z]\\.[0-9]{4}\\.[0-9]{6}T[0-9]{4}Z\\-[0-9]{6}T[0-9]{4}Z)")
     val warningLatLonPattern: Pattern = Pattern.compile("\"coordinates\":\\[\\[(.*?)\\]\\]\\}")
     val watchPattern: Pattern = Pattern.compile("[om] Watch #([0-9]*?)</a>")

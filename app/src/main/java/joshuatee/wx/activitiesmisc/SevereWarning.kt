@@ -21,23 +21,20 @@
 
 package joshuatee.wx.activitiesmisc
 
-import joshuatee.wx.MyApplication
-import joshuatee.wx.external.ExternalDuplicateRemover
 import joshuatee.wx.objects.PolygonType
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
-import joshuatee.wx.util.Utility
+import joshuatee.wx.radar.LatLon
+import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.UtilityTime
 
-internal class SevereWarning(private val type: PolygonType) {
+class SevereWarning(private val type: PolygonType) {
 
     //
     // encapsulates VTEC data and count for tst,tor, or ffw
     //
 
-    var text = ""
-        private set
     var count = 0
         private set
 
@@ -48,55 +45,56 @@ internal class SevereWarning(private val type: PolygonType) {
     var eventList = listOf<String>()
     var senderNameList = listOf<String>()
     var warnings = listOf<String>()
+    var listOfWfo = mutableListOf<String>()
+    private var listOfPolygonRaw = listOf<String>()
 
     fun getName(): String {
-        var name = ""
-        when (type) {
-            PolygonType.TOR -> name = "Tornado Warning"
-            PolygonType.TST -> name = "Severe Thunderstorm Warning"
-            PolygonType.FFW -> name = "Flash Flood Warning"
-            else -> {}
+        return when (type) {
+            PolygonType.TOR -> "Tornado Warning"
+            PolygonType.TST -> "Severe Thunderstorm Warning"
+            PolygonType.FFW -> "Flash Flood Warning"
+            else -> ""
         }
-        return name
+    }
+
+    private fun getClosestRadar(index: Int): String {
+        val data = listOfPolygonRaw[index].replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
+        val points = data.split(" ")
+        // From CapAlert
+        return if (points.size > 2) {
+            val lat = points[1]
+            val lon = "-" + points[0]
+            val radarSites = UtilityLocation.getNearestRadarSites(LatLon(lat, lon), 1, includeTdwr = false)
+            if (radarSites.isEmpty()) {
+                ""
+            } else {
+                radarSites[0].name
+            }
+        } else {
+            ""
+        }
     }
 
     fun generateString(html: String) {
-        var vtecComponents: List<String>
-        var wfo: String
-        var wfoLocation = ""
         idList = html.parseColumn("\"id\": \"(NWS.*?)\"")
         areaDescList = html.parseColumn("\"areaDesc\": \"(.*?)\"")
         effectiveList = html.parseColumn("\"effective\": \"(.*?)\"")
         expiresList = html.parseColumn("\"expires\": \"(.*?)\"")
         eventList = html.parseColumn("\"event\": \"(.*?)\"")
         senderNameList = html.parseColumn("\"senderName\": \"(.*?)\"")
-        var label = ""
-        when (type) {
-            PolygonType.TOR -> label = "Tornado Warnings"
-            PolygonType.TST -> label = "Severe Thunderstorm Warnings"
-            PolygonType.FFW -> label = "Flash Flood Warnings"
-            else -> {
-            }
-        }
+        val data = html.replace("\n", "").replace(" ", "")
+        listOfPolygonRaw = data.parseColumn(RegExp.warningLatLonPattern)
         warnings = html.parseColumn(RegExp.warningVtecPattern)
-        warnings.forEach {
+        warnings.forEachIndexed { index, it ->
             val vtecIsCurrent = UtilityTime.isVtecCurrent(it)
             if (!it.startsWith("O.EXP") && vtecIsCurrent) {
-                text += it
                 count += 1
-                vtecComponents = it.split(".")
-                if (vtecComponents.size > 1) {
-                    wfo = vtecComponents[2]
-                    wfo = wfo.replace("^[KP]".toRegex(), "")
-                    wfoLocation = Utility.getWfoSiteName(wfo)
-                }
-                text += "  " + wfoLocation + MyApplication.newline
+                val radarSite = getClosestRadar(index)
+                listOfWfo.add(radarSite)
+            } else {
+                listOfWfo.add("")
             }
         }
-        val remover = ExternalDuplicateRemover()
-        text = remover.stripDuplicates(text)
-        text = "(" + text.split(MyApplication.newline).dropLastWhile { it.isEmpty() }.size +
-                ") " + label + MyApplication.newline + text.replace((MyApplication.newline + "$").toRegex(), "")
     }
 }
 

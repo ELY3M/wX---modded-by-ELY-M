@@ -31,20 +31,15 @@ import kotlin.math.abs
  *
  * @author Mike Gavaghan
  */
-open class ExternalGlobalCoordinates
 /**
  * Construct a new GlobalCoordinates. Angles will be canonicalized.
  *
- * @param mLatitude latitude in degrees
- * @param mLongitude longitude in degrees
+ * mLatitude latitude in degrees
+ * mLongitude longitude in degrees
  */
-    (
-    /** Latitude in degrees. Negative latitude is southern hemisphere.  */
-    private var mLatitude: Double,
-    /** Longitude in degrees. Negative longitude is western hemisphere.  */
-    private var mLongitude: Double
-) : Comparable<ExternalGlobalCoordinates>, Serializable {
-
+/** Latitude in degrees. Negative latitude is southern hemisphere.  */
+/** Longitude in degrees. Negative longitude is western hemisphere.  */
+open class ExternalGlobalCoordinates (private var mLatitude: Double, private var mLongitude: Double) : Comparable<ExternalGlobalCoordinates>, Serializable {
     /**
      * Get latitude.
      *
@@ -66,7 +61,6 @@ open class ExternalGlobalCoordinates
             mLatitude = latitude
             canonicalize()
         }
-
     /**
      * Get longitude.
      *
@@ -83,7 +77,6 @@ open class ExternalGlobalCoordinates
             mLongitude = longitude
             canonicalize()
         }
-
     /**
      * Canonicalize the current latitude and longitude values such that:
      *
@@ -95,7 +88,6 @@ open class ExternalGlobalCoordinates
         mLatitude = (mLatitude + 180) % 360
         if (mLatitude < 0) mLatitude += 360.0
         mLatitude -= 180.0
-
         if (mLatitude > 90) {
             mLatitude = 180 - mLatitude
             mLongitude += 180.0
@@ -103,7 +95,6 @@ open class ExternalGlobalCoordinates
             mLatitude = -180 - mLatitude
             mLongitude += 180.0
         }
-
         mLongitude = (mLongitude + 180) % 360
         if (mLongitude <= 0) mLongitude += 360.0
         mLongitude -= 180.0
@@ -112,7 +103,6 @@ open class ExternalGlobalCoordinates
     init {
         canonicalize()
     }
-
     /**
      * Compare these coordinates to another set of coordiates. Western longitudes
      * are less than eastern logitudes. If longitudes are equal, then southern
@@ -121,25 +111,19 @@ open class ExternalGlobalCoordinates
      * @param other instance to compare to
      * @return -1, 0, or +1 as per Comparable contract
      */
-    override fun compareTo(other: ExternalGlobalCoordinates): Int {
-        return when {
+    override fun compareTo(other: ExternalGlobalCoordinates) = when {
             mLongitude < other.mLongitude -> -1
             mLongitude > other.mLongitude -> +1
             mLatitude < other.mLatitude -> -1
             mLatitude > other.mLatitude -> +1
             else -> 0
         }
-    }
-
     /**
      * Get a hash code for these coordinates.
      *
      * @return
      */
-    override fun hashCode(): Int {
-        return (mLongitude * mLatitude * 1000000.0 + 1021).toInt() * 1000033
-    }
-
+    override fun hashCode() = (mLongitude * mLatitude * 1000000.0 + 1021).toInt() * 1000033
     /**
      * Compare these coordinates to another object for equality.
      *
@@ -151,7 +135,6 @@ open class ExternalGlobalCoordinates
         val other = obj as ExternalGlobalCoordinates?
         return mLongitude == other!!.mLongitude && mLatitude == other.mLatitude
     }
-
     /**
      * Get coordinates as a string.
      */

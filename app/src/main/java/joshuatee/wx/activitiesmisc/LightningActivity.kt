@@ -24,8 +24,8 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
@@ -38,20 +38,13 @@ import joshuatee.wx.util.UtilityShare
 
 import kotlinx.coroutines.*
 
-class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
+class LightningActivity : VideoRecordActivity() {
 
     //
     // Used to view lighting data
     //
-    // Arguments
-    // 1: URL TODO what is this arg for?
-    //
 
-    companion object {
-        const val URL: String = ""
-    }
-
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
     private var period = "0.25"
     private var periodPretty = "15 MIN"
@@ -59,18 +52,19 @@ class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private val prefTokenIdx = "LIGHTNING_SECTOR_IDX"
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.lightning_activity, menu)
+        return true
+    }
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer_bottom_toolbar, R.menu.lightning_activity, iconsEvenlySpaced = true, bottomToolbar = true)
-        toolbarBottom.setOnMenuItemClickListener(this)
-        toolbar.setOnClickListener { toolbar.showOverflowMenu() }
-        objectNavDrawer = ObjectNavDrawer(this, UtilityLightning.labels, UtilityLightning.urls)
+        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.lightning_activity, iconsEvenlySpaced = true, bottomToolbar = false)
+        objectNavDrawer = ObjectNavDrawer(this, UtilityLightning.labels, UtilityLightning.urls, ::getContentFixThis)
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, objectNavDrawer, prefTokenIdx)
         objectNavDrawer.index = Utility.readPref(this, prefTokenIdx, 0)
-        objectNavDrawer.setListener(::getContentFixThis)
         period = Utility.readPref(this, "LIGHTNING_PERIOD", period)
         periodPretty = UtilityLightning.getTimePretty(period)
-        toolbarBottom.setOnClickListener { objectNavDrawer.drawerLayout.openDrawer(objectNavDrawer.listView) }
         getContent()
     }
 
@@ -86,9 +80,7 @@ class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         title = "Lightning " + objectNavDrawer.getLabel()
         toolbar.subtitle = periodPretty
-        bitmap = withContext(Dispatchers.IO) {
-            UtilityLightning.getImage(objectNavDrawer.url, period)
-        }
+        bitmap = withContext(Dispatchers.IO) { UtilityLightning.getImage(objectNavDrawer.url, period) }
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn("LIGHTNING")
         Utility.writePref(this@LightningActivity, "LIGHTNING_PERIOD", period)
@@ -104,39 +96,29 @@ class LightningActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener
         objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean =
-            objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
-
-    override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true
-        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
         when (item.itemId) {
             R.id.action_share -> {
-                if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
+                if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityShare.shareBitmap(
-                            this,
-                            this,
-                            "Lightning Strikes " + objectNavDrawer.getLabel() + " $periodPretty",
-                            bitmap
-                    )
+                    UtilityShare.bitmap(this, this, "Lightning Strikes " + objectNavDrawer.getLabel() + " $periodPretty", bitmap)
                 }
             }
-            R.id.action_15min -> setPeriodGetContent("0.25", "15 MIN")
-            R.id.action_2hr -> setPeriodGetContent("2", "2 HR")
-            R.id.action_12hr -> setPeriodGetContent("12", "12 HR")
-            R.id.action_24hr -> setPeriodGetContent("24", "24 HR")
-            R.id.action_48hr -> setPeriodGetContent("48", "48 HR")
+            R.id.action_15min -> setPeriodGetContent("0.25")
+            R.id.action_2hr -> setPeriodGetContent("2")
+            R.id.action_12hr -> setPeriodGetContent("12")
+            R.id.action_24hr -> setPeriodGetContent("24")
+            R.id.action_48hr -> setPeriodGetContent("48")
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
-    private fun setPeriodGetContent(period: String, periodPretty: String) {
+    private fun setPeriodGetContent(period: String) {
         this.period = period
-        this.periodPretty = periodPretty
+        periodPretty = UtilityLightning.getTimePretty(period)
         getContent()
     }
 

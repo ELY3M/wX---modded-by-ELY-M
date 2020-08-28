@@ -19,10 +19,23 @@
 <!-- modded by ELY M. -->
 <resources>
 
+      <string name="nav_drawer_main_screen_toggle">
+         Toggle items on or off from showing in the main screen navigation drawer if that UI mode is selected.
+</string>
+
+    <string name="nav_drawer_main_screen_label">
+          Instead of using tabs on the main screen use a navigation drawer. You can then tab the plus icon bottom right or swipe from the left to
+        open the drawer. This option may be better for people who like to navigate by text instead of picture.
+</string>
+
+    <string name="nav_drawer_main_screen_on_right_label">
+          If using a navigation drawer on the main screen have it open from the right.
+</string>
+
     <string name="radar_show_wpc_fronts_label">
           Show WPC Fronts and pressure highs and lows. The data is not realtime but rather forecast data from NWS WPC.
          You can long press (press and hold) in nexrad radar and you will see the timestamp for the current data. For example "WPC Fronts: 0107 1200Z"
-         would indicate Janunary 7, 12:00 in GMT. Blue is for cold fronts and high pressure centers. Red is for warm fronts and low
+         would indicate January 7, 12:00 in GMT. Blue is for cold fronts and high pressure centers. Red is for warm fronts and low
          pressure centers. Light brown is for troughs which could be a trough, outflow boundary, squall line, or dry line. Stationary fronts
          are alternating red and blue. Occluded fronts are pink.
 
@@ -33,7 +46,7 @@
 </string>
 
     <string name="gps_update_interval_label">
-          Minumum time in seconds between GPS updates if GPS and auto-refresh enabled.
+          Minimum time in seconds between GPS updates if GPS and auto-refresh enabled.
 </string>
 
     <string name="textview_fontsize_np_label">
@@ -72,17 +85,9 @@ Show the media control notification in status bar.
 Allows one to hide or show the voice recognition icon on the main screen. Off by default.
 </string>
 
-    <string name="help_models_nssl_wrf">
+   <!-- <string name="help_models_nssl_wrf">
 Interface for the NSSL WRF Forecasts found at http://wrf.nssl.noaa.gov/newsite/
-</string>
-
-    <string name="help_goes16">
-Interface for GOES16 images.
-</string>
-
-    <string name="help_wpcgefs">
-Interface for WPC GEFS model images.
-</string>
+</string>-->
 
     <string name="obs_ext_zoom_label">
 With observations or wind barbs enabled if you zoom in closely on an obs site the detailed METAR will appear.
@@ -94,7 +99,8 @@ Use a dataset 4 times larger then the default county dataset: cb_2015_us_county_
 </string>
 
     <string name="radar_icons_level2_label">
-If enabled and displaying base velocity tapping on the velocity icon again will show Level2. Once Level2 is shown tapping on icon again will show Level3. Same applied to base reflectivity.
+If enabled and displaying base velocity tapping on the velocity icon again will show Level2.
+        Once Level2 is shown tapping on icon again will show Level3. Same applied to base reflectivity.
 </string>
 
 
@@ -124,17 +130,8 @@ Use JNI ( native C code ) for performance sensitive areas in radar. Although thi
          is not close to stock Android. If this works without any crashes great, if not I recommend to turn it off. All development is occuring in the Java code first at this point in time.
      </string>
 
-    <string name="help_spchrrr_models">
-Interface to the SPC HRRR viewer. Multiple parameters selected via the left pullout drawer will be used as layers. Select them again to no longer show them or clear all parameters
-         from the sub-menu.
-     </string>
-
     <string name="prevent_accidental_exit_label">
 If enabled, on the main screen if you tap the back arrow at the bottom left you will be required to tap this twice to exit the program.
-</string>
-
-    <string name="help_nws_obs_sites">
-Interface to NWS Observation site data.
 </string>
 
     <string name="obs_label">
@@ -172,7 +169,7 @@ Nexrad radar single pane activity will have the status bar and navigation bar hi
 
     <string name="record_screen_share_label">
 Use screen recording technology for sharing in activities involving just images and offering animations. After touching the record button in
-          the upper right of the screen touch the same area to stop the recording. Media can be accesssed via the notifications or via a filemanager
+          the upper right of the screen touch the same area to stop the recording. Media can be accessed via the notifications or via a filemanager
           in the DCIM or Movies folder.
       </string>
 
@@ -225,10 +222,8 @@ Configure size of the circle at the end of wind barbs if configured. Default is 
 If set to true the lightning icon on the bottom toolbar of the main screen will show the dual-pane radar instead of the traditional single pane radar.
 </string>
 
-
     <string name="locdot_follows_gps_label">
-Location dot will use the GPS of your device and will update on every scan as opposed to using the lat/lon of your saved location. If \"Screen on, auto refresh\" is enabled
-        it will update location frequently.
+Location dot will use the GPS of your device and will also keep the screen on and refresh data according to the refresh interval setting which is 3 minutes by default.
 </string>
 
     <string name="locdot_bug_label">
@@ -239,119 +234,10 @@ add heading bug to your GPS location if you are following your GPS.
 If in a multi-pane radar mode each pane will share the same zoom lat/lon provided they are using the same radar site.
 </string>
 
-    <string name="help_spc_tstorm">
-SPC Thunderstorm outlook for the rest of the day.
-</string>
-
     <string name="nws_text_removelinebreak_label">
 Remove line breaks used to keep NWS text products at fixed width.
         This will make headers harder to read but the body of the text will more easily adapt to the size of your screen.
     </string>
-
-    <string name="help_opc">
-Interface to NWS OPC images.
-</string>
-
-    <string name="help_goesfulldisk">
-Interface to GOES Full Disk images.
-</string>
-
-    <string name="help_spc_swo_summary">
-Eight images showing SPC severe weather probability for the next  8 days. Tap any image to see the related text and additional images if available.
-</string>
-
-
-    <string name="help_spc_swo_detail">
-Direct access to text and images for a specific SPC severe weather outlook. If Day 1 a submenu is available to access the state graphic
-  for the current location. From there other states can be selected as well.
-</string>
-
-
-    <string name="help_spc_storm_reports">
-SPC Storm reports for today or yesterday. Tap the image to open a date chooser to view older data.
-    Tap an entry to see a map of approximate location. A pullout nav bar on the left can be used to filter entries by state.
-    Long press an entry to view radar from the time of the report ( beta feature ). Level 2 data is only available for the past 2-3 days.
-</string>
-
-
-    <string name="help_spc_mcd">
-Show active SPC Mesoscale discussions. If only one, text will be shown as well. If more than one, multiple images are shown and you can tap on one to show the text. Once text is shown you can long press on the image to save one of the mentioned WFOs as a location.
-</string>
-
-
-    <string name="help_spc_watches">
-Show active SPC Watches. If only one, text will be shown as well. If more than one, multiple images are shown and you can tap on one to show the text. Once text is shown you can long press on the image to save one of the mentioned WFOs as a location.
-</string>
-
-
-    <string name="help_spc_mesoanalysis">
-Access to SPC mesoanalysis data. Use a pullout nav drawer on the left to select parameters. Use the action bar menu to select region. Common parameters are also shown in the action bar. Last region and parameter used are shown the next this activity is used.
-</string>
-
-    <string name="help_spchref_models">
- SPC HREF Model.
-</string>
-
-
-    <string name="help_spc_fire_weather">
-SPC Fire weather outlook: Images for the next two day\'s outlooks. Tap either image for the text.
-</string>
-
-
-    <string name="help_wpc_text_products">
-WPC text products: Show mostly text products from WPC. Last one viewed is shown at next start of activity. Action bar menu is used to change products.
-</string>
-
-
-    <string name="help_spc_compmap">
-SPC Compmap: Beta activity for this Product. Use pullout nav bar at left to select parameters. Values are stacked on top of each other.
-        You can select the item again to turn it off. Items will show with leading "on" in nav drawer when enabled.
-</string>
-
-
-    <string name="help_uswarn">
-US severe weather alerts: By default tornado, flash flood, or severe tstorm warnings are shown if any. Use pullout nav drawer from left to filter on a different type or specific state. Tap an entry to view text. Long press an entry for more options such as show radar.
-</string>
-
-    <string name="help_nhc">
-National Hurricane Center product viewer: Tap either image or use the action bar menu to access NHC products.
-</string>
-
-    <string name="help_nws_radar_mosaics">
-Nws mosaic viewer: View nws radar mosaics by region and with animation. wX custom roads and state boundaries are used. Severe weather polygons are shown if configured in global settings.
-</string>
-
-
-    <string name="help_goes_viewer">
-GOES product viewer: This is same activity used by the cloud icon in the action bar with a different default view: CONUS water vapor. Numerous products and geographical views are available. Animations are supported.
-</string>
-
-
-    <string name="help_lightning">
-US lightning strikes: An image showing recent lightning strikes CONUS wide. For legacy reasons a long press for this icon will give access to beta features.
-</string>
-
-    <string name="help_wpc_rainfall">
-     Show three graphics for WPC Excessive Rainfall products. If you tap on a graphic it will show the related text
-        product. From the WPC Website: "In the Excessive Rainfall Outlooks, the Weather Prediction Center (WPC)
-        forecasts the probability that rainfall will exceed flash flood guidance (FFG) within
-        40 kilometers (25 miles) of a point."
-</string>
-
-
-    <string name="help_twitter">
-Twitter widgets: Content is shown for state or Canadian province wx and tornado search via the 2 right most icons in the bottom row.
-</string>
-
-    <string name="help_hourly_forecast">
-Hourly forecast for the next seven days for the currently active location.
-</string>
-
-
-    <string name="help_goes_radar_mosaic">
-Radar mosaic: GOES image viewer showing one zoom level out with radar on top of vis/ir.
-</string>
-
 
     <string name="help_radar">
 Radar: The default radar provider "WXOGL" uses OpenGL to render nexrad radar data that is decoded locally on your device.
@@ -389,93 +275,6 @@ Radar: The default radar provider "WXOGL" uses OpenGL to render nexrad radar dat
         share, or delete the given media file.
 
     </string>
-
-
-    <string name="help_settings">
-Settings: This selection leads to the main settings activity which provides access to all configurable items for the program.
-</string>
-
-
-    <string name="help_severe_dashboard">
-Severe Dashboard: This activity shows active tornado,  flash flood, or severe tstorm warnings. In addition, any SPC MCD or Watch is listed along with WPC MPD. All items can be selected for access to more detail. Although all of this content is accessible in other parts of the program the goal for this activity is bring together a concise summary.
-</string>
-
-    <string name="help_cloud">
-GOES product viewer: Vis/ir satellite for your currently active location. Numerous products, geographical view, and overlays are available. Animations are supported as are severe weather polygons controlled by global settings. SPC MCD and watch overlays are also available.
-</string>
-
-    <string name="help_afd">
-Local WFO text products including AFD and HWO. The last viewed product is shown upon next start of this activity.
-</string>
-
-    <string name="help_vr">
-Use voice recognition to navigate in wX. Once you hear the beep, speak and then after you pause, wX will show the text and navigate if it\'s
-recognized.  The voice recognition in Android does take some practice before things are properly detected.\n\n
-
-Voice Commands ( text within parens is just to clarify and is not spoken ). The WFO GRR and radar site GRR are used as examples. Substitute as needed.\n\n
-
-radar\n
-radar GRR\n
-text\n
-text GRR\n
-cloud\n
-cloud GRR\n
-day 1 ( will show SPC day 1 conv outlook)\n
-day 2\n
-day 3\n
-day 4 ( shows 4-8 )\n
-twitter\n
-twitter Florida\n
-add location\n
-map ( map as in SPC mesoanalysis, voice recognition doesn’t handle “mesoanalysis” so well )\n
-map pressure\n
-map 500  ( 500mb wind )\n
-map cape ( mucape )\n
-map supercell ( comp )\n
-map wind ( eshr )\n
-forecast\n
-playlist - play the current playlist from start\n
-download playlist - download all text products in playlist\n
-edit location" - edit current location\n
-edit location Chicago - edit the current location and change the loction to Chicago\n
-add location Chicago - add Chicago as a new location and change the current location to this new location\n
-
-NOTE: While commands such as “spc day 2” are still supported, due to issues with voice recognition in Android it’s preferred to use “day 2”.
-</string>
-
-    <string name="help_playlist">
-Manage and play ( text to speech ) stored text products. Items can be rearranged, viewed, and deleted.
-    TTS can be iniated from the start or any point in the list.
-    In addition automatic downloads of all text products in the playlist can be setup.
-</string>
-
-    <string name="help_soundings">
-Access sounding and hodograph data for current location. Choose between SPC or OU as data source in settings.
-</string>
-
-    <string name="help_forecast_generic_status">
-Shows the site location and time stamp for the current conditions. Tapping on this field will also reload all data in the current activity.
-</string>
-    <string name="help_current_generic">
-Current conditions from the closest NWS observation site.
-    Format is as follows:  Current conditions Temp (wind chill or heat index), wind direction and speed, dew_pt ( relative humidity ) - Pressure - Visibility. Tap on this data to show the Soundings activity.
-</string>
-    <string name="help_forecast_generic">
-Seven day forecast in a summarized format. Tap on forecast to expand the text for full detail and also sunrise/sunset at bottom.
-</string>
-
-
-    <string name="help_spc_sref">
-Interface for SPC\'s SREF website.
-</string>
-
-    <string name="help_ncep_models">
-Interface for NCEP\'s models website.
-</string>
-
-    <string name="help_hrrr_viewer">
-Interface for NWS HRRR Viewer website.
-</string>
 
     <string name="cod_warnings_default_label">
 Display warning polygons for tornado, severe thunderstorm, and flash flood. This will cause a periodic task to run in the background and pull data.
@@ -553,7 +352,15 @@ Thickness of lines for rivers and lakes. Smaller number is thinner.
  <string name="gpscircle_linesize_np">
 Thickness of lines for the GPS location circle. Smaller number is thinner.
 </string>
-
+    <string name="sti_linesize_np">
+Thickness of lines for storm tracks. Smaller number is thinner.
+</string>
+    <string name="swo_linesize_np">
+Thickness of lines for the SPC Convective Outlooks. Smaller number is thinner.
+</string>
+    <string name="wb_linesize_np">
+Thickness of lines for wind barbs. Smaller number is thinner.
+</string>
     <string name="locdot_size_np">
 Allows one to change the size of the location marker.</string>
 
@@ -599,7 +406,8 @@ Turn on sound for this notification.</string>
     <string name="alert_sound_text_prod_label">
 Turn on sound for this notification.</string>
     <string name="alert_interval_np_label">
-Interval to use for checking all notifications.</string>
+Interval to use for checking all notifications. This also impacts widgets and the value should be lower then the widget check interval. If this value is set to the
+    highest value possible - 121 - it will completely disable the background check mechanism if you are running Android 7.0 or higher.</string>
     <string name="alert_onlyonce_label">
 Notifications will not be persistent and will only display once for the life of the event</string>
     <string name="alert_autocancel_label">
@@ -657,7 +465,7 @@ to download warning data.
 Only the first tab will be available along with all action bar items. Can be used to present a more simplistic weather application.
     </string>
     <string name="units_f_label">
-Use Fahrenheit instead aof Celsius.</string>
+Use Fahrenheit instead of Celsius.</string>
     <string name="units_m_label">
 Use Millibars instead of inches.</string>
 
@@ -665,9 +473,9 @@ Use Millibars instead of inches.</string>
  Interval for updating current conditions and seven day for selected location. Setting this to 0 will disable updates on the homescreen.
     The only way to trigger updates aside from app restarts would be to touch the status text under the current conditions.
     </string>
-    <string name="roaming_location_distance_check_np_label">
+   <!-- <string name="roaming_location_distance_check_np_label">
 If using a roaming location the amount of miles traveled before a location change is checked for.
-    </string>
+    </string>-->
 
     <string name="cc_interval_np_label">
         Check interval for widget data in minutes.
@@ -717,17 +525,13 @@ If selected the toolbars will not have the ability to be hidden on demand. If in
     <string name="translate_text_label">
 Translate NWS abbreviations in text products.</string>
 
-
-    <string name="help_wpc_images">
-Show forecast maps and QPF forecasts from NWS WPC and numerous other images from various other central NWS departments.</string>
-
     <string name="activity_settings_generic_help">
-This activity can be used to add or modify an existing location. To add a new location you can use the magnifiying glass icon to search for a new location.
+This activity can be used to add or modify an existing location. To add a new location you can use the magnifying glass icon to search for a new location.
         A successful search will populate the latitude and longitude fields with good values. If you choose a location that is suggested via autocomplete then it
             will automatically populate the label, lat, lon, and save the location. If a suggested city was not selected you can edit the location label if desired and then use
         check icon to save the location.
             Additionally, you can touch the GPS icon to populate the lat/lon fields if you have location services enabled.
-            You should see two popup messages, one at the start and one after the location has been saved. On this screen you can
+            You should see one popup message after the location has been saved. On this screen you can
         also toggle notifications on or off for this specific location. </string>
 
     <string name="show_county_label">

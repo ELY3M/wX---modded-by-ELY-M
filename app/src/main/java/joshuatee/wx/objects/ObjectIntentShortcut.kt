@@ -28,12 +28,7 @@ class ObjectIntentShortcut() {
 
     var intent: Intent? = null
 
-    constructor(
-        context: Context,
-        clazz: Class<*>,
-        url: String,
-        stringArray: Array<String>
-    ) : this() {
+    constructor(context: Context, clazz: Class<*>, url: String, stringArray: Array<String>) : this() {
         intent = Intent(context, clazz)
         intent?.putExtra(url, stringArray)
         intent?.action = Intent.ACTION_VIEW

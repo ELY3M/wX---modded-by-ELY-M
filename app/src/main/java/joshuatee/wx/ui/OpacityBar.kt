@@ -36,31 +36,33 @@ import kotlin.math.roundToInt
 
 class OpacityBar : View {
 
+    // FIXME reformat whole file
+
     /**
      * The thickness of the bar.
      */
-    private var mBarThickness: Int = 0
+    private var mBarThickness = 0
 
     /**
      * The length of the bar.
      */
-    private var mBarLength: Int = 0
-    private var mPreferredBarLength: Int = 0
+    private var mBarLength = 0
+    private var mPreferredBarLength = 0
 
     /**
      * The radius of the pointer.
      */
-    private var mBarPointerRadius: Int = 0
+    private var mBarPointerRadius = 0
 
     /**
      * The radius of the halo of the pointer.
      */
-    private var mBarPointerHaloRadius: Int = 0
+    private var mBarPointerHaloRadius = 0
 
     /**
      * The position of the pointer on the bar.
      */
-    private var mBarPointerPosition: Int = 0
+    private var mBarPointerPosition = 0
 
     /**
      * `Paint` instance used to draw the bar.
@@ -98,7 +100,7 @@ class OpacityBar : View {
     /**
      * The ARGB value of the currently selected color.
      */
-    private var mColor: Int = 0
+    private var mColor = 0
 
     /**
      * An array of floats that can be build into a `Color` <br></br>
@@ -109,12 +111,12 @@ class OpacityBar : View {
     /**
      * Factor used to calculate the position to the Opacity on the bar.
      */
-    private var mPosToOpacFactor: Float = 0.toFloat()
+    private var mPosToOpacFactor = 0.toFloat()
 
     /**
      * Factor used to calculate the Opacity to the postion on the bar.
      */
-    private var mOpacToPosFactor: Float = 0.toFloat()
+    private var mOpacToPosFactor = 0.toFloat()
 
     /**
      * Interface and listener so that changes in OpacityBar are sent
@@ -125,7 +127,7 @@ class OpacityBar : View {
     /**
      * Opacity of the latest entry of the onOpacityChangedListener.
      */
-    private var oldChangedListenerOpacity: Int = 0
+    private var oldChangedListenerOpacity = 0
 
     interface OnOpacityChangedListener {
         fun onOpacityChanged(opacity: Int)

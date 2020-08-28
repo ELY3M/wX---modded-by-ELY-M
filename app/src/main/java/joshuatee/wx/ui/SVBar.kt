@@ -36,31 +36,33 @@ import kotlin.math.roundToInt
 
 class SVBar : View {
 
+    // FIXME reformat whole file
+
     /**
      * The thickness of the bar.
      */
-    private var mBarThickness: Int = 0
+    private var mBarThickness = 0
 
     /**
      * The length of the bar.
      */
-    private var mBarLength: Int = 0
-    private var mPreferredBarLength: Int = 0
+    private var mBarLength = 0
+    private var mPreferredBarLength = 0
 
     /**
      * The radius of the pointer.
      */
-    private var mBarPointerRadius: Int = 0
+    private var mBarPointerRadius = 0
 
     /**
      * The radius of the halo of the pointer.
      */
-    private var mBarPointerHaloRadius: Int = 0
+    private var mBarPointerHaloRadius = 0
 
     /**
      * The position of the pointer on the bar.
      */
-    private var mBarPointerPosition: Int = 0
+    private var mBarPointerPosition = 0
 
     /**
      * `Paint` instance used to draw the bar.
@@ -93,12 +95,12 @@ class SVBar : View {
 
      * @see .onTouchEvent
      */
-    private var mIsMovingPointer: Boolean = false
+    private var mIsMovingPointer = false
 
     /**
      * The ARGB value of the currently selected color.
      */
-    private var mColor: Int = 0
+    private var mColor = 0
 
     /**
      * An array of floats that can be build into a `Color` <br></br>
@@ -109,12 +111,12 @@ class SVBar : View {
     /**
      * Factor used to calculate the position to the Saturation/Value on the bar.
      */
-    private var mPosToSVFactor: Float = 0.toFloat()
+    private var mPosToSVFactor = 0.toFloat()
 
     /**
      * Factor used to calculate the Saturation/Value to the postion on the bar.
      */
-    private var mSVToPosFactor: Float = 0.toFloat()
+    private var mSVToPosFactor = 0.toFloat()
 
     /**
      * `ColorPicker` instance used to control the ColorPicker.
@@ -124,7 +126,7 @@ class SVBar : View {
     /**
      * Used to toggle orientation between vertical and horizontal.
      */
-    private var mOrientation: Boolean = false
+    private var mOrientation = false
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -143,12 +145,8 @@ class SVBar : View {
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        val a = context.obtainStyledAttributes(
-            attrs,
-            R.styleable.ColorBars, defStyle, 0
-        )
+        val a = context.obtainStyledAttributes(attrs, R.styleable.ColorBars, defStyle, 0)
         val b = context.resources
-
         mBarThickness = a.getDimensionPixelSize(
             R.styleable.ColorBars_bar_thickness,
             b.getDimensionPixelSize(R.dimen.bar_thickness)

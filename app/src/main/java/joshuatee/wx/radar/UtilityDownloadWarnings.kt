@@ -31,61 +31,39 @@ import joshuatee.wx.util.UtilityDownloadNws
 internal object UtilityDownloadWarnings {
 
     const val type = "WARNINGS"
-    var timer = DownloadTimer(type)
+    val timer = DownloadTimer(type)
+    val timerSevereDashboard = DownloadTimer("WARNINGS_SEVERE_DASHBOARD")
 
     private const val baseUrl = "https://api.weather.gov/alerts/active?event="
     private const val tStormUrl = baseUrl + "Severe%20Thunderstorm%20Warning"
     private const val ffwUrl = baseUrl + "Flash%20Flood%20Warning"
     private const val tornadoUrl = baseUrl + "Tornado%20Warning"
-    // Below is for testing
     //val ffwUrl = baseUrl + "Flood%20Warning"
 
     fun get(context: Context) {
         if (timer.isRefreshNeeded(context)) {
-            //UtilityLog.d("wx", "DOWNLOAD WARNINGS")
-            if (PolygonType.TST.pref) {
-                getPolygonVtec(context)
-            }
+            if (PolygonType.TST.pref) getPolygonVtec(context)
             MyApplication.radarWarningPolygons.forEach {
-                if (it.isEnabled) {
-                    it.storage.valueSet(context, getVtecByType(it.type))
-                } else {
-                    it.storage.valueSet(context, "")
-                }
+                if (it.isEnabled) it.storage.valueSet(context, getVtecByType(it.type)) else it.storage.valueSet(context, "")
             }
         }
     }
 
-    fun getForSevereDashboard(context: Context) {
-        if (timer.isRefreshNeeded(context)) {
-            getPolygonVtec(context)
-        }
-    }
+    fun getForSevereDashboard(context: Context) { if (timerSevereDashboard.isRefreshNeeded(context)) getPolygonVtec(context) }
 
     // The only difference from the get method above is the absence of any preference check
     // ie - if you call this you are going to download regardless
-    fun getForNotification(context: Context) {
-        if (timer.isRefreshNeeded(context)) {
-            getPolygonVtec(context)
-        }
-    }
+    fun getForNotification(context: Context) { if (timer.isRefreshNeeded(context)) getPolygonVtec(context) }
 
     private fun getPolygonVtec(context: Context) {
+        // FIXME improve structure
         val tstData = UtilityDownloadNws.getStringFromUrlNoAcceptHeader(tStormUrl)
-        if (tstData != "") {
-            MyApplication.severeDashboardTst.valueSet(context, tstData)
-        }
+        if (tstData != "") MyApplication.severeDashboardTst.valueSet(context, tstData)
         val ffwData = UtilityDownloadNws.getStringFromUrlNoAcceptHeader(ffwUrl)
-        if (ffwData != "") {
-            MyApplication.severeDashboardFfw.valueSet(context, ffwData)
-        }
+        if (ffwData != "") MyApplication.severeDashboardFfw.valueSet(context, ffwData)
         val torData = UtilityDownloadNws.getStringFromUrlNoAcceptHeader(tornadoUrl)
-        if (torData != "") {
-            MyApplication.severeDashboardTor.valueSet(context, torData)
-        }
+        if (torData != "") MyApplication.severeDashboardTor.valueSet(context, torData)
     }
 
-    fun getVtecByType(type: PolygonWarningType): String {
-        return UtilityDownloadNws.getStringFromUrlNoAcceptHeader(baseUrl + type.urlToken)
-    }
+    fun getVtecByType(type: PolygonWarningType) = UtilityDownloadNws.getStringFromUrlNoAcceptHeader(baseUrl + type.urlToken)
 }

@@ -34,6 +34,7 @@ import android.widget.TextView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import joshuatee.wx.ui.ObjectTextView
+import joshuatee.wx.util.Utility
 
 class BottomSheetFragment(private val actContext: Context, val position: Int, private val topLabel: String, private val usedForLocation: Boolean) : BottomSheetDialogFragment() {
 
@@ -44,19 +45,30 @@ class BottomSheetFragment(private val actContext: Context, val position: Int, pr
     lateinit var functions: List<(Int) -> Unit>
     lateinit var labelList: List<String>
     private var textViewList = mutableListOf<ObjectTextView>()
-
     private var fragmentView: View? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fragmentView = inflater.inflate(R.layout.bottom_sheet_layout, container, false)
         label = fragmentView!!.findViewById(R.id.label)
+        if (Utility.isThemeAllWhite()) {
+            label.setTextColor(Color.BLACK)
+            label.setBackgroundColor(Color.LTGRAY)
+        } else {
+            label.setTextColor(Color.WHITE)
+            label.setBackgroundColor(Color.BLACK)
+        }
         linearLayout = fragmentView!!.findViewById(R.id.linearLayout)
         labelList.forEachIndexed { index, it ->
             val item = ObjectTextView(actContext, it)
             textViewList.add(item)
             item.setPadding(60, 30, 0, 30)
             item.gravity = Gravity.CENTER_HORIZONTAL
-            item.color = Color.BLACK
+            if (Utility.isThemeAllBlack()) {
+                item.color = Color.WHITE
+                item.tv.setBackgroundColor(Color.BLACK)
+            } else {
+                item.color = Color.BLACK
+            }
             item.tv.setOnClickListener {
                 functions[index](position)
                 dismiss()
@@ -69,9 +81,7 @@ class BottomSheetFragment(private val actContext: Context, val position: Int, pr
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (usedForLocation && Location.numLocations == 1) {
-            textViewList[1].tv.visibility = View.INVISIBLE
-            textViewList[2].tv.visibility = View.INVISIBLE
-            textViewList[3].tv.visibility = View.INVISIBLE
+            listOf(1,2,3).forEach{ textViewList[it].tv.visibility = View.INVISIBLE }
         }
         initView()
     }
@@ -82,7 +92,5 @@ class BottomSheetFragment(private val actContext: Context, val position: Int, pr
         behavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
-    private fun initView() {
-        label.text = topLabel
-    }
+    private fun initView() { label.text = topLabel }
 }

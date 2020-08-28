@@ -22,14 +22,13 @@
 #include "genIndex.h"
 
 JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndex(JNIEnv * env, jclass clazz,  jobject index_buff, jint len, jint break_size) {
-
 	jshort* iBuff = (*env)->GetDirectBufferAddress(env, index_buff);
 	int i = 0;
 	int incr = 0;
 	int remainder = 0;
 	int chunk_count = 1;
 	int total_bins = len;
-	if (total_bins<break_size){
+	if (total_bins < break_size){
 		break_size = total_bins;
 		remainder = break_size;
 	} else {
@@ -39,33 +38,32 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndex(JNIEnv * env, jclass clazz
 	}
 	int chunk_index = 0;
 	int j = 0;
-	for (chunk_index = 0; chunk_index<chunk_count; chunk_index++) {
+	for (chunk_index = 0; chunk_index < chunk_count; chunk_index++) {
 		incr = 0;
 		if (chunk_index == (chunk_count - 1))
 			break_size = remainder;
 
-		for (j=0; j<break_size; j++) {
-			iBuff[i++]=(short)(0 + incr);
-			iBuff[i++]=(short)(1 + incr);
-			iBuff[i++]=(short)(2 + incr);
-			iBuff[i++]=(short)(0 + incr);
-			iBuff[i++]=(short)(2 + incr);
-			iBuff[i++]=(short)(3 + incr);
+		for (j=0; j < break_size; j++) {
+			iBuff[i++] = (short)(0 + incr);
+			iBuff[i++] = (short)(1 + incr);
+			iBuff[i++] = (short)(2 + incr);
+			iBuff[i++] = (short)(0 + incr);
+			iBuff[i++] = (short)(2 + incr);
+			iBuff[i++] = (short)(3 + incr);
 			incr += 4;
 		}
 	}
 }
 
 JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndexLine(JNIEnv * env, jclass clazz,  jobject index_buff, jint len, jint break_size) {
-
 	jshort* iBuff = (*env)->GetDirectBufferAddress(env, index_buff);
 	int i = 0;
 	int incr = 0;
 	int remainder = 0;
 	int chunk_count = 1;
 	int total_bins = len / 4;
-	if (total_bins<break_size){
-		break_size=total_bins;
+	if (total_bins < break_size){
+		break_size = total_bins;
 		remainder = break_size;
 	} else {
 		chunk_count = total_bins / break_size;
@@ -74,14 +72,14 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndexLine(JNIEnv * env, jclass c
 	}
 	int chunk_index = 0;
 	int j = 0;
-	for (chunk_index = 0; chunk_index<chunk_count; chunk_index++){
+	for (chunk_index = 0; chunk_index < chunk_count; chunk_index++){
 		incr = 0;
 		if (chunk_index == (chunk_count - 1))
 			break_size = remainder;
 
-		for (j=0; j<break_size; j++){
-			iBuff[i++]=(short)(0 + incr);
-			iBuff[i++]=(short)(1 + incr);
+		for (j = 0; j < break_size; j++){
+			iBuff[i++] = (short)(0 + incr);
+			iBuff[i++] = (short)(1 + incr);
 			incr += 2;
 		}
 	}

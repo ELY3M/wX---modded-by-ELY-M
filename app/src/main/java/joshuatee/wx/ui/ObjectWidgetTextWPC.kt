@@ -33,22 +33,14 @@ import joshuatee.wx.wpc.WpcTextProductsActivity
 
 class ObjectWidgetTextWpc(context: Context) {
 
-    val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_textview_layout)
+    val remoteViews = RemoteViews(context.packageName, R.layout.widget_textview_layout)
 
     init {
         val text = Utility.readPref(context, "TEXTWPC_WIDGET", "")
         remoteViews.setTextViewText(R.id.text1, Utility.fromHtml(text))
         remoteViews.setTextViewTextSize(R.id.text1, TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
         if (!MyApplication.widgetPreventTap) {
-            UtilityWidget.setupIntent(
-                context,
-                remoteViews,
-                WpcTextProductsActivity::class.java,
-                R.id.text1,
-                WpcTextProductsActivity.URL,
-                arrayOf("pmdspd", "Short Range Forecast Discussion"),
-                TEXT_WPC.action
-            )
+            UtilityWidget.setupIntent(context, remoteViews, WpcTextProductsActivity::class.java, R.id.text1, WpcTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"), TEXT_WPC.action)
         }
     }
 }

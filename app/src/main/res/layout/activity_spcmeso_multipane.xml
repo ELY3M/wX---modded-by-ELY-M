@@ -45,7 +45,7 @@
             android:layout_above="@id/toolbar_bottom"
             android:orientation="vertical">
 
-            <include layout="@layout/widget_toolbar_top_with_spinner" />
+            <include layout="@layout/widget_toolbar_top" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"

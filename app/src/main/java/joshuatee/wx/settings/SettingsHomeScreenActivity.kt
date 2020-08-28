@@ -52,68 +52,33 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_recyclerview_homescreen,
-                R.menu.settings_homescreen,
-                true
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_homescreen, R.menu.settings_homescreen, true)
         toolbarBottom.setOnMenuItemClickListener(this)
         favoriteString = MyApplication.homescreenFav
         homeScreenFavOrig = favoriteString
         toolbar.subtitle = "Tap item to delete or move."
         UtilityToolbar.fullScreenMode(toolbar, false)
-        ObjectFab(
-                this,
-                this,
-                R.id.fab,
-                MyApplication.ICON_ADD,
-                View.OnClickListener { dialogueMain.show() }
-        )
+        ObjectFab(this, this, R.id.fab, MyApplication.ICON_ADD, View.OnClickListener { dialogueMain.show() })
         updateList(true)
         recyclerView = ObjectRecyclerView(this, this, R.id.card_list, labels, ::prodClicked)
-        dialogueMain = ObjectDialogue(
-                this,
-                "Select text products:",
-                UtilityHomeScreen.localChoicesText + UtilityWpcText.labels
-        )
+        dialogueMain = ObjectDialogue(this, "Select text products:", UtilityHomeScreen.localChoicesText + UtilityWpcText.labels)
         dialogueMain.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
-            alertDialogClicked(
-                    dialogueMain,
-                    "TXT-",
-                    which
-            )
+            alertDialogClicked(dialogueMain, "TXT-", which)
             dialog.dismiss()
         })
-        dialogueImages = ObjectDialogue(
-                this,
-                "Select image products:",
-                UtilityHomeScreen.localChoicesImg + GlobalArrays.nwsImageProducts
-        )
+        dialogueImages = ObjectDialogue(this, "Select image products:", UtilityHomeScreen.localChoicesImg + GlobalArrays.nwsImageProducts)
         dialogueImages.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
-            alertDialogClicked(
-                    dialogueImages,
-                    "",
-                    which
-            )
+            alertDialogClicked(dialogueImages, "", which)
             dialog.dismiss()
         })
         dialogueAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
         dialogueAfd.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
-            alertDialogClicked(
-                    dialogueAfd,
-                    "TXT-" + "AFD",
-                    which
-            )
+            alertDialogClicked(dialogueAfd, "TXT-" + "AFD", which)
             dialog.dismiss()
         })
         dialogueRadar = ObjectDialogue(this, "Select fixed location Nexrad products:", GlobalArrays.radars + GlobalArrays.tdwrRadarsForHomeScreen)
         dialogueRadar.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
-            alertDialogClicked(
-                    dialogueRadar,
-                    "NXRD-",
-                    which
-            )
+            alertDialogClicked(dialogueRadar, "NXRD-", which)
             dialog.dismiss()
         })
     }
@@ -124,39 +89,21 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         val tempList = favoriteString.split(":").dropLastWhile { it.isEmpty() }
         if (favoriteString != "") {
             favoriteList.clear()
-            tempList.forEach {
-                favoriteList.add(it)
-            }
-            if (firstTime) {
-                labels = mutableListOf()
-            }
+            tempList.forEach { favoriteList.add(it) }
+            if (firstTime) labels = mutableListOf()
             favoriteList.indices.forEach { k ->
                 if (!firstTime) {
                     labels[k] = findPositionAFD(favoriteList[k])
                 } else {
                     labels.add(findPositionAFD(favoriteList[k]))
                 }
-                if (labels[k] == "") {
-                    labels[k] = findPositionTEXT(favoriteList[k])
-                }
-                if (labels[k] == "") {
-                    labels[k] = findPositionIMG(favoriteList[k])
-                }
-                if (labels[k] == "") {
-                    labels[k] = findPositionTEXTLOCAL(favoriteList[k])
-                }
-                if (labels[k] == "") {
-                    labels[k] = findPositionIMG2(favoriteList[k])
-                }
-                if (labels[k] == "") {
-                    labels[k] = findPositionRadarNexrad(favoriteList[k])
-                }
-                if (labels[k] == "") {
-                    labels[k] = findPositionRadarTdwr(favoriteList[k])
-                }
-                if (labels[k] == "") {
-                    labels[k] = favoriteList[k]
-                }
+                if (labels[k] == "") labels[k] = findPositionTEXT(favoriteList[k])
+                if (labels[k] == "") labels[k] = findPositionIMG(favoriteList[k])
+                if (labels[k] == "") labels[k] = findPositionTEXTLOCAL(favoriteList[k])
+                if (labels[k] == "") labels[k] = findPositionIMG2(favoriteList[k])
+                if (labels[k] == "") labels[k] = findPositionRadarNexrad(favoriteList[k])
+                if (labels[k] == "") labels[k] = findPositionRadarTdwr(favoriteList[k])
+                if (labels[k] == "") labels[k] = favoriteList[k]
             }
         } else {
             if (!firstTime) {
@@ -167,9 +114,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                 favoriteList = mutableListOf()
             }
         }
-        if (!firstTime) {
-            recyclerView.notifyDataSetChanged()
-        }
+        if (!firstTime) recyclerView.notifyDataSetChanged()
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -177,7 +122,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             R.id.action_img -> dialogueImages.show()
             R.id.action_afd -> dialogueAfd.show()
             R.id.action_radar -> dialogueRadar.show()
-            R.id.action_help -> showHelpText(resources.getString(R.string.homescreen_help_label))
+            R.id.action_help -> ObjectDialogue(this, resources.getString(R.string.homescreen_help_label))
             R.id.action_reset -> {
                 MyApplication.homescreenFav = MyApplication.HOMESCREEN_FAV_DEFAULT
                 favoriteString = MyApplication.homescreenFav
@@ -195,45 +140,37 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         return true
     }
 
-    private fun showHelpText(helpStr: String) {
-        UtilityAlertDialog.showHelpText(helpStr, this)
-    }
-
-    private fun moveUp(pos: Int) {
+    private fun moveUp(position: Int) {
         favoriteString = MyApplication.homescreenFav
         favoriteList = favoriteString.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
-        if (pos != 0) {
-            val tmp = favoriteList[pos - 1]
-            favoriteList[pos - 1] = favoriteList[pos]
-            favoriteList[pos] = tmp
+        if (position != 0) {
+            val tmp = favoriteList[position - 1]
+            favoriteList[position - 1] = favoriteList[position]
+            favoriteList[position] = tmp
         } else {
             val tmp = favoriteList.last()
-            favoriteList[favoriteList.lastIndex] = favoriteList[pos]
+            favoriteList[favoriteList.lastIndex] = favoriteList[position]
             favoriteList[0] = tmp
         }
         favoriteString = ""
-        favoriteList.forEach {
-            favoriteString += ":$it"
-        }
+        favoriteList.forEach { favoriteString += ":$it" }
         updateList()
     }
 
-    private fun moveDown(pos: Int) {
+    private fun moveDown(position: Int) {
         favoriteString = MyApplication.homescreenFav
         favoriteList = favoriteString.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
-        if (pos != favoriteList.lastIndex) {
-            val tmp = favoriteList[pos + 1]
-            favoriteList[pos + 1] = favoriteList[pos]
-            favoriteList[pos] = tmp
+        if (position != favoriteList.lastIndex) {
+            val tmp = favoriteList[position + 1]
+            favoriteList[position + 1] = favoriteList[position]
+            favoriteList[position] = tmp
         } else {
             val tmp = favoriteList[0]
-            favoriteList[0] = favoriteList[pos]
+            favoriteList[0] = favoriteList[position]
             favoriteList[favoriteList.lastIndex] = tmp
         }
         favoriteString = ""
-        favoriteList.forEach {
-            favoriteString += ":$it"
-        }
+        favoriteList.forEach { favoriteString += ":$it" }
         updateList()
     }
 
@@ -244,20 +181,12 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     private fun findPositionTEXT(key: String) = (UtilityWpcText.labels.indices)
             .firstOrNull {
-                UtilityWpcText.labels[it].startsWith(
-                        key.toLowerCase(Locale.US).replace(
-                                "txt-",
-                                ""
-                        )
-                )
-            }
-            ?.let { UtilityWpcText.labels[it] }
-            ?: ""
+                UtilityWpcText.labels[it].startsWith(key.toLowerCase(Locale.US).replace("txt-", ""))
+            } ?.let { UtilityWpcText.labels[it] } ?: ""
 
     private fun findPositionIMG(key: String) = (GlobalArrays.nwsImageProducts.indices)
             .firstOrNull { GlobalArrays.nwsImageProducts[it].startsWith(key.replace("IMG-", "")) }
-            ?.let { GlobalArrays.nwsImageProducts[it] }
-            ?: ""
+            ?.let { GlobalArrays.nwsImageProducts[it] } ?: ""
 
     private fun findPositionIMG2(key: String): String {
         for (l in UtilityHomeScreen.localChoicesImg) {
@@ -267,32 +196,26 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         return ""
     }
 
-    private fun findPositionTEXTLOCAL(key: String) =
-            UtilityHomeScreen.localChoicesText.firstOrNull { it.startsWith(key.replace("TXT-", "")) }
-                    ?: ""
+    private fun findPositionTEXTLOCAL(key: String) = UtilityHomeScreen.localChoicesText.firstOrNull { it.startsWith(key.replace("TXT-", "")) } ?: ""
 
     private fun findPositionAFD(key: String): String {
         (GlobalArrays.wfos.indices).forEach {
-            if (GlobalArrays.wfos[it].startsWith(key.replace("TXT-AFD", ""))) {
-                return "AFD " + GlobalArrays.wfos[it]
-            }
-            if (GlobalArrays.wfos[it].startsWith(key.replace("IMG-", ""))) {
-                return "VIS " + GlobalArrays.wfos[it]
-            }
+            if (GlobalArrays.wfos[it].startsWith(key.replace("TXT-AFD", ""))) return "AFD " + GlobalArrays.wfos[it]
+            if (GlobalArrays.wfos[it].startsWith(key.replace("IMG-", ""))) return "VIS " + GlobalArrays.wfos[it]
         }
         return ""
     }
 
     private fun findPositionRadarNexrad(key: String): String {
         val allRadars = GlobalArrays.radars
-        return (allRadars.indices)
+        return allRadars.indices
                 .firstOrNull { allRadars[it].startsWith(key.replace("NXRD-", "")) }
                 ?.let { allRadars[it] + " (NEXRAD)" } ?: ""
     }
 
     private fun findPositionRadarTdwr(key: String): String {
         val allRadars = GlobalArrays.tdwrRadarsForHomeScreen
-        return (allRadars.indices)
+        return allRadars.indices
                 .firstOrNull { allRadars[it].startsWith(key.replace("NXRD-", "")) }
                 ?.let { allRadars[it] + " (TDWR)" } ?: ""
     }

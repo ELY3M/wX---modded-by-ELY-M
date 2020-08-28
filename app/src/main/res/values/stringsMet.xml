@@ -49,12 +49,12 @@
     <string name="label_mlcape">CAPE - 100mb Mixed-Layer</string>
     <string name="label_mucape">CAPE - Most-Unstable / LPL Height</string>
 
-    <string name="label_sigh">Sgfnt Hail</string>
-    <string name="label_stpc">Sgfnt Tornado (effective layer)</string>
+    <string name="label_sigh">Significant Hail</string>
+    <string name="label_stpc">Significant Tornado (effective layer)</string>
     <string name="label_scp">Supercell Composite</string>
 
-    <string name="label_srh1">SR Helecity - Sfc-1km</string>
-    <string name="label_srh3">SR Helecity - Sfc-3km</string>
+    <string name="label_srh1">SR Helicity - Sfc-1km</string>
+    <string name="label_srh3">SR Helicity - Sfc-3km</string>
     <string name="label_shr6">Bulk Shear - Sfc-6km</string>
     <string name="label_eshr">Bulk Shear - Effective</string>
 

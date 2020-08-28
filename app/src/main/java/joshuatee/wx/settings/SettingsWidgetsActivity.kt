@@ -45,21 +45,10 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_widgets, null, false)
         toolbar.subtitle = "Please tap on text for additional help."
-        val numberOfLocations = Location.numLocations
         val locationNameShortLength = 20
-        val locationAl = (1 until numberOfLocations + 1).mapTo(mutableListOf()) {
-            "$it: " + UtilityStringExternal.truncate(
-                    Utility.readPref(
-                            this,
-                            "LOC" + it + "_LABEL",
-                            ""
-                    ),
-                    locationNameShortLength
-            )
-        }
+        val locations = (1 until Location.numLocations + 1).map { "$it: " + UtilityStringExternal.truncate(Utility.readPref(this, "LOC" + it + "_LABEL", ""), locationNameShortLength) }
         linearLayout.addView(
                 ObjectSettingsCheckBox(
-                        this,
                         this,
                         "Warnings in radar mosaic",
                         "WIDGET_MOSAIC_WARNINGS",
@@ -69,7 +58,6 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        this,
                         "Do not show 7day in CC widget",
                         "WIDGET_CC_DONOTSHOW_7_DAY",
                         R.string.cc_widget_show_sevenday
@@ -77,7 +65,6 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
         )
         linearLayout.addView(
                 ObjectSettingsCheckBox(
-                        this,
                         this,
                         "Download nexrad radar",
                         WidgetFile.NEXRAD_RADAR.prefString,
@@ -87,7 +74,6 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        this,
                         "Download mosaics",
                         WidgetFile.VIS.prefString,
                         R.string.loc1_mosaics_label
@@ -95,7 +81,6 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
         )
         linearLayout.addView(
                 ObjectSettingsCheckBox(
-                        this,
                         this,
                         "Download radar mosaic",
                         WidgetFile.MOSAIC_RADAR.prefString,
@@ -105,7 +90,6 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        this,
                         "Download AFD",
                         WidgetFile.AFD.prefString,
                         R.string.loc1_txt_label
@@ -114,7 +98,6 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        this,
                         "Download HWO",
                         WidgetFile.HWO.prefString,
                         R.string.loc1_txt_hwo_label
@@ -122,7 +105,6 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
         )
         linearLayout.addView(
                 ObjectSettingsSpinner(
-                        this,
                         this,
                         "Radar mosaic level",
                         "WIDGET_RADAR_LEVEL",
@@ -134,17 +116,15 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
         linearLayout.addView(
                 ObjectSettingsSpinner(
                         this,
-                        this,
                         "Location",
                         "WIDGET_LOCATION",
                         "",
                         R.string.spinner_location_label,
-                        locationAl
+                        locations
                 ).card
         )
         linearLayout.addView(
                 ObjectSettingsSpinner(
-                        this,
                         this,
                         "Nexrad centered at:",
                         "WIDGET_NEXRAD_CENTER",
@@ -154,8 +134,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                 ).card
         )
         linearLayout.addView(
-                ObjectSettingsSeekbar(
-                        this,
+                ObjectSettingsSeekBar(
                         this,
                         "Widget check interval in minutes",
                         "CC_NOTIFICATION_INTERVAL",
@@ -166,8 +145,7 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
                 ).card
         )
         linearLayout.addView(
-                ObjectSettingsSeekbar(
-                        this,
+                ObjectSettingsSeekBar(
                         this,
                         "Widget nexrad size",
                         "WIDGET_NEXRAD_SIZE",

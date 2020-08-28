@@ -32,7 +32,7 @@ import androidx.appcompat.widget.Toolbar
 import android.view.Menu
 
 import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.AfdActivity
+import joshuatee.wx.activitiesmisc.WfoTextActivity
 import joshuatee.wx.activitiesmisc.SevereDashboardActivity
 import joshuatee.wx.objects.ObjectIntentShortcut
 import joshuatee.wx.objects.ShortcutType
@@ -70,28 +70,15 @@ object UtilityShortcut {
             var imageId = 0
             when (type) {
                 ShortcutType.SevereDashboard -> {
-                    intent = ObjectIntentShortcut(
-                            context,
-                            SevereDashboardActivity::class.java
-                    ).intent
+                    intent = ObjectIntentShortcut(context, SevereDashboardActivity::class.java).intent
                     imageId = R.drawable.ntor
                 }
                 ShortcutType.AFD -> {
-                    intent = ObjectIntentShortcut(
-                            context,
-                            AfdActivity::class.java,
-                            AfdActivity.URL,
-                            arrayOf(Location.wfo, "")
-                    ).intent
+                    intent = ObjectIntentShortcut(context, WfoTextActivity::class.java, WfoTextActivity.URL, arrayOf(Location.wfo, "")).intent
                     imageId = R.drawable.widget_afd
                 }
                 ShortcutType.GOES16 -> {
-                    intent = ObjectIntentShortcut(
-                            context,
-                            GoesActivity::class.java,
-                            GoesActivity.RID,
-                            arrayOf("")
-                    ).intent
+                    intent = ObjectIntentShortcut(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("")).intent
                     imageId = R.drawable.goes
                 }
                 ShortcutType.RADAR_MOSAIC -> {
@@ -104,42 +91,36 @@ object UtilityShortcut {
                 }
             }
             val shortcutId = type.toString()
-            val mShortcutManager = context.getSystemService(ShortcutManager::class.java)
+            val shortcutManager = context.getSystemService(ShortcutManager::class.java)
             val shortcut = ShortcutInfo.Builder(context, shortcutId)
                     .setShortLabel(shortcutId)
                     .setLongLabel(shortcutId)
                     .setIcon(Icon.createWithResource(context, imageId))
-                    .setIntents(
-                            arrayOf(
-                                    Intent(
-                                            Intent.ACTION_MAIN,
-                                            Uri.EMPTY,
-                                            context,
-                                            joshuatee.wx.WX::class.java
-                                    ).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK),
-                                    intent
-                            )
-                    )
+                    .setIntents(arrayOf(Intent(Intent.ACTION_MAIN, Uri.EMPTY, context, joshuatee.wx.WX::class.java).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK), intent))
                     .build()
-            val pinnedShortcutCallbackIntent = mShortcutManager!!.createShortcutResultIntent(shortcut)
+            val pinnedShortcutCallbackIntent = shortcutManager!!.createShortcutResultIntent(shortcut)
             val successCallback = PendingIntent.getBroadcast(context, 0, pinnedShortcutCallbackIntent, 0)
-            mShortcutManager.requestPinShortcut(shortcut, successCallback.intentSender)
-
+            shortcutManager.requestPinShortcut(shortcut, successCallback.intentSender)
         }
     }
 
     fun hidePinIfNeeded(toolbar: Toolbar) {
         if (android.os.Build.VERSION.SDK_INT < 26) {
-            val menu = toolbar.menu
-            val pin = menu.findItem(R.id.action_pin)
-            pin.isVisible = false
+            try {
+                toolbar.menu.findItem(R.id.action_pin).isVisible = false
+            } catch (e:Exception) {
+                UtilityLog.handleException(e)
+            }
         }
     }
 
     fun hidePinIfNeeded(menu: Menu) {
         if (android.os.Build.VERSION.SDK_INT < 26) {
-            val pin = menu.findItem(R.id.action_pin)
-            pin.isVisible = false
+            try {
+                menu.findItem(R.id.action_pin).isVisible = false
+            } catch (e:Exception) {
+                UtilityLog.handleException(e)
+            }
         }
     }
 }

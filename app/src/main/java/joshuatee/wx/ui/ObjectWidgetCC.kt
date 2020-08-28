@@ -39,7 +39,7 @@ import joshuatee.wx.util.UtilityTimeSunMoon
 
 class ObjectWidgetCC(context: Context) {
 
-    val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_cc_layout)
+    val remoteViews = RemoteViews(context.packageName, R.layout.widget_cc_layout)
 
     init {
         val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
@@ -49,9 +49,7 @@ class ObjectWidgetCC(context: Context) {
         val updateTime = Utility.readPref(context, "UPDTIME_WIDGET", "No data")
         val sevenDay = Utility.readPref(context, "7DAY_EXT_WIDGET", "No data")
         var bitmap = UtilityImg.getBlankBitmap()
-        if (Location.isUS(widgetLocationNumberAsInteger)) {
-            bitmap = UtilityNws.getIcon(context, iconUrl)
-        }
+        if (Location.isUS(widgetLocationNumberAsInteger)) bitmap = UtilityNws.getIcon(context, iconUrl)
         val stringSeparator = " - "
         val currentConditionsList = currentConditionsString.split(stringSeparator).dropLastWhile { it.isEmpty() }
         var currentConditionsTime = ""
@@ -66,16 +64,11 @@ class ObjectWidgetCC(context: Context) {
             )
             remoteViews.setTextColor(R.id.location, MyApplication.widgetTextColor)
         }
-        if (currentConditionsList.size > 4
-                && !currentConditionsList[0].contains("NA")
-                && Location.isUS(widgetLocationNumberAsInteger)
-        ) {
+        if (currentConditionsList.size > 4 && !currentConditionsList[0].contains("NA") && Location.isUS(widgetLocationNumberAsInteger)) {
             val temperatureList = currentConditionsList[0].split("/").dropLastWhile { it.isEmpty() }
             remoteViews.setTextViewText(R.id.wind, currentConditionsList[2])
             val ccArr = updateTime.split(" ")
-            if (ccArr.size > 2) {
-                currentConditionsTime = ccArr[0] + " " + ccArr[1]
-            }
+            if (ccArr.size > 2) currentConditionsTime = ccArr[0] + " " + ccArr[1]
             remoteViews.setTextViewText(R.id.pressure, currentConditionsList[1])
             remoteViews.setTextViewText(R.id.visibility, currentConditionsList[3])
             remoteViews.setTextColor(R.id.bigdewpt, MyApplication.widgetTextColor)
@@ -92,53 +85,36 @@ class ObjectWidgetCC(context: Context) {
             remoteViews.setTextViewText(R.id.text4, sevenDay)
             remoteViews.setTextColor(R.id.text4, MyApplication.widgetTextColor)
         }
-        if (android.os.Build.VERSION.SDK_INT > 20) {
-            val wbIcon = UtilityImg.vectorDrawableToBitmap(
-                    context,
-                    R.drawable.ic_navigation_white_24dp,
-                    MyApplication.widgetHighlightTextColor
-            )
-            var windBardRotate = 0.0f
-            if (currentConditionsList.size > 2) {
-                val tmpWindArr = MyApplication.space.split(currentConditionsList[2])
-                var windDirStr = ""
-                if (tmpWindArr.isNotEmpty()) {
-                    windDirStr = tmpWindArr[0]
-                }
-                windBardRotate = when (windDirStr) {
-                    "N" -> 180f
-                    "NE" -> 225f
-                    "E" -> 270f
-                    "SE" -> 315f
-                    "S" -> 0f
-                    "NW" -> 135f
-                    "W" -> 90f
-                    "SW" -> 45f
-                    else -> 1000f
-                }
-            }
-            val scaleFactor = MyApplication.deviceScale / 3.0f * 1.25f
-            val matrix = Matrix()
-            matrix.postRotate(windBardRotate, 100f, 100f)
-            var rotatedWb = Bitmap.createBitmap(wbIcon, 0, 0, wbIcon.width, wbIcon.height, matrix, true)
-            rotatedWb = Bitmap.createScaledBitmap(
-                    rotatedWb,
-                    (wbIcon.width * scaleFactor).toInt(),
-                    (wbIcon.height * scaleFactor).toInt(),
-                    false
-            )
-            remoteViews.setImageViewUri(R.id.wind_barb, Uri.parse(""))
-            if (windBardRotate < 500) {
-                remoteViews.setImageViewBitmap(R.id.wind_barb, rotatedWb)
+        val wbIcon = UtilityImg.vectorDrawableToBitmap(context, R.drawable.ic_navigation_white_24dp, MyApplication.widgetHighlightTextColor)
+        var windBardRotate = 0.0f
+        if (currentConditionsList.size > 2) {
+            val tmpWindArr = MyApplication.space.split(currentConditionsList[2])
+            var windDirStr = ""
+            if (tmpWindArr.isNotEmpty()) windDirStr = tmpWindArr[0]
+            windBardRotate = when (windDirStr) {
+                "N" -> 180f
+                "NE" -> 225f
+                "E" -> 270f
+                "SE" -> 315f
+                "S" -> 0f
+                "NW" -> 135f
+                "W" -> 90f
+                "SW" -> 45f
+                else -> 1000f
             }
         }
+        val scaleFactor = MyApplication.deviceScale / 3.0f * 1.25f
+        val matrix = Matrix()
+        matrix.postRotate(windBardRotate, 100f, 100f)
+        var rotatedWb = Bitmap.createBitmap(wbIcon, 0, 0, wbIcon.width, wbIcon.height, matrix, true)
+        rotatedWb = Bitmap.createScaledBitmap(rotatedWb, (wbIcon.width * scaleFactor).toInt(), (wbIcon.height * scaleFactor).toInt(), false)
+        remoteViews.setImageViewUri(R.id.wind_barb, Uri.parse(""))
+        if (windBardRotate < 500) remoteViews.setImageViewBitmap(R.id.wind_barb, rotatedWb)
         if (!currentConditionsList[0].contains("NA")) {
             remoteViews.setImageViewUri(R.id.iv, Uri.parse(""))
             remoteViews.setImageViewBitmap(R.id.iv, bitmap)
         }
-        if (!MyApplication.widgetPreventTap) {
-            UtilityWidget.setupIntent(context, remoteViews, WX::class.java, R.id.layout, "WX")
-        }
+        if (!MyApplication.widgetPreventTap) UtilityWidget.setupIntent(context, remoteViews, WX::class.java, R.id.layout, "WX")
     }
 }
 

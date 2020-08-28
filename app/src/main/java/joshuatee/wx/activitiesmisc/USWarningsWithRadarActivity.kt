@@ -24,25 +24,17 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.View
+import android.view.Menu
 import android.widget.AdapterView
 import java.util.Locale
-import android.view.ContextMenu
 import android.view.MenuItem
-import android.view.ContextMenu.ContextMenuInfo
-import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.Extensions.getImage
-import joshuatee.wx.GlobalDictionaries
 
 import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.radar.WXGLRadarActivity
-import joshuatee.wx.settings.Location
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectAlertSummary
 import joshuatee.wx.ui.ObjectNavDrawer
-import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.util.UtilityImg
 import kotlinx.coroutines.*
@@ -50,7 +42,7 @@ import kotlinx.coroutines.*
 import kotlinx.android.synthetic.main.activity_linear_layout_show_navdrawer_bottom_toolbar.*
 
 // FIXME rename USWarningsWithRadarActivity
-class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
+class USWarningsWithRadarActivity : BaseActivity() {
 
     // US weather alert interface
     //
@@ -59,34 +51,31 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
     // 2: region ( "us" )
     //
 
-    companion object {
-        const val URL: String = ""
-    }
+    companion object { const val URL = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private var html = ""
     private var usDownloaded = false
     private var usDataStr = ""
+    // TODO refactor var naming
     private val turlLocal = Array(3) { "" }
     private var firstRun = true
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private lateinit var objectAlertSummary: ObjectAlertSummary
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.uswarn, menu)
+        return true
+    }
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_linear_layout_show_navdrawer_bottom_toolbar,
-                R.menu.uswarn,
-                true
-        )
-        toolbarBottom.setOnMenuItemClickListener(this)
-        toolbar.setOnClickListener { toolbar.showOverflowMenu() }
+        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_show_navdrawer, R.menu.uswarn, false)
         val activityArguments = intent.getStringArrayExtra(URL)
         turlLocal[0] = activityArguments!![0]
         turlLocal[1] = activityArguments[1]
-        objectAlertSummary = ObjectAlertSummary(this, this, linearLayout, scrollView)
+        objectAlertSummary = ObjectAlertSummary(this, linearLayout, scrollView)
         objectNavDrawer = ObjectNavDrawer(this, objectAlertSummary.filterArray.toList())
         objectNavDrawer.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             objectNavDrawer.listView.setItemChecked(position, false)
@@ -102,61 +91,6 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
         }
         toolbarBottom.setOnClickListener { objectNavDrawer.drawerLayout.openDrawer(objectNavDrawer.listView) }
         getContent()
-    }
-
-    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        val zone = objectAlertSummary.mapButtonZone[v.id]
-        menu.add(0, v.id, 0, "Open radar interface")
-        menu.add(0, v.id, 0, "Add new location for this warning ($zone)")
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        when {
-            item.title == "Open radar interface" -> radarInterface(item.itemId)
-            (item.title as String).contains("Add new location for this warning") -> locationAdd(item.itemId)
-            else -> return false
-        }
-        return true
-    }
-
-    private fun radarInterface(id: Int) {
-        val radarSite = GlobalDictionaries.wfoToRadarSite[objectAlertSummary.mapButtonNws[id]] ?: ""
-        ObjectIntent(
-                this@USWarningsWithRadarActivity,
-                WXGLRadarActivity::class.java,
-                WXGLRadarActivity.RID,
-                arrayOf(radarSite, objectAlertSummary.mapButtonState[id]!!, "N0Q", "")
-        )
-    }
-
-    private fun locationAdd(id: Int) {
-        saveLocFromZone(id)
-    }
-
-    private fun saveLocFromZone(id: Int) = GlobalScope.launch(uiDispatcher) {
-        var toastStr = ""
-        var coord = listOf<String>()
-        withContext(Dispatchers.IO) {
-            var locNumIntCurrent = Location.numLocations
-            locNumIntCurrent += 1
-            val locNumToSaveStr = locNumIntCurrent.toString()
-            val zone = objectAlertSummary.mapButtonZone[id]
-            var state = objectAlertSummary.mapButtonState[id]
-            val county = objectAlertSummary.mapButtonCounty[id]
-            if (zone!!.length > 3) {
-                coord = if (zone.matches("[A-Z][A-Z]C.*?".toRegex())) {
-                    UtilityLocation.getLatLonFromAddress(county + "," + zone.substring(0, 2))
-                } else {
-                    UtilityDownloadNws.getLatLonForZone(zone)
-                }
-                state = zone.substring(0, 2)
-            }
-            val x = coord[0]
-            val y = coord[1]
-            toastStr = Location.locationSave(this@USWarningsWithRadarActivity, locNumToSaveStr, x, y, state + "_" + county)
-        }
-        UtilityUI.makeSnackBar(linearLayout, toastStr)
     }
 
     override fun onRestart() {
@@ -195,36 +129,13 @@ class USWarningsWithRadarActivity : BaseActivity(), Toolbar.OnMenuItemClickListe
         objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean =
-            objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
-
-    override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true
-        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
         when (item.itemId) {
-            R.id.action_warnmap -> ObjectIntent(
-                    this@USWarningsWithRadarActivity,
-                    ImageShowActivity::class.java,
-                    ImageShowActivity.URL,
-                    arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map")
-            )
-            R.id.action_warnmapAK -> ObjectIntent(
-                    this@USWarningsWithRadarActivity,
-                    ImageShowActivity::class.java,
-                    ImageShowActivity.URL,
-                    arrayOf("https://forecast.weather.gov/wwamap/png/ak.png", "AK warning map")
-            )
-            R.id.action_warnmapHI -> ObjectIntent(
-                    this@USWarningsWithRadarActivity,
-                    ImageShowActivity::class.java,
-                    ImageShowActivity.URL,
-                    arrayOf("https://forecast.weather.gov/wwamap/png/hi.png", "HI warning map")
-            )
-            R.id.action_impact_graphics -> ObjectIntent(
-                    this@USWarningsWithRadarActivity,
-                    USWarningsImpactActivity::class.java
-            )
+            R.id.action_warnmap -> ObjectIntent.showImage(this@USWarningsWithRadarActivity, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map"))
+            R.id.action_warnmapAK -> ObjectIntent.showImage(this@USWarningsWithRadarActivity, arrayOf("https://forecast.weather.gov/wwamap/png/ak.png", "AK warning map"))
+            R.id.action_warnmapHI -> ObjectIntent.showImage(this@USWarningsWithRadarActivity, arrayOf("https://forecast.weather.gov/wwamap/png/hi.png", "HI warning map"))
+            R.id.action_impact_graphics -> ObjectIntent(this@USWarningsWithRadarActivity, USWarningsImpactActivity::class.java)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

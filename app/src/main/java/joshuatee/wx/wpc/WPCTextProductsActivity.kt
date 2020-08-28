@@ -22,12 +22,13 @@
 package joshuatee.wx.wpc
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
-import android.view.View
-import android.widget.AdapterView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
+import joshuatee.wx.Extensions.safeGet
 
 import java.util.Locale
 
@@ -35,21 +36,16 @@ import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.notifications.UtilityNotificationTextProduct
-import joshuatee.wx.settings.FavAddActivity
-import joshuatee.wx.settings.FavRemoveActivity
 import joshuatee.wx.MyApplication
-import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.ui.ObjectSpinner
 
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.ui.ObjectNavDrawerCombo
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_wpctextproducts.*
 
-class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
-        AdapterView.OnItemSelectedListener {
+class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     // Display WPC ( and other ) text products
     // last used product is first shown on re-entry
@@ -58,11 +54,9 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     // 1: text product (lower case)
     //
 
-    companion object {
-        const val URL: String = ""
-    }
+    companion object { const val URL = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private lateinit var activityArguments: Array<String>
     private var product = ""
     private var html = ""
@@ -72,16 +66,22 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
     private lateinit var notificationToggle: MenuItem
     private var ridFavOld = ""
     private lateinit var textCard: ObjectCardText
-    private lateinit var sp: ObjectSpinner
     private lateinit var drw: ObjectNavDrawerCombo
+    private val prefToken = "NWS_TEXT_FAV"
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.wpctext_products_top, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.action_product).title = products.safeGet(0)
+        return super.onPrepareOptionsMenu(menu)
+    }
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_wpctextproducts,
-                R.menu.wpctext_products
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_wpctextproducts, R.menu.wpctext_products)
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         notificationToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
@@ -93,33 +93,26 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
             initialProduct = product
         }
         textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        products = UtilityFavorites.setupMenuNwsText(MyApplication.nwsTextFav, product)
-        sp = ObjectSpinner(this, this, this, R.id.spinner1, products)
-        UtilityWpcText.createData()
-        drw = ObjectNavDrawerCombo(
-                this,
-                UtilityWpcText.groups,
-                UtilityWpcText.longCodes,
-                UtilityWpcText.shortCodes,
-                this,
-                ""
-        )
+        UtilityWpcText.create()
+        drw = ObjectNavDrawerCombo(this, UtilityWpcText.groups, UtilityWpcText.longCodes, UtilityWpcText.shortCodes, this, "")
         drw.setListener(::changeProduct)
+        getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        products = UtilityFavorites.setupMenu(this@WpcTextProductsActivity, MyApplication.nwsTextFav, product, prefToken)
+        invalidateOptionsMenu()
         updateSubmenuNotificationText()
         scrollView.smoothScrollTo(0, 0)
-        if (MyApplication.nwsTextFav.contains(":$product:")) {
-            star.setIcon(MyApplication.STAR_ICON)
-        } else {
-            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-        }
+        if (MyApplication.nwsTextFav.contains(":$product:")) star.setIcon(MyApplication.STAR_ICON) else star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         ridFavOld = MyApplication.nwsTextFav
-        html = withContext(Dispatchers.IO) {
-            UtilityDownload.getTextProduct(this@WpcTextProductsActivity, product)
-        }
+        html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@WpcTextProductsActivity, product) }
         textCard.setTextAndTranslate(html)
+        if (UtilityWpcText.needsFixedWidthFont(product.toUpperCase(Locale.US))) {
+            textCard.typefaceMono()
+        } else {
+            textCard.typefaceDefault()
+        }
         UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, "wpctext")
         if (initialProduct != product) {
             Utility.writePref(this@WpcTextProductsActivity, "WPC_TEXT_FAV", product)
@@ -127,84 +120,63 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener,
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean =
-            drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
-
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, html, product, product)) {
-            return true
-        }
+        val textToShare = UtilityShare.prepTextForShare(html)
+        if (audioPlayMenu(item.itemId, html, product, product)) return true
         when (item.itemId) {
             R.id.action_fav -> toggleFavorite()
             R.id.action_notif_text_prod -> {
-                UtilityNotificationTextProduct.toggle(
-                        this,
-                        linearLayout,
-                        product.toUpperCase(Locale.US)
-                )
+                UtilityNotificationTextProduct.toggle(this, linearLayout, product.toUpperCase(Locale.US))
                 updateSubmenuNotificationText()
             }
-            R.id.action_share -> UtilityShare.shareText(this, product, Utility.fromHtml(html))
+            R.id.action_share -> UtilityShare.text(this, product, textToShare)
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-        when (position) {
-            1 -> ObjectIntent(
-                    this,
-                    FavAddActivity::class.java,
-                    FavAddActivity.TYPE,
-                    arrayOf("NWSTEXT")
-            )
-            2 -> ObjectIntent(
-                    this,
-                    FavRemoveActivity::class.java,
-                    FavRemoveActivity.TYPE,
-                    arrayOf("NWSTEXT")
-            )
-            else -> {
-                product = products[position].split(":").getOrNull(0) ?: ""
-                getContent()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        products = UtilityFavorites.setupMenu(this, MyApplication.nwsTextFav, product, prefToken)
+        when (item.itemId) {
+            R.id.action_product -> {
+                genericDialog(products) {
+                    when (it) {
+                        1 -> ObjectIntent.favoriteAdd(this, arrayOf("NWSTEXT"))
+                        2 -> ObjectIntent.favoriteRemove(this, arrayOf("NWSTEXT"))
+                        else -> {
+                            product = products[it].split(" ").getOrNull(0) ?: ""
+                            getContent()
+                        }
+                    }
+                }
             }
+            else -> return super.onOptionsItemSelected(item)
         }
+        return true
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>) {}
-
-    private fun findPosition(key: String) =
-            (UtilityWpcText.labels.indices).firstOrNull {
-                UtilityWpcText.labels[it].contains(
-                        key
-                )
-            }
-                    ?: 0
-
-    override fun onRestart() {
-        if (ridFavOld != MyApplication.nwsTextFav) {
-            products = UtilityFavorites.setupMenuNwsText(
-                    MyApplication.nwsTextFav,
-                    UtilityWpcText.labels[findPosition(product)]
-            )
-            sp.refreshData(this, products)
-        }
-        super.onRestart()
+    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
+        val objectDialogue = ObjectDialogue(this, list)
+        objectDialogue.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
+            dialog.dismiss()
+            UtilityUI.immersiveMode(this)
+        })
+        objectDialogue.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+            fn(which)
+            getContent()
+            dialog.dismiss()
+        })
+        objectDialogue.show()
     }
 
     private fun toggleFavorite() {
-        UtilityFavorites.toggle(this, product, star, "NWS_TEXT_FAV")
-        products = UtilityFavorites.setupMenuNwsText(MyApplication.nwsTextFav, product)
-        sp.refreshData(this, products)
+        UtilityFavorites.toggle(this, product, star, prefToken)
     }
 
     private fun changeProduct() {
         product = drw.getUrl()
-        products = UtilityFavorites.setupMenuNwsText(
-                MyApplication.nwsTextFav,
-                UtilityWpcText.labels[findPosition(product)]
-        )
-        sp.refreshData(this, products)
+        getContent()
     }
 
     private fun updateSubmenuNotificationText() {

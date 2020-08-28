@@ -21,18 +21,14 @@
 
 package joshuatee.wx.ui
 
-class ObjectMenuTitle(var title: String, var count: Int) {
+class ObjectMenuTitle(val title: String, val count: Int) {
 
     companion object {
 
         fun getStart(titles: List<ObjectMenuTitle>, index: Int): Int {
-            if (index == 0) {
-                return 0
-            }
+            if (index == 0) return 0
             var sum = 0
-            (0 until index).forEach {
-                sum += titles[it].count
-            }
+            (0 until index).forEach { sum += titles[it].count }
             return sum
         }
     }

@@ -36,8 +36,8 @@ import joshuatee.wx.util.Utility
 
 class SettingsPlaylistAutodownloadActivity : BaseActivity() {
 
-    private var currHr: Int = 0
-    private var currMin: Int = 0
+    private var currHr = 0
+    private var currMin = 0
     private var ridArr = mutableListOf<String>()
     private var ridFav = ""
     private val tokenSep = "T"
@@ -45,42 +45,24 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
     private var deleteMode = false
     private var hour = 0
     private var minute = 0
-    private var gposition = 0
     private val modifyModeString = "Modify mode"
     private lateinit var recyclerView: ObjectRecyclerView
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_recyclerview_toolbar_with_twofab,
-                null,
-                false
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_twofab, null, false)
         toolbar.subtitle = modifyModeString
-        ObjectFab(
-                this,
-                this,
-                R.id.fab1,
-                R.drawable.ic_alarm_add_24dp,
-                View.OnClickListener { pickTimeFAB() })
-        ObjectFab(
-                this,
-                this,
-                R.id.fab2,
-                MyApplication.ICON_DELETE,
-                View.OnClickListener { deleteFAB() })
+        ObjectFab(this, this, R.id.fab1, R.drawable.ic_alarm_add_24dp, View.OnClickListener { pickTimeFAB() })
+        ObjectFab(this, this, R.id.fab2, MyApplication.ICON_DELETE, View.OnClickListener { deleteFAB() })
         ridFav = Utility.readPref(this, prefToken, "")
         val calendar = Calendar.getInstance()
         hour = calendar.get(Calendar.HOUR_OF_DAY)
         minute = calendar.get(Calendar.MINUTE)
         updateList()
-        recyclerView = ObjectRecyclerView(this, this, R.id.card_list, ridArr, ::pickItem)
+        recyclerView = ObjectRecyclerView(this, this, R.id.cardList, ridArr, ::pickItem)
     }
 
-    private fun updateList() {
-        ridArr = ridFav.split(tokenSep.toRegex()).dropLastWhile { it.isEmpty() }.toMutableList()
-    }
+    private fun updateList() { ridArr = ridFav.split(tokenSep.toRegex()).dropLastWhile { it.isEmpty() }.toMutableList() }
 
     private fun deleteFAB() {
         if (deleteMode) {
@@ -97,12 +79,7 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
         mTimePicker = TimePickerDialog(
                 this@SettingsPlaylistAutodownloadActivity,
                 TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
-                    if (!ridFav.contains(
-                                    "$selectedHour:" + String.format(
-                                            "%2s",
-                                            selectedMinute.toString()
-                                    ).replace(' ', '0')
-                            )
+                    if (!ridFav.contains("$selectedHour:" + String.format("%2s", selectedMinute.toString()).replace(' ', '0'))
                     ) {
                         ridFav = ridFav + selectedHour.toString() + ":" +
                                 String.format("%2s", selectedMinute.toString()).replace(' ', '0') +
@@ -110,12 +87,7 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
                         Utility.writePref(this, prefToken, ridFav)
                         updateList()
                         recyclerView.refreshList(ridArr)
-                        UtilityPlayListAutoDownload.setAlarm(
-                                this@SettingsPlaylistAutodownloadActivity,
-                                ridArr.lastIndex,
-                                selectedHour,
-                                selectedMinute
-                        )
+                        UtilityPlayListAutoDownload.setAlarm(this@SettingsPlaylistAutodownloadActivity, ridArr.lastIndex, selectedHour, selectedMinute)
                     }
                 },
                 hour,
@@ -129,7 +101,6 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
     }
 
     private fun pickItem(position: Int) {
-        gposition = position
         if (deleteMode) {
             ridArr.indices.forEach { UtilityPlayListAutoDownload.cancelAlarm(this@SettingsPlaylistAutodownloadActivity, it) }
             ridFav = ridFav.replace(ridArr[position] + tokenSep, "")
@@ -164,7 +135,7 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
                             )
                             UtilityPlayListAutoDownload.setAlarm(
                                     this@SettingsPlaylistAutodownloadActivity,
-                                    gposition,
+                                    position,
                                     selectedHour,
                                     selectedMinute
                             )

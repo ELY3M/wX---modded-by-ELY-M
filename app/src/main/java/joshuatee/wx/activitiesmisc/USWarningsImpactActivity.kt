@@ -33,42 +33,33 @@ import kotlinx.coroutines.*
 
 class USWarningsImpactActivity : BaseActivity() {
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private lateinit var recyclerView: ObjectRecyclerViewGeneric
     private var warningsList = listOf<ObjectImpactGraphic>()
     private var warningsListSorted = listOf<ObjectImpactGraphic>()
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-            savedInstanceState,
-            R.layout.activity_recyclerview_toolbar,
-            null,
-            false
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
         recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
         getContent()
     }
 
-    // TODO onrestart
+    override fun onRestart() {
+        getContent()
+        super.onRestart()
+    }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        warningsList = withContext(Dispatchers.IO) {
-            UtilityWarningsImpact.data
-        }
+        warningsList = withContext(Dispatchers.IO) { UtilityWarningsImpact.data }
         warningsListSorted = warningsList.sortedWith(compareByDescending { it.title })
-        val ca = AdapterUSWarningsImpact(warningsListSorted)
-        recyclerView.recyclerView.adapter = ca
-        title = warningsListSorted.size.toString() + " NWS active Tor/Tst/Ffw warnings "
-        toolbar.subtitle = UtilityTime.gmtTime("HH:mm")
-        ca.setOnItemClickListener(object: AdapterUSWarningsImpact.MyClickListener {
+        val adapterUSWarningsImpact = AdapterUSWarningsImpact(warningsListSorted)
+        recyclerView.recyclerView.adapter = adapterUSWarningsImpact
+        title = warningsListSorted.size.toString() + " Tor/Tst/Ffw warnings "
+        toolbar.subtitle = UtilityTime.gmtTime("HH:mm") + " UTC"
+        adapterUSWarningsImpact.setOnItemClickListener(object: AdapterUSWarningsImpact.MyClickListener {
             override fun onItemClick(position: Int) {
-                ObjectIntent(
-                        this@USWarningsImpactActivity,
-                        ImageShowActivity::class.java,
-                        ImageShowActivity.URL,
-                        arrayOf(warningsListSorted[position].imageUrl, warningsListSorted[position].title)
-                )
+                ObjectIntent.showImage(this@USWarningsImpactActivity, arrayOf(warningsListSorted[position].imageUrl, warningsListSorted[position].title))
             }
         })
     }

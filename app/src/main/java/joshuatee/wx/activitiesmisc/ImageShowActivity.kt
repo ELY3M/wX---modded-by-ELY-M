@@ -24,8 +24,8 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
@@ -37,7 +37,7 @@ import joshuatee.wx.util.UtilityShare
 
 import kotlinx.coroutines.*
 
-class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
+class ImageShowActivity : BaseActivity() {
 
     //
     // This is a general purpose activity used to view one image. URL and title are passed in via extras
@@ -48,11 +48,9 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     // 3: (optional) string "true" means a white background is needed
     //
 
-    companion object {
-        const val URL: String = ""
-    }
+    companion object { const val URL = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private var url = ""
     private var urls = listOf<String>()
     private var bitmap = UtilityImg.getBlankBitmap()
@@ -60,18 +58,21 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private var needsWhiteBackground = false
     private lateinit var img: ObjectTouchImageView
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.image_show_activity, menu)
+        return true
+    }
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show_bottom_toolbar, R.menu.image_show_activity, true)
-        toolbarBottom.setOnMenuItemClickListener(this)
+        super.onCreate(savedInstanceState, R.layout.activity_image_show, R.menu.image_show_activity, false)
         img = ObjectTouchImageView(this, this, toolbar, R.id.iv)
         val activityArguments: Array<String> = intent.getStringArrayExtra(URL)!!
         url = activityArguments[0]
-        title = activityArguments[1]
+        title = "Image Viewer"
+        toolbar.subtitle = activityArguments[1]
         shareTitle = activityArguments[1]
-        if (activityArguments.size > 2) {
-            needsWhiteBackground = activityArguments[2] == "true"
-        }
+        if (activityArguments.size > 2) needsWhiteBackground = activityArguments[2] == "true"
         when {
             url.contains("file:") -> {
                 urls = url.split(":")
@@ -97,9 +98,7 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         bitmap = withContext(Dispatchers.IO) { url.getImage() }
-        if (needsWhiteBackground) {
-            bitmap = UtilityImg.addColorBackground(this@ImageShowActivity, bitmap, Color.WHITE)
-        }
+        if (needsWhiteBackground) bitmap = UtilityImg.addColorBackground(this@ImageShowActivity, bitmap, Color.WHITE)
         img.setBitmap(bitmap)
     }
 
@@ -107,9 +106,9 @@ class ImageShowActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         img.setBitmap(UtilityIO.bitmapFromInternalStorage(this@ImageShowActivity, urls[1]))
     }
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareBitmap(this, this, shareTitle, bitmap)
+            R.id.action_share -> UtilityShare.bitmap(this, this, shareTitle, bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

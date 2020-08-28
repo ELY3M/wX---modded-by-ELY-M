@@ -29,9 +29,7 @@ import joshuatee.wx.notifications.UtilityNotification
 
 class AudioServiceToggleState : IntentService("AudioServiceToggleState") {
     override fun onHandleIntent(intent: Intent?) {
-        if (UtilityTts.mMediaPlayer != null) {
-            UtilityTts.playMediaPlayer(1)
-        }
+        if (UtilityTts.mediaPlayer != null) UtilityTts.playMediaPlayer(1)
         UtilityNotification.createMediaControlNotification(this, "")
     }
 } 

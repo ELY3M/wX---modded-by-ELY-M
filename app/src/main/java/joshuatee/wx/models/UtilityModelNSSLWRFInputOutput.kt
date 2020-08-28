@@ -49,55 +49,39 @@ internal object UtilityModelNsslWrfInputOutput {
             runData.listRunAddAll(UtilityTime.genModelRuns(mostRecentRun, 12, "yyyyMMddHH"))
             runData.mostRecentRun = mostRecentRun
             return runData
-            // FIXME standardize on listRunAdd,listRunAddAll or appendListRun
         }
 
-    fun getImage(context: Context, om: ObjectModel, timeF: String): Bitmap {
-        val time = timeF.split(" ")[0]
-        val sectorIndex: Int = if (om.sector == "") {
-            0
-        } else {
-            UtilityModelNsslWrfInterface.sectorsLong.indexOf(om.sector)
-        }
+    fun getImage(context: Context, om: ObjectModelNoSpinner, timeOriginal: String): Bitmap {
+        val time = timeOriginal.split(" ")[0]
+        val sectorIndex = if (om.sector == "") 0 else UtilityModelNsslWrfInterface.sectorsLong.indexOf(om.sector)
         val sector = UtilityModelNsslWrfInterface.sectors[sectorIndex]
         val baseLayerUrl = "https://cams.nssl.noaa.gov/graphics/blank_maps/spc_$sector.png"
         var modelPostfix = "_nssl"
         var model = om.model.toLowerCase(Locale.US)
         if (om.model == "HRRRV3") {
             modelPostfix = ""
-        }
-        if (om.model == "WRF_3KM") {
+        } else if (om.model == "WRF_3KM") {
             model = "wrf_nssl_3km"
             modelPostfix = ""
         }
-        if (om.run.length > 8) {
+        return if (om.run.length > 8) {
             val year = om.run.substring(0, 4)
             val month = om.run.substring(4, 6)
             val day = om.run.substring(6, 8)
             val hour = om.run.substring(8, 10)
-            val url =
-                baseUrl + "/graphics/models/" + model + modelPostfix + "/" + year + "/" + month + "/" +
-                        day + "/" + hour + "00/f" + time + "00/" + om.currentParam + ".spc_" +
-                        sector.toLowerCase(Locale.US) + ".f" + time + "00.png"
-            val baseLayer = baseLayerUrl.getImage()
-            val prodLayer = url.getImage()
-            return UtilityImg.addColorBackground(
-                context,
-                UtilityImg.mergeImages(context, prodLayer, baseLayer),
-                Color.WHITE
-            )
+            val url = baseUrl + "/graphics/models/" + model + modelPostfix + "/" + year + "/" + month + "/" + day + "/" + hour + "00/f" +
+                    time + "00/" + om.currentParam + ".spc_" + sector.toLowerCase(Locale.US) + ".f" + time + "00.png"
+            val baseLayerImage = baseLayerUrl.getImage()
+            val productLayerImage = url.getImage()
+            UtilityImg.addColorBackground(context, UtilityImg.mergeImages(context, productLayerImage, baseLayerImage), Color.WHITE)
         } else {
-            return UtilityImg.getBlankBitmap()
+            UtilityImg.getBlankBitmap()
         }
     }
 
-    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) {
-            return AnimationDrawable()
-        }
-        val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) {
-            getImage(context, om, om.spTime.list[it].split(" ").getOrNull(0) ?: "")
-        }
-        return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
+    fun getAnimation(context: Context, om: ObjectModelNoSpinner): AnimationDrawable {
+        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        val bitmaps = (om.spinnerTimeValue until om.times.size).map { getImage(context, om, om.times[it].split(" ").getOrNull(0) ?: "") }
+        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 }

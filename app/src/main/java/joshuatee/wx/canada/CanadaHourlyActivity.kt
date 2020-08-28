@@ -22,7 +22,6 @@
 package joshuatee.wx.canada
 
 import android.annotation.SuppressLint
-import android.graphics.Typeface
 import android.os.Bundle
 
 import joshuatee.wx.R
@@ -36,21 +35,19 @@ import kotlinx.android.synthetic.main.activity_linear_layout.*
 
 class CanadaHourlyActivity : BaseActivity() {
 
-    companion object {
-        const val LOC_NUM: String = ""
-    }
+    companion object { const val LOC_NUM = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
-    private var locNumInt = 0
-    private lateinit var c0: ObjectCardText
+    private val uiDispatcher = Dispatchers.Main
+    private var locationNumber = 0
+    private lateinit var objectCardText: ObjectCardText
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        locNumInt = (intent.getStringExtra(LOC_NUM)!!.toIntOrNull() ?: 0) - 1
-        c0 = ObjectCardText(this, ll, toolbar)
-        ObjectCALegal(this, ll, UtilityCanadaHourly.getUrl(Location.locationIndex))
-        title = Location.getName(locNumInt) + " hourly forecast"
+        locationNumber = (intent.getStringExtra(LOC_NUM)!!.toIntOrNull() ?: 0) - 1
+        objectCardText = ObjectCardText(this, linearLayout, toolbar)
+        ObjectCALegal(this, linearLayout, UtilityCanadaHourly.getUrl(Location.locationIndex))
+        title = Location.getName(locationNumber) + " hourly forecast"
         getContent()
     }
 
@@ -60,7 +57,7 @@ class CanadaHourlyActivity : BaseActivity() {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        c0.text = withContext(Dispatchers.IO) { UtilityCanadaHourly.getString(locNumInt) }
-        c0.tv.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
+        objectCardText.text = withContext(Dispatchers.IO) { UtilityCanadaHourly.getString(locationNumber) }
+        objectCardText.typefaceMono()
     }
 }

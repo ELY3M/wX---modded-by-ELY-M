@@ -33,7 +33,7 @@ import joshuatee.wx.RegExp
 
 object UtilitySpc {
 
-    fun getStormReportsTodayUrl(): String = "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/" + "today" + ".gif"
+    fun getStormReportsTodayUrl() = "${MyApplication.nwsSPCwebsitePrefix}/climo/reports/" + "today" + ".gif"
 
     internal val thunderStormOutlookImages: List<Bitmap>
         get() {
@@ -59,21 +59,11 @@ object UtilitySpc {
         val marginalStr = "THERE IS A MARGINAL RISK OF"
         var returnStr = ""
         var html = UtilityDownload.getTextProduct(context, prod)
-        if (html.contains(marginalStr)) {
-            returnStr = "marginal"
-        }
-        if (html.contains(slightStr)) {
-            returnStr = "slight"
-        }
-        if (html.contains(enhStr)) {
-            returnStr = "enh"
-        }
-        if (html.contains(moderateStr)) {
-            returnStr = "modt"
-        }
-        if (html.contains(highStr)) {
-            returnStr = "high"
-        }
+        if (html.contains(marginalStr)) returnStr = "marginal"
+        if (html.contains(slightStr)) returnStr = "slight"
+        if (html.contains(enhStr)) returnStr = "enh"
+        if (html.contains(moderateStr)) returnStr = "modt"
+        if (html.contains(highStr)) returnStr = "high"
         html = html.replace("ACUS[0-9]{2} KWNS [0-9]{6}".toRegex(), "")
                 .replace("SWOD[Y4][1-3]".toRegex(), "")
                 .replace("SPC AC [0-9]{6}".toRegex(), "")
@@ -86,8 +76,6 @@ object UtilitySpc {
         val mcdNothingString = "<center>No Mesoscale Discussions are currently in effect."
         val watchNothingString = "<center><strong>No watches are currently valid"
         val mpdNothingString = "No MPDs are currently in effect."
-        var tabStr = ""
-        val tabStrSpc: String
         var mdPresent = false
         var watchPresent = false
         var mpdPresent = false
@@ -100,42 +88,31 @@ object UtilitySpc {
         if (MyApplication.checkspc) {
             if (!MyApplication.severeDashboardMcd.value.contains(mcdNothingString)) {
                 mdPresent = true
-                val al = MyApplication.severeDashboardMcd.value.parseColumn(RegExp.mcdPatternUtilspc)
-                mdCount = al.size
-                al.forEach {
-                    dashboardStrMcd += ":$it"
-                }
+                val items = MyApplication.severeDashboardMcd.value.parseColumn(RegExp.mcdPatternUtilspc)
+                mdCount = items.size
+                items.forEach { dashboardStrMcd += ":$it" }
             }
             if (!MyApplication.severeDashboardWat.value.contains(watchNothingString)) {
                 watchPresent = true
-                val al = MyApplication.severeDashboardWat.value.parseColumn(RegExp.watchPattern)
-                watchCount = al.size
-                al.forEach {
-                    dashboardStrWat += ":$it"
-                }
+                val items = MyApplication.severeDashboardWat.value.parseColumn(RegExp.watchPattern)
+                watchCount = items.size
+                items.forEach { dashboardStrWat += ":$it" }
             }
         }
         if (MyApplication.checkwpc) {
             if (!MyApplication.severeDashboardMpd.value.contains(mpdNothingString)) {
                 mpdPresent = true
-                val al = MyApplication.severeDashboardMpd.value.parseColumn(RegExp.mpdPattern)
-                mpdCount = al.size
-                al.forEach {
-                    dashboardStrMpd += ":$it"
-                }
+                val items = MyApplication.severeDashboardMpd.value.parseColumn(RegExp.mpdPattern)
+                mpdCount = items.size
+                items.forEach { dashboardStrMpd += ":$it" }
             }
         }
         var label = MyApplication.tabHeaders[1]
+        val tabStrSpc: String
         if (watchPresent || mdPresent || mpdPresent) {
-            if (watchPresent) {
-                label += " W($watchCount)"
-            }
-            if (mdPresent) {
-                label += " M($mdCount)"
-            }
-            if (mpdPresent) {
-                label += " P($mpdCount)"
-            }
+            if (watchPresent) label += " W($watchCount)"
+            if (mdPresent) label += " M($mdCount)"
+            if (mpdPresent) label += " P($mpdCount)"
             tabStrSpc = label
         } else {
             tabStrSpc = MyApplication.tabHeaders[1]
@@ -149,12 +126,10 @@ object UtilitySpc {
             tStormCount = UtilityVtec.getStormCount(MyApplication.severeDashboardTst.value)
             torCount = UtilityVtec.getStormCount(MyApplication.severeDashboardTor.value)
             floodCount = UtilityVtec.getStormCount(MyApplication.severeDashboardFfw.value)
-            if (tStormCount > 0 || torCount > 0 || floodCount > 0) {
-                usWarnPresent = true
-            }
+            if (tStormCount > 0 || torCount > 0 || floodCount > 0) usWarnPresent = true
         }
-        tabStr = if (usWarnPresent) {
-            tabStr + "  " + MyApplication.tabHeaders[2] + " W(" + tStormCount + "," + torCount + "," + floodCount + ")"
+        val tabStr = if (usWarnPresent) {
+            MyApplication.tabHeaders[2] + " W(" + tStormCount + "," + torCount + "," + floodCount + ")"
         } else {
             MyApplication.tabHeaders[2]
         }

@@ -36,31 +36,33 @@ import kotlin.math.roundToInt
 
 class SaturationBar : View {
 
+    // FIXME reformat whole file
+
     /**
      * The thickness of the bar.
      */
-    private var mBarThickness: Int = 0
+    private var mBarThickness = 0
 
     /**
      * The length of the bar.
      */
-    private var mBarLength: Int = 0
-    private var mPreferredBarLength: Int = 0
+    private var mBarLength = 0
+    private var mPreferredBarLength = 0
 
     /**
      * The radius of the pointer.
      */
-    private var mBarPointerRadius: Int = 0
+    private var mBarPointerRadius = 0
 
     /**
      * The radius of the halo of the pointer.
      */
-    private var mBarPointerHaloRadius: Int = 0
+    private var mBarPointerHaloRadius = 0
 
     /**
      * The position of the pointer on the bar.
      */
-    private var mBarPointerPosition: Int = 0
+    private var mBarPointerPosition = 0
 
     /**
      * `Paint` instance used to draw the bar.
@@ -98,7 +100,7 @@ class SaturationBar : View {
     /**
      * The ARGB value of the currently selected color.
      */
-    private var mColor: Int = 0
+    private var mColor = 0
 
     /**
      * An array of floats that can be build into a `Color` <br></br>
@@ -109,12 +111,12 @@ class SaturationBar : View {
     /**
      * Factor used to calculate the position to the Opacity on the bar.
      */
-    private var mPosToSatFactor: Float = 0.toFloat()
+    private var mPosToSatFactor = 0.toFloat()
 
     /**
      * Factor used to calculate the Opacity to the postion on the bar.
      */
-    private var mSatToPosFactor: Float = 0.toFloat()
+    private var mSatToPosFactor = 0.toFloat()
 
     /**
      * `ColorPicker` instance used to control the ColorPicker.
@@ -124,7 +126,7 @@ class SaturationBar : View {
     /**
      * Used to toggle orientation between vertical and horizontal.
      */
-    private var mOrientation: Boolean = false
+    private var mOrientation = false
 
     /**
      * Interface and listener so that changes in SaturationBar are sent
@@ -135,7 +137,7 @@ class SaturationBar : View {
     /**
      * Saturation of the latest entry of the onSaturationChangedListener.
      */
-    private var oldChangedListenerSaturation: Int = 0
+    private var oldChangedListenerSaturation = 0
 
     interface OnSaturationChangedListener {
         fun onSaturationChanged(saturation: Int)

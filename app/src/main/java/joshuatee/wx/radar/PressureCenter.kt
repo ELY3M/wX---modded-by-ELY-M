@@ -21,4 +21,4 @@
 
 package joshuatee.wx.radar
 
-class PressureCenter(var type: PressureCenterTypeEnum, var pressureInMb: String, var lat: Double, var lon: Double)
+class PressureCenter(val type: PressureCenterTypeEnum, val pressureInMb: String, val lat: Double, val lon: Double)

@@ -124,52 +124,36 @@ object UtilityTime {
         return cal.time
     }
 
-    fun getCurrentLocalTimeAsString(): String =
-        SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())
+    fun getCurrentLocalTimeAsString(): String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())
 
-    fun year(): Int = Calendar.getInstance().get(Calendar.YEAR)
+    //fun year() = Calendar.getInstance().get(Calendar.YEAR)
 
-    fun getYear(): Int = Calendar.getInstance().get(Calendar.YEAR)
+    fun getYear() = Calendar.getInstance().get(Calendar.YEAR)
 
     //fun month(): Int = Calendar.getInstance().get(Calendar.MONTH) + 1
 
-    fun day(): Int = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+    fun day() = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
     val currentHourInUtc: Int
         get() = Calendar.getInstance(TimeZone.getTimeZone("GMT")).get(Calendar.HOUR_OF_DAY)
 
     fun isRadarTimeOld(radarTime: String): Boolean {
         val radarTimeComponents = radarTime.split(":")
-        if (radarTimeComponents.size < 3) {
-            // something went wrong
-            return false
-        }
+        if (radarTimeComponents.size < 3) return false
         val radarTimeHours = radarTimeComponents[0].toIntOrNull() ?: 0
         val radarTimeMinutes = radarTimeComponents[1].toIntOrNull() ?: 0
         val radarTimeTotalMinutes = radarTimeHours * 60 + radarTimeMinutes
         val currentTime = getCurrentLocalTimeAsString().split(" ")[1]
         val currentTimeComponents = currentTime.split(":")
-        if (currentTimeComponents.size < 3) {
-            // something went wrong
-            return false
-        }
+        if (currentTimeComponents.size < 3) return false
         val currentTimeHours = currentTimeComponents[0].toIntOrNull() ?: 0
         val currentTimeMinutes = currentTimeComponents[1].toIntOrNull() ?: 0
         val currentTimeTotalMinutes = currentTimeHours * 60 + currentTimeMinutes
-        if (currentTimeTotalMinutes < 30) {
-            // FIXME find out how to handle midnight
-            return false
-        }
-        if (radarTimeTotalMinutes > currentTimeTotalMinutes) {
-            // radar time should not be in the future, radar is down
-            return true
-        }
-        if (radarTimeTotalMinutes < (currentTimeTotalMinutes - 20)) {
-            return true
-        }
+        if (currentTimeTotalMinutes < 30) return false
+        if (radarTimeTotalMinutes > currentTimeTotalMinutes) return true
+        if (radarTimeTotalMinutes < (currentTimeTotalMinutes - 20)) return true
         return false
     }
-
 
     fun isVtecCurrent(vtec: String ): Boolean {
         // example 190512T1252Z-190512T1545Z
@@ -187,7 +171,6 @@ object UtilityTime {
         val day = ((timeRange).parse("[0-9]{4}([0-9]{2})[0-9]{4}")).toIntOrNull()  ?: 0
         val hour = ((timeRange).parse("[0-9]{6}([0-9]{2})[0-9]{2}")).toIntOrNull()  ?: 0
         val minute = ((timeRange).parse("[0-9]{6}[0-9]{2}([0-9]{2})")).toIntOrNull() ?: 0
-        //UtilityLog.d("wx", timeRange + "," + year.toString() + "," + month.toString() + "," + day.toString() + "," + hour.toString() + "," + minute.toString());
         val cal = Calendar.getInstance()
         cal.set(year, month - 1, day, hour, minute)
         return cal
@@ -199,7 +182,5 @@ object UtilityTime {
         return dateFormatGmt.format(Date())
     }
 
-    fun currentTimeMillis(): Long {
-        return System.currentTimeMillis()
-    }
+    fun currentTimeMillis() = System.currentTimeMillis() // Long
 }

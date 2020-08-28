@@ -25,11 +25,12 @@ import android.content.Context
 import androidx.preference.PreferenceManager
 import joshuatee.wx.util.Utility
 
-class DataStorage(private var preference: String) {
+class DataStorage(private val preference: String) {
 
-    private var storedVal: String = ""
+    private var storedVal = ""
 
-    val value: String get() = storedVal
+    val value: String
+        get() = storedVal
 
     // update in memory value from what is on disk
     fun update(context: Context) {

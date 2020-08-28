@@ -44,13 +44,9 @@ object UtilityNotificationUtils {
         val token1 = Utility.readPref(context, "NOTIF_STR", "")
         val token2 = Utility.readPref(context, "NOTIF_STR_OLD", "")
         var issuedStr: String = Utility.readPref(context, "NOTIF_ISSUED_STR", "")
-        if (token1.contains(token) || token2.contains(token) || issuedStr.contains(token)) {
-            retStatus = true
-        }
+        if (token1.contains(token) || token2.contains(token) || issuedStr.contains(token)) retStatus = true
         if (!issuedStr.contains(token)) {
-            val tokenCnt = (0 until issuedStr.length).count {
-                issuedStr[it] == ','
-            }
+            val tokenCnt = issuedStr.indices.count { issuedStr[it] == ',' }
             val issuedStrOrig = issuedStr
             val maxCnt = 40
             if (tokenCnt > maxCnt) {

@@ -23,7 +23,7 @@ package joshuatee.wx.activitiesmisc
 
 object UtilityWfoText {
 
-    val labels: List<String> = listOf(
+    val labels = listOf(
             "Area Forecast Discussion",
             "Aviation only AFD",
             "Hazardous Weather Outlook",
@@ -38,10 +38,14 @@ object UtilityWfoText {
             "Local Storm Report",
             "Record Event Report",
             "Nearshore Marine Forecast",
-            "Daily Climate Report"
+            "Daily Climate Report",
+            "Hurricane Local Statement",
+            "Marine Weather Warning",
+            "Coastal Flood Advisory",
+            "Areal Flood Watch"
     )
 
-    val codes: List<String> = listOf(
+    val codes = listOf(
             "AFD",
             "VFD",
             "HWO",
@@ -56,7 +60,11 @@ object UtilityWfoText {
             "LSR",
             "RER",
             "NSH",
-            "CLI"
+            "CLI",
+            "HLS",
+            "MWW",
+            "CFW",
+            "FFA"
     )
 
     val codeToName = mapOf(
@@ -74,7 +82,11 @@ object UtilityWfoText {
             "LSR" to "Local Storm Report",
             "RER" to "Record Event Report",
             "NSH" to "Nearshore Marine Forecast",
-            "CLI" to "Daily Climate Report"
+            "CLI" to "Daily Climate Report",
+            "HLS" to "Hurricane Local Statement",
+            "MWW" to "Marine Weather Warning",
+            "CFW" to "Coastal Flood Advisory",
+            "FFA" to "Areal Flood Watch"
     )
 }
 

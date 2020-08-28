@@ -25,17 +25,17 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import androidx.core.app.ActivityCompat
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import android.view.MenuItem
 import android.view.View
-
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.ui.UtilityToolbar
+import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 
 abstract class AudioPlayActivity : AppCompatActivity() {
@@ -50,6 +50,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
     private var ttsProd = ""
     private var ttsTxt = ""
     private lateinit var view: View
+    private var pausePressedIcon = 0
 
     protected fun onCreate(savedInstanceState: Bundle?, layoutResId: Int, menuResId: Int) {
         setTheme(UIPreferences.themeInt)
@@ -70,6 +71,8 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         toolbarBottom.setOnClickListener { toolbarBottom.showOverflowMenu() }
         UtilityToolbar.fullScreenMode(toolbar, false)
         initBottomToolbar()
+        UtilityTts.initTts(this)
+        pausePressedIcon = if (Utility.isThemeAllWhite()) MyApplication.ICON_PAUSE_PRESSED_BLUE else MyApplication.ICON_PAUSE_PRESSED
     }
 
     private fun initBottomToolbar() {
@@ -77,41 +80,33 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         pause = menu.findItem(R.id.action_stop)
         val playlist = menu.findItem(R.id.action_playlist)
         playlist.let { playlist.setIcon(R.drawable.ic_playlist_add_24dp) }
-        if (UtilityTts.mMediaPlayer != null && !UtilityTts.mMediaPlayer!!.isPlaying)
-            pause.setIcon(MyApplication.ICON_PAUSE_PRESSED)
+        if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying)
+            pause.setIcon(pausePressedIcon)
         else
             pause.setIcon(MyApplication.ICON_PAUSE)
     }
 
-    protected fun audioPlayMenu(
-        item: Int,
-        txt: String,
-        prod: String,
-        playlistToken: String
-    ): Boolean {
+    protected fun audioPlayMenu(item: Int, txt: String, prod: String, playlistToken: String): Boolean {
         ttsProd = prod
         ttsTxt = txt
         when (item) {
             R.id.action_read_aloud -> {
                 if (isStoragePermissionGranted) {
-                    UtilityTts.synthesizeTextAndPlay(applicationContext, txt, prod)
+                    UtilityTts.synthesizeTextAndPlay(this, txt, prod)
                     pause.setIcon(MyApplication.ICON_PAUSE)
-                    if (UIPreferences.mediaControlNotif)
-                        UtilityNotification.createMediaControlNotification(applicationContext, "")
+                    if (UIPreferences.mediaControlNotif) UtilityNotification.createMediaControlNotification(applicationContext, "")
                 } else {
                     UtilityLog.d("wx", "perm to write to storage was not granted")
                 }
             }
             R.id.action_stop -> {
-                if (UtilityTts.mMediaPlayer != null)
-                    UtilityTts.playMediaPlayer(1)
-                if (UtilityTts.mMediaPlayer != null && !UtilityTts.mMediaPlayer!!.isPlaying)
-                    pause.setIcon(MyApplication.ICON_PAUSE_PRESSED)
+                if (UtilityTts.mediaPlayer != null) UtilityTts.playMediaPlayer(1)
+                if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying)
+                    pause.setIcon(pausePressedIcon)
                 else
                     pause.setIcon(MyApplication.ICON_PAUSE)
-                if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying)
-                    if (UIPreferences.mediaControlNotif)
-                        UtilityNotification.createMediaControlNotification(applicationContext, "")
+                if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying && UIPreferences.mediaControlNotif)
+                    UtilityNotification.createMediaControlNotification(applicationContext, "")
             }
             R.id.action_playlist -> UtilityPlayList.add(this, view, playlistToken, txt)
             else -> return false
@@ -120,11 +115,16 @@ abstract class AudioPlayActivity : AppCompatActivity() {
     }
 
     override fun onRestart() {
-        if (UtilityTts.mMediaPlayer != null && !UtilityTts.mMediaPlayer!!.isPlaying)
-            pause.setIcon(MyApplication.ICON_PAUSE_PRESSED)
+        if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying)
+            pause.setIcon(pausePressedIcon)
         else
             pause.setIcon(MyApplication.ICON_PAUSE)
         super.onRestart()
+    }
+
+    override fun onDestroy() {
+        UtilityTts.shutdownTts()
+        super.onDestroy()
     }
 
     private val isStoragePermissionGranted: Boolean
@@ -133,11 +133,7 @@ abstract class AudioPlayActivity : AppCompatActivity() {
                 if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     true
                 } else {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        1
-                    )
+                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
                     false
                 }
             } else {
@@ -145,20 +141,14 @@ abstract class AudioPlayActivity : AppCompatActivity() {
             }
         }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         when (requestCode) {
             1 -> {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     UtilityTts.synthesizeTextAndPlay(applicationContext, ttsTxt, ttsProd)
                     pause.setIcon(MyApplication.ICON_PAUSE)
-                    if (UIPreferences.mediaControlNotif)
-                        UtilityNotification.createMediaControlNotification(applicationContext, "")
-
+                    if (UIPreferences.mediaControlNotif) UtilityNotification.createMediaControlNotification(applicationContext, "")
                 }
             }
         }

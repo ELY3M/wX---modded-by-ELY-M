@@ -24,8 +24,6 @@ package joshuatee.wx.models
 internal object UtilityModelEsrlInterface {
 
     val models = listOf(
-        //"HRRR",
-        //"HRRR_AK",
         "HRRR_NCEP",
         "RAP",
         "RAP_NCEP"
@@ -50,8 +48,6 @@ internal object UtilityModelEsrlInterface {
         "ATL",
         "CLE"
     )
-
-    //val sectorsHrrrAk = listOf("Full")
 
     val paramsHrrr = listOf(
         "1ref_sfc",

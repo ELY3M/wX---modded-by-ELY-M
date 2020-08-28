@@ -21,31 +21,31 @@
 
 package joshuatee.wx.radar
 
+import android.content.Context
 import java.io.EOFException
 import java.io.IOException
 import joshuatee.wx.util.UCARRandomAccessFile
+import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
 
 object UtilityLevel3TextProduct {
 
-    fun read(dis: UCARRandomAccessFile?): String {
-        val sb = StringBuilder(1500)
+    fun readFile(context: Context, fileName: String): String {
+        val ucarRandomAccessFile = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName))
+        ucarRandomAccessFile.bigEndian = true
+        return read(ucarRandomAccessFile)
+    }
+
+    fun read(ucarRandomAccessFile: UCARRandomAccessFile?): String {
+        val stringBuilder = StringBuilder(1500)
         try {
-            dis?.let {
-                while (true) {
-                    if (it.readShort().toInt() == -1) {
-                        break
-                    }
-                }
+            ucarRandomAccessFile?.let {
+                while (true) if (it.readShort().toInt() == -1) break
                 it.skipBytes(26)
-                while (true) {
-                    if (it.readShort().toInt() == -1) {
-                        break
-                    }
-                }
+                while (true) if (it.readShort().toInt() == -1) break
                 try {
                     while (!it.isAtEndOfFile) {
-                        sb.append(String(byteArrayOf(it.readByte()), charset("ISO-8859-1")))
+                        stringBuilder.append(String(byteArrayOf(it.readByte()), charset("ISO-8859-1")))
                     }
                 } catch (e: EOFException) {
                     UtilityLog.handleException(e)
@@ -62,6 +62,6 @@ object UtilityLevel3TextProduct {
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
-        return sb.toString()
+        return stringBuilder.toString()
     }
 }

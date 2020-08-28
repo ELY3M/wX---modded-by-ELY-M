@@ -22,34 +22,31 @@
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
+import joshuatee.wx.Extensions.safeGet
 
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
-import joshuatee.wx.activitiesmisc.WebView
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.settings.*
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
-        OnMenuItemClickListener {
+class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
 
-    companion object {
-        const val URL: String = ""
-    }
+    companion object { const val URL = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private var imgUrl = ""
     private lateinit var img: ObjectTouchImageView
     private lateinit var imageMap: ObjectImageMap
-    private var nwsOffice = ""
+    private var office = ""
     private var mapShown = false
     private var firstTime = true
     private lateinit var star: MenuItem
@@ -57,54 +54,50 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
     private val prefToken = "SND_FAV"
     private var upperAir = ""
     private var bitmap = UtilityImg.getBlankBitmap()
-    private lateinit var objectSpinner: ObjectSpinner
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.spcsoundings_top, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.action_sector).title = locations.safeGet(0)
+        return super.onPrepareOptionsMenu(menu)
+    }
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_spcsoundings,
-                R.menu.spcsoundings,
-                true
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_spcsoundings, R.menu.spcsoundings, true)
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv)
-        nwsOffice = UtilityLocation.getNearestSoundingSite(Location.latLon)
-        locations = UtilityFavorites.setupMenu(this, MyApplication.sndFav, nwsOffice, prefToken)
-        objectSpinner = ObjectSpinner(this, this, this, R.id.spinner1, locations)
+        office = UtilityLocation.getNearestSoundingSite(Location.latLon)
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
         imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToSnd)
+        getContent()
     }
 
     override fun onRestart() {
-        locations = UtilityFavorites.setupMenu(this, MyApplication.sndFav, nwsOffice, prefToken)
-        objectSpinner.refreshData(this, locations)
+        getContent()
         super.onRestart()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        if (MyApplication.sndFav.contains(":$nwsOffice:"))
-            star.setIcon(MyApplication.STAR_ICON)
-        else
-            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-        withContext(Dispatchers.IO) {
-            bitmap = UtilitySpcSoundings.getImage(this@SpcSoundingsActivity, nwsOffice)
-        }
+        locations = UtilityFavorites.setupMenu(this@SpcSoundingsActivity, MyApplication.sndFav, office, prefToken)
+        invalidateOptionsMenu()
+        if (MyApplication.sndFav.contains(":$office:")) star.setIcon(MyApplication.STAR_ICON) else star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+        bitmap = withContext(Dispatchers.IO) { UtilitySpcSoundings.getImage(this@SpcSoundingsActivity, office) }
         img.img.visibility = View.VISIBLE
         img.setBitmap(bitmap)
         img.setMaxZoom(4f)
         img.firstRunSetZoomPosn("SOUNDING")
-        Utility.writePref(this@SpcSoundingsActivity, "SOUNDING_SECTOR", nwsOffice)
+        Utility.writePref(this@SpcSoundingsActivity, "SOUNDING_SECTOR", office)
     }
 
     private fun getContentSPCPlot() = GlobalScope.launch(uiDispatcher) {
         imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/$upperAir"
         withContext(Dispatchers.IO) {
-            val date = UtilityString.getHtmlAndParse(
-                    "${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/",
-                    "/obswx/maps/" + upperAir + "_([0-9]{6}_[0-9]{2}).gif"
-            )
+            val date = UtilityString.getHtmlAndParse("${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/", "/obswx/maps/" + upperAir + "_([0-9]{6}_[0-9]{2}).gif")
             bitmap = UtilityImg.getBitmapAddWhiteBackground(this@SpcSoundingsActivity, imgUrl + "_" + date + ".gif")
         }
         img.img.visibility = View.VISIBLE
@@ -114,7 +107,7 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareBitmap(this, this, "$nwsOffice sounding", bitmap)
+            R.id.action_share -> UtilityShare.bitmap(this, this, "$office sounding", bitmap)
             R.id.action_250mb -> setPlotAndGet("250")
             R.id.action_300mb -> setPlotAndGet("300")
             R.id.action_500mb -> setPlotAndGet("500")
@@ -124,15 +117,7 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
             R.id.action_sfc -> setPlotAndGet("sfc")
             R.id.action_map -> imageMap.toggleMap()
             R.id.action_fav -> toggleFavorite()
-            R.id.action_spc_help -> ObjectIntent(
-                    this,
-                    WebView::class.java,
-                    WebView.URL,
-                    arrayOf(
-                            "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/begin.html",
-                            nwsOffice
-                    )
-            )
+            R.id.action_spc_help -> ObjectIntent.showWebView(this, arrayOf("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/begin.html", office))
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -143,48 +128,54 @@ class SpcSoundingsActivity : BaseActivity(), OnItemSelectedListener,
         getContentSPCPlot()
     }
 
-    private fun mapSwitch(loc: String) {
-        nwsOffice = loc
+    private fun mapSwitch(location: String) {
+        office = location
         mapShown = false
-        locations = UtilityFavorites.setupMenu(this, MyApplication.sndFav, nwsOffice, prefToken)
-        objectSpinner.refreshData(this, locations)
+        getContent()
         img.resetZoom()
     }
 
     private fun toggleFavorite() {
-        val ridFav = UtilityFavorites.toggleString(this, nwsOffice, star, prefToken)
-        locations = UtilityFavorites.setupMenu(this, ridFav, nwsOffice, prefToken)
-        objectSpinner.refreshData(this, locations)
+        UtilityFavorites.toggle(this, office, star, prefToken)
     }
 
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        if (locations.isNotEmpty()) {
-            if (firstTime) {
-                UtilityToolbar.fullScreenMode(toolbar, toolbarBottom)
-                firstTime = false
-            }
-            when (pos) {
-                1 -> ObjectIntent(
-                        this,
-                        FavAddActivity::class.java,
-                        FavAddActivity.TYPE,
-                        arrayOf("SND")
-                )
-                2 -> ObjectIntent(
-                        this,
-                        FavRemoveActivity::class.java,
-                        FavRemoveActivity.TYPE,
-                        arrayOf("SND")
-                )
-                else -> {
-                    nwsOffice = locations[pos].split(" ").getOrNull(0) ?: ""
-                    getContent()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        locations = UtilityFavorites.setupMenu(this, MyApplication.sndFav, office, prefToken)
+        when (item.itemId) {
+            R.id.action_sector -> genericDialog(locations) {
+                if (locations.isNotEmpty()) {
+                    if (firstTime) {
+                        UtilityToolbar.fullScreenMode(toolbar, toolbarBottom)
+                        firstTime = false
+                    }
+                    when (it) {
+                        1 -> ObjectIntent.favoriteAdd(this, arrayOf("SND"))
+                        2 -> ObjectIntent.favoriteRemove(this, arrayOf("SND"))
+                        else -> {
+                            office = locations[it].split(" ").getOrNull(0) ?: ""
+                            getContent()
+                        }
+                    }
                 }
             }
+            else -> return super.onOptionsItemSelected(item)
         }
+        return true
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>) {}
+    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
+        val objectDialogue = ObjectDialogue(this, list)
+        objectDialogue.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
+            dialog.dismiss()
+            UtilityUI.immersiveMode(this)
+        })
+        objectDialogue.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+            fn(which)
+            getContent()
+            dialog.dismiss()
+        })
+        objectDialogue.show()
+    }
 
     override fun onStop() {
         img.imgSavePosnZoom(this, "SOUNDING")

@@ -26,7 +26,8 @@ import android.view.MenuItem
 
 import joshuatee.wx.MyApplication
 
-import joshuatee.wx.GlobalArrays
+import joshuatee.wx.canada.UtilityCanada
+import joshuatee.wx.spc.UtilitySpcMeso
 import joshuatee.wx.wpc.UtilityWpcText
 
 object UtilityFavorites {
@@ -55,53 +56,34 @@ object UtilityFavorites {
             "WFO_FAV" -> MyApplication.wfoFav = value
             "RID_FAV" -> MyApplication.ridFav = value
             "SND_FAV" -> MyApplication.sndFav = value
+            "SREF_FAV" -> MyApplication.srefFav = value
+            "NWS_TEXT_FAV" -> MyApplication.nwsTextFav = value
+            "SPCMESO_FAV" ->  MyApplication.spcMesoFav = value
+            "RID_CA_FAV" -> MyApplication.caRidFav = value
         }
     }
 
-    fun setupMenu(
-        context: Context,
-        favoriteString: String,
-        value: String,
-        prefToken: String
-    ): List<String> {
+    fun setupMenu(context: Context, favoriteString: String, value: String, prefToken: String): List<String> {
         checkAndCorrect(context, favoriteString, prefToken)
         var favorites = favoriteString.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
-        if (favorites.size < 3) {
-            favorites = MutableList(3) { "" }
-        }
+        if (favorites.size < 3) favorites = MutableList(3) { "" }
         favorites[0] = value
         favorites[1] = ADD_STR
         favorites[2] = MODIFY_STR
         val returnList = MutableList(favorites.size) { "" }
-        var name: String
         favorites.indices.forEach { k ->
-            name = when (prefToken) {
+            UtilityLog.d("wx", "DEBUG: " + favorites[k])
+            val name = when (prefToken) {
                 "RID_FAV" -> Utility.getRadarSiteName(favorites[k])
                 "WFO_FAV" -> Utility.getWfoSiteName(favorites[k])
                 "SND_FAV" -> Utility.getSoundingSiteName(favorites[k])
+                "NWS_TEXT_FAV" -> UtilityWpcText.getLabel(favorites[k])
+                "SPCMESO_FAV" -> UtilitySpcMeso.getLabelFromParam(favorites[k])
+                "RID_CA_FAV" -> UtilityCanada.getRadarLabel(favorites[k])
+                "SPCSREF_FAV" -> ""
                 else -> "FIXME"
             }
-            if (k == 1 || k == 2) {
-                returnList[k] = favorites[k]
-            } else {
-                returnList[k] = favorites[k] + DELIM_TOKEN + name
-            }
-        }
-        return returnList.toList()
-    }
-
-    fun setupMenuCanada(favoriteString: String, value: String): List<String> {
-        val favorites = favoriteString.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
-        favorites[0] = value
-        favorites[1] = ADD_STR
-        favorites[2] = MODIFY_STR
-        val returnList = MutableList(favorites.size) { "" }
-        favorites.indices.forEach { k ->
-            GlobalArrays.canadaRadars.indices.filter { GlobalArrays.canadaRadars[it].contains(favorites[k]) }
-                .forEach { returnList[k] = GlobalArrays.canadaRadars[it].replace(":", "") }
-            if (k == 1 || k == 2) {
-                returnList[k] = favorites[k]
-            }
+            if (k == 1 || k == 2) returnList[k] = favorites[k] else returnList[k] = favorites[k] + DELIM_TOKEN + name
         }
         return returnList.toList()
     }
@@ -122,93 +104,8 @@ object UtilityFavorites {
             "SND_FAV" -> MyApplication.sndFav = favoriteString
             "SREF_FAV" -> MyApplication.srefFav = favoriteString
             "NWS_TEXT_FAV" -> MyApplication.nwsTextFav = favoriteString
+            "SPCMESO_FAV" ->  MyApplication.spcMesoFav = favoriteString
+            "RID_CA_FAV" -> MyApplication.caRidFav = favoriteString
         }
-    }
-
-    // mirror of method above save it returns the string
-    fun toggleString(
-        context: Context,
-        value: String,
-        star: MenuItem,
-        prefToken: String
-    ): String {
-        var favoriteString = Utility.readPref(context, prefToken, initialValue)
-        if (favoriteString.contains(value)) {
-            favoriteString = favoriteString.replace("$value:", "")
-            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-        } else {
-            favoriteString = "$favoriteString$value:"
-            star.setIcon(MyApplication.STAR_ICON)
-        }
-        Utility.writePref(context, prefToken, favoriteString)
-        when (prefToken) {
-            "RID_FAV" -> MyApplication.ridFav = favoriteString
-            "WFO_FAV" -> MyApplication.wfoFav = favoriteString
-            "SND_FAV" -> MyApplication.sndFav = favoriteString
-            "SREF_FAV" -> MyApplication.srefFav = favoriteString
-            "NWS_TEXT_FAV" -> MyApplication.nwsTextFav = favoriteString
-        }
-        return favoriteString
-    }
-
-    fun toggleSpcMeso(context: Context, value: String, label: String, star: MenuItem) {
-        var favoriteString = Utility.readPref(context, "SPCMESO_FAV", initialValue)
-        var favoriteLabelString = Utility.readPref(context, "SPCMESO_LABEL_FAV", initialValue)
-        if (favoriteString.contains(value)) {
-            favoriteString = favoriteString.replace("$value:", "")
-            favoriteLabelString = favoriteLabelString.replace("$label:", "")
-            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-        } else {
-            favoriteString = "$favoriteString$value:"
-            favoriteLabelString = "$favoriteLabelString$label:"
-            star.setIcon(MyApplication.STAR_ICON)
-        }
-        Utility.writePref(context, "SPCMESO_FAV", favoriteString)
-        Utility.writePref(context, "SPCMESO_LABEL_FAV", favoriteLabelString)
-        MyApplication.spcMesoFav = favoriteString
-        MyApplication.spcmesoLabelFav = favoriteLabelString
-    }
-
-    // Takes a value and a colon separated string
-    // returns a List with the value at the start followed by two constant values (add/modify)
-    // followed by each token in the string as list items
-    // If somehow the input colon separated string is to small correct it in this method
-    fun setupMenuSpc(favoriteString: String, value: String): List<String> {
-        var favorites = favoriteString.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
-        if (favorites.size < 3) {
-            favorites = MutableList(3) { "" }
-        }
-        favorites[0] = value
-        favorites[1] = ADD_STR
-        favorites[2] = MODIFY_STR
-        return favorites.toList()
-    }
-
-    fun setupMenuNwsText(favoriteString: String, value: String): List<String> {
-        val favorites = favoriteString.split(":").dropLastWhile { it.isEmpty() }.toMutableList()
-        favorites[0] = value
-        favorites[1] = ADD_STR
-        favorites[2] = MODIFY_STR
-        val returnList = MutableList(favorites.size) { "" }
-        favorites.indices.forEach {
-            if (it == 1 || it == 2) {
-                returnList[it] = favorites[it]
-            } else {
-                val index = findPositionNwsText(favorites[it])
-                if (index == -1) {
-                    returnList[it] = value
-                } else {
-                    returnList[it] = UtilityWpcText.labels[findPositionNwsText(favorites[it])]
-                }
-            }
-        }
-        return returnList.toList()
-    }
-
-    fun findPositionNwsText(key: String): Int {
-        val index = UtilityWpcText.labels.indices.firstOrNull {
-            UtilityWpcText.labels[it].startsWith(key)
-        } ?: -1
-        return index
     }
 }

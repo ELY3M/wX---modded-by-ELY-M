@@ -35,19 +35,14 @@ import joshuatee.wx.util.UtilityString
 internal object UtilityDownloadMpd {
 
     const val type = "MPD"
-    var timer = DownloadTimer(type)
+    val typeEnum = PolygonType.MPD
+    val timer = DownloadTimer(type)
 
-    fun get(context: Context) {
-        if (timer.isRefreshNeeded(context)) {
-            getMpd(context)
-        }
-    }
+    fun get(context: Context) { if (timer.isRefreshNeeded(context)) getMpd(context) }
 
     fun getMpd(context: Context): WatchData {
         val html = "${MyApplication.nwsWPCwebsitePrefix}/metwatch/metwatch_mpd.php".getHtml()
-        if (html != "") {
-            MyApplication.severeDashboardMpd.valueSet(context, html)
-        }
+        if (html != "") MyApplication.severeDashboardMpd.valueSet(context, html)
         val numberList = getListOfNumbers(context)
         val htmlList = mutableListOf<String>()
         var latLonString = ""
@@ -56,29 +51,21 @@ internal object UtilityDownloadMpd {
             htmlList.add(mcdData[0])
             latLonString += mcdData[1]
         }
-        val locationNeedsMpd = UtilityNotificationWpc.locationNeedsMpd()
-        if (PolygonType.MPD.pref || locationNeedsMpd) {
-            MyApplication.mpdLatLon.valueSet(context, latLonString)
-        }
+        if (PolygonType.MPD.pref || UtilityNotificationWpc.locationNeedsMpd()) MyApplication.mpdLatLon.valueSet(context, latLonString)
         return WatchData(numberList, htmlList)
     }
 
     private fun getListOfNumbers(context: Context): List<String> {
         val list = UtilityString.parseColumn(MyApplication.severeDashboardMpd.value, RegExp.mpdPattern)
         var mpdNoList = ""
-        list.forEach {
-            mpdNoList = "$mpdNoList$it:"
-        }
-        val locationNeedsMpd = UtilityNotificationWpc.locationNeedsMpd()
-        if (PolygonType.MPD.pref || locationNeedsMpd) {
-            MyApplication.mpdNoList.valueSet(context, mpdNoList)
-        }
+        list.forEach { mpdNoList += "$it:" }
+        if (PolygonType.MPD.pref || UtilityNotificationWpc.locationNeedsMpd()) MyApplication.mpdNoList.valueSet(context, mpdNoList)
         return list
     }
 
     // return the raw MPD text and the lat/lon as a list
     fun getLatLon(context: Context, number: String): List<String> {
         val html = UtilityDownload.getTextProduct(context, "WPCMPD$number")
-        return listOf(html, UtilityNotification.storeWatMcdLatLon(html))
+        return listOf(html, UtilityNotification.storeWatchMcdLatLon(html))
     }
 }

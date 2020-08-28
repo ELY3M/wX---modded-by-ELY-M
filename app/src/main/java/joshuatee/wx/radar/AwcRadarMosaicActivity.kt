@@ -25,28 +25,25 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
+class AwcRadarMosaicActivity : VideoRecordActivity() {
 
     // Provides native interface to AWC radar mosaics along with animations
     //
     // arg1: "widget" (optional) - if this arg is specified it will show mosaic for widget location
     //       "location" for current location
 
-    companion object {
-        const val URL: String = ""
-    }
+    companion object { const val URL = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private var animRan = false
     private var animDrawable = AnimationDrawable()
     private lateinit var img: ObjectTouchImageView
@@ -58,32 +55,25 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
     private val prefTokenProduct = "AWCMOSAIC_PRODUCT_LAST_USED"
     private var sector = "us"
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.awcmosaic, menu)
+        return true
+    }
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_image_show_navdrawer_bottom_toolbar,
-                R.menu.awcmosaic,
-                iconsEvenlySpaced = true,
-                bottomToolbar = true
-        )
-        toolbarBottom.setOnMenuItemClickListener(this)
-        UtilityShortcut.hidePinIfNeeded(toolbarBottom)
-        objectNavDrawer = ObjectNavDrawer(this, UtilityAwcRadarMosaic.labels, UtilityAwcRadarMosaic.sectors)
+        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.awcmosaic, iconsEvenlySpaced = true, bottomToolbar = false)
+        objectNavDrawer = ObjectNavDrawer(this, UtilityAwcRadarMosaic.labels, UtilityAwcRadarMosaic.sectors, ::getContentFixThis)
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, objectNavDrawer, "")
         img.setMaxZoom(8.0f)
         img.setListener(this, objectNavDrawer, ::getContentFixThis)
         sector = Utility.readPref(this, prefTokenSector, sector)
         product = Utility.readPref(this, prefTokenProduct, product)
         objectNavDrawer.index = UtilityAwcRadarMosaic.sectors.indexOf(sector)
-        objectNavDrawer.setListener(::getContentFixThis)
-        toolbarBottom.setOnClickListener { objectNavDrawer.drawerLayout.openDrawer(objectNavDrawer.listView) }
         getContent(product)
     }
 
-    private fun getContentFixThis() {
-        getContent(product)
-    }
+    private fun getContentFixThis() { getContent(product) }
 
     override fun onRestart() {
         getContent(product)
@@ -93,9 +83,8 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
     private fun getContent(productLocal: String) = GlobalScope.launch(uiDispatcher) {
         product = productLocal
         toolbar.subtitle = objectNavDrawer.getLabel()
-        bitmap = withContext(Dispatchers.IO) {
-            UtilityAwcRadarMosaic.get(objectNavDrawer.url, product)
-        }
+        title = product
+        bitmap = withContext(Dispatchers.IO) { UtilityAwcRadarMosaic.get(objectNavDrawer.url, product) }
         img.setBitmap(bitmap)
         animRan = false
         img.firstRunSetZoomPosn(prefImagePosition)
@@ -104,9 +93,7 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
     }
 
     private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
-        animDrawable = withContext(Dispatchers.IO) {
-            UtilityAwcRadarMosaic.getAnimation(this@AwcRadarMosaicActivity, objectNavDrawer.url, product)
-        }
+        animDrawable = withContext(Dispatchers.IO) { UtilityAwcRadarMosaic.getAnimation(this@AwcRadarMosaicActivity, objectNavDrawer.url, product) }
         animRan = UtilityImgAnim.startAnimation(animDrawable, img)
     }
 
@@ -120,12 +107,9 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
         objectNavDrawer.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true
-        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
         when (item.itemId) {
-            R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.RADAR_MOSAIC)
             R.id.action_animate -> getAnimate()
             R.id.action_stop -> animDrawable.stop()
             R.id.action_rad_rala -> getContent("rad_rala")
@@ -137,22 +121,13 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
             R.id.action_sat_vis -> getContent("sat_vis")
             R.id.action_sat_wv -> getContent("sat_wv")
             R.id.action_share -> {
-                if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
+                if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
                     if (animRan) {
-                        UtilityShare.shareAnimGif(
-                                this,
-                                "NWS mosaic",
-                                animDrawable
-                        )
+                        UtilityShare.animGif(this, "NWS mosaic", animDrawable)
                     } else {
-                        UtilityShare.shareBitmap(
-                                this,
-                                this,
-                                "NWS mosaic",
-                                bitmap
-                        )
+                        UtilityShare.bitmap(this, this, "NWS mosaic", bitmap)
                     }
                 }
             }
@@ -160,9 +135,6 @@ class AwcRadarMosaicActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLis
         }
         return true
     }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean =
-            objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onStop() {
         img.imgSavePosnZoom(this, prefImagePosition)

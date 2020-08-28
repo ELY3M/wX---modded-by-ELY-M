@@ -23,132 +23,63 @@ package joshuatee.wx.radar
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.objects.ProjectionType
-import joshuatee.wx.util.UtilityCanvasProjection
 import joshuatee.wx.util.ProjectionNumbers
-import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.external.ExternalPolygon
 
 internal object UtilityWatch {
 
-    fun add(
-        provider: ProjectionType,
-        radarSite: String,
-        type: PolygonType
-    ): List<Double> {
-        var testArr: Array<String>
+    fun add(projectionNumbers: ProjectionNumbers, polygonType: PolygonType): List<Double> {
         val warningList = mutableListOf<Double>()
-        var prefToken = ""
-        when (type) {
-            PolygonType.MCD -> prefToken = MyApplication.mcdLatLon.value
-            PolygonType.WATCH -> prefToken = MyApplication.watchLatLon.value
-            PolygonType.WATCH_TORNADO -> prefToken = MyApplication.watchLatLonTor.value
-            PolygonType.MPD -> prefToken = MyApplication.mpdLatLon.value
-            else -> {
-            }
+        val prefToken = when (polygonType) {
+            PolygonType.MCD -> MyApplication.mcdLatLon.value
+            PolygonType.WATCH -> MyApplication.watchLatLon.value
+            PolygonType.WATCH_TORNADO -> MyApplication.watchLatLonTor.value
+            PolygonType.MPD -> MyApplication.mpdLatLon.value
+            else -> ""
         }
-        val pn = ProjectionNumbers(radarSite, provider)
-        var j: Int
-        var pixXInit: Double
-        var pixYInit: Double
-        val textFfw = prefToken
-        if (textFfw != "") {
-            val tmpArr = MyApplication.colon.split(textFfw)
-            tmpArr.forEach { it ->
-                testArr = MyApplication.space.split(it)
-                val x = testArr.filterIndexed { idx: Int, _: String -> idx and 1 == 0 }.map {
-                    it.toDoubleOrNull() ?: 0.0
-                }
-                val y = testArr.filterIndexed { idx: Int, _: String -> idx and 1 != 0 }.map {
-                    it.toDoubleOrNull() ?: 0.0
-                }
-                if (y.isNotEmpty() && x.isNotEmpty()) {
-                    var tmpCoords = UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], pn)
-                    pixXInit = tmpCoords[0]
-                    pixYInit = tmpCoords[1]
-                    warningList.add(tmpCoords[0])
-                    warningList.add(tmpCoords[1])
-                    if (x.size == y.size) {
-                        j = 1
-                        while (j < x.size) {
-                            tmpCoords =
-                                UtilityCanvasProjection.computeMercatorNumbers(x[j], y[j], pn)
-                            warningList.add(tmpCoords[0])
-                            warningList.add(tmpCoords[1])
-                            warningList.add(tmpCoords[0])
-                            warningList.add(tmpCoords[1])
-                            j += 1
-                        }
-                        warningList.add(pixXInit)
-                        warningList.add(pixYInit)
-                    }
-                }
+        if (prefToken != "") {
+            val polygons = prefToken.split(":").dropLastWhile { it.isEmpty() }
+            polygons.forEach { polygon ->
+                val latLons = LatLon.parseStringToLatLons(polygon, 1.0, false)
+                warningList += LatLon.latLonListToListOfDoubles(latLons, projectionNumbers)
             }
         }
         return warningList
     }
 
-    fun show(lat: Double, lon: Double, type: PolygonType): String {
-        var text = ""
-        val textWatNoList: String
-        val mcdNoArr: Array<String>
+    fun show(latLon: LatLon, type: PolygonType): String {
+        val numberList: List<String>
         val watchLatLon: String
         when (type) {
             PolygonType.WATCH -> {
-                textWatNoList = MyApplication.watchNoList.value
-                mcdNoArr = MyApplication.colon.split(textWatNoList)
+                numberList = MyApplication.watchNoList.value.split(":").dropLastWhile { it.isEmpty() }
                 watchLatLon = MyApplication.watchLatLonList.value
             }
             PolygonType.MCD -> {
-                textWatNoList = MyApplication.mcdNoList.value
-                mcdNoArr = MyApplication.colon.split(textWatNoList)
+                numberList = MyApplication.mcdNoList.value.split(":").dropLastWhile { it.isEmpty() }
                 watchLatLon = MyApplication.mcdLatLon.value
             }
             PolygonType.MPD -> {
-                textWatNoList = MyApplication.mpdNoList.value
-                mcdNoArr = MyApplication.colon.split(textWatNoList)
+                numberList = MyApplication.mpdNoList.value.split(":").dropLastWhile { it.isEmpty() }
                 watchLatLon = MyApplication.mpdLatLon.value
             }
             else -> {
-                textWatNoList = MyApplication.watchNoList.value
-                mcdNoArr = MyApplication.colon.split(textWatNoList)
+                numberList = MyApplication.watchNoList.value.split(":").dropLastWhile { it.isEmpty() }
                 watchLatLon = MyApplication.watchLatLonList.value
             }
         }
-        val latLonArr = MyApplication.colon.split(watchLatLon)
-        val x = mutableListOf<Double>()
-        val y = mutableListOf<Double>()
-        var i: Int
-        var testArr: List<String>
-        var z = 0
+        val polygons = watchLatLon.split(":").dropLastWhile { it.isEmpty() }
         var notFound = true
-        while (z < latLonArr.size) {
-            testArr = latLonArr[z].split(" ")
-            x.clear()
-            y.clear()
-            i = 0
-            while (i < testArr.size) {
-                if (i and 1 == 0) {
-                    x.add(testArr[i].toDoubleOrNull() ?: 0.0)
-                } else {
-                    y.add((testArr[i].toDoubleOrNull() ?: 0.0) * -1)
-                }
-                i += 1
-            }
-            if (y.size > 3 && x.size > 3 && x.size == y.size) {
-                val poly2 = ExternalPolygon.Builder()
-                for (j in x.indices) {
-                    poly2.addVertex(ExternalPoint(x[j].toFloat(), y[j].toFloat()))
-                }
-                val polygon2 = poly2.build()
-                val contains = polygon2.contains(ExternalPoint(lat.toFloat(), lon.toFloat()))
+        var text = ""
+        polygons.indices.forEach { z ->
+            val latLons = LatLon.parseStringToLatLons(polygons[z],-1.0, false)
+            if (latLons.isNotEmpty()) {
+                val contains = ExternalPolygon.polygonContainsPoint(latLon, latLons)
                 if (contains && notFound) {
-                    text = mcdNoArr[z]
+                    text = numberList[z]
                     notFound = false
                 }
             }
-            z += 1
-
         }
         return text
     }

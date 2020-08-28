@@ -41,9 +41,7 @@ internal object UtilityModelNcepInterface {
             "POLAR",
             "RAP",
             "SREF",
-            "WW3",
-            "WW3-ENP",
-            "WW3-WNA"
+            "WW3"
     )
 
     val sectorsGfs = listOf(
@@ -53,7 +51,7 @@ internal object UtilityModelNcepInterface {
             "AFRICA",
             "NORTH-PAC",
             "EAST-PAC",
-            "WN-ATL",
+            "WEST-ATL",
             "ATLANTIC",
             "POLAR",
             "ALASKA",
@@ -190,17 +188,17 @@ internal object UtilityModelNcepInterface {
             "ATL-PAC",
             "NORTH-PAC",
             "EAST-PAC",
-            "WN-ATL"
+            "WEST-ATL"
     )
 
-    val sectorsWw3Enp = listOf(
+   /* val sectorsWw3Enp = listOf(
             "NORTH-PAC",
             "EAST-PAC"
     )
 
     val sectorsWw3Wna = listOf(
             "WN-ATL"
-    )
+    )*/
 
     val sectorsEstofs = listOf(
             "WEST-GOA",
@@ -235,7 +233,7 @@ internal object UtilityModelNcepInterface {
             "precip_p48",
             "precip_p60",
             "precip_ptot",
-            "sim_radar_cref",
+            "sim_radar_comp",
             "snodpth_chng",
             "1000_500_thick",
             "1000_850_thick",
@@ -268,7 +266,7 @@ internal object UtilityModelNcepInterface {
             "Total Precipitation every 48 hours",
             "Total Precipitation every 60 hours",
             "Total Accumulated Precipitation of Period",
-            "Simulated Composite Radar Reflectivity",
+            "Composite Radar Reflectivity",
             "Snow Depth Change from F00",
             "MSLP, 1000-500mb thickness and 3-, or 12-hourly total precipitation",
             "MSLP, 1000-850mb thickness and 3- or 12-hourly total precipitation",
@@ -363,6 +361,7 @@ internal object UtilityModelNcepInterface {
             "precip_rate",
             "snow_total",
             "sim_radar_1km",
+            "sim_radar_comp",
             "1000_500_thick",
             "1000_850_thick",
             "850_700_thick",
@@ -389,6 +388,7 @@ internal object UtilityModelNcepInterface {
             "Precipitation Rate",
             "Total Accumulated Snowfall",
             "Simulated Radar Reflectivity 1km",
+            "Composite Radar Reflectivity",
             "MSLP, 1000-500mb thickness, 1-hourly precipitation",
             "MSLP, 1000-850mb thickness, 1-hourly precipitation",
             "MSLP, 850-700mb thickness, 1-hourly precipitation",
@@ -415,6 +415,7 @@ internal object UtilityModelNcepInterface {
             "precip_rate",
             "snow_total",
             "sim_radar_1km",
+            "sim_radar_comp",
             "sim_radar_max",
             "1000_500_thick",
             "1000_850_thick",
@@ -449,6 +450,7 @@ internal object UtilityModelNcepInterface {
             "Precipitation Rate",
             "Total Accumulated Snowfall",
             "Simulated Radar Reflectivity 1km",
+            "Composite Radar Reflectivity",
             "Max Simulated Radar Reflectivity",
             "PMSL, 1000-500mb thickness, 1-hourly precipitation",
             "PMSL, 1000-850mb thickness, 1-hourly precipitation",
@@ -488,6 +490,7 @@ internal object UtilityModelNcepInterface {
             "precip_p60",
             "precip_ptot",
             "sim_radar_1km",
+            "sim_radar_comp",
             "snodpth_chng",
             "1000_500_thick",
             "1000_850_thick",
@@ -531,6 +534,7 @@ internal object UtilityModelNcepInterface {
             "Total Precipitation every 60 hours",
             "Total Accumulated Precipitation of Period",
             "Simulated Radar Reflectivity 1km",
+            "Composite Radar Reflectivity",
             "Snow Depth Change from F00",
             "MSLP, 1000-500mb thickness, 3-hourly total precipitation",
             "MSLP, 1000-850mb thickness, 3-hourly total precipitation",
@@ -675,6 +679,7 @@ internal object UtilityModelNcepInterface {
             "precip_p48",
             "precip_ptot",
             "sim_radar_1km",
+            "sim_radar_comp",
             "1000_500_thick",
             "1000_850_thick",
             "850_700_thick",
@@ -708,6 +713,7 @@ internal object UtilityModelNcepInterface {
             "Total Precipitation every 48 hours",
             "Total Accumulated Precipitation",
             "Simulated Radar Reflectivity 1km",
+            "Composite Radar Reflectivity",
             "MSLP, 1000-500mb thickness, 3-hourly total precipitation",
             "MSLP, 1000-850mb thickness, 3-hourly total precipitation",
             "MSLP, 850-700mb thickness, 3-hourly total precipitation",
@@ -851,30 +857,6 @@ internal object UtilityModelNcepInterface {
             "Wind Wave Direction and Period (sec)"
     )
 
-    val paramsWw3Enp = listOf(
-            "regional_pk_dir_per",
-            "regional_wv_dir_per",
-            "regional_wv_ht"
-    )
-
-    val labelsWw3Enp = listOf(
-            "Regional WW3 Model Peak Wave Direction and Period",
-            "Regional WW3 Model Wind Wave Direction and Period",
-            "Regional WW3 Model Sig Wave Height and Wind"
-    )
-
-    val paramsWw3Wna = listOf(
-            "regional_pk_dir_per",
-            "regional_wv_dir_per",
-            "regional_wv_ht"
-    )
-
-    val labelsWw3Wna = listOf(
-            "Regional WW3 Model Peak Wave Direction and Period",
-            "Regional WW3 Model Wind Wave Direction and Period",
-            "Regional WW3 Model Sig Wave Height and Wind"
-    )
-
     val paramsEstofs = listOf(
             "storm_surge",
             "total_water_level"
@@ -893,6 +875,7 @@ internal object UtilityModelNcepInterface {
             "precip_pwat",
             "snodpth_chng",
             "sim_radar_1km",
+            "sim_radar_comp",
             "2m_tmpc",
             "2m_dwpc",
             "2m_rh_10m_wnd",
@@ -917,6 +900,7 @@ internal object UtilityModelNcepInterface {
             "Total Column Precipitable Water",
             "Snow Depth Change from F00 ",
             "1000 m AGL Radar Reflectivity",
+            "Composite Radar Reflectivity",
             "Shelter (2-m) Temperature",
             "Shelter (2-m) Dew Point Temperature",
             "1-hr Minimum Relative Humidity, 10-m Wind",
@@ -943,6 +927,7 @@ internal object UtilityModelNcepInterface {
             "precip_p48",
             "precip_ptot",
             "sim_radar_1km",
+            "sim_radar_comp",
             "1000_500_thick",
             "1000_850_thick",
             "850_700_thick",
@@ -976,6 +961,7 @@ internal object UtilityModelNcepInterface {
             "Total Precipitation every 48 hours",
             "Total Accumulated Precipitation",
             "Simulated Radar Reflectivity 1km",
+            "Composite Radar Reflectivity",
             "MSLP, 1000-500mb thickness, 3-hourly total precipitation",
             "MSLP, 1000-850mb thickness, 3-hourly total precipitation",
             "MSLP, 850-700mb thickness, 3-hourly total precipitation",

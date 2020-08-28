@@ -38,20 +38,16 @@ internal object UtilityModelEsrlInputOutput {
 
     fun getRunTime(model: String, param: String): RunTimeData {
         val runData = RunTimeData()
-        val htmlRunStatus: String = when (model) {
-            "HRRR_AK" -> ("$urlBase/alaska/").getHtml()
+        val htmlRunStatus = when (model) {
+            "HRRR_AK" -> "$urlBase/alaska/".getHtml()
             // https://rapidrefresh.noaa.gov/RAP/Welcome.cgi?dsKey=rap_jet&domain=full&run_time=23+Nov+2018+-+08Z
-            "RAP_NCEP" -> ("$urlBase/RAP/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US)
-                    + "_jet&domain=full").getHtml()
-            "RAP" -> ("$urlBase/RAP/").getHtml()
-            "HRRR_NCEP" -> ("$urlBase/hrrr/HRRR/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US)
-                    + "_jet&domain=full").getHtml()
-            else -> ("$urlBase/" + model.toLowerCase(Locale.US) + "/" + model + "/Welcome.cgi?dsKey="
-                    + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
+            "RAP_NCEP" -> ("$urlBase/RAP/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
+            "RAP" -> "$urlBase/RAP/".getHtml()
+            "HRRR_NCEP" -> ("$urlBase/hrrr/HRRR/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
+            else -> ("$urlBase/" + model.toLowerCase(Locale.US) + "/" + model + "/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
         }
-        val oldRunTimes: List<String>
         var html = htmlRunStatus.parse(RegExp.eslHrrrPattern1)
-        oldRunTimes = htmlRunStatus.parseColumn(RegExp.eslHrrrPattern2)
+        val oldRunTimes = htmlRunStatus.parseColumn(RegExp.eslHrrrPattern2)
         var year = html.parse(RegExp.eslHrrrPattern3)
         var day = html.parse(RegExp.eslHrrrPattern4)
         var hour = html.parse(RegExp.eslHrrrPattern5)
@@ -103,11 +99,20 @@ internal object UtilityModelEsrlInputOutput {
     // https://rapidrefresh.noaa.gov/RAP/for_web/rap_jet/2016091600/full/cref_sfc_f00.png
     // https://rapidrefresh.noaa.gov/HRRR/for_web/hrrr_jet/2016091607/full/1ref_sfc_f00.png
 
-    fun getImage(om: ObjectModel, time: String): Bitmap {
+    fun getImage(om: ObjectModelNoSpinner, time: String): Bitmap {
         var sector = om.sector
         var paramTmp = om.currentParam
         val imgUrl: String
         val zipStr = "TZA"
+        if (om.model.contains("HRRR"))
+            om.sectorInt = UtilityModelEsrlInterface.sectorsHrrr.indexOf(sector)
+        else
+            om.sectorInt = UtilityModelEsrlInterface.sectorsRap.indexOf(sector)
+        if (om.sectorInt == -1 ) {
+            om.sectorInt = 0
+            om.sector = "Full"
+        }
+        //UtilityLog.d("Wx", "DEBUG: " + sector + " " + om.sectorInt.toString())
         when (om.model) {
             "HRRR", "HRRR_NCEP" -> when {
                 om.sectorInt == 0 -> {
@@ -121,13 +126,10 @@ internal object UtilityModelEsrlInputOutput {
                     paramTmp = paramTmp.replace("_", "_$sector")
                 }
             }
-            "HRRR_AK" -> {
-            }
+            "HRRR_AK" -> {}
             "RAP", "RAP_NCEP" ->
                 when (om.sectorInt) {
-                    9 -> {
-                        sector = "alaska"
-                    }
+                    9 -> sector = "alaska"
                     10 -> { // AK Zoom
                         sector = "a1"
                         paramTmp = paramTmp.replace("_", "_$sector")
@@ -147,8 +149,7 @@ internal object UtilityModelEsrlInputOutput {
         when (om.model) {
             "RAP_NCEP" -> parentModel = "RAP"
             "HRRR_NCEP" -> parentModel = "HRRR"
-            else -> {
-            }
+            else -> {}
         }
         val onDemandUrl: String
         if (parentModel.contains("RAP")) {
@@ -175,18 +176,15 @@ internal object UtilityModelEsrlInputOutput {
                     "%20Model%20Fields%20-%20Experimental&maxFcstLen=15&fcstStrLen=-1&domain=" +
                     sector.toLowerCase(Locale.US) + "&adtfn=1"
         }
+        //UtilityLog.d("Wx", imgUrl)
         onDemandUrl.getHtml()
         return imgUrl.getImage()
     }
 
-    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) {
-            return AnimationDrawable()
-        }
-        val timeList = om.spTime.list.toMutableList()
-        val bmAl = (om.spinnerTimeValue until timeList.size).mapTo(mutableListOf()) {
-            getImage(om, timeList[it].split(" ").getOrNull(0) ?: "")
-        }
-        return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
+    fun getAnimation(context: Context, om: ObjectModelNoSpinner): AnimationDrawable {
+        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        val timeList = om.times
+        val bitmaps = (om.spinnerTimeValue until timeList.size).map { getImage(om, timeList[it].split(" ").getOrNull(0) ?: "") }
+        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 }

@@ -26,28 +26,19 @@ import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-class ObjectRecyclerView(
-    context: Context,
-    activity: Activity,
-    resourceId: Int,
-    list: MutableList<String>,
-    fn: (Int) -> Unit
-) {
+class ObjectRecyclerView(context: Context, activity: Activity, resourceId: Int, list: MutableList<String>, fn: (Int) -> Unit) {
 
-    var recyclerView: RecyclerView = activity.findViewById(resourceId)
-    var ca: SingleTextAdapterList
+    val recyclerView: RecyclerView = activity.findViewById(resourceId)
+    var ca = SingleTextAdapterList(list)
 
     init {
         recyclerView.setHasFixedSize(true)
-        val llm = LinearLayoutManager(context)
-        llm.orientation = RecyclerView.VERTICAL
-        recyclerView.layoutManager = llm
-        ca = SingleTextAdapterList(list)
+        val linearLayoutManager = LinearLayoutManager(context)
+        linearLayoutManager.orientation = RecyclerView.VERTICAL
+        recyclerView.layoutManager = linearLayoutManager
         recyclerView.adapter = ca
         ca.setOnItemClickListener(object : SingleTextAdapterList.MyClickListener {
-            override fun onItemClick(position: Int) {
-                fn(position)
-            }
+            override fun onItemClick(position: Int) { fn(position) }
         })
     }
 
@@ -56,25 +47,15 @@ class ObjectRecyclerView(
         recyclerView.adapter = ca
     }
 
-    fun notifyDataSetChanged() {
-        ca.notifyDataSetChanged()
-    }
+    fun notifyDataSetChanged() = ca.notifyDataSetChanged()
 
-    fun setItem(index: Int, str: String) {
-        ca.setItem(index, str)
-    }
+    fun setItem(index: Int, str: String) = ca.setItem(index, str)
 
-    fun getItem(index: Int): String {
-        return ca.getItem(index)
-    }
+    fun getItem(index: Int) = ca.getItem(index)
 
-    fun deleteItem(index: Int) {
-        ca.deleteItem(index)
-    }
+    fun deleteItem(index: Int) = ca.deleteItem(index)
 
-    override fun toString(): String {
-        return ca.toString()
-    }
+    override fun toString() = ca.toString()
 }
 
 

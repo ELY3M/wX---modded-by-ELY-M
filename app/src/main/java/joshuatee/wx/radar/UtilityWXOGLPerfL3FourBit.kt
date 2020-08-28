@@ -33,108 +33,72 @@ import joshuatee.wx.util.UtilityLog
 internal object UtilityWXOGLPerfL3FourBit {
 
     // Used for Legacy 4bit radar - only SRM or spectrum width 30 or TDWR TR0
-    // was decode4bit
-    fun decodeRadial(
-        context: Context,
-        fn: String,
-        radialStart: ByteBuffer,
-        binWord: ByteBuffer
-    ): Short {
+    fun decodeRadial(context: Context, fileName: String, radialStart: ByteBuffer, binWord: ByteBuffer): Short {
         var numberOfRangeBins = 0.toShort()
         try {
-            val fis = context.openFileInput(fn)
-            val dis = DataInputStream(BufferedInputStream(fis))
-            dis.skipBytes(170)
-            numberOfRangeBins = dis.readUnsignedShort().toShort()
-            dis.skipBytes(6)
-            val numberOfRadials = dis.readUnsignedShort()
+            val fileInputStream = context.openFileInput(fileName)
+            val dataInputStream = DataInputStream(BufferedInputStream(fileInputStream))
+            dataInputStream.skipBytes(170)
+            numberOfRangeBins = dataInputStream.readUnsignedShort().toShort()
+            dataInputStream.skipBytes(6)
+            val numberOfRadials = dataInputStream.readUnsignedShort()
             val numberOfRleHalfWords = IntArray(numberOfRadials)
             radialStart.position(0)
-            var s: Int
             var bin: Short
             var numOfBins: Int
-            var u: Int
-            (0..359).forEach { r ->
-                numberOfRleHalfWords[r] = dis.readUnsignedShort()
-                radialStart.putFloat((450 - dis.readUnsignedShort() / 10).toFloat())
-                dis.skipBytes(2)
-                s = 0
-                while (s < numberOfRleHalfWords[r] * 2) {
-                    bin = dis.readUnsignedByte().toShort()
+            for (r in 0..359) {
+                numberOfRleHalfWords[r] = dataInputStream.readUnsignedShort()
+                radialStart.putFloat((450 - dataInputStream.readUnsignedShort() / 10).toFloat())
+                dataInputStream.skipBytes(2)
+                for (s in 0 until numberOfRleHalfWords[r] * 2) {
+                    bin = dataInputStream.readUnsignedByte().toShort()
                     numOfBins = bin.toInt() shr 4
-                    u = 0
-                    while (u < numOfBins) {
-                        binWord.put((bin % 16).toByte())
-                        u += 1
-                    }
-                    s += 1
+                    for (u in 0 until numOfBins) { binWord.put((bin % 16).toByte()) }
                 }
             }
-            dis.close()
-        } catch (e: IOException) {
-            UtilityLog.handleException(e)
-        }
+            dataInputStream.close()
+        } catch (e: IOException) { UtilityLog.handleException(e) }
         return numberOfRangeBins
     }
 
-    fun decodeRaster(
-            context: Context,
-            fn: String,
-            binWord: ByteBuffer
-    ): Short {
+    // comp ref
+    fun decodeRaster(context: Context, fileName: String, binWord: ByteBuffer): Short {
         val numberOfRangeBins = 0.toShort()
         try {
-            val fis = context.openFileInput(fn)
-            val dis = DataInputStream(BufferedInputStream(fis))
-            dis.skipBytes(172)
-
+            val fis = context.openFileInput(fileName)
+            val dataInputStream = DataInputStream(BufferedInputStream(fis))
+            dataInputStream.skipBytes(172)
             /*val iCoordinateStart = dis.readUnsignedShort()
             val jCoordinateStart = dis.readUnsignedShort()
             val xScaleInt = dis.readUnsignedShort()
             val xScaleFractional = dis.readUnsignedShort()
             val yScaleInt = dis.readUnsignedShort()
             val yScaleFractional = dis.readUnsignedShort()*/
-
-            dis.readUnsignedShort()
-            dis.readUnsignedShort()
-            dis.readUnsignedShort()
-            dis.readUnsignedShort()
-            dis.readUnsignedShort()
-            dis.readUnsignedShort()
-
-            val numberOfRows = dis.readUnsignedShort()
-
+            dataInputStream.readUnsignedShort()
+            dataInputStream.readUnsignedShort()
+            dataInputStream.readUnsignedShort()
+            dataInputStream.readUnsignedShort()
+            dataInputStream.readUnsignedShort()
+            dataInputStream.readUnsignedShort()
+            val numberOfRows = dataInputStream.readUnsignedShort()
             //val packingDescriptor = dis.readUnsignedShort()
-            dis.readUnsignedShort()
-
+            dataInputStream.readUnsignedShort()
             // 464 rows in NCR
             // 232 rows in NCZ
-            var s: Int
             var bin: Short
             var numOfBins: Int
-            var u: Int
-            var totalPerRow: Int
-            (0 until numberOfRows).forEach { _ ->
-                val numberOfBytes = dis.readUnsignedShort()
-                totalPerRow = 0
-                s = 0
-                u = 0
-                while (s < numberOfBytes) {
-                    bin = dis.readUnsignedByte().toShort()
+            for (unused in 0 until numberOfRows) {
+                val numberOfBytes = dataInputStream.readUnsignedShort()
+                for (s in 0 until numberOfBytes) {
+                    bin = dataInputStream.readUnsignedByte().toShort()
                     numOfBins = bin.toInt() shr 4
-                    u = 0
-                    while (u < numOfBins) {
+                    for (u in 0 until numOfBins) {
                         binWord.put((bin % 16).toByte())
-                        u += 1
-                        totalPerRow += 1
                     }
-                    s += 1
                 }
             }
-            dis.close()
-        } catch (e: IOException) {
-            UtilityLog.handleException(e)
-        }
+            dataInputStream.close()
+        } catch (e: IOException) { UtilityLog.handleException(e) }
         return numberOfRangeBins
     }
 }

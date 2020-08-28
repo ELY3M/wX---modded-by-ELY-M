@@ -62,21 +62,17 @@ object UtilityString {
         return String(chars)
     }
 
-    fun getHtmlAndParse(url: String, match: String): String = url.getHtml().parse(match)
+    fun getHtmlAndParse(url: String, match: String) = url.getHtml().parse(match)
 
-    fun getHtmlAndParse(url: String, pattern: Pattern): String = url.getHtml().parse(pattern)
+    fun getHtmlAndParseLastMatch(url: String, match: String) = url.getHtml().parseLastMatch(match)
 
-    fun getHtmlAndParseLastMatch(url: String, match: String): String = url.getHtml().parseLastMatch(match)
-
-    fun getHtmlAndParseLastMatch(url: String, pattern: Pattern): String = url.getHtml().parseLastMatch(pattern)
+    fun getHtmlAndParseLastMatch(url: String, pattern: Pattern) = url.getHtml().parseLastMatch(pattern)
 
     fun parseLastMatch(str: String, pattern: Pattern): String {
         var content = ""
         try {
             val m = pattern.matcher(str)
-            while (m.find()) {
-                content = m.group(1)!!
-            }
+            while (m.find()) content = m.group(1)!!
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -88,9 +84,7 @@ object UtilityString {
         try {
             val p = Pattern.compile(match)
             val m = p.matcher(string)
-            while (m.find()) {
-                content = m.group(1)!!
-            }
+            while (m.find()) content = m.group(1)!!
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -132,32 +126,9 @@ object UtilityString {
         return content
     }
 
-    fun getHtmlAndParseSep(url: String, match: String): String = url.getHtmlSep().parse(match)
+    fun getHtmlAndParseSep(url: String, match: String) = url.getHtmlSep().parse(match)
 
     internal fun getHtmlAndParseSep(url: String, pattern: Pattern) = url.getHtmlSep().parse(pattern)
-
-    fun getHtmlAndParseMultipleFirstMatch(
-        url: String,
-        match: String,
-        number: Int
-    ): MutableList<String> = parseMultipleFirst(url.getHtml(), match, number)
-
-    private fun parseMultipleFirst(
-        data: String,
-        match: String,
-        number: Int
-    ): MutableList<String> {
-        val result = MutableList(number) { "" }
-        try {
-            val pattern = Pattern.compile(match)
-            val m = pattern.matcher(data)
-            m.find()
-            (0 until number).forEach { result[it] = m.group(it + 1)!! }
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        return result
-    }
 
     fun parseMultiple(data: String, match: String, number: Int): MutableList<String> {
         val result = MutableList(number) { "" }
@@ -191,9 +162,7 @@ object UtilityString {
         try {
             val pattern = Pattern.compile(match)
             val m = pattern.matcher(data)
-            while (m.find()) {
-                result.add(m.group(1)!!)
-            }
+            while (m.find()) result.add(m.group(1)!!)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -205,9 +174,7 @@ object UtilityString {
         try {
             val pattern = Pattern.compile(match)
             val m = pattern.matcher(data)
-            while (m.find()) {
-                result.add(m.group(1)!!)
-            }
+            while (m.find()) result.add(m.group(1)!!)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -218,9 +185,7 @@ object UtilityString {
         val result = mutableListOf<String>()
         try {
             val m = pattern.matcher(data)
-            while (m.find()) {
-                result.add(m.group(1)!!)
-            }
+            while (m.find()) result.add(m.group(1)!!)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -231,9 +196,7 @@ object UtilityString {
         val result = mutableListOf<String>()
         try {
             val m = pattern.matcher(data)
-            while (m.find()) {
-                result.add(m.group(1)!!)
-            }
+            while (m.find()) result.add(m.group(1)!!)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -244,9 +207,7 @@ object UtilityString {
         val result = mutableListOf<String>()
         try {
             val m = pattern.matcher(data)
-            while (m.find()) {
-                result.add(m.group(1)!!)
-            }
+            while (m.find()) result.add(m.group(1)!!)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -257,9 +218,7 @@ object UtilityString {
         val result = mutableListOf<String>()
         try {
             val m = pattern.matcher(data)
-            while (m.find()) {
-                result.add(m.group())
-            }
+            while (m.find()) result.add(m.group())
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
@@ -271,22 +230,20 @@ object UtilityString {
         try {
             val p = Pattern.compile(match)
             val m = p.matcher(data)
-            while (m.find()) {
-                i += 1
-            }
+            while (m.find()) i += 1
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
         return i
     }
 
-    fun getNwsPre(url: String): String = url.getHtmlSep().parse(RegExp.pre2Pattern)
+    //fun getNwsPre(url: String) = url.getHtmlSep().parse(RegExp.pre2Pattern)
 
-    fun getLastXChars(s: String, x: Int): String = when {
+    fun getLastXChars(s: String, x: Int) = when {
         s.length == x -> s
         s.length > x -> s.substring(s.length - x)
         else -> s
     }
 
-    fun addPeriodBeforeLastTwoChars(string: String): String = StringBuilder(string).insert(string.length - 2, ".").toString()
+    fun addPeriodBeforeLastTwoChars(string: String) = StringBuilder(string).insert(string.length - 2, ".").toString()
 }

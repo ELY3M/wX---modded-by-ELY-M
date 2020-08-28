@@ -34,58 +34,42 @@ import joshuatee.wx.radar.SpotterReports
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
 
-internal class AdapterSpotterReports(private val dataSet: List<SpotterReports>) :
-    RecyclerView.Adapter<AdapterSpotterReports.DataObjectHolder>() {
+internal class AdapterSpotterReports(private val dataSet: List<SpotterReports>) : RecyclerView.Adapter<AdapterSpotterReports.DataObjectHolder>() {
 
-    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-        val name = ObjectTextView(itemView, R.id.name, UIPreferences.textHighlightColor, TextSize.MEDIUM)
-        val email = ObjectTextView(itemView, R.id.email)
-        val time = ObjectTextView(itemView, R.id.time)
-        val phone = ObjectTextView(itemView, R.id.phone)
-        val summary = ObjectTextView(itemView, R.id.summary)
+        val type = ObjectTextView(itemView, R.id.type, UIPreferences.textHighlightColor, TextSize.MEDIUM)
+        val city = ObjectTextView(itemView, R.id.city, backgroundText = true)
+        val time = ObjectTextView(itemView, R.id.time, backgroundText = true)
+        val name = ObjectTextView(itemView, R.id.name, backgroundText = true)
+        val summary = ObjectTextView(itemView, R.id.summary, backgroundText = true)
 
         init {
             ObjectCard(itemView, R.id.cv1)
             itemView.setOnClickListener(this)
         }
 
-        override fun onClick(v: View) {
-            myClickListener!!.onItemClick(adapterPosition)
-        }
+        override fun onClick(v: View) { myClickListener!!.onItemClick(adapterPosition) }
     }
 
-    fun setOnItemClickListener(myClickListenerloc: MyClickListener) {
-        myClickListener = myClickListenerloc
-    }
+    fun setOnItemClickListener(myClickListenerloc: MyClickListener) { myClickListener = myClickListenerloc }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.cardview_spotter_reports, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.cardview_spotter_reports, parent, false)
         return DataObjectHolder(view)
     }
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
-        holder.name.text = dataSet[position].type
+        holder.type.text = dataSet[position].type
         holder.time.text = dataSet[position].time
-        holder.email.text = dataSet[position].city.replace(MyApplication.newline, " ")
-        holder.phone.text = dataSet[position].lastName + ", " + dataSet[position].firstName
+        holder.city.text = dataSet[position].city.replace(MyApplication.newline, " ")
+        holder.name.text = dataSet[position].lastName + ", " + dataSet[position].firstName
         holder.summary.text = dataSet[position].narrative
-        holder.summary.setAsBackgroundText()
-        listOf(holder.time, holder.email, holder.phone, holder.summary).forEach {
-            it.color = UIPreferences.backgroundColor
-            it.setTextSize(TextSize.SMALL)
-        }
     }
 
     override fun getItemCount() = dataSet.size
 
-    interface MyClickListener {
-        fun onItemClick(position: Int)
-    }
+    interface MyClickListener { fun onItemClick(position: Int) }
 
-    companion object {
-        private var myClickListener: MyClickListener? = null
-    }
+    companion object { private var myClickListener: MyClickListener? = null }
 }

@@ -35,31 +35,7 @@
             android:layout_alignParentBottom="true"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            app:popupTheme="@style/MyDarkToolbarStyle">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <Spinner
-                    android:id="@+id/spinner_run"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent" />
-
-                <Spinner
-                    android:id="@+id/spinner_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@android:color/transparent" />
-
-            </LinearLayout>
-
-        </androidx.appcompat.widget.Toolbar>
+            app:popupTheme="@style/MyDarkToolbarStyle" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -105,7 +81,7 @@
                         app:layout_anchor="@id/iv1"
                         app:layout_anchorGravity="bottom|right"
                         app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-                        app:srcCompat="@drawable/ic_keyboard_arrow_right_24dp" />
+                        app:srcCompat="@drawable/ic_keyboard_arrow_right_24dp_white" />
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/fab1"
@@ -118,7 +94,7 @@
                         app:layout_anchor="@id/iv1"
                         app:layout_anchorGravity="bottom|right"
                         app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-                        app:srcCompat="@drawable/ic_keyboard_arrow_left_24dp" />
+                        app:srcCompat="@drawable/ic_keyboard_arrow_left_24dp_white" />
 
                 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

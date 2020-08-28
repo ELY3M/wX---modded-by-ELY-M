@@ -49,45 +49,28 @@ object UtilityImg {
 
     fun showNextImg(drw: ObjectNavDrawer, fn: () -> Unit) {
         drw.index += 1
-        if (drw.index == drw.getUrlCount()) {
-            drw.index = 0
-        }
+        if (drw.index == drw.getUrlCount()) drw.index = 0
         fn()
     }
 
     fun showPrevImg(drw: ObjectNavDrawer, fn: () -> Unit) {
         drw.index -= 1
-        if (drw.index == -1) {
-            drw.index = drw.getUrlCount() - 1
-        }
+        if (drw.index == -1) drw.index = drw.getUrlCount() - 1
         fn()
     }
 
-    fun mergeImages(context: Context, imageA: Bitmap, imageB: Bitmap): Bitmap {
-        val layers = mutableListOf<Drawable>()
-        layers.add(BitmapDrawable(context.resources, imageA))
-        layers.add(BitmapDrawable(context.resources, imageB))
-        return layerDrawableToBitmap(layers)
-    }
+    fun mergeImages(context: Context, imageA: Bitmap, imageB: Bitmap) =
+            layerDrawableToBitmap(listOf(BitmapDrawable(context.resources, imageA), BitmapDrawable(context.resources, imageB)))
 
-    fun addColorBackground(context: Context, imageA: Bitmap, color: Int): Bitmap {
-        val layers = mutableListOf<Drawable>()
-        layers.add(ColorDrawable(color))
-        layers.add(BitmapDrawable(context.resources, imageA))
-        return layerDrawableToBitmap(layers)
-    }
+    fun addColorBackground(context: Context, bitmap: Bitmap, color: Int) =
+            layerDrawableToBitmap(listOf(ColorDrawable(color), BitmapDrawable(context.resources, bitmap)))
 
     fun getBlankBitmap(): Bitmap = Bitmap.createBitmap(10, 10, Config.ARGB_8888)
 
-    fun getBitmapRemoveBackground(imgUrl: String, color: Int): Bitmap = eraseBackground(imgUrl.getImage(), color)
+    fun getBitmapRemoveBackground(imgUrl: String, color: Int) = eraseBackground(imgUrl.getImage(), color)
 
-    fun getBitmapAddWhiteBackground(context: Context, imgUrl: String): Bitmap {
-        val layers = mutableListOf<Drawable>()
-        val bitmap = imgUrl.getImage()
-        layers.add(ColorDrawable(Color.WHITE))
-        layers.add(BitmapDrawable(context.resources, bitmap))
-        return layerDrawableToBitmap(layers)
-    }
+    fun getBitmapAddWhiteBackground(context: Context, imgUrl: String) =
+            layerDrawableToBitmap(listOf(ColorDrawable(Color.WHITE), BitmapDrawable(context.resources, imgUrl.getImage())))
 
     // FIXME rename Posn to Position
     fun firstRunSetZoomPosn(firstRunF: Boolean, img: TouchImageView2, pref: String): Boolean {
@@ -130,27 +113,24 @@ object UtilityImg {
                     MyApplication.wpcgefsX = x
                     MyApplication.wpcgefsY = y
                 }
-                else -> {
-                }
+                else -> {}
             }
         }
     }
 
-    fun loadBitmap(context: Context, res: Int, resize: Boolean): Bitmap {
-        val bitmap: Bitmap
-        val inputStream = context.resources.openRawResource(res)
+    fun loadBitmap(context: Context, resourceId: Int, resize: Boolean): Bitmap {
+        val inputStream = context.resources.openRawResource(resourceId)
         var options: BitmapFactory.Options? = null
         if (resize) {
             options = BitmapFactory.Options()
             options.inPreferredConfig = Config.RGB_565
             options.inSampleSize = 2
         }
-        bitmap = try {
+        return try {
             if (!resize)
                 BitmapFactory.decodeStream(inputStream)
             else
-                BitmapFactory.decodeStream(inputStream, null, options)
-                        ?: getBlankBitmap()
+                BitmapFactory.decodeStream(inputStream, null, options) ?: getBlankBitmap()
         } catch (e: OutOfMemoryError) {
             UtilityLog.handleException(e)
             return getBlankBitmap()
@@ -161,14 +141,13 @@ object UtilityImg {
                 UtilityLog.handleException(e)
             }
         }
-        return bitmap
     }
 
-    fun animInterval(context: Context): Int = 50 * Utility.readPref(context, "ANIM_INTERVAL", MyApplication.animationIntervalDefault)
+    fun animInterval(context: Context) = 50 * Utility.readPref(context, "ANIM_INTERVAL", MyApplication.animationIntervalDefault)
 
-    fun bitmapToLayerDrawable(context: Context, bitmap: Bitmap): LayerDrawable = LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
+    fun bitmapToLayerDrawable(context: Context, bitmap: Bitmap) = LayerDrawable(arrayOf(BitmapDrawable(context.resources, bitmap)))
 
-    fun layerDrawableToBitmap(layers: MutableList<Drawable>): Bitmap {
+    fun layerDrawableToBitmap(layers: List<Drawable>): Bitmap {
         val drawable = LayerDrawable(layers.toTypedArray())
         val bitmap: Bitmap
         val width = drawable.intrinsicWidth
@@ -215,9 +194,7 @@ object UtilityImg {
             val size = width * height
             val pixels = IntArray(size)
             src.getPixels(pixels, 0, width, 0, 0, width, height)
-            (0 until size)
-                    .filter { pixels[it] == color }
-                    .forEach { pixels[it] = 0 }
+            (0 until size).filter { pixels[it] == color }.forEach { pixels[it] = 0 }
             b.setPixels(pixels, 0, width, 0, 0, width, height)
             b
         } catch (e: OutOfMemoryError) {
@@ -225,44 +202,40 @@ object UtilityImg {
         }
     }
 
-    fun resizeViewSetImgInCard(bitmap: Bitmap, iv: ImageView, numberAcross: Int = 1) {
-        val paramsIv = iv.layoutParams
-        paramsIv.width = (MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()) / numberAcross
-        paramsIv.height = ((MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()) * bitmap.height / bitmap.width ) / numberAcross
-        iv.layoutParams = paramsIv
-        iv.setImageBitmap(bitmap)
+    fun resizeViewSetImgInCard(bitmap: Bitmap, imageView: ImageView, numberAcross: Int = 1) {
+        val layoutParams = imageView.layoutParams
+        layoutParams.width = (MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()) / numberAcross
+        layoutParams.height = ((MyApplication.dm.widthPixels - (MyApplication.lLpadding * 2).toInt()) * bitmap.height / bitmap.width ) / numberAcross
+        imageView.layoutParams = layoutParams
+        imageView.setImageBitmap(bitmap)
     }
 
     fun resizeViewAndSetImage(context: Context, bitmap: Bitmap, imageView: ImageView) {
-        if (UtilityUI.isLandScape(context)) {
-            resizeViewSetImgByWidth(bitmap, imageView)
-        } else {
-            resizeViewSetImgByHeight(bitmap, imageView)
-        }
+        if (UtilityUI.isLandScape(context)) resizeViewSetImgByWidth(bitmap, imageView) else resizeViewSetImgByHeight(bitmap, imageView)
     }
 
     private fun resizeViewSetImgByHeight(bitmap: Bitmap, imageView: ImageView) {
-        val paramsIv = imageView.layoutParams
-        paramsIv.height = MyApplication.dm.heightPixels / 2
-        paramsIv.width = paramsIv.height * bitmap.width / bitmap.height
-        imageView.layoutParams = paramsIv
+        val layoutParams = imageView.layoutParams
+        layoutParams.height = MyApplication.dm.heightPixels / 2
+        layoutParams.width = layoutParams.height * bitmap.width / bitmap.height
+        imageView.layoutParams = layoutParams
         imageView.setImageBitmap(bitmap)
     }
 
     private fun resizeViewSetImgByWidth(bitmap: Bitmap, imageView: ImageView) {
-        val paramsIv = imageView.layoutParams
-        paramsIv.width = MyApplication.dm.widthPixels / 2
-        paramsIv.height = paramsIv.width * bitmap.width / bitmap.height
-        imageView.layoutParams = paramsIv
+        val layoutParams = imageView.layoutParams
+        layoutParams.width = MyApplication.dm.widthPixels / 2
+        layoutParams.height = layoutParams.width * bitmap.width / bitmap.height
+        imageView.layoutParams = layoutParams
         imageView.setImageBitmap(bitmap)
     }
 
     fun scaleBitmap(bitmap: Bitmap, wantedWidth: Int, wantedHeight: Int): Bitmap {
         val output = Bitmap.createBitmap(wantedWidth, wantedHeight, Config.ARGB_8888)
         val canvas = Canvas(output)
-        val m = Matrix()
-        m.setScale(wantedWidth.toFloat() / bitmap.width, wantedHeight.toFloat() / bitmap.height)
-        canvas.drawBitmap(bitmap, m, Paint())
+        val matrix = Matrix()
+        matrix.setScale(wantedWidth.toFloat() / bitmap.width, wantedHeight.toFloat() / bitmap.height)
+        canvas.drawBitmap(bitmap, matrix, Paint())
         return output
     }
 
@@ -308,13 +281,13 @@ object UtilityImg {
     }
 
     fun vectorDrawableToBitmap(context: Context, resourceDrawable: Int, color: Int): Bitmap {
-        val d = ContextCompat.getDrawable(context, resourceDrawable)!!
-        DrawableCompat.setTint(d, color)
-        val b = Bitmap.createBitmap(d.intrinsicWidth, d.intrinsicHeight, Config.ARGB_8888)
-        val c = Canvas(b)
-        d.setBounds(0, 0, c.width, c.height)
-        d.draw(c)
-        return b
+        val drawable = ContextCompat.getDrawable(context, resourceDrawable)!!
+        DrawableCompat.setTint(drawable, color)
+        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        return bitmap
     }
 
     fun mergeImagesVertically(images: List<Bitmap>): Bitmap {
@@ -323,13 +296,9 @@ object UtilityImg {
         var height = 0
         images.forEach {
             height += it.height
-            if (it.width > width) {
-                width = it.width
-            }
+            if (it.width > width) { width = it.width }
         }
-        if ( width == 0 || height == 0 ) {
-            return getBlankBitmap()
-        }
+        if ( width == 0 || height == 0 ) return getBlankBitmap()
         combinedImage = Bitmap.createBitmap(width, height, Config.ARGB_8888)
         val comboImage = Canvas(combinedImage!!)
         var workingHeight = 0f

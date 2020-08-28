@@ -23,14 +23,11 @@ package joshuatee.wx.fragments
 
 import android.content.Context
 import joshuatee.wx.MyApplication
-import joshuatee.wx.util.UtilityString
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.radar.WXGLRender
 import joshuatee.wx.settings.Location
-import joshuatee.wx.settings.SettingsLocationGenericActivity
 import joshuatee.wx.util.Utility
 import java.util.*
 
@@ -58,30 +55,24 @@ object UtilityLocationFragment {
     fun extract7DayMetrics(chunk: String): String {
         val spacing = " "
         // wind 24 to 29 mph
-        val wind = UtilityString.parseMultiple(chunk, RegExp.sevenDayWind1, 2)
+        val wind = chunk.parseMultiple(RegExp.sevenDayWind1, 2)
         // wind around 9 mph
         val wind2 = chunk.parse(RegExp.sevenDayWind2)
         // 5 to 10 mph after
-        val wind3 = UtilityString.parseMultiple(chunk, RegExp.sevenDayWind4, 2)
+        val wind3 = chunk.parseMultiple(RegExp.sevenDayWind4, 2)
         // around 5 mph after
         val wind4 = chunk.parse(RegExp.sevenDayWind5)
         // 5 to 7 mph in
-        val wind5 = UtilityString.parseMultiple(chunk, RegExp.sevenDayWind6, 2)
+        val wind5 = chunk.parseMultiple(RegExp.sevenDayWind6, 2)
         // around 6 mph.
         val wind7 = chunk.parse(RegExp.sevenDayWind7)
         // with gusts as high as 21 mph
         var gust = chunk.parse(RegExp.sevenDayWind3)
         // 5 to 7 mph.
-        val wind9 = UtilityString.parseMultiple(chunk, RegExp.sevenDayWind9, 2)
+        val wind9 = chunk.parseMultiple(RegExp.sevenDayWind9, 2)
         // Winds could gusts as high as 21 mph.
-        if (gust == "") {
-            gust = chunk.parse(RegExp.sevenDayWind8)
-        }
-        gust = if (gust != "") {
-            " G $gust mph"
-        } else {
-            " mph"
-        }
+        if (gust == "") gust = chunk.parse(RegExp.sevenDayWind8)
+        gust = if (gust != "") " G $gust mph" else " mph"
         if (wind[0] != "" && wind[1] != "") {
             return spacing + wind[0] + "-" + wind[1] + gust
         } else if (wind2 != "") {
@@ -101,7 +92,7 @@ object UtilityLocationFragment {
         }
     }
 
-    fun setNwsIconSize(): Int = (MyApplication.dm.widthPixels * (MyApplication.nwsIconSize / 100f)).toInt()
+    fun setNwsIconSize() = (MyApplication.dm.widthPixels * (MyApplication.nwsIconSize / 100f)).toInt()
 
     fun extractWindDirection(chunk: String): String {
         val windDir1 = chunk.parseLastMatch(RegExp.sevenDayWinddir1)
@@ -125,175 +116,100 @@ object UtilityLocationFragment {
             ""
         } else {
             val ret = windDirectionMap[retStr.toLowerCase(Locale.US)]
-            if (ret != null) {
-                " $ret"
-            } else {
-                ""
-            }
+            if (ret != null) " $ret" else ""
         }
     }
 
     fun extractTemperature(blob: String): String {
-        var temp = blob.parse(RegExp.nws7DayTemp1)
-        if (temp != "") {
-            return temp
+        val list = listOf(
+                RegExp.nws7DayTemp1,
+                RegExp.nws7DayTemp2,
+                RegExp.nws7DayTemp3,
+                RegExp.nws7DayTemp4,
+                RegExp.nws7DayTemp5,
+                RegExp.nws7DayTemp6,
+                RegExp.nws7DayTemp7,
+                RegExp.nws7DayTemp8,
+                RegExp.nws7DayTemp9,
+                RegExp.nws7DayTemp10,
+                RegExp.nws7DayTemp11
+        )
+        list.forEach {
+            val temp = blob.parse(it)
+            if (temp != "") return temp
         }
-        temp = blob.parse(RegExp.nws7DayTemp2)
-        if (temp != "") {
-            return temp
-        }
-        temp = blob.parse(RegExp.nws7DayTemp3)
-        if (temp != "") {
-            return temp
-        }
-        temp = blob.parse(RegExp.nws7DayTemp4)
-        if (temp != "") {
-            return temp
-        }
-        temp = blob.parse(RegExp.nws7DayTemp5)
-        if (temp != "") {
-            return temp
-        }
-        temp = blob.parse(RegExp.nws7DayTemp6)
-        if (temp != "") {
-            return temp
-        }
-        temp = blob.parse(RegExp.nws7DayTemp7)
-        if (temp != "") {
-            return temp
-        }
-        temp = blob.parse(RegExp.nws7DayTemp8)
-        if (temp != "") {
-            return temp
-        }
-        temp = blob.parse(RegExp.nws7DayTemp9)
-        if (temp != "") {
-            return temp
-        }
-        temp = blob.parse(RegExp.nws7DayTemp10)
-        if (temp != "") {
-            return temp
-        }
-        temp = blob.parse(RegExp.nws7DayTemp11)
-        if (temp != "") {
-            return temp
-        }
-        return temp
+        return ""
     }
 
     fun extractCanadaTemperature(blob: String): String {
         var temp = blob.parse(RegExp.ca7DayTemp1)
-        if (temp != "")
-            return temp.replace("minus ", "-")
+        if (temp != "") return temp.replace("minus ", "-")
         temp = blob.parse(RegExp.ca7DayTemp2)
-        if (temp != "")
-            return temp.replace("minus ", "-")
+        if (temp != "") return temp.replace("minus ", "-")
         temp = blob.parse(RegExp.ca7DayTemp3)
-        if (temp != "")
-            return temp.replace("minus ", "-")
+        if (temp != "") return temp.replace("minus ", "-")
         temp = blob.parse(RegExp.ca7DayTemp4)
-        if (temp != "")
-            return temp
+        if (temp != "") return temp
         temp = blob.parse(RegExp.ca7DayTemp5)
-        if (temp != "")
-            return temp
+        if (temp != "") return temp
         temp = blob.parse(RegExp.ca7DayTemp6)
-        if (temp != "")
-            return temp.replace("minus ", "-")
+        if (temp != "") return temp.replace("minus ", "-")
         temp = blob.parse(RegExp.ca7DayTemp7)
-        if (temp != "")
-            return temp
+        if (temp != "") return temp
         temp = blob.parse(RegExp.ca7DayTemp8)
-        if (temp != "")
-            return temp.replace("minus ", "-")
+        if (temp != "") return temp.replace("minus ", "-")
         temp = blob.parse(RegExp.ca7DayTemp9)
-        if (temp != "")
-            return temp.replace("minus ", "-")
+        if (temp != "") return temp.replace("minus ", "-")
         temp = blob.parse(RegExp.ca7DayTemp10)
-        if (temp != "")
-            return temp.replace("minus ", "-")
+        if (temp != "") return temp.replace("minus ", "-")
         temp = blob.parse(RegExp.ca7DayTemp11)
-        if (temp != "")
-            return "0"
+        if (temp != "") return "0"
         temp = blob.parse(RegExp.ca7DayTemp12)
-        if (temp != "")
-            return temp
+        if (temp != "") return temp
         temp = blob.parse(RegExp.ca7DayTemp13)
-        if (temp != "")
-            return temp
+        if (temp != "") return temp
         temp = blob.parse(RegExp.ca7DayTemp14)
-        if (temp != "")
-            return temp
+        if (temp != "") return temp
         temp = blob.parse(RegExp.ca7DayTemp15)
-        if (temp != "")
-            return temp
+        if (temp != "") return temp
         temp = blob.parse(RegExp.ca7DayTemp16)
-        if (temp != "")
-            return "0"
+        if (temp != "") return "0"
         temp = blob.parse(RegExp.ca7DayTemp17)
-        if (temp != "")
-            return "0"
+        if (temp != "") return "0"
         temp = blob.parse(RegExp.ca7DayTemp18)
-        if (temp != "")
-            return temp
+        if (temp != "") return temp
         temp = blob.parse(RegExp.ca7DayTemp19)
-        if (temp != "")
-            return temp
+        if (temp != "") return temp
         temp = blob.parse(RegExp.ca7DayTemp20)
-        if (temp != "")
-            return "0"
+        if (temp != "") return "0"
         temp = blob.parse(RegExp.ca7DayTemp21)
-        if (temp != "")
-            return temp
+        if (temp != "") return temp
         temp = blob.parse(RegExp.ca7DayTemp22)
-        if (temp != "")
-            return "0"
+        if (temp != "") return "0"
         return temp
     }
 
     fun extractCanadaWindDirection(chunk: String): String {
         var windDirection = chunk.parse(RegExp.ca7DayWinddir1)
-        if (windDirection == "") {
-            windDirection = chunk.parse(RegExp.ca7DayWinddir2)
-        }
-        if (windDirection != "") {
-            windDirection = " " + (windDirectionMap[windDirection] ?: "")
-        }
+        if (windDirection == "") windDirection = chunk.parse(RegExp.ca7DayWinddir2)
+        if (windDirection != "") windDirection = " " + (windDirectionMap[windDirection] ?: "")
         return windDirection
     }
 
     fun extractCanadaWindSpeed(forecast: String): String {
-        val windSpeedRange = UtilityString.parseMultiple(forecast, RegExp.ca7DayWindspd1, 2)
+        val windSpeedRange = forecast.parseMultiple(RegExp.ca7DayWindspd1, 2)
         val windSpeed = forecast.parse(RegExp.ca7DayWindspd2)
         var gust = ""
-        if (forecast.contains("gusting")) {
-            gust = " G " + forecast.parse(RegExp.ca7DayWindspd3)
-        }
+        if (forecast.contains("gusting")) gust = " G " + forecast.parse(RegExp.ca7DayWindspd3)
         if (windSpeedRange.size > 1 && windSpeedRange[0] != "" && windSpeedRange[1] != "") {
             return " " + windSpeedRange[0] + "-" + windSpeedRange[1] + gust + " km/h"
         }
-        return if (windSpeed == "") {
-            ""
-        } else {
-            "$windSpeed$gust km/h"
-        }
+        return if (windSpeed == "") "" else "$windSpeed$gust km/h"
     }
 
-    fun handleIconTap(
-            stringName: String,
-            wxglRender: WXGLRender?,
-            activityReference: Context,
-            fnRefresh: () -> Unit,
-            fnResetRadarView: () -> Unit,
-            fnGetRadars: () -> Unit
-    ) {
+    fun handleIconTap(stringName: String, wxglRender: WXGLRender?, activityReference: Context, fnRefresh: () -> Unit, fnResetRadarView: () -> Unit, fnGetRadars: () -> Unit) {
         when {
-            stringName.contains("Edit Location..") -> ObjectIntent(
-                    activityReference,
-                    SettingsLocationGenericActivity::class.java,
-                    SettingsLocationGenericActivity.LOC_NUM,
-                    arrayOf(Location.currentLocationStr, "")
-            )
+            stringName.contains("Edit Location..") -> ObjectIntent.showLocationEdit(activityReference, arrayOf(Location.currentLocationStr, ""))
             stringName.contains("Force Data Refresh") -> fnRefresh()
             stringName.contains("Radar type: Reflectivity") -> {
                 wxglRender?.product = "N0Q"
@@ -305,15 +221,9 @@ object UtilityLocationFragment {
             }
             stringName.contains("Reset zoom and center") -> fnResetRadarView()
             else -> {
-                val ridContext = stringName.split(":")[0]
-                var stateContext = Utility.getRadarSiteName(ridContext)
-                stateContext = stateContext.split(",")[0]
-                ObjectIntent(
-                        activityReference,
-                        WXGLRadarActivity::class.java,
-                        WXGLRadarActivity.RID,
-                        arrayOf(ridContext, stateContext, wxglRender!!.product, "")
-                )
+                val radarSite = stringName.split(":")[0]
+                val state = Utility.getRadarSiteName(radarSite).split(",")[0]
+                ObjectIntent.showRadar(activityReference, arrayOf(radarSite, state, wxglRender!!.product, ""))
             }
         }
     }

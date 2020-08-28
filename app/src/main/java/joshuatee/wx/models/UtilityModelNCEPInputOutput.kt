@@ -33,71 +33,46 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 import joshuatee.wx.RegExp
 import joshuatee.wx.util.UtilityImgAnim
-import joshuatee.wx.util.UtilityString
+import joshuatee.wx.util.UtilityLog
 
 internal object UtilityModelNcepInputOutput {
 
     fun getRunTime(model: String, param: String, spinnerSectorCurrent: String): RunTimeData {
         val runData = RunTimeData()
         val runCompletionDataStr = StringBuilder(100)
-        var html = UtilityString.getHtmlAndParse(
-                "${MyApplication.nwsMagNcepWebsitePrefix}/model-guidance-model-parameter.php?group=Model%20Guidance&model="
-                        + model.toUpperCase(Locale.US) + "&area=" + spinnerSectorCurrent + "&ps=area",
-                RegExp.ncepPattern2
-        )
-        html = html.replace("UTC", "Z").replace(" ", "")
+        val url = "${MyApplication.nwsMagNcepWebsitePrefix}/model-guidance-model-parameter.php?group=Model%20Guidance&model=" + model.toUpperCase(Locale.US) + "&area=" + spinnerSectorCurrent + "&ps=area"
+        val fullHtml = url.getHtml()
+        val html = fullHtml.parse(RegExp.ncepPattern2).replace("UTC", "Z").replace(" ", "")
         runCompletionDataStr.append(html.replace("Z", " UTC"))
-        if (runCompletionDataStr.length > 8) {
-            runCompletionDataStr.insert(8, " ")
-        }
-        val timeCompleteUrl =
-                "${MyApplication.nwsMagNcepWebsitePrefix}/model-fhrs.php?group=Model%20Guidance&model=" + model.toLowerCase(
-                        Locale.US
-                ) + "&fhr_mode=image&loop_start=-1&loop_end=-1&area=" +
-                        spinnerSectorCurrent + "&fourpan=no&imageSize=&preselected_formatted_cycle_date=" +
-                        runCompletionDataStr + "&cycle=" + runCompletionDataStr + "&param=" + param + "&ps=area"
-        val timeCompleteHTML = (timeCompleteUrl.replace(" ", "%20")).getHtml()
-        runData.imageCompleteStr = timeCompleteHTML.parseLastMatch("SubmitImageForm.(.*?).\"")
+        if (runCompletionDataStr.length > 8) runCompletionDataStr.insert(8, " ")
+        val timeCompleteUrl = "${MyApplication.nwsMagNcepWebsitePrefix}/model-fhrs.php?group=Model%20Guidance&model=" + model.toLowerCase(Locale.US) +
+                "&fhr_mode=image&loop_start=-1&loop_end=-1&area=" + spinnerSectorCurrent + "&fourpan=no&imageSize=&preselected_formatted_cycle_date=" +
+                runCompletionDataStr + "&cycle=" + runCompletionDataStr + "&param=" + param + "&ps=area"
+        val timeCompleteHtml = timeCompleteUrl.replace(" ", "%20").getHtml()
+        runData.imageCompleteStr = timeCompleteHtml.parseLastMatch("SubmitImageForm.(.*?).\"")
         runData.mostRecentRun = html.parseLastMatch(RegExp.ncepPattern1)
         return runData
     }
 
-    fun getImage(om: ObjectModel, time: String): Bitmap {
-        val imgUrl: String = when (om.model) {
-            "GFS" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(
-                    Locale.US
-            ) + "/" + om.run.replace(
-                    "Z",
-                    ""
-            ) +
-                    "/" + om.sector.toLowerCase(Locale.US) + "/" + om.currentParam + "/" + om.model.toLowerCase(
-                    Locale.US
-            ) + "_" +
+    fun getImage(om: ObjectModelNoSpinner, time: String): Bitmap {
+        val modifiedTime = if (om.model == "HRRR" && time.length ==  3) time + "00" else time
+        val imgUrl = when (om.model) {
+            "GFS" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace("Z", "") +
+                    "/" + om.sector.toLowerCase(Locale.US) + "/" + om.currentParam + "/" + om.model.toLowerCase(Locale.US) + "_" +
                     om.sector.toLowerCase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
-            "HRRR" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(
-                    Locale.US
-            ) + "/" + om.run.replace(
-                    "Z",
-                    ""
-            ) +
-                    "/" + om.model.toLowerCase(Locale.US) + "_" + om.sector.toLowerCase(Locale.US) + "_" + time + "00_" + om.currentParam + ".gif"
-            else -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace(
-                    "Z",
-                    ""
-            ) +
+            "HRRR" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace("Z", "") +
+                    "/" + om.model.toLowerCase(Locale.US) + "_" + om.sector.toLowerCase(Locale.US) + "_" + modifiedTime + "_" + om.currentParam + ".gif"
+            else -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace("Z", "") +
                     "/" + om.model.toLowerCase(Locale.US) + "_" + om.sector.toLowerCase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
         }
+        UtilityLog.d("wx", imgUrl)
         return imgUrl.getImage()
     }
 
-    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) {
-            return AnimationDrawable()
-        }
-        val timeList = om.spTime.list.toMutableList()
-        val bmAl = (om.spinnerTimeValue until timeList.size).mapTo(mutableListOf()) {
-            getImage(om, timeList[it].split(" ").getOrNull(0) ?: "")
-        }
-        return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
+    fun getAnimation(context: Context, om: ObjectModelNoSpinner): AnimationDrawable {
+        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        val timeList = om.times
+        val bitmaps = (om.spinnerTimeValue until timeList.size).map { getImage(om, timeList[it].split(" ").getOrNull(0) ?: "") }
+        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 }

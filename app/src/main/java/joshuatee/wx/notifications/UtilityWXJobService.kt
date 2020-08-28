@@ -34,18 +34,25 @@ object UtilityWXJobService {
 
     private var kJobId = 0
 
-    fun startService(c: Context) {
-        if (android.os.Build.VERSION.SDK_INT > 23) {
-            start(c)
-        } else {
-            c.startService(Intent(c, AlertService::class.java))
-        }
+    fun startService(context: Context) {
+        val alertNotificationIntervalCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_INTERVAL", -1)
+        //if (alertNotificationIntervalCurrent < 121) {
+            if (android.os.Build.VERSION.SDK_INT > 23) {
+                if (alertNotificationIntervalCurrent < 121) {
+                    start(context)
+                } else {
+                    val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+                    scheduler.cancelAll()
+                    UtilityLog.d("wx", "job cancel all")
+                }
+            } else {
+                context.startService(Intent(context, AlertService::class.java))
+            }
+        //}
     }
 
     fun start(context: Context) {
-        val alertNotificationIntervalCurrent: Int =
-            Utility.readPref(context, "ALERT_NOTIFICATION_INTERVAL", -1)
-        UtilityLog.d("wx", "called start for jobService")
+        val alertNotificationIntervalCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_INTERVAL", -1)
         if (android.os.Build.VERSION.SDK_INT > 23) {
             val serviceName = ComponentName(context, WXJobService::class.java)
             val jobInfo = JobInfo.Builder(kJobId++, serviceName)
@@ -53,16 +60,11 @@ object UtilityWXJobService {
                 .setRequiresDeviceIdle(false)
                 .setRequiresCharging(false)
                 .setPersisted(true)
-                .setPeriodic(
-                    (alertNotificationIntervalCurrent * 1000 * 60).toLong(),
-                    60000
-                ) // final arg is one minute
+                .setPeriodic((alertNotificationIntervalCurrent * 1000 * 60).toLong(), 60000) // final arg is one minute
                 .build()
             val scheduler = context.getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
             val result = scheduler.schedule(jobInfo)
-            if (result == JobScheduler.RESULT_SUCCESS) {
-                UtilityLog.d("wx", "Job scheduled successfully! jobService")
-            }
+            if (result == JobScheduler.RESULT_SUCCESS) UtilityLog.d("wx", "Job scheduled successfully - jobService")
         }
     }
 }

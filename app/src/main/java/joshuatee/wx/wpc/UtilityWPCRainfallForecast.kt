@@ -32,7 +32,7 @@ internal object UtilityWpcRainfallForecast {
             "QPF99E"
     )
 
-    val imageUrls = listOf(
+    val urls = listOf(
             "${MyApplication.nwsWPCwebsitePrefix}/qpf/94ewbg.gif",
             "${MyApplication.nwsWPCwebsitePrefix}/qpf/98ewbg.gif",
             "${MyApplication.nwsWPCwebsitePrefix}/qpf/99ewbg.gif"

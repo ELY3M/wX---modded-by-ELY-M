@@ -30,7 +30,6 @@ import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.ImageShowActivity
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.objects.ObjectIntent
@@ -53,11 +52,9 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // 1: day
     //
 
-    companion object {
-        const val NUMBER: String = ""
-    }
+    companion object { const val NUMBER = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private var textProduct = ""
     private var imageUrl = ""
     private var bitmap = UtilityImg.getBlankBitmap()
@@ -68,20 +65,16 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_linear_layout_bottom_toolbar,
-                R.menu.spcmcdshowdetail
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
         toolbarBottom.setOnMenuItemClickListener(this)
         tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
         if (tabletInLandscape) {
-            ll.orientation = LinearLayout.HORIZONTAL
-            objectCardImage = ObjectCardImage(this, ll, UtilityImg.getBlankBitmap(), 2)
+            linearLayout.orientation = LinearLayout.HORIZONTAL
+            objectCardImage = ObjectCardImage(this, linearLayout, UtilityImg.getBlankBitmap(), 2)
         } else {
-            objectCardImage = ObjectCardImage(this, ll)
+            objectCardImage = ObjectCardImage(this, linearLayout)
         }
-        objectCardText = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        objectCardText = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         activityArguments = intent.getStringArrayExtra(NUMBER)!!
         textProduct = activityArguments[0]
         imageUrl = activityArguments[1]
@@ -92,55 +85,21 @@ class SpcFireOutlookActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         bitmap = withContext(Dispatchers.IO) { imageUrl.getImage() }
-        objectCardText.text = withContext(Dispatchers.IO) {
-            UtilityDownload.getTextProduct(this@SpcFireOutlookActivity, textProduct)
-        }
-        if (tabletInLandscape) {
-            objectCardImage.setImage(bitmap, 2)
-        } else {
-            objectCardImage.setImage(bitmap)
-        }
+        objectCardText.text = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@SpcFireOutlookActivity, textProduct) }
+        if (tabletInLandscape) objectCardImage.setImage(bitmap, 2) else objectCardImage.setImage(bitmap)
         objectCardImage.setOnClickListener(View.OnClickListener {
-            ObjectIntent(
-                    this@SpcFireOutlookActivity,
-                    ImageShowActivity::class.java,
-                    ImageShowActivity.URL,
-                    arrayOf(imageUrl, textProduct, "true")
-            )
+            ObjectIntent.showImage(this@SpcFireOutlookActivity, arrayOf(imageUrl, textProduct, "true"))
         })
-        UtilityTts.conditionalPlay(
-                activityArguments,
-                1,
-                applicationContext,
-                objectCardText.text,
-                textProduct
-        )
+        UtilityTts.conditionalPlay(activityArguments, 1, applicationContext, objectCardText.text, textProduct)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, objectCardText.text, textProduct, textProduct)) {
-            return true
-        }
+        if (audioPlayMenu(item.itemId, objectCardText.text, textProduct, textProduct)) return true
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.shareBitmap(
-                    this,
-                    this,
-                    textProduct,
-                    bitmap,
-                    objectCardText.text
-            )
-            R.id.action_share_text -> UtilityShare.shareText(
-                    this,
-                    textProduct,
-                    objectCardText.text
-            )
-            R.id.action_share_url -> UtilityShare.shareText(this, textProduct, textProduct)
-            R.id.action_share_image -> UtilityShare.shareBitmap(
-                    this,
-                    this,
-                    textProduct,
-                    bitmap
-            )
+            R.id.action_share_all -> UtilityShare.bitmap(this, this, textProduct, bitmap, objectCardText.text)
+            R.id.action_share_text -> UtilityShare.text(this, textProduct, objectCardText.text)
+            R.id.action_share_url -> UtilityShare.text(this, textProduct, textProduct)
+            R.id.action_share_image -> UtilityShare.bitmap(this, this, textProduct, bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

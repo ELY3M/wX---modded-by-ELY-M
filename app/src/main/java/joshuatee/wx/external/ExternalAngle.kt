@@ -9,33 +9,18 @@
  */
 package joshuatee.wx.external
 
+import kotlin.math.*
+
 /**
  * Utility methods for dealing with angles.
  *
  * @author Mike Gavaghan
  */
 internal object ExternalAngle {
-    /** Degrees/Radians conversion constant.  */
-    private const val PiOver180 = Math.PI / 180.0
 
-    /**
-     * Convert degrees to radians.
-     * @param degrees
-     * @return
-     */
-    fun toRadians(degrees: Double): Double {
-        return degrees * PiOver180
-    }
+    private const val PiOver180 = PI / 180.0
 
-    /**
-     * Convert radians to degrees.
-     * @param radians
-     * @return
-     */
-    fun toDegrees(radians: Double): Double {
-        return radians / PiOver180
-    }
+    fun toRadians(degrees: Double) = degrees * PiOver180
+
+    fun toDegrees(radians: Double) = radians / PiOver180
 }
-/**
- * Disallow instantiation.
- */

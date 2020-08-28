@@ -45,49 +45,45 @@ object WXGLNexrad {
             "NTP"
     )
 
-    // next 3 maps are for color palette editor
-    val productCodeStringToName: Map<String, String> = mapOf(
-            "94" to "Reflectivity",
-            "99" to "Velocity",
-            "134" to "Digital Vertical Integrated Liquid",
-            "135" to "Enhanced Echo Tops",
-            "159" to "Differential Reflectivity",
-            "161" to "Correlation Coefficient",
-            "163" to "Specific Differential Phase",
-            "172" to "Digital Storm Total Precipitation"
+    fun isProductTdwr(product: String) = product.startsWith("TV") || product == "TZL" || product.startsWith("TZ")
+
+    // next 3 maps are for color palette editor : Map<String, String>
+    val productCodeStringToName = mapOf(
+            94 to "Reflectivity",
+            99 to "Velocity",
+            134 to "Digital Vertical Integrated Liquid",
+            135 to "Enhanced Echo Tops",
+            159 to "Differential Reflectivity",
+            161 to "Correlation Coefficient",
+            163 to "Specific Differential Phase",
+            172 to "Digital Storm Total Precipitation"
     )
 
-    val productCodeStringToCode: Map<String, String> = mapOf(
-            "94" to "N0Q",
-            "99" to "N0U",
-            "134" to "DVL",
-            "135" to "EET",
-            "159" to "N0X",
-            "161" to "N0C",
-            "163" to "N0K",
-            "172" to "DSP"
+    val productCodeStringToCode = mapOf(
+            94 to "N0Q",
+            99 to "N0U",
+            134 to "DVL",
+            135 to "EET",
+            159 to "N0X",
+            161 to "N0C",
+            163 to "N0K",
+            172 to "DSP"
     )
 
-    /*val radarModelShortToDescription: Map<Short, String> = mapOf(
-            0.toShort() to "Maintenance",
-            1.toShort() to "Clean Air",
-            2.toShort() to "Precipitation/Severe Weather"
-    )*/
-
-    val productCodeStringToResourceFile: Map<String, Int> = mapOf(
-            "94" to R.raw.dvn94,
-            "99" to R.raw.dvn99,
-            "134" to R.raw.gsp134,
-            "135" to R.raw.vax135,
-            "159" to R.raw.vax159,
-            "161" to R.raw.vax161,
-            "163" to R.raw.vax163,
-            "172" to R.raw.vax172
+    val productCodeStringToResourceFile = mapOf(
+            94 to R.raw.dvn94,
+            99 to R.raw.dvn99,
+            134 to R.raw.gsp134,
+            135 to R.raw.vax135,
+            159 to R.raw.vax159,
+            161 to R.raw.vax161,
+            163 to R.raw.vax163,
+            172 to R.raw.vax172
     )
 
-    val colorPaletteProducts: List<String> = listOf("94", "99", "134", "135", "159", "161", "163", "172")
+    val colorPaletteProducts = listOf(94, 99, 134, 135, 159, 161, 163, 172)
 
-    private val closestTdwrToNexrad: Map<String, String> = mapOf(
+    private val closestTdwrToNexrad = mapOf(
             "DTX" to "DTW",
             "LOT" to "ORD",
             "MKX" to "MKE",
@@ -170,8 +166,7 @@ object WXGLNexrad {
     private const val binSize16 = 0.590022f
     private const val binSize110 = 2.0f * binSize54
 
-
-    fun getBinSize(prodId: Int): Float = when (prodId) {
+    fun getBinSize(prodId: Int) = when (prodId) {
         134, 135 -> binSize54
         186 -> binSize16
         159, 161, 163, 165, 99, 170, 172 -> binSize13
@@ -182,10 +177,9 @@ object WXGLNexrad {
     }
 
     // FIXME use different split
-    fun isRidTdwr(rid: String): Boolean =
-            GlobalArrays.tdwrRadars.any { rid == MyApplication.space.split(it)[0] }
+    fun isRidTdwr(rid: String) = GlobalArrays.tdwrRadars.any { rid == MyApplication.space.split(it)[0] }
 
-    fun getTdwrFromRid(rid: String): String = closestTdwrToNexrad[rid] ?: ""
+    fun getTdwrFromRid(rid: String) = closestTdwrToNexrad[rid] ?: ""
 
     fun savePrefs(context: Context, prefPrefix: String, wxglRender: WXGLRender) {
         Utility.writePref(context, prefPrefix + "_RID", wxglRender.rid)
@@ -212,16 +206,12 @@ object WXGLNexrad {
         Utility.writePref(context, prefPrefix + "_PROD" + idx.toString(), wxglRender.product)
     }
 
-    fun getRadarInfo(context: Context, pane: String): String {
-        return Utility.readPref(context, "WX_RADAR_CURRENT_INFO$pane", "")
-    }
+    fun getRadarInfo(context: Context, pane: String) = Utility.readPref(context, "WX_RADAR_CURRENT_INFO$pane", "")
 
     // for Location Fragment as there seem to be quite a few
     // at joshuatee.wx.fragments.LocationFragment.getActivityReference (LocationFragment.kt:833)
     // kotlin.KotlinNullPointerException:
-    fun getRadarInfo(pane: String): String {
-        return Utility.readPref("WX_RADAR_CURRENT_INFO$pane", "")
-    }
+    fun getRadarInfo(pane: String) = Utility.readPref("WX_RADAR_CURRENT_INFO$pane", "")
 
     fun writeRadarInfo(context: Context, pane: String, info: String) {
         Utility.writePref(context, "WX_RADAR_CURRENT_INFO$pane", info)
@@ -231,7 +221,5 @@ object WXGLNexrad {
         Utility.writePref(context, "WX_RADAR_CURRENT_INFO_WIDGET_TIME", time)
     }
 
-    fun readRadarTimeForWidget(context: Context): String {
-        return Utility.readPref(context, "WX_RADAR_CURRENT_INFO_WIDGET_TIME", "")
-    }
+    fun readRadarTimeForWidget(context: Context) = Utility.readPref(context, "WX_RADAR_CURRENT_INFO_WIDGET_TIME", "")
 }

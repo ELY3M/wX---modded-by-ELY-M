@@ -36,7 +36,6 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.Spotter
 import joshuatee.wx.radar.UtilitySpotter
-import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.radar.LatLon
 import joshuatee.wx.settings.BottomSheetFragment
 import joshuatee.wx.settings.UtilityLocation
@@ -56,7 +55,7 @@ class SpottersActivity : BaseActivity() {
     // can tap on email or phone to respectively email or call the individual
     //
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private lateinit var ca: AdapterSpotter
     private var spotterList = mutableListOf<Spotter>()
     private var spotterList2 = mutableListOf<Spotter>()
@@ -82,9 +81,7 @@ class SpottersActivity : BaseActivity() {
                 return true
             }
         })
-        if (UIPreferences.themeIsWhite) {
-            changeSearchViewTextColor(searchView)
-        }
+        if (UIPreferences.themeIsWhite) changeSearchViewTextColor(searchView)
         return true
     }
 
@@ -93,14 +90,12 @@ class SpottersActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_onefab, null, false)
         title = titleString
         toolbar.subtitle = "Tap on name for actions."
-        ObjectFab(this, this, R.id.fab, R.drawable.ic_info_outline_24dp, View.OnClickListener { reportFAB() })
+        ObjectFab(this, this, R.id.fab, R.drawable.ic_info_outline_24dp_white, View.OnClickListener { reportFAB() })
         recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
         getContent()
     }
 
-    private fun reportFAB() {
-        ObjectIntent(this, SpotterReportsActivity::class.java)
-    }
+    private fun reportFAB() { ObjectIntent(this, SpotterReportsActivity::class.java) }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         spotterList = withContext(Dispatchers.IO) { UtilitySpotter.get(this@SpottersActivity) }.toMutableList()
@@ -112,12 +107,12 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun changeSearchViewTextColor(view: View?) {
-        if (view != null) {
-            if (view is TextView) {
-                view.setTextColor(Color.WHITE)
-            } else if (view is ViewGroup) {
-                (0 until view.childCount).forEach {
-                    changeSearchViewTextColor(view.getChildAt(it))
+        if (!Utility.isThemeAllWhite()) {
+            if (view != null) {
+                if (view is TextView) {
+                    view.setTextColor(Color.WHITE)
+                } else if (view is ViewGroup) {
+                    (0 until view.childCount).forEach { changeSearchViewTextColor(view.getChildAt(it)) }
                 }
             }
         }
@@ -128,9 +123,7 @@ class SpottersActivity : BaseActivity() {
         val filteredModelList = mutableListOf<Spotter>()
         models.forEach {
             val text = it.lastName.toLowerCase(Locale.US)
-            if (text.contains(queryLocal)) {
-                filteredModelList.add(it)
-            }
+            if (text.contains(queryLocal)) filteredModelList.add(it)
         }
         return filteredModelList
     }
@@ -149,9 +142,7 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun markFavorites() {
-        spotterList
-                .filter { MyApplication.spotterFav.contains(it.unique + ":") && !it.lastName.contains("0FAV ") }
-                .forEach {
+        spotterList.filter { MyApplication.spotterFav.contains(it.unique + ":") && !it.lastName.contains("0FAV ") }.forEach {
                     it.lastName = "0FAV " + it.lastName
                 }
         sortSpotters()
@@ -160,8 +151,7 @@ class SpottersActivity : BaseActivity() {
     private fun sortSpotters() {
         Collections.sort(spotterList, Comparator { p1, p2 ->
             val res = p1.lastName.compareTo(p2.lastName, ignoreCase = true)
-            if (res != 0)
-                return@Comparator res
+            if (res != 0) return@Comparator res
             p1.firstName.compareTo(p2.firstName, ignoreCase = true)
         })
         if (firstTime) {
@@ -178,43 +168,22 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun itemClicked(position: Int) {
-        // FIXME use recyclerView.getItem(position)
         val bottomSheetFragment = BottomSheetFragment(this, position, ca.getItem(position).toString(), false)
-        //val bottomSheetFragment = BottomSheetFragment(this, position, recyclerView.getItem(position), false)
         bottomSheetFragment.functions = listOf(::showItemOnRadar, ::showItemOnMap, ::toggleFavorite)
         bottomSheetFragment.labelList = listOf("Show on radar", "Show on map", "Toggle favorite")
         bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
     }
 
     private fun showItemOnMap(position: Int) {
-        ObjectIntent(
-                this,
-                WebView::class.java,
-                WebView.URL,
-                arrayOf(
-                        UtilityMap.getMapUrl(
-                                spotterList[position].lat,
-                                spotterList[position].lon,
-                                "9"
-                        ), spotterList[position].lastName + ", " + spotterList[position].firstName
-                )
+        ObjectIntent.showWebView(this, arrayOf(UtilityMap.getMapUrl(spotterList[position].lat, spotterList[position].lon, "9"),
+                spotterList[position].lastName + ", " + spotterList[position].firstName)
         )
     }
 
     private fun showItemOnRadar(position: Int) {
-        val radarSite = UtilityLocation.getNearestOffice(
-                "RADAR",
-                LatLon(spotterList[position].lat, spotterList[position].lon)
-        )
-        ObjectIntent(
-                this,
-                WXGLRadarActivity::class.java,
-                WXGLRadarActivity.RID,
-                arrayOf(radarSite, "", "N0Q", "", spotterList[position].unique)
-        )
+        val radarSite = UtilityLocation.getNearestOffice("RADAR", LatLon(spotterList[position].lat, spotterList[position].lon))
+        ObjectIntent.showRadar(this, arrayOf(radarSite, "", "N0Q", "", spotterList[position].unique))
     }
 
-    private fun toggleFavorite(position: Int) {
-        checkFavorite(position)
-    }
+    private fun toggleFavorite(position: Int) { checkFavorite(position) }
 } 

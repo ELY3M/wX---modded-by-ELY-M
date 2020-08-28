@@ -22,11 +22,30 @@
 package joshuatee.wx.wpc
 
 import android.util.SparseArray
+import joshuatee.wx.Extensions.safeGet
 
 import joshuatee.wx.util.Group
 import joshuatee.wx.ui.ObjectMenuTitle
 
 internal object UtilityWpcText {
+
+    fun needsFixedWidthFont(product: String): Boolean {
+        val productList = listOf("RWRMX", "UVICAC", "MIATWSEP", "MIATWSAT")
+        return product.startsWith("TPT")
+                || product.startsWith("SWPC")
+                || product.startsWith("MIAPW")
+                || product.startsWith("MIATCM")
+                || productList.contains(product)
+    }
+
+    fun getLabel(token: String): String {
+        val list = labels.filter { it.startsWith(token) }
+        return if (list.isNotEmpty()) {
+            list[0].split(":").safeGet(1)
+        } else {
+            ""
+        }
+    }
 
     private val titles = listOf(
             ObjectMenuTitle("General Forecast Discussions", 11),
@@ -150,10 +169,10 @@ internal object UtilityWpcText {
             "swpcwwa: Advisory Outlook",
 
             "focn45: Significant Weather Discussion, PASPC",
-            "fxcn01_d1-3_west: FXCN01_D1-3_WEST",
-            "fxcn01_d4-7_west: FXCN01_D4-7_WEST",
-            "fxcn01_d1-3_east: FXCN01_D1-3_EAST",
-            "fxcn01_d4-7_east: FXCN01_D4-7_EAST",
+            "fxcn01_d1-3_west: Days 1 to 3 Significant Weather Discussion - West",
+            "fxcn01_d4-7_west: Days 4 to 7 Significant Weather Discussion - West",
+            "fxcn01_d1-3_east: Days 1 to 3 Significant Weather Discussion - East",
+            "fxcn01_d4-7_east: Days 4 to 7 Significant Weather Discussion - East",
             "awcn11: Weather Summary S. Manitoba",
             "awcn12: Weather Summary N. Manitoba",
             "awcn13: Weather Summary S. Saskatchewan",
@@ -166,7 +185,7 @@ internal object UtilityWpcText {
     var shortCodes = Array(13) { Array(39) { "" } }
     var longCodes = Array(13) { Array(39) { "" } }
 
-    internal fun createData() {
+    internal fun create() {
         var k = 0
         titles.indices.forEach { index ->
             val group = Group(titles[index].title)

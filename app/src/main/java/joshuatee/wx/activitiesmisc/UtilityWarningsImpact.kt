@@ -31,19 +31,17 @@ internal object UtilityWarningsImpact {
 
     val data: List<ObjectImpactGraphic>
         get() {
-            val warningsList = mutableListOf<ObjectImpactGraphic>()
             val html = url.getHtmlSep()
             val outerChunk = html.parse("\\[(.*?)\\]")
-            val warningListTmp = outerChunk.parseColumn("\\{(.*?)\\}")
-            warningListTmp.forEach {
-                val title = it.parse("msg.:.(.*?)\"")
-                        .replace(Regex("including .*until"),"until")
-                        .replace(Regex("continues for .*until"),"until")
-                val cities = it.parse("city_list.:.(.*?).,").replace("including ", "")
-                val population = it.parse("population.:.(.*?)\"")
-                val file = it.parse("file.:.(.*?png)")
-                warningsList.add(ObjectImpactGraphic(title, cities, population, file))
+            val warnings = outerChunk.parseColumn("\\{(.*?)\\}")
+            val objectImpactGraphics = mutableListOf<ObjectImpactGraphic>()
+            warnings.forEach { warning ->
+                val title = warning.parse("msg.:.(.*?)\"").replace(Regex("including .*until"),"until").replace(Regex("continues for .*until"),"until")
+                val cities = warning.parse("city_list.:.(.*?).,").replace("including ", "")
+                val population = warning.parse("population.:.(.*?)\"")
+                val file = warning.parse("file.:.(.*?png)")
+                objectImpactGraphics.add(ObjectImpactGraphic(title, cities, population, file))
             }
-            return warningsList
+            return objectImpactGraphics
         }
 }

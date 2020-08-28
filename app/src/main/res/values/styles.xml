@@ -20,200 +20,268 @@
 
 <resources>
 
-    <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="MyCustomTheme_NOAB" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="android:buttonTint">@color/off_white</item>
+        <item name="colorPrimaryDark">@color/primary_dark_blue</item>
+        <item name="colorAccent">@color/blue_accent</item>
+        <item name="android:statusBarColor">@color/primary_dark_blue</item>
+        <item name="android:windowBackground">@color/bg_blue</item>
+        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
+        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
+    </style>
+
+    <style name="MyCustomTheme_white_NOAB" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="android:buttonTint">@color/primary_blue</item>
+        <item name="android:progressBackgroundTint">@color/light_blue</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:statusBarColor">@color/primary_dark_blue</item>
+        <item name="android:windowBackground">@color/bg_blue</item>
+        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorControlActivated">@color/bg_blue</item>
+        <item name="colorSwitchThumbNormal">@color/blue_accent</item>
+        <item name="android:editTextColor">@color/black</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
+        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
+    </style>
+
+    <style name="MyCustomTheme_whiter_NOAB" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="android:buttonTint">@color/primary_blue</item>
+
+        <!-- comments below are for reference only, with the update from MDC 1.0.0
+             to 1.1.0 all themes have had .Bridge tacked on to the end of the their names
+             to avoid transitioning to the new theme structure which is non-trivial and of little value add
+             https://medium.com/google-design/material-design-components-for-android-1-1-0-are-now-available-45e1d576037c
+             -->
+        <!-- MDC 1.1.0 FAB icon tint, tab bar inactive tab-->
+        <!--<item name="colorOnSecondary">@color/white</item>-->
+        <!-- <item name="colorOnSurface">@color/white</item> -->
+        <!--<item name="colorPrimaryVariant">@color/black</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorSecondary">@color/black</item>
+        <item name="colorSecondaryVariant">@color/black</item>
+        <item name="colorError">@color/black</item>
+        <item name="colorOnError">@color/black</item>
+        <item name="colorSurface">@color/black</item>
+        <item name="colorOnBackground">@color/black</item>-->
+
+        <item name="android:progressBackgroundTint">@color/light_blue</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:statusBarColor">@color/primary_dark_blue</item>
+        <item name="android:windowBackground">@color/off_white</item>
+        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorControlActivated">@color/bg_blue</item>
+        <item name="colorSwitchThumbNormal">@color/blue_accent</item>
+        <item name="android:editTextColor">@color/black</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
+        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
+    </style>
+
+    <style name="MyCustomTheme_whitest_NOAB" parent="Theme.MaterialComponents.Light.NoActionBar.Bridge">
+        <item name="colorPrimary">@color/white</item>
+        <item name="android:buttonTint">@color/primary_blue</item>
+        <item name="android:progressBackgroundTint">@color/light_blue</item>
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="colorAccent">@color/white</item>
+        <item name="android:statusBarColor">@color/primary_dark_blue</item>
+        <item name="android:windowBackground">@color/off_white</item>
+        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="colorControlActivated">@color/bg_blue</item>
+        <item name="colorSwitchThumbNormal">@color/blue_accent</item>
+        <item name="android:editTextColor">@color/black</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleWhite</item>
+        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
+    </style>
+
+    <style name="PickerDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Bridge">
+        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="colorPrimaryDark">@color/primary_dark_blue</item>
+        <item name="colorAccent">@color/blue_accent</item>
+    </style>
+
+    <style name="AppCompatAlertDialogStyle" parent="Theme.MaterialComponents.Dialog.Alert.Bridge">
         <item name="colorAccent">@color/yellow</item>
+        <item name="colorOnSecondary">@color/yellow</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>
         <item name="android:background">@color/primary_blue</item>
     </style>
 
-    <style name="MyCustomTheme_ActionBar" parent="Theme.AppCompat">
-        <item name="android:windowBackground">@color/bg_blue</item>
-        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
+    <style name="AppCompatAlertDialogStyleBlack" parent="Theme.MaterialComponents.Light.Dialog.Alert.Bridge">
+        <item name="colorAccent">@color/white</item>
         <item name="android:textColor">@color/white</item>
-        <item name="colorPrimary">@color/primary_blue</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:background">@color/black</item>
+    </style>
+	
+    <style name="AppCompatAlertDialogStyleGray" parent="Theme.MaterialComponents.Light.Dialog.Alert.Bridge">
+        <item name="colorAccent">@color/white</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+        <item name="android:background">@color/gray_dark</item>
+    </style>
+	
+	<style name="AppCompatAlertDialogStyleBlackAqua" parent="Theme.MaterialComponents.Light.Dialog.Alert.Bridge">
+    <item name="colorAccent">@color/aqua</item>
+    <item name="android:textColor">@color/aqua</item>
+    <item name="android:textColorPrimary">@color/aqua</item>
+    <item name="android:textColorSecondary">@color/aqua</item>
+    <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="AppCompatAlertDialogStyleBlackNeonGreen" parent="Theme.MaterialComponents.Light.Dialog.Alert.Bridge">
+        <item name="colorAccent">@color/lime</item>
+        <item name="android:textColor">@color/lime</item>
+        <item name="android:textColorPrimary">@color/lime</item>
+        <item name="android:textColorSecondary">@color/lime</item>
+        <item name="android:background">@color/black</item>
+    </style>
+
+    <style name="AppCompatAlertDialogStyleWhite" parent="Theme.MaterialComponents.Dialog.Alert.Bridge">
+        <item name="colorAccent">@color/black</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">@color/black</item>
+        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="MyCustomTheme_mixedBlue_NOAB" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+        <item name="colorPrimary">@color/bg_blue</item>
+        <item name="android:buttonTint">@color/bg_blue</item>
         <item name="colorPrimaryDark">@color/primary_dark_blue</item>
         <item name="colorAccent">@color/primary_blue</item>
-        <item name="actionOverflowMenuStyle">@style/ABOverflow</item>
-        <item name="actionDropDownStyle">@style/MyDropDownNav2</item>
-        <item name="android:dialogTheme">@style/MyDialogTheme</item>
-        <item name="android:alertDialogTheme">@style/MyDialogTheme</item>
-    </style>
-
-    <style name="MyCustomTheme_NOAB" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@color/bg_blue</item>
-        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
-        <item name="android:textColor">@color/white</item>
-        <item name="colorPrimary">@color/primary_blue</item>
-        <item name="colorPrimaryDark">@color/primary_dark_blue</item>
-        <item name="colorAccent">@color/blue_accent</item>
-        <item name="actionOverflowMenuStyle">@style/ABOverflow</item>
-        <item name="actionDropDownStyle">@style/MyDropDownNav2</item>
-        <item name="android:dialogTheme">@style/MyDialogTheme</item>
-        <item name="android:alertDialogTheme">@style/MyDialogTheme</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
-    </style>
-
-    <style name="MyCustomTheme_white_NOAB" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@color/bg_blue</item>
-        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="colorPrimary">@color/primary_blue</item>
-        <item name="colorPrimaryDark">@color/primary_dark_blue</item>
-        <item name="colorAccent">@color/white</item>
-        <item name="actionOverflowMenuStyle">@style/ABOverflowWhite</item>
-        <item name="actionDropDownStyle">@style/MyDropDownNav2White</item>
-        <item name="android:dialogTheme">@style/MyDialogThemeWhite</item>
-        <item name="android:alertDialogTheme">@style/MyDialogThemeWhite</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="colorControlActivated">@color/bg_blue</item>
-        <item name="colorSwitchThumbNormal">@color/blue_accent</item>
-        <item name="android:colorForeground">@color/gray_light</item>
-        <item name="android:editTextColor">@color/black</item>
-        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
-    </style>
-
-    <style name="MyCustomTheme_whiter_NOAB" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@color/off_white</item>
-        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="colorPrimary">@color/light_blue</item>
-        <item name="colorPrimaryDark">@color/primary_dark_blue</item>
-        <item name="colorAccent">@color/white</item>
-        <item name="actionOverflowMenuStyle">@style/ABOverflowWhite</item>
-        <item name="actionDropDownStyle">@style/MyDropDownNav2White</item>
-        <item name="android:dialogTheme">@style/MyDialogThemeWhite</item>
-        <item name="android:alertDialogTheme">@style/MyDialogThemeWhite</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="colorControlActivated">@color/bg_blue</item>
-        <item name="colorSwitchThumbNormal">@color/blue_accent</item>
-        <item name="android:colorForeground">@color/gray_light</item>
-        <item name="android:editTextColor">@color/black</item>
-        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
-    </style>
-
-    <style name="SpinnerThemeOverlay" parent="">
-        <item name="colorControlNormal">@color/black</item>
-    </style>
-
-    <style name="MyCustomTheme_mixedBlue_NOAB" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:statusBarColor">@color/primary_dark_blue</item>
         <item name="android:windowBackground">@color/primary_dark_blue</item>
         <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
         <item name="android:textColor">@color/white</item>
-        <item name="colorPrimary">@color/bg_blue</item>
-        <item name="colorPrimaryDark">@color/primary_dark_blue</item>
-        <item name="colorAccent">@color/primary_blue</item>
-        <item name="actionOverflowMenuStyle">@style/ABOverflow</item>
-        <item name="actionDropDownStyle">@style/MyDropDownNav2</item>
-        <item name="android:dialogTheme">@style/MyDialogTheme</item>
-        <item name="android:alertDialogTheme">@style/MyDialogTheme</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="colorControlActivated">@color/primary_dark_blue</item>
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
     </style>
 
-    <style name="MyCustomTheme_DarkBlue_NOAB" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@color/primary_dark_blue</item>
-        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
-        <item name="android:textColor">@color/white</item>
+    <style name="MyCustomTheme_DarkBlue_NOAB" parent="Theme.MaterialComponents.NoActionBar.Bridge">
         <item name="colorPrimary">@color/bg_blue</item>
+        <item name="android:buttonTint">@color/off_white</item>
         <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorAccent">@color/primary_blue</item>
-        <item name="actionOverflowMenuStyle">@style/ABOverflow</item>
-        <item name="actionDropDownStyle">@style/MyDropDownNav2</item>
-        <item name="android:dialogTheme">@style/MyDialogTheme</item>
-        <item name="android:alertDialogTheme">@style/MyDialogTheme</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
-    </style>
-
-    <style name="MyCustomTheme_BlackAqua_NOAB" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@color/black</item>
-        <item name="android:colorBackgroundCacheHint">@color/black</item>
-        <item name="android:textColor">@color/aqua</item>
-        <item name="colorPrimary">@color/black</item>
-        <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorAccent">@color/aqua</item>
-        <item name="actionOverflowMenuStyle">@style/ABOverflow</item>
-        <item name="actionDropDownStyle">@style/MyDropDownNav2</item>
-        <item name="android:dialogTheme">@style/MyDialogTheme</item>
-        <item name="android:alertDialogTheme">@style/MyDialogTheme</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="colorControlActivated">@color/black</item>
-        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
-    </style>
-    <style name="MyCustomTheme_orange_NOAB" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowBackground">@color/primary_orange</item>
+        <item name="colorAccent">@color/blue_accent</item>
+        <item name="android:statusBarColor">@color/primary_dark_blue</item>
+        <item name="android:windowBackground">@color/primary_dark_blue</item>
         <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
         <item name="android:textColor">@color/white</item>
-        <item name="colorPrimary">@color/bg_orange</item>
-        <item name="colorPrimaryDark">@color/dark_orange</item>
-        <item name="colorAccent">@color/primary_orange</item>
-        <item name="actionOverflowMenuStyle">@style/ABOverflow</item>
-        <item name="actionDropDownStyle">@style/MyDropDownNav2</item>
-        <item name="android:dialogTheme">@style/MyDialogTheme</item>
-        <item name="android:alertDialogTheme">@style/MyDialogTheme</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
     </style>
 
-    <style name="MyDialogTheme" parent="Theme.AppCompat.Dialog">
-        <item name="android:windowBackground">@color/primary_dark_blue</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowCloseOnTouchOutside">true</item>
-    </style>
-
-    <style name="MyDialogThemeWhite" parent="Theme.AppCompat.Dialog">
-        <item name="android:windowBackground">@color/white</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowCloseOnTouchOutside">true</item>
-    </style>
-
-    <style name="MyDropDownNav2" parent="Widget.AppCompat.Spinner.DropDown.ActionBar">
-        <item name="android:popupBackground">@color/primary_dark_blue</item>
-    </style>
-
-    <style name="MyDropDownNav2White" parent="Widget.AppCompat.Spinner.DropDown.ActionBar">
-        <item name="android:popupBackground">@color/white</item>
-    </style>
-
-    <style name="ABOverflow" parent="Base.Widget.AppCompat.PopupMenu.Overflow">
-        <item name="android:popupBackground">@color/primary_dark_blue</item>
-    </style>
-
-    <style name="ABOverflowWhite" parent="Base.Widget.AppCompat.PopupMenu.Overflow">
-        <item name="android:popupBackground">@color/white</item>
-    </style>
-
-    <style name="MyCustomTheme_Holo_Dark_NOAB" parent="Theme.AppCompat.NoActionBar">
+    <style name="MyCustomTheme_orange_NOAB" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+        <item name="colorPrimary">@color/bg_orange</item>
+        <item name="android:buttonTint">@color/off_white</item>
+        <item name="colorPrimaryDark">@color/dark_orange</item>
+        <item name="colorAccent">@color/orange_accent</item>
+        <item name="android:statusBarColor">@color/primary_orange</item>
+        <item name="android:windowBackground">@color/bg_orange</item>
+        <item name="android:colorBackgroundCacheHint">@color/my_custom_color</item>
         <item name="android:textColor">@color/white</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyle</item>
+        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
+    </style>
+
+    <style name="MyDarkToolbarStyle" parent="ThemeOverlay.MaterialComponents.Light">
+        <item name="android:colorBackground">?attr/colorPrimaryDark</item>
+    </style>
+
+    <style name="MyLightToolbarStyle" parent="ThemeOverlay.MaterialComponents.Dark">
+        <item name="android:colorBackground">?attr/colorPrimaryDark</item>
+        <item name="android:textColorSecondary">#B3FFFFFF</item>
+    </style>
+
+    <style name="MyCustomTheme_Holo_Dark_NOAB" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:buttonTint">@color/white</item>
         <item name="colorPrimary">@color/black</item>
-        <item name="colorPrimaryDark">@color/black</item>
-        <item name="colorAccent">@color/black</item>
-        <item name="android:windowBackground">@color/black</item>
-        <item name="windowActionModeOverlay">true</item>
-    </style>
-
-    <style name="MyCustomTheme_Green_NOAB" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:textColor">@color/white</item>
-        <item name="colorPrimary">@color/green_light</item>
-        <item name="colorPrimaryDark">@color/green_dark</item>
-        <item name="colorAccent">@color/green_light</item>
-        <item name="android:windowBackground">@color/green_medium</item>
-        <item name="windowActionModeOverlay">true</item>
-    </style>
-
-    <style name="MyCustomTheme_Gray_NOAB" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:textColor">@color/white</item>
-        <item name="colorPrimary">@color/gray_light</item>
         <item name="colorPrimaryDark">@color/black</item>
         <item name="colorAccent">@color/gray_light</item>
+        <item name="android:windowBackground">@color/black</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="windowActionModeOverlay">true</item>
+        <!--<item name="colorControlActivated">@color/primary_blue</item>-->
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleBlack</item>
+    </style>
+
+    <style name="MyCustomTheme_Green_NOAB" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+        <item name="android:textColor">@color/white</item>
+        <item name="colorPrimary">@color/green_light</item>
+        <item name="android:buttonTint">@color/white</item>
+        <item name="colorPrimaryDark">@color/green_dark</item>
+        <item name="colorAccent">@color/green_accent</item>
+        <item name="android:windowBackground">@color/green_medium</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:statusBarColor">@color/green_dark</item>
+    </style>
+
+    <style name="MyCustomTheme_Gray_NOAB" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+        <item name="android:textColor">@color/white</item>
+        <item name="colorPrimary">@color/gray_light</item>
+        <item name="android:buttonTint">@color/white</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/gray_accent</item>
         <item name="android:windowBackground">@color/gray_dark</item>
         <item name="windowActionModeOverlay">true</item>
     </style>
 
+    <style name="MyCustomTheme_BlackAqua_NOAB" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+        <item name="colorPrimary">@color/black</item>
+        <item name="android:buttonTint">@color/aqua</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/aqua</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:windowBackground">@color/black</item>
+        <item name="android:colorBackgroundCacheHint">@color/black</item>
+        <item name="android:textColor">@color/aqua</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleBlackAqua</item>
+        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
+    </style>
+
+    <style name="MyCustomTheme_BlackNeonGreen_NOAB" parent="Theme.MaterialComponents.NoActionBar.Bridge">
+        <item name="colorPrimary">@color/black</item>
+        <item name="android:buttonTint">@color/lime</item>
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="colorAccent">@color/lime</item>
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:windowBackground">@color/black</item>
+        <item name="android:colorBackgroundCacheHint">@color/black</item>
+        <item name="android:textColor">@color/lime</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="alertDialogTheme">@style/AppCompatAlertDialogStyleBlackNeonGreen</item>
+        <item name="android:datePickerDialogTheme">@style/PickerDialogTheme</item>
+        <item name="android:timePickerDialogTheme">@style/PickerDialogTheme</item>
+    </style>
+
+    <!-- voice recognition -->
     <style name="Theme.Transparent" parent="android:Theme">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -223,8 +291,9 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
+
     <!-- Telecine -->
-    <style name="Theme.Telecine.Transparent" parent="Theme.AppCompat.NoActionBar">
+    <style name="Theme.Telecine.Transparent" parent="android:Theme.Translucent.NoTitleBar">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowIsFloating">true</item>

@@ -340,7 +340,7 @@ internal object UtilityWpcImages {
     var shortCodes = Array(8) { Array(28) { "" } }
     var longCodes = Array(8) { Array(28) { "" } }
 
-    internal fun createData() {
+    internal fun create() {
         var k = 0
         titles.indices.forEach { index ->
             val group = Group(titles[index].title)

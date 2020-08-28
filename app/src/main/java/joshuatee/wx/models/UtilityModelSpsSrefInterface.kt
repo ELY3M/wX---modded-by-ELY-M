@@ -28,7 +28,7 @@ import joshuatee.wx.util.Group
 
 object UtilityModelSpcSrefInterface {
 
-    val models: List<String> = listOf("SREF")
+    val models = listOf("SREF")
 
     private val titles = listOf(
             ObjectMenuTitle("SPC Guidance", 11),
@@ -44,7 +44,7 @@ object UtilityModelSpcSrefInterface {
             ObjectMenuTitle("Aviation", 9)
     )
 
-    val params: List<String> = listOf(
+    val params = listOf(
         "SREF_PROB_TRW_CALIBRATED_HRLY__",
         "SREF_03HR_SVR_PROBS__",
         "SREF_03HR_SVR_PROBS_CONDITIONAL__",

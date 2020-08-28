@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ObjectRecyclerViewGeneric(context: Context, activity: Activity, resourceId: Int) {
 
-    var recyclerView: RecyclerView = activity.findViewById(resourceId)
+    val recyclerView: RecyclerView = activity.findViewById(resourceId)
 
     init {
         recyclerView.setHasFixedSize(true)
@@ -37,13 +37,7 @@ class ObjectRecyclerViewGeneric(context: Context, activity: Activity, resourceId
         recyclerView.layoutManager = linearLayoutManager
     }
 
-    fun scrollToPosition(position: Int) {
-        recyclerView.scrollToPosition(position)
-    }
-
-    //fun getItem(index: Int): String {
-
-    //}
+    fun scrollToPosition(position: Int) = recyclerView.scrollToPosition(position)
 }
 
 

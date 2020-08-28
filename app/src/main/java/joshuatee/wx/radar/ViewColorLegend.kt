@@ -30,6 +30,7 @@ import android.view.View
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.external.UtilityStringExternal
+import joshuatee.wx.util.UtilityLog
 
 class ViewColorLegend(context: Context, private val product: String) : View(context) {
 
@@ -60,12 +61,15 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
     }
 
     private fun setColorWithBuffers(prodId: Int, index: Int) {
-        myPaint.color = Color.rgb(
-            MyApplication.colorMap[prodId]!!.redValues.get(index).toInt() and 0xFF,
-            MyApplication.colorMap[prodId]!!.greenValues.get(index).toInt() and 0xFF,
-            MyApplication.colorMap[prodId]!!.blueValues.get(index).toInt() and 0xFF
-        )
-	///TODO  this should not be hard coded :(  
+        try {
+            myPaint.color = Color.rgb(
+                    MyApplication.colorMap[prodId]!!.redValues.get(index).toInt() and 0xFF,
+                    MyApplication.colorMap[prodId]!!.greenValues.get(index).toInt() and 0xFF,
+                    MyApplication.colorMap[prodId]!!.blueValues.get(index).toInt() and 0xFF
+            )
+        } catch (e: Exception) {
+            UtilityLog.handleException(e)
+        }
         myPaint.strokeWidth = 10.0f
     }
 
@@ -74,9 +78,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
         paintText.strokeWidth = 1f
         paintText.textSize = MyApplication.radarShowLegendTextSize.toFloat() //was 30f
         paintText.color = MyApplication.radarShowLegendTextColor
-        //if (!MyApplication.blackBg) {
-        //    paintText.color = Color.BLACK
-        //}
+        //if (!MyApplication.blackBg) paintText.color = Color.BLACK
         val startHeight = MyApplication.actionBarHeight.toFloat()
         val width = MyApplication.radarShowLegendWidth.toFloat() //was 50f
         val widthStarting = 0f

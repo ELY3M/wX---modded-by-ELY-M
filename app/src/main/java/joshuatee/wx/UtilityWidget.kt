@@ -45,21 +45,17 @@ object UtilityWidget {
     private fun uriShareAndGenerate(context: Context, fileName: String): Uri {
         val dir = File(context.filesDir.toString() + "/shared")
         val file = File(dir, fileName)
-        val imgUri = FileProvider.getUriForFile(
-            context,
-            "${MyApplication.packageNameAsString}.fileprovider",
-            file
-        )
+        val uri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", file)
         val localPackageManager = context.packageManager
         val intentHome = Intent("android.intent.action.MAIN")
         intentHome.addCategory("android.intent.category.HOME")
         try {
-            val str = localPackageManager.resolveActivity(intentHome, PackageManager.MATCH_DEFAULT_ONLY)!!.activityInfo.packageName
-            context.grantUriPermission(str, imgUri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            val string = localPackageManager.resolveActivity(intentHome, PackageManager.MATCH_DEFAULT_ONLY)!!.activityInfo.packageName
+            context.grantUriPermission(string, uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
-        return imgUri
+        return uri
     }
 
     fun setImage(context: Context, remoteViews: RemoteViews, fileName: String) {
@@ -74,7 +70,7 @@ object UtilityWidget {
         val uri = uriShareAndGenerate(context, fileName)
         val uriBAK = uriShareAndGenerate(context, MyApplication.WIDGET_FILE_BAK + fileName)
         remoteViews.setImageViewUri(res, null)
-        remoteViews.setImageViewUri(R.id.iv, uriBAK)
+        remoteViews.setImageViewUri(res, uriBAK)
         remoteViews.setImageViewUri(res, uri)
     }
 
@@ -84,78 +80,32 @@ object UtilityWidget {
         val allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
         allWidgetIds.forEach { widgetId ->
             when (widgetType) {
-                MOSAIC_RADAR -> {
-                    val obj = ObjectWidgetMosaicRadar(context)
-                    appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
-                }
-                VIS -> {
-                    val obj = ObjectWidgetVis(context)
-                    appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
-                }
-                NEXRAD_RADAR -> {
-                    val obj = ObjectWidgetNexradRadar(context)
-                    appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
-                }
-                SPCMESO, CONUSWV, STRPT, WPCIMG -> {
-                    val obj = ObjectWidgetGeneric(context, widgetType)
-                    appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
-                }
-                SPCSWO -> {
-                    val obj = ObjectWidgetSpcSwo(context)
-                    appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
-                }
-                NHC -> {
-                    val obj = ObjectWidgetNhc(context)
-                    appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
-                }
-                AFD -> {
-                    val obj = ObjectWidgetAfd(context)
-                    appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
-                }
-                HWO -> {
-                    val obj = ObjectWidgetHwo(context)
-                    appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
-                }
-                TEXT_WPC -> {
-                    val obj = ObjectWidgetTextWpc(context)
-                    appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
-                }
-                CC -> {
-                    val obj = ObjectWidgetCC(context)
-                    appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
-                }
-                CCLegacy -> {
-                    val obj = ObjectWidgetCCLegacy(context, allWidgetIds)
-                    appWidgetManager.updateAppWidget(widgetId, obj.remoteViews)
-                }
+                MOSAIC_RADAR -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetMosaicRadar(context).remoteViews)
+                VIS -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetVis(context).remoteViews)
+                NEXRAD_RADAR -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetNexradRadar(context).remoteViews)
+                SPCMESO, CONUSWV, STRPT, WPCIMG -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetGeneric(context, widgetType).remoteViews)
+                SPCSWO -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetSpcSwo(context).remoteViews)
+                NHC -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetNhc(context).remoteViews)
+                AFD -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetAfd(context).remoteViews)
+                HWO -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetHwo(context).remoteViews)
+                TEXT_WPC -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetTextWpc(context).remoteViews)
+                CC -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetCC(context).remoteViews)
+                CCLegacy -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetCCLegacy(context, allWidgetIds).remoteViews)
             }
         }
     }
 
-    fun widgetDownloadData(
-        context: Context,
-        objCc: ObjectForecastPackageCurrentConditions,
-        objSevenDay: ObjectForecastPackage7Day,
-        objHazards: ObjectForecastPackageHazards
-    ) {
+    fun widgetDownloadData(context: Context, objCc: ObjectCurrentConditions, objSevenDay: ObjectSevenDay, objHazards: ObjectHazards) {
         val hazardRaw = objHazards.hazards
         Utility.writePref(context, "HAZARD_WIDGET", objHazards.getHazardsShort())
         Utility.writePref(context, "7DAY_WIDGET", objSevenDay.sevenDayShort)
-        if (objCc.data != "") {
-            Utility.writePref(context, "CC_WIDGET", objCc.data)
-        }
-        if (objCc.iconUrl != "") {
-            Utility.writePref(context, "CC_WIDGET_ICON_URL", objCc.iconUrl)
-        }
+        if (objCc.data != "") Utility.writePref(context, "CC_WIDGET", objCc.data)
+        if (objCc.iconUrl != "") Utility.writePref(context, "CC_WIDGET_ICON_URL", objCc.iconUrl)
         Utility.writePref(context, "UPDTIME_WIDGET", objCc.status)
-        if (objSevenDay.sevenDayLong != "") {
-            Utility.writePref(context, "7DAY_EXT_WIDGET", objSevenDay.sevenDayLong)
-        }
+        if (objSevenDay.sevenDayLong != "") Utility.writePref(context, "7DAY_EXT_WIDGET", objSevenDay.sevenDayLong)
         Utility.writePref(context, "HAZARD_URL_WIDGET", objHazards.hazards)
         Utility.writePref(context, "HAZARD_RAW_WIDGET", hazardRaw)
-        if (objSevenDay.iconsAsString != "") {
-            Utility.writePref(context, "7DAY_ICONS_WIDGET", objSevenDay.iconsAsString)
-        }
+        if (objSevenDay.iconsAsString != "") Utility.writePref(context, "7DAY_ICONS_WIDGET", objSevenDay.iconsAsString)
         Utility.commitPref(context)
         update(context, CCLegacy)
         update(context, CC)
@@ -179,15 +129,7 @@ object UtilityWidget {
         }
     }
 
-    fun setupIntent(
-        context: Context,
-        remoteViews: RemoteViews,
-        activity: Class<*>,
-        layoutItem: Int,
-        activityFlag: String,
-        activityStringArr: Array<String>,
-        actionString: String
-    ) {
+    fun setupIntent(context: Context, remoteViews: RemoteViews, activity: Class<*>, layoutItem: Int, activityFlag: String, activityStringArr: Array<String>, actionString: String) {
         val requestID = UtilityTime.currentTimeMillis().toInt()
         val intent = Intent(context, activity)
         intent.putExtra(activityFlag, activityStringArr)
@@ -199,15 +141,7 @@ object UtilityWidget {
         remoteViews.setOnClickPendingIntent(layoutItem, pendingIntent)
     }
 
-    fun setupIntent(
-        context: Context,
-        remoteViews: RemoteViews,
-        activity: Class<*>,
-        layoutItem: Int,
-        activityFlag: String,
-        activityString: String,
-        actionString: String
-    ) {
+    fun setupIntent(context: Context, remoteViews: RemoteViews, activity: Class<*>, layoutItem: Int, activityFlag: String, activityString: String, actionString: String) {
         val requestID = UtilityTime.currentTimeMillis().toInt()
         val intent = Intent(context, activity)
         intent.putExtra(activityFlag, activityString)
@@ -219,13 +153,7 @@ object UtilityWidget {
         remoteViews.setOnClickPendingIntent(layoutItem, pendingIntent)
     }
 
-    fun setupIntent(
-        context: Context,
-        remoteViews: RemoteViews,
-        activity: Class<*>,
-        layoutItem: Int,
-        actionString: String
-    ) {
+    fun setupIntent(context: Context, remoteViews: RemoteViews, activity: Class<*>, layoutItem: Int, actionString: String) {
         val requestID = UtilityTime.currentTimeMillis().toInt()
         val intent = Intent(context, activity)
         intent.action = actionString
@@ -246,40 +174,36 @@ object UtilityWidget {
     }
 
     internal fun updateSevenDay(context: Context) {
-        val r = context.contentResolver
-        r.delete(WeatherDataProvider.CONTENT_URI, null, null)
-        val mgr = AppWidgetManager.getInstance(context)
-        val cn = ComponentName(context, WeatherWidgetProvider::class.java)
-        if (WeatherWidgetProvider.sWorkerQueue != null) {
-            WeatherWidgetProvider.sDataObserver =
-                WeatherDataProviderObserver(mgr, cn, WeatherWidgetProvider.sWorkerQueue!!)
-            r.registerContentObserver(
+        val contentResolver = context.contentResolver
+        contentResolver.delete(WeatherDataProvider.CONTENT_URI, null, null)
+        val widgetManager = AppWidgetManager.getInstance(context)
+        val componentName = ComponentName(context, WeatherWidgetProvider::class.java)
+        if (WeatherWidgetProvider.workerQueue != null) {
+            WeatherWidgetProvider.weatherDataProviderObserver =
+                WeatherDataProviderObserver(widgetManager, componentName, WeatherWidgetProvider.workerQueue!!)
+            contentResolver.registerContentObserver(
                 WeatherDataProvider.CONTENT_URI,
                 true,
-                WeatherWidgetProvider.sDataObserver!!
+                WeatherWidgetProvider.weatherDataProviderObserver!!
             )
         }
-        val preferences =
-            context.getSharedPreferences(context.packageName + "_preferences", Context.MODE_PRIVATE)
+        val preferences = context.getSharedPreferences(context.packageName + "_preferences", Context.MODE_PRIVATE)
         val sevenDay = preferences.getString("7DAY_EXT_WIDGET", "No data")!!
-        val dayArr = sevenDay.split("\n\n").dropLastWhile { it.isEmpty() }.toMutableList()
-        if (dayArr.isNotEmpty()) {
-            dayArr[0] = preferences.getString("CC_WIDGET", "No data")!!
-        }
-        (0 until dayArr.lastIndex).forEach {
+        val forecasts = sevenDay.split("\n\n").dropLastWhile { it.isEmpty() }.toMutableList()
+        if (forecasts.isNotEmpty()) forecasts[0] = preferences.getString("CC_WIDGET", "No data")!!
+        forecasts.indices.forEach {
             val uri = ContentUris.withAppendedId(WeatherDataProvider.CONTENT_URI, it.toLong())
             val values = ContentValues()
-            if (it < dayArr.size) {
-                values.put(WeatherDataProvider.Columns.DAY, dayArr[it])
-                r.update(uri, values, null, null)
+            if (it < forecasts.size) {
+                values.put(WeatherDataProvider.Columns.DAY, forecasts[it])
+                contentResolver.update(uri, values, null, null)
             }
         }
         val appWidgetManager = AppWidgetManager.getInstance(context)
         val thisWidget = ComponentName(context, WeatherWidgetProvider::class.java)
         val allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
         allWidgetIds.forEach {
-            val layout =
-                WeatherWidgetProvider.buildLayout(context, it, WeatherWidgetProvider.mIsLargeLayout)
+            val layout = WeatherWidgetProvider.buildLayout(context, it, WeatherWidgetProvider.isLargeLayout)
             appWidgetManager.updateAppWidget(it, layout)
         }
     }

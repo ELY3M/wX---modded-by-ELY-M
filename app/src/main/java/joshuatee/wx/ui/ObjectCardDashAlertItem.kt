@@ -25,60 +25,50 @@ import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
-import androidx.cardview.widget.CardView
+import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.activitiesmisc.SevereWarning
 
-class ObjectCardDashAlertItem(
-        context: Context,
-        val linearLayout: LinearLayout,
-        private val senderName: String,
-        private val eventType: String,
-        private val effectiveTime: String,
-        private val expiresTime: String,
-        private val areaDescription: String
-) {
+class ObjectCardDashAlertItem(context: Context, val linearLayout: LinearLayout, private val severeWarning: SevereWarning, val index: Int) {
 
-    private val objCard: ObjectCard
-    private val textViewTop: ObjectTextView
-    private val textViewTitle: ObjectTextView
-    private val textViewStart: ObjectTextView
-    private val textViewEnd: ObjectTextView
-    private val textViewBottom: ObjectTextView
+    private val objectCard = ObjectCard(context)
+    private val textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
+    private val textViewTitle = ObjectTextView(context)
+    private val textViewStart = ObjectTextView(context)
+    private val textViewEnd = ObjectTextView(context)
+    private val textViewBottom = ObjectTextView(context, backgroundText = true)
+    val radarButton = ObjectButton(context,"Radar", MyApplication.ICON_RADAR)
+    val detailsButton = ObjectButton(context,"Details", MyApplication.ICON_CURRENT)
 
     init {
-        val linearLayoutVertical = LinearLayout(context)
-        textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
-        textViewTitle = ObjectTextView(context)
-        textViewStart = ObjectTextView(context)
-        textViewEnd= ObjectTextView(context)
-        textViewBottom = ObjectTextView(context)
-        textViewBottom.setAsBackgroundText()
-        linearLayoutVertical.orientation = LinearLayout.VERTICAL
-        linearLayoutVertical.gravity = Gravity.CENTER_VERTICAL
-        linearLayoutVertical.addView(textViewTop.tv)
-        linearLayoutVertical.addView(textViewTitle.tv)
-        linearLayoutVertical.addView(textViewStart.tv)
-        linearLayoutVertical.addView(textViewEnd.tv)
-        linearLayoutVertical.addView(textViewBottom.tv)
-        objCard = ObjectCard(context)
-        objCard.addView(linearLayoutVertical)
+        val linearLayoutVertical = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
+        listOf(textViewTop, textViewTitle, textViewStart, textViewEnd, textViewBottom).forEach {
+            linearLayoutVertical.addView(it)
+        }
+        val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        val linearLayoutHorizontal = LinearLayout(context)
+        linearLayoutHorizontal.layoutParams = layoutParams
+        linearLayoutHorizontal.addView(radarButton.card)
+        linearLayoutHorizontal.addView(detailsButton.card)
+        linearLayoutVertical.addView(linearLayoutHorizontal)
+        objectCard.addView(linearLayoutVertical)
         setTextFields()
-        linearLayout.addView(objCard.card)
+        linearLayout.addView(objectCard.card)
     }
 
-    val card: CardView get() = objCard.card
+    val card get() = objectCard.card
 
-    fun setListener(fn: View.OnClickListener) {
-        objCard.card.setOnClickListener(fn)
-    }
+    fun setListener(fn: View.OnClickListener) = objectCard.card.setOnClickListener(fn)
 
     private fun setTextFields() {
-        textViewTop.text = senderName
-        textViewTitle.text = eventType
-        textViewStart.text = effectiveTime.replace("T", " ").replace(Regex(":00-0[0-9]:00"), "")
-        textViewEnd.text = expiresTime.replace("T", " ").replace(Regex(":00-0[0-9]:00"), "")
-        textViewBottom.text = areaDescription
+        textViewTop.text = severeWarning.senderNameList[index]
+        textViewTitle.text = severeWarning.eventList[index]
+        textViewStart.text = severeWarning.effectiveList[index].replace("T", " ").replace(Regex(":00-0[0-9]:00"), "").replace(Regex(":00-10:00"), "")
+        textViewEnd.text = severeWarning.expiresList[index].replace("T", " ").replace(Regex(":00-0[0-9]:00"), "").replace(Regex(":00-10:00"), "")
+        textViewBottom.text = severeWarning.areaDescList[index]
     }
+
+    fun setId(id: Int) { objectCard.card.id = id }
 }
 
 

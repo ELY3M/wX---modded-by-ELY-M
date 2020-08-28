@@ -27,13 +27,13 @@ import android.widget.RemoteViews
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UtilityWidget
-import joshuatee.wx.activitiesmisc.AfdActivity
+import joshuatee.wx.activitiesmisc.WfoTextActivity
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.util.Utility
 
 class ObjectWidgetHwo(context: Context) {
 
-    val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_textview_layout)
+    val remoteViews = RemoteViews(context.packageName, R.layout.widget_textview_layout)
 
     init {
         val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
@@ -42,15 +42,7 @@ class ObjectWidgetHwo(context: Context) {
         remoteViews.setTextViewText(R.id.text1, Utility.fromHtml(hwo))
         remoteViews.setTextViewTextSize(R.id.text1, TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
         if (!MyApplication.widgetPreventTap) {
-            UtilityWidget.setupIntent(
-                    context,
-                    remoteViews,
-                    AfdActivity::class.java,
-                    R.id.text1,
-                    AfdActivity.URL,
-                    arrayOf(wfo, "HWO"),
-                    WidgetFile.HWO.action
-            )
+            UtilityWidget.setupIntent(context, remoteViews, WfoTextActivity::class.java, R.id.text1, WfoTextActivity.URL, arrayOf(wfo, "HWO"), WidgetFile.HWO.action)
         }
     }
 }

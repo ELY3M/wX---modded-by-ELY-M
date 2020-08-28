@@ -22,12 +22,11 @@
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
-import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
@@ -41,19 +40,16 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 import kotlinx.coroutines.*
 
-class SpcSwoStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListener,
-        OnMenuItemClickListener {
+class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
 
     // Show state level SPC SWO graphics for D1-3
     //
     // Arguments
     // 1: day
 
-    companion object {
-        const val NO: String = ""
-    }
+    companion object { const val NO = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private var day = ""
     private var imgUrl = ""
     private lateinit var img: ObjectTouchImageView
@@ -62,20 +58,23 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListene
     private var firstTime = true
     private val imgPrefToken = "SWO_STATE"
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.spcswostate_top, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.action_sector).title = state
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_spcswostate,
-                R.menu.spcswostate,
-                iconsEvenlySpaced = true,
-                bottomToolbar = true
-        )
-        toolbarBottom.setOnMenuItemClickListener(this)
+        super.onCreate(savedInstanceState, R.layout.activity_spcswostate, R.menu.spcswostate_top, iconsEvenlySpaced = true, bottomToolbar = false)
         day = intent.getStringArrayExtra(NO)!![0]
         state = Utility.getWfoSiteName(Location.wfo).split(",")[0]
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv)
-        ObjectSpinner(this, this, this, R.id.spinner1, GlobalArrays.states, state)
+        getContent()
     }
 
     override fun onRestart() {
@@ -85,6 +84,7 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListene
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         title = "SWO D$day"
+        invalidateOptionsMenu()
         imgUrl = UtilitySpcSwo.getSwoStateUrl(state, day)
         bitmap = withContext(Dispatchers.IO) { imgUrl.getImage() }
         img.img.visibility = View.VISIBLE
@@ -92,30 +92,36 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity(), OnItemSelectedListene
         img.firstRunSetZoomPosn(imgPrefToken)
     }
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareBitmap(
-                    this,
-                    this,
-                    "$state SWO D$day",
-                    bitmap
-            )
+            R.id.action_sector -> genericDialog(GlobalArrays.states) {
+                if (firstTime) {
+                    UtilityToolbar.fullScreenMode(this)
+                    firstTime = false
+                }
+                img.setZoom(1.0f)
+                state = GlobalArrays.states[it].split(":")[0]
+                getContent()
+            }
+            R.id.action_share -> UtilityShare.bitmap(this, this, "$state SWO D$day", bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
-        if (firstTime) {
-            UtilityToolbar.fullScreenMode(this)
-            firstTime = false
-        }
-        img.setZoom(1.0f)
-        state = GlobalArrays.states[pos].split(":")[0]
-        getContent()
+    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
+        val objectDialogue = ObjectDialogue(this@SpcSwoStateGraphicsActivity, list)
+        objectDialogue.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
+            dialog.dismiss()
+            UtilityUI.immersiveMode(this)
+        })
+        objectDialogue.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+            fn(which)
+            getContent()
+            dialog.dismiss()
+        })
+        objectDialogue.show()
     }
-
-    override fun onNothingSelected(parent: AdapterView<*>) {}
 
     override fun onStop() {
         img.imgSavePosnZoom(this, imgPrefToken)

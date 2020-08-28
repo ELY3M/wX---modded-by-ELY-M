@@ -24,29 +24,28 @@ package joshuatee.wx.radar
 import android.content.Context
 
 import joshuatee.wx.MyApplication
-import joshuatee.wx.util.UCARRandomAccessFile
 import joshuatee.wx.util.UtilityLog
-import joshuatee.wx.external.ExternalEllipsoid
 import joshuatee.wx.external.ExternalGeodeticCalculator
 import joshuatee.wx.external.ExternalGlobalCoordinates
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
 import joshuatee.wx.settings.UtilityLocation
-import joshuatee.wx.util.UtilityIO
 
 internal object WXGLNexradLevel3TVS {
 
     private const val tvsBaseFn = "nids_tvs_tab"
 
     fun decodeAndPlot(context: Context, radarSite: String, fnSuffix: String): List<Double> {
+        val fileName = tvsBaseFn + fnSuffix
         val stormList = mutableListOf<Double>()
         val location = UtilityLocation.getSiteLocation(radarSite)
-        WXGLDownload.getNidsTab(context, "TVS", radarSite, tvsBaseFn + fnSuffix)
-        val dis: UCARRandomAccessFile
+        WXGLDownload.getNidsTab(context, "TVS", radarSite, fileName)
+        val tvs: MutableList<String>
         try {
-            dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, tvsBaseFn + fnSuffix))
-            dis.bigEndian = true
+            val data = UtilityLevel3TextProduct.readFile(context, fileName)
+            // P  TVS    R7   216/ 50    29    57    57/ 6.5    15.9    6.5/ 22.4    18/ 6.5    &#0;
+            tvs = data.parseColumn(RegExp.tvsPattern1).toMutableList()
         } catch (e: Exception) {
             UtilityLog.handleException(e)
             return listOf()
@@ -54,33 +53,16 @@ internal object WXGLNexradLevel3TVS {
             UtilityLog.handleException(e)
             return listOf()
         }
-        var retStr = UtilityLevel3TextProduct.read(dis)
-        // P  TVS    R7   216/ 50    29    57    57/ 6.5    15.9    6.5/ 22.4    18/ 6.5    &#0;
-        val tvs = retStr.parseColumn(RegExp.tvsPattern1)
-        var tmpStr: String
-        var tmpStrArr: Array<String>
-        var degree: Int
-        var nm: Int
-        val bearing = DoubleArray(2)
-        var start: ExternalGlobalCoordinates
-        var ec: ExternalGlobalCoordinates
         tvs.forEach {
             val ecc = ExternalGeodeticCalculator()
-            tmpStr = it.parse(RegExp.tvsPattern2)
-            tmpStrArr = MyApplication.slash.split(tmpStr)
-            retStr += tmpStr
-            degree = tmpStrArr[0].replace(" ", "").toIntOrNull() ?: 0
-            nm = tmpStrArr[1].replace(" ", "").toIntOrNull() ?: 0
-            start = ExternalGlobalCoordinates(location)
-            ec = ecc.calculateEndingGlobalCoordinates(
-                ExternalEllipsoid.WGS84,
-                start,
-                degree.toDouble(),
-                nm * 1852.0,
-                bearing
-            )
-            stormList.add(ec.latitude)
-            stormList.add(ec.longitude * -1.0)
+            val string = it.parse(RegExp.tvsPattern2)
+            val items = MyApplication.slash.split(string)
+            val degree = items[0].replace(" ", "").toIntOrNull() ?: 0
+            val nm = items[1].replace(" ", "").toIntOrNull() ?: 0
+            val start = ExternalGlobalCoordinates(location)
+            val externalGlobalCoordinates = ecc.calculateEndingGlobalCoordinates(start, degree.toDouble(), nm * 1852.0)
+            stormList.add(externalGlobalCoordinates.latitude)
+            stormList.add(externalGlobalCoordinates.longitude * -1.0)
         }
         return stormList
     }

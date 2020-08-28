@@ -58,7 +58,7 @@ class SettingsLocationCanadaActivity : BaseActivity() {
         "SK: Saskatchewan",
         "YT: Yukon"
     )
-    private lateinit var recyclerView: ObjectRecyclerView
+    private lateinit var objectRecyclerView: ObjectRecyclerView
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,16 +66,11 @@ class SettingsLocationCanadaActivity : BaseActivity() {
         title = "Canadian Locations"
         toolbar.subtitle = "Select a location and then use the back arrow to save."
         cityDisplay = false
-        recyclerView = ObjectRecyclerView(
-            this,
-            this,
-            R.id.card_list,
-            provArr.toMutableList(),
-            ::provClicked
-        )
+        // FIXME don't pass R.id in, assign to val and pass instead of kotlin synthetic
+        objectRecyclerView = ObjectRecyclerView(this, this, R.id.card_list, provArr.toMutableList(), ::provinceClicked)
     }
 
-    private fun provClicked(position: Int) {
+    private fun provinceClicked(position: Int) {
         if (!cityDisplay) {
             provSelected = UtilityStringExternal.truncate(provArr[position], 2)
             title = "Canadian Locations ($provSelected)"
@@ -102,7 +97,7 @@ class SettingsLocationCanadaActivity : BaseActivity() {
             listIds = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-(.*?)_metric_e.html\">.*?</a></li>")
             listCity = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-.*?_metric_e.html\">(.*?)</a></li>")
         }
-        recyclerView.refreshList(listCity.distinct().toMutableList())
+        objectRecyclerView.refreshList(listCity.distinct().toMutableList())
         cityDisplay = true
     }
 } 

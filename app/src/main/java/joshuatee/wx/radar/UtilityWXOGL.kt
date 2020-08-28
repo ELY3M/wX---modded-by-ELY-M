@@ -26,26 +26,20 @@ import android.content.Context
 import java.io.EOFException
 import java.io.File
 import java.io.IOException
-import java.util.Locale
 
 import joshuatee.wx.MyApplication
-import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.external.ExternalPolygon
 import joshuatee.wx.util.UCARRandomAccessFile
-import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
 
 import joshuatee.wx.Extensions.*
 
-import joshuatee.wx.GlobalDictionaries
 import joshuatee.wx.RegExp
 
 object UtilityWXOGL {
 
-    fun getMeteogramUrl(obsSite: String): String {
-        return "https://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=$obsSite"
-    }
+    fun getMeteogramUrl(obsSite: String) = "https://www.nws.noaa.gov/mdl/gfslamp/meteo.php?BackHour=0&TempBox=Y&DewBox=Y&SkyBox=Y&WindSpdBox=Y&WindDirBox=Y&WindGustBox=Y&CigBox=Y&VisBox=Y&ObvBox=Y&PtypeBox=N&PopoBox=Y&LightningBox=Y&ConvBox=Y&sta=$obsSite"
 
     fun getRidPrefix(radarSite: String, product: String): String {
         var ridPrefix = when (radarSite) {
@@ -53,10 +47,7 @@ object UtilityWXOGL {
             "HKI", "HMO", "HKM", "HWA", "APD", "ACG", "AIH", "AHG", "AKC", "ABC", "AEC", "GUA" -> "p"
             else -> "k"
         }
-        // FIXME need TDWR method
-        if (product.startsWith("TV") || product == "TZL" || product.startsWith("TZ") || product == "N1P" || product == "NTP" || product == "ET" || product == "VIL") {
-            ridPrefix = ""
-        }
+        if (WXGLNexrad.isProductTdwr(product)) ridPrefix = ""
         return ridPrefix
     }
 
@@ -66,9 +57,7 @@ object UtilityWXOGL {
             "HKI", "HMO", "HKM", "HWA", "APD", "ACG", "AIH", "AHG", "AKC", "ABC", "AEC", "GUA" -> "p"
             else -> "k"
         }
-        if (tdwr) {
-            ridPrefix = ""
-        }
+        if (tdwr) ridPrefix = ""
         return ridPrefix
     }
 
@@ -77,13 +66,9 @@ object UtilityWXOGL {
         val product = "VWP"
         val l3BaseFn = "nidsVWP"
         val indexString = "0"
-        val ridPrefix = getRidPrefix(radarSite, product)
         val file: File
-        val inputStream = UtilityDownload.getInputStreamFromUrl(
-                MyApplication.NWS_RADAR_PUB + "SL.us008001/DF.of/DC.radar/"
-                        + GlobalDictionaries.NEXRAD_PRODUCT_STRING[product]
-                        + "/SI." + ridPrefix + radarSite.toLowerCase(Locale.US) + "/sn.last"
-        )
+        val url = WXGLDownload.getRadarFileUrl(radarSite, product, false)
+        val inputStream = url.getInputStream()
         if (inputStream != null) {
             UtilityIO.saveInputStream(context, inputStream, l3BaseFn + indexString + "_d")
         } else {
@@ -97,37 +82,23 @@ object UtilityWXOGL {
             val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, l3BaseFn + indexString))
             dis.bigEndian = true
             // ADVANCE PAST WMO HEADER
-            while (true) {
-                if (dis.readShort().toInt() == -1) {
-                    break
-                }
-            }
+            while (true) if (dis.readShort().toInt() == -1) break
             dis.skipBytes(26) // 3 int (12) + 7*2 (14)
-            while (true) {
-                if (dis.readShort().toInt() == -1) {
-                    break
-                }
-            }
+            while (true) if (dis.readShort().toInt() == -1) break
             var byte: Byte?
             var vSpotted = false
             output += "<font face=monospace><small>"
             try {
                 while (!dis.isAtEndOfFile) {
                     byte = dis.readByte()
-                    if (android.os.Build.VERSION.SDK_INT >= 19) {
-                        if (byte.toChar() == 'V') {
-                            vSpotted = true
-                        }
-                        if (Character.isAlphabetic(byte.toInt()) || Character.isWhitespace(byte.toInt()) || Character.isDigit(
-                                        byte.toInt()
-                                ) || Character.isISOControl(byte.toInt()) || Character.isDefined(byte.toInt())
-                        ) {
-                            if (vSpotted) {
-                                output += if (byte == 0.toByte()) {
-                                    "<br>"
-                                } else {
-                                    String(byteArrayOf(byte))
-                                }
+                    if (byte.toChar() == 'V') vSpotted = true
+                    if (Character.isAlphabetic(byte.toInt()) || Character.isWhitespace(byte.toInt())
+                            || Character.isDigit(byte.toInt()) || Character.isISOControl(byte.toInt()) || Character.isDefined(byte.toInt())) {
+                        if (vSpotted) {
+                            output += if (byte == 0.toByte()) {
+                                "<br>"
+                            } else {
+                                String(byteArrayOf(byte))
                             }
                         }
                     }
@@ -148,66 +119,33 @@ object UtilityWXOGL {
         return output
     }
 
-    fun showTextProducts(lat: Double, lon: Double): String {
+    fun showTextProducts(latLon: LatLon): String {
         var html = MyApplication.severeDashboardTor.value + MyApplication.severeDashboardTst.value + MyApplication.severeDashboardFfw.value
-        MyApplication.radarWarningPolygons.forEach {
-            if (it.isEnabled) {
-                html += it.storage.value
-            }
-        }
-        // val warningLatLonPattern: Pattern = Pattern.compile("\"coordinates\":\\[\\[(.*?)\\]\\]\\}")
+        MyApplication.radarWarningPolygons.forEach { if (it.isEnabled) html += it.storage.value }
         // discard  "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3771044",            "type": "Feature",            "geometry": null,
         // Special Weather Statements can either have a polygon or maybe not, need to strip out those w/o polygon
         val urlList = html.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"").toMutableList()
         val urlListCopy = urlList.toMutableList()
         urlListCopy.forEach {
-            //if (html.contains(Regex("\"id\"\\: ." + it + "\",            \"type\": \"Feature\",            \"geometry\": null"))) {
             if (html.contains(Regex("\"id\"\\: ." + it + "\",\\s*\"type\": \"Feature\",\\s*\"geometry\": null"))) {
                 urlList.remove(it)
             }
         }
-        html = html.replace("\n", "")
-        html = html.replace(" ", "")
+        html = html.replace("\n", "").replace(" ", "")
         val polygons = html.parseColumn(RegExp.warningLatLonPattern)
-        var retStr = ""
-        var testArr: List<String>
-        var q = 0
+        var string = ""
         var notFound = true
-        var polyCount = -1
-        polygons.forEach { polys ->
-            polyCount += 1
-            //if (vtecAl.size > polyCount && !vtecAl[polyCount].startsWith("0.EXP") && !vtecAl[polyCount].startsWith("0.CAN")) {
-            //if (true) {
-            val polyTmp = polys.replace("[", "").replace("]", "").replace(",", " ")
-            testArr = polyTmp.split(" ").dropLastWhile { it.isEmpty() }
-            val y = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 == 0 }
-                    .map {
-                        it.toDoubleOrNull() ?: 0.0
-                    }.toList()
-            val x = testArr.asSequence().filterIndexed { idx: Int, _: String -> idx and 1 != 0 }
-                    .map {
-                        it.toDoubleOrNull() ?: 0.0
-                    }.toList()
-            if (y.size > 3 && x.size > 3 && x.size == y.size) {
-                val poly2 = ExternalPolygon.Builder()
-                x.indices.forEach { j ->
-                    poly2.addVertex(
-                            ExternalPoint(
-                                    x[j].toFloat(),
-                                    y[j].toFloat()
-                            )
-                    )
-                }
-                val polygon2 = poly2.build()
-                val contains = polygon2.contains(ExternalPoint(lat.toFloat(), lon.toFloat()))
+        polygons.forEachIndexed { urlIndex, polygon ->
+            val polygonTmp = polygon.replace("[", "").replace("]", "").replace(",", " ")
+            val latLons = LatLon.parseStringToLatLons(polygonTmp)
+            if (latLons.isNotEmpty()) {
+                val contains = ExternalPolygon.polygonContainsPoint(latLon, latLons)
                 if (contains && notFound) {
-                    retStr = urlList[q]
+                    string = urlList[urlIndex]
                     notFound = false
                 }
             }
-            //}
-            q += 1
         }
-        return retStr
+        return string
     }
 }

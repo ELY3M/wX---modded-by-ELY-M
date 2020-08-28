@@ -28,72 +28,47 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
-import androidx.cardview.widget.CardView
 import joshuatee.wx.MyApplication
 
-class ObjectCardVerticalText(context: Context, numColumns: Int) {
+class ObjectCardVerticalText(context: Context, numberOfColumns: Int) {
 
-    private val objCard = ObjectCard(context)
-    private var tvArr = mutableListOf<TextView>()
+    private val objectCard = ObjectCard(context)
+    private val textViews = mutableListOf<TextView>()
 
     init {
-        val ll = LinearLayout(context)
-        ll.gravity = Gravity.CENTER
-        ll.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT
-        )
-        ll.orientation = LinearLayout.HORIZONTAL
-        ll.isBaselineAligned = false
-        objCard.addView(ll)
-        (0 until numColumns).forEach {
-            val llv = LinearLayout(context)
-            llv.layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                1.0f
-            )
-            ll.addView(llv)
-            tvArr.add(TextView(context))
-            tvArr[it].gravity = Gravity.START
-            tvArr[it].layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            llv.addView(tvArr[it])
+        val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.HORIZONTAL, Gravity.CENTER)
+        objectLinearLayout.linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        objectLinearLayout.linearLayout.isBaselineAligned = false
+        objectCard.addView(objectLinearLayout)
+        (0 until numberOfColumns).forEach {_ ->
+            val linearLayout = LinearLayout(context)
+            linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
+            objectLinearLayout.linearLayout.addView(linearLayout)
+            val textView = TextView(context)
+            textViews.add(textView)
+            textView.gravity = Gravity.START
+            textView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            linearLayout.addView(textView)
         }
     }
 
-    constructor(
-        context: Context,
-        numColumns: Int,
-        linearLayout: LinearLayout,
-        toolbar: Toolbar
-    ) : this(context, numColumns) {
+    constructor(context: Context, numberOfColumns: Int, linearLayout: LinearLayout, toolbar: Toolbar) : this(context, numberOfColumns) {
         linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener {
-            UtilityToolbar.showHide(
-                toolbar
-            )
-        })
+        setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar) })
     }
 
-    fun setText(textArr: List<String>) {
-        if (textArr.size == tvArr.size) {
-            (textArr.indices).forEach {
-                tvArr[it].text = textArr[it]
-            }
-            (textArr.indices).forEach {
-                tvArr[it].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
+    fun setText(list: List<String>) {
+        if (list.size == textViews.size) {
+            list.indices.forEach {
+                textViews[it].text = list[it]
+                textViews[it].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
             }
         }
     }
 
-    val card: CardView get() = objCard.card
+    val card get() = objectCard.card
 
-    fun setOnClickListener(fn: View.OnClickListener) {
-        objCard.setOnClickListener(fn)
-    }
+    fun setOnClickListener(fn: View.OnClickListener) = objectCard.setOnClickListener(fn)
 }
 
 

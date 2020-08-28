@@ -24,6 +24,7 @@ package joshuatee.wx.radar
 
 class MetarData {
 
+    // FIXME rename
     // temp / dew per site
     var obsArr = listOf<String>()
     // extended obs per site

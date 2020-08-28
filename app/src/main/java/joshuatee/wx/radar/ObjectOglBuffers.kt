@@ -18,7 +18,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M. 
 
 package joshuatee.wx.radar
 
@@ -41,16 +40,16 @@ open class ObjectOglBuffers() {
     var indexBuffer: ByteBuffer = ByteBuffer.allocate(0)
         private set
     var colorBuffer: ByteBuffer = ByteBuffer.allocate(0)
-    var colorIntArray: List<Int> = listOf()
+    var colorIntArray = listOf<Int>()
     var solidColorRed: Byte = 0
         private set
     var solidColorGreen: Byte = 0
         private set
     var solidColorBlue: Byte = 0
         private set
-    var breakSize: Int = 30000
-    var chunkCount: Int = 0
-    var count: Int = 0
+    var breakSize = 30000
+    var chunkCount = 0
+    var count = 0
         set(count) {
             field = count
             chunkCount = 1
@@ -62,36 +61,31 @@ open class ObjectOglBuffers() {
                 chunkCount += 1
             }
         }
-    var isInitialized: Boolean = false
+    var isInitialized = false
         set(downloaded) {
             field = downloaded
-            if (!isInitialized) {
-                chunkCount = 0
-            }
+            if (!isInitialized) chunkCount = 0
         }
-    var lenInit: Float = 7.5f
-    var xList: DoubleArray = DoubleArray(1)
-    var yList: DoubleArray = DoubleArray(1)
-    var triangleCount: Int = 0
-    var scaleCutOff: Float = 0.0f
-    var type: PolygonType = PolygonType.NONE
-    var geotype: GeographyType = GeographyType.NONE
+    var lenInit = 7.5f
+    var xList = DoubleArray(1)
+    var yList = DoubleArray(1)
+    var triangleCount = 0
+    var scaleCutOff = 0.0f
+    var type = PolygonType.NONE
+    var geotype = GeographyType.NONE
     var warningType: ObjectPolygonWarning? = null
 
-    constructor(type: PolygonType) : this() {
-        this.type = type
-    }
+    constructor(type: PolygonType) : this() { this.type = type }
 
-    constructor(warningType: ObjectPolygonWarning) : this() {
-        this.warningType = warningType
-    }
-    constructor(geotype: GeographyType, scaleCutOff: Float) : this() {
-        this.geotype = geotype
+    constructor(warningType: ObjectPolygonWarning) : this() { this.warningType = warningType }
+
+    constructor(geotype: PolygonType, scaleCutOff: Float) : this() {
+        this.type = geotype
         this.scaleCutOff = scaleCutOff
     }
 
-    constructor(type: PolygonType, scaleCutOff: Float) : this() {
-        this.type = type
+    constructor(geotype: GeographyType, scaleCutOff: Float) : this() {
+        this.geotype = geotype
         this.scaleCutOff = scaleCutOff
     }
 
@@ -130,17 +124,11 @@ open class ObjectOglBuffers() {
         }
     }
 
-    fun putFloat(index: Int, newValue: Float) {
-        floatBuffer.putFloat(index, newValue)
-    }
+    fun putFloat(index: Int, newValue: Float) { floatBuffer.putFloat(index, newValue) }
 
-    fun putIndex(newValue: Short) {
-        indexBuffer.putShort(newValue)
-    }
+    fun putIndex(newValue: Short) { indexBuffer.putShort(newValue) }
 
-    fun putIndex(index: Int, newValue: Short) {
-        indexBuffer.putShort(index, newValue)
-    }
+    fun putIndex(index: Int, newValue: Short) { indexBuffer.putShort(index, newValue) }
 
     fun putColor(b: Byte) {
         if (colorBuffer.position() < colorBuffer.capacity()) {
@@ -155,120 +143,121 @@ open class ObjectOglBuffers() {
     val colorArray: ByteArray
         get() = byteArrayOf(solidColorRed, solidColorGreen, solidColorBlue)
 
-    // provided a list of X1 Y2 X2 Y2 , break apart into seperate X,Y lists
+    // provided a list of X1 Y2 X2 Y2 , break apart into separate X,Y lists
     // used by TVS and HI
     fun setXYList(combinedLatLonList: List<Double>) {
         xList = DoubleArray(combinedLatLonList.size / 2)
         yList = DoubleArray(combinedLatLonList.size / 2)
-        var j = 0
-        while (j < combinedLatLonList.size) {
+        for (j in combinedLatLonList.indices step 2) {
             xList[j / 2] = combinedLatLonList[j]
             yList[j / 2] = combinedLatLonList[j + 1]
-            j += 2
         }
     }
 
-    fun draw(pn: ProjectionNumbers) {
+    fun draw(projectionNumbers: ProjectionNumbers) {
         when (type) {
-            PolygonType.HI -> redrawTriangleUp(this, pn)
-            PolygonType.SPOTTER -> redrawCircle(this, pn)
-            PolygonType.TVS -> redrawTriangle(this, pn)
-            PolygonType.LOCDOT -> redrawCircle(this, pn)
-            PolygonType.WIND_BARB_CIRCLE -> redrawCircleWithColor(this, pn)
-            else -> redrawTriangle(this, pn)
+            PolygonType.HI -> redrawTriangleUp(this, projectionNumbers)
+            PolygonType.SPOTTER -> redrawCircle(this, projectionNumbers)
+            PolygonType.TVS -> redrawTriangleUp(this, projectionNumbers)
+            PolygonType.LOCDOT -> redrawCircle(this, projectionNumbers)
+            PolygonType.WIND_BARB_CIRCLE -> redrawCircleWithColor(this, projectionNumbers)
+            else -> redrawTriangle(this, projectionNumbers)
         }
     }
 
-    //FIXME //add point sprite in JNI
     companion object {
         // TVS
-        private fun redrawTriangle(buffers: ObjectOglBuffers, pn: ProjectionNumbers) {
-            if (!MyApplication.radarUseJni)
-                UtilityWXOGLPerf.genMarkerList(buffers, pn, buffers.xList, buffers.yList)
-            else
+        private fun redrawTriangle(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
+            if (!MyApplication.radarUseJni) {
+                UtilityWXOGLPerf.genMarkerList(buffers, projectionNumbers, buffers.xList, buffers.yList)
+            } else {
                 Jni.genTriangle(
-                    buffers.floatBuffer,
-                    buffers.indexBuffer,
-                    pn.xFloat,
-                    pn.yFloat,
-                    pn.xCenter.toFloat(),
-                    pn.yCenter.toFloat(),
-                    pn.oneDegreeScaleFactorFloat,
-                    buffers.xList,
-                    buffers.yList,
-                    buffers.count,
-                    buffers.lenInit,
-                    buffers.colorBuffer,
-                    buffers.colorArray
+                        buffers.floatBuffer,
+                        buffers.indexBuffer,
+                        projectionNumbers.xFloat,
+                        projectionNumbers.yFloat,
+                        projectionNumbers.xCenter.toFloat(),
+                        projectionNumbers.yCenter.toFloat(),
+                        projectionNumbers.oneDegreeScaleFactorFloat,
+                        buffers.xList,
+                        buffers.yList,
+                        buffers.count,
+                        buffers.lenInit,
+                        buffers.colorBuffer,
+                        buffers.colorArray
                 )
+            }
         }
 
         // HI
-        private fun redrawTriangleUp(buffers: ObjectOglBuffers, pn: ProjectionNumbers) {
-            if (!MyApplication.radarUseJni)
-                UtilityWXOGLPerf.genMarkerList(buffers, pn, buffers.xList, buffers.yList)
-            else
+        private fun redrawTriangleUp(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
+            if (!MyApplication.radarUseJni) {
+                UtilityWXOGLPerf.genMarkerList(buffers, projectionNumbers, buffers.xList, buffers.yList)
+            } else {
                 Jni.genTriangleUp(
-                    buffers.floatBuffer,
-                    buffers.indexBuffer,
-                    pn.xFloat,
-                    pn.yFloat,
-                    pn.xCenter.toFloat(),
-                    pn.yCenter.toFloat(),
-                    pn.oneDegreeScaleFactorFloat,
-                    buffers.xList,
-                    buffers.yList,
-                    buffers.count,
-                    buffers.lenInit,
-                    buffers.colorBuffer,
-                    buffers.colorArray
+                        buffers.floatBuffer,
+                        buffers.indexBuffer,
+                        projectionNumbers.xFloat,
+                        projectionNumbers.yFloat,
+                        projectionNumbers.xCenter.toFloat(),
+                        projectionNumbers.yCenter.toFloat(),
+                        projectionNumbers.oneDegreeScaleFactorFloat,
+                        buffers.xList,
+                        buffers.yList,
+                        buffers.count,
+                        buffers.lenInit,
+                        buffers.colorBuffer,
+                        buffers.colorArray
                 )
+            }
         }
 
         // LOCDOT, SPOTTER
-        private fun redrawCircle(buffers: ObjectOglBuffers, pn: ProjectionNumbers) {
-            if (!MyApplication.radarUseJni)
-                UtilityWXOGLPerf.genCircle(buffers, pn, buffers.xList, buffers.yList)
-            else
+        private fun redrawCircle(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
+            if (!MyApplication.radarUseJni) {
+                UtilityWXOGLPerf.genCircle(buffers, projectionNumbers)
+            } else {
                 Jni.genCircle(
-                    buffers.floatBuffer,
-                    buffers.indexBuffer,
-                    pn.xFloat,
-                    pn.yFloat,
-                    pn.xCenter.toFloat(),
-                    pn.yCenter.toFloat(),
-                    pn.oneDegreeScaleFactorFloat,
-                    buffers.xList,
-                    buffers.yList,
-                    buffers.count,
-                    buffers.lenInit,
-                    buffers.triangleCount,
-                    buffers.colorBuffer,
-                    buffers.colorArray
+                        buffers.floatBuffer,
+                        buffers.indexBuffer,
+                        projectionNumbers.xFloat,
+                        projectionNumbers.yFloat,
+                        projectionNumbers.xCenter.toFloat(),
+                        projectionNumbers.yCenter.toFloat(),
+                        projectionNumbers.oneDegreeScaleFactorFloat,
+                        buffers.xList,
+                        buffers.yList,
+                        buffers.count,
+                        buffers.lenInit,
+                        buffers.triangleCount,
+                        buffers.colorBuffer,
+                        buffers.colorArray
                 )
+            }
         }
 
         // WIND BARB CIRCLE
-        private fun redrawCircleWithColor(buffers: ObjectOglBuffers, pn: ProjectionNumbers) {
-            if (!MyApplication.radarUseJni)
-                UtilityWXOGLPerf.genCircleWithColor(buffers, pn, buffers.xList, buffers.yList)
-            else
+        private fun redrawCircleWithColor(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
+            if (!MyApplication.radarUseJni) {
+                UtilityWXOGLPerf.genCircleWithColor(buffers, projectionNumbers)
+            } else {
                 Jni.genCircleWithColor(
-                    buffers.floatBuffer,
-                    buffers.indexBuffer,
-                    pn.xFloat,
-                    pn.yFloat,
-                    pn.xCenter.toFloat(),
-                    pn.yCenter.toFloat(),
-                    pn.oneDegreeScaleFactorFloat,
-                    buffers.xList,
-                    buffers.yList,
-                    buffers.count,
-                    buffers.lenInit,
-                    buffers.triangleCount,
-                    buffers.colorBuffer,
-                    buffers.colorIntArray.toIntArray()
+                        buffers.floatBuffer,
+                        buffers.indexBuffer,
+                        projectionNumbers.xFloat,
+                        projectionNumbers.yFloat,
+                        projectionNumbers.xCenter.toFloat(),
+                        projectionNumbers.yCenter.toFloat(),
+                        projectionNumbers.oneDegreeScaleFactorFloat,
+                        buffers.xList,
+                        buffers.yList,
+                        buffers.count,
+                        buffers.lenInit,
+                        buffers.triangleCount,
+                        buffers.colorBuffer,
+                        buffers.colorIntArray.toIntArray()
                 )
+            }
         }
     }
 }

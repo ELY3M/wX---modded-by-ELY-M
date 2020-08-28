@@ -33,6 +33,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.UIPreferences
 import joshuatee.wx.radar.UtilityRadar
 import joshuatee.wx.radar.UtilityRadarUI
 import joshuatee.wx.ui.UtilityUI
@@ -47,16 +48,12 @@ object Utility {
         diagnostics += MyApplication.dm.heightPixels.toString() + " Screen height" + MyApplication.newline
         diagnostics += UtilityUI.statusBarHeight(context).toString() + " Status bar height" + MyApplication.newline
         var landScape = false
-        if(context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
-            landScape = true
-        }
+        if (context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) landScape = true
         diagnostics += landScape.toString() + " Landscape" + MyApplication.newline
         return diagnostics
     }
 
-    fun getRadarSiteName(radarSite: String): String {
-        return UtilityRadar.radarIdToName[radarSite] ?: ""
-    }
+    fun getRadarSiteName(radarSite: String) = UtilityRadar.radarIdToName[radarSite] ?: ""
 
     /* fun getRadarSiteLatLon(radarSite: String): LatLon {
          val lat = UtilityRadar.radarSiteToLat[radarSite] ?: ""
@@ -64,33 +61,19 @@ object Utility {
          return LatLon(lat, lon)
      }*/
 
-    fun getRadarSiteX(radarSite: String): String {
-        return UtilityRadar.radarSiteToLat[radarSite] ?: ""
-    }
+    fun getRadarSiteX(radarSite: String) = UtilityRadar.radarSiteToLat[radarSite] ?: ""
 
-    fun getRadarSiteY(radarSite: String): String {
-        return UtilityRadar.radarSiteToLon[radarSite] ?: ""
-    }
+    fun getRadarSiteY(radarSite: String) = UtilityRadar.radarSiteToLon[radarSite] ?: ""
 
-    fun getWfoSiteX(site: String): String {
-        return UtilityRadar.wfoSiteToLat[site] ?: ""
-    }
+    fun getWfoSiteX(site: String) = UtilityRadar.wfoSiteToLat[site] ?: ""
 
-    fun getWfoSiteY(site: String): String {
-        return UtilityRadar.wfoSiteToLon[site] ?: ""
-    }
+    fun getWfoSiteY(site: String) = UtilityRadar.wfoSiteToLon[site] ?: ""
 
-    fun getWfoSiteName(wfo: String): String {
-        return UtilityRadar.wfoIdToName[wfo] ?: ""
-    }
+    fun getWfoSiteName(wfo: String) = UtilityRadar.wfoIdToName[wfo] ?: ""
 
-    fun getSoundingSiteX(site: String): String {
-        return UtilityRadar.soundingSiteToLat[site] ?: ""
-    }
+    fun getSoundingSiteX(site: String) = UtilityRadar.soundingSiteToLat[site] ?: ""
 
-    fun getSoundingSiteY(site: String): String {
-        return UtilityRadar.soundingSiteToLon[site] ?: ""
-    }
+    fun getSoundingSiteY(site: String) = UtilityRadar.soundingSiteToLon[site] ?: ""
 
    /* fun getWfoSiteLatLon(wfo: String): LatLon {
         val lat = UtilityRadar.wfoSitetoLat[wfo] ?: ""
@@ -106,9 +89,7 @@ object Utility {
 
      fun getSoundingSiteName(wfo: String): String {
           var site = UtilityRadar.wfoIdToName[wfo] ?: ""
-          if (site == "") {
-              site = UtilityRadar.soundingIdToName[wfo] ?: ""
-          }
+          if (site == "") site = UtilityRadar.soundingIdToName[wfo] ?: ""
           return site
       }
 
@@ -145,7 +126,6 @@ object Utility {
     }
 
     fun writePrefWithNull(context: Context, key: String, value: String?) {
-        //UtilityLog.d("WRITEPREF", key)
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = preferences.edit()
         editor.putString(key, value)
@@ -153,7 +133,6 @@ object Utility {
     }
 
     fun writePref(context: Context, key: String, value: Int) {
-        //UtilityLog.d("WRITEPREF INT", key + " " + value.toString())
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = preferences.edit()
         editor.putInt(key, value)
@@ -175,7 +154,6 @@ object Utility {
     }
 
     fun writePref(key: String, value: String) {
-        //UtilityLog.d("WRITEPREF", key)
         MyApplication.editor.putString(key, value)
         MyApplication.editor.apply()
     }
@@ -196,7 +174,6 @@ object Utility {
     //}
 
     fun readPref(context: Context, key: String, value: String): String {
-        //UtilityLog.d("READPREF", key)
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         return preferences.getString(key, value)!!
     }
@@ -227,9 +204,9 @@ object Utility {
     }
 
     // FIXME deprecate these
-    fun readPref(key: String, value: String): String = MyApplication.preferences.getString(key, value)!!
+    fun readPref(key: String, value: String) = MyApplication.preferences.getString(key, value)!!
 
-    fun theme(themeStr: String): Int = when {
+    fun theme(themeStr: String) = when {
         themeStr.startsWith("blue") -> R.style.MyCustomTheme_NOAB
         themeStr.startsWith("black") -> R.style.MyCustomTheme_Holo_Dark_NOAB
         themeStr.startsWith("green") -> R.style.MyCustomTheme_Green_NOAB
@@ -238,36 +215,29 @@ object Utility {
         themeStr.startsWith("mixedBlue") -> R.style.MyCustomTheme_mixedBlue_NOAB
         themeStr == "white" -> R.style.MyCustomTheme_white_NOAB
         themeStr.startsWith("whiteNew") -> R.style.MyCustomTheme_whiter_NOAB
+        themeStr.startsWith("allWhite") -> R.style.MyCustomTheme_whitest_NOAB
         themeStr.startsWith("orange") -> R.style.MyCustomTheme_orange_NOAB
         themeStr.startsWith("BlackAqua") -> R.style.MyCustomTheme_BlackAqua_NOAB
+        themeStr.startsWith("BlackNeonGreen") -> R.style.MyCustomTheme_BlackNeonGreen_NOAB
         themeStr.startsWith("WhiteToolbar") -> R.style.MyCustomTheme_white_NOAB
         else -> R.style.MyCustomTheme_NOAB
     }
 
-    fun getHazards(url: String): String =
-            url.parse("<!-- AddThis Button END --> {3}<hr /><br />(.*?)</div>")
+    fun isThemeAllBlack() = UIPreferences.themeInt == R.style.MyCustomTheme_Holo_Dark_NOAB
 
-    fun fromHtml(source: String): String = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+    fun isThemeAllWhite() = UIPreferences.themeInt == R.style.MyCustomTheme_whitest_NOAB
+
+    fun getHazards(url: String) = url.parse("<!-- AddThis Button END --> {3}<hr /><br />(.*?)</div>")
+
+    fun fromHtml(source: String) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
         Html.fromHtml(source, Html.FROM_HTML_MODE_LEGACY).toString()
     } else {
         Html.fromHtml(source).toString()
     }
 
-    fun safeGet(list: List<String>, index: Int): String {
-        return if (list.size <= index) {
-            ""
-        } else {
-            list[index]
-        }
-    }
+    fun safeGet(list: List<String>, index: Int) = if (list.size <= index || index < 0) "" else list[index]
 
-    fun safeGet(list: Array<String>, index: Int): String {
-        return if (list.size <= index) {
-            ""
-        } else {
-            list[index]
-        }
-    }
+    fun safeGet(list: Array<String>, index: Int) = if (list.size <= index) "" else list[index]
 
     fun showVersion(context: Context, activity: Activity): String {
         var version = ""
@@ -280,20 +250,16 @@ object Utility {
                 MyApplication.newline + version + MyApplication.newline + MyApplication.newline +
                 "Use alt-? on the main screen and in nexrad radar to show keyboard shortcuts"
         string += MyApplication.newline + MyApplication.newline + "Diagnostics information:" + MyApplication.newline
-        string += readPref(
-                context,
-                "JOBSERVICE_TIME_LAST_RAN",
-                ""
-        ) + "  Last background update" + MyApplication.newline
+        string += readPref(context, "JOBSERVICE_TIME_LAST_RAN", "") + "  Last background update" + MyApplication.newline
         string += UtilityRadarUI.getLastRadarTime(context) + "  Last radar update" + MyApplication.newline
         string += showDiagnostics(context)
         string += "Tablet: " + UtilityUI.isTablet().toString() + MyApplication.newline
         string += "Forecast zone: " + UtilityDownloadNws.forecastZone + MyApplication.newline
+        string += "Notification Cancel String: " + readPref(context, "NOTIF_STR", "") + MyApplication.newline
         return string
     }
 
-    fun showMainScreenShortCuts(): String {
-        return "Ctrl-r: Nexrad radar" + MyApplication.newline +
+    fun showMainScreenShortCuts() = "Ctrl-r: Nexrad radar" + MyApplication.newline +
                 "Ctrl-m: Show submenu" + MyApplication.newline +
                 "Ctrl-d: Severe Dashboard" + MyApplication.newline +
                 "Ctrl-c: Goes Viewer" + MyApplication.newline +
@@ -301,7 +267,6 @@ object Utility {
                 "Ctrl-s: Settings" + MyApplication.newline +
                 "Ctrl-2: Dual Pane Radar" + MyApplication.newline +
                 "Ctrl-4: Quad Pane Radar" + MyApplication.newline +
-                //"Ctrl-w: US Alerts" + MyApplication.newline +
                 "Ctrl-e: SPC Mesoanalysis" + MyApplication.newline +
                 "Ctrl-n: NCEP Models" + MyApplication.newline +
                 "Ctrl-h: Hourly" + MyApplication.newline +
@@ -311,10 +276,8 @@ object Utility {
                 "Ctrl-z: National text discussions" + MyApplication.newline +
                 "Ctrl-j: Previous tab" + MyApplication.newline +
                 "Ctrl-k: Next tab" + MyApplication.newline
-    }
 
-    fun showRadarShortCuts(): String {
-        return "Ctrl-l: Show map" + MyApplication.newline +
+    fun showRadarShortCuts() = "Ctrl-l: Show map" + MyApplication.newline +
                 "Ctrl-m: Show submenu" + MyApplication.newline +
                 "Ctrl-a: Animate / stop animate" + MyApplication.newline +
                 "Ctrl-r: Show reflectivity" + MyApplication.newline +
@@ -326,23 +289,16 @@ object Utility {
                 "Ctrl-DownArrow: Zoom in" + MyApplication.newline +
                 "Arrow keys: pan radar" + MyApplication.newline +
                 "Reload key: reload radar" + MyApplication.newline
-    }
 
-    fun showWfoTextShortCuts(): String {
-        return "Ctrl-l: Show map" + MyApplication.newline +
+    fun showWfoTextShortCuts() = "Ctrl-l: Show map" + MyApplication.newline +
                 "Ctrl-m: Show submenu" + MyApplication.newline +
                 "Ctrl-f: Toggle favorite" + MyApplication.newline +
                 "Ctrl-p: Play audio - TTS" + MyApplication.newline +
                 "Ctrl-s: Stop audio - TTS" + MyApplication.newline +
                 "Ctrl-d: Show navigation drawer" + MyApplication.newline
-    }
 
-    fun showLocationEditShortCuts(): String {
-        return "Ctrl-g: Use GPS to find location" + MyApplication.newline +
-                "Ctrl-m: Show submenu" + MyApplication.newline
-                //"Ctrl-a: Animate / stop animate" + MyApplication.newline +
+    fun showLocationEditShortCuts() = "Ctrl-g: Use GPS to find location" + MyApplication.newline + "Ctrl-m: Show submenu" + MyApplication.newline
 
-    }
         
     fun checkInternet(context: Context) {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

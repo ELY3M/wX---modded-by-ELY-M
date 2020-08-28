@@ -33,9 +33,7 @@ private constructor(private val name: String) {
      *
      * @return  string representation
      */
-    override fun toString(): String {
-        return name
-    }
+    override fun toString() = name
 
     companion object {
 
@@ -52,8 +50,7 @@ private constructor(private val name: String) {
          * <tt>magic</tt>
          * @throws IllegalArgumentException  if <tt>magic.length&lt;MAGIC_SIZE</tt>
          */
-        fun getCompression(magic: ByteArray): Compression {
-            return if (magic.size < MAGIC_SIZE) {
+        fun getCompression(magic: ByteArray): Compression = if (magic.size < MAGIC_SIZE) {
                 throw IllegalArgumentException(
                     "Magic buffer must be at least MAGIC_SIZE=" + MAGIC_SIZE +
                             " bytes"
@@ -70,7 +67,6 @@ private constructor(private val name: String) {
             } else {
                 NONE
             }
-        }
 
         /**
          * Returns a decompressed version of the given input stream.
@@ -122,9 +118,7 @@ private constructor(private val name: String) {
              * implementation used here too). */
                 /* (bug ID 4812237 submitted to developer.java.sun.com by mbt) */
                 return object : GZIPInputStream(raw) {
-                    override fun markSupported(): Boolean {
-                        return false
-                    }
+                    override fun markSupported(): Boolean = false
                 }
             }
         }
@@ -136,7 +130,6 @@ private constructor(private val name: String) {
             @Throws(IOException::class)
             override fun decompress(raw: InputStream): InputStream {
                 //System.out.println("BZIP2 COMPRESSION FOUND");
-
                 /* Eat the first two bytes. */
                 if (raw.read().toChar() != 'B' || raw.read().toChar() != 'Z') {
                     throw IllegalArgumentException(
@@ -152,10 +145,7 @@ private constructor(private val name: String) {
          */
         private val COMPRESS: Compression = object : Compression("compress") {
             @Throws(IOException::class)
-            override fun decompress(raw: InputStream): InputStream {
-                //System.out.println("UNIZ .Z COMPRESSION FOUND");
-                return UncompressInputStream(raw)
-            }
+            override fun decompress(raw: InputStream): InputStream = UncompressInputStream(raw)
         }
     }
 }

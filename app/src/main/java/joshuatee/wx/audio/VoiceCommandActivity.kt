@@ -39,17 +39,16 @@ class VoiceCommandActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainView = findViewById(android.R.id.content)
-        if (UtilityTts.mMediaPlayer != null && UtilityTts.mMediaPlayer!!.isPlaying) {
-            UtilityTts.mMediaPlayer!!.stop()
+        if (UtilityTts.mediaPlayer != null && UtilityTts.mediaPlayer!!.isPlaying) {
+            UtilityTts.mediaPlayer!!.stop()
             UtilityTts.ttsIsPaused = true
         }
-        val i = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US")
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US")
         try {
-            startActivityForResult(i, requestOk)
+            startActivityForResult(intent, requestOk)
         } catch (e: Exception) {
-            Toast.makeText(this, "Error initializing speech to text engine.", Toast.LENGTH_LONG)
-                    .show()
+            Toast.makeText(this, "Error initializing speech to text engine.", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -59,17 +58,8 @@ class VoiceCommandActivity : Activity() {
             val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
             UtilityUI.makeSnackBar(mainView, thingsYouSaid!![0])
             val address = thingsYouSaid[0]
-            val gotHit = UtilityVoiceCommand.processCommand(
-                    this,
-                    mainView,
-                    address,
-                    Location.rid,
-                    Location.wfo,
-                    Location.state
-            )
-            if (!gotHit) {
-                finish()
-            }
+            val gotHit = UtilityVoiceCommand.processCommand(this, mainView, address, Location.rid, Location.wfo, Location.state)
+            if (!gotHit) finish()
         } else {
             finish()
         }

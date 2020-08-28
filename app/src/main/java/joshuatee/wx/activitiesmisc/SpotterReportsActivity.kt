@@ -28,7 +28,6 @@ import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.UtilitySpotter
 import joshuatee.wx.radar.LatLon
-import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectRecyclerViewGeneric
@@ -36,44 +35,37 @@ import joshuatee.wx.util.UtilityTime
 
 class SpotterReportsActivity : BaseActivity() {
 
-    // TODO onrestart
-
     //
     // Show active spotter reports
     //
 
+    private lateinit var objectRecyclerViewGeneric: ObjectRecyclerViewGeneric
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-            savedInstanceState,
-            R.layout.activity_recyclerview_toolbar,
-            null,
-            false
-        )
-        val objectRecyclerViewGeneric = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
-        val adapterSpotterReports = AdapterSpotterReports(UtilitySpotter.spotterReports)
+        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, null, false)
+        objectRecyclerViewGeneric = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
+        val adapterSpotterReports = AdapterSpotterReports(UtilitySpotter.reports)
         objectRecyclerViewGeneric.recyclerView.adapter = adapterSpotterReports
-        title = UtilitySpotter.spotterReports.size.toString() + " Spotter reports " + UtilityTime.gmtTime("HH:mm")
+        updateTitles()
         adapterSpotterReports.setOnItemClickListener(object : AdapterSpotterReports.MyClickListener {
-            override fun onItemClick(position: Int) {
-                itemSelected(position)
-            }
+            override fun onItemClick(position: Int) { itemSelected(position) }
         })
     }
 
+    override fun onRestart() {
+        objectRecyclerViewGeneric.recyclerView.adapter = AdapterSpotterReports(UtilitySpotter.reports)
+        updateTitles()
+        super.onRestart()
+    }
+
+    private fun updateTitles() {
+        title = UtilitySpotter.reports.size.toString() + " Spotter reports"
+        toolbar.subtitle = UtilityTime.gmtTime("HH:mm") + " UTC"
+    }
+
     private fun itemSelected(position: Int) {
-        val radarSite = UtilityLocation.getNearestOffice(
-            "RADAR",
-            LatLon(
-                UtilitySpotter.spotterReports[position].lat,
-                UtilitySpotter.spotterReports[position].lon
-            )
-        )
-        ObjectIntent(
-            this,
-            WXGLRadarActivity::class.java,
-            WXGLRadarActivity.RID,
-            arrayOf(radarSite, "", "N0Q", "", UtilitySpotter.spotterReports[position].uniq)
-        )
+        val radarSite = UtilityLocation.getNearestOffice("RADAR", LatLon(UtilitySpotter.reports[position].lat, UtilitySpotter.reports[position].lon))
+        ObjectIntent.showRadar(this, arrayOf(radarSite, "", "N0Q", "", UtilitySpotter.reports[position].uniq))
     }
 } 

@@ -24,7 +24,7 @@ package joshuatee.wx.wpc
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.content.res.Configuration
-import androidx.appcompat.widget.Toolbar
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import joshuatee.wx.Extensions.getImage
@@ -41,41 +41,48 @@ import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_wpcimages.*
 
-class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
-        Toolbar.OnMenuItemClickListener {
+class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
 
-    companion object {
-        const val URL: String = ""
-    }
+    companion object { const val URL = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
     private var timePeriod = 1
     private var firstRun = false
     private var imageLoaded = false
-    private lateinit var actionBack: MenuItem
-    private lateinit var actionForward: MenuItem
     private lateinit var drw: ObjectNavDrawerCombo
     private lateinit var activityArguments: Array<String>
     private var calledFromHomeScreen = false
     private var homeScreenId = ""
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.wpcimages, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val actionBack = menu.findItem(R.id.action_back)
+        val actionForward = menu.findItem(R.id.action_forward)
+        actionBack!!.isVisible = false
+        actionForward!!.isVisible = false
+        if (drw.getUrl().contains("https://graphical.weather.gov/images/conus/")) {
+            actionBack.isVisible = true
+            actionForward.isVisible = true
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_wpcimages, R.menu.wpcimages, iconsEvenlySpaced = true, bottomToolbar = true)
-        toolbarBottom.setOnMenuItemClickListener(this)
+        super.onCreate(savedInstanceState, R.layout.activity_wpcimages, R.menu.wpcimages, iconsEvenlySpaced = true, bottomToolbar = false)
         img.setOnClickListener(this)
         img.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeLeft() {
-                if (img.currentZoom < 1.01f) {
-                    showNextImg()
-                }
+                if (img.currentZoom < 1.01f) showNextImg()
             }
 
             override fun onSwipeRight() {
-                if (img.currentZoom < 1.01f) {
-                    showPrevImg()
-                }
+                if (img.currentZoom < 1.01f) showPrevImg()
             }
         })
         activityArguments = intent.getStringArrayExtra(URL)!!
@@ -85,23 +92,10 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
                 calledFromHomeScreen = true
             }
         }
-        val menu = toolbarBottom.menu
-        actionBack = menu.findItem(R.id.action_back)
-        actionForward = menu.findItem(R.id.action_forward)
-        actionBack.isVisible = false
-        actionForward.isVisible = false
-        UtilityWpcImages.createData()
-        drw = ObjectNavDrawerCombo(
-                this,
-                UtilityWpcImages.groups,
-                UtilityWpcImages.longCodes,
-                UtilityWpcImages.shortCodes,
-                this,
-                "WPG_IMG"
-        )
+        UtilityWpcImages.create()
+        drw = ObjectNavDrawerCombo(this, UtilityWpcImages.groups, UtilityWpcImages.longCodes, UtilityWpcImages.shortCodes, this, "WPG_IMG")
         drw.setListener(::getContentFixThis)
         toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
-        toolbarBottom.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
         getContent()
     }
 
@@ -115,26 +109,13 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        val getUrl: String
         if (!calledFromHomeScreen) {
             title = "Images"
             toolbar.subtitle = drw.getLabel()
-            when {
-                drw.getUrl().contains("https://graphical.weather.gov/images/conus/") -> {
-                    getUrl = drw.getUrl() + timePeriod + "_conus.png"
-                    actionBack.isVisible = true
-                    actionForward.isVisible = true
-                }
-                drw.getUrl().contains("aviationweather") -> {
-                    actionBack.isVisible = true
-                    actionForward.isVisible = true
-                    getUrl = drw.getUrl()
-                }
-                else -> {
-                    actionBack.isVisible = false
-                    actionForward.isVisible = false
-                    getUrl = drw.getUrl()
-                }
+            val getUrl = when {
+                drw.getUrl().contains("https://graphical.weather.gov/images/conus/") -> drw.getUrl() + timePeriod + "_conus.png"
+                drw.getUrl().contains("aviationweather") -> drw.getUrl()
+                else -> drw.getUrl()
             }
             Utility.writePref(this@WpcImagesActivity, "WPG_IMG_FAV_URL", drw.getUrl())
             Utility.writePref(this@WpcImagesActivity, "WPG_IMG_IDX", drw.imgIdx)
@@ -152,6 +133,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
             firstRun = true
         }
         imageLoaded = true
+        invalidateOptionsMenu()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -164,51 +146,40 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener,
         drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true
-        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
         when (item.itemId) {
             R.id.action_forward -> {
                 timePeriod += 1
                 getContent()
             }
             R.id.action_back -> {
-                timePeriod--
+                timePeriod -= 1
                 getContent()
             }
             R.id.action_share -> {
-                if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
+                if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else
-                    UtilityShare.shareBitmap(this, this, drw.getLabel(), bitmap)
+                    UtilityShare.bitmap(this, this, drw.getLabel(), bitmap)
             }
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean =
-            drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
-
     override fun onClick(v: View) {
-        when (v.id) {
-            R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
-        }
+        when (v.id) {R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
     override fun onStop() {
-        if (imageLoaded && activityArguments.size < 2) {
-            UtilityImg.imgSavePosnZoom(this, img, "WPCIMG")
-        }
+        if (imageLoaded && activityArguments.size < 2) UtilityImg.imgSavePosnZoom(this, img, "WPCIMG")
         super.onStop()
     }
 
     private fun showNextImg() {
         drw.imgIdx += 1
-        if (UtilityWpcImages.shortCodes[drw.imgGroupIdx][drw.imgIdx] == "") {
-            drw.imgIdx = 0
-        }
+        if (UtilityWpcImages.shortCodes[drw.imgGroupIdx][drw.imgIdx] == "") drw.imgIdx = 0
         getContent()
     }
 

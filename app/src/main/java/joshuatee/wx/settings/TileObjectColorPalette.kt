@@ -34,38 +34,29 @@ import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityLog
 
-internal class TileObjectColorPalette(
-    val colorMapLabel: String,
-    val toolbar: Toolbar,
-    val prefToken: String,
-    context: Context,
-    product: String,
-    val builtin: Boolean
-) {
+internal class TileObjectColorPalette(val colorMapLabel: String, val toolbar: Toolbar, val prefToken: String, context: Context, product: String, val builtin: Boolean) {
 
     val bitmapWithText: Bitmap
 
     init {
         val oldMap: String
         val bitmap: Bitmap
-        var textColor = Color.WHITE
-        if (builtin) {
-            textColor = Color.YELLOW
-        }
+        val textColor = if (builtin) Color.YELLOW else Color.WHITE
+        val productAsInt = product.toIntOrNull() ?: 94
         if (UtilityFileManagement.internalFileExist(context, "colormap" + product + this.colorMapLabel)) {
             bitmapWithText = UtilityIO.bitmapFromInternalStorage(context, "colormap" + product + this.colorMapLabel)
         } else {
-            oldMap = MyApplication.radarColorPalette[product]!!
-            MyApplication.radarColorPalette[product] = colorMapLabel
+            oldMap = MyApplication.radarColorPalette[productAsInt]!!
+            MyApplication.radarColorPalette[productAsInt] = colorMapLabel
             try {
-                UtilityColorPaletteGeneric.loadColorMap(context, product)
+                UtilityColorPaletteGeneric.loadColorMap(context, productAsInt)
             } catch (e: Exception) {
                 UtilityLog.handleException(e)
             }
-            bitmap = UtilityUSImgWX.bitmapForColorPalette(context, product)
+            bitmap = UtilityUSImgWX.bitmapForColorPalette(context, productAsInt)
             bitmapWithText = UtilityImg.drawTextToBitmap(context, bitmap, colorMapLabel, textColor)
             UtilityIO.bitmapToInternalStorage(context, bitmapWithText, "colormap$product$colorMapLabel")
-            MyApplication.radarColorPalette[product] = oldMap
+            MyApplication.radarColorPalette[productAsInt] = oldMap
         }
     }
 }

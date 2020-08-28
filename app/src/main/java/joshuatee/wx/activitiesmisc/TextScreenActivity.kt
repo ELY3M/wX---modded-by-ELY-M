@@ -38,17 +38,18 @@ import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
+// TODO rename to TextViewer
 class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
+    //
     // arg0  URL or text chunk depending on if start with "http"
     // arg1  Title
     // arg2 if "sound" will play TTS on first load
+    //
 
-    companion object {
-        const val URL: String = ""
-    }
+    companion object { const val URL = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private lateinit var activityArguments: Array<String>
     private var url = ""
     private var html = ""
@@ -56,25 +57,15 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-            savedInstanceState,
-            R.layout.activity_linear_layout_bottom_toolbar,
-            R.menu.shared_tts
-        )
-        val menu = toolbarBottom.menu
-        val playlistMi = menu.findItem(R.id.action_playlist)
-        playlistMi.isVisible = false
+        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.shared_tts)
+        toolbarBottom.menu.findItem(R.id.action_playlist).isVisible = false
         toolbarBottom.setOnMenuItemClickListener(this)
         activityArguments = intent.getStringArrayExtra(URL)!!
         url = activityArguments[0]
         title = activityArguments[1]
-        textCard = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         if (!url.startsWith("http")) {
-            if (url.contains("<")) {
-                textCard.text = Utility.fromHtml(url)
-            } else {
-                textCard.text = url
-            }
+            if (url.contains("<")) textCard.text = Utility.fromHtml(url) else textCard.text = url
             html = url
         } else {
             getContent()
@@ -82,9 +73,7 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onRestart() {
-        if (url.startsWith("http")) {
-            getContent()
-        }
+        if (url.startsWith("http")) getContent()
         super.onRestart()
     }
 
@@ -95,15 +84,10 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, html, "txt", "txt")) {
-            return true
-        }
+        val textToShare = UtilityShare.prepTextForShare(html)
+        if (audioPlayMenu(item.itemId, html, "txt", "txt")) return true
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(
-                this,
-                activityArguments[1],
-                Utility.fromHtml(html)
-            )
+            R.id.action_share -> UtilityShare.text(this, activityArguments[1], textToShare)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

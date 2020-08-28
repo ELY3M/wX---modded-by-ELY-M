@@ -24,33 +24,32 @@ package joshuatee.wx.util
 import java.nio.ByteBuffer
 
 import joshuatee.wx.external.ExternalGlobalCoordinates
+import joshuatee.wx.radar.LatLon
 
 import kotlin.math.*
 
 object UtilityCanvasProjection {
 
-    fun compute4326Numbers(x: Double, y: Double, pn: ProjectionNumbers): DoubleArray =
+    fun compute4326Numbers(x: Double, y: Double, pn: ProjectionNumbers) =
         doubleArrayOf(
             (-((y - pn.yDbl) * pn.scale) + pn.xCenter),
             (-((x - pn.xDbl) * pn.scale) + pn.yCenter)
         )
 
-    fun compute4326NumbersFloatToBuffer(
-        numBuffer: ByteBuffer,
-        tmpBuffer: ByteBuffer,
-        pn: ProjectionNumbers
-    ) {
+    fun compute4326Numbers(latLon: LatLon, projectionNumbers: ProjectionNumbers) = compute4326Numbers(latLon.lat, latLon.lon, projectionNumbers)
+
+    fun compute4326NumbersFloatToBuffer(numBuffer: ByteBuffer, tmpBuffer: ByteBuffer, projectionNumbers: ProjectionNumbers) {
         numBuffer.position(0)
         tmpBuffer.position(0)
         var x: Float
         var y: Float
         var xTmp: Float
         var yTmp: Float
-        val pnXFloat = pn.xFloat
-        val pnYFloat = pn.yFloat
-        val pnScaleFloat = pn.scaleFloat
-        val pnXCenter = pn.xCenter
-        val pnYCenter = pn.yCenter
+        val pnXFloat = projectionNumbers.xFloat
+        val pnYFloat = projectionNumbers.yFloat
+        val pnScaleFloat = projectionNumbers.scaleFloat
+        val pnXCenter = projectionNumbers.xCenter
+        val pnYCenter = projectionNumbers.yCenter
         try {
             while (numBuffer.position() < numBuffer.capacity()) {
                 xTmp = numBuffer.float
@@ -67,22 +66,18 @@ object UtilityCanvasProjection {
         }
     }
 
-    fun computeMercatorFloatToBuffer(
-        numBuffer: ByteBuffer,
-        tmpBuffer: ByteBuffer,
-        pn: ProjectionNumbers
-    ) {
+    fun computeMercatorFloatToBuffer(numBuffer: ByteBuffer, tmpBuffer: ByteBuffer, projectionNumbers: ProjectionNumbers) {
         numBuffer.position(0)
         tmpBuffer.position(0)
         var x: Float
         var y: Float
         var xTmp: Float
         var yTmp: Float
-        val pnXFloat = pn.xFloat
-        val pnYFloat = pn.yFloat
-        val pnXCenter = pn.xCenter
-        val pnYCenter = pn.yCenter
-        val oneDegreeScaleFactor = pn.oneDegreeScaleFactorFloat
+        val pnXFloat = projectionNumbers.xFloat
+        val pnYFloat = projectionNumbers.yFloat
+        val pnXCenter = projectionNumbers.xCenter
+        val pnYCenter = projectionNumbers.yCenter
+        val oneDegreeScaleFactor = projectionNumbers.oneDegreeScaleFactorFloat
         while (numBuffer.position() < numBuffer.capacity()) {
             xTmp = numBuffer.float
             yTmp = numBuffer.float
@@ -99,11 +94,11 @@ object UtilityCanvasProjection {
         }
     }
 
-    fun computeMercatorNumbers(ec: ExternalGlobalCoordinates, pn: ProjectionNumbers): DoubleArray {
-        return computeMercatorNumbers(ec.latitude, ec.longitude * -1.0, pn)
-    }
+    fun computeMercatorNumbers(latLon: LatLon, projectionNumbers: ProjectionNumbers) = computeMercatorNumbers(latLon.lat, latLon.lon, projectionNumbers)
 
-    fun computeMercatorNumbers(x: Double, y: Double, pn: ProjectionNumbers): DoubleArray =
+    fun computeMercatorNumbers(ec: ExternalGlobalCoordinates, pn: ProjectionNumbers) = computeMercatorNumbers(ec.latitude, ec.longitude * -1.0, pn)
+
+    fun computeMercatorNumbers(x: Double, y: Double, pn: ProjectionNumbers) =
         doubleArrayOf(
             (-((y - pn.yDbl) * pn.oneDegreeScaleFactor)) + pn.xCenter.toFloat(),
             (-((180 / PI * log(

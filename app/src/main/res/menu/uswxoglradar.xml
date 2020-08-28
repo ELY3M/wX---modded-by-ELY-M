@@ -23,7 +23,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_ridmap"
-        android:icon="@drawable/ic_public_24dp"
+        android:icon="@drawable/ic_public_24dp_white"
         android:title="@string/label_rid_map"
         app:showAsAction="always" />
     <item
@@ -44,19 +44,19 @@
 
     <item
         android:id="@+id/action_a"
-        android:icon="@drawable/ic_play_arrow_24dp"
+        android:icon="@drawable/ic_play_arrow_24dp_white"
         android:title="@string/label_a"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_fav"
-        android:icon="@drawable/ic_star_outline_24dp"
+        android:icon="@drawable/ic_star_outline_24dp_white"
         android:title="@string/label_toggle_favorite"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share_and_tools"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_jellybean_drawtools"
         android:title="@string/label_radar_jellybean_drawtools"

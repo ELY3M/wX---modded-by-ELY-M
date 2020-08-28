@@ -40,11 +40,7 @@ import java.util.Random
 /**
  * Our data observer just notifies an update for all weather widgets when it detects a change.
  */
-class WeatherDataProviderObserver(
-    private val mAppWidgetManager: AppWidgetManager,
-    private val mComponentName: ComponentName,
-    h: Handler
-) : ContentObserver(h) {
+class WeatherDataProviderObserver(private val mAppWidgetManager: AppWidgetManager, private val mComponentName: ComponentName, handler: Handler) : ContentObserver(handler) {
 
     override fun onChange(selfChange: Boolean) {
         // The data has changed, so notify the widget that the collection view needs to be updated.
@@ -62,9 +58,9 @@ class WeatherDataProviderObserver(
 class WeatherWidgetProvider : AppWidgetProvider() {
     init {
         // Start the worker thread
-        sWorkerThread = HandlerThread("WeatherWidgetProvider-worker")
-        sWorkerThread!!.start()
-        sWorkerQueue = Handler(sWorkerThread!!.looper)
+        workerThread = HandlerThread("WeatherWidgetProvider-worker")
+        workerThread!!.start()
+        workerQueue = Handler(workerThread!!.looper)
     }
 
     // XXX: clear the worker queue if we are destroyed?
@@ -75,16 +71,16 @@ class WeatherWidgetProvider : AppWidgetProvider() {
         // user interaction in the main app.  To ensure that the widget always reflects the current
         // state of the data, we must listen for changes and update ourselves accordingly.
         Utility.writePref(context, "WIDGETS_ENABLED", "true")
-        val r = context.contentResolver
-        if (sDataObserver == null) {
-            val mgr = AppWidgetManager.getInstance(context)
-            val cn = ComponentName(context, WeatherWidgetProvider::class.java)
-            sDataObserver = WeatherDataProviderObserver(mgr, cn, sWorkerQueue!!)
-            r.registerContentObserver(WeatherDataProvider.CONTENT_URI, true, sDataObserver!!)
+        val contentResolver = context.contentResolver
+        if (weatherDataProviderObserver == null) {
+            val appWidgetManager = AppWidgetManager.getInstance(context)
+            val componentName = ComponentName(context, WeatherWidgetProvider::class.java)
+            weatherDataProviderObserver = WeatherDataProviderObserver(appWidgetManager, componentName, workerQueue!!)
+            contentResolver.registerContentObserver(WeatherDataProvider.CONTENT_URI, true, weatherDataProviderObserver!!)
         }
     }
 
-    override fun onReceive(ctx: Context, intent: Intent) {
+    override fun onReceive(context: Context, intent: Intent) {
         val action = intent.action
         if (action == REFRESH_ACTION) {
             // BroadcastReceivers have a limited amount of time to do work, so for this sample, we
@@ -92,71 +88,55 @@ class WeatherWidgetProvider : AppWidgetProvider() {
             // can be triggered from a background service, or perhaps as a result of user actions
             // inside the main application.
             //val context = ctx
-            sWorkerQueue!!.removeMessages(0)
-            sWorkerQueue!!.post {
-                val r = ctx.contentResolver
-                val c = r.query(WeatherDataProvider.CONTENT_URI, null, null, null, null)
-                val count = c!!.count
+            workerQueue!!.removeMessages(0)
+            workerQueue!!.post {
+                val contentResolver = context.contentResolver
+                val cursor = contentResolver.query(WeatherDataProvider.CONTENT_URI, null, null, null, null)
+                val count = cursor!!.count
                 (0 until count).forEach {
-                    val uri =
-                        ContentUris.withAppendedId(WeatherDataProvider.CONTENT_URI, it.toLong())
+                    val uri = ContentUris.withAppendedId(WeatherDataProvider.CONTENT_URI, it.toLong())
                     val values = ContentValues()
-                    values.put(
-                        WeatherDataProvider.Columns.TEMPERATURE,
-                        Random().nextInt(sMaxDegrees)
-                    )
-                    r.update(uri, values, null, null)
+                    values.put(WeatherDataProvider.Columns.TEMPERATURE, Random().nextInt(maxDegrees))
+                    contentResolver.update(uri, values, null, null)
                 }
-                r.registerContentObserver(WeatherDataProvider.CONTENT_URI, true, sDataObserver!!)
-                val mgr = AppWidgetManager.getInstance(ctx)
-                val cn = ComponentName(ctx, WeatherWidgetProvider::class.java)
-                mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.weather_list)
+                contentResolver.registerContentObserver(WeatherDataProvider.CONTENT_URI, true, weatherDataProviderObserver!!)
+                val appWidgetManager = AppWidgetManager.getInstance(context)
+                val componentName = ComponentName(context, WeatherWidgetProvider::class.java)
+                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetManager.getAppWidgetIds(componentName), R.id.weather_list)
             }
         } else if (action == CLICK_ACTION) {
             val day = intent.getStringExtra(EXTRA_DAY_ID)
-            val formatStr = ctx.resources.getString(R.string.toast_format_string)
-            Toast.makeText(ctx, String.format(formatStr, day), Toast.LENGTH_SHORT).show()
+            val formatStr = context.resources.getString(R.string.toast_format_string)
+            Toast.makeText(context, String.format(formatStr, day), Toast.LENGTH_SHORT).show()
         }
-        super.onReceive(ctx, intent)
+        super.onReceive(context, intent)
     }
 
-    override fun onUpdate(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
-    ) {
+    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         // Update each of the widgets with the remote adapter
-
         UtilityWidget.updateSevenDay(context)
         super.onUpdate(context, appWidgetManager, appWidgetIds)
     }
 
-    override fun onAppWidgetOptionsChanged(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetId: Int,
-        newOptions: Bundle
-    ) {
+    override fun onAppWidgetOptionsChanged(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int, newOptions: Bundle) {
         val minHeight = newOptions.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT)
-        mIsLargeLayout = minHeight >= 100
-        val layout: RemoteViews = buildLayout(context, appWidgetId, mIsLargeLayout)
+        isLargeLayout = minHeight >= 100
+        val layout: RemoteViews = buildLayout(context, appWidgetId, isLargeLayout)
         appWidgetManager.updateAppWidget(appWidgetId, layout)
     }
 
     companion object {
-        const val CLICK_ACTION: String =
-            "${MyApplication.packageNameAsString}.weatherlistwidget.CLICK"
-        const val REFRESH_ACTION: String =
-            "${MyApplication.packageNameAsString}.weatherlistwidget.REFRESH"
-        const val EXTRA_DAY_ID: String =
-            "${MyApplication.packageNameAsString}.weatherlistwidget.day"
-        var sWorkerThread: HandlerThread? = null
-        var sWorkerQueue: Handler? = null
-        var sDataObserver: WeatherDataProviderObserver? = null
-        private const val sMaxDegrees = 96
-        var mIsLargeLayout: Boolean = true
+        const val CLICK_ACTION = "${MyApplication.packageNameAsString}.weatherlistwidget.CLICK"
+        const val REFRESH_ACTION = "${MyApplication.packageNameAsString}.weatherlistwidget.REFRESH"
+        const val EXTRA_DAY_ID = "${MyApplication.packageNameAsString}.weatherlistwidget.day"
+        var workerThread: HandlerThread? = null
+        var workerQueue: Handler? = null
+        var weatherDataProviderObserver: WeatherDataProviderObserver? = null
+        private const val maxDegrees = 96
+        var isLargeLayout = true
+
         fun buildLayout(context: Context, appWidgetId: Int, largeLayout: Boolean): RemoteViews {
-            val rv: RemoteViews
+            val remoteViews: RemoteViews
             val widgetLocNum = Utility.readPref(context, "WIDGET_LOCATION", "1")
             val widgetLocNumInt = (widgetLocNum.toIntOrNull() ?: 0) - 1
             if (largeLayout) {
@@ -165,36 +145,28 @@ class WeatherWidgetProvider : AppWidgetProvider() {
                 val intent = Intent(context, WeatherWidgetService::class.java)
                 intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                 intent.data = Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME))
-                rv = RemoteViews(context.packageName, R.layout.widget_7day_layout)
-                rv.setRemoteAdapter(R.id.weather_list, intent)
-                val requestID = UtilityTime.currentTimeMillis().toInt()
+                remoteViews = RemoteViews(context.packageName, R.layout.widget_7day_layout)
+                remoteViews.setRemoteAdapter(R.id.weather_list, intent)
+                val requestId = UtilityTime.currentTimeMillis().toInt()
                 val intentWx = Intent(context, WX::class.java)
                 intentWx.action = "WX"
-                val pendingIntentWx =
-                    PendingIntent.getActivity(context, requestID, intentWx, 0) // was 0
-                rv.setPendingIntentTemplate(R.id.weather_list, pendingIntentWx)
-                // Restore the minimal header
-                rv.setTextViewText(R.id.city_name, Location.getName(widgetLocNumInt))
+                val pendingIntentWx = PendingIntent.getActivity(context, requestId, intentWx, 0) // was 0
+                remoteViews.setPendingIntentTemplate(R.id.weather_list, pendingIntentWx)
+                remoteViews.setTextViewText(R.id.city_name, Location.getName(widgetLocNumInt))
             } else {
-                rv = RemoteViews(context.packageName, R.layout.widget_layout_small)
+                remoteViews = RemoteViews(context.packageName, R.layout.widget_layout_small)
                 // Update the header to reflect the weather for "today"
-                val c = context.contentResolver.query(
-                    WeatherDataProvider.CONTENT_URI,
-                    null,
-                    null,
-                    null,
-                    null
-                )
-                if (c!!.moveToPosition(0)) {
-                    val tempColIndex = c.getColumnIndex(WeatherDataProvider.Columns.TEMPERATURE)
-                    val temp = c.getInt(tempColIndex)
+                val cursor = context.contentResolver.query(WeatherDataProvider.CONTENT_URI, null, null, null, null)
+                if (cursor!!.moveToPosition(0)) {
+                    val tempColIndex = cursor.getColumnIndex(WeatherDataProvider.Columns.TEMPERATURE)
+                    val temp = cursor.getInt(tempColIndex)
                     val formatStr = context.resources.getString(R.string.header_format_string)
                     val header = String.format(formatStr, temp, Location.getName(widgetLocNumInt))
-                    rv.setTextViewText(R.id.city_name, header)
+                    remoteViews.setTextViewText(R.id.city_name, header)
                 }
-                c.close()
+                cursor.close()
             }
-            return rv
+            return remoteViews
         }
     }
 }

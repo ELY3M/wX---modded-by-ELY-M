@@ -49,10 +49,10 @@
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
         app:showAsAction="always" />
-    <item
+ <!--   <item
         android:id="@+id/action_pin"
         android:icon="@drawable/ic_touch_app_24dp"
         android:title="@string/label_pin"
-        app:showAsAction="always" />
+        app:showAsAction="always" />-->
 </menu>
 

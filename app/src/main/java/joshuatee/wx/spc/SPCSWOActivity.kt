@@ -35,15 +35,14 @@ import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShare
 
 import joshuatee.wx.Extensions.*
-import joshuatee.wx.activitiesmisc.ImageShowActivity
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectLinearLayout
 import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.util.UtilityLog
 import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
@@ -57,36 +56,28 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // 1: day
     //
 
-    companion object {
-        const val NUMBER: String = ""
-    }
+    companion object { const val NUMBER = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private var html = ""
     private var bitmaps = listOf<Bitmap>()
     private lateinit var activityArguments: Array<String>
     private var day = ""
     private var playlistProd = ""
     private lateinit var objectCardText: ObjectCardText
-    private var objectCardImageList: MutableList<ObjectCardImage> = mutableListOf()
+    private val objectCardImageList = mutableListOf<ObjectCardImage>()
     private var imagesPerRow = 2
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_linear_layout_bottom_toolbar,
-                R.menu.spcswo
-        )
-        if (UtilityUI.isLandScape(this) && UtilityUI.isTablet()) {
-            imagesPerRow = 4
-        }
+        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcswo)
+        if (UtilityUI.isLandScape(this) && UtilityUI.isTablet()) imagesPerRow = 4
         toolbarBottom.setOnMenuItemClickListener(this)
         var numberOfImages = 0
-        val horizontalLinearLayouts: MutableList<ObjectLinearLayout> = mutableListOf()
-        for (index in 0..4) {
+        val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout>()
+        (0..4).forEach { _ ->
             if (numberOfImages % imagesPerRow == 0) {
-                val objectLinearLayout = ObjectLinearLayout(this, ll)
+                val objectLinearLayout = ObjectLinearLayout(this, linearLayout)
                 objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
                 horizontalLinearLayouts.add(objectLinearLayout)
                 objectCardImageList.add(ObjectCardImage(this, objectLinearLayout.linearLayout))
@@ -95,7 +86,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             }
             numberOfImages += 1
         }
-        objectCardText = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        objectCardText = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         activityArguments = intent.getStringArrayExtra(NUMBER)!!
         day = activityArguments[0]
         title = "Day $day Convective Outlook"
@@ -110,11 +101,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val miDay6Img = menu.findItem(R.id.action_share_d6)
         val miDay7Img = menu.findItem(R.id.action_share_d7)
         val miDay8Img = menu.findItem(R.id.action_share_d8)
-        miDay4Img.isVisible = false
-        miDay5Img.isVisible = false
-        miDay6Img.isVisible = false
-        miDay7Img.isVisible = false
-        miDay8Img.isVisible = false
+        listOf(miDay4Img, miDay5Img, miDay6Img, miDay7Img, miDay8Img).forEach { it.isVisible = false }
         if (day == "1" || day == "2") {
             miProbabilistic.isVisible = false
         } else {
@@ -132,11 +119,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (day == "4-8") {
             val state = menu.findItem(R.id.action_state_graphics)
             state.isVisible = false
-            miDay4Img.isVisible = true
-            miDay5Img.isVisible = true
-            miDay6Img.isVisible = true
-            miDay7Img.isVisible = true
-            miDay8Img.isVisible = true
+            listOf(miDay4Img, miDay5Img, miDay6Img, miDay7Img, miDay8Img).forEach { it.isVisible = true }
         }
         getContent()
     }
@@ -148,10 +131,9 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         var textUrl = "SWODY$day"
-        var urls: List<String> = listOf("")
-        if (day == "4-8") {
-            textUrl = "SWOD48"
-        }
+        val imageLabel = "Day $day Convective Outlook"
+        var urls = listOf("")
+        if (day == "4-8") textUrl = "SWOD48"
         withContext(Dispatchers.IO) {
             html = UtilityDownload.getTextProduct(this@SpcSwoActivity, textUrl)
             urls = UtilitySpcSwo.getUrls(day)
@@ -159,134 +141,47 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         objectCardText.text = html
         toolbar.subtitle = html.parse("(Valid.*?Z - [0-9]{6}Z)")
-        if (activityArguments[1] == "sound") {
-            UtilityTts.synthesizeTextAndPlay(applicationContext, html, "spcswo")
-        }
+        if (activityArguments[1] == "sound") UtilityTts.synthesizeTextAndPlay(applicationContext, html, "spcswo")
         when (day) {
             "1", "2" -> {
-                setImageAndClickAction(0, urls, textUrl)
-                setImageAndClickAction(1, urls, textUrl)
-                setImageAndClickAction(2, urls, textUrl)
-                setImageAndClickAction(3, urls, textUrl)
+                listOf(0, 1, 2, 3).forEach { setImageAndClickAction(it, urls, imageLabel) }
                 objectCardImageList[4].visibility = View.GONE
             }
             "3" -> {
-                setImageAndClickAction(0, urls, textUrl)
-                setImageAndClickAction(1, urls, textUrl)
-                for (index in 2..4)
-                    objectCardImageList[index].visibility = View.GONE
+                listOf(0, 1).forEach { setImageAndClickAction(it, urls, imageLabel) }
+                (2..4).forEach { objectCardImageList[it].visibility = View.GONE }
             }
-            "4-8" -> {
-                setImageAndClickAction(0, urls, textUrl)
-                setImageAndClickAction(1, urls, textUrl)
-                setImageAndClickAction(2, urls, textUrl)
-                setImageAndClickAction(3, urls, textUrl)
-                setImageAndClickAction(4, urls, textUrl)
-            }
+            "4-8" -> listOf(0, 1, 2, 3, 4).forEach { setImageAndClickAction(it, urls, imageLabel) }
         }
     }
 
     private fun showImageProduct(imageUrl: String, title: String) {
-        ObjectIntent(
-                this,
-                ImageShowActivity::class.java,
-                ImageShowActivity.URL,
-                arrayOf(imageUrl, title)
-        )
+        ObjectIntent.showImage(this, arrayOf(imageUrl, title))
     }
 
     private fun setImageAndClickAction(index: Int, urls: List<String>, textUrl: String) {
         objectCardImageList[index].setImage(bitmaps[index], imagesPerRow)
-        objectCardImageList[index].setOnClickListener(
-                View.OnClickListener {
-                    showImageProduct(urls[index], textUrl)
-                }
-        )
+        objectCardImageList[index].setOnClickListener(View.OnClickListener { showImageProduct(urls[index], textUrl) })
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, html, playlistProd, playlistProd)) {
-            return true
-        }
+        val textToShare = UtilityShare.prepTextForShare(html)
+        UtilityLog.d("wx", textToShare)
+        if (audioPlayMenu(item.itemId, html, playlistProd, playlistProd)) return true
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.shareText(
-                    this,
-                    this,
-                    "Day $day Convective Outlook",
-                    Utility.fromHtml(html),
-                    bitmaps
-            )
-            R.id.action_share_text -> UtilityShare.shareText(
-                    this,
-                    "Day $day Convective Outlook - Text",
-                    Utility.fromHtml(html)
-            )
-            R.id.action_share_tornado -> if (bitmaps.size > 1) UtilityShare.shareBitmap(
-                    this,
-                    this,
-                    "Day $day Convective Outlook - Tornado",
-                    bitmaps[1]
-            )
-            R.id.action_share_hail -> if (bitmaps.size > 2) UtilityShare.shareBitmap(
-                    this,
-                    this,
-                    "Day $day Convective Outlook - Hail",
-                    bitmaps[2]
-            )
-            R.id.action_share_wind -> if (bitmaps.size > 3) UtilityShare.shareBitmap(
-                    this,
-                    this,
-                    "Day $day Convective Outlook - Wind",
-                    bitmaps[3]
-            )
-            R.id.action_share_categorical -> if (bitmaps.isNotEmpty()) UtilityShare.shareBitmap(
-                    this,
-                    this,
-                    "Day $day Convective Outlook - Categorical",
-                    bitmaps[0]
-            )
-            R.id.action_share_probabilistic -> if (bitmaps.size > 1) UtilityShare.shareBitmap(
-                    this,
-                    this,
-                    "Day $day Convective Outlook - Probabilistic",
-                    bitmaps[1]
-            )
-            R.id.action_share_d4 -> if (bitmaps.isNotEmpty()) UtilityShare.shareBitmap(
-                    this,
-                    this,
-                    "Day " + "4" + " Convective Outlook - Image",
-                    bitmaps[0]
-            )
-            R.id.action_share_d5 -> if (bitmaps.size > 1) UtilityShare.shareBitmap(
-                    this,
-                    this,
-                    "Day " + "5" + " Convective Outlook - Image",
-                    bitmaps[1]
-            )
-            R.id.action_share_d6 -> if (bitmaps.size > 2) UtilityShare.shareBitmap(
-                    this,
-                    this,
-                    "Day " + "6" + " Convective Outlook - Image",
-                    bitmaps[2]
-            )
-            R.id.action_share_d7 -> if (bitmaps.size > 3) UtilityShare.shareBitmap(
-                    this,
-                    this,
-                    "Day " + "7" + " Convective Outlook - Image",
-                    bitmaps[3]
-            )
-            R.id.action_share_d8 -> if (bitmaps.size > 4) UtilityShare.shareBitmap(
-                    this,
-                    this,
-                    "Day " + "8" + " Convective Outlook - Image",
-                    bitmaps[4]
-            )
-            R.id.action_state_graphics -> ObjectIntent(
-                    this,
-                    SpcSwoStateGraphicsActivity::class.java,
-                    SpcSwoStateGraphicsActivity.NO,
-                    arrayOf(day, "")
-            )
+            R.id.action_share_all -> UtilityShare.text(this, this, "Day $day Convective Outlook", textToShare, bitmaps)
+            R.id.action_share_text -> UtilityShare.text(this, "Day $day Convective Outlook - Text", textToShare)
+            R.id.action_share_tornado -> if (bitmaps.size > 1) UtilityShare.bitmap(this, this, "Day $day Convective Outlook - Tornado", bitmaps[1])
+            R.id.action_share_hail -> if (bitmaps.size > 2) UtilityShare.bitmap(this, this, "Day $day Convective Outlook - Hail", bitmaps[2])
+            R.id.action_share_wind -> if (bitmaps.size > 3) UtilityShare.bitmap(this, this, "Day $day Convective Outlook - Wind", bitmaps[3])
+            R.id.action_share_categorical -> if (bitmaps.isNotEmpty()) UtilityShare.bitmap(this, this, "Day $day Convective Outlook - Categorical", bitmaps[0])
+            R.id.action_share_probabilistic -> if (bitmaps.size > 1) UtilityShare.bitmap(this, this, "Day $day Convective Outlook - Probabilistic", bitmaps[1])
+            R.id.action_share_d4 -> if (bitmaps.isNotEmpty()) UtilityShare.bitmap(this, this, "Day " + "4" + " Convective Outlook - Image", bitmaps[0])
+            R.id.action_share_d5 -> if (bitmaps.size > 1) UtilityShare.bitmap(this, this, "Day " + "5" + " Convective Outlook - Image", bitmaps[1])
+            R.id.action_share_d6 -> if (bitmaps.size > 2) UtilityShare.bitmap(this, this, "Day " + "6" + " Convective Outlook - Image", bitmaps[2])
+            R.id.action_share_d7 -> if (bitmaps.size > 3) UtilityShare.bitmap(this, this, "Day " + "7" + " Convective Outlook - Image", bitmaps[3])
+            R.id.action_share_d8 -> if (bitmaps.size > 4) UtilityShare.bitmap(this, this, "Day " + "8" + " Convective Outlook - Image", bitmaps[4])
+            R.id.action_state_graphics -> ObjectIntent(this, SpcSwoStateGraphicsActivity::class.java, SpcSwoStateGraphicsActivity.NO, arrayOf(day, ""))
             else -> return super.onOptionsItemSelected(item)
         }
         return true

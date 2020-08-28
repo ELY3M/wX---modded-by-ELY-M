@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/esrl"
+        android:icon="@drawable/hrrrviewer"
+        android:title="ESRL HRRR/RAP" />
+    <item
+        android:id="@+id/rainfall_outlook"
+        android:icon="@drawable/wpc_rainfall"
+        android:title="Excessive Rainfall Outlook" />
+    <item
+        android:id="@+id/glcfs"
+        android:icon="@drawable/glcfs"
+        android:title="GLCFS" />
+    <item
+        android:id="@+id/goes_global"
+        android:icon="@drawable/goesfulldisk"
+        android:title="Global Satellite" />
+    <item
+        android:id="@+id/goes_conus_wv"
+        android:icon="@drawable/goes"
+        android:title="GOES Conus Water Vapor" />
+    <item
+        android:id="@+id/lightning"
+        android:icon="@drawable/lightning"
+        android:title="Lightning" />
+    <item
+        android:id="@+id/national_images"
+        android:icon="@drawable/fmap"
+        android:title="National Images" />
+    <item
+        android:id="@+id/national_text"
+        android:icon="@drawable/srfd"
+        android:title="National Text" />
+    <item
+        android:id="@+id/ncep_models"
+        android:icon="@drawable/ncep"
+        android:title="NCEP Models" />
+    <item
+        android:id="@+id/nhc"
+        android:icon="@drawable/nhc"
+        android:title="NHC" />
+    <item
+        android:id="@+id/nssl_wrf"
+        android:icon="@drawable/nsslwrf"
+        android:title="NSSL WRF" />
+    <item
+        android:id="@+id/observations"
+        android:icon="@drawable/nwsobs"
+        android:title="Observations" />
+    <item
+        android:id="@+id/observation_sites"
+        android:icon="@drawable/nwsobssites"
+        android:title="Observation Sites" />
+    <item
+        android:id="@+id/opc"
+        android:icon="@drawable/opc"
+        android:title="OPC" />
+    <item
+        android:id="@+id/radar_mosaic"
+        android:icon="@drawable/nws_sector"
+        android:title="Radar Mosaic" />
+    <item
+        android:id="@+id/radar_dual_pane"
+        android:icon="@drawable/wxogldualpane"
+        android:title="Radar dual pane" />
+    <item
+        android:id="@+id/radar_quad_pane"
+        android:icon="@drawable/wxoglquadpane"
+        android:title="Radar quad pane" />
+    <item
+        android:id="@+id/spc_comp_map"
+        android:icon="@drawable/spccompmap"
+        android:title="SPC Composite Map" />
+    <item
+        android:id="@+id/spc_convective_outlooks"
+        android:icon="@drawable/spc_sum"
+        android:title="SPC Convective Outlooks" />
+    <item
+        android:id="@+id/spc_day_1"
+        android:icon="@drawable/day1"
+        android:title="SPC Convective Day 1" />
+    <item
+        android:id="@+id/spc_day_2"
+        android:icon="@drawable/day2"
+        android:title="SPC Convective Day 2" />
+    <item
+        android:id="@+id/spc_day_3"
+        android:icon="@drawable/day3"
+        android:title="SPC Convective Day 3" />
+    <item
+        android:id="@+id/spc_day_4_8"
+        android:icon="@drawable/day48"
+        android:title="SPC Convective Day 4-8" />
+    <item
+        android:id="@+id/spc_fire_outlooks"
+        android:icon="@drawable/fire_outlook"
+        android:title="SPC Fire Weather Outlooks" />
+    <item
+        android:id="@+id/spc_href"
+        android:icon="@drawable/spchref"
+        android:title="SPC HREF" />
+    <item
+        android:id="@+id/spc_hrrr"
+        android:icon="@drawable/spchrrr"
+        android:title="SPC HRRR" />
+    <item
+        android:id="@+id/spc_mesoanalysis"
+        android:icon="@drawable/meso"
+        android:title="SPC Mesoanalysis" />
+    <item
+        android:id="@+id/spc_soundings"
+        android:icon="@drawable/spcsoundings"
+        android:title="SPC Soundings" />
+    <item
+        android:id="@+id/spc_sref"
+        android:icon="@drawable/spcsref"
+        android:title="SPC SREF" />
+    <item
+        android:id="@+id/spc_storm_reports"
+        android:icon="@drawable/report_today"
+        android:title="SPC Storm Reports" />
+    <item
+        android:id="@+id/spc_thunderstorm_outlooks"
+        android:icon="@drawable/tstorm"
+        android:title="SPC Thunderstorm Outlooks" />
+    <item
+        android:id="@+id/spotters"
+        android:icon="@drawable/spotters"
+        android:title="Spotters" />
+    <item
+        android:id="@+id/twitter_states"
+        android:icon="@drawable/twstate"
+        android:title="Twitter states" />
+    <item
+        android:id="@+id/twitter_tornado"
+        android:icon="@drawable/twtornado"
+        android:title="Twitter tornado" />
+    <item
+        android:id="@+id/us_alerts"
+        android:icon="@drawable/uswarn"
+        android:title="US Alerts" />
+    <item
+        android:id="@+id/wpc_gefs"
+        android:icon="@drawable/wpcgefs"
+        android:title="WPC GEFS" />
+</menu>

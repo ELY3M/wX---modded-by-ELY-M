@@ -35,12 +35,7 @@ abstract class BaseActivity : AppCompatActivity() {
     protected lateinit var toolbar: Toolbar
     protected lateinit var toolbarBottom: Toolbar
 
-    protected fun onCreate(
-        savedInstanceState: Bundle?,
-        layoutResId: Int,
-        menuResId: Int?,
-        bottomToolbar: Boolean
-    ) {
+    protected fun onCreate(savedInstanceState: Bundle?, layoutResId: Int, menuResId: Int?, bottomToolbar: Boolean) {
         setTheme(UIPreferences.themeInt)
         super.onCreate(savedInstanceState)
         setContentView(layoutResId)

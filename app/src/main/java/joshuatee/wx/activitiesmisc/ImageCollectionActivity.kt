@@ -22,18 +22,20 @@
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
-import android.os.Bundle
 import android.content.res.Configuration
 import android.graphics.drawable.AnimationDrawable
-import androidx.appcompat.widget.Toolbar
+import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
-import joshuatee.wx.Extensions.getImage
-import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
+import joshuatee.wx.Extensions.getImage
+import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.radar.VideoRecordActivity
-import joshuatee.wx.ui.*
+import joshuatee.wx.ui.ObjectImagesCollection
+import joshuatee.wx.ui.ObjectNavDrawer
+import joshuatee.wx.ui.ObjectTouchImageView
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
@@ -41,46 +43,41 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.vis.UtilityGoesFullDisk
 import kotlinx.coroutines.*
 
-class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
+class ImageCollectionActivity : VideoRecordActivity() {
 
-    companion object {
-        const val TYPE: String = ""
-    }
+    companion object { const val TYPE = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var img: ObjectTouchImageView
     private lateinit var drw: ObjectNavDrawer
-    private lateinit var actionAnimate: MenuItem
     private lateinit var imageCollection: ObjectImagesCollection
     private lateinit var activityArguments: Array<String>
     private var animDrawable = AnimationDrawable()
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.imagecollection, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val actionAnimate = menu.findItem(R.id.action_animate)
+        actionAnimate.isVisible = false
+        if (drw.url.contains("jma") && imageCollection.title == "GOESFD") actionAnimate.isVisible = true
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer_bottom_toolbar, R.menu.imagecollection, iconsEvenlySpaced = true, bottomToolbar = true)
+        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.imagecollection, iconsEvenlySpaced = true, bottomToolbar = false)
         activityArguments = intent.getStringArrayExtra(TYPE)!!
         imageCollection = MyApplication.imageCollectionMap[activityArguments[0]]!!
-        toolbarBottom.setOnMenuItemClickListener(this)
-        val menu = toolbarBottom.menu
-        actionAnimate = menu.findItem(R.id.action_animate)
-        actionAnimate.isVisible = false
         title = imageCollection.title
-        drw = ObjectNavDrawer(this, imageCollection.labels, imageCollection.urls)
-        img = ObjectTouchImageView(
-                this,
-                this,
-                toolbar,
-                toolbarBottom,
-                R.id.iv,
-                drw,
-                imageCollection.prefTokenIdx
-        )
+        drw = ObjectNavDrawer(this, imageCollection.labels, imageCollection.urls, ::getContentFixThis)
+        img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, imageCollection.prefTokenIdx)
         img.setListener(this, drw, ::getContentFixThis)
         drw.index = Utility.readPref(this, imageCollection.prefTokenIdx, 0)
-        drw.setListener(::getContentFixThis)
         toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
-        toolbarBottom.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
         getContent()
     }
 
@@ -89,23 +86,15 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
         super.onRestart()
     }
 
-    private fun getContentFixThis() {
-        getContent()
-    }
+    private fun getContentFixThis() { getContent() }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         toolbar.subtitle = drw.getLabel()
-        if (drw.url.contains("jma") && imageCollection.title == "GOESFD") {
-            actionAnimate.isVisible = true
-        }
         bitmap = withContext(Dispatchers.IO) { drw.url.getImage() }
-        if (drw.url.contains("large_latestsfc.gif")) {
-            img.setMaxZoom(16f)
-        } else {
-            img.setMaxZoom(4f)
-        }
+        if (drw.url.contains("large_latestsfc.gif")) img.setMaxZoom(16f) else img.setMaxZoom(4f)
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn(imageCollection.prefImagePosition)
+        invalidateOptionsMenu()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -118,17 +107,15 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
         drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true
-        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
         when (item.itemId) {
             R.id.action_animate -> getAnimate()
             R.id.action_share -> {
-                if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
+                if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityShare.shareBitmap(this, this, imageCollection.title, bitmap)
+                    UtilityShare.bitmap(this, this, imageCollection.title, bitmap)
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -136,18 +123,13 @@ class ImageCollectionActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickLi
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean =
-            drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
-
     override fun onStop() {
         img.imgSavePosnZoom(this, imageCollection.prefImagePosition)
         super.onStop()
     }
 
     private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
-        animDrawable = withContext(Dispatchers.IO) {
-            UtilityGoesFullDisk.getAnimation(this@ImageCollectionActivity, drw.url)
-        }
+        animDrawable = withContext(Dispatchers.IO) { UtilityGoesFullDisk.getAnimation(this@ImageCollectionActivity, drw.url) }
         UtilityImgAnim.startAnimation(animDrawable, img)
     }
 }

@@ -25,15 +25,12 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.graphics.Bitmap
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
-import android.view.ContextMenu.ContextMenuInfo
 
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
@@ -54,11 +51,9 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
     // Arguments
     // - MCD/Wat number
 
-    companion object {
-        const val NO: String = ""
-    }
+    companion object { const val NO = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private var number = ""
     private var imgUrl = ""
     private var textUrl = ""
@@ -80,11 +75,7 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_linear_layout_bottom_toolbar,
-                R.menu.spcmcdshowdetail
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
         toolbarBottom.setOnMenuItemClickListener(this)
         val menu = toolbarBottom.menu
         miAll = menu.findItem(R.id.action_share_all)
@@ -137,13 +128,11 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
             }
             if (mcdList.size == 1) {
                 if (number.contains("at")) {
-                    textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/w" +
-                            mcdNumbers[0] + ".html"
+                    textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/w" + mcdNumbers[0] + ".html"
                     titleString = "Watch " + mcdNumbers[0].replace("w", "")
                     product = "SPCWAT" + mcdNumbers[0].replace("w", "")
                 } else {
-                    textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/md" +
-                            mcdNumbers[0] + ".html"
+                    textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/md" + mcdNumbers[0] + ".html"
                     titleString = "MCD " + mcdNumbers[0]
                     product = "SPCMCD" + mcdNumbers[0]
                 }
@@ -151,77 +140,41 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
             }
         }
         mcdList.indices.forEach { mcdIndex ->
-            val card = ObjectCardImage(this@SpcMcdWatchShowSummaryActivity, ll, bitmaps[mcdIndex])
-            card.setOnClickListener(View.OnClickListener {
-                ObjectIntent(
-                        this@SpcMcdWatchShowSummaryActivity,
-                        SpcMcdWatchShowActivity::class.java,
-                        SpcMcdWatchShowActivity.NUMBER,
-                        arrayOf(mcdNumbers[mcdIndex], "", polygonType.toString())
-                )
+            val objectCardImage = ObjectCardImage(this@SpcMcdWatchShowSummaryActivity, linearLayout, bitmaps[mcdIndex])
+            objectCardImage.setOnClickListener(View.OnClickListener {
+                ObjectIntent.showMcd(this@SpcMcdWatchShowSummaryActivity, arrayOf(mcdNumbers[mcdIndex], "", polygonType.toString()))
             })
-            if (mcdList.size == 1) {
-                registerForContextMenu(card.img)
-            }
         }
         if (mcdList.size == 1) {
             val wfoStr = text.parse("ATTN...WFO...(.*?)... ")
             wfos = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
-            ObjectCardText(this@SpcMcdWatchShowSummaryActivity, ll, toolbar, toolbarBottom, Utility.fromHtml(text))
+            ObjectCardText(this@SpcMcdWatchShowSummaryActivity, linearLayout, toolbar, toolbarBottom, Utility.fromHtml(text))
             title = titleString
-            if (!number.contains("at")) {
-                toolbar.subtitle = text.parse("Areas affected...(.*?)<BR>")
-            }
+            if (!number.contains("at")) toolbar.subtitle = text.parse("Areas affected...(.*?)<BR>")
             miAll.isVisible = true
             miText.isVisible = true
             miUrl.isVisible = true
             miImage.isVisible = true
         } else {
-            titleString =
-                    "$activityLabel " + mcdNumbers.toString().replace(
-                            "[{}]".toRegex(),
-                            ""
-                    ).replace("\\[|\\]".toRegex(), "").replace("w", "")
+            titleString = "$activityLabel " + mcdNumbers.toString().replace("[{}]".toRegex(), "").replace("\\[|\\]".toRegex(), "").replace("w", "")
             miAll.isVisible = true
             title = titleString
         }
-        if (mcdList.isEmpty()) {
-            ObjectCardText(this@SpcMcdWatchShowSummaryActivity, ll, toolbar, toolbarBottom, nothingPresentStr)
-        }
-    }
-
-    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        wfos.filter{ !it.contains("<BR>") }.forEach {
-            menu.add(0, v.id, 0, "Add location: $it - " + Utility.getWfoSiteName(it))
-        }
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        wfos.filter { item.title.toString().contains(it) }.forEach {
-            UtilityLocation.saveLocationForMcd(it, this@SpcMcdWatchShowSummaryActivity, ll, uiDispatcher)
-        }
-        return true
+        if (mcdList.isEmpty()) ObjectCardText(this@SpcMcdWatchShowSummaryActivity, linearLayout, toolbar, toolbarBottom, nothingPresentStr)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, text, number, product)) {
-            return true
-        }
+        if (audioPlayMenu(item.itemId, text, number, product)) return true
         when (item.itemId) {
             R.id.action_share_all -> {
                 if (bitmaps.size > 1)
-                    UtilityShare.shareText(this, this, titleString, "", bitmaps)
+                    UtilityShare.text(this, this, titleString, "", bitmaps)
                 else if (bitmaps.size == 1)
-                    UtilityShare.shareBitmap(this, this, titleString, bitmaps[0], Utility.fromHtml(text))
+                    UtilityShare.bitmap(this, this, titleString, bitmaps[0], Utility.fromHtml(text))
             }
-            R.id.action_share_text -> UtilityShare.shareText(
-                    this,
-                    titleString,
-                    Utility.fromHtml(text)
-            )
-            R.id.action_share_url -> UtilityShare.shareText(this, titleString, textUrl)
-            R.id.action_share_image -> UtilityShare.shareBitmap(this,this, titleString, bitmaps[0])
+            R.id.action_share_text -> UtilityShare.text(this, titleString, Utility.fromHtml(text))
+            R.id.action_share_url -> UtilityShare.text(this, titleString, textUrl)
+            R.id.action_share_image -> UtilityShare.bitmap(this,this, titleString, bitmaps[0])
             else -> return super.onOptionsItemSelected(item)
         }
         return true

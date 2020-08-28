@@ -26,41 +26,34 @@ import android.graphics.Color
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
-import androidx.cardview.widget.CardView
 
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.TextSize
 
 class ObjectCardBlackHeaderText(context: Context, val linearLayout: LinearLayout, val text: String) {
 
-    private val objCard: ObjectCard
-    private val textViewTop: ObjectTextView
+    private val objectCard = ObjectCard(context)
+    private val objectTextView = ObjectTextView(context, UIPreferences.textHighlightColor)
 
     init {
-        val linearLayoutVertical = LinearLayout(context)
-        textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
-        linearLayoutVertical.orientation = LinearLayout.VERTICAL
-        linearLayoutVertical.gravity = Gravity.CENTER_VERTICAL
-        linearLayoutVertical.addView(textViewTop.tv)
-        objCard = ObjectCard(context)
-        objCard.addView(linearLayoutVertical)
-        linearLayout.addView(objCard.card)
+        val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
+        objectLinearLayout.addView(objectTextView)
+        objectCard.addView(objectLinearLayout)
+        linearLayout.addView(objectCard.card)
         setTextHeader()
     }
 
-    val card: CardView get() = objCard.card
+    val card get() = objectCard.card
 
-    fun setListener(fn: View.OnClickListener) {
-        objCard.card.setOnClickListener(fn)
-    }
+    fun setListener(fn: View.OnClickListener) = objectCard.card.setOnClickListener(fn)
 
     private fun setTextHeader() {
-        textViewTop.text = text
-        textViewTop.setTextSize(TextSize.LARGE)
-        textViewTop.setPadding(20,20,20,20)
-        textViewTop.color = UIPreferences.textHighlightColor
-        textViewTop.tv.setBackgroundColor(Color.BLACK)
-        textViewTop.tv.setTextColor(Color.WHITE)
+        objectTextView.text = text
+        objectTextView.setTextSize(TextSize.LARGE)
+        objectTextView.setPadding(20)
+        objectTextView.color = UIPreferences.textHighlightColor
+        objectTextView.tv.setBackgroundColor(Color.BLACK)
+        objectTextView.tv.setTextColor(Color.WHITE)
     }
 }
 

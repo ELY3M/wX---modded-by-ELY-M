@@ -463,12 +463,7 @@ object UtilityConusRadar {
         //}
         if (bitmap.height > 10) {
             bitmapCanvas = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-            UtilityCanvasMain.addCanvasConus(
-                    context,
-                    bitmapCanvas,
-                    scaleType,
-                    "latest"
-            )
+            UtilityCanvasMain.addCanvasConus(context, bitmapCanvas, scaleType, "latest", 1)
         }
         layers.add(cd)
         layers.add(BitmapDrawable(context.resources, bitmap))
@@ -494,12 +489,7 @@ object UtilityConusRadar {
         //}
         if (bitmap.height > 10) {
             bitmapCanvas = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-            UtilityCanvasMain.addCanvasConus(
-                    context,
-                    bitmapCanvas,
-                    scaleType,
-                    "latest"
-            )
+            UtilityCanvasMain.addCanvasConus(context, bitmapCanvas, scaleType, "latest", 1)
         }
         layers.add(cd)
         layers.add(BitmapDrawable(context.resources, bitmap))
@@ -520,7 +510,13 @@ object UtilityConusRadar {
 
     fun getConusImage() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
+            //nwsConusRadarWithMapSquare(MyApplication.appContext)
+        try {
             nwsConusRadarWithMapSquare(MyApplication.appContext)
+        } catch (e: Exception) {
+        UtilityLog.d("wx", "getConusImage() failed!!!!!!!!!!!!!!!!!")
+        UtilityLog.handleException(e)
+    }
         }
     }
 

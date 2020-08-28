@@ -23,10 +23,12 @@ package joshuatee.wx.ui
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import android.view.View
 import joshuatee.wx.util.ImageMap
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.MyApplication
+import joshuatee.wx.util.Utility
 
 class ObjectImageMap(
     val activity: Activity,
@@ -34,42 +36,57 @@ class ObjectImageMap(
     resId: Int,
     val toolbar: Toolbar,
     val toolbarBottom: Toolbar,
-    private val viewArr: List<View>
+    private val views: List<View>
 ) {
 
-    var map: ImageMap = activity.findViewById(resId)
+    val map: ImageMap = activity.findViewById(resId)
+    var isRadarWithTransparent = false
 
-    init {
-        map.visibility = View.GONE
-    }
+    init { map.visibility = View.GONE }
 
     fun toggleMap() {
+        val toolbarAlpha = toolbar.background.alpha
+        if (toolbarAlpha == 0) isRadarWithTransparent = true
         if (map.visibility == View.GONE) {
             setupMap()
+            if (isRadarWithTransparent) {
+                if (Utility.isThemeAllWhite()) {
+                    toolbar.setBackgroundColor(Color.BLACK)
+                    toolbarBottom.setBackgroundColor(Color.BLACK)
+                }
+                toolbar.background.mutate().alpha = 255
+                toolbarBottom.background.mutate().alpha = 255
+            }
         } else {
             map.visibility = View.GONE
-            viewArr.forEach {
-                it.visibility = View.VISIBLE
-            }
+            views.forEach { it.visibility = View.VISIBLE }
+            if (isRadarWithTransparent) UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
+        }
+    }
+
+    fun hideMap() {
+        //val toolbarAlpha = toolbar.background.alpha
+        //if (toolbarAlpha == 0) isRadarWithTransparent = true
+        if (map.visibility != View.GONE) {
+            map.visibility = View.GONE
+            views.forEach { it.visibility = View.VISIBLE }
+            if (isRadarWithTransparent) UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
         }
     }
 
     private fun setupMap() {
-        viewArr.forEach {
-            it.visibility = View.GONE
-        }
+        views.forEach { it.visibility = View.GONE }
         setupImageMap(context, toolbar, toolbarBottom)
         map.visibility = View.VISIBLE
     }
 
-    private fun addOnImageMapClickedHandler(h: ImageMap.OnImageMapClickedHandler) {
-        map.addOnImageMapClickedHandler(h)
-    }
+    private fun addOnImageMapClickedHandler(h: ImageMap.OnImageMapClickedHandler) = map.addOnImageMapClickedHandler(h)
 
     fun addClickHandler(fn: (String) -> Unit, mapFn: (Int) -> String) {
         addOnImageMapClickedHandler(object : ImageMap.OnImageMapClickedHandler {
             override fun onImageMapClicked(id: Int, im2: ImageMap) {
                 im2.visibility = View.GONE
+                if (isRadarWithTransparent) UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
                 fn(mapFn(id))
             }
 
@@ -77,14 +94,9 @@ class ObjectImageMap(
         })
     }
 
-    private fun setupImageMap(
-        context: Context,
-        toolbar: Toolbar,
-        toolbarBottom: Toolbar
-    ) {
+    private fun setupImageMap(context: Context, toolbar: Toolbar, toolbarBottom: Toolbar) {
         val layoutParams = map.layoutParams
-        layoutParams.height = MyApplication.dm.heightPixels - toolbar.height -
-                toolbarBottom.height - UtilityUI.statusBarHeight(context)
+        layoutParams.height = MyApplication.dm.heightPixels - toolbar.height - toolbarBottom.height - UtilityUI.statusBarHeight(context)
         layoutParams.width = MyApplication.dm.widthPixels
         map.layoutParams = layoutParams
     }

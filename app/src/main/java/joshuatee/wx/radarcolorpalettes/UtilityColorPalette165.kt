@@ -22,61 +22,35 @@
 package joshuatee.wx.radarcolorpalettes
 
 import android.content.Context
-import android.graphics.Color
 
 import joshuatee.wx.MyApplication
 
 internal object UtilityColorPalette165 {
 
-    private fun generate(context: Context, code: String) {
-        val obj165 = MyApplication.colorMap[165]!!
-        obj165.redValues.position(0)
-        obj165.greenValues.position(0)
-        obj165.blueValues.position(0)
-        val dbzAl = mutableListOf<Int>()
-        val rAl = mutableListOf<Int>()
-        val gAl = mutableListOf<Int>()
-        val bAl = mutableListOf<Int>()
-        val text = UtilityColorPalette.getColorMapStringFromDisk(context, "165", code)
-        val lines = text.split("\n").dropLastWhile { it.isEmpty() }
-        var tmpArr: List<String>
-        lines.forEach {
-            if (it.contains("olor") && !it.contains("#")) {
-                tmpArr = if (it.contains(","))
-                    it.split(",")
-                else
-                    it.split(" ")
+    private const val radarColorPaletteCode = 165
 
-                if (tmpArr.size > 4) {
-                    dbzAl.add(tmpArr[1].toIntOrNull() ?: 0)
-                    rAl.add(tmpArr[2].toIntOrNull() ?: 0)
-                    gAl.add(tmpArr[3].toIntOrNull() ?: 0)
-                    bAl.add(tmpArr[4].toIntOrNull() ?: 0)
+    private fun generate(context: Context, code: String) {
+        val objectColorPalette = MyApplication.colorMap[radarColorPaletteCode]!!
+        objectColorPalette.position(0)
+        val objectColorPaletteLines = mutableListOf<ObjectColorPaletteLine>()
+        val text = UtilityColorPalette.getColorMapStringFromDisk(context, radarColorPaletteCode, code)
+        val lines = text.split("\n").dropLastWhile { it.isEmpty() }
+        lines.forEach { line ->
+            if (line.contains("olor") && !line.contains("#")) {
+                val items = if (line.contains(",")) line.split(",") else line.split(" ")
+                if (items.size > 4) {
+                    objectColorPaletteLines.add(ObjectColorPaletteLine(items))
                 }
             }
         }
-        var lowColor: Int
-        var diff: Int
-        dbzAl.indices.forEach {
-            lowColor = Color.rgb(rAl[it], gAl[it], bAl[it])
-            diff = 10
-            obj165.redValues.put(rAl[it].toByte())
-            obj165.greenValues.put(gAl[it].toByte())
-            obj165.blueValues.put(bAl[it].toByte())
-            (1 until diff).forEach { _ ->
-                obj165.redValues.put(Color.red(lowColor).toByte())
-                obj165.greenValues.put(Color.green(lowColor).toByte())
-                obj165.blueValues.put(Color.blue(lowColor).toByte())
-            }
+        val diff = 10
+        objectColorPaletteLines.forEach {
+            (0 until diff).forEach { _ -> objectColorPalette.putLine(it) }
         }
     }
 
     fun loadColorMap(context: Context) {
-        when (MyApplication.radarColorPalette["165"]) {
-            "CODENH" -> generate(context, "CODENH")
-            else -> generate(context, MyApplication.radarColorPalette["165"]!!
-            )
-        }
+        generate(context, MyApplication.radarColorPalette[radarColorPaletteCode]!!)
     }
 }
 

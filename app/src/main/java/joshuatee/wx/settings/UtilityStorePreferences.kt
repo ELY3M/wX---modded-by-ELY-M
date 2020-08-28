@@ -42,13 +42,11 @@ object UtilityStorePreferences {
             val alert7Day1NotificationDefault = "false"
             val alertNotificationSoundDefault = "false"
             val alertNotificationRadarDefault = "false"
-
             val alertNotificationIntervalDefault = 12
             val alertBlackoutDefault = "false"
             val alertBlackoutAmDefault = 7
             val alertBlackoutPmDefault = 22
             val alertBlackoutTornadoDefault = "true"
-
             val current1Default = "true"
             val county1Default = "Cleveland"
             val zone1Default = "OKC027"
@@ -60,25 +58,21 @@ object UtilityStorePreferences {
             val radarSiteDefault = "TLX"
             val nws1DefaultState = "OK"
             val nwsRadarBgBlack = "true"
-
             editor.putString("ALERT_ONLYONCE", "true")
             editor.putString("ALERT_AUTOCANCEL", "true")
             editor.putString("LOCK_TOOLBARS", "true")
             editor.putString("RADAR_SHOW_COUNTY", "true")
             editor.putString("ALERT1_NOTIFICATION", alertNotificationDefault)
-
             editor.putString("ALERT_CC1_NOTIFICATION", alertCcNotificationDefault)
             editor.putString("ALERT_7DAY_1_NOTIFICATION", alert7Day1NotificationDefault)
             editor.putString("ALERT_NOTIFICATION_RADAR1", alertNotificationRadarDefault)
             editor.putString("ALERT_NOTIFICATION_SOUND1", alertNotificationSoundDefault)
-
             editor.putInt("ALERT_NOTIFICATION_INTERVAL", alertNotificationIntervalDefault)
             editor.putString("ALERT_BLACKOUT", alertBlackoutDefault)
             editor.putInt("ALERT_BLACKOUT_AM", alertBlackoutAmDefault)
             editor.putInt("ALERT_BLACKOUT_PM", alertBlackoutPmDefault)
             editor.putString("ALERT_BLACKOUT_TORNADO", alertBlackoutTornadoDefault)
             editor.putInt("LOC_NUM_INT", locNumIntDefault)
-
             editor.putString("LOC1_X", loc1XDefault)
             editor.putString("LOC1_Y", loc1YDefault)
             editor.putString("LOC1_NWS", loc1NwsDefault)
@@ -87,20 +81,16 @@ object UtilityStorePreferences {
             editor.putString("ZONE1", zone1Default)
             editor.putString("ALERTS1", alerts1Default)
             editor.putString("CURRENT1", current1Default)
-
             editor.putString("STATE", stateDefault)
             editor.putString("STATE_CODE", stateCodeDefault)
-
             editor.putString("NWS1", wfoDefault)
             editor.putString("RID1", radarSiteDefault)
             editor.putString("NWS1_STATE", nws1DefaultState)
             editor.putString("THEME_BLUE", themeBlueDefault)
             editor.putString("NWS_RADAR_BG_BLACK", nwsRadarBgBlack)
-
             // NCEP default to GFS
             editor.putInt("MODEL_NCEP1_INDEX", 4)
             editor.putInt("MODEL_NCEP2_INDEX", 4)
-
             editor.apply()
         }
     }

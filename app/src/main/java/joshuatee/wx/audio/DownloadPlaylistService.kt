@@ -40,7 +40,7 @@ class DownloadPlaylistService : IntentService("DownloadPlaylistService") {
     // configured interval
 
     companion object {
-        const val URL: String = ""
+        const val URL = ""
     }
 
     override fun onHandleIntent(intent: Intent?) {
@@ -53,16 +53,15 @@ class DownloadPlaylistService : IntentService("DownloadPlaylistService") {
             val stackBuilder = TaskStackBuilder.create(this)
             stackBuilder.addParentStack(SettingsPlaylistActivity::class.java)
             stackBuilder.addNextIntent(resultIntent)
-            val objPI = ObjectPendingIntents(this, SettingsPlaylistActivity::class.java)
+            val objectPendingIntents = ObjectPendingIntents(this, SettingsPlaylistActivity::class.java)
             val notificationObj = ObjectNotification(
-                this, false, notificationText, result, objPI.resultPendingIntent,
+                this, false, notificationText, result, objectPendingIntents.resultPendingIntent,
                 MyApplication.ICON_CURRENT, result, Notification.PRIORITY_DEFAULT, Color.YELLOW,
-                MyApplication.ICON_ACTION, objPI.resultPendingIntent2, "PLAYLIST"
+                MyApplication.ICON_ACTION, objectPendingIntents.resultPendingIntent2, "PLAYLIST"
             )
             val notification = UtilityNotification.createNotificationBigTextWithAction(notificationObj)
             notificationObj.sendNotification(this, url, 1, notification)
         }
-        //LocalBroadcastManager.getInstance(this).sendBroadcast(Intent("playlistdownloaded"))
     }
 } 
 

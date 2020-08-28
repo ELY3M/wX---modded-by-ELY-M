@@ -43,18 +43,12 @@ class WidgetNHC : AppWidgetProvider() {
         super.onEnabled(context)
     }
 
-    override fun onUpdate(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
-    ) {
+    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
         UtilityWidget.update(context, type)
     }
 
     private fun getContent(context: Context) = GlobalScope.launch(uiDispatcher) {
-        withContext(Dispatchers.IO) {
-            UtilityWidgetDownload.download(context, type)
-        }
+        withContext(Dispatchers.IO) { UtilityWidgetDownload.download(context, type) }
         UtilityWidget.update(context, type)
     }
 } 

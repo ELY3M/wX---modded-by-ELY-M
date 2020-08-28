@@ -21,7 +21,6 @@
 
 package joshuatee.wx.settings
 
-import android.app.Activity
 import android.app.NotificationManager
 import android.content.Context
 import android.util.TypedValue
@@ -30,7 +29,7 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.cardview.widget.CardView
+import joshuatee.wx.Extensions.setPadding
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
@@ -38,69 +37,48 @@ import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectCardText
+import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.ObjectLinearLayout
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 
-class ObjectSettingsCheckBox(
-    context: Context,
-    private val activity: Activity,
-    label: String,
-    pref: String,
-    strId: Int
-) {
+class ObjectSettingsCheckBox(context: Context, label: String, pref: String, strId: Int) {
 
-    private val objCard = ObjectCard(context)
-    private val cb: CheckBox
+    private val objectCard = ObjectCard(context)
+    private val checkBox = CheckBox(context)
 
     init {
-        val tv = TextView(context)
-        ObjectCardText.textViewSetup(tv)
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-        tv.setTextColor(UIPreferences.backgroundColor)
-        tv.setPadding(
-            MyApplication.paddingSettings,
-            MyApplication.paddingSettings,
-            MyApplication.paddingSettings,
-            MyApplication.paddingSettings
-        )
-        tv.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            1.0f
-        )
-        tv.text = label
-        tv.gravity = Gravity.CENTER_VERTICAL
+        val textView = TextView(context)
+        ObjectCardText.textViewSetup(textView)
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
+        textView.setTextColor(UIPreferences.backgroundColor)
+        textView.setPadding(MyApplication.paddingSettings)
+        textView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1.0f)
+        textView.text = label
+        textView.gravity = Gravity.CENTER_VERTICAL
         val strInner = context.resources.getString(strId)
-        tv.setOnClickListener { showHelpText(strInner) }
-        val ll = LinearLayout(context)
-        ll.layoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT
-        )
-        ll.orientation = LinearLayout.HORIZONTAL
-        ll.gravity = Gravity.CENTER_VERTICAL
-        ll.addView(tv)
-        cb = CheckBox(context)
-        cb.gravity = Gravity.CENTER_VERTICAL
+        textView.setOnClickListener { ObjectDialogue(context, strInner) }
+        val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.HORIZONTAL, Gravity.CENTER_VERTICAL)
+        objectLinearLayout.matchParent()
+        objectLinearLayout.addView(textView)
+        checkBox.gravity = Gravity.CENTER_VERTICAL
         val truePrefs = listOf(
-            "COD_HW_DEFAULT",
-            "DUALPANE_SHARE_POSN",
-            "UNITS_F",
-            "UNITS_M",
-            "FAB_IN_MODELS",
-            "NWS_TEXT_REMOVELINEBREAKS",
-            "RECORD_SCREEN_SHARE",
-            "PREF_PREVENT_ACCIDENTAL_EXIT",
-            "COD_LOCDOT_DEFAULT",
-            "UI_MAIN_SCREEN_RADAR_FAB",
-            "RADAR_TOOLBAR_TRANSPARENT"
+                "COD_HW_DEFAULT",
+                "DUALPANE_SHARE_POSN",
+                "UNITS_F",
+                "UNITS_M",
+                "FAB_IN_MODELS",
+                "NWS_TEXT_REMOVELINEBREAKS",
+                "RECORD_SCREEN_SHARE",
+                "PREF_PREVENT_ACCIDENTAL_EXIT",
+                "COD_LOCDOT_DEFAULT",
+                "UI_MAIN_SCREEN_RADAR_FAB",
+                "RADAR_TOOLBAR_TRANSPARENT",
+                "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT"
         )
-        cb.isChecked = Utility.readPref(
-            context,
-            pref,
-            java.lang.Boolean.toString(truePrefs.contains(pref))
-        ) == "true"
-        cb.setOnCheckedChangeListener { compoundButton, _ ->
+        checkBox.isChecked = Utility.readPref(context, pref, java.lang.Boolean.toString(truePrefs.contains(pref))) == "true"
+             || ( pref.startsWith(UtilityNavDrawer.getPrefVar("")) && Utility.readPref(context, pref, "") != "false")
+        checkBox.setOnCheckedChangeListener { compoundButton, _ ->
             if (compoundButton.isChecked) {
                 if (pref == "MEDIA_CONTROL_NOTIF") {
                     if (Utility.readPref(context, "MEDIA_CONTROL_NOTIF", "").startsWith("f")) {
@@ -111,93 +89,53 @@ class ObjectSettingsCheckBox(
             } else {
                 if (pref == "MEDIA_CONTROL_NOTIF") {
                     if (Utility.readPref(context, "MEDIA_CONTROL_NOTIF", "").startsWith("t")) {
-                        val notifier =
-                            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                        val notifier = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                         notifier.cancel("wx_media", 1)
                     }
                 }
                 Utility.writePref(context, pref, "false")
             }
             if (pref == "SIMPLE_MODE") {
-                if (MyApplication.simpleMode != Utility.readPref(
-                        context,
-                        "SIMPLE_MODE",
-                        "false"
-                    ).startsWith("t")
-                ) {
+                if (MyApplication.simpleMode != Utility.readPref(context, "SIMPLE_MODE", "false").startsWith("t")) {
                     Utility.commitPref(context)
                     UtilityAlertDialog.restart()
                 }
             }
             if (pref == "HIDE_TOP_TOOLBAR") {
-                if (UIPreferences.hideTopToolbar != Utility.readPref(
-                        context,
-                        "HIDE_TOP_TOOLBAR",
-                        "false"
-                    ).startsWith("t")
-                ) {
+                if (UIPreferences.hideTopToolbar != Utility.readPref(context, "HIDE_TOP_TOOLBAR", "false").startsWith("t")) {
                     Utility.commitPref(context)
                     UtilityAlertDialog.restart()
                 }
             }
             if (pref == "UI_MAIN_SCREEN_RADAR_FAB") {
-                if (UIPreferences.mainScreenRadarFab != Utility.readPref(
-                        context,
-                        "UI_MAIN_SCREEN_RADAR_FAB",
-                        "false"
-                    ).startsWith("t")
-                ) {
+                if (UIPreferences.mainScreenRadarFab != Utility.readPref(context, "UI_MAIN_SCREEN_RADAR_FAB", "false").startsWith("t")) {
                     Utility.commitPref(context)
                     UtilityAlertDialog.restart()
                 }
             }
             when (pref) {
-                "COD_WARNINGS_DEFAULT", "RADAR_SHOW_MPD", "RADAR_SHOW_WATCH" -> Utility.writePref(
-                    context,
-                    "RESTART_NOTIF",
-                    "true"
-                )
+                "COD_WARNINGS_DEFAULT", "RADAR_SHOW_MPD", "RADAR_SHOW_WATCH" -> Utility.writePref(context, "RESTART_NOTIF", "true")
                 "RADAR_STATE_HIRES", "RADAR_COUNTY_HIRES", "RADAR_HW_ENH_EXT", "RADAR_CAMX_BORDERS", "WXOGL_SPOTTERS", "WXOGL_SPOTTERS_LABEL" -> {
                     MyApplication.initPreferences(context)
                     when (pref) {
-                        "RADAR_STATE_HIRES" -> MyApplication.initRadarGeometryByType(
-                            context,
-                            GeographyType.STATE_LINES
-                        )
-                        "RADAR_COUNTY_HIRES" -> MyApplication.initRadarGeometryByType(
-                            context,
-                            GeographyType.COUNTY_LINES
-                        )
-                        "RADAR_HW_ENH_EXT" -> MyApplication.initRadarGeometryByType(
-                            context,
-                            GeographyType.HIGHWAYS_EXTENDED
-                        )
-                        "RADAR_CAMX_BORDERS" -> MyApplication.initRadarGeometryByType(
-                            context,
-                            GeographyType.STATE_LINES
-                        )
+                        "RADAR_STATE_HIRES" -> MyApplication.initRadarGeometryByType(context, GeographyType.STATE_LINES)
+                        "RADAR_COUNTY_HIRES" -> MyApplication.initRadarGeometryByType(context, GeographyType.COUNTY_LINES)
+                        "RADAR_HW_ENH_EXT" -> MyApplication.initRadarGeometryByType(context, GeographyType.HIGHWAYS_EXTENDED)
+                        "RADAR_CAMX_BORDERS" -> MyApplication.initRadarGeometryByType(context, GeographyType.STATE_LINES)
                     }
                     GeographyType.refresh()
                 }
             }
         }
-        ll.addView(cb)
-        objCard.addView(ll)
+        objectLinearLayout.addView(checkBox)
+        objectCard.addView(objectLinearLayout.linearLayout)
     }
 
-    private fun showHelpText(helpStr: String) {
-        UtilityAlertDialog.showHelpText(helpStr, activity)
-    }
+    fun isChecked(value: Boolean) { checkBox.isChecked = value }
 
-    fun isChecked(value: Boolean) {
-        cb.isChecked = value
-    }
+    val card get() = objectCard.card
 
-    val card: CardView get() = objCard.card
-
-    internal fun setOnCheckedChangeListener(l: CompoundButton.OnCheckedChangeListener) {
-        cb.setOnCheckedChangeListener(l)
-    }
+    internal fun setOnCheckedChangeListener(listener: CompoundButton.OnCheckedChangeListener) { checkBox.setOnCheckedChangeListener(listener) }
 }
 
 

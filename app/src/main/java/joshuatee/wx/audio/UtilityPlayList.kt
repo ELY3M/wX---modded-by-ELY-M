@@ -59,23 +59,23 @@ object UtilityPlayList {
     }
 
     internal fun downloadAll(context: Context): String {
-        var resultStr = ""
-        val arr = MyApplication.colon.split(MyApplication.playlistStr)
+        var string = ""
+        val items = MyApplication.colon.split(MyApplication.playlistStr)
         val formattedDate = UtilityTime.getDateAsString(FORMAT_TIME_STR)
-        (1 until arr.size).forEach {
-            var text = UtilityDownload.getTextProduct(context, arr[it])
-            if (arr[it].contains("SWO")) {
+        (1 until items.size).forEach {
+            var text = UtilityDownload.getTextProduct(context, items[it])
+            if (items[it].contains("SWO")) {
                 text = text.substring(text.indexOf('>') + 1)
                 text = text.replace("^<br>".toRegex(), "")
             }
             if (text != "") {
-                Utility.writePref(context, "PLAYLIST_" + arr[it], text)
-                Utility.writePref(context, "PLAYLIST_" + arr[it] + "_TIME", formattedDate)
+                Utility.writePref(context, "PLAYLIST_" + items[it], text)
+                Utility.writePref(context, "PLAYLIST_" + items[it] + "_TIME", formattedDate)
             }
-            resultStr = resultStr + arr[it] + " " + text.length.toString() + " "
+            string += items[it] + " " + text.length.toString() + " "
         }
         val date = UtilityTime.getDateAsString("MM-dd-yy HH:mm:SS Z")
-        Utility.writePref(context, "PLAYLIST_STATUS", date + MyApplication.newline + resultStr)
-        return resultStr
+        Utility.writePref(context, "PLAYLIST_STATUS", date + MyApplication.newline + string)
+        return string
     }
 }

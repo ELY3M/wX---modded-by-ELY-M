@@ -23,6 +23,7 @@ package joshuatee.wx.ui
 
 import android.app.Activity
 import android.content.Context
+import android.graphics.Color
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.ActionBarDrawerToggle
 import android.util.SparseArray
@@ -49,6 +50,7 @@ class ObjectNavDrawerCombo(
     var imgGroupIdx: Int
 
     init {
+        if (Utility.isThemeAllWhite()) listView.setBackgroundColor(Color.WHITE)
         listView.setAdapter(MyExpandableListAdapter(activity, items))
         actionBarDrawerToggle = ActionBarDrawerToggle(
             activity,
@@ -66,13 +68,13 @@ class ObjectNavDrawerCombo(
         }
     }
 
-    fun getLabel(grp: Int, ch: Int): String = labels[grp][ch]
+    fun getLabel(grp: Int, ch: Int) = labels[grp][ch]
 
-    fun getToken(grp: Int, ch: Int): String = tokens[grp][ch]
+    fun getToken(grp: Int, ch: Int) = tokens[grp][ch]
 
-    fun getUrl(): String = getToken(imgGroupIdx, imgIdx)
+    fun getUrl() = getToken(imgGroupIdx, imgIdx)
 
-    fun getLabel(): String = getLabel(imgGroupIdx, imgIdx)
+    fun getLabel() = getLabel(imgGroupIdx, imgIdx)
 
     fun setListener(fn: () -> Unit) {
         listView.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->

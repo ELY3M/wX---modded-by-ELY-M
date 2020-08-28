@@ -30,8 +30,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genMercato
-  (JNIEnv * , jclass, jobject , jobject, jfloat, jfloat, jfloat, jfloat, jfloat , jint);
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genMercato(JNIEnv * , jclass, jobject, jobject, jfloat, jfloat, jfloat, jfloat, jfloat, jint);
 
 #ifdef __cplusplus
 }

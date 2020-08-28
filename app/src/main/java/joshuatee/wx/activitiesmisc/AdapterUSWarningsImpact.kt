@@ -28,33 +28,26 @@ import android.view.ViewGroup
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.objects.TextSize
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectTextView
 
-internal class AdapterUSWarningsImpact(private val dataSet: List<ObjectImpactGraphic>) :
-    RecyclerView.Adapter<AdapterUSWarningsImpact.DataObjectHolder>() {
+internal class AdapterUSWarningsImpact(private val dataSet: List<ObjectImpactGraphic>) : RecyclerView.Adapter<AdapterUSWarningsImpact.DataObjectHolder>() {
 
-    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+    internal class DataObjectHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
 
-        val title = ObjectTextView(itemView, R.id.title)
-        val cities = ObjectTextView(itemView, R.id.cities)
-        val population = ObjectTextView(itemView, R.id.population)
+        val title = ObjectTextView(itemView, R.id.title, UIPreferences.textHighlightColor)
+        val cities = ObjectTextView(itemView, R.id.cities, backgroundText = true)
+        val population = ObjectTextView(itemView, R.id.population, backgroundText = true)
 
         init {
             ObjectCard(itemView, R.id.cv1)
             itemView.setOnClickListener(this)
         }
 
-        override fun onClick(v: View) {
-            myClickListener!!.onItemClick(adapterPosition)
-        }
+        override fun onClick(v: View) { myClickListener!!.onItemClick(adapterPosition) }
     }
 
-    fun setOnItemClickListener(myClickListenerloc: MyClickListener) {
-        myClickListener = myClickListenerloc
-    }
+    fun setOnItemClickListener(myClickListenerloc: MyClickListener) { myClickListener = myClickListenerloc }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataObjectHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.cardview_uswarningsimpact, parent, false)
@@ -63,22 +56,13 @@ internal class AdapterUSWarningsImpact(private val dataSet: List<ObjectImpactGra
 
     override fun onBindViewHolder(holder: DataObjectHolder, position: Int) {
         holder.title.text = dataSet[position].title
-        holder.title.color = UIPreferences.textHighlightColor
-        holder.title.setTextSize(TextSize.SMALL)
         holder.cities.text = dataSet[position].cities
         holder.population.text = dataSet[position].population
-        listOf(holder.cities, holder.population).forEach {
-            it.setAsSmallText()
-        }
     }
 
     override fun getItemCount() = dataSet.size
 
-    interface MyClickListener {
-        fun onItemClick(position: Int)
-    }
+    interface MyClickListener { fun onItemClick(position: Int) }
 
-    companion object {
-        private var myClickListener: MyClickListener? = null
-    }
+    companion object { private var myClickListener: MyClickListener? = null }
 }

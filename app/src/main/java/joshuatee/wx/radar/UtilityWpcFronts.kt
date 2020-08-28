@@ -71,9 +71,10 @@ import joshuatee.wx.objects.DownloadTimer
  */
 
 object UtilityWpcFronts {
-    var pressureCenters = mutableListOf<PressureCenter>()
-    var fronts = mutableListOf<Fronts>()
-    private var timer = DownloadTimer("WPC FRONTS")
+
+    val pressureCenters = mutableListOf<PressureCenter>()
+    val fronts = mutableListOf<Fronts>()
+    private val timer = DownloadTimer("WPC FRONTS")
 
     private fun addColdFrontTriangles(front: Fronts, tokens: List<String>) {
         val length = 0.4
@@ -154,25 +155,16 @@ object UtilityWpcFronts {
         tokens.indices.forEach { index ->
             val coordinates = parseLatLon(tokens[index])
             // effectively the first and last values are not there
-            if (index != 0 && index != (tokens.size - 1)) {
-                front.coordinates.add(LatLon(coordinates[0], coordinates[1]))
-            }
+            if (index != 0 && index != (tokens.size - 1)) front.coordinates.add(LatLon(coordinates[0], coordinates[1]))
         }
     }
 
     private fun addFrontDataTrof(front: Fronts, tokens: List<String>) {
-        val fraction = 0.8
         for (index in 0 until tokens.size - 1 step 1) {
             val coordinates = parseLatLon(tokens[index])
             front.coordinates.add(LatLon(coordinates[0], coordinates[1]))
             val oldCoordinates = parseLatLon(tokens[index + 1])
-            val coord = UtilityMath.computeMiddishPoint(
-                    coordinates[0],
-                    coordinates[1],
-                    oldCoordinates[0],
-                    oldCoordinates[1],
-                    fraction
-            )
+            val coord = UtilityMath.computeMidPoint(coordinates[0], coordinates[1], oldCoordinates[0], oldCoordinates[1], 0.8)
             front.coordinates.add(LatLon(coord[0], coord[1]))
         }
     }
@@ -181,9 +173,7 @@ object UtilityWpcFronts {
         tokens.indices.forEach { index ->
             val coordinates = parseLatLon(tokens[index])
             front.coordinates.add(LatLon(coordinates[0], coordinates[1]))
-            if (index != 0 && index != (tokens.size - 1)) {
-                front.coordinates.add(LatLon(coordinates[0], coordinates[1]))
-            }
+            if (index != 0 && index != (tokens.size - 1)) front.coordinates.add(LatLon(coordinates[0], coordinates[1]))
         }
     }
 
@@ -191,33 +181,30 @@ object UtilityWpcFronts {
         return if (string.length != 7) {
             listOf(0.0, 0.0)
         } else {
-            val lat = (string.substring(0, 2) + "." + string.substring(2, 3)).toDoubleOrNull() ?: 0.0
-            val lon: Double = if (string[3] == '0') {
+            val latitude = (string.substring(0, 2) + "." + string.substring(2, 3)).toDoubleOrNull() ?: 0.0
+            val longitude = if (string[3] == '0') {
                 (string.substring(4, 6) + "." + string.substring(6, 7)).toDoubleOrNull() ?: 0.0
             } else {
                 (string.substring(3, 6) + "." + string.substring(6, 7)).toDoubleOrNull() ?: 0.0
             }
-            listOf(lat, lon)
+            listOf(latitude, longitude)
         }
     }
 
     fun get(context: Context) {
         if (timer.isRefreshNeeded(context)) {
-            pressureCenters = mutableListOf()
-            fronts = mutableListOf()
+            pressureCenters.clear()
+            fronts.clear()
             val urlBlob = MyApplication.nwsWPCwebsitePrefix + "/basicwx/coded_srp.txt"
             var html = urlBlob.getHtmlSep()
             html = html.replace("<br>", MyApplication.newline)
             html = html.replace(MyApplication.newline, MyApplication.sep)
             val timestamp = html.parseFirst("SURFACE PROG VALID ([0-9]{12}Z)")
             Utility.writePref("WPC_FRONTS_TIMESTAMP", timestamp)
-            html = html.parseFirst("SURFACE PROG VALID [0-9]{12}Z(.*?)" +
-                    MyApplication.sep +
-                    " " +
-                    MyApplication.sep)
+            html = html.parseFirst("SURFACE PROG VALID [0-9]{12}Z(.*?)" + MyApplication.sep + " " + MyApplication.sep)
             html = html.replace(MyApplication.sep, MyApplication.newline)
             val lines = html.split(MyApplication.newline).toMutableList()
-            for (index in lines.indices) {
+            lines.indices.forEach { index ->
                 if (index < lines.size - 1) {
                     // Handle lines that wrap around, check to see if lines don't start
                     // with a known character
@@ -296,8 +283,7 @@ object UtilityWpcFronts {
                             addWarmFrontSemicircles(front, tokens)
                             fronts.add(front)
                         }
-                        else -> {
-                        }
+                        else -> {}
                     }
                 }
             }

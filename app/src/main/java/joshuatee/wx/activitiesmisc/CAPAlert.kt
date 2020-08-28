@@ -23,27 +23,47 @@ package joshuatee.wx.activitiesmisc
 
 import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.radar.LatLon
+import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.util.UtilityLog
 
 class CapAlert {
 
-    var text: String = ""
+    var text = ""
         private set
-    var title: String = ""
+    var title = ""
         private set
-    var summary: String = ""
+    var summary = ""
         private set
-    var area: String = ""
+    var area = ""
         private set
-    var instructions: String = ""
+    var instructions = ""
         private set
-    var zones: String = ""
-    var vtec: String = ""
-    var url: String = ""
+    var zones = ""
+    var vtec = ""
+    var url = ""
         private set
-    var event: String = ""
-    var effective: String  = ""
-    var expires: String  = ""
+    var event = ""
+    var effective = ""
+    var expires = ""
+    var points = listOf<String>()
+
+    fun getClosestRadar(): String {
+        return if (points.size > 2) {
+            val lat = points[1]
+            val lon = "-" + points[0]
+            val radarSites = UtilityLocation.getNearestRadarSites(LatLon(lat, lon), 1, includeTdwr = false)
+            if (radarSites.isEmpty()) {
+                ""
+            } else {
+                radarSites[0].name
+            }
+        } else {
+            ""
+        }
+    }
 
     companion object {
 
@@ -51,7 +71,7 @@ class CapAlert {
         fun initializeFromCap(eventText: String): CapAlert {
             val capAlert = CapAlert()
             capAlert.url = eventText.parse("<id>(.*?)</id>")
-            capAlert.title  = eventText.parse("<title>(.*?)</title>")
+            capAlert.title = eventText.parse("<title>(.*?)</title>")
             capAlert.summary = eventText.parse("<summary>(.*?)</summary>")
             capAlert.instructions = eventText.parse("</description>.*?<instruction>(.*?)</instruction>.*?<areaDesc>")
             capAlert.area = eventText.parse("<cap:areaDesc>(.*?)</cap:areaDesc>")
@@ -61,24 +81,25 @@ class CapAlert {
             capAlert.event = eventText.parse("<cap:event>(.*?)</cap:event>")
             capAlert.vtec = eventText.parse("<valueName>VTEC</valueName>.*?<value>(.*?)</value>")
             capAlert.zones = eventText.parse("<valueName>UGC</valueName>.*?<value>(.*?)</value>")
-            capAlert.text = "<h4><b>"
+            capAlert.text = ""
             capAlert.text += capAlert.title
-            capAlert.text += "</b></h4>"
-            capAlert.text += "<b>Counties: "
+            capAlert.text += MyApplication.newline + MyApplication.newline
+            capAlert.text += "Counties: "
             capAlert.text += capAlert.area
-            capAlert.text += "</b><br><br>"
+            capAlert.text += MyApplication.newline + MyApplication.newline
             capAlert.text += capAlert.summary
-            capAlert.text += "<br><br><br>"
+            capAlert.text += MyApplication.newline + MyApplication.newline
             capAlert.text += capAlert.instructions
-            capAlert.text += "<br><br><br>"
-            capAlert.summary = capAlert.summary.replace("<br>\\*", "<br><br>*")
+            capAlert.text += MyApplication.newline + MyApplication.newline
             if (UIPreferences.nwsTextRemovelinebreaks) {
                 capAlert.instructions = capAlert.instructions.replace("<br><br>", "<BR><BR>").replace("<br>", " ")
             }
             return capAlert
         }
 
+        // Used by USAlert detail
         fun createFromUrl(url: String): CapAlert {
+            //UtilityLog.d("wx", "DEBUG: " + url)
             val expireStr = "This alert has expired"
             val capAlert = CapAlert()
             capAlert.url = url
@@ -96,18 +117,21 @@ class CapAlert {
                     capAlert.instructions = html.parse("</description>.*?<instruction>(.*?)</instruction>.*?<areaDesc>")
                     capAlert.area = html.parse("</instruction>.*?<areaDesc>(.*?)</areaDesc>.*?")
                     capAlert.area = capAlert.area.replace("&apos;", "'")
-                    capAlert.text = "<h4><b>"
+                    capAlert.text = ""
                     capAlert.text += capAlert.title
-                    capAlert.text += "</b></h4>"
-                    capAlert.text += "<b>Counties: "
+                    capAlert.text += MyApplication.newline + MyApplication.newline
+                    capAlert.text += "Counties: "
                     capAlert.text += capAlert.area
-                    capAlert.text += "</b><br><br>"
+                    capAlert.text += MyApplication.newline + MyApplication.newline
                     capAlert.text += capAlert.summary
-                    capAlert.text += "<br><br><br>"
+                    capAlert.text += MyApplication.newline + MyApplication.newline
                     capAlert.text += capAlert.instructions
-                    capAlert.text += "<br><br><br>"
+                    capAlert.text += MyApplication.newline + MyApplication.newline
                 }
             } else {
+                UtilityLog.d("wx", "DEBUG: processing JSON")
+                capAlert.points = getWarningsFromJson(html)
+                UtilityLog.d("wx", "DEBUG: " + capAlert.points)
                 capAlert.title = html.parse("\"headline\": \"(.*?)\"")
                 capAlert.summary = html.parse("\"description\": \"(.*?)\"")
                 capAlert.instructions = html.parse("\"instruction\": \"(.*?)\"")
@@ -116,16 +140,16 @@ class CapAlert {
                 capAlert.summary = capAlert.summary.replace("\\n", " ")
                 capAlert.summary = capAlert.summary.replace("ABC123", "\n\n")
                 capAlert.instructions = capAlert.instructions.replace("\\n", " ")
-                capAlert.text = "<h4><b>"
+                capAlert.text = ""
                 capAlert.text += capAlert.title
-                capAlert.text += "</b></h4>"
-                capAlert.text += "<b>Counties: "
+                capAlert.text += MyApplication.newline + MyApplication.newline
+                capAlert.text += "Counties: "
                 capAlert.text += capAlert.area
-                capAlert.text += "</b><br><br>"
+                capAlert.text += MyApplication.newline + MyApplication.newline
                 capAlert.text += capAlert.summary
-                capAlert.text += "<br><br><br>"
+                capAlert.text += MyApplication.newline + MyApplication.newline
                 capAlert.text += capAlert.instructions
-                capAlert.text += "<br><br><br>"
+                capAlert.text += MyApplication.newline + MyApplication.newline
             }
             capAlert.summary = capAlert.summary.replace("<br>\\*".toRegex(), "<br><br>*")
             if (UIPreferences.nwsTextRemovelinebreaks) {
@@ -134,6 +158,31 @@ class CapAlert {
             }
             return capAlert
         }
+
+        private fun getWarningsFromJson(html: String): List<String> {
+            val data = html.replace("\n", "").replace(" ", "")
+            var points = data.parseFirst("\"coordinates\":\\[\\[(.*?)\\]\\]\\}")
+            points = points.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
+            return points.split(" ")
+        }
+
+        /*private fun getWarningsFromJsonOld(html: String): List<String> {
+            val data = html.replace("\n", "").replace(" ", "")
+            val warnings = UtilityString.parseColumnMutable(data, RegExp.warningLatLonPattern)
+            val warningsFiltered = mutableListOf<String>()
+            val vtecs = data.parseColumn(RegExp.warningVtecPattern)
+            warnings.forEachIndexed { i, _ ->
+                warnings[i] = warnings[i].replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
+                if (!(vtecs[i].startsWith("O.EXP") || vtecs[i].startsWith("O.CAN"))) {
+                    warningsFiltered.add(warnings[i])
+                }
+            }
+            return if (warningsFiltered.size > 0) {
+                warningsFiltered[0].split(" ")
+            } else {
+                warningsFiltered
+            }
+        }*/
     }
 }
 

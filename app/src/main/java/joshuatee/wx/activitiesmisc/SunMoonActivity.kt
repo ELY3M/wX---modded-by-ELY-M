@@ -78,7 +78,7 @@ class SunMoonActivity : AudioPlayActivity(), OnMenuItemClickListener {
     override fun onMenuItemClick(item: MenuItem): Boolean {
         if (audioPlayMenu(item.itemId, dataB, "sunmoon", "sunmoon")) return true
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(this, dataA, dataB)
+            R.id.action_share -> UtilityShare.text(this, dataA, dataB)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

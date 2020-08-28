@@ -53,8 +53,7 @@ internal object UtilityWidgetDownload {
             TEXT_WPC -> textWpc(context)
             AFD -> afd(context)
             MOSAIC_RADAR -> radarMosaic(context)
-            else -> {
-            }
+            else -> {}
         }
     }
 
@@ -73,8 +72,8 @@ internal object UtilityWidgetDownload {
         }
     }
 
-    private fun generic(context: Context, type: WidgetFile, prod: String) {
-        val bitmap = UtilityDownload.getImageProduct(context, prod)
+    private fun generic(context: Context, type: WidgetFile, product: String) {
+        val bitmap = UtilityDownload.getImageProduct(context, product)
         saveImage(context, bitmap, type.fileName)
     }
 
@@ -96,9 +95,9 @@ internal object UtilityWidgetDownload {
 
     // save image to 2 different files to workaround android widget update strangeness
     private fun saveImage(context: Context, bitmap: Bitmap, fileName: String) {
-        val fos = getFileOutputStream(context, fileName)
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
-        fos?.close()
+        val fileOutputStream = getFileOutputStream(context, fileName)
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+        fileOutputStream?.close()
         val fos2 = getFileOutputStream(context, MyApplication.WIDGET_FILE_BAK + fileName)
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos2)
         fos2?.close()
@@ -129,17 +128,9 @@ internal object UtilityWidgetDownload {
             wfo = Utility.readPref(context, "WFO_LAST_USED", wfo).toUpperCase(Locale.US)
         }
         if (Utility.readPref(context, "WFO_TEXT_FAV", "").startsWith("VFD")) {
-            Utility.writePref(
-                    context,
-                    "AFD_WIDGET",
-                    UtilityDownload.getTextProduct(context, "VFD$wfo")
-            )
+            Utility.writePref(context, "AFD_WIDGET", UtilityDownload.getTextProduct(context, "VFD$wfo"))
         } else {
-            Utility.writePref(
-                    context,
-                    "AFD_WIDGET",
-                    UtilityDownload.getTextProduct(context, "AFD$wfo")
-            )
+            Utility.writePref(context, "AFD_WIDGET", UtilityDownload.getTextProduct(context, "AFD$wfo"))
         }
     }
 
@@ -152,22 +143,21 @@ internal object UtilityWidgetDownload {
     }
 
     private fun getFileOutputStream(context: Context, fileName: String): FileOutputStream? {
-        var fos: FileOutputStream? = null
+        var fileOutputStream: FileOutputStream? = null
         try {
             val dir = File(context.filesDir.toString() + "/shared")
-            if (!dir.mkdirs())
-                UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
+            if (!dir.mkdirs()) UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
             val file = File(dir, fileName)
-            fos = FileOutputStream(file)
+            fileOutputStream = FileOutputStream(file)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
-        return fos
+        return fileOutputStream
     }
 
     private fun wpcImage(context: Context, type: WidgetFile) {
-        val imgUrl = Utility.readPref(context, "WPG_IMG_FAV_URL", UtilityWpcImages.urls[0])
-        val bitmap = imgUrl.getImage()
+        val url = Utility.readPref(context, "WPG_IMG_FAV_URL", UtilityWpcImages.urls[0])
+        val bitmap = url.getImage()
         saveImage(context, bitmap, type.fileName)
     }
 

@@ -69,7 +69,7 @@
         android:id="@+id/action_pin"
         android:icon="@drawable/ic_touch_app_24dp"
         android:title="@string/label_pin"
-        app:showAsAction="always" />
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_FD"
         android:title="Full Disk: GOES-East"
@@ -134,6 +134,14 @@
             <item
                 android:id="@+id/action_ak"
                 android:title="Alaska"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_cak"
+                android:title="Central Alaska"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_sea"
+                android:title="Southeastern Alaska"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_hi"

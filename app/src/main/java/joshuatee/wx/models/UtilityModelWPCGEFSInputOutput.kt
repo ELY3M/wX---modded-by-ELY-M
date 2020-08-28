@@ -28,6 +28,7 @@ import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.util.UtilityImgAnim
+import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityTime
 
 internal object UtilityModelWpcGefsInputOutput {
@@ -41,40 +42,26 @@ internal object UtilityModelWpcGefsInputOutput {
             val runData = RunTimeData()
             val currentHour = UtilityTime.currentHourInUtc
             runData.mostRecentRun = "00"
-            if (currentHour in 12..17) {
-                runData.mostRecentRun = "06"
-            }
-            if (currentHour >= 18) {
-                runData.mostRecentRun = "12"
-            }
-            if (currentHour < 6) {
-                runData.mostRecentRun = "18"
-            }
-            runData.listRunAdd("00")
-            runData.listRunAdd("06")
-            runData.listRunAdd("12")
-            runData.listRunAdd("18")
+            if (currentHour in 12..17) runData.mostRecentRun = "06"
+            if (currentHour >= 18) runData.mostRecentRun = "12"
+            if (currentHour < 6) runData.mostRecentRun = "18"
+            listOf("00", "06", "12", "18").forEach { runData.listRunAdd(it) }
             runData.timeStrConv = runData.mostRecentRun
             return runData
         }
 
-    fun getImage(om: ObjectModel, time: String): Bitmap {
-        var sectorAdd = ""
-        if (om.sector == "AK") {
-            sectorAdd = "_ak"
-        }
-        val imgUrl = "${MyApplication.nwsWPCwebsitePrefix}/exper/gefs/" + om.run + "/GEFS_" +
-                        om.currentParam + "_" + om.run + "Z_f" + time + sectorAdd + ".gif"
-        return imgUrl.getImage()
+    fun getImage(om: ObjectModelNoSpinner, time: String): Bitmap {
+        val sectorAdd = if (om.sector == "AK") "_ak" else ""
+        val url = "${MyApplication.nwsWPCwebsitePrefix}/exper/gefs/" + om.run + "/GEFS_" + om.currentParam + "_" + om.run + "Z_f" + time + sectorAdd + ".gif"
+        UtilityLog.d("wx", "DEBUG: " + url + " " + om.sector)
+        return url.getImage()
     }
 
-    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) {
-            return AnimationDrawable()
+    fun getAnimation(context: Context, om: ObjectModelNoSpinner): AnimationDrawable {
+        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        val bitmaps = (om.spinnerTimeValue until om.times.size).map {
+            getImage(om, om.times[it].split(" ").getOrNull(0) ?: "")
         }
-        val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) {
-            getImage(om, om.spTime.list[it].split(" ").getOrNull(0) ?: "")
-        }
-        return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
+        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 }

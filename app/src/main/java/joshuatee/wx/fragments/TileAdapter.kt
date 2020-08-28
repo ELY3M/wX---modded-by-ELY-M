@@ -32,12 +32,12 @@ internal class TileAdapter(
         } else {
             UtilityImg.loadBitmap(context, itemList[position].photo, true)
         }
-        val paramsIv = holder.iv.layoutParams
-        paramsIv.width = MyApplication.dm.widthPixels / tilesPerRow
-        paramsIv.height = paramsIv.width * bitmap.height / bitmap.width
-        holder.iv.layoutParams = paramsIv
-        holder.iv.setImageBitmap(bitmap)
-        holder.iv.contentDescription = itemList[position].description
+        val layoutParams = holder.imageView.layoutParams
+        layoutParams.width = MyApplication.dm.widthPixels / tilesPerRow
+        layoutParams.height = layoutParams.width * bitmap.height / bitmap.width
+        holder.imageView.layoutParams = layoutParams
+        holder.imageView.setImageBitmap(bitmap)
+        holder.imageView.contentDescription = itemList[position].description
     }
 
     override fun getItemCount() = this.itemList.size
@@ -58,9 +58,7 @@ internal class TileAdapter(
             }
         }
         var prefSave = ""
-        itemList.forEach {
-            prefSave = prefSave + it.objectTagStr + ":"
-        }
+        itemList.forEach { prefSave = prefSave + it.objectTagStr + ":" }
         Utility.writePref(context, this.prefVar, prefSave)
         notifyItemMoved(fromPosition, toPosition)
         return true

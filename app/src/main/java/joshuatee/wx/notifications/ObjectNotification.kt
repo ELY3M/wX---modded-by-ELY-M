@@ -43,15 +43,9 @@ class ObjectNotification(
     val buttonStr: String
 ) {
 
-    fun sendNotification(
-        context: Context,
-        cancelString: String,
-        id: Int,
-        notification: Notification
-    ) {
+    fun sendNotification(context: Context, cancelString: String, id: Int, notification: Notification) {
         if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
-            val notifier =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notifier = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notifier.notify(cancelString, id, notification)
         }
     }

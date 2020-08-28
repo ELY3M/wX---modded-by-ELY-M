@@ -89,9 +89,7 @@ internal class ObjectMetar(context: Context, location: LatLon) {
     private fun capitalizeString(string: String): String {
         val tokens = string.split(" ")
         var newString = ""
-        tokens.forEach {
-            newString += it.capitalize() + " "
-        }
+        tokens.forEach { newString += it.capitalize() + " " }
         return newString.trimEnd()
     }
 
@@ -99,22 +97,12 @@ internal class ObjectMetar(context: Context, location: LatLon) {
         var newValue = "NA"
         if (value != "") {
             val tempD = value.toDoubleOrNull() ?: 0.0
-            newValue = if (MyApplication.unitsF) {
-                UtilityMath.roundToString(tempD)
-            } else {
-                UtilityMath.fahrenheitToCelsius(tempD)
-            }
+            newValue = if (MyApplication.unitsF) UtilityMath.roundToString(tempD) else UtilityMath.fahrenheitToCelsius(tempD)
         }
         return newValue
     }
 
-    private fun changePressureUnits(value: String): String {
-        return if (!MyApplication.unitsM) {
-            UtilityMath.pressureMBtoIn(value)
-        } else {
-            "$value mb"
-        }
-    }
+    private fun changePressureUnits(value: String) = if (!MyApplication.unitsM) UtilityMath.pressureMBtoIn(value) else "$value mb"
 
     private fun decodeIconFromMetar(condition: String, obs: RID): String {
         // https://api.weather.gov/icons/land/day/ovc?size=medium
@@ -127,12 +115,9 @@ internal class ObjectMetar(context: Context, location: LatLon) {
         currentCal.time = Date()
         currentCal.add(Calendar.DATE, 1)
         val currentTimeTomorrow = currentCal.time
-        val fallsBetweenTomorrow =
-            currentTimeTomorrow.after(sunRiseDate) && currentTimeTomorrow.before(sunSetDate)
+        val fallsBetweenTomorrow = currentTimeTomorrow.after(sunRiseDate) && currentTimeTomorrow.before(sunSetDate)
         var timeOfDay = "night"
-        if (fallsBetween || fallsBetweenTomorrow) {
-            timeOfDay = "day"
-        }
+        if (fallsBetween || fallsBetweenTomorrow) timeOfDay = "day"
         val conditionModified = condition.split(";")[0]
         val shortCondition = UtilityMetarConditions.iconFromCondition[conditionModified] ?: ""
         return MyApplication.nwsApiUrl + "/icons/land/$timeOfDay/$shortCondition?size=medium"
@@ -145,7 +130,7 @@ internal class ObjectMetar(context: Context, location: LatLon) {
         //val observationData = url.getNwsHtml()
         //icon = observationData.parse("\"icon\": \"(.*?)\",")
         //condition = observationData.parse("\"textDescription\": \"(.*?)\",")
-        val urlMetar = "${MyApplication.NWS_RADAR_PUB}/data/observations/metar/decoded/" + obsClosest.name + ".TXT"
+        val urlMetar = "${MyApplication.nwsRadarPub}/data/observations/metar/decoded/" + obsClosest.name + ".TXT"
         val metarData = urlMetar.getHtmlSep().replace("<br>", MyApplication.newline)
         temperature = metarData.parse("Temperature: (.*?) F")
         dewPoint = metarData.parse("Dew Point: (.*?) F")
@@ -169,9 +154,7 @@ internal class ObjectMetar(context: Context, location: LatLon) {
             metarWeatherCondition
         }
         condition = condition.replace("; Lightning Observed", "")
-        if (condition == "Mist") {
-            condition = "Fog/Mist"
-        }
+        if (condition == "Mist") condition = "Fog/Mist"
         icon = decodeIconFromMetar(condition, obsClosest)
         condition = condition.replace(";", " and")
         val metarDataList = metarData.split(MyApplication.newline)
@@ -186,12 +169,8 @@ internal class ObjectMetar(context: Context, location: LatLon) {
         dewPoint = changeDegreeUnits(dewPoint)
         windChill = changeDegreeUnits(windChill)
         heatIndex = changeDegreeUnits(heatIndex)
-        if (windSpeed == "") {
-            windSpeed = "0"
-        }
-        if (condition == "") {
-            condition = "NA"
-        }
+        if (windSpeed == "") windSpeed = "0"
+        if (condition == "") condition = "NA"
     }
 }
 

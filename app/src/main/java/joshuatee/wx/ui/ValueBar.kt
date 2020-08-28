@@ -36,31 +36,33 @@ import kotlin.math.roundToInt
 
 class ValueBar : View {
 
+    // FIXME reformat whole file
+
     /**
      * The thickness of the bar.
      */
-    private var mBarThickness: Int = 0
+    private var mBarThickness = 0
 
     /**
      * The length of the bar.
      */
-    private var mBarLength: Int = 0
-    private var mPreferredBarLength: Int = 0
+    private var mBarLength = 0
+    private var mPreferredBarLength = 0
 
     /**
      * The radius of the pointer.
      */
-    private var mBarPointerRadius: Int = 0
+    private var mBarPointerRadius = 0
 
     /**
      * The radius of the halo of the pointer.
      */
-    private var mBarPointerHaloRadius: Int = 0
+    private var mBarPointerHaloRadius = 0
 
     /**
      * The position of the pointer on the bar.
      */
-    private var mBarPointerPosition: Int = 0
+    private var mBarPointerPosition = 0
 
     /**
      * `Paint` instance used to draw the bar.
@@ -93,12 +95,12 @@ class ValueBar : View {
 
      * @see .onTouchEvent
      */
-    private var mIsMovingPointer: Boolean = false
+    private var mIsMovingPointer = false
 
     /**
      * The ARGB value of the currently selected color.
      */
-    private var mColor: Int = 0
+    private var mColor = 0
 
     /**
      * An array of floats that can be build into a `Color` <br></br>
@@ -109,12 +111,12 @@ class ValueBar : View {
     /**
      * Factor used to calculate the position to the Opacity on the bar.
      */
-    private var mPosToSatFactor: Float = 0.toFloat()
+    private var mPosToSatFactor = 0.toFloat()
 
     /**
      * Factor used to calculate the Opacity to the postion on the bar.
      */
-    private var mSatToPosFactor: Float = 0.toFloat()
+    private var mSatToPosFactor = 0.toFloat()
 
     /**
      * `ColorPicker` instance used to control the ColorPicker.
@@ -124,7 +126,7 @@ class ValueBar : View {
     /**
      * Used to toggle orientation between vertical and horizontal.
      */
-    private var mOrientation: Boolean = false
+    private var mOrientation = false
 
     /**
      * Interface and listener so that changes in ValueBar are sent
@@ -135,7 +137,7 @@ class ValueBar : View {
     /**
      * Value of the latest entry of the onValueChangedListener.
      */
-    private var oldChangedListenerValue: Int = 0
+    private var oldChangedListenerValue = 0
 
     interface OnValueChangedListener {
         fun onValueChanged(value: Int)
@@ -166,47 +168,23 @@ class ValueBar : View {
     }
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        val a = context.obtainStyledAttributes(
-            attrs,
-            R.styleable.ColorBars, defStyle, 0
-        )
+        val a = context.obtainStyledAttributes(attrs, R.styleable.ColorBars, defStyle, 0)
         val b = context.resources
-
-        mBarThickness = a.getDimensionPixelSize(
-            R.styleable.ColorBars_bar_thickness,
-            b.getDimensionPixelSize(R.dimen.bar_thickness)
-        )
-        mBarLength = a.getDimensionPixelSize(
-            R.styleable.ColorBars_bar_length,
-            b.getDimensionPixelSize(R.dimen.bar_length)
-        )
+        mBarThickness = a.getDimensionPixelSize(R.styleable.ColorBars_bar_thickness, b.getDimensionPixelSize(R.dimen.bar_thickness))
+        mBarLength = a.getDimensionPixelSize(R.styleable.ColorBars_bar_length, b.getDimensionPixelSize(R.dimen.bar_length))
         mPreferredBarLength = mBarLength
-        mBarPointerRadius = a.getDimensionPixelSize(
-            R.styleable.ColorBars_bar_pointer_radius,
-            b.getDimensionPixelSize(R.dimen.bar_pointer_radius)
-        )
-        mBarPointerHaloRadius = a.getDimensionPixelSize(
-            R.styleable.ColorBars_bar_pointer_halo_radius,
-            b.getDimensionPixelSize(R.dimen.bar_pointer_halo_radius)
-        )
-        mOrientation = a.getBoolean(
-            R.styleable.ColorBars_bar_orientation_horizontal, ORIENTATION_DEFAULT
-        )
-
+        mBarPointerRadius = a.getDimensionPixelSize(R.styleable.ColorBars_bar_pointer_radius, b.getDimensionPixelSize(R.dimen.bar_pointer_radius))
+        mBarPointerHaloRadius = a.getDimensionPixelSize(R.styleable.ColorBars_bar_pointer_halo_radius, b.getDimensionPixelSize(R.dimen.bar_pointer_halo_radius))
+        mOrientation = a.getBoolean(R.styleable.ColorBars_bar_orientation_horizontal, ORIENTATION_DEFAULT)
         a.recycle()
-
         mBarPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         mBarPaint!!.shader = shader
-
         mBarPointerPosition = mBarPointerHaloRadius
-
         mBarPointerHaloPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         mBarPointerHaloPaint!!.color = Color.BLACK
         mBarPointerHaloPaint!!.alpha = 0x50
-
         mBarPointerPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         mBarPointerPaint!!.color = 0xff81ff00.toInt()
-
         mPosToSatFactor = 1 / mBarLength.toFloat()
         mSatToPosFactor = mBarLength.toFloat() / 1
     }

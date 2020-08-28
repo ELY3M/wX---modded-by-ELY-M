@@ -35,7 +35,7 @@ import joshuatee.wx.vis.GoesActivity
 
 class ObjectWidgetVis(context: Context) {
 
-    val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
+    val remoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
 
     init {
         val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
@@ -45,25 +45,9 @@ class ObjectWidgetVis(context: Context) {
         UtilityWidget.setImage(context, remoteViews, VIS.fileName)
         if (!MyApplication.widgetPreventTap) {
             if (Location.isUS(widgetLocationNumber)) {
-                UtilityWidget.setupIntent(
-                        context,
-                        remoteViews,
-                        GoesActivity::class.java,
-                        R.id.iv,
-                        GoesActivity.RID,
-                        arrayOf(""),
-                        VIS.action
-                )
+                UtilityWidget.setupIntent(context, remoteViews, GoesActivity::class.java, R.id.iv, GoesActivity.RID, arrayOf(""), VIS.action)
             } else {
-                UtilityWidget.setupIntent(
-                        context,
-                        remoteViews,
-                        CanadaRadarActivity::class.java,
-                        R.id.iv,
-                        CanadaRadarActivity.RID,
-                        arrayOf(radarSite, "vis"),
-                        VIS.action
-                )
+                UtilityWidget.setupIntent(context, remoteViews, CanadaRadarActivity::class.java, R.id.iv, CanadaRadarActivity.RID, arrayOf(radarSite, "vis"), VIS.action)
             }
         }
     }

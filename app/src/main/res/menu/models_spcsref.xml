@@ -21,6 +21,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_run"
+        android:title="Run"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_time"
+        android:title="Time"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_fav"
         android:icon="@drawable/ic_star_outline_24dp"
         android:title="@string/label_toggle_favorite"

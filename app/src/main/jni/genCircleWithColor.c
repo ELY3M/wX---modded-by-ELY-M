@@ -33,8 +33,7 @@ jbyte blue(color) {
       return (color & 0xFF);
 }
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genCircleWithColor(JNIEnv * env, jclass clazz, jobject loc_buff, jobject index_buff, jfloat center_x, jfloat center_y, jfloat x_image_center_pixels, jfloat y_image_center_pixels,  jfloat one_degree_scale_factor, jdoubleArray x,jdoubleArray y,jint count,jfloat len, int triangleAmount, jobject color_buff,jintArray color_arrInt){
-
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genCircleWithColor(JNIEnv * env, jclass clazz, jobject loc_buff, jobject index_buff, jfloat center_x, jfloat center_y, jfloat x_image_center_pixels, jfloat y_image_center_pixels, jfloat one_degree_scale_factor, jdoubleArray x, jdoubleArray y, jint count, jfloat len, int triangleAmount, jobject color_buff, jintArray color_arrInt) {
 	jfloat* lBuff = (*env)-> GetDirectBufferAddress(env, loc_buff);
 	jshort* iBuff = (*env)-> GetDirectBufferAddress(env, index_buff);
 	jbyte* cBuff = (*env)-> GetDirectBufferAddress(env, color_buff);
@@ -65,8 +64,8 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genCircleWithColor(JNIEnv * env, jc
 		point_y = y_arr[i_count];
 		test1 = W_180_DIV_PI * log(tan(W_PI_DIV_4+point_x*W_PI_DIV_360));
 		test2 = W_180_DIV_PI * log(tan(W_PI_DIV_4+center_x*W_PI_DIV_360));
-		pix_y_d =  -((test1 - test2) *  one_degree_scale_factor ) + y_image_center_pixels;
-		pix_x_d =  -((point_y - center_y ) * one_degree_scale_factor ) + x_image_center_pixels;
+		pix_y_d = -((test1 - test2) *  one_degree_scale_factor ) + y_image_center_pixels;
+		pix_x_d = -((point_y - center_y ) * one_degree_scale_factor ) + x_image_center_pixels;
 		int i;
 		for(i = 0; i < triangleAmount; i++) {
 			lBuff[l_count++] = pix_x_d;

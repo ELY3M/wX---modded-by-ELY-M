@@ -30,11 +30,9 @@
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndex
-  (JNIEnv * , jclass, jobject , jint, jint);
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndex(JNIEnv * , jclass, jobject, jint, jint);
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndexLine
-  (JNIEnv * , jclass, jobject , jint, jint);
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genIndexLine(JNIEnv * , jclass, jobject, jint, jint);
 
 #ifdef __cplusplus
 }

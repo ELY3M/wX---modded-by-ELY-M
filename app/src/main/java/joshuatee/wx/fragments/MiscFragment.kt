@@ -50,26 +50,21 @@ class MiscFragment : Fragment() {
 
     private val hm = mutableMapOf<String, TileObject>()
 
-    override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_recyclerview, container, false)
-        val rowListItem = allItemList
-        val lLayout = GridLayoutManager(activity, UIPreferences.tilesPerRow)
-        val rView: RecyclerView = view.findViewById(R.id.recycler_view)
-        rView.setHasFixedSize(true)
-        rView.layoutManager = lLayout
-        val rcAdapter = TileAdapter(context!!, rowListItem, UIPreferences.tilesPerRow, "FRAGMENT_MISC_ORDER")
-        rView.adapter = rcAdapter
-        val callback = SimpleItemTouchHelperCallback(rcAdapter)
+        val gridLayoutManager = GridLayoutManager(activity, UIPreferences.tilesPerRow)
+        val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = gridLayoutManager
+        val tileAdapter = TileAdapter(context!!, tileObjects, UIPreferences.tilesPerRow, "FRAGMENT_MISC_ORDER")
+        recyclerView.adapter = tileAdapter
+        val callback = SimpleItemTouchHelperCallback(tileAdapter)
         val touchHelper = ItemTouchHelper(callback)
-        touchHelper.attachToRecyclerView(rView)
+        touchHelper.attachToRecyclerView(recyclerView)
         return view
     }
 
-    private val allItemList: MutableList<TileObject>
+    private val tileObjects: MutableList<TileObject>
         get() {
             hm["model_ncep"] = TileObject(
                     R.drawable.ncep,
@@ -175,7 +170,7 @@ class MiscFragment : Fragment() {
                     "goesfulldisk", "GOES Full Disk"
             )
             hm["nwsobs"] = TileObject(
-                    R.drawable.nwsobs,
+                    R.drawable.nwsobssites,
                     NwsObsSitesActivity::class.java,
                     "",
                     arrayOf(),

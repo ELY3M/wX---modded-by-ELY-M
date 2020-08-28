@@ -35,11 +35,5 @@ object UtilityStringExternal {
      * @return Returns value if value is null or value.length() is less or equal to than length, otherwise a String representing
      * value truncated to length.
      */
-    fun truncate(value: String, length: Int): String {
-        var valueLocal = value
-        if (valueLocal.length > length) {
-            valueLocal = valueLocal.substring(0, length)
-        }
-        return valueLocal
-    }
+    fun truncate(value: String, length: Int) = if (value.length > length) value.substring(0, length) else value
 }

@@ -33,6 +33,7 @@ import android.util.TypedValue
 import android.widget.TextView
 import android.view.ViewGroup
 import android.view.View
+import joshuatee.wx.util.Utility
 
 class ObjectDialogue {
 
@@ -41,7 +42,7 @@ class ObjectDialogue {
     }
 
     private val alertDialog: AlertDialog.Builder
-    private var arrayAdapter: ArrayAdapter<String>
+    private val arrayAdapter: ArrayAdapter<String>
 
     constructor(context: Context, title: String, list: List<String>) {
         alertDialog = AlertDialog.Builder(context)
@@ -49,17 +50,13 @@ class ObjectDialogue {
         arrayAdapter = object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent)
-                val tv = view.findViewById(android.R.id.text1) as TextView
-                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-                tv.setTextColor(Color.WHITE)
-                tv.setPadding(20,10,20,10)
+                val textView = view.findViewById(android.R.id.text1) as TextView
+                setupTextView(textView)
                 return view
             }
         }
         arrayAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
-        alertDialog.setNegativeButton(
-                "Done"
-        ) { dialog, _ -> dialog.dismiss() }
+        alertDialog.setNegativeButton("Done") { dialog, _ -> dialog.dismiss() }
     }
 
     constructor(context: Context, list: List<String>) {
@@ -67,17 +64,23 @@ class ObjectDialogue {
         arrayAdapter = object : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 val view = super.getView(position, convertView, parent)
-                val tv = view.findViewById(android.R.id.text1) as TextView
-                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-                tv.setTextColor(Color.WHITE)
-                tv.setPadding(20,10,20,10)
+                val textView = view.findViewById(android.R.id.text1) as TextView
+                setupTextView(textView)
                 return view
             }
         }
         arrayAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
-        alertDialog.setNegativeButton(
-                "Done"
-        ) { dialog, _ -> dialog.dismiss() }
+        alertDialog.setNegativeButton("Done") { dialog, _ -> dialog.dismiss() }
+    }
+
+    fun setupTextView(textView: TextView) {
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
+        if (Utility.isThemeAllWhite()) {
+            textView.setTextColor(Color.BLACK)
+        } else {
+            textView.setTextColor(Color.WHITE)
+        }
+        textView.setPadding(20,10,20,10)
     }
 
     constructor(context: Context, text: String) {
@@ -85,31 +88,21 @@ class ObjectDialogue {
         alertDialog = AlertDialog.Builder(context)
         alertDialog.setMessage(text)
         alertDialog.setCancelable(false)
-        alertDialog.setNegativeButton(
-                "Done"
-        ) { dialog, _ -> dialog.dismiss() }
+        alertDialog.setNegativeButton("Done") { dialog, _ -> dialog.dismiss() }
         val ad = alertDialog.create()
         ad.setCanceledOnTouchOutside(true)
         ad.show()
     }
 
-    fun show() {
-        alertDialog.show()
-    }
+    fun show() { alertDialog.show() }
 
-    fun setSingleChoiceItems(l: DialogInterface.OnClickListener) {
-        alertDialog.setSingleChoiceItems(arrayAdapter, checkedItem, l)
-    }
+    fun setSingleChoiceItems(listener: DialogInterface.OnClickListener) { alertDialog.setSingleChoiceItems(arrayAdapter, checkedItem, listener) }
 
-    fun setNegativeButton(l: DialogInterface.OnClickListener) {
-        alertDialog.setNegativeButton("Cancel", l)
-    }
+    fun setNegativeButton(listener: DialogInterface.OnClickListener) { alertDialog.setNegativeButton("Cancel", listener) }
 
-    fun setTitle(title: String) {
-        alertDialog.setTitle(title)
-    }
+    fun setTitle(title: String) { alertDialog.setTitle(title) }
 
-    fun getItem(idx: Int): String = arrayAdapter.getItem(idx) ?: ""
+    fun getItem(index: Int) = arrayAdapter.getItem(index) ?: ""
 }
 
 

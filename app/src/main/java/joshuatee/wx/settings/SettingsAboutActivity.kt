@@ -27,100 +27,85 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.activitiesmisc.WebView
-import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardText
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityFileManagement
 import joshuatee.wx.util.UtilityShare
-import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
+import kotlinx.android.synthetic.main.activity_linear_layout.linearLayout
 
-class SettingsAboutActivity : AudioPlayActivity(), OnMenuItemClickListener {
+class SettingsAboutActivity : BaseActivity() {
 
     private var html = ""
     private lateinit var textCard: ObjectCardText
     private val faqUrl = "https://docs.google.com/document/u/1/d/e/2PACX-1vQVkTWlnpRZCSn-ZI7tNLMDHUq-oWp9i1bf8e1yFf1ebEA2CFMapVUsALGJASj2aNhEMYAwBMs4GstL/pub"
     private val iOSUrl = "https://apps.apple.com/us/app/wxl23/id1171250052"
-    //private val releaseNotesUrl = "https://docs.google.com/document/d/1A7rvP3QrJg0QqoEtKgU4B_VqLkjECijb4CFtXyNQNAM/edit?usp=sharing"
+    //private val releaseNotesUrl = "https://docs.google.com/document/u/1/d/e/2PACX-1vT-YfH9yH_qmxLHe25UGlJvHHj_25qmTHJoeWPBbNWlvS4nm0YBmFeAnEpeel3GTL3OYKnvXkMNbnOX/pub"
     private val releaseNotesUrl = "https://github.com/ELY3M/wX---modded-by-ELY-M/blob/master/README.md"
+    
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.generic_about, menu)
+        return true
+    }
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-            savedInstanceState,
-            R.layout.activity_linear_layout_bottom_toolbar,
-            R.menu.shared_tts
-        )
-        val menu = toolbarBottom.menu
-        val playlistMi = menu.findItem(R.id.action_playlist)
-        playlistMi.isVisible = false
-        toolbarBottom.setOnMenuItemClickListener(this)
+        super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.generic_about, false)
         val version = Utility.getVersion(this)
         toolbar.subtitle = "version: $version"
-        val faqButton = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        val faqButton = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         faqButton.setTextColor(UIPreferences.textHighlightColor)
         faqButton.text = "View FAQ (Outage notifications listed at top if any current)"
-        faqButton.setOnClickListener(View.OnClickListener {
-            ObjectIntent(
-                    this,
-                    WebView::class.java,
-                    WebView.URL,
-                    arrayOf(faqUrl, "Frequently Asked Questions")
-            )
-        })
-        val releaseNotesButton = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        faqButton.setOnClickListener(View.OnClickListener { ObjectIntent.showWebView(this, arrayOf(faqUrl, "Frequently Asked Questions")) })
+        val releaseNotesButton = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         releaseNotesButton.setTextColor(UIPreferences.textHighlightColor)
         releaseNotesButton.text = "View release notes"
-        releaseNotesButton.setOnClickListener(View.OnClickListener {
-            ObjectIntent(
-                    this,
-                    WebView::class.java,
-                    WebView.URL,
-                    arrayOf(releaseNotesUrl, "Release Notes")
-            )
-        })
-        val emailButton = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        releaseNotesButton.setOnClickListener(View.OnClickListener { ObjectIntent.showWebView(this, arrayOf(releaseNotesUrl, "Release Notes")) })
+        val emailButton = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         emailButton.setTextColor(UIPreferences.textHighlightColor)
         emailButton.text = "Email developer"
         emailButton.setOnClickListener(View.OnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:")
             intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(MyApplication.emailAsString))
-            intent.putExtra(Intent.EXTRA_SUBJECT, "")
+            intent.putExtra(Intent.EXTRA_SUBJECT, "wX version $version")
             startActivity(Intent.createChooser(intent, "Send Email"))
         })
-        val iOSVersion = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        val iOSVersion = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         iOSVersion.setTextColor(UIPreferences.textHighlightColor)
         iOSVersion.text = "iOS port of wX is called wXL23"
-        iOSVersion.setOnClickListener(View.OnClickListener {
-            ObjectIntent(
-                    this,
-                    WebView::class.java,
-                    WebView.URL,
-                    arrayOf(iOSUrl, "wXL23 for iOS")
-            )
+        iOSVersion.setOnClickListener(View.OnClickListener { ObjectIntent.showWebView(this, arrayOf(iOSUrl, "wXL23 for iOS")) })
+        textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
+        val cardDeleteFiles = ObjectCardText(this, "Delete old radar files", MyApplication.textSizeNormal, MyApplication.paddingSettings)
+        cardDeleteFiles.setOnClickListener(View.OnClickListener {
+            UtilityUI.makeSnackBar(linearLayout, "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
         })
-        textCard = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        linearLayout.addView(cardDeleteFiles.card)
+        displayContent()
+    }
+
+    private fun displayContent() {
         textCard.text = Utility.showVersion(this, this)
         html = Utility.showVersion(this, this)
     }
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, html, "txt", "txt")) {
-            return true
-        }
+    override fun onRestart() {
+        textCard.text = Utility.showVersion(this, this)
+        html = Utility.showVersion(this, this)
+        super.onRestart()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(
-                this,
-                "About wX",
-                html
-            )
+            R.id.action_share -> UtilityShare.text(this, "About wX", html)
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -129,18 +114,10 @@ class SettingsAboutActivity : AudioPlayActivity(), OnMenuItemClickListener {
     override fun onKeyUp(keyCode: Int, event: KeyEvent?): Boolean {
         textCard.text = keyCode.toString() + " " + Utility.showVersion(this, this)
         return when (keyCode) {
-            KeyEvent.KEYCODE_DPAD_LEFT -> {
-                true
-            }
-            KeyEvent.KEYCODE_DPAD_RIGHT -> {
-                true
-            }
-            KeyEvent.KEYCODE_DPAD_UP -> {
-                true
-            }
-            KeyEvent.KEYCODE_DPAD_DOWN -> {
-                true
-            }
+            KeyEvent.KEYCODE_DPAD_LEFT -> true
+            KeyEvent.KEYCODE_DPAD_RIGHT -> true
+            KeyEvent.KEYCODE_DPAD_UP -> true
+            KeyEvent.KEYCODE_DPAD_DOWN -> true
             else -> super.onKeyUp(keyCode, event)
         }
     }

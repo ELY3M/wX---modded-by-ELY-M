@@ -58,24 +58,12 @@ internal object Level2 {
     private var first: Level2Record? = null
     private var vcp = 0
 
-    fun decode(
-        context: Context,
-        fileName: String,
-        binWord: ByteBuffer,
-        radialStartAngle: ByteBuffer,
-        prod: Int,
-        days: ByteBuffer,
-        milliSeconds: ByteBuffer
-    ) {
+    fun decode(context: Context, fileName: String, binWord: ByteBuffer, radialStartAngle: ByteBuffer, prod: Int, days: ByteBuffer, milliSeconds: ByteBuffer) {
         val velocityProd = prod == 154
         try {
-            val dis2 = UCARRandomAccessFile(
-                UtilityIO.getFilePath(context, fileName),
-                "r",
-                1024 * 256 * 10
-            )
-            dis2.bigEndian = true
-            dis2.let {
+            val ucarRandomAccessFile = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName), "r", 1024 * 256 * 10)
+            ucarRandomAccessFile.bigEndian = true
+            ucarRandomAccessFile.let {
                 it.setBufferSize(2621440) // 1024*256*10
                 it.bigEndian = true
                 it.seek(FILE_HEADER_SIZE.toLong())
@@ -85,54 +73,38 @@ internal object Level2 {
             var messageOffset31: Long = 0
             var recordNumber = 0
             while (true) {
-                //val r = Level2Record.factory(dis2, recordNumber++, messageOffset31) ?: break
-                val r = Level2Record.factory(dis2, recordNumber, messageOffset31) ?: break
+                val r = Level2Record.factory(ucarRandomAccessFile, recordNumber, messageOffset31) ?: break
                 recordNumber += 1
-                if (r.messageType.toInt() == 31) {
-                    messageOffset31 += (r.messageSize * 2 + 12 - 2432)
-                }
-                if (r.messageType.toInt() != 1 && r.messageType.toInt() != 31) {
-                    continue
-                }
-                if (vcp == 0) {
-                    vcp = r.vcp.toInt()
-                }
-                if (first == null) {
-                    first = r
-                }
+                if (r.messageType.toInt() == 31) messageOffset31 += (r.messageSize * 2 + 12 - 2432)
+                if (r.messageType.toInt() != 1 && r.messageType.toInt() != 31) continue
+                if (vcp == 0) vcp = r.vcp.toInt()
+                if (first == null) first = r
                 if (r.messageType.toInt() == 31) {
                     if (r.hasHighResREFData) highReflectivity.add(r)
                 }
-                if (r.hasHighResVELData) {
-                    highVelocity.add(r)
-                }
+                if (r.hasHighResVELData) highVelocity.add(r)
             }
             val numberOfRadials = 720
-            var r = 1
             days.position(0)
-            days.putShort(highReflectivity[r].dataJulianDate)
+            days.putShort(highReflectivity[1].dataJulianDate)
             milliSeconds.position(0)
-            milliSeconds.putInt(highReflectivity[r].dataMsecs)
+            milliSeconds.putInt(highReflectivity[1].dataMsecs)
             if (!velocityProd) {
-                r = 0
-                while (r < numberOfRadials) {
+                for (r in 0 until numberOfRadials) {
                     if (highReflectivity[r].elevationNum.toInt() == 1) {
                         radialStartAngle.putFloat(450.0f - highReflectivity[r].azimuth)
-                        highReflectivity[r].readData(dis2, REFLECTIVITY_HIGH, binWord)
+                        highReflectivity[r].readData(ucarRandomAccessFile, REFLECTIVITY_HIGH, binWord)
                     }
-                    r += 1
                 }
             } else {
-                r = 0
-                while (r < numberOfRadials) {
+                for (r in 0 until numberOfRadials) {
                     if (highVelocity[r].elevationNum.toInt() == 2) {
                         radialStartAngle.putFloat(450.0f - highVelocity[r].azimuth)
-                        highVelocity[r].readData(dis2, VELOCITY_HIGH, binWord)
+                        highVelocity[r].readData(ucarRandomAccessFile, VELOCITY_HIGH, binWord)
                     }
-                    r += 1
                 }
             }
-            dis2.close()
+            ucarRandomAccessFile.close()
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         } catch (e: OutOfMemoryError) {

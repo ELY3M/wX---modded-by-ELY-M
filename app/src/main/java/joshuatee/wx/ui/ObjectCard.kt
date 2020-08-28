@@ -30,14 +30,16 @@ import joshuatee.wx.MyApplication
 
 class ObjectCard {
 
-    companion object {
-        private const val padding = 2
-    }
+    companion object { private const val padding = 2 }
 
     val card: CardView
 
     constructor(context: Context) {
         card = CardView(context)
+        setupCard()
+    }
+
+    private fun setupCard() {
         card.setCardBackgroundColor(UtilityTheme.primaryColorFromSelectedTheme)
         card.cardElevation = MyApplication.cardElevation
         card.setContentPadding(padding, padding, padding, padding)
@@ -46,51 +48,31 @@ class ObjectCard {
         card.preventCornerOverlap = true
     }
 
-    constructor(context: Context, color: Int) : this(context) {
-        card.setCardBackgroundColor(color)
-    }
+    constructor(context: Context, color: Int) : this(context) { card.setCardBackgroundColor(color) }
 
     constructor(itemView: View, resId: Int) {
         card = itemView.findViewById(resId)
-        card.setCardBackgroundColor(UtilityTheme.primaryColorFromSelectedTheme)
-        card.cardElevation = MyApplication.cardElevation
-        card.setContentPadding(padding, padding, padding, padding)
-        card.radius = MyApplication.cardCorners
-        card.useCompatPadding = true
-        card.preventCornerOverlap = true
+        setupCard()
     }
 
-    constructor(itemView: View, color: Int, resId: Int) : this(itemView, resId) {
-        card.setCardBackgroundColor(color)
-    }
+    constructor(itemView: View, color: Int, resId: Int) : this(itemView, resId) { card.setCardBackgroundColor(color) }
 
     constructor(activity: Activity, resId: Int) {
         card = activity.findViewById(resId)
-        card.setCardBackgroundColor(UtilityTheme.primaryColorFromSelectedTheme)
-        card.cardElevation = MyApplication.cardElevation
-        card.setContentPadding(padding, padding, padding, padding)
-        card.radius = MyApplication.cardCorners
-        card.useCompatPadding = true
-        card.preventCornerOverlap = true
+        setupCard()
     }
 
-    constructor(activity: Activity, color: Int, resId: Int) : this(activity, resId) {
-        card.setCardBackgroundColor(color)
-    }
+    constructor(activity: Activity, color: Int, resId: Int) : this(activity, resId) { card.setCardBackgroundColor(color) }
 
     var visibility: Int
         get() = card.visibility
-        set(newValue) {
-            card.visibility = newValue
-        }
+        set(newValue) { card.visibility = newValue }
 
-    fun addView(v: View) {
-        card.addView(v)
-    }
+    fun addView(view: View) { card.addView(view) }
 
-    fun setOnClickListener(fn: View.OnClickListener) {
-        card.setOnClickListener(fn)
-    }
+    fun addView(objectLinearLayout: ObjectLinearLayout) { card.addView(objectLinearLayout.linearLayout) }
+
+    fun setOnClickListener(fn: View.OnClickListener) { card.setOnClickListener(fn) }
 }
 
 

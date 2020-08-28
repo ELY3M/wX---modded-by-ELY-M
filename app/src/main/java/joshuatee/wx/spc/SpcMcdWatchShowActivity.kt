@@ -24,19 +24,15 @@ package joshuatee.wx.spc
 import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
-import android.view.ContextMenu.ContextMenuInfo
 import android.widget.LinearLayout
 
 import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.ImageShowActivity
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.ui.UtilityUI
@@ -56,11 +52,9 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
     // 1: number of MCD, WAT, or MPD such as 0403
     //
 
-    companion object {
-        const val NUMBER: String = ""
-    }
+    companion object { const val NUMBER = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private var number = ""
     private lateinit var activityArguments: Array<String>
     private lateinit var objectCardImage: ObjectCardImage
@@ -70,28 +64,23 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_linear_layout_bottom_toolbar,
-                R.menu.spcmcdshowdetail
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
         toolbarBottom.setOnMenuItemClickListener(this)
         tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
         if (tabletInLandscape) {
-            ll.orientation = LinearLayout.HORIZONTAL
-            objectCardImage = ObjectCardImage(this, ll, UtilityImg.getBlankBitmap(), 2)
+            linearLayout.orientation = LinearLayout.HORIZONTAL
+            objectCardImage = ObjectCardImage(this, linearLayout, UtilityImg.getBlankBitmap(), 2)
         } else {
-            objectCardImage = ObjectCardImage(this, ll)
+            objectCardImage = ObjectCardImage(this, linearLayout)
         }
-        objectCardText = ObjectCardText(this, ll, toolbar, toolbarBottom)
+        objectCardText = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         activityArguments = intent.getStringArrayExtra(NUMBER)!!
         number = activityArguments[0]
         when (activityArguments[2]) {
             "MCD" -> objectWatchProduct = ObjectWatchProduct(PolygonType.MCD, number)
             "WATCH" -> objectWatchProduct = ObjectWatchProduct(PolygonType.WATCH, number)
             "MPD" -> objectWatchProduct = ObjectWatchProduct(PolygonType.MPD, number)
-            else -> {
-            }
+            else -> {}
         }
         title = objectWatchProduct.title
         getContent()
@@ -107,67 +96,19 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
             objectCardImage.setImage(objectWatchProduct.bitmap)
         }
         objectCardImage.setOnClickListener(View.OnClickListener {
-            ObjectIntent(
-                    this@SpcMcdWatchShowActivity,
-                    ImageShowActivity::class.java,
-                    ImageShowActivity.URL,
-                    arrayOf(objectWatchProduct.imgUrl, objectWatchProduct.title, "true")
-            )
+            ObjectIntent.showImage(this@SpcMcdWatchShowActivity, arrayOf(objectWatchProduct.imgUrl, objectWatchProduct.title, "true"))
         })
-        registerForContextMenu(objectCardImage.img)
-        UtilityTts.conditionalPlay(
-                activityArguments,
-                1,
-                applicationContext,
-                objectWatchProduct.text,
-                objectWatchProduct.prod
-        )
-    }
-
-    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenuInfo?) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        objectWatchProduct.wfos.forEach {
-            menu.add(0, v.id, 0, "Add location: $it - " + Utility.getWfoSiteName(it)
-            )
-        }
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        objectWatchProduct.wfos.filter { item.title.toString().contains(it) }.forEach {
-            UtilityLocation.saveLocationForMcd(
-                    it,
-                    this@SpcMcdWatchShowActivity,
-                    ll,
-                    uiDispatcher
-            )
-        }
-        return true
+        UtilityTts.conditionalPlay(activityArguments, 1, applicationContext, objectWatchProduct.text, objectWatchProduct.prod)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, objectWatchProduct.text, number, objectWatchProduct.prod)) {
-            return true
-        }
+        if (audioPlayMenu(item.itemId, objectWatchProduct.text, number, objectWatchProduct.prod)) return true
         when (item.itemId) {
-            R.id.action_share_all -> UtilityShare.shareBitmap(
-                    this,
-                    this,
-                    objectWatchProduct.title,
-                    objectWatchProduct.bitmap,
-                    Utility.fromHtml(objectWatchProduct.text)
-            )
-            R.id.action_share_text -> UtilityShare.shareText(
-                    this,
-                    objectWatchProduct.title,
-                    Utility.fromHtml(objectWatchProduct.text)
-            )
-            R.id.action_share_url -> UtilityShare.shareText(this, objectWatchProduct.title, objectWatchProduct.textUrl)
-            R.id.action_share_image -> UtilityShare.shareBitmap(
-                    this,
-                    this,
-                    objectWatchProduct.title,
-                    objectWatchProduct.bitmap
-            )
+            R.id.action_radar -> ObjectIntent.showRadarBySite(this, objectWatchProduct.getClosestRadar())
+            R.id.action_share_all -> UtilityShare.bitmap(this, this, objectWatchProduct.title, objectWatchProduct.bitmap, Utility.fromHtml(objectWatchProduct.text))
+            R.id.action_share_text -> UtilityShare.text(this, objectWatchProduct.title, Utility.fromHtml(objectWatchProduct.text))
+            R.id.action_share_url -> UtilityShare.text(this, objectWatchProduct.title, objectWatchProduct.textUrl)
+            R.id.action_share_image -> UtilityShare.bitmap(this, this, objectWatchProduct.title, objectWatchProduct.bitmap)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

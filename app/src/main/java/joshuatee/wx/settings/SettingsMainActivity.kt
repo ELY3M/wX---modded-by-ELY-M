@@ -48,94 +48,32 @@ class SettingsMainActivity : BaseActivity() {
         UtilityTheme.setPrimaryColor(this)
         val backuprestore = UtilityBackupRestore()
         val version = Utility.getVersion(this)
+        val textSize = MyApplication.textSizeLarge
+        val padding = MyApplication.paddingSettings
         toolbar.subtitle = "$version, tap on text for additional help."
-        val cardAbout = ObjectCardText(this, "About wX", MyApplication.textSizeNormal, MyApplication.paddingSettings)
-        val cardLocations = ObjectCardText(
-                this,
-                "Locations",
-                MyApplication.textSizeNormal,
-                SettingsLocationRecyclerViewActivity::class.java,
-	    	MyApplication.paddingSettings
-        )
-        val cardsn = ObjectCardText(
-	this, 
-	"Spotter Network Settings", 
-	MyApplication.textSizeNormal,
-	SettingsSpotterNetwork::class.java,
-                MyApplication.paddingSettings
-        )
-        val cardNotif = ObjectCardText(
-                this,
-                "Notifications",
-                MyApplication.textSizeNormal,
-                SettingsNotificationsActivity::class.java,
-                MyApplication.paddingSettings
-        )
-        val cardWidgets = ObjectCardText(
-                this,
-                "Widgets",
-                MyApplication.textSizeNormal,
-                SettingsWidgetsActivity::class.java,
-                MyApplication.paddingSettings
-        )
-        val cardColors = ObjectCardText(
-                this,
-                "Colors",
-                MyApplication.textSizeNormal,
-                SettingsColorsActivity::class.java,
-                MyApplication.paddingSettings
-        )
-        val cardPL = ObjectCardText(
-                this,
-                "PlayList",
-                MyApplication.textSizeNormal,
-                SettingsPlaylistActivity::class.java,
-                MyApplication.paddingSettings
-        )
-        val cardRadar = ObjectCardText(
-                this,
-                "Radar",
-                MyApplication.textSizeNormal,
-                SettingsRadarActivity::class.java,
-                MyApplication.paddingSettings
-        )
-        val cardHS = ObjectCardText(
-                this,
-                "Home Screen",
-                MyApplication.textSizeNormal,
-                SettingsHomeScreenActivity::class.java,
-                MyApplication.paddingSettings
-        )
-        val cardUI = ObjectCardText(
-                this,
-                "User Interface",
-                MyApplication.textSizeNormal,
-                SettingsUIActivity::class.java,
-                MyApplication.paddingSettings
-        )
-        val cardCtoF = ObjectCardText(this, "Celsius to fahrenheit table", MyApplication.textSizeNormal, MyApplication.paddingSettings)
+        val cardAbout = ObjectCardText(this, "About wX", textSize, padding)
+        val cardLocations = ObjectCardText(this, "Locations", textSize, SettingsLocationRecyclerViewActivity::class.java, padding)
+        val cardsn = ObjectCardText(this, "Spotter Network Settings", MyApplication.textSizeNormal, SettingsSpotterNetwork::class.java, MyApplication.paddingSettings)
+        val cardNotif = ObjectCardText(this, "Notifications", textSize, SettingsNotificationsActivity::class.java, padding)
+        val cardWidgets = ObjectCardText(this, "Widgets", textSize, SettingsWidgetsActivity::class.java, padding)
+        val cardColors = ObjectCardText(this, "Colors", textSize, SettingsColorsActivity::class.java, padding)
+        val cardPL = ObjectCardText(this, "PlayList", textSize, SettingsPlaylistActivity::class.java, padding)
+        val cardRadar = ObjectCardText(this, "Radar", textSize, SettingsRadarActivity::class.java, padding)
+        val cardHS = ObjectCardText(this, "Home Screen", textSize, SettingsHomeScreenActivity::class.java, padding)
+        val cardUI = ObjectCardText(this, "User Interface", textSize, SettingsUIActivity::class.java, padding)
+        val cardCtoF = ObjectCardText(this, "Celsius to fahrenheit table", textSize, padding)
         val cardDeleteFiles = ObjectCardText(this, "Delete old radar files", MyApplication.textSizeNormal, MyApplication.paddingSettings)
         val cardbackuppref = ObjectCardText(this, "Backup Settings", MyApplication.textSizeNormal, MyApplication.paddingSettings)
         val cardrestorepref = ObjectCardText(this, "Restore Settings", MyApplication.textSizeNormal, MyApplication.paddingSettings)
         cardCtoF.setOnClickListener(View.OnClickListener {
-            ObjectIntent(
-                    this,
-                    TextScreenActivity::class.java,
-                    TextScreenActivity.URL,
-                    arrayOf(UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table")
-            )
+            ObjectIntent.showText(this, arrayOf(UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table"))
         })
         cardbackuppref.setOnClickListener(View.OnClickListener { backuprestore.backupPrefs(this) })
         cardrestorepref.setOnClickListener(View.OnClickListener { backuprestore.restorePrefs(this) })
         cardDeleteFiles.setOnClickListener(View.OnClickListener {
-            UtilityUI.makeSnackBar(
-                    ll,
-                    "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this)
-            )
+            UtilityUI.makeSnackBar(linearLayout, "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
         })
-        cardAbout.setOnClickListener(View.OnClickListener {
-            ObjectIntent(this, SettingsAboutActivity::class.java)
-        })
+        cardAbout.setOnClickListener(View.OnClickListener { ObjectIntent(this, SettingsAboutActivity::class.java) })
         listOf(
                 cardAbout.card,
                 cardLocations.card,
@@ -152,107 +90,18 @@ class SettingsMainActivity : BaseActivity() {
 		cardbackuppref.card,
 		cardrestorepref.card
         ).forEach {
-            ll.addView(it)
+            linearLayout.addView(it)
         }
-        ll.addView(
+	
+        linearLayout.addView(
                 ObjectSettingsCheckBox(
-                        this,
-                        this,
-                        "Check for SPC MCD/Watches",
-                        "CHECKSPC",
-                        R.string.checkspc_switch_label
-                ).card
-        )
-        ll.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        this,
-                        "Check for WPC MPDs",
-                        "CHECKWPC",
-                        R.string.checkwpc_switch_label
-                ).card
-        )
-        ll.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        this,
-                        "Check for TOR,TST,FFW",
-                        "CHECKTOR",
-                        R.string.checktor_switch_label
-                ).card
-        )
-        ll.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        this,
-                        "Media control notification",
-                        "MEDIA_CONTROL_NOTIF",
-                        R.string.media_control_notif_tv
-                ).card
-        )
-        ll.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        this,
-                        "Dual-pane radar from main screen",
-                        "DUALPANE_RADAR_ICON",
-                        R.string.dualpane_radar_icon_tv
-                ).card
-        )
-        ll.addView(
-                ObjectSettingsCheckBox(
-                        this,
-                        this,
-                        "Translate abbreviations",
-                        "TRANSLATE_TEXT",
-                        R.string.translate_text_label
-                ).card
-        )
-        ll.addView(
-                ObjectSettingsCheckBox(
-                        this,
                         this,
                         "Check for Internet on startup",
                         "CHECKINTERNET",
                         R.string.checkinternet_switch_label
                 ).card
         )
-        ll.addView(
-                ObjectSettingsSeekbar(
-                        this,
-                        this,
-                        "Refresh interval for location in minutes",
-                        "REFRESH_LOC_MIN",
-                        R.string.refresh_loc_min_np_label,
-                        10,
-                        0,
-                        120
-                ).card
-        )
-        ll.addView(
-                ObjectSettingsSeekbar(
-                        this,
-                        this,
-                        "Roaming distance check in miles",
-                        "ROAMING_LOCATION_DISTANCE_CHECK",
-                        R.string.roaming_location_distance_check_np_label,
-                        5,
-                        1,
-                        120
-                ).card
-        )
-        ll.addView(
-                ObjectSettingsSeekbar(
-                        this,
-                        this,
-                        "Text to speech speed",
-                        "TTS_SPEED_PREF",
-                        R.string.tts_speed_np_label,
-                        10,
-                        1,
-                        20
-                ).card
-        )
+
     }
 
     override fun onStop() {

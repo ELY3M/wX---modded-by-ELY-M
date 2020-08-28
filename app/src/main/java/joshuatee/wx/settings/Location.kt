@@ -24,7 +24,6 @@ package joshuatee.wx.settings
 import android.content.Context
 import joshuatee.wx.MyApplication
 import joshuatee.wx.canada.UtilityCanada
-import joshuatee.wx.objects.LatLonStr
 import joshuatee.wx.radar.LatLon
 import joshuatee.wx.util.Utility
 import java.util.*
@@ -60,8 +59,6 @@ class Location(val context: Context, locNumInt: Int) {
     private val alertNotificationSwoCurrent: String
     private val alertNotificationSpcfwCurrent: String
     private val alertNotificationWpcmpdCurrent: String
-    private val raw: String
-    private val dst: String
     val isUS: Boolean
     var observation = ""
     private val prefNumberString: String
@@ -86,18 +83,14 @@ class Location(val context: Context, locNumInt: Int) {
         alertNotificationSwoCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_SWO$jStr", "false")
         alertNotificationSpcfwCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_SPCFW$jStr", "false")
         alertNotificationWpcmpdCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_WPCMPD$jStr", "false")
-        raw = Utility.readPref(context, "LOC" + jStr + "_TIMERAW", "")
-        dst = Utility.readPref(context, "LOC" + jStr + "_TIMEDST", "")
         state = Utility.getWfoSiteName(wfo).split(",")[0]
         observation = Utility.readPref(context, "LOC" + jStr + "_OBSERVATION", "")
         isUS = us(x)
         addToListOfNames(name)
     }
 
-    fun saveLocationToNewSlot(newLocNumInt: Int) {
+    fun saveToNewSlot(newLocNumInt: Int) {
         val iStr = (newLocNumInt + 1).toString()
-        Utility.writePref(context, "LOC" + iStr + "_TIMERAW", raw)
-        Utility.writePref(context, "LOC" + iStr + "_TIMEDST", dst)
         Utility.writePref(context, "ALERT" + iStr + "_NOTIFICATION", alertNotificationCurrent)
         Utility.writePref(context, "ALERT_CC" + iStr + "_NOTIFICATION", alertCcNotificationCurrent)
         Utility.writePref(context, "ALERT_7DAY_" + iStr + "_NOTIFICATION", alertSevenDayNotificationCurrent)
@@ -124,40 +117,34 @@ class Location(val context: Context, locNumInt: Int) {
         Utility.writePref(context, "LOC" + prefNumberString + "_OBSERVATION", observation)
     }
 
-    val notification: Boolean get() = alertNotificationCurrent.startsWith("t")
+    val notification get() = alertNotificationCurrent.startsWith("t")
 
-    val notificationRadar: Boolean get() = alertNotificationRadarCurrent.startsWith("t")
+    val notificationRadar get() = alertNotificationRadarCurrent.startsWith("t")
 
-    val ccNotification: Boolean get() = alertCcNotificationCurrent.startsWith("t")
+    val ccNotification get() = alertCcNotificationCurrent.startsWith("t")
 
-    val sevenDayNotification: Boolean get() = alertSevenDayNotificationCurrent.startsWith("t")
+    val sevenDayNotification get() = alertSevenDayNotificationCurrent.startsWith("t")
 
-    val sound: Boolean get() = alertNotificationSoundCurrent.startsWith("t")
+    val sound get() = alertNotificationSoundCurrent.startsWith("t")
 
-    val notificationMcd: Boolean get() = alertNotificationMcdCurrent.startsWith("t")
+    val notificationMcd get() = alertNotificationMcdCurrent.startsWith("t")
 
-    val notificationSwo: Boolean get() = alertNotificationSwoCurrent.startsWith("t")
+    val notificationSwo get() = alertNotificationSwoCurrent.startsWith("t")
 
-    val notificationSpcFw: Boolean get() = alertNotificationSpcfwCurrent.startsWith("t")
+    val notificationSpcFw get() = alertNotificationSpcfwCurrent.startsWith("t")
 
-    val notificationWpcMpd: Boolean get() = alertNotificationWpcmpdCurrent.startsWith("t")
+    val notificationWpcMpd get() = alertNotificationWpcmpdCurrent.startsWith("t")
 
     companion object {
-        var numLocations: Int = 1
-        var currentLocation: Int = 0
+        var numLocations = 1
+        var currentLocation = 0
             private set
 
-        val listOf: MutableList<String> = mutableListOf()
+        val listOf = mutableListOf<String> ()
 
-        fun us(xStr: String): Boolean = if (xStr.isNotEmpty()) {
-            Character.isDigit(xStr[0])
-        } else {
-            true
-        }
+        fun us(xStr: String) = if (xStr.isNotEmpty()) Character.isDigit(xStr[0]) else true
 
-        fun addToListOfNames(name: String) {
-            listOf.add(name)
-        }
+        fun addToListOfNames(name: String) { listOf.add(name) }
 
         fun checkCurrentLocationValidity() {
             if (currentLocation >= MyApplication.locations.size) {
@@ -166,9 +153,7 @@ class Location(val context: Context, locNumInt: Int) {
             }
         }
 
-        private fun clearListOfNames() {
-            listOf.clear()
-        }
+        private fun clearListOfNames() { listOf.clear() }
 
         private fun initNumLocations(context: Context) {
             val numberOfLocations = Utility.readPref(context, "LOC_NUM_INT", 1)
@@ -182,37 +167,35 @@ class Location(val context: Context, locNumInt: Int) {
 
         var currentLocationStr: String
             get() = (currentLocation + 1).toString()
-            set(currentLocationStr) {
-                currentLocation = (currentLocationStr.toIntOrNull() ?: 0) - 1
-            }
+            set(currentLocationStr) { currentLocation = (currentLocationStr.toIntOrNull() ?: 0) - 1 }
 
-        val state: String get() = MyApplication.locations.getOrNull(currentLocation)?.state ?: "MI"
+        val state get() = MyApplication.locations.getOrNull(currentLocation)?.state ?: "MI"
 
-        val wfo: String get() = MyApplication.locations.getOrNull(currentLocation)?.wfo ?: "DTX"
+        val wfo get() = MyApplication.locations.getOrNull(currentLocation)?.wfo ?: "DTX"
 
-        val rid: String get() = MyApplication.locations.getOrNull(currentLocation)?.rid ?: "DTX"
+        val rid get() = MyApplication.locations.getOrNull(currentLocation)?.rid ?: "DTX"
 
-        val x: String get() = MyApplication.locations.getOrNull(currentLocation)?.x ?: "0.0"
+        val x get() = MyApplication.locations.getOrNull(currentLocation)?.x ?: "0.0"
 
-        val y: String get() = MyApplication.locations.getOrNull(currentLocation)?.y ?: "-0.0"
+        val y get() = MyApplication.locations.getOrNull(currentLocation)?.y ?: "-0.0"
 
-        val latLon: LatLon get() = LatLon(x, y)
+        val latLon get() = LatLon(x, y)
 
-        val name: String get() = MyApplication.locations.getOrNull(currentLocation)?.name ?: ""
+        val name get() = MyApplication.locations.getOrNull(currentLocation)?.name ?: ""
 
-        fun getName(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.name ?: "0.0"
+        fun getName(locNum: Int) = MyApplication.locations.getOrNull(locNum)?.name ?: "0.0"
 
-        fun getX(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.x ?: "0.0"
+        fun getX(locNum: Int) = MyApplication.locations.getOrNull(locNum)?.x ?: "0.0"
 
-        fun getY(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.y ?: "-0.0"
+        fun getY(locNum: Int) = MyApplication.locations.getOrNull(locNum)?.y ?: "-0.0"
 
-        fun getRid(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.rid ?: "DTX"
+        fun getRid(locNum: Int) = MyApplication.locations.getOrNull(locNum)?.rid ?: "DTX"
 
-        fun getWfo(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.wfo ?: "DTX"
+        fun getWfo(locNum: Int) = MyApplication.locations.getOrNull(locNum)?.wfo ?: "DTX"
 
-        fun getObservation(locNum: Int): String = MyApplication.locations.getOrNull(locNum)?.observation ?: ""
+        fun getObservation(locNum: Int) = MyApplication.locations.getOrNull(locNum)?.observation ?: ""
 
-        fun getLatLon(locNum: Int): LatLon = LatLon(getX(locNum), getY(locNum))
+        fun getLatLon(locNum: Int) = LatLon(getX(locNum), getY(locNum))
 
         fun getIdentifier(locNum: Int): String {
             val lat = MyApplication.locations.getOrNull(locNum)?.x ?: ""
@@ -220,19 +203,15 @@ class Location(val context: Context, locNumInt: Int) {
             return "LAT" + lat + "LON" + lon
         }
 
-        val locationIndex: Int get() = currentLocation
+        val locationIndex get() = currentLocation
 
-        fun isUS(locationNumber: Int): Boolean =
-                MyApplication.locations.getOrNull(locationNumber)?.isUS
-                        ?: true
+        fun isUS(locationNumber: Int) = MyApplication.locations.getOrNull(locationNumber)?.isUS ?: true
 
-        fun isUS(locationNumberString: String): Boolean =
-                MyApplication.locations[locationNumberString.toInt() - 1].isUS
+        fun isUS(locationNumberString: String) = MyApplication.locations[locationNumberString.toInt() - 1].isUS
 
-        val isUS: Boolean get() = MyApplication.locations.getOrNull(currentLocation)?.isUS ?: true
+        val isUS get() = MyApplication.locations.getOrNull(currentLocation)?.isUS ?: true
 
-        fun getRid(context: Context, locNum: String): String =
-                Utility.readPref(context, "RID$locNum", "")
+        fun getRid(context: Context, locNum: String) = Utility.readPref(context, "RID$locNum", "")
 
         fun refreshLocationData(context: Context) {
             initNumLocations(context)
@@ -253,34 +232,14 @@ class Location(val context: Context, locNumInt: Int) {
             return listOf(wfo, radarStation)
         }
 
-        fun locationSave(context: Context, latLon: LatLon): String {
-            return locationSave(
-                    context,
-                    (numLocations + 1).toString(),
-                    latLon.latString,
-                    latLon.lonString,
-                    latLon.toString()
-            )
-        }
+        fun save(context: Context, latLon: LatLon) =
+                save(context, (numLocations + 1).toString(), latLon.latString, latLon.lonString, latLon.toString())
 
-        fun locationSave(
-                context: Context,
-                locNum: String,
-                xStr: String,
-                yStr: String,
-                labelStr: String
-        ): String {
-            if (xStr == "" || yStr == "" || labelStr == "") {
-                return "Location label, latitude, and longitude all must have valid values, please try again."
-            }
-            val locNumToSave: Int
+        fun save(context: Context, locNum: String, xStr: String, yStr: String, labelStr: String): String {
+            if (xStr == "" || yStr == "" || labelStr == "") return "Location label, latitude, and longitude all must have valid values, please try again."
             val locNumInt = locNum.toIntOrNull() ?: 0
             val locNumIntCurrent = numLocations
-            locNumToSave = if (locNumInt == locNumIntCurrent + 1) {
-                locNumInt
-            } else {
-                locNumIntCurrent
-            }
+            val locNumToSave = if (locNumInt == locNumIntCurrent + 1) locNumInt else locNumIntCurrent
             Utility.writePref(context, "LOC" + locNum + "_X", xStr)
             Utility.writePref(context, "LOC" + locNum + "_Y", yStr)
             Utility.writePref(context, "LOC" + locNum + "_LABEL", labelStr)
@@ -291,47 +250,30 @@ class Location(val context: Context, locNumInt: Int) {
                 val wfoAndRadar =  getWfoRadarSiteFromPoint(LatLon(xStr, yStr))
                 wfo = wfoAndRadar[0]
                 radarSite = wfoAndRadar[1]
-                if (wfo == "") {
-                    wfo = UtilityLocation.getNearestOffice( "WFO", LatLon(xStr, yStr)).toLowerCase(Locale.US)
-                }
-                if (radarSite == "") {
-                    radarSite = UtilityLocation.getNearestOffice( "RADAR", LatLon(xStr, yStr))
-                }
+                if (wfo == "") wfo = UtilityLocation.getNearestOffice( "WFO", LatLon(xStr, yStr)).toLowerCase(Locale.US)
+                if (radarSite == "") radarSite = UtilityLocation.getNearestOffice( "RADAR", LatLon(xStr, yStr))
                 // CT shows mosaic not nexrad so the old way is needed
-                if (radarSite == "") {
-                    radarSite = GlobalDictionaries.wfoToRadarSite[wfo.toUpperCase(Locale.US)] ?: ""
-                }
+                if (radarSite == "") radarSite = GlobalDictionaries.wfoToRadarSite[wfo.toUpperCase(Locale.US)] ?: ""
                 Utility.writePref(context, "RID$locNum", radarSite.toUpperCase(Locale.US))
                 Utility.writePref(context, "NWS$locNum", wfo.toUpperCase(Locale.US)
                 )
             } else if (xStr.contains("CANADA")) {
-                var tmpLatLon = LatLonStr()
+                var tmpLatLon = LatLon()
                 if (xStr.length < 12) {
                     // if we are here then the user used the submenu
                     // need to calculate lat/lon first as get rid is now coded to parse on ":" for both x/y
                     // first check if the label is present in the database
-                    if (UtilityCanada.isLabelPresent(labelStr)) {
-                        tmpLatLon = UtilityCanada.getLatLonFromLabel(labelStr)
-                    }
+                    if (UtilityCanada.isLabelPresent(labelStr)) tmpLatLon = UtilityCanada.getLatLonFromLabel(labelStr)
                 }
                 var prov = ""
                 val parseProv = xStr.split(":").dropLastWhile { it.isEmpty() }
                 if (parseProv.isNotEmpty()) prov = parseProv[1]
                 var id = ""
                 val parseId = yStr.split(":").dropLastWhile { it.isEmpty() }
-                if (parseId.isNotEmpty()) {
-                    id = parseId[0]
-                }
-                if (xStr.length > 12) {
-                    tmpLatLon.latStr = parseProv[2]
-                    tmpLatLon.lonStr = parseId[1]
-                }
-                Utility.writePref(
-                        context,
-                        "LOC" + locNum + "_X",
-                        "CANADA" + ":" + prov + ":" + tmpLatLon.latStr
-                )
-                Utility.writePref(context, "LOC" + locNum + "_Y", id + ":" + tmpLatLon.lonStr)
+                if (parseId.isNotEmpty()) id = parseId[0]
+                if (xStr.length > 12) tmpLatLon = LatLon(parseProv[2], parseId[1])
+                Utility.writePref(context, "LOC" + locNum + "_X", "CANADA" + ":" + prov + ":" + tmpLatLon.latString)
+                Utility.writePref(context, "LOC" + locNum + "_Y", id + ":" + tmpLatLon.lonString)
                 setNumLocations(context, locNumToSave)
                 radarSite = UtilityCanada.getRadarSite(xStr, yStr)
                 Utility.writePref(context, "RID$locNum", radarSite.toUpperCase(Locale.US))
@@ -342,9 +284,7 @@ class Location(val context: Context, locNumInt: Int) {
             }
             refreshLocationData(context)
             setCurrentLocationStr(context, locNum)
-            return "Saving location $locNum as $labelStr ($xStr,$yStr) " + wfo.toUpperCase(
-                    Locale.US
-            ) + "(" + radarSite.toUpperCase(Locale.US) + ")"
+            return "Saving location $locNum as $labelStr ($xStr,$yStr) " + wfo.toUpperCase(Locale.US) + "(" + radarSite.toUpperCase(Locale.US) + ")"
         }
 
         private fun setCurrentLocationStr(context: Context, locNum: String) {
@@ -352,7 +292,7 @@ class Location(val context: Context, locNumInt: Int) {
             currentLocationStr = locNum
         }
 
-        fun deleteLocation(context: Context, locToDeleteStr: String) {
+        fun delete(context: Context, locToDeleteStr: String) {
             val locToDeleteInt = locToDeleteStr.toIntOrNull() ?: 0
             val locNumIntCurrent = numLocations
             val locNumIntCurrentStr = locNumIntCurrent.toString()
@@ -380,55 +320,15 @@ class Location(val context: Context, locNumInt: Int) {
                     val alertNotificationSwoCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_SWO$jStr", "false")
                     val alertNotificationSpcfwCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_SPCFW$jStr", "false")
                     val alertNotificationWpcmpdCurrent = Utility.readPref(context, "ALERT_NOTIFICATION_WPCMPD$jStr", "false")
-                    val raw = Utility.readPref(context, "LOC" + jStr + "_TIMERAW", "")
-                    val dst = Utility.readPref(context, "LOC" + jStr + "_TIMEDST", "")
-                    Utility.writePref(context, "LOC" + iStr + "_TIMERAW", raw)
-                    Utility.writePref(context, "LOC" + iStr + "_TIMEDST", dst)
-                    Utility.writePref(
-                            context,
-                            "ALERT" + iStr + "_NOTIFICATION",
-                            alertNotificationCurrent
-                    )
-                    Utility.writePref(
-                            context,
-                            "ALERT_CC" + iStr + "_NOTIFICATION",
-                            alertCcNotificationCurrent
-                    )
-                    Utility.writePref(
-                            context,
-                            "ALERT_7DAY_" + iStr + "_NOTIFICATION",
-                            alert7Day1NotificationCurrent
-                    )
-                    Utility.writePref(
-                            context,
-                            "ALERT_NOTIFICATION_SOUND$iStr",
-                            alertNotificationSoundCurrent
-                    )
-                    Utility.writePref(
-                            context,
-                            "ALERT_NOTIFICATION_MCD$iStr",
-                            alertNotificationMcdCurrent
-                    )
-                    Utility.writePref(
-                            context,
-                            "ALERT_NOTIFICATION_SWO$iStr",
-                            alertNotificationSwoCurrent
-                    )
-                    Utility.writePref(
-                            context,
-                            "ALERT_NOTIFICATION_SPCFW$iStr",
-                            alertNotificationSpcfwCurrent
-                    )
-                    Utility.writePref(
-                            context,
-                            "ALERT_NOTIFICATION_WPCMPD$iStr",
-                            alertNotificationWpcmpdCurrent
-                    )
-                    Utility.writePref(
-                            context,
-                            "ALERT_NOTIFICATION_RADAR$iStr",
-                            alertNotificationRadarCurrent
-                    )
+                    Utility.writePref(context, "ALERT" + iStr + "_NOTIFICATION", alertNotificationCurrent)
+                    Utility.writePref(context, "ALERT_CC" + iStr + "_NOTIFICATION", alertCcNotificationCurrent)
+                    Utility.writePref(context, "ALERT_7DAY_" + iStr + "_NOTIFICATION", alert7Day1NotificationCurrent)
+                    Utility.writePref(context, "ALERT_NOTIFICATION_SOUND$iStr", alertNotificationSoundCurrent)
+                    Utility.writePref(context, "ALERT_NOTIFICATION_MCD$iStr", alertNotificationMcdCurrent)
+                    Utility.writePref(context, "ALERT_NOTIFICATION_SWO$iStr", alertNotificationSwoCurrent)
+                    Utility.writePref(context, "ALERT_NOTIFICATION_SPCFW$iStr", alertNotificationSpcfwCurrent)
+                    Utility.writePref(context, "ALERT_NOTIFICATION_WPCMPD$iStr", alertNotificationWpcmpdCurrent)
+                    Utility.writePref(context, "ALERT_NOTIFICATION_RADAR$iStr", alertNotificationRadarCurrent)
                     Utility.writePref(context, "LOC" + iStr + "_OBSERVATION", locObsCurrent)
                     Utility.writePref(context, "LOC" + iStr + "_X", locXCurrent)
                     Utility.writePref(context, "LOC" + iStr + "_Y", locYCurrent)

@@ -41,35 +41,25 @@ internal object UtilityModelSpcSrefInputOutput {
             val tmpTxt = html.parse(RegExp.srefPattern2)
             val result = html.parseColumn(RegExp.srefPattern3)
             val latestRunAl = tmpTxt.split("</a>").dropLastWhile { it.isEmpty() }
-            if (latestRunAl.isNotEmpty()) {
-                runData.listRunAdd(latestRunAl[0])
-            }
-            if (result.isNotEmpty()) {
-                result.forEach {
-                    runData.listRunAdd(it)
-                }
-            }
+            if (latestRunAl.isNotEmpty()) runData.listRunAdd(latestRunAl[0])
+            if (result.isNotEmpty()) { result.forEach { runData.listRunAdd(it) } }
             runData.imageCompleteStr = tmpTxt
             runData.mostRecentRun = tmpTxt.parseLastMatch(RegExp.srefPattern1)
             return runData
         }
 
-    fun getImage(context: Context, om: ObjectModel, time: String): Bitmap {
+    fun getImage(context: Context, om: ObjectModelNoSpinner, time: String): Bitmap {
         val run = om.run.replace("z", "")
-        return UtilityImg.getBitmapAddWhiteBackground(
-            context,
-            "${MyApplication.nwsSPCwebsitePrefix}/exper/sref/gifs/$run/${om.currentParam}$time.gif"
-        )
+        val url = "${MyApplication.nwsSPCwebsitePrefix}/exper/sref/gifs/$run/${om.currentParam}$time.gif"
+        return UtilityImg.getBitmapAddWhiteBackground(context, url)
     }
 
-    fun getAnimation(context: Context, om: ObjectModel): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) {
-            return AnimationDrawable()
+    fun getAnimation(context: Context, om: ObjectModelNoSpinner): AnimationDrawable {
+        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        val bitmaps = (om.spinnerTimeValue until om.times.size).map {
+            getImage(context, om, om.times[it].split(" ").getOrNull(0) ?: "")
         }
-        val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) {
-            getImage(context, om, om.spTime.list[it].split(" ").getOrNull(0) ?: "")
-        }
-        return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
+        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 }
 

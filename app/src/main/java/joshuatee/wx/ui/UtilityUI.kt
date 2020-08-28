@@ -30,7 +30,6 @@ import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.os.Build
 import android.util.TypedValue
 import android.view.View
 import android.widget.*
@@ -46,12 +45,12 @@ object UtilityUI {
 
     fun setResDrawable(context: Context, fab: RemoteViews, ib: Int, resourceDrawable: Int) {
         val wrappedContext = ContextWrapper(context)
-        val d = ContextCompat.getDrawable(wrappedContext, resourceDrawable)!!
-        val b = Bitmap.createBitmap(d.intrinsicWidth, d.intrinsicHeight, Bitmap.Config.ARGB_8888)
-        val c = Canvas(b)
-        d.setBounds(0, 0, c.width, c.height)
-        d.draw(c)
-        fab.setImageViewBitmap(ib, b)
+        val drawable = ContextCompat.getDrawable(wrappedContext, resourceDrawable)!!
+        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+        fab.setImageViewBitmap(ib, bitmap)
     }
 
     fun makeToastLegacy(context: Context, message: String) {
@@ -70,17 +69,17 @@ object UtilityUI {
         snack.setActionTextColor(Color.YELLOW)
         snack.setAction("DISMISS") { snack.dismiss() }
         val viewSnack = snack.view
-        val tv = viewSnack.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
+        val textView = viewSnack.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
         val fgColor = Color.WHITE
         val bgColor = Color.BLACK
-        tv.setTextColor(fgColor)
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
+        textView.setTextColor(fgColor)
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
         viewSnack.setBackgroundColor(bgColor)
         snack.show()
     }
 
     fun immersiveMode(activity: Activity) {
-        if (Build.VERSION.SDK_INT >= 19 && UIPreferences.radarImmersiveMode) {
+        if (UIPreferences.radarImmersiveMode) {
             activity.window.decorView.systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
                         View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN or
@@ -99,19 +98,14 @@ object UtilityUI {
             itemList[0] = tmp
         }
         var ridFav = ""
-        itemList.indices.forEach {
-            ridFav = ridFav + ":" + MyApplication.semicolon.split(itemList[it])[0]
+        itemList.indices.forEach { item ->
+            ridFav = ridFav + ":" + itemList[item].split(";").dropLastWhile { it.isEmpty() }[0]
         }
         Utility.writePref(context, prefToken, ridFav)
         return ridFav
     }
 
-    fun moveDown(
-        context: Context,
-        prefToken: String,
-        itemList: MutableList<String>,
-        position: Int
-    ): String {
+    fun moveDown(context: Context, prefToken: String, itemList: MutableList<String>, position: Int): String {
         if (position != itemList.lastIndex) {
             val tmp = itemList[position + 1]
             itemList[position + 1] = itemList[position]
@@ -121,49 +115,33 @@ object UtilityUI {
             itemList[0] = itemList[position]
             itemList[itemList.lastIndex] = tmp
         }
-        var ridFav = ""
-        itemList.indices.forEach {
-            ridFav = ridFav + ":" + MyApplication.semicolon.split(itemList[it])[0]
+        var value = ""
+        itemList.indices.forEach { item ->
+            value = value + ":" + itemList[item].split(";").dropLastWhile { it.isEmpty() }[0]
         }
-        Utility.writePref(context, prefToken, ridFav)
-        return ridFav
+        Utility.writePref(context, prefToken, value)
+        return value
     }
 
     fun statusBarHeight(context: Context): Int {
-        var result = 0
         val resourceId = context.resources.getIdentifier("status_bar_height", "dimen", "android")
-        if (resourceId > 0) {
-            result = context.resources.getDimensionPixelSize(resourceId)
-        }
-        return result
+        return if (resourceId > 0) context.resources.getDimensionPixelSize(resourceId) else 0
     }
 
     fun navigationBarHeight(context: Context): Int {
-        var result = 0
-        val resourceId =
-            context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
-        if (resourceId > 0) {
-            result = context.resources.getDimensionPixelSize(resourceId)
-        }
-        return result
+        val resourceId = context.resources.getIdentifier("navigation_bar_height", "dimen", "android")
+        return if (resourceId > 0) context.resources.getDimensionPixelSize(resourceId) else 0
     }
 
-    fun spToPx(sp: Int, context: Context): Float {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp.toFloat(), context.resources.displayMetrics)
-    }
+    fun spToPx(sp: Int, context: Context) = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp.toFloat(), context.resources.displayMetrics)
 
     fun isTablet(): Boolean {
         val displayMetrics = MyApplication.dm
-        val wInches = displayMetrics.widthPixels / displayMetrics.densityDpi
-        val hInches = displayMetrics.heightPixels / displayMetrics.densityDpi
-        val screenDiagonal = sqrt(wInches.toDouble().pow(2.0) + hInches.toDouble().pow(2.0))
-        return (screenDiagonal >= 7.0)
+        val width = displayMetrics.widthPixels / displayMetrics.densityDpi
+        val height = displayMetrics.heightPixels / displayMetrics.densityDpi
+        val screenDiagonal = sqrt(width.toDouble().pow(2.0) + height.toDouble().pow(2.0))
+        return screenDiagonal >= 7.0
     }
 
-    fun isLandScape(context: Context): Boolean {
-        if(context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            return true
-        }
-        return false
-    }
+    fun isLandScape(context: Context) = context.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 }

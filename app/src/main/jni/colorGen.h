@@ -30,8 +30,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_ColorGen
-  (JNIEnv * , jclass, jobject , jint , jbyteArray);
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_ColorGen(JNIEnv * , jclass, jobject , jint , jbyteArray);
 
 #ifdef __cplusplus
 }

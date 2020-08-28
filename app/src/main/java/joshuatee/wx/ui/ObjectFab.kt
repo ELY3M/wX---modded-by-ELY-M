@@ -40,27 +40,19 @@ class ObjectFab {
 
     constructor(activity: Activity, context: Context, resId: Int, fn: View.OnClickListener) {
         fab = activity.findViewById(resId)
-        setupFAB(context)
+        setupFab(context)
         setOnClickListener(fn)
     }
 
-    constructor(
-            activity: Activity,
-            context: Context,
-            resId: Int,
-            iconID: Int,
-            fn: View.OnClickListener
-    ) {
+    constructor(activity: Activity, context: Context, resId: Int, iconID: Int, fn: View.OnClickListener) {
         fab = activity.findViewById(resId)
-        setupFAB(context, iconID)
+        setupFab(context, iconID)
         setOnClickListener(fn)
     }
 
-    fun setOnClickListener(fn: View.OnClickListener) {
-        fab.setOnClickListener(fn)
-    }
+    fun setOnClickListener(fn: View.OnClickListener) = fab.setOnClickListener(fn)
 
-    var visibility: Int
+    var visibility
         get() = fab.visibility
         set(newValue) {
             when (newValue) {
@@ -72,42 +64,28 @@ class ObjectFab {
     fun fabSetResDrawable(context: Context, resourceDrawable: Int) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val drawable = ContextCompat.getDrawable(context, resourceDrawable)
-            //drawable!!.mutate().setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY);
-            //drawable!!.mutate().colorFilter
             fab.setImageDrawable(drawable)
         } else {
-            val d = ContextCompat.getDrawable(context, resourceDrawable)!!
-            val b = Bitmap.createBitmap(
-                    d.intrinsicWidth,
-                    d.intrinsicHeight,
-                    Bitmap.Config.ARGB_8888
-            )
-            val c = Canvas(b)
-            d.setBounds(0, 0, c.width, c.height)
-            d.draw(c)
-            fab.setImageBitmap(b)
+            val drawable = ContextCompat.getDrawable(context, resourceDrawable)!!
+            val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            drawable.setBounds(0, 0, canvas.width, canvas.height)
+            drawable.draw(canvas)
+            fab.setImageBitmap(bitmap)
         }
     }
 
-    private fun setupFAB(context: Context, icon: Int) {
-        if (UIPreferences.themeIsWhite) {
-            fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
-        }
+    private fun setupFab(context: Context, icon: Int) {
+        if (UIPreferences.themeIsWhite) fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
         fabSetResDrawable(context, icon)
-        if (Build.VERSION.SDK_INT > 20) {
-            fab.elevation = MyApplication.fabElevation
-            fab.translationZ = MyApplication.fabElevationDepressed
-        }
+        fab.elevation = MyApplication.fabElevation
+        fab.translationZ = MyApplication.fabElevationDepressed
     }
 
-    private fun setupFAB(context: Context) {
-        if (UIPreferences.themeIsWhite) {
-            fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
-        }
-        if (Build.VERSION.SDK_INT > 20) {
-            fab.elevation = MyApplication.fabElevation
-            fab.translationZ = MyApplication.fabElevationDepressed
-        }
+    private fun setupFab(context: Context) {
+        if (UIPreferences.themeIsWhite) fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+        fab.elevation = MyApplication.fabElevation
+        fab.translationZ = MyApplication.fabElevationDepressed
     }
 }
 

@@ -40,19 +40,16 @@ object UtilityGoes {
     }
 
     fun getImage(product: String, sector: String): Bitmap {
-        var sectorLocal = "SECTOR/$sector"
-        if (sector == "FD" || sector == "CONUS" || sector == "CONUS-G17") {
-            sectorLocal = sector
+        var sectorLocal = if (sector == "FD" || sector == "CONUS" || sector == "CONUS-G17") {
+            sector
+        } else {
+            "SECTOR/$sector"
         }
         var satellite = "GOES16"
         if (sectorsInGoes17.contains(sector)) {
             satellite = "GOES17"
-            if (sector == "CONUS-G17") {
-                sectorLocal = "CONUS"
-            }
-            if (sector == "FD-G17") {
-                sectorLocal = "FD"
-            }
+            if (sector == "CONUS-G17") sectorLocal = "CONUS"
+            if (sector == "FD-G17") sectorLocal = "FD"
         }
         // https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/cgl/03/
         // https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/cgl/12/latest.jpg
@@ -64,17 +61,9 @@ object UtilityGoes {
 
     // https://www.star.nesdis.noaa.gov/GOES/sector_band.php?sat=G17&sector=ak&band=GEOCOLOR&length=12
     // https://www.star.nesdis.noaa.gov/GOES/sector_band.php?sat=G16&sector=cgl&band=GEOCOLOR&length=12
-    fun getAnimation(
-            context: Context,
-            product: String,
-            sector: String,
-            frameCount: Int
-    ): AnimationDrawable {
+    fun getAnimation(context: Context, product: String, sector: String, frameCount: Int): AnimationDrawable {
         val frameCountString = frameCount.toString()
-        var satellite = "G16"
-        if (sectorsInGoes17.contains(sector)) {
-            satellite = "G17"
-        }
+        val satellite = if (sectorsInGoes17.contains(sector)) "G17" else "G16"
         val url = when (sector) {
             // https://www.star.nesdis.noaa.gov/GOES/fulldisk_band.php?sat=G17&band=GEOCOLOR&length=12
             "FD", "FD-G17" -> MyApplication.goes16AnimUrl + "/GOES/fulldisk_band.php?sat=$satellite&band=$product&length=$frameCountString"
@@ -84,17 +73,11 @@ object UtilityGoes {
         val html = url.getHtml().replace("\n", "").replace("\r", "")
         val imageHtml = html.parse("animationImages = \\[(.*?)\\];")
         val imageUrls = imageHtml.parseColumn("'(https.*?jpg)'")
-        val bitmaps = imageUrls.map {
-            it.getImage()
-        }
-        return UtilityImgAnim.getAnimationDrawableFromBMList(
-                context,
-                bitmaps,
-                UtilityImg.animInterval(context)
-        )
+        val bitmaps = imageUrls.map { it.getImage() }
+        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps, UtilityImg.animInterval(context))
     }
 
-    val labels: List<String> = listOf(
+    val labels = listOf(
             "00 True color daytime, multispectral IR at night",
             "00.47 um (Band 1) Blue - Visible",
             "00.64 um (Band 2) Red - Visible",
@@ -113,10 +96,12 @@ object UtilityGoes {
             "12.3 um (Band 15) Dirty Longwave Window - IR",
             "13.3 um (Band 16) CO2 Longwave - IR",
             "AirMass - RGB composite based on the data from IR and WV",
-            "Sandwich RGB - Bands 3 and 13 combo"
+            "Sandwich RGB - Bands 3 and 13 combo",
+            "Day Cloud Phase",
+            "Night Microphysics"
     )
 
-    val codes: List<String> = listOf(
+    val codes = listOf(
             "GEOCOLOR",
             "01",
             "02",
@@ -135,13 +120,17 @@ object UtilityGoes {
             "15",
             "16",
             "AirMass",
-            "Sandwich"
+            "Sandwich",
+            "DayCloudPhase",
+            "NightMicrophysics"
     )
 
-    private val sectorsInGoes17: List<String> = listOf(
+    private val sectorsInGoes17 = listOf(
             "CONUS-G17",
             "FD-G17",
             "ak",
+            "cak",
+            "sea",
             "hi",
             "pnw",
             "psw",
@@ -172,6 +161,8 @@ object UtilityGoes {
             "cam" to "Central America",
             "taw" to "Tropical Atlantic",
             "ak" to "Alaska",
+            "cak" to "Central Alaska",
+            "sea" to "Southeastern Alaska",
             "hi" to "Hawaii",
             "wus" to "US Pacific Coast",
             "tpw" to "Tropical Pacific",
@@ -202,6 +193,8 @@ object UtilityGoes {
             "ssa" to "1800x1080",
             "np" to "1800x1080",
             "ak" to "1000x1000",
+            "cak" to "1200x1200",
+            "sea" to "1200x1200",
             "hi" to "1200x1200"
     )
 }

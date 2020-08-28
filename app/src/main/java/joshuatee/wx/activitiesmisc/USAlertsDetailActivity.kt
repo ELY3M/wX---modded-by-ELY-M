@@ -25,10 +25,12 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
+import joshuatee.wx.Extensions.safeGet
 
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
+import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectAlertDetail
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.util.Utility
@@ -39,23 +41,21 @@ import kotlinx.android.synthetic.main.activity_usalertsdetail.*
 
 class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
-    companion object {
-        const val URL: String = ""
-    }
+    companion object { const val URL = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main // CoroutineDispatcher
     private lateinit var activityArguments: Array<String>
     private var capAlert = CapAlert()
     private lateinit var objectAlertDetail: ObjectAlertDetail
+    private lateinit var radarIcon: MenuItem
+    private var radarSite = ""
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_usalertsdetail, R.menu.shared_tts)
-        title = ""
+        super.onCreate(savedInstanceState, R.layout.activity_usalertsdetail, R.menu.usalerts_detail)
         ObjectCard(this, R.id.cardView)
-        val menu = toolbarBottom.menu
-        val tts = menu.findItem(R.id.action_playlist)
-        tts.isVisible = false
+        toolbarBottom.menu.findItem(R.id.action_playlist).isVisible = false
+        radarIcon = toolbarBottom.menu.findItem(R.id.action_radar)
         toolbarBottom.setOnMenuItemClickListener(this)
         objectAlertDetail = ObjectAlertDetail(this, linearLayout)
         activityArguments = intent.getStringArrayExtra(URL)!!
@@ -68,33 +68,31 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        capAlert = withContext(Dispatchers.IO) {
-            CapAlert.createFromUrl(activityArguments[0])
+        capAlert = withContext(Dispatchers.IO) { CapAlert.createFromUrl(activityArguments[0]) }
+        radarSite = capAlert.getClosestRadar()
+        if (radarSite == "") {
+            radarIcon.isVisible = false
         }
         objectAlertDetail.updateContent(capAlert, activityArguments[0])
         toolbar.subtitle = objectAlertDetail.wfoTitle
         title = objectAlertDetail.title
-        UtilityTts.conditionalPlay(
-                activityArguments,
-                1,
-                applicationContext,
-                Utility.fromHtml(capAlert.text),
-                "alert"
-        )
+        UtilityTts.conditionalPlay(activityArguments, 1, applicationContext, Utility.fromHtml(capAlert.text), "alert")
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, capAlert.text, "alert", "alert")) {
-            return true
-        }
+        if (audioPlayMenu(item.itemId, capAlert.text, "alert", "alert")) return true
         when (item.itemId) {
-            R.id.action_share -> UtilityShare.shareText(
-                    this,
-                    capAlert.title + " " + capAlert.area,
-                    Utility.fromHtml(capAlert.text)
-            )
+            R.id.action_share -> UtilityShare.text(this, capAlert.title + " " + capAlert.area, capAlert.text)
+            R.id.action_radar -> radarInterface()
             else -> return super.onOptionsItemSelected(item)
         }
         return true
+    }
+
+    // TODO move to util
+    private fun radarInterface() {
+        val radarLabel = Utility.getRadarSiteName(radarSite)
+        val state = radarLabel.split(",").safeGet(0)
+        ObjectIntent.showRadar(this@USAlertsDetailActivity, arrayOf(radarSite, state, "N0Q", ""))
     }
 }

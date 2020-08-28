@@ -27,7 +27,6 @@ import android.graphics.Color
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.util.UtilityIO
-import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityMath
 import joshuatee.wx.settings.UtilityLocation
 
@@ -42,12 +41,11 @@ internal object UtilityMetar {
     // 4 is for the main screen
     // 5 is for canvas
     val metarDataList = List(6) { MetarData() }
-
     // A data structure (map) consisting of a Lat/Lon string array for each Obs site
     // A flag is used to track if it's been initialized
     private var initializedObsMap = false
     private val obsLatLon = mutableMapOf<String, Array<String>>()
-    var timer = DownloadTimer("METAR")
+    val timer = DownloadTimer("METAR")
 
     fun getStateMetarArrayForWXOGL(context: Context, rid: String, paneNumber: Int) {
         if (timer.isRefreshNeeded(context) || rid != metarDataList[paneNumber].obsStateOld) {
@@ -82,14 +80,10 @@ internal object UtilityMetar {
                     val tmpBlob = z.parse(RegExp.patternMetarWxogl1) // ".*? (M{0,1}../M{0,1}..) .*?"
                     val tdArr = MyApplication.slash.split(tmpBlob)
                     var timeBlob = ""
-                    if (tmpArr2.size > 1) {
-                        timeBlob = tmpArr2[1]
-                    }
+                    if (tmpArr2.size > 1) timeBlob = tmpArr2[1]
                     var pressureBlob = z.parse(RegExp.patternMetarWxogl2) // ".*? A([0-9]{4})"
                     var windBlob = z.parse(RegExp.patternMetarWxogl3) // "AUTO ([0-9].*?KT) .*?"
-                    if (windBlob == "") {
-                        windBlob = z.parse(RegExp.patternMetarWxogl4)
-                    }
+                    if (windBlob == "") windBlob = z.parse(RegExp.patternMetarWxogl4)
                     val conditionsBlob = z.parse(RegExp.patternMetarWxogl5) // "SM (.*?) M{0,1}[0-9]{2}/"
                     var visBlob = z.parse(" ([0-9].*?SM) ")
                     val visBlobArr = MyApplication.space.split(visBlob)
@@ -106,7 +100,6 @@ internal object UtilityMetar {
                     var bknStr = conditionsBlob.parse("BKN([0-9]{3})")
                     var ovcInt = 100000
                     var bknInt = 100000
-                    val lowestCig: Int
                     if (ovcStr != "") {
                         ovcStr += "00"
                         ovcInt = ovcStr.toIntOrNull() ?: 0
@@ -115,23 +108,17 @@ internal object UtilityMetar {
                         bknStr += "00"
                         bknInt = bknStr.toIntOrNull() ?: 0
                     }
-                    lowestCig = if (bknInt < ovcInt) {
-                        bknInt
+                    val lowestCig = if (bknInt < ovcInt) bknInt else ovcInt
+                    val aviationColor = if (visInt > 5 && lowestCig > 3000) {
+                        Color.GREEN
+                    } else if (visInt in 3..5 || lowestCig in 1000..3000) {
+                        Color.rgb(0, 100, 255)
+                    } else if (visInt in 1..2 || lowestCig in 500..999) {
+                        Color.RED
+                    } else if (visInt < 1 || lowestCig < 500) {
+                        Color.MAGENTA
                     } else {
-                        ovcInt
-                    }
-                    var aviationColor = Color.GREEN
-                    if (visInt > 5 && lowestCig > 3000) {
-                        aviationColor = Color.GREEN
-                    }
-                    if (visInt in 3..5 || lowestCig in 1000..3000) {
-                        aviationColor = Color.rgb(0, 100, 255)
-                    }
-                    if (visInt in 1..2 || lowestCig in 500..999) {
-                        aviationColor = Color.RED
-                    }
-                    if (visInt < 1 || lowestCig < 500) {
-                        aviationColor = Color.MAGENTA
+                        Color.GREEN
                     }
                     //  green, blue, red, and purple
                     // VFR 	> 5 mi 	and > 3000 ft AGL
@@ -197,13 +184,9 @@ internal object UtilityMetar {
             metarDataList[paneNumber].obsArrExt = obsAlExt.toList()
             metarDataList[paneNumber].obsArrWb = obsAlWb.toList()
             metarDataList[paneNumber].x = DoubleArray(obsAlX.size)
-            obsAlX.indices.forEach {
-                metarDataList[paneNumber].x[it] = obsAlX[it]
-            }
+            obsAlX.indices.forEach { metarDataList[paneNumber].x[it] = obsAlX[it] }
             metarDataList[paneNumber].y = DoubleArray(obsAlY.size)
-            obsAlY.indices.forEach {
-                metarDataList[paneNumber].y[it] = obsAlY[it]
-            }
+            obsAlY.indices.forEach { metarDataList[paneNumber].y[it] = obsAlY[it] }
             metarDataList[paneNumber].obsArrWbGust = obsAlWbGust.toList()
             metarDataList[paneNumber].obsArrAviationColor = obsAlAviationColor.toList()
         }
@@ -230,8 +213,7 @@ internal object UtilityMetar {
         return if (bestRid == -1) {
             "Please select a location in the United States."
         } else {
-            (MyApplication.NWS_RADAR_PUB + "data/observations/metar/decoded/" + metarSites[bestRid].name + ".TXT").getHtmlSep()
-                .replace("<br>", MyApplication.newline)
+            (MyApplication.nwsRadarPub + "data/observations/metar/decoded/" + metarSites[bestRid].name + ".TXT").getHtmlSep().replace("<br>", MyApplication.newline)
         }
     }
 
@@ -252,7 +234,6 @@ internal object UtilityMetar {
 
     @Synchronized private fun readMetarData(context: Context) {
         if (metarSites.isEmpty()) {
-            UtilityLog.d("wx", "CC init metar data")
             metarDataRaw = UtilityIO.readTextFileFromRaw(context.resources, R.raw.us_metar3)
             val metarDataAsList = metarDataRaw.split("\n").dropLastWhile { it.isEmpty() }
             metarDataAsList.indices.forEach {
@@ -275,11 +256,7 @@ internal object UtilityMetar {
             }
         }
         // In the unlikely event no closest site is found just return the first one
-        return if (bestRid == -1) {
-            metarSites[0]
-        } else {
-            metarSites[bestRid]
-        }
+        return if (bestRid == -1) metarSites[0] else metarSites[bestRid]
     }
 
     //

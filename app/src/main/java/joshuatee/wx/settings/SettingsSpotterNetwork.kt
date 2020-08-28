@@ -32,7 +32,7 @@ class SettingsSpotterNetwork : BaseActivity() {
         setupEditText()
 
         val ll: LinearLayout = findViewById(R.id.sn_settings)
-        ll.addView(ObjectSettingsCheckBox(this, this, "Spotter Network Location Report", "SN_LOCATIONREPORT", R.string.sn_locationreport).card)
+        ll.addView(ObjectSettingsCheckBox(this, "Spotter Network Location Report", "SN_LOCATIONREPORT", R.string.sn_locationreport).card)
 
 
     }

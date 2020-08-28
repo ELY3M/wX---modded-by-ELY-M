@@ -23,15 +23,15 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.widget.LinearLayout
+import joshuatee.wx.Extensions.parseMultiple
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.objects.TextSize
-import joshuatee.wx.util.UtilityString
 
-class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
+class ObjectAlertDetail(val context: Context, linearLayout: LinearLayout) {
 
     private val objectTextViews = mutableListOf<ObjectTextView>()
     var title: String = ""
@@ -40,40 +40,14 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
         private set
 
     init {
-        (0 until 5).forEach {
-            objectTextViews.add(ObjectTextView(context))
-            ll.addView(objectTextViews[it].tv)
+        (0..4).forEach { _ ->
+            val objectTextView = ObjectTextView(context)
+            objectTextViews.add(objectTextView)
+            linearLayout.addView(objectTextView.tv)
         }
-        objectTextViews[0].setPadding(
-                MyApplication.padding,
-                0,
-                MyApplication.padding,
-                0
-        )
-        objectTextViews[1].setPadding(
-                MyApplication.padding,
-                0,
-                MyApplication.padding,
-                MyApplication.padding
-        )
-        objectTextViews[2].setPadding(
-                MyApplication.padding,
-                MyApplication.padding,
-                MyApplication.padding,
-                MyApplication.padding
-        )
-        objectTextViews[3].setPadding(
-                MyApplication.padding,
-                MyApplication.padding,
-                MyApplication.padding,
-                MyApplication.padding
-        )
-        objectTextViews[4].setPadding(
-                MyApplication.padding,
-                MyApplication.padding,
-                MyApplication.padding,
-                MyApplication.padding
-        )
+        objectTextViews[0].setPadding(MyApplication.padding, 0, MyApplication.padding, 0)
+        objectTextViews[1].setPadding(MyApplication.padding, 0, MyApplication.padding, MyApplication.padding)
+        (2..4).forEach { objectTextViews[it].setPadding(MyApplication.padding) }
     }
 
     fun updateContent(capAlert: CapAlert, url: String) {
@@ -86,52 +60,38 @@ class ObjectAlertDetail(val context: Context, ll: LinearLayout) {
         } else {
             if (!url.contains("NWS-IDP-PROD")) {
                 if (capAlert.title.contains("until")) {
-                    val tmpArr = UtilityString.parseMultiple(
-                            capAlert.title,
-                            "(.*?) issued (.*?) until (.*?) by (.*?)$",
-                            4
-                    )
-                    title = tmpArr[0]
-                    startTime = tmpArr[1]
-                    endTime = tmpArr[2]
-                    wfo = tmpArr[3]
+                    val items = capAlert.title.parseMultiple("(.*?) issued (.*?) until (.*?) by (.*?)$", 4)
+                    title = items[0]
+                    startTime = items[1]
+                    endTime = items[2]
+                    wfo = items[3]
                 } else {
-                    val tmpArr =
-                            UtilityString.parseMultiple(capAlert.title, "(.*?) issued (.*?) by (.*?)$", 3)
-                    title = tmpArr[0]
-                    startTime = tmpArr[1]
-                    wfo = tmpArr[2]
+                    val items = capAlert.title.parseMultiple("(.*?) issued (.*?) by (.*?)$", 3)
+                    title = items[0]
+                    startTime = items[1]
+                    wfo = items[2]
                 }
             } else {
                 when {
                     capAlert.title.contains("expiring") -> {
-                        val tmpArr = UtilityString.parseMultiple(
-                                capAlert.title,
-                                "(.*?) issued (.*?) expiring (.*?) by (.*?)$",
-                                4
-                        )
-                        title = tmpArr[0]
-                        startTime = tmpArr[1]
-                        endTime = tmpArr[2]
-                        wfo = tmpArr[3]
+                        val items = capAlert.title.parseMultiple("(.*?) issued (.*?) expiring (.*?) by (.*?)$", 4)
+                        title = items[0]
+                        startTime = items[1]
+                        endTime = items[2]
+                        wfo = items[3]
                     }
                     capAlert.title.contains("until") -> {
-                        val tmpArr = UtilityString.parseMultiple(
-                                capAlert.title,
-                                "(.*?) issued (.*?) until (.*?) by (.*?)$",
-                                4
-                        )
-                        title = tmpArr[0]
-                        startTime = tmpArr[1]
-                        endTime = tmpArr[2]
-                        wfo = tmpArr[3]
+                        val items = capAlert.title.parseMultiple("(.*?) issued (.*?) until (.*?) by (.*?)$", 4)
+                        title = items[0]
+                        startTime = items[1]
+                        endTime = items[2]
+                        wfo = items[3]
                     }
                     else -> {
-                        val tmpArr =
-                                UtilityString.parseMultiple(capAlert.title, "(.*?) issued (.*?) by (.*?)$", 3)
-                        title = tmpArr[0]
-                        startTime = tmpArr[1]
-                        wfo = tmpArr[2]
+                        val items = capAlert.title.parseMultiple("(.*?) issued (.*?) by (.*?)$", 3)
+                        title = items[0]
+                        startTime = items[1]
+                        wfo = items[2]
                     }
                 }
             }

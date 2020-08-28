@@ -22,13 +22,18 @@
 package joshuatee.wx.ui
 
 import android.app.Activity
+import android.graphics.Color
+import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.ActionBarDrawerToggle
 import android.widget.ArrayAdapter
 import android.widget.ListView
-
+import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.drawerlayout.widget.DrawerLayout
 import joshuatee.wx.R
+import joshuatee.wx.util.Utility
+
 
 class ObjectNavDrawer(activity: Activity, private var labels: List<String>) {
 
@@ -36,10 +41,21 @@ class ObjectNavDrawer(activity: Activity, private var labels: List<String>) {
     val listView: ListView = activity.findViewById(R.id.left_drawer)
     val actionBarDrawerToggle: ActionBarDrawerToggle
     var tokens = listOf<String>()
-    var index: Int = 0
+    var index = 0
 
     init {
-        listView.adapter = ArrayAdapter(activity, R.layout.drawer_list_item, labels)
+        if (Utility.isThemeAllWhite()) {
+            listView.setBackgroundColor(Color.WHITE)
+            listView.adapter = object : ArrayAdapter<String>(activity, R.layout.drawer_list_item, labels) {
+                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val view: View = super.getView(position, convertView, parent)
+                    view.findViewById<TextView>(android.R.id.text1).setTextColor(Color.BLACK)
+                    return view
+                }
+            }
+        } else {
+            listView.adapter = ArrayAdapter(activity, R.layout.drawer_list_item, labels)
+        }
         actionBarDrawerToggle = ActionBarDrawerToggle(
             activity,
             drawerLayout,
@@ -51,56 +67,62 @@ class ObjectNavDrawer(activity: Activity, private var labels: List<String>) {
 
     fun updateLists(activity: Activity, items: List<String>, tokens: List<String>) {
         listView.adapter = ArrayAdapter(activity, R.layout.drawer_list_item, items)
+        if (Utility.isThemeAllWhite()) {
+            listView.setBackgroundColor(Color.WHITE)
+            listView.adapter = object : ArrayAdapter<String>(activity, R.layout.drawer_list_item, items) {
+                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val view: View = super.getView(position, convertView, parent)
+                    view.findViewById<TextView>(android.R.id.text1).setTextColor(Color.BLACK)
+                    return view
+                }
+            }
+        } else {
+            listView.adapter = ArrayAdapter(activity, R.layout.drawer_list_item, items)
+        }
         labels = items
         this.tokens = tokens
     }
 
     fun updateLists(activity: Activity, items: List<String>) {
         listView.adapter = ArrayAdapter(activity, R.layout.drawer_list_item, items)
+        if (Utility.isThemeAllWhite()) {
+            listView.setBackgroundColor(Color.WHITE)
+            listView.adapter = object : ArrayAdapter<String>(activity, R.layout.drawer_list_item, items) {
+                override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+                    val view: View = super.getView(position, convertView, parent)
+                    view.findViewById<TextView>(android.R.id.text1).setTextColor(Color.BLACK)
+                    return view
+                }
+            }
+        } else {
+            listView.adapter = ArrayAdapter(activity, R.layout.drawer_list_item, items)
+        }
         labels = items
     }
 
-    constructor(activity: Activity, items: List<String>, tokens: List<String>) : this(
-        activity,
-        items
-    ) {
+    constructor(activity: Activity, items: List<String>, tokens: List<String>) : this(activity, items) {
         this.tokens = tokens
     }
 
-    fun getLabel(position: Int): String = labels[position]
+    constructor(activity: Activity, items: List<String>, tokens: List<String>, fn: () -> Unit) : this(activity, items, tokens) {
+        setListener(fn)
+    }
 
-    //fun getToken(position: Int): String = tokens[position]
-
-    //fun getUrl(): String = tokens[index]
-
-    var url: String = ""
+    val url: String
         get() = tokens[index]
-        //set(newValue) {
-        //    card.visibility = newValue
-        //}
 
-    fun getUrlCount(): Int = tokens.size
+    fun getUrlCount() = tokens.size
 
-    // TODO convert to getter
+    fun getLabel(position: Int) = labels[position]
+
     fun getLabel(): String {
-        if (index >= labels.size) {
-            index = labels.size - 1
-        }
+        if (index >= labels.size) index = labels.size - 1
         return labels[index]
     }
 
-    /*fun getToken(): String {
-        if (index >= tokens.size) {
-            index = tokens.size - 1
-        }
-        return tokens[index]
-    }*/
-
-    var token: String = ""
+    val token: String
         get() {
-            if (index >= tokens.size) {
-                index = tokens.size - 1
-            }
+            if (index >= tokens.size) index = tokens.size - 1
             return tokens[index]
         }
 

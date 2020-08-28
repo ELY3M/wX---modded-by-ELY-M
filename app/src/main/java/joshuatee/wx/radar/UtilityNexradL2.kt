@@ -58,7 +58,7 @@ import joshuatee.wx.util.UtilityMath
 internal object UtilityNexradL2 {
 
     private const val DECOMP_FN = "l2.decomp"
-
+    // FIXME needs refactor - all utilNexrad*
     fun decodeAndPlot(context: Context, bitmap: Bitmap, prod: String) {
         val canvas = Canvas(bitmap)
         var productCode = 153
@@ -67,8 +67,7 @@ internal object UtilityNexradL2 {
         val numberOfRangeBins = 916
         // 1832 vel 1192 vel
         var zeroColor = ContextCompat.getColor(context, R.color.black)
-        if (Utility.readPref(context, "NWS_RADAR_BG_BLACK", "") != "true") zeroColor =
-            ContextCompat.getColor(context, R.color.white)
+        if (Utility.readPref(context, "NWS_RADAR_BG_BLACK", "") != "true") zeroColor = ContextCompat.getColor(context, R.color.white)
         val radialStartAngle = ByteBuffer.allocateDirect(720 * 4)
         radialStartAngle.order(ByteOrder.nativeOrder())
         radialStartAngle.position(0)
@@ -89,9 +88,9 @@ internal object UtilityNexradL2 {
         var xy2: FloatArray
         var xy3: FloatArray
         var xy4: FloatArray
-        val wallpaint = Paint()
-        wallpaint.style = Style.FILL
-        val wallpath = Path()
+        val paint = Paint()
+        paint.style = Style.FILL
+        val path = Path()
         var g = 0
         var angle: Float
         var angleV: Float
@@ -108,7 +107,6 @@ internal object UtilityNexradL2 {
             cR = MyApplication.colorMap[colorMapProductCode]!!.redValues
             cG = MyApplication.colorMap[colorMapProductCode]!!.greenValues
             cB = MyApplication.colorMap[colorMapProductCode]!!.blueValues
-
         } else {
             colorMapProductCode = 99
             cR = MyApplication.colorMap[colorMapProductCode]!!.redValues
@@ -143,20 +141,20 @@ internal object UtilityNexradL2 {
                     xy3[1] = (xy3[1] - centerY) * -1
                     xy4[1] = (xy4[1] - centerY) * -1
                     if (level == 0)
-                        wallpaint.color = zeroColor
+                        paint.color = zeroColor
                     else
-                        wallpaint.color = Color.rgb(
+                        paint.color = Color.rgb(
                             cR.get(level).toInt() and 0xFF,
                             cG.get(level).toInt() and 0xFF,
                             cB.get(level).toInt() and 0xFF
                         )
-                    wallpath.rewind() // only needed when reusing this path for a new build
-                    wallpath.moveTo(xy1[0], xy1[1])
-                    wallpath.lineTo(xy2[0], xy2[1])
-                    wallpath.lineTo(xy3[0], xy3[1])
-                    wallpath.lineTo(xy4[0], xy4[1])
-                    wallpath.lineTo(xy1[0], xy1[1])
-                    canvas.drawPath(wallpath, wallpaint)
+                    path.rewind() // only needed when reusing this path for a new build
+                    path.moveTo(xy1[0], xy1[1])
+                    path.lineTo(xy2[0], xy2[1])
+                    path.lineTo(xy3[0], xy3[1])
+                    path.lineTo(xy4[0], xy4[1])
+                    path.lineTo(xy1[0], xy1[1])
+                    canvas.drawPath(path, paint)
                     level = tmpVal
                     binStart = bin * binSize
                     levelCount = 1

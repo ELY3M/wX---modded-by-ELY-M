@@ -23,6 +23,7 @@ package joshuatee.wx.util
 
 import android.content.Context
 import android.text.format.DateFormat
+import joshuatee.wx.MyApplication
 import joshuatee.wx.external.ExternalSunriseLocation
 import joshuatee.wx.external.ExternalSunriseSunsetCalculator
 import joshuatee.wx.radar.RID
@@ -46,11 +47,11 @@ object UtilityTimeSunMoon {
         val lat: String
         val lon: String
         if (!Location.isUS(locNumInt)) {
-            val latArr = Location.getX(locNumInt).split(":").dropLastWhile { it.isEmpty() }
-            val lonArr = Location.getY(locNumInt).split(":").dropLastWhile { it.isEmpty() }
-            if (latArr.size > 2 && lonArr.size > 1) {
-                lat = latArr[2]
-                lon = lonArr[1]
+            val latItems = Location.getX(locNumInt).split(":").dropLastWhile { it.isEmpty() }
+            val lonItems = Location.getY(locNumInt).split(":").dropLastWhile { it.isEmpty() }
+            if (latItems.size > 2 && lonItems.size > 1) {
+                lat = latItems[2]
+                lon = lonItems[1]
             } else
                 return ""
         } else {
@@ -61,33 +62,29 @@ object UtilityTimeSunMoon {
         val calculator = ExternalSunriseSunsetCalculator(location, TimeZone.getDefault())
         val officialSunriseCal = calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
         val officialSunsetCal = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance())
-        val srTime: String
-        val ssTime: String
-        var amStr = ""
-        var pmStr = ""
+        val sunRiseTime: String
+        val sunSetTime: String
+        var am = ""
+        var pm = ""
         if (!DateFormat.is24HourFormat(context)) {
-            amStr = "am"
-            pmStr = "pm"
-            srTime = (officialSunriseCal.get(Calendar.HOUR)).toString() + ":" +
-                    String.format("%2s", (officialSunriseCal.get(Calendar.MINUTE))).replace(
-                            ' ',
-                            '0'
-                    )
-            ssTime = (officialSunsetCal.get(Calendar.HOUR)).toString() + ":" +
+            am = "am"
+            pm = "pm"
+            sunRiseTime = officialSunriseCal.get(Calendar.HOUR).toString() + ":" +
+                    String.format("%2s", (officialSunriseCal.get(Calendar.MINUTE))).replace(' ', '0')
+            sunSetTime = officialSunsetCal.get(Calendar.HOUR).toString() + ":" +
                     String.format("%2s", (officialSunsetCal.get(Calendar.MINUTE))).replace(' ', '0')
         } else {
-            srTime = (officialSunriseCal.get(Calendar.HOUR_OF_DAY)).toString() + ":" +
-                    String.format("%2s", (officialSunriseCal.get(Calendar.MINUTE))).replace(
-                            ' ',
-                            '0'
-                    )
-            ssTime = (officialSunsetCal.get(Calendar.HOUR_OF_DAY)).toString() + ":" +
+            sunRiseTime = officialSunriseCal.get(Calendar.HOUR_OF_DAY).toString() + ":" +
+                    String.format("%2s", (officialSunriseCal.get(Calendar.MINUTE))).replace(' ', '0')
+            sunSetTime = officialSunsetCal.get(Calendar.HOUR_OF_DAY).toString() + ":" +
                     String.format("%2s", (officialSunsetCal.get(Calendar.MINUTE))).replace(' ', '0')
         }
         return if (shortFormat) {
-            "$srTime$amStr / $ssTime$pmStr"
+            "$sunRiseTime$am / $sunSetTime$pm"
         } else {
-            "Sunrise: $srTime$amStr   Sunset: $ssTime$pmStr"
+            "Sunrise: $sunRiseTime$am   Sunset: $sunSetTime$pm"
         }
     }
+
+    fun getForHomeScreen(context: Context) = getSunriseSunset(context, Location.currentLocationStr, false) + MyApplication.newline + UtilityTime.gmtTime()
 }

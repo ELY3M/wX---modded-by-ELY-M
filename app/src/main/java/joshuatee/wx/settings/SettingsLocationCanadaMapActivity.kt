@@ -43,19 +43,14 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
     //
 
     companion object {
-        const val URL: String = ""
+        const val URL = ""
     }
 
     private var url = ""
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_settings_location_canada_map,
-                null,
-                false
-        )
+        super.onCreate(savedInstanceState, R.layout.activity_settings_location_canada_map, null, false)
         val activityArguments = intent.getStringArrayExtra(URL)
         url = activityArguments!![0]
         title = url.toUpperCase(Locale.US)
@@ -117,18 +112,16 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
             }
         }
         hideAllMaps()
-        val bm = UtilityImg.loadBitmap(this, imgRes, false)
-        val map: ImageMap = findViewById(imgMap)
-        map.visibility = View.VISIBLE
-        map.setImageBitmap(bm)
-        val paramsIv = map.layoutParams
-        paramsIv.width = MyApplication.dm.widthPixels
-        paramsIv.height = MyApplication.dm.widthPixels * bm.height / bm.width
-        map.layoutParams = paramsIv
-        map.addOnImageMapClickedHandler(object : ImageMap.OnImageMapClickedHandler {
-            override fun onImageMapClicked(id: Int, im2: ImageMap) {
-                mapClicked(id)
-            }
+        val bitmap = UtilityImg.loadBitmap(this, imgRes, false)
+        val imageMap: ImageMap = findViewById(imgMap)
+        imageMap.visibility = View.VISIBLE
+        imageMap.setImageBitmap(bitmap)
+        val layoutParams = imageMap.layoutParams
+        layoutParams.width = MyApplication.dm.widthPixels
+        layoutParams.height = MyApplication.dm.widthPixels * bitmap.height / bitmap.width
+        imageMap.layoutParams = layoutParams
+        imageMap.addOnImageMapClickedHandler(object : ImageMap.OnImageMapClickedHandler {
+            override fun onImageMapClicked(id: Int, im2: ImageMap) { mapClicked(id) }
 
             override fun onBubbleClicked(id: Int) {}
         })
@@ -139,11 +132,7 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
         val cityLoc = getCityFromXml(sector)
         Utility.writePref(this, "LOCATION_CANADA_PROV", url.toUpperCase(Locale.US))
         Utility.writePref(this, "LOCATION_CANADA_CITY", cityLoc)
-        Utility.writePref(
-                this,
-                "LOCATION_CANADA_ID",
-                sector.split("_".toRegex()).dropLastWhile { it.isEmpty() }[1]
-        )
+        Utility.writePref(this, "LOCATION_CANADA_ID", sector.split("_".toRegex()).dropLastWhile { it.isEmpty() }[1])
         toolbar.subtitle = url.toUpperCase(Locale.US) + ", " + cityLoc
         finish()
     }
@@ -169,7 +158,7 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
                 R.id.map_sk,
                 R.id.map_yt
         ).forEach {
-            val map: ImageMap = findViewById(it)
+            val map = findViewById<ImageMap>(it)
             map.visibility = View.GONE
         }
     }
@@ -177,11 +166,7 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
     private fun getCityFromXml(token: String): String {
         val data = UtilityIO.readTextFileFromRaw(this@SettingsLocationCanadaMapActivity.resources, R.raw.maps)
         val lines = data.split(MyApplication.newline)
-        lines.forEach {
-            if (it.contains(token)) {
-                return it.parse("title=\"(.*?)\"")
-            }
-        }
+        lines.forEach { if (it.contains(token)) return it.parse("title=\"(.*?)\"") }
         return ""
     }
 }

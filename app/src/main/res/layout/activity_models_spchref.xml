@@ -37,28 +37,7 @@
             android:layout_alignParentBottom="true"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            app:popupTheme="@style/MyDarkToolbarStyle">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:orientation="horizontal">
-
-                <Spinner
-                    android:id="@+id/spinner_run"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-                <Spinner
-                    android:id="@+id/spinner_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-        </androidx.appcompat.widget.Toolbar>
+            app:popupTheme="@style/MyDarkToolbarStyle" />
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -72,16 +51,7 @@
                 android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
-                app:popupTheme="@style/MyDarkToolbarStyle">
-
-                <Spinner
-                    android:id="@+id/spinner_sector"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1" />
-
-            </androidx.appcompat.widget.Toolbar>
+                app:popupTheme="@style/MyDarkToolbarStyle" />
 
             <TableLayout
                 android:layout_width="match_parent"
@@ -119,7 +89,7 @@
                         app:layout_anchor="@id/iv1"
                         app:layout_anchorGravity="bottom|right"
                         app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-                        app:srcCompat="@drawable/ic_keyboard_arrow_right_24dp" />
+                        app:srcCompat="@drawable/ic_keyboard_arrow_right_24dp_white" />
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/fab1"
@@ -132,7 +102,7 @@
                         app:layout_anchor="@id/iv1"
                         app:layout_anchorGravity="bottom|right"
                         app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-                        app:srcCompat="@drawable/ic_keyboard_arrow_left_24dp" />
+                        app:srcCompat="@drawable/ic_keyboard_arrow_left_24dp_white" />
 
                 </androidx.coordinatorlayout.widget.CoordinatorLayout>
             </TableLayout>

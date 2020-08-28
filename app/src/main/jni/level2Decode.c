@@ -272,33 +272,29 @@ void readData(jbyte* bin_word, long offset, int cnt, short s) {
 	bin_word_idx = bin_word_idx + cnt;
 }
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_level2Decode(JNIEnv * env, jclass clazz, jstring src, jobject bin_word_g,jobject radial_start_angle_g, jint product_code, jobject bb_days, jobject bb_msecs){
-
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_level2Decode(JNIEnv * env, jclass clazz, jstring src, jobject bin_word_g, jobject radial_start_angle_g, jint product_code, jobject bb_days, jobject bb_msecs) {
 	jbyte* bin_word = (*env)->GetDirectBufferAddress(env, bin_word_g);
 	jfloat* radial_start_angle = (*env)->GetDirectBufferAddress(env, radial_start_angle_g);
-
 	jshort* days = (*env)-> GetDirectBufferAddress(env, bb_days);
 	jint* msecs = (*env)-> GetDirectBufferAddress(env, bb_msecs);
-
-	days[0]=0;
-	msecs[0]=0;
-
-	bin_word_idx=0;
+	days[0] = 0;
+	msecs[0] = 0;
+	bin_word_idx = 0;
 	const char *src_path = (*env)->GetStringUTFChars( env, src , NULL ) ;
 	fp_src = fopen(src_path, "r");
-	if ( fp_src == NULL ){
-    		return;
+	if (fp_src == NULL) {
+    	return;
     }
 	int ref_alloc_list = 720;
 	int vel_alloc_list = 0;
-	if (product_code == 154){
+	if (product_code == 154) {
 		vel_alloc_list = 1440;
 	}
 	// skip the header
 	char header[FILE_HEADER_SIZE];
 	size_t fread_return = fread(header, sizeof(char), FILE_HEADER_SIZE, fp_src);
 	if(fread_return != FILE_HEADER_SIZE ) {
-    	    return;
+	    return;
     }
 	struct Level2Record highReflectivity[ref_alloc_list];
 	struct Level2Record highVelocity[vel_alloc_list];
@@ -309,7 +305,7 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_level2Decode(JNIEnv * env, jclass c
 	int recno = 0;
 	while (true) {
 		level2_tmp = UtilityNexradLevel2Record(fp_src, recno++, message_offset31);
-		if (level2_tmp.eof){
+		if (level2_tmp.eof) {
 		    break;
 		}
 		if (level2_tmp.message_type == 31) {
@@ -319,17 +315,17 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_level2Decode(JNIEnv * env, jclass c
 			continue;
 		}
 		if (level2_tmp.message_type == 31) {
-			if (level2_tmp.hasHighResREFData && product_code==153 && level2_tmp.elevation_num==1){
+			if (level2_tmp.hasHighResREFData && product_code == 153 && level2_tmp.elevation_num == 1) {
 				highReflectivity[highReflectivity_cnt] = level2_tmp;
 				highReflectivity_cnt++;
 			}
-			if (level2_tmp.hasHighResVELData && product_code==154 &&  level2_tmp.velocityHR_gate_count==1192 && level2_tmp.elevation_num==2){
+			if (level2_tmp.hasHighResVELData && product_code == 154 &&  level2_tmp.velocityHR_gate_count == 1192 && level2_tmp.elevation_num == 2){
 				highVelocity[highVelocity_cnt] = level2_tmp;
 				highVelocity_cnt++;
 			}
 		}
 	}
-	if (product_code==153){
+	if (product_code == 153) {
 		days[0] = highReflectivity[1].data_julian_date;
 		msecs[0] = highReflectivity[1].data_msecs;
 	} else {
@@ -338,23 +334,23 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_level2Decode(JNIEnv * env, jclass c
 	}
 	int number_of_radials = 720;
 	bool velocity_prod = false;
-	if (product_code==154){
+	if (product_code == 154) {
 		velocity_prod = true;
 	}
 	int r;
 	int radial_start_angle_cnt = 0;
 	if (!velocity_prod) {
-		for (r=0; r<number_of_radials; r++) {
-			if (highReflectivity[r].elevation_num==1){
+		for (r = 0; r < number_of_radials; r++) {
+			if (highReflectivity[r].elevation_num == 1) {
 				radial_start_angle[radial_start_angle_cnt] = 450.0f - highReflectivity[r].azimuth;
 				radial_start_angle_cnt++;
 				readData(bin_word, highReflectivity[r].message_offset, highReflectivity[r].reflectHR_gate_count, highReflectivity[r].reflectHR_offset);
 			}
 		}
 	} else {
-		for (r = 0; r<number_of_radials; r++) {
-			if (highVelocity[r].elevation_num==2) {
-				radial_start_angle[radial_start_angle_cnt] = 450.0f-highVelocity[r].azimuth;
+		for (r = 0; r < number_of_radials; r++) {
+			if (highVelocity[r].elevation_num == 2) {
+				radial_start_angle[radial_start_angle_cnt] = 450.0f - highVelocity[r].azimuth;
 				radial_start_angle_cnt++;
 				readData(bin_word,highVelocity[r].message_offset, highVelocity[r].velocityHR_gate_count, highVelocity[r].velocityHR_offset);
 			}

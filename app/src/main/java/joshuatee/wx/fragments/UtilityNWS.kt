@@ -31,157 +31,126 @@ import joshuatee.wx.ui.ObjectPaintStripe
 import joshuatee.wx.ui.UtilityTheme
 import joshuatee.wx.util.UtilityImg
 
+// TODO rename file
 object UtilityNws {
 
-    // FIXME better var naming in this class
-
+    // Given the raw icon URL from NWS, determine if bitmap is on disk or must be created
+    // input examples
+    //  https://api.weather.gov/icons/land/day/rain_showers,60/rain_showers,30?size=medium
+    //  https://api.weather.gov/icons/land/night/bkn?size=medium
+    //  https://api.weather.gov/icons/land/day/tsra_hi,40?size=medium
     fun getIcon(context: Context, url: String): Bitmap {
-        val bitmap: Bitmap
-        if (url == "NULL") {
-            return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
-        }
-        var fn = url.replace("?size=medium", "")
+        if (url == "NULL") return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
+        var fileName = url.replace("?size=medium", "")
             .replace("?size=small", "")
             .replace("https://api.weather.gov/icons/land/", "")
             .replace("http://api.weather.gov/icons/land/", "")
             .replace("http://nids-wapiapp.bldr.ncep.noaa.gov:9000/icons/land/", "")
             .replace("day/", "")
-        if (fn.contains("night")) {
-            fn = fn.replace("night/", "n")
-                .replace("/", "/n")
-        }
-        val fnResId = UtilityNwsIcon.iconMap["$fn.png"]
-        bitmap = if (fnResId == null || fn.contains(",")) {
-            parseBitmap(context, fn)
+        if (fileName.contains("night")) fileName = fileName.replace("night/", "n").replace("/", "/n")
+        val fileId = UtilityNwsIcon.iconMap["$fileName.png"]
+        return if (fileId == null || fileName.contains(",")) {
+            parseBitmapString(context, fileName)
         } else {
-            UtilityImg.loadBitmap(context, fnResId, false)
+            UtilityImg.loadBitmap(context, fileId, false)
         }
-        return bitmap
     }
 
-    private fun parseBitmap(context: Context, url: String): Bitmap {
-        val bitmap: Bitmap
-        val conditions: List<String>
-        if (url.contains("/")) {
-            conditions = url.split("/").dropLastWhile { it.isEmpty() } //  snow,20/ovc,20
-            bitmap = if (conditions.size > 1) {
-                dualBitmapWithNumbers(context, conditions[0], conditions[1])
+    // Given one string that does not have a match on disk, decode and return a bitmap with textual labels
+    // it could be composed of 2 bitmaps with one or more textual labels (if string has a "/" ) or just one bitmap with label
+    // input examples
+    //  rain_showers,70/tsra,80
+    //  ntsra,80
+    private fun parseBitmapString(context: Context, url: String): Bitmap {
+        return if (url.contains("/")) {
+            val conditions = url.split("/").dropLastWhile { it.isEmpty() } //  snow,20/ovc,20
+            if (conditions.size > 1) {
+                getDualBitmapWithNumbers(context, conditions[0], conditions[1])
             } else {
                 UtilityImg.getBlankBitmap()
             }
         } else {
-            bitmap = dualBitmapWithNumbers(context, url)
+            getBitmapWithOneNumber(context, url)
         }
-        return bitmap
     }
 
-    private fun dualBitmapWithNumbers(context: Context, aF: String, bF: String): Bitmap {
-        var a = aF
-        var b = bF
-        var num1 = ""
-        var num2 = ""
-        val aSplit = a.split(",").dropLastWhile { it.isEmpty() }
-        val bSplit = b.split(",").dropLastWhile { it.isEmpty() }
-        if (aSplit.size > 1) {
-            num1 = aSplit[1]
+    private const val dimensions = 86
+    private const val numHeight = 15
+
+    // Given two strings return a custom bitmap made of two bitmaps with optional numeric label
+    // input examples
+    //  rain_showers,60 rain_showers,30
+    //  nrain_showers,80 nrain_showers,70
+    //  ntsra_hi,40 ntsra_hi
+    //  bkn rain
+    private fun getDualBitmapWithNumbers(context: Context, iconLeftString: String, iconRightString: String): Bitmap {
+        val leftTokens = iconLeftString.split(",").dropLastWhile { it.isEmpty() }
+        val rightTokens = iconRightString.split(",").dropLastWhile { it.isEmpty() }
+        val leftNumber = if (leftTokens.size > 1) leftTokens[1] else ""
+        val rightNumber = if (rightTokens.size > 1) rightTokens[1] else ""
+        val leftWeatherCondition: String
+        val rightWeatherCondition: String
+        if (leftTokens.isNotEmpty() && rightTokens.isNotEmpty()) {
+            leftWeatherCondition = leftTokens[0]
+            rightWeatherCondition = rightTokens[0]
+        } else {
+            leftWeatherCondition = ""
+            rightWeatherCondition = ""
         }
-        if (bSplit.size > 1) {
-            num2 = bSplit[1]
-        }
-        if (aSplit.isNotEmpty() && bSplit.isNotEmpty()) {
-            a = aSplit[0]
-            b = bSplit[0]
-        }
-        val dimens = 86
-        val numHeight = 15
-        var leftCropA = 4
-        var leftCropB = 4
-        if (a.contains("fg")) {
-            leftCropA = 45
-        }
-        if (b.contains("fg")) {
-            leftCropB = 45
-        }
-        val bitmap = Bitmap.createBitmap(dimens, dimens, Bitmap.Config.ARGB_8888)
+        val halfWidth = 41
+        val middlePoint = 45
+        val leftCropA = if (leftWeatherCondition.contains("fg")) middlePoint else 4
+        val leftCropB = if (rightWeatherCondition.contains("fg")) middlePoint else 4
+        val bitmap = Bitmap.createBitmap(dimensions, dimensions, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
-        val fnResId1 = UtilityNwsIcon.iconMap["$a.png"]
-        val fnResId2 = UtilityNwsIcon.iconMap["$b.png"]
-        if (fnResId1 == null || fnResId2 == null) {
-            return bitmap
-        }
-        val bm1Tmp = UtilityImg.loadBitmap(context, fnResId1, false)
-        val bm1 = Bitmap.createBitmap(bm1Tmp, leftCropA, 0, 41, dimens)
-        canvas.drawBitmap(bm1, 0f, 0f, Paint(Paint.FILTER_BITMAP_FLAG))
+        val fileNameLeft = UtilityNwsIcon.iconMap["$leftWeatherCondition.png"]
+        val fileNameRight = UtilityNwsIcon.iconMap["$rightWeatherCondition.png"]
+        if (fileNameLeft == null || fileNameRight == null) return bitmap
+        val bitmap1 = UtilityImg.loadBitmap(context, fileNameLeft, false)
+        val bitmap2 = Bitmap.createBitmap(bitmap1, leftCropA, 0, halfWidth, dimensions)
+        canvas.drawBitmap(bitmap2, 0f, 0f, Paint(Paint.FILTER_BITMAP_FLAG))
         val paint = ObjectPaint()
-        var xText = 58
         val yText = 84
         val xTextLeft = 2
-        if (num2 == "100") {
-            xText = 50
-        }
+        val xText = if (rightNumber == "100") 50 else 58
         val paintStripe = ObjectPaintStripe()
-        if (num1 != "") {
-            canvas.drawRect(
-                0f,
-                (dimens - numHeight).toFloat(),
-                41f,
-                dimens.toFloat(),
-                paintStripe.paint
-            )
-            canvas.drawText("$num1%", xTextLeft.toFloat(), yText.toFloat(), paint.paint)
+        if (leftNumber != "") {
+            canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), halfWidth.toFloat(), dimensions.toFloat(), paintStripe.paint)
+            canvas.drawText("$leftNumber%", xTextLeft.toFloat(), yText.toFloat(), paint.paint)
         }
-        val bm2Tmp = UtilityImg.loadBitmap(context, fnResId2, false)
-        val bm2 = Bitmap.createBitmap(bm2Tmp, leftCropB, 0, 41, dimens) // was 42 change to 40
-        canvas.drawBitmap(bm2, 45f, 0f, Paint(Paint.FILTER_BITMAP_FLAG)) // was 42 change to 44
-        if (num2 != "") {
-            canvas.drawRect(
-                45f,
-                (dimens - numHeight).toFloat(),
-                dimens.toFloat(),
-                dimens.toFloat(),
-                paintStripe.paint
-            )
-            canvas.drawText("$num2%", xText.toFloat(), yText.toFloat(), paint.paint)
+        val bitmap3 = UtilityImg.loadBitmap(context, fileNameRight, false)
+        val bitmap4 = Bitmap.createBitmap(bitmap3, leftCropB, 0, halfWidth, dimensions)
+        canvas.drawBitmap(bitmap4, middlePoint.toFloat(), 0.0f, Paint(Paint.FILTER_BITMAP_FLAG))
+        if (rightNumber != "") {
+            canvas.drawRect(middlePoint.toFloat(), (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.paint)
+            canvas.drawText("$rightNumber%", xText.toFloat(), yText.toFloat(), paint.paint)
         }
         return bitmap
     }
 
-    private fun dualBitmapWithNumbers(context: Context, aF: String): Bitmap {
-        var a = aF
-        var num1 = ""
-        val aSplit = a.split(",").dropLastWhile { it.isEmpty() }
-        if (aSplit.size > 1) {
-            num1 = aSplit[1]
-        }
-        if (aSplit.isNotEmpty()) {
-            a = aSplit[0]
-        }
-        val dimens = 86
-        val numHeight = 15
-        val bitmap = Bitmap.createBitmap(dimens, dimens, Bitmap.Config.ARGB_8888)
+    // Given one string return a custom bitmap with numeric label
+    // input examples
+    //  nrain_showers,80
+    //  tsra_hi,40
+    private fun getBitmapWithOneNumber(context: Context, iconString: String): Bitmap {
+        val items = iconString.split(",").dropLastWhile { it.isEmpty() }
+        val number = if (items.size > 1) items[1] else ""
+        val weatherCondition = if (items.isNotEmpty()) items[0] else ""
+        val bitmap = Bitmap.createBitmap(dimensions, dimensions, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)
-        val fnResId1 = UtilityNwsIcon.iconMap["$a.png"] ?: return bitmap
-        val bm1Tmp = UtilityImg.loadBitmap(context, fnResId1, false)
-        val bm1 = Bitmap.createBitmap(bm1Tmp, 0, 0, dimens, dimens) // was 41,dimens
-        canvas.drawBitmap(bm1, 0f, 0f, Paint(Paint.FILTER_BITMAP_FLAG))
+        val fileName = UtilityNwsIcon.iconMap["$weatherCondition.png"] ?: return bitmap
+        val bitmap1 = UtilityImg.loadBitmap(context, fileName, false)
+        val bitmap2 = Bitmap.createBitmap(bitmap1, 0, 0, dimensions, dimensions)
+        canvas.drawBitmap(bitmap2, 0.0f, 0.0f, Paint(Paint.FILTER_BITMAP_FLAG))
         val paint = ObjectPaint()
-        var xText = 58
         val yText = 84
-        if (num1 == "100") {
-            xText = 50
-        }
+        val xText = if (number == "100") 50 else 58
         val paintStripe = ObjectPaintStripe()
-        if (num1 != "") {
-            canvas.drawRect(
-                0f,
-                (dimens - numHeight).toFloat(),
-                dimens.toFloat(),
-                dimens.toFloat(),
-                paintStripe.paint
-            )
-            canvas.drawText("$num1%", xText.toFloat(), yText.toFloat(), paint.paint)
+        if (number != "") {
+            canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.paint)
+            canvas.drawText("$number%", xText.toFloat(), yText.toFloat(), paint.paint)
         }
         return bitmap
     }

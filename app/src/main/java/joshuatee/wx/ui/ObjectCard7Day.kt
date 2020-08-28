@@ -25,109 +25,65 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.view.View
 import android.widget.LinearLayout
-import androidx.cardview.widget.CardView
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.fragments.UtilityLocationFragment
 import joshuatee.wx.objects.TextSize
 
-class ObjectCard7Day(context: Context, bm: Bitmap, isUS: Boolean, day: Int, day7Arr: List<String>) {
+class ObjectCard7Day(context: Context, bitmap: Bitmap, isUS: Boolean, day: Int, forecasts: List<String>) {
 
-    private val objCard: ObjectCard
-    private val imageView = ObjectImageView(context)
-    private val topLineText: ObjectTextView
-    private val bottomLineText: ObjectTextView
+    private val objectCard = ObjectCard(context)
+    private val objectImageView = ObjectImageView(context)
+    private val topLineText = ObjectTextView(context, TextSize.MEDIUM)
+    private val bottomLineText = ObjectTextView(context, backgroundText = true)
 
     init {
-        val horizontalContainer = LinearLayout(context)
-        horizontalContainer.orientation = LinearLayout.HORIZONTAL
-        val verticalContainer = LinearLayout(context)
-        verticalContainer.orientation = LinearLayout.VERTICAL
-        topLineText = ObjectTextView(context, TextSize.MEDIUM)
-        topLineText.setPadding(
-            MyApplication.padding,
-            0,
-            MyApplication.paddingSmall,
-            0
-        )
-        //TextViewCompat.setAutoSizeTextTypeWithDefaults(
-        //    topLineText.tv,
-        //    TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM
-        //)
-        //topLineText.maxLines = 1
-        bottomLineText = ObjectTextView(context)
-        bottomLineText.setPadding(
-            MyApplication.padding,
-            0,
-            MyApplication.paddingSmall,
-            0
-        )
-        bottomLineText.setAsBackgroundText()
-        verticalContainer.addView(topLineText.tv)
-        verticalContainer.addView(bottomLineText.tv)
-        objCard = ObjectCard(context)
-        if (!UIPreferences.locfragDontShowIcons) {
-            horizontalContainer.addView(imageView.image)
-        }
+        val horizontalContainer = ObjectLinearLayout(context, LinearLayout.HORIZONTAL)
+        val verticalContainer = ObjectLinearLayout(context, LinearLayout.VERTICAL)
+        topLineText.setPadding(MyApplication.padding, 0, MyApplication.paddingSmall, 0)
+        bottomLineText.setPadding(MyApplication.padding, 0, MyApplication.paddingSmall, 0)
+        verticalContainer.addViews(listOf(topLineText.tv, bottomLineText.tv))
+        if (!UIPreferences.locfragDontShowIcons) horizontalContainer.addView(objectImageView)
         horizontalContainer.addView(verticalContainer)
-        objCard.addView(horizontalContainer)
-        var dayTmpArr = listOf<String>()
-        if (day7Arr.size > day) {
-            dayTmpArr = day7Arr[day].split(": ")
-        }
-        if (dayTmpArr.size > 1) {
+        objectCard.addView(horizontalContainer)
+        val items = if (forecasts.size > day) forecasts[day].split(": ") else listOf()
+        if (items.size > 1) {
             if (isUS) {
-                setTv1(
-                    dayTmpArr[0].replace(":", " ") + " (" + UtilityLocationFragment.extractTemperature(
-                        dayTmpArr[1]
-                    )
-                            + MyApplication.DEGREE_SYMBOL
-                            + UtilityLocationFragment.extractWindDirection(dayTmpArr[1].substring(1))
-                            + UtilityLocationFragment.extract7DayMetrics(dayTmpArr[1].substring(1)) + ")"
+                setTopLine(
+                        items[0] + " (" + UtilityLocationFragment.extractTemperature(
+                                items[1]
+                        )
+                                + MyApplication.DEGREE_SYMBOL
+                                + UtilityLocationFragment.extractWindDirection(items[1].substring(1))
+                                + UtilityLocationFragment.extract7DayMetrics(items[1].substring(1)) + ")"
                 )
             } else {
-                setTv1(
-                    dayTmpArr[0].replace(":", " ") + " ("
-                            + UtilityLocationFragment.extractCanadaTemperature(dayTmpArr[1])
-                            + MyApplication.DEGREE_SYMBOL
-                            + UtilityLocationFragment.extractCanadaWindDirection(dayTmpArr[1])
-                            + UtilityLocationFragment.extractCanadaWindSpeed(dayTmpArr[1]) + ")"
+                setTopLine(
+                        items[0] + " ("
+                                + UtilityLocationFragment.extractCanadaTemperature(items[1])
+                                + MyApplication.DEGREE_SYMBOL
+                                + UtilityLocationFragment.extractCanadaWindDirection(items[1])
+                                + UtilityLocationFragment.extractCanadaWindSpeed(items[1]) + ")"
                 )
             }
-            if (isUS) {
-                setTv2(dayTmpArr[1])
-            } else {
-                setTv2(dayTmpArr[1])
-            }
+            setBottomLine(items[1])
         }
-        if (!UIPreferences.locfragDontShowIcons) {
-            imageView.setImage(bm)
-        }
+        if (!UIPreferences.locfragDontShowIcons) objectImageView.setImage(bitmap)
     }
 
-    private fun setTv1(text: String) {
-        topLineText.text = text
-    }
+    private fun setTopLine(text: String) { topLineText.text = text }
 
-    private fun setTv2(text: String) {
-        bottomLineText.text = text
-    }
+    private fun setBottomLine(text: String) { bottomLineText.text = text }
 
-    fun setOnClickListener(fn: View.OnClickListener) {
-        objCard.setOnClickListener(fn)
-    }
+    fun setOnClickListener(fn: View.OnClickListener) = objectCard.setOnClickListener(fn)
 
     fun refreshTextSize() {
         topLineText.refreshTextSize(TextSize.MEDIUM)
         bottomLineText.refreshTextSize(TextSize.MEDIUM)
-        //TextViewCompat.setAutoSizeTextTypeWithDefaults(
-        //        topLineText.tv,
-        //        TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM
-        //)
     }
 
-    val card: CardView get() = objCard.card
+    val card get() = objectCard.card
 }
 
 

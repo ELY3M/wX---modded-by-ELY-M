@@ -26,6 +26,7 @@ import android.content.Context
 import android.content.Intent
 
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityTime
 
 class AlertReceiver : BroadcastReceiver() {
@@ -34,10 +35,7 @@ class AlertReceiver : BroadcastReceiver() {
 
     override fun onReceive(context1: Context, intent1: Intent) {
         BackgroundFetch(context1).getContent()
-        Utility.writePref(
-            context1,
-            "JOBSERVICE_TIME_LAST_RAN",
-            UtilityTime.getCurrentLocalTimeAsString()
-        )
+        UtilityLog.d("wx", "job via AlertReceiver")
+        Utility.writePref(context1, "JOBSERVICE_TIME_LAST_RAN", UtilityTime.getCurrentLocalTimeAsString())
     }
 }

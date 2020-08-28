@@ -31,11 +31,6 @@
         android:title="@string/stop_audio"
         app:showAsAction="always" />
     <item
-        android:id="@+id/action_playlist"
-        android:icon="@drawable/ic_queue_24dp"
-        android:title="@string/label_playlist"
-        app:showAsAction="always" />
-    <item
         android:id="@+id/action_test"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
@@ -91,6 +86,11 @@
                 app:showAsAction="never" />
         </menu>
     </item>
+    <item
+        android:id="@+id/action_playlist"
+        android:icon="@drawable/ic_queue_24dp"
+        android:title="@string/label_playlist"
+        app:showAsAction="never" />
     <item
         android:id="@+id/action_state_graphics"
         android:title="State graphics"

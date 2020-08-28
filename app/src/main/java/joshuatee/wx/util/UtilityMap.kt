@@ -23,12 +23,8 @@ package joshuatee.wx.util
 
 object UtilityMap {
 
-    fun getMapUrl(x: String, y: String, zoomLevel: String): String =
-        "http://www.openstreetmap.org/?mlat=$x&mlon=$y&zoom=$zoomLevel&layers=M"
+    fun getMapUrl(x: String, y: String, zoomLevel: String) = "http://www.openstreetmap.org/?mlat=$x&mlon=$y&zoom=$zoomLevel&layers=M"
 
-    fun getMapUrlFromStreetAddress(streetAddress: String): String =
-        "http://www.openstreetmap.org/search?query=" + streetAddress.replace(",", "%2C").replace(
-            " ",
-            "%20"
-        )
+    fun getMapUrlFromStreetAddress(streetAddress: String) =
+        "http://www.openstreetmap.org/search?query=" + streetAddress.replace(",", "%2C").replace(" ", "%20")
 }

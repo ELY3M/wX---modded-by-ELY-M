@@ -31,15 +31,9 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.ui.ObjectCard
 
-internal class TileAdapterColorPalette(
-    private val itemList: List<TileObjectColorPalette>,
-    private val tilesPerRow: Int
-) : RecyclerView.Adapter<TileAdapterColorPalette.RecyclerViewHoldersColorPalette>() {
+internal class TileAdapterColorPalette(private val itemList: List<TileObjectColorPalette>, private val tilesPerRow: Int) : RecyclerView.Adapter<TileAdapterColorPalette.RecyclerViewHoldersColorPalette>() {
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): RecyclerViewHoldersColorPalette {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHoldersColorPalette {
         val layoutView = LayoutInflater.from(parent.context).inflate(R.layout.cardview_tiles, null)
         return RecyclerViewHoldersColorPalette(layoutView)
     }
@@ -67,22 +61,14 @@ internal class TileAdapterColorPalette(
             itemView.setOnClickListener(this)
         }
 
-        override fun onClick(v: View) {
-            myClickListener!!.onItemClick(adapterPosition)
-        }
+        override fun onClick(v: View) { myClickListener!!.onItemClick(adapterPosition) }
     }
 
     fun setListener(fn: (Int) -> Unit) {
-        myClickListener = object : MyClickListener {
-            override fun onItemClick(position: Int) {
-                fn(position)
-            }
-        }
+        myClickListener = object : MyClickListener { override fun onItemClick(position: Int) { fn(position) } }
     }
 
-    interface MyClickListener {
-        fun onItemClick(position: Int)
-    }
+    interface MyClickListener { fun onItemClick(position: Int) }
 
     companion object {
         private var myClickListener: MyClickListener? = null

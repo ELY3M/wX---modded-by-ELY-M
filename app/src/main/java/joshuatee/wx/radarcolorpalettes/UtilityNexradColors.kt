@@ -26,9 +26,6 @@ import kotlin.math.absoluteValue
 
 internal object UtilityNexradColors {
 
-    // thanks Mark Renouf and Stuck
-    // http://stackoverflow.com/questions/4414673/android-color-between-two-colors-based-on-percentage
-
     private fun interpolate(a: Float, b: Float, proportion: Float) = a + (b - a) * proportion
 
     private fun interpolateHue(a: Float, b: Float, proportion: Float): Float {
@@ -50,28 +47,26 @@ internal object UtilityNexradColors {
                 transformedColor
             } else {
                 transformedColor = a + (b - a) * proportion
-                if ( a > 270.0 && b < 90.0) {
-                    transformedColor = (a + (360 - a + b)*proportion)
-                }
+                if ( a > 270.0 && b < 90.0) transformedColor = (a + (360 - a + b)*proportion)
                 transformedColor
             }
         }
     }
 
-    /** Returns an interpoloated color, between `a` and `b`  */
+    // Returns an interpolated color, between `a` and `b`
     fun interpolateColor(a: Int, b: Int, proportion: Double): Int {
-        val hsva = FloatArray(3)
-        val hsvb = FloatArray(3)
-        Color.colorToHSV(a, hsva)
-        Color.colorToHSV(b, hsvb)
+        val hsvA = FloatArray(3)
+        val hsvB = FloatArray(3)
+        Color.colorToHSV(a, hsvA)
+        Color.colorToHSV(b, hsvB)
         (0..2).forEach {
             if (it > 0) {
-                hsvb[it] = interpolate(hsva[it], hsvb[it], proportion.toFloat())
+                hsvB[it] = interpolate(hsvA[it], hsvB[it], proportion.toFloat())
             } else {
-                hsvb[it] = interpolateHue(hsva[it], hsvb[it], proportion.toFloat())
+                hsvB[it] = interpolateHue(hsvA[it], hsvB[it], proportion.toFloat())
             }
         }
-        return Color.HSVToColor(hsvb)
+        return Color.HSVToColor(hsvB)
     }
 }
 

@@ -22,26 +22,27 @@
 package joshuatee.wx.ui
 
 import android.content.Context
+import android.graphics.Typeface
 import android.util.TypedValue
+import android.view.View
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.util.Utility
 
 class ObjectCardHSText(context: Context, val product: String) {
 
-    private val objCard = ObjectCard(context)
-    val tv: TextView = TextView(context)
+    private val objectCard = ObjectCard(context)
+    private val textView: TextView = TextView(context)
     private var textShort = ""
     private var textLong = ""
     private var textShownSmall = true
 
     init {
-        ObjectCardText.textViewSetup(tv)
-        tv.setTextIsSelectable(true)
-        tv.isFocusable = false
-        objCard.addView(tv)
+        ObjectCardText.textViewSetup(textView)
+        textView.setTextIsSelectable(true)
+        textView.isFocusable = false
+        objectCard.addView(textView)
     }
 
     fun toggleText() {
@@ -56,25 +57,23 @@ class ObjectCardHSText(context: Context, val product: String) {
 
     fun setText(text: String) {
         if (text.contains("<br>") || text.contains("<BR>")) {
-            tv.text = Utility.fromHtml(text)
+            textView.text = Utility.fromHtml(text)
         } else {
-            tv.text = text
+            textView.text = text
         }
     }
 
-    fun refreshTextSize() {
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
-    }
+    fun refreshTextSize() = textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
 
-    fun setTextLong(text: String) {
-        textLong = text
-    }
+    fun setTextLong(text: String) { textLong = text }
 
-    fun setTextShort(text: String) {
-        textShort = text
-    }
+    fun setTextShort(text: String) { textShort = text }
 
-    val card: CardView get() = objCard.card
+    fun setOnClickListener(fn: View.OnClickListener) = textView.setOnClickListener(fn)
+
+    fun typefaceMono() { textView.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL) }
+
+    val card get() = objectCard.card
 }
 
 

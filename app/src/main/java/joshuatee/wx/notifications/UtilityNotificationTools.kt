@@ -29,7 +29,6 @@ object UtilityNotificationTools {
 
     fun nwsLocalAlertNotFiltered(context: Context, title: String): Boolean {
         val nwsWfoFilterStr = Utility.readPref(context, "NOTIF_WFO_FILTER", "")
-        return MyApplication.colon.split(nwsWfoFilterStr)
-            .none { it.length > 5 && title.startsWith(it) }
+        return MyApplication.colon.split(nwsWfoFilterStr).none { it.length > 5 && title.startsWith(it) }
     }
 }

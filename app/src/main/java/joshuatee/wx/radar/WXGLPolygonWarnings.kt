@@ -23,8 +23,6 @@ package joshuatee.wx.radar
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.objects.ProjectionType
-import joshuatee.wx.util.UtilityCanvasProjection
 import joshuatee.wx.util.ProjectionNumbers
 
 import joshuatee.wx.Extensions.*
@@ -35,90 +33,37 @@ import joshuatee.wx.util.UtilityTime
 
 internal object WXGLPolygonWarnings {
 
-    fun addGeneric(projectionType: ProjectionType, radarSite: String, objectPolygonWarning: ObjectPolygonWarning): List<Double> {
+    fun addGeneric(projectionNumbers: ProjectionNumbers, objectPolygonWarning: ObjectPolygonWarning): List<Double> {
         val warningList = mutableListOf<Double>()
         val prefToken = objectPolygonWarning.storage.value
-        val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
         val html = prefToken.replace("\n", "").replace(" ", "")
         val polygons = html.parseColumn(RegExp.warningLatLonPattern)
         val vtecs = html.parseColumn(RegExp.warningVtecPattern)
-        var polygonCount = -1
-        polygons.forEach { polygon ->
-            polygonCount += 1
-            if (objectPolygonWarning.type == PolygonWarningType.SpecialWeatherStatement
-                    || (vtecs.size > polygonCount
-                            && !vtecs[polygonCount].startsWith("O.EXP")
-                            && !vtecs[polygonCount].startsWith("O.CAN"))
-            ) {
-                val polyTmp = polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
-                val testArr = polyTmp.split(" ")
-                val y = testArr.asSequence().filterIndexed { index: Int, _: String -> index and 1 == 0 }
-                        .map {
-                            it.toDoubleOrNull() ?: 0.0
-                        }.toList()
-                val x = testArr.asSequence().filterIndexed { index: Int, _: String -> index and 1 != 0 }
-                        .map {
-                            it.toDoubleOrNull() ?: 0.0
-                        }.toList()
-                if (y.isNotEmpty() && x.isNotEmpty()) {
-                    val startCoordinates = UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], projectionNumbers).toMutableList()
-                    warningList += startCoordinates
-                    if (x.size == y.size) {
-                        for (index in 1 until x.size) {
-                            val coordinates = UtilityCanvasProjection.computeMercatorNumbers(x[index], y[index], projectionNumbers).toMutableList()
-                            warningList += coordinates
-                            warningList += coordinates
-                        }
-                        warningList += startCoordinates
-                    }
-                }
+        polygons.forEachIndexed { polygonCount, polygon ->
+            if (objectPolygonWarning.type == PolygonWarningType.SpecialWeatherStatement || (vtecs.size > polygonCount && !vtecs[polygonCount].startsWith("O.EXP") && !vtecs[polygonCount].startsWith("O.CAN"))) {
+                val polygonTmp = polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
+                val latLons = LatLon.parseStringToLatLons(polygonTmp)
+                warningList += LatLon.latLonListToListOfDoubles(latLons, projectionNumbers)
             }
         }
         return warningList
     }
 
-    fun add(projectionType: ProjectionType, radarSite: String, polygonType: PolygonType): List<Double> {
+    fun add(projectionNumbers: ProjectionNumbers, polygonType: PolygonType): List<Double> {
         val warningList = mutableListOf<Double>()
         val prefToken = when (polygonType) {
             PolygonType.TOR -> MyApplication.severeDashboardTor.value
             PolygonType.TST -> MyApplication.severeDashboardTst.value
             else -> MyApplication.severeDashboardFfw.value
         }
-        val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
         val html = prefToken.replace("\n", "").replace(" ", "")
         val polygons = html.parseColumn(RegExp.warningLatLonPattern)
         val vtecs = html.parseColumn(RegExp.warningVtecPattern)
-        var polygonCount = -1
-        polygons.forEach { polygon ->
-            polygonCount += 1
-            //val vtecIsCurrent = UtilityTime.isVtecCurrent(vtecAl[polyCount])
-            if (vtecs.size > polygonCount
-                    && !vtecs[polygonCount].startsWith("O.EXP")
-                    && !vtecs[polygonCount].startsWith("O.CAN")
-                    && UtilityTime.isVtecCurrent(vtecs[polygonCount])
-            ) {
-                val polyTmp = polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
-                val testArr = polyTmp.split(" ")
-                val y = testArr.asSequence().filterIndexed { index: Int, _: String -> index and 1 == 0 }
-                        .map {
-                            it.toDoubleOrNull() ?: 0.0
-                        }.toList()
-                val x = testArr.asSequence().filterIndexed { index: Int, _: String -> index and 1 != 0 }
-                        .map {
-                            it.toDoubleOrNull() ?: 0.0
-                        }.toList()
-                if (y.isNotEmpty() && x.isNotEmpty()) {
-                    val startCoordinates = UtilityCanvasProjection.computeMercatorNumbers(x[0], y[0], projectionNumbers).toMutableList()
-                    warningList += startCoordinates
-                    if (x.size == y.size) {
-                        for (index in 1 until x.size) {
-                            val coordinates = UtilityCanvasProjection.computeMercatorNumbers(x[index], y[index], projectionNumbers).toMutableList()
-                            warningList += coordinates
-                            warningList += coordinates
-                        }
-                        warningList += startCoordinates
-                    }
-                }
+        polygons.forEachIndexed { polygonCount, polygon ->
+            if (vtecs.size > polygonCount && !vtecs[polygonCount].startsWith("O.EXP") && !vtecs[polygonCount].startsWith("O.CAN") && UtilityTime.isVtecCurrent(vtecs[polygonCount])) {
+                val polygonTmp = polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
+                val latLons = LatLon.parseStringToLatLons(polygonTmp)
+                warningList += LatLon.latLonListToListOfDoubles(latLons, projectionNumbers)
             }
         }
         return warningList

@@ -24,44 +24,36 @@ package joshuatee.wx.spc
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.LinearLayout
-import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.ShortcutType
-import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectCardImage
-import joshuatee.wx.ui.ObjectLinearLayout
-import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityShortcut
 import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
-class SpcSwoSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
+class SpcSwoSummaryActivity : BaseActivity() {
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    private val uiDispatcher = Dispatchers.Main
     private var bitmaps = mutableListOf<Bitmap>()
     private var imagesPerRow = 2
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.spc_swo_summary, menu)
+        UtilityShortcut.hidePinIfNeeded(menu)
+        return true
+    }
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_linear_layout_bottom_toolbar,
-                R.menu.spc_swo_summary,
-                true
-        )
-        if (UtilityUI.isLandScape(this)) {
-            imagesPerRow = 3
-        }
-        toolbarBottom.setOnMenuItemClickListener(this)
-        val menu = toolbarBottom.menu
-        UtilityShortcut.hidePinIfNeeded(menu)
+        super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.spc_swo_summary, false)
+        if (UtilityUI.isLandScape(this)) imagesPerRow = 3
         toolbar.subtitle = "SPC"
         title = "Convective Outlooks"
         getContent()
@@ -74,55 +66,19 @@ class SpcSwoSummaryActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         bitmaps = mutableListOf()
-        withContext(Dispatchers.IO) {
-            arrayOf("1", "2", "3", "4-8").forEach {
-                bitmaps.addAll(UtilitySpcSwo.getImages(it, false))
-            }
-        }
-        ll.removeAllViews()
-        var numberOfImages = 0
-        val horizontalLinearLayouts: MutableList<ObjectLinearLayout> = mutableListOf()
-        bitmaps.forEachIndexed { index, bitmap ->
-            val day = if (index < 3) {
-                (index + 1).toString()
-            } else {
-                "4-8"
-            }
-            val objectCardImage: ObjectCardImage
-            if (numberOfImages % imagesPerRow == 0) {
-                val objectLinearLayout = ObjectLinearLayout(this@SpcSwoSummaryActivity, ll)
-                objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
-                horizontalLinearLayouts.add(objectLinearLayout)
-                objectCardImage = ObjectCardImage(
-                        this@SpcSwoSummaryActivity,
-                        objectLinearLayout.linearLayout,
-                        bitmap,
-                        imagesPerRow
-                )
-            } else {
-                objectCardImage = ObjectCardImage(
-                        this@SpcSwoSummaryActivity,
-                        horizontalLinearLayouts.last().linearLayout,
-                        bitmap,
-                        imagesPerRow
-                )
-            }
-            objectCardImage.setOnClickListener(View.OnClickListener {
-                ObjectIntent(
-                        this@SpcSwoSummaryActivity,
-                        SpcSwoActivity::class.java,
-                        SpcSwoActivity.NUMBER,
-                        arrayOf(day, "")
-                )
-            })
-            numberOfImages += 1
+        withContext(Dispatchers.IO) { listOf("1", "2", "3", "4-8").forEach { bitmaps.addAll(UtilitySpcSwo.getImages(it, false)) } }
+        linearLayout.removeAllViews()
+        val objectImageSummary = ObjectImageSummary(this@SpcSwoSummaryActivity, linearLayout, bitmaps)
+        objectImageSummary.objectCardImages.forEachIndexed { index, objectCardImage ->
+            val day = if (index < 3) (index + 1).toString() else "4-8"
+            objectCardImage.setOnClickListener(View.OnClickListener { ObjectIntent.showSpcSwo(this@SpcSwoSummaryActivity, arrayOf(day, "")) })
         }
     }
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.SPC_SWO_SUMMARY)
-            R.id.action_share -> UtilityShare.shareText(this, this, "Convective Outlook Summary", "", bitmaps)
+            R.id.action_share -> UtilityShare.text(this, this, "Convective Outlook Summary", "", bitmaps)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

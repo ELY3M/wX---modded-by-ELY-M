@@ -68,17 +68,17 @@ package joshuatee.wx.util.bzip2
  */
 interface BZip2Constants {
     companion object {
-        const val baseBlockSize: Int = 100000
-        const val MAX_ALPHA_SIZE: Int = 258
-        const val MAX_CODE_LEN: Int = 23
-        const val RUNA: Int = 0
-        const val RUNB: Int = 1
-        const val N_GROUPS: Int = 6
-        const val G_SIZE: Int = 50
+        const val baseBlockSize = 100000
+        const val MAX_ALPHA_SIZE = 258
+        const val MAX_CODE_LEN = 23
+        const val RUNA = 0
+        const val RUNB = 1
+        const val N_GROUPS = 6
+        const val G_SIZE = 50
         //val N_ITERS = 4
         const val MAX_SELECTORS: Int = 2 + 900000 / G_SIZE
         //val NUM_OVERSHOOT_BYTES = 20
-        val rNums: IntArray = intArrayOf(
+        val rNums = intArrayOf(
             619,
             720,
             127,

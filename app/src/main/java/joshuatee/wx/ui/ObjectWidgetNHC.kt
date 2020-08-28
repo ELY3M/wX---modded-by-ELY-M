@@ -31,19 +31,11 @@ import joshuatee.wx.objects.WidgetFile.*
 
 class ObjectWidgetNhc(context: Context) {
 
-    val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
+    val remoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
 
     init {
-        UtilityWidget.setImage(context, remoteViews, R.id.iv, NHC.fileName + "0")
-        if (!MyApplication.widgetPreventTap) {
-            UtilityWidget.setupIntent(
-                    context,
-                    remoteViews,
-                    NhcActivity::class.java,
-                    R.id.iv,
-                    NHC.action + "0"
-            )
-        }
+        UtilityWidget.setImage(context, remoteViews, NHC.fileName + "0")
+        if (!MyApplication.widgetPreventTap) UtilityWidget.setupIntent(context, remoteViews, NhcActivity::class.java, R.id.iv, NHC.action + "0")
     }
 }
 

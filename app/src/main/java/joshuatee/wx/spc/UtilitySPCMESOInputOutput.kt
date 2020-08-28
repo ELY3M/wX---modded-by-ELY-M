@@ -47,11 +47,7 @@ object UtilitySpcMesoInputOutput {
         val showWatchWarn = Utility.readPref(context, prefModel + "_SHOW_WATWARN", "false").startsWith("t")
         val showTopography = Utility.readPref(context, prefModel + "_SHOW_TOPO", "false").startsWith("t")
         val drawables = mutableListOf<Drawable>()
-        val gifUrl = if (UtilitySpcMeso.imgSf.contains(param) && !showRadar) {
-            "_sf.gif"
-        } else {
-            ".gif"
-        }
+        val gifUrl = if (UtilitySpcMeso.imgSf.contains(param) && !showRadar) "_sf.gif" else ".gif"
         val imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/$param/$param$gifUrl"
         val radImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/rgnlrad/rgnlrad.gif"
         val outlookImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/otlk/otlk.gif"
@@ -59,58 +55,26 @@ object UtilitySpcMesoInputOutput {
         val topographyImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/topo/topo.gif"
         var bitmap = imgUrl.getImage()
         drawables.add(ColorDrawable(Color.WHITE))
-        if (showTopography) {
-            drawables.add(
-                BitmapDrawable(
-                    context.resources,
-                    UtilityImg.eraseBackground(topographyImgUrl.getImage(), -1)
-                )
-            )
-        }
+        if (showTopography) drawables.add(BitmapDrawable(context.resources, UtilityImg.eraseBackground(topographyImgUrl.getImage(), -1)))
         if (showRadar) {
             val bitmapRadar = radImgUrl.getImage()
             bitmap = UtilityImg.eraseBackground(bitmap, -1)
             drawables.add(BitmapDrawable(context.resources, bitmapRadar))
         }
         drawables.add(BitmapDrawable(context.resources, bitmap))
-        if (showOutlook) {
-            drawables.add(
-                BitmapDrawable(
-                    context.resources,
-                    UtilityImg.eraseBackground(outlookImgUrl.getImage(), -1)
-                )
-            )
-        }
-        if (showWatchWarn) {
-            drawables.add(
-                BitmapDrawable(
-                    context.resources,
-                    UtilityImg.eraseBackground(watchWarningImgUrl.getImage(), -1)
-                )
-            )
-        }
+        if (showOutlook) drawables.add(BitmapDrawable(context.resources, UtilityImg.eraseBackground(outlookImgUrl.getImage(), -1)))
+        if (showWatchWarn) drawables.add(BitmapDrawable(context.resources, UtilityImg.eraseBackground(watchWarningImgUrl.getImage(), -1)))
         return UtilityImg.layerDrawableToBitmap(drawables)
     }
 
-    fun getAnimation(
-        context: Context,
-        sector: String,
-        param: String,
-        frameCnt: Int
-    ): AnimationDrawable {
-        val urlAl = mutableListOf<String>()
-        val timeList =
-            ("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/new/archiveviewer.php?sector=19&parm=pmsl").getHtml()
-                .parseColumn("dattim\\[[0-9]{1,2}\\].*?=.*?([0-9]{8})")
+    fun getAnimation(context: Context, product: String, sector: String, frameCnt: Int): AnimationDrawable {
+        var urls = listOf<String>()
+        val timeList = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/new/archiveviewer.php?sector=19&parm=pmsl".getHtml().parseColumn("dattim\\[[0-9]{1,2}\\].*?=.*?([0-9]{8})")
         val delay = UtilityImg.animInterval(context)
         if (timeList.size > frameCnt) {
-            stride(
-                frameCnt - 1,
-                -1,
-                -1
-            ).mapTo(urlAl) { "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s" + sector + "/" + param + "/" + param + "_" + timeList[it] + ".gif" }
+            urls = stride(frameCnt - 1, -1, -1).map { "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s" + sector + "/" + product + "/" + product + "_" + timeList[it] + ".gif" }
         }
-        return UtilityImgAnim.getAnimationDrawableFromUrlListWhiteBG(context, urlAl, delay)
+        return UtilityImgAnim.getAnimationDrawableFromUrlListWhiteBackground(context, urls, delay)
     }
 
     private fun stride(start: Int, end: Int, incr: Int): IntArray {

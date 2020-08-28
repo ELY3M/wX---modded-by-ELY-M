@@ -43,37 +43,21 @@ object UtilityUS {
         var locationName: String? = OBS_CODE_TO_LOCATION[obsClosestClass]
         if (locationName == null) {
             locationName = findObsName(context, obsClosestClass)
-            if (locationName != "" && obsClosestClass != "") {
-                OBS_CODE_TO_LOCATION[obsClosestClass] = locationName
-            }
+            if (locationName != "" && obsClosestClass != "") OBS_CODE_TO_LOCATION[obsClosestClass] = locationName
         }
         return conditionsTimeStr + " " + UtilityString.capitalizeString(locationName).trim { it <= ' ' } + " (" + obsClosestClass + ") "
     }
 
     private fun findObsName(context: Context, obsShortCode: String): String {
-        var locationName = ""
-        try {
-            val text = UtilityIO.readTextFileFromRaw(context.resources, R.raw.stations_us4)
-            val lines = text.split("\n").dropLastWhile { it.isEmpty() }
-            val tmpArr: List<String>
-            val tmp = lines.lastOrNull { it.contains(",$obsShortCode") } ?: ""
-            tmpArr = tmp.split(",")
-            if (tmpArr.size > 2) {
-                locationName = tmpArr[0] + ", " + tmpArr[1]
-            }
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        return locationName
+        val text = UtilityIO.readTextFileFromRaw(context.resources, R.raw.stations_us4)
+        val lines = text.split("\n").dropLastWhile { it.isEmpty() }
+        val list = lines.lastOrNull { it.contains(",$obsShortCode") } ?: ""
+        val items = list.split(",")
+        return if (items.size > 2) items[0] + ", " + items[1] else ""
     }
 
-    fun checkForNotifications(
-            context: Context,
-            currentLoc: Int,
-            inBlackout: Boolean,
-            tornadoWarningString: String
-    ): String {
-        var html = ObjectForecastPackageHazards.getHazardsHtml(Location.getLatLon(currentLoc))
+    fun checkForNotifications(context: Context, currentLoc: Int, inBlackout: Boolean, tornadoWarningString: String): String {
+        var html = ObjectHazards.getHazardsHtml(Location.getLatLon(currentLoc))
         var notificationUrls = ""
         val locationLabelString = "(" + Location.getName(currentLoc) + ") "
         val ids = html.parseColumn("\"@id\": \"(.*?)\"")
@@ -90,24 +74,11 @@ object UtilityUS {
                     val noMain = locationLabelString + title
                     val noBody = title + " " + ca.area + " " + ca.summary
                     val noSummary = title + ": " + ca.area + " " + ca.summary
-                    val objectPendingIntents = ObjectPendingIntents(
-                            context,
-                            USAlertsDetailActivity::class.java,
-                            USAlertsDetailActivity.URL,
-                            arrayOf(url, ""),
-                            arrayOf(url, "sound")
-                    )
+                    val objectPendingIntents = ObjectPendingIntents(context, USAlertsDetailActivity::class.java, USAlertsDetailActivity.URL, arrayOf(url, ""), arrayOf(url, "sound"))
                     val tornadoWarningPresent = title.contains(tornadoWarningString)
-                    if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(
-                                    context,
-                                    url
-                            ))
-                    ) {
-                        val sound = MyApplication.locations[currentLoc].sound
-                                && !inBlackout
-                                || MyApplication.locations[currentLoc].sound
-                                && tornadoWarningPresent
-                                && MyApplication.alertBlackoutTornado
+                    if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, url))) {
+                        val sound = MyApplication.locations[currentLoc].sound && !inBlackout || MyApplication.locations[currentLoc].sound
+                                && tornadoWarningPresent && MyApplication.alertBlackoutTornado
                         val objectNotification = ObjectNotification(
                                 context,
                                 sound,

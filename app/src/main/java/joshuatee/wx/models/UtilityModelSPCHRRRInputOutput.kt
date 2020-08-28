@@ -54,49 +54,29 @@ internal object UtilityModelSpcHrrrInputOutput {
             return runData
         }
 
-    fun getImage(
-        context: Context,
-        om: ObjectModel,
-        time: String,
-        overlayImg: List<String>
-    ): Bitmap {
+    fun getImage(context: Context, om: ObjectModelNoSpinner, time: String, overlayImg: List<String>): Bitmap {
         val layerUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/"
-        var imgUrl: String
-        val bitmapAl = mutableListOf<Bitmap>()
-        val layersAl = mutableListOf<Drawable>()
+        val bitmaps = mutableListOf<Bitmap>()
+        val layers = mutableListOf<Drawable>()
         overlayImg.forEach {
-            imgUrl = layerUrl + getSectorCode(om.sector).toLowerCase(Locale.US) + "/" + it + "/" + it + ".gif"
-            bitmapAl.add(UtilityImg.eraseBackground(imgUrl.getImage(), -1))
+            val url = layerUrl + getSectorCode(om.sector).toLowerCase(Locale.US) + "/" + it + "/" + it + ".gif"
+            bitmaps.add(UtilityImg.eraseBackground(url.getImage(), -1))
         }
-        imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/hrrr/data/hrrr3/" +
-                getSectorCode(om.sector).toLowerCase(Locale.US) + "/R" +
-                om.run.replace("Z", "") + "_F" +
-                formatTime(time) + "_V" + getValidTime(om.run, time, om.rtd.validTime) +
+        val backgroundUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/hrrr/data/hrrr3/" + getSectorCode(om.sector).toLowerCase(Locale.US) + "/R" +
+                om.run.replace("Z", "") + "_F" + formatTime(time) + "_V" + getValidTime(om.run, time, om.rtd.validTime) +
                 "_" + getSectorCode(om.sector) + "_" + om.currentParam + ".gif"
-        bitmapAl.add(UtilityImg.eraseBackground(imgUrl.getImage(), -1))
-        layersAl.add(ColorDrawable(Color.WHITE))
-        bitmapAl.mapTo(layersAl) { BitmapDrawable(context.resources, it) }
-        return UtilityImg.layerDrawableToBitmap(layersAl)
+        bitmaps.add(UtilityImg.eraseBackground(backgroundUrl.getImage(), -1))
+        layers.add(ColorDrawable(Color.WHITE))
+        layers += bitmaps.map { BitmapDrawable(context.resources, it) }
+        return UtilityImg.layerDrawableToBitmap(layers)
     }
 
-    fun getAnimation(
-        context: Context,
-        om: ObjectModel,
-        overlayImg: List<String>
-    ): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) {
-            return AnimationDrawable()
+    fun getAnimation(context: Context, om: ObjectModelNoSpinner, overlayImg: List<String>): AnimationDrawable {
+        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        val bitmaps = (om.spinnerTimeValue until om.times.size).map { k ->
+            getImage(context, om, om.times[k].split(" ").dropLastWhile { it.isEmpty() }.getOrNull(0) ?: "", overlayImg)
         }
-        val bmAl = (om.spinnerTimeValue until om.spTime.list.size).mapTo(mutableListOf()) { k ->
-            getImage(
-                context,
-                om,
-                om.spTime.list[k].split(" ").dropLastWhile { it.isEmpty() }.getOrNull(0)
-                    ?: "",
-                overlayImg
-            )
-        }
-        return UtilityImgAnim.getAnimationDrawableFromBMList(context, bmAl)
+        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 
     private fun getSectorCode(sectorName: String) =
@@ -104,7 +84,6 @@ internal object UtilityModelSpcHrrrInputOutput {
             .firstOrNull { sectorName == UtilityModelSpcHrrrInterface.sectors[it] }
             ?.let { UtilityModelSpcHrrrInterface.sectorCodes[it] }
             ?: "S19"
-
 
     private fun getValidTime(run: String, validTimeForecast: String, validTime: String): String {
         var validTimeCurrent = ""

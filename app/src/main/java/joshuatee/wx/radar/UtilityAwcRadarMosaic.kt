@@ -31,49 +31,50 @@ import joshuatee.wx.Extensions.*
 
 object UtilityAwcRadarMosaic {
 
-    private const val baseUrl: String = "https://www.aviationweather.gov/data/obs/"
+    private const val baseUrl = "https://www.aviationweather.gov/data/obs/"
 
-    val sectors: List<String> = listOf(
-        "us",
-        "alb",
-        "bwi",
-        "clt",
-        "tpa",
-        "dtw",
-        "evv",
-        "mgm",
-        "lit",
-        "pir",
-        "ict",
-        "aus",
-        "cod",
-        "den",
-        "abq",
-        "lws",
-        "wmc",
-        "las"
+    val sectors = listOf(
+            "us",
+            "alb",
+            "bwi",
+            "clt",
+            "tpa",
+            "dtw",
+            "evv",
+            "mgm",
+            "msp",
+            "lit",
+            "pir",
+            "ict",
+            "aus",
+            "cod",
+            "den",
+            "abq",
+            "lws",
+            "wmc",
+            "las"
     )
 
-    val labels: List<String> = listOf(
-        "CONUS US",
-        "Albany NY",
-        "Baltimore MD",
-        "Charlotte NC",
-        "Tampa FL",
-        "Detroit MI",
-        "Evansville IN",
-        "Montgomery AL",
-        "Minneapolis MN",
-        "Little Rock AR",
-        "Pierre SD",
-        "Wichita KS",
-        "Austin TX",
-        "Cody WY",
-        "Denver CO",
-        "Albuquerque NM",
-        "Lewiston ID",
-        "Winnemuca NV",
-        "Las Vegas NV"
+    val labels = listOf(
+            "CONUS US",
+            "Albany NY",
+            "Baltimore MD",
+            "Charlotte NC",
+            "Tampa FL",
+            "Detroit MI",
+            "Evansville IN",
+            "Montgomery AL",
+            "Minneapolis MN",
+            "Little Rock AR",
+            "Pierre SD",
+            "Wichita KS",
+            "Austin TX",
+            "Cody WY",
+            "Denver CO",
+            "Albuquerque NM",
+            "Lewiston ID",
+            "Winnemuca NV",
+            "Las Vegas NV"
     )
 
     // https://www.aviationweather.gov/data/obs/radar/rad_rala_msp.gif
@@ -112,11 +113,11 @@ object UtilityAwcRadarMosaic {
         val productUrl = "https://www.aviationweather.gov/" + baseAddOnTopUrl + "plot?region=" + sector + topUrlAddOn
         val html = productUrl.getHtml()
         val urls = html.parseColumn(
-            "image_url.[0-9]{1,2}. = ./data/obs/" + baseAddOn + "([0-9]{8}/[0-9]{2}/[0-9]{8}_[0-9]{4}_" + product + "_"
-                    + sector
-                    + imageType + ")."
+                "image_url.[0-9]{1,2}. = ./data/obs/" + baseAddOn + "([0-9]{8}/[0-9]{2}/[0-9]{8}_[0-9]{4}_" + product + "_"
+                        + sector
+                        + imageType + ")."
         )
         val bitmaps = urls.map { (baseUrl + baseAddOn + it).getImage() }
-        return UtilityImgAnim.getAnimationDrawableFromBMList(context, bitmaps)
+        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 }

@@ -55,19 +55,7 @@ internal object UtilitySpcStormReports {
                     description = items[7]
                 }
             }
-            stormReports.add(
-                    StormReport(
-                            title,
-                            lat,
-                            lon,
-                            time,
-                            magnitude,
-                            address,
-                            city,
-                            state,
-                            description
-                    )
-            )
+            stormReports.add(StormReport(title, lat, lon, time, magnitude, address, city, state, description))
         }
         return stormReports
     }

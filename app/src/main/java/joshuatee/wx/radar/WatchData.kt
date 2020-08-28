@@ -21,8 +21,5 @@
 
 package joshuatee.wx.radar
 
-class WatchData(
-        val numberList: List<String>,
-        val htmlList: List<String>
-)
+class WatchData(val numberList: List<String>, val htmlList: List<String>)
 

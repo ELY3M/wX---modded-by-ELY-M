@@ -27,11 +27,15 @@ import joshuatee.wx.Extensions.condenseSpace
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.Extensions.parse
 import joshuatee.wx.MyApplication
+import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.PolygonType
+import joshuatee.wx.radar.LatLon
+import joshuatee.wx.radar.UtilityDownloadWatch
+import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityImg
 
-internal class ObjectWatchProduct(type: PolygonType, productNumber: String) {
+internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) {
 
     private var productNumber = ""
     var imgUrl = ""
@@ -45,8 +49,9 @@ internal class ObjectWatchProduct(type: PolygonType, productNumber: String) {
         private set
     var text = ""
         private set
-    var wfos = listOf<String>()
-        private set
+    private var wfos = listOf<String>()
+    private var stringOfLatLon = ""
+    private var latLons = listOf<String>()
 
     init {
         this.productNumber = productNumber
@@ -69,24 +74,54 @@ internal class ObjectWatchProduct(type: PolygonType, productNumber: String) {
                 title = "MPD $productNumber"
                 prod = "WPCMPD$productNumber"
             }
-            else -> {
-            }
+            else -> {}
         }
     }
 
     fun getData(context: Context) {
         text = UtilityDownload.getTextProduct(context, prod)
+        var textWithLatLon = text
+        if (type == PolygonType.WATCH || type == PolygonType.WATCH_TORNADO) {
+            textWithLatLon = UtilityDownloadWatch.getLatLon(productNumber)
+        }
+        stringOfLatLon = UtilityNotification.storeWatchMcdLatLon(textWithLatLon).replace(":", "")
+        latLons = stringOfLatLon.split(" ")
         bitmap = imgUrl.getImage()
         val wfoString = text.parse("ATTN...WFO...(.*?)...<BR><BR>")
         wfos = wfoString.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
     }
 
+    private fun getCenterOfPolygon(latLons: List<LatLon>): LatLon {
+        val center = LatLon(0.0, 0.0)
+        for (latLon in latLons) {
+            center.lat += latLon.lat
+            center.lon += latLon.lon
+        }
+        val totalPoints = latLons.size
+        center.lat = center.lat / totalPoints
+        center.lon = center.lon / totalPoints
+        return center
+    }
+
+    fun getClosestRadar(): String {
+        return if (latLons.size > 2) {
+            val latLonList = LatLon.parseStringToLatLons(stringOfLatLon, -1.0, isWarning = false)
+            val center = getCenterOfPolygon(latLonList)
+            val radarSites = UtilityLocation.getNearestRadarSites(center, 1, includeTdwr = false)
+            if (radarSites.isEmpty()) {
+                ""
+            } else {
+                radarSites[0].name
+            }
+        } else {
+            ""
+        }
+    }
+
     val textForSubtitle: String
         get() {
             var subTitle = text.parse("Areas affected...(.*?)<BR>")
-            if (subTitle == "" ) {
-                subTitle = text.parse("Watch for (.*?)<BR>").condenseSpace()
-            }
+            if (subTitle == "" ) subTitle = text.parse("Watch for (.*?)<BR>").condenseSpace()
             return subTitle
         }
 }

@@ -21,8 +21,7 @@
 
 #include "genTriangle.h"
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genTriangle(JNIEnv * env, jclass clazz, jobject loc_buff, jobject index_buff, jfloat center_x, jfloat center_y, jfloat x_image_center_pixels, jfloat y_image_center_pixels, jfloat one_degree_scale_factor, jdoubleArray x,jdoubleArray y,jint count,jfloat len, jobject color_buff,jbooleanArray col){
-
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genTriangle(JNIEnv * env, jclass clazz, jobject loc_buff, jobject index_buff, jfloat center_x, jfloat center_y, jfloat x_image_center_pixels, jfloat y_image_center_pixels, jfloat one_degree_scale_factor, jdoubleArray x, jdoubleArray y, jint count, jfloat len, jobject color_buff, jbooleanArray col) {
 	jfloat* lBuff = (*env)->GetDirectBufferAddress(env, loc_buff);
 	jshort* iBuff = (*env)->GetDirectBufferAddress(env, index_buff);
 	jbyte* cBuff = (*env)->GetDirectBufferAddress(env, color_buff);
@@ -47,28 +46,28 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genTriangle(JNIEnv * env, jclass cl
 		point_y = y_arr[i_count];
 		test1 = W_180_DIV_PI * log(tan(W_PI_DIV_4+point_x*W_PI_DIV_360));
 		test2 = W_180_DIV_PI * log(tan(W_PI_DIV_4+center_x*W_PI_DIV_360));
-		pix_y_d =  -((test1 - test2) *  one_degree_scale_factor ) + y_image_center_pixels;
-		pix_x_d =  -((point_y - center_y ) * one_degree_scale_factor ) + x_image_center_pixels;
+		pix_y_d = -((test1 - test2) *  one_degree_scale_factor ) + y_image_center_pixels;
+		pix_x_d = -((point_y - center_y ) * one_degree_scale_factor ) + x_image_center_pixels;
 		lBuff[l_count] = pix_x_d;
-		lBuff[l_count+1] = -pix_y_d;
-		lBuff[l_count+2] = pix_x_d - len;
-		lBuff[l_count+3] = -pix_y_d + len;
-		lBuff[l_count+4] = pix_x_d + len;
-		lBuff[l_count+5] = -pix_y_d + len;
-		l_count +=  6;
+		lBuff[l_count + 1] = -pix_y_d;
+		lBuff[l_count + 2] = pix_x_d - len;
+		lBuff[l_count + 3] = -pix_y_d + len;
+		lBuff[l_count + 4] = pix_x_d + len;
+		lBuff[l_count + 5] = -pix_y_d + len;
+		l_count += 6;
 		iBuff[ix_count] = ix_count;
-		iBuff[ix_count+1] = ix_count+1;
-		iBuff[ix_count+2] = ix_count+2;
-		ix_count +=  3;
+		iBuff[ix_count + 1] = ix_count + 1;
+		iBuff[ix_count + 2] = ix_count + 2;
+		ix_count += 3;
 		cBuff[c_count] = col_arr[0];
-		cBuff[c_count+1] = col_arr[1];
-		cBuff[c_count+2] = col_arr[2];
-		cBuff[c_count+3] = col_arr[0];
-		cBuff[c_count+4] = col_arr[1];
-		cBuff[c_count+5] = col_arr[2];
-		cBuff[c_count+6] = col_arr[0];
-		cBuff[c_count+7] = col_arr[1];
-		cBuff[c_count+8] = col_arr[2];
+		cBuff[c_count + 1] = col_arr[1];
+		cBuff[c_count + 2] = col_arr[2];
+		cBuff[c_count + 3] = col_arr[0];
+		cBuff[c_count + 4] = col_arr[1];
+		cBuff[c_count + 5] = col_arr[2];
+		cBuff[c_count + 6] = col_arr[0];
+		cBuff[c_count + 7] = col_arr[1];
+		cBuff[c_count + 8] = col_arr[2];
 		c_count += 9;
 	}
 }

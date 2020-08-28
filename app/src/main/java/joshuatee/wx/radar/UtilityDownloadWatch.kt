@@ -34,19 +34,13 @@ import joshuatee.wx.util.UtilityString
 internal object UtilityDownloadWatch {
 
     const val type = "WATCH"
-    var timer = DownloadTimer(type)
+    val timer = DownloadTimer(type)
 
-    fun get(context: Context) {
-        if (timer.isRefreshNeeded(context)) {
-            getWatch(context)
-        }
-    }
+    fun get(context: Context) { if (timer.isRefreshNeeded(context)) getWatch(context) }
 
     fun getWatch(context: Context): WatchData {
-        val html =  "${MyApplication.nwsSPCwebsitePrefix}/products/watch/".getHtml()
-        if (html != "" ) {
-            MyApplication.severeDashboardWat.valueSet(context, html)
-        }
+        val html = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/".getHtml()
+        if (html != "" ) MyApplication.severeDashboardWat.valueSet(context, html)
         val numberList = getListOfNumbers(context)
         val htmlList = mutableListOf<String>()
         var watchLatLonList = ""
@@ -56,11 +50,11 @@ internal object UtilityDownloadWatch {
             val watchHtml = UtilityDownload.getTextProduct(context, "SPCWAT$it")
             htmlList.add(watchHtml)
             val latLonHtml = getLatLon(it)
-            watchLatLonList += UtilityNotification.storeWatMcdLatLon(latLonHtml)
+            watchLatLonList += UtilityNotification.storeWatchMcdLatLon(latLonHtml)
             if (!watchHtml.contains("Tornado Watch")) {
-                watchLatLon += UtilityNotification.storeWatMcdLatLon(latLonHtml)
+                watchLatLon += UtilityNotification.storeWatchMcdLatLon(latLonHtml)
             } else {
-                watchLatLonTor += UtilityNotification.storeWatMcdLatLon(latLonHtml)
+                watchLatLonTor += UtilityNotification.storeWatchMcdLatLon(latLonHtml)
             }
         }
         if (PolygonType.MCD.pref) {
@@ -75,16 +69,10 @@ internal object UtilityDownloadWatch {
         val listOriginal = UtilityString.parseColumn(MyApplication.severeDashboardWat.value, RegExp.watchPattern)
         val list = listOriginal.map { String.format("%4s", it).replace(' ', '0') }
         var watchNoList = ""
-        list.forEach {
-            watchNoList = "$watchNoList$it:"
-        }
-        if (PolygonType.MCD.pref) {
-            MyApplication.watchNoList.valueSet(context, watchNoList)
-        }
+        list.forEach { watchNoList += "$it:" }
+        if (PolygonType.MCD.pref) MyApplication.watchNoList.valueSet(context, watchNoList)
         return list
     }
 
-    fun getLatLon(number: String): String {
-        return UtilityString.getHtmlAndParseLastMatch("${MyApplication.nwsSPCwebsitePrefix}/products/watch/wou$number.html", RegExp.pre2Pattern)
-    }
+    fun getLatLon(number: String) = UtilityString.getHtmlAndParseLastMatch("${MyApplication.nwsSPCwebsitePrefix}/products/watch/wou$number.html", RegExp.pre2Pattern)
 }

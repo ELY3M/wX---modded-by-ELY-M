@@ -25,7 +25,7 @@ import joshuatee.wx.R
 
 object UtilityNwsIcon {
 
-    val iconMap: Map<String, Int> = mapOf(
+    val iconMap = mapOf(
         "bkn.png" to R.drawable.bkn,
         "blizzard.png" to R.drawable.blizzard,
         "cold.png" to R.drawable.cold,

@@ -1434,7 +1434,6 @@ public class TouchImageView2 extends AppCompatImageView {
     private void compatPostOnAnimation(Runnable runnable) {
         if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN) {
             postOnAnimation(runnable);
-
         } else {
             postDelayed(runnable, 1000 / 60);
         }

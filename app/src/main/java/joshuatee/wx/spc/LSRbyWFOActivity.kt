@@ -22,33 +22,27 @@
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import java.util.Locale
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemSelectedListener
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
+import joshuatee.wx.Extensions.safeGet
 
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.settings.FavAddActivity
-import joshuatee.wx.settings.FavRemoveActivity
 import joshuatee.wx.ui.*
-import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityDownload
-import joshuatee.wx.util.UtilityFavorites
-import joshuatee.wx.util.UtilityImageMap
-import joshuatee.wx.util.UtilityShare
-import joshuatee.wx.util.UtilityString
+import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
 import kotlinx.android.synthetic.main.activity_afd.*
 
-class LsrByWfoActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItemClickListener {
+class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     //
     // The primary purpose of this activity is to view all recent LSR by WFO
@@ -57,9 +51,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
     // 2: product ( always LSR )
     //
 
-    companion object {
-        const val URL: String = ""
-    }
+    companion object { const val URL = "" }
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var firstTime = true
@@ -72,7 +64,16 @@ class LsrByWfoActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
     private val prefToken = "WFO_FAV"
     private var ridFavOld = ""
     private var wfoProd = listOf<String>()
-    private lateinit var sp: ObjectSpinner
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.afd_top, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.action_sector).title = locations.safeGet(0)
+        return super.onPrepareOptionsMenu(menu)
+    }
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,40 +82,28 @@ class LsrByWfoActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         val activityArguments = intent.getStringArrayExtra(URL)
         wfo = activityArguments!![0]
-        if (wfo == "") {
-            wfo = "OUN"
-        }
-        prod = if (activityArguments[1] == "")
-            MyApplication.wfoTextFav
-        else
-            activityArguments[1]
+        if (wfo == "") wfo = "OUN"
+        prod = if (activityArguments[1] == "") MyApplication.wfoTextFav else activityArguments[1]
         toolbar.title = prod
         locations = UtilityFavorites.setupMenu(this, MyApplication.wfoFav, wfo, prefToken)
-        sp = ObjectSpinner(this, this, this, R.id.spinner1, locations)
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(scrollView))
         imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToWfo)
+        getContent()
     }
 
     override fun onRestart() {
         if (ridFavOld != MyApplication.wfoFav) {
             locations = UtilityFavorites.setupMenu(this, MyApplication.wfoFav, wfo, prefToken)
-            sp.refreshData(this@LsrByWfoActivity, locations)
         }
         super.onRestart()
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, wfoProd.toString(), prod, prod + wfo)) {
-            return true
-        }
+        if (audioPlayMenu(item.itemId, wfoProd.toString(), prod, prod + wfo)) return true
         when (item.itemId) {
             R.id.action_fav -> toggleFavorite()
             R.id.action_map -> imageMap.toggleMap()
-            R.id.action_share -> UtilityShare.shareText(
-                    this,
-                    prod + wfo,
-                    Utility.fromHtml(wfoProd.toString())
-            )
+            R.id.action_share -> UtilityShare.text(this, prod + wfo, Utility.fromHtml(wfoProd.toString()))
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -125,74 +114,82 @@ class LsrByWfoActivity : AudioPlayActivity(), OnItemSelectedListener, OnMenuItem
         wfo = loc.toUpperCase(Locale.US)
         mapShown = false
         locations = UtilityFavorites.setupMenu(this, MyApplication.wfoFav, wfo, prefToken)
-        sp.refreshData(this@LsrByWfoActivity, locations)
+        getContent()
     }
 
     private fun toggleFavorite() {
-        val ridFav = UtilityFavorites.toggleString(this, wfo, star, prefToken)
-        locations = UtilityFavorites.setupMenu(this, ridFav, wfo, prefToken)
-        sp.refreshData(this@LsrByWfoActivity, locations)
+        UtilityFavorites.toggle(this, wfo, star, prefToken)
     }
 
-    override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-        if (locations.isNotEmpty()) {
-            when (position) {
-                1 -> ObjectIntent(
-                        this,
-                        FavAddActivity::class.java,
-                        FavAddActivity.TYPE,
-                        arrayOf("WFO")
-                )
-                2 -> ObjectIntent(
-                        this,
-                        FavRemoveActivity::class.java,
-                        FavRemoveActivity.TYPE,
-                        arrayOf("WFO")
-                )
-                else -> {
-                    wfo = locations[position].split(" ").getOrNull(0) ?: ""
-                    getContent()
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        locations = UtilityFavorites.setupMenu(this, MyApplication.wfoFav, wfo, prefToken)
+        when (item.itemId) {
+            R.id.action_sector -> genericDialog(locations) {
+                if (locations.isNotEmpty()) {
+                    when (it) {
+                        1 -> ObjectIntent.favoriteAdd(this, arrayOf("WFO"))
+                        2 -> ObjectIntent.favoriteRemove(this, arrayOf("WFO"))
+                        else -> {
+                            wfo = locations[it].split(" ").getOrNull(0) ?: ""
+                            getContent()
+                        }
+                    }
+                    if (firstTime) {
+                        UtilityToolbar.fullScreenMode(toolbar, toolbarBottom)
+                        firstTime = false
+                    }
                 }
             }
-            if (firstTime) {
-                UtilityToolbar.fullScreenMode(toolbar, toolbarBottom)
-                firstTime = false
-            }
+            else -> return super.onOptionsItemSelected(item)
         }
+        return true
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>) {}
+    private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
+        val objectDialogue = ObjectDialogue(this, list)
+        objectDialogue.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
+            dialog.dismiss()
+            UtilityUI.immersiveMode(this)
+        })
+        objectDialogue.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+            fn(which)
+            getContent()
+            dialog.dismiss()
+        })
+        objectDialogue.show()
+    }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
+        locations = UtilityFavorites.setupMenu(this@LsrByWfoActivity, MyApplication.wfoFav, wfo, prefToken)
+        invalidateOptionsMenu()
+        if (MyApplication.wfoFav.contains(":$wfo:")) {
+            star.setIcon(MyApplication.STAR_ICON)
+        } else {
+            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+        }
         scrollView.smoothScrollTo(0, 0)
         ridFavOld = MyApplication.wfoFav
-        wfoProd = withContext(Dispatchers.IO) { lsrFromWfo }
         linearLayout.removeAllViewsInLayout()
+        wfoProd = withContext(Dispatchers.IO) { lsrFromWfo }
         wfoProd.forEach {
-            ObjectCardText(this@LsrByWfoActivity, linearLayout, Utility.fromHtml(it))
+            val objectCardText = ObjectCardText(this@LsrByWfoActivity, linearLayout, Utility.fromHtml(it))
+            objectCardText.typefaceMono()
         }
     }
 
     private val lsrFromWfo: List<String>
         get() {
-            val localStormReports = mutableListOf<String>()
+            val localStormReports: List<String>
             val numberLSR = UtilityString.getHtmlAndParseLastMatch(
                     "https://forecast.weather.gov/product.php?site=$wfo&issuedby=$wfo&product=LSR&format=txt&version=1&glossary=0",
                     "product=LSR&format=TXT&version=(.*?)&glossary"
             )
             if (numberLSR == "") {
-                localStormReports.add("None issued by this office recently.")
+                localStormReports = listOf("None issued by this office recently.")
             } else {
                 var maxVersions = numberLSR.toIntOrNull() ?: 0
-                if (maxVersions > 30) {
-                    maxVersions = 30
-                }
-                (1..maxVersions + 1 step 2).mapTo(localStormReports) {
-                    UtilityDownload.getTextProduct(
-                            "LSR$wfo",
-                            it
-                    )
-                }
+                if (maxVersions > 30) maxVersions = 30
+                localStormReports = (1..maxVersions + 1 step 2).map { UtilityDownload.getTextProduct("LSR$wfo", it) }
             }
             return localStormReports
         }

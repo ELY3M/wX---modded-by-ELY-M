@@ -21,43 +21,65 @@
 
 package joshuatee.wx.nhc
 
-import android.graphics.Bitmap
-
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
-import joshuatee.wx.RegExp
 
 object UtilityNhc {
 
     const val widgetImageUrlTop = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_atl_0d0.png"
     const val widgetImageUrlBottom = "${MyApplication.nwsNhcWebsitePrefix}/xgtwo/two_pac_0d0.png"
 
-    fun getHurricaneInfo(rssUrl: String): ObjectNhcStormInfo {
-        var title = ""
-        var summary = ""
-        var url = ""
-        var img1 = ""
-        var img2 = ""
-        var wallet = ""
-        val urlList: List<String>
-        val html = rssUrl.getHtml()
-        if (!html.contains("No current storm in")) {
-            title = html.parse(RegExp.utilNhcPattern1)
-            summary = html.parse(RegExp.utilNhcPattern2)
-            url = html.parse(RegExp.utilNhcPattern3)
-            summary = summary.replace("</.*?>".toRegex(), "<br>")
-            wallet = html.parse(RegExp.utilNhcPattern4)
-            urlList = html.parseColumn(RegExp.utilNhcPattern5)
-            if (urlList.size > 1) {
-                img1 = urlList[0]
-                img2 = urlList[1]
+    fun getHurricaneInfo(): List<ObjectNhcStormDetails> {
+        val stormDataList = mutableListOf<ObjectNhcStormDetails>()
+        val url = MyApplication.nwsNhcWebsitePrefix + "/CurrentStorms.json"
+        //val url = "https://www.nhc.noaa.gov/productexamples/NHC_JSON_Sample.json"
+        val html = url.getHtml()
+        val ids = html.parseColumn("\"id\": \"(.*?)\"")
+        val binNumbers = html.parseColumn("\"binNumber\": \"(.*?)\"")
+        val names = html.parseColumn("\"name\": \"(.*?)\"")
+        val classifications = html.parseColumn("\"classification\": \"(.*?)\"")
+        val intensities = html.parseColumn("\"intensity\": \"(.*?)\"")
+        val pressures = html.parseColumn("\"pressure\": \"(.*?)\"")
+        // sample data not quoted for these two
+        //intensities = html.parseColumn("\"intensity\": (.*?),");
+        //pressures = html.parseColumn("\"pressure\": (.*?),");
+        //
+        val latitudes = html.parseColumn("\"latitude\": \"(.*?)\"")
+        val longitudes = html.parseColumn("\"longitude\": \"(.*?)\"")
+        val movementDirs = html.parseColumn("\"movementDir\": (.*?),")
+        val movementSpeeds = html.parseColumn("\"movementSpeed\": (.*?),")
+        val lastUpdates = html.parseColumn("\"lastUpdate\": \"(.*?)\"")
+        //binNumbers.forEach {
+        //    val text = UtilityDownload.getTextProduct(context, "MIATCP" + it)
+        //    val status = text.parseFirst("(\\.\\.\\..*?\\.\\.\\.)")
+        //    statusList.add(status)
+        //}
+
+        if (ids.isNotEmpty()) {
+            ids.indices.forEach { index ->
+                val objectNhcStormDetails = ObjectNhcStormDetails(
+                        names[index],
+                        movementDirs[index],
+                        movementSpeeds[index],
+                        pressures[index],
+                        binNumbers[index],
+                        ids[index],
+                        lastUpdates[index],
+                        classifications[index],
+                        latitudes[index],
+                        longitudes[index],
+                        intensities[index],
+                        ""
+                )
+                stormDataList.add(objectNhcStormDetails)
+                //val card = ObjectCardNhcStormReportItem(context, linearLayout, objectNhcStormDetails)
+                //card.setListener(View.OnClickListener { ObjectIntent.showNhcStorm(context, objectNhcStormDetails) })
             }
         }
-        return ObjectNhcStormInfo(title, summary, url, img1, img2, wallet)
+        return stormDataList
     }
 
-    fun getImage(rid: String, prod: String): Bitmap =
-        ("https://www.ssd.noaa.gov/PS/TROP/floaters/" + rid + "/imagery/" + prod + "0.gif").getImage()
+    fun getImage(rid: String, prod: String) = ("https://www.ssd.noaa.gov/PS/TROP/floaters/" + rid + "/imagery/" + prod + "0.gif").getImage()
 }
 
 

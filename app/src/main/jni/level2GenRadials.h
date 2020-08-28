@@ -30,9 +30,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_Level2GenRadials
-  (JNIEnv * , jclass, jobject , jobject , jobject,jobject, jint, jint, jfloat, jboolean,
-   jobject, jobject, jobject, jint);
+JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_Level2GenRadials(JNIEnv * , jclass, jobject, jobject, jobject, jobject, jint, jint, jfloat, jboolean, jobject, jobject, jobject, jint);
 
 #ifdef __cplusplus
 }

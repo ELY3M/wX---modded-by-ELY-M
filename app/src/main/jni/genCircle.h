@@ -30,8 +30,7 @@
 extern "C" {
 #endif
 
-JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genCircle
-  (JNIEnv * , jclass, jobject , jobject, jfloat, jfloat, jfloat, jfloat, jfloat , jdoubleArray ,jdoubleArray ,jint,jfloat,jint,jobject,jbooleanArray);
+JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genCircle(JNIEnv * , jclass, jobject, jobject, jfloat, jfloat, jfloat, jfloat, jfloat, jdoubleArray, jdoubleArray, jint, jfloat, jint, jobject, jbooleanArray);
 
 #ifdef __cplusplus
 }

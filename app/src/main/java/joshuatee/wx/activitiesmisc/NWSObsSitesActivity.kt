@@ -24,22 +24,23 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.widget.Toolbar
+import joshuatee.wx.Extensions.truncate
 
 import joshuatee.wx.R
-import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.util.UtilityIO
 
 import joshuatee.wx.GlobalArrays
 import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.radar.UtilityMetar
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
 import java.util.*
 
-class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
+class NwsObsSitesActivity : BaseActivity() {
 
     //
     // Used to view NWS website for obs data and provide a link to the map
@@ -51,38 +52,38 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private val listCity = mutableListOf<String>()
     private val listSort = mutableListOf<String>()
     private var siteDisplay = false
-    private var provSelected = ""
+    private var stateSelected = ""
     private lateinit var objectRecyclerView: ObjectRecyclerView
-    private val titleString = "Observation sites"
-    val prefToken: String = "NWS_OBSSITE_LAST_USED"
-    private lateinit var lastUsedMenuItem: MenuItem
+    private val titleString = "Obs sites"
+    val prefToken = "NWS_OBSSITE_LAST_USED"
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.nwsobssites, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        menu.findItem(R.id.action_lastused).title = "Last Used: " + Utility.readPref(this, prefToken, UtilityMetar.findClosestObservation(this, Location.latLon).name)
+        return super.onPrepareOptionsMenu(menu)
+    }
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_bottom_toolbar, R.menu.nwsobssites, true)
-        toolbarBottom.setOnMenuItemClickListener(this)
+        super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar, R.menu.nwsobssites, bottomToolbar = false)
         title = titleString
         updateButton()
         siteDisplay = false
-        objectRecyclerView = ObjectRecyclerView(
-                this,
-                this,
-                R.id.card_list,
-                GlobalArrays.states.toMutableList(),
-                ::itemClicked
-        )
+        objectRecyclerView = ObjectRecyclerView(this, this, R.id.card_list, GlobalArrays.states.toMutableList(), ::itemClicked)
     }
 
     private fun updateButton() {
-        val menu = toolbarBottom.menu
-        lastUsedMenuItem = menu.findItem(R.id.action_lastused)
-        lastUsedMenuItem.title = "Last Used: " + Utility.readPref(this, prefToken, "")
+        invalidateOptionsMenu()
     }
 
     private fun itemClicked(position: Int) {
         if (!siteDisplay) {
-            provSelected = UtilityStringExternal.truncate(GlobalArrays.states[position], 2)
-            title = "$titleString ($provSelected)"
+            stateSelected = GlobalArrays.states[position].truncate(2)
+            title = "$titleString ($stateSelected)"
             stateSelected()
         } else {
             when (position) {
@@ -99,15 +100,7 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
     private fun showObsSite(obsSite: String) {
         Utility.writePref(prefToken, obsSite)
         updateButton()
-        ObjectIntent(
-                this@NwsObsSitesActivity,
-                WebView::class.java,
-                WebView.URL,
-                arrayOf(
-                        "https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=$obsSite",
-                        obsSite
-                )
-        )
+        ObjectIntent.showWebView(this@NwsObsSitesActivity, arrayOf("https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=$obsSite", obsSite))
     }
 
     private fun stateSelected() {
@@ -120,29 +113,23 @@ class NwsObsSitesActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         listOf(listCity, listIds, listSort).forEach { it.clear() }
         listCity.add("..Back to state list")
         listIds.add("..Back to state list")
-        lines.filterTo(listSort) { it.startsWith(provSelected.toUpperCase(Locale.US)) }
+        lines.filterTo(listSort) { it.startsWith(stateSelected.toUpperCase(Locale.US)) }
         listSort.sort()
         listSort.forEach {
-            val tmpArr = it.split(",")
-            listCity.add(tmpArr[2] + ": " + tmpArr[1])
-            listIds.add(tmpArr[2])
+            val items = it.split(",")
+            listCity.add(items[2] + ": " + items[1])
+            listIds.add(items[2])
         }
         objectRecyclerView.refreshList(listCity)
         siteDisplay = true
     }
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_lastused -> showObsSite(Utility.readPref(this, prefToken, ""))
-            R.id.action_map -> {
-                val url = "https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.toLowerCase(Locale.US)
-                ObjectIntent(
-                        this,
-                        WebView::class.java,
-                        WebView.URL,
-                        arrayOf(url, "Observations near " + Location.wfo)
-                )
-            }
+            R.id.action_lastused -> showObsSite(Utility.readPref(this, prefToken, UtilityMetar.findClosestObservation(this, Location.latLon).name))
+            R.id.action_map -> ObjectIntent.showWebView(this,
+                        arrayOf("https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.toLowerCase(Locale.US),
+                                "Observations near " + Location.wfo))
             else -> return super.onOptionsItemSelected(item)
         }
         return true

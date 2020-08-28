@@ -28,14 +28,12 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityLog
 
 internal object UtilityCanadaHourly {
 
     fun getString(locNumInt: Int): String {
         val htmlUrl = MyApplication.canadaEcSitePrefix + "/forecast/hourly/" + (Location.getX(locNumInt).split(":"))[1].toLowerCase(Locale.US) + "-" + (Location.getY(locNumInt).split(":"))[0] + "_metric_e.html"
         val html = htmlUrl.getHtml()
-        //val header = "Time   Temp  Summary   PrecipChance   Wind"
         val header = "Time    Temp  Summary                  Precip   Wind"
         return header + parse(html)
     }
@@ -45,7 +43,6 @@ internal object UtilityCanadaHourly {
             Locale.US) + "-" + (Location.getY(locNumInt).split(":"))[0] + "_metric_e.html"
 
     private fun parse(htmlFullPage: String): String {
-        var string = ""
         val html = htmlFullPage.parse("<tbody>(.*?)</tbody>")
         val times = html.parseColumn("<td headers=.header1. class=.text-center.>([0-9]{2}:[0-9]{2})</td>")
         val temperatures = html.parseColumn("<td headers=.header2. class=.text-center.>(.*?)</td>")
@@ -53,12 +50,12 @@ internal object UtilityCanadaHourly {
         val precipChances = html.parseColumn("<td headers=.header4. class=.text-center.>(.*?)</td>")
         val winds = html.parseColumn("<abbr title=(.*?.>.*?<.abbr>..[0-9]{2})<br>").toMutableList()
         //let feelsLikeTemps = html.parseColumn("<td headers=.header7. class=.text-center.>(.*?)</td>")
-        val space = "   "
-        UtilityLog.d("wx", winds.toString())
         winds.indices.forEach {
             val cleanString = removeSpecialCharsFromString(winds[it])
             winds[it] = cleanString.parse(">(.*?)<") + " " + cleanString.parse(".*?([0-9]{1,3})")
         }
+        var string = ""
+        val space = "   "
         times.indices.forEach {
             string += MyApplication.newline + times[it] + space +
                     Utility.safeGet(temperatures, it).padEnd(3, ' ')  + space +
@@ -69,9 +66,6 @@ internal object UtilityCanadaHourly {
         return string
     }
 
-    private fun removeSpecialCharsFromString(text: String): String {
-        //val okayChars = setOf("abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLKMNOPQRSTUVWXYZ1234567890+-=().!_<>")
-        return text.filter { it.isLetterOrDigit() || it.isWhitespace() || it == '>' || it == '<' }
-    }
+    private fun removeSpecialCharsFromString(text: String) = text.filter { it.isLetterOrDigit() || it.isWhitespace() || it == '>' || it == '<' }
 }
 

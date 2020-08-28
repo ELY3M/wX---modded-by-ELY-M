@@ -26,9 +26,7 @@ import android.content.Context
 object UtilityPreferences {
 
     fun write(context: Context, prefList: List<String>) {
-        (prefList.indices step 2).forEach {
-            Utility.writePref(context, prefList[it], prefList[it + 1])
-        }
+        (prefList.indices step 2).forEach { Utility.writePref(context, prefList[it], prefList[it + 1]) }
     }
 
     //private const val sep = "-:-"

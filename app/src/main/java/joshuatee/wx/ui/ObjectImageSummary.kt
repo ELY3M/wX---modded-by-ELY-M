@@ -25,47 +25,26 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.widget.LinearLayout
 
-class ObjectImageSummary(
-        context: Context,
-        var ll: LinearLayout,
-        var bitmaps: List<Bitmap>,
-        var classTarget: String,
-        var cl: Class<*>
-) {
+class ObjectImageSummary(context: Context, val linearLayout: LinearLayout, val bitmaps: List<Bitmap>) {
+
+    val objectCardImages = mutableListOf<ObjectCardImage>()
 
     init {
         val imagesPerRow = 2
-        ll.removeAllViews()
+        linearLayout.removeAllViews()
         var numberOfImages = 0
-        val horizontalLinearLayouts: MutableList<ObjectLinearLayout> = mutableListOf()
-        bitmaps.forEachIndexed { index, bitmap ->
+        val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout>()
+        bitmaps.forEach { bitmap ->
             val objectCardImage: ObjectCardImage
             if (numberOfImages % imagesPerRow == 0) {
-                val objectLinearLayout = ObjectLinearLayout(context, ll)
+                val objectLinearLayout = ObjectLinearLayout(context, linearLayout)
                 objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
                 horizontalLinearLayouts.add(objectLinearLayout)
-                objectCardImage = ObjectCardImage(
-                        context,
-                        objectLinearLayout.linearLayout,
-                        bitmap,
-                        imagesPerRow
-                )
+                objectCardImage = ObjectCardImage(context, objectLinearLayout.linearLayout, bitmap, imagesPerRow)
             } else {
-                objectCardImage = ObjectCardImage(
-                        context,
-                        horizontalLinearLayouts.last().linearLayout,
-                        bitmap,
-                        imagesPerRow
-                )
+                objectCardImage = ObjectCardImage(context, horizontalLinearLayouts.last().linearLayout, bitmap, imagesPerRow)
             }
-            /*objectCardImage.setOnClickListener(View.OnClickListener {
-                ObjectIntent(
-                        this@SpcThunderStormOutlookActivity,
-                        ImageShowActivity::class.java,
-                        ImageShowActivity.URL,
-                        arrayOf(urls[index], "")
-                )
-            })*/
+            objectCardImages.add(objectCardImage)
             numberOfImages += 1
         }
     }

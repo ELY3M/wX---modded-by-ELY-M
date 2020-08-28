@@ -23,27 +23,16 @@ package joshuatee.wx.radar
 
 import joshuatee.wx.objects.ProjectionType
 import joshuatee.wx.util.UtilityCanvasProjection
-import joshuatee.wx.external.ExternalEllipsoid
 import joshuatee.wx.external.ExternalGeodeticCalculator
 import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.util.ProjectionNumbers
 
 internal object WXGLNexradLevel3WindBarbs {
 
-    fun decodeAndPlot(
-            rid: String,
-            projectionType: ProjectionType,
-            isGust: Boolean,
-            index: Int
-    ): List<Double> {
+    fun decodeAndPlot(radarSite: String, projectionType: ProjectionType, isGust: Boolean, dataSetIndex: Int): List<Double> {
         val stormList = mutableListOf<Double>()
-        val pn = ProjectionNumbers(rid, projectionType)
-        val arrWb = if (!isGust) {
-            UtilityMetar.metarDataList[index].obsArrWb
-        } else {
-            UtilityMetar.metarDataList[index].obsArrWbGust
-        }
-        val bearing = DoubleArray(2)
+        val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
+        val arrWb = if (!isGust) UtilityMetar.metarDataList[dataSetIndex].obsArrWb else UtilityMetar.metarDataList[dataSetIndex].obsArrWbGust
         val degreeShift = 180.00
         val arrowLength = 2.5
         val arrowSpacing = 3.0
@@ -57,48 +46,33 @@ internal object WXGLNexradLevel3WindBarbs {
             val metarArr = line.split(":").dropLastWhile { it.isEmpty() }
             var angle = 0
             var length = 0
-            val locXDbl: Double
-            val locYDbl: Double
+            var locXDbl = 0.0
+            var locYDbl = 0.0
             if (metarArr.size > 3) {
                 locXDbl = metarArr[0].toDoubleOrNull() ?: 0.0
                 locYDbl = metarArr[1].toDoubleOrNull() ?: 0.0
                 angle = metarArr[2].toIntOrNull() ?: 0
                 length = metarArr[3].toIntOrNull() ?: 0
-            } else {
-                locXDbl = 0.0
-                locYDbl = 0.0
             }
             if (length > 4) {
                 val degree2 = angle.toDouble()
                 val startLength = 0.0
                 var start = ExternalGlobalCoordinates(locXDbl, locYDbl)
-                var ec = ecc.calculateEndingGlobalCoordinates(
-                    ExternalEllipsoid.WGS84,
-                    start,
-                    0.0,
-                    startLength,
-                    bearing
-                )
-                stormList += UtilityCanvasProjection.computeMercatorNumbers(ec, pn).toList()
+                var ec = ecc.calculateEndingGlobalCoordinates(start, 0.0, startLength)
+                stormList += UtilityCanvasProjection.computeMercatorNumbers(ec, projectionNumbers).toList()
                 start = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
                 ec = ecc.calculateEndingGlobalCoordinates(
-                    ExternalEllipsoid.WGS84,
                     start,
                     degree2 + degreeShift,
-                    barbLength * nmScaleFactor * barbLengthScaleFactor,
-                    bearing
+                    barbLength * nmScaleFactor * barbLengthScaleFactor
                 )
                 val end = ExternalGlobalCoordinates(ec.latitude, ec.longitude)
-                stormList += UtilityCanvasProjection.computeMercatorNumbers(ec, pn).toList()
+                stormList += UtilityCanvasProjection.computeMercatorNumbers(ec, projectionNumbers).toList()
                 var barbCount = length / 10
                 var halfBarb = false
                 var oneHalfBarb = false
-                if (length - barbCount * 10 > 4 && length > 10 || length in 5..9) {
-                    halfBarb = true
-                }
-                if (length in 5..9) {
-                    oneHalfBarb = true
-                }
+                if (length - barbCount * 10 > 4 && length > 10 || length in 5..9) halfBarb = true
+                if (length in 5..9) oneHalfBarb = true
                 val above50: Boolean
                 if (length > 49) {
                     above50 = true
@@ -106,125 +80,83 @@ internal object WXGLNexradLevel3WindBarbs {
                 } else {
                     above50 = false
                 }
-                var j = 0
+                var index = 0
                 if (above50) {
                     // initial angled line
                     ec = ecc.calculateEndingGlobalCoordinates(
-                        ExternalEllipsoid.WGS84,
                         end,
                         degree2,
-                        barbOffset + startLength + j.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor,
-                        bearing
+                        barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
                     )
-                    drawLine(
-                        stormList,
+                    // FIXME create class to handle items that don't change much
+                    stormList += WXGLNexradLevel3Common.drawLine(
                         ec,
                         ecc,
-                        pn,
+                        projectionNumbers,
                         degree2 - arrowBend * 2.0,
-                        startLength + arrowLength * nmScaleFactor,
-                        bearing
+                        startLength + arrowLength * nmScaleFactor
                     )
                     // perpendicular line from main barb
                     ec = ecc.calculateEndingGlobalCoordinates(
-                        ExternalEllipsoid.WGS84,
                         end,
                         degree2,
-                        barbOffset + startLength + -1.0 * arrowSpacing * nmScaleFactor * barbLengthScaleFactor,
-                        bearing
+                        barbOffset + startLength + -1.0 * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
                     )
-                    drawLine(
-                        stormList,
+                    stormList += WXGLNexradLevel3Common.drawLine(
                         ec,
                         ecc,
-                        pn,
+                        projectionNumbers,
                         degree2 - 90.0,
-                        startLength + 0.80 * arrowLength * nmScaleFactor,
-                        bearing
+                        startLength + 0.80 * arrowLength * nmScaleFactor
                     )
                     // connecting line parallel to main barb
                     ec = ecc.calculateEndingGlobalCoordinates(
-                        ExternalEllipsoid.WGS84,
                         end,
                         degree2,
-                        barbOffset + startLength + j.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor,
-                        bearing
+                        barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
                     )
-                    drawLine(
-                        stormList,
+                    stormList += WXGLNexradLevel3Common.drawLine(
                         ec,
                         ecc,
-                        pn,
+                        projectionNumbers,
                         degree2 - 180.0,
-                        startLength + 0.5 * arrowLength * nmScaleFactor,
-                        bearing
+                        startLength + 0.5 * arrowLength * nmScaleFactor
                     )
+                    index += 1
                 }
-                j = 0
-                while (j < barbCount) {
+                (index until barbCount).forEach { _ ->
                     ec = ecc.calculateEndingGlobalCoordinates(
-                        ExternalEllipsoid.WGS84,
                         end,
                         degree2,
-                        barbOffset + startLength + j.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor,
-                        bearing
+                        barbOffset + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
                     )
-                    drawLine(
-                        stormList,
+                    stormList += WXGLNexradLevel3Common.drawLine(
                         ec,
                         ecc,
-                        pn,
+                        projectionNumbers,
                         degree2 - arrowBend * 2.0,
-                        startLength + arrowLength * nmScaleFactor,
-                        bearing
+                        startLength + arrowLength * nmScaleFactor
                     )
-                    j += 1
+                    index += 1
                 }
                 var halfBarbOffsetFudge = 0.0
-                if (oneHalfBarb) {
-                    halfBarbOffsetFudge = nmScaleFactor * 1.0
-                }
+                if (oneHalfBarb) halfBarbOffsetFudge = nmScaleFactor * 1.0
                 if (halfBarb) {
                     ec = ecc.calculateEndingGlobalCoordinates(
-                        ExternalEllipsoid.WGS84,
                         end,
                         degree2,
-                        barbOffset + halfBarbOffsetFudge + startLength + j.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor,
-                        bearing
+                        barbOffset + halfBarbOffsetFudge + startLength + index.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor
                     )
-                    drawLine(
-                        stormList,
+                    stormList += WXGLNexradLevel3Common.drawLine(
                         ec,
                         ecc,
-                        pn,
+                        projectionNumbers,
                         degree2 - arrowBend * 2.0,
-                        startLength + arrowLength / 2.0 * nmScaleFactor,
-                        bearing
+                        startLength + arrowLength / 2.0 * nmScaleFactor
                     )
                 }
             } // if length greater then 4
         } // loop over wind barbs
         return stormList
-    }
-
-    private fun drawLine(
-        list: MutableList<Double>,
-        startEc: ExternalGlobalCoordinates,
-        ecc: ExternalGeodeticCalculator,
-        pn: ProjectionNumbers,
-        startBearing: Double,
-        distance: Double,
-        bearing: DoubleArray
-    ) {
-        val startPoint = ExternalGlobalCoordinates(startEc)
-        list += UtilityCanvasProjection.computeMercatorNumbers(startEc, pn).toList()
-        val ec = ecc.calculateEndingGlobalCoordinates(
-            ExternalEllipsoid.WGS84,
-            startPoint,
-            startBearing,
-            distance,
-            bearing
-        )
-        list += UtilityCanvasProjection.computeMercatorNumbers(ec, pn).toList()
     }
 }

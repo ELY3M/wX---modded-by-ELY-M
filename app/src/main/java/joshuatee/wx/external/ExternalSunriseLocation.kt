@@ -21,63 +21,16 @@ import java.math.BigDecimal
 /**
  * Simple VO class to store latitude/longitude information.
  */
-class ExternalSunriseLocation
-/**
- * Creates a new instance of `Location` with the given parameters.
- *
- * @param latitude
- * the latitude, in degrees, of this location. North latitude is positive, south negative.
- * @param longitude
- * the longitude, in degrees of this location. East longitude is positive, west negative.
- */
-    (latitude: String, longitude: String) {
+class ExternalSunriseLocation(latitude: String, longitude: String) {
     /**
      * Creates a new instance of `Location` with the given parameters.
      *
-     * @param latitude
+     *  latitude
      * the latitude, in degrees, of this location. North latitude is positive, south negative.
-     * @param longitude
+     *  longitude
      * the longitude, in degrees, of this location. East longitude is positive, east negative.
      */
-    /* public ExternalSunriseLocation(double latitude, double longitude) {
-        this.latitude = new BigDecimal(latitude);
-        this.longitude = new BigDecimal(longitude);
-    }*/
+    val latitude = latitude.toBigDecimalOrNull() ?: BigDecimal("0.0")
 
-    /**
-     * @return the latitude
-     */
-    //val latitude: BigDecimal = BigDecimal(latitude)
-    val latitude: BigDecimal = latitude.toBigDecimalOrNull() ?: BigDecimal("0.0")
-    /**
-     * @return the longitude
-     */
-    //val longitude: BigDecimal = BigDecimal(longitude)
-    val longitude: BigDecimal = longitude.toBigDecimalOrNull() ?: BigDecimal("0.0")
-
-    /**
-     * Sets the coordinates of the location object.
-     *
-     * @param latitude
-     * the latitude, in degrees, of this location. North latitude is positive, south negative.
-     * @param longitude
-     * the longitude, in degrees, of this location. East longitude is positive, east negative.
-     */
-    /* public void setLocation(String latitude, String longitude) {
-        this.latitude = new BigDecimal(latitude);
-        this.longitude = new BigDecimal(longitude);
-    }*/
-
-    /**
-     * Sets the coordinates of the location object.
-     *
-     * @param latitude
-     * the latitude, in degrees, of this location. North latitude is positive, south negative.
-     * @param longitude
-     * the longitude, in degrees, of this location. East longitude is positive, east negative.
-     */
-    /* public void setLocation(double latitude, double longitude) {
-        this.latitude = new BigDecimal(latitude);
-        this.longitude = new BigDecimal(longitude);
-    }*/
+    val longitude = longitude.toBigDecimalOrNull() ?: BigDecimal("0.0")
 }

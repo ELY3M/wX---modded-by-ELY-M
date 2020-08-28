@@ -51,32 +51,24 @@ internal object UtilityNotificationTornado {
         return notifUrls
     }
 
-    private fun checkForNotifications(
-            context: Context,
-            htmlF: String,
-            inBlackout: Boolean
-    ): String {
-        var html = htmlF
+    private fun checkForNotifications(context: Context, htmlOriginal: String, inBlackout: Boolean): String {
+        var html = htmlOriginal
         var notifUrls = ""
         val locLabelStr = "(" + "CONUS Tornado alert" + ") "
         val idAl = html.parseColumn("\"@id\": \"(.*?)\"")
         val hazardTitles = html.parseColumn("\"event\": \"(.*?)\"")
         var i = 0
-        for (title in hazardTitles) {
+        hazardTitles.forEach { title ->
             if (idAl.size > i) {
                 val url = idAl[i]
-                val ca = CapAlert.createFromUrl(url)
-                if (UtilityNotificationTools.nwsLocalAlertNotFiltered(
-                                context,
-                                title
-                        )
-                ) { // placeholder for WFO filter check
+                val capAlert = CapAlert.createFromUrl(url)
+                if (UtilityNotificationTools.nwsLocalAlertNotFiltered(context, title)) { // placeholder for WFO filter check
                     html = "$html<b>$title</b><br>"
-                    html = html + "<b>Counties: " + ca.area + "</b><br>"
-                    html = html + ca.summary + "<br><br><br>"
+                    html += "<b>Counties: " + capAlert.area + "</b><br>"
+                    html += capAlert.summary + "<br><br><br>"
                     val noMain = locLabelStr + title
-                    val noBody = title + " " + ca.area + " " + ca.summary
-                    val noSummary = title + ": " + ca.area + " " + ca.summary
+                    val noBody = title + " " + capAlert.area + " " + capAlert.summary
+                    val noSummary = title + ": " + capAlert.area + " " + capAlert.summary
                     val objectPendingIntents = ObjectPendingIntents(
                             context,
                             USAlertsDetailActivity::class.java,
@@ -84,11 +76,7 @@ internal object UtilityNotificationTornado {
                             arrayOf(url, ""),
                             arrayOf(url, "sound")
                     )
-                    if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(
-                                    context,
-                                    url
-                            ))
-                    ) {
+                    if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, url))) {
                         val sound = MyApplication.alertNotificationSoundTornadoCurrent && !inBlackout
                         val objectNotification = ObjectNotification(
                                 context,

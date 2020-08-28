@@ -21,12 +21,7 @@
 
 package joshuatee.wx.activitiesmisc
 
-internal class ObjectImpactGraphic(
-    var title: String,
-    var cities: String,
-    var population: String,
-    var imageUrl: String
-) {
+internal class ObjectImpactGraphic(var title: String, var cities: String, var population: String, var imageUrl: String) {
 
     companion object {
         private const val baseImageUrl = "https://www.weather.gov/images/crh/impact/"

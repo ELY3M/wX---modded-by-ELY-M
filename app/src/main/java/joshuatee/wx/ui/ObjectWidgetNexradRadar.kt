@@ -34,7 +34,7 @@ import joshuatee.wx.util.Utility
 
 class ObjectWidgetNexradRadar(context: Context) {
 
-    val remoteViews: RemoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
+    val remoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
 
     init {
         val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
@@ -42,25 +42,9 @@ class ObjectWidgetNexradRadar(context: Context) {
         UtilityWidget.setImage(context, remoteViews, NEXRAD_RADAR.fileName)
         if (!MyApplication.widgetPreventTap) {
             if (Location.isUS(widgetLocationNumber)) {
-                UtilityWidget.setupIntent(
-                    context,
-                    remoteViews,
-                    WXGLRadarActivity::class.java,
-                    R.id.iv,
-                    WXGLRadarActivity.RID,
-                    arrayOf(radarSite),
-                    NEXRAD_RADAR.action
-                )
+                UtilityWidget.setupIntent(context, remoteViews, WXGLRadarActivity::class.java, R.id.iv, WXGLRadarActivity.RID, arrayOf(radarSite), NEXRAD_RADAR.action)
             } else {
-                UtilityWidget.setupIntent(
-                    context,
-                    remoteViews,
-                    CanadaRadarActivity::class.java,
-                    R.id.iv,
-                    CanadaRadarActivity.RID,
-                    arrayOf(radarSite, "rad"),
-                    NEXRAD_RADAR.action
-                )
+                UtilityWidget.setupIntent(context, remoteViews, CanadaRadarActivity::class.java, R.id.iv, CanadaRadarActivity.RID, arrayOf(radarSite, "rad"), NEXRAD_RADAR.action)
             }
         }
     }

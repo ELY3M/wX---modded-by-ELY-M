@@ -21,14 +21,13 @@
 
 package joshuatee.wx.radar
 
-class Fronts(var type: FrontTypeEnum) {
-    var coordinates = mutableListOf<LatLon>()
+class Fronts(val type: FrontTypeEnum) {
+
+    val coordinates = mutableListOf<LatLon>()
 
     override fun toString(): String {
         var string = ""
-        coordinates.forEach {
-            string += "$it "
-        }
+        coordinates.forEach { string += "$it " }
         return string
     }
 }

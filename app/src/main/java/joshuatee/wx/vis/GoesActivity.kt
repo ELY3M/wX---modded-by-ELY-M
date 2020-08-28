@@ -25,8 +25,9 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import androidx.appcompat.widget.Toolbar
+import android.view.Menu
 import android.view.MenuItem
+import joshuatee.wx.Extensions.startAnimation
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
@@ -36,13 +37,16 @@ import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
 
-class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
+class GoesActivity : VideoRecordActivity() {
 
-    companion object {
-        const val RID: String = ""
-    }
+    //
+    // GOES 16 / GOES 17 image viewer
+    // https://www.star.nesdis.noaa.gov/GOES/index.php
+    //
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    companion object { const val RID = "" }
+
+    private val uiDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var img: ObjectTouchImageView
     private var animDrawable = AnimationDrawable()
@@ -53,24 +57,21 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
     private lateinit var activityArguments: Array<String>
     private val prefImagePosition = "GOES16_IMG"
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.goes16, menu)
+        return true
+    }
+
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(
-                savedInstanceState,
-                R.layout.activity_image_show_navdrawer_bottom_toolbar,
-                R.menu.goes16,
-                iconsEvenlySpaced = true,
-                bottomToolbar = true
-        )
-        toolbarBottom.setOnMenuItemClickListener(this)
+        super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.goes16, iconsEvenlySpaced = true, bottomToolbar = false)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
         activityArguments = intent.getStringArrayExtra(RID)!!
-        drw = ObjectNavDrawer(this, UtilityGoes.labels, UtilityGoes.codes)
+        drw = ObjectNavDrawer(this, UtilityGoes.labels, UtilityGoes.codes, ::getContentFixThis)
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, "")
         img.setMaxZoom(8f)
         img.setListener(this, drw, ::getContentFixThis)
         readPrefs()
-        drw.setListener(::getContentFixThis)
         getContent(sector)
     }
 
@@ -83,9 +84,7 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
         writePrefs()
         toolbar.title = UtilityGoes.sectorToName[sector] ?: ""
         toolbar.subtitle = drw.getLabel()
-        bitmap = withContext(Dispatchers.IO) {
-            UtilityGoes.getImage(drw.url, sector)
-        }
+        bitmap = withContext(Dispatchers.IO) { UtilityGoes.getImage(drw.url, sector) }
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn(prefImagePosition)
         if (oldSector != sector) {
@@ -125,10 +124,8 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
         oldSector = sector
     }
 
-    override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
-            return true
-        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
         when (item.itemId) {
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.GOES16)
             R.id.action_a12 -> getAnimate(12)
@@ -154,6 +151,8 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
             R.id.action_smv -> getContent("smv")
             R.id.action_se -> getContent("se")
             R.id.action_ak -> getContent("ak")
+            R.id.action_cak -> getContent("cak")
+            R.id.action_sea -> getContent("sea")
             R.id.action_hi -> getContent("hi")
             R.id.action_can -> getContent("can")
             R.id.action_mex -> getContent("mex")
@@ -170,10 +169,10 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
             R.id.action_eep -> getContent("eep")
             R.id.action_np -> getContent("np")
             R.id.action_share -> {
-                if (android.os.Build.VERSION.SDK_INT > 20 && UIPreferences.recordScreenShare) {
+                if (UIPreferences.recordScreenShare) {
                     checkOverlayPerms()
                 } else {
-                    UtilityShare.shareBitmap(this, this, drw.getLabel(), bitmap)
+                    UtilityShare.bitmap(this, this, drw.getLabel(), bitmap)
                 }
             }
             else -> return super.onOptionsItemSelected(item)
@@ -186,18 +185,13 @@ class GoesActivity : VideoRecordActivity(), Toolbar.OnMenuItemClickListener {
         super.onRestart()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean =
-            drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
-
     override fun onStop() {
         img.imgSavePosnZoom(this, prefImagePosition)
         super.onStop()
     }
 
     private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
-        animDrawable = withContext(Dispatchers.IO) {
-            UtilityGoes.getAnimation(this@GoesActivity, drw.url, sector, frameCount)
-        }
-        UtilityImgAnim.startAnimation(animDrawable, img)
+        animDrawable = withContext(Dispatchers.IO) { UtilityGoes.getAnimation(this@GoesActivity, drw.url, sector, frameCount) }
+        animDrawable.startAnimation(img)
     }
 }

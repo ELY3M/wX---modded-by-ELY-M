@@ -91,7 +91,7 @@ class BackgroundFetch(val context: Context) {
                         val noMain = "SPC MCD #$mcdNumber"
                         val mcdPreModified = mcdData.htmlList[index].replace("<.*?>".toRegex(), " ")
                         val polygonType = MCD
-                        val objPI = ObjectPendingIntents(
+                        val objectPendingIntents = ObjectPendingIntents(
                                 context,
                                 SpcMcdWatchShowActivity::class.java,
                                 SpcMcdWatchShowActivity.NUMBER,
@@ -99,24 +99,20 @@ class BackgroundFetch(val context: Context) {
                                 arrayOf(mcdNumber, "sound", polygonType.toString())
                         )
                         cancelStr = "usspcmcd$mcdNumber"
-                        if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(
-                                        context,
-                                        cancelStr
-                                ))
-                        ) {
+                        if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
                             val sound = MyApplication.alertNotificationSoundSpcmcd && !inBlackout
                             val notificationObj = ObjectNotification(
                                     context,
                                     sound,
                                     noMain,
                                     mcdPreModified,
-                                    objPI.resultPendingIntent,
+                                    objectPendingIntents.resultPendingIntent,
                                     MyApplication.ICON_MCD,
                                     mcdPreModified,
                                     NotificationCompat.PRIORITY_HIGH,
                                     Color.YELLOW,
                                     MyApplication.ICON_ACTION,
-                                    objPI.resultPendingIntent2,
+                                    objectPendingIntents.resultPendingIntent2,
                                     context.resources.getString(R.string.read_aloud)
                             )
                             val notification = UtilityNotification.createNotificationBigTextWithAction(notificationObj)
@@ -140,7 +136,7 @@ class BackgroundFetch(val context: Context) {
                         val noMain = "WPC MPD #$mpdNumber"
                         val mcdPreModified = mpdData.htmlList[index].replace("<.*?>".toRegex(), " ")
                         val polygonType = MPD
-                        val objPI = ObjectPendingIntents(
+                        val objectPendingIntents = ObjectPendingIntents(
                                 context,
                                 SpcMcdWatchShowActivity::class.java,
                                 SpcMcdWatchShowActivity.NUMBER,
@@ -148,24 +144,20 @@ class BackgroundFetch(val context: Context) {
                                 arrayOf(mpdNumber, "sound", polygonType.toString())
                         )
                         cancelStr = "uswpcmpd$mpdNumber"
-                        if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(
-                                        context,
-                                        cancelStr
-                                ))
-                        ) {
+                        if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
                             val sound = MyApplication.alertNotificationSoundWpcmpd && !inBlackout
                             val notificationObj = ObjectNotification(
                                     context,
                                     sound,
                                     noMain,
                                     mcdPreModified,
-                                    objPI.resultPendingIntent,
+                                    objectPendingIntents.resultPendingIntent,
                                     MyApplication.ICON_MPD,
                                     mcdPreModified,
                                     NotificationCompat.PRIORITY_HIGH,
                                     Color.GREEN,
                                     MyApplication.ICON_ACTION,
-                                    objPI.resultPendingIntent2,
+                                    objectPendingIntents.resultPendingIntent2,
                                     context.resources.getString(R.string.read_aloud)
                             )
                             val notification = UtilityNotification.createNotificationBigTextWithAction(notificationObj)
@@ -190,7 +182,7 @@ class BackgroundFetch(val context: Context) {
                         val noMain = "SPC Watch #$watchNumber"
                         val mcdPreModified = watchData.htmlList[index].replace("<.*?>".toRegex(), " ")
                         val polygonType = WATCH
-                        val objPI = ObjectPendingIntents(
+                        val objectPendingIntents = ObjectPendingIntents(
                                 context,
                                 SpcMcdWatchShowActivity::class.java,
                                 SpcMcdWatchShowActivity.NUMBER,
@@ -198,24 +190,20 @@ class BackgroundFetch(val context: Context) {
                                 arrayOf(watchNumber, "sound", polygonType.toString())
                         )
                         cancelStr = "usspcwat$watchNumber"
-                        if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(
-                                        context,
-                                        cancelStr
-                                ))
-                        ) {
+                        if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelStr))) {
                             val sound = MyApplication.alertNotificationSoundSpcwat && !inBlackout
                             val notificationObj = ObjectNotification(
                                     context,
                                     sound,
                                     noMain,
                                     mcdPreModified,
-                                    objPI.resultPendingIntent,
+                                    objectPendingIntents.resultPendingIntent,
                                     MyApplication.ICON_ALERT_2,
                                     mcdPreModified,
                                     NotificationCompat.PRIORITY_HIGH,
                                     Color.YELLOW,
                                     MyApplication.ICON_ACTION,
-                                    objPI.resultPendingIntent2,
+                                    objectPendingIntents.resultPendingIntent2,
                                     context.resources.getString(R.string.read_aloud)
                             )
                             val notification = UtilityNotification.createNotificationBigTextWithAction(notificationObj)
@@ -233,38 +221,21 @@ class BackgroundFetch(val context: Context) {
         }
         LocalBroadcastManager.getInstance(context).sendBroadcast(Intent("notifran"))
         notificationUrls += UtilityNotificationSpc.sendSwoNotifications(context, inBlackout)
-        if (MyApplication.alertNhcEpacNotification || MyApplication.alertNhcAtlNotification)
-            notificationUrls += UtilityNotificationNhc.send(
-                    context,
-                    MyApplication.alertNhcEpacNotification,
-                    MyApplication.alertNhcAtlNotification
-            )
-
+        if (MyApplication.alertNhcEpacNotification || MyApplication.alertNhcAtlNotification) notificationUrls += UtilityNotificationNhc.send(context, MyApplication.alertNhcEpacNotification, MyApplication.alertNhcAtlNotification)
         // send 7day and current conditions notifications for locations
         (1..Location.numLocations).forEach {
             val requestID = UtilityTime.currentTimeMillis().toInt()
-            notificationUrls += UtilityNotification.sendNotificationCurrentConditions(
-                    context,
-                    it.toString(),
-                    requestID,
-                    requestID + 1
-            )
+            notificationUrls += UtilityNotification.sendNotificationCurrentConditions(context, it.toString(), requestID, requestID + 1)
         }
         // check for any text prod notifications
         UtilityNotificationTextProduct.notifyOnAll(context)
-        if (locationNeedsMcd) {
-            notificationUrls += UtilityNotificationSpc.sendMcdLocationNotifications(context)
-        }
+        if (locationNeedsMcd) notificationUrls += UtilityNotificationSpc.sendMcdLocationNotifications(context)
         if (locationNeedsSwo) {
             notificationUrls += UtilityNotificationSpc.sendSwoLocationNotifications(context)
             notificationUrls += UtilityNotificationSpc.sendSwoD48LocationNotifications(context)
         }
-        if (locationNeedsSpcFw) {
-            notificationUrls += UtilityNotificationSpcFireWeather.sendSpcFireWeatherD12LocationNotifications(context)
-        }
-        if (locationNeedsWpcMpd) {
-            notificationUrls += UtilityNotificationWpc.sendMpdLocationNotifications(context)
-        }
+        if (locationNeedsSpcFw) notificationUrls += UtilityNotificationSpcFireWeather.sendSpcFireWeatherD12LocationNotifications(context)
+        if (locationNeedsWpcMpd) notificationUrls += UtilityNotificationWpc.sendMpdLocationNotifications(context)
         cancelOldNotifications(notificationUrls)
     }
 
@@ -272,9 +243,9 @@ class BackgroundFetch(val context: Context) {
         val oldNotificationString = Utility.readPref(context, "NOTIF_STR", "")
         val notifier = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val notificationList = MyApplication.comma.split(oldNotificationString)
-        notificationList
-                .filterNot { notificationString.contains(it) }
-                .forEach { notifier.cancel(it, 1) }
+        notificationList.filterNot { notificationString.contains(it) }.forEach {
+            notifier.cancel(it, 1)
+        }
         Utility.writePref(context, "NOTIF_STR_OLD", oldNotificationString)
         Utility.writePref(context, "NOTIF_STR", notificationString)
     }

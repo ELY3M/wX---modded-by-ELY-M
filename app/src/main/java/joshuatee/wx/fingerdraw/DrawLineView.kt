@@ -95,9 +95,7 @@ class DrawLineView : View {
         paint.strokeWidth = MyApplication.drawToolSize.toFloat()
         paint.textSize = textSize
         paintText.color = Color.WHITE
-        if (!MyApplication.blackBg) {
-            paintText.color = Color.BLACK
-        }
+        if (!MyApplication.blackBg) paintText.color = Color.BLACK
         paintText.isAntiAlias = true
         paintText.strokeWidth = 4.5f
         paintText.textSize = textSize
@@ -131,11 +129,7 @@ class DrawLineView : View {
         test2 = 180 / PI * log(tan(PI / 4 + centerX * (PI / 180) / 2), E)
         var newY2 = (test2.toFloat() + (-mPositionY / mScaleFactor + diffY) / ppd).toDouble()
         newY2 = (180 / PI * (2 * atan(exp(newY2 * PI / 180)) - PI / 2)).toFloat().toDouble()
-        return LatLon.distance(
-            LatLon(newY, newX * -1),
-            LatLon(newY2, newX2 * -1),
-            DistanceUnit.MILE
-        ).toFloat()
+        return LatLon.distance(LatLon(newY, newX * -1), LatLon(newY2, newX2 * -1), DistanceUnit.MILE).toFloat()
     }
 
     private fun distanceBetweenTwoPoints(x1: Float, y1: Float, x2: Float, y2: Float) =

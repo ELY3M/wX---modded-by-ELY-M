@@ -62,7 +62,7 @@
         </TableLayout>
     </RelativeLayout>
 
-    <include layout="@layout/widget_toolbar_top_with_spinner_wxogl" />
+    <include layout="@layout/widget_toolbar_top" />
 
     <include layout="@layout/widget_toolbar_bottom" />
 </RelativeLayout>
