@@ -43,7 +43,7 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
     STI(MyApplication.radarColorSti, "STI", MyApplication.radarSti, MyApplication.radarStiLineSize.toFloat()),
     TVS(MyApplication.radarColorTor, "TVS", MyApplication.radarTvs, MyApplication.radarTvsSize.toFloat()),
     HI(MyApplication.radarColorHi, "HI", MyApplication.radarHi, MyApplication.radarHiSize.toFloat()),
-    HAIL_LABELS(MyApplication.radarColorHiText, "HAILSIZE_LABELS", MyApplication.radarHailSizeLabel, MyApplication.radarHiTextSize.toFloat()),
+    HAIL_LABELS(MyApplication.radarColorHiText, "HAILSIZE_LABELS", MyApplication.radarHailSizeLabel, MyApplication.radarHiTextSize),
     OBS(MyApplication.radarColorObs, "OBS", MyApplication.radarObs, 0.0f),
     SWO(MyApplication.radarColorHi, "SWO", MyApplication.radarSwo, MyApplication.radarSwoLineSize.toFloat()),
     USERPOINTS(0, "USERPOINTS", MyApplication.radarUserPoints, 0.0f),
@@ -73,7 +73,7 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
             STI.pref = MyApplication.radarSti
             TVS.pref = MyApplication.radarTvs
             HI.pref = MyApplication.radarHi
-	    HAIL_LABELS.pref = MyApplication.radarHailSizeLabel
+	        HAIL_LABELS.pref = MyApplication.radarHailSizeLabel
             OBS.pref = MyApplication.radarObs
             SWO.pref = MyApplication.radarSwo
             USERPOINTS.pref = MyApplication.radarUserPoints

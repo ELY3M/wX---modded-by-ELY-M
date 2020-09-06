@@ -47,6 +47,7 @@ internal class ObjectSettingsSeekBar(
     private val objectCard = ObjectCard(context)
     private val initValue = when (pref) {
         "RADAR_TEXT_SIZE" -> (Utility.readPref(context, pref, defValue.toFloat()) * 10).toInt()
+        "RADAR_HI_TEXT_SIZE" -> (Utility.readPref(context, pref, defValue.toFloat()) * 10).toInt()
         "UI_ANIM_ICON_FRAMES" -> (Utility.readPref(context, pref, MyApplication.uiAnimIconFrames)).toIntOrNull() ?: 0
         "CARD_CORNER_RADIUS" -> (Utility.readPref(context, pref, 0))
         else -> Utility.readPref(context, pref, defValue)
