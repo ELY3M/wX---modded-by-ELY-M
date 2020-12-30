@@ -820,7 +820,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private val conus_image: Runnable = object : Runnable {
         override fun run() {
             UtilityLog.d("wx", "downloading new conus image")
-            UtilityConusRadar.getConusGfw()
+            //UtilityConusRadar.getConusGfw()
             UtilityConusRadar.getConusImage()
             conus_handler.postDelayed(this, conus_Interval.toLong())
         }

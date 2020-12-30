@@ -323,23 +323,24 @@ object UtilityConusRadar {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     var conusbitmap: Bitmap? = null
-    var conusgif = "conus.gif"
-    var IMAGEFILE = MyApplication.FilesPath + "conus.gif"
+    var conusImage = "conus.jpg"
+    var IMAGEFILE = MyApplication.FilesPath + "conus.jpg"
 
-
+    /*
         var gfw1 = ""
         var gfw2 = ""
         var gfw3 = ""
         var gfw4 = ""
         var gfw5 = ""
         var gfw6 = ""
+*/
 
 
         private var initialized = false
         private var lastRefresh = 0.toLong()
         private val REFRESH_LOC_MIN = 5
 
-
+/*
     fun getConusGfw() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
             val currentTime1 = System.currentTimeMillis()
@@ -377,6 +378,7 @@ object UtilityConusRadar {
         }
 
     }
+*/
 
 
     private fun getFileOutputStream(fileName: String): FileOutputStream? {
@@ -396,7 +398,7 @@ object UtilityConusRadar {
 
     // save image
     private fun saveImage(bitmap: Bitmap) {
-        val fos = getFileOutputStream("conus.gif")
+        val fos = getFileOutputStream(conusImage)
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
         fos?.close()
     }
@@ -424,7 +426,7 @@ object UtilityConusRadar {
 
     fun nwsConusRadarSquare(context: Context) {
         val imgUrl =
-                "${MyApplication.nwsRadarWebsitePrefix}/Conus/RadarImg/latest_radaronly.gif"
+                "${MyApplication.nwsConusRadar}"
         val layers = mutableListOf<Drawable>()
         var bitmap = imgUrl.getImage()
         var bitmapCanvas = UtilityImg.getBlankBitmap()
@@ -448,7 +450,7 @@ object UtilityConusRadar {
     //TODO Hack job! need to use real plotting with nwsConusRadar(context: Context)
     fun nwsConusRadarWithMap(context: Context) {
         val imgUrl =
-                "${MyApplication.nwsRadarWebsitePrefix}/Conus/RadarImg/latest_radaronly.gif"
+                "${MyApplication.nwsConusRadar}"
         val layers = mutableListOf<Drawable>()
         val cd = if (MyApplication.blackBg) {
             ColorDrawable(Color.BLACK)
@@ -474,7 +476,7 @@ object UtilityConusRadar {
     //TODO Hack job! need to use real plotting with nwsConusRadar(context: Context)
     fun nwsConusRadarWithMapSquare(context: Context) {
         val imgUrl =
-                "${MyApplication.nwsRadarWebsitePrefix}/Conus/RadarImg/latest_radaronly.gif"
+                "${MyApplication.nwsConusRadar}"
         val layers = mutableListOf<Drawable>()
         val cd = if (MyApplication.blackBg) {
             ColorDrawable(Color.BLACK)
@@ -500,7 +502,7 @@ object UtilityConusRadar {
 
 
     fun nwsConusRadar(context: Context) {
-        val imgUrl = "${MyApplication.nwsRadarWebsitePrefix}/Conus/RadarImg/latest_radaronly.gif"
+        val imgUrl = "${MyApplication.nwsConusRadar}"
         val layers = mutableListOf<Drawable>()
         var bitmap = imgUrl.getImage()
         bitmap = UtilityImg.eraseBackground(bitmap, -1)

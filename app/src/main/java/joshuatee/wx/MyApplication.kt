@@ -662,9 +662,11 @@ class MyApplication : Application() {
         //
         const val nwsRadarPub = "https://tgftp.nws.noaa.gov/"
         const val nwsRadarLevel2Pub = "https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
-	//conus radar for zoom out
-        const val nwsConusRadar = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
-        const val nwsConusRadarGfw = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
+        //conus radar for zoom out
+        //const val nwsConusRadar = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
+        //const val nwsConusRadarGfw = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
+        const val nwsConusRadar = "https://cdn.star.nesdis.noaa.gov/GOES16/ABI/CONUS/07/1250x750.jpg"
+        const val conusImageName = "conus.jpg"
         var radarConusRadar = false
         var radarConusRadarZoom = 173
         var radarWarnings = false

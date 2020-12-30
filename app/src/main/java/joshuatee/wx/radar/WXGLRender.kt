@@ -565,10 +565,11 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
 
 
-            val conusbitmap: Bitmap? = OpenGLShader.LoadBitmap(MyApplication.FilesPath + "/conus.gif")
+            val conusbitmap: Bitmap? = OpenGLShader.LoadBitmap(MyApplication.FilesPath + MyApplication.conusImageName)
             val ridx = Utility.readPref(context, "RID_" + rid + "_X", "0.0f").toFloat()
             val ridy = Utility.readPref(context, "RID_" + rid + "_Y", "0.0f").toFloat() / -1.0
             UtilityLog.d("wx", rid + " rid x: " + ridx + " y: " + ridy)
+/*
 
             UtilityLog.d("wx", "gfw1: " + UtilityConusRadar.gfw1)
             UtilityLog.d("wx", "gfw2: " + UtilityConusRadar.gfw2)
@@ -605,6 +606,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             UtilityLog.d("wx", "aeast: " + aeast)
             UtilityLog.d("wx", "midofwest: " + midofwest)
             UtilityLog.d("wx", "midofsouth: " + midofsouth)
+*/
 
 
 
@@ -648,7 +650,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
 
             //triangle
-            val base = RectF(-conusbitmap.width.toFloat(), conusbitmap.height.toFloat(), conusbitmap.width.toFloat(), -conusbitmap.height.toFloat())
+            val base = RectF(-conusbitmap!!.width.toFloat(), conusbitmap!!.height.toFloat(), conusbitmap!!.width.toFloat(), -conusbitmap!!.height.toFloat())
             val scale = 3.0f //was 2.0f
 
             UtilityLog.d("wx", "left: " + base.left)
@@ -707,7 +709,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             uvBuffer = tbb.asFloatBuffer()
             uvBuffer.put(uvs)
             uvBuffer.position(0)
-            OpenGLShader.LoadImage(MyApplication.FilesPath + "/conus.gif")
+            OpenGLShader.LoadImage(MyApplication.FilesPath + MyApplication.conusImageName)
 
             val mPositionHandle = GLES20.glGetAttribLocation(OpenGLShader.sp_conus, "vPosition")
             GLES20.glEnableVertexAttribArray(mPositionHandle)
@@ -750,7 +752,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             GLES20.glUniform1f(sizeHandle, 1600f) //was 1600f
             iTexture = GLES20.glGetUniformLocation(OpenGLShader.sp_loadimage, "u_texture")
             //val conusbitmap: Bitmap? = ///UtilityConusRadar.nwsConusRadar(context)
-            conusradarId = OpenGLShader.LoadTexture(MyApplication.FilesPath + "conus.gif")
+            conusradarId = OpenGLShader.LoadTexture(MyApplication.FilesPath + MyApplication.conusImageName)
             GLES20.glVertexAttribPointer(positionHandle, 2, GLES20.GL_FLOAT, false, 0, buffers.floatBuffer.slice().asFloatBuffer())
             GLES20.glEnableVertexAttribArray(positionHandle)
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0)
