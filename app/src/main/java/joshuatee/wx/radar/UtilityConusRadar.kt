@@ -323,8 +323,6 @@ object UtilityConusRadar {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     var conusbitmap: Bitmap? = null
-    var conusImage = "conus.jpg"
-    var IMAGEFILE = MyApplication.FilesPath + "conus.jpg"
 
     /*
         var gfw1 = ""
@@ -398,13 +396,13 @@ object UtilityConusRadar {
 
     // save image
     private fun saveImage(bitmap: Bitmap) {
-        val fos = getFileOutputStream(conusImage)
+        val fos = getFileOutputStream(MyApplication.conusImageName)
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
         fos?.close()
     }
 
 
-    fun layerDrawableToBitmapConusSquare(layers: MutableList<Drawable>): Bitmap {
+    fun layerDrawableToBitmapConusSquareOrg(layers: MutableList<Drawable>): Bitmap {
         val drawable = LayerDrawable(layers.toTypedArray())
         val bitmap: Bitmap
         val width = 3400
@@ -423,6 +421,28 @@ object UtilityConusRadar {
         }
         return bitmap
     }
+
+    //adjusted for size of AWV radar.....   NWS radar gif is dead  :(
+    fun layerDrawableToBitmapConusSquare(layers: MutableList<Drawable>): Bitmap {
+        val drawable = LayerDrawable(layers.toTypedArray())
+        val bitmap: Bitmap
+        val width = 3400
+        val height = 3680 //test
+        if (width > 0 && height > 0) {
+            try {
+                bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            } catch (e: OutOfMemoryError) {
+                return UtilityImg.getBlankBitmap()
+            }
+            val canvas = Canvas(bitmap)
+            drawable.setBounds(0, 800, 3400, 3400)
+            drawable.draw(canvas)
+        } else {
+            bitmap = UtilityImg.getBlankBitmap()
+        }
+        return bitmap
+    }
+
 
     fun nwsConusRadarSquare(context: Context) {
         val imgUrl =
@@ -475,8 +495,7 @@ object UtilityConusRadar {
     }
     //TODO Hack job! need to use real plotting with nwsConusRadar(context: Context)
     fun nwsConusRadarWithMapSquare(context: Context) {
-        val imgUrl =
-                "${MyApplication.nwsConusRadar}"
+        val imgUrl = "${MyApplication.nwsConusRadar}"
         val layers = mutableListOf<Drawable>()
         val cd = if (MyApplication.blackBg) {
             ColorDrawable(Color.BLACK)
@@ -489,6 +508,11 @@ object UtilityConusRadar {
         //if (MyApplication.blackBg) {
         //    bitmap = UtilityImg.eraseBG(bitmap, -1)
         //}
+        //testing 12-30-20
+        //bitmap = UtilityImg.eraseBackground(bitmap, Color.WHITE)
+        //testing 12-30-20
+        //bitmap.eraseColor(Color.TRANSPARENT);
+        bitmap = UtilityImg.eraseBackground(bitmap, Color.WHITE)
         if (bitmap.height > 10) {
             bitmapCanvas = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
             UtilityCanvasMain.addCanvasConus(context, bitmapCanvas, scaleType, "latest", 1)

@@ -665,10 +665,17 @@ class MyApplication : Application() {
         //conus radar for zoom out
         //const val nwsConusRadar = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gif";
         //const val nwsConusRadarGfw = "https://radar.weather.gov/ridge/Conus/RadarImg/latest_radaronly.gfw"
-        const val nwsConusRadar = "https://cdn.star.nesdis.noaa.gov/GOES16/ABI/CONUS/07/1250x750.jpg"
-        const val conusImageName = "conus.jpg"
+
+        //const val nwsConusRadar = "https://atlas.niu.edu/analysis/radar/CONUS/usrad_current_b.gif"  //backup url
+        const val nwsConusRadar = "https://www.aviationweather.gov/data/obs/radar/rad_rala_us.gif"
+        const val conusImageName = "conus.gif"
+
+        //testing
+        const val nwsConusRadarNew = "https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_raw/ows?service=wms&version=1.3.0&request=GetCapabilities"
+
+
         var radarConusRadar = false
-        var radarConusRadarZoom = 173
+        var radarConusRadarZoom = 75 //was 173
         var radarWarnings = false
         var locationDotFollowsGps = false
         var locdotBug = false
@@ -738,7 +745,7 @@ class MyApplication : Application() {
             radarShowWpcFronts = getInitialPreference("RADAR_SHOW_WPC_FRONTS", "false")
             radarLocationUpdateInterval = getInitialPreference("RADAR_LOCATION_UPDATE_INTERVAL", 10)
             radarConusRadar = getInitialPreference("CONUS_RADAR", "false")
-            radarConusRadarZoom = getInitialPreference("CONUS_RADAR_ZOOM", 173)
+            radarConusRadarZoom = getInitialPreference("CONUS_RADAR_ZOOM", 75)
             radarWarnings = getInitialPreference("COD_WARNINGS_DEFAULT", "false")
             locationDotFollowsGps = getInitialPreference("LOCDOT_FOLLOWS_GPS", "false")
             locdotBug = getInitialPreference("LOCDOT_BUG", "false")

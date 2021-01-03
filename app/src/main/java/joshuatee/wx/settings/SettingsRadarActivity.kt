@@ -584,8 +584,8 @@ class SettingsRadarActivity : BaseActivity() {
                         "Conus Radar Zoom",
                         "CONUS_RADAR_ZOOM",
                         R.string.conus_radar_zoom_label,
-                        173,
-                        1,
+                        75,
+                        0,
                         530
                 ).card
         )

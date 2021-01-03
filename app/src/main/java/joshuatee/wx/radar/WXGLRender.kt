@@ -526,7 +526,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
 
     } //displayhold
-    
+
 
 
         //TODO try to use real plotting without adding usa map....
