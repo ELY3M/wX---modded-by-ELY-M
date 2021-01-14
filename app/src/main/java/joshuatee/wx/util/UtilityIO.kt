@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//modded by ELY M. (readTextFile() cant be private....)
 
 package joshuatee.wx.util
 
@@ -55,7 +56,7 @@ object UtilityIO {
 
     fun readTextFileFromRaw(resources: Resources, fileRaw: Int) = readTextFile(resources.openRawResource(fileRaw))
 
-    private fun readTextFile(inputStream: InputStream): String {
+    fun readTextFile(inputStream: InputStream): String {
         val byteArrayOutputStream = ByteArrayOutputStream()
         val byteArray = ByteArray(32768)
         try {

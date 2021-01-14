@@ -137,6 +137,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     private var totalBinsOgl = 0
     var gpsLatLonTransformed = floatArrayOf(0.0f, 0.0f)
     var displayHold = false
+    var displayConus = false
     private var sizeHandle = 0
     private var iTexture: Int = 0
 
@@ -528,7 +529,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     } //displayhold
 
 
-
+/*
         //TODO try to use real plotting without adding usa map....
         //hack job!!!
         if (!displayHold) {
@@ -541,8 +542,23 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 }
             }
         }
+        */
 
-
+        if (displayConus) {
+            drawConusRadarTest(conusRadarBuffers)
+        }
+        //TODO try to use real plotting without adding usa map....
+        //hack job!!!
+        if (!displayHold) {
+            UtilityLog.d("wx", "zoom: " + zoom)
+            UtilityLog.d("wx", "zoom setting: "+MyApplication.radarConusRadarZoom+ " math: "+(MyApplication.radarConusRadarZoom / 1000.0))
+            if (MyApplication.radarConusRadar) {
+                if (zoom < (MyApplication.radarConusRadarZoom / 1000.0).toFloat()) {
+                    UtilityLog.d("wx", "zoom out to conusradar")
+                    displayConus = true
+                } else { displayConus = false }
+            }
+        }
 
 
     }

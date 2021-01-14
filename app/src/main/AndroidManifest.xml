@@ -493,15 +493,6 @@
        android:resource="@xml/widget_textwpc_info" />
   </receiver>
 
-  <receiver android:name="joshuatee.wx.WidgetAurora" >
-   <intent-filter>
-    <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-   </intent-filter>
-   <meta-data
-       android:name="android.appwidget.provider"
-       android:resource="@xml/widget_aurora" />
-  </receiver>
-
   <activity
       android:name=".settings.SettingsWidgetsActivity"
       android:label="@string/title_activity_settings_widgets"

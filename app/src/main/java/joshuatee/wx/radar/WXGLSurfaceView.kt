@@ -25,20 +25,19 @@ package joshuatee.wx.radar
 import android.app.Activity
 import android.content.Context
 import android.opengl.GLSurfaceView
-import androidx.appcompat.widget.Toolbar
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.TextView
-
+import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
-
+import joshuatee.wx.util.UtilityLog
 import kotlin.math.*
 
 class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
@@ -130,7 +129,29 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
                 }
                 if (numPanes == 1 && fullScreen || numPanes > 1) UtilityUI.immersiveMode(activity!!)
             }
-            MotionEvent.ACTION_MOVE -> {}
+            MotionEvent.ACTION_MOVE -> {
+                //3 fingers press to show conus
+                val count = event.pointerCount
+                UtilityLog.d("wx", "Fingers Count: "+count)
+                if (count == 3) {
+                    if (!locationFragment) {
+                        (0 until numPanes).forEach {
+                            wxglTextObjects[it].hideLabels()
+                            wxglRenders[it].displayHold = true
+                            wxglRenders[it].displayConus = true
+                        }
+                    }
+                } else {
+                    if (!locationFragment) {
+                        (0 until numPanes).forEach {
+                            wxglRenders[it].displayHold = false
+                            wxglRenders[it].displayConus = false
+                        }
+                    }
+                }
+
+            }
+
             MotionEvent.ACTION_UP -> {
                 listener?.onProgressChanged(50000, index, idxInt)
                 (0 until numPanes).forEach {
