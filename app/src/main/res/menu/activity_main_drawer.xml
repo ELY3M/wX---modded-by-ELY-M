@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- modded by ELY M. -->
     <item
         android:id="@+id/esrl"
         android:icon="@drawable/hrrrviewer"
@@ -144,4 +145,9 @@
         android:id="@+id/wpc_gefs"
         android:icon="@drawable/wpcgefs"
         android:title="WPC GEFS" />
+    <item
+        android:id="@+id/aurora"
+        android:icon="@drawable/auroralforecast"
+        android:title="Aurora Forecast" />
+
 </menu>

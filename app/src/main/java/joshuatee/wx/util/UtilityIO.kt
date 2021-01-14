@@ -55,7 +55,7 @@ object UtilityIO {
 
     fun readTextFileFromRaw(resources: Resources, fileRaw: Int) = readTextFile(resources.openRawResource(fileRaw))
 
-    fun readTextFile(inputStream: InputStream): String {
+    private fun readTextFile(inputStream: InputStream): String {
         val byteArrayOutputStream = ByteArrayOutputStream()
         val byteArray = ByteArray(32768)
         try {

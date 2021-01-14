@@ -243,6 +243,7 @@ class WX : CommonActionBarFragment() {
                         }
                     }
                     R.id.wpc_gefs -> ObjectIntent.showModel(this, arrayOf("1", "WPCGEFS", "WPC"))
+                    R.id.aurora -> ObjectIntent(this, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("AURORA"))
                 }
                 if (UIPreferences.navDrawerMainScreenOnRight) {
                     drawerLayout.closeDrawer(GravityCompat.END)

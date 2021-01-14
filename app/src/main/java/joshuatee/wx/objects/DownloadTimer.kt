@@ -18,13 +18,11 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
-//modded by ELY M.
 
 package joshuatee.wx.objects
 
 import android.content.Context
 import joshuatee.wx.util.Utility
-import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityTime
 
 //
@@ -39,8 +37,8 @@ class DownloadTimer(private val identifier: String) {
 
     fun isRefreshNeeded(context: Context): Boolean {
         var refreshDataInMinutes: Int = maxOf(Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3), 6)
-        if (identifier == "WARNINGS") refreshDataInMinutes = Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3)
-        if (identifier == "SPOTTERGPSREPORT") refreshDataInMinutes = 5
+        if (identifier == "WARNINGS")
+            refreshDataInMinutes = Utility.readPref(context, "RADAR_REFRESH_INTERVAL", 3)
         var refreshNeeded = false
         val currentTime = UtilityTime.currentTimeMillis()
         val currentTimeSeconds = currentTime / 1000
@@ -50,9 +48,11 @@ class DownloadTimer(private val identifier: String) {
             initialized = true
             lastRefresh = currentTime / 1000
         }
-        UtilityLog.d("wx", "TIMER: $identifier $refreshNeeded")
+        //UtilityLog.d("wx", "TIMER: $identifier $refreshNeeded")
         return refreshNeeded
     }
 
-    fun resetTimer() { lastRefresh = 0 }
+    fun resetTimer() {
+        lastRefresh = 0
+    }
 }

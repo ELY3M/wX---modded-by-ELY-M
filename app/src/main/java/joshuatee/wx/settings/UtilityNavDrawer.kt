@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//modded by ELY M.
 
 package joshuatee.wx.settings
 
@@ -64,7 +65,8 @@ internal object UtilityNavDrawer {
             "Twitter states",
             "Twitter tornado",
             "US Alerts",
-            "WPC GEFS"
+            "WPC GEFS",
+            "Aurora Forecast"
     )
 
     val labelToTokenMap = mapOf(
@@ -103,7 +105,8 @@ internal object UtilityNavDrawer {
             "Twitter states" to "twitter_state",
             "Twitter tornado" to "twitter_tornado",
             "US Alerts" to "uswarn",
-            "WPC GEFS" to "wpcgefs"
+            "WPC GEFS" to "wpcgefs",
+            "Aurora Forecast" to "aurora"
     )
 
     private val navDrawerIdToToken = mapOf(
@@ -142,7 +145,8 @@ internal object UtilityNavDrawer {
             R.id.twitter_states to "twitter_state",
             R.id.twitter_tornado to "twitter_tornado",
             R.id.us_alerts to "uswarn",
-            R.id.wpc_gefs to "wpcgefs"
+            R.id.wpc_gefs to "wpcgefs",
+            R.id.aurora to "aurora"
     )
 
     // The Pref ver below is important, it must stay as is and no other prefs must start with XZ_

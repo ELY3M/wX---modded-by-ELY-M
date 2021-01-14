@@ -18,12 +18,14 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M. 
 
 package joshuatee.wx.ui
 
 import joshuatee.wx.activitiesmisc.UtilityOpcImages
 import joshuatee.wx.activitiesmisc.UtilityObservations
 import joshuatee.wx.vis.UtilityGoesFullDisk
+import joshuatee.wx.space.*
 
 class ObjectImagesCollection(val title: String, val urls: List<String>, val labels: List<String>, val prefTokenIdx: String, val prefImagePosition: String) {
 
@@ -50,6 +52,13 @@ class ObjectImagesCollection(val title: String, val urls: List<String>, val labe
                     UtilityGoesFullDisk.labels,
                     "GOESFULLDISK_IMG_FAV_IDX",
                     "GOESFULLDISKIMG"
+            )
+            collectionMap["AURORA"] = ObjectImagesCollection(
+                    "AURORA",
+                    UtilityAurora.urls,
+                    UtilityAurora.labels,
+                    "AURORA_IMG_FAV_IDX",
+                    "AURORA"
             )
             return collectionMap
         }

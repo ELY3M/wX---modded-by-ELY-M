@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.
 
 package joshuatee.wx.fragments
 
@@ -229,7 +230,19 @@ class MiscFragment : Fragment() {
                     arrayOf(),
                     "wpc_rainfall", "WPC RAINFALL"
             )
-            val tileOrder = "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:wpc_rainfall:"
+
+            hm["aurora"] = TileObject(
+                    R.drawable.auroralforecast,
+                    ImageCollectionActivity::class.java,
+                    ImageCollectionActivity.TYPE,
+                    arrayOf("AURORA"),
+                    "aurora", "Aurora Forecast"
+            )
+
+
+
+
+            val tileOrder = "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:wpc_rainfall:aurora:"
             var miscPref: String = Utility.readPref("FRAGMENT_MISC_ORDER", tileOrder)
             if (!miscPref.contains("wxoglquad")) {
                 miscPref += "wxoglquad:"
@@ -258,6 +271,11 @@ class MiscFragment : Fragment() {
             miscPref = Utility.readPref("FRAGMENT_MISC_ORDER", tileOrder)
             if (!miscPref.contains("wpc_rainfall")) {
                 miscPref += "wpc_rainfall:"
+                Utility.writePref("FRAGMENT_MISC_ORDER", miscPref)
+            }
+            miscPref = Utility.readPref("FRAGMENT_MISC_ORDER", tileOrder)
+            if (!miscPref.contains("aurora")) {
+                miscPref += "aurora:"
                 Utility.writePref("FRAGMENT_MISC_ORDER", miscPref)
             }
             val tileOrderArr = miscPref.split(":").dropLastWhile { it.isEmpty() }

@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  */
+//modded by ELY M.
 
 package joshuatee.wx
 
@@ -75,7 +76,8 @@ object GlobalArrays {
             "NHC2EPAC: EPAC Two-Day Graphical Tropical Weather Outlook",
             "NHC5EPAC: EPAC Five-Day Graphical Tropical Weather Outlook",
             "NHC2CPAC: CPAC Two-Day Graphical Tropical Weather Outlook",
-            "NHC5CPAC: CPAC Five-Day Graphical Tropical Weather Outlook"
+            "NHC5CPAC: CPAC Five-Day Graphical Tropical Weather Outlook",
+            "AURORA: Aurora Forecast"
     )
 
     val tdwrRadars = listOf(
