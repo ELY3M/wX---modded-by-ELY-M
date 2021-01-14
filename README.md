@@ -53,7 +53,7 @@ http://bmx3r.com/wx/switch
 
 #
 ## DONE!
-====================================
+====================================     
 as temp fix, I switched conus radar to WPC for now.   I know the radar on weather.gov is changed.   
 Added 3 fingers touch function to show conus radar from any zoom.  press and hold screen with 3 fingers to show conus radar map anytime.  
 Added in function to enable and disable showing radar.  idea/request by Mike T. - very great idea!   The radar show/hide function is in menu in tools section.    
