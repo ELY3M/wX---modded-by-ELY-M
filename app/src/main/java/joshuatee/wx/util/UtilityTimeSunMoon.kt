@@ -37,8 +37,8 @@ object UtilityTimeSunMoon {
     fun getSunriseSunsetFromObs(obs: RID): List<Calendar> {
         val location = ExternalSunriseLocation(obs.location.latString, obs.location.lonString)
         val calculator = ExternalSunriseSunsetCalculator(location, TimeZone.getDefault())
-        val officialSunriseCal = calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
-        val officialSunsetCal = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance())
+        val officialSunriseCal: Calendar = calculator.getOfficialSunriseCalendarForDate(Calendar.getInstance())
+        val officialSunsetCal: Calendar = calculator.getOfficialSunsetCalendarForDate(Calendar.getInstance())
         return listOf(officialSunriseCal, officialSunsetCal)
     }
 
@@ -86,5 +86,7 @@ object UtilityTimeSunMoon {
         }
     }
 
-    fun getForHomeScreen(context: Context) = getSunriseSunset(context, Location.currentLocationStr, false) + MyApplication.newline + UtilityTime.gmtTime()
+    fun getForHomeScreen(context: Context): String {
+        return getSunriseSunset(context, Location.currentLocationStr, false) + MyApplication.newline + UtilityTime.gmtTime()
+    }
 }

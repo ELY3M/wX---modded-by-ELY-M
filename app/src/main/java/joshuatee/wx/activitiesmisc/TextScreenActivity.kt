@@ -24,6 +24,7 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
 import joshuatee.wx.R
@@ -35,8 +36,6 @@ import joshuatee.wx.util.UtilityShare
 
 import joshuatee.wx.Extensions.*
 import kotlinx.coroutines.*
-
-import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 // TODO rename to TextViewer
 class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
@@ -54,10 +53,12 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var url = ""
     private var html = ""
     private lateinit var textCard: ObjectCardText
+    private lateinit var linearLayout: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.shared_tts)
+        linearLayout = findViewById(R.id.linearLayout)
         toolbarBottom.menu.findItem(R.id.action_playlist).isVisible = false
         toolbarBottom.setOnMenuItemClickListener(this)
         activityArguments = intent.getStringArrayExtra(URL)!!

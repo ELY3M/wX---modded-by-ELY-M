@@ -26,7 +26,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
@@ -34,8 +34,6 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
-
-import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class SpcFireOutlookSummaryActivity : BaseActivity() {
 
@@ -46,6 +44,7 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
     private val uiDispatcher = Dispatchers.Main
     private var bitmaps = listOf<Bitmap>()
     private var imagesPerRow = 2
+    private lateinit var linearLayout: LinearLayout
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.shared_multigraphics, menu)
@@ -55,7 +54,10 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.shared_multigraphics, false)
-        if (UtilityUI.isLandScape(this)) imagesPerRow = 3
+        linearLayout = findViewById(R.id.linearLayout)
+        if (UtilityUI.isLandScape(this)) {
+            imagesPerRow = 3
+        }
         toolbar.subtitle = "SPC"
         title = "Fire Weather Outlooks"
         getContent()
@@ -67,14 +69,16 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        bitmaps = withContext(Dispatchers.IO) { UtilitySpcFireOutlook.imageUrls.map { it.getImage() } }
+        bitmaps = withContext(Dispatchers.IO) {
+            UtilitySpcFireOutlook.imageUrls.map { it.getImage() }
+        }
         linearLayout.removeAllViews()
         val objectImageSummary = ObjectImageSummary(this@SpcFireOutlookSummaryActivity, linearLayout, bitmaps)
         objectImageSummary.objectCardImages.forEachIndexed { index, objectCardImage ->
-            objectCardImage.setOnClickListener(View.OnClickListener {
+            objectCardImage.setOnClickListener {
                 ObjectIntent(this@SpcFireOutlookSummaryActivity, SpcFireOutlookActivity::class.java, SpcFireOutlookActivity.NUMBER,
                         arrayOf(UtilitySpcFireOutlook.textProducts[index], UtilitySpcFireOutlook.imageUrls[index]))
-            })
+            }
         }
     }
 

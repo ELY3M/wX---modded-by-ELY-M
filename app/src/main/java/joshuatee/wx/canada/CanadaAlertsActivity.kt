@@ -25,6 +25,8 @@ package joshuatee.wx.canada
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar
 
 import joshuatee.wx.R
@@ -34,17 +36,19 @@ import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
 import kotlinx.coroutines.*
 
-import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
-
 class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private val uiDispatcher = Dispatchers.Main
     private var firstTime = true
     private lateinit var objectCanadaWarnings: ObjectCanadaWarnings
+    private lateinit var scrollView: ScrollView
+    private lateinit var linearLayout: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.caalerts, true)
+        scrollView = findViewById(R.id.scrollView)
+        linearLayout = findViewById(R.id.linearLayout)
         toolbarBottom.setOnMenuItemClickListener(this)
         objectCanadaWarnings = ObjectCanadaWarnings(this, this, linearLayout, toolbar)
         objectCanadaWarnings.province = Utility.readPref(this, "CA_ALERTS_PROV", objectCanadaWarnings.province)
@@ -59,7 +63,9 @@ class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         scrollView.smoothScrollTo(0, 0)
-        withContext(Dispatchers.IO) { objectCanadaWarnings.getData() }
+        withContext(Dispatchers.IO) {
+            objectCanadaWarnings.getData()
+        }
         objectCanadaWarnings.showData()
         if (firstTime) {
             UtilityToolbar.fullScreenMode(toolbar)

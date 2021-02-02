@@ -27,6 +27,9 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.LinearLayout
+import android.widget.ScrollView
+import androidx.cardview.widget.CardView
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
@@ -35,8 +38,6 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectCardVerticalText
 import joshuatee.wx.util.UtilityShare
-
-import kotlinx.android.synthetic.main.activity_hourly.*
 
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
@@ -58,6 +59,9 @@ class HourlyActivity : BaseActivity() {
     private var htmlShare = listOf<String>()
     private lateinit var objectCard: ObjectCard
     private lateinit var objectCardVerticalText: ObjectCardVerticalText
+    private lateinit var scrollView: ScrollView
+    private lateinit var linearLayout: LinearLayout
+    private lateinit var graphCard: CardView
     private var hourlyData = ObjectHourly()
     private var locationNumber = 0
 
@@ -69,11 +73,14 @@ class HourlyActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_hourly, R.menu.shared_multigraphics, false)
+        scrollView = findViewById(R.id.scrollView)
+        linearLayout = findViewById(R.id.linearLayout)
+        graphCard = findViewById(R.id.graphCard)
         locationNumber = (intent.getStringExtra(LOC_NUM)!!.toIntOrNull() ?: 0) - 1
         objectCard = ObjectCard(this, R.color.black, R.id.graphCard)
         graphCard.visibility = View.GONE
         objectCardVerticalText = ObjectCardVerticalText(this, 5, linearLayout, toolbar)
-        objectCardVerticalText.setOnClickListener(View.OnClickListener { scrollView.scrollTo(0,0)})
+        objectCardVerticalText.setOnClickListener { scrollView.scrollTo(0, 0) }
         title = "Hourly Forecast"
         toolbar.subtitle = Location.getName(locationNumber)
         getContent()
@@ -85,8 +92,12 @@ class HourlyActivity : BaseActivity() {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        htmlShare = withContext(Dispatchers.IO) { UtilityUSHourly.getString(locationNumber) }
-        hourlyData = withContext(Dispatchers.IO) { UtilityUSHourly.getStringForActivity(htmlShare[1]) }
+        htmlShare = withContext(Dispatchers.IO) {
+            UtilityUSHourly.getString(locationNumber)
+        }
+        hourlyData = withContext(Dispatchers.IO) {
+            UtilityUSHourly.getStringForActivity(htmlShare[1])
+        }
         graphCard.visibility = View.VISIBLE
         objectCardVerticalText.setText(listOf(hourlyData.time, hourlyData.temp, hourlyData.windSpeed, hourlyData.windDir, hourlyData.conditions))
         plotData()

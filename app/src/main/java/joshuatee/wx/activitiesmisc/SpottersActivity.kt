@@ -90,7 +90,7 @@ class SpottersActivity : BaseActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_onefab, null, false)
         title = titleString
         toolbar.subtitle = "Tap on name for actions."
-        ObjectFab(this, this, R.id.fab, R.drawable.ic_info_outline_24dp_white, View.OnClickListener { reportFAB() })
+        ObjectFab(this, this, R.id.fab, R.drawable.ic_info_outline_24dp_white) { reportFAB() }
         recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)
         getContent()
     }

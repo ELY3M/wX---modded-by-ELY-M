@@ -22,7 +22,6 @@
 package joshuatee.wx.models
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.os.Bundle
 import android.content.res.Configuration
 import android.view.KeyEvent
@@ -100,8 +99,8 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         miStatusParam1 = menu.findItem(R.id.action_status_param1)
         miStatusParam2 = menu.findItem(R.id.action_status_param2)
         if (om.numPanes < 2) {
-            fab1 = ObjectFab(this, this, R.id.fab1, View.OnClickListener { om.leftClick() })
-            fab2 = ObjectFab(this, this, R.id.fab2, View.OnClickListener { om.rightClick() })
+            fab1 = ObjectFab(this, this, R.id.fab1) { om.leftClick() }
+            fab2 = ObjectFab(this, this, R.id.fab2) { om.rightClick() }
             menu.findItem(R.id.action_img1).isVisible = false
             menu.findItem(R.id.action_img2).isVisible = false
             if (UIPreferences.fabInModels) {
@@ -246,15 +245,15 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
         val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
+        objectDialogue.setNegativeButton { dialog, _ ->
             dialog.dismiss()
             UtilityUI.immersiveMode(this)
-        })
-        objectDialogue.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        }
+        objectDialogue.setSingleChoiceItems { dialog, which ->
             fn(which)
             getContent()
             dialog.dismiss()
-        })
+        }
         objectDialogue.show()
     }
 

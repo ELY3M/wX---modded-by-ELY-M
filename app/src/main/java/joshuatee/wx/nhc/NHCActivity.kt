@@ -27,6 +27,8 @@ import java.util.Locale
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import joshuatee.wx.MyApplication
 
 import joshuatee.wx.R
@@ -36,12 +38,12 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.wpc.WpcTextProductsActivity
 import kotlinx.coroutines.*
 
-import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
-
 class NhcActivity : BaseActivity() {
 
     private val uiDispatcher = Dispatchers.Main
     private lateinit var objectNhc: ObjectNhc
+    private lateinit var scrollView: ScrollView
+    private lateinit var linearLayout: LinearLayout
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.nhc, menu)
@@ -51,19 +53,24 @@ class NhcActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.nhc, false)
+        scrollView = findViewById(R.id.scrollView)
+        linearLayout = findViewById(R.id.linearLayout)
         objectNhc = ObjectNhc(this, linearLayout)
         getContent()
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         scrollView.smoothScrollTo(0, 0)
-        withContext(Dispatchers.IO) { objectNhc.getTextData() }
+        withContext(Dispatchers.IO) {
+            objectNhc.getTextData()
+        }
         objectNhc.showTextData()
         NhcOceanEnum.values().forEach {
-            withContext(Dispatchers.IO) { objectNhc.regionMap[it]!!.getImages() }
+            withContext(Dispatchers.IO) {
+                objectNhc.regionMap[it]!!.getImages()
+            }
             objectNhc.showImageData(it)
         }
-
     }
 
     private fun showTextProduct(prod: String) {
@@ -97,7 +104,6 @@ class NhcActivity : BaseActivity() {
     }
 
     override fun onRestart() {
-        //getContent()
         objectNhc.handleRestartForNotification()
         super.onRestart()
     }

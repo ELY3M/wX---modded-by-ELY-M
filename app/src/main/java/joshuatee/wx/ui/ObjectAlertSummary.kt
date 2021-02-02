@@ -24,7 +24,6 @@ package joshuatee.wx.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
-import android.view.View
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import joshuatee.wx.GlobalDictionaries
@@ -62,7 +61,7 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
         val cardText = ObjectCardText(context)
         linearLayout.addView(cardText.card)
         val objectCardImageView = ObjectCardImage(context, bitmap)
-        objectCardImageView.setOnClickListener(View.OnClickListener { ObjectIntent.showImage(context, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "US Alerts", "true")) })
+        objectCardImageView.setOnClickListener { ObjectIntent.showImage(context, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "US Alerts", "true")) }
         linearLayout.addView(objectCardImageView.card)
         totalAlertsCnt = 0
         val mapEvent = TreeMap<String, Int>()
@@ -115,9 +114,9 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
                     mapButtonZone[i] = firstZone
                     objectCardAlertSummaryItem.setTextFields(nwsOffice, nwsLoc, capAlert)
                     val url = capAlert.url
-                    objectCardAlertSummaryItem.setListener(View.OnClickListener { showWarningDetails(url) })
-                    objectCardAlertSummaryItem.radarButton.setOnClickListener(View.OnClickListener { radarInterface(nwsOffice) })
-                    objectCardAlertSummaryItem.detailsButton.setOnClickListener(View.OnClickListener { showWarningDetails(url) })
+                    objectCardAlertSummaryItem.setListener { showWarningDetails(url) }
+                    objectCardAlertSummaryItem.radarButton.setOnClickListener { radarInterface(nwsOffice) }
+                    objectCardAlertSummaryItem.detailsButton.setOnClickListener { showWarningDetails(url) }
                     linearLayout.addView(objectCardAlertSummaryItem.card)
                     i += 1
                 }

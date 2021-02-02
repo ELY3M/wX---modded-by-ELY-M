@@ -54,18 +54,18 @@ class ObjectCardText(context: Context) {
 
     constructor(context: Context, linearLayout: LinearLayout, toolbar: Toolbar, toolbarBottom: Toolbar) : this(context) {
         linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
+        setOnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
     constructor(context: Context, linearLayout: LinearLayout, toolbar: Toolbar, toolbarBottom: Toolbar, textValue: String) : this(context) {
         linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
+        setOnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) }
         text = textValue
     }
 
     constructor(context: Context, linearLayout: LinearLayout, toolbar: Toolbar) : this(context) {
         linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar) })
+        setOnClickListener { UtilityToolbar.showHide(toolbar) }
     }
 
     constructor(context: Context, text: String) : this(context) {
@@ -134,7 +134,7 @@ class ObjectCardText(context: Context) {
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
-        setOnClickListener(View.OnClickListener { ObjectIntent(context, clazz) })
+        setOnClickListener { ObjectIntent(context, clazz) }
     }
 
     constructor(context: Context, text: String, textSize: Float, clazz: Class<*>) : this(
@@ -144,7 +144,7 @@ class ObjectCardText(context: Context) {
         tv.text = text
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
-        setOnClickListener(View.OnClickListener { ObjectIntent(context, clazz) })
+        setOnClickListener { ObjectIntent(context, clazz) }
     }
 
     constructor(context: Context, linearLayout: LinearLayout, text: String, textSize: Float, clazz: Class<*>) : this(
@@ -157,7 +157,7 @@ class ObjectCardText(context: Context) {
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
         linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener { ObjectIntent(context, clazz) })
+        setOnClickListener { ObjectIntent(context, clazz) }
     }
 
     constructor(context: Context, linearLayout: LinearLayout, text: String, textSize: Float, clazz: Class<*>, padding: Int) : this(
@@ -172,7 +172,7 @@ class ObjectCardText(context: Context) {
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize)
         tv.isFocusable = false
         linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener { ObjectIntent(context, clazz) })
+        setOnClickListener { ObjectIntent(context, clazz) }
     }
 
     fun setPaddingAmount(padding: Int) {

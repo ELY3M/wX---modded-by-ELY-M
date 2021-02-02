@@ -22,28 +22,24 @@
 package joshuatee.wx.wpc
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.safeGet
-
 import java.util.Locale
-
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.notifications.UtilityNotificationTextProduct
 import joshuatee.wx.MyApplication
-
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
-
-import kotlinx.android.synthetic.main.activity_wpctextproducts.*
 
 class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -67,6 +63,8 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var ridFavOld = ""
     private lateinit var textCard: ObjectCardText
     private lateinit var drw: ObjectNavDrawerCombo
+    private lateinit var scrollView: ScrollView
+    private lateinit var linearLayout: LinearLayout
     private val prefToken = "NWS_TEXT_FAV"
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -82,6 +80,8 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_wpctextproducts, R.menu.wpctext_products)
+        scrollView = findViewById(R.id.scrollView)
+        linearLayout = findViewById(R.id.linearLayout)
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         notificationToggle = toolbarBottom.menu.findItem(R.id.action_notif_text_prod)
@@ -104,7 +104,11 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         invalidateOptionsMenu()
         updateSubmenuNotificationText()
         scrollView.smoothScrollTo(0, 0)
-        if (MyApplication.nwsTextFav.contains(":$product:")) star.setIcon(MyApplication.STAR_ICON) else star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+        if (MyApplication.nwsTextFav.contains(":$product:")) {
+            star.setIcon(MyApplication.STAR_ICON)
+        } else {
+            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+        }
         ridFavOld = MyApplication.nwsTextFav
         html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@WpcTextProductsActivity, product) }
         textCard.setTextAndTranslate(html)
@@ -136,7 +140,9 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         products = UtilityFavorites.setupMenu(this, MyApplication.nwsTextFav, product, prefToken)
         when (item.itemId) {
             R.id.action_product -> {
@@ -158,15 +164,15 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
         val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
+        objectDialogue.setNegativeButton { dialog, _ ->
             dialog.dismiss()
             UtilityUI.immersiveMode(this)
-        })
-        objectDialogue.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        }
+        objectDialogue.setSingleChoiceItems { dialog, which ->
             fn(which)
             getContent()
             dialog.dismiss()
-        })
+        }
         objectDialogue.show()
     }
 

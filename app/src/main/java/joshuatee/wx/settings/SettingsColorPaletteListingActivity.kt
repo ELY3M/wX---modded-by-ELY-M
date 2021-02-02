@@ -23,7 +23,7 @@ package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
+import android.widget.LinearLayout
 
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
@@ -32,15 +32,15 @@ import joshuatee.wx.radar.WXGLNexrad
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardText
 
-import kotlinx.android.synthetic.main.activity_linear_layout.*
-
 class SettingsColorPaletteListingActivity : BaseActivity() {
 
     private var cardColorPalettes = mutableListOf<ObjectCardText>()
+    private lateinit var linearLayout: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
+        linearLayout = findViewById(R.id.linearLayout)
         WXGLNexrad.colorPaletteProducts.forEach { product ->
             val card = ObjectCardText(
                     this,
@@ -49,9 +49,9 @@ class SettingsColorPaletteListingActivity : BaseActivity() {
                     MyApplication.textSizeNormal,
                     MyApplication.paddingSettings
             )
-            card.setOnClickListener(View.OnClickListener {
+            card.setOnClickListener {
                 ObjectIntent(this, SettingsColorPaletteActivity::class.java, SettingsColorPaletteActivity.TYPE, arrayOf(product.toString()))
-            })
+            }
             cardColorPalettes.add(card)
         }
     }

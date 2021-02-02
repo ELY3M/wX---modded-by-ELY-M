@@ -24,7 +24,6 @@ package joshuatee.wx.ui
 import android.app.Activity
 import android.content.Context
 import androidx.appcompat.widget.Toolbar
-import android.view.View
 import android.widget.LinearLayout
 
 import java.util.Locale
@@ -101,7 +100,7 @@ class ObjectCanadaWarnings(private val context: Context, private val activity: A
             objectCardText.text = Utility.fromHtml(province.toUpperCase(Locale.US) + ": " + locWarning + " " + locWatch + " " + locStatement)
             val url = MyApplication.canadaEcSitePrefix + listLocUrl[index]
             val location = listLocName[index]
-            objectCardText.setOnClickListener(View.OnClickListener { getWarningDetail(url, location) })
+            objectCardText.setOnClickListener { getWarningDetail(url, location) }
         }
         ObjectCALegal(activity, linearLayout, MyApplication.canadaEcSitePrefix + "/warnings/index_e.html")
     }

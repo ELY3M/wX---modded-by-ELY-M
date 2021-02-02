@@ -26,7 +26,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
 
@@ -36,8 +35,6 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
-
-import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class NhcStormActivity : BaseActivity() {
 
@@ -56,6 +53,7 @@ class NhcStormActivity : BaseActivity() {
     private var product = ""
     private val bitmaps = mutableListOf<Bitmap>()
     private lateinit var objectCardText: ObjectCardText
+    private lateinit var linearLayout: LinearLayout
     private var numberOfImages = 0
     private var imagesPerRow = 2
     private val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout>()
@@ -79,11 +77,14 @@ class NhcStormActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.nhc_storm, false)
+        linearLayout = findViewById(R.id.linearLayout)
         stormData = intent.getSerializableExtra(URL) as ObjectNhcStormDetails
         title = stormData.name + " " + stormData.classification
         toolbar.subtitle = stormData.forTopHeader()
         product = "MIATCP${stormData.binNumber}"
-        if (UtilityUI.isLandScape(this)) imagesPerRow = 3
+        if (UtilityUI.isLandScape(this)) {
+            imagesPerRow = 3
+        }
         getContent()
     }
 
@@ -97,8 +98,10 @@ class NhcStormActivity : BaseActivity() {
         withContext(Dispatchers.IO) {
             imageUrls.forEach {
                 var url = stormData.baseUrl
-                if (it == "WPCQPF_sm2.gif" || it == "WPCERO_sm2.gif") url = url.dropLast(2)
-                UtilityLog.d("wx", url)
+                if (it == "WPCQPF_sm2.gif" || it == "WPCERO_sm2.gif") {
+                    url = url.dropLast(2)
+                }
+                // UtilityLog.d("wx", url)
                 bitmaps.add((url + it).getImage())
             }
         }
@@ -116,17 +119,25 @@ class NhcStormActivity : BaseActivity() {
                     objectCardImage = ObjectCardImage(this@NhcStormActivity, horizontalLinearLayouts.last().linearLayout, bitmap, imagesPerRow)
                 }
                 numberOfImages += 1
-                objectCardImage.setOnClickListener(View.OnClickListener {
+                objectCardImage.setOnClickListener {
                     var url = stormData.baseUrl
-                    if (imageUrls[index] == "WPCQPF_sm2.gif" || imageUrls[index] == "WPCERO_sm2.gif") url = url.dropLast(2)
+                    if (imageUrls[index] == "WPCQPF_sm2.gif" || imageUrls[index] == "WPCERO_sm2.gif") {
+                        url = url.dropLast(2)
+                    }
                     val fullUrl = url + imageUrls[index]
                     ObjectIntent.showImage(this@NhcStormActivity, arrayOf(fullUrl, ""))
-                })
+                }
             }
         }
-        html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@NhcStormActivity, product) }
+        html = withContext(Dispatchers.IO) {
+            UtilityDownload.getTextProduct(this@NhcStormActivity, product)
+        }
         objectCardText = ObjectCardText(this@NhcStormActivity, linearLayout, toolbar, toolbarBottom)
-        if (html.contains("<")) objectCardText.text = Utility.fromHtml(html) else objectCardText.text = html
+        if (html.contains("<")) {
+            objectCardText.text = Utility.fromHtml(html)
+        } else {
+            objectCardText.text = html
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

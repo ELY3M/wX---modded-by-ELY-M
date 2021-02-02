@@ -60,8 +60,8 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_playlist, R.menu.settings_playlist, true)
         toolbarBottom.setOnMenuItemClickListener(this)
-        ObjectFab(this, this, R.id.fab, View.OnClickListener { playAll() })
-        fabPause = ObjectFab(this, this, R.id.fab3, View.OnClickListener { playItemFab() })
+        ObjectFab(this, this, R.id.fab) { playAll() }
+        fabPause = ObjectFab(this, this, R.id.fab3) { playItemFab() }
         val icon = if (UtilityTts.mediaPlayer != null && !UtilityTts.mediaPlayer!!.isPlaying) {
             MyApplication.ICON_PAUSE_PRESSED
         } else {
@@ -69,7 +69,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         }
         fabPause.fabSetResDrawable(this, icon)
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
-        diaAfd.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        diaAfd.setSingleChoiceItems { dialog, which ->
             val name = diaAfd.getItem(which)
             val product = "AFD" + name.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)
             if (!ridFav.contains(product)) {
@@ -84,9 +84,9 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
                 val rootView: View = (this as Activity).window.decorView.findViewById(android.R.id.content)
                 UtilityUI.makeSnackBar(rootView, "$product already in playlist")
             }
-        })
+        }
         diaMain = ObjectDialogue(this, "Select text products:", UtilityWpcText.labels)
-        diaMain.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        diaMain.setSingleChoiceItems { dialog, which ->
             val name = diaMain.getItem(which)
             val product = name.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)
             if (!ridFav.contains(product)) {
@@ -101,7 +101,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
                 val rootView: View = (this as Activity).window.decorView.findViewById(android.R.id.content)
                 UtilityUI.makeSnackBar(rootView, "$product already in playlist")
             }
-        })
+        }
         toolbar.subtitle = "Tap item to play, view, delete or move."
         ridFav = Utility.readPref(this, prefToken, "")
         updateList()

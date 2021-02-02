@@ -1432,11 +1432,7 @@ public class TouchImageView2 extends AppCompatImageView {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void compatPostOnAnimation(Runnable runnable) {
-        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN) {
-            postOnAnimation(runnable);
-        } else {
-            postDelayed(runnable, 1000 / 60);
-        }
+        postOnAnimation(runnable);
     }
 
     private class ZoomVariables {

@@ -26,7 +26,7 @@ import android.os.Bundle
 import android.graphics.Bitmap
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
-import android.view.View
+import android.widget.LinearLayout
 
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
@@ -41,8 +41,6 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ObjectIntent
 import kotlinx.coroutines.*
-
-import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -72,10 +70,12 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
     private lateinit var miUrl: MenuItem
     private lateinit var miImage: MenuItem
     private lateinit var polygonType: PolygonType
+    private lateinit var linearLayout: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
+        linearLayout = findViewById(R.id.linearLayout)
         toolbarBottom.setOnMenuItemClickListener(this)
         val menu = toolbarBottom.menu
         miAll = menu.findItem(R.id.action_share_all)
@@ -112,7 +112,7 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        var mcdList = listOf<String>()
+        var mcdList: List<String>
         withContext(Dispatchers.IO) {
             mcdList = url.getHtml().parseColumn(patternStr)
             mcdList.forEach {
@@ -141,16 +141,18 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
         }
         mcdList.indices.forEach { mcdIndex ->
             val objectCardImage = ObjectCardImage(this@SpcMcdWatchShowSummaryActivity, linearLayout, bitmaps[mcdIndex])
-            objectCardImage.setOnClickListener(View.OnClickListener {
+            objectCardImage.setOnClickListener {
                 ObjectIntent.showMcd(this@SpcMcdWatchShowSummaryActivity, arrayOf(mcdNumbers[mcdIndex], "", polygonType.toString()))
-            })
+            }
         }
         if (mcdList.size == 1) {
             val wfoStr = text.parse("ATTN...WFO...(.*?)... ")
             wfos = wfoStr.split("\\.\\.\\.".toRegex()).dropLastWhile { it.isEmpty() }
             ObjectCardText(this@SpcMcdWatchShowSummaryActivity, linearLayout, toolbar, toolbarBottom, Utility.fromHtml(text))
             title = titleString
-            if (!number.contains("at")) toolbar.subtitle = text.parse("Areas affected...(.*?)<BR>")
+            if (!number.contains("at")) {
+                toolbar.subtitle = text.parse("Areas affected...(.*?)<BR>")
+            }
             miAll.isVisible = true
             miText.isVisible = true
             miUrl.isVisible = true
@@ -160,11 +162,15 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
             miAll.isVisible = true
             title = titleString
         }
-        if (mcdList.isEmpty()) ObjectCardText(this@SpcMcdWatchShowSummaryActivity, linearLayout, toolbar, toolbarBottom, nothingPresentStr)
+        if (mcdList.isEmpty()) {
+            ObjectCardText(this@SpcMcdWatchShowSummaryActivity, linearLayout, toolbar, toolbarBottom, nothingPresentStr)
+        }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, text, number, product)) return true
+        if (audioPlayMenu(item.itemId, text, number, product)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_share_all -> {
                 if (bitmaps.size > 1)

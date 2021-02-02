@@ -33,7 +33,6 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.View.OnClickListener
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.ScrollView
@@ -42,17 +41,14 @@ import androidx.cardview.widget.CardView
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.canada.UtilityCanada
-import joshuatee.wx.settings.SettingsLocationGenericActivity
 import joshuatee.wx.util.*
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.activitiesmisc.TextScreenActivity
 import joshuatee.wx.notifications.UtilityNotificationTools
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
@@ -165,7 +161,7 @@ class LocationFragment : Fragment()  {
                 val hsTextTmp = ObjectCardHSText(activityReference, token.replace("TXT-", ""))
                 linearLayout.addView(hsTextTmp.card)
                 homeScreenTextCards.add(hsTextTmp)
-                hsTextTmp.setOnClickListener(OnClickListener { hsTextTmp.toggleText() })
+                hsTextTmp.setOnClickListener { hsTextTmp.toggleText() }
             } else if (token.contains("IMG-")) {
                 val hsImageTmp = ObjectCardHSImage(activityReference, token.replace("IMG-", ""))
                 linearLayout.addView(hsImageTmp.card)
@@ -212,10 +208,10 @@ class LocationFragment : Fragment()  {
         }
         // The dialogue that opens when the user wants to change location
         locationDialogue = ObjectDialogue(activityReference, "Select location:", Location.listOf)
-        locationDialogue.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, locationIndex ->
+        locationDialogue.setSingleChoiceItems { dialog, locationIndex ->
             changeLocation(locationIndex)
             dialog.dismiss()
-        })
+        }
         // The main LL that holds all content
         linearLayout = view.findViewById(R.id.ll)
         // The button the user will tape so change location
@@ -223,7 +219,7 @@ class LocationFragment : Fragment()  {
         val locationLabelPadding = if (UtilityUI.isTablet()) 10 else 20
         locationLabel.tv.setPadding(locationLabelPadding)
         locationLabel.setTextColor(UIPreferences.textHighlightColor)
-        locationLabel.setOnClickListener(OnClickListener { locationDialogue.show() })
+        locationLabel.setOnClickListener { locationDialogue.show() }
         if (homescreenFavLocal.contains("TXT-CC2")) {
             objectCardCurrentConditions = ObjectCardCurrentConditions(activityReference, 2)
             objectCardCurrentConditions?.setListener(alertDialogStatus, alertDialogStatusList, ::radarTimestamps)
@@ -479,7 +475,7 @@ class LocationFragment : Fragment()  {
             val cl = MyApplication.HM_CLASS[homeScreenImageCards[ii].product]
             val id = MyApplication.HM_CLASS_ID[homeScreenImageCards[ii].product]
             val argsOrig = MyApplication.HM_CLASS_ARGS[homeScreenImageCards[ii].product]
-            homeScreenImageCards[ii].setOnClickListener(OnClickListener {
+            homeScreenImageCards[ii].setOnClickListener {
                 if (argsOrig != null) {
                     val args = arrayOfNulls<String>(argsOrig.size)
                     System.arraycopy(argsOrig, 0, args, 0, argsOrig.size)
@@ -503,7 +499,7 @@ class LocationFragment : Fragment()  {
                 } else {
                     ObjectIntent.showVis(activityReference)
                 }
-            })
+            }
         }
     }
 
@@ -539,14 +535,14 @@ class LocationFragment : Fragment()  {
         hazardsCards[0].setTextColor(UIPreferences.textHighlightColor)
         hazardsCards[0].text = hazUrl
         val hazUrlCa = objectHazards.hazards
-        hazardsCards[0].setOnClickListener(OnClickListener { ObjectIntent.showText(activityReference, arrayOf(Utility.fromHtml(hazUrlCa), hazUrl)) })
+        hazardsCards[0].setOnClickListener { ObjectIntent.showText(activityReference, arrayOf(Utility.fromHtml(hazUrlCa), hazUrl)) }
         if (!hazUrl.startsWith("NO WATCHES OR WARNINGS IN EFFECT")) linearLayoutHazards?.addView(hazardsCards[0].card)
     }
 
     private fun setupAlertDialogStatus() {
         alertDialogStatus = ObjectDialogue(activityReference, alertDialogStatusList)
-        alertDialogStatus!!.setNegativeButton(DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
-        alertDialogStatus!!.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        alertDialogStatus!!.setNegativeButton { dialog, _ -> dialog.dismiss() }
+        alertDialogStatus!!.setSingleChoiceItems { dialog, which ->
             val strName = alertDialogStatusList[which]
             if (wxglRenders.size > 0) {
                 UtilityLocationFragment.handleIconTap(
@@ -568,17 +564,17 @@ class LocationFragment : Fragment()  {
                 )
             }
             dialog.dismiss()
-        })
+        }
     }
 
     private fun setupAlertDialogRadarLongPress() {
         dialogRadarLongPress = ObjectDialogue(activityReference, radarLongPressItems)
-        dialogRadarLongPress!!.setNegativeButton(DialogInterface.OnClickListener { dialog, _ -> dialog.dismiss() })
-        dialogRadarLongPress!!.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        dialogRadarLongPress!!.setNegativeButton { dialog, _ -> dialog.dismiss() }
+        dialogRadarLongPress!!.setSingleChoiceItems { dialog, which ->
             val item = radarLongPressItems[which]
             UtilityRadarUI.doLongPressAction(item, activityReference, activityReference, wxglSurfaceViews[idxIntG], wxglRenders[idxIntG], uiDispatcher, ::longPressRadarSiteSwitch)
             dialog.dismiss()
-        })
+        }
     }
 
     private fun longPressRadarSiteSwitch(strName: String) {
@@ -619,7 +615,7 @@ class LocationFragment : Fragment()  {
                 hazardsCards[z].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
                 hazardsCards[z].setTextColor(UIPreferences.textHighlightColor)
                 hazardsCards[z].text = objectHazards.titles[z].toUpperCase(Locale.US)
-                hazardsCards[z].setOnClickListener(OnClickListener { ObjectIntent.showHazard(activityReference, arrayOf(objectHazards.urls[z])) })
+                hazardsCards[z].setOnClickListener { ObjectIntent.showHazard(activityReference, arrayOf(objectHazards.urls[z])) }
                 linearLayoutHazards?.addView(hazardsCards[z].card)
             } else {
                 hazardsExpandedAl.add(false)
@@ -700,14 +696,14 @@ class LocationFragment : Fragment()  {
                 val day7Arr = objectSevenDay.forecastList
                 bitmaps.forEachIndexed { index, bitmap ->
                     val objectCard7Day = ObjectCard7Day(activityReference, bitmap, Location.isUS, index, day7Arr)
-                    objectCard7Day.setOnClickListener(OnClickListener { scrollView.smoothScrollTo(0, 0) })
+                    objectCard7Day.setOnClickListener { scrollView.smoothScrollTo(0, 0) }
                     linearLayoutForecast?.addView(objectCard7Day.card)
                     sevenDayCards.add(objectCard7Day)
                 }
                 // sunrise card
                 val cardSunrise = ObjectCardText(activityReference)
                 cardSunrise.center()
-                cardSunrise.setOnClickListener(OnClickListener { scrollView.smoothScrollTo(0, 0) })
+                cardSunrise.setOnClickListener { scrollView.smoothScrollTo(0, 0) }
                 try {
                     cardSunrise.text = UtilityTimeSunMoon.getForHomeScreen(activityReference)
                 } catch (e: Exception) {

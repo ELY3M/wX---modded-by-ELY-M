@@ -26,6 +26,8 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.core.app.NavUtils
 
 import joshuatee.wx.R
@@ -37,9 +39,6 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityAlertDialog
 import joshuatee.wx.util.UtilityLog
-
-import kotlinx.android.synthetic.main.activity_settings_ui.*
-import kotlinx.android.synthetic.main.activity_settings_ui.linearLayout
 
 class SettingsUIActivity : BaseActivity() {
 
@@ -61,10 +60,19 @@ class SettingsUIActivity : BaseActivity() {
     private var tilesPerRowStart = 0
     private var navDrawerMainScreen = false
     private var navDrawerMainScreenOnRight = true
+    private lateinit var linearLayout: LinearLayout
+    private lateinit var et1: EditText
+    private lateinit var et2: EditText
+    private lateinit var et3: EditText
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_ui, null, false)
+        linearLayout = findViewById(R.id.linearLayout)
+        et1 = findViewById(R.id.et1)
+        et2 = findViewById(R.id.et2)
+        et3 = findViewById(R.id.et3)
+
         toolbar.subtitle = "Please tap on text for additional help."
         tilesPerRowStart = UIPreferences.tilesPerRow
         navDrawerMainScreen = UIPreferences.navDrawerMainScreen

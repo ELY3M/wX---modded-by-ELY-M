@@ -25,6 +25,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.widget.CompoundButton
+import android.widget.LinearLayout
+import androidx.appcompat.widget.SwitchCompat
 
 import joshuatee.wx.R
 import joshuatee.wx.external.UtilityStringExternal
@@ -34,16 +36,18 @@ import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.util.Utility
 
-import kotlinx.android.synthetic.main.activity_settings_widgets.*
-
 class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeListener {
 
     private val sectors = listOf("regional", "usa")
     private val nexradCenterList = listOf("Center", "NW", "NE", "SW", "SE", "N", "E", "S", "W")
+    private lateinit var linearLayout: LinearLayout
+    private lateinit var abSwitch: SwitchCompat
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_widgets, null, false)
+        linearLayout = findViewById(R.id.linearLayout)
+        abSwitch = findViewById(R.id.abSwitch)
         toolbar.subtitle = "Please tap on text for additional help."
         val locationNameShortLength = 20
         val locations = (1 until Location.numLocations + 1).map { "$it: " + UtilityStringExternal.truncate(Utility.readPref(this, "LOC" + it + "_LABEL", ""), locationNameShortLength) }

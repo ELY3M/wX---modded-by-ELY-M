@@ -22,10 +22,8 @@
 package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.R
 import joshuatee.wx.GlobalArrays
@@ -58,29 +56,29 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         homeScreenFavOrig = favoriteString
         toolbar.subtitle = "Tap item to delete or move."
         UtilityToolbar.fullScreenMode(toolbar, false)
-        ObjectFab(this, this, R.id.fab, MyApplication.ICON_ADD, View.OnClickListener { dialogueMain.show() })
+        ObjectFab(this, this, R.id.fab, MyApplication.ICON_ADD) { dialogueMain.show() }
         updateList(true)
         recyclerView = ObjectRecyclerView(this, this, R.id.card_list, labels, ::prodClicked)
         dialogueMain = ObjectDialogue(this, "Select text products:", UtilityHomeScreen.localChoicesText + UtilityWpcText.labels)
-        dialogueMain.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        dialogueMain.setSingleChoiceItems { dialog, which ->
             alertDialogClicked(dialogueMain, "TXT-", which)
             dialog.dismiss()
-        })
+        }
         dialogueImages = ObjectDialogue(this, "Select image products:", UtilityHomeScreen.localChoicesImg + GlobalArrays.nwsImageProducts)
-        dialogueImages.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        dialogueImages.setSingleChoiceItems { dialog, which ->
             alertDialogClicked(dialogueImages, "", which)
             dialog.dismiss()
-        })
+        }
         dialogueAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
-        dialogueAfd.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        dialogueAfd.setSingleChoiceItems { dialog, which ->
             alertDialogClicked(dialogueAfd, "TXT-" + "AFD", which)
             dialog.dismiss()
-        })
+        }
         dialogueRadar = ObjectDialogue(this, "Select fixed location Nexrad products:", GlobalArrays.radars + GlobalArrays.tdwrRadarsForHomeScreen)
-        dialogueRadar.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        dialogueRadar.setSingleChoiceItems { dialog, which ->
             alertDialogClicked(dialogueRadar, "NXRD-", which)
             dialog.dismiss()
-        })
+        }
     }
 
     private fun updateList(firstTime: Boolean = false) {

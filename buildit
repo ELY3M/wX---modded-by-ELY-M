@@ -28,6 +28,7 @@ if [ "$1" == "-t" ]; then
 fi
 
 echo Clone and zip
+rm -rf ${tmpPath}
 mkdir ${tmpPath} || exit 1
 cd ${tmpPath} || exit 1
 git clone ${gitRepo}

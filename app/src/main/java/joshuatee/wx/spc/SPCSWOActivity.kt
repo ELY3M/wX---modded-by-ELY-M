@@ -45,8 +45,6 @@ import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.UtilityLog
 import kotlinx.coroutines.*
 
-import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
-
 class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     //
@@ -65,13 +63,17 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var day = ""
     private var playlistProd = ""
     private lateinit var objectCardText: ObjectCardText
+    private lateinit var linearLayout: LinearLayout
     private val objectCardImageList = mutableListOf<ObjectCardImage>()
     private var imagesPerRow = 2
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcswo)
-        if (UtilityUI.isLandScape(this) && UtilityUI.isTablet()) imagesPerRow = 4
+        linearLayout = findViewById(R.id.linearLayout)
+        if (UtilityUI.isLandScape(this) && UtilityUI.isTablet()) {
+            imagesPerRow = 4
+        }
         toolbarBottom.setOnMenuItemClickListener(this)
         var numberOfImages = 0
         val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout>()
@@ -132,8 +134,10 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         var textUrl = "SWODY$day"
         val imageLabel = "Day $day Convective Outlook"
-        var urls = listOf("")
-        if (day == "4-8") textUrl = "SWOD48"
+        var urls: List<String>
+        if (day == "4-8") {
+            textUrl = "SWOD48"
+        }
         withContext(Dispatchers.IO) {
             html = UtilityDownload.getTextProduct(this@SpcSwoActivity, textUrl)
             urls = UtilitySpcSwo.getUrls(day)
@@ -141,17 +145,27 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         objectCardText.text = html
         toolbar.subtitle = html.parse("(Valid.*?Z - [0-9]{6}Z)")
-        if (activityArguments[1] == "sound") UtilityTts.synthesizeTextAndPlay(applicationContext, html, "spcswo")
+        if (activityArguments[1] == "sound") {
+            UtilityTts.synthesizeTextAndPlay(applicationContext, html, "spcswo")
+        }
         when (day) {
             "1", "2" -> {
-                listOf(0, 1, 2, 3).forEach { setImageAndClickAction(it, urls, imageLabel) }
+                listOf(0, 1, 2, 3).forEach {
+                    setImageAndClickAction(it, urls, imageLabel)
+                }
                 objectCardImageList[4].visibility = View.GONE
             }
             "3" -> {
-                listOf(0, 1).forEach { setImageAndClickAction(it, urls, imageLabel) }
-                (2..4).forEach { objectCardImageList[it].visibility = View.GONE }
+                listOf(0, 1).forEach {
+                    setImageAndClickAction(it, urls, imageLabel)
+                }
+                (2..4).forEach {
+                    objectCardImageList[it].visibility = View.GONE
+                }
             }
-            "4-8" -> listOf(0, 1, 2, 3, 4).forEach { setImageAndClickAction(it, urls, imageLabel) }
+            "4-8" -> listOf(0, 1, 2, 3, 4).forEach {
+                setImageAndClickAction(it, urls, imageLabel)
+            }
         }
     }
 
@@ -161,13 +175,17 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun setImageAndClickAction(index: Int, urls: List<String>, textUrl: String) {
         objectCardImageList[index].setImage(bitmaps[index], imagesPerRow)
-        objectCardImageList[index].setOnClickListener(View.OnClickListener { showImageProduct(urls[index], textUrl) })
+        objectCardImageList[index].setOnClickListener {
+            showImageProduct(urls[index], textUrl)
+        }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         val textToShare = UtilityShare.prepTextForShare(html)
         UtilityLog.d("wx", textToShare)
-        if (audioPlayMenu(item.itemId, html, playlistProd, playlistProd)) return true
+        if (audioPlayMenu(item.itemId, html, playlistProd, playlistProd)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_share_all -> UtilityShare.text(this, this, "Day $day Convective Outlook", textToShare, bitmaps)
             R.id.action_share_text -> UtilityShare.text(this, "Day $day Convective Outlook - Text", textToShare)

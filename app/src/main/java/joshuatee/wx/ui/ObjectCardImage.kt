@@ -65,7 +65,7 @@ open class ObjectCardImage {
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
         objectCard.addView(img)
         linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar) })
+        setOnClickListener { UtilityToolbar.showHide(toolbar) }
     }
 
     constructor(context: Context, linearLayout: LinearLayout, toolbar: Toolbar, toolbarBottom: Toolbar, bitmap: Bitmap) {
@@ -76,7 +76,7 @@ open class ObjectCardImage {
         UtilityImg.resizeViewSetImgInCard(bitmap, img)
         objectCard.addView(img)
         linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
+        setOnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
     constructor(context: Context) {

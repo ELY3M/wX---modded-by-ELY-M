@@ -169,8 +169,12 @@ internal class ObjectMetar(context: Context, location: LatLon) {
         dewPoint = changeDegreeUnits(dewPoint)
         windChill = changeDegreeUnits(windChill)
         heatIndex = changeDegreeUnits(heatIndex)
-        if (windSpeed == "") windSpeed = "0"
-        if (condition == "") condition = "NA"
+        if (windSpeed == "") {
+            windSpeed = "0"
+        }
+        if (condition == "") {
+            condition = "NA"
+        }
     }
 }
 

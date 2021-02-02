@@ -22,7 +22,6 @@
 package joshuatee.wx.activitiesmisc
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.res.Configuration
 import java.util.Locale
 
@@ -32,6 +31,8 @@ import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import androidx.core.view.GravityCompat
 import joshuatee.wx.Extensions.getHtml
@@ -51,8 +52,6 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
-
-import kotlinx.android.synthetic.main.activity_afd.*
 
 class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -87,6 +86,8 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private val cardList = mutableListOf<CardView>()
     private lateinit var objectCardText: ObjectCardText
     private lateinit var drw: ObjectNavDrawer
+    private lateinit var scrollView: ScrollView
+    private lateinit var linearLayout: LinearLayout
     private var originalWfo = ""
     private val fixedWidthProducts = listOf("RTP", "RWR", "CLI", "RVA")
 
@@ -103,6 +104,8 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_afd, R.menu.afd)
+        scrollView = findViewById(R.id.scrollView)
+        linearLayout = findViewById(R.id.linearLayout)
         toolbarBottom.setOnMenuItemClickListener(this)
         drw = ObjectNavDrawer(this, UtilityWfoText.labels, UtilityWfoText.codes, ::getContentFixThis)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
@@ -114,8 +117,14 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (Utility.readPref(this, "WFO_REMEMBER_LOCATION", "") == "true") {
             wfo = Utility.readPref(this, "WFO_LAST_USED", Location.wfo)
         }
-        if (wfo == "") wfo = "OUN"
-        product = if (activityArguments[1] == "") MyApplication.wfoTextFav else activityArguments[1]
+        if (wfo == "") {
+            wfo = "OUN"
+        }
+        product = if (activityArguments[1] == "") {
+            MyApplication.wfoTextFav
+        } else {
+            activityArguments[1]
+        }
         if (product.startsWith("RTP") && product.length == 5) {
             val state = Utility.getWfoSiteName(wfo).split(",")[0]
             product = "RTP$state"
@@ -159,8 +168,12 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
         scrollView.smoothScrollTo(0, 0)
         ridFavOld = MyApplication.wfoFav
-        if (product != oldProduct) version = 1
-        if (wfo != oldWfo) version = 1
+        if (product != oldProduct) {
+            version = 1
+        }
+        if (wfo != oldWfo) {
+            version = 1
+        }
         html = withContext(Dispatchers.IO) {
             when {
                 product == "CLI" -> UtilityDownload.getTextProduct(this@WfoTextActivity, product + wfo + originalWfo)
@@ -179,12 +192,16 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             else -> product + wfo
         }
         // restore the WFO as CLI modifies to a sub-region
-        if (product == "CLI") wfo = originalWfo
+        if (product == "CLI") {
+            wfo = originalWfo
+        }
         toolbar.subtitle = UtilityWfoText.codeToName[product]
         cardList.forEach { linearLayout.removeView(it) }
         objectCardText.visibility = View.VISIBLE
         scrollView.visibility = View.VISIBLE
-        if (html == "") html = "None issued by this office recently."
+        if (html == "") {
+            html = "None issued by this office recently."
+        }
         objectCardText.setTextAndTranslate(html)
         if (fixedWidthProducts.contains(product) || product.startsWith("RTP")) {
             objectCardText.typefaceMono()
@@ -207,7 +224,9 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         val textToShare = UtilityShare.prepTextForShare(html)
-        if (audioPlayMenu(item.itemId, html, product, product + wfo)) return true
+        if (audioPlayMenu(item.itemId, html, product, product + wfo)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_back -> {
                 version += 2
@@ -273,8 +292,12 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         val wfoProd = mutableListOf<String>()
         scrollView.smoothScrollTo(0, 0)
         ridFavOld = MyApplication.wfoFav
-        if (product != oldProduct) version = 1
-        if (wfo != oldWfo) version = 1
+        if (product != oldProduct) {
+            version = 1
+        }
+        if (wfo != oldWfo) {
+            version = 1
+        }
         title = product
         withContext(Dispatchers.IO) {
             html = ""
@@ -298,15 +321,17 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun checkForCliSite() = GlobalScope.launch(uiDispatcher) {
         if (product == "CLI") {
-            val cliHtml = withContext(Dispatchers.IO) { ("https://w2.weather.gov/climate/index.php?wfo=" + wfo.toLowerCase(Locale.US)).getHtml() }
+            val cliHtml = withContext(Dispatchers.IO) {
+                ("https://w2.weather.gov/climate/index.php?wfo=" + wfo.toLowerCase(Locale.US)).getHtml()
+            }
             val cliSites = cliHtml.parseColumn("cf6PointArray\\[.\\] = new Array\\('.*?','(.*?)'\\)")
             val cliNames = cliHtml.parseColumn("cf6PointArray\\[.\\] = new Array\\('(.*?)','.*?'\\)")
             val dialogueMain = ObjectDialogue(this@WfoTextActivity, "Select site from $wfo:", cliNames)
-            dialogueMain.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, index ->
+            dialogueMain.setSingleChoiceItems { dialog, index ->
                 wfo = Utility.safeGet(cliSites, index)
                 dialog.dismiss()
                 getContent()
-            })
+            }
             originalWfo = wfo
             dialogueMain.show()
         }
@@ -328,7 +353,11 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
                                 val state = Utility.getWfoSiteName(wfo).split(",")[0]
                                 product = "RTP$state"
                             }
-                            if (product == "CLI") checkForCliSite() else getContent()
+                            if (product == "CLI") {
+                                checkForCliSite()
+                            } else {
+                                getContent()
+                            }
                         }
                     }
                     if (firstTime) {
@@ -344,15 +373,15 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
         val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
+        objectDialogue.setNegativeButton { dialog, _ ->
             dialog.dismiss()
             UtilityUI.immersiveMode(this)
-        })
-        objectDialogue.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        }
+        objectDialogue.setSingleChoiceItems { dialog, which ->
             fn(which)
             getContent()
             dialog.dismiss()
-        })
+        }
         objectDialogue.show()
     }
 
@@ -371,31 +400,38 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         return when (keyCode) {
             KeyEvent.KEYCODE_M -> {
-                if (event.isCtrlPressed) toolbarBottom.showOverflowMenu()
+                if (event.isCtrlPressed)
+                    toolbarBottom.showOverflowMenu()
                 return true
             }
             KeyEvent.KEYCODE_D -> {
-                if (event.isCtrlPressed) drw.drawerLayout.openDrawer(GravityCompat.START)
+                if (event.isCtrlPressed)
+                    drw.drawerLayout.openDrawer(GravityCompat.START)
                 true
             }
             KeyEvent.KEYCODE_F -> {
-                if (event.isCtrlPressed) toggleFavorite()
+                if (event.isCtrlPressed)
+                    toggleFavorite()
                 return true
             }
             KeyEvent.KEYCODE_P -> {
-                if (event.isCtrlPressed) audioPlayMenu(R.id.action_read_aloud, html, product, product + wfo)
+                if (event.isCtrlPressed)
+                    audioPlayMenu(R.id.action_read_aloud, html, product, product + wfo)
                 return true
             }
             KeyEvent.KEYCODE_S -> {
-                if (event.isCtrlPressed) audioPlayMenu(R.id.action_stop, html, product, product + wfo)
+                if (event.isCtrlPressed)
+                    audioPlayMenu(R.id.action_stop, html, product, product + wfo)
                 return true
             }
             KeyEvent.KEYCODE_L -> {
-                if (event.isCtrlPressed) imageMap.toggleMap()
+                if (event.isCtrlPressed)
+                    imageMap.toggleMap()
                 return true
             }
             KeyEvent.KEYCODE_SLASH -> {
-                if (event.isAltPressed) ObjectDialogue(this, Utility.showWfoTextShortCuts())
+                if (event.isAltPressed)
+                    ObjectDialogue(this, Utility.showWfoTextShortCuts())
                 return true
             }
             else -> super.onKeyUp(keyCode, event)

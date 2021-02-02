@@ -25,7 +25,6 @@ import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import java.util.Calendar
 import android.os.Bundle
-import android.view.View
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
@@ -52,8 +51,8 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_recyclerview_toolbar_with_twofab, null, false)
         toolbar.subtitle = modifyModeString
-        ObjectFab(this, this, R.id.fab1, R.drawable.ic_alarm_add_24dp, View.OnClickListener { pickTimeFAB() })
-        ObjectFab(this, this, R.id.fab2, MyApplication.ICON_DELETE, View.OnClickListener { deleteFAB() })
+        ObjectFab(this, this, R.id.fab1, R.drawable.ic_alarm_add_24dp) { pickTimeFAB() }
+        ObjectFab(this, this, R.id.fab2, MyApplication.ICON_DELETE) { deleteFAB() }
         ridFav = Utility.readPref(this, prefToken, "")
         val calendar = Calendar.getInstance()
         hour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -78,7 +77,7 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
         val mTimePicker: TimePickerDialog
         mTimePicker = TimePickerDialog(
                 this@SettingsPlaylistAutodownloadActivity,
-                TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
+                { _, selectedHour, selectedMinute ->
                     if (!ridFav.contains("$selectedHour:" + String.format("%2s", selectedMinute.toString()).replace(' ', '0'))
                     ) {
                         ridFav = ridFav + selectedHour.toString() + ":" +
@@ -115,7 +114,7 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
             val mTimePicker: TimePickerDialog
             mTimePicker = TimePickerDialog(
                     this@SettingsPlaylistAutodownloadActivity,
-                    TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
+                    { _, selectedHour, selectedMinute ->
                         if (!ridFav.contains(
                                         "$selectedHour:" + String.format(
                                                 "%2s",

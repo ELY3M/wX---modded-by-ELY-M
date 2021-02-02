@@ -26,7 +26,6 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.Extensions.safeGet
@@ -37,7 +36,6 @@ import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.radar.*
 import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.ui.*
-import kotlinx.android.synthetic.main.activity_linear_layout.*
 import kotlinx.coroutines.*
 import joshuatee.wx.R
 import joshuatee.wx.util.*
@@ -63,6 +61,7 @@ class SevereDashboardActivity : BaseActivity() {
     private val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout> ()
     private var imagesPerRow = 2
     private val listOfWfoForWarnings = mutableListOf<String>()
+    private lateinit var linearLayout: LinearLayout
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.severe_dashboard, menu)
@@ -73,7 +72,10 @@ class SevereDashboardActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
-        if (UtilityUI.isLandScape(this)) imagesPerRow = 3
+        linearLayout = findViewById(R.id.linearLayout)
+        if (UtilityUI.isLandScape(this)) {
+            imagesPerRow = 3
+        }
         getContent()
     }
 
@@ -128,9 +130,9 @@ class SevereDashboardActivity : BaseActivity() {
                 card = ObjectCardImage(this@SevereDashboardActivity, horizontalLinearLayouts.last().linearLayout, bitmaps[it], imagesPerRow)
             }
             if (it == 0) {
-                card.setOnClickListener(View.OnClickListener { ObjectIntent.showUsAlerts(this@SevereDashboardActivity) })
+                card.setOnClickListener { ObjectIntent.showUsAlerts(this@SevereDashboardActivity) }
             } else {
-                card.setOnClickListener(View.OnClickListener { ObjectIntent.showSpcStormReports(this@SevereDashboardActivity) })
+                card.setOnClickListener { ObjectIntent.showSpcStormReports(this@SevereDashboardActivity) }
             }
             numberOfImages += 1
         }
@@ -150,12 +152,12 @@ class SevereDashboardActivity : BaseActivity() {
                     val data = severeWarning.warnings[index]
                     if (!data.startsWith("O.EXP")) {
                         val objectCardDashAlertItem = ObjectCardDashAlertItem(this@SevereDashboardActivity, linearLayout, severeWarning, index)
-                        objectCardDashAlertItem.setListener(View.OnClickListener { showWarningDetails(severeWarning.idList[index]) })
+                        objectCardDashAlertItem.setListener { showWarningDetails(severeWarning.idList[index]) }
                         val id = numberOfWarnings
-                        objectCardDashAlertItem.radarButton.setOnClickListener(View.OnClickListener {
+                        objectCardDashAlertItem.radarButton.setOnClickListener {
                             ObjectIntent.showRadarBySite(this@SevereDashboardActivity, listOfWfoForWarnings.safeGet(id))
-                        })
-                        objectCardDashAlertItem.detailsButton.setOnClickListener(View.OnClickListener { showWarningDetails(severeWarning.idList[index]) })
+                        }
+                        objectCardDashAlertItem.detailsButton.setOnClickListener { showWarningDetails(severeWarning.idList[index]) }
                         listOfWfoForWarnings.add(severeWarning.listOfWfo[index])
                         objectCardDashAlertItem.setId(numberOfWarnings)
                         numberOfWarnings += 1
@@ -174,10 +176,18 @@ class SevereDashboardActivity : BaseActivity() {
 
     private fun getSubTitle(): String {
         var subTitle = ""
-        if (watchCount > 0) subTitle += "W($watchCount) "
-        if (mcdCount > 0) subTitle += "M($mcdCount) "
-        if (mpdCount > 0) subTitle += "P($mpdCount) "
-        if (torCount > 0 || tstCount > 0 || ffwCount > 0) subTitle += " ($tstCount,$torCount,$ffwCount)"
+        if (watchCount > 0) {
+            subTitle += "W($watchCount) "
+        }
+        if (mcdCount > 0) {
+            subTitle += "M($mcdCount) "
+        }
+        if (mpdCount > 0) {
+            subTitle += "P($mpdCount) "
+        }
+        if (torCount > 0 || tstCount > 0 || ffwCount > 0) {
+            subTitle += " ($tstCount,$torCount,$ffwCount)"
+        }
         return subTitle
     }
 
@@ -198,9 +208,9 @@ class SevereDashboardActivity : BaseActivity() {
                             )
                         }
                         val number = severeNotice.numbers[j]
-                        card.setOnClickListener(View.OnClickListener {
+                        card.setOnClickListener {
                             ObjectIntent.showMcd(this@SevereDashboardActivity, arrayOf(number, "", severeNotice.toString()))
-                        })
+                        }
                         numberOfImages += 1
                     }
                 }

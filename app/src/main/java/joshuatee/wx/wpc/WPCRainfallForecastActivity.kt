@@ -25,7 +25,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
-import android.view.View
 import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
 
@@ -40,8 +39,6 @@ import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
-
-import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -61,11 +58,13 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
     private lateinit var activityArguments: Array<String>
     private lateinit var objectCardImage: ObjectCardImage
     private lateinit var objectCardText: ObjectCardText
+    private lateinit var linearLayout: LinearLayout
     private var tabletInLandscape = false
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.spcmcdshowdetail)
+        linearLayout = findViewById(R.id.linearLayout)
         toolbarBottom.setOnMenuItemClickListener(this)
         tabletInLandscape = UtilityUI.isTablet() && UtilityUI.isLandScape(this)
         if (tabletInLandscape) {
@@ -87,9 +86,9 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
         bitmap = withContext(Dispatchers.IO) { imageUrl.getImage() }
         objectCardText.text = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@WpcRainfallForecastActivity, textProduct) }
         if (tabletInLandscape) objectCardImage.setImage(bitmap, 2) else objectCardImage.setImage(bitmap)
-        objectCardImage.setOnClickListener(View.OnClickListener {
+        objectCardImage.setOnClickListener {
             ObjectIntent.showImage(this@WpcRainfallForecastActivity, arrayOf(imageUrl, textProduct, "true"))
-        })
+        }
         UtilityTts.conditionalPlay(activityArguments, 1, applicationContext, objectCardText.text, textProduct)
     }
 

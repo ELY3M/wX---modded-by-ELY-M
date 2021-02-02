@@ -34,7 +34,7 @@ import joshuatee.wx.util.*
 internal object UtilityDownloadMcd {
 
     const val type = "MCD"
-    val typeEnum = PolygonType.MCD
+    // val typeEnum = PolygonType.MCD
     val timer = DownloadTimer(type)
 
     fun get(context: Context) { if (timer.isRefreshNeeded(context)) getMcd(context) }

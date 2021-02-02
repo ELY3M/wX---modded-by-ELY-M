@@ -135,6 +135,7 @@ internal object UtilityRadarUI {
     fun doLongPressAction(string: String, context: Context, activity: Activity, wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender,
             uiDispatcher: CoroutineDispatcher, function: (strName: String) -> Unit) {
         when {
+            string.contains("miles from") -> {}
             string.contains("Show Warning text") -> showNearestWarning(context, wxglSurfaceView)
             string.contains("Show Watch text") -> showNearestProduct(context, PolygonType.WATCH, wxglSurfaceView, uiDispatcher)
             string.contains("Show MCD text") -> showNearestProduct(context, PolygonType.MCD, wxglSurfaceView, uiDispatcher)

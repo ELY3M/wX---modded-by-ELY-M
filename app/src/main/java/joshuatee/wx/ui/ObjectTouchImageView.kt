@@ -46,15 +46,15 @@ class ObjectTouchImageView {
     }
 
     constructor(activity: Activity, context: Context, toolbar: Toolbar, resourceId: Int) : this(activity, context, resourceId) {
-        setOnClickListener(View.OnClickListener {
+        setOnClickListener {
             UtilityToolbar.showHide(toolbar)
-        })
+        }
     }
 
     constructor(activity: Activity, context: Context, toolbar: Toolbar, toolbarBottom: Toolbar, resourceId: Int) : this(activity, context, resourceId) {
-        setOnClickListener(View.OnClickListener {
+        setOnClickListener {
             UtilityToolbar.showHide(toolbar, toolbarBottom)
-        })
+        }
     }
 
     constructor(activity: Activity, context: Context, resourceId: Int, drw: ObjectNavDrawer, prefTokenIdx: String) {
@@ -66,12 +66,12 @@ class ObjectTouchImageView {
 
     constructor(activity: Activity, context: Context, toolbar: Toolbar, toolbarBottom: Toolbar, resourceId: Int, drw: ObjectNavDrawer, prefTokenIdx: String
     ) : this(activity, context, resourceId, drw, prefTokenIdx) {
-        setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) })
+        setOnClickListener { UtilityToolbar.showHide(toolbar, toolbarBottom) }
     }
 
     constructor(activity: Activity, context: Context, toolbar: Toolbar, resourceId: Int, drw: ObjectNavDrawer, prefTokenIdx: String
     ) : this(activity, context, resourceId, drw, prefTokenIdx) {
-        setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar) })
+        setOnClickListener { UtilityToolbar.showHide(toolbar) }
     }
 
     fun setBitmap(bitmap: Bitmap) {

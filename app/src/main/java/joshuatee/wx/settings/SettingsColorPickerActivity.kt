@@ -30,10 +30,12 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import android.graphics.Color
+import android.widget.Button
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.ui.ColorPicker
+import joshuatee.wx.ui.SaturationBar
+import joshuatee.wx.ui.ValueBar
 import joshuatee.wx.util.Utility
-
-import kotlinx.android.synthetic.main.activity_settings_color_picker.*
 
 class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener {
 
@@ -50,11 +52,19 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
     private var color = 0
     private var prefVal = ""
     private lateinit var toolbar: Toolbar
+    private lateinit var colorPicker: ColorPicker
+    private lateinit var buttonDefault: Button
+    private lateinit var vBar: ValueBar
+    private lateinit var sBar: SaturationBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) setTheme(R.style.MyCustomTheme_NOAB) else setTheme(UIPreferences.themeInt)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings_color_picker)
+        colorPicker = findViewById(R.id.colorPicker)
+        vBar = findViewById(R.id.vBar)
+        sBar = findViewById(R.id.sBar)
+        buttonDefault = findViewById(R.id.buttonDefault)
         toolbar = findViewById(R.id.toolbar_top)
         setSupportActionBar(toolbar)
         assert(supportActionBar != null)
@@ -66,13 +76,13 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
         color = UtilityColor.setColor(prefVal)
         val currentColor = Utility.readPref(this, prefVal, color)
         buttonDefault.setTextColor(color)
-        picker.oldCenterColor = currentColor
-        picker.color = currentColor
-        picker.addValueBar(vBar)
-        picker.addSaturationBar(sBar)
-        picker.setOnColorChangedListener(this)
+        colorPicker.oldCenterColor = currentColor
+        colorPicker.color = currentColor
+        colorPicker.addValueBar(vBar)
+        colorPicker.addSaturationBar(sBar)
+        colorPicker.setOnColorChangedListener(this)
         buttonDefault.setOnClickListener {
-            picker.oldCenterColor = color
+            colorPicker.oldCenterColor = color
             Utility.writePref(this, prefVal, color)
             toolbar.subtitle = "(" + Color.red(color) + "," + Color.green(color) + "," + Color.blue(color) + ")"
         }
@@ -82,8 +92,8 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
 
     override fun onColorChanged(color: Int) {
         toolbar.subtitle = "(" + Color.red(color) + "," + Color.green(color) + "," + Color.blue(color) + ")"
-        picker.oldCenterColor = picker.color
-        Utility.writePref(this, prefVal, picker.color)
+        colorPicker.oldCenterColor = colorPicker.color
+        Utility.writePref(this, prefVal, colorPicker.color)
     }
 
     override fun onStop() {

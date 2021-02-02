@@ -24,6 +24,8 @@ package joshuatee.wx.canada
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.MyApplication
@@ -39,18 +41,20 @@ import joshuatee.wx.util.UtilityString
 import joshuatee.wx.wpc.UtilityWpcText
 import kotlinx.coroutines.*
 
-import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
-
 class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private val uiDispatcher = Dispatchers.Main
     private var product = "focn45"
     private var html = ""
     private lateinit var objectCardText: ObjectCardText
+    private lateinit var scrollView: ScrollView
+    private lateinit var linearLayout: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_bottom_toolbar, R.menu.canada_text)
+        scrollView = findViewById(R.id.scrollView)
+        linearLayout = findViewById(R.id.linearLayout)
         toolbarBottom.setOnMenuItemClickListener(this)
         objectCardText = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         ObjectCALegal(this, linearLayout, MyApplication.canadaEcSitePrefix)
@@ -79,7 +83,9 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, html, product, product)) return true
+        if (audioPlayMenu(item.itemId, html, product, product)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_share -> {
                 UtilityShare.text(this, getDescription(), Utility.fromHtml(html))

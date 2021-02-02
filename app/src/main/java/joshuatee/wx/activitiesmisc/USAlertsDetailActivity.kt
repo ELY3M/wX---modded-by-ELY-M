@@ -24,6 +24,7 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.safeGet
 
@@ -37,8 +38,6 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
 
-import kotlinx.android.synthetic.main.activity_usalertsdetail.*
-
 class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object { const val URL = "" }
@@ -47,12 +46,14 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var activityArguments: Array<String>
     private var capAlert = CapAlert()
     private lateinit var objectAlertDetail: ObjectAlertDetail
+    private lateinit var linearLayout: LinearLayout
     private lateinit var radarIcon: MenuItem
     private var radarSite = ""
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_usalertsdetail, R.menu.usalerts_detail)
+        linearLayout = findViewById(R.id.linearLayout)
         ObjectCard(this, R.id.cardView)
         toolbarBottom.menu.findItem(R.id.action_playlist).isVisible = false
         radarIcon = toolbarBottom.menu.findItem(R.id.action_radar)
@@ -68,7 +69,9 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        capAlert = withContext(Dispatchers.IO) { CapAlert.createFromUrl(activityArguments[0]) }
+        capAlert = withContext(Dispatchers.IO) {
+            CapAlert.createFromUrl(activityArguments[0])
+        }
         radarSite = capAlert.getClosestRadar()
         if (radarSite == "") {
             radarIcon.isVisible = false
@@ -80,7 +83,9 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, capAlert.text, "alert", "alert")) return true
+        if (audioPlayMenu(item.itemId, capAlert.text, "alert", "alert")) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_share -> UtilityShare.text(this, capAlert.title + " " + capAlert.area, capAlert.text)
             R.id.action_radar -> radarInterface()

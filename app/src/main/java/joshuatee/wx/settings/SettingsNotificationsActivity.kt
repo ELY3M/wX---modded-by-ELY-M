@@ -34,7 +34,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.appcompat.app.AlertDialog
 import android.content.Intent
-import android.view.View
+import android.widget.LinearLayout
 
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
@@ -44,13 +44,14 @@ import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
 
-import kotlinx.android.synthetic.main.activity_linear_layout.*
-
 class SettingsNotificationsActivity : BaseActivity() {
+
+    private lateinit var linearLayout: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
+        linearLayout = findViewById(R.id.linearLayout)
         toolbar.subtitle = "Please tap on text for additional help."
         val cardSound = ObjectCardText(this, linearLayout, "Notification sound chooser", MyApplication.textSizeNormal, MyApplication.paddingSettings)
         val cardWFOFilter = ObjectCardText(this, linearLayout, "WFO notification filter", MyApplication.textSizeNormal, MyApplication.paddingSettings)
@@ -61,8 +62,8 @@ class SettingsNotificationsActivity : BaseActivity() {
                 MyApplication.textSizeNormal,
                 MyApplication.paddingSettings
         )
-        cardSound.setOnClickListener(View.OnClickListener { notifSoundPicker() })
-        cardWFOFilter.setOnClickListener(View.OnClickListener { showWFONotificationFilterDialogue() })
+        cardSound.setOnClickListener { notifSoundPicker() }
+        cardWFOFilter.setOnClickListener { showWFONotificationFilterDialogue() }
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,

@@ -331,8 +331,10 @@ internal object UtilityWpcImages {
             "${MyApplication.nwsAWCwebsitePrefix}/data/products/progs/F144_wpc_prog.gif",
             "${MyApplication.nwsAWCwebsitePrefix}/data/products/progs/F168_wpc_prog.gif",
 
-            "https://services.swpc.noaa.gov/images/animations/ovation-north/latest.jpg",
-            "https://services.swpc.noaa.gov/images/animations/ovation-south/latest.jpg",
+            // "https://services.swpc.noaa.gov/images/animations/ovation-north/latest.jpg",
+            // "https://services.swpc.noaa.gov/images/animations/ovation-south/latest.jpg",
+            "https://services.swpc.noaa.gov/images/animations/ovation/north/latest.jpg",
+            "https://services.swpc.noaa.gov/images/animations/ovation/south/latest.jpg",
             "https://services.swpc.noaa.gov/images/planetary-k-index.gif"
     )
 

@@ -31,7 +31,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.MenuItem
-import android.view.View
+import android.widget.EditText
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 
 import joshuatee.wx.MyApplication
@@ -46,7 +46,6 @@ import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.util.*
 import java.io.File
-import kotlinx.android.synthetic.main.activity_settings_color_palette_editor.*
 
 class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
 
@@ -60,12 +59,16 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
     private var name = ""
     private var type = ""
     private var typeAsInt = 0
+    private lateinit var palTitle: EditText
+    private lateinit var palContent: EditText
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_color_palette_editor, R.menu.settings_color_palette_editor, true)
+        palTitle = findViewById(R.id.palTitle)
+        palContent = findViewById(R.id.palContent)
         toolbarBottom.setOnMenuItemClickListener(this)
-        ObjectFab(this, this, R.id.fab, View.OnClickListener { fabSavePalette(this) })
+        ObjectFab(this, this, R.id.fab) { fabSavePalette(this) }
         ObjectCard(this, R.id.cv1)
         if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
             listOf(palTitle, palContent).forEach {

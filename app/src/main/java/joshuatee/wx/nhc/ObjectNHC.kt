@@ -96,7 +96,7 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
         val muteStr = Utility.readPref(context, "NOTIF_NHC_MUTE", "")
         notificationCard = ObjectCardText(context, cardNotificationHeaderText + muteStr)
         linearLayout.addView(notificationCard?.card)
-        notificationCard?.setOnClickListener(View.OnClickListener { clearNhcNotificationBlock() })
+        notificationCard?.setOnClickListener { clearNhcNotificationBlock() }
         if (muteStr != "") {
             notificationCard?.visibility = View.VISIBLE
         } else {
@@ -121,7 +121,7 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
                 )
                 stormDataList.add(objectNhcStormDetails)
                 val card = ObjectCardNhcStormReportItem(context, linearLayout, objectNhcStormDetails)
-                card.setListener(View.OnClickListener { ObjectIntent.showNhcStorm(context, objectNhcStormDetails) })
+                card.setListener { ObjectIntent.showNhcStorm(context, objectNhcStormDetails) }
             }
         }
     }
@@ -139,7 +139,7 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
                 objectCardImage = ObjectCardImage(context, horizontalLinearLayouts.last().linearLayout, bitmap, imagesPerRow)
             }
             numberOfImages += 1
-            objectCardImage.setOnClickListener(View.OnClickListener { ObjectIntent.showImage(context, regionMap[region]!!.getTitle(index)) })
+            objectCardImage.setOnClickListener { ObjectIntent.showImage(context, regionMap[region]!!.getTitle(index)) }
             bitmaps.add(bitmap)
         }
     }

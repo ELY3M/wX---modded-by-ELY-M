@@ -32,8 +32,8 @@
         android:id="@+id/action_warnmapHI"
         android:title="HI warning map"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/action_impact_graphics"
-        android:title="Impact Graphics"
-        app:showAsAction="never" />
+<!--    <item-->
+<!--        android:id="@+id/action_impact_graphics"-->
+<!--        android:title="Impact Graphics"-->
+<!--        app:showAsAction="never" />-->
 </menu>

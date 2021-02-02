@@ -22,11 +22,9 @@
 package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
-
 import android.os.Bundle
-import android.view.View
-import joshuatee.wx.MyApplication
 
+import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.ObjectIntent
@@ -52,7 +50,7 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_location_recyclerview, null, false)
-        ObjectFab(this, this, R.id.fab_add, View.OnClickListener { addLocation() })
+        ObjectFab(this, this, R.id.fab_add) { addLocation() }
         toolbar.subtitle = "Tap location to edit, delete, or move."
         updateList()
         recyclerView = ObjectRecyclerViewGeneric(this, this, R.id.card_list)

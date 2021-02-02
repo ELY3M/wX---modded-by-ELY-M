@@ -24,7 +24,6 @@ package joshuatee.wx.ui
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.view.View
 import android.widget.LinearLayout
 
 import joshuatee.wx.R
@@ -38,7 +37,7 @@ class ObjectCALegal(context: Context, linearLayout: LinearLayout, url: String) {
     init {
         objectCardText.refreshTextSize(TextSize.SMALL)
         objectCardText.center()
-        objectCardText.setOnClickListener(View.OnClickListener { ObjectIntent(context, Intent.ACTION_VIEW, Uri.parse(url)) })
+        objectCardText.setOnClickListener { ObjectIntent(context, Intent.ACTION_VIEW, Uri.parse(url)) }
         objectCardText.text = context.resources.getText(R.string.main_screen_ca_disclaimor).toString()
         linearLayout.addView(objectCardText.card)
     }

@@ -8,14 +8,29 @@
 // TODO [ADD] for alert closest radar use polygon center like mcd
 // TODO [ADD] certain GOES regions like CONUS have additional products (GLM, DMW)
 // TODO [FIX] NSSL WRF needs better runtime detection (reference C++ code)
-// TODO [FIX] in nexrad, long press and select top entry - should not do anything
-// TODO [FIX] remove NWS Obs site KEKM since it goes offline from 9pm-6am every day (reported by user)
-// TODO [FIX] look into nexrad pan scaled to zoom (user request)
-// TODO [FIX] look into removing state in city textual label in nexrad (user request)
-// TODO [FIX] remove text products from Canada that are not working
-// TODO [FIX] in location - edit, help text for notifications has spelling
-mistake for notifications
+// TODO [ADD] update copyright 2021
+// TODO [ADD] check for new SPC Meso parms
+// TODO [ADD] 'IntentService' is deprecated. Deprecated in Jav
+    https://stackoverflow.com/questions/62138507/intentservice-is-deprecated-how-do-i-replace-it-with-jobintentservice
+// TODO [ADD] 'constructor Handler()' is deprecated. Deprecated in Java
+// TODO [ADD] 'getter for defaultDisplay: Display!' is deprecated. Deprecated in Java
+// TODO [ADD] 'getMetrics(DisplayMetrics!): Unit' is deprecated. Deprecated in Java
 
+55510 2021_01_31
+55509 2021_01_31    [ADD] start removing import kotlinx.android.synthetic.main.activity_hourly.*, switch to findViewById (not interested in View Binding at this time)
+55508 2021_01_30    [FIX] misc lint (redundant SAM constructor)
+                    [ADD] update "com.squareup.okhttp3:okhttp:4.6.0" to "com.squareup.okhttp3:okhttp:4.9.0"
+55507 2021_01_23    [ADD] upgrade ndk from r21c to r21d
+                    [FIX] in location - edit, help text for notifications has spelling mistake for notifications
+                    [FIX] remove "pmdhmd: Model Diagnostics Discussion" from National Text Products as the NWS no longer provides this product
+                    [FIX] corrected URLs for 2 Space Weather images in National Images
+                    [FIX] in nexrad, long press and select top two entries "miles from location", etc - should not do anything (user reported bug)
+                    [ADD] change compileSdkVersion from 29 to 30
+                    [ADD] change buildToolsVersion from 29.0.3 to 30.0.3
+                    [ADD] change targetSdkVersion from 29 to 30
+                    [ADD] update androidx.media:media:1.2.0 to androidx.media:media:1.2.1
+                    [FIX] misc lint (redundant SAM constructor)
+                    [FIX] USAlerts - remove warning impact graphics as NWS no longer has a public interface to this data (that I could find)
 55506 2020_08_24    [REF] com.google.android.material:material:1.2.0 (from 1.1.0) org.jetbrains.kotlin:kotlin-gradle-plugin:1.4.0 (from 1.3.72), and others
                     [FIX] give build process more memory
 55505 2020_07_10    [FIX] NHC storm graphics not working for storms IDs over 5

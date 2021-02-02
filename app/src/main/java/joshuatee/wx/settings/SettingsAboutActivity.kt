@@ -29,7 +29,7 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import android.widget.LinearLayout
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
@@ -40,7 +40,6 @@ import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityFileManagement
 import joshuatee.wx.util.UtilityShare
-import kotlinx.android.synthetic.main.activity_linear_layout.linearLayout
 
 class SettingsAboutActivity : BaseActivity() {
 
@@ -50,6 +49,7 @@ class SettingsAboutActivity : BaseActivity() {
     private val iOSUrl = "https://apps.apple.com/us/app/wxl23/id1171250052"
     //private val releaseNotesUrl = "https://docs.google.com/document/u/1/d/e/2PACX-1vT-YfH9yH_qmxLHe25UGlJvHHj_25qmTHJoeWPBbNWlvS4nm0YBmFeAnEpeel3GTL3OYKnvXkMNbnOX/pub"
     private val releaseNotesUrl = "https://github.com/ELY3M/wX---modded-by-ELY-M/blob/master/README.md"
+    private lateinit var linearLayout: LinearLayout
     
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.generic_about, menu)
@@ -59,35 +59,36 @@ class SettingsAboutActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.generic_about, false)
+        linearLayout = findViewById(R.id.linearLayout)
         val version = Utility.getVersion(this)
         toolbar.subtitle = "version: $version"
         val faqButton = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         faqButton.setTextColor(UIPreferences.textHighlightColor)
         faqButton.text = "View FAQ (Outage notifications listed at top if any current)"
-        faqButton.setOnClickListener(View.OnClickListener { ObjectIntent.showWebView(this, arrayOf(faqUrl, "Frequently Asked Questions")) })
+        faqButton.setOnClickListener { ObjectIntent.showWebView(this, arrayOf(faqUrl, "Frequently Asked Questions")) }
         val releaseNotesButton = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         releaseNotesButton.setTextColor(UIPreferences.textHighlightColor)
         releaseNotesButton.text = "View release notes"
-        releaseNotesButton.setOnClickListener(View.OnClickListener { ObjectIntent.showWebView(this, arrayOf(releaseNotesUrl, "Release Notes")) })
+        releaseNotesButton.setOnClickListener { ObjectIntent.showWebView(this, arrayOf(releaseNotesUrl, "Release Notes")) }
         val emailButton = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         emailButton.setTextColor(UIPreferences.textHighlightColor)
         emailButton.text = "Email developer"
-        emailButton.setOnClickListener(View.OnClickListener {
+        emailButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:")
             intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(MyApplication.emailAsString))
             intent.putExtra(Intent.EXTRA_SUBJECT, "wX version $version")
             startActivity(Intent.createChooser(intent, "Send Email"))
-        })
+        }
         val iOSVersion = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         iOSVersion.setTextColor(UIPreferences.textHighlightColor)
         iOSVersion.text = "iOS port of wX is called wXL23"
-        iOSVersion.setOnClickListener(View.OnClickListener { ObjectIntent.showWebView(this, arrayOf(iOSUrl, "wXL23 for iOS")) })
+        iOSVersion.setOnClickListener { ObjectIntent.showWebView(this, arrayOf(iOSUrl, "wXL23 for iOS")) }
         textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         val cardDeleteFiles = ObjectCardText(this, "Delete old radar files", MyApplication.textSizeNormal, MyApplication.paddingSettings)
-        cardDeleteFiles.setOnClickListener(View.OnClickListener {
+        cardDeleteFiles.setOnClickListener {
             UtilityUI.makeSnackBar(linearLayout, "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
-        })
+        }
         linearLayout.addView(cardDeleteFiles.card)
         displayContent()
     }

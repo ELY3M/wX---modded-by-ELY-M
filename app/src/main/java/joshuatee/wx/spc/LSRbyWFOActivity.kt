@@ -22,13 +22,14 @@
 package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import java.util.Locale
 
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.safeGet
 
@@ -39,8 +40,6 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
-
-import kotlinx.android.synthetic.main.activity_afd.*
 
 class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -60,6 +59,8 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var imageMap: ObjectImageMap
     private var mapShown = false
     private lateinit var star: MenuItem
+    private lateinit var scrollView: ScrollView
+    private lateinit var linearLayout: LinearLayout
     private var locations = listOf<String>()
     private val prefToken = "WFO_FAV"
     private var ridFavOld = ""
@@ -78,12 +79,20 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_afd, R.menu.lsrbywfo)
+        scrollView = findViewById(R.id.scrollView)
+        linearLayout = findViewById(R.id.linearLayout)
         toolbarBottom.setOnMenuItemClickListener(this)
         star = toolbarBottom.menu.findItem(R.id.action_fav)
         val activityArguments = intent.getStringArrayExtra(URL)
         wfo = activityArguments!![0]
-        if (wfo == "") wfo = "OUN"
-        prod = if (activityArguments[1] == "") MyApplication.wfoTextFav else activityArguments[1]
+        if (wfo == "") {
+            wfo = "OUN"
+        }
+        prod = if (activityArguments[1] == "") {
+            MyApplication.wfoTextFav
+        } else {
+            activityArguments[1]
+        }
         toolbar.title = prod
         locations = UtilityFavorites.setupMenu(this, MyApplication.wfoFav, wfo, prefToken)
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(scrollView))
@@ -99,7 +108,9 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, wfoProd.toString(), prod, prod + wfo)) return true
+        if (audioPlayMenu(item.itemId, wfoProd.toString(), prod, prod + wfo)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_fav -> toggleFavorite()
             R.id.action_map -> imageMap.toggleMap()
@@ -147,15 +158,15 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
         val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
+        objectDialogue.setNegativeButton { dialog, _ ->
             dialog.dismiss()
             UtilityUI.immersiveMode(this)
-        })
-        objectDialogue.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        }
+        objectDialogue.setSingleChoiceItems { dialog, which ->
             fn(which)
             getContent()
             dialog.dismiss()
-        })
+        }
         objectDialogue.show()
     }
 
@@ -170,7 +181,9 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         scrollView.smoothScrollTo(0, 0)
         ridFavOld = MyApplication.wfoFav
         linearLayout.removeAllViewsInLayout()
-        wfoProd = withContext(Dispatchers.IO) { lsrFromWfo }
+        wfoProd = withContext(Dispatchers.IO) {
+            lsrFromWfo
+        }
         wfoProd.forEach {
             val objectCardText = ObjectCardText(this@LsrByWfoActivity, linearLayout, Utility.fromHtml(it))
             objectCardText.typefaceMono()
@@ -188,7 +201,9 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
                 localStormReports = listOf("None issued by this office recently.")
             } else {
                 var maxVersions = numberLSR.toIntOrNull() ?: 0
-                if (maxVersions > 30) maxVersions = 30
+                if (maxVersions > 30) {
+                    maxVersions = 30
+                }
                 localStormReports = (1..maxVersions + 1 step 2).map { UtilityDownload.getTextProduct("LSR$wfo", it) }
             }
             return localStormReports

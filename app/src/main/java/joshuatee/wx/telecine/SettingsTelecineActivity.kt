@@ -10,19 +10,19 @@ package joshuatee.wx.telecine
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.LinearLayout
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.settings.ObjectSettingsCheckBox
 import joshuatee.wx.settings.ObjectSettingsSpinner
 import joshuatee.wx.ui.BaseActivity
 
-import kotlinx.android.synthetic.main.activity_linear_layout.*
-
 class SettingsTelecineActivity : BaseActivity() {
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
+        val linearLayout: LinearLayout = findViewById(R.id.linearLayout)
         val vidSize = listOf("100", "75", "50")
         val vidSpinner = ObjectSettingsSpinner(
             this,

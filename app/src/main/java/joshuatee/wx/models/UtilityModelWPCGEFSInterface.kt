@@ -22,12 +22,11 @@
 package joshuatee.wx.models
 
 import android.util.SparseArray
-import joshuatee.wx.ui.ObjectMenuTitle
 import joshuatee.wx.util.Group
 
 internal object UtilityModelWpcGefsInterface {
 
-    private val titles = listOf(
+/*    private val titles = listOf(
             ObjectMenuTitle("Precip", 37),
             ObjectMenuTitle("QPF > Annual Chance (CONUS only)", 8),
             ObjectMenuTitle("Precip Type", 4),
@@ -37,13 +36,13 @@ internal object UtilityModelWpcGefsInterface {
             ObjectMenuTitle("Upper Level Temps", 10),
             ObjectMenuTitle("Stnd Anom Temp", 18),
             ObjectMenuTitle("Other", 46)
-    )
+    )*/
 
     var shortCodes = Array(13) { Array(50) { "" } }
     var longCodes = Array(13) { Array(50) { "" } }
     val groups = SparseArray<Group>()
 
-    internal fun createData() {
+/*    internal fun createData() {
         var k = 0
         titles.indices.forEach { index ->
             val group = Group(titles[index].title)
@@ -60,7 +59,7 @@ internal object UtilityModelWpcGefsInterface {
             }
             groups.append(index, group)
         }
-    }
+    }*/
 
     val sectors = listOf(
         "US",

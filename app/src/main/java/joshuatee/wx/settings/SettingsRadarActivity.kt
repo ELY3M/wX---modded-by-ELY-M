@@ -27,9 +27,9 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.widget.LinearLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import android.widget.CompoundButton
 
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
@@ -41,13 +41,14 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.telecine.SettingsTelecineActivity
 import joshuatee.wx.util.Utility
 
-import kotlinx.android.synthetic.main.activity_linear_layout.*
-
 class SettingsRadarActivity : BaseActivity() {
+
+    private lateinit var linearLayout: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
+        linearLayout = findViewById(R.id.linearLayout)
         toolbar.subtitle = "Please tap on text for additional help."
         val textSize = MyApplication.textSizeLarge
         val padding = MyApplication.paddingSettings
@@ -175,7 +176,7 @@ class SettingsRadarActivity : BaseActivity() {
                 R.string.locdot_follows_gps_label
         )
         linearLayout.addView(gpsSw.card)
-        gpsSw.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, _ ->
+        gpsSw.setOnCheckedChangeListener { compoundButton, _ ->
             MyApplication.locationDotFollowsGps = compoundButton.isChecked
             if (MyApplication.locationDotFollowsGps != Utility.readPref(
                             this,
@@ -190,7 +191,7 @@ class SettingsRadarActivity : BaseActivity() {
             } else {
                 Utility.writePref(this, "LOCDOT_FOLLOWS_GPS", "false")
             }
-        })
+        }
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
@@ -265,7 +266,7 @@ class SettingsRadarActivity : BaseActivity() {
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        "Show Hail index",
+                        "Hail index",
                         "RADAR_SHOW_HI",
                         R.string.show_hi_label
                 ).card

@@ -48,7 +48,7 @@ internal object UtilityWpcText {
     }
 
     private val titles = listOf(
-            ObjectMenuTitle("General Forecast Discussions", 11),
+            ObjectMenuTitle("General Forecast Discussions", 10),
             ObjectMenuTitle("Precipitation Discussions", 2),
             ObjectMenuTitle("Hazards", 7),
             ObjectMenuTitle("Ocean Weather", 38),
@@ -64,7 +64,7 @@ internal object UtilityWpcText {
     val labels = listOf(
             "pmdspd: Short Range Forecast Discussion",
             "pmdepd: Extended Forecast Discussion",
-            "pmdhmd: Model Diagnostics Discussion",
+            // "pmdhmd: Model Diagnostics Discussion",
 
             "pmdhi: Hawaii Extended Forecast Discussion",
             "pmdak: Alaska Extended Forecast Discussion",

@@ -54,7 +54,7 @@ class ObjectCardVerticalText(context: Context, numberOfColumns: Int) {
 
     constructor(context: Context, numberOfColumns: Int, linearLayout: LinearLayout, toolbar: Toolbar) : this(context, numberOfColumns) {
         linearLayout.addView(card)
-        setOnClickListener(View.OnClickListener { UtilityToolbar.showHide(toolbar) })
+        setOnClickListener { UtilityToolbar.showHide(toolbar) }
     }
 
     fun setText(list: List<String>) {

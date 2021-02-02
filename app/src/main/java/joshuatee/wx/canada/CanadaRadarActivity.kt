@@ -22,7 +22,6 @@
 package joshuatee.wx.canada
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.Menu
@@ -234,15 +233,15 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCl
 
     private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
         val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
+        objectDialogue.setNegativeButton { dialog, _ ->
             dialog.dismiss()
             UtilityUI.immersiveMode(this)
-        })
-        objectDialogue.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        }
+        objectDialogue.setSingleChoiceItems { dialog, which ->
             fn(which)
             getContent()
             dialog.dismiss()
-        })
+        }
         objectDialogue.show()
     }
 

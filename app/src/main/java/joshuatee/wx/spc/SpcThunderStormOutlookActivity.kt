@@ -27,7 +27,7 @@ import android.os.Bundle
 import android.graphics.Bitmap
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
@@ -35,8 +35,6 @@ import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.UtilityShare
 import kotlinx.coroutines.*
-
-import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
 
 class SpcThunderStormOutlookActivity : BaseActivity() {
 
@@ -48,6 +46,7 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
     private var bitmaps = listOf<Bitmap>()
     private var urls = listOf<String>()
     private var imagesPerRow = 2
+    private lateinit var linearLayout: LinearLayout
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.shared_multigraphics, menu)
@@ -57,7 +56,10 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.shared_multigraphics, false)
-        if (UtilityUI.isLandScape(this)) imagesPerRow = 3
+        linearLayout = findViewById(R.id.linearLayout)
+        if (UtilityUI.isLandScape(this)) {
+            imagesPerRow = 3
+        }
         toolbar.subtitle = "SPC"
         title = "Thunderstorm Outlooks"
         getContent()
@@ -69,14 +71,18 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        urls = withContext(Dispatchers.IO) { UtilitySpc.thunderStormOutlookUrls }
-        bitmaps = withContext(Dispatchers.IO) { urls.map { it.getImage() } }
+        urls = withContext(Dispatchers.IO) {
+            UtilitySpc.thunderStormOutlookUrls
+        }
+        bitmaps = withContext(Dispatchers.IO) {
+            urls.map { it.getImage() }
+        }
         linearLayout.removeAllViews()
         val objectImageSummary = ObjectImageSummary(this@SpcThunderStormOutlookActivity, linearLayout, bitmaps)
         objectImageSummary.objectCardImages.forEachIndexed { index, objectCardImage ->
-            objectCardImage.setOnClickListener(View.OnClickListener {
+            objectCardImage.setOnClickListener {
                 ObjectIntent.showImage(this@SpcThunderStormOutlookActivity, arrayOf(urls[index], ""))
-            })
+            }
         }
     }
 

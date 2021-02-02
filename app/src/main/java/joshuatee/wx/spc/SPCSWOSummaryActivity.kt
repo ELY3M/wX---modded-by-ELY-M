@@ -26,7 +26,7 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import android.widget.LinearLayout
 
 import joshuatee.wx.R
 import joshuatee.wx.objects.ObjectIntent
@@ -36,13 +36,12 @@ import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityShortcut
 import kotlinx.coroutines.*
 
-import kotlinx.android.synthetic.main.activity_linear_layout_bottom_toolbar.*
-
 class SpcSwoSummaryActivity : BaseActivity() {
 
     private val uiDispatcher = Dispatchers.Main
     private var bitmaps = mutableListOf<Bitmap>()
     private var imagesPerRow = 2
+    private lateinit var linearLayout: LinearLayout
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.spc_swo_summary, menu)
@@ -53,7 +52,10 @@ class SpcSwoSummaryActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.spc_swo_summary, false)
-        if (UtilityUI.isLandScape(this)) imagesPerRow = 3
+        linearLayout = findViewById(R.id.linearLayout)
+        if (UtilityUI.isLandScape(this)) {
+            imagesPerRow = 3
+        }
         toolbar.subtitle = "SPC"
         title = "Convective Outlooks"
         getContent()
@@ -66,12 +68,18 @@ class SpcSwoSummaryActivity : BaseActivity() {
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         bitmaps = mutableListOf()
-        withContext(Dispatchers.IO) { listOf("1", "2", "3", "4-8").forEach { bitmaps.addAll(UtilitySpcSwo.getImages(it, false)) } }
+        withContext(Dispatchers.IO) {
+            listOf("1", "2", "3", "4-8").forEach { bitmaps.addAll(UtilitySpcSwo.getImages(it, false)) }
+        }
         linearLayout.removeAllViews()
         val objectImageSummary = ObjectImageSummary(this@SpcSwoSummaryActivity, linearLayout, bitmaps)
         objectImageSummary.objectCardImages.forEachIndexed { index, objectCardImage ->
-            val day = if (index < 3) (index + 1).toString() else "4-8"
-            objectCardImage.setOnClickListener(View.OnClickListener { ObjectIntent.showSpcSwo(this@SpcSwoSummaryActivity, arrayOf(day, "")) })
+            val day = if (index < 3) {
+                    (index + 1).toString()
+            } else {
+                "4-8"
+            }
+            objectCardImage.setOnClickListener { ObjectIntent.showSpcSwo(this@SpcSwoSummaryActivity, arrayOf(day, "")) }
         }
     }
 

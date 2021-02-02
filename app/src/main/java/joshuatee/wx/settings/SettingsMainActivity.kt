@@ -24,27 +24,29 @@ package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.view.View
+import android.widget.LinearLayout
 
 import joshuatee.wx.R
 import joshuatee.wx.audio.SettingsPlaylistActivity
 import joshuatee.wx.MyApplication
-import joshuatee.wx.activitiesmisc.TextScreenActivity
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.ui.UtilityTheme
-import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.*
 
-import kotlinx.android.synthetic.main.activity_linear_layout.*
+//elys mod - deletefiles keep in   
+import joshuatee.wx.ui.UtilityUI
 
 class SettingsMainActivity : BaseActivity() {
+
+    private lateinit var linearLayout: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
+        linearLayout = findViewById(R.id.linearLayout)
         UtilityTheme.setPrimaryColor(this)
         val backuprestore = UtilityBackupRestore()
         val version = Utility.getVersion(this)
@@ -65,15 +67,15 @@ class SettingsMainActivity : BaseActivity() {
         val cardDeleteFiles = ObjectCardText(this, "Delete old radar files", MyApplication.textSizeNormal, MyApplication.paddingSettings)
         val cardbackuppref = ObjectCardText(this, "Backup Settings", MyApplication.textSizeNormal, MyApplication.paddingSettings)
         val cardrestorepref = ObjectCardText(this, "Restore Settings", MyApplication.textSizeNormal, MyApplication.paddingSettings)
-        cardCtoF.setOnClickListener(View.OnClickListener {
+        cardCtoF.setOnClickListener {
             ObjectIntent.showText(this, arrayOf(UtilityMath.celsiusToFahrenheitTable(), "Celsius to Fahrenheit table"))
-        })
-        cardbackuppref.setOnClickListener(View.OnClickListener { backuprestore.backupPrefs(this) })
-        cardrestorepref.setOnClickListener(View.OnClickListener { backuprestore.restorePrefs(this) })
-        cardDeleteFiles.setOnClickListener(View.OnClickListener {
+        }
+        cardbackuppref.setOnClickListener { backuprestore.backupPrefs(this) }
+        cardrestorepref.setOnClickListener { backuprestore.restorePrefs(this) }
+        cardDeleteFiles.setOnClickListener {
             UtilityUI.makeSnackBar(linearLayout, "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
-        })
-        cardAbout.setOnClickListener(View.OnClickListener { ObjectIntent(this, SettingsAboutActivity::class.java) })
+        }
+        cardAbout.setOnClickListener { ObjectIntent(this, SettingsAboutActivity::class.java) }
         listOf(
                 cardAbout.card,
                 cardLocations.card,

@@ -511,13 +511,13 @@ Controls whether notifications for this location are audible</string>
     <string name="alert_radar1_switch_text">
 Controls whether a radar image notification is presented when a weather alert is present. Must have NWS weather alerts enabled.</string>
     <string name="alert_mcd_switch_text">
-Controls whether a notication is generated when an SPC MCD is active for the current location.</string>
+Controls whether a notification is generated when an SPC MCD is active for the current location.</string>
     <string name="alert_swo_switch_text">
-Controls whether a notication is generated when an SPC convective outlook risk is active for the current location.</string>
+Controls whether a notification is generated when an SPC convective outlook risk is active for the current location.</string>
     <string name="alert_spcfw_switch_text">
-Controls whether a notication is generated when an SPC fire outlook risk is active for the current location.</string>
+Controls whether a notification is generated when an SPC fire outlook risk is active for the current location.</string>
     <string name="alert_wpcmpd_switch_text">
-Controls whether a notication is generated when an WPC MPD Is active for the current location.</string>
+Controls whether a notification is generated when an WPC MPD Is active for the current location.</string>
     <string name="lock_toolbars_label">
 If selected the toolbars will not have the ability to be hidden on demand. If in an activity with a text product or a text product and an image you an tap on the
     text product to hide/show the toolbars. If the activity only has an image you can tap to hide/show the toolbars.</string>

@@ -27,6 +27,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.webkit.WebView
 import android.webkit.WebViewClient
 
 import joshuatee.wx.R
@@ -34,8 +35,6 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.UtilityUI
-
-import kotlinx.android.synthetic.main.activity_webview_toolbar.*
 
 class WebView : BaseActivity() {
 
@@ -49,9 +48,14 @@ class WebView : BaseActivity() {
     companion object { const val URL = "" }
 
     private var url = ""
+    private lateinit var webView: WebView
 
     override fun onBackPressed() {
-        if (webview.canGoBack()) webview.goBack() else super.onBackPressed()
+        if (webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            super.onBackPressed()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -62,10 +66,11 @@ class WebView : BaseActivity() {
     @SuppressLint("SetJavaScriptEnabled", "MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_webview_toolbar, null, false)
+        webView = findViewById(R.id.webView)
         val activityArguments = intent.getStringArrayExtra(URL)
         url = activityArguments!![0]
         title = activityArguments[1]
-        val webSettings = webview.settings
+        val webSettings = webView.settings
         webSettings.javaScriptEnabled = true
         if (activityArguments.size > 2) {
             webSettings.builtInZoomControls = true
@@ -78,11 +83,11 @@ class WebView : BaseActivity() {
         } else {
             webSettings.textZoom = (100 * (UIPreferences.normalTextSize.toDouble() / UIPreferences.normalTextSizeDefault.toDouble())).toInt()
         }
-        webview.webViewClient = WebViewClient()
+        webView.webViewClient = WebViewClient()
         if (url.startsWith("http")) {
-            webview.loadUrl(url)
+            webView.loadUrl(url)
         } else {
-            webview.loadData(url, "text/html", null)
+            webView.loadData(url, "text/html", null)
         }
     }
 

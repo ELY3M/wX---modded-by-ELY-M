@@ -35,11 +35,10 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.ObjectNavDrawerCombo
 import joshuatee.wx.ui.OnSwipeTouchListener
+import joshuatee.wx.ui.TouchImageView2
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.*
 import kotlinx.coroutines.*
-
-import kotlinx.android.synthetic.main.activity_wpcimages.*
 
 class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
 
@@ -52,6 +51,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
     private var imageLoaded = false
     private lateinit var drw: ObjectNavDrawerCombo
     private lateinit var activityArguments: Array<String>
+    private lateinit var img: TouchImageView2
     private var calledFromHomeScreen = false
     private var homeScreenId = ""
 
@@ -75,6 +75,7 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_wpcimages, R.menu.wpcimages, iconsEvenlySpaced = true, bottomToolbar = false)
+        img = findViewById(R.id.img)
         img.setOnClickListener(this)
         img.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeLeft() {
@@ -124,7 +125,9 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
         } else {
             title = "Images"
             toolbar.subtitle = GlobalArrays.nwsImageProducts.findLast { it.startsWith("$homeScreenId:") }!!.split(":")[1]
-            bitmap = withContext(Dispatchers.IO) { UtilityDownload.getImageProduct(this@WpcImagesActivity, homeScreenId) }
+            bitmap = withContext(Dispatchers.IO) {
+                UtilityDownload.getImageProduct(this@WpcImagesActivity, homeScreenId)
+            }
             calledFromHomeScreen = false
         }
         img.setImageBitmap(bitmap)
@@ -173,13 +176,17 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
     }
 
     override fun onStop() {
-        if (imageLoaded && activityArguments.size < 2) UtilityImg.imgSavePosnZoom(this, img, "WPCIMG")
+        if (imageLoaded && activityArguments.size < 2) {
+            UtilityImg.imgSavePosnZoom(this, img, "WPCIMG")
+        }
         super.onStop()
     }
 
     private fun showNextImg() {
         drw.imgIdx += 1
-        if (UtilityWpcImages.shortCodes[drw.imgGroupIdx][drw.imgIdx] == "") drw.imgIdx = 0
+        if (UtilityWpcImages.shortCodes[drw.imgGroupIdx][drw.imgIdx] == "") {
+            drw.imgIdx = 0
+        }
         getContent()
     }
 

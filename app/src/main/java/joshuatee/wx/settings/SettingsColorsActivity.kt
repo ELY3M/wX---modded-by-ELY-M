@@ -25,6 +25,7 @@ package joshuatee.wx.settings
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.LinearLayout
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
@@ -32,15 +33,15 @@ import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.ui.BaseActivity
 
-import kotlinx.android.synthetic.main.activity_linear_layout.*
-
 class SettingsColorsActivity : BaseActivity() {
 
     private var objectSettingsColorLabels = listOf<ObjectSettingsColorLabel>()
+    private lateinit var linearLayout: LinearLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, null, false)
+        linearLayout = findViewById(R.id.linearLayout)
         linearLayout.setBackgroundColor(Color.BLACK)
         val mapColorToPref = mutableMapOf(
             "Highway color" to "RADAR_COLOR_HW",

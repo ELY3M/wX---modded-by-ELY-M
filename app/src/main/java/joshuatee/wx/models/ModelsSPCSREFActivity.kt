@@ -22,9 +22,7 @@
 package joshuatee.wx.models
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import java.util.Locale
-
 import android.os.Bundle
 import android.content.res.Configuration
 import android.view.KeyEvent
@@ -32,10 +30,8 @@ import android.view.Menu
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import android.view.View
-import android.view.View.OnClickListener
 import android.widget.LinearLayout
 import joshuatee.wx.Extensions.safeGet
-
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
@@ -100,14 +96,14 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         title = activityArguments[2]
         if (om.numPanes < 2) {
-            fab1 = ObjectFab(this, this, R.id.fab1, OnClickListener {
+            fab1 = ObjectFab(this, this, R.id.fab1) {
                 om.leftClick()
                 getContent()
-            })
-            fab2 = ObjectFab(this, this, R.id.fab2, OnClickListener {
+            }
+            fab2 = ObjectFab(this, this, R.id.fab2) {
                 om.rightClick()
                 getContent()
-            })
+            }
             menu.findItem(R.id.action_img1).isVisible = false
             menu.findItem(R.id.action_img2).isVisible = false
             if (UIPreferences.fabInModels) {
@@ -286,15 +282,15 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
         val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
+        objectDialogue.setNegativeButton { dialog, _ ->
             dialog.dismiss()
             UtilityUI.immersiveMode(this)
-        })
-        objectDialogue.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        }
+        objectDialogue.setSingleChoiceItems { dialog, which ->
             fn(which)
             getContent()
             dialog.dismiss()
-        })
+        }
         objectDialogue.show()
     }
 

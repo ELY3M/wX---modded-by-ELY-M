@@ -31,7 +31,6 @@ import android.os.Build
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.*
-import android.view.View.OnClickListener
 import android.widget.*
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.OnQueryTextListener
@@ -48,12 +47,9 @@ import joshuatee.wx.radar.UtilityCitiesExtended
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMap
-import kotlinx.android.synthetic.main.activity_settings_location_generic.*
 import kotlinx.coroutines.*
 
-
-class SettingsLocationGenericActivity : BaseActivity(),
-        OnMenuItemClickListener { // OnCheckedChangeListener OnClickListener
+class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener { // OnCheckedChangeListener OnClickListener
 
     // manual interface for searching and saving a location
     //
@@ -81,15 +77,26 @@ class SettingsLocationGenericActivity : BaseActivity(),
     private lateinit var alertSpcfwSw: ObjectSettingsCheckBox
     private lateinit var alertWpcmpdSw: ObjectSettingsCheckBox
     private var menuLocal: Menu? = null
+    private lateinit var locLabelEt: EditText
+    private lateinit var locXEt: EditText
+    private lateinit var locYEt: EditText
+    private lateinit var linearLayout: LinearLayout
+    private lateinit var rl: RelativeLayout
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_settings_location_generic, R.menu.settings_location_generic_bottom, true)
+        locLabelEt = findViewById(R.id.locLabelEt)
+        locXEt = findViewById(R.id.locXEt)
+        locYEt = findViewById(R.id.locYEt)
+        linearLayout = findViewById(R.id.linearLayout)
+        rl = findViewById(R.id.rl)
+
         toolbarBottom.setOnMenuItemClickListener(this)
         Utility.writePref(this, "LOCATION_CANADA_PROV", "")
         Utility.writePref(this, "LOCATION_CANADA_CITY", "")
         Utility.writePref(this, "LOCATION_CANADA_ID", "")
-        ObjectFab(this, this, R.id.fab, OnClickListener { fabSaveLocation() })
+        ObjectFab(this, this, R.id.fab) { fabSaveLocation() }
         val me = toolbarBottom.menu
         listOf(R.id.cv1).forEach { ObjectCard(this, it) }
         val locNumArr = intent.getStringArrayExtra(LOC_NUM)
@@ -283,8 +290,8 @@ class SettingsLocationGenericActivity : BaseActivity(),
     }
 
     private fun saveLocation(locNum: String, xStr: String, yStr: String, labelStr: String) = GlobalScope.launch(uiDispatcher) {
-        var toastStr = ""
-        var xLoc = ""
+        var toastStr: String
+        var xLoc: String
         withContext(Dispatchers.IO) {
             toastStr = Location.save(this@SettingsLocationGenericActivity, locNum, xStr, yStr, labelStr)
             xLoc = xStr
@@ -320,7 +327,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
         cityArrayAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
         searchView.setAdapter(cityArrayAdapter)
         searchView.queryHint = "Enter city here"
-        searchView.setOnItemClickListener(AdapterView.OnItemClickListener { _, _, position, _ ->
+        searchView.setOnItemClickListener { _, _, position, _ ->
             var k = 0
             for (y in combinedCitiesList.indices) {
                 if (cityArrayAdapter.getItem(position) == combinedCitiesList[y]) {
@@ -342,7 +349,7 @@ class SettingsLocationGenericActivity : BaseActivity(),
                 val labelStr = locLabelEt.text.toString()
                 saveLocation(locNum, xStr, yStr, labelStr)
             }
-        })
+        }
 
         searchView.setOnQueryTextListener(object : OnQueryTextListener {
 

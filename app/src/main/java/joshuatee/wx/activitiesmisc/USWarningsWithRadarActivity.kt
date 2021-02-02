@@ -28,6 +28,8 @@ import android.view.Menu
 import android.widget.AdapterView
 import java.util.Locale
 import android.view.MenuItem
+import android.widget.LinearLayout
+import android.widget.ScrollView
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
@@ -38,8 +40,6 @@ import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.util.UtilityImg
 import kotlinx.coroutines.*
-
-import kotlinx.android.synthetic.main.activity_linear_layout_show_navdrawer_bottom_toolbar.*
 
 // FIXME rename USWarningsWithRadarActivity
 class USWarningsWithRadarActivity : BaseActivity() {
@@ -63,6 +63,8 @@ class USWarningsWithRadarActivity : BaseActivity() {
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var objectNavDrawer: ObjectNavDrawer
     private lateinit var objectAlertSummary: ObjectAlertSummary
+    private lateinit var scrollView: ScrollView
+    private lateinit var linearLayout: LinearLayout
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.uswarn, menu)
@@ -72,6 +74,8 @@ class USWarningsWithRadarActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout_show_navdrawer, R.menu.uswarn, false)
+        scrollView = findViewById(R.id.scrollView)
+        linearLayout = findViewById(R.id.linearLayout)
         val activityArguments = intent.getStringArrayExtra(URL)
         turlLocal[0] = activityArguments!![0]
         turlLocal[1] = activityArguments[1]
@@ -135,7 +139,6 @@ class USWarningsWithRadarActivity : BaseActivity() {
             R.id.action_warnmap -> ObjectIntent.showImage(this@USWarningsWithRadarActivity, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map"))
             R.id.action_warnmapAK -> ObjectIntent.showImage(this@USWarningsWithRadarActivity, arrayOf("https://forecast.weather.gov/wwamap/png/ak.png", "AK warning map"))
             R.id.action_warnmapHI -> ObjectIntent.showImage(this@USWarningsWithRadarActivity, arrayOf("https://forecast.weather.gov/wwamap/png/hi.png", "HI warning map"))
-            R.id.action_impact_graphics -> ObjectIntent(this@USWarningsWithRadarActivity, USWarningsImpactActivity::class.java)
             else -> return super.onOptionsItemSelected(item)
         }
         return true

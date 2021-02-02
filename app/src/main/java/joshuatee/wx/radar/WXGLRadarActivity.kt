@@ -26,10 +26,8 @@ import android.annotation.SuppressLint
 import java.io.File
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
@@ -56,13 +54,14 @@ import joshuatee.wx.UIPreferences
 
 import joshuatee.wx.GlobalArrays
 import joshuatee.wx.activitiesmisc.SevereDashboardActivity
-import joshuatee.wx.activitiesmisc.WebView
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.util.*
-import joshuatee.wx.vis.UtilityGoes
 import joshuatee.wx.radar.SpotterNetworkPositionReport.SendPosition
 import kotlinx.coroutines.*
+
+//elys mod
+import joshuatee.wx.activitiesmisc.WebView
 
 class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
@@ -730,15 +729,15 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun genericDialog(list: List<String>, fn: (Int) -> Unit) {
         val objectDialogue = ObjectDialogue(this, list)
-        objectDialogue.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
+        objectDialogue.setNegativeButton { dialog, _ ->
             dialog.dismiss()
             UtilityUI.immersiveMode(this)
-        })
-        objectDialogue.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        }
+        objectDialogue.setSingleChoiceItems { dialog, which ->
             fn(which)
             getContent()
             dialog.dismiss()
-        })
+        }
         objectDialogue.show()
     }
 
@@ -885,11 +884,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun setupAlertDialogRadarLongPress() {
         dialogRadarLongPress = ObjectDialogue(this@WXGLRadarActivity, dialogStatusList)
-        dialogRadarLongPress!!.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
+        dialogRadarLongPress!!.setNegativeButton { dialog, _ ->
             dialog.dismiss()
             UtilityUI.immersiveMode(this@WXGLRadarActivity)
-        })
-        dialogRadarLongPress!!.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        }
+        dialogRadarLongPress!!.setSingleChoiceItems { dialog, which ->
             val strName = dialogStatusList[which]
             UtilityRadarUI.doLongPressAction(
                     strName,
@@ -901,7 +900,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     ::longPressRadarSiteSwitch
             )
             dialog.dismiss()
-        })
+        }
     }
 
     private fun longPressRadarSiteSwitch(strName: String) {
@@ -913,11 +912,11 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private fun alertDialogTdwr() {
         val diaTdwr = ObjectDialogue(this@WXGLRadarActivity, GlobalArrays.tdwrRadars)
-        diaTdwr.setNegativeButton(DialogInterface.OnClickListener { dialog, _ ->
+        diaTdwr.setNegativeButton { dialog, _ ->
             dialog.dismiss()
             UtilityUI.immersiveMode(this@WXGLRadarActivity)
-        })
-        diaTdwr.setSingleChoiceItems(DialogInterface.OnClickListener { dialog, which ->
+        }
+        diaTdwr.setSingleChoiceItems { dialog, which ->
             val strName = GlobalArrays.tdwrRadars[which]
             wxglRender.rid = strName.split(" ").getOrNull(0) ?: ""
             wxglRender.product = "TZL"
@@ -925,7 +924,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
             title = wxglRender.product
             getContent()
             dialog.dismiss()
-        })
+        }
         diaTdwr.show()
     }
 
