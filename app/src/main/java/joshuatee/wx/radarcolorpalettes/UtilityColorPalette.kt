@@ -119,7 +119,7 @@ object UtilityColorPalette {
         return text
     }
 
-
+/*
     fun scanfor94pal() {
         //Log.i(TAG, "running scanfor94pal()")
         File(MyApplication.PalFilesPath).walk().forEach {
@@ -132,7 +132,7 @@ object UtilityColorPalette {
 
         }
     }
-
+*/
 
 
 }

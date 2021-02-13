@@ -338,7 +338,9 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         locationList = UtilityFavorites.setupMenu(this@WfoTextActivity, MyApplication.wfoFav, wfo, prefToken)
         when (item.itemId) {
             R.id.action_sector -> genericDialog(locationList) {

@@ -67,7 +67,7 @@ object UtilityUserPoints {
                         //UtilityLog.d("userpoint", "Found Userpoint values: " + it.key + ": " + it.value)
                         val getLatLon: String = it.value.toString()
                         var tmpArr: List<String>
-                        getLatLon.forEach { line ->
+                        getLatLon.forEach { _ ->
                             tmpArr = getLatLon.split("_").dropLastWhile { it.isEmpty() }
                             if (tmpArr.size > tmpsize) {
                                 UtilityLog.d("userpoint", "Got Userpoint values: " + keyString + ": " + it.value)
@@ -112,20 +112,15 @@ object UtilityUserPoints {
 
 
 
-    fun addUserPoint(context: Context, oglr: WXGLRender, glv: WXGLSurfaceView, location: LatLon) {
+    fun addUserPoint(context: Context, location: LatLon) {
         Utility.writePref(context, "USERPOINTS="+location.lat + "=" + location.lon, ""+location.lat + "_" + location.lon)
         UtilityLog.d("userpoint", "UserPoint Added: lat: "+location.lat+" lon: "+location.lon)
-        //oglr.constructUserPoints()
-        //glv.requestRender()
-        //val get = WXGLRadarActivity()
-        //get.getContent()
-
 
     }
 
 
 
-    fun deleteUserPoint(context: Context, oglr: WXGLRender, glv: WXGLSurfaceView, location: LatLon): String {
+    fun deleteUserPoint(context: Context, location: LatLon): String {
         var userPointInfoString = ""
         val userPointInfo = mutableListOf<Userpoints>()
 
@@ -138,7 +133,7 @@ object UtilityUserPoints {
                 val keyString = it.key
                 val getLatLon: String = it.value.toString()
                 var tmpArr: List<String>
-                getLatLon.forEach { line ->
+                getLatLon.forEach { _ ->
                     tmpArr = getLatLon.split("_").dropLastWhile { it.isEmpty() }
                     if (tmpArr.size > tmpsize) {
                         UtilityLog.d("userpoint", "Got Userpoint values: " + keyString + ": " + it.value)
@@ -167,10 +162,6 @@ object UtilityUserPoints {
 
                 userPointInfoString = "UserPoint Deleted: \nkey: "+userPointInfo[it].key+"\nlat: "+userPointInfo[it].lat+"\n lon: "+userPointInfo[it].lon+"\n"
                 Utility.removePref(context, userPointInfo[it].key)
-                //oglr.constructUserPoints()
-                //glv.requestRender()
-                //val get = WXGLRadarActivity()
-                //get.getContent()
 
 
             }

@@ -89,9 +89,13 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCl
         val activityArguments = intent.getStringArrayExtra(RID)
         radarSite = activityArguments!![0]
         imageType = activityArguments[1]
-        if (radarSite == "NAT") radarSite = "CAN"
+        if (radarSite == "NAT") {
+            radarSite = "CAN"
+        }
         url = Utility.readPref(this, "CA_LAST_RID_URL", url)
-        if (MyApplication.wxoglRememberLocation && MyApplication.wxoglRid != "") radarSite = Utility.readPref(this, "CA_LAST_RID", radarSite)
+        if (MyApplication.wxoglRememberLocation && MyApplication.wxoglRid != "") {
+            radarSite = Utility.readPref(this, "CA_LAST_RID", radarSite)
+        }
         title = "Canada"
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(img.img))
         imageMap.addClickHandler(::ridMapSwitch, UtilityImageMap::mapToCanadaRadarSite)
@@ -106,7 +110,11 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCl
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         favorites = UtilityFavorites.setupMenu(this@CanadaRadarActivity, MyApplication.caRidFav, radarSite, prefToken)
         invalidateOptionsMenu()
-        if (MyApplication.caRidFav.contains(":$radarSite:")) star.setIcon(MyApplication.STAR_ICON) else star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+        if (MyApplication.caRidFav.contains(":$radarSite:")) {
+            star.setIcon(MyApplication.STAR_ICON)
+        } else {
+            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+        }
         withContext(Dispatchers.IO) {
             bitmap = if (imageType == "rad") {
                 UtilityCanadaImg.getRadarBitmapOptionsApplied(this@CanadaRadarActivity, radarSite, "")
@@ -122,7 +130,9 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCl
 
     private fun getMosaic(sector: String) = GlobalScope.launch(uiDispatcher) {
         mosaicShownId = sector
-        bitmap = withContext(Dispatchers.IO) { UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(this@CanadaRadarActivity, sector) }
+        bitmap = withContext(Dispatchers.IO) {
+            UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(this@CanadaRadarActivity, sector)
+        }
         img.setBitmap(bitmap)
         animRan = false
     }

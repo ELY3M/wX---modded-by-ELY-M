@@ -47,7 +47,9 @@ object UtilityWXOGL {
             "HKI", "HMO", "HKM", "HWA", "APD", "ACG", "AIH", "AHG", "AKC", "ABC", "AEC", "GUA" -> "p"
             else -> "k"
         }
-        if (WXGLNexrad.isProductTdwr(product)) ridPrefix = ""
+        if (WXGLNexrad.isProductTdwr(product)) {
+            ridPrefix = ""
+        }
         return ridPrefix
     }
 
@@ -57,7 +59,9 @@ object UtilityWXOGL {
             "HKI", "HMO", "HKM", "HWA", "APD", "ACG", "AIH", "AHG", "AKC", "ABC", "AEC", "GUA" -> "p"
             else -> "k"
         }
-        if (tdwr) ridPrefix = ""
+        if (tdwr) {
+            ridPrefix = ""
+        }
         return ridPrefix
     }
 
@@ -66,7 +70,6 @@ object UtilityWXOGL {
         val product = "VWP"
         val l3BaseFn = "nidsVWP"
         val indexString = "0"
-        val file: File
         val url = WXGLDownload.getRadarFileUrl(radarSite, product, false)
         val inputStream = url.getInputStream()
         if (inputStream != null) {
@@ -74,7 +77,7 @@ object UtilityWXOGL {
         } else {
             return ""
         }
-        file = File(context.filesDir, l3BaseFn + indexString + "_d")
+        val file = File(context.filesDir, l3BaseFn + indexString + "_d")
         if (!file.renameTo(File(context.filesDir, l3BaseFn + indexString)))
             UtilityLog.d("wx", "Problem moving file to $l3BaseFn$indexString")
         var output = ""

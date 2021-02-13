@@ -35,6 +35,7 @@ import okhttp3.Request
 object UtilityNetworkIO {
 
     fun getStringFromUrl(url: String): String {
+        UtilityLog.d("wx", "getStringFromUrl: $url")
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder().url(url).build()
@@ -56,6 +57,7 @@ object UtilityNetworkIO {
     }
 
     fun getStringFromUrlWithNewLine(url: String): String {
+        UtilityLog.d("wx", "getStringFromUrlWithNewLine: $url")
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder().url(url).build()
@@ -77,6 +79,7 @@ object UtilityNetworkIO {
     }
 
     fun getStringFromUrlWithSeparator(url: String): String {
+        UtilityLog.d("wx", "getStringFromUrlWithSeparator: $url")
         val breakStr = "ABC123_456ZZ"
         val out = StringBuilder(5000)
         try {
@@ -97,10 +100,11 @@ object UtilityNetworkIO {
     }
 
     fun getBitmapFromUrl(url: String): Bitmap = try {
+            UtilityLog.d("wx", "getBitmapFromUrl: $url")
             val request = Request.Builder().url(url).build()
             val response = MyApplication.httpClient!!.newCall(request).execute()
             BitmapFactory.decodeStream(BufferedInputStream(response.body!!.byteStream()))
-    } catch (e: Exception) {
+        } catch (e: Exception) {
             UtilityImg.getBlankBitmap()
         } catch (e: OutOfMemoryError) {
             UtilityImg.getBlankBitmap()
@@ -117,6 +121,7 @@ object UtilityNetworkIO {
         }*/
 
     fun getInputStreamFromUrl(url: String): InputStream? = try {
+            UtilityLog.d("wx", "getInputStreamFromUrl: $url")
             val request = Request.Builder().url(url).build()
             val response = MyApplication.httpClient!!.newCall(request).execute()
             response.body!!.byteStream()

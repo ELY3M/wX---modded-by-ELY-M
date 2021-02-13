@@ -63,7 +63,9 @@ class ImageCollectionActivity : VideoRecordActivity() {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         val actionAnimate = menu.findItem(R.id.action_animate)
         actionAnimate.isVisible = false
-        if (drw.url.contains("jma") && imageCollection.title == "GOESFD") actionAnimate.isVisible = true
+        if (drw.url.contains("jma") && imageCollection.title == "GOESFD") {
+            actionAnimate.isVisible = true
+        }
         return super.onPrepareOptionsMenu(menu)
     }
 
@@ -86,12 +88,18 @@ class ImageCollectionActivity : VideoRecordActivity() {
         super.onRestart()
     }
 
-    private fun getContentFixThis() { getContent() }
+    private fun getContentFixThis() {
+        getContent()
+    }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         toolbar.subtitle = drw.getLabel()
         bitmap = withContext(Dispatchers.IO) { drw.url.getImage() }
-        if (drw.url.contains("large_latestsfc.gif")) img.setMaxZoom(16f) else img.setMaxZoom(4f)
+        if (drw.url.contains("large_latestsfc.gif")) {
+            img.setMaxZoom(16f)
+        } else {
+            img.setMaxZoom(4f)
+        }
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn(imageCollection.prefImagePosition)
         invalidateOptionsMenu()
@@ -129,7 +137,9 @@ class ImageCollectionActivity : VideoRecordActivity() {
     }
 
     private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
-        animDrawable = withContext(Dispatchers.IO) { UtilityGoesFullDisk.getAnimation(this@ImageCollectionActivity, drw.url) }
+        animDrawable = withContext(Dispatchers.IO) {
+            UtilityGoesFullDisk.getAnimation(this@ImageCollectionActivity, drw.url)
+        }
         UtilityImgAnim.startAnimation(animDrawable, img)
     }
 }

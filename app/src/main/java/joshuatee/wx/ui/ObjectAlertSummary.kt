@@ -159,7 +159,9 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
         //ObjectIntent.showRadar(context, arrayOf(radarSite, state, "N0Q", ""))
     }
 
-    private fun showWarningDetails(url: String) { ObjectIntent.showHazard(context, arrayOf(url, "")) }
+    private fun showWarningDetails(url: String) {
+        ObjectIntent.showHazard(context, arrayOf(url, ""))
+    }
 
     fun getTitle(title: String) = "(" + totalAlertsCnt + ") " + title.toUpperCase(Locale.US) + " Alerts"
 }

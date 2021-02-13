@@ -37,7 +37,7 @@ object UtilitySpc {
 
     internal val thunderStormOutlookImages: List<Bitmap>
         get() {
-            val url = "${MyApplication.nwsSPCwebsitePrefix}/products/exper/enhtstm"
+            val url = "${MyApplication.nwsSPCwebsitePrefix}/products/exper/enhtstm/"
             val html = url.getHtml()
             val dates = html.parseColumn("OnClick.\"show_tab\\(.([0-9]{4}).\\)\".*?")
             return dates.map { "$url/imgs/enh_$it.gif".getImage() }

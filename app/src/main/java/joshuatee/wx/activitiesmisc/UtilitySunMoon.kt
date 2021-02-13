@@ -85,16 +85,16 @@ object UtilitySunMoon {
         val illumination = MoonIllumination.compute().on(now).timezone(TimeZone.getDefault()).execute()
         val phase = illumination.phase
         val moonFracillum = illumination.fraction * 100
-        val moonangle = illumination.angle
+        //val moonangle = illumination.angle
         val normalized = phase + 180.0
         val moonage = 29.0 * (normalized / 360.0) + 1.0
 
 
-        val moonphase = MoonPhase.compute().on(now).timezone(TimeZone.getDefault()).execute()
-        val test = moonphase.time
+        //val moonphase = MoonPhase.compute().on(now).timezone(TimeZone.getDefault()).execute()
+        //val test = moonphase.time
 
 
-        val header = "Sun/Moon Data" + MyApplication.newline
+        //val header = "Sun/Moon Data" + MyApplication.newline
         var content = "Astronomical Rise: " + astronomical.rise + MyApplication.newline
         content += "Nautical Rise: " + nautical.rise + MyApplication.newline
         content += "Civil Rise: " + civil.rise + MyApplication.newline

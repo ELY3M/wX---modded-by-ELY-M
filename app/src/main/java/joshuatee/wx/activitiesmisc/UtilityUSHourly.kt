@@ -84,10 +84,18 @@ object UtilityUSHourly {
         startTime.indices.forEach {
             val time = translateTime(startTime[it].replace(Regex("-0[0-9]:00"), ""))
             content += String.format("%-8s", time)
-            if (temperature.size > it) content += String.format("%-5s", temperature[it].replace("\"",""))
-            if (windSpeed.size > it) content += String.format("%-9s", windSpeed[it])
-            if (windDirection.size > it) content += String.format("%-7s", windDirection[it])
-            if (shortForecast.size > it) content += String.format("%-12s", shortenConditions(shortForecast[it]))
+            if (temperature.size > it) {
+                content += String.format("%-5s", temperature[it].replace("\"",""))
+            }
+            if (windSpeed.size > it) {
+                content += String.format("%-9s", windSpeed[it])
+            }
+            if (windDirection.size > it) {
+                content += String.format("%-7s", windDirection[it])
+            }
+            if (shortForecast.size > it) {
+                content += String.format("%-12s", shortenConditions(shortForecast[it]))
+            }
             content += MyApplication.newline
         }
         return content

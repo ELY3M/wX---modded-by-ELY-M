@@ -58,7 +58,6 @@ object UtilityCanvasStormInfo {
         paint.textSize = textSize.toFloat()
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
         val stormList = mutableListOf<Double>()
-        val stormLists: FloatArray
         val location = UtilityLocation.getSiteLocation(radarSite)
         try {
             val ucarRandomAccessFile = UCARRandomAccessFile(UtilityIO.getFilePath(context, stiBaseFileName + ""))
@@ -125,7 +124,7 @@ object UtilityCanvasStormInfo {
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
-        stormLists = FloatArray(stormList.size)
+        val stormLists = FloatArray(stormList.size)
         stormList.indices.forEach { stormLists[it] = stormList[it].toFloat() }
         paint.color = MyApplication.radarColorSti
         canvas.drawLines(stormLists, paint)

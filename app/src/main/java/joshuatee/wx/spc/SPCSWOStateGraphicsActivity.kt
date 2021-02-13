@@ -85,7 +85,9 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
         title = "SWO D$day"
         invalidateOptionsMenu()
         imgUrl = UtilitySpcSwo.getSwoStateUrl(state, day)
-        bitmap = withContext(Dispatchers.IO) { imgUrl.getImage() }
+        bitmap = withContext(Dispatchers.IO) {
+            imgUrl.getImage()
+        }
         img.img.visibility = View.VISIBLE
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn(imgPrefToken)

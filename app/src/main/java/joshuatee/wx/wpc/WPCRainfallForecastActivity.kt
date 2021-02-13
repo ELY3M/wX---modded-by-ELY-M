@@ -83,7 +83,9 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
     }
 
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        bitmap = withContext(Dispatchers.IO) { imageUrl.getImage() }
+        bitmap = withContext(Dispatchers.IO) {
+            imageUrl.getImage()
+        }
         objectCardText.text = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@WpcRainfallForecastActivity, textProduct) }
         if (tabletInLandscape) objectCardImage.setImage(bitmap, 2) else objectCardImage.setImage(bitmap)
         objectCardImage.setOnClickListener {
@@ -93,7 +95,9 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, objectCardText.text, textProduct, textProduct)) return true
+        if (audioPlayMenu(item.itemId, objectCardText.text, textProduct, textProduct)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_share_all -> UtilityShare.bitmap(this, this, textProduct, bitmap, objectCardText.text)
             R.id.action_share_text -> UtilityShare.text(this, textProduct, objectCardText.text)

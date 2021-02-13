@@ -12,11 +12,12 @@
 // TODO [ADD] check for new SPC Meso parms
 // TODO [ADD] 'IntentService' is deprecated. Deprecated in Jav
     https://stackoverflow.com/questions/62138507/intentservice-is-deprecated-how-do-i-replace-it-with-jobintentservice
-// TODO [ADD] 'constructor Handler()' is deprecated. Deprecated in Java
 // TODO [ADD] 'getter for defaultDisplay: Display!' is deprecated. Deprecated in Java
 // TODO [ADD] 'getMetrics(DisplayMetrics!): Unit' is deprecated. Deprecated in Java
 
-55510 2021_01_31
+55511 2021_02_05    [ADD] misc lint and deprecations (Handler() in nexrad)
+55510 2021_02_05    [REF] remove kotlin-android-extensions in build.gradle
+                    [ADD] minor correction in SPC Tstorm URL
 55509 2021_01_31    [ADD] start removing import kotlinx.android.synthetic.main.activity_hourly.*, switch to findViewById (not interested in View Binding at this time)
 55508 2021_01_30    [FIX] misc lint (redundant SAM constructor)
                     [ADD] update "com.squareup.okhttp3:okhttp:4.6.0" to "com.squareup.okhttp3:okhttp:4.9.0"

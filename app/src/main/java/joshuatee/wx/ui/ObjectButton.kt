@@ -42,11 +42,17 @@ class ObjectButton(context: Context, title: String, icon: Int) {
         button.setIconResource(icon)
         button.setBackgroundColor(Color.TRANSPARENT)
         button.setPadding(padding)
-        if (Utility.isThemeAllWhite()) button.iconTintMode = PorterDuff.Mode.DARKEN
-        if (Utility.isThemeAllBlack()) button.iconTintMode = PorterDuff.Mode.LIGHTEN
+        if (Utility.isThemeAllWhite()) {
+            button.iconTintMode = PorterDuff.Mode.DARKEN
+        }
+        if (Utility.isThemeAllBlack()) {
+            button.iconTintMode = PorterDuff.Mode.LIGHTEN
+        }
     }
 
-    fun setOnClickListener(fn: View.OnClickListener) { button.setOnClickListener(fn) }
+    fun setOnClickListener(fn: View.OnClickListener) {
+        button.setOnClickListener(fn)
+    }
 
     val card get() = button
 }

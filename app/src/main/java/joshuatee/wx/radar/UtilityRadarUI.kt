@@ -147,8 +147,8 @@ internal object UtilityRadarUI {
             string.contains("Show nearest forecast") -> showNearestForecast(context, wxglSurfaceView)
             string.contains("Show Spotter Info") -> showSpotterInfo(activity, wxglSurfaceView, uiDispatcher)
             string.contains("userpoint info") -> showUserPointInfo(activity, context, wxglSurfaceView, uiDispatcher)
-            string.contains("Add userpoint for") -> addUserPoint(activity, context, wxglRender, wxglSurfaceView)
-            string.contains("Delete userpoint for") ->  deleteUserPoint(activity, context, wxglRender, wxglSurfaceView, uiDispatcher)
+            string.contains("Add userpoint for") -> addUserPoint(activity, context, wxglSurfaceView)
+            string.contains("Delete userpoint for") ->  deleteUserPoint(activity, context, wxglSurfaceView, uiDispatcher)
             string.contains("Delete all userpoints") -> deleteAllUserPoints(activity, context, uiDispatcher)
             else -> function(string)
         }
@@ -372,16 +372,15 @@ internal object UtilityRadarUI {
         ObjectDialogue(act, txt)
     }
 
-    private fun addUserPoint(act: Activity, context: Context, oglr: WXGLRender, glview: WXGLSurfaceView) {
-        UtilityUserPoints.addUserPoint(context, oglr, glview, glview.latLon)
+    private fun addUserPoint(act: Activity, context: Context, glview: WXGLSurfaceView) {
+        UtilityUserPoints.addUserPoint(context, glview.latLon)
         ObjectDialogue(act, "added userpoint")
     }
 
 
-    private fun deleteUserPoint(act: Activity, context: Context, oglr: WXGLRender, glview: WXGLSurfaceView, uiDispatcher: CoroutineDispatcher) = GlobalScope.launch(uiDispatcher) {
+    private fun deleteUserPoint(act: Activity, context: Context, glview: WXGLSurfaceView, uiDispatcher: CoroutineDispatcher) = GlobalScope.launch(uiDispatcher) {
         val txt = withContext(Dispatchers.IO) {
-            UtilityUserPoints.deleteUserPoint(
-                    context, oglr, glview, glview.latLon)
+            UtilityUserPoints.deleteUserPoint(context, glview.latLon)
         }
         ObjectDialogue(act, txt)
     }

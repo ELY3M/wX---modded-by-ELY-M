@@ -33,6 +33,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.SystemClock
 import android.view.KeyEvent
 import android.view.MenuItem
@@ -372,12 +373,12 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 }
             }
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            mHandler = Handler()
+            mHandler = Handler(Looper.getMainLooper())
             startRepeatingTask()
         }
         if (MyApplication.sn_locationreport) {
             UtilityLog.d("wx", "starting location report")
-            sn_Handler_m = Handler()
+            sn_Handler_m = Handler(Looper.getMainLooper())
             start_sn_reporting()
         }
 
@@ -848,7 +849,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         }
     }
 
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
 
     private val mStatusChecker: Runnable = object : Runnable {
         override fun run() {
@@ -868,7 +869,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     //report your spotter network location
-    private val sn_handler = Handler()
+    private val sn_handler = Handler(Looper.getMainLooper())
     private val sn_reporter: Runnable = object : Runnable {
         override fun run() {
             UtilityLog.d("wx", "SendPosition(this@WXGLRadarActivityMultiPane) on lat: "+latD+" lon: "+lonD)

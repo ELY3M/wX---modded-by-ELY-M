@@ -130,8 +130,6 @@ class WXGLNexradLevel3 internal constructor() {
             productCode = dis.readUnsignedShort().toShort()
             operationalMode = dis.readUnsignedShort().toShort()
             volumeCoveragePattern = dis.readUnsignedShort().toShort()
-            val sequenceNumber = dis.readUnsignedShort().toShort()
-            val volumeScanNumber = dis.readUnsignedShort().toShort()
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()
             val d = UtilityTime.radarTime(volumeScanDate, volumeScanTime)
@@ -144,7 +142,6 @@ class WXGLNexradLevel3 internal constructor() {
             // it is necessary to further dissect the header. Previously we skipped 74 bytes
             // hw 24-30
             dis.skipBytes(10)
-            val elevationNumber = dis.readUnsignedShort()
             val elevationAngle = dis.readShort()
             degree = elevationAngle.toInt() / 10f
             // hw 31-32 as a int
@@ -196,13 +193,9 @@ class WXGLNexradLevel3 internal constructor() {
             init4Bit(productCode)
             operationalMode = dis.readUnsignedShort().toShort()
             volumeCoveragePattern = dis.readUnsignedShort().toShort()
-            val sequenceNumber = dis.readUnsignedShort().toShort()
-            val volumeScanNumber = dis.readUnsignedShort().toShort()
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()
             val d = UtilityTime.radarTime(volumeScanDate, volumeScanTime)
-            val productGenerationDate = dis.readUnsignedShort().toShort()
-            val productGenerationTime = dis.readInt()
             //final short        product_generation_date = (short) dis.readUnsignedShort();
             //final int        product_generation_time    = dis.readInt() ;
             //dis.skipBytes(6)

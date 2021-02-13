@@ -36,7 +36,7 @@ object UtilitySpcMeso {
             ObjectMenuTitle("Upper Air", 25),
             ObjectMenuTitle("Thermodynamics", 19),
             ObjectMenuTitle("Wind Shear", 19),
-            ObjectMenuTitle("Composite Indices", 22),
+            ObjectMenuTitle("Composite Indices", 23),
             ObjectMenuTitle("Multi-Parameter Fields", 10),
             ObjectMenuTitle("Heavy Rain", 8),
             ObjectMenuTitle("Winter Weather", 14),
@@ -276,6 +276,7 @@ object UtilitySpcMeso {
             "sigt1",
             "sigt2",
             "nstp",
+            "vtp", // Feb 2021
             "sigh",
             "sars1",
             "sars2",
@@ -334,15 +335,16 @@ object UtilitySpcMeso {
             "ttot",
             "kidx",
             "show",
+
             "sherbe",
             "moshe",
             "cwasp",
-            "eehi",
+            "tehi",
+            "tts",
             "oprh",
             "ptstpe",
             "pstpe",
             "pvstpe",
-            "vtp",
             "pw3k"
     )
 
@@ -441,6 +443,7 @@ object UtilitySpcMeso {
             "Cond. Prob. Sigtor (Eqn 1)",
             "Cond. Prob. Sigtor (Eqn 2)",
             "Non-Supercell Tornado",
+            "Violent Tornado Parameter (VTP)", // Feb 2021
             "Sgfnt Hail",
             "SARS Hail Size",
             "SARS Sig. Hail Percentage",
@@ -501,15 +504,16 @@ object UtilitySpcMeso {
             "Total Totals",
             "K-Index",
             "Showalter Index",
+
             "SHERBE",
             "Modified SHERBE",
             "CWASP",
-            "Enhanced EHI",
+            "Tornadic 0-1km EHI",
+            "Tornadic Tilting & Stretching",
             "OPRH",
             "Prob EF0+ (conditional on RM supercell)",
             "Prob EF2+ (conditional on RM supercell)",
             "Prob EF4+ (conditional on RM supercell)",
-            "Violent Tornado Parameter (VTP)",
             "PW * 3kmRH"
     )
 }

@@ -59,7 +59,6 @@ object UtilityCanvasWindbarbs {
         var pixXInit: Double
         var pixYInit: Double
         val stormList = mutableListOf<Double>()
-        val stormListArr: FloatArray
         val arrWb = if (!isGust) UtilityMetar.metarDataList[index].obsArrWb else UtilityMetar.metarDataList[index].obsArrWbGust
         try {
             val degreeShift = 180.00
@@ -117,7 +116,7 @@ object UtilityCanvasWindbarbs {
         } catch (e: Exception) {
             UtilityLog.handleException(e)
         }
-        stormListArr = FloatArray(stormList.size)
+        val stormListArr = FloatArray(stormList.size)
         stormList.indices.forEach { stormListArr[it] = stormList[it].toFloat() }
         canvas.drawLines(stormListArr, paint)
         // draw aviation circle on top

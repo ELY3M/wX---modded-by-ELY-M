@@ -44,7 +44,7 @@ import joshuatee.wx.util.UCARRandomAccessFile
 internal class Level2Record @Throws(IOException::class)
 private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, messageOffset31: Long) {
 
-    private val messageOffset: Long // offset of start of message
+    private val messageOffset: Long = (record * RADAR_DATA_SIZE).toLong() + FILE_HEADER_SIZE.toLong() + messageOffset31 // offset of start of message
     var hasHighResREFData = false
     var hasHighResVELData = false
     // message header
@@ -66,7 +66,6 @@ private constructor(ucarRandomAccessFile: UCARRandomAccessFile, record: Int, mes
     private var velocityHROffset: Short = 0
 
     init {
-        messageOffset = (record * RADAR_DATA_SIZE).toLong() + FILE_HEADER_SIZE.toLong() + messageOffset31
         ucarRandomAccessFile.seek(messageOffset)
         ucarRandomAccessFile.skipBytes(CTM_HEADER_SIZE)
         messageSize = ucarRandomAccessFile.readShort() // size in "halfwords" = 2 bytes

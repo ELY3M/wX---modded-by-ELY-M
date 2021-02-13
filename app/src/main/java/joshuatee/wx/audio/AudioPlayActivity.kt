@@ -59,7 +59,6 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         view = findViewById(android.R.id.content)
         toolbar = findViewById(R.id.toolbar_top)
         setSupportActionBar(toolbar)
-        assert(supportActionBar != null)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         toolbarBottom = findViewById(R.id.toolbar_bottom)
         if (MyApplication.iconsEvenSpaced) {

@@ -74,8 +74,7 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
     }
 
     private fun pickTimeFAB() {
-        val mTimePicker: TimePickerDialog
-        mTimePicker = TimePickerDialog(
+        val mTimePicker = TimePickerDialog(
                 this@SettingsPlaylistAutodownloadActivity,
                 { _, selectedHour, selectedMinute ->
                     if (!ridFav.contains("$selectedHour:" + String.format("%2s", selectedMinute.toString()).replace(' ', '0'))
@@ -111,8 +110,7 @@ class SettingsPlaylistAutodownloadActivity : BaseActivity() {
             val timeArr = ridArr[position].split(":").dropLastWhile { it.isEmpty() }
             currHr = timeArr[0].toIntOrNull() ?: 0
             currMin = timeArr[1].toIntOrNull() ?: 0
-            val mTimePicker: TimePickerDialog
-            mTimePicker = TimePickerDialog(
+            val mTimePicker = TimePickerDialog(
                     this@SettingsPlaylistAutodownloadActivity,
                     { _, selectedHour, selectedMinute ->
                         if (!ridFav.contains(

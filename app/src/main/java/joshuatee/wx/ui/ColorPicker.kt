@@ -408,14 +408,12 @@ class ColorPicker : View {
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
-        val width: Int
-        val height: Int
-        width = when (widthMode) {
+        val width: Int = when (widthMode) {
             MeasureSpec.EXACTLY -> widthSize
             MeasureSpec.AT_MOST -> min(intrinsicSize, widthSize)
             else -> intrinsicSize
         }
-        height = when (heightMode) {
+        val height: Int = when (heightMode) {
             MeasureSpec.EXACTLY -> heightSize
             MeasureSpec.AT_MOST -> min(intrinsicSize, heightSize)
             else -> intrinsicSize

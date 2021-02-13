@@ -77,11 +77,17 @@ class ObjectCardAlertSummaryItem(context: Context) {
             endTime = ""
         }
         textViewTop.text = "$office ($location)"
-        if (office == "") textViewTop.tv.visibility = View.GONE
+        if (office == "") {
+            textViewTop.tv.visibility = View.GONE
+        }
         textViewBottom.text = capAlert.area
         textViewTitle.text = title
         textViewStart.text = "Start: $startTime"
-        if (endTime != "") textViewEnd.text = "End: $endTime" else textViewEnd.tv.visibility = View.GONE
+        if (endTime != "") {
+            textViewEnd.text = "End: $endTime"
+        } else {
+            textViewEnd.tv.visibility = View.GONE
+        }
     }
 }
 

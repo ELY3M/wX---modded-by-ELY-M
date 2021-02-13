@@ -67,7 +67,6 @@ class SettingsColorPickerActivity : AppCompatActivity(), OnColorChangedListener 
         buttonDefault = findViewById(R.id.buttonDefault)
         toolbar = findViewById(R.id.toolbar_top)
         setSupportActionBar(toolbar)
-        assert(supportActionBar != null)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         UtilityToolbar.fullScreenMode(toolbar, false)
         val activityArguments = intent.getStringArrayExtra(INFO)

@@ -93,7 +93,9 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
     }
 
     private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
-        animDrawable = withContext(Dispatchers.IO) { UtilityAwcRadarMosaic.getAnimation(this@AwcRadarMosaicActivity, objectNavDrawer.url, product) }
+        animDrawable = withContext(Dispatchers.IO) {
+            UtilityAwcRadarMosaic.getAnimation(this@AwcRadarMosaicActivity, objectNavDrawer.url, product)
+        }
         animRan = UtilityImgAnim.startAnimation(animDrawable, img)
     }
 
@@ -108,7 +110,9 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_animate -> getAnimate()
             R.id.action_stop -> animDrawable.stop()

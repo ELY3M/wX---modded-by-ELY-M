@@ -40,6 +40,7 @@ import androidx.core.content.ContextCompat
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.os.Handler
+import android.os.Looper
 import android.view.*
 
 import joshuatee.wx.R
@@ -341,18 +342,18 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 }
             }
             window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-            mHandler = Handler()
+            mHandler = Handler(Looper.getMainLooper())
             startRepeatingTask()
         }
 	//elys mod
         if (MyApplication.sn_locationreport) {
             UtilityLog.d("wx", "starting location report")
-            sn_Handler_m = Handler()
+            sn_Handler_m = Handler(Looper.getMainLooper())
             start_sn_reporting()
         }
 
         if (MyApplication.radarConusRadar) {
-            conus_Handler_m = Handler()
+            conus_Handler_m = Handler(Looper.getMainLooper())
             start_conusimage()
         }
         //super.onRestart()
@@ -429,7 +430,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 ridChanged = false
             }
             if (PolygonType.SPOTTER_LABELS.pref && !archiveMode) UtilityWXGLTextObject.updateSpotterLabels(numberOfPanes, wxglTextObjects)
-	    
+	    //elys mod
 	    if (PolygonType.HAIL_LABELS.pref && !archiveMode) {
             UtilityWXGLTextObject.updateHailLabels(numberOfPanes, wxglTextObjects)
             }
@@ -775,7 +776,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
     }
 
-    private val handler = Handler()
+    private val handler = Handler(Looper.getMainLooper())
 
     private var mStatusChecker: Runnable = object : Runnable {
         override fun run() {
@@ -798,7 +799,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     //report your spotter network location
-    private val sn_handler = Handler()
+    private val sn_handler = Handler(Looper.getMainLooper())
     private val sn_reporter: Runnable = object : Runnable {
         override fun run() {
             UtilityLog.d("wx", "SendPosition(this@WXGLRadarActivity) on lat: "+latD+" lon: "+lonD)
@@ -815,7 +816,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         sn_Handler_m = null
     }
     //conus radar
-    private val conus_handler = Handler()
+    private val conus_handler = Handler(Looper.getMainLooper())
     private val conus_image: Runnable = object : Runnable {
         override fun run() {
             UtilityLog.d("wx", "downloading new conus image")

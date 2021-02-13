@@ -121,7 +121,9 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
             Utility.writePref(this@WpcImagesActivity, "WPG_IMG_FAV_URL", drw.getUrl())
             Utility.writePref(this@WpcImagesActivity, "WPG_IMG_IDX", drw.imgIdx)
             Utility.writePref(this@WpcImagesActivity, "WPG_IMG_GROUPIDX", drw.imgGroupIdx)
-            bitmap = withContext(Dispatchers.IO) { getUrl.getImage() }
+            bitmap = withContext(Dispatchers.IO) {
+                getUrl.getImage()
+            }
         } else {
             title = "Images"
             toolbar.subtitle = GlobalArrays.nwsImageProducts.findLast { it.startsWith("$homeScreenId:") }!!.split(":")[1]
@@ -150,7 +152,9 @@ class WpcImagesActivity : VideoRecordActivity(), View.OnClickListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_forward -> {
                 timePeriod += 1

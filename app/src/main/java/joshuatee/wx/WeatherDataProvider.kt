@@ -54,7 +54,7 @@ class WeatherDataProvider : ContentProvider() {
 
     @Synchronized
     override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
-        assert(uri.pathSegments.isEmpty())
+        // assert(uri.pathSegments.isEmpty())
         // In this sample, we only query without any parameters, so we can just return a cursor to
         // all the weather data.
         val matrixCursor = MatrixCursor(arrayOf(Columns.ID, Columns.DAY, Columns.TEMPERATURE))
@@ -73,7 +73,7 @@ class WeatherDataProvider : ContentProvider() {
 
     @Synchronized
     override fun update(uri: Uri, values: ContentValues?, selection: String?, selectionArgs: Array<String>?): Int {
-        assert(uri.pathSegments.size == 1)
+        // assert(uri.pathSegments.size == 1)
         // In this sample, we only update the content provider individually for each row with new
         // temperature values.
         val index = uri.pathSegments[0].toIntOrNull() ?: 0

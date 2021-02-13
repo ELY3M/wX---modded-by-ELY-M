@@ -41,7 +41,6 @@ abstract class BaseActivity : AppCompatActivity() {
         setContentView(layoutResId)
         toolbar = findViewById(R.id.toolbar_top)
         setSupportActionBar(toolbar)
-        assert(supportActionBar != null)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         if (bottomToolbar) {
             toolbarBottom = findViewById(R.id.toolbar_bottom)
