@@ -26,6 +26,7 @@ import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.settings.Location
 
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.UIPreferences
 import joshuatee.wx.radar.LatLon
 
 class ObjectSevenDay {
@@ -37,7 +38,7 @@ class ObjectSevenDay {
         private set
     var sevenDayShort = ""
         private set
-    var icons = listOf<String>()
+    var icons = mutableListOf<String>()
         private set
     private var detailedForecasts = mutableListOf<String>()
 
@@ -53,7 +54,7 @@ class ObjectSevenDay {
             val html = UtilityCanada.getLocationHtml(Location.getLatLon(locationNumber))
             sevenDayLong = UtilityCanada.get7Day(html)
             iconsAsString = UtilityCanada.getIcons7Day(sevenDayLong)
-            icons = UtilityCanada.getIcons7DayAsList(sevenDayLong)
+            icons = UtilityCanada.getIcons7DayAsList(sevenDayLong).toMutableList()
             convertExt7DayToList()
         }
     }
@@ -73,46 +74,77 @@ class ObjectSevenDay {
     }
 
     private fun getIcons7Day(html: String): String {
-        val icons = html.parseColumn("\"icon\": \"(.*?)\",")
-        var iconList = ""
-        icons.forEach { iconList += "$it!" }
-        return iconList
+        if (UIPreferences.useNwsApi) {
+            val icons = html.parseColumn("\"icon\": \"(.*?)\",")
+            var iconList = ""
+            icons.forEach { iconList += "$it!" }
+            return iconList
+        } else {
+            return ""
+        }
     }
 
     private fun get7DayShort(html: String): String {
-        val names = html.parseColumn("\"name\": \"(.*?)\",")
-        val temperatures = html.parseColumn("\"temperature\": (.*?),")
-        val shortForecasts = html.parseColumn("\"shortForecast\": \"(.*?)\",")
-        val detailedForecasts = html.parseColumn("\"detailedForecast\": \"(.*?)\"")
-        return if ((names.size == temperatures.size) && (temperatures.size == shortForecasts.size) && (shortForecasts.size == detailedForecasts.size)) {
-            val objectForecasts = (names.indices).map { ObjectForecast(names[it], temperatures[it], shortForecasts[it], detailedForecasts[it]) }
-            var forecasts = MyApplication.newline + MyApplication.newline
-            objectForecasts.forEach {
-                forecasts += it.name + "(" + it.temperature + "): " + it.shortForecast
-                forecasts += MyApplication.newline + MyApplication.newline
+        if (UIPreferences.useNwsApi) {
+            val names = html.parseColumn("\"name\": \"(.*?)\",")
+            val temperatures = html.parseColumn("\"temperature\": (.*?),")
+            val shortForecasts = html.parseColumn("\"shortForecast\": \"(.*?)\",")
+            val detailedForecasts = html.parseColumn("\"detailedForecast\": \"(.*?)\"")
+            return if ((names.size == temperatures.size) && (temperatures.size == shortForecasts.size) && (shortForecasts.size == detailedForecasts.size)) {
+                val objectForecasts = (names.indices).map { ObjectForecast(names[it], temperatures[it], shortForecasts[it], detailedForecasts[it]) }
+                var forecasts = MyApplication.newline + MyApplication.newline
+                objectForecasts.forEach {
+                    forecasts += it.name + "(" + it.temperature + "): " + it.shortForecast
+                    forecasts += MyApplication.newline + MyApplication.newline
+                }
+                forecasts
+            } else {
+                ""
             }
-            forecasts
         } else {
-            ""
+            return ""
         }
     }
 
     private fun get7DayExtended(html: String): String {
-        val names = html.parseColumn("\"name\": \"(.*?)\",")
-        val temperatures = html.parseColumn("\"temperature\": (.*?),")
-        this.icons = html.parseColumn("\"icon\": \"(.*?)\",")
-        val shortForecasts = html.parseColumn("\"shortForecast\": \"(.*?)\",")
-        val detailedForecastsLocal = html.parseColumn("\"detailedForecast\": \"(.*?)\"")
-        var forecast = MyApplication.newline + MyApplication.newline
-        if (names.size == temperatures.size && temperatures.size == shortForecasts.size && shortForecasts.size == detailedForecastsLocal.size) {
-            val forecasts = (names.indices).map { ObjectForecast(names[it], temperatures[it], shortForecasts[it], detailedForecastsLocal[it]) }
-            forecasts.forEach {
-                forecast += it.name + ": " + it.detailedForecast
-                forecast += MyApplication.newline + MyApplication.newline
-                detailedForecasts.add(it.name + ": " + it.detailedForecast)
+        if (UIPreferences.useNwsApi) {
+            val names = html.parseColumn("\"name\": \"(.*?)\",")
+            val temperatures = html.parseColumn("\"temperature\": (.*?),")
+            this.icons = html.parseColumn("\"icon\": \"(.*?)\",").toMutableList()
+            val shortForecasts = html.parseColumn("\"shortForecast\": \"(.*?)\",")
+            val detailedForecastsLocal = html.parseColumn("\"detailedForecast\": \"(.*?)\"")
+            var forecast = MyApplication.newline + MyApplication.newline
+            if (names.size == temperatures.size && temperatures.size == shortForecasts.size && shortForecasts.size == detailedForecastsLocal.size) {
+                val forecasts = (names.indices).map { ObjectForecast(names[it], temperatures[it], shortForecasts[it], detailedForecastsLocal[it]) }
+                forecasts.forEach {
+                    forecast += it.name + ": " + it.detailedForecast
+                    forecast += MyApplication.newline + MyApplication.newline
+                    detailedForecasts.add(it.name + ": " + it.detailedForecast)
+                }
             }
+            return forecast
+        } else {
+            icons.clear()
+            detailedForecasts.clear()
+            val forecastStringList = UtilityUS.getCurrentConditionsUS(html)
+            val forecastString = forecastStringList[3]
+            val iconString = forecastStringList[0]
+            val forecasts = forecastString.split("\n").dropLastWhile { it.isEmpty() }
+            val iconList = UtilityString.parseColumn(iconString, "<icon-link>(.*?)</icon-link>")
+            var forecast = MyApplication.newline + MyApplication.newline
+            forecasts.forEachIndexed { index, s ->
+                if (s != "") {
+                    detailedForecasts.add(s.trim())
+                    forecast += s.trim()
+                    forecast += MyApplication.newline + MyApplication.newline
+                    // UtilityLog.d("wx", s.trim())
+                    if (iconList.size > index) {
+                        icons.add(iconList[index])
+                    }
+                }
+            }
+            return forecast
         }
-        return forecast
     }
 }
 

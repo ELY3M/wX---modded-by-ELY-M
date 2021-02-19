@@ -46,6 +46,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
     private lateinit var dialogueImages: ObjectDialogue
     private lateinit var dialogueAfd: ObjectDialogue
     private lateinit var dialogueRadar: ObjectDialogue
+    private lateinit var dialogueWeb: ObjectDialogue
     private val homeScreenCanadaDefault = "TXT-CC2:TXT-HAZ:IMG-CARAIN:TXT-7DAY2"
 
     @SuppressLint("MissingSuperCall")
@@ -77,6 +78,11 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
         dialogueRadar = ObjectDialogue(this, "Select fixed location Nexrad products:", GlobalArrays.radars + GlobalArrays.tdwrRadarsForHomeScreen)
         dialogueRadar.setSingleChoiceItems { dialog, which ->
             alertDialogClicked(dialogueRadar, "NXRD-", which)
+            dialog.dismiss()
+        }
+        dialogueWeb = ObjectDialogue(this, "Select Web page:", UtilityHomeScreen.localChoicesWeb)
+        dialogueWeb.setSingleChoiceItems { dialog, which ->
+            alertDialogClicked(dialogueWeb, "WEB-", which)
             dialog.dismiss()
         }
     }
@@ -120,6 +126,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             R.id.action_img -> dialogueImages.show()
             R.id.action_afd -> dialogueAfd.show()
             R.id.action_radar -> dialogueRadar.show()
+            R.id.action_web -> dialogueWeb.show()
             R.id.action_help -> ObjectDialogue(this, resources.getString(R.string.homescreen_help_label))
             R.id.action_reset -> {
                 MyApplication.homescreenFav = MyApplication.HOMESCREEN_FAV_DEFAULT

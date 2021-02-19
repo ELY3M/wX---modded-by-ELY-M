@@ -321,6 +321,14 @@ class SettingsUIActivity : BaseActivity() {
                         R.string.translate_text_label
                 ).card
         )
+        linearLayout.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Use new NWS API for 7 day",
+                        "USE_NWS_API_SEVEN_DAY",
+                        R.string.use_nws_api
+                ).card
+        )	
        	linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,

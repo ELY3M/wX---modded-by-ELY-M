@@ -64,8 +64,10 @@ object UIPreferences {
     var normalTextSize = 16
     var navDrawerMainScreen = false
     var navDrawerMainScreenOnRight = true
+    var useNwsApi = true
 
     fun initPreferences(context: Context) {
+        useNwsApi = Utility.readPref(context, "USE_NWS_API_SEVEN_DAY", "true").startsWith("t")
         navDrawerMainScreen = Utility.readPref(context, "NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")
         navDrawerMainScreenOnRight = Utility.readPref(context, "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", "true").startsWith("t")
         if (UtilityUI.isTablet()) normalTextSizeDefault = 18

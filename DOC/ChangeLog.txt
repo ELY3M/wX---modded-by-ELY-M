@@ -9,13 +9,33 @@
 // TODO [ADD] certain GOES regions like CONUS have additional products (GLM, DMW)
 // TODO [FIX] NSSL WRF needs better runtime detection (reference C++ code)
 // TODO [ADD] update copyright 2021
-// TODO [ADD] check for new SPC Meso parms
 // TODO [ADD] 'IntentService' is deprecated. Deprecated in Jav
     https://stackoverflow.com/questions/62138507/intentservice-is-deprecated-how-do-i-replace-it-with-jobintentservice
 // TODO [ADD] 'getter for defaultDisplay: Display!' is deprecated. Deprecated in Java
 // TODO [ADD] 'getMetrics(DisplayMetrics!): Unit' is deprecated. Deprecated in Java
+// TODO [REF] move radarColorPalette,colorMap to ObjectColorPalette
+// TODO [REF] add ObjectLocation
+// TODO [ADD] test widgets with old NWS API
 
-55511 2021_02_05    [ADD] misc lint and deprecations (Handler() in nexrad)
+55519 2021_02_18
+55518 2021_02_18    [FIX] 7 day widget when using old NWS API
+55517 2021_02_18    [ADD] framework for using old 7 day forecast data (nasty 2014 code), toggle in settings -> UI
+55516 2021_02_18    [ADD] don't use accept header for NWS 7day similar to iOS port
+55515 2021_02_17    [FIX] web widget tweak
+55514 2021_02_17    [FIX] headers excluded for XML
+55513 2021_02_17    [ADD] Accept headers and correct in one spot
+                    [ADD] change URL and use ObjectCard for webview on main screen
+                    [ADD] tweak webview display
+55512 2021_02_17    [ADD] upgrade org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8 to 1.4.1
+                    [ADD] experimental Web based 7 day card for homescreen for those impacted by NWS API flakiness
+55511 2021_02_07    [ADD] misc lint and deprecations (Handler() in nexrad)
+                    [ADD] SPC Meso - move VTP Violent Tornado from Beta into Composite Indices to match SPC website
+                    [ADD] SPC Meso - add Tornadic 0-1km EHI to Beta to match SPC website
+                    [ADD] SPC Meso - add Tornadic Tilting & Stretching to Beta to match SPC website
+                    [ADD] SPC Meso - remove Enhanced EHI from Beta as it's no longer present on the SPC website
+                    [ADD] update implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7' to 1.3.8
+                    [ADD] update api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.21" to 1.4.30
+                    [ADD] update implementation 'com.google.android.material:material:1.2.1' to 1.3.0
 55510 2021_02_05    [REF] remove kotlin-android-extensions in build.gradle
                     [ADD] minor correction in SPC Tstorm URL
 55509 2021_01_31    [ADD] start removing import kotlinx.android.synthetic.main.activity_hourly.*, switch to findViewById (not interested in View Binding at this time)

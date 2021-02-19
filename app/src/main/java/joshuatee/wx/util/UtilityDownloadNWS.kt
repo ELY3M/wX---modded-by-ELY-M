@@ -31,10 +31,12 @@ import joshuatee.wx.radar.LatLon
 import okhttp3.Request
 
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.UIPreferences
 
 object UtilityDownloadNws {
 
     private const val USER_AGENT_STR = "Android ${MyApplication.packageNameAsString} ${MyApplication.emailAsString}"
+    private const val ACCEPT_STR = "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9"
 
     var forecastZone = ""
 
@@ -67,9 +69,17 @@ object UtilityDownloadNws {
     // https://forecast-v3.weather.gov/documentation?redirect=legacy
     // http://www.nws.noaa.gov/os/notification/pns16-35forecastgov.htm
 
-    fun getStringFromUrl(url: String) = getStringFromURLBase(url, "application/vnd.noaa.dwml+xml;version=1")
+//    fun getStringFromUrl(url: String) = getStringFromURLBase(url, "application/vnd.noaa.dwml+xml;version=1")
+//
+//    private fun getStringFromUrlJson(url: String) = getStringFromURLBase(url, "application/geo+json;version=1")
 
-    private fun getStringFromUrlJson(url: String) = getStringFromURLBase(url, "application/geo+json;version=1")
+//    fun getStringFromUrl(url: String) = getStringFromURLBase(url, ACCEPT_STR)
+//
+//    private fun getStringFromUrlJson(url: String) = getStringFromURLBase(url, ACCEPT_STR)
+
+    fun getStringFromUrl(url: String) = getStringFromUrlBaseNoAcceptHeader(url)
+
+    private fun getStringFromUrlJson(url: String) = getStringFromUrlBaseNoAcceptHeader(url)
 
     fun getStringFromUrlNoAcceptHeader(url: String) = getStringFromUrlBaseNoHeader(url)
 
@@ -79,7 +89,30 @@ object UtilityDownloadNws {
             val request = Request.Builder()
                     .url(url)
                     .header("User-Agent", USER_AGENT_STR)
+                    //.addHeader("Accept", ACCEPT_STR)
                     .addHeader("Accept", header)
+                    .build()
+            val response = MyApplication.httpClient!!.newCall(request).execute()
+            val inputStream = BufferedInputStream(response.body!!.byteStream())
+            val bufferedReader = BufferedReader(InputStreamReader(inputStream))
+            var line: String? = bufferedReader.readLine()
+            while (line != null) {
+                out.append(line)
+                line = bufferedReader.readLine()
+            }
+            bufferedReader.close()
+        } catch (e: Exception) {
+            UtilityLog.handleException(e)
+        }
+        return out.toString()
+    }
+
+    private fun getStringFromUrlBaseNoAcceptHeader(url: String): String {
+        val out = StringBuilder(5000)
+        try {
+            val request = Request.Builder()
+                    .url(url)
+                    .header("User-Agent", USER_AGENT_STR)
                     .build()
             val response = MyApplication.httpClient!!.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
@@ -102,6 +135,7 @@ object UtilityDownloadNws {
             val request = Request.Builder()
                     .url(url)
                     .header("User-Agent", USER_AGENT_STR)
+                    .addHeader("Accept", ACCEPT_STR)
                     .build()
             val response = MyApplication.httpClient!!.newCall(request).execute()
             val inputStream = BufferedInputStream(response.body!!.byteStream())
@@ -152,11 +186,15 @@ object UtilityDownloadNws {
     }
 
     fun get7DayData(latLon: LatLon): String {
-        val pointsData = getLocationPointData(latLon)
-        val forecastUrl = pointsData.parse("\"forecast\": \"(.*?)\"")
-        // set static var at object level for use elsewhere
-        forecastZone = forecastUrl
-        return forecastUrl.getNwsHtml()
+        if (UIPreferences.useNwsApi) {
+            val pointsData = getLocationPointData(latLon)
+            val forecastUrl = pointsData.parse("\"forecast\": \"(.*?)\"")
+            // set static var at object level for use elsewhere
+            forecastZone = forecastUrl
+            return forecastUrl.getNwsHtml()
+        } else {
+            return UtilityUS.getLocationHtml(latLon.latString, latLon.lonString)
+        }
     }
 
     private fun getLocationPointData(latLon: LatLon) = (MyApplication.nwsApiUrl + "/points/" + latLon.latString + "," + latLon.lonString).getNwsHtml()

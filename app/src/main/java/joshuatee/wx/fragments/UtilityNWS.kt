@@ -30,6 +30,8 @@ import joshuatee.wx.ui.ObjectPaint
 import joshuatee.wx.ui.ObjectPaintStripe
 import joshuatee.wx.ui.UtilityTheme
 import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.UtilityLog
+import joshuatee.wx.util.UtilityString
 
 // TODO rename file
 object UtilityNws {
@@ -40,14 +42,27 @@ object UtilityNws {
     //  https://api.weather.gov/icons/land/night/bkn?size=medium
     //  https://api.weather.gov/icons/land/day/tsra_hi,40?size=medium
     fun getIcon(context: Context, url: String): Bitmap {
-        if (url == "NULL") return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
+        UtilityLog.d("wx", url)
+        if (url == "NULL" || url == "") {
+            return Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888)
+        }
         var fileName = url.replace("?size=medium", "")
             .replace("?size=small", "")
             .replace("https://api.weather.gov/icons/land/", "")
             .replace("http://api.weather.gov/icons/land/", "")
             .replace("http://nids-wapiapp.bldr.ncep.noaa.gov:9000/icons/land/", "")
             .replace("day/", "")
-        if (fileName.contains("night")) fileName = fileName.replace("night/", "n").replace("/", "/n")
+
+        // legacy add
+        fileName = fileName.replace("http://forecast.weather.gov/newimages/medium/", "")
+        fileName = fileName.replace(".png", "")
+        fileName = fileName.replace("http://forecast.weather.gov/DualImage.php?", "")
+        fileName = fileName.replace("&amp", "")
+        // legacy add end
+
+        if (fileName.contains("night")) {
+            fileName = fileName.replace("night/", "n").replace("/", "/n")
+        }
         val fileId = UtilityNwsIcon.iconMap["$fileName.png"]
         return if (fileId == null || fileName.contains(",")) {
             parseBitmapString(context, fileName)
@@ -62,12 +77,28 @@ object UtilityNws {
     //  rain_showers,70/tsra,80
     //  ntsra,80
     private fun parseBitmapString(context: Context, url: String): Bitmap {
-        return if (url.contains("/")) {
+        // legacy: i=nsn;j=nsn;ip=60;jp=30
+        // legacy add - 2nd condition
+        return if (url.contains("/") || url.contains(";j=")) {
             val conditions = url.split("/").dropLastWhile { it.isEmpty() } //  snow,20/ovc,20
             if (conditions.size > 1) {
                 getDualBitmapWithNumbers(context, conditions[0], conditions[1])
             } else {
-                UtilityImg.getBlankBitmap()
+                // UtilityImg.getBlankBitmap()
+                // legacy add
+                var urlTmp = url.replace("i=", "")
+                urlTmp = urlTmp.replace("j=", "")
+                urlTmp = urlTmp.replace("ip=", "")
+                urlTmp = urlTmp.replace("jp=", "")
+                val items = urlTmp.split(";")
+                return if (items.size > 3) {
+                    UtilityLog.d("wx", "getDualBitmapWithNumbers " + items[0] + items[2] + ":" + items[1] + items[3])
+                    getDualBitmapWithNumbers(context, items[0] + items[2], items[1] + items[3])
+                } else {
+                    UtilityLog.d("wx", "getDualBitmapWithNumbers " + items[0] + " " + items[1])
+                    getDualBitmapWithNumbers(context, items[0], items[1])
+                }
+                // legacy add end
             }
         } else {
             getBitmapWithOneNumber(context, url)
@@ -86,10 +117,10 @@ object UtilityNws {
     private fun getDualBitmapWithNumbers(context: Context, iconLeftString: String, iconRightString: String): Bitmap {
         val leftTokens = iconLeftString.split(",").dropLastWhile { it.isEmpty() }
         val rightTokens = iconRightString.split(",").dropLastWhile { it.isEmpty() }
-        val leftNumber = if (leftTokens.size > 1) leftTokens[1] else ""
-        val rightNumber = if (rightTokens.size > 1) rightTokens[1] else ""
-        val leftWeatherCondition: String
-        val rightWeatherCondition: String
+        var leftNumber = if (leftTokens.size > 1) leftTokens[1] else ""
+        var rightNumber = if (rightTokens.size > 1) rightTokens[1] else ""
+        var leftWeatherCondition: String
+        var rightWeatherCondition: String
         if (leftTokens.isNotEmpty() && rightTokens.isNotEmpty()) {
             leftWeatherCondition = leftTokens[0]
             rightWeatherCondition = rightTokens[0]
@@ -97,6 +128,17 @@ object UtilityNws {
             leftWeatherCondition = ""
             rightWeatherCondition = ""
         }
+
+        // legacy add
+        if (!iconLeftString.contains(",") && !iconRightString.contains(",")) {
+            leftNumber = UtilityString.parse(iconLeftString, ".*?([0-9]+)")
+            leftWeatherCondition = UtilityString.parse(iconLeftString, "([a-z_]+)")
+            rightNumber = UtilityString.parse(iconRightString, ".*?([0-9]+)")
+            rightWeatherCondition = UtilityString.parse(iconRightString, "([a-z_]+)")
+            UtilityLog.d("wx", "dual: " + leftNumber + leftWeatherCondition + rightNumber + rightWeatherCondition)
+        }
+        // legacy add end
+
         val halfWidth = 41
         val middlePoint = 45
         val leftCropA = if (leftWeatherCondition.contains("fg")) middlePoint else 4
@@ -115,14 +157,18 @@ object UtilityNws {
         val xTextLeft = 2
         val xText = if (rightNumber == "100") 50 else 58
         val paintStripe = ObjectPaintStripe()
-        if (leftNumber != "") {
+
+        // legacy add - 2nd conditional
+        if (leftNumber != "" && leftNumber != "0") {
             canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), halfWidth.toFloat(), dimensions.toFloat(), paintStripe.paint)
             canvas.drawText("$leftNumber%", xTextLeft.toFloat(), yText.toFloat(), paint.paint)
         }
         val bitmap3 = UtilityImg.loadBitmap(context, fileNameRight, false)
         val bitmap4 = Bitmap.createBitmap(bitmap3, leftCropB, 0, halfWidth, dimensions)
         canvas.drawBitmap(bitmap4, middlePoint.toFloat(), 0.0f, Paint(Paint.FILTER_BITMAP_FLAG))
-        if (rightNumber != "") {
+
+        // legacy add - 2nd conditional
+        if (rightNumber != "" && leftNumber != "0") {
             canvas.drawRect(middlePoint.toFloat(), (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.paint)
             canvas.drawText("$rightNumber%", xText.toFloat(), yText.toFloat(), paint.paint)
         }
@@ -135,8 +181,17 @@ object UtilityNws {
     //  tsra_hi,40
     private fun getBitmapWithOneNumber(context: Context, iconString: String): Bitmap {
         val items = iconString.split(",").dropLastWhile { it.isEmpty() }
-        val number = if (items.size > 1) items[1] else ""
-        val weatherCondition = if (items.isNotEmpty()) items[0] else ""
+        var number = if (items.size > 1) items[1] else ""
+        var weatherCondition = if (items.isNotEmpty()) items[0] else ""
+
+        // legacy add
+        if (!iconString.contains(",")) {
+            UtilityLog.d("wx","getBitmapWithOneNumber: " + iconString)
+            number = UtilityString.parse(iconString, ".*?([0-9]+)")
+            weatherCondition = UtilityString.parse(iconString, "([a-z]+)")
+        }
+        // legacy add end
+
         val bitmap = Bitmap.createBitmap(dimensions, dimensions, Bitmap.Config.ARGB_8888)
         val canvas = Canvas(bitmap)
         canvas.drawColor(UtilityTheme.primaryColorFromSelectedTheme)

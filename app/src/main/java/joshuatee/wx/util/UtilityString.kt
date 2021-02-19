@@ -246,4 +246,48 @@ object UtilityString {
     }
 
     fun addPeriodBeforeLastTwoChars(string: String) = StringBuilder(string).insert(string.length - 2, ".").toString()
+
+    //
+    // Legacy forecast support
+    //
+    fun parseXml(payloadF: String?, delimF: String?): Array<String> {
+        var payload = payloadF
+        var delim = delimF
+        if ( payloadF == null ) {
+            payload = ""
+        }
+        if ( delimF == null ) {
+            delim = ""
+        }
+        if (delim == "start-valid-time") {
+            payload = payload!!.replace( "<end-valid-time>.*?</end-valid-time>".toRegex() , "").replace( "<layout-key>.*?</layout-key>".toRegex() , "")
+        }
+        payload = payload!!.replace( "<name>.*?</name>".toRegex() , "").replace( "</" + delim + ">".toRegex() , "")
+        return payload.split("<" + delim + ">").toTypedArray()
+    }
+
+    // static String[] parseXmlValue(String payload) {
+    //     if ( payload == null ) {
+    //         payload = "";
+    //     }
+    //     payload = payload.replaceAll( "<name>.*?</name>" , "").replaceAll( "</value>" , "")
+    //     return MyApplication.xml_value_pattern.split(payload)
+    // }
+
+    fun parseXmlExt (regexpList: Array<String>, html: String): Array<String> {
+        val items = Array(regexpList.size) {""}
+        var  p: Pattern
+        // var m: Matcher
+        for (i in regexpList.indices) {
+            try {
+                p = Pattern.compile(regexpList[i], Pattern.DOTALL)
+                val m = p.matcher(html)
+                while (m.find()) {
+                    items[i] = m.group(1)
+                }
+            }  catch (e: Exception) {
+            }
+        }
+        return items
+    }
 }

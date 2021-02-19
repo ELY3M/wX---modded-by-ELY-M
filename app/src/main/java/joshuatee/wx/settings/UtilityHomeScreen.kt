@@ -57,6 +57,9 @@ internal object UtilityHomeScreen {
             "WEATHERSTORY: Local NWS Weather Story",
             "WFOWARNINGS: Local NWS Office Warnings"
     )
+    val localChoicesWeb = listOf(
+            "7DAY: 7 Day Forecast",
+    )
 
     fun setupMap() {
         (1..3).forEach {
