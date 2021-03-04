@@ -387,7 +387,7 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
                             UtilityShare.bitmap(this, this, title, displayData.bitmap[0])
                         } else {
                             title = UtilitySpcMeso.sectorMap[sector] + " - " + displayData.paramLabel[curImg]
-                            UtilityShare.bitmap(this, this,  title, displayData.bitmap[curImg])
+                            UtilityShare.bitmap(this, this, title, displayData.bitmap[curImg])
                         }
                     }
                 }

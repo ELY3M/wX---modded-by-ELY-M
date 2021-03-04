@@ -34,7 +34,6 @@ import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NhcStormActivity
 import joshuatee.wx.nhc.ObjectNhcStormDetails
 import joshuatee.wx.radar.AwcRadarMosaicActivity
-import joshuatee.wx.radar.USNwsMosaicActivity
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.radar.WXGLRadarActivityMultiPane
 import joshuatee.wx.settings.*
@@ -148,7 +147,7 @@ class ObjectIntent() {
         fun showRadarMosaic(context: Context) {
             if (Location.isUS) {
                 if (!UIPreferences.useAwcRadarMosaic) {
-                    ObjectIntent(context, USNwsMosaicActivity::class.java, USNwsMosaicActivity.URL, arrayOf("location"))
+                    // ObjectIntent(context, USNwsMosaicActivity::class.java, USNwsMosaicActivity.URL, arrayOf("location"))
                 } else {
                     ObjectIntent(context, AwcRadarMosaicActivity::class.java, AwcRadarMosaicActivity.URL, arrayOf(""))
                 }

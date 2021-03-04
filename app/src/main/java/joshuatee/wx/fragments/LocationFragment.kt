@@ -58,7 +58,7 @@ import joshuatee.wx.radar.*
 import joshuatee.wx.ui.*
 import kotlinx.coroutines.*
 
-class LocationFragment : Fragment()  {
+class LocationFragment : Fragment() {
 
     //
     // Displays the main content when wX is first opened including current conditions
@@ -195,17 +195,10 @@ class LocationFragment : Fragment()  {
             } else if (token.contains("WEB-")) {
                 if (token == "WEB-7DAY") {
                     val wv = WebView(activityReference)
-                    // wv.settings.builtInZoomControls = true
-                    // wv.settings.setSupportZoom(true)
-                    // wv.settings.useWideViewPort = true
-                    // wv.settings.loadWithOverviewMode = true
-                    // wv.settings.javaScriptEnabled = true
                     homeScreenWebCards.add(ObjectCard(activityReference))
                     homeScreenWebViews.add(wv)
                     homeScreenWebCards.last().addView(homeScreenWebViews.last())
                     linearLayout.addView(homeScreenWebCards.last().card)
-                    // val forecastUrl = "https://forecast.weather.gov/MapClick.php?lat=" + Location.x + "&lon=" + Location.y + "&unit=0&lg=english&FcstType=text&TextType=2"
-                    // webView.loadUrl(forecastUrl)
                 }
             }
         } // end of loop over HM tokens
@@ -267,7 +260,9 @@ class LocationFragment : Fragment()  {
             Location.currentLocationStr = (position + 1).toString()
             x = Location.x
             y = Location.y
-            if (oglrIdx != -1) radarLocationChangedAl[oglrIdx] = false
+            if (oglrIdx != -1) {
+                radarLocationChangedAl[oglrIdx] = false
+            }
             if (MyApplication.locDisplayImg && oglrIdx != -1) {
                 wxglSurfaceViews[oglrIdx].scaleFactor = MyApplication.wxoglSize.toFloat() / 10.0f
                 wxglRenders[oglrIdx].setViewInitial(MyApplication.wxoglSize.toFloat() / 10.0f, 0.0f, 0.0f)
@@ -284,13 +279,17 @@ class LocationFragment : Fragment()  {
     fun getContent() {
         locationLabel.text = Location.name
         sevenDayExtShown = false
-        if (needForecastData) getForecastData()
+        if (needForecastData) {
+            getForecastData()
+        }
         homeScreenTextCards.indices.forEach { getTextProduct(it.toString()) }
         homeScreenImageCards.indices.forEach { getImageProduct(it.toString()) }
         homeScreenWebViews.indices.forEach { getWebProduct(it.toString()) }
         x = Location.x
         y = Location.y
-        if (MyApplication.locDisplayImg) getAllRadars()
+        if (MyApplication.locDisplayImg) {
+            getAllRadars()
+        }
         val currentTime = UtilityTime.currentTimeMillis()
         lastRefresh = currentTime / 1000
         Utility.writePref(activityReference, "LOC_LAST_UPDATE", lastRefresh)
@@ -298,13 +297,15 @@ class LocationFragment : Fragment()  {
 
     override fun onResume() {
         super.onResume()
-        if (glviewInitialized) { wxglSurfaceViews.forEach { it.onResume() } }
+        if (glviewInitialized) {
+            wxglSurfaceViews.forEach { it.onResume() }
+        }
         objectCardCurrentConditions?.refreshTextSize()
         locationLabel.refreshTextSize(TextSize.MEDIUM)
         locationLabel.text = Location.name
-        sevenDayCards.forEach{ it.refreshTextSize() }
-        homeScreenTextCards.forEach{ it.refreshTextSize() }
-        hazardsCards.forEach{ it.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal) }
+        sevenDayCards.forEach { it.refreshTextSize() }
+        homeScreenTextCards.forEach { it.refreshTextSize() }
+        hazardsCards.forEach { it.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal) }
         // TODO use a Timer class to handle the data refresh stuff
         val currentTime = UtilityTime.currentTimeMillis()
         val currentTimeSec = currentTime / 1000
@@ -336,11 +337,21 @@ class LocationFragment : Fragment()  {
     private fun getRadar(idx: Int) = GlobalScope.launch(uiDispatcher) {
         var radarTimeStampLocal = ""
         if (oglrIdx != -1)
-            if (!radarLocationChangedAl[oglrIdx]) wxglRenders[oglrIdx].rid = Location.rid
-        if (wxglRenders[idx].product == "N0Q" && WXGLNexrad.isRidTdwr(wxglRenders[idx].rid)) wxglRenders[idx].product = "TZL"
-        if (wxglRenders[idx].product == "TZL" && !WXGLNexrad.isRidTdwr(wxglRenders[idx].rid)) wxglRenders[idx].product = "N0Q"
-        if (wxglRenders[idx].product == "N0U" && WXGLNexrad.isRidTdwr(wxglRenders[idx].rid)) wxglRenders[idx].product = "TV0"
-        if (wxglRenders[idx].product == "TV0" && !WXGLNexrad.isRidTdwr(wxglRenders[idx].rid)) wxglRenders[idx].product = "N0U"
+            if (!radarLocationChangedAl[oglrIdx]) {
+                wxglRenders[oglrIdx].rid = Location.rid
+            }
+        if (wxglRenders[idx].product == "N0Q" && WXGLNexrad.isRidTdwr(wxglRenders[idx].rid)) {
+            wxglRenders[idx].product = "TZL"
+        }
+        if (wxglRenders[idx].product == "TZL" && !WXGLNexrad.isRidTdwr(wxglRenders[idx].rid)) {
+            wxglRenders[idx].product = "N0Q"
+        }
+        if (wxglRenders[idx].product == "N0U" && WXGLNexrad.isRidTdwr(wxglRenders[idx].rid)) {
+            wxglRenders[idx].product = "TV0"
+        }
+        if (wxglRenders[idx].product == "TV0" && !WXGLNexrad.isRidTdwr(wxglRenders[idx].rid)) {
+            wxglRenders[idx].product = "N0U"
+        }
         UtilityRadarUI.initWxOglGeom(
                 wxglSurfaceViews[idx],
                 wxglRenders[idx],
@@ -370,7 +381,9 @@ class LocationFragment : Fragment()  {
                         false
                 )
             }
-            if (idx == oglrIdx) radarTimeStampLocal = getRadarTimeStampForHomescreen(wxglRenders[oglrIdx].rid)
+            if (idx == oglrIdx) {
+                radarTimeStampLocal = getRadarTimeStampForHomescreen(wxglRenders[oglrIdx].rid)
+            }
         }
         // recent adds Jan 2020
         if (MyApplication.radarWarnings && activityReferenceWithNull != null) {
@@ -382,7 +395,9 @@ class LocationFragment : Fragment()  {
         if (PolygonType.MCD.pref && activityReferenceWithNull != null) {
             withContext(Dispatchers.IO) {
                 UtilityDownloadMcd.get(activityReference)
-                if (activityReferenceWithNull != null) UtilityDownloadWatch.get(activityReference)
+                if (activityReferenceWithNull != null) {
+                    UtilityDownloadWatch.get(activityReference)
+                }
             }
             if (!wxglRenders[idx].product.startsWith("2")) {
                 UtilityRadarUI.plotMcdWatchPolygons(wxglSurfaceViews[idx], wxglRenders[idx], false)
@@ -413,9 +428,16 @@ class LocationFragment : Fragment()  {
         // guess it's worth another try to see if the issue back then was fixed in the various re-writes that have
         // occurred since
         if (Location.isUS && idx == 0) {
-            if (PolygonType.OBS.pref) UtilityWXGLTextObject.updateObservations(numberOfRadars, wxglTextObjects)
-       	    if (PolygonType.HAIL_LABELS.pref) UtilityWXGLTextObject.updateHailLabels(numberOfRadars, wxglTextObjects)
-	    if (PolygonType.SPOTTER_LABELS.pref) UtilityWXGLTextObject.updateSpotterLabels(numberOfRadars, wxglTextObjects)
+            if (PolygonType.OBS.pref) {
+                UtilityWXGLTextObject.updateObservations(numberOfRadars, wxglTextObjects)
+            }
+	    //elys mod
+	    if (PolygonType.HAIL_LABELS.pref) { 
+	    	UtilityWXGLTextObject.updateHailLabels(numberOfRadars, wxglTextObjects)
+	    }
+            if (PolygonType.SPOTTER_LABELS.pref) {
+                UtilityWXGLTextObject.updateSpotterLabels(numberOfRadars, wxglTextObjects)
+            }
             wxglSurfaceViews[idx].requestRender()
             if (idx == oglrIdx) {
                 radarTime = radarTimeStampLocal
@@ -428,17 +450,15 @@ class LocationFragment : Fragment()  {
     }
 
     private fun getWebProduct(productString: String) {
-        //if (productString ==  "WEB-7DAY") {
-            // val forecastUrl = "https://forecast.weather.gov/MapClick.php?lat=" + Location.x + "&lon=" + Location.y + "&unit=0&lg=english&FcstType=text&TextType=2"
         val forecastUrl = "https://forecast.weather.gov/MapClick.php?lat=" + Location.x + "&lon=" + Location.y + "&unit=0&lg=english&FcstType=text&TextType=2"
-        //val forecastUrl = "https://mobile.weather.gov/index.php?lat=" + Location.x + "&lon=" + Location.x + "&unit=0&lg=english#text_forecast"
         homeScreenWebViews.last().loadUrl(forecastUrl)
-        //}
     }
 
     private fun getTextProduct(productString: String) = GlobalScope.launch(uiDispatcher) {
         val productIndex = productString.toIntOrNull() ?: 0
-        val longTextDownload = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(MyApplication.appContext, homeScreenTextCards[productIndex].product) }
+        val longTextDownload = withContext(Dispatchers.IO) {
+            UtilityDownload.getTextProduct(MyApplication.appContext, homeScreenTextCards[productIndex].product)
+        }
         var longText = longTextDownload
         if (homeScreenTextCards[productIndex].product=="NFDOFFN31" || homeScreenTextCards[productIndex].product=="NFDOFFN32") {
             longText = Utility.fromHtml(longTextDownload)
@@ -447,12 +467,16 @@ class LocationFragment : Fragment()  {
         val shortText = UtilityStringExternal.truncate(longText, UIPreferences.homescreenTextLength)
         homeScreenTextCards[productIndex].setTextShort(shortText)
         homeScreenTextCards[productIndex].setText(shortText)
-        if (homeScreenTextCards[productIndex].product == "HOURLY") homeScreenTextCards[productIndex].typefaceMono()
+        if (homeScreenTextCards[productIndex].product == "HOURLY") {
+            homeScreenTextCards[productIndex].typefaceMono()
+        }
     }
 
     private fun getImageProduct(productString: String) = GlobalScope.launch(uiDispatcher) {
         val productIndex = productString.toIntOrNull() ?: 0
-        val bitmap = withContext(Dispatchers.IO) { UtilityDownload.getImageProduct(MyApplication.appContext, homeScreenImageCards[productIndex].product) }
+        val bitmap = withContext(Dispatchers.IO) {
+            UtilityDownload.getImageProduct(MyApplication.appContext, homeScreenImageCards[productIndex].product)
+        }
         homeScreenImageCards[productIndex].setImage(bitmap)
     }
 
@@ -483,7 +507,9 @@ class LocationFragment : Fragment()  {
     private fun getRadarTimeStamp(string: String, j: Int): String {
         var timestamp = ""
         val tokens = string.split(" ")
-        if (tokens.size > 3) timestamp = tokens[3]
+        if (tokens.size > 3) {
+            timestamp = tokens[3]
+        }
         return wxglRenders[j].rid + ": " + timestamp + " (" + Utility.getRadarSiteName(wxglRenders[j].rid) + ")"
     }
 
@@ -564,7 +590,9 @@ class LocationFragment : Fragment()  {
         hazardsCards[0].text = hazUrl
         val hazUrlCa = objectHazards.hazards
         hazardsCards[0].setOnClickListener { ObjectIntent.showText(activityReference, arrayOf(Utility.fromHtml(hazUrlCa), hazUrl)) }
-        if (!hazUrl.startsWith("NO WATCHES OR WARNINGS IN EFFECT")) linearLayoutHazards?.addView(hazardsCards[0].card)
+        if (!hazUrl.startsWith("NO WATCHES OR WARNINGS IN EFFECT")) {
+            linearLayoutHazards?.addView(hazardsCards[0].card)
+        }
     }
 
     private fun setupAlertDialogStatus() {
@@ -623,7 +651,9 @@ class LocationFragment : Fragment()  {
 
     override fun onAttach(context: Context) { // was Context? before 'androidx.preference:preference:1.1.0' // was 1.0.0
         super.onAttach(context)
-        if (context is FragmentActivity) mActivity = context
+        if (context is FragmentActivity) {
+            mActivity = context
+        }
     }
 
     override fun onDetach() {
@@ -712,7 +742,9 @@ class LocationFragment : Fragment()  {
             }
             try {
                 Utility.writePref(activityReference, "FCST", objectSevenDay.sevenDayLong)
-                if (homescreenFavLocal.contains("TXT-7DAY")) bitmaps = objectSevenDay.icons.map { UtilityNws.getIcon(activityReference, it) }
+                if (homescreenFavLocal.contains("TXT-7DAY")) {
+                    bitmaps = objectSevenDay.icons.map { UtilityNws.getIcon(activityReference, it) }
+                }
             } catch (e: Exception) {
                 UtilityLog.handleException(e)
             }
@@ -791,7 +823,9 @@ class LocationFragment : Fragment()  {
         }
     }
 
-    fun showLocations() { locationDialogue.show() }
+    fun showLocations() {
+        locationDialogue.show()
+    }
 
     // FIXME change to return context and use getContext in API greater then 22
     // FIXME duplicate for 2 other areas

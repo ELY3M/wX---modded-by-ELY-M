@@ -84,6 +84,7 @@ object UtilityDownloadNws {
     fun getStringFromUrlNoAcceptHeader(url: String) = getStringFromUrlBaseNoHeader(url)
 
     private fun getStringFromURLBase(url: String, header: String): String {
+        UtilityLog.d("wx", "getStringFromURLBase: $url")
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
@@ -186,14 +187,14 @@ object UtilityDownloadNws {
     }
 
     fun get7DayData(latLon: LatLon): String {
-        if (UIPreferences.useNwsApi) {
+        return if (UIPreferences.useNwsApi) {
             val pointsData = getLocationPointData(latLon)
             val forecastUrl = pointsData.parse("\"forecast\": \"(.*?)\"")
             // set static var at object level for use elsewhere
             forecastZone = forecastUrl
-            return forecastUrl.getNwsHtml()
+            forecastUrl.getNwsHtml()
         } else {
-            return UtilityUS.getLocationHtml(latLon.latString, latLon.lonString)
+            UtilityUS.getLocationHtml(latLon.latString, latLon.lonString)
         }
     }
 

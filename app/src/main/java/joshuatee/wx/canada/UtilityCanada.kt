@@ -295,8 +295,12 @@ object UtilityCanada {
         val resultListDay = html.parseColumn("<title>(.*?)</title>")
         var j = 0
         for (i in 2 until resultListDay.size) {
-            if (resultListDay[i].contains("Current Conditions")) continue
-            if (!resultListDay[i].contains(":")) continue
+            if (resultListDay[i].contains("Current Conditions")) {
+                continue
+            }
+            if (!resultListDay[i].contains(":")) {
+                continue
+            }
             val string = resultListDay[i].split(":")[0] + ": " + stringList[j]
             sevenDayForecast += string + MyApplication.newline + MyApplication.newline
             j += 1

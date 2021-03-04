@@ -48,7 +48,7 @@
             android:layout_margin="3dip"
             android:contentDescription="@string/action_radar"
             android:gravity="center"
-            app:srcCompat="@drawable/ic_flash_on_24dp" />
+            app:srcCompat="@drawable/ic_flash_on_24dp_white" />
 
         <ImageView
             android:id="@+id/b_cloud"
@@ -57,7 +57,7 @@
             android:layout_margin="3dip"
             android:contentDescription="Visible Sat"
             android:gravity="center"
-            app:srcCompat="@drawable/ic_cloud_24dp" />
+            app:srcCompat="@drawable/ic_cloud_24dp_white" />
 
         <ImageView
             android:id="@+id/b_afd"
@@ -66,7 +66,7 @@
             android:layout_margin="3dip"
             android:contentDescription="Area Forecast Discussion"
             android:gravity="center"
-            app:srcCompat="@drawable/ic_info_outline_24dp" />
+            app:srcCompat="@drawable/ic_info_outline_24dp_white" />
 
         <ImageView
             android:id="@+id/b_hourly"
@@ -93,7 +93,7 @@
             android:layout_margin="3dip"
             android:contentDescription="Severe Dashboard"
             android:gravity="center"
-            app:srcCompat="@drawable/ic_report_24dp" />
+            app:srcCompat="@drawable/ic_report_24dp_white" />
     </LinearLayout>
 
     <TextView

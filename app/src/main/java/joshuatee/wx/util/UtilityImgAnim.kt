@@ -36,21 +36,21 @@ import joshuatee.wx.ui.ObjectTouchImageView
 
 object UtilityImgAnim {
 
-    fun getUrlArray(url: String, pattern: String, frameCount: Int): List<String> {
-        var urls = listOf<String>()
-        try {
-            val radarIndexHtml = url.getHtml()
-            val items = radarIndexHtml.parseColumn(pattern)
-            urls = if (items.size >= frameCount) {
-                (items.size - frameCount until items.size).map { items[it] }
-            } else {
-                items.indices.map { items[it] }
-            }
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
-        return urls
-    }
+//    fun getUrlArray(url: String, pattern: String, frameCount: Int): List<String> {
+//        var urls = listOf<String>()
+//        try {
+//            val radarIndexHtml = url.getHtml()
+//            val items = radarIndexHtml.parseColumn(pattern)
+//            urls = if (items.size >= frameCount) {
+//                (items.size - frameCount until items.size).map { items[it] }
+//            } else {
+//                items.indices.map { items[it] }
+//            }
+//        } catch (e: Exception) {
+//            UtilityLog.handleException(e)
+//        }
+//        return urls
+//    }
 
     fun getAnimationDrawableFromUrlList(context: Context, urls: List<String>, delayOriginal: Int): AnimationDrawable {
         var delay = delayOriginal
@@ -102,18 +102,18 @@ object UtilityImgAnim {
         return animationDrawable
     }
 
-    fun getAnimationDrawableFromBitmapListWithCanvas(context: Context, bitmaps: List<Bitmap>, delayOriginal: Int, colorDrawable: ColorDrawable, bitmapCanvas: Bitmap): AnimationDrawable {
-        var delay = delayOriginal
-        val animationDrawable = AnimationDrawable()
-        bitmaps.forEachIndexed { index, bitmap ->
-            if (bitmap.width > 10) {
-                if (index == bitmaps.lastIndex) delay *= 3
-                val layers = arrayOf(colorDrawable, BitmapDrawable(context.resources, bitmap), BitmapDrawable(context.resources, bitmapCanvas))
-                animationDrawable.addFrame(LayerDrawable(layers), delay)
-            }
-        }
-        return animationDrawable
-    }
+//    fun getAnimationDrawableFromBitmapListWithCanvas(context: Context, bitmaps: List<Bitmap>, delayOriginal: Int, colorDrawable: ColorDrawable, bitmapCanvas: Bitmap): AnimationDrawable {
+//        var delay = delayOriginal
+//        val animationDrawable = AnimationDrawable()
+//        bitmaps.forEachIndexed { index, bitmap ->
+//            if (bitmap.width > 10) {
+//                if (index == bitmaps.lastIndex) delay *= 3
+//                val layers = arrayOf(colorDrawable, BitmapDrawable(context.resources, bitmap), BitmapDrawable(context.resources, bitmapCanvas))
+//                animationDrawable.addFrame(LayerDrawable(layers), delay)
+//            }
+//        }
+//        return animationDrawable
+//    }
 
     fun startAnimation(animationDrawable: AnimationDrawable, img: TouchImageView2): Boolean {
         img.setImageDrawable(animationDrawable)

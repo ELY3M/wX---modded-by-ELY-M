@@ -76,7 +76,7 @@ class SevereWarning(private val type: PolygonType) {
     }
 
     fun generateString(html: String) {
-        idList = html.parseColumn("\"id\": \"(NWS.*?)\"")
+        idList = html.parseColumn("\"id\": \"(https://api.weather.gov/alerts/urn.*?)\"")
         areaDescList = html.parseColumn("\"areaDesc\": \"(.*?)\"")
         effectiveList = html.parseColumn("\"effective\": \"(.*?)\"")
         expiresList = html.parseColumn("\"expires\": \"(.*?)\"")

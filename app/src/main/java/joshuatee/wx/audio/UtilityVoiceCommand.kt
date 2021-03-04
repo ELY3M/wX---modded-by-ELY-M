@@ -46,11 +46,15 @@ object UtilityVoiceCommand {
             var validRid = true
             if (tokens.size > 1) {
                 radarSite = tokens[1].toUpperCase(Locale.US)
-                if (Utility.getRadarSiteName(radarSite) == "") validRid = false
+                if (Utility.getRadarSiteName(radarSite) == "") {
+                    validRid = false
+                }
             }
             if (validRid) ObjectIntent.showRadar(context, arrayOf(radarSite, state))
         } else if (vrString.contains("AFD") || vrString.contains("text")) {
-            if (tokens.size > 1) wfo = tokens[1].toUpperCase(Locale.US)
+            if (tokens.size > 1) {
+                wfo = tokens[1].toUpperCase(Locale.US)
+            }
             if (wfo == "WPC") {
                 ObjectIntent(context, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion", "sound"))
             } else {

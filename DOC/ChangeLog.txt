@@ -15,9 +15,27 @@
 // TODO [ADD] 'getMetrics(DisplayMetrics!): Unit' is deprecated. Deprecated in Java
 // TODO [REF] move radarColorPalette,colorMap to ObjectColorPalette
 // TODO [REF] add ObjectLocation
-// TODO [ADD] test widgets with old NWS API
+// TODO [ADD] LSR by WFO - download and show one at a time
 
-55519 2021_02_18
+55531 2021_03_03    [REF] remove ObjectImpactGraphic.kt
+                    [REF] lint
+55530 2021_03_03    [ADD] AK/Hawaii/Carib sectors for AWC Radar Mosaic
+                    [REF] remove warning impact and old mosaic code no longer needed
+                    [REF] various formatting/code cleanup
+                    [FIX] Radar Mosaic widget when tapping on image was not opening correct mosaic activity
+55529 2021_03_02    [FIX] for target SDK 30, widgets with images not working on Android 11 devices. Needed manifest additions queries/intent
+55527 2021_03_02    [FIX] change compile target SDK from 30 to 29, looks like latest SDK breaks image based widgets for those running latest Android
+55526 2021_03_02    [FIX] prevent location that is not supported (such as over water) from crashing
+                    [REF] various code formatting cleanup
+55525 2021_02_27    [FIX] lint
+                    [FIX] crash in severedash when tapping on alert
+55524 2021_02_26    [FIX] UtilityWXOGL, CapAlert, ObjectAlertDetail, UtilityVtec.kt to make use of the new API URL for alerts starting with urn:oid
+55523 2021_02_26    [FIX] add bounds checks in utilUS and code cleanup
+55522 2021_02_25    [FIX] NWS has changed URLs for some alerts which broke display in some cases
+55521 2021_02_24    [ADD] more work for icon generation 7day old api
+55520 2021_02_24    [FIX] make AWC radar mosaic the only option for radar mosaic as NWS has removed a timeframe for the traditional radar mosaic
+                    [FIX] make the older NWS API the default for 7 day forecast
+55519 2021_02_20    [FIX] legacy large widget had icons missing, they are now there but colors are a mix of white/gray
 55518 2021_02_18    [FIX] 7 day widget when using old NWS API
 55517 2021_02_18    [ADD] framework for using old 7 day forecast data (nasty 2014 code), toggle in settings -> UI
 55516 2021_02_18    [ADD] don't use accept header for NWS 7day similar to iOS port

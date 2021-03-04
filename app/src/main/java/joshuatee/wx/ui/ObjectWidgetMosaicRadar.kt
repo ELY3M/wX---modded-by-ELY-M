@@ -29,7 +29,7 @@ import joshuatee.wx.UtilityWidget
 import joshuatee.wx.canada.CanadaRadarActivity
 import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.objects.WidgetFile.*
-import joshuatee.wx.radar.USNwsMosaicActivity
+import joshuatee.wx.radar.AwcRadarMosaicActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.Utility
 
@@ -43,7 +43,7 @@ class ObjectWidgetMosaicRadar(context: Context) {
         UtilityWidget.setImage(context, remoteViews, MOSAIC_RADAR.fileName)
         if (!MyApplication.widgetPreventTap) {
             if (Location.isUS(widgetLocationNumber)) {
-                UtilityWidget.setupIntent(context, remoteViews, USNwsMosaicActivity::class.java, R.id.iv, USNwsMosaicActivity.URL, arrayOf("widget"), MOSAIC_RADAR.action)
+                UtilityWidget.setupIntent(context, remoteViews, AwcRadarMosaicActivity::class.java, R.id.iv, AwcRadarMosaicActivity.URL, arrayOf("widget"), MOSAIC_RADAR.action)
             } else {
                 UtilityWidget.setupIntent(context, remoteViews, CanadaRadarActivity::class.java, R.id.iv, CanadaRadarActivity.RID, arrayOf(UtilityCanada.getSectorFromProvince(province), "rad"), MOSAIC_RADAR.action)
             }

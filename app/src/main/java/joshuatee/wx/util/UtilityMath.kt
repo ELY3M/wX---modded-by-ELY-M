@@ -21,11 +21,10 @@
 
 package joshuatee.wx.util
 
-import java.util.Locale
-
 import joshuatee.wx.MyApplication
-
+import java.util.*
 import kotlin.math.*
+
 
 object UtilityMath {
 
@@ -53,7 +52,7 @@ object UtilityMath {
         return listOf(rx, ry)
     }
 
-    fun computeMidPoint(x0: Double, y0: Double, x1: Double, y1: Double, fraction: Double) = listOf(x0 + fraction * (x1 - x0) , y0 + fraction * (y1 - y0))
+    fun computeMidPoint(x0: Double, y0: Double, x1: Double, y1: Double, fraction: Double) = listOf(x0 + fraction * (x1 - x0), y0 + fraction * (y1 - y0))
 
     // 42.98888 to 42.99
     fun latLonFix(x: String): String {
@@ -94,13 +93,16 @@ object UtilityMath {
     fun celsiusToFahrenheitTable(): String {
         var table = ""
         val cInit = -40
-        for (z in 40 downTo cInit) { table += z.toString() + "  " + celsiusToFahrenheitAsInt(z) + MyApplication.newline }
+        for (z in 40 downTo cInit) {
+            table += z.toString() + "  " + celsiusToFahrenheitAsInt(z) + MyApplication.newline
+        }
         return table
     }
 
     internal fun roundToString(value: Double) = round(value.toFloat()).toInt().toString()
 
-    internal fun pressureMBtoIn(value: String) = String.format(Locale.US, "%.2f", ((value.toDoubleOrNull() ?: 0.0) / 33.8637526)) + " in"
+    internal fun pressureMBtoIn(value: String) = String.format(Locale.US, "%.2f", ((value.toDoubleOrNull()
+            ?: 0.0) / 33.8637526)) + " in"
 
     fun pixPerDegreeLon(centerX: Double, factor: Double): Double {
         val radius = 180 / PI * (1 / cos(Math.toRadians(30.51))) * factor
@@ -121,7 +123,7 @@ object UtilityMath {
     // https://training.weather.gov/wdtd/tools/misc/beamwidth/index.htm
     fun getRadarBeamHeight(degree: Float, distance: Double) = 3.281 * (sin(Math.toRadians(degree.toDouble())) * distance + distance * distance / 15417.82) * 1000.0
 
-    fun heatIndex(temp: String , rh: String ): String {
+    fun heatIndex(temp: String, rh: String): String {
         val t = temp.toDoubleOrNull() ?: 0.0
         val r = rh.toDoubleOrNull() ?: 0.0
         return if ( t > 80.0 && r > 40.0 ) {
@@ -139,5 +141,23 @@ object UtilityMath {
         } else {
             ""
         }
+    }
+
+    //
+    // legacy forecast
+    //
+    fun unitsTemp(valueF: String): String {
+        var value = valueF
+        var tmpNum = 0.0
+        if (!MyApplication.unitsF) {
+            // Deduct 32, then multiply by 5, then divide by 9
+            try {
+                tmpNum = value.toDouble()
+            } catch (e: java.lang.Exception) {
+            }
+            tmpNum = (tmpNum - 32) * 5 / 9
+            value = tmpNum.roundToInt().toString()
+        }
+        return value
     }
 }

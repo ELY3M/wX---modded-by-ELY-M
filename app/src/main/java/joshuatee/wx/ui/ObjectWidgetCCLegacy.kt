@@ -67,12 +67,12 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         val radarSite = Location.getRid(context, widgetLocationNumber)
         val locLabel = Utility.readPref(context, "LOC" + widgetLocationNumber + "_LABEL", "")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            remoteViews.setImageViewResource(R.id.b_radar, R.drawable.ic_flash_on_24dp)
-            remoteViews.setImageViewResource(R.id.b_cloud, R.drawable.ic_cloud_24dp)
-            remoteViews.setImageViewResource(R.id.b_afd, R.drawable.ic_info_outline_24dp)
+            remoteViews.setImageViewResource(R.id.b_radar, R.drawable.ic_flash_on_24dp_white)
+            remoteViews.setImageViewResource(R.id.b_cloud, R.drawable.ic_cloud_24dp_white)
+            remoteViews.setImageViewResource(R.id.b_afd, R.drawable.ic_info_outline_24dp_white)
             remoteViews.setImageViewResource(R.id.b_hourly, R.drawable.ic_place_24dp)
             remoteViews.setImageViewResource(R.id.b_alert, R.drawable.ic_warning_24dp)
-            remoteViews.setImageViewResource(R.id.b_dash, R.drawable.ic_report_24dp)
+            remoteViews.setImageViewResource(R.id.b_dash, R.drawable.ic_report_24dp_white)
         } else {
             val icons = listOf(
                     R.drawable.ic_flash_on_24dp,

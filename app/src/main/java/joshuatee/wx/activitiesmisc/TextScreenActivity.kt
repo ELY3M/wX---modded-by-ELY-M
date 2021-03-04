@@ -74,7 +74,9 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onRestart() {
-        if (url.startsWith("http")) getContent()
+        if (url.startsWith("http")) {
+            getContent()
+        }
         super.onRestart()
     }
 
@@ -86,7 +88,9 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         val textToShare = UtilityShare.prepTextForShare(html)
-        if (audioPlayMenu(item.itemId, html, "txt", "txt")) return true
+        if (audioPlayMenu(item.itemId, html, "txt", "txt")) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_share -> UtilityShare.text(this, activityArguments[1], textToShare)
             else -> return super.onOptionsItemSelected(item)

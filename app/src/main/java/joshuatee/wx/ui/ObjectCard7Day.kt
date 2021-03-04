@@ -30,7 +30,6 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.fragments.UtilityLocationFragment
 import joshuatee.wx.objects.TextSize
-import joshuatee.wx.util.UtilityLog
 
 class ObjectCard7Day(context: Context, bitmap: Bitmap, isUS: Boolean, day: Int, forecasts: List<String>) {
 

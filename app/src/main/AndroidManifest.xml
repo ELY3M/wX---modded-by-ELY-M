@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55519"
-    android:versionName="55519-elys"
+    android:versionCode="55531"
+    android:versionName="55531-elys"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -38,6 +38,15 @@
  <uses-permission android:name="android.permission.ACTION_MANAGE_OVERLAY_PERMISSION" />
  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+ 
+ <queries>
+  <intent>
+   <action android:name="android.intent.action.MAIN" />
+  </intent>
+  <intent>
+  <action android:name="android.intent.category.HOME" />
+  </intent>
+ </queries>
 
  <uses-feature
      android:glEsVersion="0x00020000"
@@ -270,11 +279,11 @@
       android:label="@string/title_activity_uswarnings_with_radar_v3"
       android:parentActivityName="WX" >
   </activity>
-  <activity
+<!--  <activity
       android:name=".activitiesmisc.USWarningsImpactActivity"
       android:label=""
       android:parentActivityName="WX" >
-  </activity>
+  </activity>-->
   <activity
       android:name=".spc.SpcCompmapActivity"
       android:label="@string/title_activity_spccompmap"
@@ -305,11 +314,11 @@
       android:label="@string/title_activity_spcsoundings"
       android:parentActivityName="WX" >
   </activity>
-  <activity
+<!--  <activity
       android:name=".radar.USNwsMosaicActivity"
       android:label="@string/title_activity_nwsmosaic"
       android:parentActivityName="WX" >
-  </activity>
+  </activity>-->
   <activity
       android:name=".activitiesmisc.WfoTextActivity"
       android:label=""

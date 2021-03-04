@@ -31,6 +31,9 @@ import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.notifications.*
 import joshuatee.wx.settings.Location
+import java.util.*
+import java.util.regex.Matcher
+import kotlin.collections.ArrayList
 
 
 object UtilityUS {
@@ -107,12 +110,12 @@ object UtilityUS {
     // Legacy forecast support
     //
     fun getLocationHtml(x: String, y: String): String {
-        return UtilityNetworkIO.getStringFromUrlWithNewLine("https://forecast.weather.gov/MapClick.php?lat=" + x + "&lon=" + y + "&unit=0&lg=english&FcstType=dwml")
+        return UtilityNetworkIO.getStringFromUrlWithNewLine("https://forecast.weather.gov/MapClick.php?lat=$x&lon=$y&unit=0&lg=english&FcstType=dwml")
     }
 
     fun getCurrentConditionsUS(html: String): Array<String> {
-        val result = Array<String>(6) {""}
-        val data_regexp = arrayOf(
+        val result = Array(6) {""}
+        val regexpList = arrayOf(
                 "<temperature type=.apparent. units=.Fahrenheit..*?>(.*?)</temperature>",
                 "<temperature type=.dew point. units=.Fahrenheit..*?>(.*?)</temperature>",
                 "<direction type=.wind.*?>(.*?)</direction>",
@@ -136,33 +139,34 @@ object UtilityUS {
                 "<data type=.forecast.>.*?<area-description>(.*?)</area-description>",
                 "<humidity type=.relative..*?>(.*?)</humidity>"
         )
-        val raw_data = UtilityString.parseXmlExt(data_regexp, html)
-        result[0] = raw_data[10]
-        result[3] = get7DayExt(raw_data)
+        val rawData = UtilityString.parseXmlExt(regexpList, html)
+        result[0] = rawData[10]
+        result[2] = get7Day(rawData)
+        result[3] = get7DayExt(rawData)
         return result
     }
 
-    fun get7DayExt(raw_data: Array<String>): String {
-        val time_p12n13_al: MutableList<String> = ArrayList(14)
-        val weather_summary_al: MutableList<String> = ArrayList(14)
+    private fun get7DayExt(raw_data: Array<String>): String {
+        val timeP12n13List: MutableList<String> = ArrayList(14)
+        val weatherSummaryList: MutableList<String> = ArrayList(14)
         val forecast: Array<String> = UtilityString.parseXml(raw_data[11], "text")
-        val seven_day_site_str = raw_data[20]
+        // val seven_day_site_str = raw_data[20]
         // var m: Matcher
         try {
             //p = Pattern.compile(".*?weather-summary=(.*?)/>.*?");
             val m = MyApplication.utilUS_weather_summary_pattern.matcher(raw_data[18])
-            weather_summary_al.add("")
+            weatherSummaryList.add("")
             while (m.find()) {
-                weather_summary_al.add(m.group(1).replace("\"", ""))
+                weatherSummaryList.add(m.group(1).replace("\"", ""))
             }
         } catch (e: Exception) {
         }
         try {
             //p = Pattern.compile(".*?period-name=(.*?)>.*?");
             val m = MyApplication.utilUS_period_name_pattern.matcher(raw_data[15])
-            time_p12n13_al.add("")
+            timeP12n13List.add("")
             while (m.find()) {
-                time_p12n13_al.add(m.group(1).replace("\"", ""))
+                timeP12n13List.add(m.group(1).replace("\"", ""))
             }
         } catch (e: Exception) {
         }
@@ -172,14 +176,123 @@ object UtilityUS {
         // sb.append(GlobalVariables.newline);
         // sb.append(GlobalVariables.newline);
         for (j in 1 until forecast.size) {
-            sb.append(time_p12n13_al[j])
+            sb.append(timeP12n13List[j])
             sb.append(": ")
             sb.append(forecast[j])
-            if (j < forecast.size - 1) {
-                // sb.append(GlobalVariables.newline);
-                // sb.append(GlobalVariables.newline);
-            }
         }
         return sb.toString()
+    }
+
+    private fun get7Day(raw_data: Array<String>): String {
+        val dayHash = Hashtable<String, String>()
+        dayHash["Sun"] = "Sat"
+        dayHash["Mon"] = "Sun"
+        dayHash["Tue"] = "Mon"
+        dayHash["Wed"] = "Tue"
+        dayHash["Thu"] = "Wed"
+        dayHash["Fri"] = "Thu"
+        dayHash["Sat"] = "Fri"
+
+        val sb = StringBuilder(250)
+        var k = 1
+        val sumCnt: Int
+        var maxCnt: Int
+        val timeP12n13List = ArrayList<String>(14)
+        val timeP24n7List = ArrayList<String>(8)
+        val weatherSummaryList = ArrayList<String>(14)
+        val maxTemp = UtilityString.parseXmlValue(raw_data[8])
+        val minTemp = UtilityString.parseXmlValue(raw_data[9])
+        var m: Matcher
+        //p = Pattern.compile(".*?weather-summary=(.*?)/>.*?");
+        try {
+            m = MyApplication.utilUS_weather_summary_pattern.matcher(raw_data[18])
+            weatherSummaryList.add("")
+            while (m.find()) {
+                weatherSummaryList.add(m.group(1).replace("\"",""))
+            }
+        } catch (e: Exception) {
+        }
+        //p = Pattern.compile(".*?period-name=(.*?)>.*?");
+        try {
+            m = MyApplication.utilUS_period_name_pattern.matcher(raw_data[15])
+            timeP12n13List.add("")
+            while (m.find()) {
+                timeP12n13List.add(m.group(1).replace("\"",""))
+            }
+        } catch (e: Exception) {
+        }
+        try {
+            m = MyApplication.utilUS_period_name_pattern.matcher(raw_data[16])
+            timeP24n7List.add("")
+            while (m.find()) {
+                timeP24n7List.add(m.group(1).replace("\"",""))
+            }
+        } catch (e: Exception) {
+        }
+        if (timeP24n7List.size > 1 && timeP24n7List[1].contains("night")) {
+            minTemp[1] = minTemp[1].replace("\\s*".toRegex(),"")
+            if (timeP24n7List.size > 2) {
+                sb.append(dayHash[timeP24n7List[2].substring(0, 3)]) // short_time
+            } else {
+                sb.append(timeP24n7List[1].substring(0, 3))
+            }
+            sb.append(": ")
+            sb.append(UtilityMath.unitsTemp(minTemp[1]))
+            sb.append(" (")
+            sb.append(weatherSummaryList[1])
+            sb.append(")")
+            sb.append(MyApplication.newline)
+            sumCnt = 2
+            maxCnt = 1
+            k++
+        } else {
+            sumCnt = 1
+            maxCnt = 1
+        }
+        for (j in sumCnt until minTemp.size) {
+            if (maxCnt < maxTemp.size) {
+                maxTemp[maxCnt] = maxTemp[maxCnt].replace(" ", "")
+            }
+            minTemp[j] = minTemp[j].replace(" ","")
+            if (sumCnt == j) {
+                if (timeP24n7List.size > sumCnt + 2) {
+                    sb.append(dayHash[timeP24n7List[j + 1].substring(0, 3)]) // short_time
+                }
+            }
+            else {
+                val tmpString = Utility.safeGet(timeP24n7List, j)
+                if (tmpString.length > 3) {
+                    sb.append(tmpString.substring(0, 3))
+                } else {
+                    sb.append("")
+                }
+            }
+            sb.append(": ")
+            sb.append(UtilityMath.unitsTemp(Utility.safeGet(maxTemp, maxCnt)))
+            sb.append("/")
+            sb.append(UtilityMath.unitsTemp(minTemp[j]))
+            sb.append(" (")
+            // sb.append(weatherSummaryList[k])
+            sb.append(Utility.safeGet(weatherSummaryList, k))
+            k += 1
+            sb.append(" / ")
+            // sb.append(weatherSummaryList[k])
+            sb.append(Utility.safeGet(weatherSummaryList, k))
+            k += 1
+            sb.append(")")
+            sb.append(MyApplication.newline)
+            maxCnt++
+        }
+        if (timeP12n13List.size > 3) {
+            sb.append(timeP12n13List[timeP12n13List.size - 1].substring(0, 3)) // last_short_time
+        }
+        sb.append(": ")
+        sb.append(UtilityMath.unitsTemp(maxTemp[maxTemp.size - 1].replace("\\s*".toRegex(), ""))) // last_max
+        sb.append(" (" )
+        if (weatherSummaryList.size > 2) {
+            sb.append(weatherSummaryList[weatherSummaryList.size - 2])
+        }
+        sb.append(")")
+        return sb.toString().replace("Chance","Chc").replace("Thunderstorms","Tstorms")
     }
 }

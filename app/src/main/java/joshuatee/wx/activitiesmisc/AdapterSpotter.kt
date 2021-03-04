@@ -95,7 +95,9 @@ internal class AdapterSpotter(private val dataSet: MutableList<Spotter>) : Recyc
     private fun applyAndAnimateRemovals(newModels: List<Spotter>) {
         dataSet.indices.reversed().forEach {
             val model = dataSet[it]
-            if (!newModels.contains(model)) removeItem(it)
+            if (!newModels.contains(model)) {
+                removeItem(it)
+            }
         }
     }
 
@@ -103,7 +105,9 @@ internal class AdapterSpotter(private val dataSet: MutableList<Spotter>) : Recyc
         val count = newModels.size
         for (i in 0 until count) {
             val model = newModels[i]
-            if (!dataSet.contains(model)) addItem(i, model)
+            if (!dataSet.contains(model)) {
+                addItem(i, model)
+            }
         }
     }
 
@@ -111,7 +115,9 @@ internal class AdapterSpotter(private val dataSet: MutableList<Spotter>) : Recyc
         newModels.indices.reversed().forEach {
             val model = newModels[it]
             val fromPosition = dataSet.indexOf(model)
-            if (fromPosition >= 0 && fromPosition != it) moveItem(fromPosition, it)
+            if (fromPosition >= 0 && fromPosition != it) {
+                moveItem(fromPosition, it)
+            }
         }
     }
 

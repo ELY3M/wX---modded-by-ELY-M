@@ -11,7 +11,11 @@ class ViewPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_
 
     val tabTitles = arrayOf("LOCAL", "SPC", "MISC")
 
-    override fun getCount() = if (MyApplication.simpleMode || UIPreferences.navDrawerMainScreen) 1 else tabTitles.size
+    override fun getCount() = if (MyApplication.simpleMode || UIPreferences.navDrawerMainScreen) {
+        1
+    } else {
+        tabTitles.size
+    }
 
     override fun getItem(position: Int): Fragment = if (MyApplication.simpleMode || UIPreferences.navDrawerMainScreen) {
             LocationFragment()

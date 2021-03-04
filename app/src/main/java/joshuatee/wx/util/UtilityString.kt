@@ -263,20 +263,21 @@ object UtilityString {
             payload = payload!!.replace( "<end-valid-time>.*?</end-valid-time>".toRegex() , "").replace( "<layout-key>.*?</layout-key>".toRegex() , "")
         }
         payload = payload!!.replace( "<name>.*?</name>".toRegex() , "").replace( "</" + delim + ">".toRegex() , "")
-        return payload.split("<" + delim + ">").toTypedArray()
+        return payload.split("<$delim>").toTypedArray()
     }
 
-    // static String[] parseXmlValue(String payload) {
-    //     if ( payload == null ) {
-    //         payload = "";
-    //     }
-    //     payload = payload.replaceAll( "<name>.*?</name>" , "").replaceAll( "</value>" , "")
-    //     return MyApplication.xml_value_pattern.split(payload)
-    // }
+    fun parseXmlValue(payloadF: String?): Array<String> {
+        var payload = payloadF
+        if (payload == null ) {
+            payload = ""
+        }
+        payload = payload.replace("<name>.*?</name>".toRegex() , "").replace( "</value>" , "")
+        return MyApplication.xml_value_pattern.split(payload)
+    }
 
     fun parseXmlExt (regexpList: Array<String>, html: String): Array<String> {
         val items = Array(regexpList.size) {""}
-        var  p: Pattern
+        var p: Pattern
         // var m: Matcher
         for (i in regexpList.indices) {
             try {
@@ -285,7 +286,7 @@ object UtilityString {
                 while (m.find()) {
                     items[i] = m.group(1)
                 }
-            }  catch (e: Exception) {
+            } catch (e: Exception) {
             }
         }
         return items

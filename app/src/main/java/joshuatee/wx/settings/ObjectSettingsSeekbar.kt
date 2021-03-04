@@ -102,7 +102,7 @@ internal class ObjectSettingsSeekBar(
     private fun convertForSave(value: Int) = value + lowValue
 
     fun updateLabel() {
-        objectTextView.text = label + " (default is " +  defValue.toString() + "): " + convertForSave(seekBar.progress).toString()
+        objectTextView.text = label + " (default is " + defValue.toString() + "): " + convertForSave(seekBar.progress).toString()
     }
 
     val card get() = objectCard.card

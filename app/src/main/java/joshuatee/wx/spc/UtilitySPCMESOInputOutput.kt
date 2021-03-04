@@ -55,15 +55,21 @@ object UtilitySpcMesoInputOutput {
         val topographyImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/topo/topo.gif"
         var bitmap = imgUrl.getImage()
         drawables.add(ColorDrawable(Color.WHITE))
-        if (showTopography) drawables.add(BitmapDrawable(context.resources, UtilityImg.eraseBackground(topographyImgUrl.getImage(), -1)))
+        if (showTopography) {
+            drawables.add(BitmapDrawable(context.resources, UtilityImg.eraseBackground(topographyImgUrl.getImage(), -1)))
+        }
         if (showRadar) {
             val bitmapRadar = radImgUrl.getImage()
             bitmap = UtilityImg.eraseBackground(bitmap, -1)
             drawables.add(BitmapDrawable(context.resources, bitmapRadar))
         }
         drawables.add(BitmapDrawable(context.resources, bitmap))
-        if (showOutlook) drawables.add(BitmapDrawable(context.resources, UtilityImg.eraseBackground(outlookImgUrl.getImage(), -1)))
-        if (showWatchWarn) drawables.add(BitmapDrawable(context.resources, UtilityImg.eraseBackground(watchWarningImgUrl.getImage(), -1)))
+        if (showOutlook) {
+            drawables.add(BitmapDrawable(context.resources, UtilityImg.eraseBackground(outlookImgUrl.getImage(), -1)))
+        }
+        if (showWatchWarn) {
+            drawables.add(BitmapDrawable(context.resources, UtilityImg.eraseBackground(watchWarningImgUrl.getImage(), -1)))
+        }
         return UtilityImg.layerDrawableToBitmap(drawables)
     }
 

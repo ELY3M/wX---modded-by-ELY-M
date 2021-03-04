@@ -169,7 +169,7 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         stormReports = UtilitySpcStormReports.process(linesOfData)
         var stormCnt = -3
         stormReports.forEachIndexed { k, stormReport ->
-            val isHeader =  stormReport.title == "Tornado Reports" || stormReport.title == "Wind Reports" || stormReport.title == "Hail Reports"
+            val isHeader = stormReport.title == "Tornado Reports" || stormReport.title == "Wind Reports" || stormReport.title == "Hail Reports"
             if (filter == "All" || stormReport.state == filter || isHeader ) {
                 stormCnt += 1
                 if (stormReport.state != "") {

@@ -30,7 +30,7 @@ import joshuatee.wx.canada.CanadaRadarActivity
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NhcActivity
 import joshuatee.wx.radar.AwcRadarMosaicActivity
-import joshuatee.wx.radar.USNwsMosaicActivity
+//import joshuatee.wx.radar.USNwsMosaicActivity
 import joshuatee.wx.radar.WXGLRadarActivityMultiPane
 import joshuatee.wx.spc.*
 import joshuatee.wx.vis.GoesActivity
@@ -143,62 +143,62 @@ internal object UtilityHomeScreen {
         MyApplication.HM_CLASS_ID["RAD_1KM"] = SpcSoundingsActivity.URL
 
         if (!UIPreferences.useAwcRadarMosaic) {
-            MyApplication.HM_CLASS["RAD_2KM"] = USNwsMosaicActivity::class.java
-            MyApplication.HM_CLASS_ARGS["RAD_2KM"] = arrayOf("location")
-            MyApplication.HM_CLASS_ID["RAD_2KM"] = USNwsMosaicActivity.URL
+//            MyApplication.HM_CLASS["RAD_2KM"] = USNwsMosaicActivity::class.java
+//            MyApplication.HM_CLASS_ARGS["RAD_2KM"] = arrayOf("location")
+//            MyApplication.HM_CLASS_ID["RAD_2KM"] = USNwsMosaicActivity.URL
         } else {
             MyApplication.HM_CLASS["RAD_2KM"] = AwcRadarMosaicActivity::class.java
             MyApplication.HM_CLASS_ARGS["RAD_2KM"] = arrayOf("")
             MyApplication.HM_CLASS_ID["RAD_2KM"] = AwcRadarMosaicActivity.URL
         }
         listOf(
-                "FMAP",
-                "FMAPD2",
-                "FMAPD3",
-                "FMAP12",
-                "FMAP24",
-                "FMAP36",
-                "FMAP48",
-                "FMAP72",
-                "FMAP96",
-                "FMAP120",
-                "FMAP144",
-                "FMAP168",
-                "FMAP3D",
-                "FMAP4D",
-                "FMAP5D",
-                "FMAP6D",
-                "WPC_ANALYSIS",
-                "QPF1",
-                "QPF2",
-                "QPF3",
-                "QPF1-2",
-                "QPF1-3",
-                "QPF4-5",
-                "QPF6-7",
-                "QPF1-5",
-                "QPF1-7"
+            "FMAP",
+            "FMAPD2",
+            "FMAPD3",
+            "FMAP12",
+            "FMAP24",
+            "FMAP36",
+            "FMAP48",
+            "FMAP72",
+            "FMAP96",
+            "FMAP120",
+            "FMAP144",
+            "FMAP168",
+            "FMAP3D",
+            "FMAP4D",
+            "FMAP5D",
+            "FMAP6D",
+            "WPC_ANALYSIS",
+            "QPF1",
+            "QPF2",
+            "QPF3",
+            "QPF1-2",
+            "QPF1-3",
+            "QPF4-5",
+            "QPF6-7",
+            "QPF1-5",
+            "QPF1-7"
         ).forEach {
             MyApplication.HM_CLASS[it] = WpcImagesActivity::class.java
             MyApplication.HM_CLASS_ARGS[it] = arrayOf("HS", it)
             MyApplication.HM_CLASS_ID[it] = WpcImagesActivity.URL
         }
         listOf(
-                "USWARN",
-                "AKWARN",
-                "HIWARN"
+            "USWARN",
+            "AKWARN",
+            "HIWARN"
         ).forEach {
             MyApplication.HM_CLASS[it] = USWarningsWithRadarActivity::class.java
             MyApplication.HM_CLASS_ARGS[it] = arrayOf(".*?Tornado Warning.*?|.*?Severe Thunderstorm Warning.*?|.*?Flash Flood Warning.*?", "us")
             MyApplication.HM_CLASS_ID[it] = USWarningsWithRadarActivity.URL
         }
         listOf(
-                "NHC2ATL",
-                "NHC5ATL",
-                "NHC2EPAC",
-                "NHC5EPAC",
-                "NHC2CPAC",
-                "NHC5CPAC"
+            "NHC2ATL",
+            "NHC5ATL",
+            "NHC2EPAC",
+            "NHC5EPAC",
+            "NHC2CPAC",
+            "NHC5CPAC"
         ).forEach {
             MyApplication.HM_CLASS[it] = NhcActivity::class.java
             MyApplication.HM_CLASS_ID[it] = ""

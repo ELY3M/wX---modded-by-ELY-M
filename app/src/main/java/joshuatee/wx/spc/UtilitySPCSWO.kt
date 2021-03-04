@@ -52,7 +52,11 @@ internal object UtilitySpcSwo {
                 else -> {
                 }
             }
-            return if (getAllImages) imgUrls.map { it.getImage() } else listOf(imgUrls[0].getImage())
+            return if (getAllImages) {
+                imgUrls.map { it.getImage() }
+            } else {
+                listOf(imgUrls[0].getImage())
+            }
         }
     }
 

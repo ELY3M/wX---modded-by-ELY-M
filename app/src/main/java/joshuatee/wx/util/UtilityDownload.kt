@@ -18,19 +18,13 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-//modded by ELY M.
+//modded by ELY M. //keeping sun/moon
 
 package joshuatee.wx.util
 
-import java.io.BufferedInputStream
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
 import java.util.Locale
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 
 import joshuatee.wx.MyApplication
 import joshuatee.wx.activitiesmisc.UtilityLightning
@@ -41,14 +35,12 @@ import joshuatee.wx.canada.UtilityCanadaImg
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.spc.*
-import okhttp3.Request
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.radar.UtilityAwcRadarMosaic
-import joshuatee.wx.radar.UtilityUSImgNwsMosaic
 import joshuatee.wx.vis.UtilityGoes
 
 object UtilityDownload {
@@ -70,11 +62,12 @@ object UtilityDownload {
                     "usa" -> k = "usa"
                 }
                 bitmap = if (Location.isUS(location)) {
-                    if (k == "usa") {
-                        UtilityUSImgNwsMosaic.get(context, "latest", false)
-                    } else {
-                        UtilityUSImgNwsMosaic.get(context, UtilityUSImgNwsMosaic.getSectorFromState(state), false)
-                    }
+//                    if (k == "usa") {
+//                        UtilityUSImgNwsMosaic.get(context, "latest", false)
+//                    } else {
+//                        UtilityUSImgNwsMosaic.get(context, UtilityUSImgNwsMosaic.getSectorFromState(state), false)
+//                    }
+                    UtilityImg.getBlankBitmap()
                 } else {
                     val province = Utility.readPref(context, "NWS" + location + "_STATE", "")
                     UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(context, UtilityCanada.getSectorFromProvince(province))
@@ -423,21 +416,21 @@ object UtilityDownload {
                 text = text.replace("<br><br>", MyApplication.newline)
             }
             prod.contains("PMD30D") -> {
-                val textUrl = MyApplication.tgftpSitePrefix +  "/data/raw/fx/fxus07.kwbc.pmd.30d.txt"
+                val textUrl = MyApplication.tgftpSitePrefix + "/data/raw/fx/fxus07.kwbc.pmd.30d.txt"
                 text = textUrl.getHtmlWithNewLine()
                 text = text.removeLineBreaks()
             }
             prod.contains("PMD90D") -> {
-                val textUrl = MyApplication.tgftpSitePrefix +  "/data/raw/fx/fxus05.kwbc.pmd.90d.txt"
+                val textUrl = MyApplication.tgftpSitePrefix + "/data/raw/fx/fxus05.kwbc.pmd.90d.txt"
                 text = textUrl.getHtmlWithNewLine()
                 text = text.removeLineBreaks()
             }
             prod.contains("PMDHCO") -> {
-                val textUrl = MyApplication.tgftpSitePrefix +  "/data/raw/fx/fxhw40.kwbc.pmd.hco.txt"
+                val textUrl = MyApplication.tgftpSitePrefix + "/data/raw/fx/fxhw40.kwbc.pmd.hco.txt"
                 text = textUrl.getHtmlWithNewLine()
             }
             prod.contains("PMDMRD") -> {
-                val textUrl = MyApplication.tgftpSitePrefix +  "/data/raw/fx/fxus06.kwbc.pmd.mrd.txt"
+                val textUrl = MyApplication.tgftpSitePrefix + "/data/raw/fx/fxus06.kwbc.pmd.mrd.txt"
                 text = textUrl.getHtmlWithNewLine().removeLineBreaks()
             }
             prod.startsWith("RWR") -> {
@@ -575,51 +568,12 @@ object UtilityDownload {
         return text
     }
 
-
-    fun getRadarStatusMessage(context: Context, radarSite: String): String {
-        val ridSmall = if (radarSite.length == 4) radarSite.replace("^T".toRegex(), "") else radarSite
-        return getTextProduct(context, "FTM" + ridSmall.toUpperCase(Locale.US))
-    }
-
-    
-    //check api.weather.gov first//
-    //https://w1.weather.gov/data/LOT/FTMLOT
-    //text = ("${MyApplication.nwsWeatherGov}/data/"+Location.wfo.toUpperCase(Locale.US)+"/FTM"+Location.wfo.toUpperCase(Locale.US)).getHtmlSep()
-    //https://forecast.weather.gov/product.php?site=NWS&issuedby=ARX&product=FTM&format=TXT
-    //https://forecast.weather.gov/product.php?site=NWS&issuedby=SFX&product=FTM&format=txt&version=1&glossary=0
-    //<span style="color:Red;">None issued by this office recently.</span>
-    /*
     fun getRadarStatusMessage(context: Context, radarSite: String): String {
         val ridSmall = if (radarSite.length == 4) {
             radarSite.replace("^T".toRegex(), "")
         } else {
             radarSite
         }
-        var text: String = getTextProduct(context, "FTM" + ridSmall.toUpperCase(Locale.US))
-        UtilityLog.d("wx", "getRadarStatus api text: " + text)
-        if (text == "") {
-            text = ("${MyApplication.nwsWeatherGov}/data/" + ridSmall.toUpperCase(Locale.US) + "/FTM" + ridSmall.toUpperCase(Locale.US)).getHtmlSep()
-        }
-        if (text.contains("<!DOCTYPE html PUBLIC") || text.contains("Forbidden")) {
-            UtilityLog.d("wx", "getRadarStatus testtext: " + text)
-            //try another url...
-            UtilityLog.d("wx", "getRadarStatus trying another url for FTM")
-            text = UtilityString.getHtmlAndParseSep(
-                    "https://forecast.weather.gov/product.php?site=NWS&issuedby="+ridSmall.toUpperCase(Locale.US)+"&product=FTM&format=TXT&glossary=0",
-                    RegExp.prePattern
-            )
-            if (text == "") {
-                text = "None issued by "+ridSmall.toUpperCase(Locale.US)+" office recently."
-            }
-
-        }
-        UtilityLog.d("wx", "getRadarStatus text: "+text)
-        return text
+        return getTextProduct(context, "FTM" + ridSmall.toUpperCase(Locale.US))
     }
-*/
-
 }
-    
-    
-    
-

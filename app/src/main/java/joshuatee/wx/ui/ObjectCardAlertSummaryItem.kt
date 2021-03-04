@@ -66,7 +66,7 @@ class ObjectCardAlertSummaryItem(context: Context) {
         val startTime: String
         val endTime: String
         if (capAlert.title.contains("until")) {
-            val items = capAlert.title.parseMultiple("(.*?) issued (.*?) until (.*?) by (.*?)$",  4)
+            val items = capAlert.title.parseMultiple("(.*?) issued (.*?) until (.*?) by (.*?)$", 4)
             title = items[0]
             startTime = items[1]
             endTime = items[2]

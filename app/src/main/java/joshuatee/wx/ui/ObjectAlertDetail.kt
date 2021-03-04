@@ -58,7 +58,7 @@ class ObjectAlertDetail(val context: Context, linearLayout: LinearLayout) {
             objectTextViews[0].text = capAlert.text
             objectTextViews[0].setTextSize(TextSize.LARGE)
         } else {
-            if (!url.contains("NWS-IDP-PROD")) {
+            if (!url.contains("urn:oid")) {
                 if (capAlert.title.contains("until")) {
                     val items = capAlert.title.parseMultiple("(.*?) issued (.*?) until (.*?) by (.*?)$", 4)
                     title = items[0]

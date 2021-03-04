@@ -27,15 +27,15 @@ import joshuatee.wx.R
 internal object UtilityWpcRainfallForecast {
 
     val productCode = listOf(
-            "QPF94E",
-            "QPF98E",
-            "QPF99E"
+        "QPF94E",
+        "QPF98E",
+        "QPF99E"
     )
 
     val urls = listOf(
-            "${MyApplication.nwsWPCwebsitePrefix}/qpf/94ewbg.gif",
-            "${MyApplication.nwsWPCwebsitePrefix}/qpf/98ewbg.gif",
-            "${MyApplication.nwsWPCwebsitePrefix}/qpf/99ewbg.gif"
+        "${MyApplication.nwsWPCwebsitePrefix}/qpf/94ewbg.gif",
+        "${MyApplication.nwsWPCwebsitePrefix}/qpf/98ewbg.gif",
+        "${MyApplication.nwsWPCwebsitePrefix}/qpf/99ewbg.gif"
     )
 
     const val activityTitle = R.string.title_activity_hpcrainfall_forecast

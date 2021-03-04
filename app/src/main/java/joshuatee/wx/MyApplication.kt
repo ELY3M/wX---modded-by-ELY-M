@@ -359,8 +359,8 @@ class MyApplication : Application() {
         //
         var utilUS_weather_summary_pattern: Pattern = Pattern.compile(".*?weather-summary=(.*?)/>.*?")
         var utilUS_period_name_pattern: Pattern = Pattern.compile(".*?period-name=(.*?)>.*?")
-        var utilUS_headline_pattern: Pattern = Pattern.compile(".*?headline=(.*?)>.*?")
-        var utilUS_hazardtexturl_pattern: Pattern = Pattern.compile(".*?<hazardTextURL>(.*?)</hazardTextURL>.*?")
+        // var utilUS_headline_pattern: Pattern = Pattern.compile(".*?headline=(.*?)>.*?")
+        // var utilUS_hazardtexturl_pattern: Pattern = Pattern.compile(".*?<hazardTextURL>(.*?)</hazardTextURL>.*?")
         var xml_value_pattern: Pattern = Pattern.compile("<value>")
 
         fun initPreferences(context: Context) {

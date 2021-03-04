@@ -247,7 +247,7 @@ class Location(val context: Context, locNumInt: Int) {
             var radarSite = ""
             if (us(xStr)) {
                 setNumLocations(context, locNumToSave)
-                val wfoAndRadar =  getWfoRadarSiteFromPoint(LatLon(xStr, yStr))
+                val wfoAndRadar = getWfoRadarSiteFromPoint(LatLon(xStr, yStr))
                 wfo = wfoAndRadar[0]
                 radarSite = wfoAndRadar[1]
                 if (wfo == "") wfo = UtilityLocation.getNearestOffice( "WFO", LatLon(xStr, yStr)).toLowerCase(Locale.US)

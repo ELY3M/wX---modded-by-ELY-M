@@ -127,7 +127,7 @@ object UtilityWXOGL {
         MyApplication.radarWarningPolygons.forEach { if (it.isEnabled) html += it.storage.value }
         // discard  "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3771044",            "type": "Feature",            "geometry": null,
         // Special Weather Statements can either have a polygon or maybe not, need to strip out those w/o polygon
-        val urlList = html.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/NWS-IDP-.*?)\"").toMutableList()
+        val urlList = html.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/urn.*?)\"").toMutableList()
         val urlListCopy = urlList.toMutableList()
         urlListCopy.forEach {
             if (html.contains(Regex("\"id\"\\: ." + it + "\",\\s*\"type\": \"Feature\",\\s*\"geometry\": null"))) {

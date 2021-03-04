@@ -106,17 +106,27 @@ internal object UtilityRadarUI {
         if (MyApplication.radarShowWpcFronts) {
             var wpcFrontsTimeStamp = Utility.readPref(context,"WPC_FRONTS_TIMESTAMP", "")
             wpcFrontsTimeStamp = wpcFrontsTimeStamp.replace(UtilityTime.getYear().toString(), "")
-            if (wpcFrontsTimeStamp.length > 6) wpcFrontsTimeStamp = wpcFrontsTimeStamp.insert(4, " ")
+            if (wpcFrontsTimeStamp.length > 6) {
+                wpcFrontsTimeStamp = wpcFrontsTimeStamp.insert(4, " ")
+            }
             longPressList.add(MyApplication.newline + "WPC Fronts: " + wpcFrontsTimeStamp)
         }
         longPressList += wxglRender.ridNewList.map { "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.getRadarSiteName(it.name) }
         val obsSite = UtilityMetar.findClosestObservation(context, wxglSurfaceView.latLon)
         ObjectPolygonWarning.isCountNonZero()
-        if ((MyApplication.radarWarnings  || ObjectPolygonWarning.areAnyEnabled()) && ObjectPolygonWarning.isCountNonZero()) longPressList.add("Show Warning text")
+        if ((MyApplication.radarWarnings || ObjectPolygonWarning.areAnyEnabled()) && ObjectPolygonWarning.isCountNonZero()) {
+            longPressList.add("Show Warning text")
+        }
         // Thanks to Ely
-        if (MyApplication.radarWatMcd && MyApplication.watchLatLonList.value != "") longPressList.add("Show Watch text")
-        if (MyApplication.radarWatMcd && MyApplication.mcdLatLon.value != "") longPressList.add("Show MCD text")
-        if (MyApplication.radarMpd && MyApplication.mpdLatLon.value != "") longPressList.add("Show MPD text")
+        if (MyApplication.radarWatMcd && MyApplication.watchLatLonList.value != "") {
+            longPressList.add("Show Watch text")
+        }
+        if (MyApplication.radarWatMcd && MyApplication.mcdLatLon.value != "") {
+            longPressList.add("Show MCD text")
+        }
+        if (MyApplication.radarMpd && MyApplication.mpdLatLon.value != "") {
+            longPressList.add("Show MPD text")
+        }
         // end Thanks to Ely
         longPressList.add("Show nearest observation: " + obsSite.name)
         longPressList.add("Show nearest forecast: $latLonTitle")
@@ -124,8 +134,8 @@ internal object UtilityRadarUI {
         if (MyApplication.radarSpotters || MyApplication.radarSpottersLabel) longPressList.add("Show Spotter Info")
         longPressList.add("Show current radar status message: " + wxglRender.rid)
 	    val getridpoint: String = UtilityLocation.getNearestRadarSite(LatLon(pointX.toString(), pointY.toString()))
-	    longPressList.add("Show nearest radar status message: " + getridpoint)
-	    longPressList.add("userpoint info: " + latLonTitle)
+	longPressList.add("Show nearest radar status message: " + getridpoint)
+	longPressList.add("userpoint info: " + latLonTitle)
         longPressList.add("Add userpoint for: " + latLonTitle)
         longPressList.add("Delete userpoint for: " + latLonTitle)
         longPressList.add("Delete all userpoints")
@@ -289,6 +299,7 @@ internal object UtilityRadarUI {
         }).start()
     }
 
+    //elys mod - removed showExtras to show everything
     fun plotRadar(wxglRender: WXGLRender, urlString: String, context: Context, fnGps: () -> Unit, fnGetLatLon: () -> LatLon, /* showExtras: Boolean, */ archiveMode: Boolean = false) {
         wxglRender.constructPolygons("", urlString, true)
         // work-around for a bug in which raster doesn't show on first launch
@@ -335,7 +346,7 @@ internal object UtilityRadarUI {
         if (text != "") ObjectIntent.showMcd(context, arrayOf(text, "", polygonType.toString()))
     }
     
-    
+    //elys mod
     var getrid: String = ""
     private fun showNearestRadarStatus(context: Context, act: Activity, glview: WXGLSurfaceView, uiDispatcher: CoroutineDispatcher) = GlobalScope.launch(uiDispatcher) {
         var radarStatus = withContext(Dispatchers.IO) {

@@ -71,8 +71,14 @@ object UtilityLocationFragment {
         // 5 to 7 mph.
         val wind9 = chunk.parseMultiple(RegExp.sevenDayWind9, 2)
         // Winds could gusts as high as 21 mph.
-        if (gust == "") gust = chunk.parse(RegExp.sevenDayWind8)
-        gust = if (gust != "") " G $gust mph" else " mph"
+        if (gust == "") {
+            gust = chunk.parse(RegExp.sevenDayWind8)
+        }
+        gust = if (gust != "") {
+            " G $gust mph"
+        } else {
+            " mph"
+        }
         if (wind[0] != "" && wind[1] != "") {
             return spacing + wind[0] + "-" + wind[1] + gust
         } else if (wind2 != "") {
@@ -116,7 +122,11 @@ object UtilityLocationFragment {
             ""
         } else {
             val ret = windDirectionMap[retStr.toLowerCase(Locale.US)]
-            if (ret != null) " $ret" else ""
+            if (ret != null) {
+                " $ret"
+            } else {
+                ""
+            }
         }
     }
 
@@ -136,7 +146,9 @@ object UtilityLocationFragment {
         )
         list.forEach {
             val temp = blob.parse(it)
-            if (temp != "") return temp
+            if (temp != "") {
+                return temp
+            }
         }
         return ""
     }
@@ -191,8 +203,12 @@ object UtilityLocationFragment {
 
     fun extractCanadaWindDirection(chunk: String): String {
         var windDirection = chunk.parse(RegExp.ca7DayWinddir1)
-        if (windDirection == "") windDirection = chunk.parse(RegExp.ca7DayWinddir2)
-        if (windDirection != "") windDirection = " " + (windDirectionMap[windDirection] ?: "")
+        if (windDirection == "") {
+            windDirection = chunk.parse(RegExp.ca7DayWinddir2)
+        }
+        if (windDirection != "") {
+            windDirection = " " + (windDirectionMap[windDirection] ?: "")
+        }
         return windDirection
     }
 
@@ -200,11 +216,17 @@ object UtilityLocationFragment {
         val windSpeedRange = forecast.parseMultiple(RegExp.ca7DayWindspd1, 2)
         val windSpeed = forecast.parse(RegExp.ca7DayWindspd2)
         var gust = ""
-        if (forecast.contains("gusting")) gust = " G " + forecast.parse(RegExp.ca7DayWindspd3)
+        if (forecast.contains("gusting")) {
+            gust = " G " + forecast.parse(RegExp.ca7DayWindspd3)
+        }
         if (windSpeedRange.size > 1 && windSpeedRange[0] != "" && windSpeedRange[1] != "") {
             return " " + windSpeedRange[0] + "-" + windSpeedRange[1] + gust + " km/h"
         }
-        return if (windSpeed == "") "" else "$windSpeed$gust km/h"
+        return if (windSpeed == "") {
+            ""
+        } else {
+            "$windSpeed$gust km/h"
+        }
     }
 
     fun handleIconTap(stringName: String, wxglRender: WXGLRender?, activityReference: Context, fnRefresh: () -> Unit, fnResetRadarView: () -> Unit, fnGetRadars: () -> Unit) {

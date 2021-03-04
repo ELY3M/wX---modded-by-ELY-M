@@ -58,7 +58,7 @@ object UtilityFavorites {
             "SND_FAV" -> MyApplication.sndFav = value
             "SREF_FAV" -> MyApplication.srefFav = value
             "NWS_TEXT_FAV" -> MyApplication.nwsTextFav = value
-            "SPCMESO_FAV" ->  MyApplication.spcMesoFav = value
+            "SPCMESO_FAV" -> MyApplication.spcMesoFav = value
             "RID_CA_FAV" -> MyApplication.caRidFav = value
         }
     }
@@ -104,7 +104,7 @@ object UtilityFavorites {
             "SND_FAV" -> MyApplication.sndFav = favoriteString
             "SREF_FAV" -> MyApplication.srefFav = favoriteString
             "NWS_TEXT_FAV" -> MyApplication.nwsTextFav = favoriteString
-            "SPCMESO_FAV" ->  MyApplication.spcMesoFav = favoriteString
+            "SPCMESO_FAV" -> MyApplication.spcMesoFav = favoriteString
             "RID_CA_FAV" -> MyApplication.caRidFav = favoriteString
         }
     }

@@ -139,19 +139,29 @@ object UtilityTime {
 
     fun isRadarTimeOld(radarTime: String): Boolean {
         val radarTimeComponents = radarTime.split(":")
-        if (radarTimeComponents.size < 3) return false
+        if (radarTimeComponents.size < 3) {
+            return false
+        }
         val radarTimeHours = radarTimeComponents[0].toIntOrNull() ?: 0
         val radarTimeMinutes = radarTimeComponents[1].toIntOrNull() ?: 0
         val radarTimeTotalMinutes = radarTimeHours * 60 + radarTimeMinutes
         val currentTime = getCurrentLocalTimeAsString().split(" ")[1]
         val currentTimeComponents = currentTime.split(":")
-        if (currentTimeComponents.size < 3) return false
+        if (currentTimeComponents.size < 3) {
+            return false
+        }
         val currentTimeHours = currentTimeComponents[0].toIntOrNull() ?: 0
         val currentTimeMinutes = currentTimeComponents[1].toIntOrNull() ?: 0
         val currentTimeTotalMinutes = currentTimeHours * 60 + currentTimeMinutes
-        if (currentTimeTotalMinutes < 30) return false
-        if (radarTimeTotalMinutes > currentTimeTotalMinutes) return true
-        if (radarTimeTotalMinutes < (currentTimeTotalMinutes - 20)) return true
+        if (currentTimeTotalMinutes < 30) {
+            return false
+        }
+        if (radarTimeTotalMinutes > currentTimeTotalMinutes) {
+            return true
+        }
+        if (radarTimeTotalMinutes < (currentTimeTotalMinutes - 20)) {
+            return true
+        }
         return false
     }
 
@@ -166,10 +176,10 @@ object UtilityTime {
     private fun decodeVtecTime(timeRangeOriginal: String): Calendar {
         // Y2K issue
         val timeRange = timeRangeOriginal.replace("T","")
-        val year = ("20" + (timeRange).parse("([0-9]{2})[0-9]{4}[0-9]{4}")).toIntOrNull()  ?: 0
-        val month = ((timeRange).parse("[0-9]{2}([0-9]{2})[0-9]{2}[0-9]{4}")).toIntOrNull()  ?: 0
-        val day = ((timeRange).parse("[0-9]{4}([0-9]{2})[0-9]{4}")).toIntOrNull()  ?: 0
-        val hour = ((timeRange).parse("[0-9]{6}([0-9]{2})[0-9]{2}")).toIntOrNull()  ?: 0
+        val year = ("20" + (timeRange).parse("([0-9]{2})[0-9]{4}[0-9]{4}")).toIntOrNull() ?: 0
+        val month = ((timeRange).parse("[0-9]{2}([0-9]{2})[0-9]{2}[0-9]{4}")).toIntOrNull() ?: 0
+        val day = ((timeRange).parse("[0-9]{4}([0-9]{2})[0-9]{4}")).toIntOrNull() ?: 0
+        val hour = ((timeRange).parse("[0-9]{6}([0-9]{2})[0-9]{2}")).toIntOrNull() ?: 0
         val minute = ((timeRange).parse("[0-9]{6}[0-9]{2}([0-9]{2})")).toIntOrNull() ?: 0
         val cal = Calendar.getInstance()
         cal.set(year, month - 1, day, hour, minute)

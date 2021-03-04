@@ -231,7 +231,11 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCl
                         } else {
                             mosaicShown = true
                             img.resetZoom()
-                            if (imageType == "rad") getMosaic(favorites[it]) else getContent()
+                            if (imageType == "rad") {
+                                getMosaic(favorites[it])
+                            } else {
+                                getContent()
+                            }
                         }
                     }
                 }
@@ -256,7 +260,9 @@ class CanadaRadarActivity : VideoRecordActivity(), OnClickListener, OnMenuItemCl
     }
 
     override fun onClick(v: View) {
-        when (v.id) { R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom) }
+        when (v.id) {
+            R.id.iv -> UtilityToolbar.showHide(toolbar, toolbarBottom)
+        }
     }
 
     private fun toggleFavorite() {

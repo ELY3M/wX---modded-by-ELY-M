@@ -25,10 +25,13 @@ internal class RecyclerViewHolders(itemView: View, private val itemList: List<Ti
     }
 
     // following 2 methods available via implements ItemTouchHelperViewHolder
+    override fun onItemSelected() {
+        (itemView as CardView).setCardBackgroundColor(Color.RED)
+    }
 
-    override fun onItemSelected() { (itemView as CardView).setCardBackgroundColor(Color.RED) }
-
-    override fun onItemClear() { (itemView as CardView).setCardBackgroundColor(0) }
+    override fun onItemClear() {
+        (itemView as CardView).setCardBackgroundColor(0)
+    }
 
     override fun onClick(view: View) {
         val intent = Intent(view.context, itemList[adapterPosition].activity)

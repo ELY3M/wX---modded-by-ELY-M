@@ -36,7 +36,7 @@ import joshuatee.wx.activitiesmisc.WfoTextActivity
 import joshuatee.wx.activitiesmisc.SevereDashboardActivity
 import joshuatee.wx.objects.ObjectIntentShortcut
 import joshuatee.wx.objects.ShortcutType
-import joshuatee.wx.radar.USNwsMosaicActivity
+import joshuatee.wx.radar.AwcRadarMosaicActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.spc.SpcSwoSummaryActivity
 import joshuatee.wx.vis.GoesActivity
@@ -81,10 +81,10 @@ object UtilityShortcut {
                     intent = ObjectIntentShortcut(context, GoesActivity::class.java, GoesActivity.RID, arrayOf("")).intent
                     imageId = R.drawable.goes
                 }
-                ShortcutType.RADAR_MOSAIC -> {
-                    intent = ObjectIntentShortcut(context, USNwsMosaicActivity::class.java).intent
-                    imageId = R.drawable.widget_radar_mosaic
-                }
+                 ShortcutType.RADAR_MOSAIC -> {
+                     intent = ObjectIntentShortcut(context, AwcRadarMosaicActivity::class.java).intent
+                     imageId = R.drawable.widget_radar_mosaic
+                 }
                 ShortcutType.SPC_SWO_SUMMARY -> {
                     intent = ObjectIntentShortcut(context, SpcSwoSummaryActivity::class.java).intent
                     imageId = R.drawable.spc_sum

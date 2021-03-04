@@ -50,7 +50,7 @@ object UtilityVtec {
         return dashboardString.split(MyApplication.newline).dropLastWhile { it.isEmpty() }.size
     }
 
-    fun getStormCountGeneric(data: String) = data.parseColumn("(NWS-IDP-PROD-)").size
+    fun getStormCountGeneric(data: String) = data.parseColumn("(\"id\": \"https://api.weather.gov/alerts/urn:oid)").size
 }
 
 

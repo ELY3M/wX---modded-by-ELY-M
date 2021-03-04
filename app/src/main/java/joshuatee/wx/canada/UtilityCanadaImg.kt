@@ -58,7 +58,9 @@ object UtilityCanadaImg {
     private fun getRadarAnimStringArray(rid: String, duration: String): String {
         val radHtml = (MyApplication.canadaEcSitePrefix + "/radar/index_e.html?id=$rid").getHtmlSep()
         var durationPattern = "<p>Short .1hr.:</p>(.*?)</div>"
-        if (duration == "long") durationPattern = "<p>Long .3hr.:</p>(.*?)</div>"
+        if (duration == "long") {
+            durationPattern = "<p>Long .3hr.:</p>(.*?)</div>"
+        }
         val radarHtml1Hr = radHtml.parse(durationPattern)
         var timeStamps = radarHtml1Hr.parseColumn("display='(.*?)'&amp;")
         val radarSiteCode = (timeStamps.first()).split("_")[0]
@@ -160,8 +162,14 @@ object UtilityCanadaImg {
             MyApplication.canadaEcSitePrefix + "/radar/index_e.html?id=$sector"
         }
         val radHtml = url.getHtmlSep()
-        if (sector == "CAN") sector = "NAT"
-        val durationPatMatch = if (duration == "long") "<p>Long .3hr.:</p>(.*?)</div>" else "<p>Short .1hr.:</p>(.*?)</div>"
+        if (sector == "CAN") {
+            sector = "NAT"
+        }
+        val durationPatMatch = if (duration == "long") {
+            "<p>Long .3hr.:</p>(.*?)</div>"
+        } else {
+            "<p>Short .1hr.:</p>(.*?)</div>"
+        }
         val radarHtml1Hr = radHtml.parse(durationPatMatch)
         val list = radarHtml1Hr.parseColumn("display='(.*?)'&amp;")
         var urlList = ""

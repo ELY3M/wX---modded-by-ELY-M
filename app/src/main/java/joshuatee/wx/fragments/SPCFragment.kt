@@ -78,19 +78,19 @@ class SpcFragment : Fragment() {
             )
             hm["spcswod1"] = TileObject(
                     R.drawable.day1, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
-                    arrayOf("1", ""),  "spcswod1", "Day 1"
+                    arrayOf("1", ""), "spcswod1", "Day 1"
             )
             hm["spcswod2"] = TileObject(
                     R.drawable.day2, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
-                    arrayOf("2", ""),  "spcswod2", "Day 2"
+                    arrayOf("2", ""), "spcswod2", "Day 2"
             )
             hm["spcswod3"] = TileObject(
                     R.drawable.day3, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
-                    arrayOf("3", ""),  "spcswod3", "Day 3"
+                    arrayOf("3", ""), "spcswod3", "Day 3"
             )
             hm["spcswod48"] = TileObject(
                     R.drawable.day48, SpcSwoActivity::class.java, SpcSwoActivity.NUMBER,
-                    arrayOf("4-8", ""),  "spcswod48", "Day 4 through 8"
+                    arrayOf("4-8", ""), "spcswod48", "Day 4 through 8"
             )
             hm["spcstormrpt1"] = TileObject(
                     R.drawable.report_today,

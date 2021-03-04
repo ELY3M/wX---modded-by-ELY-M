@@ -56,7 +56,9 @@ object UtilityPlayListAutoDownload {
         calendar.set(Calendar.MINUTE, minute)
         calendar.set(Calendar.SECOND, 0)
         var timeToAlarm = calendar.timeInMillis
-        if (calendar.timeInMillis < UtilityTime.currentTimeMillis()) timeToAlarm += (24 * 60 * 60 * 1000).toLong()
+        if (calendar.timeInMillis < UtilityTime.currentTimeMillis()) {
+            timeToAlarm += (24 * 60 * 60 * 1000).toLong()
+        }
         val intent = Intent(context, DownloadPlaylistService::class.java)
         intent.putExtra(DownloadPlaylistService.URL, "true")
         val pendingIntent = PendingIntent.getService(context, pos, intent, PendingIntent.FLAG_UPDATE_CURRENT)

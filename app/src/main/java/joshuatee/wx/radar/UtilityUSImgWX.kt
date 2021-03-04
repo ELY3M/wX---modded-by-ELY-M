@@ -153,7 +153,11 @@ object UtilityUSImgWX {
         val hwLineWidth = 1
         val animDrawable = AnimationDrawable()
         val bitmapCanvas = Bitmap.createBitmap(1000, 1000, Config.ARGB_8888)
-        val cd = if (MyApplication.blackBg) ColorDrawable(Color.BLACK) else ColorDrawable(Color.WHITE)
+        val cd = if (MyApplication.blackBg) {
+            ColorDrawable(Color.BLACK)
+        } else {
+            ColorDrawable(Color.WHITE)
+        }
         val bitmaps = Array(frameCount) { UtilityImg.getBlankBitmap() }
         (0 until frameCount).forEach {
             bitmaps[it] = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
@@ -178,7 +182,11 @@ object UtilityUSImgWX {
         val fileName = "nids_dvn_" + product + "_archive"
         UtilityIO.saveRawToInternalStorage(context, WXGLNexrad.productCodeStringToResourceFile[product] ?: R.raw.dvn94, fileName)
         val layers = mutableListOf<Drawable>()
-        val colorDrawable = if (MyApplication.blackBg) ColorDrawable(Color.BLACK) else ColorDrawable(Color.WHITE)
+        val colorDrawable = if (MyApplication.blackBg) {
+            ColorDrawable(Color.BLACK)
+        } else {
+            ColorDrawable(Color.WHITE)
+        }
         try {
             val bitmapCanvas = Bitmap.createBitmap(CANVAS_X, CANVAS_Y, Config.ARGB_8888)
             UtilityNexradRadial8Bit.decodeAndPlot(context, bitmapCanvas, fileName, WXGLNexrad.productCodeStringToCode[product] ?: "N0Q")

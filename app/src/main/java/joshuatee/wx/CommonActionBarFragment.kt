@@ -38,16 +38,9 @@ import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.audio.UtilityVoiceCommand
 import joshuatee.wx.canada.*
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.radar.AwcRadarMosaicActivity
-import joshuatee.wx.radar.USNwsMosaicActivity
-import joshuatee.wx.radar.WXGLRadarActivity
-import joshuatee.wx.radar.WXGLRadarActivityMultiPane
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.SettingsMainActivity
-import joshuatee.wx.spc.SpcSoundingsActivity
 import joshuatee.wx.ui.UtilityUI
-import joshuatee.wx.util.Utility
-import joshuatee.wx.vis.GoesActivity
 import joshuatee.wx.settings.SettingsAboutActivity
 
 open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListener {
@@ -68,7 +61,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-	    //not removing this - ELY M. 
+	    //elys mod - not removing this - ELY M. 
             R.id.action_forecast_webpage -> ObjectIntent(
                 this,
                 WebView::class.java,
@@ -105,7 +98,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                     Toast.makeText(this, "Error initializing speech to text engine.", Toast.LENGTH_LONG).show()
                 }
             }
-            //not removing about - ELY M.
+            //elys mod - not removing about - ELY M.
             R.id.action_about -> ObjectIntent(this, SettingsAboutActivity::class.java)
             else -> return super.onOptionsItemSelected(item)
         }

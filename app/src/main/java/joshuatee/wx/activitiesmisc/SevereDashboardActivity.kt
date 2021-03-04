@@ -227,6 +227,6 @@ class SevereDashboardActivity : BaseActivity() {
     }
 
     private fun showWarningDetails(url: String) {
-        ObjectIntent.showHazard(this@SevereDashboardActivity, arrayOf("https://api.weather.gov/alerts/$url", ""))
+        ObjectIntent.showHazard(this@SevereDashboardActivity, arrayOf(url, ""))
     }
 }
