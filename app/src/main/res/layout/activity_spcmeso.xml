@@ -68,3 +68,6 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp" />
 </androidx.drawerlayout.widget.DrawerLayout>
+<!--
+    android:background="@color/primary_dark_blue"
+    android:background="?attr/colorPrimary" -->

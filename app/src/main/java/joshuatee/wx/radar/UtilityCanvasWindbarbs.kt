@@ -45,7 +45,9 @@ object UtilityCanvasWindbarbs {
         val wbCircleXArr = UtilityMetar.metarDataList[index].x
         val wbCircleYArr = UtilityMetar.metarDataList[index].y
         var mercator = false
-        if (projectionType !== ProjectionType.NWS_MOSAIC) mercator = true
+        if (projectionType !== ProjectionType.NWS_MOSAIC) {
+            mercator = true
+        }
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.FILL
@@ -53,13 +55,21 @@ object UtilityCanvasWindbarbs {
         if (projectionType === ProjectionType.WX_RENDER || projectionType === ProjectionType.WX_RENDER_48) {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         }
-        if (isGust) paint.color = Color.RED else paint.color = MyApplication.radarColorObsWindbarbs
+        if (isGust) {
+            paint.color = Color.RED
+        } else {
+            paint.color = MyApplication.radarColorObsWindbarbs
+        }
         paint.textSize = textSize.toFloat()
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
         var pixXInit: Double
         var pixYInit: Double
         val stormList = mutableListOf<Double>()
-        val arrWb = if (!isGust) UtilityMetar.metarDataList[index].obsArrWb else UtilityMetar.metarDataList[index].obsArrWbGust
+        val arrWb = if (!isGust) {
+            UtilityMetar.metarDataList[index].obsArrWb
+        } else {
+            UtilityMetar.metarDataList[index].obsArrWbGust
+        }
         try {
             val degreeShift = 180.00
             val arrowLength = 2.5
@@ -95,7 +105,9 @@ object UtilityCanvasWindbarbs {
                     val barbCount = length / 10
                     var halfBarb = false
                     var oneHalfBarb = false
-                    if (length - barbCount * 10 > 4 && length > 10 || length in 5..9) halfBarb = true
+                    if (length - barbCount * 10 > 4 && length > 10 || length in 5..9) {
+                        halfBarb = true
+                    }
                     if (length in 5..9) oneHalfBarb = true
                     (0 until barbCount).forEach { j ->
                         ec = ecc.calculateEndingGlobalCoordinates(end, degree2, barbOffset + startLength + j.toDouble() * arrowSpacing * nmScaleFactor * barbLengthScaleFactor)

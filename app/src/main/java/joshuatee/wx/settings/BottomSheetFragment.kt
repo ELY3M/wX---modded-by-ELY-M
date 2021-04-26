@@ -53,6 +53,9 @@ class BottomSheetFragment(private val actContext: Context, val position: Int, pr
         if (Utility.isThemeAllWhite()) {
             label.setTextColor(Color.BLACK)
             label.setBackgroundColor(Color.LTGRAY)
+        } else if (Utility.isThemeAllBlack()) {
+            label.setTextColor(Color.WHITE)
+            label.setBackgroundColor(Color.BLACK)
         } else {
             label.setTextColor(Color.WHITE)
             label.setBackgroundColor(Color.BLACK)

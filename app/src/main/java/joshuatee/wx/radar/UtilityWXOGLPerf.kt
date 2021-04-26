@@ -610,13 +610,15 @@ internal object UtilityWXOGLPerf {
     }
 
     fun colorGen(colorBuff: ByteBuffer, length: Int, colors: ByteArray) {
-        if (length * 3 <= colorBuff.limit()) {
-            for (notUsed in 0 until length) {
-                if (colorBuff.hasRemaining()) colorBuff.put(colors[0])
-                if (colorBuff.hasRemaining()) colorBuff.put(colors[1])
-                if (colorBuff.hasRemaining()) colorBuff.put(colors[2])
+        try {
+            if (length * 3 <= colorBuff.limit()) {
+                for (notUsed in 0 until length) {
+                    if (colorBuff.hasRemaining()) colorBuff.put(colors[0])
+                    if (colorBuff.hasRemaining()) colorBuff.put(colors[1])
+                    if (colorBuff.hasRemaining()) colorBuff.put(colors[2])
+                }
             }
-        }
+        } catch (e: Exception) { UtilityLog.handleException(e) }
     }
     
 //elys mods   

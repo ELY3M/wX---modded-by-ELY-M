@@ -3,22 +3,29 @@
 package joshuatee.wx
 
 import android.Manifest
-import android.os.Bundle
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build.VERSION.SDK_INT
+import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import com.intentfilter.androidpermissions.PermissionManager
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.notifications.UtilityWXJobService
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.settings.*
 import joshuatee.wx.util.Utility
-import androidx.core.app.ActivityCompat
-import com.intentfilter.androidpermissions.PermissionManager
+import joshuatee.wx.util.UtilityAlertDialog
 import joshuatee.wx.util.UtilityLog
-import java.util.Collections.singleton
 import java.io.*
 import java.nio.charset.Charset
+import java.util.Collections.singleton
+import kotlin.system.exitProcess
 
 
 class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCallback {
@@ -29,21 +36,43 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
     // display the splash screen, start the service that handles notifications,
     // and display the version in the title.
     //
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Utility.readPrefWithNull(this, "LOC1_LABEL", null) == null) UtilityStorePreferences.setDefaults(this)
+
+        if (Utility.readPrefWithNull(this, "LOC1_LABEL", null) == null) {
+            UtilityStorePreferences.setDefaults(this)
+        }
         MyApplication.initPreferences(this)
         Location.refreshLocationData(this)
         UtilityWXJobService.startService(this)
-        if (UIPreferences.mediaControlNotif) UtilityNotification.createMediaControlNotification(applicationContext, "")
 
+        if (UIPreferences.mediaControlNotif) {
+            UtilityNotification.createMediaControlNotification(applicationContext, "")
+        }
 
         //storage permission so we can run checkfiles for custom icons//
         val storagepermissionManager = PermissionManager.getInstance(this)
         storagepermissionManager.checkPermissions(singleton(Manifest.permission.WRITE_EXTERNAL_STORAGE), object : PermissionManager.PermissionRequestListener {
             override fun onPermissionGranted() {
-                runme()
+
+                //FUCK YOU GOOGLE!!!!!!  They kept changing their code to "secure" the storage   FUCK YOU
+                //my ass will be at your new HQ offices and chewing you out for what you did to me.  I fucking hate companies that censor.
+                //I will make you pay my fucking income!!!!  FUCK YOU!!!!
+                //Google company Execs need metal pipes in their asses for breaking their promoise not to censor!!!!!
+                //file access permission functions moved to WX.kt
+                if(SDK_INT >= 30) {
+                    if(!Environment.isExternalStorageManager()) {
+                        Toast.makeText(applicationContext, "This app need access to your phone memory or SD Card to make files and write files (/wX/ on your phone memory or sd card)\nThe all file access settings will open. Make sure to toggle it on to enable all files access for this app to function fully.\n You need to restart the app after you enabled the all files access for this app in the settings.\n", Toast.LENGTH_LONG).show()
+                        val intent = Intent(ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                        startActivity(intent)
+                        //force restart :/
+                        exitProcess(0)
+                    } else {
+                        runme()
+                    }
+                } else {
+                    runme()
+                }
 
             }
 
@@ -69,7 +98,6 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
 
         finish()
     }
-
 
     fun runme() {
 
@@ -130,24 +158,24 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
 
 
     fun checkfiles(drawable: Int, filename: String) {
-        UtilityLog.d("wx", "running files check on "+MyApplication.FilesPath)
+        UtilityLog.d("wx", "running files check on " + MyApplication.FilesPath)
         val dir = File(MyApplication.FilesPath)
         if (!dir.exists()) {
             UtilityLog.d("wx", "making dir")
             dir.mkdirs()
         }
 
-        var file = File(MyApplication.FilesPath+filename)
+        var file = File(MyApplication.FilesPath + filename)
         var fileExists = file.exists()
         if(!fileExists)
         {
             //need to copy files!
-            UtilityLog.d("wx", filename+" does not exist.")
+            UtilityLog.d("wx", filename + " does not exist.")
             var bitmap: Bitmap = BitmapFactory.decodeResource(resources, drawable)
             saveBitmapToFile(filename, bitmap)
 
         } else {
-            UtilityLog.d("wx", filename+" are there!")
+            UtilityLog.d("wx", filename + " are there!")
         }
     }
 
@@ -158,7 +186,7 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
             bm.compress(Bitmap.CompressFormat.PNG, 100, out)
             out.flush()
             out.close()
-            UtilityLog.d("wx", fileName+" copied!")
+            UtilityLog.d("wx", fileName + " copied!")
         } catch (e: Exception) {
             UtilityLog.d("wx", "checkfiles Exception!")
             e.printStackTrace()
@@ -169,22 +197,22 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
 
     //check colortable files and copy if any missing//
     fun checkpalfiles(resourceId: Int, filename: String) {
-        UtilityLog.d("wx", "running files check on "+MyApplication.PalFilesPath)
+        UtilityLog.d("wx", "running files check on " + MyApplication.PalFilesPath)
         val dir = File(MyApplication.PalFilesPath)
         if (!dir.exists()) {
             UtilityLog.d("wx", "making dir")
             dir.mkdirs()
         }
 
-        var file = File(MyApplication.PalFilesPath+filename)
+        var file = File(MyApplication.PalFilesPath + filename)
         var fileExists = file.exists()
         if(!fileExists)
         {
             //need to copy files!
-            UtilityLog.d("wx", filename+" does not exist.")
+            UtilityLog.d("wx", filename + " does not exist.")
             saveRawToFile(filename, resourceId)
         } else {
-            UtilityLog.d("wx", filename+" are there!")
+            UtilityLog.d("wx", filename + " are there!")
         }
     }
 
@@ -196,11 +224,6 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
             it.println(content)
         }
     }
-
-
-
-
-
 
 
 

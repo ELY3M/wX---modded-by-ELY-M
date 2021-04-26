@@ -395,14 +395,14 @@ internal class RecordingSession(
         UtilityNotification.initChannels(context)
         val requestID = UtilityTime.currentTimeMillis().toInt()
         val viewIntent = Intent(ACTION_VIEW, uri)
-        val pendingViewIntent = PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT)
+        val pendingViewIntent = PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         var shareIntent = Intent(ACTION_SEND)
         shareIntent.type = MIME_TYPE_RECORDING
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         shareIntent.data = uri
         shareIntent = Intent.createChooser(shareIntent, null)
-        val pendingShareIntent = PendingIntent.getActivity(context, requestID, shareIntent, FLAG_CANCEL_CURRENT)
+        val pendingShareIntent = PendingIntent.getActivity(context, requestID, shareIntent, FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val title = context.getText(R.string.notification_captured_title)
         val subtitle = context.getText(R.string.notification_captured_subtitle)
         val share = context.getText(R.string.notification_captured_share)
@@ -453,14 +453,14 @@ internal class RecordingSession(
         UtilityNotification.initChannels(context)
         val requestID = UtilityTime.currentTimeMillis().toInt()
         val viewIntent = Intent(ACTION_VIEW, uri)
-        val pendingViewIntent = PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT)
+        val pendingViewIntent = PendingIntent.getActivity(context, requestID, viewIntent, FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         var shareIntent = Intent(ACTION_SEND)
         shareIntent.type = MIME_TYPE_SCREENSHOT
         shareIntent.putExtra(Intent.EXTRA_STREAM, uri)
         shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         shareIntent.data = uri
         shareIntent = Intent.createChooser(shareIntent, null)
-        val pendingShareIntent = PendingIntent.getActivity(context, requestID, shareIntent, FLAG_CANCEL_CURRENT)
+        val pendingShareIntent = PendingIntent.getActivity(context, requestID, shareIntent, FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val title = context.getText(R.string.notification_screenshot_captured_title)
         val subtitle = context.getText(R.string.notification_screenshot_captured_subtitle)
         val share = context.getText(R.string.notification_captured_share)

@@ -50,7 +50,13 @@ class ObjectNavDrawerCombo(
     var imgGroupIdx: Int
 
     init {
-        if (Utility.isThemeAllWhite()) listView.setBackgroundColor(Color.WHITE)
+        if (Utility.isThemeAllWhite()) {
+            listView.setBackgroundColor(Color.WHITE)
+        } else if (Utility.isThemeAllBlack()) {
+            listView.setBackgroundColor(Color.BLACK)
+        } /*else {
+            listView.setBackgroundColor(R.attr.colorPrimary)
+        }*/
         listView.setAdapter(MyExpandableListAdapter(activity, items))
         actionBarDrawerToggle = ActionBarDrawerToggle(
             activity,

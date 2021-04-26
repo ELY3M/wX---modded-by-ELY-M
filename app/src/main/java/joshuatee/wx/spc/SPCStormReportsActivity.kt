@@ -270,7 +270,9 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         var time = stormReports[id].time
         var radarSite = UtilityLocation.getNearestOffice("RADAR", LatLon(x, y))
         time = UtilityStringExternal.truncate(time, 3)
-        if (prod == "TR0" || prod == "TV0") radarSite = WXGLNexrad.getTdwrFromRid(radarSite)
+        if (prod == "TR0" || prod == "TV0") {
+            radarSite = WXGLNexrad.getTdwrFromRid(radarSite)
+        }
         if ((stormReports[id].time.toIntOrNull() ?: 0) < 1000) {
             monthStr = String.format(Locale.US, "%02d", month + 1)
             dayStr = String.format(Locale.US, "%02d", day + 1)
@@ -284,7 +286,10 @@ class SpcStormReportsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             x = "0.0"
             y = "0.0"
         }
-        if (prod == "L2REF" || prod == "L2VEL") ObjectIntent.showRadar(this, arrayOf(radarSite, "", prod, "", patternL2, x, y))
+        if (prod == "L2REF" || prod == "L2VEL") {
+            UtilityLog.d("wx LEVEL2", patternL2)
+            ObjectIntent.showRadar(this, arrayOf(radarSite, "", prod, "", patternL2, x, y))
+        }
     }
 
     private fun updateIowaMesoData() {

@@ -19,28 +19,9 @@
 
  */
 
-package joshuatee.wx.radarcolorpalettes
+package joshuatee.wx
 
-import android.content.Context
-import joshuatee.wx.MyApplication
+object GlobalVariables {
 
-import joshuatee.wx.R
-import joshuatee.wx.util.UtilityIO
 
-internal object UtilityColorPalette4bitGeneric {
-
-    fun generate(context: Context, product: Int) {
-        MyApplication.colorMap[product]!!.position(0)
-        val fileId = when (product) {
-            19 -> R.raw.colormap19
-            30 -> R.raw.colormap30
-            56 -> R.raw.colormap56
-            else -> R.raw.colormap19
-        }
-        UtilityIO.readTextFileFromRaw(context.resources, fileId).split("\n").forEach { line ->
-            if (line.contains(",")) {
-                MyApplication.colorMap[product]!!.putLine(line)
-            }
-        }
-    }
 }

@@ -203,8 +203,8 @@ internal object UtilityNotificationSpc {
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(SpcMcdWatchShowActivity::class.java)
         stackBuilder.addNextIntent(resultIntent)
-        val resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
-        val resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT)
+        val resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val cancelString = "spcmcdloc$mdNo$locNum"
         if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
             val sound = MyApplication.locations[locNumInt].sound && !inBlackout
@@ -246,8 +246,8 @@ internal object UtilityNotificationSpc {
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(SpcSwoActivity::class.java)
         stackBuilder.addNextIntent(resultIntent)
-        val resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
-        val resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT)
+        val resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val cancelString = "spcswoloc$day$locNum$threatLevel$validTime"
         if (!(MyApplication.alertOnlyOnce && UtilityNotificationUtils.checkToken(context, cancelString))) {
             val sound = (MyApplication.locations.getOrNull(locNumInt)?.sound ?: false) && !inBlackout

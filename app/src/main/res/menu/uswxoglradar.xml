@@ -287,7 +287,7 @@
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_legend"
-                android:title="Show/Hide Legend"
+                android:title="Show/Hide Color Legend"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_about"

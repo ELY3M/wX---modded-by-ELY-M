@@ -43,8 +43,8 @@ class ObjectPendingIntents {
         stackBuilder.addParentStack(cl)
         stackBuilder.addNextIntent(resultIntent)
         val requestID = UtilityTime.currentTimeMillis().toInt()
-        resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
-        resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT)
+        resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
 
     constructor(context: Context, cl: Class<*>, classFlag: String, classArgs1: ObjectNhcStormDetails) {
@@ -56,8 +56,8 @@ class ObjectPendingIntents {
         stackBuilder.addParentStack(cl)
         stackBuilder.addNextIntent(resultIntent)
         val requestID = UtilityTime.currentTimeMillis().toInt()
-        resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
-        resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT)
+        resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
 
     internal constructor(context: Context, cl: Class<*>) {
@@ -67,8 +67,8 @@ class ObjectPendingIntents {
         stackBuilder.addParentStack(cl)
         stackBuilder.addNextIntent(resultIntent)
         val requestID = UtilityTime.currentTimeMillis().toInt()
-        resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
-        resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT)
+        resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
 }
 

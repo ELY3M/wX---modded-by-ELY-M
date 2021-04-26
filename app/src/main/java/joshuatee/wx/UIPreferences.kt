@@ -65,12 +65,16 @@ object UIPreferences {
     var navDrawerMainScreen = false
     var navDrawerMainScreenOnRight = true
     var useNwsApi = false
+    var useNwsApiForHourly = true
 
     fun initPreferences(context: Context) {
         useNwsApi = Utility.readPref(context, "USE_NWS_API_SEVEN_DAY", "false").startsWith("t")
+        useNwsApiForHourly = Utility.readPref("USE_NWS_API_HOURLY", "true").startsWith("t")
         navDrawerMainScreen = Utility.readPref(context, "NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")
         navDrawerMainScreenOnRight = Utility.readPref(context, "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", "true").startsWith("t")
-        if (UtilityUI.isTablet()) normalTextSizeDefault = 18
+        if (UtilityUI.isTablet()) {
+            normalTextSizeDefault = 18
+        }
         normalTextSize = Utility.readPref(context, "TEXTVIEW_FONT_SIZE", normalTextSizeDefault) // 14 16 21
         MyApplication.textSizeSmall = UtilityUI.spToPx(normalTextSize - 2, context)
         MyApplication.textSizeNormal = UtilityUI.spToPx(normalTextSize, context)
@@ -94,7 +98,9 @@ object UIPreferences {
         radarToolbarTransparent = Utility.readPref(context, "RADAR_TOOLBAR_TRANSPARENT", "true").startsWith("t")
         radarStatusBarTransparent = Utility.readPref(context, "RADAR_STATUSBAR_TRANSPARENT", "false").startsWith("t")
         radarImmersiveMode = Utility.readPref(context, "RADAR_IMMERSIVE_MODE", "false").startsWith("t")
-        if (UtilityUI.isTablet()) tilesPerRowDefault = 5
+        if (UtilityUI.isTablet()) {
+            tilesPerRowDefault = 5
+        }
         tilesPerRow = Utility.readPref(context, "UI_TILES_PER_ROW", tilesPerRowDefault)
         themeStr = Utility.readPref(context, "THEME_BLUE", "whiteNew")
         themeInt = Utility.theme(themeStr)

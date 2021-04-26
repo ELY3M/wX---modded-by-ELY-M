@@ -42,9 +42,15 @@ internal object UtilityDownloadWarnings {
 
     fun get(context: Context) {
         if (timer.isRefreshNeeded(context)) {
-            if (PolygonType.TST.pref) getPolygonVtec(context)
+            if (PolygonType.TST.pref) {
+                getPolygonVtec(context)
+            }
             MyApplication.radarWarningPolygons.forEach {
-                if (it.isEnabled) it.storage.valueSet(context, getVtecByType(it.type)) else it.storage.valueSet(context, "")
+                if (it.isEnabled) {
+                    it.storage.valueSet(context, getVtecByType(it.type))
+                } else {
+                    it.storage.valueSet(context, "")
+                }
             }
         }
     }

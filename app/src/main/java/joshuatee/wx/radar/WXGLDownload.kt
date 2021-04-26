@@ -175,6 +175,7 @@ class WXGLDownload {
             // experimentation has shown that L2REF and L2VEL lowest tiles are at the start of the
             // file so "Range" HTTP header is used to download just what is needed based on prod
             // requested
+            UtilityLog.d("wx", "getInputStreamFromUrlL2: $url")
             if (url == "") {
                 return null
             }

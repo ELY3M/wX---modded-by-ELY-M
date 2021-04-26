@@ -27,9 +27,9 @@ import android.view.View
 import android.widget.LinearLayout
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.activitiesmisc.SevereWarning
+import joshuatee.wx.objects.ObjectWarning
 
-class ObjectCardDashAlertItem(context: Context, val linearLayout: LinearLayout, private val severeWarning: SevereWarning, val index: Int) {
+class ObjectCardDashAlertItem(context: Context, val linearLayout: LinearLayout, private val warning: ObjectWarning) {
 
     private val objectCard = ObjectCard(context)
     private val textViewTop = ObjectTextView(context, UIPreferences.textHighlightColor)
@@ -61,11 +61,11 @@ class ObjectCardDashAlertItem(context: Context, val linearLayout: LinearLayout, 
     fun setListener(fn: View.OnClickListener) = objectCard.card.setOnClickListener(fn)
 
     private fun setTextFields() {
-        textViewTop.text = severeWarning.senderNameList[index]
-        textViewTitle.text = severeWarning.eventList[index]
-        textViewStart.text = severeWarning.effectiveList[index].replace("T", " ").replace(Regex(":00-0[0-9]:00"), "").replace(Regex(":00-10:00"), "")
-        textViewEnd.text = severeWarning.expiresList[index].replace("T", " ").replace(Regex(":00-0[0-9]:00"), "").replace(Regex(":00-10:00"), "")
-        textViewBottom.text = severeWarning.areaDescList[index]
+        textViewTop.text = warning.sender
+        textViewTitle.text = warning.event
+        textViewStart.text = warning.effective.replace("T", " ").replace(Regex(":00-0[0-9]:00"), "").replace(Regex(":00-10:00"), "")
+        textViewEnd.text = warning.expires.replace("T", " ").replace(Regex(":00-0[0-9]:00"), "").replace(Regex(":00-10:00"), "")
+        textViewBottom.text = warning.area
     }
 
     fun setId(id: Int) { objectCard.card.id = id }

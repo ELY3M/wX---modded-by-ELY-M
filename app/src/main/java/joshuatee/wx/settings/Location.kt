@@ -250,28 +250,41 @@ class Location(val context: Context, locNumInt: Int) {
                 val wfoAndRadar = getWfoRadarSiteFromPoint(LatLon(xStr, yStr))
                 wfo = wfoAndRadar[0]
                 radarSite = wfoAndRadar[1]
-                if (wfo == "") wfo = UtilityLocation.getNearestOffice( "WFO", LatLon(xStr, yStr)).toLowerCase(Locale.US)
-                if (radarSite == "") radarSite = UtilityLocation.getNearestOffice( "RADAR", LatLon(xStr, yStr))
+                if (wfo == "") {
+                    wfo = UtilityLocation.getNearestOffice( "WFO", LatLon(xStr, yStr)).toLowerCase(Locale.US)
+                }
+                if (radarSite == "") {
+                    radarSite = UtilityLocation.getNearestOffice( "RADAR", LatLon(xStr, yStr))
+                }
                 // CT shows mosaic not nexrad so the old way is needed
-                if (radarSite == "") radarSite = GlobalDictionaries.wfoToRadarSite[wfo.toUpperCase(Locale.US)] ?: ""
+                if (radarSite == "") {
+                    radarSite = GlobalDictionaries.wfoToRadarSite[wfo.toUpperCase(Locale.US)] ?: ""
+                }
                 Utility.writePref(context, "RID$locNum", radarSite.toUpperCase(Locale.US))
-                Utility.writePref(context, "NWS$locNum", wfo.toUpperCase(Locale.US)
-                )
+                Utility.writePref(context, "NWS$locNum", wfo.toUpperCase(Locale.US))
             } else if (xStr.contains("CANADA")) {
                 var tmpLatLon = LatLon()
                 if (xStr.length < 12) {
                     // if we are here then the user used the submenu
                     // need to calculate lat/lon first as get rid is now coded to parse on ":" for both x/y
                     // first check if the label is present in the database
-                    if (UtilityCanada.isLabelPresent(labelStr)) tmpLatLon = UtilityCanada.getLatLonFromLabel(labelStr)
+                    if (UtilityCanada.isLabelPresent(labelStr)) {
+                        tmpLatLon = UtilityCanada.getLatLonFromLabel(labelStr)
+                    }
                 }
                 var prov = ""
                 val parseProv = xStr.split(":").dropLastWhile { it.isEmpty() }
-                if (parseProv.isNotEmpty()) prov = parseProv[1]
+                if (parseProv.isNotEmpty()) {
+                    prov = parseProv[1]
+                }
                 var id = ""
                 val parseId = yStr.split(":").dropLastWhile { it.isEmpty() }
-                if (parseId.isNotEmpty()) id = parseId[0]
-                if (xStr.length > 12) tmpLatLon = LatLon(parseProv[2], parseId[1])
+                if (parseId.isNotEmpty()) {
+                    id = parseId[0]
+                }
+                if (xStr.length > 12) {
+                    tmpLatLon = LatLon(parseProv[2], parseId[1])
+                }
                 Utility.writePref(context, "LOC" + locNum + "_X", "CANADA" + ":" + prov + ":" + tmpLatLon.latString)
                 Utility.writePref(context, "LOC" + locNum + "_Y", id + ":" + tmpLatLon.lonString)
                 setNumLocations(context, locNumToSave)

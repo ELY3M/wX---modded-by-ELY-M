@@ -118,7 +118,6 @@
     <string name="title_activity_spcfire_outlook">SPC Fire Weather Outlook</string>
     <string name="title_activity_hpcrainfall_forecast">WPC Excessive Rainfall Forecast</string>
     <string name="title_activity_spcsoundings">Sounding</string>
-    <string name="title_activity_nwsmosaic">NWS Mosaics</string>
     <string name="title_activity_severe_dashboard">Severe Dashboard</string>
     <string name="title_activity_settings_location_list_view">Locations</string>
     <string name="title_activity_settings_spotternetwork_view">Spotter Network</string>

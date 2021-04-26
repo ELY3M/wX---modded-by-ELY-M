@@ -82,7 +82,9 @@ class ObjectNhcRegionSummary(region: NhcOceanEnum) {
         }
     }
 
-    fun getImages() { bitmaps = urls.map { it.getImage() } }
+    fun getImages() {
+        bitmaps = urls.map { it.getImage() }
+    }
 
     fun getTitle(index: Int) = arrayOf(urls[index], titles[index])
 }

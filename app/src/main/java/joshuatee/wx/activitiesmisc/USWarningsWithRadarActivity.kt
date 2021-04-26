@@ -134,7 +134,9 @@ class USWarningsWithRadarActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) return true
+        if (objectNavDrawer.actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true
+        }
         when (item.itemId) {
             R.id.action_warnmap -> ObjectIntent.showImage(this@USWarningsWithRadarActivity, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "CONUS warning map"))
             R.id.action_warnmapAK -> ObjectIntent.showImage(this@USWarningsWithRadarActivity, arrayOf("https://forecast.weather.gov/wwamap/png/ak.png", "AK warning map"))

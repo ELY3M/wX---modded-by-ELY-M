@@ -134,6 +134,21 @@ object UtilityTime {
 
     fun day() = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
+    fun dayOfWeek(year: Int, month: Int, day: Int): String {
+        val calendar = Calendar.getInstance()
+        calendar.set(year - 1900, month - 1, day, 0, 0)
+        return when (calendar.get(Calendar.DAY_OF_WEEK)) {
+            6 -> "Mon"
+            7 -> "Tue"
+            1 -> "Wed"
+            2 -> "Thu"
+            3 -> "Fri"
+            4 -> "Sat"
+            5 -> "Sun"
+            else -> ""
+        }
+    }
+
     val currentHourInUtc: Int
         get() = Calendar.getInstance(TimeZone.getTimeZone("GMT")).get(Calendar.HOUR_OF_DAY)
 

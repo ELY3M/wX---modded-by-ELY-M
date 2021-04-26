@@ -327,7 +327,11 @@ class SettingsNotificationsActivity : BaseActivity() {
                 checkedItems[i] = false
             }
         }
-        val dialog = AlertDialog.Builder(this, R.style.PickerDialogTheme)
+        var theme = R.style.PickerDialogTheme
+        if (Utility.isThemeAllBlack()) {
+            theme = R.style.PickerDialogThemeDark
+        }
+        val dialog = AlertDialog.Builder(this, theme)
                 .setTitle("Choose which Local NWS Alerts to not show:")
                 .setMultiChoiceItems(items.toTypedArray(), checkedItems) { _, indexSelected, isChecked ->
                     if (isChecked) {

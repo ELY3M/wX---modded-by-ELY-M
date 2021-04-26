@@ -137,7 +137,7 @@ object UtilityWidget {
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(activity)
         stackBuilder.addNextIntent(intent)
-        val pendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         remoteViews.setOnClickPendingIntent(layoutItem, pendingIntent)
     }
 
@@ -149,7 +149,7 @@ object UtilityWidget {
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(activity)
         stackBuilder.addNextIntent(intent)
-        val pendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         remoteViews.setOnClickPendingIntent(layoutItem, pendingIntent)
     }
 
@@ -160,7 +160,7 @@ object UtilityWidget {
         val stackBuilder = TaskStackBuilder.create(context)
         stackBuilder.addParentStack(activity)
         stackBuilder.addNextIntent(intent)
-        val pendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         remoteViews.setOnClickPendingIntent(layoutItem, pendingIntent)
     }
 

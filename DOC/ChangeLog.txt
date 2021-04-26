@@ -14,11 +14,38 @@
 // TODO [ADD] 'getter for defaultDisplay: Display!' is deprecated. Deprecated in Java
 // TODO [ADD] 'getMetrics(DisplayMetrics!): Unit' is deprecated. Deprecated in Java
 // TODO [REF] move radarColorPalette,colorMap to ObjectColorPalette
-// TODO [REF] add ObjectLocation
 // TODO [ADD] LSR by WFO - download and show one at a time
+// TODO [FIX] Hourly onrestart graph
+// TODO [FIX] code cleanup in utilDownloadMcd/w/mpd
+// TODO [ADD] GOES option to follow location
+// TODO [ADD] allBlack refinements (Spc sref nav drawer, Dash buttons are invisible)
+// TODO [REF] add ObjectLocation
 
-55531 2021_03_03    [REF] remove ObjectImpactGraphic.kt
+55539 2021_04_07
+55538 2021_04_07    [FIX] add try for java.nio.BufferOverflowException: joshuatee.wx.radar.UtilityWXOGLPerf.colorGen (UtilityWXOGLPerf.kt:589)
+                    [REF] readability
+55537 2021_04_06    [ADD] ObjectWarning
+55536 2021_04_04    [FIX] settings->homescreen, force web option to submenu as it broke when "icons evenly spaced" was enabled
+                    [FIX] fix time translation in old API hourly
+                    [FIX] SPC Meso - the following image products were not working correctly "temp_chg" "dwpt_chg" "mixr_chg" "thte_chg"
+55535 2021_03_14    [ADD] additional layout changes like the last revision in the following files:
+                        res/layout/activity_models_* (except HREF)
+                        use relative color xml files for icons in ObjectCardAlertSummaryItem
+                        SettingsLocationGenericActivity - add logic for search drop down color on black theme
+                        Settings notifications dialogs - additional them for dialog
+55534 2021_03_14    [ADD] activity_image_show_navdrawer.xml, activity_linear_layout_show_navdrawer_bottom_toolbar.xml
+                          activity_spcmeso.xml, activity_linear_layout_show_navdrawer.xml
+                            change ListView android:background="@color/primary_dark_blue"
+                            to android:background="?attr/colorPrimary" in support of allBlack theme, minor impact to other themes
+55533 2021_03_10    [ADD] option to not use new NWS API for hourly data
+55532 2021_03_10    [FIX] some forecasts icons during generation were showing "0%" instead of nothing
+                    [ADD] option to not use new NWS API for hourly data - WIP
+                    [ADD] all black theme (no gray) - WIP
+55531 2021_03_04    [REF] remove ObjectImpactGraphic.kt and other files no longer needed
                     [REF] lint
+                    [ADD] placeholders for Android 12 (SDK31) testing
+                    [ADD] upgrade NDK to r22 from r21d
+                    [ADD] add 2nd flag for pending intents FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE (per Android 12 API 31 need )
 55530 2021_03_03    [ADD] AK/Hawaii/Carib sectors for AWC Radar Mosaic
                     [REF] remove warning impact and old mosaic code no longer needed
                     [REF] various formatting/code cleanup

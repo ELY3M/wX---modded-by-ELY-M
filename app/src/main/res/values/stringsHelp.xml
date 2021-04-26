@@ -23,6 +23,10 @@
          Use the new NWS API for 7 day forecasts. If having issues with 7 day forecasts you can turn this off to use the older method.
 </string>
 
+    <string name="use_nws_api_hourly">
+         Use the new NWS API for Hourly forecast. If having issues with hourly forecasts you can turn this off to use the older method.
+</string>
+
       <string name="nav_drawer_main_screen_toggle">
          Toggle items on or off from showing in the main screen navigation drawer if that UI mode is selected.
 </string>
@@ -55,10 +59,6 @@
 
     <string name="textview_fontsize_np_label">
          Size of the normal size text. Default is 16. Large and small font are relative to this as well. A full manual app restart might be required for this (for now). Work in progress.
-</string>
-
-     <string name="ui_awc_radar_mosaic">
-         Use the AWC Radar mosaic images instead of the main NWS images.
 </string>
 
     <string name="widget_prevent_tap">

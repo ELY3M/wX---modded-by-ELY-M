@@ -146,7 +146,9 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
 
     private fun clearNhcNotificationBlock() {
         Utility.writePref(context, "NOTIF_NHC_MUTE", "")
-        if (notificationCard != null) notificationCard!!.visibility = View.GONE
+        if (notificationCard != null) {
+            notificationCard!!.visibility = View.GONE
+        }
     }
 
     fun handleRestartForNotification() {

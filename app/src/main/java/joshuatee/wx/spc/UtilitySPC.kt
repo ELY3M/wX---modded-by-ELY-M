@@ -88,7 +88,7 @@ object UtilitySpc {
         if (MyApplication.checkspc) {
             if (!MyApplication.severeDashboardMcd.value.contains(mcdNothingString)) {
                 mdPresent = true
-                val items = MyApplication.severeDashboardMcd.value.parseColumn(RegExp.mcdPatternUtilspc)
+                val items = MyApplication.severeDashboardMcd.value.parseColumn(RegExp.mcdPatternUtilSpc)
                 mdCount = items.size
                 items.forEach { dashboardStrMcd += ":$it" }
             }

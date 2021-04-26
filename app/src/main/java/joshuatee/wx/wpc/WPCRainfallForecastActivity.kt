@@ -87,7 +87,11 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
             imageUrl.getImage()
         }
         objectCardText.text = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@WpcRainfallForecastActivity, textProduct) }
-        if (tabletInLandscape) objectCardImage.setImage(bitmap, 2) else objectCardImage.setImage(bitmap)
+        if (tabletInLandscape) {
+            objectCardImage.setImage(bitmap, 2)
+        } else {
+            objectCardImage.setImage(bitmap)
+        }
         objectCardImage.setOnClickListener {
             ObjectIntent.showImage(this@WpcRainfallForecastActivity, arrayOf(imageUrl, textProduct, "true"))
         }

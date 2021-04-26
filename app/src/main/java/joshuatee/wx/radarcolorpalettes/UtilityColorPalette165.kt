@@ -37,7 +37,11 @@ internal object UtilityColorPalette165 {
         val lines = text.split("\n").dropLastWhile { it.isEmpty() }
         lines.forEach { line ->
             if (line.contains("olor") && !line.contains("#")) {
-                val items = if (line.contains(",")) line.split(",") else line.split(" ")
+                val items = if (line.contains(",")) {
+                    line.split(",")
+                } else {
+                    line.split(" ")
+                }
                 if (items.size > 4) {
                     objectColorPaletteLines.add(ObjectColorPaletteLine(items))
                 }

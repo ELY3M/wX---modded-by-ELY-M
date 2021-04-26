@@ -55,7 +55,7 @@ internal object UtilityDownloadMcd {
     }
 
     private fun getListOfNumbers(context: Context): List<String> {
-        val list = UtilityString.parseColumn(MyApplication.severeDashboardMcd.value, RegExp.mcdPatternAlertr)
+        val list = UtilityString.parseColumn(MyApplication.severeDashboardMcd.value, RegExp.mcdPatternAlerts)
         var mcdNoList = ""
         list.forEach { mcdNoList += "$it:" }
         if (PolygonType.MCD.pref || UtilityNotificationSpc.locationNeedsMcd()) MyApplication.mcdNoList.valueSet(context, mcdNoList)

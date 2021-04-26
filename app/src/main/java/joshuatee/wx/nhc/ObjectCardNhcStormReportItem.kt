@@ -58,7 +58,9 @@ class ObjectCardNhcStormReportItem(context: Context, linearLayout: LinearLayout,
 
     val card get() = objectCard.card
 
-    fun setListener(fn: View.OnClickListener) { objectCard.card.setOnClickListener(fn) }
+    fun setListener(fn: View.OnClickListener) {
+        objectCard.card.setOnClickListener(fn)
+    }
 }
 
 

@@ -33,6 +33,11 @@ class MyExpandableListAdapter(act: Activity, private val groups: SparseArray<Gro
             linearLayout.setBackgroundColor(Color.WHITE)
             text.setBackgroundColor(Color.WHITE)
             text.setTextColor(Color.BLACK)
+        } else if (Utility.isThemeAllBlack()) {
+            spacing.setBackgroundColor(Color.BLACK)
+            linearLayout.setBackgroundColor(Color.BLACK)
+            text.setBackgroundColor(Color.BLACK)
+            text.setTextColor(Color.WHITE)
         }
         return convertView
     }
@@ -47,13 +52,18 @@ class MyExpandableListAdapter(act: Activity, private val groups: SparseArray<Gro
 
     override fun getGroupView(groupPosition: Int, isExpanded: Boolean, view: View?, parent: ViewGroup): View {
         var convertView = view
-        if (convertView == null) convertView = inflater.inflate(R.layout.listrow_group, null)
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.listrow_group, null)
+        }
         val group = getGroup(groupPosition) as Group
         (convertView as CheckedTextView).text = group.string
         convertView.isChecked = isExpanded
         if (Utility.isThemeAllWhite()) {
             convertView.setBackgroundColor(Color.WHITE)
             convertView.setTextColor(Color.BLACK)
+        } else if (Utility.isThemeAllBlack()) {
+            convertView.setBackgroundColor(Color.BLACK)
+            convertView.setTextColor(Color.WHITE)
         }
         return convertView
     }

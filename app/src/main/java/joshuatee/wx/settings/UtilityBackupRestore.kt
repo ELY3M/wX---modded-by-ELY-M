@@ -18,6 +18,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.util.UtilityAlertDialog
 import java.io.*
+import java.nio.file.Files
 
 
 class UtilityBackupRestore {
@@ -168,8 +169,12 @@ class UtilityBackupRestore {
         val d = File(MyApplication.BackupFilesPath)
         s.listFiles().forEach {
             Log.i(TAG, "backing up: "+it.name+" to "+File(d.absolutePath).path+ '/' +it.name)
-            it.copyRecursively(File(File(d.absolutePath).path + '/' + it.name), true)
-        }
+            if (it.exists()) {
+                Log.i(TAG, "File Exists: "+File(d.absolutePath).path+ '/' +it.name)
+            } else {
+                it.copyRecursively(File(File(d.absolutePath).path + '/' + it.name), true)
+            }
+            }
 
     }
 

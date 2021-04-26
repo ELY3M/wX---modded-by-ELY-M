@@ -55,7 +55,7 @@ internal class SevereNotice(val type: PolygonType) {
         }
         if (!html.contains(zeroString)) {
             when (type) {
-                PolygonType.MCD -> pattern = RegExp.mcdPatternUtilspc
+                PolygonType.MCD -> pattern = RegExp.mcdPatternUtilSpc
                 PolygonType.WATCH -> pattern = RegExp.watchPattern
                 PolygonType.MPD -> pattern = RegExp.mpdPattern
                 else -> {}
@@ -74,6 +74,10 @@ internal class SevereNotice(val type: PolygonType) {
             }
             bitmaps.add(url.getImage())
         }
+    }
+
+    fun getCount(): Int {
+        return bitmaps.size
     }
 
     override fun toString() = typeAsString

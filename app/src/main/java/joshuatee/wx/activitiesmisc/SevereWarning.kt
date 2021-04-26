@@ -21,13 +21,14 @@
 
 package joshuatee.wx.activitiesmisc
 
-import joshuatee.wx.objects.PolygonType
-
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
+import joshuatee.wx.objects.ObjectWarning
+import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.radar.LatLon
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.util.UtilityTime
+
 
 class SevereWarning(private val type: PolygonType) {
 
@@ -47,6 +48,7 @@ class SevereWarning(private val type: PolygonType) {
     var warnings = listOf<String>()
     var listOfWfo = mutableListOf<String>()
     private var listOfPolygonRaw = listOf<String>()
+    var warningList = listOf<ObjectWarning>()
 
     fun getName(): String {
         return when (type) {
@@ -75,7 +77,10 @@ class SevereWarning(private val type: PolygonType) {
         }
     }
 
-    fun generateString(html: String) {
+    fun generateString(html1: String) {
+        val html = ObjectWarning.getBulkData(type)
+        warningList = ObjectWarning.parseJson(html)
+
         idList = html.parseColumn("\"id\": \"(https://api.weather.gov/alerts/urn.*?)\"")
         areaDescList = html.parseColumn("\"areaDesc\": \"(.*?)\"")
         effectiveList = html.parseColumn("\"effective\": \"(.*?)\"")

@@ -118,7 +118,9 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
                 favoriteList = mutableListOf()
             }
         }
-        if (!firstTime) recyclerView.notifyDataSetChanged()
+        if (!firstTime) {
+            recyclerView.notifyDataSetChanged()
+        }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -195,8 +197,12 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     private fun findPositionIMG2(key: String): String {
         for (l in UtilityHomeScreen.localChoicesImg) {
-            if (l.startsWith(key.replace("OGL-", ""))) return l
-            if (l.startsWith(key.replace("IMG-", ""))) return l
+            if (l.startsWith(key.replace("OGL-", ""))) {
+                return l
+            }
+            if (l.startsWith(key.replace("IMG-", ""))) {
+                return l
+            }
         }
         return ""
     }
@@ -205,8 +211,12 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     private fun findPositionAFD(key: String): String {
         (GlobalArrays.wfos.indices).forEach {
-            if (GlobalArrays.wfos[it].startsWith(key.replace("TXT-AFD", ""))) return "AFD " + GlobalArrays.wfos[it]
-            if (GlobalArrays.wfos[it].startsWith(key.replace("IMG-", ""))) return "VIS " + GlobalArrays.wfos[it]
+            if (GlobalArrays.wfos[it].startsWith(key.replace("TXT-AFD", ""))) {
+                return "AFD " + GlobalArrays.wfos[it]
+            }
+            if (GlobalArrays.wfos[it].startsWith(key.replace("IMG-", ""))) {
+                return "VIS " + GlobalArrays.wfos[it]
+            }
         }
         return ""
     }

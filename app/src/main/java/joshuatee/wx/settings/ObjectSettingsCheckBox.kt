@@ -75,7 +75,7 @@ class ObjectSettingsCheckBox(context: Context, label: String, pref: String, strI
                 "UI_MAIN_SCREEN_RADAR_FAB",
                 "RADAR_TOOLBAR_TRANSPARENT",
                 "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT",
-                "USE_NWS_API_SEVEN_DAY"
+                "USE_NWS_API_HOURLY"
         )
         checkBox.isChecked = Utility.readPref(context, pref, java.lang.Boolean.toString(truePrefs.contains(pref))) == "true"
              || ( pref.startsWith(UtilityNavDrawer.getPrefVar("")) && Utility.readPref(context, pref, "") != "false")
@@ -132,11 +132,15 @@ class ObjectSettingsCheckBox(context: Context, label: String, pref: String, strI
         objectCard.addView(objectLinearLayout.linearLayout)
     }
 
-    fun isChecked(value: Boolean) { checkBox.isChecked = value }
+    fun isChecked(value: Boolean) {
+        checkBox.isChecked = value
+    }
 
     val card get() = objectCard.card
 
-    internal fun setOnCheckedChangeListener(listener: CompoundButton.OnCheckedChangeListener) { checkBox.setOnCheckedChangeListener(listener) }
+    internal fun setOnCheckedChangeListener(listener: CompoundButton.OnCheckedChangeListener) {
+        checkBox.setOnCheckedChangeListener(listener)
+    }
 }
 
 

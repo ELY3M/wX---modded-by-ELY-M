@@ -109,6 +109,7 @@ object UtilityDownloadNws {
     }
 
     private fun getStringFromUrlBaseNoAcceptHeader(url: String): String {
+        UtilityLog.d("wx", "getStringFromUrlBaseNoAcceptHeader: $url")
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
@@ -131,6 +132,7 @@ object UtilityDownloadNws {
     }
 
     private fun getStringFromUrlBaseNoHeader(url: String): String {
+        UtilityLog.d("wx", "getStringFromUrlBaseNoHeader: $url")
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()

@@ -83,10 +83,6 @@ object UtilityColorPaletteGeneric {
             }
         }
         objectColorPalette.position(0)
-        //val dbzList = mutableListOf<Int>()
-        //val redList = mutableListOf<Int>()
-        //val greenList = mutableListOf<Int>()
-        //val blueList = mutableListOf<Int>()
         val objectColorPaletteLines = mutableListOf<ObjectColorPaletteLine>()
         var r = "0"
         var g = "0"
@@ -97,35 +93,15 @@ object UtilityColorPaletteGeneric {
                 val items = if (line.contains(",")) line.split(",") else line.split(" ")
                 if (items.size > 4) {
                     if (priorLineHas6) {
-                        /*dbzList.add(((items[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset - 1).toInt())
-                        redList.add(r.toIntOrNull() ?: 0)
-                        greenList.add(g.toIntOrNull() ?: 0)
-                        blueList.add(b.toIntOrNull() ?: 0)*/
                         objectColorPaletteLines.add(ObjectColorPaletteLine(((items[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset - 1).toInt(), r, g, b))
-
-                        /*dbzList.add(((items[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset).toInt())
-                        redList.add(items[2].toIntOrNull() ?: 0)
-                        greenList.add(items[3].toIntOrNull() ?: 0)
-                        blueList.add(items[4].toIntOrNull() ?: 0)*/
                         objectColorPaletteLines.add(ObjectColorPaletteLine(items){
                             ((it[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset).toInt()
                         })
-
                         priorLineHas6 = false
-
-                       /* val test = ObjectColorPaletteLine(items)
-                        val test3 = ObjectColorPaletteLine(items) {
-                            ((it[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset - 1).toInt()
-                        }*/
                     } else {
-                       /* dbzList.add(((items[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset).toInt())
-                        redList.add(items[2].toIntOrNull() ?: 0)
-                        greenList.add(items[3].toIntOrNull() ?: 0)
-                        blueList.add(items[4].toIntOrNull() ?: 0)*/
                         objectColorPaletteLines.add(ObjectColorPaletteLine(items){
                             ((it[1].toDoubleOrNull() ?: 0.0) * prodScale + prodOffset).toInt()
                         })
-
                     }
                     if (items.size > 7) {
                         priorLineHas6 = true
@@ -194,11 +170,12 @@ object UtilityColorPaletteGeneric {
         // This is the entrance method to load a colormap called at various spots
         // http://www.usawx.com/grradarexamples.htm
         var code = MyApplication.radarColorPalette[product] ?: ""
-        if (code == "COD") code =  "CODENH"
+        if (code == "COD") {
+            code =  "CODENH"
+        }
         generate(context, product, code)
     }
 }
-
 
 /*# NSSL derived Reflectivity Pallette -32 -> 95
         #

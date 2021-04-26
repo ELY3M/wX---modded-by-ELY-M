@@ -150,7 +150,7 @@ object UtilityNotification {
                     stackBuilder2.addParentStack(CanadaRadarActivity::class.java)
                 }
                 stackBuilder2.addNextIntent(resultIntent2)
-                val resultPendingIntent2 = stackBuilder2.getPendingIntent(y, PendingIntent.FLAG_UPDATE_CURRENT)
+                val resultPendingIntent2 = stackBuilder2.getPendingIntent(y, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                 if (!(MyApplication.alertOnlyOnce && oldNotifStr.contains(url2 + "radar"))) {
                     noti2 = createNotificationBigPicture(context, noMain, resultPendingIntent2, MyApplication.ICON_RADAR, bitmap)
                     if (NotificationManagerCompat.from(context).areNotificationsEnabled()) {
@@ -215,7 +215,7 @@ object UtilityNotification {
                     else
                         stackBuilder.addParentStack(CanadaHourlyActivity::class.java)
                     stackBuilder.addNextIntent(resultIntent)
-                    val resultPendingIntent = stackBuilder.getPendingIntent(x, PendingIntent.FLAG_UPDATE_CURRENT)
+                    val resultPendingIntent = stackBuilder.getPendingIntent(x, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                     val tmpArr = noBody.split(MyApplication.DEGREE_SYMBOL.toRegex()).dropLastWhile { it.isEmpty() }
                     var smallIconResource = R.drawable.temp_0
                     if (tmpArr.isNotEmpty()) {
@@ -255,7 +255,7 @@ object UtilityNotification {
                     val stackBuilder2 = TaskStackBuilder.create(context)
                     stackBuilder2.addParentStack(TextScreenActivity::class.java)
                     stackBuilder2.addNextIntent(resultIntent2)
-                    val resultPendingIntent2 = stackBuilder2.getPendingIntent(y, PendingIntent.FLAG_UPDATE_CURRENT)
+                    val resultPendingIntent2 = stackBuilder2.getPendingIntent(y, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
                     val objectPendingIntents = ObjectPendingIntents(
                             context,
                             TextScreenActivity::class.java,
@@ -393,10 +393,10 @@ object UtilityNotification {
         stackBuilder.addParentStack(WX::class.java)
         stackBuilder.addNextIntent(resultIntent)
         val requestID = UtilityTime.currentTimeMillis().toInt()
-        val resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT)
-        val resultPendingIntent2 = PendingIntent.getService(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT)
-        val resultPendingIntentBack = PendingIntent.getService(context, requestID + 4, resultIntentBack, PendingIntent.FLAG_UPDATE_CURRENT)
-        val resultPendingIntentForward = PendingIntent.getService(context, requestID + 5, resultIntentForward, PendingIntent.FLAG_UPDATE_CURRENT)
+        val resultPendingIntent = stackBuilder.getPendingIntent(requestID, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val resultPendingIntent2 = PendingIntent.getService(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val resultPendingIntentBack = PendingIntent.getService(context, requestID + 4, resultIntentBack, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val resultPendingIntentForward = PendingIntent.getService(context, requestID + 5, resultIntentForward, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         val notifCurrent = "true"
         val txt = if (notifCurrent.startsWith("t")) {
             val tabStr = UtilitySpc.checkSpc()

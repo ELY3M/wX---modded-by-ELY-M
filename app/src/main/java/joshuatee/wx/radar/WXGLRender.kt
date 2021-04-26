@@ -1060,7 +1060,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         }
         var vList = 0
         (0 until buffers.chunkCount).forEach {
-            if (it == buffers.chunkCount - 1) buffers.breakSize = remainder
+            if (it == buffers.chunkCount - 1) {
+                buffers.breakSize = remainder
+            }
             for (notUsed in 0 until buffers.breakSize) {
                 buffers.putFloat(list[vList].toFloat())
                 buffers.putFloat(list[vList + 1].toFloat() * -1)
@@ -1104,7 +1106,11 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
     fun constructGenericWarningLines() {
         genericWarningBuffers.forEach {
-            if (it.warningType!!.isEnabled) constructGenericLines(it) else deconstructGenericLines(it)
+            if (it.warningType!!.isEnabled) {
+                constructGenericLines(it)
+            } else {
+                deconstructGenericLines(it)
+            }
         }
     }
 
@@ -1247,7 +1253,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         constructTriangles(spotterBuffers)
     }
 
-    fun deconstructSpotters() { spotterBuffers.isInitialized = false }
+    fun deconstructSpotters() {
+        spotterBuffers.isInitialized = false
+    }
 
     fun constructHi() {
         hiBuffers.lenInit = 0f //MyApplication.radarHiSize.toFloat()
@@ -1313,7 +1321,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
     }
 
-    fun deconstructTvs() { tvsBuffers.isInitialized = false }
+    fun deconstructTvs() {
+        tvsBuffers.isInitialized = false
+    }
 
     fun constructMpdLines() = constructGenericLines(mpdBuffers)
 
@@ -1352,7 +1362,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         }
         var vList = 0
         (0 until buffers.chunkCount).forEach {
-            if (it == buffers.chunkCount - 1) buffers.breakSize = remainder
+            if (it == buffers.chunkCount - 1) {
+                buffers.breakSize = remainder
+            }
             for (notUsed in 0 until buffers.breakSize) {
                 if (list.size > (vList + 3)) {
                     buffers.putFloat(list[vList].toFloat())
@@ -1452,7 +1464,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         wbCircleBuffers.isInitialized = true
     }
 
-    private fun deconstructWBCircle() { wbCircleBuffers.isInitialized = false }
+    private fun deconstructWBCircle() {
+        wbCircleBuffers.isInitialized = false
+    }
 
     fun constructSwoLines() {
         val hashSwo = UtilitySwoDayOne.HASH_SWO.toMap()
@@ -1489,18 +1503,28 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         }
     }
 
-    fun deconstructSwoLines() { swoBuffers.isInitialized = false }
+    fun deconstructSwoLines() {
+        swoBuffers.isInitialized = false
+    }
 
-    fun setHiInit(hiInit: Boolean) { hiBuffers.isInitialized = hiInit }
+    fun setHiInit(hiInit: Boolean) {
+        hiBuffers.isInitialized = hiInit
+    }
 
-    fun setTvsInit(tvsInit: Boolean) { tvsBuffers.isInitialized = tvsInit }
+    fun setTvsInit(tvsInit: Boolean) {
+        tvsBuffers.isInitialized = tvsInit
+    }
 
     val oneDegreeScaleFactor: Float
         get() = projectionNumbers.oneDegreeScaleFactorFloat
 
-    fun setChunkCountSti(chunkCountSti: Int) { this.stiBuffers.chunkCount = chunkCountSti }
+    fun setChunkCountSti(chunkCountSti: Int) {
+        this.stiBuffers.chunkCount = chunkCountSti
+    }
 
-    fun setChunkCount(chunkCount: Int) { this.chunkCount = chunkCount }
+    fun setChunkCount(chunkCount: Int) {
+        this.chunkCount = chunkCount
+    }
 
     fun setViewInitial(zoom: Float, x: Float, y: Float) {
         this.zoom = zoom

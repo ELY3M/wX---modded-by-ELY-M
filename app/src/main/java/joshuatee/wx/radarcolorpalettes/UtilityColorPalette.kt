@@ -57,6 +57,7 @@ object UtilityColorPalette {
                     "CUST", "CODE" -> text = readpalfile("colormaprefcode.txt")
                     "NSSL" -> text = readpalfile("colormaprefnssl.txt")
                     "NWSD" -> text = readpalfile("colormaprefnwsd.txt")
+             	    "NWS" -> text = readpalfile("colormaprefnws.txt")
                     "COD", "CODENH" -> text = readpalfile("colormaprefcodenh.txt")
                     "MENH" -> text = readpalfile("colormaprefmenh.txt")
                     "ELY" -> text = readpalfile("colormapownref.txt")

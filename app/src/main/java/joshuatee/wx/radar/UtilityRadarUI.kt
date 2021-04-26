@@ -135,7 +135,7 @@ internal object UtilityRadarUI {
         longPressList.add("Show current radar status message: " + wxglRender.rid)
 	    val getridpoint: String = UtilityLocation.getNearestRadarSite(LatLon(pointX.toString(), pointY.toString()))
 	longPressList.add("Show nearest radar status message: " + getridpoint)
-	longPressList.add("userpoint info: " + latLonTitle)
+	longPressList.add("Userpoint info: " + latLonTitle)
         longPressList.add("Add userpoint for: " + latLonTitle)
         longPressList.add("Delete userpoint for: " + latLonTitle)
         longPressList.add("Delete all userpoints")
@@ -156,7 +156,7 @@ internal object UtilityRadarUI {
             string.contains("Show nearest radar status message") -> showNearestRadarStatus(context, activity, wxglSurfaceView, uiDispatcher)
             string.contains("Show nearest forecast") -> showNearestForecast(context, wxglSurfaceView)
             string.contains("Show Spotter Info") -> showSpotterInfo(activity, wxglSurfaceView, uiDispatcher)
-            string.contains("userpoint info") -> showUserPointInfo(activity, context, wxglSurfaceView, uiDispatcher)
+            string.contains("Userpoint info") -> showUserPointInfo(activity, context, wxglSurfaceView, uiDispatcher)
             string.contains("Add userpoint for") -> addUserPoint(activity, context, wxglSurfaceView)
             string.contains("Delete userpoint for") ->  deleteUserPoint(activity, context, wxglSurfaceView, uiDispatcher)
             string.contains("Delete all userpoints") -> deleteAllUserPoints(activity, context, uiDispatcher)
@@ -196,9 +196,9 @@ internal object UtilityRadarUI {
             wxglTextObjects: MutableList<WXGLTextObject>, paneList: List<Int>, imageMap: ObjectImageMap?, wxglSurfaceViews: MutableList<WXGLSurfaceView>,
             fnGps: () -> Unit, fnGetLatLon: () -> LatLon, archiveMode: Boolean = false) {
         wxglRender.initializeGeometry()
-        UtilityLog.d("wx", "DEBUG: redraw geo called " + oldRadarSites[index] + " " + wxglRenders[index].rid)
+        // UtilityLog.d("wx", "DEBUG: redraw geo called " + oldRadarSites[index] + " " + wxglRenders[index].rid)
         if (oldRadarSites[index] != wxglRenders[index].rid) {
-            UtilityLog.d("wx", "DEBUG: redraw geo")
+            // UtilityLog.d("wx", "DEBUG: redraw geo")
             wxglRender.setChunkCount(0)
             wxglRender.setChunkCountSti(0)
             wxglRender.setHiInit(false)
@@ -260,7 +260,8 @@ internal object UtilityRadarUI {
         } else {
             wxglRender.deconstructLocationDot()
         }
-
+	
+	//elys mod
         if (PolygonType.USERPOINTS.pref && !archiveMode) wxglRender.constructUserPoints() else wxglRender.deconstructUserPoints()
 
         if (imageMap != null && imageMap.map.visibility != View.VISIBLE) {
@@ -343,7 +344,9 @@ internal object UtilityRadarUI {
 
     private fun showNearestProduct(context: Context, polygonType: PolygonType, wxglSurfaceView: WXGLSurfaceView, uiDispatcher: CoroutineDispatcher) = GlobalScope.launch(uiDispatcher) {
         val text = withContext(Dispatchers.IO) { UtilityWatch.show(wxglSurfaceView.latLon, polygonType) }
-        if (text != "") ObjectIntent.showMcd(context, arrayOf(text, "", polygonType.toString()))
+        if (text != "") {
+            ObjectIntent.showMcd(context, arrayOf(text, "", polygonType.toString()))
+        }
     }
     
     //elys mod

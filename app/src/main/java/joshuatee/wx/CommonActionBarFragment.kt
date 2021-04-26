@@ -72,11 +72,17 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
                 )
             )
             R.id.action_alert -> {
-                if (Location.isUS) ObjectIntent.showUsAlerts(this) else ObjectIntent(this, CanadaAlertsActivity::class.java)
+                if (Location.isUS) {
+                    ObjectIntent.showUsAlerts(this)
+                } else {
+                    ObjectIntent(this, CanadaAlertsActivity::class.java)
+                }
             }
             R.id.action_observations -> ObjectIntent.showObservations(this)
             R.id.action_playlist -> ObjectIntent(this, SettingsPlaylistActivity::class.java)
-            R.id.action_soundings -> if (Location.isUS) ObjectIntent.showSounding(this)
+            R.id.action_soundings -> if (Location.isUS) {
+                ObjectIntent.showSounding(this)
+            }
             R.id.action_cloud -> openVis()
             R.id.action_radar -> openNexradRadar(this)
             R.id.action_forecast -> openHourly()
@@ -134,7 +140,11 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
     fun openSettings() = ObjectIntent(this, SettingsMainActivity::class.java)
 
     fun openVis() {
-        if (Location.isUS) ObjectIntent.showVis(this) else ObjectIntent.showCanadaRadar(this, arrayOf(Location.rid, "vis"))
+        if (Location.isUS) {
+            ObjectIntent.showVis(this)
+        } else {
+            ObjectIntent.showCanadaRadar(this, arrayOf(Location.rid, "vis"))
+        }
     }
 
     fun openDashboard() {

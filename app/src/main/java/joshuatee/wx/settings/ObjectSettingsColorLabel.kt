@@ -56,7 +56,11 @@ internal class ObjectSettingsColorLabel(val context: Context, label: String, pri
 
     fun refreshColor() {
         val colorInt = Utility.readPref(context, pref, UtilityColor.setColor(pref))
-        if (colorInt != Color.BLACK) objectTextView.color = colorInt else objectTextView.color = Color.WHITE
+        if (colorInt != Color.BLACK) {
+            objectTextView.color = colorInt
+        } else {
+            objectTextView.color = Color.WHITE
+        }
     }
 
     val card get() = objectCard.card

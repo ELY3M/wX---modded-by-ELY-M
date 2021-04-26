@@ -53,7 +53,9 @@ class ObjectSettingsSpinner(context: Context, label: String, pref: String, prefI
         objectLinearLayout.matchParent()
         objectLinearLayout.addView(objectTextView.tv)
         val spinner = Spinner(context)
-        if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) setupSpinner(spinner, false)
+        if (UIPreferences.themeInt == R.style.MyCustomTheme_white_NOAB) {
+            setupSpinner(spinner, false)
+        }
         val dataAdapter = ArrayAdapter(context, android.R.layout.simple_spinner_item, spinnerArr)
         dataAdapter.setDropDownViewResource(MyApplication.spinnerLayout)
         spinner.adapter = dataAdapter

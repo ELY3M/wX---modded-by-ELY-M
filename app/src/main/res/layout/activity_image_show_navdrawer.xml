@@ -60,9 +60,12 @@
         android:layout_width="360dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@color/primary_dark_blue"
+        android:background="?attr/colorPrimary"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp" />
 </androidx.drawerlayout.widget.DrawerLayout>
 
+<!--     TODO FIXME not sure this layout is needed anymore
+
+android:background="@color/primary_dark_blue"-->

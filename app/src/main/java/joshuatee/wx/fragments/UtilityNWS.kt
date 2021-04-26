@@ -32,7 +32,6 @@ import joshuatee.wx.ui.UtilityTheme
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityString
 
-// TODO rename file
 object UtilityNws {
 
     // Given the raw icon URL from NWS, determine if bitmap is on disk or must be created
@@ -191,7 +190,7 @@ object UtilityNws {
         canvas.drawBitmap(bitmap4, middlePoint.toFloat(), 0.0f, Paint(Paint.FILTER_BITMAP_FLAG))
 
         // legacy add - 2nd conditional
-        if (rightNumber != "" && leftNumber != "0") {
+        if (rightNumber != "" && rightNumber != "0") {
             canvas.drawRect(middlePoint.toFloat(), (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.paint)
             canvas.drawText("$rightNumber%", xText.toFloat(), yText.toFloat(), paint.paint)
         }
@@ -200,8 +199,8 @@ object UtilityNws {
 
     // Given one string return a custom bitmap with numeric label
     // input examples
-    //  nrain_showers,80
-    //  tsra_hi,40
+    // nrain_showers,80
+    // tsra_hi,40
     private fun getBitmapWithOneNumber(context: Context, iconString: String): Bitmap {
         val items = iconString.split(",").dropLastWhile { it.isEmpty() }
         var number = if (items.size > 1) {
@@ -237,7 +236,7 @@ object UtilityNws {
             58
         }
         val paintStripe = ObjectPaintStripe()
-        if (number != "") {
+        if (number != "" && number != "0") {
             canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.paint)
             canvas.drawText("$number%", xText.toFloat(), yText.toFloat(), paint.paint)
         }

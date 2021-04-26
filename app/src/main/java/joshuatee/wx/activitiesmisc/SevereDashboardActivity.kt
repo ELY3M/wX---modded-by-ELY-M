@@ -60,7 +60,7 @@ class SevereDashboardActivity : BaseActivity() {
     private var numberOfImages = 0
     private val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout> ()
     private var imagesPerRow = 2
-    private val listOfWfoForWarnings = mutableListOf<String>()
+    // private val listOfWfoForWarnings = mutableListOf<String>()
     private lateinit var linearLayout: LinearLayout
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -143,22 +143,23 @@ class SevereDashboardActivity : BaseActivity() {
         bitmaps.addAll(snMcd.bitmaps)
         bitmaps.addAll(snMpd.bitmaps)
         bitmaps.addAll(bitmaps)
-        listOfWfoForWarnings.clear()
+        // listOfWfoForWarnings.clear()
         var numberOfWarnings = 0
         listOf(wTor, wTst, wFfw).forEach { severeWarning ->
             if (severeWarning.count > 0) {
                 ObjectCardBlackHeaderText(this@SevereDashboardActivity, linearLayout, "(" + severeWarning.count + ") " + severeWarning.getName())
-                severeWarning.effectiveList.forEachIndexed { index, _ ->
-                    val data = severeWarning.warnings[index]
-                    if (!data.startsWith("O.EXP")) {
-                        val objectCardDashAlertItem = ObjectCardDashAlertItem(this@SevereDashboardActivity, linearLayout, severeWarning, index)
-                        objectCardDashAlertItem.setListener { showWarningDetails(severeWarning.idList[index]) }
+                severeWarning.warningList.forEach { w ->
+                    // val data = severeWarning.warnings[index]
+                    //if (!data.startsWith("O.EXP")) {
+                    if (w.isCurrent) {
+                        val objectCardDashAlertItem = ObjectCardDashAlertItem(this@SevereDashboardActivity, linearLayout, w)
+                        objectCardDashAlertItem.setListener { showWarningDetails(w.url) }
                         val id = numberOfWarnings
                         objectCardDashAlertItem.radarButton.setOnClickListener {
-                            ObjectIntent.showRadarBySite(this@SevereDashboardActivity, listOfWfoForWarnings.safeGet(id))
+                            ObjectIntent.showRadarBySite(this@SevereDashboardActivity, w.getClosestRadar())
                         }
-                        objectCardDashAlertItem.detailsButton.setOnClickListener { showWarningDetails(severeWarning.idList[index]) }
-                        listOfWfoForWarnings.add(severeWarning.listOfWfo[index])
+                        objectCardDashAlertItem.detailsButton.setOnClickListener { showWarningDetails(w.url) }
+                        // listOfWfoForWarnings.add(severeWarning.listOfWfo[index])
                         objectCardDashAlertItem.setId(numberOfWarnings)
                         numberOfWarnings += 1
                     }
@@ -168,9 +169,9 @@ class SevereDashboardActivity : BaseActivity() {
         tstCount = wTst.count
         ffwCount = wFfw.count
         torCount = wTor.count
-        watchCount = snWat.bitmaps.size
-        mcdCount = snMcd.bitmaps.size
-        mpdCount = snMpd.bitmaps.size
+        watchCount = snWat.getCount()
+        mcdCount = snMcd.getCount()
+        mpdCount = snMpd.getCount()
         toolbar.subtitle = getSubTitle()
     }
 

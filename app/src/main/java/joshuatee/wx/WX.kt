@@ -22,19 +22,24 @@
 
 package joshuatee.wx
 
+import android.app.AlertDialog
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.os.Environment
+import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
 import android.util.TypedValue
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -57,10 +62,13 @@ import joshuatee.wx.settings.UtilityNavDrawer
 import joshuatee.wx.spc.*
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityAlertDialog
+import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.vis.GoesActivity
 import joshuatee.wx.wpc.WpcImagesActivity
 import joshuatee.wx.wpc.WpcRainfallForecastSummaryActivity
 import joshuatee.wx.wpc.WpcTextProductsActivity
+import kotlin.system.exitProcess
 
 class WX : CommonActionBarFragment() {
 
@@ -100,10 +108,40 @@ class WX : CommonActionBarFragment() {
         } else {
             toolbarBottom.inflateMenu(R.menu.cab)
         }
-	//elys mod
+
+        //elys mod
         if (MyApplication.checkinternet) {
             Utility.checkInternet(this)
         }
+        //FUCK YOU GOOGLE!!!!!!  They kept changing their code to "secure" the storage   FUCK YOU
+        //my ass will be at your new HQ offices and chewing you out for what you did to me.  I fucking hate companies that censor.
+        //I will make you pay my fucking income!!!!  FUCK YOU!!!!
+        //Google company Execs need metal pipes in their asses for breaking their promoise not to censor!!!!!
+        /*
+        if(SDK_INT >= 30) {
+            if(!Environment.isExternalStorageManager()) {
+                UtilityLog.d("wx", "Manage Storage Permissions Denied - sending alert dialog and opening settings")
+                val alertDialogBuilder = androidx.appcompat.app.AlertDialog.Builder(this)
+                alertDialogBuilder.setMessage("This app need access to your phone memory or SD Card to make files and write files (/wX/ on your phone memory or sd card)\nClick OK to open the settings to enable all files access for this app to function fully.").setCancelable(false)
+                        .setPositiveButton("OK") { dialog, _ -> dialog.cancel()
+                            val intent = Intent(ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                            startActivity(intent)
+                            //force restart :/
+                            exitProcess(0)
+                        }
+                val alertDialog = alertDialogBuilder.create()
+                alertDialog.show()
+
+            } else {
+
+                StartupActivity().runme()
+            }
+        } else {
+
+            StartupActivity().runme()
+        }
+        */
+
         toolbarBottom.setOnMenuItemClickListener(this)
         toolbarBottom.setOnClickListener { toolbarBottom.showOverflowMenu() }
         val menu = toolbarBottom.menu
@@ -130,7 +168,9 @@ class WX : CommonActionBarFragment() {
             navigationView = findViewById(R.id.nav_view)
             drawerLayout = findViewById(R.id.drawer_layout)
             navigationView.itemIconTintList = null
-            if (!UIPreferences.themeIsWhite) navigationView.itemTextColor = ColorStateList.valueOf(Color.WHITE)
+            if (!UIPreferences.themeIsWhite) {
+                navigationView.itemTextColor = ColorStateList.valueOf(Color.WHITE)
+            }
             val color = UtilityTheme.getPrimaryColorFromSelectedTheme(this, 0)
             var tint = ColorStateList.valueOf(color)
             val headerLayout = navigationView.getHeaderView(0)
@@ -159,7 +199,11 @@ class WX : CommonActionBarFragment() {
             wfoButton.backgroundTintList = tint
             hourlyButton.backgroundTintList = tint
             settingsButton.backgroundTintList = tint
-            val gravityForDrawer = if (UIPreferences.navDrawerMainScreenOnRight) GravityCompat.END else GravityCompat.START
+            val gravityForDrawer = if (UIPreferences.navDrawerMainScreenOnRight) {
+                GravityCompat.END
+            } else {
+                GravityCompat.START
+            }
             severeDashboardButton.setOnClickListener {
                 ObjectIntent(this, SevereDashboardActivity::class.java)
                 drawerLayout.closeDrawer(gravityForDrawer)
@@ -258,8 +302,7 @@ class WX : CommonActionBarFragment() {
             ObjectFab(this, this, R.id.fab2, MyApplication.ICON_ADD2) {
                 val headerSize: Float
                 val tabStr = UtilitySpc.checkSpc()
-                if (MyApplication.checkspc || MyApplication.checktor || MyApplication.checkwpc
-                        && (tabStr[0] != "SPC" || tabStr[1] != "MISC")) {
+                if (MyApplication.checkspc || MyApplication.checktor || MyApplication.checkwpc && (tabStr[0] != "SPC" || tabStr[1] != "MISC")) {
                     statusText.visibility = View.VISIBLE
                     statusText.text = tabStr[0] + " " + tabStr[1]
                     headerSize = 280f
@@ -443,33 +486,6 @@ class WX : CommonActionBarFragment() {
             else -> return super.onKeyUp(keyCode, event)
         }
     }
-
-    /* fun onNavigationItemSelected(item: MenuItem): Boolean {
-         // Handle navigation view item clicks here.
-         when (item.itemId) {
-             *//*R.id.nav_camera -> {
-                // Handle the camera action
-            }
-            R.id.nav_gallery -> {
-
-            }
-            R.id.nav_slideshow -> {
-
-            }
-            R.id.nav_manage -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
-            }*//*
-        }
-
-        drawerLayout.closeDrawer(GravityCompat.START)
-        return true
-    }*/
 }
 
 

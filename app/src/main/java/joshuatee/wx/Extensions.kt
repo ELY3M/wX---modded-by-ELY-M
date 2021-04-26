@@ -36,6 +36,12 @@ fun List<String>.safeGet(index: Int) = Utility.safeGet(this, index)
 
 fun String.parse(match: String) = UtilityString.parse(this, match)
 
+fun String.strip() = this.trim()
+
+fun String.ljust(padding: Int): String {
+    return String.format("%-" + padding.toString() + "s", this)
+}
+
 fun String.condenseSpace()= this.replace("\\s+".toRegex(), " ")
 
 fun String.removeHtml() = this.replace(Regex("\\<[^>]*>"),"")

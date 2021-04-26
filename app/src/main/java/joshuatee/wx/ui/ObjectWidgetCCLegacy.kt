@@ -155,7 +155,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         val updateIntent = Intent()
         updateIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         updateIntent.putExtra(Widget.WIDGET_IDS_KEY, allWidgetIds)
-        val pendingIntentWidgetTime = PendingIntent.getBroadcast(context, 0, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntentWidgetTime = PendingIntent.getBroadcast(context, 0, updateIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         remoteViews.setOnClickPendingIntent(R.id.widget_time, pendingIntentWidgetTime)
         val tabStr = UtilitySpc.checkSpc()
         remoteViews.setViewVisibility(R.id.tab, View.VISIBLE)

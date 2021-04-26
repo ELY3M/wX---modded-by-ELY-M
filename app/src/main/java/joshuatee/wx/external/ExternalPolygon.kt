@@ -152,7 +152,9 @@ class ExternalPolygon private constructor(private val sides: List<ExternalLine>,
             /*
 			 * If the number of intersections is odd, then the point is inside the polygon
 			 */
-            if (intersection % 2 == 1) return true
+            if (intersection % 2 == 1) {
+                return true
+            }
         }
         return false
     }
