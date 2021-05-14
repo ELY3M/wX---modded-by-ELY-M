@@ -175,7 +175,8 @@ object UtilityCanvasMain {
         }
         if (PolygonType.MPD.pref) UtilityCanvas.addMcd(projectionType, bitmapCanvas, projectionNumbers, PolygonType.MPD)
     }
-    
+ 
+    //elys mod    
     //for Conus Radar
     fun addCanvasConus(
             context: Context,

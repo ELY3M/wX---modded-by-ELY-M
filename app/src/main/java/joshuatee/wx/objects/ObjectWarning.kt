@@ -86,19 +86,7 @@ class ObjectWarning() {
         data = data.replace(",", " ")
         data = data.replace("-", "")
         val points = data.split(" ")
-        return if (points.size > 2) {
-            val lat = points[1]
-            val lon = "-" + points[0]
-            val latLon = LatLon(lat, lon)
-            val radarSites = UtilityLocation.getNearestRadarSites(latLon, 1, false)
-            if (radarSites.isEmpty()) {
-                ""
-            } else {
-                radarSites[0].name
-            }
-        } else {
-            ""
-        }
+        return getClosestRadarCompute(points)
     }
 
     fun getPolygonAsLatLons(mult: Int): List<LatLon> {
@@ -110,6 +98,22 @@ class ObjectWarning() {
     }
 
     companion object {
+
+        fun getClosestRadarCompute(points: List<String>): String {
+            return if (points.size > 2) {
+                val lat = points[1]
+                val lon = "-" + points[0]
+                val latLon = LatLon(lat, lon)
+                val radarSites = UtilityLocation.getNearestRadarSites(latLon, 1, false)
+                if (radarSites.isEmpty()) {
+                    ""
+                } else {
+                    radarSites[0].name
+                }
+            } else {
+                ""
+            }
+        }
 
         fun getBulkData(type1: PolygonType): String {
             return when (type1) {
@@ -145,7 +149,6 @@ class ObjectWarning() {
             val listOfPolygonRaw = UtilityString.parseColumn(data, RegExp.warningLatLonPattern)
             val vtecs = UtilityString.parseColumn(html, RegExp.warningVtecPattern)
             val geometryList = UtilityString.parseColumn(html, "\"geometry\": (.*?),")
-            // count = len(idList)
             for (index in urlList.indices) {
                 warnings.add(ObjectWarning(
                         Utility.safeGet(urlList, index),

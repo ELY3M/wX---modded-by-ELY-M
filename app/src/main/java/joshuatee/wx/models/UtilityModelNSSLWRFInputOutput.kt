@@ -57,7 +57,7 @@ internal object UtilityModelNsslWrfInputOutput {
         val sector = UtilityModelNsslWrfInterface.sectors[sectorIndex]
         val baseLayerUrl = "https://cams.nssl.noaa.gov/graphics/blank_maps/spc_$sector.png"
         var modelPostfix = "_nssl"
-        var model = om.model.toLowerCase(Locale.US)
+        var model = om.model.lowercase(Locale.US)
         if (om.model == "HRRRV3") {
             modelPostfix = ""
         } else if (om.model == "WRF_3KM") {
@@ -70,7 +70,7 @@ internal object UtilityModelNsslWrfInputOutput {
             val day = om.run.substring(6, 8)
             val hour = om.run.substring(8, 10)
             val url = baseUrl + "/graphics/models/" + model + modelPostfix + "/" + year + "/" + month + "/" + day + "/" + hour + "00/f" +
-                    time + "00/" + om.currentParam + ".spc_" + sector.toLowerCase(Locale.US) + ".f" + time + "00.png"
+                    time + "00/" + om.currentParam + ".spc_" + sector.lowercase(Locale.US) + ".f" + time + "00.png"
             val baseLayerImage = baseLayerUrl.getImage()
             val productLayerImage = url.getImage()
             UtilityImg.addColorBackground(context, UtilityImg.mergeImages(context, productLayerImage, baseLayerImage), Color.WHITE)

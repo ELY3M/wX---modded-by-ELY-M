@@ -89,7 +89,7 @@ class USWarningsWithRadarActivity : BaseActivity() {
                 turlLocal[1] = "us"
             } else {
                 turlLocal[0] = ".*?"
-                turlLocal[1] = objectAlertSummary.filterArray[position].toLowerCase(Locale.US)
+                turlLocal[1] = objectAlertSummary.filterArray[position].lowercase(Locale.US)
             }
             getContent()
         }

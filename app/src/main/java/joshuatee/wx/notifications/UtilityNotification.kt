@@ -44,9 +44,7 @@ import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.audio.VoiceCommandActivity
 import joshuatee.wx.canada.CanadaHourlyActivity
-import joshuatee.wx.canada.CanadaRadarActivity
 import joshuatee.wx.canada.UtilityCanada
-import joshuatee.wx.canada.UtilityCanadaImg
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.*
 import android.app.NotificationChannel
@@ -129,25 +127,25 @@ object UtilityNotification {
                     bitmap = UtilityUSImg.getPreferredLayeredImg(context, Location.getRid(locNumInt), false)
                 } else {
                     url2 = Location.getRid(locNumInt) + "CA"
-                    bitmap = UtilityCanadaImg.getRadarBitmapOptionsApplied(context, Location.getRid(locNumInt), "")
+                    // bitmap = UtilityCanadaImg.getRadarBitmapOptionsApplied(context, Location.getRid(locNumInt), "")
+                    bitmap = UtilityImg.getBlankBitmap()
                 }
                 locLabelStr = "(" + Location.getName(locNumInt) + ") " + Location.getRid(locNumInt) + " Radar"
                 val noMain = locLabelStr
                 val notifier2 = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 val noti2: Notification
-                val resultIntent2: Intent
-                if (Location.isUS(locNumInt)) {
-                    resultIntent2 = Intent(context, WXGLRadarActivity::class.java)
-                    resultIntent2.putExtra(WXGLRadarActivity.RID, arrayOf(Location.getRid(locNumInt), nws1StateCurrent))
-                } else {
-                    resultIntent2 = Intent(context, CanadaRadarActivity::class.java)
-                    resultIntent2.putExtra(CanadaRadarActivity.RID, arrayOf(Location.getRid(locNumInt), "rad"))
-                }
+                //                if (Location.isUS(locNumInt)) {
+                val resultIntent2 = Intent(context, WXGLRadarActivity::class.java)
+                resultIntent2.putExtra(WXGLRadarActivity.RID, arrayOf(Location.getRid(locNumInt), nws1StateCurrent))
+//                } else {
+////                    resultIntent2 = Intent(context, CanadaRadarActivity::class.java)
+////                    resultIntent2.putExtra(CanadaRadarActivity.RID, arrayOf(Location.getRid(locNumInt), "rad"))
+//                }
                 val stackBuilder2 = TaskStackBuilder.create(context)
                 if (Location.isUS(locNumInt)) {
                     stackBuilder2.addParentStack(WX::class.java)
                 } else {
-                    stackBuilder2.addParentStack(CanadaRadarActivity::class.java)
+//                    stackBuilder2.addParentStack(CanadaRadarActivity::class.java)
                 }
                 stackBuilder2.addNextIntent(resultIntent2)
                 val resultPendingIntent2 = stackBuilder2.getPendingIntent(y, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)

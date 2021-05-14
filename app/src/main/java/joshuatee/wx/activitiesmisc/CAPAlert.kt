@@ -24,9 +24,10 @@ package joshuatee.wx.activitiesmisc
 import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
+import joshuatee.wx.RegExp
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.radar.LatLon
-import joshuatee.wx.settings.UtilityLocation
+import joshuatee.wx.objects.ObjectWarning
+import joshuatee.wx.util.UtilityString
 
 class CapAlert {
 
@@ -50,18 +51,19 @@ class CapAlert {
     var points = listOf<String>()
 
     fun getClosestRadar(): String {
-        return if (points.size > 2) {
-            val lat = points[1]
-            val lon = "-" + points[0]
-            val radarSites = UtilityLocation.getNearestRadarSites(LatLon(lat, lon), 1, includeTdwr = false)
-            if (radarSites.isEmpty()) {
-                ""
-            } else {
-                radarSites[0].name
-            }
-        } else {
-            ""
-        }
+        return ObjectWarning.getClosestRadarCompute(points)
+//        return if (points.size > 2) {
+//            val lat = points[1]
+//            val lon = "-" + points[0]
+//            val radarSites = UtilityLocation.getNearestRadarSites(LatLon(lat, lon), 1, includeTdwr = false)
+//            if (radarSites.isEmpty()) {
+//                ""
+//            } else {
+//                radarSites[0].name
+//            }
+//        } else {
+//            ""
+//        }
     }
 
     companion object {
@@ -113,6 +115,7 @@ class CapAlert {
             capAlert.summary = capAlert.summary.replace("\\n\\n", "ABC123")
             capAlert.summary = capAlert.summary.replace("\\n", " ")
             capAlert.summary = capAlert.summary.replace("ABC123", "\n\n")
+            capAlert.vtec = UtilityString.parse(html, RegExp.warningVtecPattern)
             capAlert.instructions = capAlert.instructions.replace("\\n", " ")
             capAlert.text = ""
             capAlert.text += capAlert.title
@@ -130,7 +133,8 @@ class CapAlert {
 
         private fun getWarningsFromJson(html: String): List<String> {
             val data = html.replace("\n", "").replace(" ", "")
-            var points = data.parseFirst("\"coordinates\":\\[\\[(.*?)\\]\\]\\}")
+            // var points = data.parseFirst("\"coordinates\":\\[\\[(.*?)\\]\\]\\}")
+            var points = data.parseFirst(RegExp.warningLatLonPattern)
             points = points.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
             return points.split(" ")
         }

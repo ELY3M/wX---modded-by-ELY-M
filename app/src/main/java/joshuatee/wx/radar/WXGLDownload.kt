@@ -69,9 +69,9 @@ class WXGLDownload {
         fun getRadarFilesForAnimation(context: Context, frameCount: Int, radarSite: String, product: String): List<String> {
             val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, product)
             return if (!product.contains("L2")) {
-                getLevel3FilesForAnimation(context, frameCount, product, ridPrefix, radarSite.toLowerCase(Locale.US))
+                getLevel3FilesForAnimation(context, frameCount, product, ridPrefix, radarSite.lowercase(Locale.US))
             } else {
-                getLevel2FilesForAnimation(context, nwsRadarLevel2Pub + ridPrefix.toUpperCase(Locale.US) + radarSite.toUpperCase(Locale.US) + "/", frameCount)
+                getLevel2FilesForAnimation(context, nwsRadarLevel2Pub + ridPrefix.uppercase(Locale.US) + radarSite.uppercase(Locale.US) + "/", frameCount)
             }
         }
 
@@ -153,7 +153,7 @@ class WXGLDownload {
 
         // TODO refactor variable names
         fun getLevel2Url(radarSite: String): String {
-            val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, false).toUpperCase(Locale.US)
+            val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, false).uppercase(Locale.US)
             val baseUrl = "$nwsRadarLevel2Pub$ridPrefix$radarSite/"
             val list = (baseUrl + "dir.list").getHtmlSep().replace("<br>", " ").split(" ").dropLastWhile { it.isEmpty() }
             if (list.size < 4) {
@@ -193,7 +193,7 @@ class WXGLDownload {
         }
 
         private fun iowaMesoL2Archive(radarSite: String, url: String): String {
-            val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, false).toUpperCase(Locale.US)
+            val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, false).uppercase(Locale.US)
             val baseUrl = "http://mesonet-nexrad.agron.iastate.edu/level2/raw/$ridPrefix$radarSite/"
             val tmpStr = (baseUrl + "dir.list").getHtmlSep()
             val regexp = ".*?($ridPrefix$url[0-9]).*?"
@@ -208,11 +208,11 @@ class WXGLDownload {
 
         fun getRadarFileUrl(radarSite: String, product: String, tdwr: Boolean): String {
             val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, tdwr)
-            return MyApplication.nwsRadarPub + "SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.toLowerCase(Locale.US) + "/sn.last"
+            return MyApplication.nwsRadarPub + "SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(Locale.US) + "/sn.last"
         }
 
         private fun getRadarDirectoryUrl(radarSite: String, product: String, ridPrefix: String): String {
-            return MyApplication.nwsRadarPub + "SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.toLowerCase(Locale.US) + "/"
+            return MyApplication.nwsRadarPub + "SL.us008001/DF.of/DC.radar/" + GlobalDictionaries.nexradProductString[product] + "/SI." + ridPrefix + radarSite.lowercase(Locale.US) + "/"
         }
     }
 }

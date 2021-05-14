@@ -40,7 +40,7 @@ internal object WXGLNexradLevel3StormInfo {
         val fileName = stiBaseFileName + fileNameSuffix
         val stormList = mutableListOf<Double>()
         val location = UtilityLocation.getSiteLocation(projectionNumbers.radarSite)
-        WXGLDownload.getNidsTab(context, "STI", projectionNumbers.radarSite.toLowerCase(Locale.US), fileName)
+        WXGLDownload.getNidsTab(context, "STI", projectionNumbers.radarSite.lowercase(Locale.US), fileName)
         val posn: List<String>
         val motion: List<String>
         try {

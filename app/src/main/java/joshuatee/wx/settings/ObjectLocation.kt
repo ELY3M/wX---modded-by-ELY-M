@@ -22,14 +22,14 @@
 package joshuatee.wx.settings
 
 import android.content.Context
-import joshuatee.wx.MyApplication
-import joshuatee.wx.canada.UtilityCanada
-import joshuatee.wx.radar.LatLon
+//import joshuatee.wx.MyApplication
+//import joshuatee.wx.canada.UtilityCanada
+//import joshuatee.wx.radar.LatLon
 import joshuatee.wx.util.Utility
-import java.util.*
-import joshuatee.wx.Extensions.*
-import joshuatee.wx.GlobalDictionaries
-import joshuatee.wx.util.UtilityString
+//import java.util.*
+//import joshuatee.wx.Extensions.*
+//import joshuatee.wx.GlobalDictionaries
+//import joshuatee.wx.util.UtilityString
 
 // TODO FIXME not currently used
 

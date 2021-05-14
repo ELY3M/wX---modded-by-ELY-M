@@ -90,8 +90,7 @@ object UtilityUSHourly {
 
     fun get(locationNumber: Int): List<String> {
         if (UIPreferences.useNwsApiForHourly) {
-            val dataList = getString(locationNumber)
-            return dataList
+            return getString(locationNumber)
         }
         val data = UtilityHourlyOldApi.getHourlyString(locationNumber)
         return listOf(data, data)

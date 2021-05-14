@@ -56,9 +56,9 @@ internal object UtilityWXOGLPerf {
             }
             dis.skipBytes(100)
             val magic = ByteArray(3)
-            magic[0] = 'B'.toByte()
-            magic[1] = 'Z'.toByte()
-            magic[2] = 'h'.toByte()
+            magic[0] = 'B'.code.toByte()
+            magic[1] = 'Z'.code.toByte()
+            magic[2] = 'h'.code.toByte()
             val compression = Compression.getCompression(magic)
             val compressedFileSize = dis.length() - dis.filePointer
             val buf = ByteArray(compressedFileSize.toInt())
@@ -555,9 +555,9 @@ internal object UtilityWXOGLPerf {
             // index 2,3 is long as Int
             ucarRandomAccessFile.skipBytes(100)
             val magic = ByteArray(3)
-            magic[0] = 'B'.toByte()
-            magic[1] = 'Z'.toByte()
-            magic[2] = 'h'.toByte()
+            magic[0] = 'B'.code.toByte()
+            magic[1] = 'Z'.code.toByte()
+            magic[2] = 'h'.code.toByte()
             val compression = Compression.getCompression(magic)
             val compressedFileSize = ucarRandomAccessFile.length() - ucarRandomAccessFile.filePointer
             val buf = ByteArray(compressedFileSize.toInt())

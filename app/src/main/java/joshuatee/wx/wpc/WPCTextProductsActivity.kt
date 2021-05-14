@@ -112,7 +112,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         ridFavOld = MyApplication.nwsTextFav
         html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@WpcTextProductsActivity, product) }
         textCard.setTextAndTranslate(html)
-        if (UtilityWpcText.needsFixedWidthFont(product.toUpperCase(Locale.US))) {
+        if (UtilityWpcText.needsFixedWidthFont(product.uppercase(Locale.US))) {
             textCard.typefaceMono()
         } else {
             textCard.typefaceDefault()
@@ -132,7 +132,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         when (item.itemId) {
             R.id.action_fav -> toggleFavorite()
             R.id.action_notif_text_prod -> {
-                UtilityNotificationTextProduct.toggle(this, linearLayout, product.toUpperCase(Locale.US))
+                UtilityNotificationTextProduct.toggle(this, linearLayout, product.uppercase(Locale.US))
                 updateSubmenuNotificationText()
             }
             R.id.action_share -> UtilityShare.text(this, product, textToShare)
@@ -188,7 +188,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun updateSubmenuNotificationText() {
-        if (UtilityNotificationTextProduct.check(product.toUpperCase(Locale.US))) {
+        if (UtilityNotificationTextProduct.check(product.uppercase(Locale.US))) {
             notificationToggle.title = resources.getString(R.string.notif_remove)
         } else {
             notificationToggle.title = resources.getString(R.string.notif_add)

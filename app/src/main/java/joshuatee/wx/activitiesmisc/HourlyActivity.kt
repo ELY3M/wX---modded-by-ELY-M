@@ -96,9 +96,6 @@ class HourlyActivity : BaseActivity() {
         htmlShare = withContext(Dispatchers.IO) {
             UtilityUSHourly.get(locationNumber)
         }
-//        hourlyData = withContext(Dispatchers.IO) {
-//            UtilityUSHourly.getStringForActivity(htmlShare[1])
-//        }
         hourlyData = if (UIPreferences.useNwsApiForHourly) {
             UtilityUSHourly.getStringForActivity(htmlShare[1])
         } else {

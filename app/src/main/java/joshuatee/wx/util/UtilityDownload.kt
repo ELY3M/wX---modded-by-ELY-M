@@ -31,7 +31,6 @@ import joshuatee.wx.activitiesmisc.UtilityLightning
 import joshuatee.wx.activitiesmisc.UtilitySunMoon
 import joshuatee.wx.activitiesmisc.UtilityUSHourly
 import joshuatee.wx.audio.UtilityPlayList
-import joshuatee.wx.canada.UtilityCanadaImg
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.spc.*
@@ -39,7 +38,6 @@ import joshuatee.wx.spc.*
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
 import joshuatee.wx.UIPreferences
-import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.radar.UtilityAwcRadarMosaic
 import joshuatee.wx.vis.UtilityGoes
 
@@ -54,8 +52,8 @@ object UtilityDownload {
         try {
             if (!UIPreferences.useAwcRadarMosaic) {
                 val ridLoc = Utility.getRadarSiteName(radarSite)
-                val nwsLocationArr = ridLoc.split(",").dropLastWhile { it.isEmpty() }
-                val state = nwsLocationArr[0]
+                // val nwsLocationArr = ridLoc.split(",").dropLastWhile { it.isEmpty() }
+                // val state = nwsLocationArr[0]
                 var k = Utility.readPref(context, "WIDGET_RADAR_LEVEL", "1km")
                 when (k) {
                     "regional" -> k = "regional"
@@ -70,7 +68,8 @@ object UtilityDownload {
                     UtilityImg.getBlankBitmap()
                 } else {
                     val province = Utility.readPref(context, "NWS" + location + "_STATE", "")
-                    UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(context, UtilityCanada.getSectorFromProvince(province))
+//                    UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(context, UtilityCanada.getSectorFromProvince(province))
+                    UtilityImg.getBlankBitmap()
                 }
             } else {
                 var product = "rad_rala"
@@ -103,8 +102,9 @@ object UtilityDownload {
                 var rid = Location.rid
                 if (rid == "NAT") rid = "CAN"
                 bitmap = when (rid) {
-                    "CAN", "PAC", "WRN", "ONT", "QUE", "ERN" -> UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(context, rid)
-                    else -> UtilityCanadaImg.getRadarBitmapOptionsApplied(context, rid, "")
+//                    "CAN", "PAC", "WRN", "ONT", "QUE", "ERN" -> UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(context, rid)
+//                    else -> UtilityCanadaImg.getRadarBitmapOptionsApplied(context, rid, "")
+                    else -> UtilityImg.getBlankBitmap()
                 }
             }
             "RAD_2KM" -> {
@@ -162,11 +162,11 @@ object UtilityDownload {
             }
             "WEATHERSTORY" -> {
                 needsBitmap = false
-                bitmap = ("https://www.weather.gov/images/" + Location.wfo.toLowerCase(Locale.US) + "/wxstory/Tab2FileL.png").getImage()
+                bitmap = ("https://www.weather.gov/images/" + Location.wfo.lowercase(Locale.US) + "/wxstory/Tab2FileL.png").getImage()
             }
             "WFOWARNINGS" -> {
                 needsBitmap = false
-                bitmap = ("https://www.weather.gov/wwamap/png/" + Location.wfo.toLowerCase(Locale.US) + ".png").getImage()
+                bitmap = ("https://www.weather.gov/wwamap/png/" + Location.wfo.lowercase(Locale.US) + ".png").getImage()
             }
             "SWOD2" -> {
                 needsBitmap = false
@@ -269,12 +269,13 @@ object UtilityDownload {
 
     fun getTextProduct(context: Context, prodF: String): String {
         var text: String
-        val prod = prodF.toUpperCase(Locale.US)
+        val prod = prodF.uppercase(Locale.US)
         when {
-            prod == "AFDLOC" -> text = getTextProduct(context, "afd" + Location.wfo.toLowerCase(Locale.US))
-            prod == "HWOLOC" -> text = getTextProduct(context, "hwo" + Location.wfo.toLowerCase(Locale.US))
-            prod == "VFDLOC" -> text = getTextProduct(context, "vfd" + Location.wfo.toLowerCase(Locale.US))
-            prod == "SUNMOON" -> text = UtilitySunMoon.getData(Location.locationIndex)
+            prod == "AFDLOC" -> text = getTextProduct(context, "afd" + Location.wfo.lowercase(Locale.US))
+            prod == "HWOLOC" -> text = getTextProduct(context, "hwo" + Location.wfo.lowercase(Locale.US))
+            prod == "VFDLOC" -> text = getTextProduct(context, "vfd" + Location.wfo.lowercase(Locale.US))
+            //elys mod
+	    prod == "SUNMOON" -> text = UtilitySunMoon.getData(Location.locationIndex)
             prod == "HOURLY" -> text = UtilityUSHourly.get(Location.currentLocation)[0]
             prod == "QPF94E" -> {
                 val textUrl = "https://www.wpc.ncep.noaa.gov/qpf/ero.php?opt=curr&day=" + "1"
@@ -305,7 +306,7 @@ object UtilityDownload {
             }
             prod.contains("MIAT") || prod == "HFOTWOCP" -> text = "${MyApplication.nwsNhcWebsitePrefix}/ftp/pub/forecasts/discussion/$prod".getHtmlWithNewLine().removeLineBreaks()
             prod.startsWith("SCCNS") -> {
-                val url = "${MyApplication.nwsWPCwebsitePrefix}/discussions/nfd" + prod.toLowerCase(Locale.US).replace("ns", "") + ".html"
+                val url = "${MyApplication.nwsWPCwebsitePrefix}/discussions/nfd" + prod.lowercase(Locale.US).replace("ns", "") + ".html"
                 text = url.getHtmlWithNewLine()
                 text = UtilityString.extractPre(text).removeHtml()
             }
@@ -343,9 +344,9 @@ object UtilityDownload {
             }
             prod.startsWith("GLF") && !prod.contains("%") -> text = getTextProduct(context, "$prod%")
             prod.contains("FOCN45") -> text = "${MyApplication.nwsRadarPub}/data/raw/fo/focn45.cwwg..txt".getHtmlWithNewLine().removeLineBreaks()
-            prod.startsWith("AWCN") -> text = ("${MyApplication.nwsRadarPub}/data/raw/aw/" + prod.toLowerCase(Locale.US) + ".cwwg..txt").getHtmlWithNewLine().removeLineBreaks()
+            prod.startsWith("AWCN") -> text = ("${MyApplication.nwsRadarPub}/data/raw/aw/" + prod.lowercase(Locale.US) + ".cwwg..txt").getHtmlWithNewLine().removeLineBreaks()
             prod.contains("NFD") -> {
-                text = (MyApplication.nwsOpcWebsitePrefix + "/mobile/mobile_product.php?id=" + prod.toUpperCase(Locale.US)).getHtml()
+                text = (MyApplication.nwsOpcWebsitePrefix + "/mobile/mobile_product.php?id=" + prod.uppercase(Locale.US)).getHtml()
                 text = Utility.fromHtml(text)
             }
             // use forecast but site=NWS
@@ -385,7 +386,7 @@ object UtilityDownload {
                 text = ("http://collaboration.cmc.ec.gc.ca/cmc/cmop/FXCN/").getHtmlSep()
                 val dateList = UtilityString.parseColumn(text, "href=\"([0-9]{8})/\"")
                 val dateString = dateList.last()
-                val daysAndRegion = prod.replace("FXCN01_", "").toLowerCase(Locale.US)
+                val daysAndRegion = prod.replace("FXCN01_", "").lowercase(Locale.US)
                 text = ("http://collaboration.cmc.ec.gc.ca/cmc/cmop/FXCN/" + dateString + "/fx_" + daysAndRegion + "_" + dateString + "00.html")
                         .getHtml()
                         .replace(MyApplication.newline + MyApplication.newline, MyApplication.newline)
@@ -514,7 +515,7 @@ object UtilityDownload {
                             text = UtilityString.extractPreLsr(html).removeLineBreaks().removeHtml()
                         }
                         "PMDSPD", "PMDEPD", "PMDHI", "PMDAK", "QPFERD", "QPFHSD" -> {
-                            val url = "https://www.wpc.ncep.noaa.gov/discussions/hpcdiscussions.php?disc=" + prod.toLowerCase(Locale.US)
+                            val url = "https://www.wpc.ncep.noaa.gov/discussions/hpcdiscussions.php?disc=" + prod.lowercase(Locale.US)
                             val html = url.getHtmlWithNewLine()
                             text = UtilityString.extractPreLsr(html).removeLineBreaks().removeHtml()
                         }
@@ -549,7 +550,7 @@ object UtilityDownload {
     }
 
     fun getTextProduct(prodF: String, version: Int): String {
-        val prod = prodF.toUpperCase(Locale.US)
+        val prod = prodF.uppercase(Locale.US)
         val t1 = prod.substring(0, 3)
         val t2 = prod.substring(3)
         val url = "https://forecast.weather.gov/product.php?site=NWS&product=$t1&issuedby=$t2&version=$version"
@@ -574,6 +575,6 @@ object UtilityDownload {
         } else {
             radarSite
         }
-        return getTextProduct(context, "FTM" + ridSmall.toUpperCase(Locale.US))
+        return getTextProduct(context, "FTM" + ridSmall.uppercase(Locale.US))
     }
 }

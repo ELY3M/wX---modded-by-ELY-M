@@ -57,9 +57,9 @@ private constructor(private val name: String) {
                 )
             } else if (magic[0] == 0x1f.toByte() && magic[1] == 0x8b.toByte()) {
                 GZIP
-            } else if (magic[0] == 'B'.toByte() &&
-                magic[1] == 'Z'.toByte() &&
-                magic[2] == 'h'.toByte()
+            } else if (magic[0] == 'B'.code.toByte() &&
+                magic[1] == 'Z'.code.toByte() &&
+                magic[2] == 'h'.code.toByte()
             ) {
                 BZIP2
             } else if (magic[0] == 0x1f.toByte() && magic[1] == 0x9d.toByte()) {

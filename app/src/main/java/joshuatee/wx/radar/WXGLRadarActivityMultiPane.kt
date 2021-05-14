@@ -300,14 +300,18 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         oglInView = true
         panesList.forEach {
             var initialRadarSite = activityArguments[0]
-            if (activityArguments[0] == "") initialRadarSite = joshuatee.wx.settings.Location.rid
+            if (activityArguments[0] == "") {
+                initialRadarSite = joshuatee.wx.settings.Location.rid
+            }
             if (!useSinglePanePref) {
                 wxglRenders[it].rid = Utility.readPref(this, prefPrefix + "_RID" + (it + 1).toString(), initialRadarSite)
             } else {
                 wxglRenders[it].rid = Utility.readPref(this, prefPrefix + "_RID", initialRadarSite)
             }
         }
-        if (MyApplication.dualpaneshareposn) (1 until numberOfPanes).forEach { wxglRenders[it].rid = wxglRenders[0].rid }
+        if (MyApplication.dualpaneshareposn) {
+                (1 until numberOfPanes).forEach { wxglRenders[it].rid = wxglRenders[0].rid }
+        }
         val defaultProducts = listOf("N0Q", "N0U", "N0C", "DVL")
         panesList.forEach {
             oldRadarSites[it] = ""
@@ -350,7 +354,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             wxglSurfaceViews[it].wxglTextObjects = wxglTextObjects
             wxglTextObjects[it].initializeLabels(this)
         }
-        if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) getContentSerial() else getContentParallel()
+        if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) {
+            getContentSerial()
+        } else {
+            getContentParallel()
+        }
         checkForAutoRefresh()
     }
 
@@ -398,7 +406,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             }
         }
         // spotter code is serialized for now
-        if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) getContentSerial() else getContentParallel()
+        if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) {
+            getContentSerial()
+        } else {
+            getContentParallel()
+        }
         checkForAutoRefresh()
         super.onRestart()
     }
@@ -438,31 +450,47 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     glviewShow()
                     oglInView = true
                 }
-                if (ridChanged && !restartedZoom) ridChanged = false
+                if (ridChanged && !restartedZoom) {
+                    ridChanged = false
+                }
                 if (restartedZoom) {
                     restartedZoom = false
                     ridChanged = false
                 }
-                if (PolygonType.SPOTTER_LABELS.pref) UtilityWXGLTextObject.updateSpotterLabels(numberOfPanes, wxglTextObjects)
-                if (PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) UtilityWXGLTextObject.updateObservations(numberOfPanes, wxglTextObjects)
-      	    	//TODO test me in multi-pane
-            	if (PolygonType.HAIL_LABELS.pref) UtilityWXGLTextObject.updateHailLabels(numberOfPanes, wxglTextObjects)
+                if (PolygonType.SPOTTER_LABELS.pref) {
+                    UtilityWXGLTextObject.updateSpotterLabels(numberOfPanes, wxglTextObjects)
+                }
 		
-		glview.requestRender()
+		if (PolygonType.OBS.pref || PolygonType.WIND_BARB.pref) { 
+		UtilityWXGLTextObject.updateObservations(numberOfPanes, wxglTextObjects)
+      	    	} 
+		
+		
+		//TODO test me in multi-pane
+            	if (PolygonType.HAIL_LABELS.pref) { 
+		UtilityWXGLTextObject.updateHailLabels(numberOfPanes, wxglTextObjects)
+                }
+                glview.requestRender()
                 setSubTitle()
                 animRan = false
                 withContext(Dispatchers.IO) { UtilityDownloadWarnings.get(this@WXGLRadarActivityMultiPane) }
-                if (!oglr.product.startsWith("2")) UtilityRadarUI.plotWarningPolygons(glview, oglr, false)
+                if (!oglr.product.startsWith("2")) {
+                    UtilityRadarUI.plotWarningPolygons(glview, oglr, false)
+                }
                 if (PolygonType.MCD.pref) {
                     withContext(Dispatchers.IO) {
                         UtilityDownloadMcd.get(this@WXGLRadarActivityMultiPane)
                         UtilityDownloadWatch.get(this@WXGLRadarActivityMultiPane)
                     }
-                    if (!oglr.product.startsWith("2")) UtilityRadarUI.plotMcdWatchPolygons(glview, oglr, false)
+                    if (!oglr.product.startsWith("2")) {
+                        UtilityRadarUI.plotMcdWatchPolygons(glview, oglr, false)
+                    }
                 }
                 if (PolygonType.MPD.pref) {
                     withContext(Dispatchers.IO) { UtilityDownloadMpd.get(this@WXGLRadarActivityMultiPane) }
-                    if (!oglr.product.startsWith("2")) UtilityRadarUI.plotMpdPolygons(glview, oglr, false)
+                    if (!oglr.product.startsWith("2")) {
+                        UtilityRadarUI.plotMpdPolygons(glview, oglr, false)
+                    }
                 }
                 //if (MyApplication.radarShowWpcFronts) {
                 //    withContext(Dispatchers.IO) { UtilityWpcFronts.get(this@WXGLRadarActivityMultiPane) }
@@ -541,9 +569,15 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     launch(uiDispatcher) { progressUpdate((r + 1).toString(), (animArray[0].size).toString()) }
                     panesList.forEach { wxglSurfaceViews[it].requestRender() }
                     timeMilli = UtilityTime.currentTimeMillis()
-                    if ((timeMilli - priorTime) < delay) SystemClock.sleep(delay - ((timeMilli - priorTime)))
-                    if (!inOglAnim) break
-                    if (r == (animArray[0].lastIndex)) SystemClock.sleep(delay.toLong() * 2)
+                    if ((timeMilli - priorTime) < delay) {
+                        SystemClock.sleep(delay - ((timeMilli - priorTime)))
+                    }
+                    if (!inOglAnim) {
+                        break
+                    }
+                    if (r == (animArray[0].lastIndex)) {
+                        SystemClock.sleep(delay.toLong() * 2)
+                    }
                 }
                 loopCnt += 1
             }
@@ -552,7 +586,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     }
 
     private fun progressUpdate(vararg values: String) {
-        if ((values[1].toIntOrNull() ?: 0) > 1) setSubTitle(values[0], values[1]) else toolbar.subtitle = "Problem downloading"
+        if ((values[1].toIntOrNull() ?: 0) > 1) {
+            setSubTitle(values[0], values[1])
+        } else {
+            toolbar.subtitle = "Problem downloading"
+        }
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -613,8 +651,14 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             animateButton.setIcon(MyApplication.ICON_PLAY_WHITE)
             animateButton.title = animateButtonPlayString
             // spotter code is serialized for now
-            if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) getContentSerial() else getContentParallel()
-            if (item.itemId == R.id.action_a) return true
+            if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) {
+                getContentSerial()
+            } else {
+                getContentParallel()
+            }
+            if (item.itemId == R.id.action_a) {
+                return true
+            }
         }
         when (item.itemId) {
             R.id.action_help -> ObjectDialogue(this,
@@ -778,11 +822,12 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             inOglAnimPaused = false
             // if an L2 anim is in process sleep for 1 second to let the current decode/render finish
             // otherwise the new selection might overwrite in the OGLR object - hack
-            if (wxglRenders[0].product.contains("L2") || wxglRenders[1].product.contains("L2")) SystemClock.sleep(2000)
+            if (wxglRenders[0].product.contains("L2") || wxglRenders[1].product.contains("L2")) {
+                SystemClock.sleep(2000)
+            }
             animateButton.setIcon(MyApplication.ICON_PLAY_WHITE)
             animateButton.title = animateButtonPlayString
         }
-
         if (MyApplication.dualpaneshareposn) {
             // if one long presses change the currently active radar as well
             curRadar = idxIntAl
@@ -798,7 +843,11 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             wxglSurfaceViews[idxIntAl].scaleFactor = MyApplication.wxoglSize / 10.0f
             wxglRenders[idxIntAl].setViewInitial(MyApplication.wxoglSize / 10.0f, 0.0f, 0.0f)
         }
-        if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) getContentSerial() else getContentParallel()
+        if (PolygonType.SPOTTER.pref || PolygonType.SPOTTER_LABELS.pref) {
+            getContentSerial()
+        } else {
+            getContentParallel()
+        }
     }
 
     private fun showRadarScanInfo() {
@@ -854,7 +903,13 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     private val mStatusChecker: Runnable = object : Runnable {
         override fun run() {
             if (mHandler != null) {
-                if (loopCount > 0) { if (inOglAnim) animTriggerDownloads = true else getContentSerial() }
+                if (loopCount > 0) {
+                    if (inOglAnim) {
+                        animTriggerDownloads = true
+                    } else {
+                        getContentSerial()
+                    }
+                }
                 loopCount += 1
                 handler.postDelayed(this, mInterval.toLong())
             }
@@ -1102,15 +1157,21 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         when (keyCode) {
             KeyEvent.KEYCODE_L -> {
-                if (event.isCtrlPressed) showMap()
+                if (event.isCtrlPressed) {
+                    showMap()
+                }
                 return true
             }
             KeyEvent.KEYCODE_M -> {
-                if (event.isCtrlPressed) toolbarBottom.showOverflowMenu()
+                if (event.isCtrlPressed) {
+                    toolbarBottom.showOverflowMenu()
+                }
                 return true
             }
             KeyEvent.KEYCODE_SLASH -> {
-                if (event.isAltPressed) ObjectDialogue(this, Utility.showRadarShortCuts())
+                if (event.isAltPressed) {
+                    ObjectDialogue(this, Utility.showRadarShortCuts())
+                }
                 return true
             }
             KeyEvent.KEYCODE_REFRESH -> {

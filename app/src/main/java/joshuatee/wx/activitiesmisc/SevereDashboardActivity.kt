@@ -28,7 +28,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
-import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
@@ -60,7 +59,6 @@ class SevereDashboardActivity : BaseActivity() {
     private var numberOfImages = 0
     private val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout> ()
     private var imagesPerRow = 2
-    // private val listOfWfoForWarnings = mutableListOf<String>()
     private lateinit var linearLayout: LinearLayout
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -113,9 +111,9 @@ class SevereDashboardActivity : BaseActivity() {
         val wFfw = SevereWarning(PolygonType.FFW)
         withContext(Dispatchers.IO) {
             UtilityDownloadWarnings.getForSevereDashboard(this@SevereDashboardActivity)
-            wTor.generateString(MyApplication.severeDashboardTor.value)
-            wTst.generateString(MyApplication.severeDashboardTst.value)
-            wFfw.generateString(MyApplication.severeDashboardFfw.value)
+            wTor.generateString()
+            wTst.generateString()
+            wFfw.generateString()
         }
         linearLayout.removeAllViews()
         numberOfImages = 0
@@ -143,32 +141,27 @@ class SevereDashboardActivity : BaseActivity() {
         bitmaps.addAll(snMcd.bitmaps)
         bitmaps.addAll(snMpd.bitmaps)
         bitmaps.addAll(bitmaps)
-        // listOfWfoForWarnings.clear()
         var numberOfWarnings = 0
         listOf(wTor, wTst, wFfw).forEach { severeWarning ->
-            if (severeWarning.count > 0) {
-                ObjectCardBlackHeaderText(this@SevereDashboardActivity, linearLayout, "(" + severeWarning.count + ") " + severeWarning.getName())
+            if (severeWarning.getCount() > 0) {
+                ObjectCardBlackHeaderText(this@SevereDashboardActivity, linearLayout, "(" + severeWarning.getCount() + ") " + severeWarning.getName())
                 severeWarning.warningList.forEach { w ->
-                    // val data = severeWarning.warnings[index]
-                    //if (!data.startsWith("O.EXP")) {
                     if (w.isCurrent) {
                         val objectCardDashAlertItem = ObjectCardDashAlertItem(this@SevereDashboardActivity, linearLayout, w)
                         objectCardDashAlertItem.setListener { showWarningDetails(w.url) }
-                        val id = numberOfWarnings
                         objectCardDashAlertItem.radarButton.setOnClickListener {
                             ObjectIntent.showRadarBySite(this@SevereDashboardActivity, w.getClosestRadar())
                         }
                         objectCardDashAlertItem.detailsButton.setOnClickListener { showWarningDetails(w.url) }
-                        // listOfWfoForWarnings.add(severeWarning.listOfWfo[index])
                         objectCardDashAlertItem.setId(numberOfWarnings)
                         numberOfWarnings += 1
                     }
                 }
             }
         }
-        tstCount = wTst.count
-        ffwCount = wFfw.count
-        torCount = wTor.count
+        tstCount = wTst.getCount()
+        ffwCount = wFfw.getCount()
+        torCount = wTor.getCount()
         watchCount = snWat.getCount()
         mcdCount = snMcd.getCount()
         mpdCount = snMpd.getCount()

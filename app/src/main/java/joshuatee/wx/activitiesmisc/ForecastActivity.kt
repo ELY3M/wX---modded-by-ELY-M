@@ -158,7 +158,7 @@ class ForecastActivity : BaseActivity() {
             hazardCards[z].setPaddingAmount(MyApplication.paddingSettings)
             hazardCards[z].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
             hazardCards[z].setTextColor(UIPreferences.textHighlightColor)
-            hazardCards[z].text = objectHazards.titles[z].toUpperCase(Locale.US)
+            hazardCards[z].text = objectHazards.titles[z].uppercase(Locale.US)
             hazardCards[z].setOnClickListener { ObjectIntent.showHazard(this@ForecastActivity, arrayOf(objectHazards.urls[z])) }
             linearLayoutHazards.addView(hazardCards[z].card)
         }

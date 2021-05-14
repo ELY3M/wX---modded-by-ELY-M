@@ -22,20 +22,17 @@
 package joshuatee.wx.radar
 
 import android.content.Context
-
 import java.io.EOFException
 import java.io.File
 import java.io.IOException
-
 import joshuatee.wx.MyApplication
 import joshuatee.wx.external.ExternalPolygon
 import joshuatee.wx.util.UCARRandomAccessFile
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
-
 import joshuatee.wx.Extensions.*
 
-import joshuatee.wx.RegExp
+//import joshuatee.wx.RegExp
 import joshuatee.wx.objects.ObjectWarning
 
 object UtilityWXOGL {
@@ -123,52 +120,15 @@ object UtilityWXOGL {
         return output
     }
 
-//    fun showTextProducts(latLon: LatLon): String {
-//        var html = MyApplication.severeDashboardTor.value + MyApplication.severeDashboardTst.value + MyApplication.severeDashboardFfw.value
-//        MyApplication.radarWarningPolygons.forEach { if (it.isEnabled) html += it.storage.value }
-//        // discard  "id": "https://api.weather.gov/alerts/NWS-IDP-PROD-3771044",            "type": "Feature",            "geometry": null,
-//        // Special Weather Statements can either have a polygon or maybe not, need to strip out those w/o polygon
-//        val urlList = html.parseColumn("\"id\"\\: .(https://api.weather.gov/alerts/urn.*?)\"").toMutableList()
-//        val urlListCopy = urlList.toMutableList()
-//        urlListCopy.forEach {
-//            if (html.contains(Regex("\"id\"\\: ." + it + "\",\\s*\"type\": \"Feature\",\\s*\"geometry\": null"))) {
-//                urlList.remove(it)
-//            }
-//        }
-//        html = html.replace("\n", "").replace(" ", "")
-//        val polygons = html.parseColumn(RegExp.warningLatLonPattern)
-//        var string = ""
-//        var notFound = true
-//        polygons.forEachIndexed { urlIndex, polygon ->
-//            val polygonTmp = polygon.replace("[", "").replace("]", "").replace(",", " ")
-//            val latLons = LatLon.parseStringToLatLons(polygonTmp)
-//            if (latLons.isNotEmpty()) {
-//                val contains = ExternalPolygon.polygonContainsPoint(latLon, latLons)
-//                if (contains && notFound) {
-//                    string = urlList[urlIndex]
-//                    notFound = false
-//                }
-//            }
-//        }
-//        return string
-//    }
-
     fun showTextProducts(latLon: LatLon): String {
         var html = MyApplication.severeDashboardTor.value + MyApplication.severeDashboardTst.value + MyApplication.severeDashboardFfw.value
         MyApplication.radarWarningPolygons.forEach {
             if (it.isEnabled) html += it.storage.value
         }
-//        for (data in ObjectPolygonWarning.polygonList) {
-//            let it = ObjectPolygonWarning.polygonDataByType[data]!
-//            if it.isEnabled {
-//                warningChunk += it.storage.value
-//            }
-//        }
         val warnings = ObjectWarning.parseJson(html)
         var urlToOpen = ""
         var notFound = true
         for (w in warnings) {
-            // qDebug() << w.geometry << " " << w.vtec << " " << w.sender;
             val latLons = w.getPolygonAsLatLons(1)
             if (latLons.isNotEmpty()) {
                 val contains = ExternalPolygon.polygonContainsPoint(latLon, latLons)
@@ -180,7 +140,4 @@ object UtilityWXOGL {
         }
         return urlToOpen
     }
-
-
-
 }

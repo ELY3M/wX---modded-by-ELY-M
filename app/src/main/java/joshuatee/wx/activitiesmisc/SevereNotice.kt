@@ -24,7 +24,6 @@ package joshuatee.wx.activitiesmisc
 import android.graphics.Bitmap
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.MyApplication
-
 import joshuatee.wx.RegExp
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.util.UtilityString

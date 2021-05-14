@@ -32,7 +32,6 @@ import joshuatee.wx.*
 import joshuatee.wx.activitiesmisc.*
 import joshuatee.wx.canada.CanadaAlertsActivity
 import joshuatee.wx.canada.CanadaHourlyActivity
-import joshuatee.wx.canada.CanadaRadarActivity
 import joshuatee.wx.canada.CanadaTextActivity
 import joshuatee.wx.radar.WXGLRadarActivity
 import joshuatee.wx.settings.Location
@@ -114,11 +113,11 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         hazardsExt = hazardsExt.replace("<hr /><br />", "")
         UtilityWidget.setupIntent(context, remoteViews, TextScreenActivity::class.java, R.id.hazard, TextScreenActivity.URL, arrayOf(hazardsExt, "Local Hazards"), actionHazard)
         // radar
-        if (Location.isUS(widgetLocationNumber)) {
-            UtilityWidget.setupIntent(context, remoteViews, WXGLRadarActivity::class.java, R.id.b_radar, WXGLRadarActivity.RID, arrayOf(radarSite), actionRadar)
-        } else {
-            UtilityWidget.setupIntent(context, remoteViews, CanadaRadarActivity::class.java, R.id.b_radar, CanadaRadarActivity.RID, arrayOf(radarSite, "rad"), actionRadar)
-        }
+//        if (Location.isUS(widgetLocationNumber)) {
+        UtilityWidget.setupIntent(context, remoteViews, WXGLRadarActivity::class.java, R.id.b_radar, WXGLRadarActivity.RID, arrayOf(radarSite), actionRadar)
+//        } else {
+//            UtilityWidget.setupIntent(context, remoteViews, CanadaRadarActivity::class.java, R.id.b_radar, CanadaRadarActivity.RID, arrayOf(radarSite, "rad"), actionRadar)
+//        }
         // local alerts ( or nat for CA )
         if (Location.isUS(widgetLocationNumber)) {
             UtilityWidget.setupIntent(
@@ -147,11 +146,11 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         }
         UtilityWidget.setupIntent(context, remoteViews, SevereDashboardActivity::class.java, R.id.b_dash, actionDashboard)
         // cloud icon - vis
-        if (Location.isUS(widgetLocationNumber)) {
-            UtilityWidget.setupIntent(context, remoteViews, GoesActivity::class.java, R.id.b_cloud, GoesActivity.RID, arrayOf(""), actionCloud)
-        } else {
-            UtilityWidget.setupIntent(context, remoteViews, CanadaRadarActivity::class.java, R.id.b_cloud, CanadaRadarActivity.RID, arrayOf(radarSite, "vis"), actionCloud)
-        }
+//        if (Location.isUS(widgetLocationNumber)) {
+        UtilityWidget.setupIntent(context, remoteViews, GoesActivity::class.java, R.id.b_cloud, GoesActivity.RID, arrayOf(""), actionCloud)
+//        } else {
+//            UtilityWidget.setupIntent(context, remoteViews, CanadaRadarActivity::class.java, R.id.b_cloud, CanadaRadarActivity.RID, arrayOf(radarSite, "vis"), actionCloud)
+//        }
         val updateIntent = Intent()
         updateIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         updateIntent.putExtra(Widget.WIDGET_IDS_KEY, allWidgetIds)

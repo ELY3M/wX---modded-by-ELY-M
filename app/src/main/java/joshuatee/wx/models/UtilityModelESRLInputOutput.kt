@@ -41,10 +41,10 @@ internal object UtilityModelEsrlInputOutput {
         val htmlRunStatus = when (model) {
             "HRRR_AK" -> "$urlBase/alaska/".getHtml()
             // https://rapidrefresh.noaa.gov/RAP/Welcome.cgi?dsKey=rap_jet&domain=full&run_time=23+Nov+2018+-+08Z
-            "RAP_NCEP" -> ("$urlBase/RAP/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
+            "RAP_NCEP" -> ("$urlBase/RAP/Welcome.cgi?dsKey=" + model.lowercase(Locale.US) + "_jet&domain=full").getHtml()
             "RAP" -> "$urlBase/RAP/".getHtml()
-            "HRRR_NCEP" -> ("$urlBase/hrrr/HRRR/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
-            else -> ("$urlBase/" + model.toLowerCase(Locale.US) + "/" + model + "/Welcome.cgi?dsKey=" + model.toLowerCase(Locale.US) + "_jet&domain=full").getHtml()
+            "HRRR_NCEP" -> ("$urlBase/hrrr/HRRR/Welcome.cgi?dsKey=" + model.lowercase(Locale.US) + "_jet&domain=full").getHtml()
+            else -> ("$urlBase/" + model.lowercase(Locale.US) + "/" + model + "/Welcome.cgi?dsKey=" + model.lowercase(Locale.US) + "_jet&domain=full").getHtml()
         }
         var html = htmlRunStatus.parse(RegExp.eslHrrrPattern1)
         val oldRunTimes = htmlRunStatus.parseColumn(RegExp.eslHrrrPattern2)
@@ -153,28 +153,28 @@ internal object UtilityModelEsrlInputOutput {
         }
         val onDemandUrl: String
         if (parentModel.contains("RAP")) {
-            imgUrl = "$urlBase/" + parentModel + "/for_web/" + om.model.toLowerCase(Locale.US) +
+            imgUrl = "$urlBase/" + parentModel + "/for_web/" + om.model.lowercase(Locale.US) +
                     "_jet/" + om.run.replace("Z", "") +
-                    "/" + sector.toLowerCase(Locale.US) + "/" + param + "_f" + time + ".png"
+                    "/" + sector.lowercase(Locale.US) + "/" + param + "_f" + time + ".png"
             onDemandUrl = "$urlBase/" + parentModel + "/" +
                     "displayMapLocalDiskDateDomainZip" + zipStr + ".cgi?keys=" +
-                    om.model.toLowerCase(Locale.US) + "_jet:&runtime=" + om.run.replace("Z", "") +
+                    om.model.lowercase(Locale.US) + "_jet:&runtime=" + om.run.replace("Z", "") +
                     "&plot_type=" + param + "&fcst=" + time + "&time_inc=60&num_times=16&model=" +
                     "rr" + "&ptitle=" + om.model +
                     "%20Model%20Fields%20-%20Experimental&maxFcstLen=15&fcstStrLen=-1&domain=" +
-                    sector.toLowerCase(Locale.US) + "&adtfn=1"
+                    sector.lowercase(Locale.US) + "&adtfn=1"
 
         } else {
-            imgUrl = "$urlBase/hrrr/" + parentModel.toUpperCase(Locale.US) + "/for_web/" +
-                    om.model.toLowerCase(Locale.US) + "_jet/" + om.run.replace("Z", "") +
-                    "/" + sector.toLowerCase(Locale.US) + "/" + param + "_f" + time + ".png"
-            onDemandUrl = "$urlBase/hrrr/" + parentModel.toUpperCase(Locale.US) + "/" +
+            imgUrl = "$urlBase/hrrr/" + parentModel.uppercase(Locale.US) + "/for_web/" +
+                    om.model.lowercase(Locale.US) + "_jet/" + om.run.replace("Z", "") +
+                    "/" + sector.lowercase(Locale.US) + "/" + param + "_f" + time + ".png"
+            onDemandUrl = "$urlBase/hrrr/" + parentModel.uppercase(Locale.US) + "/" +
                     "displayMapLocalDiskDateDomainZip" + zipStr + ".cgi?keys=" +
-                    om.model.toLowerCase(Locale.US) + "_jet:&runtime=" + om.run.replace("Z", "") +
+                    om.model.lowercase(Locale.US) + "_jet:&runtime=" + om.run.replace("Z", "") +
                     "&plot_type=" + param + "&fcst=" + time + "&time_inc=60&num_times=16&model=" +
-                    om.model.toLowerCase(Locale.US) + "&ptitle=" + om.model +
+                    om.model.lowercase(Locale.US) + "&ptitle=" + om.model +
                     "%20Model%20Fields%20-%20Experimental&maxFcstLen=15&fcstStrLen=-1&domain=" +
-                    sector.toLowerCase(Locale.US) + "&adtfn=1"
+                    sector.lowercase(Locale.US) + "&adtfn=1"
         }
         //UtilityLog.d("Wx", imgUrl)
         onDemandUrl.getHtml()

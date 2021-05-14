@@ -537,9 +537,9 @@ class LocationFragment : Fragment() {
                         if (args[z] == "WFO_FOR_SND")
                             args[z] = UtilityLocation.getNearestSoundingSite(LatLon(Location.x, Location.y))
                         if (args[z] == "WFO_FOR_GOES")
-                            args[z] = Location.wfo.toLowerCase(Locale.US)
+                            args[z] = Location.wfo.lowercase(Locale.US)
                         if (args[z] == "STATE_LOWER")
-                            args[z] = Location.state.toLowerCase(Locale.US)
+                            args[z] = Location.state.lowercase(Locale.US)
                         if (args[z] == "STATE_UPPER")
                             args[z] = Location.state
                         if (args[z] == "RID_FOR_CA")
@@ -672,7 +672,7 @@ class LocationFragment : Fragment() {
                 hazardsCards[z].setPaddingAmount(MyApplication.paddingSettings)
                 hazardsCards[z].setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
                 hazardsCards[z].setTextColor(UIPreferences.textHighlightColor)
-                hazardsCards[z].text = objectHazards.titles[z].toUpperCase(Locale.US)
+                hazardsCards[z].text = objectHazards.titles[z].uppercase(Locale.US)
                 hazardsCards[z].setOnClickListener { ObjectIntent.showHazard(activityReference, arrayOf(objectHazards.urls[z])) }
                 linearLayoutHazards?.addView(hazardsCards[z].card)
             } else {
@@ -813,7 +813,7 @@ class LocationFragment : Fragment() {
                 }
             } else {
                 if (objectHazards.getHazardsShort() != "") {
-                    val hazardsSum = objectHazards.getHazardsShort().toUpperCase(Locale.US)
+                    val hazardsSum = objectHazards.getHazardsShort().uppercase(Locale.US)
                     if (homescreenFavLocal.contains("TXT-HAZ")) {
                         linearLayoutHazards?.visibility = View.VISIBLE
                         setupHazardCardsCA(hazardsSum)

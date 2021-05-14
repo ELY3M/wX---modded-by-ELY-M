@@ -227,7 +227,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             Jni.genIndexLine(lineIndexBuffer, breakSizeLine * 4, breakSizeLine * 2)
         }
         MyApplication.radarWarningPolygons.forEach { genericWarningBuffers.add(ObjectOglBuffers(it)) }
-        if (UtilityUI.isTablet()) zoomScreenScaleFactor = 2.0
+        if (UtilityUI.isTablet()) {
+            zoomScreenScaleFactor = 2.0
+        }
     }
 
     fun initializeGeometry() {
@@ -1126,7 +1128,9 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         locYCurrent = locYCurrent.replace("-", "")
         val x = locXCurrent.toDoubleOrNull() ?: 0.0
         val y = locYCurrent.toDoubleOrNull() ?: 0.0
-        if (PolygonType.LOCDOT.pref) locationMarkers = UtilityLocation.latLonAsDouble
+        if (PolygonType.LOCDOT.pref) {
+            locationMarkers = UtilityLocation.latLonAsDouble
+        }
         if (MyApplication.locationDotFollowsGps || archiveMode) {
             locationMarkers.add(x)
             locationMarkers.add(y)

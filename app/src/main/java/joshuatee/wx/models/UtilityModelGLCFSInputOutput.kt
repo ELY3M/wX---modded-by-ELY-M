@@ -33,7 +33,7 @@ internal object UtilityModelGlcfsInputOutput {
 
     fun getImage(om: ObjectModelNoSpinner, timeOriginal: String): Bitmap {
         var sector = ""
-        if (om.sector.split(" ").size > 1) sector = om.sector.split(" ")[1].substring(0, 1).toLowerCase(Locale.US)
+        if (om.sector.split(" ").size > 1) sector = om.sector.split(" ")[1].substring(0, 1).lowercase(Locale.US)
         var time = timeOriginal.replace("00", "0")
         val timeInt = time.toIntOrNull() ?: 0
         if (timeInt > 9) time = time.replace(Regex("^0"), "")

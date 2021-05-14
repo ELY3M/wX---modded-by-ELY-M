@@ -113,7 +113,7 @@ class NwsObsSitesActivity : BaseActivity() {
         listOf(listCity, listIds, listSort).forEach { it.clear() }
         listCity.add("..Back to state list")
         listIds.add("..Back to state list")
-        lines.filterTo(listSort) { it.startsWith(stateSelected.toUpperCase(Locale.US)) }
+        lines.filterTo(listSort) { it.startsWith(stateSelected.uppercase(Locale.US)) }
         listSort.sort()
         listSort.forEach {
             val items = it.split(",")
@@ -128,7 +128,7 @@ class NwsObsSitesActivity : BaseActivity() {
         when (item.itemId) {
             R.id.action_lastused -> showObsSite(Utility.readPref(this, prefToken, UtilityMetar.findClosestObservation(this, Location.latLon).name))
             R.id.action_map -> ObjectIntent.showWebView(this,
-                        arrayOf("https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.toLowerCase(Locale.US),
+                        arrayOf("https://www.wrh.noaa.gov/map/?obs=true&wfo=" + Location.wfo.lowercase(Locale.US),
                                 "Observations near " + Location.wfo))
             else -> return super.onOptionsItemSelected(item)
         }

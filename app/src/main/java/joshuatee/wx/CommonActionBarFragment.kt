@@ -122,15 +122,15 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
     }
 
     fun openNexradRadar(context: Context) {
-        if (Location.isUS) {
-            if (!UIPreferences.dualpaneRadarIcon) {
-                ObjectIntent.showRadar(context, arrayOf(Location.rid, ""))
-            } else {
-                ObjectIntent.showRadarMultiPane(context, arrayOf(Location.rid, "", "2"))
-            }
+//        if (Location.isUS) {
+        if (!UIPreferences.dualpaneRadarIcon) {
+            ObjectIntent.showRadar(context, arrayOf(Location.rid, ""))
         } else {
-            ObjectIntent.showCanadaRadar(context, arrayOf(Location.rid, "rad"))
+            ObjectIntent.showRadarMultiPane(context, arrayOf(Location.rid, "", "2"))
         }
+//        } else {
+//            ObjectIntent.showCanadaRadar(context, arrayOf(Location.rid, "rad"))
+//        }
     }
 
     fun openAfd() {
@@ -140,11 +140,11 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
     fun openSettings() = ObjectIntent(this, SettingsMainActivity::class.java)
 
     fun openVis() {
-        if (Location.isUS) {
-            ObjectIntent.showVis(this)
-        } else {
-            ObjectIntent.showCanadaRadar(this, arrayOf(Location.rid, "vis"))
-        }
+//        if (Location.isUS) {
+        ObjectIntent.showVis(this)
+//        } else {
+//            ObjectIntent.showCanadaRadar(this, arrayOf(Location.rid, "vis"))
+//        }
     }
 
     fun openDashboard() {

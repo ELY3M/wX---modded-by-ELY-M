@@ -188,16 +188,16 @@ object UtilityLocation {
         val y: String
         when (officeType) {
             "RID" -> {
-                x = Utility.getRadarSiteX(site.toUpperCase(Locale.US))
-                y = addChar + Utility.getRadarSiteY(site.toUpperCase(Locale.US))
+                x = Utility.getRadarSiteX(site.uppercase(Locale.US))
+                y = addChar + Utility.getRadarSiteY(site.uppercase(Locale.US))
             }
             "NWS" -> {
-                x = Utility.getWfoSiteX(site.toUpperCase(Locale.US))
-                y = addChar + Utility.getWfoSiteY(site.toUpperCase(Locale.US))
+                x = Utility.getWfoSiteX(site.uppercase(Locale.US))
+                y = addChar + Utility.getWfoSiteY(site.uppercase(Locale.US))
             }
             "SND" -> {
-                x = Utility.getSoundingSiteX(site.toUpperCase(Locale.US))
-                y = addChar + Utility.getSoundingSiteY(site.toUpperCase(Locale.US))
+                x = Utility.getSoundingSiteX(site.uppercase(Locale.US))
+                y = addChar + Utility.getSoundingSiteY(site.uppercase(Locale.US))
             }
             else -> {
                 x = "0.0"

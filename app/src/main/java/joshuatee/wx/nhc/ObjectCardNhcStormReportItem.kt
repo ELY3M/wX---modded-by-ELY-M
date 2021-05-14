@@ -52,7 +52,7 @@ class ObjectCardNhcStormReportItem(context: Context, linearLayout: LinearLayout,
         textViewMovement.text = "Moving: " + stormData.movement
         textViewPressure.text = "Min pressure: " + stormData.pressure
         textViewWindSpeed.text = "Max sustained: " + stormData.intensity
-        textViewBottom.text = stormData.status + " " + stormData.binNumber + " " + stormData.id.toUpperCase(Locale.US)
+        textViewBottom.text = stormData.status + " " + stormData.binNumber + " " + stormData.id.uppercase(Locale.US)
         linearLayout.addView(objectCard.card)
     }
 

@@ -53,7 +53,7 @@ class ObjectNhcStormDetails(
         if (modBinNumber.length == 3) {
             modBinNumber = modBinNumber.insert(2, "0")
         }
-        baseUrl = "https://www.nhc.noaa.gov/storm_graphics/" + modBinNumber + "/" + id.toUpperCase(Locale.US)
+        baseUrl = "https://www.nhc.noaa.gov/storm_graphics/" + modBinNumber + "/" + id.uppercase(Locale.US)
     }
 
     fun forTopHeader(): String {

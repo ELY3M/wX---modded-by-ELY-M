@@ -63,7 +63,7 @@ object UtilityDownloadNws {
     fun getCap(sector: String) = if (sector == "us") {
         getStringFromUrlXml(MyApplication.nwsApiUrl + "/alerts/active?region_type=land")
     } else {
-        getStringFromUrlXml(MyApplication.nwsApiUrl + "/alerts/active/area/" + sector.toUpperCase(Locale.US))
+        getStringFromUrlXml(MyApplication.nwsApiUrl + "/alerts/active/area/" + sector.uppercase(Locale.US))
     }
 
     // https://forecast-v3.weather.gov/documentation?redirect=legacy
@@ -155,12 +155,13 @@ object UtilityDownloadNws {
         return out.toString()
     }
 
-    fun getStringFromUrlSep(strURL: String): String {
+    fun getStringFromUrlSep(url: String): String {
+        UtilityLog.d("wx", "getStringFromUrlBaseNoHeader: $url")
         val breakStr = "ABC123_456ZZ"
         val out = StringBuilder(5000)
         try {
             val request = Request.Builder()
-                    .url(strURL)
+                    .url(url)
                     .header("User-Agent", USER_AGENT_STR)
                     .addHeader("Accept", "application/vnd.noaa.dwml+xml;version=1")
                     .build()

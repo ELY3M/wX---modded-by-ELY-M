@@ -18,10 +18,27 @@
 // TODO [FIX] Hourly onrestart graph
 // TODO [FIX] code cleanup in utilDownloadMcd/w/mpd
 // TODO [ADD] GOES option to follow location
-// TODO [ADD] allBlack refinements (Spc sref nav drawer, Dash buttons are invisible)
+// TODO [ADD] allBlack refinements (Dash buttons are invisible)
 // TODO [REF] add ObjectLocation
 
-55539 2021_04_07
+55544 2021_05_14
+55543 2021_05_14    [REF] misc lint 'B'.toByte() -> 'B'.code.toByte()
+                    [REF] remove unused resources related to canada radar removal
+                    [REF] 'com.android.tools.build:gradle:4.2.0' -> 'com.android.tools.build:gradle:4.2.1'
+55542 2021_05_13    [REF] utilUs cleanup, toUpperCase -> uppercase per link
+55541 2021_05_09    [FIX] SPC SREF was not showing old runs after SPC made a minor change to their HTML code
+                    [REF] refactor getClosestRadar in CapAlert and ObjectWarning
+55540 2021_05_05    [ADD] Android Studio 4.2 update incl various gradle upgrades, etc (below)
+                    [REF] WFO/WPC Text toUpperCase -> uppercase per link
+                    [FIX] remove Canada radar (and supporting files) as EC no longer provides static images
+    gradle-6.5-all.zip -> gradle-6.7.1-all.zip
+    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.31" -> api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.0"
+    classpath 'com.android.tools.build:gradle:4.1.2' -> classpath 'com.android.tools.build:gradle:4.2.0'
+    implementation 'androidx.media:media:1.2.1' -> implementation 'androidx.media:media:1.3.1'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0' -> implementation 'androidx.recyclerview:recyclerview:1.2.0'
+55539 2021_05_01    [FIX] US Tornado notification - check vtec for old alerts before notifying
+                    [FIX] SevereWarning - remove unused code that was causing a crash in SevereDashboard when warning had no vtec
+                    [FIX] SevereWarning - remove unused code in general
 55538 2021_04_07    [FIX] add try for java.nio.BufferOverflowException: joshuatee.wx.radar.UtilityWXOGLPerf.colorGen (UtilityWXOGLPerf.kt:589)
                     [REF] readability
 55537 2021_04_06    [ADD] ObjectWarning

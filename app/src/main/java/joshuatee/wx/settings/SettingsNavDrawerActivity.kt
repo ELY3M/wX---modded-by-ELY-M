@@ -63,7 +63,7 @@ class SettingsNavDrawerActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val newTokenList = UtilityNavDrawer.generateNewTokenList(this)
+        // val newTokenList = UtilityNavDrawer.generateNewTokenList(this)
         when (item.itemId) {
             android.R.id.home -> {
                 //if (tokenList != newTokenList && tokenList != "")

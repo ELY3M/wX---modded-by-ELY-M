@@ -119,7 +119,11 @@ class WXGLNexradLevel3 internal constructor() {
             val dis = UCARRandomAccessFile(UtilityIO.getFilePath(context, fileName))
             dis.bigEndian = true
             // ADVANCE PAST WMO HEADER
-            while (true) if (dis.readShort().toInt() == -1) break
+            while (true) {
+                if (dis.readShort().toInt() == -1) {
+                    break
+                }
+            }
             // the following chunk was added to analyze the header so that status info could be extracted
             // index 4 is radar height
             // index 0,1 is lat as Int
@@ -130,18 +134,21 @@ class WXGLNexradLevel3 internal constructor() {
             productCode = dis.readUnsignedShort().toShort()
             operationalMode = dis.readUnsignedShort().toShort()
             volumeCoveragePattern = dis.readUnsignedShort().toShort()
+            val sequenceNumber = dis.readUnsignedShort().toShort()
+            val volumeScanNumber = dis.readUnsignedShort().toShort()
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()
             val d = UtilityTime.radarTime(volumeScanDate, volumeScanTime)
             // TODO assign directly to timestamp
             val radarInfo = formatRadarString(d)
             WXGLNexrad.writeRadarInfo(context, radarStatus, radarInfo)
-            WXGLNexrad.writeRadarInfo(context, radarStatus + site.toUpperCase(Locale.US), radarInfo)
+            WXGLNexrad.writeRadarInfo(context, radarStatus + site.uppercase(Locale.US), radarInfo)
             timestamp = radarInfo
             // Because the scale for storm total precip ( 172 ) is stored as a float in halfwords 33/34
             // it is necessary to further dissect the header. Previously we skipped 74 bytes
             // hw 24-30
             dis.skipBytes(10)
+            val elevationNumber = dis.readUnsignedShort()
             val elevationAngle = dis.readShort()
             degree = elevationAngle.toInt() / 10f
             // hw 31-32 as a int
@@ -193,9 +200,13 @@ class WXGLNexradLevel3 internal constructor() {
             init4Bit(productCode)
             operationalMode = dis.readUnsignedShort().toShort()
             volumeCoveragePattern = dis.readUnsignedShort().toShort()
+            val sequenceNumber = dis.readUnsignedShort().toShort()
+            val volumeScanNumber = dis.readUnsignedShort().toShort()
             val volumeScanDate = dis.readUnsignedShort().toShort()
             val volumeScanTime = dis.readInt()
             val d = UtilityTime.radarTime(volumeScanDate, volumeScanTime)
+            val productGenerationDate = dis.readUnsignedShort().toShort()
+            val productGenerationTime = dis.readInt()
             //final short        product_generation_date = (short) dis.readUnsignedShort();
             //final int        product_generation_time    = dis.readInt() ;
             //dis.skipBytes(6)

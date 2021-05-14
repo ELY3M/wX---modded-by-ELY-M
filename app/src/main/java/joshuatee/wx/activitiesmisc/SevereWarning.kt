@@ -21,13 +21,8 @@
 
 package joshuatee.wx.activitiesmisc
 
-import joshuatee.wx.Extensions.*
-import joshuatee.wx.RegExp
 import joshuatee.wx.objects.ObjectWarning
 import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.radar.LatLon
-import joshuatee.wx.settings.UtilityLocation
-import joshuatee.wx.util.UtilityTime
 
 
 class SevereWarning(private val type: PolygonType) {
@@ -36,18 +31,6 @@ class SevereWarning(private val type: PolygonType) {
     // encapsulates VTEC data and count for tst,tor, or ffw
     //
 
-    var count = 0
-        private set
-
-    var idList = listOf<String>()
-    var areaDescList = listOf<String>()
-    var effectiveList = listOf<String>()
-    var expiresList = listOf<String>()
-    var eventList = listOf<String>()
-    var senderNameList = listOf<String>()
-    var warnings = listOf<String>()
-    var listOfWfo = mutableListOf<String>()
-    private var listOfPolygonRaw = listOf<String>()
     var warningList = listOf<ObjectWarning>()
 
     fun getName(): String {
@@ -59,47 +42,19 @@ class SevereWarning(private val type: PolygonType) {
         }
     }
 
-    private fun getClosestRadar(index: Int): String {
-        val data = listOfPolygonRaw[index].replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
-        val points = data.split(" ")
-        // From CapAlert
-        return if (points.size > 2) {
-            val lat = points[1]
-            val lon = "-" + points[0]
-            val radarSites = UtilityLocation.getNearestRadarSites(LatLon(lat, lon), 1, includeTdwr = false)
-            if (radarSites.isEmpty()) {
-                ""
-            } else {
-                radarSites[0].name
-            }
-        } else {
-            ""
-        }
-    }
-
-    fun generateString(html1: String) {
+    fun generateString() {
         val html = ObjectWarning.getBulkData(type)
         warningList = ObjectWarning.parseJson(html)
+    }
 
-        idList = html.parseColumn("\"id\": \"(https://api.weather.gov/alerts/urn.*?)\"")
-        areaDescList = html.parseColumn("\"areaDesc\": \"(.*?)\"")
-        effectiveList = html.parseColumn("\"effective\": \"(.*?)\"")
-        expiresList = html.parseColumn("\"expires\": \"(.*?)\"")
-        eventList = html.parseColumn("\"event\": \"(.*?)\"")
-        senderNameList = html.parseColumn("\"senderName\": \"(.*?)\"")
-        val data = html.replace("\n", "").replace(" ", "")
-        listOfPolygonRaw = data.parseColumn(RegExp.warningLatLonPattern)
-        warnings = html.parseColumn(RegExp.warningVtecPattern)
-        warnings.forEachIndexed { index, it ->
-            val vtecIsCurrent = UtilityTime.isVtecCurrent(it)
-            if (!it.startsWith("O.EXP") && vtecIsCurrent) {
-                count += 1
-                val radarSite = getClosestRadar(index)
-                listOfWfo.add(radarSite)
-            } else {
-                listOfWfo.add("")
+    fun getCount(): Int {
+        var i = 0
+        for (s in warningList) {
+            if (s.isCurrent) {
+                i += 1
             }
         }
+        return i
     }
 }
 

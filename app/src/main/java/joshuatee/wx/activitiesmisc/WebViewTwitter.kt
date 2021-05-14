@@ -109,7 +109,7 @@ class WebViewTwitter : BaseActivity() {
     fun getContent() {
         invalidateOptionsMenu()
         Utility.writePref(this, prefToken, sector)
-        var url = "https://mobile.twitter.com/hashtag/" + sector.toLowerCase(Locale.US)
+        var url = "https://mobile.twitter.com/hashtag/" + sector.lowercase(Locale.US)
         if (sector.length == 2) {
             url += "wx"
         }
@@ -121,7 +121,7 @@ class WebViewTwitter : BaseActivity() {
             R.id.action_sector -> genericDialog(sectorList) { getContent(it) }
             R.id.action_browser -> {
                 var tail = "wx"
-                var stateTmp = sector.toLowerCase(Locale.US)
+                var stateTmp = sector.lowercase(Locale.US)
                 canadianSectors.forEach {
                     if (it.contains("$stateTmp:")) {
                         tail = ""

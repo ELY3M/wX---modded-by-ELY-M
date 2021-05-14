@@ -44,8 +44,8 @@ object UtilityString {
         return parsedText.replace(separator, MyApplication.newline)
     }
 
-    internal fun capitalizeString(string: String): String {
-        val chars = string.toLowerCase(Locale.US).toCharArray()
+    internal fun capitalizeString(s: String): String {
+        val chars = s.lowercase(Locale.US).toCharArray()
         var found = false
         if (chars.size > 3) {
             (2 until chars.size).forEach {

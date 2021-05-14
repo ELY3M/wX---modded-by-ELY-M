@@ -252,7 +252,7 @@ object UtilityCanada {
         val prov = location.latString.split(":").dropLastWhile { it.isEmpty() }
         val id = location.lonString.split(":").dropLastWhile { it.isEmpty() }
         return if (prov.size > 1 && id.isNotEmpty()) {
-            (MyApplication.canadaEcSitePrefix + "/rss/city/" + prov[1].toLowerCase(Locale.US) + "-" + id[0] + "_e.xml").getHtmlSep()
+            (MyApplication.canadaEcSitePrefix + "/rss/city/" + prov[1].lowercase(Locale.US) + "-" + id[0] + "_e.xml").getHtmlSep()
         } else {
             ""
         }
@@ -264,7 +264,7 @@ object UtilityCanada {
         return if (prov.count() < 2 || id.count() < 1) {
             ""
         } else {
-            MyApplication.canadaEcSitePrefix + "/city/pages/" + prov[1].toLowerCase(Locale.US) + "-" + id[0] + "_metric_e.html"
+            MyApplication.canadaEcSitePrefix + "/city/pages/" + prov[1].lowercase(Locale.US) + "-" + id[0] + "_metric_e.html"
         }
     }
 
@@ -272,10 +272,10 @@ object UtilityCanada {
 
     fun getRadarSite(x: String, y: String): String {
         val url = (MyApplication.canadaEcSitePrefix + "/city/pages/"
-                + x.split(":").dropLastWhile { it.isEmpty() }[1].toLowerCase(Locale.US) + "-"
+                + x.split(":").dropLastWhile { it.isEmpty() }[1].lowercase(Locale.US) + "-"
                 + y.split(":").dropLastWhile { it.isEmpty() }[0] + "_metric_e.html")
         val html = url.getHtmlSep()
-        return html.parse("<a href=./radar/index_e.html.id=([a-z]{3})..*?>Weather Radar</a>").toUpperCase(Locale.US)
+        return html.parse("<a href=./radar/index_e.html.id=([a-z]{3})..*?>Weather Radar</a>").uppercase(Locale.US)
     }
 
     fun getConditions(html: String): String {

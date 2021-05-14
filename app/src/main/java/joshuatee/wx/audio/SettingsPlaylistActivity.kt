@@ -71,7 +71,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         diaAfd = ObjectDialogue(this, "Select fixed location AFD products:", GlobalArrays.wfos)
         diaAfd.setSingleChoiceItems { dialog, which ->
             val name = diaAfd.getItem(which)
-            val product = "AFD" + name.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)
+            val product = "AFD" + name.split(":").dropLastWhile { it.isEmpty() }[0].uppercase(Locale.US)
             if (!ridFav.contains(product)) {
                 ridFav = "$ridFav:$product"
                 Utility.writePref(this, prefToken, ridFav)
@@ -88,7 +88,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         diaMain = ObjectDialogue(this, "Select text products:", UtilityWpcText.labels)
         diaMain.setSingleChoiceItems { dialog, which ->
             val name = diaMain.getItem(which)
-            val product = name.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)
+            val product = name.split(":").dropLastWhile { it.isEmpty() }[0].uppercase(Locale.US)
             if (!ridFav.contains(product)) {
                 ridFav = "$ridFav:$product"
                 Utility.writePref(this, prefToken, ridFav)
@@ -224,7 +224,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     }
 
     private fun viewItem(position: Int) {
-        ObjectIntent.showWpcText(this, arrayOf(playListItems[position].split(";")[0].toLowerCase(Locale.US)))
+        ObjectIntent.showWpcText(this, arrayOf(playListItems[position].split(";")[0].lowercase(Locale.US)))
     }
 
     private fun playItem(position: Int) {

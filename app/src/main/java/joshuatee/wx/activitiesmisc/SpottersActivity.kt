@@ -119,10 +119,10 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun filter(models: List<Spotter>, query: String): List<Spotter> {
-        val queryLocal = query.toLowerCase(Locale.US)
+        val queryLocal = query.lowercase(Locale.US)
         val filteredModelList = mutableListOf<Spotter>()
         models.forEach {
-            val text = it.lastName.toLowerCase(Locale.US)
+            val text = it.lastName.lowercase(Locale.US)
             if (text.contains(queryLocal)) filteredModelList.add(it)
         }
         return filteredModelList

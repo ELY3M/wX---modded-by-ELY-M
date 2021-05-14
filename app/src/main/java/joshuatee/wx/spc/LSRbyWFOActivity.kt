@@ -122,7 +122,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     private fun mapSwitch(loc: String) {
         scrollView.visibility = View.VISIBLE
-        wfo = loc.toUpperCase(Locale.US)
+        wfo = loc.uppercase(Locale.US)
         mapShown = false
         locations = UtilityFavorites.setupMenu(this, MyApplication.wfoFav, wfo, prefToken)
         getContent()

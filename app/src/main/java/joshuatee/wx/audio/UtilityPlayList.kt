@@ -36,7 +36,7 @@ object UtilityPlayList {
     private const val FORMAT_TIME_STR = "MM-dd HH:mm"
 
     fun add(context: Context, view: View, product: String, text: String) {
-        val productUpperCase = product.toUpperCase(Locale.US)
+        val productUpperCase = product.uppercase(Locale.US)
         if (!MyApplication.playlistStr.contains(productUpperCase)) {
             Utility.writePref(context, "PLAYLIST", MyApplication.playlistStr + ":" + productUpperCase)
             MyApplication.playlistStr = MyApplication.playlistStr + ":" + productUpperCase
@@ -50,7 +50,7 @@ object UtilityPlayList {
     }
 
     fun checkAndSave(context: Context, product: String, text: String) {
-        val productUpperCase = product.toUpperCase(Locale.US)
+        val productUpperCase = product.uppercase(Locale.US)
         val formattedDate = UtilityTime.getDateAsString(FORMAT_TIME_STR)
         if (MyApplication.playlistStr.contains(productUpperCase)) {
             Utility.writePref(context, "PLAYLIST_$productUpperCase", text)

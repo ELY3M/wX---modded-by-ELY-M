@@ -188,7 +188,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     private fun findPositionTEXT(key: String) = (UtilityWpcText.labels.indices)
             .firstOrNull {
-                UtilityWpcText.labels[it].startsWith(key.toLowerCase(Locale.US).replace("txt-", ""))
+                UtilityWpcText.labels[it].startsWith(key.lowercase(Locale.US).replace("txt-", ""))
             } ?.let { UtilityWpcText.labels[it] } ?: ""
 
     private fun findPositionIMG(key: String) = (GlobalArrays.nwsImageProducts.indices)
@@ -264,12 +264,12 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
 
     private fun alertDialogClicked(dialogue: ObjectDialogue, token: String, which: Int) {
         val strName = dialogue.getItem(which)
-        var textProduct = token + strName.split(":").dropLastWhile { it.isEmpty() }[0].toUpperCase(Locale.US)
+        var textProduct = token + strName.split(":").dropLastWhile { it.isEmpty() }[0].uppercase(Locale.US)
         if (token == "") {
             textProduct = if (textProduct != "RADAR") {
-                "IMG-" + textProduct.toUpperCase(Locale.US)
+                "IMG-" + textProduct.uppercase(Locale.US)
             } else {
-                "OGL-" + textProduct.toUpperCase(Locale.US)
+                "OGL-" + textProduct.uppercase(Locale.US)
             }
         }
         favoriteString = MyApplication.homescreenFav

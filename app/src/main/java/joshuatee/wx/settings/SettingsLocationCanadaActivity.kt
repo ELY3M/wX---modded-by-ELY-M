@@ -94,8 +94,8 @@ class SettingsLocationCanadaActivity : BaseActivity() {
     private fun getContent() = GlobalScope.launch(uiDispatcher) {
         withContext(Dispatchers.IO) {
             val html = UtilityCanada.getProvidenceHtml(provSelected)
-            listIds = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-(.*?)_metric_e.html\">.*?</a></li>")
-            listCity = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.toLowerCase(Locale.US) + "-.*?_metric_e.html\">(.*?)</a></li>")
+            listIds = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.lowercase(Locale.US) + "-(.*?)_metric_e.html\">.*?</a></li>")
+            listCity = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.lowercase(Locale.US) + "-.*?_metric_e.html\">(.*?)</a></li>")
         }
         objectRecyclerView.refreshList(listCity.distinct().toMutableList())
         cityDisplay = true

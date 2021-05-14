@@ -32,15 +32,15 @@ import joshuatee.wx.util.Utility
 internal object UtilityCanadaHourly {
 
     fun getString(locNumInt: Int): String {
-        val htmlUrl = MyApplication.canadaEcSitePrefix + "/forecast/hourly/" + (Location.getX(locNumInt).split(":"))[1].toLowerCase(Locale.US) + "-" + (Location.getY(locNumInt).split(":"))[0] + "_metric_e.html"
+        val htmlUrl = MyApplication.canadaEcSitePrefix + "/forecast/hourly/" + (Location.getX(locNumInt).split(":"))[1].lowercase(Locale.US) + "-" + (Location.getY(locNumInt).split(":"))[0] + "_metric_e.html"
         val html = htmlUrl.getHtml()
         val header = "Time    Temp  Summary                  Precip   Wind"
         return header + parse(html)
     }
 
     fun getUrl(locNumInt: Int) =
-            MyApplication.canadaEcSitePrefix + "/forecast/hourly/" + (Location.getX(locNumInt).split(":"))[1].toLowerCase(
-            Locale.US) + "-" + (Location.getY(locNumInt).split(":"))[0] + "_metric_e.html"
+            MyApplication.canadaEcSitePrefix + "/forecast/hourly/" + (Location.getX(locNumInt).split(":"))[1].lowercase(
+                    Locale.US) + "-" + (Location.getY(locNumInt).split(":"))[0] + "_metric_e.html"
 
     private fun parse(htmlFullPage: String): String {
         val html = htmlFullPage.parse("<tbody>(.*?)</tbody>")

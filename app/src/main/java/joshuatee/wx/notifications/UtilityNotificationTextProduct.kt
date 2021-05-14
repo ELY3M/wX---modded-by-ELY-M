@@ -41,7 +41,7 @@ object UtilityNotificationTextProduct {
     const val PREF_TOKEN: String = "NOTIF_TEXT_PROD"
 
     fun toggle(context: Context, view: View, prodOriginal: String) {
-        val prod = prodOriginal.toUpperCase(Locale.US)
+        val prod = prodOriginal.uppercase(Locale.US)
         if (!MyApplication.notifTextProdStr.contains(prod)) {
             Utility.writePref(context, PREF_TOKEN, MyApplication.notifTextProdStr + ":" + prod)
             MyApplication.notifTextProdStr = MyApplication.notifTextProdStr + ":" + prod

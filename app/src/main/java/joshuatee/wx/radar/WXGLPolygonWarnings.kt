@@ -29,22 +29,6 @@ import joshuatee.wx.objects.PolygonWarningType
 
 internal object WXGLPolygonWarnings {
 
-//    fun addGeneric(projectionNumbers: ProjectionNumbers, objectPolygonWarning: ObjectPolygonWarning): List<Double> {
-//        val warningList = mutableListOf<Double>()
-//        val prefToken = objectPolygonWarning.storage.value
-//        val html = prefToken.replace("\n", "").replace(" ", "")
-//        val polygons = html.parseColumn(RegExp.warningLatLonPattern)
-//        val vtecs = html.parseColumn(RegExp.warningVtecPattern)
-//        polygons.forEachIndexed { polygonCount, polygon ->
-//            if (objectPolygonWarning.type == PolygonWarningType.SpecialWeatherStatement || (vtecs.size > polygonCount && !vtecs[polygonCount].startsWith("O.EXP") && !vtecs[polygonCount].startsWith("O.CAN"))) {
-//                val polygonTmp = polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
-//                val latLons = LatLon.parseStringToLatLons(polygonTmp)
-//                warningList += LatLon.latLonListToListOfDoubles(latLons, projectionNumbers)
-//            }
-//        }
-//        return warningList
-//    }
-
     fun addGeneric(projectionNumbers: ProjectionNumbers, warn: ObjectPolygonWarning): List<Double> {
         val html = warn.storage.value
         val warnings = ObjectWarning.parseJson(html)
@@ -58,26 +42,6 @@ internal object WXGLPolygonWarnings {
         return warningList
     }
 
-//    fun add(projectionNumbers: ProjectionNumbers, polygonType: PolygonType): List<Double> {
-//        val warningList = mutableListOf<Double>()
-//        val prefToken = when (polygonType) {
-//            PolygonType.TOR -> MyApplication.severeDashboardTor.value
-//            PolygonType.TST -> MyApplication.severeDashboardTst.value
-//            else -> MyApplication.severeDashboardFfw.value
-//        }
-//        val html = prefToken.replace("\n", "").replace(" ", "")
-//        val polygons = html.parseColumn(RegExp.warningLatLonPattern)
-//        val vtecs = html.parseColumn(RegExp.warningVtecPattern)
-//        polygons.forEachIndexed { polygonCount, polygon ->
-//            if (vtecs.size > polygonCount && !vtecs[polygonCount].startsWith("O.EXP") && !vtecs[polygonCount].startsWith("O.CAN") && UtilityTime.isVtecCurrent(vtecs[polygonCount])) {
-//                val polygonTmp = polygon.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
-//                val latLons = LatLon.parseStringToLatLons(polygonTmp)
-//                warningList += LatLon.latLonListToListOfDoubles(latLons, projectionNumbers)
-//            }
-//        }
-//        return warningList
-//    }
-
     fun add(projectionNumbers: ProjectionNumbers, polygonType: PolygonType): List<Double> {
         val html = ObjectWarning.getBulkData(polygonType)
         val warnings = ObjectWarning.parseJson(html)
@@ -88,6 +52,6 @@ internal object WXGLPolygonWarnings {
                 warningList += LatLon.latLonListToListOfDoubles(latLons, projectionNumbers)
             }
         }
-        return warningList;
+        return warningList
     }
 }

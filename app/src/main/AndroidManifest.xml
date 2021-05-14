@@ -22,8 +22,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55539"
-    android:versionName="55539-elys"
+    android:versionCode="55544"
+    android:versionName="55544-elys"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
@@ -514,10 +514,10 @@
       android:label=""
       android:parentActivityName="WX" >
   </activity>
-  <activity
-      android:name=".canada.CanadaRadarActivity"
-      android:parentActivityName="WX" >
-  </activity>
+<!--  <activity-->
+<!--      android:name=".canada.CanadaRadarActivity"-->
+<!--      android:parentActivityName="WX" >-->
+<!--  </activity>-->
   <activity
       android:name=".settings.SettingsLocationCanadaActivity"
       android:parentActivityName="WX" >

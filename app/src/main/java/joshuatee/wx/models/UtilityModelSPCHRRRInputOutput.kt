@@ -59,10 +59,10 @@ internal object UtilityModelSpcHrrrInputOutput {
         val bitmaps = mutableListOf<Bitmap>()
         val layers = mutableListOf<Drawable>()
         overlayImg.forEach {
-            val url = layerUrl + getSectorCode(om.sector).toLowerCase(Locale.US) + "/" + it + "/" + it + ".gif"
+            val url = layerUrl + getSectorCode(om.sector).lowercase(Locale.US) + "/" + it + "/" + it + ".gif"
             bitmaps.add(UtilityImg.eraseBackground(url.getImage(), -1))
         }
-        val backgroundUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/hrrr/data/hrrr3/" + getSectorCode(om.sector).toLowerCase(Locale.US) + "/R" +
+        val backgroundUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/hrrr/data/hrrr3/" + getSectorCode(om.sector).lowercase(Locale.US) + "/R" +
                 om.run.replace("Z", "") + "_F" + formatTime(time) + "_V" + getValidTime(om.run, time, om.rtd.validTime) +
                 "_" + getSectorCode(om.sector) + "_" + om.currentParam + ".gif"
         bitmaps.add(UtilityImg.eraseBackground(backgroundUrl.getImage(), -1))

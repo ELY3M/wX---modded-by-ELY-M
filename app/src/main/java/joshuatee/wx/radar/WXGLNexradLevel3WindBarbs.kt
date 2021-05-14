@@ -71,8 +71,12 @@ internal object WXGLNexradLevel3WindBarbs {
                 var barbCount = length / 10
                 var halfBarb = false
                 var oneHalfBarb = false
-                if (length - barbCount * 10 > 4 && length > 10 || length in 5..9) halfBarb = true
-                if (length in 5..9) oneHalfBarb = true
+                if (length - barbCount * 10 > 4 && length > 10 || length in 5..9) {
+                    halfBarb = true
+                }
+                if (length in 5..9) {
+                    oneHalfBarb = true
+                }
                 val above50: Boolean
                 if (length > 49) {
                     above50 = true
@@ -140,7 +144,9 @@ internal object WXGLNexradLevel3WindBarbs {
                     index += 1
                 }
                 var halfBarbOffsetFudge = 0.0
-                if (oneHalfBarb) halfBarbOffsetFudge = nmScaleFactor * 1.0
+                if (oneHalfBarb) {
+                    halfBarbOffsetFudge = nmScaleFactor * 1.0
+                }
                 if (halfBarb) {
                     ec = ecc.calculateEndingGlobalCoordinates(
                         end,

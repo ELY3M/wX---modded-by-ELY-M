@@ -302,7 +302,7 @@ object Utility {
 
     fun showLocationEditShortCuts() = "Ctrl-g: Use GPS to find location" + MyApplication.newline + "Ctrl-m: Show submenu" + MyApplication.newline
 
-        
+    //elys mod    
     fun checkInternet(context: Context) {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = cm.activeNetworkInfo

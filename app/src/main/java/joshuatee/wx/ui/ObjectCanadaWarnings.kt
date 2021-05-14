@@ -97,7 +97,7 @@ class ObjectCanadaWarnings(private val context: Context, private val activity: A
             }
             val province = listLocUrl[index].parse("report_e.html.([a-z]{2}).*?")
             val objectCardText = ObjectCardText(context, linearLayout)
-            objectCardText.text = Utility.fromHtml(province.toUpperCase(Locale.US) + ": " + locWarning + " " + locWatch + " " + locStatement)
+            objectCardText.text = Utility.fromHtml(province.uppercase(Locale.US) + ": " + locWarning + " " + locWatch + " " + locStatement)
             val url = MyApplication.canadaEcSitePrefix + listLocUrl[index]
             val location = listLocName[index]
             objectCardText.setOnClickListener { getWarningDetail(url, location) }

@@ -26,11 +26,9 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.activitiesmisc.LightningActivity
 import joshuatee.wx.activitiesmisc.USWarningsWithRadarActivity
-import joshuatee.wx.canada.CanadaRadarActivity
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NhcActivity
 import joshuatee.wx.radar.AwcRadarMosaicActivity
-//import joshuatee.wx.radar.USNwsMosaicActivity
 import joshuatee.wx.radar.WXGLRadarActivityMultiPane
 import joshuatee.wx.spc.*
 import joshuatee.wx.vis.GoesActivity
@@ -133,9 +131,9 @@ internal object UtilityHomeScreen {
         MyApplication.HM_CLASS_ARGS["OBS"] = arrayOf("STATE_LOWER", "")
         MyApplication.HM_CLASS_ID["OBS"] = SpcSoundingsActivity.URL
 
-        MyApplication.HM_CLASS["CARAIN"] = CanadaRadarActivity::class.java
-        MyApplication.HM_CLASS_ARGS["CARAIN"] = arrayOf("RID_FOR_CA", "rad")
-        MyApplication.HM_CLASS_ID["CARAIN"] = CanadaRadarActivity.RID
+//        MyApplication.HM_CLASS["CARAIN"] = CanadaRadarActivity::class.java
+//        MyApplication.HM_CLASS_ARGS["CARAIN"] = arrayOf("RID_FOR_CA", "rad")
+//        MyApplication.HM_CLASS_ID["CARAIN"] = CanadaRadarActivity.RID
 
         // FIXME this one should be removed
         MyApplication.HM_CLASS["RAD_1KM"] = SpcSoundingsActivity::class.java

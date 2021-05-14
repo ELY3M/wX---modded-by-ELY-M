@@ -121,7 +121,7 @@ object UtilityLocationFragment {
         return if (retStr == "") {
             ""
         } else {
-            val ret = windDirectionMap[retStr.toLowerCase(Locale.US)]
+            val ret = windDirectionMap[retStr.lowercase(Locale.US)]
             if (ret != null) {
                 " $ret"
             } else {

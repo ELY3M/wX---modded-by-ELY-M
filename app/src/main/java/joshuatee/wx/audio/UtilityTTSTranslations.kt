@@ -71,7 +71,7 @@ object UtilityTtsTranslations {
 
     @SuppressLint
     private fun translateAbbreviationChunk(sF: String): String {
-        var s = sF.toUpperCase(Locale.US)
+        var s = sF.uppercase(Locale.US)
         s = s.replace(" SVR ", " severe ")
             .replace(" TSTM ", " thunderstorm ")
             .replace(" TSTMS ", " thunderstorms ")

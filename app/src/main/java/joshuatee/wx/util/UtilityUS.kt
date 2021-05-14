@@ -146,41 +146,28 @@ object UtilityUS {
         return result
     }
 
-    private fun get7DayExt(raw_data: Array<String>): String {
-        val timeP12n13List: MutableList<String> = ArrayList(14)
-        val weatherSummaryList: MutableList<String> = ArrayList(14)
-        val forecast: Array<String> = UtilityString.parseXml(raw_data[11], "text")
-        // val seven_day_site_str = raw_data[20]
-        // var m: Matcher
-        try {
-            //p = Pattern.compile(".*?weather-summary=(.*?)/>.*?");
-            val m = MyApplication.utilUS_weather_summary_pattern.matcher(raw_data[18])
-            weatherSummaryList.add("")
-            while (m.find()) {
-                weatherSummaryList.add(m.group(1).replace("\"", ""))
-            }
-        } catch (e: Exception) {
-        }
-        try {
-            //p = Pattern.compile(".*?period-name=(.*?)>.*?");
-            val m = MyApplication.utilUS_period_name_pattern.matcher(raw_data[15])
-            timeP12n13List.add("")
-            while (m.find()) {
-                timeP12n13List.add(m.group(1).replace("\"", ""))
-            }
-        } catch (e: Exception) {
-        }
-        val sb = StringBuilder(300)
-        // sb.append(seven_day_site_str);
-        // sb.append(" ");
-        // sb.append(GlobalVariables.newline);
-        // sb.append(GlobalVariables.newline);
+    private fun get7DayExt(rawData: Array<String>): String {
+        // var timeP12n13List: MutableList<String> = ArrayList(14)
+        val forecast: Array<String> = UtilityString.parseXml(rawData[11], "text")
+//        try {
+//            val m = MyApplication.utilUS_period_name_pattern.matcher(raw_data[15])
+//            timeP12n13List.add("")
+//            while (m.find()) {
+//                timeP12n13List.add(m.group(1).replace("\"", ""))
+//            }
+//        } catch (e: Exception) {
+//        }
+
+        val timeP12n13List = UtilityString.parseColumnMutable(rawData[15], MyApplication.utilUS_period_name_pattern)
+        timeP12n13List.add(0, "")
+
+        var forecastString = ""
         for (j in 1 until forecast.size) {
-            sb.append(timeP12n13List[j])
-            sb.append(": ")
-            sb.append(forecast[j])
+            forecastString += timeP12n13List[j].replace("\"", "")
+            forecastString += ": "
+            forecastString += forecast[j]
         }
-        return sb.toString()
+        return forecastString
     }
 
     private fun get7Day(raw_data: Array<String>): String {

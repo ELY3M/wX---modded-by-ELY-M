@@ -251,17 +251,17 @@ class Location(val context: Context, locNumInt: Int) {
                 wfo = wfoAndRadar[0]
                 radarSite = wfoAndRadar[1]
                 if (wfo == "") {
-                    wfo = UtilityLocation.getNearestOffice( "WFO", LatLon(xStr, yStr)).toLowerCase(Locale.US)
+                    wfo = UtilityLocation.getNearestOffice( "WFO", LatLon(xStr, yStr)).lowercase(Locale.US)
                 }
                 if (radarSite == "") {
                     radarSite = UtilityLocation.getNearestOffice( "RADAR", LatLon(xStr, yStr))
                 }
                 // CT shows mosaic not nexrad so the old way is needed
                 if (radarSite == "") {
-                    radarSite = GlobalDictionaries.wfoToRadarSite[wfo.toUpperCase(Locale.US)] ?: ""
+                    radarSite = GlobalDictionaries.wfoToRadarSite[wfo.uppercase(Locale.US)] ?: ""
                 }
-                Utility.writePref(context, "RID$locNum", radarSite.toUpperCase(Locale.US))
-                Utility.writePref(context, "NWS$locNum", wfo.toUpperCase(Locale.US))
+                Utility.writePref(context, "RID$locNum", radarSite.uppercase(Locale.US))
+                Utility.writePref(context, "NWS$locNum", wfo.uppercase(Locale.US))
             } else if (xStr.contains("CANADA")) {
                 var tmpLatLon = LatLon()
                 if (xStr.length < 12) {
@@ -289,7 +289,7 @@ class Location(val context: Context, locNumInt: Int) {
                 Utility.writePref(context, "LOC" + locNum + "_Y", id + ":" + tmpLatLon.lonString)
                 setNumLocations(context, locNumToSave)
                 radarSite = UtilityCanada.getRadarSite(xStr, yStr)
-                Utility.writePref(context, "RID$locNum", radarSite.toUpperCase(Locale.US))
+                Utility.writePref(context, "RID$locNum", radarSite.uppercase(Locale.US))
                 Utility.writePref(context, "NWS" + locNum + "_STATE", prov)
                 Utility.writePref(context, "ZONE$locNum", "")
                 Utility.writePref(context, "COUNTY$locNum", "")
@@ -297,7 +297,7 @@ class Location(val context: Context, locNumInt: Int) {
             }
             refreshLocationData(context)
             setCurrentLocationStr(context, locNum)
-            return "Saving location $locNum as $labelStr ($xStr,$yStr) " + wfo.toUpperCase(Locale.US) + "(" + radarSite.toUpperCase(Locale.US) + ")"
+            return "Saving location $locNum as $labelStr ($xStr,$yStr) " + wfo.uppercase(Locale.US) + "(" + radarSite.uppercase(Locale.US) + ")"
         }
 
         private fun setCurrentLocationStr(context: Context, locNum: String) {

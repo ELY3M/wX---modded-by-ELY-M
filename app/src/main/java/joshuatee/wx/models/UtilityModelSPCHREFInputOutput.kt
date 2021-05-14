@@ -72,12 +72,12 @@ internal object UtilityModelSpcHrefInputOutput {
                 val paramArr = it.split(" ")
                 "${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year +
                         "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" +
-                        paramArr[0] + "." + sector.toLowerCase(Locale.US) + ".f0" + time +
+                        paramArr[0] + "." + sector.lowercase(Locale.US) + ".f0" + time +
                         "00." + paramArr[1] + ".tl00.png"
             } else {
                 "${MyApplication.nwsSPCwebsitePrefix}/exper/href/graphics/models/href/" + year +
                         "/" + month + "/" + day + "/" + hour + "00/f0" + time + "00/" + it +
-                        "." + sector.toLowerCase(Locale.US) + ".f0" + time + "00.png"
+                        "." + sector.lowercase(Locale.US) + ".f0" + time + "00.png"
             }
             urls.add(url)
             UtilityLog.d("wx", url)

@@ -58,6 +58,8 @@ fun String.parse(pattern: Pattern) = UtilityString.parse(this, pattern)
 
 fun String.parseFirst(pattern: String) = UtilityString.parse(this, pattern)
 
+fun String.parseFirst(pattern: Pattern) = UtilityString.parse(this, pattern)
+
 fun String.parseColumn(match: String) = UtilityString.parseColumn(this, match)
 
 fun String.parseColumn(pattern: Pattern) = UtilityString.parseColumn(this, pattern)

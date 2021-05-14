@@ -163,5 +163,5 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
         ObjectIntent.showHazard(context, arrayOf(url, ""))
     }
 
-    fun getTitle(title: String) = "(" + totalAlertsCnt + ") " + title.toUpperCase(Locale.US) + " Alerts"
+    fun getTitle(title: String) = "(" + totalAlertsCnt + ") " + title.uppercase(Locale.US) + " Alerts"
 }

@@ -32,6 +32,7 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityLog
 
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.util.UtilityTime
 
 // FIXME share more code with severe dashboard or radar
 internal object UtilityNotificationTornado {
@@ -62,7 +63,11 @@ internal object UtilityNotificationTornado {
             if (idAl.size > i) {
                 val url = idAl[i]
                 val capAlert = CapAlert.createFromUrl(url)
-                if (UtilityNotificationTools.nwsLocalAlertNotFiltered(context, title)) { // placeholder for WFO filter check
+                val vtec = capAlert.vtec
+                UtilityLog.d("wxVTEC", vtec)
+                val isAlertCurrent = UtilityTime.isVtecCurrent(vtec)
+                UtilityLog.d("wxVTEC", isAlertCurrent.toString())
+                if (isAlertCurrent && UtilityNotificationTools.nwsLocalAlertNotFiltered(context, title)) { // placeholder for WFO filter check
                     html = "$html<b>$title</b><br>"
                     html += "<b>Counties: " + capAlert.area + "</b><br>"
                     html += capAlert.summary + "<br><br><br>"

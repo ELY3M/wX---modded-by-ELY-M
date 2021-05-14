@@ -74,7 +74,7 @@ class NhcActivity : BaseActivity() {
     }
 
     private fun showTextProduct(prod: String) {
-        ObjectIntent(this, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf(prod.toLowerCase(Locale.US), ""))
+        ObjectIntent(this, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf(prod.lowercase(Locale.US), ""))
     }
 
     private fun showImageProduct(imageUrl: String, title: String, needWhiteBackground: String) {

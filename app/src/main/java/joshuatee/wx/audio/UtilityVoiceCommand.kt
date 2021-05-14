@@ -45,7 +45,7 @@ object UtilityVoiceCommand {
         if (vrString.contains("radar")) {
             var validRid = true
             if (tokens.size > 1) {
-                radarSite = tokens[1].toUpperCase(Locale.US)
+                radarSite = tokens[1].uppercase(Locale.US)
                 if (Utility.getRadarSiteName(radarSite) == "") {
                     validRid = false
                 }
@@ -53,7 +53,7 @@ object UtilityVoiceCommand {
             if (validRid) ObjectIntent.showRadar(context, arrayOf(radarSite, state))
         } else if (vrString.contains("AFD") || vrString.contains("text")) {
             if (tokens.size > 1) {
-                wfo = tokens[1].toUpperCase(Locale.US)
+                wfo = tokens[1].uppercase(Locale.US)
             }
             if (wfo == "WPC") {
                 ObjectIntent(context, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion", "sound"))
@@ -62,7 +62,7 @@ object UtilityVoiceCommand {
             }
         } else if (vrString.contains("cloud")) {
             ObjectIntent.showVis(context)
-        } else if (vrString.toUpperCase(Locale.US).contains("SPC")) {
+        } else if (vrString.uppercase(Locale.US).contains("SPC")) {
             if (tokens.size > 1) {
                 when {
                     vrString.contains("1") -> ObjectIntent.showSpcSwo(context, arrayOf("1", "sound"))

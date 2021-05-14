@@ -27,9 +27,7 @@ import android.net.Uri
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.activitiesmisc.*
 import joshuatee.wx.canada.CanadaHourlyActivity
-import joshuatee.wx.canada.CanadaRadarActivity
 import joshuatee.wx.canada.CanadaTextActivity
-import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.models.ModelsGenericActivity
 import joshuatee.wx.nhc.NhcStormActivity
 import joshuatee.wx.nhc.ObjectNhcStormDetails
@@ -145,21 +143,21 @@ class ObjectIntent() {
         }
 
         fun showRadarMosaic(context: Context) {
-            if (Location.isUS) {
-                if (!UIPreferences.useAwcRadarMosaic) {
-                    // ObjectIntent(context, USNwsMosaicActivity::class.java, USNwsMosaicActivity.URL, arrayOf("location"))
-                } else {
-                    ObjectIntent(context, AwcRadarMosaicActivity::class.java, AwcRadarMosaicActivity.URL, arrayOf(""))
-                }
+//            if (Location.isUS) {
+            if (!UIPreferences.useAwcRadarMosaic) {
+                // ObjectIntent(context, USNwsMosaicActivity::class.java, USNwsMosaicActivity.URL, arrayOf("location"))
             } else {
-                val prov = Utility.readPref(context, "NWS" + Location.currentLocationStr + "_STATE", "")
-                ObjectIntent(context, CanadaRadarActivity::class.java, CanadaRadarActivity.RID, arrayOf(UtilityCanada.getSectorFromProvince(prov), "rad"))
+                ObjectIntent(context, AwcRadarMosaicActivity::class.java, AwcRadarMosaicActivity.URL, arrayOf(""))
             }
+//            } else {
+//                val prov = Utility.readPref(context, "NWS" + Location.currentLocationStr + "_STATE", "")
+//                ObjectIntent(context, CanadaRadarActivity::class.java, CanadaRadarActivity.RID, arrayOf(UtilityCanada.getSectorFromProvince(prov), "rad"))
+//            }
         }
 
-        fun showCanadaRadar(context: Context, array: Array<String>) {
-            ObjectIntent(context, CanadaRadarActivity::class.java, CanadaRadarActivity.RID, array)
-        }
+//        fun showCanadaRadar(context: Context, array: Array<String>) {
+//            ObjectIntent(context, CanadaRadarActivity::class.java, CanadaRadarActivity.RID, array)
+//        }
 
         fun showSpcStormReports(context: Context) {
             ObjectIntent(context, SpcStormReportsActivity::class.java, SpcStormReportsActivity.NO, arrayOf("today"))

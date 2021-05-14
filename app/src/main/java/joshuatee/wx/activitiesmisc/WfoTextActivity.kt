@@ -247,8 +247,8 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             }
             R.id.action_map -> imageMap.toggleMap()
             R.id.action_pin -> UtilityShortcut.create(this, ShortcutType.AFD)
-            R.id.action_website -> ObjectIntent.showWebView(this, arrayOf("https://www.weather.gov/" + wfo.toLowerCase(Locale.US), wfo, "extended"))
-            R.id.action_hazards -> ObjectIntent.showImage(this, arrayOf("https://www.weather.gov/wwamap/png/" + wfo.toLowerCase(Locale.US) + ".png", "$wfo WWA Map"))
+            R.id.action_website -> ObjectIntent.showWebView(this, arrayOf("https://www.weather.gov/" + wfo.lowercase(Locale.US), wfo, "extended"))
+            R.id.action_hazards -> ObjectIntent.showImage(this, arrayOf("https://www.weather.gov/wwamap/png/" + wfo.lowercase(Locale.US) + ".png", "$wfo WWA Map"))
             R.id.action_share -> UtilityShare.text(this, product + wfo, textToShare)
             else -> return super.onOptionsItemSelected(item)
         }
@@ -261,7 +261,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     private fun mapSwitch(loc: String) {
-        wfo = loc.toUpperCase(Locale.US)
+        wfo = loc.uppercase(Locale.US)
         originalWfo = wfo
         mapShown = false
         getContent()
@@ -322,7 +322,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun checkForCliSite() = GlobalScope.launch(uiDispatcher) {
         if (product == "CLI") {
             val cliHtml = withContext(Dispatchers.IO) {
-                ("https://w2.weather.gov/climate/index.php?wfo=" + wfo.toLowerCase(Locale.US)).getHtml()
+                ("https://w2.weather.gov/climate/index.php?wfo=" + wfo.lowercase(Locale.US)).getHtml()
             }
             val cliSites = cliHtml.parseColumn("cf6PointArray\\[.\\] = new Array\\('.*?','(.*?)'\\)")
             val cliNames = cliHtml.parseColumn("cf6PointArray\\[.\\] = new Array\\('(.*?)','.*?'\\)")

@@ -50,15 +50,19 @@ class BottomSheetFragment(private val actContext: Context, val position: Int, pr
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fragmentView = inflater.inflate(R.layout.bottom_sheet_layout, container, false)
         label = fragmentView!!.findViewById(R.id.label)
-        if (Utility.isThemeAllWhite()) {
-            label.setTextColor(Color.BLACK)
-            label.setBackgroundColor(Color.LTGRAY)
-        } else if (Utility.isThemeAllBlack()) {
-            label.setTextColor(Color.WHITE)
-            label.setBackgroundColor(Color.BLACK)
-        } else {
-            label.setTextColor(Color.WHITE)
-            label.setBackgroundColor(Color.BLACK)
+        when {
+            Utility.isThemeAllWhite() -> {
+                label.setTextColor(Color.BLACK)
+                label.setBackgroundColor(Color.LTGRAY)
+            }
+            Utility.isThemeAllBlack() -> {
+                label.setTextColor(Color.WHITE)
+                label.setBackgroundColor(Color.BLACK)
+            }
+            else -> {
+                label.setTextColor(Color.WHITE)
+                label.setBackgroundColor(Color.BLACK)
+            }
         }
         linearLayout = fragmentView!!.findViewById(R.id.linearLayout)
         labelList.forEachIndexed { index, it ->

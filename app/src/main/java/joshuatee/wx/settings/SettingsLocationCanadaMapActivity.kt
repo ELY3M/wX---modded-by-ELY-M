@@ -53,7 +53,7 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
         super.onCreate(savedInstanceState, R.layout.activity_settings_location_canada_map, null, false)
         val activityArguments = intent.getStringArrayExtra(URL)
         url = activityArguments!![0]
-        title = url.toUpperCase(Locale.US)
+        title = url.uppercase(Locale.US)
         toolbar.subtitle = "Select a location and then use the back arrow to save."
         var imgRes = 0
         var imgMap = 0
@@ -130,10 +130,10 @@ class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
     private fun mapClicked(id: Int) {
         val sector = UtilityImageMap.canadaMap(id)
         val cityLoc = getCityFromXml(sector)
-        Utility.writePref(this, "LOCATION_CANADA_PROV", url.toUpperCase(Locale.US))
+        Utility.writePref(this, "LOCATION_CANADA_PROV", url.uppercase(Locale.US))
         Utility.writePref(this, "LOCATION_CANADA_CITY", cityLoc)
         Utility.writePref(this, "LOCATION_CANADA_ID", sector.split("_".toRegex()).dropLastWhile { it.isEmpty() }[1])
-        toolbar.subtitle = url.toUpperCase(Locale.US) + ", " + cityLoc
+        toolbar.subtitle = url.uppercase(Locale.US) + ", " + cityLoc
         finish()
     }
 

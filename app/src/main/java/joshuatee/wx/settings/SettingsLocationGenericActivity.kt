@@ -370,12 +370,16 @@ class SettingsLocationGenericActivity : BaseActivity(), OnMenuItemClickListener 
         }
         // the SearchView's AutoCompleteTextView drop down. For some reason this wasn't working in styles.xml
         val autoCompleteTextView: SearchView.SearchAutoComplete = searchView.findViewById(R.id.search_src_text)
-        if (UIPreferences.themeIsWhite) {
-            autoCompleteTextView.setDropDownBackgroundResource(R.drawable.dr_white)
-        } else if (Utility.isThemeAllBlack()) {
-            autoCompleteTextView.setDropDownBackgroundResource(R.drawable.dr_black)
-        } else {
-            autoCompleteTextView.setDropDownBackgroundResource(R.drawable.dr_dark_blue)
+        when {
+            UIPreferences.themeIsWhite -> {
+                autoCompleteTextView.setDropDownBackgroundResource(R.drawable.dr_white)
+            }
+            Utility.isThemeAllBlack() -> {
+                autoCompleteTextView.setDropDownBackgroundResource(R.drawable.dr_black)
+            }
+            else -> {
+                autoCompleteTextView.setDropDownBackgroundResource(R.drawable.dr_dark_blue)
+            }
         }
         return true
     }

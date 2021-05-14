@@ -39,14 +39,14 @@ internal object UtilityModelNcepInputOutput {
     fun getRunTime(model: String, param: String, spinnerSectorCurrent: String): RunTimeData {
         val runData = RunTimeData()
         val runCompletionDataStr = StringBuilder(100)
-        val url = "${MyApplication.nwsMagNcepWebsitePrefix}/model-guidance-model-parameter.php?group=Model%20Guidance&model=" + model.toUpperCase(Locale.US) + "&area=" + spinnerSectorCurrent + "&ps=area"
+        val url = "${MyApplication.nwsMagNcepWebsitePrefix}/model-guidance-model-parameter.php?group=Model%20Guidance&model=" + model.uppercase(Locale.US) + "&area=" + spinnerSectorCurrent + "&ps=area"
         val fullHtml = url.getHtml()
         val html = fullHtml.parse(RegExp.ncepPattern2).replace("UTC", "Z").replace(" ", "")
         runCompletionDataStr.append(html.replace("Z", " UTC"))
         if (runCompletionDataStr.length > 8) {
             runCompletionDataStr.insert(8, " ")
         }
-        val timeCompleteUrl = "${MyApplication.nwsMagNcepWebsitePrefix}/model-fhrs.php?group=Model%20Guidance&model=" + model.toLowerCase(Locale.US) +
+        val timeCompleteUrl = "${MyApplication.nwsMagNcepWebsitePrefix}/model-fhrs.php?group=Model%20Guidance&model=" + model.lowercase(Locale.US) +
                 "&fhr_mode=image&loop_start=-1&loop_end=-1&area=" + spinnerSectorCurrent + "&fourpan=no&imageSize=&preselected_formatted_cycle_date=" +
                 runCompletionDataStr + "&cycle=" + runCompletionDataStr + "&param=" + param + "&ps=area"
         val timeCompleteHtml = timeCompleteUrl.replace(" ", "%20").getHtml()
@@ -62,13 +62,13 @@ internal object UtilityModelNcepInputOutput {
             time
         }
         val imgUrl = when (om.model) {
-            "GFS" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace("Z", "") +
-                    "/" + om.sector.toLowerCase(Locale.US) + "/" + om.currentParam + "/" + om.model.toLowerCase(Locale.US) + "_" +
-                    om.sector.toLowerCase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
-            "HRRR" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace("Z", "") +
-                    "/" + om.model.toLowerCase(Locale.US) + "_" + om.sector.toLowerCase(Locale.US) + "_" + modifiedTime + "_" + om.currentParam + ".gif"
-            else -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.toLowerCase(Locale.US) + "/" + om.run.replace("Z", "") +
-                    "/" + om.model.toLowerCase(Locale.US) + "_" + om.sector.toLowerCase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
+            "GFS" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
+                    "/" + om.sector.lowercase(Locale.US) + "/" + om.currentParam + "/" + om.model.lowercase(Locale.US) + "_" +
+                    om.sector.lowercase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
+            "HRRR" -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
+                    "/" + om.model.lowercase(Locale.US) + "_" + om.sector.lowercase(Locale.US) + "_" + modifiedTime + "_" + om.currentParam + ".gif"
+            else -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
+                    "/" + om.model.lowercase(Locale.US) + "_" + om.sector.lowercase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
         }
         // UtilityLog.d("wx", imgUrl)
         return imgUrl.getImage()
