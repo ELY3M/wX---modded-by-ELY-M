@@ -21,7 +21,6 @@ https://github.com/sromku/polygon-contains-point
  */
 
 import joshuatee.wx.radar.LatLon
-import java.util.ArrayList
 
 /**
  * The 2D polygon. <br></br>
@@ -48,8 +47,8 @@ class ExternalPolygon private constructor(private val sides: List<ExternalLine>,
      * @author Roman Kushnarenko (sromku@gmail.com)
      */
     class Builder {
-        private var vertexes: MutableList<ExternalPoint> = ArrayList()
-        private val sides = ArrayList<ExternalLine>()
+        private var vertexes = mutableListOf<ExternalPoint>()
+        private val sides = mutableListOf<ExternalLine>()
         private var boundingBox: BoundingBox? = null
         private var firstPoint = true
         private var isClosed = false
@@ -64,7 +63,7 @@ class ExternalPolygon private constructor(private val sides: List<ExternalLine>,
         fun addVertex(point: ExternalPoint): Builder {
             if (isClosed) {
                 // each hole we start with the new array of vertex points
-                vertexes = ArrayList()
+                vertexes = mutableListOf()
                 isClosed = false
             }
             updateBoundingBox(point)

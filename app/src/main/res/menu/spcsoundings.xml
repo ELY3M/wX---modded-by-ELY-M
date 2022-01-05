@@ -61,11 +61,11 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/action_sfc"
-        android:title="Surface"
+        android:title="@string/surface"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_spc_help"
-        android:title="SPC Help"
+        android:title="@string/spc_help"
         app:showAsAction="never" />
 </menu>
 

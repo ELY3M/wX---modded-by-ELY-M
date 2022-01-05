@@ -11,7 +11,6 @@ package joshuatee.wx.external
 
 import joshuatee.wx.external.ExternalAngle.toDegrees
 import joshuatee.wx.external.ExternalAngle.toRadians
-
 import kotlin.math.*
 
 /**
@@ -27,7 +26,6 @@ import kotlin.math.*
  */
 class ExternalGeodeticCalculator {
 
-    //private final double TwoPi = 2.0 * Math.PI;
     /**
      * Calculate the destination and final bearing after traveling a specified
      * distance, and a specified starting bearing, for an initial location. This
@@ -124,7 +122,9 @@ class ExternalGeodeticCalculator {
         // build result
         val latitude = toDegrees(phi2)
         val longitude = start.longitude + toDegrees(bigL)
-        if (endBearing != null && endBearing.isNotEmpty()) endBearing[0] = toDegrees(alpha2)
+        if (endBearing != null && endBearing.isNotEmpty()) {
+            endBearing[0] = toDegrees(alpha2)
+        }
         return ExternalGlobalCoordinates(latitude, longitude)
     }
 }

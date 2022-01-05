@@ -42,11 +42,15 @@ class ObjectImageMap(
     val map: ImageMap = activity.findViewById(resId)
     var isRadarWithTransparent = false
 
-    init { map.visibility = View.GONE }
+    init {
+        map.visibility = View.GONE
+    }
 
     fun toggleMap() {
         val toolbarAlpha = toolbar.background.alpha
-        if (toolbarAlpha == 0) isRadarWithTransparent = true
+        if (toolbarAlpha == 0) {
+            isRadarWithTransparent = true
+        }
         if (map.visibility == View.GONE) {
             setupMap()
             if (isRadarWithTransparent) {
@@ -60,17 +64,19 @@ class ObjectImageMap(
         } else {
             map.visibility = View.GONE
             views.forEach { it.visibility = View.VISIBLE }
-            if (isRadarWithTransparent) UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
+            if (isRadarWithTransparent) {
+                UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
+            }
         }
     }
 
     fun hideMap() {
-        //val toolbarAlpha = toolbar.background.alpha
-        //if (toolbarAlpha == 0) isRadarWithTransparent = true
         if (map.visibility != View.GONE) {
             map.visibility = View.GONE
             views.forEach { it.visibility = View.VISIBLE }
-            if (isRadarWithTransparent) UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
+            if (isRadarWithTransparent) {
+                UtilityToolbar.transparentToolbars(toolbar, toolbarBottom)
+            }
         }
     }
 

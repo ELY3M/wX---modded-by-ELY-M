@@ -61,7 +61,7 @@ internal class TileAdapterColorPalette(private val itemList: List<TileObjectColo
             itemView.setOnClickListener(this)
         }
 
-        override fun onClick(v: View) { myClickListener!!.onItemClick(adapterPosition) }
+        override fun onClick(v: View) { myClickListener!!.onItemClick(layoutPosition) }
     }
 
     fun setListener(fn: (Int) -> Unit) {

@@ -111,7 +111,7 @@ class ObjectSevenDay {
             val forecastString = forecastStringList[2]
             val forecasts = forecastString.split("\n").dropLastWhile { it.isEmpty() }
             var forecast = MyApplication.newline + MyApplication.newline
-            forecasts.forEachIndexed { index, s ->
+            forecasts.forEach { s ->
                 if (s != "") {
                     forecast += s.trim()
                     forecast += MyApplication.newline
@@ -152,7 +152,6 @@ class ObjectSevenDay {
                     detailedForecasts.add(s.trim())
                     forecast += s.trim()
                     forecast += MyApplication.newline + MyApplication.newline
-                    // UtilityLog.d("wx", s.trim())
                     if (iconList.size > index) {
                         icons.add(iconList[index])
                     }

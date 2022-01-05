@@ -28,4 +28,3 @@
     android:minHeight="?attr/actionBarSize"
     app:theme="@style/MyLightToolbarStyle"
     app:popupTheme="@style/MyLightToolbarStyle" />
-

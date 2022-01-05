@@ -32,7 +32,7 @@ internal object UtilitySpcFireOutlook {
         "fwddy38"
     )
 
-    val imageUrls = listOf(
+    val urls = listOf(
         "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/day1otlk_fire.gif",
         "${MyApplication.nwsSPCwebsitePrefix}/products/fire_wx/day2otlk_fire.gif",
         "${MyApplication.nwsSPCwebsitePrefix}/products/exper/fire_wx/imgs/day38otlk_fire.gif"

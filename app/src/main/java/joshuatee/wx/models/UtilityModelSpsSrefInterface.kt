@@ -17,12 +17,11 @@
     You should have received a copy of the GNU General Public License
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
- */
+*/
 
 package joshuatee.wx.models
 
 import android.util.SparseArray
-
 import joshuatee.wx.ui.ObjectMenuTitle
 import joshuatee.wx.util.Group
 

@@ -31,10 +31,11 @@ import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
 import joshuatee.wx.notifications.UtilityNotificationNhc
+import joshuatee.wx.objects.FutureText
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
-import kotlinx.coroutines.*
 
 class NhcStormActivity : BaseActivity() {
 
@@ -47,13 +48,13 @@ class NhcStormActivity : BaseActivity() {
 
     companion object { const val URL = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private lateinit var stormData: ObjectNhcStormDetails
-    private var html = ""
     private var product = ""
     private val bitmaps = mutableListOf<Bitmap>()
     private lateinit var objectCardText: ObjectCardText
     private lateinit var linearLayout: LinearLayout
+    private lateinit var linearLayoutText: ObjectLinearLayout
+    private lateinit var linearLayoutImage: ObjectLinearLayout
     private var numberOfImages = 0
     private var imagesPerRow = 2
     private val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout>()
@@ -78,6 +79,8 @@ class NhcStormActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_linear_layout, R.menu.nhc_storm, false)
         linearLayout = findViewById(R.id.linearLayout)
+        linearLayoutImage = ObjectLinearLayout(this, linearLayout)
+        linearLayoutText = ObjectLinearLayout(this, linearLayout)
         stormData = intent.getSerializableExtra(URL) as ObjectNhcStormDetails
         title = stormData.name + " " + stormData.classification
         toolbar.subtitle = stormData.forTopHeader()
@@ -93,25 +96,30 @@ class NhcStormActivity : BaseActivity() {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent() {
+        FutureVoid( this, ::downloadImages, ::showImages)
+        FutureText(this, product, ::showText)
+    }
+
+    private fun downloadImages() {
         bitmaps.clear()
-        withContext(Dispatchers.IO) {
-            imageUrls.forEach {
-                var url = stormData.baseUrl
-                if (it == "WPCQPF_sm2.gif" || it == "WPCERO_sm2.gif") {
-                    url = url.dropLast(2)
-                }
-                // UtilityLog.d("wx", url)
-                bitmaps.add((url + it).getImage())
+        imageUrls.forEach {
+            var url = stormData.baseUrl
+            if (it == "WPCQPF_sm2.gif" || it == "WPCERO_sm2.gif") {
+                url = url.dropLast(2)
             }
+            bitmaps.add((url + it).getImage())
         }
-        linearLayout.removeAllViews()
+    }
+
+    fun showImages() {
+        linearLayoutImage.removeAllViews()
         numberOfImages = 0
         bitmaps.forEachIndexed { index, bitmap ->
             if (bitmap.width > 100) {
                 val objectCardImage: ObjectCardImage
                 if (numberOfImages % imagesPerRow == 0) {
-                    val objectLinearLayout = ObjectLinearLayout(this@NhcStormActivity, linearLayout)
+                    val objectLinearLayout = ObjectLinearLayout(this@NhcStormActivity, linearLayoutImage.get())
                     objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
                     horizontalLinearLayouts.add(objectLinearLayout)
                     objectCardImage = ObjectCardImage(this@NhcStormActivity, objectLinearLayout.linearLayout, bitmap, imagesPerRow)
@@ -129,19 +137,21 @@ class NhcStormActivity : BaseActivity() {
                 }
             }
         }
-        html = withContext(Dispatchers.IO) {
-            UtilityDownload.getTextProduct(this@NhcStormActivity, product)
-        }
-        objectCardText = ObjectCardText(this@NhcStormActivity, linearLayout, toolbar, toolbarBottom)
-        if (html.contains("<")) {
-            objectCardText.text = Utility.fromHtml(html)
+    }
+
+    fun showText(s: String) {
+        linearLayoutText.removeAllViews()
+        objectCardText = ObjectCardText(this@NhcStormActivity, linearLayoutText.get(), toolbar, toolbarBottom)
+        if (s.contains("<")) {
+            objectCardText.text = Utility.fromHtml(s)
         } else {
-            objectCardText.text = html
+            objectCardText.text = s
         }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.action_cloud -> ObjectIntent.showVisNhc(this, stormData.goesUrl)
             R.id.action_share -> UtilityShare.text(this, this, stormData.name, "", bitmaps)
             R.id.action_MIATCPEP2 -> ObjectIntent.showWpcText(this, arrayOf("MIATCP${stormData.binNumber}"))
             R.id.action_MIATCMEP2 -> ObjectIntent.showWpcText(this, arrayOf("MIATCM${stormData.binNumber}"))

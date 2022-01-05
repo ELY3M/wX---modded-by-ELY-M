@@ -26,16 +26,14 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
-
 import joshuatee.wx.Extensions.*
-import kotlinx.coroutines.*
+import joshuatee.wx.objects.FutureVoid
 
 // TODO rename to TextViewer
 class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
@@ -48,7 +46,6 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object { const val URL = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private lateinit var activityArguments: Array<String>
     private var url = ""
     private var html = ""
@@ -80,8 +77,15 @@ class TextScreenActivity : AudioPlayActivity(), OnMenuItemClickListener {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        html = withContext(Dispatchers.IO) { url.getHtml() }
+    private fun getContent() {
+        FutureVoid(this@TextScreenActivity, ::download, ::update)
+    }
+
+    fun download() {
+        html = url.getHtml()
+    }
+
+    fun update() {
         textCard.setTextAndTranslate(Utility.fromHtml(html))
         UtilityTts.conditionalPlay(activityArguments, 2, applicationContext, html, "textscreen")
     }

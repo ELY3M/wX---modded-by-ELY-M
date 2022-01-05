@@ -361,10 +361,11 @@ class SettingsNotificationsActivity : BaseActivity() {
 
     private val fileWritePerm = 5002
 
+    // FIXME TODO decide what to do with this
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            fileWritePerm -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            }
-        }
+//        when (requestCode) {
+//            fileWritePerm -> if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//            }
+//        }
     }
 }

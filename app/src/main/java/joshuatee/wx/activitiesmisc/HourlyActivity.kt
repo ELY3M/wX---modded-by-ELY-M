@@ -31,20 +31,18 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.cardview.widget.CardView
 import joshuatee.wx.MyApplication
-
 import joshuatee.wx.R
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.ui.ObjectCardVerticalText
 import joshuatee.wx.util.UtilityShare
-
 import com.jjoe64.graphview.series.DataPoint
 import com.jjoe64.graphview.series.LineGraphSeries
 import com.jjoe64.graphview.DefaultLabelFormatter
 import com.jjoe64.graphview.GraphView
 import joshuatee.wx.UIPreferences
-import kotlinx.coroutines.*
+import joshuatee.wx.objects.FutureVoid
 
 class HourlyActivity : BaseActivity() {
 
@@ -56,13 +54,13 @@ class HourlyActivity : BaseActivity() {
 
     companion object { const val LOC_NUM = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var htmlShare = listOf<String>()
     private lateinit var objectCard: ObjectCard
     private lateinit var objectCardVerticalText: ObjectCardVerticalText
     private lateinit var scrollView: ScrollView
     private lateinit var linearLayout: LinearLayout
     private lateinit var graphCard: CardView
+    private lateinit var graph: GraphView
     private var hourlyData = ObjectHourly()
     private var locationNumber = 0
 
@@ -77,6 +75,7 @@ class HourlyActivity : BaseActivity() {
         scrollView = findViewById(R.id.scrollView)
         linearLayout = findViewById(R.id.linearLayout)
         graphCard = findViewById(R.id.graphCard)
+        graph = findViewById(R.id.graph)
         locationNumber = (intent.getStringExtra(LOC_NUM)!!.toIntOrNull() ?: 0) - 1
         objectCard = ObjectCard(this, R.color.black, R.id.graphCard)
         graphCard.visibility = View.GONE
@@ -92,10 +91,11 @@ class HourlyActivity : BaseActivity() {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        htmlShare = withContext(Dispatchers.IO) {
-            UtilityUSHourly.get(locationNumber)
-        }
+    private fun getContent() {
+        FutureVoid(this, { htmlShare = UtilityUSHourly.get(locationNumber) }, ::update)
+    }
+
+    private fun update() {
         hourlyData = if (UIPreferences.useNwsApiForHourly) {
             UtilityUSHourly.getStringForActivity(htmlShare[1])
         } else {
@@ -123,7 +123,7 @@ class HourlyActivity : BaseActivity() {
         }
         val series = LineGraphSeries(dataPoints.toTypedArray())
         series.color = Color.BLACK
-        val graph: GraphView = findViewById(R.id.graph)
+        graph.removeAllSeries()
         graph.viewport.isXAxisBoundsManual = true
         graph.viewport.backgroundColor = Color.LTGRAY
         graph.viewport.setMinX(0.0)

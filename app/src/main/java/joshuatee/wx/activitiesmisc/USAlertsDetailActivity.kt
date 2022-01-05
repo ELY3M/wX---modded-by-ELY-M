@@ -27,22 +27,20 @@ import android.view.MenuItem
 import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.safeGet
-
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectAlertDetail
 import joshuatee.wx.ui.ObjectCard
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityShare
-import kotlinx.coroutines.*
 
 class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object { const val URL = "" }
 
-    private val uiDispatcher = Dispatchers.Main // CoroutineDispatcher
     private lateinit var activityArguments: Array<String>
     private var capAlert = CapAlert()
     private lateinit var objectAlertDetail: ObjectAlertDetail
@@ -68,10 +66,11 @@ class USAlertsDetailActivity : AudioPlayActivity(), OnMenuItemClickListener {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        capAlert = withContext(Dispatchers.IO) {
-            CapAlert.createFromUrl(activityArguments[0])
-        }
+    private fun getContent() {
+        FutureVoid(this, { capAlert = CapAlert.createFromUrl(activityArguments[0]) }, ::update)
+    }
+
+    private fun update() {
         radarSite = capAlert.getClosestRadar()
         if (radarSite == "") {
             radarIcon.isVisible = false

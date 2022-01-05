@@ -1,153 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- modded by ELY M. -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- modded by ELY M. -->
     <item
         android:id="@+id/esrl"
         android:icon="@drawable/hrrrviewer"
-        android:title="ESRL HRRR/RAP" />
+        android:title="@string/esrl_hrrr_rap" />
     <item
         android:id="@+id/rainfall_outlook"
         android:icon="@drawable/wpc_rainfall"
-        android:title="Excessive Rainfall Outlook" />
+        android:title="@string/excessive_rainfall_outlook" />
     <item
         android:id="@+id/glcfs"
         android:icon="@drawable/glcfs"
-        android:title="GLCFS" />
+        android:title="@string/glcfs" />
     <item
         android:id="@+id/goes_global"
         android:icon="@drawable/goesfulldisk"
-        android:title="Global Satellite" />
+        android:title="@string/global_satellite" />
     <item
         android:id="@+id/goes_conus_wv"
         android:icon="@drawable/goes"
-        android:title="GOES Conus Water Vapor" />
+        android:title="@string/goes_conus_water_vapor" />
     <item
         android:id="@+id/lightning"
         android:icon="@drawable/lightning"
-        android:title="Lightning" />
+        android:title="@string/lightning" />
     <item
         android:id="@+id/national_images"
         android:icon="@drawable/fmap"
-        android:title="National Images" />
+        android:title="@string/national_images" />
     <item
         android:id="@+id/national_text"
         android:icon="@drawable/srfd"
-        android:title="National Text" />
+        android:title="@string/national_text" />
     <item
         android:id="@+id/ncep_models"
         android:icon="@drawable/ncep"
-        android:title="NCEP Models" />
+        android:title="@string/ncep_models" />
     <item
         android:id="@+id/nhc"
         android:icon="@drawable/nhc"
-        android:title="NHC" />
+        android:title="@string/nhc" />
     <item
         android:id="@+id/nssl_wrf"
         android:icon="@drawable/nsslwrf"
-        android:title="NSSL WRF" />
+        android:title="@string/nssl_wrf" />
     <item
         android:id="@+id/observations"
         android:icon="@drawable/nwsobs"
-        android:title="Observations" />
+        android:title="@string/observations" />
     <item
         android:id="@+id/observation_sites"
         android:icon="@drawable/nwsobssites"
-        android:title="Observation Sites" />
+        android:title="@string/observation_sites" />
     <item
         android:id="@+id/opc"
         android:icon="@drawable/opc"
-        android:title="OPC" />
+        android:title="@string/opc" />
     <item
         android:id="@+id/radar_mosaic"
         android:icon="@drawable/nws_sector"
-        android:title="Radar Mosaic" />
+        android:title="@string/radar_mosaic" />
     <item
         android:id="@+id/radar_dual_pane"
         android:icon="@drawable/wxogldualpane"
-        android:title="Radar dual pane" />
+        android:title="@string/radar_dual_pane" />
     <item
         android:id="@+id/radar_quad_pane"
         android:icon="@drawable/wxoglquadpane"
-        android:title="Radar quad pane" />
+        android:title="@string/radar_quad_pane" />
     <item
         android:id="@+id/spc_comp_map"
         android:icon="@drawable/spccompmap"
-        android:title="SPC Composite Map" />
+        android:title="@string/spc_composite_map" />
     <item
         android:id="@+id/spc_convective_outlooks"
         android:icon="@drawable/spc_sum"
-        android:title="SPC Convective Outlooks" />
+        android:title="@string/spc_convective_outlooks" />
     <item
         android:id="@+id/spc_day_1"
         android:icon="@drawable/day1"
-        android:title="SPC Convective Day 1" />
+        android:title="@string/spc_convective_day_1" />
     <item
         android:id="@+id/spc_day_2"
         android:icon="@drawable/day2"
-        android:title="SPC Convective Day 2" />
+        android:title="@string/spc_convective_day_2" />
     <item
         android:id="@+id/spc_day_3"
         android:icon="@drawable/day3"
-        android:title="SPC Convective Day 3" />
+        android:title="@string/spc_convective_day_3" />
     <item
         android:id="@+id/spc_day_4_8"
         android:icon="@drawable/day48"
-        android:title="SPC Convective Day 4-8" />
+        android:title="@string/spc_convective_day_4_8" />
     <item
         android:id="@+id/spc_fire_outlooks"
         android:icon="@drawable/fire_outlook"
-        android:title="SPC Fire Weather Outlooks" />
+        android:title="@string/spc_fire_weather_outlooks" />
     <item
         android:id="@+id/spc_href"
         android:icon="@drawable/spchref"
-        android:title="SPC HREF" />
+        android:title="@string/spc_href" />
     <item
         android:id="@+id/spc_hrrr"
         android:icon="@drawable/spchrrr"
-        android:title="SPC HRRR" />
+        android:title="@string/spc_hrrr" />
     <item
         android:id="@+id/spc_mesoanalysis"
         android:icon="@drawable/meso"
-        android:title="SPC Mesoanalysis" />
+        android:title="@string/spc_mesoanalysis" />
     <item
         android:id="@+id/spc_soundings"
         android:icon="@drawable/spcsoundings"
-        android:title="SPC Soundings" />
+        android:title="@string/spc_soundings" />
     <item
         android:id="@+id/spc_sref"
         android:icon="@drawable/spcsref"
-        android:title="SPC SREF" />
+        android:title="@string/spc_sref" />
     <item
         android:id="@+id/spc_storm_reports"
         android:icon="@drawable/report_today"
-        android:title="SPC Storm Reports" />
+        android:title="@string/spc_storm_reports" />
     <item
         android:id="@+id/spc_thunderstorm_outlooks"
         android:icon="@drawable/tstorm"
-        android:title="SPC Thunderstorm Outlooks" />
+        android:title="@string/spc_thunderstorm_outlooks" />
     <item
         android:id="@+id/spotters"
         android:icon="@drawable/spotters"
-        android:title="Spotters" />
+        android:title="@string/spotters" />
     <item
         android:id="@+id/twitter_states"
         android:icon="@drawable/twstate"
-        android:title="Twitter states" />
+        android:title="@string/twitter_states" />
     <item
         android:id="@+id/twitter_tornado"
         android:icon="@drawable/twtornado"
-        android:title="Twitter tornado" />
+        android:title="@string/twitter_tornado" />
     <item
         android:id="@+id/us_alerts"
         android:icon="@drawable/uswarn"
-        android:title="US Alerts" />
+        android:title="@string/us_alerts" />
     <item
         android:id="@+id/wpc_gefs"
         android:icon="@drawable/wpcgefs"
-        android:title="WPC GEFS" />
+        android:title="@string/wpc_gefs" />
     <item
         android:id="@+id/aurora"
         android:icon="@drawable/auroralforecast"
-        android:title="Aurora Forecast" />
-
+        android:title="@string/aurora" />
 </menu>

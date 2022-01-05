@@ -22,7 +22,6 @@
 package joshuatee.wx.activitiesmisc
 
 import android.graphics.Bitmap
-
 import joshuatee.wx.Extensions.*
 
 object UtilityLightning {

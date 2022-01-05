@@ -25,20 +25,17 @@ import android.app.Activity
 import android.content.Context
 import androidx.appcompat.widget.Toolbar
 import android.widget.LinearLayout
-
 import java.util.Locale
-
 import joshuatee.wx.canada.UtilityCanada
-import joshuatee.wx.util.*
-
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
+import joshuatee.wx.objects.FutureText2
 import joshuatee.wx.objects.ObjectIntent
-import kotlinx.coroutines.*
 
 class ObjectCanadaWarnings(private val context: Context, private val activity: Activity, private val linearLayout: LinearLayout, private val toolbar: Toolbar) {
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var listLocUrl = mutableListOf<String>()
     private var listLocName = mutableListOf<String>()
     private var listLocWarning = mutableListOf<String>()
@@ -107,11 +104,13 @@ class ObjectCanadaWarnings(private val context: Context, private val activity: A
 
     val title get() = provinceToLabel[province] + " (" + listLocUrl.size + ")"
 
-    private fun getWarningDetail(url: String, location: String) =
-            GlobalScope.launch(uiDispatcher) {
-                val data = withContext(Dispatchers.IO) { UtilityCanada.getHazardsFromUrl(url) }
-                ObjectIntent.showText(context, arrayOf(data, location))
-            }
+    private fun getWarningDetail(url: String, location: String) {
+        FutureText2(
+                context,
+                { UtilityCanada.getHazardsFromUrl(url) },
+                { data -> ObjectIntent.showText(context, arrayOf(data, location)) }
+        )
+    }
 
     companion object {
         private val provinceToLabel = mapOf(

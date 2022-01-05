@@ -27,7 +27,8 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.TextView
 import joshuatee.wx.MyApplication
-
+import joshuatee.wx.UIPreferences
+import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.util.Utility
 
 class ObjectCardHSText(context: Context, val product: String) {
@@ -63,15 +64,29 @@ class ObjectCardHSText(context: Context, val product: String) {
         }
     }
 
+    fun setup(longTextDownload: String) {
+        var longText = longTextDownload
+        if (product=="NFDOFFN31" || product=="NFDOFFN32") {
+            longText = Utility.fromHtml(longTextDownload)
+        }
+        setTextLong(longText)
+        val shortText = UtilityStringExternal.truncate(longText, UIPreferences.homescreenTextLength)
+        setTextShort(shortText)
+        setText(shortText)
+        if (product == "HOURLY") {
+            typefaceMono()
+        }
+    }
+
     fun refreshTextSize() = textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
 
-    fun setTextLong(text: String) { textLong = text }
+    private fun setTextLong(text: String) { textLong = text }
 
-    fun setTextShort(text: String) { textShort = text }
+    private fun setTextShort(text: String) { textShort = text }
 
     fun setOnClickListener(fn: View.OnClickListener) = textView.setOnClickListener(fn)
 
-    fun typefaceMono() { textView.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL) }
+    private fun typefaceMono() { textView.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL) }
 
     val card get() = objectCard.card
 }

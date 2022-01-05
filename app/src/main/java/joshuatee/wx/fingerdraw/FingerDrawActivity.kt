@@ -9,7 +9,6 @@ import android.app.Activity
 import android.graphics.Color
 import android.os.Bundle
 import android.widget.RelativeLayout
-
 import joshuatee.wx.R
 
 /**

@@ -23,6 +23,7 @@ package joshuatee.wx.activitiesmisc
 
 import joshuatee.wx.util.UtilityDownloadNws
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.common.GlobalVariables
 import joshuatee.wx.MyApplication
 import joshuatee.wx.RegExp
 import joshuatee.wx.UIPreferences
@@ -49,21 +50,17 @@ class CapAlert {
     var effective = ""
     var expires = ""
     var points = listOf<String>()
+    private var nwsHeadLine = ""
+    var windThreat = ""
+    private var maxWindGust = ""
+    var hailThreat = ""
+    private var maxHailSize = ""
+    private var tornadoThreat = ""
+    var motion = ""
+    var extended = ""
 
     fun getClosestRadar(): String {
         return ObjectWarning.getClosestRadarCompute(points)
-//        return if (points.size > 2) {
-//            val lat = points[1]
-//            val lon = "-" + points[0]
-//            val radarSites = UtilityLocation.getNearestRadarSites(LatLon(lat, lon), 1, includeTdwr = false)
-//            if (radarSites.isEmpty()) {
-//                ""
-//            } else {
-//                radarSites[0].name
-//            }
-//        } else {
-//            ""
-//        }
     }
 
     companion object {
@@ -117,25 +114,67 @@ class CapAlert {
             capAlert.summary = capAlert.summary.replace("ABC123", "\n\n")
             capAlert.vtec = UtilityString.parse(html, RegExp.warningVtecPattern)
             capAlert.instructions = capAlert.instructions.replace("\\n", " ")
+
+            capAlert.windThreat = UtilityString.parse(html, "\"windThreat\": \\[.*?\"(.*?)\".*?\\],")
+            capAlert.maxWindGust = UtilityString.parse(html, "\"maxWindGust\": \\[.*?\"(.*?)\".*?\\],")
+            capAlert.hailThreat = UtilityString.parse(html, "\"hailThreat\": \\[.*?\"(.*?)\".*?\\],")
+            capAlert.maxHailSize = UtilityString.parse(html, "\"maxHailSize\": \\[\\s*(.*?)\\s*\\],")
+            capAlert.tornadoThreat = UtilityString.parse(html, "\"tornadoDetection\": \\[.*?\"(.*?)\".*?\\],")
+            capAlert.nwsHeadLine = UtilityString.parse(html, "\"NWSheadline\": \\[.*?\"(.*?)\".*?\\],")
+            capAlert.motion = UtilityString.parse(html, "\"eventMotionDescription\": \\[.*?\"(.*?)\".*?\\],")
+
             capAlert.text = ""
             capAlert.text += capAlert.title
-            capAlert.text += MyApplication.newline + MyApplication.newline
+            capAlert.text += GlobalVariables.newline
             capAlert.text += "Counties: "
             capAlert.text += capAlert.area
-            capAlert.text += MyApplication.newline + MyApplication.newline
+            capAlert.text += GlobalVariables.newline
+
+            if (capAlert.nwsHeadLine != "") {
+                capAlert.summary = "..." + capAlert.nwsHeadLine + "..." + GlobalVariables.newline + GlobalVariables.newline + capAlert.summary
+            }
+
             capAlert.text += capAlert.summary
-            capAlert.text += MyApplication.newline + MyApplication.newline
-            capAlert.text += capAlert.instructions
-            capAlert.text += MyApplication.newline + MyApplication.newline
+            capAlert.text += GlobalVariables.newline + GlobalVariables.newline
+            if (capAlert.instructions != "") {
+                capAlert.text += "PRECAUTIONARY/PREPAREDNESS ACTIONS..." + GlobalVariables.newline + GlobalVariables.newline
+                capAlert.text += capAlert.instructions
+            }
+
+            capAlert.extended += GlobalVariables.newline + GlobalVariables.newline
+            if (capAlert.windThreat != "") {
+                capAlert.extended += "WIND THREAT...${capAlert.windThreat}"
+                capAlert.extended += GlobalVariables.newline
+            }
+            if (capAlert.maxWindGust != "" && capAlert.maxWindGust != "0") {
+                capAlert.extended += "MAX WIND GUST...${capAlert.maxWindGust}"
+                capAlert.extended += GlobalVariables.newline
+            }
+            if (capAlert.hailThreat != "") {
+                capAlert.extended += "HAIL THREAT...${capAlert.hailThreat}"
+                capAlert.extended += GlobalVariables.newline
+
+                capAlert.extended += "MAX HAIL SIZE...${capAlert.maxHailSize} in"
+                capAlert.extended += GlobalVariables.newline
+            }
+            if (capAlert.tornadoThreat != "") {
+                capAlert.extended += "TORNADO THREAT...${capAlert.tornadoThreat}"
+                capAlert.extended += GlobalVariables.newline
+            }
+            capAlert.extended += capAlert.motion + GlobalVariables.newline
+            capAlert.extended += capAlert.vtec + GlobalVariables.newline
+
             capAlert.summary = capAlert.summary.replace("<br>\\*".toRegex(), "<br><br>*")
             return capAlert
         }
 
         private fun getWarningsFromJson(html: String): List<String> {
             val data = html.replace("\n", "").replace(" ", "")
-            // var points = data.parseFirst("\"coordinates\":\\[\\[(.*?)\\]\\]\\}")
             var points = data.parseFirst(RegExp.warningLatLonPattern)
-            points = points.replace("[", "").replace("]", "").replace(",", " ").replace("-", "")
+            points = points.replace("[", "")
+                    .replace("]", "")
+                    .replace(",", " ")
+                    .replace("-", "")
             return points.split(" ")
         }
     }

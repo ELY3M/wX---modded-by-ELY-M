@@ -24,7 +24,8 @@
             android:layout_weight="1"
             android:background="@color/gray_dark"
             android:clickable="true"
-            android:contentDescription="@string/clear" />
+            android:contentDescription="@string/clear"
+            android:focusable="true" />
 
         <ImageButton
             android:id="@+id/record_overlay_distancetool"
@@ -33,7 +34,8 @@
             android:layout_weight="1"
             android:background="@color/gray_dark"
             android:clickable="true"
-            android:contentDescription="@string/clear" />
+            android:contentDescription="@string/clear"
+            android:focusable="true" />
 
         <ImageButton
             android:id="@+id/record_overlay_drawtool"

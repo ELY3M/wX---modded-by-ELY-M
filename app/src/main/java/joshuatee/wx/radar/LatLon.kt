@@ -30,8 +30,8 @@ import kotlin.math.cos
 import kotlin.math.sin
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.util.ProjectionNumbers
+import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityCanvasProjection
-
 
 class LatLon() {
 
@@ -41,42 +41,42 @@ class LatLon() {
     private var yStr = "0.0"
 
     constructor(latLon: DoubleArray) : this() {
-        this.latNum = latLon[0]
-        this.lonNum = latLon[1]
-        this.xStr = this.latNum.toString()
-        this.yStr = this.lonNum.toString()
+        latNum = latLon[0]
+        lonNum = latLon[1]
+        xStr = latNum.toString()
+        yStr = lonNum.toString()
     }
 
     constructor(latNum: Double, lonNum: Double) : this() {
         this.latNum = latNum
         this.lonNum = lonNum
-        this.xStr = this.latNum.toString()
-        this.yStr = this.lonNum.toString()
+        xStr = latNum.toString()
+        yStr = lonNum.toString()
     }
 
     constructor(xStr: String, yStr: String) : this() {
         this.xStr = xStr
         this.yStr = yStr
-        this.latNum = this.xStr.toDoubleOrNull() ?: 0.0
-        this.lonNum = this.yStr.toDoubleOrNull() ?: 0.0
+        latNum = To.double(xStr)
+        lonNum = To.double(yStr)
     }
 
     constructor(temp: String) : this() {
-        this.xStr = temp.substring(0, 4)
-        this.yStr = temp.substring(4, 8)
-        if (this.yStr.matches("^0".toRegex())) {
-            this.yStr = this.yStr.replace("^0".toRegex(), "")
-            this.yStr += "0"
+        xStr = temp.substring(0, 4)
+        yStr = temp.substring(4, 8)
+        if (yStr.matches("^0".toRegex())) {
+            yStr = yStr.replace("^0".toRegex(), "")
+            yStr += "0"
         }
-        this.xStr = UtilityString.addPeriodBeforeLastTwoChars(this.xStr)
-        this.yStr = UtilityString.addPeriodBeforeLastTwoChars(this.yStr)
-        var tmpDbl = yStr.toDoubleOrNull() ?: 0.0
+        xStr = UtilityString.addPeriodBeforeLastTwoChars(xStr)
+        yStr = UtilityString.addPeriodBeforeLastTwoChars(yStr)
+        var tmpDbl = To.double(yStr)
         if (tmpDbl < 40.00) {
             tmpDbl += 100
-            this.yStr = tmpDbl.toString()
+            yStr = tmpDbl.toString()
         }
-        this.latNum = xStr.toDoubleOrNull() ?: 0.0
-        this.lonNum = yStr.toDoubleOrNull() ?: 0.0
+        latNum = To.double(xStr)
+        lonNum = To.double(yStr)
     }
 
     var lat: Double
@@ -97,14 +97,14 @@ class LatLon() {
         get() { return xStr }
         set(newValue) {
             xStr = newValue
-            latNum = newValue.toDoubleOrNull() ?: 0.0
+            latNum = To.double(newValue)
         }
 
     var lonString: String
         get() { return yStr }
         set(newValue) {
             yStr = newValue
-            lonNum = newValue.toDoubleOrNull() ?: 0.0
+            lonNum = To.double(newValue)
         }
 
     fun asList() = listOf(lat, lon)
@@ -138,14 +138,13 @@ class LatLon() {
         // for UtilityWatch need to multiply Y by -1.0
         fun parseStringToLatLons(stringOfNumbers: String, multiplier: Double = 1.0, isWarning: Boolean = true): List<LatLon> {
             val list = stringOfNumbers.split(" ").dropLastWhile { it.isEmpty() }
-            // FIXME move to list of LatLon
             val x = mutableListOf<Double>()
             val y = mutableListOf<Double>()
             list.indices.forEach { i ->
                 if (isWarning) {
-                    if (i.isEven()) y.add((list[i].toDoubleOrNull() ?: 0.0) * multiplier) else x.add(list[i].toDoubleOrNull() ?: 0.0)
+                    if (i.isEven()) y.add(To.double(list[i]) * multiplier) else x.add(To.double(list[i]))
                 } else {
-                    if (i.isEven()) x.add(list[i].toDoubleOrNull() ?: 0.0) else y.add((list[i].toDoubleOrNull() ?: 0.0) * multiplier)
+                    if (i.isEven()) x.add(To.double(list[i])) else y.add(To.double(list[i]) * multiplier)
                 }
             }
             val latLons = mutableListOf<LatLon>()

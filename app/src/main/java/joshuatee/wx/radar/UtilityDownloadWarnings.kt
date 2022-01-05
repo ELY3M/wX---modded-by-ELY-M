@@ -55,7 +55,11 @@ internal object UtilityDownloadWarnings {
         }
     }
 
-    fun getForSevereDashboard(context: Context) { if (timerSevereDashboard.isRefreshNeeded(context)) getPolygonVtec(context) }
+    fun getForSevereDashboard(context: Context) {
+        if (timerSevereDashboard.isRefreshNeeded(context)) {
+            getPolygonVtec(context)
+        }
+    }
 
     // The only difference from the get method above is the absence of any preference check
     // ie - if you call this you are going to download regardless
@@ -64,11 +68,17 @@ internal object UtilityDownloadWarnings {
     private fun getPolygonVtec(context: Context) {
         // FIXME improve structure
         val tstData = UtilityDownloadNws.getStringFromUrlNoAcceptHeader(tStormUrl)
-        if (tstData != "") MyApplication.severeDashboardTst.valueSet(context, tstData)
+        if (tstData != "") {
+            MyApplication.severeDashboardTst.valueSet(context, tstData)
+        }
         val ffwData = UtilityDownloadNws.getStringFromUrlNoAcceptHeader(ffwUrl)
-        if (ffwData != "") MyApplication.severeDashboardFfw.valueSet(context, ffwData)
+        if (ffwData != "") {
+            MyApplication.severeDashboardFfw.valueSet(context, ffwData)
+        }
         val torData = UtilityDownloadNws.getStringFromUrlNoAcceptHeader(tornadoUrl)
-        if (torData != "") MyApplication.severeDashboardTor.valueSet(context, torData)
+        if (torData != "") {
+            MyApplication.severeDashboardTor.valueSet(context, torData)
+        }
     }
 
     fun getVtecByType(type: PolygonWarningType) = UtilityDownloadNws.getStringFromUrlNoAcceptHeader(baseUrl + type.urlToken)

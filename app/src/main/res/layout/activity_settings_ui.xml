@@ -63,7 +63,7 @@
                             android:gravity="start"
                             android:labelFor="@+id/et1"
                             android:padding="@dimen/padding"
-                            android:text="Tab 1"
+                            android:text="@string/tab_1"
                             android:textSize="@dimen/normal_text" />
 
                         <EditText
@@ -71,7 +71,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
-                            android:hint="LOCAL"
+                            android:hint="@string/local"
                             android:inputType="text"
                             android:importantForAutofill="no" />
                     </LinearLayout>
@@ -90,7 +90,7 @@
                             android:gravity="start"
                             android:labelFor="@+id/et2"
                             android:padding="@dimen/padding"
-                            android:text="Tab 2"
+                            android:text="@string/tab_2"
                             android:textSize="@dimen/normal_text" />
 
                         <EditText
@@ -98,7 +98,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
-                            android:hint="SPC"
+                            android:hint="@string/spc"
                             android:inputType="text"
                             android:importantForAutofill="no" />
                     </LinearLayout>
@@ -117,7 +117,7 @@
                             android:gravity="start"
                             android:labelFor="@+id/et3"
                             android:padding="@dimen/padding"
-                            android:text="Tab 3"
+                            android:text="@string/tab_3"
                             android:textSize="@dimen/normal_text" />
 
                         <EditText
@@ -125,7 +125,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
-                            android:hint="MISC"
+                            android:hint="@string/misc"
                             android:inputType="text"
                             android:importantForAutofill="no" />
                     </LinearLayout>

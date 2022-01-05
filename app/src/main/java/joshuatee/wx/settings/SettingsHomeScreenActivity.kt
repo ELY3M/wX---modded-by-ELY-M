@@ -282,7 +282,7 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             updateList()
             recyclerView.notifyDataSetChanged()
         } else {
-            UtilityUI.makeSnackBar(recyclerView.recyclerView, "$textProduct is already in home screen.")
+            ObjectPopupMessage(recyclerView.recyclerView, "$textProduct is already in home screen.")
         }
     }
 } 

@@ -55,14 +55,18 @@ class ObjectTextView(val context: Context) {
     constructor(context: Context, color: Int) : this(context) { this.color = color }
 
     constructor(context: Context, backgroundText: Boolean) : this(context) {
-        if (backgroundText) setAsBackgroundText()
+        if (backgroundText) {
+            setAsBackgroundText()
+        }
     }
 
     constructor(view: View, resourceId: Int) : this(view.context) { tv = view.findViewById(resourceId) }
 
     constructor(view: View, resourceId: Int, backgroundText: Boolean) : this(view, resourceId) {
         tv = view.findViewById(resourceId)
-        if (backgroundText) setAsBackgroundText()
+        if (backgroundText) {
+            setAsBackgroundText()
+        }
     }
 
     constructor(view: View, resourceId: Int, color: Int) : this(view, resourceId) { this.color = color }
@@ -84,7 +88,7 @@ class ObjectTextView(val context: Context) {
         }
     }
 
-    fun setTextSize(size: TextSize) = refreshTextSize(size)
+    fun setTextSize(size: TextSize): Unit = refreshTextSize(size)
 
     var color
         get() = tv.currentTextColor
@@ -100,11 +104,11 @@ class ObjectTextView(val context: Context) {
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeSmall)
     }
 
-    fun setOnClickListener(fn: View.OnClickListener) = tv.setOnClickListener(fn)
+    fun setOnClickListener(fn: View.OnClickListener): Unit = tv.setOnClickListener(fn)
 
-    fun setPadding(left: Int, top: Int, right: Int, bottom: Int) = tv.setPadding(left, top, right, bottom)
+    fun setPadding(left: Int, top: Int, right: Int, bottom: Int): Unit = tv.setPadding(left, top, right, bottom)
 
-    fun setPadding(padding: Int) = tv.setPadding(padding)
+    fun setPadding(padding: Int): Unit = tv.setPadding(padding)
 }
 
 

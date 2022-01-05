@@ -42,17 +42,14 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.os.Handler
 import android.os.Looper
 import android.view.*
-
 import joshuatee.wx.R
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.telecine.TelecineService
 import joshuatee.wx.MyApplication
 import joshuatee.wx.settings.SettingsRadarActivity
 import joshuatee.wx.ui.*
-
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
-
 import joshuatee.wx.GlobalArrays
 import joshuatee.wx.activitiesmisc.SevereDashboardActivity
 import joshuatee.wx.objects.ObjectIntent
@@ -177,6 +174,8 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
         toolbar.setOnClickListener { ObjectIntent(this, SevereDashboardActivity::class.java) }
         UtilityUI.immersiveMode(this)
         if (UIPreferences.radarStatusBarTransparent) {
+//            This constant was deprecated in API level 30.
+//            Use Window#setStatusBarColor(int) with a half-translucent color instead.
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window.statusBarColor = Color.TRANSPARENT
         }
@@ -842,7 +841,7 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     private val handler = Handler(Looper.getMainLooper())
 
-    private var mStatusChecker: Runnable = object : Runnable {
+    private val mStatusChecker: Runnable = object : Runnable {
         override fun run() {
             if (mHandler != null) {
                 if (loopCount > 0) {
@@ -969,7 +968,6 @@ class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     this@WXGLRadarActivity,
                     wxglSurfaceView,
                     wxglRender,
-                    uiDispatcher,
                     ::longPressRadarSiteSwitch
             )
             dialog.dismiss()

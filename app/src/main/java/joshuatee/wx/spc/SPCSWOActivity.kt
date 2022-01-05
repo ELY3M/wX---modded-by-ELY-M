@@ -23,13 +23,11 @@ package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
-
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
@@ -37,13 +35,12 @@ import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShare
-
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectLinearLayout
 import joshuatee.wx.ui.UtilityUI
-import joshuatee.wx.util.UtilityLog
-import kotlinx.coroutines.*
+import joshuatee.wx.util.UtilityImg
 
 class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -56,9 +53,9 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object { const val NUMBER = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var html = ""
-    private var bitmaps = listOf<Bitmap>()
+    private val bitmaps = MutableList(5) { UtilityImg.getBlankBitmap() }
+    private var urls = listOf<String>()
     private lateinit var activityArguments: Array<String>
     private var day = ""
     private var playlistProd = ""
@@ -66,6 +63,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var linearLayout: LinearLayout
     private val objectCardImageList = mutableListOf<ObjectCardImage>()
     private var imagesPerRow = 2
+    private var imageLabel = ""
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +75,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         toolbarBottom.setOnMenuItemClickListener(this)
         var numberOfImages = 0
         val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout>()
-        (0..4).forEach { _ ->
+        (0..4).forEach { index ->
             if (numberOfImages % imagesPerRow == 0) {
                 val objectLinearLayout = ObjectLinearLayout(this, linearLayout)
                 objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
@@ -86,6 +84,7 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
             } else {
                 objectCardImageList.add(ObjectCardImage(this, horizontalLinearLayouts.last().linearLayout))
             }
+            objectCardImageList[index].visibility = View.GONE
             numberOfImages += 1
         }
         objectCardText = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
@@ -131,58 +130,53 @@ class SpcSwoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent() {
         var textUrl = "SWODY$day"
-        val imageLabel = "Day $day Convective Outlook"
-        var urls: List<String>
+        imageLabel = "Day $day Convective Outlook"
         if (day == "4-8") {
             textUrl = "SWOD48"
         }
-        withContext(Dispatchers.IO) {
-            html = UtilityDownload.getTextProduct(this@SpcSwoActivity, textUrl)
-            urls = UtilitySpcSwo.getUrls(day)
-            bitmaps = urls.map { it.getImage() }
-        }
+        FutureVoid(this, ::downloadImages, ::showImages)
+        FutureVoid(this, { html = UtilityDownload.getTextProduct(this@SpcSwoActivity, textUrl) }, ::showText)
+    }
+
+    private fun showText() {
         objectCardText.text = html
         toolbar.subtitle = html.parse("(Valid.*?Z - [0-9]{6}Z)")
         if (activityArguments[1] == "sound") {
             UtilityTts.synthesizeTextAndPlay(applicationContext, html, "spcswo")
         }
-        when (day) {
-            "1", "2" -> {
-                listOf(0, 1, 2, 3).forEach {
-                    setImageAndClickAction(it, urls, imageLabel)
-                }
-                objectCardImageList[4].visibility = View.GONE
-            }
-            "3" -> {
-                listOf(0, 1).forEach {
-                    setImageAndClickAction(it, urls, imageLabel)
-                }
-                (2..4).forEach {
-                    objectCardImageList[it].visibility = View.GONE
-                }
-            }
-            "4-8" -> listOf(0, 1, 2, 3, 4).forEach {
-                setImageAndClickAction(it, urls, imageLabel)
-            }
+    }
+
+    private fun downloadImages() {
+        urls = UtilitySpcSwo.getUrls(day)
+        for (index in urls.indices) {
+            FutureVoid(this, { bitmaps[index] = urls[index].getImage() }, { showImage(index) })
         }
+    }
+
+    private fun showImage(i: Int) {
+        setImageAndClickAction(i)
+    }
+
+    private fun showImages() {
+        // do nothing
     }
 
     private fun showImageProduct(imageUrl: String, title: String) {
         ObjectIntent.showImage(this, arrayOf(imageUrl, title))
     }
 
-    private fun setImageAndClickAction(index: Int, urls: List<String>, textUrl: String) {
+    private fun setImageAndClickAction(index: Int) {
+        objectCardImageList[index].visibility = View.VISIBLE
         objectCardImageList[index].setImage(bitmaps[index], imagesPerRow)
         objectCardImageList[index].setOnClickListener {
-            showImageProduct(urls[index], textUrl)
+            showImageProduct(urls[index], imageLabel)
         }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         val textToShare = UtilityShare.prepTextForShare(html)
-        UtilityLog.d("wx", textToShare)
         if (audioPlayMenu(item.itemId, html, playlistProd, playlistProd)) {
             return true
         }

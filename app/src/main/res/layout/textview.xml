@@ -15,7 +15,3 @@
         android:padding="@dimen/padding" />
 
 </androidx.cardview.widget.CardView>
-
-
-
-

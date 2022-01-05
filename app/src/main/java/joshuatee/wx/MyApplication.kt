@@ -32,21 +32,22 @@ import androidx.preference.PreferenceManager
 import android.provider.Settings
 import android.util.DisplayMetrics
 import android.util.TypedValue
-import joshuatee.wx.audio.UtilityTts
-
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
-
+import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.notifications.UtilityNotificationTextProduct
 import joshuatee.wx.objects.GeographyType
 import joshuatee.wx.objects.ObjectPolygonWarning
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.objects.PolygonWarningType
-import joshuatee.wx.radar.*
+import joshuatee.wx.radar.UtilityMetar
+import joshuatee.wx.radar.UtilitySpotter
+import joshuatee.wx.radar.WXGLNexrad
 import joshuatee.wx.radar.UtilityDownloadMcd
 import joshuatee.wx.radar.UtilityDownloadMpd
 import joshuatee.wx.radar.UtilityDownloadWarnings
 import joshuatee.wx.radar.UtilityDownloadWatch
+import joshuatee.wx.radar.UtilitySwoDayOne
 import joshuatee.wx.radarcolorpalettes.ObjectColorPalette
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityHomeScreen
@@ -156,7 +157,6 @@ class MyApplication : Application() {
         const val nwsGoesWebsitePrefix = "https://www.goes.noaa.gov"
         const val nwsOpcWebsitePrefix = "https://ocean.weather.gov"
         const val nwsNhcWebsitePrefix = "https://www.nhc.noaa.gov"
-        // const val nwsRadarWebsitePrefix = "https://radar.weather.gov"
         const val nwsMagNcepWebsitePrefix = "https://mag.ncep.noaa.gov"
         const val goes16Url = "https://cdn.star.nesdis.noaa.gov"
         const val goes16AnimUrl = "https://www.star.nesdis.noaa.gov"
@@ -237,9 +237,7 @@ class MyApplication : Application() {
         var srefFav = ""
         var spcMesoFav = ""
         var caRidFav = ""
-        //var spcmesoLabelFav = ""
         var nwsTextFav = ""
-        //var radarColorPalette = mutableMapOf<String, String>()
         var radarColorPalette = mutableMapOf<Int, String>()
         var radarColorPaletteList = mutableMapOf<Int, String>()
         var notifSoundUri = ""
@@ -248,7 +246,6 @@ class MyApplication : Application() {
         var alertNotificationSoundTornadoCurrent = false
         var alertNotificationSoundSpcmcd = false
         var alertNotificationSoundWpcmpd = false
-        //var alertNotificationSoundNhcEpac = false
         var alertNotificationSoundNhcAtl = false
         var alertNotificationSoundSpcwat = false
         var alertNotificationSoundSpcswo = false
@@ -311,40 +308,25 @@ class MyApplication : Application() {
         const val ICON_ALERT = R.drawable.ic_warning_24dp
         const val ICON_RADAR = R.drawable.ic_flash_on_24dp
         const val ICON_RADAR_WHITE = R.drawable.ic_flash_on_24dp_white
-        // const val ICON_RADAR_BLACK = R.drawable.ic_flash_on_24dp_black
-
         const val ICON_FORECAST = R.drawable.ic_place_24dp
         const val ICON_CURRENT = R.drawable.ic_info_outline_24dp
-        // const val ICON_CURRENT_BLACK = R.drawable.ic_info_outline_24dp_black
         const val ICON_CURRENT_WHITE = R.drawable.ic_info_outline_24dp_white
-
         const val ICON_NHC_1 = R.drawable.ic_brightness_auto_24dp
-        //const val ICON_NHC_2 = R.drawable.ic_brightness_medium_24dp
         const val ICON_DELETE = R.drawable.ic_delete_24dp
         const val ICON_DELETE_WHITE = R.drawable.ic_delete_24dp_white
-
         const val STAR_ICON = R.drawable.ic_star_24dp
         const val STAR_OUTLINE_ICON = R.drawable.ic_star_outline_24dp
         const val STAR_ICON_WHITE = R.drawable.ic_star_24dp_white
         const val STAR_OUTLINE_ICON_WHITE = R.drawable.ic_star_outline_24dp_white
-
-        //const val ICON_PLAY = R.drawable.ic_play_arrow_24dp
         const val ICON_PLAY_WHITE = R.drawable.ic_play_arrow_24dp_white
-
-        //const val ICON_STOP = R.drawable.ic_stop_24dp
         const val ICON_STOP_WHITE = R.drawable.ic_stop_24dp_white
-
         const val ICON_MIC = R.drawable.ic_mic_24dp
         const val ICON_PAUSE = R.drawable.ic_pause_24dp
         const val ICON_PAUSE_WHITE = R.drawable.ic_pause_24dp_white
-
         const val ICON_PAUSE_PRESSED = R.drawable.ic_pause_white_24dp
         const val ICON_PAUSE_PRESSED_BLUE = R.drawable.ic_pause_blue_24dp
         const val ICON_ADD = R.drawable.ic_add_box_24dp
         const val ICON_ADD2 = R.drawable.ic_add2_box_24dp_white
-
-        //const val ICON_BACK = R.drawable.ic_keyboard_arrow_left_24dp
-        //const val ICON_FORWARD = R.drawable.ic_keyboard_arrow_right_24dp
         const val ICON_SKIP_BACK = R.drawable.ic_skip_previous_24dp
         const val ICON_SKIP_FORWARD = R.drawable.ic_skip_next_24dp
         var spchrrrZoom = 0.0f
@@ -359,14 +341,11 @@ class MyApplication : Application() {
         var paddingSmall = 0
         var tabHeaders = arrayOf("", "", "")
         var radarLocationUpdateInterval = 10
-
         //
         // Legacy forecast support
         //
         var utilUS_weather_summary_pattern: Pattern = Pattern.compile(".*?weather-summary=(.*?)/>.*?")
         var utilUS_period_name_pattern: Pattern = Pattern.compile(".*?period-name=(.*?)>.*?")
-        // var utilUS_headline_pattern: Pattern = Pattern.compile(".*?headline=(.*?)>.*?")
-        // var utilUS_hazardtexturl_pattern: Pattern = Pattern.compile(".*?<hazardTextURL>(.*?)</hazardTextURL>.*?")
         var xml_value_pattern: Pattern = Pattern.compile("<value>")
 
         fun initPreferences(context: Context) {
@@ -421,7 +400,6 @@ class MyApplication : Application() {
             srefFav = getInitialPreferenceString("SREF_FAV", prefSeparator)
             spcMesoFav = getInitialPreferenceString("SPCMESO_FAV", prefSeparator)
             caRidFav = getInitialPreferenceString("RID_CA_FAV", prefSeparator)
-            //spcmesoLabelFav = getInitialPreferenceString("SPCMESO_LABEL_FAV", prefSeparator)
             nwsTextFav = getInitialPreferenceString("NWS_TEXT_FAV", prefSeparator)
             notifSoundUri = getInitialPreferenceString("NOTIF_SOUND_URI", "")
             if (notifSoundUri == "") notifSoundUri = Settings.System.DEFAULT_NOTIFICATION_URI.toString()
@@ -433,7 +411,6 @@ class MyApplication : Application() {
             alertNotificationSoundTornadoCurrent = getInitialPreference("ALERT_NOTIFICATION_SOUND_TORNADO", "false")
             alertNotificationSoundSpcmcd = getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCMCD", "false")
             alertNotificationSoundWpcmpd = getInitialPreference("ALERT_NOTIFICATION_SOUND_WPCMPD", "false")
-            //alertNotificationSoundNhcEpac = getInitialPreference("ALERT_NOTIFICATION_SOUND_NHC_EPAC", "false")
             alertNotificationSoundNhcAtl = getInitialPreference("ALERT_NOTIFICATION_SOUND_NHC_ATL", "false")
             alertNotificationSoundSpcwat = getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCWAT", "false")
             alertNotificationSoundSpcswo = getInitialPreference("ALERT_NOTIFICATION_SOUND_SPCSWO", "false")

@@ -23,17 +23,13 @@ package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.notifications.UtilityWXJobService
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.ui.BaseActivity
-import joshuatee.wx.ui.ObjectFab
-import joshuatee.wx.ui.ObjectRecyclerViewGeneric
-import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.ui.*
 import joshuatee.wx.util.ObjectCurrentConditions
-import kotlinx.coroutines.*
 
 class SettingsLocationRecyclerViewActivity : BaseActivity() {
 
@@ -41,7 +37,6 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     // Activity to manage ( add, delete, edit ) all locations
     //
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var locations = mutableListOf<String>()
     private lateinit var recyclerView: ObjectRecyclerViewGeneric
     private lateinit var settingsLocationAdapterList: SettingsLocationAdapterList
@@ -61,15 +56,21 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         getContent()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent() {
         currentConditions.clear()
-        withContext(Dispatchers.IO) {
-            MyApplication.locations.indices.forEach { index ->
-                val objectForecastPackageCurrentConditions = ObjectCurrentConditions(this@SettingsLocationRecyclerViewActivity, index)
-                currentConditions.add(objectForecastPackageCurrentConditions)
-                objectForecastPackageCurrentConditions.format()
-            }
+        FutureVoid(this@SettingsLocationRecyclerViewActivity, ::download, ::update)
+
+    }
+
+    private fun download() {
+        MyApplication.locations.indices.forEach { index ->
+            val objectForecastPackageCurrentConditions = ObjectCurrentConditions(this@SettingsLocationRecyclerViewActivity, index)
+            currentConditions.add(objectForecastPackageCurrentConditions)
+            objectForecastPackageCurrentConditions.format()
         }
+    }
+
+    private fun update() {
         updateListWithCurrentConditions()
         settingsLocationAdapterList.notifyDataSetChanged()
     }
@@ -112,11 +113,12 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
         if (settingsLocationAdapterList.itemCount > 1) {
             Location.delete(this, (position + 1).toString())
             settingsLocationAdapterList.deleteItem(position)
-            settingsLocationAdapterList.notifyDataSetChanged()
+//            settingsLocationAdapterList.notifyDataSetChanged()
+            settingsLocationAdapterList.notifyItemRemoved(position)
             updateTitle()
             UtilityWXJobService.startService(this)
         } else {
-            UtilityUI.makeSnackBar(recyclerView.recyclerView, "Must have at least one location.")
+            ObjectPopupMessage(recyclerView.recyclerView, "Must have at least one location.")
         }
     }
 

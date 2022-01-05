@@ -22,7 +22,7 @@ class FileProvider : androidx.core.content.FileProvider() {
         selection: String?,
         selectionArgs: Array<String>?,
         sortOrder: String?
-    ): Cursor? {
+    ): Cursor {
         val source = super.query(uri, projection, selection, selectionArgs, sortOrder)
         val columnNames = source!!.columnNames
         val newColumnNames = columnNamesWithData(columnNames)

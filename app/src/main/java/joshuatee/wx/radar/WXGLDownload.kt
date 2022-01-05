@@ -28,6 +28,7 @@ import java.io.InputStream
 import java.util.Locale
 
 import joshuatee.wx.MyApplication
+import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityFileManagement
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityLog
@@ -110,7 +111,8 @@ class WXGLDownload {
                     if (tmpK < 0) {
                         tmpK += 251
                     }
-                    fileList.add("sn." + String.format("%4s", tmpK.toString()).replace(' ', '0'))
+                    // fileList.add("sn." + String.format("%4s", tmpK.toString()).replace(' ', '0'))
+                    fileList.add("sn." + To.stringPadLeftZeros(tmpK, 4))
                     k += 1
                     j += 1
                 }

@@ -53,8 +53,6 @@
                 android:paddingEnd="@dimen/padding" />
         </LinearLayout>
 
-        <!--android:maxLines="3"
-            android:minLines="1"-->
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/text2"
             android:layout_width="wrap_content"
@@ -65,7 +63,3 @@
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>
-
-
-
-

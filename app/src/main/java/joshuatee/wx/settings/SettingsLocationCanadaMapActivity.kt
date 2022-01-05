@@ -26,20 +26,20 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.view.View.OnClickListener
-
 import joshuatee.wx.R
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.MyApplication
-
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.util.*
 import java.util.*
 
 class SettingsLocationCanadaMapActivity : BaseActivity(), OnClickListener {
 
+    //
     // Use image maps to select locations for canada to save
     // arg1: province or territory
+    //
     //
 
     companion object {

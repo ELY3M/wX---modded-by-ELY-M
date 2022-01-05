@@ -23,9 +23,7 @@ import android.widget.TextView
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.util.UtilityImg
-
 import java.util.Locale
-
 import android.graphics.PixelFormat.TRANSLUCENT
 import android.os.Build.VERSION_CODES.LOLLIPOP_MR1
 import android.text.TextUtils.getLayoutDirectionFromLocale
@@ -96,7 +94,9 @@ internal class OverlayView private constructor(
         screenshotView.setOnClickListener(this)
         cancelView.setOnClickListener(this)
         startView.setOnClickListener(this)
-        if (!showDistanceTool) distanceToolView.visibility = View.GONE
+        if (!showDistanceTool) {
+            distanceToolView.visibility = View.GONE
+        }
         if (!showRecordingTools) {
             screenshotView.visibility = View.GONE
             startView.visibility = View.GONE

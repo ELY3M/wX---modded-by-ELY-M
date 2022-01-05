@@ -23,7 +23,6 @@ package joshuatee.wx.spc
 
 import android.annotation.SuppressLint
 import java.util.Locale
-
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -32,14 +31,13 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.safeGet
-
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
 import joshuatee.wx.audio.AudioPlayActivity
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
-import kotlinx.coroutines.*
 
 class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -52,9 +50,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object { const val URL = "" }
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var firstTime = true
-    private var prod = ""
     private var wfo = ""
     private lateinit var imageMap: ObjectImageMap
     private var mapShown = false
@@ -64,7 +60,9 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private var locations = listOf<String>()
     private val prefToken = "WFO_FAV"
     private var ridFavOld = ""
-    private var wfoProd = listOf<String>()
+    private var lsrList = mutableListOf<String>()
+    private var textList = mutableListOf<ObjectCardText>()
+    private var numberLSR = ""
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.afd_top, menu)
@@ -88,12 +86,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (wfo == "") {
             wfo = "OUN"
         }
-        prod = if (activityArguments[1] == "") {
-            MyApplication.wfoTextFav
-        } else {
-            activityArguments[1]
-        }
-        toolbar.title = prod
+        title = "LSR"
         locations = UtilityFavorites.setupMenu(this, MyApplication.wfoFav, wfo, prefToken)
         imageMap = ObjectImageMap(this, this, R.id.map, toolbar, toolbarBottom, listOf<View>(scrollView))
         imageMap.addClickHandler(::mapSwitch, UtilityImageMap::mapToWfo)
@@ -108,13 +101,13 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
-        if (audioPlayMenu(item.itemId, wfoProd.toString(), prod, prod + wfo)) {
+        if (audioPlayMenu(item.itemId, lsrList.toString(), "LSR",  wfo)) {
             return true
         }
         when (item.itemId) {
             R.id.action_fav -> toggleFavorite()
             R.id.action_map -> imageMap.toggleMap()
-            R.id.action_share -> UtilityShare.text(this, prod + wfo, Utility.fromHtml(wfoProd.toString()))
+            R.id.action_share -> UtilityShare.text(this, "LSR$wfo", Utility.fromHtml(lsrList.toString()))
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -170,7 +163,7 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         objectDialogue.show()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent() {
         locations = UtilityFavorites.setupMenu(this@LsrByWfoActivity, MyApplication.wfoFav, wfo, prefToken)
         invalidateOptionsMenu()
         if (MyApplication.wfoFav.contains(":$wfo:")) {
@@ -181,32 +174,46 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         scrollView.smoothScrollTo(0, 0)
         ridFavOld = MyApplication.wfoFav
         linearLayout.removeAllViewsInLayout()
-        wfoProd = withContext(Dispatchers.IO) {
-            lsrFromWfo
-        }
-        wfoProd.forEach {
-            val objectCardText = ObjectCardText(this@LsrByWfoActivity, linearLayout, Utility.fromHtml(it))
-            objectCardText.typefaceMono()
-        }
+        FutureVoid(this, ::downloadFirst, ::getLsrFromWfo)
     }
 
-    private val lsrFromWfo: List<String>
-        get() {
-            val localStormReports: List<String>
-            val numberLSR = UtilityString.getHtmlAndParseLastMatch(
-                    "https://forecast.weather.gov/product.php?site=$wfo&issuedby=$wfo&product=LSR&format=txt&version=1&glossary=0",
-                    "product=LSR&format=TXT&version=(.*?)&glossary"
-            )
-            if (numberLSR == "") {
-                localStormReports = listOf("None issued by this office recently.")
-            } else {
-                var maxVersions = numberLSR.toIntOrNull() ?: 0
-                if (maxVersions > 30) {
-                    maxVersions = 30
-                }
-                localStormReports = (1..maxVersions + 1 step 2).map { UtilityDownload.getTextProduct("LSR$wfo", it) }
+    private fun downloadFirst() {
+        numberLSR = UtilityString.getHtmlAndParseLastMatch(
+                "https://forecast.weather.gov/product.php?site=$wfo&issuedby=$wfo&product=LSR&format=txt&version=1&glossary=0",
+                "product=LSR&format=TXT&version=(.*?)&glossary"
+        )
+    }
+
+    private fun download(i: Int , version: Int) {
+        lsrList[i] = UtilityDownload.getTextProduct("LSR$wfo", version)
+    }
+
+    private fun update(i: Int) {
+        textList[i].setText1(Utility.fromHtml(lsrList[i]))
+        textList[i].typefaceMono()
+    }
+
+    private fun getLsrFromWfo() {
+        lsrList.clear()
+        textList.clear()
+        if (numberLSR == "") {
+            lsrList = mutableListOf("None issued by this office recently.")
+            toolbar.subtitle = "Showing: None"
+        } else {
+            var maxVersions = To.int(numberLSR)
+            toolbar.subtitle = "Showing: " + (maxVersions - 1).toString()
+            if (maxVersions > 30) {
+                maxVersions = 30
             }
-            return localStormReports
+            var i = 0
+            (1..maxVersions + 1 step 2).forEach { version ->
+                lsrList.add("")
+                textList.add(ObjectCardText(this@LsrByWfoActivity, linearLayout))
+                val iFinal = i
+                FutureVoid(this, { download(iFinal, version) }, { update(iFinal) })
+                i += 1
+            }
         }
+    }
 }
 

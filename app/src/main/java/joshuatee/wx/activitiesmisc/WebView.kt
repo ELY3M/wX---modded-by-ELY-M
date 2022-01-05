@@ -29,7 +29,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
 import android.webkit.WebViewClient
-
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.ObjectIntent

@@ -40,8 +40,8 @@ import joshuatee.wx.canada.*
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.SettingsMainActivity
-import joshuatee.wx.ui.UtilityUI
-import joshuatee.wx.settings.SettingsAboutActivity
+import joshuatee.wx.ui.ObjectPopupMessage
+import joshuatee.wx.settings.SettingsAboutActivity //for about
 
 open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListener {
 
@@ -115,22 +115,18 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == requestOk && resultCode == Activity.RESULT_OK) {
             val thingsYouSaid = data!!.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-            UtilityUI.makeSnackBar(view, thingsYouSaid!![0])
+            ObjectPopupMessage(view, thingsYouSaid!![0])
             val string = thingsYouSaid[0]
             UtilityVoiceCommand.processCommand(this, view, string, Location.rid, Location.wfo, Location.state)
         }
     }
 
     fun openNexradRadar(context: Context) {
-//        if (Location.isUS) {
         if (!UIPreferences.dualpaneRadarIcon) {
             ObjectIntent.showRadar(context, arrayOf(Location.rid, ""))
         } else {
             ObjectIntent.showRadarMultiPane(context, arrayOf(Location.rid, "", "2"))
         }
-//        } else {
-//            ObjectIntent.showCanadaRadar(context, arrayOf(Location.rid, "rad"))
-//        }
     }
 
     fun openAfd() {
@@ -140,11 +136,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
     fun openSettings() = ObjectIntent(this, SettingsMainActivity::class.java)
 
     fun openVis() {
-//        if (Location.isUS) {
         ObjectIntent.showVis(this)
-//        } else {
-//            ObjectIntent.showCanadaRadar(this, arrayOf(Location.rid, "vis"))
-//        }
     }
 
     fun openDashboard() {

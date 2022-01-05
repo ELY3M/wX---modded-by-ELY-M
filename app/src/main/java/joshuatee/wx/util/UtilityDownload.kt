@@ -46,44 +46,18 @@ object UtilityDownload {
     private const val useNwsApi = false
 
     fun getRadarMosaic(context: Context): Bitmap {
-        val location = Location.currentLocationStr
-        val radarSite = Location.getRid(context, location)
-        var bitmap = UtilityImg.getBlankBitmap()
-        try {
-            if (!UIPreferences.useAwcRadarMosaic) {
-                val ridLoc = Utility.getRadarSiteName(radarSite)
-                // val nwsLocationArr = ridLoc.split(",").dropLastWhile { it.isEmpty() }
-                // val state = nwsLocationArr[0]
-                var k = Utility.readPref(context, "WIDGET_RADAR_LEVEL", "1km")
-                when (k) {
-                    "regional" -> k = "regional"
-                    "usa" -> k = "usa"
-                }
-                bitmap = if (Location.isUS(location)) {
-//                    if (k == "usa") {
-//                        UtilityUSImgNwsMosaic.get(context, "latest", false)
-//                    } else {
-//                        UtilityUSImgNwsMosaic.get(context, UtilityUSImgNwsMosaic.getSectorFromState(state), false)
-//                    }
-                    UtilityImg.getBlankBitmap()
-                } else {
-                    val province = Utility.readPref(context, "NWS" + location + "_STATE", "")
-//                    UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(context, UtilityCanada.getSectorFromProvince(province))
-                    UtilityImg.getBlankBitmap()
-                }
-            } else {
-                var product = "rad_rala"
-                val prefTokenSector = "AWCMOSAIC_SECTOR_LAST_USED"
-                val prefTokenProduct = "AWCMOSAIC_PRODUCT_LAST_USED"
-                var sector = "us"
-                sector = Utility.readPref(context, prefTokenSector, sector)
-                product = Utility.readPref(context, prefTokenProduct, product)
-                bitmap = UtilityAwcRadarMosaic.get(sector, product)
-            }
+        return try {
+            var product = "rad_rala"
+            val prefTokenSector = "AWCMOSAIC_SECTOR_LAST_USED"
+            val prefTokenProduct = "AWCMOSAIC_PRODUCT_LAST_USED"
+            var sector = "us"
+            sector = Utility.readPref(context, prefTokenSector, sector)
+            product = Utility.readPref(context, prefTokenProduct, product)
+            UtilityAwcRadarMosaic.get(sector, product)
         } catch (e: Exception) {
             UtilityLog.handleException(e)
+            UtilityImg.getBlankBitmap()
         }
-        return bitmap
     }
 
     fun getImageProduct(context: Context, product: String): Bitmap {
@@ -99,13 +73,7 @@ object UtilityDownload {
             "VIS_1KM", "VIS_MAIN" -> needsBitmap = false
             "CARAIN" -> if (Location.x.contains("CANADA")) {
                 needsBitmap = false
-                var rid = Location.rid
-                if (rid == "NAT") rid = "CAN"
-                bitmap = when (rid) {
-//                    "CAN", "PAC", "WRN", "ONT", "QUE", "ERN" -> UtilityCanadaImg.getRadarMosaicBitmapOptionsApplied(context, rid)
-//                    else -> UtilityCanadaImg.getRadarBitmapOptionsApplied(context, rid, "")
-                    else -> UtilityImg.getBlankBitmap()
-                }
+                bitmap = UtilityImg.getBlankBitmap()
             }
             "RAD_2KM" -> {
                 needsBitmap = false
@@ -251,10 +219,15 @@ object UtilityDownload {
                 bitmap = UtilityGoes.getImage("09", "CONUS")
             }
             "LTG" -> {
-                needsBitmap = false
-                bitmap = UtilityLightning.getImage(
-                        Utility.readPref(context, "LIGHTNING_SECTOR", "usa_big"), Utility.readPref(context, "LIGHTNING_PERIOD", "0.25")
-                )
+                if (UIPreferences.lightningUseGoes) {
+                    needsBitmap = false
+                    bitmap = UtilityGoes.getImage("GLM", "CONUS")
+                } else {
+                    needsBitmap = false
+                    bitmap = UtilityLightning.getImage(
+                            Utility.readPref(context, "LIGHTNING_SECTOR", "usa_big"), Utility.readPref(context, "LIGHTNING_PERIOD", "0.25")
+                    )
+                }
             }
             "SND" -> {
                 needsBitmap = false
@@ -563,9 +536,6 @@ object UtilityDownload {
         text = text.substring(text.indexOf('>') + 1)
         text = text.substring(text.indexOf('>') + 1)
         text = text.substring(text.indexOf('>') + 1)
-        //text = text.replace("^<br>".toRegex(), "")
-        //text = text.replace("<br><br>", MyApplication.newline)
-        //text = text.replace("<br>", " ")
         return text
     }
 

@@ -43,9 +43,10 @@ class ObjectNhcStormDetails(
         var status: String): Serializable {
 
     var center: String = "$lat $lon"
-    var dateTime: String = lastUpdate
-    var movement: String = UtilityMath.convertWindDir(movementDir.toDoubleOrNull() ?: 0.0) + " at " + movementSpeed + " mph"
+    var dateTime = lastUpdate
+    var movement = UtilityMath.convertWindDir(movementDir.toDoubleOrNull() ?: 0.0) + " at " + movementSpeed + " mph"
     var baseUrl: String
+    var goesUrl: String
 
     init {
         //var modBinNumber = binNumber
@@ -54,6 +55,7 @@ class ObjectNhcStormDetails(
             modBinNumber = modBinNumber.insert(2, "0")
         }
         baseUrl = "https://www.nhc.noaa.gov/storm_graphics/" + modBinNumber + "/" + id.uppercase(Locale.US)
+        goesUrl = "https://cdn.star.nesdis.noaa.gov/FLOATER/data/" + id.uppercase(Locale.US) + "/GEOCOLOR/latest.jpg"
     }
 
     fun forTopHeader(): String {

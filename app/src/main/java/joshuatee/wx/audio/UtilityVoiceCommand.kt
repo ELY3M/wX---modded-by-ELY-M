@@ -28,9 +28,9 @@ import android.view.View
 
 import joshuatee.wx.settings.Location
 import joshuatee.wx.spc.SpcMesoActivity
-import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.ObjectIntent
+import joshuatee.wx.ui.ObjectPopupMessage
 import joshuatee.wx.util.Utility
 import joshuatee.wx.wpc.WpcTextProductsActivity
 
@@ -123,7 +123,7 @@ object UtilityVoiceCommand {
             val forecast = Utility.readPref(context, "FCST", "")
             UtilityTts.synthesizeTextAndPlay(context, forecast, "7day")
         } else if (vrString.contains("download playlist")) {
-            UtilityUI.makeSnackBar(view, "Download initiated")
+            ObjectPopupMessage(view, "Download initiated")
             ObjectIntent(context, DownloadPlaylistService::class.java, DownloadPlaylistService.URL, "true")
         } else if (vrString.contains("playlist")) {
             UtilityTts.synthesizeTextAndPlayPlaylist(context, 1)

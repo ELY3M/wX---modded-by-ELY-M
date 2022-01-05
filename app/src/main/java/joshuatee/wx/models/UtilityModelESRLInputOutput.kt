@@ -24,9 +24,7 @@ package joshuatee.wx.models
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
-
 import java.util.Locale
-
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityString
 import joshuatee.wx.Extensions.*
@@ -96,87 +94,43 @@ internal object UtilityModelEsrlInputOutput {
         return runData
     }
 
-    // https://rapidrefresh.noaa.gov/RAP/for_web/rap_jet/2016091600/full/cref_sfc_f00.png
-    // https://rapidrefresh.noaa.gov/HRRR/for_web/hrrr_jet/2016091607/full/1ref_sfc_f00.png
-
     fun getImage(om: ObjectModelNoSpinner, time: String): Bitmap {
-        var sector = om.sector
-        var paramTmp = om.currentParam
-        val imgUrl: String
-        val zipStr = "TZA"
-        if (om.model.contains("HRRR"))
-            om.sectorInt = UtilityModelEsrlInterface.sectorsHrrr.indexOf(sector)
-        else
-            om.sectorInt = UtilityModelEsrlInterface.sectorsRap.indexOf(sector)
-        if (om.sectorInt == -1 ) {
-            om.sectorInt = 0
-            om.sector = "Full"
-        }
-        //UtilityLog.d("Wx", "DEBUG: " + sector + " " + om.sectorInt.toString())
-        when (om.model) {
-            "HRRR", "HRRR_NCEP" -> when {
-                om.sectorInt == 0 -> {
-                }
-                om.sectorInt < 9 -> {
-                    sector = "t" + om.sectorInt.toString()
-                    paramTmp = paramTmp.replace("_", "_$sector")
-                }
-                else -> {
-                    sector = "z" + (om.sectorInt - 9).toString()
-                    paramTmp = paramTmp.replace("_", "_$sector")
-                }
-            }
-            "HRRR_AK" -> {}
-            "RAP", "RAP_NCEP" ->
-                when (om.sectorInt) {
-                    9 -> sector = "alaska"
-                    10 -> { // AK Zoom
-                        sector = "a1"
-                        paramTmp = paramTmp.replace("_", "_$sector")
-                    }
-                    11 -> { // HI
-                        sector = "r1"
-                        paramTmp = paramTmp.replace("_", "_$sector")
-                    }
-                    in 2..8 -> {
-                        sector = "t" + (om.sectorInt - 1).toString()
-                        paramTmp = paramTmp.replace("_", "_$sector")
-                    }
-                }
-        }
-        val param = paramTmp
-        var parentModel = om.model.replace("HRRR_AK", "alaska")
+        var parentModel = ""
         when (om.model) {
             "RAP_NCEP" -> parentModel = "RAP"
             "HRRR_NCEP" -> parentModel = "HRRR"
             else -> {}
         }
         val onDemandUrl: String
+        val imgUrl: String
+        var sectorLocal = om.sector.replace(" ", "")
+        sectorLocal = sectorLocal.replace("Full", "full")
+        sectorLocal = sectorLocal.replace("CONUS", "conus")
+        val param = om.currentParam.replace("_full_", "_" + sectorLocal + "_")
         if (parentModel.contains("RAP")) {
             imgUrl = "$urlBase/" + parentModel + "/for_web/" + om.model.lowercase(Locale.US) +
                     "_jet/" + om.run.replace("Z", "") +
-                    "/" + sector.lowercase(Locale.US) + "/" + param + "_f" + time + ".png"
+                    "/" + sectorLocal + "/" + param + "_f" + time + ".png"
             onDemandUrl = "$urlBase/" + parentModel + "/" +
-                    "displayMapLocalDiskDateDomainZip" + zipStr + ".cgi?keys=" +
+                    "displayMapUpdated" + ".cgi?keys=" +
                     om.model.lowercase(Locale.US) + "_jet:&runtime=" + om.run.replace("Z", "") +
                     "&plot_type=" + param + "&fcst=" + time + "&time_inc=60&num_times=16&model=" +
                     "rr" + "&ptitle=" + om.model +
                     "%20Model%20Fields%20-%20Experimental&maxFcstLen=15&fcstStrLen=-1&domain=" +
-                    sector.lowercase(Locale.US) + "&adtfn=1"
+                    sectorLocal + "&adtfn=1"
 
         } else {
             imgUrl = "$urlBase/hrrr/" + parentModel.uppercase(Locale.US) + "/for_web/" +
                     om.model.lowercase(Locale.US) + "_jet/" + om.run.replace("Z", "") +
-                    "/" + sector.lowercase(Locale.US) + "/" + param + "_f" + time + ".png"
+                    "/" + sectorLocal + "/" + param + "_f" + time + ".png"
             onDemandUrl = "$urlBase/hrrr/" + parentModel.uppercase(Locale.US) + "/" +
-                    "displayMapLocalDiskDateDomainZip" + zipStr + ".cgi?keys=" +
+                    "displayMapUpdated" + ".cgi?keys=" +
                     om.model.lowercase(Locale.US) + "_jet:&runtime=" + om.run.replace("Z", "") +
                     "&plot_type=" + param + "&fcst=" + time + "&time_inc=60&num_times=16&model=" +
                     om.model.lowercase(Locale.US) + "&ptitle=" + om.model +
                     "%20Model%20Fields%20-%20Experimental&maxFcstLen=15&fcstStrLen=-1&domain=" +
-                    sector.lowercase(Locale.US) + "&adtfn=1"
+                    sectorLocal + "&adtfn=1"
         }
-        //UtilityLog.d("Wx", imgUrl)
         onDemandUrl.getHtml()
         return imgUrl.getImage()
     }

@@ -39,7 +39,6 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -99,7 +98,6 @@ class WX : CommonActionBarFragment() {
         viewPager = findViewById(R.id.viewPager)
 
         UtilityTheme.setPrimaryColor(this)
-        //PolygonType.refresh()
         val toolbarBottom: Toolbar = findViewById(R.id.toolbar_bottom)
         view = findViewById(android.R.id.content)
         toolbarBottom.elevation = MyApplication.elevationPref
@@ -113,34 +111,6 @@ class WX : CommonActionBarFragment() {
         if (MyApplication.checkinternet) {
             Utility.checkInternet(this)
         }
-        //FUCK YOU GOOGLE!!!!!!  They kept changing their code to "secure" the storage   FUCK YOU
-        //my ass will be at your new HQ offices and chewing you out for what you did to me.  I fucking hate companies that censor.
-        //I will make you pay my fucking income!!!!  FUCK YOU!!!!
-        //Google company Execs need metal pipes in their asses for breaking their promoise not to censor!!!!!
-        /*
-        if(SDK_INT >= 30) {
-            if(!Environment.isExternalStorageManager()) {
-                UtilityLog.d("wx", "Manage Storage Permissions Denied - sending alert dialog and opening settings")
-                val alertDialogBuilder = androidx.appcompat.app.AlertDialog.Builder(this)
-                alertDialogBuilder.setMessage("This app need access to your phone memory or SD Card to make files and write files (/wX/ on your phone memory or sd card)\nClick OK to open the settings to enable all files access for this app to function fully.").setCancelable(false)
-                        .setPositiveButton("OK") { dialog, _ -> dialog.cancel()
-                            val intent = Intent(ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
-                            startActivity(intent)
-                            //force restart :/
-                            exitProcess(0)
-                        }
-                val alertDialog = alertDialogBuilder.create()
-                alertDialog.show()
-
-            } else {
-
-                StartupActivity().runme()
-            }
-        } else {
-
-            StartupActivity().runme()
-        }
-        */
 
         toolbarBottom.setOnMenuItemClickListener(this)
         toolbarBottom.setOnClickListener { toolbarBottom.showOverflowMenu() }
@@ -160,7 +130,9 @@ class WX : CommonActionBarFragment() {
         slidingTabLayout.tabGravity = TabLayout.GRAVITY_FILL
         slidingTabLayout.setupWithViewPager(viewPager)
         slidingTabLayout.elevation = MyApplication.elevationPref
-        if (MyApplication.simpleMode || UIPreferences.hideTopToolbar || UIPreferences.navDrawerMainScreen) slidingTabLayout.visibility = View.GONE
+        if (MyApplication.simpleMode || UIPreferences.hideTopToolbar || UIPreferences.navDrawerMainScreen) {
+            slidingTabLayout.visibility = View.GONE
+        }
         slidingTabLayout.setSelectedTabIndicatorColor(UtilityTheme.getPrimaryColorFromSelectedTheme(this, 0))
         if (UIPreferences.navDrawerMainScreen) {
             toolbarBottom.visibility = View.GONE
@@ -168,6 +140,7 @@ class WX : CommonActionBarFragment() {
             navigationView = findViewById(R.id.nav_view)
             drawerLayout = findViewById(R.id.drawer_layout)
             navigationView.itemIconTintList = null
+            navigationView.setItemIconSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40.0f, MyApplication.dm).toInt())
             if (!UIPreferences.themeIsWhite) {
                 navigationView.itemTextColor = ColorStateList.valueOf(Color.WHITE)
             }
@@ -193,12 +166,9 @@ class WX : CommonActionBarFragment() {
             val hourlyText = headerLayout.findViewById<TextView>(R.id.hourlyText)
             val settingsButton = headerLayout.findViewById<ImageButton>(R.id.settingsButton)
             val settingsText = headerLayout.findViewById<TextView>(R.id.settingsText)
-            // FIXME forEach
-            severeDashboardButton.backgroundTintList = tint
-            visButton.backgroundTintList = tint
-            wfoButton.backgroundTintList = tint
-            hourlyButton.backgroundTintList = tint
-            settingsButton.backgroundTintList = tint
+            listOf(severeDashboardButton, visButton, wfoButton, hourlyButton, settingsButton).forEach {
+                it.backgroundTintList = tint
+            }
             val gravityForDrawer = if (UIPreferences.navDrawerMainScreenOnRight) {
                 GravityCompat.END
             } else {
@@ -252,7 +222,13 @@ class WX : CommonActionBarFragment() {
                     R.id.glcfs -> ObjectIntent.showModel(this, arrayOf("1", "GLCFS", "GLCFS"))
                     R.id.goes_conus_wv -> ObjectIntent(this, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "09"))
                     R.id.goes_global -> ObjectIntent(this, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("GOESFD"))
-                    R.id.lightning -> ObjectIntent(this,LightningActivity::class.java)
+                    R.id.lightning -> {
+                        if (UIPreferences.lightningUseGoes) {
+                            ObjectIntent(this, GoesActivity::class.java, GoesActivity.RID, arrayOf("CONUS", "23"))
+                        } else {
+                            ObjectIntent(this, LightningActivity::class.java)
+                        }
+                    }
                     R.id.national_images -> ObjectIntent(this, WpcImagesActivity::class.java, "", arrayOf())
                     R.id.national_text -> ObjectIntent(this, WpcTextProductsActivity::class.java, WpcTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"))
                     R.id.ncep_models -> ObjectIntent.showModel(this, arrayOf("1", "NCEP", "NCEP"))
@@ -289,7 +265,7 @@ class WX : CommonActionBarFragment() {
                         }
                     }
                     R.id.wpc_gefs -> ObjectIntent.showModel(this, arrayOf("1", "WPCGEFS", "WPC"))
-		    //elys mod
+		            //elys mod
                     R.id.aurora -> ObjectIntent(this, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("AURORA"))
                 }
                 if (UIPreferences.navDrawerMainScreenOnRight) {
@@ -320,17 +296,13 @@ class WX : CommonActionBarFragment() {
                 }
             }
         }
-        // material 1.1.0, since we are using .Bridge theme the below is not needed
-        // but left for reference
-        //slidingTabLayout.setTabTextColors(-1711276033, Color.WHITE)
-        //val a = slidingTabLayout.tabTextColors
         refreshDynamicContent()
     }
 
     override fun onBackPressed() {
         if (UIPreferences.prefPreventAccidentalExit) {
             if (backButtonCounter < 1) {
-                UtilityUI.makeSnackBar(slidingTabLayout, "Please tap the back button one more time to close wX.")
+                ObjectPopupMessage(slidingTabLayout, "Please tap the back button one more time to close wX.")
                 backButtonCounter += 1
             } else {
                 finish()
@@ -376,87 +348,30 @@ class WX : CommonActionBarFragment() {
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         when (keyCode) {
-            KeyEvent.KEYCODE_R -> {
-                if (event.isCtrlPressed)
-                    openNexradRadar(this)
-                return true
-            }
-            KeyEvent.KEYCODE_A -> {
-                if (event.isCtrlPressed)
-                    openAfd()
-                return true
-            }
-            KeyEvent.KEYCODE_S -> {
-                if (event.isCtrlPressed)
-                    openSettings()
-                return true
-            }
-            KeyEvent.KEYCODE_C -> {
-                if (event.isCtrlPressed)
-                    openVis()
-                return true
-            }
-            KeyEvent.KEYCODE_D -> {
-                if (event.isCtrlPressed)
-                    openDashboard()
-                return true
-            }
-            KeyEvent.KEYCODE_2 -> {
-                if (event.isCtrlPressed)
-                    openActivity(this, "RADAR_DUAL_PANE")
-                return true
-            }
-            KeyEvent.KEYCODE_4 -> {
-                if (event.isCtrlPressed)
-                    openActivity(this, "RADAR_QUAD_PANE")
-                return true
-            }
-            KeyEvent.KEYCODE_E -> {
-                if (event.isCtrlPressed)
-                    openActivity(this, "SPCMESO1")
-                return true
-            }
-            KeyEvent.KEYCODE_N -> {
-                if (event.isCtrlPressed)
-                    openActivity(this, "MODEL_NCEP")
-                return true
-            }
-            KeyEvent.KEYCODE_M -> {
-                if (event.isCtrlPressed)
-                    findViewById<Toolbar>(R.id.toolbar_bottom).showOverflowMenu()
-                return true
-            }
-            KeyEvent.KEYCODE_H -> {
-                if (event.isCtrlPressed)
-                    openHourly()
-                return true
-            }
-            KeyEvent.KEYCODE_O -> {
-                if (event.isCtrlPressed)
-                    openActivity(this, "NHC")
-                return true
-            }
+            KeyEvent.KEYCODE_R -> if (event.isCtrlPressed) openNexradRadar(this)
+            KeyEvent.KEYCODE_A -> if (event.isCtrlPressed) openAfd()
+            KeyEvent.KEYCODE_S -> if (event.isCtrlPressed) openSettings()
+            KeyEvent.KEYCODE_C -> if (event.isCtrlPressed) openVis()
+            KeyEvent.KEYCODE_D -> if (event.isCtrlPressed) openDashboard()
+            KeyEvent.KEYCODE_2 -> if (event.isCtrlPressed) openActivity(this, "RADAR_DUAL_PANE")
+            KeyEvent.KEYCODE_4 -> if (event.isCtrlPressed) openActivity(this, "RADAR_QUAD_PANE")
+            KeyEvent.KEYCODE_E -> if (event.isCtrlPressed) openActivity(this, "SPCMESO1")
+            KeyEvent.KEYCODE_N -> if (event.isCtrlPressed) openActivity(this, "MODEL_NCEP")
+            KeyEvent.KEYCODE_M -> if (event.isCtrlPressed) findViewById<Toolbar>(R.id.toolbar_bottom).showOverflowMenu()
+            KeyEvent.KEYCODE_H -> if (event.isCtrlPressed) openHourly()
+            KeyEvent.KEYCODE_O -> if (event.isCtrlPressed) openActivity(this, "NHC")
             KeyEvent.KEYCODE_L -> {
                 if (event.isCtrlPressed) {
                     val currentFragment = supportFragmentManager.fragments.first() as LocationFragment
                     currentFragment.showLocations()
                 }
-                return true
             }
-            KeyEvent.KEYCODE_I -> {
-                if (event.isCtrlPressed)
-                    openActivity(this, "WPCIMG")
-                return true
-            }
+            KeyEvent.KEYCODE_I -> if (event.isCtrlPressed) openActivity(this, "WPCIMG")
             KeyEvent.KEYCODE_Z -> {
-                if (event.isCtrlPressed)
-                    openActivity(this, "WPCTEXT")
-                return true
+                if (event.isCtrlPressed) openActivity(this, "WPCTEXT")
             }
             KeyEvent.KEYCODE_SLASH -> {
-                if (event.isAltPressed)
-                    ObjectDialogue(this, Utility.showMainScreenShortCuts())
-                return true
+                if (event.isAltPressed) ObjectDialogue(this, Utility.showMainScreenShortCuts())
             }
             KeyEvent.KEYCODE_J -> {
                 if (event.isCtrlPressed) {
@@ -466,7 +381,6 @@ class WX : CommonActionBarFragment() {
                     }
                     viewPager.currentItem = tabIndex
                 }
-                return true
             }
             KeyEvent.KEYCODE_K -> {
                 if (event.isCtrlPressed) {
@@ -476,15 +390,14 @@ class WX : CommonActionBarFragment() {
                     }
                     viewPager.currentItem = tabIndex
                 }
-                return true
             }
             KeyEvent.KEYCODE_REFRESH -> {
                 val currentFragment = supportFragmentManager.fragments.first() as LocationFragment
                 currentFragment.getContent()
-                return true
             }
             else -> return super.onKeyUp(keyCode, event)
         }
+        return true
     }
 }
 

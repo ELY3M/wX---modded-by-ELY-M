@@ -1,0 +1,633 @@
+<!--?xml version="1.0" encoding="utf-8"?-->
+<maps>
+    <map name="ncar_nexrad_sites">
+        <area
+            coords="104,18,12"
+            id="@+id/LGX"
+            shape="circle" />
+        <area
+            coords="130,17,12"
+            id="@+id/ATX"
+            shape="circle" />
+        <area
+            coords="151,30,12"
+            id="@+id/OTX"
+            shape="circle" />
+        <area
+            coords="109,44,12"
+            id="@+id/RTX"
+            shape="circle" />
+        <area
+            coords="141,50,12"
+            id="@+id/PDT"
+            shape="circle" />
+        <area
+            coords="105,81,12"
+            id="@+id/MAX"
+            shape="circle" />
+        <area
+            coords="159,76,12"
+            id="@+id/CBX"
+            shape="circle" />
+        <area
+            coords="183,84,12"
+            id="@+id/SFX"
+            shape="circle" />
+        <area
+            coords="179,41,12"
+            id="@+id/MSX"
+            shape="circle" />
+        <area
+            coords="201,38,12"
+            id="@+id/TFX"
+            shape="circle" />
+        <area
+            coords="233,34,12"
+            id="@+id/GGW"
+            shape="circle" />
+        <area
+            coords="217,58,12"
+            id="@+id/BLX"
+            shape="circle" />
+        <area
+            coords="213,89,12"
+            id="@+id/RIW"
+            shape="circle" />
+        <area
+            coords="242,108,12"
+            id="@+id/CYS"
+            shape="circle" />
+        <area
+            coords="275,36,12"
+            id="@+id/MBX"
+            shape="circle" />
+        <area
+            coords="275,53,12"
+            id="@+id/BIS"
+            shape="circle" />
+        <area
+            coords="303,45,12"
+            id="@+id/MVX"
+            shape="circle" />
+        <area
+            coords="259,79,12"
+            id="@+id/UDX"
+            shape="circle" />
+        <area
+            coords="293,69,12"
+            id="@+id/ABR"
+            shape="circle" />
+        <area
+            coords="300,87,12"
+            id="@+id/FSD"
+            shape="circle" />
+        <area
+            coords="275,104,12"
+            id="@+id/LNX"
+            shape="circle" />
+        <area
+            coords="309,110,12"
+            id="@+id/OAX"
+            shape="circle" />
+        <area
+            coords="294,120,12"
+            id="@+id/UEX"
+            shape="circle" />
+        <area
+            coords="330,107,12"
+            id="@+id/DMX"
+            shape="circle" />
+        <area
+            coords="354,108,12"
+            id="@+id/DVN"
+            shape="circle" />
+        <area
+            coords="347,84,12"
+            id="@+id/ARX"
+            shape="circle" />
+        <area
+            coords="330,73,12"
+            id="@+id/MPX"
+            shape="circle" />
+        <area
+            coords="340,52,12"
+            id="@+id/DLH"
+            shape="circle" />
+        <area
+            coords="375,55,12"
+            id="@+id/MQT"
+            shape="circle" />
+        <area
+            coords="371,77,12"
+            id="@+id/GRB"
+            shape="circle" />
+        <area
+            coords="368,93,12"
+            id="@+id/MKX"
+            shape="circle" />
+        <area
+            coords="374,107,12"
+            id="@+id/LOT"
+            shape="circle" />
+        <area
+            coords="365,122,12"
+            id="@+id/ILX"
+            shape="circle" />
+        <area
+            coords="377,139,12"
+            id="@+id/VWX"
+            shape="circle" />
+        <area
+            coords="385,126,12"
+            id="@+id/IND"
+            shape="circle" />
+        <area
+            coords="408,127,12"
+            id="@+id/ILN"
+            shape="circle" />
+        <area
+            coords="390,110,12"
+            id="@+id/IWX"
+            shape="circle" />
+        <area
+            coords="390,93,12"
+            id="@+id/GRR"
+            shape="circle" />
+        <area
+            coords="397,71,12"
+            id="@+id/APX"
+            shape="circle" />
+        <area
+            coords="411,94,12"
+            id="@+id/DTX"
+            shape="circle" />
+        <area
+            coords="422,106,12"
+            id="@+id/CLE"
+            shape="circle" />
+        <area
+            coords="88,95,12"
+            id="@+id/BHX"
+            shape="circle" />
+        <area
+            coords="105,109,12"
+            id="@+id/BBX"
+            shape="circle" />
+        <area
+            coords="108,120,12"
+            id="@+id/DAX"
+            shape="circle" />
+        <area
+            coords="101,133,12"
+            id="@+id/MUX"
+            shape="circle" />
+        <area
+            coords="117,144,12"
+            id="@+id/HNX"
+            shape="circle" />
+        <area
+            coords="103,156,12"
+            id="@+id/VBX"
+            shape="circle" />
+        <area
+            coords="133,158,12"
+            id="@+id/EYX"
+            shape="circle" />
+        <area
+            coords="116,165,12"
+            id="@+id/VTX"
+            shape="circle" />
+        <area
+            coords="132,173,12"
+            id="@+id/SOX"
+            shape="circle" />
+        <area
+            coords="131,184,12"
+            id="@+id/NKX"
+            shape="circle" />
+        <area
+            coords="153,188,12"
+            id="@+id/YUX"
+            shape="circle" />
+        <area
+            coords="154,156,12"
+            id="@+id/ESX"
+            shape="circle" />
+        <area
+            coords="126,110,12"
+            id="@+id/RGX"
+            shape="circle" />
+        <area
+            coords="146,103,12"
+            id="@+id/LRX"
+            shape="circle" />
+        <area
+            coords="185,103,12"
+            id="@+id/MTX"
+            shape="circle" />
+        <area
+            coords="175,141,12"
+            id="@+id/ICX"
+            shape="circle" />
+        <area
+            coords="210,129,12"
+            id="@+id/GJX"
+            shape="circle" />
+        <area
+            coords="182,172,12"
+            id="@+id/FSX"
+            shape="circle" />
+        <area
+            coords="175,186,12"
+            id="@+id/IWA"
+            shape="circle" />
+        <area
+            coords="184,200,12"
+            id="@+id/EMX"
+            shape="circle" />
+        <area
+            coords="242,125,12"
+            id="@+id/FTG"
+            shape="circle" />
+        <area
+            coords="245,139,12"
+            id="@+id/PUX"
+            shape="circle" />
+        <area
+            coords="219,169,12"
+            id="@+id/ABX"
+            shape="circle" />
+        <area
+            coords="243,177,12"
+            id="@+id/FDX"
+            shape="circle" />
+        <area
+            coords="225,192,12"
+            id="@+id/HDX"
+            shape="circle" />
+        <area
+            coords="217,205,12"
+            id="@+id/EPZ"
+            shape="circle" />
+        <area
+            coords="294,267,12"
+            id="@+id/BRO"
+            shape="circle" />
+        <area
+            coords="293,249,12"
+            id="@+id/CRP"
+            shape="circle" />
+        <area
+            coords="271,233,12"
+            id="@+id/DFX"
+            shape="circle" />
+        <area
+            coords="320,233,12"
+            id="@+id/HGX"
+            shape="circle" />
+        <area
+            coords="293,227,12"
+            id="@+id/EWX"
+            shape="circle" />
+        <area
+            coords="333,225,12"
+            id="@+id/LCH"
+            shape="circle" />
+        <area
+            coords="334,214,12"
+            id="@+id/POE"
+            shape="circle" />
+        <area
+            coords="326,202,12"
+            id="@+id/SHV"
+            shape="circle" />
+        <area
+            coords="294,215,12"
+            id="@+id/GRK"
+            shape="circle" />
+        <area
+            coords="269,213,12"
+            id="@+id/SJT"
+            shape="circle" />
+        <area
+            coords="257,205,12"
+            id="@+id/MAF"
+            shape="circle" />
+        <area
+            coords="279,200,12"
+            id="@+id/DYX"
+            shape="circle" />
+        <area
+            coords="300,202,12"
+            id="@+id/FWS"
+            shape="circle" />
+        <area
+            coords="261,189,12"
+            id="@+id/LBB"
+            shape="circle" />
+        <area
+            coords="264,170,12"
+            id="@+id/AMA"
+            shape="circle" />
+        <area
+            coords="286,182,12"
+            id="@+id/FDR"
+            shape="circle" />
+        <area
+            coords="267,129,12"
+            id="@+id/GLD"
+            shape="circle" />
+        <area
+            coords="277,147,12"
+            id="@+id/DDC"
+            shape="circle" />
+        <area
+            coords="299,149,12"
+            id="@+id/ICT"
+            shape="circle" />
+        <area
+            coords="305,134,12"
+            id="@+id/TWX"
+            shape="circle" />
+        <area
+            coords="325,139,12"
+            id="@+id/EAX"
+            shape="circle" />
+        <area
+            coords="291,158,12"
+            id="@+id/VNX"
+            shape="circle" />
+        <area
+            coords="313,164,12"
+            id="@+id/INX"
+            shape="circle" />
+        <area
+            coords="300,173,12"
+            id="@+id/TLX"
+            shape="circle" />
+        <area
+            coords="323,174,12"
+            id="@+id/SRX"
+            shape="circle" />
+        <area
+            coords="341,178,12"
+            id="@+id/LZK"
+            shape="circle" />
+        <area
+            coords="352,138,12"
+            id="@+id/LSX"
+            shape="circle" />
+        <area
+            coords="365,152,12"
+            id="@+id/PAH"
+            shape="circle" />
+        <area
+            coords="332,153,12"
+            id="@+id/SGF"
+            shape="circle" />
+        <area
+            coords="389,143,12"
+            id="@+id/LVX"
+            shape="circle" />
+        <area
+            coords="426,137,12"
+            id="@+id/RLX"
+            shape="circle" />
+        <area
+            coords="385,157,12"
+            id="@+id/HPX"
+            shape="circle" />
+        <area
+            coords="387,164,12"
+            id="@+id/OHX"
+            shape="circle" />
+        <area
+            coords="413,160,12"
+            id="@+id/MRX"
+            shape="circle" />
+        <area
+            coords="411,146,12"
+            id="@+id/JKL"
+            shape="circle" />
+        <area
+            coords="438,149,12"
+            id="@+id/FCX"
+            shape="circle" />
+        <area
+            coords="464,147,12"
+            id="@+id/AKQ"
+            shape="circle" />
+        <area
+            coords="453,162,12"
+            id="@+id/RAX"
+            shape="circle" />
+        <area
+            coords="472,169,12"
+            id="@+id/MHX"
+            shape="circle" />
+        <area
+            coords="364,173,12"
+            id="@+id/NQA"
+            shape="circle" />
+        <area
+            coords="392,175,12"
+            id="@+id/HTX"
+            shape="circle" />
+        <area
+            coords="425,172,12"
+            id="@+id/GSP"
+            shape="circle" />
+        <area
+            coords="373,185,12"
+            id="@+id/GWX"
+            shape="circle" />
+        <area
+            coords="406,187,12"
+            id="@+id/FFC"
+            shape="circle" />
+        <area
+            coords="386,193,12"
+            id="@+id/BMX"
+            shape="circle" />
+        <area
+            coords="396,201,12"
+            id="@+id/MXX"
+            shape="circle" />
+        <area
+            coords="416,196,12"
+            id="@+id/JGX"
+            shape="circle" />
+        <area
+            coords="434,181,12"
+            id="@+id/CAE"
+            shape="circle" />
+        <area
+            coords="455,178,12"
+            id="@+id/LTX"
+            shape="circle" />
+        <area
+            coords="438,194,12"
+            id="@+id/CLX"
+            shape="circle" />
+        <area
+            coords="421,211,12"
+            id="@+id/VAX"
+            shape="circle" />
+        <area
+            coords="399,209,12"
+            id="@+id/EOX"
+            shape="circle" />
+        <area
+            coords="358,203,12"
+            id="@+id/DGX"
+            shape="circle" />
+        <area
+            coords="359,223,12"
+            id="@+id/LIX"
+            shape="circle" />
+        <area
+            coords="381,218,12"
+            id="@+id/MOB"
+            shape="circle" />
+        <area
+            coords="391,238,12"
+            id="@+id/EVX"
+            shape="circle" />
+        <area
+            coords="410,220,12"
+            id="@+id/TLH"
+            shape="circle" />
+        <area
+            coords="439,219,12"
+            id="@+id/JAX"
+            shape="circle" />
+        <area
+            coords="448,239,12"
+            id="@+id/MLB"
+            shape="circle" />
+        <area
+            coords="426,245,12"
+            id="@+id/TBW"
+            shape="circle" />
+        <area
+            coords="450,262,12"
+            id="@+id/AMX"
+            shape="circle" />
+        <area
+            coords="439,274,12"
+            id="@+id/BYX"
+            shape="circle" />
+        <area
+            coords="436,115,12"
+            id="@+id/PBZ"
+            shape="circle" />
+        <area
+            coords="454,126,12"
+            id="@+id/LWX"
+            shape="circle" />
+        <area
+            coords="477,124,12"
+            id="@+id/DOX"
+            shape="circle" />
+        <area
+            coords="454,107,12"
+            id="@+id/CCX"
+            shape="circle" />
+        <area
+            coords="479,112,12"
+            id="@+id/DIX"
+            shape="circle" />
+        <area
+            coords="491,100,12"
+            id="@+id/OKX"
+            shape="circle" />
+        <area
+            coords="462,93,12"
+            id="@+id/BGM"
+            shape="circle" />
+        <area
+            coords="442,87,12"
+            id="@+id/BUF"
+            shape="circle" />
+        <area
+            coords="480,85,12"
+            id="@+id/ENX"
+            shape="circle" />
+        <area
+            coords="463,76,12"
+            id="@+id/TYX"
+            shape="circle" />
+        <area
+            coords="502,87,12"
+            id="@+id/BOX"
+            shape="circle" />
+        <area
+            coords="482,65,12"
+            id="@+id/CXX"
+            shape="circle" />
+        <area
+            coords="506,68,12"
+            id="@+id/GYX"
+            shape="circle" />
+        <area
+            coords="519,41,12"
+            id="@+id/CBW"
+            shape="circle" />
+        <area
+            coords="17,141,12"
+            id="@+id/HKI"
+            shape="circle" />
+        <area
+            coords="43,153,12"
+            id="@+id/HMO"
+            shape="circle" />
+        <area
+            coords="67,165,12"
+            id="@+id/HKM"
+            shape="circle" />
+        <area
+            coords="63,184,12"
+            id="@+id/HWA"
+            shape="circle" />
+        <area
+            coords="84,222,12"
+            id="@+id/APD"
+            shape="circle" />
+        <area
+            coords="33,235,12"
+            id="@+id/AEC"
+            shape="circle" />
+        <area
+            coords="43,258,12"
+            id="@+id/ABC"
+            shape="circle" />
+        <area
+            coords="75,257,12"
+            id="@+id/AHG"
+            shape="circle" />
+        <area
+            coords="54,274,12"
+            id="@+id/AKC"
+            shape="circle" />
+        <area
+            coords="92,277,12"
+            id="@+id/AIH"
+            shape="circle" />
+        <area
+            coords="120,286,12"
+            id="@+id/ACG"
+            shape="circle" />
+        <area
+            coords="537,281,12"
+            id="@+id/JUA"
+            shape="circle" />
+        <area
+            coords="19,173,12"
+            id="@+id/GUA"
+            shape="circle" />
+        <area
+            coords="232,0,365,22"
+            id="@+id/USA"
+            shape="rect" />
+    </map>
+</maps>

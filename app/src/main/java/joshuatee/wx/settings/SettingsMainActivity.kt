@@ -73,9 +73,11 @@ class SettingsMainActivity : BaseActivity() {
         cardbackuppref.setOnClickListener { backuprestore.backupPrefs(this) }
         cardrestorepref.setOnClickListener { backuprestore.restorePrefs(this) }
         cardDeleteFiles.setOnClickListener {
-            UtilityUI.makeSnackBar(linearLayout, "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
+            ObjectIntent.showText(this, arrayOf(UtilityFileManagement.deleteCacheFiles(this), "Deleted old radar files"))
         }
-        cardAbout.setOnClickListener { ObjectIntent(this, SettingsAboutActivity::class.java) }
+        cardAbout.setOnClickListener {
+            ObjectIntent(this, SettingsAboutActivity::class.java)
+        }
         listOf(
                 cardAbout.card,
                 cardLocations.card,

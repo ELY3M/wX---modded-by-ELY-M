@@ -25,7 +25,6 @@ import joshuatee.wx.MyApplication
 import java.util.*
 import kotlin.math.*
 
-
 object UtilityMath {
 
     fun distanceOfLine(x1: Double, y1: Double, x2: Double, y2: Double) = sqrt((x2 - x1).pow(2.0) + (y2 - y1).pow(2.0))

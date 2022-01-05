@@ -102,16 +102,16 @@ class ProjectionNumbers {
         get() = oneDegreeScaleFactor.toFloat()
 
     val xDbl
-        get() = x.toDoubleOrNull() ?: 0.0
+        get() = To.double(x)
 
     val xFloat
-        get() = x.toFloatOrNull() ?: 0.0f
+        get() = To.float(x)
 
     val yDbl
-        get() = y.toDoubleOrNull() ?: 0.0
+        get() = To.double(y)
 
     val yFloat
-        get() = y.toFloatOrNull() ?: 0.0f
+        get() = To.float(y)
 }
 
 

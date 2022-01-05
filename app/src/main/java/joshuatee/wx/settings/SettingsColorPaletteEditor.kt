@@ -108,7 +108,9 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             ObjectDialogue(this, errorCheck)
         }
         val fileName = "colormap" + type + palTitle.text.toString()
-        if (UtilityFileManagement.internalFileExist(context, fileName)) UtilityFileManagement.deleteFile(context, fileName)
+        if (UtilityFileManagement.internalFileExist(context, fileName)) {
+            UtilityFileManagement.deleteFile(context, fileName)
+        }
     }
 
     private fun checkMapForErrors(): String {
@@ -146,7 +148,9 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
                 }
             }
         }
-        if (lineCount < 2) errors += "Not enough lines present."
+        if (lineCount < 2) {
+            errors += "Not enough lines present."
+        }
         return errors
     }
 
@@ -157,8 +161,6 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
             R.id.action_help -> ObjectDialogue(this,"Not implemented yet.")
             R.id.action_share -> UtilityShare.textAsAttachment(this, this, palTitle.text.toString(), palContent.text.toString(), "wX_colormap_" + palTitle.text.toString() + ".txt")
             R.id.action_load -> loadSettings()
-            R.id.action_website -> ObjectIntent.showWeb(this, "http://almanydesigns.com/grx/reflectivity/")
-            R.id.action_website2 -> ObjectIntent.showWeb(this, "http://www.usawx.com/grradarexamples.htm")
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -173,9 +175,13 @@ class SettingsColorPaletteEditor : BaseActivity(), OnMenuItemClickListener {
         toolbarBottom.menu.findItem(R.id.action_load).isVisible = true
     }
 
-    private fun loadSettings() { performFileSearch() }
+    private fun loadSettings() {
+        performFileSearch()
+    }
 
-    private fun displaySettings(txt: String) { palContent.setText(txt) }
+    private fun displaySettings(txt: String) {
+        palContent.setText(txt)
+    }
 
     private fun convertPalette(txt: String): String {
         var txtLocal = Utility.fromHtml(txt)

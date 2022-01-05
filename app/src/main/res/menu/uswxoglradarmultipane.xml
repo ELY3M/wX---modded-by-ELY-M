@@ -17,7 +17,6 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
  -->
-<!-- modded by ELY M. -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -36,12 +35,6 @@
         android:icon="@drawable/bv"
         android:title="@string/label_bv"
         app:showAsAction="always" />
-
-    <item android:id="@+id/action_n0s"
-        android:title="@string/label_srm"
-        android:icon="@drawable/srm"
-        app:showAsAction="always" />
-	
     <item
         android:id="@+id/action_a"
         android:icon="@drawable/ic_play_arrow_24dp_white"
@@ -161,7 +154,7 @@
     </item>
     <item
         android:id="@+id/action_tdwr"
-        android:title="TDWR Products"
+        android:title="@string/tdwr_products"
         app:showAsAction="never">
         <menu>
             <item
@@ -192,14 +185,14 @@
                 android:id="@+id/action_ntp"
                 android:title="@string/label_ntp"
                 app:showAsAction="never" />-->
-            <item
+            <!--<item
                 android:id="@+id/action_et"
                 android:title="@string/label_et"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_vil"
                 android:title="@string/label_vil"
-                app:showAsAction="never" />
+                app:showAsAction="never" />-->
             <item
                 android:id="@+id/action_tdwr_blank"
                 android:title="@string/label_blank"
@@ -278,7 +271,7 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/action_radar_4"
-        android:title="Quad Pane Radar"
+        android:title="@string/quad_pane_radar"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_tools"

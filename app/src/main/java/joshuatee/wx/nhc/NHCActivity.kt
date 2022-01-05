@@ -22,25 +22,23 @@
 package joshuatee.wx.nhc
 
 import android.annotation.SuppressLint
-import java.util.Locale
-
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import java.util.Locale
 import joshuatee.wx.MyApplication
-
 import joshuatee.wx.R
+import joshuatee.wx.objects.FutureBytes
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.wpc.WpcTextProductsActivity
-import kotlinx.coroutines.*
 
 class NhcActivity : BaseActivity() {
 
-    private val uiDispatcher = Dispatchers.Main
     private lateinit var objectNhc: ObjectNhc
     private lateinit var scrollView: ScrollView
     private lateinit var linearLayout: LinearLayout
@@ -59,18 +57,13 @@ class NhcActivity : BaseActivity() {
         getContent()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent() {
         scrollView.smoothScrollTo(0, 0)
-        withContext(Dispatchers.IO) {
-            objectNhc.getTextData()
+        FutureVoid(this, objectNhc::getTextData,  objectNhc::showTextData)
+        objectNhc.urls.forEachIndexed { index, url ->
+            FutureBytes(this, url) { s -> objectNhc.updateImageData(index, s) }
         }
-        objectNhc.showTextData()
-        NhcOceanEnum.values().forEach {
-            withContext(Dispatchers.IO) {
-                objectNhc.regionMap[it]!!.getImages()
-            }
-            objectNhc.showImageData(it)
-        }
+
     }
 
     private fun showTextProduct(prod: String) {

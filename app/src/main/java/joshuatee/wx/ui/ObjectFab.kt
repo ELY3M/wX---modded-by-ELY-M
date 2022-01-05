@@ -24,9 +24,6 @@ package joshuatee.wx.ui
 import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.os.Build
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -62,28 +59,23 @@ class ObjectFab {
         }
 
     fun fabSetResDrawable(context: Context, resourceDrawable: Int) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val drawable = ContextCompat.getDrawable(context, resourceDrawable)
-            fab.setImageDrawable(drawable)
-        } else {
-            val drawable = ContextCompat.getDrawable(context, resourceDrawable)!!
-            val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
-            drawable.setBounds(0, 0, canvas.width, canvas.height)
-            drawable.draw(canvas)
-            fab.setImageBitmap(bitmap)
-        }
+        val drawable = ContextCompat.getDrawable(context, resourceDrawable)
+        fab.setImageDrawable(drawable)
     }
 
     private fun setupFab(context: Context, icon: Int) {
-        if (UIPreferences.themeIsWhite) fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+        if (UIPreferences.themeIsWhite) {
+            fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+        }
         fabSetResDrawable(context, icon)
         fab.elevation = MyApplication.fabElevation
         fab.translationZ = MyApplication.fabElevationDepressed
     }
 
     private fun setupFab(context: Context) {
-        if (UIPreferences.themeIsWhite) fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+        if (UIPreferences.themeIsWhite) {
+            fab.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(context, R.color.blue_accent))
+        }
         fab.elevation = MyApplication.fabElevation
         fab.translationZ = MyApplication.fabElevationDepressed
     }

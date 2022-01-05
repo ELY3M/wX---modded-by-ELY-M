@@ -26,9 +26,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.MyApplication
-
 import joshuatee.wx.util.UtilityImgAnim
-import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityTime
 
 internal object UtilityModelWpcGefsInputOutput {
@@ -53,7 +51,6 @@ internal object UtilityModelWpcGefsInputOutput {
     fun getImage(om: ObjectModelNoSpinner, time: String): Bitmap {
         val sectorAdd = if (om.sector == "AK") "_ak" else ""
         val url = "${MyApplication.nwsWPCwebsitePrefix}/exper/gefs/" + om.run + "/GEFS_" + om.currentParam + "_" + om.run + "Z_f" + time + sectorAdd + ".gif"
-        UtilityLog.d("wx", "DEBUG: " + url + " " + om.sector)
         return url.getImage()
     }
 

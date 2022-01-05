@@ -36,16 +36,15 @@ class StartupActivity : Activity(), ActivityCompat.OnRequestPermissionsResultCal
     // display the splash screen, start the service that handles notifications,
     // and display the version in the title.
     //
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         if (Utility.readPrefWithNull(this, "LOC1_LABEL", null) == null) {
             UtilityStorePreferences.setDefaults(this)
         }
         MyApplication.initPreferences(this)
         Location.refreshLocationData(this)
         UtilityWXJobService.startService(this)
-
         if (UIPreferences.mediaControlNotif) {
             UtilityNotification.createMediaControlNotification(applicationContext, "")
         }

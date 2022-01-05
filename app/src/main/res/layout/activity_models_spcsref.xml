@@ -81,7 +81,8 @@
                         app:layout_anchor="@id/iv1"
                         app:layout_anchorGravity="bottom|right"
                         app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-                        app:srcCompat="@drawable/ic_keyboard_arrow_right_24dp_white" />
+                        app:srcCompat="@drawable/ic_keyboard_arrow_right_24dp_white"
+                        android:contentDescription="@string/forward_arrow" />
 
                     <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/fab1"
@@ -94,7 +95,8 @@
                         app:layout_anchor="@id/iv1"
                         app:layout_anchorGravity="bottom|right"
                         app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-                        app:srcCompat="@drawable/ic_keyboard_arrow_left_24dp_white" />
+                        app:srcCompat="@drawable/ic_keyboard_arrow_left_24dp_white"
+                        android:contentDescription="@string/back_arrow" />
 
                 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
@@ -107,7 +109,7 @@
         android:layout_width="480dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="?attr/colorPrimary"
+        android:background="@color/primary_dark_blue"
         android:choiceMode="singleChoice"
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp" />

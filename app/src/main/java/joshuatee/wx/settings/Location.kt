@@ -136,6 +136,10 @@ class Location(val context: Context, locNumInt: Int) {
     val notificationWpcMpd get() = alertNotificationWpcmpdCurrent.startsWith("t")
 
     companion object {
+
+        // TODO FIXME migrate to this
+        val locations = mutableListOf<ObjectLocation>()
+
         var numLocations = 1
         var currentLocation = 0
             private set

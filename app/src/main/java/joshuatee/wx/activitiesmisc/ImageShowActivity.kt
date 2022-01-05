@@ -27,15 +27,13 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.Extensions.getImage
-
 import joshuatee.wx.R
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectTouchImageView
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
-
-import kotlinx.coroutines.*
 
 class ImageShowActivity : BaseActivity() {
 
@@ -50,7 +48,6 @@ class ImageShowActivity : BaseActivity() {
 
     companion object { const val URL = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var url = ""
     private var urls = listOf<String>()
     private var bitmap = UtilityImg.getBlankBitmap()
@@ -98,8 +95,11 @@ class ImageShowActivity : BaseActivity() {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        bitmap = withContext(Dispatchers.IO) { url.getImage() }
+    private fun getContent() {
+        FutureVoid(this, { bitmap = url.getImage() }, ::showImage)
+    }
+
+    private fun showImage() {
         if (needsWhiteBackground) {
             bitmap = UtilityImg.addColorBackground(this@ImageShowActivity, bitmap, Color.WHITE)
         }

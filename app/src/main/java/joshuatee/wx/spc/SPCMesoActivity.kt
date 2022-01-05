@@ -32,18 +32,21 @@ import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getHtml
 import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.Extensions.startAnimation
-
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.models.DisplayDataNoSpinner
 import joshuatee.wx.models.ObjectModelNoSpinner
 import joshuatee.wx.models.UtilityModels
+import joshuatee.wx.objects.FutureText2
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.*
-import joshuatee.wx.util.*
-import kotlinx.coroutines.*
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityFavorites
+import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.UtilityShare
 
 class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
@@ -56,7 +59,6 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     companion object { var INFO = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var animRan = false
     private var showRadar = true
     private var showOutlook = true
@@ -196,49 +198,64 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent() {
         favListParm = UtilityFavorites.setupMenu(this@SpcMesoActivity, MyApplication.spcMesoFav, displayData.param[curImg], prefToken)
         invalidateOptionsMenu()
         if (MyApplication.spcMesoFav.contains(":" + displayData.param[curImg] + ":"))
             star.setIcon(MyApplication.STAR_ICON)
         else
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-        withContext(Dispatchers.IO) {
-            (0 until numPanes).forEach { displayData.bitmap[it] = UtilitySpcMesoInputOutput.getImage(this@SpcMesoActivity, displayData.param[it], sector) }
-        }
-        (0 until numPanes).forEach {
-            if (numPanes > 1) {
-                UtilityImg.resizeViewAndSetImage(this@SpcMesoActivity, displayData.bitmap[it], displayData.img[it])
-            } else {
-                displayData.img[it].setImageBitmap(displayData.bitmap[it])
+        FutureVoid(this@SpcMesoActivity,
+                {
+                    (0 until numPanes).forEach {
+                        displayData.bitmap[it] = UtilitySpcMesoInputOutput.getImage(this@SpcMesoActivity, displayData.param[it], sector)
+                    }
+                }
+        )  {
+                (0 until numPanes).forEach {
+                if (numPanes > 1) {
+                    UtilityImg.resizeViewAndSetImage(this@SpcMesoActivity, displayData.bitmap[it], displayData.img[it])
+                } else {
+                    displayData.img[it].setImageBitmap(displayData.bitmap[it])
+                }
+                displayData.img[it].maxZoom = 4f
+                animRan = false
             }
-            displayData.img[it].maxZoom = 4f
-            animRan = false
-        }
-        if (!firstRun) {
-            (0 until numPanes).forEach {
-                displayData.img[it].setZoom(
-                        Utility.readPref(this@SpcMesoActivity, prefModel + numPanes + it.toString() + "_ZOOM", 1.0f),
-                        Utility.readPref(this@SpcMesoActivity, prefModel + numPanes + it.toString() + "_X", 0.5f),
-                        Utility.readPref(this@SpcMesoActivity, prefModel + numPanes + it.toString() + "_Y", 0.5f)
-                )
+            if (!firstRun) {
+                (0 until numPanes).forEach {
+                    displayData.img[it].setZoom(
+                            Utility.readPref(this@SpcMesoActivity, prefModel + numPanes + it.toString() + "_ZOOM", 1.0f),
+                            Utility.readPref(this@SpcMesoActivity, prefModel + numPanes + it.toString() + "_X", 0.5f),
+                            Utility.readPref(this@SpcMesoActivity, prefModel + numPanes + it.toString() + "_Y", 0.5f)
+                    )
+                }
+                firstRun = true
             }
-            firstRun = true
+            imageLoaded = true
+            Utility.writePref(this@SpcMesoActivity, prefParam + curImg, displayData.param[curImg])
+            Utility.writePref(this@SpcMesoActivity, prefParamLabel + curImg, displayData.paramLabel[curImg])
+            setTitle()
         }
-        imageLoaded = true
-        Utility.writePref(this@SpcMesoActivity, prefParam + curImg, displayData.param[curImg])
-        Utility.writePref(this@SpcMesoActivity, prefParamLabel + curImg, displayData.paramLabel[curImg])
-        setTitle()
     }
 
-    private fun getAnimate(frames: Int) = GlobalScope.launch(uiDispatcher) {
-        withContext(Dispatchers.IO) {
-            (0 until numPanes).forEach {
-                displayData.animDrawable[it] = UtilitySpcMesoInputOutput.getAnimation(this@SpcMesoActivity, displayData.param[it], sector, frames)
-            }
-        }
-        (0 until numPanes).forEach { displayData.animDrawable[it].startAnimation(displayData.img[it]) }
-        animRan = true
+    private fun getAnimate(frames: Int) {
+        FutureVoid(
+                this@SpcMesoActivity,
+                {
+                    (0 until numPanes).forEach {
+                        displayData.animDrawable[it] = UtilitySpcMesoInputOutput.getAnimation(
+                                this@SpcMesoActivity,
+                                displayData.param[it],
+                                sector,
+                                frames
+                        )
+                    }
+                },
+                {
+                    (0 until numPanes).forEach { displayData.animDrawable[it].startAnimation(displayData.img[it]) }
+                    animRan = true
+                }
+        )
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -407,14 +424,18 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 
-    private fun getHelp() = GlobalScope.launch(uiDispatcher) {
-        var helpText = withContext(Dispatchers.IO) {
-            ("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/help_" + displayData.param[curImg] + ".html").getHtml()
-        }
-        if (helpText.contains("Page Not Found")) {
-            helpText = "Help is not available for this parameter."
-        }
-        ObjectDialogue(this@SpcMesoActivity, Utility.fromHtml(helpText))
+    private fun getHelp() {
+        FutureText2(
+                this@SpcMesoActivity,
+                { ("${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/help/help_" + displayData.param[curImg] + ".html").getHtml() },
+                { s ->
+                    var helpText = s
+                    if (helpText.contains("Page Not Found")) {
+                        helpText = "Help is not available for this parameter."
+                    }
+                    ObjectDialogue(this@SpcMesoActivity, Utility.fromHtml(helpText))
+                }
+        )
     }
 
     private fun setAndLaunchParam(param: String, a: Int, b: Int) {
@@ -435,7 +456,9 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     override fun onStop() {
         if (imageLoaded) {
-            (0 until numPanes).forEach { UtilityImg.imgSavePosnZoom(this, displayData.img[it], prefModel + numPanes.toString() + it.toString()) }
+            (0 until numPanes).forEach {
+                UtilityImg.imgSavePosnZoom(this, displayData.img[it], prefModel + numPanes.toString() + it.toString())
+            }
         }
         super.onStop()
     }

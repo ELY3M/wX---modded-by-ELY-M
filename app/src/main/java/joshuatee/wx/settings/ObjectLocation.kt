@@ -83,51 +83,51 @@ class ObjectLocation(val context: Context, locNumInt: Int) {
         Location.addToListOfNames(name)
     }
 
-    fun saveToNewSlot(newLocNumInt: Int) {
-        val iStr = (newLocNumInt + 1).toString()
-        Utility.writePref(context, "ALERT" + iStr + "_NOTIFICATION", alertNotificationCurrent)
-        Utility.writePref(context, "ALERT_CC" + iStr + "_NOTIFICATION", alertCcNotificationCurrent)
-        Utility.writePref(context, "ALERT_7DAY_" + iStr + "_NOTIFICATION", alertSevenDayNotificationCurrent)
-        Utility.writePref(context, "ALERT_NOTIFICATION_SOUND$iStr", alertNotificationSoundCurrent)
-        Utility.writePref(context, "ALERT_NOTIFICATION_MCD$iStr", alertNotificationMcdCurrent)
-        Utility.writePref(context, "ALERT_NOTIFICATION_SWO$iStr", alertNotificationSwoCurrent)
-        Utility.writePref(context, "ALERT_NOTIFICATION_SPCFW$iStr", alertNotificationSpcfwCurrent)
-        Utility.writePref(context, "ALERT_NOTIFICATION_WPCMPD$iStr", alertNotificationWpcmpdCurrent)
-        Utility.writePref(context, "ALERT_NOTIFICATION_RADAR$iStr", alertNotificationRadarCurrent)
-        Utility.writePref(context, "LOC" + iStr + "_X", x)
-        Utility.writePref(context, "LOC" + iStr + "_Y", y)
-        Utility.writePref(context, "LOC" + iStr + "_LABEL", name)
-        Utility.writePref(context, "COUNTY$iStr", countyCurrent)
-        Utility.writePref(context, "ZONE$iStr", zoneCurrent)
-        Utility.writePref(context, "NWS$iStr", wfo)
-        Utility.writePref(context, "RID$iStr", rid)
-        Utility.writePref(context, "NWS" + iStr + "_STATE", nwsStateCurrent)
-        Utility.writePref(context, "LOC" + iStr + "_OBSERVATION", observation)
-        Location.refreshLocationData(context)
-    }
+//    fun saveToNewSlot(newLocNumInt: Int) {
+//        val iStr = (newLocNumInt + 1).toString()
+//        Utility.writePref(context, "ALERT" + iStr + "_NOTIFICATION", alertNotificationCurrent)
+//        Utility.writePref(context, "ALERT_CC" + iStr + "_NOTIFICATION", alertCcNotificationCurrent)
+//        Utility.writePref(context, "ALERT_7DAY_" + iStr + "_NOTIFICATION", alertSevenDayNotificationCurrent)
+//        Utility.writePref(context, "ALERT_NOTIFICATION_SOUND$iStr", alertNotificationSoundCurrent)
+//        Utility.writePref(context, "ALERT_NOTIFICATION_MCD$iStr", alertNotificationMcdCurrent)
+//        Utility.writePref(context, "ALERT_NOTIFICATION_SWO$iStr", alertNotificationSwoCurrent)
+//        Utility.writePref(context, "ALERT_NOTIFICATION_SPCFW$iStr", alertNotificationSpcfwCurrent)
+//        Utility.writePref(context, "ALERT_NOTIFICATION_WPCMPD$iStr", alertNotificationWpcmpdCurrent)
+//        Utility.writePref(context, "ALERT_NOTIFICATION_RADAR$iStr", alertNotificationRadarCurrent)
+//        Utility.writePref(context, "LOC" + iStr + "_X", x)
+//        Utility.writePref(context, "LOC" + iStr + "_Y", y)
+//        Utility.writePref(context, "LOC" + iStr + "_LABEL", name)
+//        Utility.writePref(context, "COUNTY$iStr", countyCurrent)
+//        Utility.writePref(context, "ZONE$iStr", zoneCurrent)
+//        Utility.writePref(context, "NWS$iStr", wfo)
+//        Utility.writePref(context, "RID$iStr", rid)
+//        Utility.writePref(context, "NWS" + iStr + "_STATE", nwsStateCurrent)
+//        Utility.writePref(context, "LOC" + iStr + "_OBSERVATION", observation)
+//        Location.refreshLocationData(context)
+//    }
 
-    fun updateObservation(observation: String) {
-        this.observation = observation
-        Utility.writePref(context, "LOC" + prefNumberString + "_OBSERVATION", observation)
-    }
+//    fun updateObservation(observation: String) {
+//        this.observation = observation
+//        Utility.writePref(context, "LOC" + prefNumberString + "_OBSERVATION", observation)
+//    }
 
     val notification get() = alertNotificationCurrent.startsWith("t")
 
     val notificationRadar get() = alertNotificationRadarCurrent.startsWith("t")
 
-    val ccNotification get() = alertCcNotificationCurrent.startsWith("t")
+//    val ccNotification get() = alertCcNotificationCurrent.startsWith("t")
 
     val sevenDayNotification get() = alertSevenDayNotificationCurrent.startsWith("t")
 
     val sound get() = alertNotificationSoundCurrent.startsWith("t")
 
-    val notificationMcd get() = alertNotificationMcdCurrent.startsWith("t")
-
-    val notificationSwo get() = alertNotificationSwoCurrent.startsWith("t")
-
-    val notificationSpcFw get() = alertNotificationSpcfwCurrent.startsWith("t")
-
-    val notificationWpcMpd get() = alertNotificationWpcmpdCurrent.startsWith("t")
+//    val notificationMcd get() = alertNotificationMcdCurrent.startsWith("t")
+//
+//    val notificationSwo get() = alertNotificationSwoCurrent.startsWith("t")
+//
+//    val notificationSpcFw get() = alertNotificationSpcfwCurrent.startsWith("t")
+//
+//    val notificationWpcMpd get() = alertNotificationWpcmpdCurrent.startsWith("t")
 }
 
 

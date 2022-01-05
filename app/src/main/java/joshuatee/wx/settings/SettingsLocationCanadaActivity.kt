@@ -23,22 +23,18 @@ package joshuatee.wx.settings
 
 import android.annotation.SuppressLint
 import java.util.Locale
-
 import android.os.Bundle
-
 import joshuatee.wx.R
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.canada.UtilityCanada
-
 import joshuatee.wx.Extensions.*
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.ObjectRecyclerView
 import joshuatee.wx.util.Utility
-import kotlinx.coroutines.*
 
 class SettingsLocationCanadaActivity : BaseActivity() {
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private var listIds = listOf<String>()
     private var listCity = listOf<String>()
     private var cityDisplay = false
@@ -91,12 +87,17 @@ class SettingsLocationCanadaActivity : BaseActivity() {
         finish()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        withContext(Dispatchers.IO) {
-            val html = UtilityCanada.getProvidenceHtml(provSelected)
-            listIds = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.lowercase(Locale.US) + "-(.*?)_metric_e.html\">.*?</a></li>")
-            listCity = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.lowercase(Locale.US) + "-.*?_metric_e.html\">(.*?)</a></li>")
-        }
+    private fun getContent() {
+        FutureVoid(this@SettingsLocationCanadaActivity, ::download, ::update)
+    }
+
+    private fun download() {
+        val html = UtilityCanada.getProvidenceHtml(provSelected)
+        listIds = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.lowercase(Locale.US) + "-(.*?)_metric_e.html\">.*?</a></li>")
+        listCity = html.parseColumn("<li><a href=\"/city/pages/" + provSelected.lowercase(Locale.US) + "-.*?_metric_e.html\">(.*?)</a></li>")
+    }
+
+    private fun update() {
         objectRecyclerView.refreshList(listCity.distinct().toMutableList())
         cityDisplay = true
     }

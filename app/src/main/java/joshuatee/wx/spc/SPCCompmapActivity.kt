@@ -27,24 +27,22 @@ import android.content.res.Configuration
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.AdapterView
-
 import joshuatee.wx.R
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.ObjectTouchImageView
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
-import kotlinx.coroutines.*
 
 class SpcCompmapActivity : BaseActivity() {
 
-    private val uiDispatcher = Dispatchers.Main
     private var layerStr = ""
     private lateinit var img: ObjectTouchImageView
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var drw: ObjectNavDrawer
-    private var paramList = mutableListOf<String>()
+    private val paramList = UtilitySpcCompmap.labels.toMutableList()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.shared_multigraphics, menu)
@@ -54,8 +52,6 @@ class SpcCompmapActivity : BaseActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.shared_multigraphics, false)
-        //toolbarBottom.setOnMenuItemClickListener(this)
-        paramList = UtilitySpcCompmap.labels.toMutableList()
         drw = ObjectNavDrawer(this, paramList)
         drw.listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             drw.listView.setItemChecked(position, false)
@@ -81,7 +77,9 @@ class SpcCompmapActivity : BaseActivity() {
 
     private fun setupInitLayerString() {
         val items = layerStr.split(":").dropLastWhile { it.isEmpty() }
-        items.forEach { selectItemNoGet(it.replace("a", "").toIntOrNull() ?: 0) }
+        items.forEach {
+            selectItemNoGet(it.replace("a", "").toIntOrNull() ?: 0)
+        }
     }
 
     private fun selectItemNoGet(positionF: Int) {
@@ -94,7 +92,9 @@ class SpcCompmapActivity : BaseActivity() {
         }
         drw.listView.setItemChecked(position, false)
         drw.drawerLayout.closeDrawer(drw.listView)
-        if (!paramList[position].contains("(on)")) paramList[position] = "(on) " + paramList[position]
+        if (!paramList[position].contains("(on)")) {
+            paramList[position] = "(on) " + paramList[position]
+        }
     }
 
     override fun onRestart() {
@@ -102,8 +102,11 @@ class SpcCompmapActivity : BaseActivity() {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        bitmap = withContext(Dispatchers.IO) { UtilitySpcCompmap.getImage(this@SpcCompmapActivity, layerStr) }
+    private fun getContent() {
+        FutureVoid(this, { bitmap = UtilitySpcCompmap.getImage(this@SpcCompmapActivity, layerStr) }, ::showImage)
+    }
+
+    private fun showImage() {
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn("SPCCOMPMAP")
         Utility.writePref(this@SpcCompmapActivity, "SPCCOMPMAP_LAYERSTR", layerStr)
@@ -118,8 +121,6 @@ class SpcCompmapActivity : BaseActivity() {
         super.onConfigurationChanged(newConfig)
         drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
-
-    //override fun onOptionsItemSelected(item: MenuItem) = drw.actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item)
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (drw.actionBarDrawerToggle.onOptionsItemSelected(item)) return true

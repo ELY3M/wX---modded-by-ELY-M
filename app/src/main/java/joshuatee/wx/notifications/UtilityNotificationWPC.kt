@@ -28,12 +28,10 @@ import joshuatee.wx.spc.SpcMcdWatchShowActivity
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.external.ExternalPoint
 import joshuatee.wx.external.ExternalPolygon
-
 import android.content.Context
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import joshuatee.wx.Extensions.safeGet
-
 import joshuatee.wx.objects.PolygonType.MPD
 import joshuatee.wx.radar.LatLon
 
@@ -104,7 +102,3 @@ internal object UtilityNotificationWpc {
         return cancelStr + MyApplication.notificationStrSep
     }
 }
-
-
-
-

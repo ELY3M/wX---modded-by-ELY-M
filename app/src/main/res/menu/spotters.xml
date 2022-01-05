@@ -22,9 +22,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_search"
-        android:title="Search by name"
+        android:title="@string/search_by_name"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always" />
 </menu>
-
-

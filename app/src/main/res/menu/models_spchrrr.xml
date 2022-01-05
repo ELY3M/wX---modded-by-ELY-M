@@ -23,11 +23,11 @@
 
     <item
         android:id="@+id/action_run"
-        android:title="Run"
+        android:title="@string/run"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_time"
-        android:title="Time"
+        android:title="@string/time"
         app:showAsAction="always" />
 
     <item
@@ -100,11 +100,11 @@
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_layer_obs"
-                android:title="Latest Sfc Obs"
+                android:title="@string/latest_sfc_obs"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_layer_topo"
-                android:title="Topography"
+                android:title="@string/topography"
                 app:showAsAction="never" />
         </menu>
     </item>
@@ -122,5 +122,3 @@
         android:title=""
         app:showAsAction="never" />
 </menu>
-
-

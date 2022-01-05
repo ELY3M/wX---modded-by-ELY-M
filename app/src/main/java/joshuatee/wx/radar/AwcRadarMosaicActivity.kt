@@ -27,23 +27,23 @@ import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
-import kotlinx.coroutines.*
 
 class AwcRadarMosaicActivity : VideoRecordActivity() {
 
+    //
     // Provides native interface to AWC radar mosaics along with animations
     //
     // arg1: "widget" (optional) - if this arg is specified it will show mosaic for widget location
     //       "location" for current location
+    //
 
     companion object { const val URL = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var animRan = false
     private var animDrawable = AnimationDrawable()
     private lateinit var img: ObjectTouchImageView
@@ -63,28 +63,29 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.awcmosaic, iconsEvenlySpaced = true, bottomToolbar = false)
-        objectNavDrawer = ObjectNavDrawer(this, UtilityAwcRadarMosaic.labels, UtilityAwcRadarMosaic.sectors, ::getContentFixThis)
+        objectNavDrawer = ObjectNavDrawer(this, UtilityAwcRadarMosaic.labels, UtilityAwcRadarMosaic.sectors) { getContent(product) }
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, objectNavDrawer, "")
         img.setMaxZoom(8.0f)
-        img.setListener(this, objectNavDrawer, ::getContentFixThis)
+        img.setListener(this, objectNavDrawer) { getContent(product) }
         sector = Utility.readPref(this, prefTokenSector, sector)
         product = Utility.readPref(this, prefTokenProduct, product)
         objectNavDrawer.index = UtilityAwcRadarMosaic.sectors.indexOf(sector)
         getContent(product)
     }
 
-    private fun getContentFixThis() { getContent(product) }
-
     override fun onRestart() {
         getContent(product)
         super.onRestart()
     }
 
-    private fun getContent(productLocal: String) = GlobalScope.launch(uiDispatcher) {
+    private fun getContent(productLocal: String) {
         product = productLocal
         toolbar.subtitle = objectNavDrawer.getLabel()
         title = product
-        bitmap = withContext(Dispatchers.IO) { UtilityAwcRadarMosaic.get(objectNavDrawer.url, product) }
+        FutureVoid(this, { bitmap = UtilityAwcRadarMosaic.get(objectNavDrawer.url, product) }, ::showImage)
+    }
+
+    private fun showImage() {
         img.setBitmap(bitmap)
         animRan = false
         img.firstRunSetZoomPosn(prefImagePosition)
@@ -92,11 +93,10 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
         Utility.writePref(this@AwcRadarMosaicActivity, prefTokenProduct, product)
     }
 
-    private fun getAnimate() = GlobalScope.launch(uiDispatcher) {
-        animDrawable = withContext(Dispatchers.IO) {
-            UtilityAwcRadarMosaic.getAnimation(this@AwcRadarMosaicActivity, objectNavDrawer.url, product)
-        }
-        animRan = UtilityImgAnim.startAnimation(animDrawable, img)
+    private fun getAnimate() {
+        FutureVoid(this@AwcRadarMosaicActivity,
+            { animDrawable = UtilityAwcRadarMosaic.getAnimation(this@AwcRadarMosaicActivity, objectNavDrawer.url, product) })
+            { animRan = UtilityImgAnim.startAnimation(animDrawable, img) }
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {

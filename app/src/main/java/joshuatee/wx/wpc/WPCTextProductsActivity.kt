@@ -36,13 +36,14 @@ import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.notifications.UtilityNotificationTextProduct
 import joshuatee.wx.MyApplication
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
-import kotlinx.coroutines.*
 
 class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
+    //
     // Display WPC ( and other ) text products
     // last used product is first shown on re-entry
     //
@@ -52,7 +53,6 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object { const val URL = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private lateinit var activityArguments: Array<String>
     private var product = ""
     private var html = ""
@@ -99,7 +99,7 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         getContent()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent() {
         products = UtilityFavorites.setupMenu(this@WpcTextProductsActivity, MyApplication.nwsTextFav, product, prefToken)
         invalidateOptionsMenu()
         updateSubmenuNotificationText()
@@ -110,7 +110,10 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
             star.setIcon(MyApplication.STAR_OUTLINE_ICON)
         }
         ridFavOld = MyApplication.nwsTextFav
-        html = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@WpcTextProductsActivity, product) }
+        FutureVoid(this, { html = UtilityDownload.getTextProduct(this@WpcTextProductsActivity, product) }, ::showText)
+    }
+
+    private fun showText() {
         textCard.setTextAndTranslate(html)
         if (UtilityWpcText.needsFixedWidthFont(product.uppercase(Locale.US))) {
             textCard.typefaceMono()

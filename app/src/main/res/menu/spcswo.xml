@@ -46,43 +46,43 @@
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_share_tornado"
-                android:title="Tornado"
+                android:title="@string/tornado"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_share_hail"
-                android:title="Hail"
+                android:title="@string/hail"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_share_wind"
-                android:title="Wind"
+                android:title="@string/wind"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_share_categorical"
-                android:title="Categorical"
+                android:title="@string/categorical"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_share_probabilistic"
-                android:title="Probabilistic"
+                android:title="@string/probabilistic"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_share_d4"
-                android:title="Day 4 Image"
+                android:title="@string/day_4_image"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_share_d5"
-                android:title="Day 5 Image"
+                android:title="@string/day_5_image"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_share_d6"
-                android:title="Day 6 Image"
+                android:title="@string/day_6_image"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_share_d7"
-                android:title="Day 7 Image"
+                android:title="@string/day_7_image"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_share_d8"
-                android:title="Day 8 Image"
+                android:title="@string/day_8_image"
                 app:showAsAction="never" />
         </menu>
     </item>
@@ -93,8 +93,9 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/action_state_graphics"
-        android:title="State graphics"
+        android:title="@string/state_graphics"
         app:showAsAction="never" />
 </menu>
+
 
 

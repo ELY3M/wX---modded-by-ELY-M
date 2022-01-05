@@ -22,7 +22,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_web"
-        android:title="Web"
+        android:title="@string/web"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_radar"
@@ -32,12 +32,12 @@
     <item
         android:id="@+id/action_afd"
         android:icon="@drawable/ic_info_outline_24dp"
-        android:title="Add afd"
+        android:title="@string/add_afd"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_img"
         android:icon="@drawable/ic_public_24dp"
-        android:title="Add img"
+        android:title="@string/add_img"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_help"
@@ -45,10 +45,10 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/action_reset"
-        android:title="Set to default"
+        android:title="@string/set_to_default"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_reset_ca"
-        android:title="Set to default (Canada)"
+        android:title="@string/set_to_default_canada"
         app:showAsAction="never" />
 </menu>

@@ -45,7 +45,9 @@ object UtilityUS {
         var locationName: String? = OBS_CODE_TO_LOCATION[obsClosestClass]
         if (locationName == null) {
             locationName = findObsName(context, obsClosestClass)
-            if (locationName != "" && obsClosestClass != "") OBS_CODE_TO_LOCATION[obsClosestClass] = locationName
+            if (locationName != "" && obsClosestClass != "") {
+                OBS_CODE_TO_LOCATION[obsClosestClass] = locationName
+            }
         }
         return conditionsTimeStr + " " + UtilityString.capitalizeString(locationName).trim { it <= ' ' } + " (" + obsClosestClass + ") "
     }
@@ -109,9 +111,8 @@ object UtilityUS {
     //
     // Legacy forecast support
     //
-    fun getLocationHtml(x: String, y: String): String {
-        return UtilityNetworkIO.getStringFromUrlWithNewLine("https://forecast.weather.gov/MapClick.php?lat=$x&lon=$y&unit=0&lg=english&FcstType=dwml")
-    }
+    fun getLocationHtml(x: String, y: String) =
+        UtilityNetworkIO.getStringFromUrlWithNewLine("https://forecast.weather.gov/MapClick.php?lat=$x&lon=$y&unit=0&lg=english&FcstType=dwml")
 
     fun getCurrentConditionsUS(html: String): Array<String> {
         val result = Array(6) {""}
@@ -147,20 +148,9 @@ object UtilityUS {
     }
 
     private fun get7DayExt(rawData: Array<String>): String {
-        // var timeP12n13List: MutableList<String> = ArrayList(14)
-        val forecast: Array<String> = UtilityString.parseXml(rawData[11], "text")
-//        try {
-//            val m = MyApplication.utilUS_period_name_pattern.matcher(raw_data[15])
-//            timeP12n13List.add("")
-//            while (m.find()) {
-//                timeP12n13List.add(m.group(1).replace("\"", ""))
-//            }
-//        } catch (e: Exception) {
-//        }
-
+        val forecast = UtilityString.parseXml(rawData[11], "text")
         val timeP12n13List = UtilityString.parseColumnMutable(rawData[15], MyApplication.utilUS_period_name_pattern)
         timeP12n13List.add(0, "")
-
         var forecastString = ""
         for (j in 1 until forecast.size) {
             forecastString += timeP12n13List[j].replace("\"", "")
@@ -195,7 +185,7 @@ object UtilityUS {
             m = MyApplication.utilUS_weather_summary_pattern.matcher(raw_data[18])
             weatherSummaryList.add("")
             while (m.find()) {
-                weatherSummaryList.add(m.group(1).replace("\"",""))
+                weatherSummaryList.add((m.group(1) ?: "").replace("\"",""))
             }
         } catch (e: Exception) {
         }
@@ -204,7 +194,7 @@ object UtilityUS {
             m = MyApplication.utilUS_period_name_pattern.matcher(raw_data[15])
             timeP12n13List.add("")
             while (m.find()) {
-                timeP12n13List.add(m.group(1).replace("\"",""))
+                timeP12n13List.add((m.group(1) ?: "").replace("\"",""))
             }
         } catch (e: Exception) {
         }
@@ -212,7 +202,7 @@ object UtilityUS {
             m = MyApplication.utilUS_period_name_pattern.matcher(raw_data[16])
             timeP24n7List.add("")
             while (m.find()) {
-                timeP24n7List.add(m.group(1).replace("\"",""))
+                timeP24n7List.add((m.group(1) ?: "").replace("\"",""))
             }
         } catch (e: Exception) {
         }

@@ -8,6 +8,7 @@ joshua.tee@gmail.com
 
 package joshuatee.wx.telecine
 
+import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -36,16 +37,6 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
-import joshuatee.wx.MyApplication
-import joshuatee.wx.R
-import joshuatee.wx.radar.WXGLRender
-import joshuatee.wx.radar.WXGLSurfaceView
-import joshuatee.wx.util.UtilityLog
-import joshuatee.wx.ui.UtilityUI
-import joshuatee.wx.fingerdraw.DrawLineView
-import joshuatee.wx.fingerdraw.DrawView
-
 import android.app.PendingIntent.FLAG_CANCEL_CURRENT
 import android.content.Context.MEDIA_PROJECTION_SERVICE
 import android.content.Context.NOTIFICATION_SERVICE
@@ -65,6 +56,14 @@ import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
 import android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
 import android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
 import android.widget.Toast.LENGTH_SHORT
+import joshuatee.wx.MyApplication
+import joshuatee.wx.R
+import joshuatee.wx.radar.WXGLRender
+import joshuatee.wx.radar.WXGLSurfaceView
+import joshuatee.wx.util.UtilityLog
+import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.fingerdraw.DrawLineView
+import joshuatee.wx.fingerdraw.DrawView
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.util.FileProvider
@@ -94,7 +93,7 @@ internal class RecordingSession(
     private var projection: MediaProjection? = null
     private var display: VirtualDisplay? = null
     private var outputFile: String? = null
-    private var running: Boolean = false
+    private var running = false
     private var drawToolActive = false
     private var distanceToolActive = false
     private var drawObject: DrawView? = null
@@ -144,7 +143,9 @@ internal class RecordingSession(
     }
 
     init {
-        if (showRecordingTools) projectionManager = context.getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        if (showRecordingTools) {
+            projectionManager = context.getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+        }
     }
 
     fun showOverlay() {
@@ -194,6 +195,7 @@ internal class RecordingSession(
         }
         val recordingInfo = recordingInfo
         recorder = MediaRecorder()
+        // recorder = MediaRecorder(context)
         recorder!!.setVideoSource(SURFACE)
         recorder!!.setOutputFormat(MPEG_4)
         recorder!!.setVideoFrameRate(recordingInfo.frameRate)
@@ -252,8 +254,9 @@ internal class RecordingSession(
                 }
             }
         }
-        // FIXME let
-        if (recorder != null) recorder!!.release()
+        if (recorder != null) {
+            recorder!!.release()
+        }
         display!!.release()
         val uri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", File(outputFile!!))
         mainThread.post {showNotification(uri, null)}
@@ -316,6 +319,7 @@ internal class RecordingSession(
         }
     }
 
+    @SuppressLint("WrongConstant")
     private fun takeScreenshot() {
         val recordingInfo = screenshotInfo
         val outputName = audioFileFormat.format(Date())
@@ -419,7 +423,7 @@ internal class RecordingSession(
             .setAutoCancel(true)
             .addAction(actionShare)
         if (bitmap != null) {
-            builder!!.setLargeIcon(createSquareBitmap(bitmap))
+            builder.setLargeIcon(createSquareBitmap(bitmap))
                 .setStyle(
                     NotificationCompat.BigPictureStyle()
                         .setBigContentTitle(title)
@@ -427,7 +431,7 @@ internal class RecordingSession(
                         .bigPicture(bitmap)
                 )
         }
-        notificationManager.notify(uri!!.toString(), NOTIFICATION_ID, builder!!.build())
+        notificationManager.notify(uri!!.toString(), NOTIFICATION_ID, builder.build())
         if (bitmap != null) {
             listener.onEnd()
             return
@@ -522,7 +526,6 @@ internal class RecordingSession(
 
         override fun onReceive(context: Context, intent: Intent) {
             val uriData = intent.dataString
-            //UtilityLog.d("wx", "cancel" + uriData!!)
             val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.cancel(uriData, NOTIFICATION_ID)
             notificationManager.cancel(uriData, NOTIFICATION_ID_SCREENSHOT)

@@ -17,12 +17,11 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<!--<resources xmlns:tools="http://schemas.android.com/tools">-->
+<resources>
     <dimen name="nav_header_height">250dp</dimen>
-    <dimen name="design_navigation_icon_size" tools:override="true">40dp</dimen>
-    <dimen name="design_navigation_icon_padding" tools:override="true">10dp</dimen>
 
-    <!-- Standart dimens for the color wheel -->
+    <!-- Standard dimens for the color wheel -->
     <dimen name="color_wheel_radius">124dp</dimen>
     <dimen name="color_wheel_thickness">8dp</dimen>
     <dimen name="color_center_halo_radius">60dp</dimen>
@@ -30,7 +29,7 @@
     <dimen name="color_pointer_halo_radius">18dp</dimen>
     <dimen name="color_pointer_radius">14dp</dimen>
 
-    <!-- Standart dimens for the bars -->
+    <!-- Standard dimens for the bars -->
     <dimen name="bar_thickness">4dp</dimen>
     <dimen name="bar_length">240dp</dimen>
     <dimen name="bar_pointer_radius">6dp</dimen>

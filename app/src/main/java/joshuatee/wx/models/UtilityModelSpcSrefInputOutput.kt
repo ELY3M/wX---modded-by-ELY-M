@@ -31,9 +31,9 @@ import joshuatee.wx.MyApplication
 
 internal object UtilityModelSpcSrefInputOutput {
 
-    const val pattern1 = "([0-9]{2}z)"
-    const val pattern2 = "([0-9]{10}z</a>&nbsp in through <b>f[0-9]{3})"
-    const val pattern3 = "<tr><td class=.previous.><a href=.sref.php\\?run=[0-9]{10}&id=SREF_H5__.>([0-9]{10}z)</a></td></tr>"
+    private const val pattern1 = "([0-9]{2}z)"
+    private const val pattern2 = "([0-9]{10}z</a>&nbsp in through <b>f[0-9]{3})"
+    private const val pattern3 = "<tr><td class=.previous.><a href=.sref.php\\?run=[0-9]{10}&id=SREF_H5__.>([0-9]{10}z)</a></td></tr>"
 
     val runTime: RunTimeData
         get() {

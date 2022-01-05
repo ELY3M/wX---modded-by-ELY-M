@@ -25,6 +25,7 @@ import android.content.Context
 import joshuatee.wx.DataStorage
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityVtec
 
 class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
@@ -32,11 +33,40 @@ class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
     var color = 0
     val storage = DataStorage(prefTokenStorage)
     var isEnabled = false
+    val timer: DownloadTimer
 
     init {
         storage.update(context)
         color = Utility.readPref(context, prefTokenColor, type.initialColor)
         isEnabled = Utility.readPref(context, prefTokenEnabled, "false").startsWith("t")
+        timer = DownloadTimer("WARNINGS_" + getTypeName())
+    }
+
+    // Not currently used
+    fun download() {
+        if (timer.isRefreshNeeded(context)) {
+            val html = UtilityIO.getHtml(getUrl())
+            if (html != "") {
+                storage.valueSet(context, html)
+            }
+        }
+    }
+
+    // Not currently used
+//    fun getData(): String {
+//        return storage.value
+//    }
+
+    fun getUrlToken(): String {
+        return longName[type] ?: ""
+    }
+
+    private fun getUrl(): String {
+        return baseUrl + getUrlToken()
+    }
+
+    private fun getTypeName(): String {
+        return type.toString().replace("PolygonType.", "")
     }
 
     val name get() = type.urlToken.replace("%20", " ")
@@ -51,11 +81,23 @@ class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
         private var polygonDataByType = mutableMapOf<PolygonWarningType, ObjectPolygonWarning>()
 
         private val polygonList = listOf(
-                PolygonWarningType.SpecialMarineWarning,
-                PolygonWarningType.SnowSquallWarning,
-                PolygonWarningType.DustStormWarning,
-                PolygonWarningType.SpecialWeatherStatement
+            PolygonWarningType.SpecialMarineWarning,
+            PolygonWarningType.SnowSquallWarning,
+            PolygonWarningType.DustStormWarning,
+            PolygonWarningType.SpecialWeatherStatement
         )
+
+        val longName = mapOf(
+            PolygonWarningType.SpecialMarineWarning to "Special%20Marine%20Warning",
+            PolygonWarningType.SnowSquallWarning to "Snow%20Squall%20Warning",
+            PolygonWarningType.DustStormWarning to "Dust%20Storm%20Warning",
+            PolygonWarningType.SpecialWeatherStatement to "Special%20Weather%20Statement",
+//            PolygonType.tor: "Tornado%20Warning",
+//            PolygonType.tst: "Severe%20Thunderstorm%20Warning",
+//            PolygonType.ffw: "Flash%20Flood%20Warning",
+        )
+
+        const val baseUrl: String = "https://api.weather.gov/alerts/active?event="
 
         fun areAnyEnabled(): Boolean {
             var anyEnabled = false

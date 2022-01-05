@@ -24,7 +24,6 @@ package joshuatee.wx.activitiesmisc
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import java.util.Locale
-
 import androidx.cardview.widget.CardView
 import android.os.Bundle
 import android.view.KeyEvent
@@ -35,10 +34,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import androidx.core.view.GravityCompat
-import joshuatee.wx.Extensions.getHtml
-import joshuatee.wx.Extensions.parseColumn
 import joshuatee.wx.Extensions.safeGet
-
 import joshuatee.wx.R
 import joshuatee.wx.audio.UtilityTts
 import joshuatee.wx.notifications.UtilityNotificationTextProduct
@@ -46,15 +42,25 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.settings.Location
 import joshuatee.wx.GlobalArrays
-import joshuatee.wx.ui.*
-
+import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.ui.ObjectImageMap
+import joshuatee.wx.ui.ObjectCardText
+import joshuatee.wx.ui.ObjectNavDrawer
+import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.UtilityToolbar
+import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.ShortcutType
-import joshuatee.wx.util.*
-import kotlinx.coroutines.*
+import joshuatee.wx.util.UtilityShare
+import joshuatee.wx.util.UtilityDownload
+import joshuatee.wx.util.UtilityShortcut
+import joshuatee.wx.util.UtilityFavorites
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityImageMap
 
 class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
+    //
     // The primary purpose of this activity is to view AFD from location's NWS office
     // However, other NWS office text products are also available from the AB menu
     // A map icon is also provided to select an office different from your current location
@@ -66,7 +72,6 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object { const val URL = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var firstTime = true
     private lateinit var activityArguments: Array<String>
     private var product = ""
@@ -90,6 +95,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private lateinit var linearLayout: LinearLayout
     private var originalWfo = ""
     private val fixedWidthProducts = listOf("RTP", "RWR", "CLI", "RVA")
+    private var wfoProd = mutableListOf<String>()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.afd_top, menu)
@@ -138,10 +144,6 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
     private fun getContentFixThis() {
         invalidateOptionsMenu()
         when (drw.token) {
-            "CLI" -> {
-                product = drw.token
-                checkForCliSite()
-            }
             "RTPZZ" -> {
                 val state = Utility.getWfoSiteName(wfo).split(",")[0]
                 getProduct(drw.token.replace("ZZ", state))
@@ -157,7 +159,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent() {
         locationList = UtilityFavorites.setupMenu(this@WfoTextActivity, MyApplication.wfoFav, wfo, prefToken)
         updateSubmenuNotificationText()
         invalidateOptionsMenu()
@@ -174,26 +176,27 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         if (wfo != oldWfo) {
             version = 1
         }
-        html = withContext(Dispatchers.IO) {
-            when {
-                product == "CLI" -> UtilityDownload.getTextProduct(this@WfoTextActivity, product + wfo + originalWfo)
-                product.startsWith("RTP") && product.length == 5 -> UtilityDownload.getTextProduct(this@WfoTextActivity, product)
-                else -> {
-                    if (version == 1) {
-                        UtilityDownload.getTextProduct(this@WfoTextActivity, product + wfo)
-                    } else {
-                        UtilityDownload.getTextProduct(product + wfo, version)
-                    }
+        FutureVoid(this@WfoTextActivity, ::download, ::update)
+    }
+
+    private fun download() {
+        html = when {
+            product == "CLI" -> UtilityDownload.getTextProduct(this@WfoTextActivity, product + wfo + originalWfo)
+            product.startsWith("RTP") && product.length == 5 -> UtilityDownload.getTextProduct(this@WfoTextActivity, product)
+            else -> {
+                if (version == 1) {
+                    UtilityDownload.getTextProduct(this@WfoTextActivity, product + wfo)
+                } else {
+                    UtilityDownload.getTextProduct(product + wfo, version)
                 }
             }
         }
+    }
+
+    private fun update() {
         title = when {
             product.startsWith("RTP") && product.length == 5 -> product
             else -> product + wfo
-        }
-        // restore the WFO as CLI modifies to a sub-region
-        if (product == "CLI") {
-            wfo = originalWfo
         }
         toolbar.subtitle = UtilityWfoText.codeToName[product]
         cardList.forEach { linearLayout.removeView(it) }
@@ -288,8 +291,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         wfoListPerState.sort()
     }
 
-    private fun getContentByState() = GlobalScope.launch(uiDispatcher) {
-        val wfoProd = mutableListOf<String>()
+    private fun getContentByState() {
         scrollView.smoothScrollTo(0, 0)
         ridFavOld = MyApplication.wfoFav
         if (product != oldProduct) {
@@ -299,41 +301,29 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
             version = 1
         }
         title = product
-        withContext(Dispatchers.IO) {
-            html = ""
-            wfoListPerState.forEach {
-                html = if (version == 1) {
-                    UtilityDownload.getTextProduct(this@WfoTextActivity, product + it)
-                } else {
-                    UtilityDownload.getTextProduct(product + it, version)
-                }
-                wfoProd.add(html)
+        wfoProd.clear()
+        FutureVoid(this@WfoTextActivity, ::downloadState, ::updateState)
+    }
+
+    private fun downloadState() {
+        html = ""
+        wfoListPerState.forEach {
+            html = if (version == 1) {
+                UtilityDownload.getTextProduct(this@WfoTextActivity, product + it)
+            } else {
+                UtilityDownload.getTextProduct(product + it, version)
             }
+            wfoProd.add(html)
         }
+    }
+
+    private fun updateState() {
         objectCardText.visibility = View.GONE
         cardList.clear()
         wfoProd.forEach {
             val textCard = ObjectCardText(this@WfoTextActivity, linearLayout)
             textCard.setTextAndTranslate(it)
             cardList.add(textCard.card)
-        }
-    }
-
-    private fun checkForCliSite() = GlobalScope.launch(uiDispatcher) {
-        if (product == "CLI") {
-            val cliHtml = withContext(Dispatchers.IO) {
-                ("https://w2.weather.gov/climate/index.php?wfo=" + wfo.lowercase(Locale.US)).getHtml()
-            }
-            val cliSites = cliHtml.parseColumn("cf6PointArray\\[.\\] = new Array\\('.*?','(.*?)'\\)")
-            val cliNames = cliHtml.parseColumn("cf6PointArray\\[.\\] = new Array\\('(.*?)','.*?'\\)")
-            val dialogueMain = ObjectDialogue(this@WfoTextActivity, "Select site from $wfo:", cliNames)
-            dialogueMain.setSingleChoiceItems { dialog, index ->
-                wfo = Utility.safeGet(cliSites, index)
-                dialog.dismiss()
-                getContent()
-            }
-            originalWfo = wfo
-            dialogueMain.show()
         }
     }
 
@@ -355,11 +345,7 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
                                 val state = Utility.getWfoSiteName(wfo).split(",")[0]
                                 product = "RTP$state"
                             }
-                            if (product == "CLI") {
-                                checkForCliSite()
-                            } else {
-                                getContent()
-                            }
+                            getContent()
                         }
                     }
                     if (firstTime) {

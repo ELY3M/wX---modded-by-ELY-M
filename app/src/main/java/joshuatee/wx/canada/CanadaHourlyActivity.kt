@@ -24,19 +24,17 @@ package joshuatee.wx.canada
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.LinearLayout
-
 import joshuatee.wx.R
+import joshuatee.wx.objects.FutureText2
 import joshuatee.wx.settings.Location
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCALegal
 import joshuatee.wx.ui.ObjectCardText
-import kotlinx.coroutines.*
 
 class CanadaHourlyActivity : BaseActivity() {
 
     companion object { const val LOC_NUM = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var locationNumber = 0
     private lateinit var objectCardText: ObjectCardText
     private lateinit var linearLayout: LinearLayout
@@ -57,10 +55,8 @@ class CanadaHourlyActivity : BaseActivity() {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        objectCardText.text = withContext(Dispatchers.IO) {
-            UtilityCanadaHourly.getString(locationNumber)
-        }
+    private fun getContent() {
         objectCardText.typefaceMono()
+        FutureText2(this, { UtilityCanadaHourly.getString(locationNumber) }, objectCardText::setText1)
     }
 }

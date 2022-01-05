@@ -24,7 +24,7 @@
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_15min"
         android:title="@string/label_min_15"

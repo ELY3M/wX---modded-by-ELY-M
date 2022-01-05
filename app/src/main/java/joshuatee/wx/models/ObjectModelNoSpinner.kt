@@ -139,8 +139,8 @@ class ObjectModelNoSpinner(val context: Context, var prefModel: String, numPanes
                 sectors = UtilityModelSpcHrrrInterface.sectors
                 defaultModel = "HRRR"
                 timeTruncate = 2
-                startStep = 2
-                endStep = 16
+                startStep = 1
+                endStep = 14
             }
         }
         model = Utility.readPref(context, prefModel, defaultModel)
@@ -205,8 +205,8 @@ class ObjectModelNoSpinner(val context: Context, var prefModel: String, numPanes
                         params = UtilityModelSpcHrrrInterface.models
                         labels = UtilityModelSpcHrrrInterface.labels
                         sectors = UtilityModelSpcHrrrInterface.sectors
-                        startStep = 2
-                        endStep = 16
+                        startStep = 1
+                        endStep = 14
                         stepAmount = 1
                         numberRuns = 4
                     }
@@ -266,9 +266,9 @@ class ObjectModelNoSpinner(val context: Context, var prefModel: String, numPanes
                         numberRuns = 4
                     }
                     9 -> {
-                        model = "HRW-NMMB"
-                        params = UtilityModelNcepInterface.paramsHrwNmm
-                        labels = UtilityModelNcepInterface.labelsHrwNmm
+                        model = "HRW-FV3"
+                        params = UtilityModelNcepInterface.modelHrwFv3Params
+                        labels = UtilityModelNcepInterface.modelHrwFv3Labels
                         sectors = UtilityModelNcepInterface.sectorsHrwNmm
                         startStep = 1
                         endStep = 48
@@ -336,10 +336,10 @@ class ObjectModelNoSpinner(val context: Context, var prefModel: String, numPanes
                         numberRuns = 1
                     }
                     17 -> {
-                        model = "WW3"
-                        params = UtilityModelNcepInterface.paramsWw3
-                        labels = UtilityModelNcepInterface.labelsWw3
-                        sectors = UtilityModelNcepInterface.sectorsWw3
+                        model = "GFS-WAVE"
+                        params = UtilityModelNcepInterface.paramsGfsWave
+                        labels = UtilityModelNcepInterface.labelsGfsWave
+                        sectors = UtilityModelNcepInterface.sectorsGfsWave
                         startStep = 0
                         endStep = 127
                         stepAmount = 6
@@ -480,8 +480,8 @@ class ObjectModelNoSpinner(val context: Context, var prefModel: String, numPanes
                         startStep = 0
                         endStep = 39
                         stepAmount = 1
-                        format = "%02d"
-                        timeTruncate = 2
+                        format = "%03d"
+                        timeTruncate = 3
                     }
                     2 -> {
                         model = "RAP_NCEP"
@@ -491,8 +491,8 @@ class ObjectModelNoSpinner(val context: Context, var prefModel: String, numPanes
                         startStep = 0
                         endStep = 39
                         stepAmount = 1
-                        format = "%02d"
-                        timeTruncate = 2
+                        format = "%03d"
+                        timeTruncate = 3
                     }
                     0 -> {
                         model = "HRRR_NCEP"
@@ -502,8 +502,8 @@ class ObjectModelNoSpinner(val context: Context, var prefModel: String, numPanes
                         startStep = 0
                         endStep = 36
                         stepAmount = 1
-                        format = "%02d"
-                        timeTruncate = 2
+                        format = "%03d"
+                        timeTruncate = 3
                     }
                 }
             }

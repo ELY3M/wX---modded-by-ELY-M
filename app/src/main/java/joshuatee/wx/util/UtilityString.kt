@@ -247,9 +247,7 @@ object UtilityString {
 
     fun addPeriodBeforeLastTwoChars(string: String) = StringBuilder(string).insert(string.length - 2, ".").toString()
 
-    fun replaceAllRegexp(s: String, a: String, b: String): String {
-        return s.replace(Regex(a), b)
-    }
+    fun replaceAllRegexp(s: String, a: String, b: String) = s.replace(Regex(a), b)
 
     //
     // Legacy forecast support
@@ -288,7 +286,7 @@ object UtilityString {
                 p = Pattern.compile(regexpList[i], Pattern.DOTALL)
                 val m = p.matcher(html)
                 while (m.find()) {
-                    items[i] = m.group(1)
+                    items[i] = m.group(1) ?: ""
                 }
             } catch (e: Exception) {
             }

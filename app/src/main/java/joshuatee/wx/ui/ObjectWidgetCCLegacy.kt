@@ -25,7 +25,6 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.view.View
 import android.widget.RemoteViews
 import joshuatee.wx.*
@@ -39,7 +38,6 @@ import joshuatee.wx.spc.SpcSoundingsActivity
 import joshuatee.wx.spc.UtilitySpc
 import joshuatee.wx.util.*
 import joshuatee.wx.vis.GoesActivity
-
 import java.util.regex.Pattern
 
 class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
@@ -65,32 +63,12 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         val wfo = Utility.readPref(context, "NWS$widgetLocationNumber", "")
         val radarSite = Location.getRid(context, widgetLocationNumber)
         val locLabel = Utility.readPref(context, "LOC" + widgetLocationNumber + "_LABEL", "")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            remoteViews.setImageViewResource(R.id.b_radar, R.drawable.ic_flash_on_24dp_white)
-            remoteViews.setImageViewResource(R.id.b_cloud, R.drawable.ic_cloud_24dp_white)
-            remoteViews.setImageViewResource(R.id.b_afd, R.drawable.ic_info_outline_24dp_white)
-            remoteViews.setImageViewResource(R.id.b_hourly, R.drawable.ic_place_24dp)
-            remoteViews.setImageViewResource(R.id.b_alert, R.drawable.ic_warning_24dp)
-            remoteViews.setImageViewResource(R.id.b_dash, R.drawable.ic_report_24dp_white)
-        } else {
-            val icons = listOf(
-                    R.drawable.ic_flash_on_24dp,
-                    R.drawable.ic_cloud_24dp,
-                    R.drawable.ic_info_outline_24dp,
-                    R.drawable.ic_place_24dp,
-                    R.drawable.ic_warning_24dp,
-                    R.drawable.ic_report_24dp
-            )
-            val buttons = listOf(
-                    R.id.b_radar,
-                    R.id.b_cloud,
-                    R.id.b_afd,
-                    R.id.b_hourly,
-                    R.id.b_alert,
-                    R.id.b_dash
-            )
-            icons.indices.forEach { UtilityUI.setResDrawable(context, remoteViews, buttons[it], icons[it]) }
-        }
+        remoteViews.setImageViewResource(R.id.b_radar, R.drawable.ic_flash_on_24dp_white)
+        remoteViews.setImageViewResource(R.id.b_cloud, R.drawable.ic_cloud_24dp_white)
+        remoteViews.setImageViewResource(R.id.b_afd, R.drawable.ic_info_outline_24dp_white)
+        remoteViews.setImageViewResource(R.id.b_hourly, R.drawable.ic_place_24dp)
+        remoteViews.setImageViewResource(R.id.b_alert, R.drawable.ic_warning_24dp)
+        remoteViews.setImageViewResource(R.id.b_dash, R.drawable.ic_report_24dp_white)
         remoteViews.setTextViewText(R.id.cc, cc)
         remoteViews.setTextViewText(R.id.updtime, updateTime)
         var hazardSum = ""
@@ -103,7 +81,11 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
             UtilityLog.handleException(e)
         }
         hazardSum = hazardSum.replace(("^" + MyApplication.newline).toRegex(), "")
-        if (hazardSum != "") remoteViews.setViewVisibility(R.id.hazard, View.VISIBLE) else remoteViews.setViewVisibility(R.id.hazard, View.GONE)
+        if (hazardSum != "") {
+            remoteViews.setViewVisibility(R.id.hazard, View.VISIBLE)
+        } else {
+            remoteViews.setViewVisibility(R.id.hazard, View.GONE)
+        }
         remoteViews.setTextViewText(R.id.hazard, hazardSum)
         remoteViews.setTextViewText(R.id.forecast, sd)
         remoteViews.setTextViewText(R.id.widget_time, "Updated: " + UtilityTime.getDateAsString("h:mm a")) // "%k:%M:%S"
@@ -112,12 +94,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         var hazardsExt = Utility.getHazards(hazardRaw)
         hazardsExt = hazardsExt.replace("<hr /><br />", "")
         UtilityWidget.setupIntent(context, remoteViews, TextScreenActivity::class.java, R.id.hazard, TextScreenActivity.URL, arrayOf(hazardsExt, "Local Hazards"), actionHazard)
-        // radar
-//        if (Location.isUS(widgetLocationNumber)) {
         UtilityWidget.setupIntent(context, remoteViews, WXGLRadarActivity::class.java, R.id.b_radar, WXGLRadarActivity.RID, arrayOf(radarSite), actionRadar)
-//        } else {
-//            UtilityWidget.setupIntent(context, remoteViews, CanadaRadarActivity::class.java, R.id.b_radar, CanadaRadarActivity.RID, arrayOf(radarSite, "rad"), actionRadar)
-//        }
         // local alerts ( or nat for CA )
         if (Location.isUS(widgetLocationNumber)) {
             UtilityWidget.setupIntent(
@@ -146,11 +123,7 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         }
         UtilityWidget.setupIntent(context, remoteViews, SevereDashboardActivity::class.java, R.id.b_dash, actionDashboard)
         // cloud icon - vis
-//        if (Location.isUS(widgetLocationNumber)) {
         UtilityWidget.setupIntent(context, remoteViews, GoesActivity::class.java, R.id.b_cloud, GoesActivity.RID, arrayOf(""), actionCloud)
-//        } else {
-//            UtilityWidget.setupIntent(context, remoteViews, CanadaRadarActivity::class.java, R.id.b_cloud, CanadaRadarActivity.RID, arrayOf(radarSite, "vis"), actionCloud)
-//        }
         val updateIntent = Intent()
         updateIntent.action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
         updateIntent.putExtra(Widget.WIDGET_IDS_KEY, allWidgetIds)

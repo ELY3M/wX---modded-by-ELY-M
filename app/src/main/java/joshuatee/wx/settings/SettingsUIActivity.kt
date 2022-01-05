@@ -338,7 +338,14 @@ class SettingsUIActivity : BaseActivity() {
                         R.string.use_nws_api_hourly
                 ).card
         )
-
+        linearLayout.addView(
+                ObjectSettingsCheckBox(
+                        this,
+                        "Use GOES GLM for lightning, requires restart",
+                        "LIGHTNING_USE_GOES",
+                        R.string.use_goes_for_lightning
+                ).card
+        )
 	//elys mod	
        	linearLayout.addView(
                 ObjectSettingsCheckBox(
@@ -348,6 +355,9 @@ class SettingsUIActivity : BaseActivity() {
                         R.string.checkinternet_switch_label
                 ).card
         )	
+        //
+        // sliders
+        //
         linearLayout.addView(
                 ObjectSettingsSeekBar(
                         this,

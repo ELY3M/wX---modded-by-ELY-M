@@ -62,6 +62,7 @@ import java.io.File
 
 class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListener {
 
+    //
     // This activity is a general purpose viewer of nexrad and mosaic content
     // nexrad data is downloaded from NWS FTP, decoded and drawn using OpenGL ES
     // Unlike the traditional viewer this one shows multiple nexrad radars at the same time
@@ -72,6 +73,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
     // 2: State NO LONGER NEEDED
     // 3: number of panes
     // 4: coming from single pane
+    //
 
     companion object { const val RID = "" }
 
@@ -273,8 +275,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                 }
             }
         }
-        UtilityLog.d("wx", "DEBUG1: " + MyApplication.dm.heightPixels.toString())
-        UtilityLog.d("wx", "DEBUG2: " + resources.displayMetrics.heightPixels.toString())
+        // UtilityLog.d("wx", "DEBUG1: " + MyApplication.dm.heightPixels.toString())
+        // UtilityLog.d("wx", "DEBUG2: " + resources.displayMetrics.heightPixels.toString())
         //UtilityLog.d("wx", "DEBUG2: " + this.resources.configuration.screenHeightDp)
         panesList.forEach {
             UtilityRadarUI.initGlView(
@@ -384,6 +386,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             mHandler = Handler(Looper.getMainLooper())
             startRepeatingTask()
         }
+	
+	//elys mod
         if (MyApplication.sn_locationreport) {
             UtilityLog.d("wx", "starting location report")
             sn_Handler_m = Handler(Looper.getMainLooper())
@@ -870,6 +874,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         // otherwise cpu will spin with no fix but to kill app
         inOglAnim = false
         mHandler?.let { stopRepeatingTask() }
+	//elys mod
         sn_Handler_m?.let { stop_sn_reporting() }
         locationManager?.let {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
@@ -923,6 +928,7 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         mHandler = null
     }
 
+    //elys mod
     //report your spotter network location
     private val sn_handler = Handler(Looper.getMainLooper())
     private val sn_reporter: Runnable = object : Runnable {
@@ -1018,7 +1024,6 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
                     this,
                     wxglSurfaceViews[idxIntAl],
                     wxglRenders[idxIntAl],
-                    uiDispatcher,
                     ::longPressRadarSiteSwitch
             )
             dialog.dismiss()

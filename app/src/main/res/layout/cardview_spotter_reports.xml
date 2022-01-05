@@ -82,7 +82,3 @@
             android:paddingBottom="@dimen/padding" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
-
-
-
-

@@ -24,12 +24,11 @@ package joshuatee.wx
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
-import joshuatee.wx.objects.WidgetFile.*
-import kotlinx.coroutines.*
+import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.WidgetFile.HWO
 
 class WidgetTextHWO : AppWidgetProvider() {
 
-    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     private val type = HWO
 
     override fun onDisabled(context: Context) {
@@ -47,8 +46,11 @@ class WidgetTextHWO : AppWidgetProvider() {
         UtilityWidget.update(context, type)
     }
 
-    private fun getContent(context: Context) = GlobalScope.launch(uiDispatcher) {
-        withContext(Dispatchers.IO) { UtilityWidgetDownload.download(context, type) }
-        UtilityWidget.update(context, type)
+    private fun getContent(context: Context) {
+        FutureVoid(
+                context,
+                { UtilityWidgetDownload.download(context, type) },
+                { UtilityWidget.update(context, type) }
+        )
     }
 } 

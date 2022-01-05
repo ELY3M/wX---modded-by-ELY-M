@@ -4,7 +4,6 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.external.UtilityStringExternal
@@ -23,14 +22,13 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
         val text1 = ObjectTextView(itemView, R.id.text1, TextSize.MEDIUM)
         val currentConditions = ObjectTextView(itemView, R.id.currentConditions, TextSize.SMALL)
         val text2 = ObjectTextView(itemView, R.id.text2, backgroundText = true)
-        //val text3 = ObjectTextView(itemView, R.id.text3, backgroundText = true)
 
         init {
             ObjectCard(itemView, R.id.cv1)
             itemView.setOnClickListener(this)
         }
 
-        override fun onClick(v: View) { myClickListener!!.onItemClick(adapterPosition) }
+        override fun onClick(v: View) { myClickListener!!.onItemClick(layoutPosition) }
     }
 
     fun setListener(fn: (Int) -> Unit) {
@@ -61,15 +59,10 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
             holder.text1.text = Location.getName(position) + " +Alert"
         }
         holder.text1.color = UIPreferences.textHighlightColor
-        //} else {
-        //    holder.text1.color = UIPreferences.backgroundColor
-        //}
         holder.currentConditions.text = Location.getObservation(position)
         if (nonUs) {
-            //holder.text2.text = "${UtilityStringExternal.truncate(lat, 6)} , ${UtilityStringExternal.truncate(lon, 6)}"
             holder.text2.text = "RID: ${Location.getRid(position)} ${UtilityLocation.hasAlerts(position)} (${UtilityStringExternal.truncate(lat, 6)} , ${UtilityStringExternal.truncate(lon, 6)})"
         } else {
-            //holder.text2.text = "${UtilityStringExternal.truncate(Location.getX(position), 6)} , ${UtilityStringExternal.truncate(Location.getY(position), 6)}"
             holder.text2.text = "WFO: ${Location.getWfo(position)}  RID: ${Location.getRid(position)} (${UtilityStringExternal.truncate(Location.getX(position), 6)} , ${UtilityStringExternal.truncate(Location.getY(position), 6)})"
         }
     }
@@ -77,7 +70,8 @@ internal class SettingsLocationAdapterList(private val dataSet: MutableList<Stri
     fun deleteItem(index: Int) {
         if (index < dataSet.count()) {
             dataSet.removeAt(index)
-            notifyDataSetChanged()
+//            notifyDataSetChanged()
+            notifyItemRemoved(index)
         }
     }
 

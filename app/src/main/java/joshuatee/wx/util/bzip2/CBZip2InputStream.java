@@ -149,22 +149,10 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
   private int j2;
   private char z;
 
-  //public CBZip2InputStream() {
-  //}
-
   public CBZip2InputStream(InputStream zStream) {
     setStream(zStream);
   }
 
-  /*public CBZip2InputStream(InputStream zStream, boolean skip) throws IOException {
-    if (skip) {
-      byte[] bzString = new byte[2];
-      int ret = zStream.read(bzString);
-      if (ret == -1)
-          throw new IOException("End of stream reached skipping bytes");
-    }
-    setStream(zStream);
-  }*/
   /**
    * Added 5-30-2006 to allow for resetting of the input used
    * by this object. This saves in memory allocation costs
@@ -210,18 +198,12 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
     } else {
       int retChar = currentChar;
       switch (currentState) {
-        //case START_BLOCK_STATE:
-        //  break;
-        //case RAND_PART_A_STATE:
-        //  break;
         case RAND_PART_B_STATE:
           setupRandPartB();
           break;
         case RAND_PART_C_STATE:
           setupRandPartC();
           break;
-        //case NO_RAND_PART_A_STATE:
-        //  break;
         case NO_RAND_PART_B_STATE:
           setupNoRandPartB();
           break;
@@ -305,10 +287,6 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
   private void badBlockHeader() {
     cadvise("Bad Block Header");
   }
-
- /* private void crcError() {
-    cadvise();
-  }*/
 
   private void bsFinishedWithStream() {
     try {
@@ -860,9 +838,6 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
   }
 
   private void setDecompressStructureSizes(int newSize100k) {
-    //if (!(0 <= newSize100k && newSize100k <= 9 && 0 <= blockSize100k && blockSize100k <= 9)) {
-      // throw new IOException("Invalid block size");
-    //}
 
     blockSize100k = newSize100k;
 
@@ -890,11 +865,6 @@ public class CBZip2InputStream extends InputStream implements BZip2Constants {
       tt = new int[n];
     }
   }
-
-  //private void cadvise() {
-  //  System.out.println("CRC Error");
-    //throw new CCoruptionError();
-  //}
 
   private void cadvise(String msg) {
     throw new BZip2ReadException(msg);

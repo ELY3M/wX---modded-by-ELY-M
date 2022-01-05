@@ -26,4 +26,4 @@
         android:background="@color/primary_dark_blue"
         android:focusable="false" />
 
-</LinearLayout> 
+</LinearLayout>

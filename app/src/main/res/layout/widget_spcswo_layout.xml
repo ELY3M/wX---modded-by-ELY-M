@@ -38,14 +38,14 @@
 
             <ImageView
                 android:id="@+id/iv1"
-                android:contentDescription="SPC Convective outlook day 1"
+                android:contentDescription="@string/spc_convective_outlook_day_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true" />
 
             <ImageView
                 android:id="@+id/iv3"
-                android:contentDescription="SPC Convective outlook day 3"
+                android:contentDescription="@string/spc_convective_outlook_day_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true" />
@@ -59,14 +59,14 @@
 
             <ImageView
                 android:id="@+id/iv2"
-                android:contentDescription="SPC Convective outlook day 3"
+                android:contentDescription="@string/spc_convective_outlook_day_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true" />
 
             <ImageView
                 android:id="@+id/iv4"
-                android:contentDescription="SPC Convective outlook day 4"
+                android:contentDescription="@string/spc_convective_outlook_day_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true" />

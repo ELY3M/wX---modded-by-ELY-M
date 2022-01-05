@@ -27,9 +27,7 @@ import java.util.Date
 import java.util.GregorianCalendar
 import java.util.Locale
 import java.util.TimeZone
-
 import joshuatee.wx.Extensions.*
-
 
 object UtilityTime {
 
@@ -47,23 +45,23 @@ object UtilityTime {
         return returnTime
     }
 
-    fun genModelRuns(time: String, hours: Int): List<String> {
-        val listRun = mutableListOf<String>()
-        val format = SimpleDateFormat("yyyyMMddHH", Locale.US)
-        var parsed: Date
-        val oneMinuteInMillis: Long = 60000
-        var t: Long = 0
-        (1 until 4).forEach {
-            try {
-                parsed = format.parse(time)!!
-                t = parsed.time
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
-            }
-            listRun.add(format.format(Date(t - 60 * oneMinuteInMillis * it.toLong() * hours.toLong())))
-        }
-        return listRun
-    }
+//    fun genModelRuns(time: String, hours: Int): List<String> {
+//        val listRun = mutableListOf<String>()
+//        val format = SimpleDateFormat("yyyyMMddHH", Locale.US)
+//        var parsed: Date
+//        val oneMinuteInMillis: Long = 60000
+//        var t: Long = 0
+//        (1 until 4).forEach {
+//            try {
+//                parsed = format.parse(time)!!
+//                t = parsed.time
+//            } catch (e: Exception) {
+//                UtilityLog.handleException(e)
+//            }
+//            listRun.add(format.format(Date(t - 60 * oneMinuteInMillis * it.toLong() * hours.toLong())))
+//        }
+//        return listRun
+//    }
 
     fun genModelRuns(time: String, hours: Int, timeStr: String): List<String> {
         val listRun = mutableListOf<String>()
@@ -126,11 +124,7 @@ object UtilityTime {
 
     fun getCurrentLocalTimeAsString(): String = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())
 
-    //fun year() = Calendar.getInstance().get(Calendar.YEAR)
-
     fun getYear() = Calendar.getInstance().get(Calendar.YEAR)
-
-    //fun month(): Int = Calendar.getInstance().get(Calendar.MONTH) + 1
 
     fun day() = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
@@ -182,7 +176,7 @@ object UtilityTime {
 
     fun isVtecCurrent(vtec: String ): Boolean {
         // example 190512T1252Z-190512T1545Z
-        val timeRange = (vtec).parse("-([0-9]{6}T[0-9]{4})Z")
+        val timeRange = vtec.parse("-([0-9]{6}T[0-9]{4})Z")
         val timeInMinutes = decodeVtecTime(timeRange)
         val currentTimeInMinutes = decodeVtecTime(getGmtTimeForVtec())
         return currentTimeInMinutes.before(timeInMinutes)
@@ -191,11 +185,11 @@ object UtilityTime {
     private fun decodeVtecTime(timeRangeOriginal: String): Calendar {
         // Y2K issue
         val timeRange = timeRangeOriginal.replace("T","")
-        val year = ("20" + (timeRange).parse("([0-9]{2})[0-9]{4}[0-9]{4}")).toIntOrNull() ?: 0
-        val month = ((timeRange).parse("[0-9]{2}([0-9]{2})[0-9]{2}[0-9]{4}")).toIntOrNull() ?: 0
-        val day = ((timeRange).parse("[0-9]{4}([0-9]{2})[0-9]{4}")).toIntOrNull() ?: 0
-        val hour = ((timeRange).parse("[0-9]{6}([0-9]{2})[0-9]{2}")).toIntOrNull() ?: 0
-        val minute = ((timeRange).parse("[0-9]{6}[0-9]{2}([0-9]{2})")).toIntOrNull() ?: 0
+        val year = To.int("20" + timeRange.parse("([0-9]{2})[0-9]{4}[0-9]{4}"))
+        val month = To.int(timeRange.parse("[0-9]{2}([0-9]{2})[0-9]{2}[0-9]{4}"))
+        val day = To.int(timeRange.parse("[0-9]{4}([0-9]{2})[0-9]{4}"))
+        val hour = To.int(timeRange.parse("[0-9]{6}([0-9]{2})[0-9]{2}"))
+        val minute = To.int(timeRange.parse("[0-9]{6}[0-9]{2}([0-9]{2})"))
         val cal = Calendar.getInstance()
         cal.set(year, month - 1, day, hour, minute)
         return cal
@@ -208,4 +202,26 @@ object UtilityTime {
     }
 
     fun currentTimeMillis() = System.currentTimeMillis() // Long
+
+    fun translateTimeForHourly(originalTime: String): String {
+        val originalTimeComponents = originalTime.replace("T", "-").split("-")
+        val year = originalTimeComponents[0].toIntOrNull() ?: 0
+        val month = originalTimeComponents[1].toIntOrNull() ?: 0
+        val day = originalTimeComponents[2].toIntOrNull() ?: 0
+        val hour = originalTimeComponents[3].replace(":00:00", "").toIntOrNull() ?: 0
+        val hourString = hour.toString()
+        val calendar = Calendar.getInstance()
+        calendar.set(year - 1900, month - 1, day, 0, 0)
+        val dayOfTheWeek = when (calendar.get(Calendar.DAY_OF_WEEK)) {
+            6 -> "Mon"
+            7 -> "Tue"
+            1 -> "Wed"
+            2 -> "Thu"
+            3 -> "Fri"
+            4 -> "Sat"
+            5 -> "Sun"
+            else -> ""
+        }
+        return "$dayOfTheWeek $hourString"
+    }
 }

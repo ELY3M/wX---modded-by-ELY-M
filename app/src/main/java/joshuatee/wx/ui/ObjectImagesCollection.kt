@@ -31,7 +31,7 @@ class ObjectImagesCollection(val title: String, val urls: List<String>, val labe
 
     companion object {
         fun initialize(): MutableMap<String, ObjectImagesCollection> {
-            val collectionMap: MutableMap<String, ObjectImagesCollection> = mutableMapOf()
+            val collectionMap = mutableMapOf<String, ObjectImagesCollection>()
             collectionMap["OPC"] = ObjectImagesCollection(
                     "OPC",
                     UtilityOpcImages.urls,

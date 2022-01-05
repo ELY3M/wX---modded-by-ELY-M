@@ -26,29 +26,32 @@ import android.content.Context
 import android.graphics.PointF
 import android.view.View
 import androidx.appcompat.widget.Toolbar
-import joshuatee.wx.Extensions.startAnimation
-
 import java.sql.Date
 import java.util.Calendar
 import java.util.TimeZone
-
+import joshuatee.wx.Extensions.startAnimation
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.external.UtilityStringExternal
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.TouchImageView2
-import joshuatee.wx.util.*
-import kotlinx.coroutines.*
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.UtilityShare
+import joshuatee.wx.util.UtilityTime
 
 object UtilityModels {
 
-    fun getContentNonSpinner(context: Context, om: ObjectModelNoSpinner, overlayImg: List<String>, uiDispatcher: CoroutineDispatcher): Job =
-            GlobalScope.launch(uiDispatcher) {
-                om.sectorInt = om.sectors.indexOf(om.sector)
-                if (om.truncateTime) {
-                    om.time = UtilityStringExternal.truncate(om.time, om.timeTruncate)
-                }
-                writePrefs(context, om)
-                withContext(Dispatchers.IO) { (0 until om.numPanes).forEach { om.displayData.bitmap[it] = om.getImage(it, overlayImg) } }
+    fun getContentNonSpinner(context: Context, om: ObjectModelNoSpinner, overlayImg: List<String>) {
+        om.sectorInt = om.sectors.indexOf(om.sector)
+        if (om.truncateTime) {
+            om.time = UtilityStringExternal.truncate(om.time, om.timeTruncate)
+        }
+        writePrefs(context, om)
+        FutureVoid(
+            context,
+            { (0 until om.numPanes).forEach { om.displayData.bitmap[it] = om.getImage(it, overlayImg) } },
+            {
                 (0 until om.numPanes).forEach {
                     if (om.numPanes > 1) {
                         UtilityImg.resizeViewAndSetImage(context, om.displayData.bitmap[it], om.displayData.img[it])
@@ -70,6 +73,8 @@ object UtilityModels {
                 updateToolbarLabels(om)
                 om.imageLoaded = true
             }
+        )
+    }
 
     private fun updateToolbarLabels(om: ObjectModelNoSpinner) {
         if (om.numPanes > 1) {
@@ -86,15 +91,16 @@ object UtilityModels {
         }
     }
 
-
-    fun getAnimate(om: ObjectModelNoSpinner, overlayImg: List<String>, uiDispatcher: CoroutineDispatcher): Job =
-            GlobalScope.launch(uiDispatcher) {
-                withContext(Dispatchers.IO) {
-                    (0 until om.numPanes).forEach { om.displayData.animDrawable[it] = om.getAnimate(it, overlayImg) }
-                }
+    fun getAnimate(context: Context, om: ObjectModelNoSpinner, overlayImg: List<String>) {
+        FutureVoid(
+            context,
+            { (0 until om.numPanes).forEach { om.displayData.animDrawable[it] = om.getAnimate(it, overlayImg) } },
+            {
                 (0 until om.numPanes).forEach { om.displayData.animDrawable[it].startAnimation(om.displayData.img[it]) }
                 om.animRan = true
             }
+        )
+    }
 
     private fun writePrefs(context: Context, om: ObjectModelNoSpinner) {
         Utility.writePref(context, om.prefSector, om.sector)

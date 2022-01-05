@@ -31,22 +31,22 @@ import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.R
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.*
+import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
-import kotlinx.coroutines.*
 
 class SpcThunderStormOutlookActivity : BaseActivity() {
 
     //
     // SPC Thunderstorm Outlooks
     //
-
-    private val uiDispatcher = Dispatchers.Main
-    private var bitmaps = listOf<Bitmap>()
+    private var bitmaps = mutableListOf<Bitmap>()
     private var urls = listOf<String>()
     private var imagesPerRow = 2
     private lateinit var linearLayout: LinearLayout
+    private lateinit var objectImageSummary: ObjectImageSummary
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.shared_multigraphics, menu)
@@ -70,19 +70,23 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        urls = withContext(Dispatchers.IO) {
-            UtilitySpc.thunderStormOutlookUrls
-        }
-        bitmaps = withContext(Dispatchers.IO) {
-            urls.map { it.getImage() }
-        }
+    private fun getContent() {
+        FutureVoid(this, { urls = UtilitySpc.thunderStormOutlookUrls }, ::getImages)
+    }
+
+    private fun getImages() {
+        bitmaps = MutableList(urls.size){ UtilityImg.getBlankBitmap() }
         linearLayout.removeAllViews()
-        val objectImageSummary = ObjectImageSummary(this@SpcThunderStormOutlookActivity, linearLayout, bitmaps)
-        objectImageSummary.objectCardImages.forEachIndexed { index, objectCardImage ->
-            objectCardImage.setOnClickListener {
-                ObjectIntent.showImage(this@SpcThunderStormOutlookActivity, arrayOf(urls[index], ""))
-            }
+        objectImageSummary = ObjectImageSummary(this@SpcThunderStormOutlookActivity, linearLayout, bitmaps)
+        for (i in urls.indices) {
+            FutureVoid(this, { bitmaps[i] = urls[i].getImage() }, { updateImage(i) })
+        }
+    }
+
+    private fun updateImage(index: Int) {
+        objectImageSummary.objectCardImages[index].setImage2(bitmaps[index], 2)
+        objectImageSummary.objectCardImages[index].setOnClickListener{
+            ObjectIntent.showImage(this@SpcThunderStormOutlookActivity, arrayOf(urls[index], ""))
         }
     }
 

@@ -22,11 +22,9 @@ package joshuatee.wx.external;
 
 import java.io.InputStream;
 import java.util.Vector;
-
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
-
-import joshuatee.wx.util.UtilityLog;
+// import joshuatee.wx.util.UtilityLog;
 
 // From https://code.google.com/p/android-gifview/source/browse/GifPlayer/src/jp/tomorrowkey/android/gifplayer/GifDecoder.java?r=3
 // https://code.google.com/p/android-gifview/
@@ -96,30 +94,6 @@ public class ExternalGifDecoder {
 		final int delay;
 	}
 
-	/*
-	 * Gets display duration for specified frame.
-	 * 
-	 * @param n
-	 *          int index of frame
-	 * @return delay in milliseconds
-	 */
-	/*public int getDelay(int n) {
-		delay = -1;
-		if ((n >= 0) && (n < frameCount)) {
-			delay = frames.elementAt(n).delay;
-		}
-		return delay;
-	}*/
-
-	/*
-	 * Gets the number of frames read from file.
-	 * 
-	 * @return frame count
-	 */
-	/*public int getFrameCount() {
-		return frameCount;
-	}*/
-
 	/**
 	 * Gets the first (or only) image read.
 	 * 
@@ -128,15 +102,6 @@ public class ExternalGifDecoder {
 	public Bitmap getBitmap() {
 		return getFrame(0);
 	}
-
-	/*
-	 * Gets the "Netscape" iteration count, if any. A count of 0 means repeat indefinitiely.
-	 * 
-	 * @return iteration count if one was specified, else 1.
-	 */
-	/*public int getLoopCount() {
-		return loopCount;
-	}*/
 
 	/**
 	 * Creates new frame image from current data (and previous frames as specified by their disposition codes).
@@ -261,7 +226,7 @@ public class ExternalGifDecoder {
 		try {
 			is.close();
 		} catch (Exception e) {
-			UtilityLog.INSTANCE.handleException(e);
+			// UtilityLog.INSTANCE.handleException(e);
 		}
 		return status;
 	}

@@ -26,27 +26,28 @@ import android.os.Bundle
 import android.content.res.Configuration
 import android.view.KeyEvent
 import android.view.Menu
-
-import java.util.Locale
-
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
-
+import java.util.Locale
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.VideoRecordActivity
-import joshuatee.wx.ui.*
-import joshuatee.wx.util.*
-import kotlinx.coroutines.*
+import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.ObjectFab
+import joshuatee.wx.ui.ObjectNavDrawerCombo
+import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.UtilityString
 
 class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
     companion object { const val INFO = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var fab1: ObjectFab? = null
     private var fab2: ObjectFab? = null
     private lateinit var miStatus: MenuItem
@@ -78,7 +79,9 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         } else {
             super.onCreate(savedInstanceState, R.layout.activity_models_spchrefmultipane, R.menu.models_spchref, iconsEvenlySpaced = false, bottomToolbar = true)
             val linearLayout: LinearLayout = findViewById(R.id.linearLayout)
-            if (UtilityUI.isLandScape(this)) linearLayout.orientation = LinearLayout.HORIZONTAL
+            if (UtilityUI.isLandScape(this)) {
+                linearLayout.orientation = LinearLayout.HORIZONTAL
+            }
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         title = activityArguments!![2]
@@ -120,7 +123,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
             objectNavDrawerCombo.drawerLayout.closeDrawer(objectNavDrawerCombo.listView)
             om.displayData.param[om.curImg] = objectNavDrawerCombo.getToken(groupPosition, childPosition)
             om.displayData.paramLabel[om.curImg] = objectNavDrawerCombo.getLabel(groupPosition, childPosition)
-            UtilityModels.getContentNonSpinner(this, om, listOf(""), uiDispatcher)
+            UtilityModels.getContentNonSpinner(this, om, listOf(""))
             true
         }
         setupModel()
@@ -148,7 +151,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
                         "(" + (om.curImg + 1).toString() + ")" + om.displayData.param[0] + "/" + om.displayData.param[1]
                 )
             }
-            R.id.action_animate -> UtilityModels.getAnimate(om, listOf(""), uiDispatcher)
+            R.id.action_animate -> UtilityModels.getAnimate(this@ModelsSpcHrefActivity, om, listOf(""))
             R.id.action_time -> genericDialog(om.times) { om.setTimeIdx(it) }
             R.id.action_run -> genericDialog(om.rtd.listRun) { om.run = om.rtd.listRun[it] }
             R.id.action_multipane -> ObjectIntent(this, ModelsSpcHrefActivity::class.java, INFO, arrayOf("2", activityArguments!![1], activityArguments!![2]))
@@ -173,8 +176,15 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         return true
     }
 
-    private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
-        om.rtd = withContext(Dispatchers.IO) { om.getRunTime() }
+    private fun getRunStatus() {
+        FutureVoid(this, ::getRunStatusDownload, ::getRunStatusUpdate)
+    }
+
+    private fun getRunStatusDownload() {
+        om.rtd = om.getRunTime()
+    }
+
+    private fun getRunStatusUpdate() {
         miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
         om.run = om.rtd.mostRecentRun
         (om.startStep until om.endStep).forEach { om.times.add(String.format(Locale.US, "%02d", it)) }
@@ -184,7 +194,7 @@ class ModelsSpcHrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        UtilityModels.getContentNonSpinner(this, om, listOf(""), uiDispatcher)
+        UtilityModels.getContentNonSpinner(this, om, listOf(""))
         updateMenuTitles()
     }
 

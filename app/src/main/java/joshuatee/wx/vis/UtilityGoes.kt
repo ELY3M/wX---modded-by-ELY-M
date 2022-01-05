@@ -24,12 +24,11 @@ package joshuatee.wx.vis
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
-
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
-
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
+import joshuatee.wx.util.UtilityString
 
 object UtilityGoes {
 
@@ -37,6 +36,12 @@ object UtilityGoes {
         val fullSize = "latest"
         val size = sizeMap[sector] ?: fullSize
         return "$size.jpg"
+    }
+
+    fun getImageGoesFloater(url: String, product: String): Bitmap {
+        var urlFinal = url
+        urlFinal = urlFinal.replace("GEOCOLOR", product)
+        return urlFinal.getImage()
     }
 
     fun getImage(product: String, sector: String): Bitmap {
@@ -59,7 +64,11 @@ object UtilityGoes {
         // https://cdn.star.nesdis.noaa.gov/GOES16/ABI/SECTOR/cgl/12/latest.jpg
         // https://cdn.star.nesdis.noaa.gov/GOES17/ABI/CONUS/GEOCOLOR/1250x750.jpg
         // https://cdn.star.nesdis.noaa.gov/GOES16/ABI/CONUS/GEOCOLOR/1250x750.jpg
-        val url = MyApplication.goes16Url + "/" + satellite + "/ABI/" + sectorLocal + "/" + product + "/" + getImageFileName(sector)
+        var url = MyApplication.goes16Url + "/" + satellite + "/ABI/" + sectorLocal + "/" + product + "/" + getImageFileName(sector)
+        if (product == "GLM") {
+            url = url.replace("ABI", "GLM")
+            url = url.replace("$sectorLocal/GLM", "$sectorLocal/EXTENT3")
+        }
         return url.getImage()
     }
 
@@ -68,16 +77,32 @@ object UtilityGoes {
     fun getAnimation(context: Context, product: String, sector: String, frameCount: Int): AnimationDrawable {
         val frameCountString = frameCount.toString()
         val satellite = if (sectorsInGoes17.contains(sector)) "G17" else "G16"
+        val productLocal = product.replace("GLM", "EXTENT")
         val url = when (sector) {
             // https://www.star.nesdis.noaa.gov/GOES/fulldisk_band.php?sat=G17&band=GEOCOLOR&length=12
-            "FD", "FD-G17" -> MyApplication.goes16AnimUrl + "/GOES/fulldisk_band.php?sat=$satellite&band=$product&length=$frameCountString"
-            "CONUS", "CONUS-G17" -> MyApplication.goes16AnimUrl + "/GOES/conus_band.php?sat=$satellite&band=$product&length=$frameCountString"
-            else -> MyApplication.goes16AnimUrl + "/GOES/sector_band.php?sat=$satellite&sector=$sector&band=$product&length=$frameCountString"
+            "FD", "FD-G17" -> MyApplication.goes16AnimUrl + "/GOES/fulldisk_band.php?sat=$satellite&band=$productLocal&length=$frameCountString"
+            "CONUS", "CONUS-G17" -> MyApplication.goes16AnimUrl + "/GOES/conus_band.php?sat=$satellite&band=$productLocal&length=$frameCountString"
+            else -> MyApplication.goes16AnimUrl + "/GOES/sector_band.php?sat=$satellite&sector=$sector&band=$productLocal&length=$frameCountString"
         }
         val html = url.getHtml().replace("\n", "").replace("\r", "")
         val imageHtml = html.parse("animationImages = \\[(.*?)\\];")
         val imageUrls = imageHtml.parseColumn("'(https.*?jpg)'")
         val bitmaps = imageUrls.map { it.getImage() }
+        return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps, UtilityImg.animInterval(context))
+    }
+
+    fun getAnimationGoesFloater(context: Context, product: String, url: String, frameCount: Int): AnimationDrawable {
+        var baseUrl = url
+        baseUrl = baseUrl.replace("GEOCOLOR", product).replace("latest.jpg", "")
+        val html = baseUrl.getHtml()
+        val urlList = UtilityString.parseColumn(html.replace("\r\n", " "), "<a href=\"([^\\s]*?1000x1000.jpg)\">")
+        val returnList = mutableListOf<String>()
+        if (urlList.size > frameCount) {
+            for (i in (urlList.size - frameCount) until urlList.size) {
+                returnList.add(baseUrl + urlList[i])
+            }
+        }
+        val bitmaps = returnList.map { it.getImage() }
         return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps, UtilityImg.animInterval(context))
     }
 
@@ -102,7 +127,11 @@ object UtilityGoes {
         "AirMass - RGB composite based on the data from IR and WV",
         "Sandwich RGB - Bands 3 and 13 combo",
         "Day Cloud Phase",
-        "Night Microphysics"
+        "Night Microphysics",
+        "Fire Temperature",
+        "Dust RGB",
+        "GLM FED+GeoColor",
+        "DMW"
     )
 
     val codes = listOf(
@@ -126,7 +155,11 @@ object UtilityGoes {
         "AirMass",
         "Sandwich",
         "DayCloudPhase",
-        "NightMicrophysics"
+        "NightMicrophysics",
+        "FireTemperature",
+        "Dust",
+        "GLM",
+        "DMW"
     )
 
     private val sectorsInGoes17 = listOf(
@@ -191,7 +224,7 @@ object UtilityGoes {
         "can" to "1125x560",
         "mex" to "1000x1000",
         "cam" to "1000x1000",
-        "eep" to "1000x1000",
+        "eep" to "1800x1080",
         "wus" to "1000x1000",
         "nsa" to "1800x1080",
         "ssa" to "1800x1080",

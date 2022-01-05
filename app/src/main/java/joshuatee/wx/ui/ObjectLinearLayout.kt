@@ -57,6 +57,10 @@ class ObjectLinearLayout(val context: Context) {
         linearLayout.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
     }
 
+    fun get(): LinearLayout {
+        return linearLayout
+    }
+
     var visibility
         get() = linearLayout.visibility
         set(value) { linearLayout.visibility = value }

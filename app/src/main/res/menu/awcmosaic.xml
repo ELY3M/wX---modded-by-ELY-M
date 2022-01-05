@@ -29,39 +29,37 @@
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_rad_rala"
-        android:title="Reflectivity"
+        android:title="@string/reflectivity"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_rad_cref"
-        android:title="Composite Reflectivity"
+        android:title="@string/composite_reflectivity"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_rad_tops18"
-        android:title="Echo Tops"
+        android:title="@string/echo_tops"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_sat_irbw"
-        android:title="Infrared (BW)"
+        android:title="@string/infrared_bw"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_sat_ircol"
-        android:title="Infrared (Col)"
+        android:title="@string/infrared_col"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_sat_irnws"
-        android:title="Infrared (NWS)"
+        android:title="@string/infrared_nws"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_sat_vis"
-        android:title="Visible"
+        android:title="@string/visible"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_sat_wv"
-        android:title="Water Vapor"
+        android:title="@string/water_vapor"
         app:showAsAction="never" />
 </menu>
-
-

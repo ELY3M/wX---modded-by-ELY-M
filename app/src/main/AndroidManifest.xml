@@ -22,13 +22,14 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="joshuatee.wx"
-    android:versionCode="55544"
-    android:versionName="55544-elys"
+    android:versionCode="55582"
+    android:versionName="55582-elys"
     >
 
  <uses-permission android:name="android.permission.INTERNET" />
  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+ <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 <!-- <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />-->
 
@@ -281,11 +282,6 @@
       android:label="@string/title_activity_uswarnings_with_radar_v3"
       android:parentActivityName="WX" >
   </activity>
-<!--  <activity
-      android:name=".activitiesmisc.USWarningsImpactActivity"
-      android:label=""
-      android:parentActivityName="WX" >
-  </activity>-->
   <activity
       android:name=".spc.SpcCompmapActivity"
       android:label="@string/title_activity_spccompmap"
@@ -316,11 +312,6 @@
       android:label="@string/title_activity_spcsoundings"
       android:parentActivityName="WX" >
   </activity>
-<!--  <activity
-      android:name=".radar.USNwsMosaicActivity"
-      android:label="@string/title_activity_nwsmosaic"
-      android:parentActivityName="WX" >
-  </activity>-->
   <activity
       android:name=".activitiesmisc.WfoTextActivity"
       android:label=""
@@ -358,11 +349,6 @@
   <activity
       android:name=".audio.SettingsPlaylistActivity"
       android:label="@string/title_activity_settings_playlist"
-      android:parentActivityName="WX" >
-  </activity>
-  <activity
-      android:name=".audio.SettingsPlaylistAutodownloadActivity"
-      android:label="@string/title_activity_settings_playlist_autodownload"
       android:parentActivityName="WX" >
   </activity>
   <activity
@@ -514,10 +500,6 @@
       android:label=""
       android:parentActivityName="WX" >
   </activity>
-<!--  <activity-->
-<!--      android:name=".canada.CanadaRadarActivity"-->
-<!--      android:parentActivityName="WX" >-->
-<!--  </activity>-->
   <activity
       android:name=".settings.SettingsLocationCanadaActivity"
       android:parentActivityName="WX" >
@@ -578,8 +560,8 @@
       android:parentActivityName="WX" >
   </activity>
   <activity
-         android:name=".radar.UtilityConusRadar"
-         android:parentActivityName="WX" >
+      android:name=".radar.UtilityConusRadar"
+      android:parentActivityName="WX" >
   </activity>
   <activity
       android:name=".spc.SpcSwoActivity"
@@ -646,10 +628,6 @@
       android:theme="@style/Theme.Telecine.Transparent"
       android:parentActivityName="WX"
       />
-
-
-
-
 
   <!-- The widget provider android:icon="@drawable/widgetsevenday" -->
   <receiver

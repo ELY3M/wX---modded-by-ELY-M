@@ -38,7 +38,7 @@
             android:id="@+id/b_wx"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="wX Logo"
+            android:contentDescription="@string/wx_logo"
             android:src="@drawable/wx" />
 
         <ImageView
@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="3dip"
-            android:contentDescription="Visible Sat"
+            android:contentDescription="@string/visible_sat"
             android:gravity="center"
             app:srcCompat="@drawable/ic_cloud_24dp_white" />
 
@@ -64,7 +64,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="3dip"
-            android:contentDescription="Area Forecast Discussion"
+            android:contentDescription="@string/area_forecast_discussion"
             android:gravity="center"
             app:srcCompat="@drawable/ic_info_outline_24dp_white" />
 
@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="3dip"
-            android:contentDescription="Hourly Forecast"
+            android:contentDescription="@string/hourly_forecast"
             android:gravity="center"
             app:srcCompat="@drawable/ic_place_24dp" />
 
@@ -82,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="3dip"
-            android:contentDescription="Alerts"
+            android:contentDescription="@string/alerts"
             android:gravity="center"
             app:srcCompat="@drawable/ic_warning_24dp" />
 
@@ -91,7 +91,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="3dip"
-            android:contentDescription="Severe Dashboard"
+            android:contentDescription="@string/severe_dashboard"
             android:gravity="center"
             app:srcCompat="@drawable/ic_report_24dp_white" />
     </LinearLayout>
@@ -154,4 +154,4 @@
         android:layout_gravity="bottom|start"
         android:layout_margin="2dip"
         android:gravity="start" />
-</LinearLayout> 
+</LinearLayout>

@@ -73,14 +73,14 @@ object UtilityImg {
             layerDrawableToBitmap(listOf(ColorDrawable(Color.WHITE), BitmapDrawable(context.resources, imgUrl.getImage())))
 
     // FIXME rename Posn to Position
-    fun firstRunSetZoomPosn(firstRunF: Boolean, img: TouchImageView2, pref: String): Boolean {
-        var firstRun = firstRunF
-        if (!firstRun) {
-            img.setZoom(pref)
-            firstRun = true
-        }
-        return firstRun
-    }
+//    fun firstRunSetZoomPosn(firstRunF: Boolean, img: TouchImageView2, pref: String): Boolean {
+//        var firstRun = firstRunF
+//        if (!firstRun) {
+//            img.setZoom(pref)
+//            firstRun = true
+//        }
+//        return firstRun
+//    }
 
     fun imgRestorePosnZoom(context: Context, img: TouchImageView2, prefStr: String) {
         img.setZoom(

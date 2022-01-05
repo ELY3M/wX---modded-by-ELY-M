@@ -28,10 +28,6 @@
     <string name="label_NE">Northeast</string>
     <string name="label_SW">Southwest</string>
     <string name="label_NW">Northwest</string>
-    <string name="label_E">East</string>
-    <string name="label_W">West</string>
-    <string name="label_ATL">Atlantic</string>
-    <string name="label_PAC">Pacific</string>
     <string name="label_CA">Canada</string>
     <string name="label_CA_BC">British Columbia</string>
     <string name="label_CA_AB">Alberta</string>
@@ -50,7 +46,6 @@
     <string name="label_CA_ON_S">Ontario - South</string>
     <string name="label_CA_ON_N">Ontario - North</string>
     <string name="label_CA_ON">Ontario</string>
-    <string name="label_PRAIRIES">Prairies</string>
     <string name="label_CA_MB_S">S MB</string>
     <string name="label_CA_MB_N">N MB</string>
     <string name="label_CA_SK_S">S SK</string>

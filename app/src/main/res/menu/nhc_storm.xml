@@ -21,30 +21,33 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/action_cloud"
+        android:icon="@drawable/ic_cloud_24dp"
+        android:title="@string/action_cloud"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_mute_notification"
-        android:title="Mute notification"
+        android:title="@string/mute_notification"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_MIATCPEP2"
-        android:title="Public Advisory"
+        android:title="@string/public_advisory"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_MIATCMEP2"
-        android:title="Forecast Advisory"
+        android:title="@string/forecast_advisory"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_MIATCDEP2"
-        android:title="Forecast Discussion"
+        android:title="@string/forecast_discussion"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_MIAPWSEP2"
-        android:title="Wind Speed Probababilities"
+        android:title="@string/wind_speed_probabilities"
         app:showAsAction="never" />
 </menu>
-
-

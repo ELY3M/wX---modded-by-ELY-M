@@ -29,9 +29,9 @@ import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import joshuatee.wx.Extensions.safeGet
 import joshuatee.wx.MyApplication
-
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.ObjectCALegal
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
@@ -39,11 +39,9 @@ import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShare
 import joshuatee.wx.util.UtilityString
 import joshuatee.wx.wpc.UtilityWpcText
-import kotlinx.coroutines.*
 
 class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
-    private val uiDispatcher = Dispatchers.Main
     private var product = "focn45"
     private var html = ""
     private lateinit var objectCardText: ObjectCardText
@@ -67,17 +65,22 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent() {
         title = product
         toolbar.subtitle = getDescription()
         scrollView.smoothScrollTo(0, 0)
-        withContext(Dispatchers.IO) {
-            html = if (product != "https://weather.gc.ca/forecast/public_bulletins_e.html?Bulletin=fpcn48.cwao") {
-                        UtilityDownload.getTextProduct(this@CanadaTextActivity, product)
-                    } else {
-                        UtilityString.getHtmlAndParseSep(product, "<pre>(.*?)</pre>")
-                    }
+        FutureVoid(this, ::download, ::update)
+    }
+
+    private fun download() {
+        html = if (product != "https://weather.gc.ca/forecast/public_bulletins_e.html?Bulletin=fpcn48.cwao") {
+            UtilityDownload.getTextProduct(this@CanadaTextActivity, product)
+        } else {
+            UtilityString.getHtmlAndParseSep(product, "<pre>(.*?)</pre>")
         }
+    }
+
+    private fun update() {
         objectCardText.setTextAndTranslate(Utility.fromHtml(html))
         Utility.writePref(this@CanadaTextActivity, "CA_TEXT_LASTUSED", product)
     }

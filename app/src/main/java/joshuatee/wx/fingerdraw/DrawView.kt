@@ -128,8 +128,8 @@ class DrawView : View {
 
 internal class Point {
 
-    var x = 0.toFloat()
-    var y = 0.toFloat()
+    var x = 0.0f
+    var y = 0.0f
 
     constructor(x2: Float, y2: Float) {
         this.x = x2

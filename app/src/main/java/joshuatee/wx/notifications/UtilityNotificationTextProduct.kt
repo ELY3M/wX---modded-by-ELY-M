@@ -22,17 +22,15 @@
 package joshuatee.wx.notifications
 
 import java.util.Locale
-
 import android.content.Context
 import android.graphics.Color
 import android.text.TextUtils
 import android.view.View
 import androidx.core.app.NotificationCompat
-
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.activitiesmisc.TextScreenActivity
-import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.ui.ObjectPopupMessage
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 
@@ -45,11 +43,11 @@ object UtilityNotificationTextProduct {
         if (!MyApplication.notifTextProdStr.contains(prod)) {
             Utility.writePref(context, PREF_TOKEN, MyApplication.notifTextProdStr + ":" + prod)
             MyApplication.notifTextProdStr = MyApplication.notifTextProdStr + ":" + prod
-            UtilityUI.makeSnackBar(view, "$prod saved to notification list")
+            ObjectPopupMessage(view, "$prod saved to notification list")
         } else {
             MyApplication.notifTextProdStr = MyApplication.notifTextProdStr.replace(":$prod", "")
             Utility.writePref(context, PREF_TOKEN, MyApplication.notifTextProdStr)
-            UtilityUI.makeSnackBar(view, "$prod removed from notification list")
+            ObjectPopupMessage(view, "$prod removed from notification list")
             Utility.removePref(context, PREF_TOKEN + "_" + prod)
         }
     }

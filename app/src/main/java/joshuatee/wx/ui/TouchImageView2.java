@@ -180,10 +180,6 @@ public class TouchImageView2 extends AppCompatImageView {
         touchImageViewListener = l;
     }
 
-    /*public void setOnDoubleTapListener(GestureDetector.OnDoubleTapListener l) {
-        doubleTapListener = l;
-    }*/
-
     private boolean isZoomEnabled() {
         return zoomEnabled;
     }
@@ -246,22 +242,6 @@ public class TouchImageView2 extends AppCompatImageView {
         return mScaleType;
     }
 
-   /* public FixedPixel getOrientationChangeFixedPixel() {
-        return orientationChangeFixedPixel;
-    }
-
-    public void setOrientationChangeFixedPixel(FixedPixel fixedPixel) {
-        this.orientationChangeFixedPixel = fixedPixel;
-    }
-
-    public FixedPixel getViewSizeChangeFixedPixel() {
-        return viewSizeChangeFixedPixel;
-    }
-
-    public void setViewSizeChangeFixedPixel(FixedPixel viewSizeChangeFixedPixel) {
-        this.viewSizeChangeFixedPixel = viewSizeChangeFixedPixel;
-    }*/
-
     /**
      * Returns false if image is in initial, unzoomed state. False, otherwise.
      *
@@ -270,23 +250,6 @@ public class TouchImageView2 extends AppCompatImageView {
     private boolean isZoomed() {
         return normalizedScale != 1;
     }
-
-    /*
-     * Return a Rect representing the zoomed image.
-     *
-     * @return rect representing zoomed image
-     */
-    /*public RectF getZoomedRect() {
-        if (mScaleType == ScaleType.FIT_XY) {
-            throw new UnsupportedOperationException("getZoomedRect() not supported with FIT_XY");
-        }
-        PointF topLeft = transformCoordTouchToBitmap(0, 0, true);
-        PointF bottomRight = transformCoordTouchToBitmap(viewWidth, viewHeight, true);
-
-        float w = getDrawable().getIntrinsicWidth();
-        float h = getDrawable().getIntrinsicHeight();
-        return new RectF(topLeft.x / w, topLeft.y / h, bottomRight.x / w, bottomRight.y / h);
-    }*/
 
     /**
      * Save the current matrix and view dimensions
@@ -400,15 +363,6 @@ public class TouchImageView2 extends AppCompatImageView {
         superMaxScale = SUPER_MAX_MULTIPLIER * maxScale;
         maxScaleIsSetByMultiplier = true;
     }
-
-    /*
-     * Get the min zoom multiplier.
-     *
-     * @return min zoom multiplier.
-     */
-    /*public float getMinZoom() {
-        return minScale;
-    }*/
 
     /**
      * Get the current zoom. This is the zoom relative to the initial
@@ -566,17 +520,6 @@ public class TouchImageView2 extends AppCompatImageView {
         point.y /= drawableHeight;
         return point;
     }
-
-    /*
-     * Set the focus point of the zoomed image. The focus points are denoted as a fraction from the
-     * left and top of the view. The focus points can range in value between 0 and 1.
-     *
-     * param focusX
-     * param focusY
-     */
-    /*public void setScrollPosition(float focusX, float focusY) {
-        setZoom(normalizedScale, focusX, focusY);
-    }*/
 
     /**
      * Performs boundary checking and fixes the image matrix if it
@@ -854,9 +797,6 @@ public class TouchImageView2 extends AppCompatImageView {
     private int setViewSize(int mode, int size, int drawableWidth) {
         int viewSize;
         switch (mode) {
-            //case MeasureSpec.EXACTLY:
-            //    viewSize = size;
-            //    break;
             case MeasureSpec.AT_MOST:
                 viewSize = Math.min(drawableWidth, size);
                 break;
@@ -924,10 +864,6 @@ public class TouchImageView2 extends AppCompatImageView {
     private void setState(State state) {
         this.state = state;
     }
-
-    /*public boolean canScrollHorizontallyFroyo(int direction) {
-        return canScrollHorizontally(direction);
-    }*/
 
     @Override
     public boolean canScrollHorizontally(int direction) {
@@ -1446,10 +1382,4 @@ public class TouchImageView2 extends AppCompatImageView {
             this.scaleType = scaleType;
         }
     }
-
-    /*private void printMatrixInfo() {
-        float[] n = new float[9];
-        matrix.getValues(n);
-        Log.d(DEBUG, "Scale: " + n[Matrix.MSCALE_X] + " TransX: " + n[Matrix.MTRANS_X] + " TransY: " + n[Matrix.MTRANS_Y]);
-    }*/
 }

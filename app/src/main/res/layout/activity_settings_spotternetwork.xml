@@ -63,7 +63,7 @@
                         android:orientation="horizontal"
                         android:weightSum="1.0" >
                         <TextView
-                            android:text="Spotter Network Key"
+                            android:text="@string/title_activity_settings_spotternetwork_key"
                             android:textSize="@dimen/normal_text"
                             android:id="@+id/tab1_et_label"
                             android:layout_width="wrap_content"
@@ -79,7 +79,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:inputType="text"
-                            android:hint="Your SN Key"
+                            android:hint="@string/title_activity_settings_spotternetwork_key_hint"
                             />
                     </LinearLayout>
 

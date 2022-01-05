@@ -24,7 +24,6 @@ package joshuatee.wx.Extensions
 import android.graphics.drawable.AnimationDrawable
 import android.view.View
 import java.util.regex.Pattern
-
 import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.ui.ObjectTouchImageView
 import joshuatee.wx.ui.TouchImageView2

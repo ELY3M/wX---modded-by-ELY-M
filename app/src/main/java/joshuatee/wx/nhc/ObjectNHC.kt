@@ -29,21 +29,21 @@ import joshuatee.wx.MyApplication
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
-
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectLinearLayout
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.util.UtilityDownload
+import joshuatee.wx.util.UtilityImg
 
-class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
+class ObjectNhc(val context: Context, linearLayout1: LinearLayout) {
 
     private var notificationCard: ObjectCardText? = null
     private val cardNotificationHeaderText = "Currently blocked storm notifications, tap this text to clear all blocks "
     private var numberOfImages = 0
-    private var imagesPerRow = 2
+    var imagesPerRow = 2
     private val horizontalLinearLayouts = mutableListOf<ObjectLinearLayout>()
-    val regionMap = mutableMapOf<NhcOceanEnum, ObjectNhcRegionSummary>()
+    private val regionMap = mutableMapOf<NhcOceanEnum, ObjectNhcRegionSummary>()
     private var stormDataList = mutableListOf<ObjectNhcStormDetails>()
     private var ids = listOf<String>()
     private var binNumbers = listOf<String>()
@@ -58,10 +58,27 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
     private var lastUpdates = listOf<String>()
     private var statusList = mutableListOf<String>()
     val bitmaps = mutableListOf<Bitmap>()
+    private val objectCardImages = mutableListOf<ObjectCardImage>()
+    val urls = mutableListOf<String>()
+    private val imageTitles = mutableListOf<String>()
+    private val linearLayoutText = ObjectLinearLayout(context, linearLayout1)
+    private val linearLayoutImages = ObjectLinearLayout(context, linearLayout1)
 
     init {
-        if (UtilityUI.isLandScape(context)) imagesPerRow = 3
-        NhcOceanEnum.values().forEach { regionMap[it] = ObjectNhcRegionSummary(it) }
+        if (UtilityUI.isLandScape(context)) {
+            imagesPerRow = 3
+        }
+        NhcOceanEnum.values().forEach {
+            regionMap[it] = ObjectNhcRegionSummary(it)
+        }
+        listOf(
+                ObjectNhcRegionSummary(NhcOceanEnum.ATL),
+                ObjectNhcRegionSummary(NhcOceanEnum.EPAC),
+                ObjectNhcRegionSummary(NhcOceanEnum.CPAC)).forEach {
+            urls.addAll(it.urls)
+            imageTitles.addAll(it.titles)
+        }
+        showImageData()
     }
 
     fun getTextData() {
@@ -92,10 +109,10 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
     }
 
     fun showTextData() {
-        linearLayout.removeAllViewsInLayout()
+        linearLayoutText.removeAllViewsInLayout()
         val muteStr = Utility.readPref(context, "NOTIF_NHC_MUTE", "")
         notificationCard = ObjectCardText(context, cardNotificationHeaderText + muteStr)
-        linearLayout.addView(notificationCard?.card)
+        linearLayoutText.addView(notificationCard!!.card)
         notificationCard?.setOnClickListener { clearNhcNotificationBlock() }
         if (muteStr != "") {
             notificationCard?.visibility = View.VISIBLE
@@ -120,18 +137,19 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
                         statusList[index]
                 )
                 stormDataList.add(objectNhcStormDetails)
-                val card = ObjectCardNhcStormReportItem(context, linearLayout, objectNhcStormDetails)
+                val card = ObjectCardNhcStormReportItem(context, linearLayoutText.get(), objectNhcStormDetails)
                 card.setListener { ObjectIntent.showNhcStorm(context, objectNhcStormDetails) }
             }
         }
     }
 
-    fun showImageData(region: NhcOceanEnum) {
+    private fun showImageData() {
         bitmaps.clear()
-        regionMap[region]!!.bitmaps.forEachIndexed { index, bitmap ->
+        urls.indices.forEach { index ->
             val objectCardImage: ObjectCardImage
+            val bitmap = UtilityImg.getBlankBitmap()
             if (numberOfImages % imagesPerRow == 0) {
-                val objectLinearLayout = ObjectLinearLayout(context, linearLayout)
+                val objectLinearLayout = ObjectLinearLayout(context, linearLayoutImages.get())
                 objectLinearLayout.linearLayout.orientation = LinearLayout.HORIZONTAL
                 horizontalLinearLayouts.add(objectLinearLayout)
                 objectCardImage = ObjectCardImage(context, objectLinearLayout.linearLayout, bitmap, imagesPerRow)
@@ -139,9 +157,15 @@ class ObjectNhc(val context: Context, private val linearLayout: LinearLayout) {
                 objectCardImage = ObjectCardImage(context, horizontalLinearLayouts.last().linearLayout, bitmap, imagesPerRow)
             }
             numberOfImages += 1
-            objectCardImage.setOnClickListener { ObjectIntent.showImage(context, regionMap[region]!!.getTitle(index)) }
+            objectCardImage.setOnClickListener { ObjectIntent.showImage(context, arrayOf(urls[index], imageTitles[index])) }
             bitmaps.add(bitmap)
+            objectCardImages.add(objectCardImage)
         }
+    }
+
+    fun updateImageData(index: Int, bitmap: Bitmap) {
+        objectCardImages[index].setImage2(bitmap, imagesPerRow)
+        objectCardImages[index].setOnClickListener { ObjectIntent.showImage(context, arrayOf(urls[index], imageTitles[index])) }
     }
 
     private fun clearNhcNotificationBlock() {

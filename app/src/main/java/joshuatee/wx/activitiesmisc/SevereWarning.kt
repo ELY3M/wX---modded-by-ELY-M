@@ -24,7 +24,6 @@ package joshuatee.wx.activitiesmisc
 import joshuatee.wx.objects.ObjectWarning
 import joshuatee.wx.objects.PolygonType
 
-
 class SevereWarning(private val type: PolygonType) {
 
     //

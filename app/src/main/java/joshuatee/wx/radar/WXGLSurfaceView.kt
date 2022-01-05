@@ -25,13 +25,13 @@ package joshuatee.wx.radar
 import android.app.Activity
 import android.content.Context
 import android.opengl.GLSurfaceView
+import androidx.appcompat.widget.Toolbar
 import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import android.widget.TextView
-import androidx.appcompat.widget.Toolbar
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.settings.UtilityLocation
@@ -130,6 +130,7 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
                 if (numPanes == 1 && fullScreen || numPanes > 1) UtilityUI.immersiveMode(activity!!)
             }
             MotionEvent.ACTION_MOVE -> {
+	        //elys mod
                 //3 fingers press to show conus
                 val count = event.pointerCount
                 UtilityLog.d("wx", "Fingers Count: "+count)

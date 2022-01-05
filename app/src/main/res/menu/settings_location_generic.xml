@@ -23,14 +23,14 @@
     <item
         android:id="@+id/ab_search"
         android:icon="@drawable/ic_search_24dp"
-        android:title="Search"
+        android:title="@string/search"
         app:actionViewClass="joshuatee.wx.settings.ArrayAdapterSearchView"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_locate"
         android:icon="@drawable/ic_my_location_24dp"
-        android:title="Locate"
-        app:showAsAction="always" />
+        android:title="@string/locate"
+        app:showAsAction="ifRoom" />
 </menu>
 
 

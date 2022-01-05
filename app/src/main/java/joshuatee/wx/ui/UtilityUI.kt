@@ -21,37 +21,22 @@
 
 package joshuatee.wx.ui
 
-import joshuatee.wx.R
-
 import android.app.Activity
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Color
 import android.util.TypedValue
 import android.view.View
-import android.widget.*
-import androidx.core.content.ContextCompat
-import com.google.android.material.snackbar.Snackbar
+import android.widget.LinearLayout
+import android.widget.Toast
+import android.widget.TextView
+import kotlin.math.sqrt
+import kotlin.math.pow
+import joshuatee.wx.R
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.util.Utility
 
-import kotlin.math.*
-
 object UtilityUI {
-
-    fun setResDrawable(context: Context, fab: RemoteViews, ib: Int, resourceDrawable: Int) {
-        val wrappedContext = ContextWrapper(context)
-        val drawable = ContextCompat.getDrawable(wrappedContext, resourceDrawable)!!
-        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
-        fab.setImageViewBitmap(ib, bitmap)
-    }
 
     fun makeToastLegacy(context: Context, message: String) {
         val view = View.inflate(context, R.layout.toast, null)
@@ -62,20 +47,6 @@ object UtilityUI {
         toast.duration = Toast.LENGTH_LONG
         toast.view = linearLayout
         toast.show()
-    }
-
-    fun makeSnackBar(view: View, message: String) {
-        val snack = Snackbar.make(view, message, Snackbar.LENGTH_INDEFINITE)
-        snack.setActionTextColor(Color.YELLOW)
-        snack.setAction("DISMISS") { snack.dismiss() }
-        val viewSnack = snack.view
-        val textView = viewSnack.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
-        val fgColor = Color.WHITE
-        val bgColor = Color.BLACK
-        textView.setTextColor(fgColor)
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, MyApplication.textSizeNormal)
-        viewSnack.setBackgroundColor(bgColor)
-        snack.show()
     }
 
     fun immersiveMode(activity: Activity) {

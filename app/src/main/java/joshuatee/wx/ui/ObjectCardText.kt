@@ -185,6 +185,10 @@ class ObjectCardText(context: Context) {
         tv.text = localText
     }
 
+    fun setText1(s: String) {
+        text = s
+    }
+
     var text
         get() = tv.text.toString()
         set(newValue) { tv.text = newValue }

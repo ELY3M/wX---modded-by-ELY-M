@@ -19,6 +19,10 @@
 <!-- modded by ELY M. -->
 <resources>
 
+        <string name="use_goes_for_lightning">
+         Use GOES GLM for lightning.
+</string>
+
     <string name="use_nws_api">
          Use the new NWS API for 7 day forecasts. If having issues with 7 day forecasts you can turn this off to use the older method.
 </string>
@@ -580,7 +584,7 @@ Controls the number of minutes before an auto  refresh is triggered if that opti
 Launch the application directly into the radar interface.</string>
 
     <string name="elevation_np_label">
-Control how much elevation is present in the UI.</string>
+Control how much elevation is present in the UI. Default is 3.</string>
 
     <string name="homescreen_help_label">
 This activity is used to manage the cards ( if enabled ) on the \"home page\" (the first screen shown when the app is launched).
@@ -590,7 +594,6 @@ By default when this activity is started the delete mode is enabled which means 
     the selected location is changed. The lightning bolt allows you to add additional OpenGL based nexrad radars. You can reset the cards shown to the default with the last entry under the submenu. Please note that any change in this list
     will require an app restart and after restart  you will be in the main settings activity.
 </string>
-
 
     <string name="loc1_radar_warnings_label">
 Show warnings and watches in radar mosaic products.</string>

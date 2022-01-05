@@ -50,11 +50,13 @@ object UtilityCanvasStormInfo {
         val canvas = Canvas(bitmap)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG)
         paint.style = Style.FILL
-        paint.strokeWidth = 2f
+        paint.strokeWidth = 2.0f
         if (projectionType === ProjectionType.WX_RENDER || projectionType === ProjectionType.WX_RENDER_48) {
             canvas.translate(UtilityCanvasMain.xOffset, UtilityCanvasMain.yOffset)
         }
-        if (projectionType.needsBlackPaint) paint.color = Color.rgb(0, 0, 0)
+        if (projectionType.needsBlackPaint) {
+            paint.color = Color.rgb(0, 0, 0)
+        }
         paint.textSize = textSize.toFloat()
         val projectionNumbers = ProjectionNumbers(radarSite, projectionType)
         val stormList = mutableListOf<Double>()

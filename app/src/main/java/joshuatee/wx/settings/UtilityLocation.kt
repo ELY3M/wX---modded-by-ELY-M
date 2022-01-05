@@ -27,17 +27,12 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationManager
 import androidx.core.content.ContextCompat
-
 import joshuatee.wx.MyApplication
 import joshuatee.wx.GlobalArrays
 import joshuatee.wx.radar.LatLon
-
 import joshuatee.wx.radar.RID
-import joshuatee.wx.util.UtilityString
-import joshuatee.wx.util.UtilityTime
-
 import joshuatee.wx.objects.DistanceUnit
-import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityLog
 import java.util.*
@@ -59,8 +54,8 @@ object UtilityLocation {
                     val tmpYArr = joshuatee.wx.settings.Location.getY(it).replace("-", "").split(":")
                     lon = if (tmpYArr.size > 1) tmpYArr[1] else ""
                 }
-                latLon.add(lat.toDoubleOrNull() ?: 0.0)
-                latLon.add(lon.toDoubleOrNull() ?: 0.0)
+                latLon.add(To.double(lat))
+                latLon.add(To.double(lon))
             }
             return latLon
         }
@@ -129,7 +124,8 @@ object UtilityLocation {
             currentDistance = LatLon.distance(location, it.location, DistanceUnit.MILE)
             it.distance = currentDistance.toInt()
         }
-        Collections.sort(radarSites, RID.DESCENDING_COMPARATOR)
+//        Collections.sort(radarSites, RID.DESCENDING_COMPARATOR)
+        radarSites.sortBy { it.distance }
         return radarSites.subList(0, count)
     }
     
@@ -207,7 +203,7 @@ object UtilityLocation {
         return LatLon(x, y)
     }
 
-    fun hasAlerts(locNum: Int): Boolean = MyApplication.locations[locNum].notification
+    fun hasAlerts(locNum: Int) = MyApplication.locations[locNum].notification
         || MyApplication.locations[locNum].notificationMcd
         || MyApplication.locations[locNum].ccNotification
         || MyApplication.locations[locNum].sevenDayNotification

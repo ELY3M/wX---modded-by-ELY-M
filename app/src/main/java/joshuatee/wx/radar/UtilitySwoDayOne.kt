@@ -21,7 +21,6 @@
 
 package joshuatee.wx.radar
 
-import android.annotation.SuppressLint
 import android.content.Context
 import joshuatee.wx.Extensions.getHtmlSep
 import joshuatee.wx.Extensions.parse
@@ -32,9 +31,7 @@ import joshuatee.wx.objects.DownloadTimer
 internal object UtilitySwoDayOne {
 
     val timer = DownloadTimer("SWO")
-
-    @SuppressLint("UseSparseArrays")
-    val HASH_SWO = mutableMapOf<Int, List<Double>>()
+    val hashSwo = mutableMapOf<Int, List<Double>>()
 
     fun get(context: Context) {
         if (timer.isRefreshNeeded(context)) {
@@ -94,7 +91,7 @@ internal object UtilitySwoDayOne {
                         warningList.add(x.last())
                         warningList.add(y[x.lastIndex])
                     }
-                    HASH_SWO[threatIndex] = warningList
+                    hashSwo[threatIndex] = warningList
                 }
             }
         }

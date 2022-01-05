@@ -73,6 +73,4 @@ internal class ExternalLine(val start: ExternalPoint, val end: ExternalPoint) {
         //return if (point.x >= minX && point.x <= maxX && point.y >= minY && point.y <= maxY) {
         return point.x in minX..maxX && point.y >= minY && point.y <= maxY
     }
-
-    override fun toString() = String.format("%s-%s", start.toString(), end.toString())
 }

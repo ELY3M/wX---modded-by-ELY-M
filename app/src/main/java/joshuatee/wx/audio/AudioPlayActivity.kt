@@ -40,6 +40,7 @@ import joshuatee.wx.util.UtilityLog
 
 abstract class AudioPlayActivity : AppCompatActivity() {
 
+    //
     // In the child activity need to "extends AudioPlayActivity"
     // instead of "extends AppCompatActivity"
     //

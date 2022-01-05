@@ -23,7 +23,6 @@ package joshuatee.wx.activitiesmisc
 
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
-import joshuatee.wx.radar.LatLon
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.UtilityIO
 import joshuatee.wx.util.UtilityTime
@@ -32,11 +31,11 @@ import joshuatee.wx.util.UtilityString
 object UtilityHourlyOldApi {
 
     fun getHourlyString(locNumber: Int): String {
-        val latLon: LatLon = Location.getLatLon(locNumber)
-        val html: String = UtilityIO.getHtml("https://forecast.weather.gov/MapClick.php?lat=" +
+        val latLon = Location.getLatLon(locNumber)
+        val html = UtilityIO.getHtml("https://forecast.weather.gov/MapClick.php?lat=" +
                 latLon.latString + "&lon=" +
                 latLon.lonString + "&FcstType=digitalDWML")
-        val header: String = "Time".ljust(13) + " " + "Temp".ljust(5) + "Dew".ljust(5) + "Precip%".ljust(7) + "Cloud%".ljust(6) + MyApplication.newline
+        val header = "Time".ljust(13) + " " + "Temp".ljust(5) + "Dew".ljust(5) + "Precip%".ljust(7) + "Cloud%".ljust(6) + MyApplication.newline
         return MyApplication.newline + header + parseHourly(html)
     }
 
@@ -69,7 +68,7 @@ object UtilityHourlyOldApi {
             val timeSplit2 = timeSplit[0].split("-")
             val month = timeSplit2[0].toIntOrNull() ?: 0
             val day = timeSplit2[1].toIntOrNull() ?: 0
-            val dayOfTheWeek: String = UtilityTime.dayOfWeek(year, month, day)
+            val dayOfTheWeek = UtilityTime.dayOfWeek(year, month, day)
             var temp3Val = "."
             var temp4Val = "."
             var temp5Val = "."

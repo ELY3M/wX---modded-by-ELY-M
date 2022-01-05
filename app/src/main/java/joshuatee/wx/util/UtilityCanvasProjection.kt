@@ -25,7 +25,6 @@ import java.nio.ByteBuffer
 
 import joshuatee.wx.external.ExternalGlobalCoordinates
 import joshuatee.wx.radar.LatLon
-
 import kotlin.math.*
 
 object UtilityCanvasProjection {

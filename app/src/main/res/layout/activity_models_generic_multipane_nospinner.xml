@@ -93,9 +93,3 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp" />
 </androidx.drawerlayout.widget.DrawerLayout>
-
-
-
-
-
-

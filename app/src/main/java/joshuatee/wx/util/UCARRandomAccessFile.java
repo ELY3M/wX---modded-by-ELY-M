@@ -81,64 +81,11 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 	static private final AtomicInteger debug_nseeks = new AtomicInteger();
 	static private final AtomicLong debug_nbytes = new AtomicLong();
 
-	/*
-	 * Debugging, do not use.
-	 *
-	 * @return true if debugLeaks is on
-	 */
-	//static public boolean getDebugLeaks() {
-	//	return debugLeaks;
-	//}
-
-	/*
-	 * Debugging, do not use.
-	 *
-	 * @param b set true to track java.io.RandomAccessFile
-	 */
-	//static public void setDebugLeaks(boolean b) {
-	//	debugLeaks = b;
-	//}
-
-	/*
-	 * Debugging, do not use.
-	 *
-	 * @return list of open files.
-	 */
-	/*static public List<String> getOpenFiles() {
-		return openFiles;
-	}
-
-	static public List<String> getAllFiles() {
-		List<String> result = new ArrayList<String>();
-		if (null == allFiles) return null;
-		Iterator<String> iter = allFiles.iterator();
-		while (iter.hasNext()) {
-			result.add( iter.next());
-		}
-		Collections.sort(result);
-		return result;
-	}*/
-
 	/**
 	 * Debugging, do not use.
 	 *
 	 * param b to debug file reading
 	 */
-	/*static public void setDebugAccess(boolean b) {
-		debugAccess = b;
-		if (b) {
-			debug_nseeks = new AtomicInteger();
-			debug_nbytes = new AtomicLong();
-		}
-	}
-
-	static public int  getDebugNseeks() {
-		return (debug_nseeks == null) ? 0 : debug_nseeks.intValue();
-	}
-
-	static public long getDebugNbytes() {
-		return (debug_nbytes == null) ? 0 : debug_nbytes.longValue();
-	}*/
 
 	private static final boolean showOpen = false;
 	private static final boolean showRead = false;
@@ -211,17 +158,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 	 */
 	private boolean bufferModified = false;
 
-	/*
-	 * Constructor, for subclasses
-	 *
-	 * @param bufferSize size of read buffer
-	 */
-	/*protected UCARRandomAccessFile(int bufferSize) {
-		file = null;
-		readonly = true;
-		init(bufferSize);
-	}*/
-
 	/**
 	 * Constructor, default buffer size.
 	 *
@@ -249,9 +185,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 	 */
 	public UCARRandomAccessFile(String location, String mode, int bufferSize) throws IOException {
 		this.location = location;
-		//if (debugLeaks) {
-			//allFiles.add(location);
-		//}
 		this.file = new java.io.RandomAccessFile(location, mode);
 		this.readonly = mode.equals("r");
 		init(bufferSize);
@@ -260,16 +193,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 			if (showOpen) System.out.println("  open " + location);
 		}
 	}
-
-	/**
-	 * Allow access to the underlying java.io.RandomAccessFile.
-	 * WARNING! BROKEN ENCAPSOLATION, DO NOT USE. May change implementation in the future.
-	 *
-	 * return the underlying java.io.RandomAccessFile.
-	 */
-	//public java.io.RandomAccessFile getRandomAccessFile() {
-	//	return this.file;
-	//}
 
 	private void init(int bufferSize) {
 		// Initialise the buffer
@@ -291,15 +214,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		init(bufferSize);
 	}
 
-	/*
-	 * Get the buffer size
-	 *
-	 * @return bufferSize length in bytes
-	 */
-	//public int getBufferSize() {
-	//	return buffer.length;
-	//}
-
 	/**
 	 * Close the file, and release any associated system resources.
 	 *
@@ -317,12 +231,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		// If we are writing and the buffer has been modified, flush the contents
 		// of the buffer.
 		flush();
-
-		/*
-    if (!readonly && bufferModified) {
-      file.seek(bufferStart);
-      file.write(buffer, 0, dataSize);
-    }  */
 
 		// may need to extend file, in case no fill is being used
 		// may need to truncate file in case overwriting a longer file
@@ -440,16 +348,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		this.bigEndian = (endian == BIG_ENDIAN);
 	}
 
-	/*
-	 * Returns the opaque file descriptor object associated with this file.
-	 *
-	 * @return the file descriptor object associated with this file.
-	 *if an I/O error occurs.
-	 */
-	/*public FileDescriptor getFD() throws IOException {
-		return (file == null) ? null : file.getFD();
-	}*/
-
 	/**
 	 * Copy the contents of the buffer to the disk.
 	 *
@@ -468,24 +366,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
       file.setLength(minLength);
     } */
 	}
-
-	/*
-	 * Make sure file is at least this long when its closed.
-	 * needed when not using fill mode, and not all data is written.
-	 *
-	 * @param minLength minimum length of the file.
-	 */
-	//public void setMinLength(long minLength) {
-	//	this.minLength = minLength;
-	//}
-
-	/*
-	 * Set extendMode for truncated, yet valid files - old NetCDF code allowed this
-	 * when NOFILL on, and user doesnt write all variables.
-	 */
-	//public void setExtendMode() {
-	//	this.extendMode = true;
-	//}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	// Read primitives.
@@ -585,33 +465,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		return copyLength;
 	}
 
-	/*
-	 * Read <code>nbytes</code> bytes, at the specified file offset, send to a WritableByteChannel.
-	 * This will block until all bytes are read.
-	 * This uses the underlying file channel directly, bypassing all user buffers.
-	 *
-	 * @param dest   write to this WritableByteChannel.
-	 * @param offset the offset in the file where copying will start.
-	 * @param nbytes the number of bytes to read.
-	 * @return the actual number of bytes read and transfered
-	 *if an I/O error occurs.
-	 */
-	/*public long readToByteChannel(WritableByteChannel dest, long offset, long nbytes) throws IOException {
-
-		if (fileChannel == null)
-			fileChannel = file.getChannel();
-
-		long need = nbytes;
-		while (need > 0) {
-			long count = fileChannel.transferTo(offset, need, dest);
-			//if (count == 0) break;  // LOOK not sure what the EOF condition is
-			need -= count;
-			offset += count;
-		}
-		return nbytes - need;
-	}*/
-
-
 	/**
 	 * Read directly from file, without going through the buffer.
 	 * All reading goes through here or readToByteChannel;
@@ -671,19 +524,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		return readBytes(b, 0, b.length);
 	}
 
-	/*
-	 * Read fully count number of bytes
-	 *
-	 * @param count how many bytes tp read
-	 * @return a byte array of length count, fully read in
-	 *if an I/O error occurrs.
-	 */
-	/*public byte[] readBytes(int count) throws IOException {
-		byte[] b = new byte[count];
-		readFully(b);
-		return b;
-	}*/
-
 	/**
 	 * Reads <code>b.length</code> bytes from this file into the byte
 	 * array. This method reads repeatedly from the file until all the
@@ -738,22 +578,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		seek(getFilePointer() + n);
 		return n;
 	}
-
-	/* public void skipToMultiple( int multipleOfBytes) throws IOException {
-   long pos = getFilePointer();
-   int pad = (int) (pos % multipleOfBytes);
-   if (pad != 0) pad = multipleOfBytes - pad;
-   if (pad > 0) skipBytes(pad);
- } */
-
-	/*
-	 * Unread the last byte read.
-	 * This method should not be used more than once
-	 * between reading operations, or strange things might happen.
-	 */
-	//public void unread() {
-	//	filePosition--;
-	//}
 
 	//
 	// Write primitives.
@@ -987,20 +811,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		}
 	}
 
-	/*
-	 * Read an array of shorts
-	 *
-	 * @param pa    read into this array
-	 * @param start starting at pa[start]
-	 * @param n     read this many elements
-	 *on read error
-	 */
-	/*public final void readShort(short[] pa, int start, int n) throws IOException {
-		for (int i = 0; i < n; i++) {
-			pa[start + i] = readShort();
-		}
-	}*/
-
 	/**
 	 * Reads an unsigned 16-bit number from this file. This method reads
 	 * two bytes from the file. If the bytes read, in order, are
@@ -1114,46 +924,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		}
 	}
 
-	/*
-	 * Read an integer at the given position, bypassing all buffering.
-	 *
-	 * @param pos read a byte at this position
-	 * @return The int that was read
-	 *if an I/O error occurs.
-	 */
-	/*public final int readIntUnbuffered(long pos) throws IOException {
-		byte[] bb = new byte[4];
-		read_(pos, bb, 0, 4);
-		int ch1 = bb[0] & 0xff;
-		int ch2 = bb[1] & 0xff;
-		int ch3 = bb[2] & 0xff;
-		int ch4 = bb[3] & 0xff;
-		if ((ch1 | ch2 | ch3 | ch4) < 0) {
-			throw new EOFException();
-		}
-
-		if (bigEndian) {
-			return ((ch1 << 24) + (ch2 << 16) + (ch3 << 8) + (ch4));
-		} else {
-			return ((ch4 << 24) + (ch3 << 16) + (ch2 << 8) + (ch1));
-		}
-	}*/
-
-
-	/*
-	 * Read an array of ints
-	 *
-	 * @param pa    read into this array
-	 * @param start starting at pa[start]
-	 * @param n     read this many elements
-	 *on read error
-	 */
-	/*public final void readInt(int[] pa, int start, int n) throws IOException {
-		for (int i = 0; i < n; i++) {
-			pa[start + i] = readInt();
-		}
-	}*/
-
 	/**
 	 * Reads a signed 64-bit integer from this file. This method reads eight
 	 * bytes from the file. If the bytes read, in order, are
@@ -1206,21 +976,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		 */
 	}
 
-	/*
-	 * Read an array of longs
-	 *
-	 * @param pa    read into this array
-	 * @param start starting at pa[start]
-	 * @param n     read this many elements
-	 *on read error
-	 */
-	/*public final void readLong(long[] pa, int start, int n) throws IOException {
-		for (int i = 0; i < n; i++) {
-			pa[start + i] = readLong();
-		}
-	}*/
-
-
 	/**
 	 * Reads a <code>float</code> from this file. This method reads an
 	 * <code>int</code> value as if by the <code>readInt</code> method
@@ -1243,21 +998,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		return Float.intBitsToFloat(readInt());
 	}
 
-	/*
-	 * Read an array of floats
-	 *
-	 * @param pa    read into this array
-	 * @param start starting at pa[start]
-	 * @param n     read this many elements
-	 *on read error
-	 */
-	/*public final void readFloat(float[] pa, int start, int n) throws IOException {
-		for (int i = 0; i < n; i++) {
-			pa[start + i] = Float.intBitsToFloat(readInt());
-		}
-	}*/
-
-
 	/**
 	 * Reads a <code>double</code> from this file. This method reads a
 	 * <code>long</code> value as if by the <code>readLong</code> method
@@ -1279,53 +1019,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 	public final double readDouble() throws IOException {
 		return Double.longBitsToDouble(readLong());
 	}
-
-	/*
-	 * Read an array of doubles
-	 *
-	 * @param pa    read into this array
-	 * @param start starting at pa[start]
-	 * @param n     read this many elements
-	 *on read error
-	 */
-	/*public final void readDouble(double[] pa, int start, int n) throws IOException {
-		for (int i = 0; i < n; i++) {
-			pa[start + i] = Double.longBitsToDouble(readLong());
-		}
-	}*/
-
-	/*
-	 * Reads the next line of text from this file. This method
-	 * successively reads bytes from the file until it reaches the end of
-	 * a line of text.
-	 * <p/>
-	 * <p/>
-	 * A line of text is terminated by a carriage-return character
-	 * (<code>'&#92;r'</code>), a newline character (<code>'&#92;n'</code>), a
-	 * carriage-return character immediately followed by a newline
-	 * character, or the end of the input stream. The line-terminating
-	 * character(s), if any, are included as part of the string returned.
-	 * <p/>
-	 * <p/>
-	 * This method blocks until a newline character is read, a carriage
-	 * return and the byte following it are read (to see if it is a
-	 * newline), the end of the stream is detected, or an exception is thrown.
-	 *
-	 * @return the next line of text from this file.
-	 *if an I/O error occurs.
-	 */
-	/* public final String readLine() throws IOException {
-    StringBuilder input = new StringBuilder();
-    int c;
-
-    while (((c = read()) != -1) && (c != '\n')) {
-      input.append((char) c);
-    }
-    if ((c == -1) && (input.length() == 0)) {
-      return null;
-    }
-    return input.toString();
-  } */
 
 	/**
 	 * Reads the next line of text from this file.  This method successively
@@ -1407,19 +1100,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		return DataInputStream.readUTF(this);
 	}
 
-	/*
-	 * Read a String of knoen length.
-	 *
-	 * @param nbytes number of bytes to read
-	 * @return String wrapping the bytes.
-	 *if an I/O error occurs.
-	 */
-	/*public String readString(int nbytes) throws IOException {
-		byte[] data = new byte[nbytes];
-		readFully(data);
-		return new String(data);
-	}*/
-
 	//
 	// DataOutput methods.
 	//
@@ -1436,20 +1116,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 	public final void writeBoolean(boolean v) throws IOException {
 		write(v ? 1 : 0);
 	}
-
-	/*
-	 * Write an array of booleans
-	 *
-	 * @param pa    write from this array
-	 * @param start starting with this element in the array
-	 * @param n     write this number of elements
-	 *on read error
-	 */
-	/*public final void writeBoolean(boolean[] pa, int start, int n) throws IOException {
-		for (int i = 0; i < n; i++) {
-			writeBoolean(pa[start + i]);
-		}
-	}*/
 
 	/**
 	 * Writes a <code>byte</code> to the file as a 1-byte value.
@@ -1472,20 +1138,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		write((v) & 0xFF);
 	}
 
-	/*
-	 * Write an array of shorts
-	 *
-	 * @param pa    write from this array
-	 * @param start starting with this element in the array
-	 * @param n     this number of elements
-	 *on read error
-	 */
-	/*public final void writeShort(short[] pa, int start, int n) throws IOException {
-		for (int i = 0; i < n; i++) {
-			writeShort(pa[start + i]);
-		}
-	}*/
-
 	/**
 	 * Writes a <code>char</code> to the file as a 2-byte value, high
 	 * byte first.
@@ -1497,20 +1149,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		write((v >>> 8) & 0xFF);
 		write((v) & 0xFF);
 	}
-
-	/*
-	 * Write an array of chars
-	 *
-	 * @param pa    write from this array
-	 * @param start starting with this element in the array
-	 * @param n     this number of elements
-	 *on read error
-	 */
-	/*public final void writeChar(char[] pa, int start, int n) throws IOException {
-		for (int i = 0; i < n; i++) {
-			writeChar(pa[start + i]);
-		}
-	}*/
 
 	/**
 	 * Writes an <code>int</code> to the file as four bytes, high byte first.
@@ -1524,20 +1162,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		write((v >>> 8) & 0xFF);
 		write((v) & 0xFF);
 	}
-
-	/*
-	 * Write an array of ints
-	 *
-	 * @param pa    write from this array
-	 * @param start starting with this element in the array
-	 * @param n     write this number of elements
-	 *on read error
-	 */
-	/*public final void writeInt(int[] pa, int start, int n) throws IOException {
-		for (int i = 0; i < n; i++) {
-			writeInt(pa[start + i]);
-		}
-	}*/
 
 	/**
 	 * Writes a <code>long</code> to the file as eight bytes, high byte first.
@@ -1556,20 +1180,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		write((int) (v) & 0xFF);
 	}
 
-	/*
-	 * Write an array of longs
-	 *
-	 * @param pa    write from this array
-	 * @param start starting with this element in the array
-	 * @param n     write this number of elements
-	 *on read error
-	 */
-	/*public final void writeLong(long[] pa, int start, int n) throws IOException {
-		for (int i = 0; i < n; i++) {
-			writeLong(pa[start + i]);
-		}
-	}*/
-
 	/**
 	 * Converts the float argument to an <code>int</code> using the
 	 * <code>floatToIntBits</code> method in class <code>Float</code>,
@@ -1583,21 +1193,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 	public final void writeFloat(float v) throws IOException {
 		writeInt(Float.floatToIntBits(v));
 	}
-
-	/*
-	 * Write an array of floats
-	 *
-	 * @param pa    write from this array
-	 * @param start starting with this element in the array
-	 * @param n     write this number of elements
-	 *on read error
-	 */
-	/*public final void writeFloat(float[] pa, int start, int n) throws IOException {
-		for (int i = 0; i < n; i++) {
-			writeFloat(pa[start + i]);
-		}
-	}*/
-
 
 	/**
 	 * Converts the double argument to a <code>long</code> using the
@@ -1613,20 +1208,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		writeLong(Double.doubleToLongBits(v));
 	}
 
-	/*
-	 * Write an array of doubles
-	 *
-	 * @param pa    write from this array
-	 * @param start starting with this element in the array
-	 * @param n     write this number of elements
-	 *on read error
-	 */
-	/*public final void writeDouble(double[] pa, int start, int n) throws IOException {
-		for (int i = 0; i < n; i++) {
-			writeDouble(pa[start + i]);
-		}
-	}*/
-
 	/**
 	 * Writes the string to the file as a sequence of bytes. Each
 	 * character in the string is written out, in sequence, by discarding
@@ -1641,22 +1222,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 			write((byte) s.charAt(i));
 		}
 	}
-
-	/*
-	 * Writes the character array to the file as a sequence of bytes. Each
-	 * character in the string is written out, in sequence, by discarding
-	 * its high eight bits.
-	 *
-	 * @param b   a character array of bytes to be written.
-	 * @param off the index of the first character to write.
-	 * @param len the number of characters to write.
-	 *if an I/O error occurs.
-	 */
-	/*public final void writeBytes(char b[], int off, int len) throws IOException {
-		for (int i = off; i < len; i++) {
-			write((byte) b[i]);
-		}
-	}*/
 
 	/**
 	 * Writes a string to the file as a sequence of characters. Each

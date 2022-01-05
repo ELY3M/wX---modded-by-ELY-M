@@ -27,10 +27,10 @@ import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
-
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.ObjectCardImage
 import joshuatee.wx.ui.ObjectCardText
@@ -38,10 +38,10 @@ import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
-import kotlinx.coroutines.*
 
 class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
+    //
     // show a rainfall outlook for a specific day
     //
     // Arguments
@@ -51,7 +51,6 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
 
     companion object { const val NUMBER = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var textProduct = ""
     private var imageUrl = ""
     private var bitmap = UtilityImg.getBlankBitmap()
@@ -60,6 +59,7 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
     private lateinit var objectCardText: ObjectCardText
     private lateinit var linearLayout: LinearLayout
     private var tabletInLandscape = false
+    private var html = ""
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,11 +82,17 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
         getContent()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        bitmap = withContext(Dispatchers.IO) {
-            imageUrl.getImage()
-        }
-        objectCardText.text = withContext(Dispatchers.IO) { UtilityDownload.getTextProduct(this@WpcRainfallForecastActivity, textProduct) }
+    private fun getContent() {
+        FutureVoid(this, { html = UtilityDownload.getTextProduct(this@WpcRainfallForecastActivity, textProduct) }, ::showText)
+        FutureVoid(this, { bitmap = imageUrl.getImage()}, ::showImage)
+    }
+
+    private fun showText() {
+        objectCardText.text = html
+        UtilityTts.conditionalPlay(activityArguments, 1, applicationContext, objectCardText.text, textProduct)
+    }
+
+    private fun showImage() {
         if (tabletInLandscape) {
             objectCardImage.setImage(bitmap, 2)
         } else {
@@ -95,7 +101,6 @@ class WpcRainfallForecastActivity : AudioPlayActivity(), OnMenuItemClickListener
         objectCardImage.setOnClickListener {
             ObjectIntent.showImage(this@WpcRainfallForecastActivity, arrayOf(imageUrl, textProduct, "true"))
         }
-        UtilityTts.conditionalPlay(activityArguments, 1, applicationContext, objectCardText.text, textProduct)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {

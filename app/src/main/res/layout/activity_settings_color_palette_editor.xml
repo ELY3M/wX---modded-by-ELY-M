@@ -67,7 +67,7 @@
                                 android:id="@+id/palTitle"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:hint="Name"
+                                android:hint="@string/name"
                                 android:inputType="text"
                                 android:textSize="18sp"
                                 android:importantForAutofill="no" />
@@ -76,7 +76,7 @@
                                 android:id="@+id/palContent"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:hint="Color Palette"
+                                android:hint="@string/color_palette"
                                 android:inputType="textMultiLine"
                                 android:textSize="@dimen/listitem_text"
                                 android:importantForAutofill="no" />
@@ -98,5 +98,6 @@
         app:layout_anchor="@id/rl"
         app:layout_anchorGravity="bottom|center"
         app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-        app:srcCompat="@drawable/ic_done_24dp" />
+        app:srcCompat="@drawable/ic_done_24dp"
+        android:contentDescription="@string/done" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

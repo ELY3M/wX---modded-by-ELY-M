@@ -24,7 +24,9 @@ package joshuatee.wx.models
 internal object UtilityModelNsslWrfInterface {
 
     val models = listOf(
-        "WRF", "FV3", "HRRRV3", "WRF_3KM"
+        "WRF",
+        "FV3",
+        "HRRRV3"
     )
 
     val paramsNsslWrf = listOf(

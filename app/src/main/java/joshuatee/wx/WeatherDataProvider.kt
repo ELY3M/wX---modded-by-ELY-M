@@ -53,7 +53,7 @@ class WeatherDataProvider : ContentProvider() {
     }
 
     @Synchronized
-    override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?, sortOrder: String?): Cursor? {
+    override fun query(uri: Uri, projection: Array<String>?, selection: String?, selectionArgs: Array<String>?, sortOrder: String?): Cursor {
         // assert(uri.pathSegments.isEmpty())
         // In this sample, we only query without any parameters, so we can just return a cursor to
         // all the weather data.
@@ -65,7 +65,7 @@ class WeatherDataProvider : ContentProvider() {
         return matrixCursor
     }
 
-    override fun getType(uri: Uri): String? = "vnd.android.cursor.dir/vnd.weatherlistwidget.temperature"
+    override fun getType(uri: Uri): String = "vnd.android.cursor.dir/vnd.weatherlistwidget.temperature"
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? = null
 

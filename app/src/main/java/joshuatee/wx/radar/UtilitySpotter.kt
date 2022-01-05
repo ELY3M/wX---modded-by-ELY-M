@@ -197,6 +197,4 @@ object UtilitySpotter {
     val reports: List<SpotterReports>
         get() = reportsList
 
-    //val spotters: List<SpotterReports>
-    //    get() = spotterList
 }

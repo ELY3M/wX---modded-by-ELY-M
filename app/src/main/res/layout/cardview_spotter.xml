@@ -24,12 +24,6 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center">
 
-<!--    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/toolbar_bottom"
-        android:orientation="vertical">-->
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,9 +47,4 @@
                 android:paddingEnd="@dimen/padding" />
         </LinearLayout>
 
-  <!--  </LinearLayout>-->
 </androidx.cardview.widget.CardView>
-
-
-
-

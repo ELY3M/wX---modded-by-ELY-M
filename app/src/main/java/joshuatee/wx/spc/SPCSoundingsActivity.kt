@@ -27,21 +27,22 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
+import joshuatee.wx.Extensions.getHtml
+import joshuatee.wx.Extensions.parse
 import joshuatee.wx.Extensions.safeGet
 
 import joshuatee.wx.R
 import joshuatee.wx.MyApplication
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.settings.*
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
-import kotlinx.coroutines.*
 
 class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
 
     companion object { const val URL = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var imgUrl = ""
     private lateinit var img: ObjectTouchImageView
     private lateinit var imageMap: ObjectImageMap
@@ -81,11 +82,18 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent() {
         locations = UtilityFavorites.setupMenu(this@SpcSoundingsActivity, MyApplication.sndFav, office, prefToken)
         invalidateOptionsMenu()
-        if (MyApplication.sndFav.contains(":$office:")) star.setIcon(MyApplication.STAR_ICON) else star.setIcon(MyApplication.STAR_OUTLINE_ICON)
-        bitmap = withContext(Dispatchers.IO) { UtilitySpcSoundings.getImage(this@SpcSoundingsActivity, office) }
+        if (MyApplication.sndFav.contains(":$office:")) {
+            star.setIcon(MyApplication.STAR_ICON)
+        } else {
+            star.setIcon(MyApplication.STAR_OUTLINE_ICON)
+        }
+        FutureVoid(this, { bitmap = UtilitySpcSoundings.getImage(this@SpcSoundingsActivity, office) }, ::showImage)
+    }
+
+    private fun showImage() {
         img.img.visibility = View.VISIBLE
         img.setBitmap(bitmap)
         img.setMaxZoom(4f)
@@ -93,12 +101,18 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
         Utility.writePref(this@SpcSoundingsActivity, "SOUNDING_SECTOR", office)
     }
 
-    private fun getContentSPCPlot() = GlobalScope.launch(uiDispatcher) {
+    private fun getContentSPCPlot() {
+        FutureVoid(this, ::downloadSpcPlot, ::showSpcPlot)
+    }
+
+    private fun downloadSpcPlot() {
         imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/$upperAir"
-        withContext(Dispatchers.IO) {
-            val date = UtilityString.getHtmlAndParse("${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/", "/obswx/maps/" + upperAir + "_([0-9]{6}_[0-9]{2}).gif")
-            bitmap = UtilityImg.getBitmapAddWhiteBackground(this@SpcSoundingsActivity, imgUrl + "_" + date + ".gif")
-        }
+        val html = "${MyApplication.nwsSPCwebsitePrefix}/obswx/maps/".getHtml()
+        val date = html.parse("/obswx/maps/" + upperAir + "_([0-9]{6}_[0-9]{2}).gif")
+        bitmap = UtilityImg.getBitmapAddWhiteBackground(this@SpcSoundingsActivity, imgUrl + "_" + date + ".gif")
+    }
+
+    private fun showSpcPlot() {
         img.img.visibility = View.VISIBLE
         img.setBitmap(bitmap)
         img.setMaxZoom(4f)

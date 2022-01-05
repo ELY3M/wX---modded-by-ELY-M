@@ -1800,7 +1800,7 @@ NM,Cibola County, 34.932050,-108.000255
 NM,Colfax County, 36.612962,-104.640126
 NM,Curry County, 34.572984,-103.346055
 NM,De Baca County, 34.351429,-104.401527
-NM,Doña Ana County, 32.350912,-106.832182
+NM,Dona Ana County, 32.350912,-106.832182
 NM,Eddy County, 32.457858,-104.306471
 NM,Grant County, 32.732087,-108.381504
 NM,Guadalupe County, 34.869782,-104.784968
@@ -3146,30 +3146,30 @@ PR,Aguada Municipio, 18.375681, -67.183707
 PR,Aguadilla Municipio, 18.480256, -67.143910
 PR,Aguas Buenas Municipio, 18.256524, -66.128496
 PR,Aibonito Municipio, 18.130647, -66.263974
-PR,Añasco Municipio, 18.286936, -67.131246
+PR,Anasco Municipio, 18.286936, -67.131246
 PR,Arecibo Municipio, 18.434031, -66.675084
 PR,Arroyo Municipio, 17.972060, -66.041945
 PR,Barceloneta Municipio, 18.469989, -66.558230
 PR,Barranquitas Municipio, 18.199014, -66.309782
-PR,Bayamón Municipio, 18.349929, -66.167922
+PR,Bayamon Municipio, 18.349929, -66.167922
 PR,Cabo Rojo Municipio, 18.008873, -67.209884
 PR,Caguas Municipio, 18.211109, -66.050964
 PR,Camuy Municipio, 18.445469, -66.863134
-PR,Canóvanas Municipio, 18.329829, -65.885142
+PR,Canovanas Municipio, 18.329829, -65.885142
 PR,Carolina Municipio, 18.396776, -65.968778
-PR,Cataño Municipio, 18.442299, -66.145357
+PR,Catano Municipio, 18.442299, -66.145357
 PR,Cayey Municipio, 18.103624, -66.151667
 PR,Ceiba Municipio, 18.273749, -65.530895
 PR,Ciales Municipio, 18.291088, -66.513306
 PR,Cidra Municipio, 18.174270, -66.161335
 PR,Coamo Municipio, 18.103800, -66.357586
-PR,Comerío Municipio, 18.225040, -66.220298
+PR,Comerio Municipio, 18.225040, -66.220298
 PR,Corozal Municipio, 18.303910, -66.326179
 PR,Culebra Municipio, 18.324241, -65.306741
 PR,Dorado Municipio, 18.473260, -66.260394
 PR,Fajardo Municipio, 18.386378, -65.588454
 PR,Florida Municipio, 18.372551, -66.558341
-PR,Guánica Municipio, 17.948052, -66.922989
+PR,Guanica Municipio, 17.948052, -66.922989
 PR,Guayama Municipio, 17.973929, -66.137467
 PR,Guayanilla Municipio, 18.005263, -66.798356
 PR,Guaynabo Municipio, 18.344357, -66.114056
@@ -3179,35 +3179,35 @@ PR,Hormigueros Municipio, 18.134644, -67.116158
 PR,Humacao Municipio, 18.135403, -65.786229
 PR,Isabela Municipio, 18.485062, -67.014142
 PR,Jayuya Municipio, 18.211097, -66.586886
-PR,Juana Díaz Municipio, 17.998175, -66.491473
+PR,Juana Diaz Municipio, 17.998175, -66.491473
 PR,Juncos Municipio, 18.224133, -65.908542
 PR,Lajas Municipio, 17.978511, -67.040111
 PR,Lares Municipio, 18.270899, -66.866375
-PR,Las Marías Municipio, 18.227594, -66.977580
+PR,Las Marias Municipio, 18.227594, -66.977580
 PR,Las Piedras Municipio, 18.187201, -65.871196
-PR,Loíza Municipio, 18.475039, -65.903280
+PR,Loiza Municipio, 18.475039, -65.903280
 PR,Luquillo Municipio, 18.367960, -65.709945
-PR,Manatí Municipio, 18.449436, -66.489982
+PR,Manati Municipio, 18.449436, -66.489982
 PR,Maricao Municipio, 18.173956, -66.935547
 PR,Maunabo Municipio, 17.999786, -65.896403
-PR,Mayagüez Municipio, 18.083850, -67.886337
+PR,Mayaguez Municipio, 18.083850, -67.886337
 PR,Moca Municipio, 18.377751, -67.080344
 PR,Morovis Municipio, 18.318386, -66.418034
 PR,Naguabo Municipio, 18.211070, -65.735749
 PR,Naranjito Municipio, 18.289927, -66.253440
 PR,Orocovis Municipio, 18.215975, -66.433971
 PR,Patillas Municipio, 18.000311, -65.986642
-PR,Peñuelas Municipio, 18.026618, -66.728125
+PR,Penuelas Municipio, 18.026618, -66.728125
 PR,Ponce Municipio, 18.001717, -66.606662
 PR,Quebradillas Municipio, 18.466351, -66.927605
-PR,Rincón Municipio, 18.340562, -67.277302
-PR,Río Grande Municipio, 18.376369, -65.798434
+PR,Rincon Municipio, 18.340562, -67.277302
+PR,Rio Grande Municipio, 18.376369, -65.798434
 PR,Sabana Grande Municipio, 18.083000, -66.943336
 PR,Salinas Municipio, 17.971485, -66.262252
-PR,San Germán Municipio, 18.107800, -67.037263
+PR,San German Municipio, 18.107800, -67.037263
 PR,San Juan Municipio, 18.422363, -66.068093
 PR,San Lorenzo Municipio, 18.147130, -65.976289
-PR,San Sebastián Municipio, 18.331409, -66.970678
+PR,San Sebastian Municipio, 18.331409, -66.970678
 PR,Santa Isabel Municipio, 17.952922, -66.387588
 PR,Toa Alta Municipio, 18.364556, -66.244669
 PR,Toa Baja Municipio, 18.456803, -66.193039

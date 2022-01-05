@@ -36,5 +36,3 @@
         android:title="@string/label_share"
         app:showAsAction="always" />
 </menu>
-
-

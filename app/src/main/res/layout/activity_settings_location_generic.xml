@@ -67,7 +67,7 @@
                                 android:id="@+id/locLabelEt"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:hint="Name of location"
+                                android:hint="@string/name_of_location"
                                 android:inputType="text"
                                 android:textSize="18sp"
                                 android:importantForAutofill="no" />
@@ -76,7 +76,7 @@
                                 android:id="@+id/locXEt"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:hint="Latitude, you are not required to enter."
+                                android:hint="@string/latitude_you_are_not_required_to_enter"
                                 android:inputType="text"
                                 android:textSize="18sp"
                                 android:importantForAutofill="no" />
@@ -85,7 +85,7 @@
                                 android:id="@+id/locYEt"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:hint="Longitude, you are not required to enter."
+                                android:hint="@string/longitude_you_are_not_required_to_enter"
                                 android:inputType="text"
                                 android:textSize="18sp"
                                 android:importantForAutofill="no" />
@@ -96,7 +96,7 @@
                         android:id="@+id/notif_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:text="Notifications"
+                        android:text="@string/notifications"
                         android:textSize="@dimen/large_text" />
                 </LinearLayout>
             </ScrollView>
@@ -112,5 +112,6 @@
         app:layout_anchor="@id/rl"
         app:layout_anchorGravity="bottom|center"
         app:pressedTranslationZ="@dimen/fab_elevation_pressed"
-        app:srcCompat="@drawable/ic_done_24dp" />
+        app:srcCompat="@drawable/ic_done_24dp"
+        android:contentDescription="@string/save" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

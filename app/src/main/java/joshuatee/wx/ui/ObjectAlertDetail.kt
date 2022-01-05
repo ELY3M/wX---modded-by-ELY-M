@@ -34,20 +34,20 @@ import joshuatee.wx.objects.TextSize
 class ObjectAlertDetail(val context: Context, linearLayout: LinearLayout) {
 
     private val objectTextViews = mutableListOf<ObjectTextView>()
-    var title: String = ""
+    var title = ""
         private set
-    var wfoTitle: String = ""
+    var wfoTitle = ""
         private set
 
     init {
-        (0..4).forEach { _ ->
+        (0..5).forEach { _ ->
             val objectTextView = ObjectTextView(context)
             objectTextViews.add(objectTextView)
             linearLayout.addView(objectTextView.tv)
         }
         objectTextViews[0].setPadding(MyApplication.padding, 0, MyApplication.padding, 0)
         objectTextViews[1].setPadding(MyApplication.padding, 0, MyApplication.padding, MyApplication.padding)
-        (2..4).forEach { objectTextViews[it].setPadding(MyApplication.padding) }
+        (2..5).forEach { objectTextViews[it].setPadding(MyApplication.padding) }
     }
 
     fun updateContent(capAlert: CapAlert, url: String) {
@@ -101,6 +101,7 @@ class ObjectAlertDetail(val context: Context, linearLayout: LinearLayout) {
             objectTextViews[2].color = UIPreferences.textHighlightColor
             objectTextViews[3].text = capAlert.summary
             objectTextViews[4].text = capAlert.instructions
+            objectTextViews[5].text = capAlert.extended
         }
         wfoTitle = wfo
     }

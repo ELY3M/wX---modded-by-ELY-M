@@ -58,7 +58,6 @@ object UIPreferences {
     var hideTopToolbar = false
     var mainScreenRadarFab = false
     var locfragDontShowIcons = false
-    var useAwcRadarMosaic = true
     var nwsIconSizeDefault = 20
     var normalTextSizeDefault = 16
     var normalTextSize = 16
@@ -66,10 +65,12 @@ object UIPreferences {
     var navDrawerMainScreenOnRight = true
     var useNwsApi = false
     var useNwsApiForHourly = true
+    var lightningUseGoes = true
 
     fun initPreferences(context: Context) {
         useNwsApi = Utility.readPref(context, "USE_NWS_API_SEVEN_DAY", "false").startsWith("t")
         useNwsApiForHourly = Utility.readPref("USE_NWS_API_HOURLY", "true").startsWith("t")
+        lightningUseGoes = Utility.readPref("LIGHTNING_USE_GOES", "true").startsWith("t")
         navDrawerMainScreen = Utility.readPref(context, "NAV_DRAWER_MAIN_SCREEN", "false").startsWith("t")
         navDrawerMainScreenOnRight = Utility.readPref(context, "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT", "true").startsWith("t")
         if (UtilityUI.isTablet()) {
@@ -79,7 +80,6 @@ object UIPreferences {
         MyApplication.textSizeSmall = UtilityUI.spToPx(normalTextSize - 2, context)
         MyApplication.textSizeNormal = UtilityUI.spToPx(normalTextSize, context)
         MyApplication.textSizeLarge = UtilityUI.spToPx(normalTextSize + 5, context)
-        // useAwcRadarMosaic = Utility.readPref(context, "USE_AWC_RADAR_MOSAIC", "false").startsWith("t")
         locfragDontShowIcons = Utility.readPref(context, "UI_LOCFRAG_NO_ICONS", "false").startsWith("t")
         mainScreenRadarFab = Utility.readPref(context, "UI_MAIN_SCREEN_RADAR_FAB", "false").startsWith("t")
         homescreenTextLength = Utility.readPref(context, "HOMESCREEN_TEXT_LENGTH_PREF", 500)

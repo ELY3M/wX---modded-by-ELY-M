@@ -25,36 +25,29 @@ internal object UtilityModelGlcfsInterface {
 
     // http://www.glerl.noaa.gov/res/glcfs
 
-    val models = listOf("GLCFS")
+    val models = listOf(
+            "GLCFS"
+    )
 
     val sectors = listOf(
-        "Lake Superior",
-        "Lake Michigan",
-        "Lake Huron",
-        "Lake Erie",
-        "Lake Ontario",
         "All Lakes"
     )
 
     val params = listOf(
-        "wv",
-        "wn",
-        "swt",
-        "sfcur",
-        "wl",
-        "wl1d",
-        "cl",
-        "at"
+        "lwv",
+        "lwn",
+        "lswt",
+        "lat",
+        "lice",
+        "lcl"
     )
 
     val labels = listOf(
-        "Wave height",
-        "Wind speed",
-        "Surface temperature",
-        "Surface currents",
-        "Water level displacement",
-        "Water level displacement 1D",
-        "Cloud cover (5 lake view only)",
-        "Air temp (5 lake view only)"
+        "Waves",
+        "Winds",
+        "Surface Water Temp",
+        "Air Temperature",
+        "Ice Cover",
+        "Cloud Cover"
     )
 }

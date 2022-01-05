@@ -22,27 +22,25 @@
 package joshuatee.wx.util
 
 import android.app.Activity
-import java.io.File
-import java.io.FileOutputStream
-
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
-import joshuatee.wx.MyApplication
-
-import joshuatee.wx.ui.UtilityUI
 import androidx.core.app.ShareCompat.IntentBuilder
+import java.io.File
+import java.io.FileOutputStream
+import joshuatee.wx.MyApplication
+import joshuatee.wx.ui.UtilityUI
 
 object UtilityShare {
 
-    fun prepTextForShare(text: String): String {
-        return text.replace(MyApplication.newline, MyApplication.newline + MyApplication.newline)
-    }
+    fun prepTextForShare(text: String) = text.replace(MyApplication.newline, MyApplication.newline + MyApplication.newline)
 
     fun textAsAttachment(activity: Activity, context: Context, subject: String, text: String, filename: String) {
         val dir = File(context.filesDir.toString() + "/shared")
-        if (!dir.mkdirs()) UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
+        if (!dir.mkdirs()) {
+            UtilityLog.d("wx", "failed to mkdir: " + context.filesDir + "/shared")
+        }
         val file = File(dir, filename)
         val imgUri = FileProvider.getUriForFile(context, "${MyApplication.packageNameAsString}.fileprovider", file)
         var fos: FileOutputStream? = null

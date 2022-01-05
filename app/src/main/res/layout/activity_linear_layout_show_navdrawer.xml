@@ -23,10 +23,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
- <!--   <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">-->
-
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -50,7 +46,6 @@
 
             </ScrollView>
         </LinearLayout>
-<!--    </RelativeLayout>-->
 
     <ListView
         android:id="@+id/left_drawer"
@@ -62,5 +57,3 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp" />
 </androidx.drawerlayout.widget.DrawerLayout>
-
-<!--    android:background="@color/primary_dark_blue"-->

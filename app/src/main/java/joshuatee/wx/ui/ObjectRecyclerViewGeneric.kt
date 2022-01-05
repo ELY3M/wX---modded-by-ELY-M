@@ -37,7 +37,7 @@ class ObjectRecyclerViewGeneric(context: Context, activity: Activity, resourceId
         recyclerView.layoutManager = linearLayoutManager
     }
 
-    fun scrollToPosition(position: Int) = recyclerView.scrollToPosition(position)
+    fun scrollToPosition(position: Int): Unit = recyclerView.scrollToPosition(position)
 }
 
 

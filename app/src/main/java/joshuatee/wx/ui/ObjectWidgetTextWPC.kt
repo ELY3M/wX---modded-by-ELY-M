@@ -27,7 +27,7 @@ import android.widget.RemoteViews
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UtilityWidget
-import joshuatee.wx.objects.WidgetFile.*
+import joshuatee.wx.objects.WidgetFile.TEXT_WPC
 import joshuatee.wx.util.Utility
 import joshuatee.wx.wpc.WpcTextProductsActivity
 

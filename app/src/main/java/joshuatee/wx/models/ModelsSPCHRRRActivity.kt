@@ -24,9 +24,6 @@ package joshuatee.wx.models
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.content.res.Configuration
-
-import java.util.Locale
-
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.text.TextUtils
 import android.view.KeyEvent
@@ -35,20 +32,24 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.LinearLayout
-
+import java.util.Locale
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.VideoRecordActivity
-import joshuatee.wx.ui.*
-import joshuatee.wx.util.*
-import kotlinx.coroutines.*
+import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.ObjectFab
+import joshuatee.wx.ui.ObjectNavDrawer
+import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.UtilityString
 
 class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { // OnItemSelectedListener
 
     companion object { const val INFO = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var fab1: ObjectFab? = null
     private var fab2: ObjectFab? = null
     private val overlayImg = mutableListOf<String>()
@@ -84,7 +85,9 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
         } else {
             super.onCreate(savedInstanceState, R.layout.activity_models_generic_multipane_nospinner, R.menu.models_spchrrr, iconsEvenlySpaced = false, bottomToolbar = true)
             val linearLayout: LinearLayout = findViewById(R.id.linearLayout)
-            if (UtilityUI.isLandScape(this)) linearLayout.orientation = LinearLayout.HORIZONTAL
+            if (UtilityUI.isLandScape(this)) {
+                linearLayout.orientation = LinearLayout.HORIZONTAL
+            }
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         title = activityArguments[2]
@@ -119,7 +122,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
             drw.drawerLayout.closeDrawer(drw.listView)
             om.displayData.param[om.curImg] = drw.tokens[position]
             om.displayData.paramLabel[om.curImg] = drw.getLabel(position)
-            UtilityModels.getContentNonSpinner(this, om, overlayImg, uiDispatcher)
+            UtilityModels.getContentNonSpinner(this, om, overlayImg)
             updateMenuTitles()
         }
         setupModel()
@@ -156,12 +159,12 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
             R.id.action_layer_cnty -> overlaySelected("cnty")
             R.id.action_layer_clear -> {
                 overlayImg.clear()
-                UtilityModels.getContentNonSpinner(this, om, overlayImg, uiDispatcher)
+                UtilityModels.getContentNonSpinner(this, om, overlayImg)
             }
             R.id.action_multipane -> ObjectIntent(this, ModelsSpcHrrrActivity::class.java, INFO, arrayOf("2", activityArguments[1], activityArguments[2]))
             R.id.action_back -> om.leftClick()
             R.id.action_forward -> om.rightClick()
-            R.id.action_animate -> UtilityModels.getAnimate(om, overlayImg, uiDispatcher)
+            R.id.action_animate -> UtilityModels.getAnimate(this@ModelsSpcHrrrActivity, om, overlayImg)
             R.id.action_time -> genericDialog(om.times) { om.setTimeIdx(it) }
             R.id.action_run -> genericDialog(om.rtd.listRun) { om.run = om.rtd.listRun[it] }
             R.id.action_share -> {
@@ -190,8 +193,15 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
         getContent()
     }
 
-    private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
-        om.rtd = withContext(Dispatchers.IO) { om.getRunTime() }
+    private fun getRunStatus() {
+        FutureVoid(this, ::getRunStatusDownload, ::getRunStatusUpdate)
+    }
+
+    private fun getRunStatusDownload() {
+        om.rtd = om.getRunTime()
+    }
+
+    private fun getRunStatusUpdate() {
         miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
         om.run = om.rtd.mostRecentRun
         (om.startStep until om.endStep).forEach { om.times.add(String.format(Locale.US, "%02d", it)) }
@@ -201,7 +211,7 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
     }
 
     private fun getContent() {
-        UtilityModels.getContentNonSpinner(this, om, overlayImg, uiDispatcher)
+        UtilityModels.getContentNonSpinner(this, om, overlayImg)
         updateMenuTitles()
     }
 

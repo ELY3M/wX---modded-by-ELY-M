@@ -26,14 +26,13 @@ import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-
+import java.util.Locale
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityTime
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityLog
-import java.util.*
 
 internal object UtilityModelSpcHrefInputOutput {
 
@@ -53,7 +52,7 @@ internal object UtilityModelSpcHrefInputOutput {
 
     fun getImage(context: Context, om: ObjectModelNoSpinner, time: String): Bitmap {
         var sectorIndex = if (om.sector == "") 0 else UtilityModelSpcHrefInterface.sectorsLong.indexOf(om.sector)
-        UtilityLog.d("wx", "DEBUG: " + sectorIndex + " " + om.sector)
+//        UtilityLog.d("wx", "DEBUG: " + sectorIndex + " " + om.sector)
         if (sectorIndex == -1) sectorIndex = 0
         val sector = UtilityModelSpcHrefInterface.sectors.safeGet(sectorIndex)
         if (om.run.length < 10) return UtilityImg.getBlankBitmap()

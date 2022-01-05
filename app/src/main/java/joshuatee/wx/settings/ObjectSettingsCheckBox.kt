@@ -75,7 +75,8 @@ class ObjectSettingsCheckBox(context: Context, label: String, pref: String, strI
                 "UI_MAIN_SCREEN_RADAR_FAB",
                 "RADAR_TOOLBAR_TRANSPARENT",
                 "NAV_DRAWER_MAIN_SCREEN_ON_RIGHT",
-                "USE_NWS_API_HOURLY"
+                "USE_NWS_API_HOURLY",
+                "LIGHTNING_USE_GOES"
         )
         checkBox.isChecked = Utility.readPref(context, pref, java.lang.Boolean.toString(truePrefs.contains(pref))) == "true"
              || ( pref.startsWith(UtilityNavDrawer.getPrefVar("")) && Utility.readPref(context, pref, "") != "false")

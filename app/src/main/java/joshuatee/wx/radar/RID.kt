@@ -21,15 +21,9 @@
 
 package joshuatee.wx.radar
 
-import java.util.Comparator
-
-// FIXME rename RID
 class RID(val name: String, val location: LatLon) {
 
     var distance = 0
 
-    companion object {
-        val DESCENDING_COMPARATOR: Comparator<RID> = Comparator { d, d1 -> d.distance - d1.distance }
-    }
 }
 

@@ -99,6 +99,14 @@ open class ObjectCardImage {
         objectCard.addView(img)
     }
 
+    open fun setImage2(bitmap: Bitmap, numberAcross: Int = 1) {
+        objectCard.card.removeAllViews()
+        img = TouchImageView2(context)
+        img.layoutParams = layoutParams
+        UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
+        objectCard.addView(img)
+    }
+
     fun resetZoom() = img.resetZoom()
 
     val card get() = objectCard.card

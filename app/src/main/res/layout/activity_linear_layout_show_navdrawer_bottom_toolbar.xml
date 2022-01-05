@@ -65,5 +65,3 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp" />
 </androidx.drawerlayout.widget.DrawerLayout>
-
-<!-- Was used in ListView directly above   android:background="@color/primary_dark_blue"-->

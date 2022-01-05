@@ -62,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:contentDescription="Conditions icon"
+                android:contentDescription="@string/conditions_icon"
                 android:maxWidth="80dip"
                 android:maxHeight="80dip"
                 android:minWidth="40dip"
@@ -105,7 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:contentDescription="Wind Direction"
+            android:contentDescription="@string/wind_direction"
             android:maxWidth="82dp"
             android:maxHeight="82dp"
             android:padding="16dip" />
@@ -151,14 +151,3 @@
         android:textColor="@color/black"
         android:textSize="15sp" />
 </LinearLayout>
-
-
-
-
-
-
-
-
-
-
-

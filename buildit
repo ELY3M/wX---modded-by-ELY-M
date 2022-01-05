@@ -11,7 +11,8 @@ ver=$(grep versionName app/src/main/AndroidManifest.xml |awk -F'"'  '{print $2}'
 tmpPath=${HOME}/tmp
 
 echo Compile release
-export PATH=/Applications/"Android Studio.app"/Contents/jre/jdk/Contents/Home/bin:~/android-studio/jre/bin:$PATH
+#export PATH=/Applications/"Android Studio.app"/Contents/jre/jdk/Contents/Home/bin:~/android-studio/jre/bin:$PATH
+export PATH=/Applications/"Android Studio.app"/Contents/jre/Contents/Home/bin:~/android-studio/jre/bin:$PATH
 ./gradlew assembleRelease --warning-mode=all
 cp app/build/outputs/apk/release/app-release.apk ${HOME}/StudioProjects/wX${ver}.apk
 

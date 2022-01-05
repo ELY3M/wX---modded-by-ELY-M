@@ -23,21 +23,11 @@
     <item
         android:id="@+id/action_afd"
         android:icon="@drawable/ic_info_outline_24dp"
-        android:title="Add afd"
+        android:title="@string/add_afd"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_add"
         android:icon="@drawable/ic_add2_box_24dp"
-        android:title="Add"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/action_autodownload"
-        android:icon="@drawable/ic_access_alarm_24dp"
-        android:title="Manage auto-downloads"
-        app:showAsAction="always" />
-    <!--<item
-        android:id="@+id/action_downloadall"
-        android:icon="@drawable/ic_get_app_24dp"
-        android:title="Download All"
-        app:showAsAction="always" />-->
+        android:title="@string/add"
+        app:showAsAction="ifRoom" />
 </menu>

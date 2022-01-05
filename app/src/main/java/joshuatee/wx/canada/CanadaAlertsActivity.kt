@@ -28,17 +28,15 @@ import android.view.MenuItem
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.appcompat.widget.Toolbar
-
 import joshuatee.wx.R
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCanadaWarnings
 import joshuatee.wx.ui.UtilityToolbar
 import joshuatee.wx.util.Utility
-import kotlinx.coroutines.*
 
 class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
-    private val uiDispatcher = Dispatchers.Main
     private var firstTime = true
     private lateinit var objectCanadaWarnings: ObjectCanadaWarnings
     private lateinit var scrollView: ScrollView
@@ -61,11 +59,12 @@ class CanadaAlertsActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent() {
         scrollView.smoothScrollTo(0, 0)
-        withContext(Dispatchers.IO) {
-            objectCanadaWarnings.getData()
-        }
+        FutureVoid(this, objectCanadaWarnings::getData, ::showText)
+    }
+
+    private fun showText() {
         objectCanadaWarnings.showData()
         if (firstTime) {
             UtilityToolbar.fullScreenMode(toolbar)

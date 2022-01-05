@@ -29,6 +29,7 @@ import android.view.MenuItem
 
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.ObjectNavDrawer
 import joshuatee.wx.ui.ObjectTouchImageView
@@ -36,15 +37,12 @@ import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
 
-import kotlinx.coroutines.*
-
 class LightningActivity : VideoRecordActivity() {
 
     //
     // Used to view lighting data
     //
 
-    private val uiDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
     private var period = "0.25"
     private var periodPretty = "15 MIN"
@@ -60,15 +58,11 @@ class LightningActivity : VideoRecordActivity() {
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.lightning_activity, iconsEvenlySpaced = true, bottomToolbar = false)
-        objectNavDrawer = ObjectNavDrawer(this, UtilityLightning.labels, UtilityLightning.urls, ::getContentFixThis)
+        objectNavDrawer = ObjectNavDrawer(this, UtilityLightning.labels, UtilityLightning.urls, ::getContent)
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, objectNavDrawer, prefTokenIdx)
         objectNavDrawer.index = Utility.readPref(this, prefTokenIdx, 0)
         period = Utility.readPref(this, "LIGHTNING_PERIOD", period)
         periodPretty = UtilityLightning.getTimePretty(period)
-        getContent()
-    }
-
-    private fun getContentFixThis() {
         getContent()
     }
 
@@ -77,12 +71,13 @@ class LightningActivity : VideoRecordActivity() {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent() {
         title = "Lightning " + objectNavDrawer.getLabel()
         toolbar.subtitle = periodPretty
-        bitmap = withContext(Dispatchers.IO) {
-            UtilityLightning.getImage(objectNavDrawer.url, period)
-        }
+        FutureVoid(this, { bitmap = UtilityLightning.getImage(objectNavDrawer.url, period) }, ::showImage)
+    }
+
+    private fun showImage() {
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn("LIGHTNING")
         Utility.writePref(this@LightningActivity, "LIGHTNING_PERIOD", period)

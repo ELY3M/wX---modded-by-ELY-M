@@ -40,7 +40,6 @@ internal interface ItemTouchHelperAdapter {
      * @return True if the item was moved to the new adapter position.
      * *
      * *
-     * @see RecyclerView.getAdapterPositionFor
      * @see RecyclerView.ViewHolder.getAdapterPosition
      */
     fun onItemMove(fromPosition: Int, toPosition: Int): Boolean
@@ -54,7 +53,6 @@ internal interface ItemTouchHelperAdapter {
      * @param position The position of the item dismissed.
      * *
      * *
-     * @see RecyclerView.getAdapterPositionFor
      * @see RecyclerView.ViewHolder.getAdapterPosition
      */
     fun onItemDismiss(position: Int)

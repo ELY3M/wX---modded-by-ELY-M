@@ -34,7 +34,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.core.app.TaskStackBuilder
 import android.widget.RemoteViews
-
 import joshuatee.wx.objects.WidgetFile
 import joshuatee.wx.objects.WidgetFile.*
 import joshuatee.wx.ui.*

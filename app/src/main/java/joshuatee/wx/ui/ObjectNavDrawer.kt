@@ -116,13 +116,17 @@ class ObjectNavDrawer(activity: Activity, private var labels: List<String>) {
     fun getLabel(position: Int) = labels[position]
 
     fun getLabel(): String {
-        if (index >= labels.size) index = labels.size - 1
+        if (index >= labels.size) {
+            index = labels.size - 1
+        }
         return labels[index]
     }
 
     val token: String
         get() {
-            if (index >= tokens.size) index = tokens.size - 1
+            if (index >= tokens.size) {
+                index = tokens.size - 1
+            }
             return tokens[index]
         }
 

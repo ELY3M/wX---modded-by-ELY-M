@@ -22,25 +22,24 @@
 package joshuatee.wx.wpc
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.LinearLayout
 import joshuatee.wx.Extensions.getImage
-
 import joshuatee.wx.R
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.*
+import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
-import kotlinx.coroutines.*
 
 class WpcRainfallForecastSummaryActivity : BaseActivity() {
 
-    private val uiDispatcher = Dispatchers.Main
-    private var bitmaps = listOf<Bitmap>()
+    private val bitmaps = MutableList(UtilityWpcRainfallForecast.urls.size){ UtilityImg.getBlankBitmap() }
     private var imagesPerRow = 2
     private lateinit var linearLayout: LinearLayout
+    private lateinit var objectImageSummary: ObjectImageSummary
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.shared_multigraphics, menu)
@@ -56,6 +55,7 @@ class WpcRainfallForecastSummaryActivity : BaseActivity() {
         }
         title = "Excessive Rainfall Outlooks"
         toolbar.subtitle = "WPC"
+        objectImageSummary = ObjectImageSummary(this@WpcRainfallForecastSummaryActivity, linearLayout, bitmaps)
         getContent()
     }
 
@@ -64,19 +64,19 @@ class WpcRainfallForecastSummaryActivity : BaseActivity() {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        bitmaps = withContext(Dispatchers.IO) {
-            UtilityWpcRainfallForecast.urls.map { it.getImage() }
+    private fun getContent() {
+        for (i in UtilityWpcRainfallForecast.urls.indices) {
+            FutureVoid(this, { bitmaps[i] = UtilityWpcRainfallForecast.urls[i].getImage() }) { updateImage(i) }
         }
-        linearLayout.removeAllViews()
-        val objectImageSummary = ObjectImageSummary(this@WpcRainfallForecastSummaryActivity, linearLayout, bitmaps)
-        objectImageSummary.objectCardImages.forEachIndexed { index, objectCardImage ->
-            objectCardImage.setOnClickListener {
-                val textProduct = UtilityWpcRainfallForecast.productCode[index]
-                val imageUrl = UtilityWpcRainfallForecast.urls[index]
-                val day = (index + 1).toString()
-                ObjectIntent(this@WpcRainfallForecastSummaryActivity, WpcRainfallForecastActivity::class.java, WpcRainfallForecastActivity.NUMBER, arrayOf(textProduct, imageUrl, day))
-            }
+    }
+
+    private fun updateImage(index: Int) {
+        objectImageSummary.objectCardImages[index].setImage2(bitmaps[index], 2)
+        objectImageSummary.objectCardImages[index].setOnClickListener {
+            val textProduct = UtilityWpcRainfallForecast.productCode[index]
+            val imageUrl = UtilityWpcRainfallForecast.urls[index]
+            val day = (index + 1).toString()
+            ObjectIntent(this@WpcRainfallForecastSummaryActivity, WpcRainfallForecastActivity::class.java, WpcRainfallForecastActivity.NUMBER, arrayOf(textProduct, imageUrl, day))
         }
     }
 

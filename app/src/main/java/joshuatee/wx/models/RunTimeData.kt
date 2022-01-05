@@ -36,10 +36,6 @@ class RunTimeData {
         listRun.add(string)
     }
 
-    fun listRunClear() {
-        listRun.clear()
-    }
-
     fun listRunAddAll(list: List<String>) {
         listRun.addAll(list)
     }

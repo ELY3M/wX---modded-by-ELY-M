@@ -249,7 +249,8 @@ internal object UtilityMetar {
         var currentDistance: Double
         var bestRid = -1
         metarSites.indices.forEach {
-            currentDistance = LatLon.distance(location, metarSites[it].location, DistanceUnit.KM)
+            currentDistance = LatLon.distance(location, metarSites[it].location, DistanceUnit.MILE)
+            metarSites[it].distance = currentDistance.toInt()
             if (currentDistance < shortestDistance) {
                 shortestDistance = currentDistance
                 bestRid = it

@@ -128,5 +128,5 @@ object UtilityNetworkIO {
     } catch (e: IOException) {
             UtilityLog.handleException(e)
             null
-        }
+    }
 }

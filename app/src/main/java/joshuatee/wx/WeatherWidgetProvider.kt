@@ -91,18 +91,33 @@ class WeatherWidgetProvider : AppWidgetProvider() {
             workerQueue!!.removeMessages(0)
             workerQueue!!.post {
                 val contentResolver = context.contentResolver
-                val cursor = contentResolver.query(WeatherDataProvider.CONTENT_URI, null, null, null, null)
-                val count = cursor!!.count
-                (0 until count).forEach {
-                    val uri = ContentUris.withAppendedId(WeatherDataProvider.CONTENT_URI, it.toLong())
-                    val values = ContentValues()
-                    values.put(WeatherDataProvider.Columns.TEMPERATURE, Random().nextInt(maxDegrees))
-                    contentResolver.update(uri, values, null, null)
+                contentResolver.query(WeatherDataProvider.CONTENT_URI, null, null, null, null)?.use { cursor ->
+                    val count = cursor.count
+                    (0 until count).forEach {
+                        val uri = ContentUris.withAppendedId(WeatherDataProvider.CONTENT_URI, it.toLong())
+                        val values = ContentValues()
+                        values.put(WeatherDataProvider.Columns.TEMPERATURE, Random().nextInt(maxDegrees))
+                        contentResolver.update(uri, values, null, null)
+                    }
+                    contentResolver.registerContentObserver(WeatherDataProvider.CONTENT_URI, true, weatherDataProviderObserver!!)
+                    val appWidgetManager = AppWidgetManager.getInstance(context)
+                    val componentName = ComponentName(context, WeatherWidgetProvider::class.java)
+                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetManager.getAppWidgetIds(componentName), R.id.weather_list)
                 }
-                contentResolver.registerContentObserver(WeatherDataProvider.CONTENT_URI, true, weatherDataProviderObserver!!)
-                val appWidgetManager = AppWidgetManager.getInstance(context)
-                val componentName = ComponentName(context, WeatherWidgetProvider::class.java)
-                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetManager.getAppWidgetIds(componentName), R.id.weather_list)
+
+//                val contentResolver = context.contentResolver
+//                val cursor = contentResolver.query(WeatherDataProvider.CONTENT_URI, null, null, null, null)
+//                val count = cursor!!.count
+//                (0 until count).forEach {
+//                    val uri = ContentUris.withAppendedId(WeatherDataProvider.CONTENT_URI, it.toLong())
+//                    val values = ContentValues()
+//                    values.put(WeatherDataProvider.Columns.TEMPERATURE, Random().nextInt(maxDegrees))
+//                    contentResolver.update(uri, values, null, null)
+//                }
+//                contentResolver.registerContentObserver(WeatherDataProvider.CONTENT_URI, true, weatherDataProviderObserver!!)
+//                val appWidgetManager = AppWidgetManager.getInstance(context)
+//                val componentName = ComponentName(context, WeatherWidgetProvider::class.java)
+//                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetManager.getAppWidgetIds(componentName), R.id.weather_list)
             }
         } else if (action == CLICK_ACTION) {
             val day = intent.getStringExtra(EXTRA_DAY_ID)
@@ -150,7 +165,7 @@ class WeatherWidgetProvider : AppWidgetProvider() {
                 val requestId = UtilityTime.currentTimeMillis().toInt()
                 val intentWx = Intent(context, WX::class.java)
                 intentWx.action = "WX"
-                val pendingIntentWx = PendingIntent.getActivity(context, requestId, intentWx, 0) // was 0
+                val pendingIntentWx = PendingIntent.getActivity(context, requestId, intentWx, PendingIntent.FLAG_IMMUTABLE) // was 0
                 remoteViews.setPendingIntentTemplate(R.id.weather_list, pendingIntentWx)
                 remoteViews.setTextViewText(R.id.city_name, Location.getName(widgetLocNumInt))
             } else {

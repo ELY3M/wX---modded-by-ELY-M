@@ -82,20 +82,6 @@ class AnimatedGifEncoderExternal {
 		delay = ms / 10;
 	}
 
-	/*
-	 * Sets the GIF frame disposal code for the last added frame and any
-	 * subsequent frames. Default is 0 if no transparent color has been set,
-	 * otherwise 2.
-	 *
-	 * @param code
-	 *          int disposal code.
-	 */
-	/*public void setDispose(int code) {
-		if (code >= 0) {
-			dispose = code;
-		}
-	}*/
-
 	/**
 	 * Sets the number of times the set of GIF frames should be played. Default is
 	 * 1; 0 means play indefinitely. Must be invoked before the first image is
@@ -201,36 +187,6 @@ class AnimatedGifEncoderExternal {
 	}
 
 	/*
-	 * Sets frame rate in frames per second. Equivalent to
-	 * <code>setDelay(1000/fps)</code>.
-	 *
-	 * @param fps
-	 *          float frame rate (frames per second)
-	 */
-	/*public void setFrameRate(float fps) {
-		if (fps != 0f) {
-			delay = (int)(100 / fps);
-		}
-	}*/
-
-	/*
-	 * Sets quality of color quantization (conversion of images to the maximum 256
-	 * colors allowed by the GIF specification). Lower values (minimum = 1)
-	 * produce better colors, but slow processing significantly. 10 is the
-	 * default, and produces good color mapping at reasonable speeds. Values
-	 * greater than 20 do not yield significant improvements in speed.
-	 *
-	 * param quality
-	 *          int greater than 0.
-	 * return
-	 */
-	/*public void setQuality(int quality) {
-		if (quality < 1)
-			quality = 1;
-		sample = quality;
-	}*/
-
-	/*
 	 * Sets the GIF frame size. The default size is the size of the first frame
 	 * added if this method is not invoked.
 	 *
@@ -248,20 +204,6 @@ class AnimatedGifEncoderExternal {
 			height = 240;
 		sizeSet = true;
 	}
-
-	/*
-	 * Sets the GIF frame position. The position is 0,0 by default.
-	 * Useful for only updating a section of the image
-	 *
-	 * param w
-	 *          int frame width.
-	 * param h
-	 *          int frame width.
-	 */
-	/*public void setPosition(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}*/
 
 	/**
 	 * Initiates GIF file creation on the given stream. The stream is not closed

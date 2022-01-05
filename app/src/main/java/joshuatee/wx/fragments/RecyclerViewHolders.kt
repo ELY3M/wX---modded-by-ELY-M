@@ -34,8 +34,9 @@ internal class RecyclerViewHolders(itemView: View, private val itemList: List<Ti
     }
 
     override fun onClick(view: View) {
-        val intent = Intent(view.context, itemList[adapterPosition].activity)
-        intent.putExtra(itemList[adapterPosition].target, itemList[adapterPosition].argsArr)
+        // was adapterPosition
+        val intent = Intent(view.context, itemList[layoutPosition].activity)
+        intent.putExtra(itemList[layoutPosition].target, itemList[layoutPosition].argsArr)
         view.context.startActivity(intent)
     }
 }

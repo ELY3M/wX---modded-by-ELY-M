@@ -27,28 +27,27 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import joshuatee.wx.Extensions.getImage
-
 import joshuatee.wx.R
 import joshuatee.wx.settings.Location
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
-
 import joshuatee.wx.GlobalArrays
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
-import kotlinx.coroutines.*
 
 class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
 
+    //
     // Show state level SPC SWO graphics for D1-3
     //
     // Arguments
     // 1: day
+    //
 
     companion object { const val NO = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var day = ""
     private var imgUrl = ""
     private lateinit var img: ObjectTouchImageView
@@ -81,13 +80,14 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
+    private fun getContent() {
         title = "SWO D$day"
         invalidateOptionsMenu()
         imgUrl = UtilitySpcSwo.getSwoStateUrl(state, day)
-        bitmap = withContext(Dispatchers.IO) {
-            imgUrl.getImage()
-        }
+        FutureVoid(this, { bitmap = imgUrl.getImage() }, ::showImage)
+    }
+
+    private fun showImage() {
         img.img.visibility = View.VISIBLE
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn(imgPrefToken)

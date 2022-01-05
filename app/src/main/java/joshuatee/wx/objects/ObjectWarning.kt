@@ -38,7 +38,7 @@ class ObjectWarning() {
     var expires = ""
     var event = ""
     var sender = ""
-    var polygon = ""
+    private var polygon = ""
     private var vtec = ""
     private var geometry = ""
     var isCurrent = true

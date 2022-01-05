@@ -26,7 +26,7 @@ import android.content.Context
 import android.view.View
 
 import joshuatee.wx.MyApplication
-import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.ui.ObjectPopupMessage
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityTime
@@ -40,9 +40,9 @@ object UtilityPlayList {
         if (!MyApplication.playlistStr.contains(productUpperCase)) {
             Utility.writePref(context, "PLAYLIST", MyApplication.playlistStr + ":" + productUpperCase)
             MyApplication.playlistStr = MyApplication.playlistStr + ":" + productUpperCase
-            UtilityUI.makeSnackBar(view, productUpperCase + " saved to playlist: " + text.length)
+            ObjectPopupMessage(view, productUpperCase + " saved to playlist: " + text.length)
         } else {
-            UtilityUI.makeSnackBar(view, productUpperCase + " already in playlist: " + text.length)
+            ObjectPopupMessage(view, productUpperCase + " already in playlist: " + text.length)
         }
         val formattedDate = UtilityTime.getDateAsString(FORMAT_TIME_STR)
         Utility.writePref(context, "PLAYLIST_$productUpperCase", text)

@@ -12,9 +12,7 @@ import android.content.Context
 import android.view.WindowManager
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
-
 import joshuatee.wx.R
-
 import android.graphics.PixelFormat.TRANSLUCENT
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.WindowManager.LayoutParams.FLAG_LAYOUT_INSET_DECOR
@@ -26,11 +24,13 @@ import android.os.Build
 
 internal class FlashView private constructor(context: Context, private val listener: Listener) : FrameLayout(context) {
 
-    init { inflate(context, R.layout.telecine_flash_view, this) }
+    init {
+        inflate(context, R.layout.telecine_flash_view, this)
+    }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        animate().alpha(100f).setDuration(200).withEndAction { listener.onFlashComplete() }.interpolator = DecelerateInterpolator()
+        animate().alpha(1.0f).setDuration(200).withEndAction { listener.onFlashComplete() }.interpolator = DecelerateInterpolator()
     }
 
     internal interface Listener {

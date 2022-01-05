@@ -21,21 +21,17 @@
 
 package joshuatee.wx.ui
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.widget.LinearLayout
 import android.widget.ScrollView
 import joshuatee.wx.GlobalDictionaries
-
-import java.util.HashSet
 import java.util.Locale
-import java.util.TreeMap
-
 import joshuatee.wx.MyApplication
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityLog
 import joshuatee.wx.util.UtilityString
 
@@ -46,31 +42,39 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
         private set
     var filterArray = listOf<String>()
         private set
-    @SuppressLint("UseSparseArrays")
-    val mapButtonZone: MutableMap<Int, String> = mutableMapOf()
-    @SuppressLint("UseSparseArrays")
-    val mapButtonNws: MutableMap<Int, String> = mutableMapOf()
-    @SuppressLint("UseSparseArrays")
-    val mapButtonState: MutableMap<Int, String> = mutableMapOf()
-    @SuppressLint("UseSparseArrays")
-    val mapButtonCounty: MutableMap<Int, String> = mutableMapOf()
+    private val mapButtonZone = mutableMapOf<Int, String>()
+    private val mapButtonNws = mutableMapOf<Int, String>()
+    private val mapButtonState = mutableMapOf<Int, String>()
+    private val mapButtonCounty = mutableMapOf<Int, String>()
+    var bitmap = UtilityImg.getBlankBitmap()
+    private var objectCardImageView = ObjectCardImage(context, bitmap)
+    private val cardText = ObjectCardText(context)
 
-    fun updateContent(bitmap: Bitmap, data: String, filterOriginal: String, firstRun: Boolean) {
+    init {
+        linearLayout.addView(cardText.card)
+        linearLayout.addView(objectCardImageView.card)
+    }
+
+    fun updateImage(bitmap: Bitmap) {
+        this.bitmap = bitmap
+        objectCardImageView.setImage(bitmap)
+    }
+
+    fun updateContent(data: String, filterOriginal: String, firstRun: Boolean) {
         linearLayout.removeAllViews()
         scrollView.smoothScrollTo(0, 0)
-        val cardText = ObjectCardText(context)
         linearLayout.addView(cardText.card)
-        val objectCardImageView = ObjectCardImage(context, bitmap)
+        objectCardImageView = ObjectCardImage(context, bitmap)
         objectCardImageView.setOnClickListener { ObjectIntent.showImage(context, arrayOf("https://forecast.weather.gov/wwamap/png/US.png", "US Alerts", "true")) }
         linearLayout.addView(objectCardImageView.card)
         totalAlertsCnt = 0
-        val mapEvent = TreeMap<String, Int>()
-        val mapState = TreeMap<String, Int>()
+        val mapEvent = mutableMapOf<String, Int>()
+        val mapState = mutableMapOf<String, Int>()
         mapButtonNws.clear()
         mapButtonState.clear()
         mapButtonCounty.clear()
         mapButtonZone.clear()
-        val map = TreeMap<String, Int>()
+        val map = mutableMapOf<String, Int>()
         var i = 0
         try {
             val capAlerts = mutableListOf<CapAlert>()
@@ -83,7 +87,7 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
                 val firstZone = if (zones.isNotEmpty()) zones[0] else ""
                 totalAlertsCnt += 1
                 val tmpStateList = zones.asSequence().filter { it.length > 1 }.map { it.substring(0, 2) }
-                val uniqueStates = HashSet(tmpStateList.toMutableList())
+                val uniqueStates = tmpStateList.toSet()
                 uniqueStates.forEach {
                     val frequency = mapState[it]
                     mapState[it] = if (frequency == null) 1 else frequency + 1
@@ -101,7 +105,7 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
                         nwsLoc = ""
                     }
                     val tmp2StateList = zones.asSequence().filter { it.length > 1 }.map { it.substring(0, 2) }
-                    val unique2States = HashSet(tmp2StateList.toMutableList())
+                    val unique2States = tmp2StateList.toSet()
                     unique2States.forEach { state ->
                         val frequencyLocal = map[state]
                         map[state] = if (frequencyLocal == null) 1 else frequencyLocal + 1
@@ -129,23 +133,19 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
         var filter = filterOriginal
         filter = filter.replace("[|*?.]".toRegex(), " ")
         if (mapOut.isNotEmpty()) {
-            cardText.text = (
-                    "Filter: " + filter.replace(
-                            "\\^".toRegex(),
-                            ""
-                    ) + " (" + i + ")" + MyApplication.newline + mapOut
-                    )
+            cardText.text = ("Filter: " + filter.replace("\\^".toRegex(), "") + " (" + i + ")" + MyApplication.newline + mapOut)
         } else {
             cardText.text = ("Filter: " + filter.replace("\\^".toRegex(), "") + " (" + i + ")")
         }
-        // FIXME this is a mess
         if (firstRun) {
             val filterArray1 = mapEvent.keys.toList()
             val filterArray1Label = mutableListOf<String>()
             filterArray1.indices.forEach { filterArray1Label.add(filterArray1[it] + ": " + mapEvent[filterArray1[it]]) }
+
             val filterArray2 = mapState.keys.toList()
             val filterArray2Label = mutableListOf<String>()
             filterArray2.indices.forEach { filterArray2Label.add(filterArray2[it] + ": " + mapState[filterArray2[it]]) }
+
             filterArray = filterArray1 + filterArray2
             navList = filterArray1Label + filterArray2Label
         }
@@ -153,10 +153,6 @@ class ObjectAlertSummary(private val context: Context, private val linearLayout:
 
     private fun radarInterface(office: String) {
         ObjectIntent.showRadarBySite(context, GlobalDictionaries.wfoToRadarSite[office] ?: "")
-        //val radarSite = GlobalDictionaries.wfoToRadarSite[office] ?: ""
-        //val radarLabel = Utility.getRadarSiteName(radarSite)
-        //val state = radarLabel.split(",")[0]
-        //ObjectIntent.showRadar(context, arrayOf(radarSite, state, "N0Q", ""))
     }
 
     private fun showWarningDetails(url: String) {

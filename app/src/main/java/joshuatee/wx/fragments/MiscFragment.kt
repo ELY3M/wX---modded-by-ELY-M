@@ -19,7 +19,7 @@
 
 */
 //modded by ELY M.
-
+//aurora add-in
 package joshuatee.wx.fragments
 
 import android.os.Bundle
@@ -56,7 +56,7 @@ class MiscFragment : Fragment() {
         val recyclerView: RecyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = gridLayoutManager
-        val tileAdapter = TileAdapter(context!!, tileObjects, UIPreferences.tilesPerRow, "FRAGMENT_MISC_ORDER")
+        val tileAdapter = TileAdapter(requireContext(), tileObjects, UIPreferences.tilesPerRow, "FRAGMENT_MISC_ORDER")
         recyclerView.adapter = tileAdapter
         val callback = SimpleItemTouchHelperCallback(tileAdapter)
         val touchHelper = ItemTouchHelper(callback)
@@ -105,37 +105,37 @@ class MiscFragment : Fragment() {
                     arrayOf(),
                     "nhc", "NHC"
             )
-            if (!UIPreferences.useAwcRadarMosaic) {
-//                hm["nwsmosaic"] = TileObject(
-//                        R.drawable.nws_sector,
-//                        USNwsMosaicActivity::class.java,
-//                        USNwsMosaicActivity.URL,
-//                        arrayOf("", ""),
-//                        "nwsmosaic", "AWC Radar Mosaics"
-//                )
-            } else {
-                hm["nwsmosaic"] = TileObject(
-                        R.drawable.nws_sector,
-                        AwcRadarMosaicActivity::class.java,
-                        AwcRadarMosaicActivity.URL,
-                        arrayOf(""),
-                        "nwsmosaic", "NWS Radar Mosaics"
-                )
-            }
+            hm["nwsmosaic"] = TileObject(
+                    R.drawable.nws_sector,
+                    AwcRadarMosaicActivity::class.java,
+                    AwcRadarMosaicActivity.URL,
+                    arrayOf(""),
+                    "nwsmosaic", "NWS Radar Mosaics"
+            )
             hm["goes"] = TileObject(
                     R.drawable.goes,
                     GoesActivity::class.java,
                     GoesActivity.RID,
-                    arrayOf("CONUS", "09"),
+                    arrayOf("CONUS", "9"),
                     "goes", "GOES"
             )
-            hm["lightning"] = TileObject(
+            if (UIPreferences.lightningUseGoes) {
+                hm["lightning"] = TileObject(
+                    R.drawable.lightning,
+                    GoesActivity::class.java,
+                    GoesActivity.RID,
+                    arrayOf("CONUS", "23"),
+                    "lightning", "lightning"
+                )
+            } else {
+                hm["lightning"] = TileObject(
                     R.drawable.lightning,
                     LightningActivity::class.java,
                     "",
                     arrayOf(),
                     "lightning", "lightning"
-            )
+                )
+            }
             hm["wpcimages"] = TileObject(
                     R.drawable.fmap,
                     WpcImagesActivity::class.java,
@@ -237,12 +237,8 @@ class MiscFragment : Fragment() {
                     arrayOf("AURORA"),
                     "aurora", "Aurora Forecast"
             )
-
-
-
-
-            val tileOrder = "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:wpc_rainfall:aurora:"
-            var miscPref: String = Utility.readPref("FRAGMENT_MISC_ORDER", tileOrder)
+            val tileOrder = "model_ncep:model_hrrr:model_ncar_ensemble:uswarn:wpctext:nhc:nwsmosaic:goes:lightning:wpcimages:twitter_state:twitter_tornado:opc:goesfulldisk:nwsobs:wxogl:wxoglquad:wpc_rainfall:"
+            var miscPref = Utility.readPref("FRAGMENT_MISC_ORDER", tileOrder)
             if (!miscPref.contains("wxoglquad")) {
                 miscPref += "wxoglquad:"
                 Utility.writePref("FRAGMENT_MISC_ORDER", miscPref)

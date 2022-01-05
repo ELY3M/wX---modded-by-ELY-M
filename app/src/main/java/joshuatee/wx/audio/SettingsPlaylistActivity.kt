@@ -24,7 +24,6 @@ package joshuatee.wx.audio
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.*
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -32,22 +31,21 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import androidx.core.app.ActivityCompat
+import java.util.Locale
 import joshuatee.wx.GlobalArrays
 import joshuatee.wx.MyApplication
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.notifications.UtilityNotification
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.settings.BottomSheetFragment
-import joshuatee.wx.ui.*
 import joshuatee.wx.util.Utility
 import joshuatee.wx.wpc.UtilityWpcText
-import kotlinx.coroutines.*
-import java.util.*
 import joshuatee.wx.R
+import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.ui.*
 
 class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
-    private val uiDispatcher = Dispatchers.Main
     private var playListItems = mutableListOf<String>()
     private var ridFav = ""
     private val prefToken = "PLAYLIST"
@@ -82,7 +80,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             } else {
                 dialog.dismiss()
                 val rootView: View = (this as Activity).window.decorView.findViewById(android.R.id.content)
-                UtilityUI.makeSnackBar(rootView, "$product already in playlist")
+                ObjectPopupMessage(rootView, "$product already in playlist")
             }
         }
         diaMain = ObjectDialogue(this, "Select text products:", UtilityWpcText.labels)
@@ -99,7 +97,7 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
             } else {
                 dialog.dismiss()
                 val rootView: View = (this as Activity).window.decorView.findViewById(android.R.id.content)
-                UtilityUI.makeSnackBar(rootView, "$product already in playlist")
+                ObjectPopupMessage(rootView, "$product already in playlist")
             }
         }
         toolbar.subtitle = "Tap item to play, view, delete or move."
@@ -113,10 +111,15 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
         getContent()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        withContext(Dispatchers.IO) { UtilityPlayList.downloadAll(this@SettingsPlaylistActivity) }
-        updateListNoInit()
-        ca.notifyDataSetChanged()
+    private fun getContent() {
+        FutureVoid(
+                this@SettingsPlaylistActivity,
+                { UtilityPlayList.downloadAll(this@SettingsPlaylistActivity) },
+                {
+                    updateListNoInit()
+                    ca.notifyDataSetChanged()
+                }
+        )
     }
 
     private fun updateList() {
@@ -133,7 +136,6 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_autodownload -> ObjectIntent(this, SettingsPlaylistAutodownloadActivity::class.java)
             R.id.action_add -> diaMain.show()
             R.id.action_afd -> diaAfd.show()
             else -> return super.onOptionsItemSelected(item)

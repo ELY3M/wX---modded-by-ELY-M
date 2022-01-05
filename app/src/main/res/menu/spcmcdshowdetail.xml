@@ -33,7 +33,7 @@
     <item
         android:id="@+id/action_radar"
         android:icon="@drawable/ic_flash_on_24dp"
-        android:title="Radar"
+        android:title="@string/radar"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_share_menu"
@@ -65,5 +65,3 @@
         android:title="@string/label_playlist"
         app:showAsAction="never" />
 </menu>
-
-

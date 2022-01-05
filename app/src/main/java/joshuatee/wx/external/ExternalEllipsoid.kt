@@ -25,26 +25,6 @@ class ExternalEllipsoid
  * @param flattening
  * @param inverseFlattening
  */
-/** Semi major axis (meters).  */
-/**
- * Get semi-major axis.
- * @return semi-major axis (in meters).
- */
-/** Semi minor axis (meters).  */
-/**
- * Get semi-minor axis.
- * @return semi-minor axis (in meters).
- */
-/** Flattening.  */
-/**
- * Get flattening
- * @return
- */
-/** Inverse flattening.  */
-/**
- * Get inverse flattening.
- * @return
- */
 private constructor(val semiMajorAxis: Double, val semiMinorAxis: Double, val flattening: Double, private val inverseFlattening: Double) : Serializable {
     companion object {
 

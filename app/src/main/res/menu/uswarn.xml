@@ -22,18 +22,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_warnmap"
-        android:title="CONUS warning map"
+        android:title="@string/conus_warning_map"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_warnmapAK"
-        android:title="AK warning map"
+        android:title="@string/ak_warning_map"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_warnmapHI"
-        android:title="HI warning map"
+        android:title="@string/hi_warning_map"
         app:showAsAction="never" />
-<!--    <item-->
-<!--        android:id="@+id/action_impact_graphics"-->
-<!--        android:title="Impact Graphics"-->
-<!--        app:showAsAction="never" />-->
 </menu>

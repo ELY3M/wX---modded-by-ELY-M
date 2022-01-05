@@ -33,7 +33,7 @@ internal object UtilityModelNcepInterface {
             "HRRR",
             "HRW-ARW",
             "HRW-ARW2",
-            "HRW-NMMB",
+            "HRW-FV3",
             "NAEFS",
             "NAM",
             "NAM-HIRES",
@@ -41,7 +41,7 @@ internal object UtilityModelNcepInterface {
             "POLAR",
             "RAP",
             "SREF",
-            "WW3"
+            "GFS-WAVE"
     )
 
     val sectorsGfs = listOf(
@@ -81,7 +81,10 @@ internal object UtilityModelNcepInterface {
             "US-SE"
     )
 
-    val sectorsRap = listOf("CONUS")
+    val sectorsRap = listOf(
+            "CONUS",
+            "NAMER"
+    )
 
     val sectorsHrrr = listOf(
             "CONUS",
@@ -90,7 +93,8 @@ internal object UtilityModelNcepInterface {
             "US-NC",
             "US-SC",
             "US-NE",
-            "US-SE"
+            "US-SE",
+            "ALASKA"
     )
 
     val sectorsSref = listOf(
@@ -183,35 +187,36 @@ internal object UtilityModelNcepInterface {
             "ARCTIC"
     )
 
-    val sectorsWw3 = listOf(
-            "ATLANTIC",
+    val sectorsGfsWave = listOf(
+            "ALASKA",
+            "ARCTIC",
             "ATL-PAC",
-            "NORTH-PAC",
+            "ATLANTIC",
             "EAST-PAC",
+            "GOM",
+            "HAWAII",
+            "NE-COAST",
+            "NORTH-CAL",
+            "NORTH-PAC",
+            "PAC-REGION",
+            "SE-COAST",
+            "SOUTH-CAL",
+            "WA-OR",
             "WEST-ATL"
     )
 
-   /* val sectorsWw3Enp = listOf(
-            "NORTH-PAC",
-            "EAST-PAC"
-    )
-
-    val sectorsWw3Wna = listOf(
-            "WN-ATL"
-    )*/
-
     val sectorsEstofs = listOf(
-            "WEST-GOA",
             "EAST-GOA",
-            "WA-OR",
-            "NORTH-CAL",
-            "SOUTH-CAL",
-            "NE-COAST",
+            "EAST-GOM",
+            "HAWAII",
             "MID-ATL",
+            "NE-COAST",
+            "NORTH-CAL",
             "SE-COAST",
-            "EGOM",
-            "WGOM",
-            "HAWAII"
+            "SOUTH-CAL",
+            "WA-OR",
+            "WEST-GOA",
+            "WEST-GOM"
     )
 
     val sectorsFirewx = listOf(
@@ -424,6 +429,7 @@ internal object UtilityModelNcepInterface {
             "helicity_1km",
             "helicity_3km",
             "max_updraft_hlcy",
+            "accu_max_updraft_hlcy",
             "10m_wnd",
             "10m_maxwnd",
             "2m_temp_10m_wnd",
@@ -459,6 +465,7 @@ internal object UtilityModelNcepInterface {
             "0-1km Helicity and Storm Motion",
             "0-3km Helicity and Storm Motion",
             "Max 2-5km Updraft Helicity ",
+            "Accumulated Maximum Updraft Helicity",
             "10 meter Wind",
             "Max 10m Wind Speed",
             "2 meter Temperature and 10 meter Wind",
@@ -845,16 +852,26 @@ internal object UtilityModelNcepInterface {
             "925mb Winds"
     )
 
-    val paramsWw3 = listOf(
+    val paramsGfsWave = listOf(
             "peak_dir_per",
             "sig_wv_ht",
-            "wnd_wv_dir_per"
+            "wsea_dir_per",
+            "wsea_wv_ht",
+            "swell1_wv_ht",
+            "swell1_dir_per",
+            "swell2_wv_ht",
+            "swell2_dir_per"
     )
 
-    val labelsWw3 = listOf(
+    val labelsGfsWave = listOf(
             "Peak Wave Direction and Period (sec)",
             "Significant Wave Height and Wind",
-            "Wind Wave Direction and Period (sec)"
+            "Wind Sea Direction and Period (sec)",
+            "Wind Sea Wave Height and Wind (sec)",
+            "Primary Swell Wave Height and Wind Image (sec)",
+            "Primary Swell Direction and Period (sec)",
+            "Secondary Swell Wave Height and Wind (sec)",
+            "Secondary Swell Direction and Period (sec)"
     )
 
     val paramsEstofs = listOf(
@@ -996,6 +1013,7 @@ internal object UtilityModelNcepInterface {
             "pmm_refd_max",
             "prob_refd_40dbz",
             "prob_refd_max_40dbz",
+            "prob_cref_40dbz",
             "prob_cref_50dbz",
             "prob_rain",
             "prob_snow",
@@ -1038,6 +1056,7 @@ internal object UtilityModelNcepInterface {
             "mean_vwshr",
             "prob_vwshr_30kt",
             "prob_max_hlcy_25",
+            "prob_max_hlcy_75",
             "prob_max_hlcy_100"
     )
 
@@ -1052,6 +1071,7 @@ internal object UtilityModelNcepInterface {
             "PMM COL MAX REFD",
             "Probability of 1km REFD greater than 40dBZ",
             "Probability of 1km MAX REFD greater than 40dBZ",
+            "Probability of COMP MAX REFC greater than 40dBZ",
             "Probability of COMP MAX REFC greater than 50dBZ",
             "Probability of rain",
             "Probability of snow",
@@ -1094,6 +1114,7 @@ internal object UtilityModelNcepInterface {
             "Mean vertical wind shear ",
             "Probability of vertical wind shear greater than 30kts",
             "Probability of max updraft helicity greater than 25m**2/s**2",
+            "Probability of max updraft helicity greater than 75m**2/s**2",
             "Probability of max updraft helicity greater than 100m**2/s**2"
     )
 
@@ -1104,8 +1125,6 @@ internal object UtilityModelNcepInterface {
             "2m_dewp_10m_wnd",
             "2m_relh_10m_wnd",
             "2m_apparent_temp",
-            "2m_min_temp",
-            "2m_max_temp",
             "10m_wnd_gust",
             "total_cloud_cover"
     )
@@ -1117,10 +1136,76 @@ internal object UtilityModelNcepInterface {
             "2 meter dew point temp and 10 meter wind",
             "2 meter Relative Humidity and 10 meter Wind",
             "2 meter Apparent Temperature and 10 meter Wind",
-            "2 meter minimum Temperature",
-            "2 meter maximum temperature",
             "10 meter wind and gust",
             "Total Cloud Cover"
+    )
+
+    val modelHrwFv3Params = listOf(
+        "precip_p01",
+        "precip_p03",
+        "precip_p06",
+        "precip_p12",
+        "precip_p24",
+        "precip_p36",
+        "precip_p48",
+        "precip_ptot",
+        "sim_radar_1km",
+        "sim_radar_comp",
+        "1000_500_thick",
+        "1000_850_thick",
+        "850_700_thick",
+        "10m_wnd",
+        "10m_wnd_precip",
+        "10m_wnd_sfc_gust",
+        "2m_dewp_10m_wnd",
+        "2m_temp_10m_wnd",
+        "best_cape_cin",
+        "sfc_cape_cin",
+        "helicity_1km",
+        "helicity_3km",
+        "max_updraft_hlcy",
+        "echo_top",
+        "ceiling",
+        "vis",
+        "250_wnd_ht",
+        "300_wnd_ht",
+        "500_vort_ht",
+        "700_rh_ht",
+        "850_temp_ht"
+    )
+
+    val modelHrwFv3Labels = listOf(
+        "Total Precipitation every 1 hour",
+        "Total Precipitation every 3 hours",
+        "Total Precipitation every 6 hours",
+        "Total Precipitation every 12 hours",
+        "Total Precipitation every 24 hours",
+        "Total Precipitation every 36 hours",
+        "Total Precipitation every 48 hours",
+        "Total Accumulated Precipitation",
+        "Simulated Radar Reflectivity 1km",
+        "Simulated Composite Radar Reflectivity",
+        "MSLP, 1000-500mb thickness, 3-hourly total precipitation",
+        "MSLP, 1000-850mb thickness, 3-hourly total precipitation",
+        "MSLP, 850-700mb thickness, 3-hourly total precipitation",
+        "10 meter Wind",
+        "MSLP, 10m wind, 3-hourly total precip, 2m temperature",
+        "10 meter wind gust",
+        "2 meter Dew Point and 10 meter wind",
+        "2 meter Temperature and 10 meter Wind",
+        "Most Unstable Convective Available Potential Energy and Convective Inhibition",
+        "Surface-Based Convective Available Potential Energy and Convective Inhibition",
+        "0-1km Helicity and Storm Motion",
+        "0-3km Helicity and Storm Motion",
+        "Max 2-5km Updraft Helicity ",
+        "Echo Tops",
+        "Cloud Ceiling ",
+        "Visibility",
+        "250mb Wind and Height",
+        "300mb Wind and Height",
+        "500mb Vorticity, Wind, and Height",
+        "700mb Relative Humidity, Wind, and Height",
+        "850mb Temperature, Wind, and Height"
     )
 
     // grep title /tmp/a | egrep -o ">.*</a>" | sed 's/>/\"/' | sed 's/<\/a>/\"\,/'

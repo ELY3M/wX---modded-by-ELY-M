@@ -69,8 +69,6 @@ object UtilityNotification {
         val inBlackout = UtilityNotificationUtils.checkBlackOut()
         val tornadoWarningString = "Tornado Warning"
         if (MyApplication.locations.size > locNumInt && MyApplication.locations[locNumInt].notification) {
-            //if (Location.getName(locNumInt).contains("ROAMING"))
-            //    UtilityLocation.checkRoamingLocation(context, locNum, Location.getX(locNumInt), Location.getY(locNumInt))
             var locLabelStr = "(" + Location.getName(locNumInt) + ") "
             var alertPresent = false
             if (Location.isUS(locNumInt)) {
@@ -127,25 +125,17 @@ object UtilityNotification {
                     bitmap = UtilityUSImg.getPreferredLayeredImg(context, Location.getRid(locNumInt), false)
                 } else {
                     url2 = Location.getRid(locNumInt) + "CA"
-                    // bitmap = UtilityCanadaImg.getRadarBitmapOptionsApplied(context, Location.getRid(locNumInt), "")
                     bitmap = UtilityImg.getBlankBitmap()
                 }
                 locLabelStr = "(" + Location.getName(locNumInt) + ") " + Location.getRid(locNumInt) + " Radar"
                 val noMain = locLabelStr
                 val notifier2 = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 val noti2: Notification
-                //                if (Location.isUS(locNumInt)) {
                 val resultIntent2 = Intent(context, WXGLRadarActivity::class.java)
                 resultIntent2.putExtra(WXGLRadarActivity.RID, arrayOf(Location.getRid(locNumInt), nws1StateCurrent))
-//                } else {
-////                    resultIntent2 = Intent(context, CanadaRadarActivity::class.java)
-////                    resultIntent2.putExtra(CanadaRadarActivity.RID, arrayOf(Location.getRid(locNumInt), "rad"))
-//                }
                 val stackBuilder2 = TaskStackBuilder.create(context)
                 if (Location.isUS(locNumInt)) {
                     stackBuilder2.addParentStack(WX::class.java)
-                } else {
-//                    stackBuilder2.addParentStack(CanadaRadarActivity::class.java)
                 }
                 stackBuilder2.addNextIntent(resultIntent2)
                 val resultPendingIntent2 = stackBuilder2.getPendingIntent(y, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
@@ -178,15 +168,18 @@ object UtilityNotification {
         ) {
             locLabel = " current conditions"
             locLabelStr = "(" + Location.getName(locNumInt) + ")" + locLabel
-            //val url = UtilityDownloadNws.get7DayUrl(Location.getLatLon(locNumInt))
             val url = Location.getIdentifier(locNumInt)
             // url above is used as the token for notifications and currenlty looks like
             // https://api.weather.gov/gridpoints/DTX/x,y/forecast
             // problem is if network is down it will be a non deterministic value so we need something different
             val currentUpdateTime = UtilityTime.currentTimeMillis()
             val lastUpdateTime = Utility.readPref(context, "CC" + locNum + "_LAST_UPDATE", 0.toLong())
-            if (MyApplication.locations[locNumInt].ccNotification) notifUrls += url + "CC" + MyApplication.notificationStrSep
-            if (MyApplication.locations[locNumInt].sevenDayNotification) notifUrls += url + "7day" + MyApplication.notificationStrSep
+            if (MyApplication.locations[locNumInt].ccNotification) {
+                notifUrls += url + "CC" + MyApplication.notificationStrSep
+            }
+            if (MyApplication.locations[locNumInt].sevenDayNotification) {
+                notifUrls += url + "7day" + MyApplication.notificationStrSep
+            }
             if (currentUpdateTime > lastUpdateTime + 1000 * 60 * ccUpdateInterval) {
                 val objCc = ObjectCurrentConditions(context, locNumInt)
                 val objHazards = ObjectHazards(locNumInt)
@@ -318,7 +311,7 @@ object UtilityNotification {
                         .setAutoCancel(MyApplication.alertAutocancel)
                         .setColor(UIPreferences.colorNotif)
                         .setLargeIcon(bitmap)
-        ).bigPicture(bitmap).build()
+        ).bigPicture(bitmap).build()!!
         noti2.flags = noti2.flags or Notification.FLAG_ONLY_ALERT_ONCE
         noti2.contentIntent = resultPendingIntent2
         return noti2
@@ -347,7 +340,7 @@ object UtilityNotification {
                             )
                             .setLights(notification.color, onMs, offMs)
                             .setSmallIcon(notification.iconAlert)
-            ).bigText(notification.noSummary).build()
+            ).bigText(notification.noSummary).build()!!
             if (MyApplication.notifSoundRepeat) noti.flags = noti.flags or Notification.FLAG_INSISTENT
             if (MyApplication.notifTts) UtilityTts.synthesizeTextAndPlay(notification.context, notification.noMain, notification.noMain)
         } else {
@@ -364,7 +357,7 @@ object UtilityNotification {
                             .addAction(notification.iconAction, notification.buttonStr, notification.actionPendingIntent)
                             .setLights(notification.color, onMs, offMs)
                             .setSmallIcon(notification.iconAlert)
-            ).bigText(notification.noSummary).build()
+            ).bigText(notification.noSummary).build()!!
         }
         return noti
     }
@@ -447,7 +440,7 @@ object UtilityNotification {
                             .setPriority(prio)
                             .setSmallIcon(smallIcon)
                             .setLargeIcon(bitmap)
-            ).bigText(noSummary).build()
+            ).bigText(noSummary).build()!!
             if (MyApplication.notifSoundRepeat)
                 noti.flags = noti.flags or Notification.FLAG_INSISTENT
             if (MyApplication.notifTts)
@@ -465,7 +458,7 @@ object UtilityNotification {
                             .setPriority(prio)
                             .setSmallIcon(smallIcon)
                             .setLargeIcon(bitmap)
-            ).bigText(noSummary).build()
+            ).bigText(noSummary).build()!!
         }
         return noti
     }

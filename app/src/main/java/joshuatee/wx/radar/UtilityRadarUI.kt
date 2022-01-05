@@ -36,9 +36,7 @@ import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.spc.SpcMcdWatchShowActivity
 import joshuatee.wx.ui.ObjectDialogue
 import joshuatee.wx.ui.ObjectImageMap
-
 import joshuatee.wx.util.*
-import kotlinx.coroutines.*
 import kotlin.math.roundToInt
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.objects.*
@@ -54,17 +52,25 @@ internal object UtilityRadarUI {
 
     fun getLastRadarTime(context: Context) = Utility.readPref(context, lastRadarTimePref, "")
 
-    private fun getRadarStatus(activity: Activity, context: Context, uiDispatcher: CoroutineDispatcher, wxglRender: WXGLRender) = GlobalScope.launch(uiDispatcher) {
-        var radarStatus = withContext(Dispatchers.IO) {
-            UtilityDownload.getRadarStatusMessage(context, wxglRender.rid)
-        }
-        if (radarStatus == "") radarStatus = "The current radar status for " + wxglRender.rid + " is not available."
-        ObjectDialogue(activity, Utility.fromHtml(radarStatus))
+    private fun getRadarStatus(activity: Activity, context: Context, wxglRender: WXGLRender) {
+        FutureText2(context,
+                { UtilityDownload.getRadarStatusMessage(context, wxglRender.rid) },
+                { s ->
+                    var radarStatus = s
+                    if (radarStatus == "") {
+                        radarStatus = "The current radar status for " + wxglRender.rid + " is not available."
+                    }
+                    ObjectDialogue(activity, Utility.fromHtml(radarStatus))
+                }
+        )
     }
 
-    private fun getMetar(wxglSurfaceView: WXGLSurfaceView, activity: Activity, context: Context, uiDispatcher: CoroutineDispatcher) = GlobalScope.launch(uiDispatcher) {
-        val string = withContext(Dispatchers.IO) { UtilityMetar.findClosestMetar(context, wxglSurfaceView.latLon) }
-        ObjectDialogue(activity, string)
+    private fun getMetar(wxglSurfaceView: WXGLSurfaceView, activity: Activity, context: Context) {
+        FutureText2(
+                context,
+                { UtilityMetar.findClosestMetar(context, wxglSurfaceView.latLon) },
+                { s -> ObjectDialogue(activity, s) }
+        )
     }
 
     private fun showNearestForecast(context: Context, wxglSurfaceView: WXGLSurfaceView) {
@@ -86,16 +92,16 @@ internal object UtilityRadarUI {
     fun addItemsToLongPress(longPressList: MutableList<String>, lat: String, lon: String, context: Context, wxglSurfaceView: WXGLSurfaceView,
             wxglRender: WXGLRender, longPressDialogue: ObjectDialogue) {
         longPressList.clear()
-        val locX = lat.toDoubleOrNull() ?: 0.0
-        val locY = lon.toDoubleOrNull() ?: 0.0
+        val locX = To.double(lat)
+        val locY = To.double(lon)
         val pointX = wxglSurfaceView.newY.toDouble()
         val pointY = wxglSurfaceView.newX * -1.0
         val dist = LatLon.distance(LatLon(locX, locY), LatLon(pointX, pointY), DistanceUnit.MILE)
-        val ridX = Utility.getRadarSiteX(wxglRender.rid).toDoubleOrNull() ?: 0.0
-        val ridY = -1.0 * (Utility.getRadarSiteY(wxglRender.rid).toDoubleOrNull() ?: 0.0)
+        val ridX = To.double(Utility.getRadarSiteX(wxglRender.rid))
+        val ridY = -1.0 * To.double(Utility.getRadarSiteY(wxglRender.rid))
         val distRid = LatLon.distance(LatLon(ridX, ridY), LatLon(pointX, pointY), DistanceUnit.MILE)
         val distRidKm = LatLon.distance(LatLon(ridX, ridY), LatLon(pointX, pointY), DistanceUnit.KM)
-        // FIXME look at iOS version and try to match in data provided and improve formatting
+        // TODO FIXME look at iOS version and try to match in data provided and improve formatting
         val latLonTitle = UtilityStringExternal.truncate(wxglSurfaceView.newY.toString(), 6) + ", -" + UtilityStringExternal.truncate(wxglSurfaceView.newX.toString(), 6)
         longPressDialogue.setTitle(latLonTitle)
         longPressList.add(UtilityStringExternal.truncate(dist.toString(), 6) + " miles from location")
@@ -113,6 +119,7 @@ internal object UtilityRadarUI {
         }
         longPressList += wxglRender.ridNewList.map { "Radar: (" + it.distance + " mi) " + it.name + " " + Utility.getRadarSiteName(it.name) }
         val obsSite = UtilityMetar.findClosestObservation(context, wxglSurfaceView.latLon)
+        // FIXME TODO what is this doing?
         ObjectPolygonWarning.isCountNonZero()
         if ((MyApplication.radarWarnings || ObjectPolygonWarning.areAnyEnabled()) && ObjectPolygonWarning.isCountNonZero()) {
             longPressList.add("Show Warning text")
@@ -128,12 +135,12 @@ internal object UtilityRadarUI {
             longPressList.add("Show MPD text")
         }
         // end Thanks to Ely
-        longPressList.add("Show nearest observation: " + obsSite.name)
+        longPressList.add("Show nearest observation: " + obsSite.name + " (" + obsSite.distance.toString() + " mi)")
         longPressList.add("Show nearest forecast: $latLonTitle")
         longPressList.add("Show nearest meteogram: " + obsSite.name)
         if (MyApplication.radarSpotters || MyApplication.radarSpottersLabel) longPressList.add("Show Spotter Info")
         longPressList.add("Show current radar status message: " + wxglRender.rid)
-	    val getridpoint: String = UtilityLocation.getNearestRadarSite(LatLon(pointX.toString(), pointY.toString()))
+	val getridpoint: String = UtilityLocation.getNearestRadarSite(LatLon(pointX.toString(), pointY.toString()))
 	longPressList.add("Show nearest radar status message: " + getridpoint)
 	longPressList.add("Userpoint info: " + latLonTitle)
         longPressList.add("Add userpoint for: " + latLonTitle)
@@ -142,30 +149,42 @@ internal object UtilityRadarUI {
         longPressDialogue.show()
     }
 
-    fun doLongPressAction(string: String, context: Context, activity: Activity, wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender,
-            uiDispatcher: CoroutineDispatcher, function: (strName: String) -> Unit) {
+    fun doLongPressAction(
+            string: String,
+            context: Context,
+            activity: Activity,
+            wxglSurfaceView: WXGLSurfaceView,
+            wxglRender: WXGLRender,
+            function: (String) -> Unit
+    ) {
         when {
             string.contains("miles from") -> {}
             string.contains("Show Warning text") -> showNearestWarning(context, wxglSurfaceView)
-            string.contains("Show Watch text") -> showNearestProduct(context, PolygonType.WATCH, wxglSurfaceView, uiDispatcher)
-            string.contains("Show MCD text") -> showNearestProduct(context, PolygonType.MCD, wxglSurfaceView, uiDispatcher)
-            string.contains("Show MPD text") -> showNearestProduct(context, PolygonType.MPD, wxglSurfaceView, uiDispatcher)
-            string.contains("Show nearest observation") -> getMetar(wxglSurfaceView, activity, context, uiDispatcher)
+            string.contains("Show Watch text") -> showNearestProduct(context, PolygonType.WATCH, wxglSurfaceView)
+            string.contains("Show MCD text") -> showNearestProduct(context, PolygonType.MCD, wxglSurfaceView)
+            string.contains("Show MPD text") -> showNearestProduct(context, PolygonType.MPD, wxglSurfaceView)
+            string.contains("Show nearest observation") -> getMetar(wxglSurfaceView, activity, context)
             string.contains("Show nearest meteogram") -> showNearestMeteogram(context, wxglSurfaceView)
-            string.contains("Show current radar status message") -> getRadarStatus(activity, context, uiDispatcher, wxglRender)
-            string.contains("Show nearest radar status message") -> showNearestRadarStatus(context, activity, wxglSurfaceView, uiDispatcher)
+            string.contains("Show current radar status message") -> getRadarStatus(activity, context, wxglRender)
+            string.contains("Show nearest radar status message") -> showNearestRadarStatus(context, activity, wxglSurfaceView)
             string.contains("Show nearest forecast") -> showNearestForecast(context, wxglSurfaceView)
-            string.contains("Show Spotter Info") -> showSpotterInfo(activity, wxglSurfaceView, uiDispatcher)
-            string.contains("Userpoint info") -> showUserPointInfo(activity, context, wxglSurfaceView, uiDispatcher)
+            string.contains("Show Spotter Info") -> showSpotterInfo(activity, wxglSurfaceView, context)
+            string.contains("Userpoint info") -> showUserPointInfo(activity, context, wxglSurfaceView)
             string.contains("Add userpoint for") -> addUserPoint(activity, context, wxglSurfaceView)
-            string.contains("Delete userpoint for") ->  deleteUserPoint(activity, context, wxglSurfaceView, uiDispatcher)
-            string.contains("Delete all userpoints") -> deleteAllUserPoints(activity, context, uiDispatcher)
+            string.contains("Delete userpoint for") ->  deleteUserPoint(activity, context, wxglSurfaceView)
+            string.contains("Delete all userpoints") -> deleteAllUserPoints(activity, context)
             else -> function(string)
         }
     }
 
-    fun initGlviewFragment(wxglSurfaceView: WXGLSurfaceView, index: Int, wxglRenders: MutableList<WXGLRender>, wxglSurfaceViews: MutableList<WXGLSurfaceView>,
-            wxglTextObjects: MutableList<WXGLTextObject>, changeListener: WXGLSurfaceView.OnProgressChangeListener): Boolean {
+    fun initGlviewFragment(
+            wxglSurfaceView: WXGLSurfaceView,
+            index: Int,
+            wxglRenders: MutableList<WXGLRender>,
+            wxglSurfaceViews: MutableList<WXGLSurfaceView>,
+            wxglTextObjects: MutableList<WXGLTextObject>,
+            changeListener: WXGLSurfaceView.OnProgressChangeListener
+    ): Boolean {
         wxglSurfaceView.setEGLContextClientVersion(2)
         wxglTextObjects[index].setWXGLRender(wxglRenders[index])
         wxglRenders[index].indexString = index.toString()
@@ -178,9 +197,17 @@ internal object UtilityRadarUI {
         return true
     }
 
-    fun initGlView(wxglSurfaceView: WXGLSurfaceView, wxglSurfaceViews: MutableList<WXGLSurfaceView>, wxglRender: WXGLRender,
-            wxglRenders: MutableList<WXGLRender>, activity: Activity, toolbar: Toolbar, toolbarBottom: Toolbar,
-            changeListener: WXGLSurfaceView.OnProgressChangeListener, archiveMode: Boolean = false) {
+    fun initGlView(
+            wxglSurfaceView: WXGLSurfaceView,
+            wxglSurfaceViews: MutableList<WXGLSurfaceView>,
+            wxglRender: WXGLRender,
+            wxglRenders: MutableList<WXGLRender>,
+            activity: Activity,
+            toolbar: Toolbar,
+            toolbarBottom: Toolbar,
+            changeListener: WXGLSurfaceView.OnProgressChangeListener,
+            archiveMode: Boolean = false
+    ) {
         wxglSurfaceView.setEGLContextClientVersion(2)
         wxglSurfaceView.setRenderer(wxglRender)
         wxglSurfaceView.setRenderVar(wxglRender, wxglRenders, wxglSurfaceViews, activity)
@@ -192,67 +219,76 @@ internal object UtilityRadarUI {
         wxglSurfaceView.archiveMode = archiveMode
     }
 
-    fun initWxOglGeom(wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender, index: Int, oldRadarSites: Array<String>, wxglRenders: MutableList<WXGLRender>,
-            wxglTextObjects: MutableList<WXGLTextObject>, paneList: List<Int>, imageMap: ObjectImageMap?, wxglSurfaceViews: MutableList<WXGLSurfaceView>,
-            fnGps: () -> Unit, fnGetLatLon: () -> LatLon, archiveMode: Boolean = false) {
+    fun initWxOglGeom(
+            wxglSurfaceView: WXGLSurfaceView,
+            wxglRender: WXGLRender,
+            index: Int,
+            oldRadarSites: Array<String>,
+            wxglRenders: MutableList<WXGLRender>,
+            wxglTextObjects: MutableList<WXGLTextObject>,
+            paneList: List<Int>,
+            imageMap: ObjectImageMap?,
+            wxglSurfaceViews: MutableList<WXGLSurfaceView>,
+            fnGps: () -> Unit,
+            fnGetLatLon: () -> LatLon,
+            archiveMode: Boolean = false
+    ) {
         wxglRender.initializeGeometry()
-        // UtilityLog.d("wx", "DEBUG: redraw geo called " + oldRadarSites[index] + " " + wxglRenders[index].rid)
         if (oldRadarSites[index] != wxglRenders[index].rid) {
-            // UtilityLog.d("wx", "DEBUG: redraw geo")
             wxglRender.setChunkCount(0)
             wxglRender.setChunkCountSti(0)
             wxglRender.setHiInit(false)
             wxglRender.setTvsInit(false)
-            Thread(Runnable {
+            Thread {
                 wxglRender.constructStateLines()
                 wxglSurfaceView.requestRender()
-            }).start()
-            Thread(Runnable {
+            }.start()
+            Thread {
                 if (GeographyType.LAKES.pref) wxglRender.constructLakes() else wxglRender.deconstructLakes()
-            }).start()
-            Thread(Runnable {
+            }.start()
+            Thread {
                 if (GeographyType.COUNTY_LINES.pref) {
                     wxglRender.constructCounty()
                     wxglSurfaceView.requestRender()
                 } else
                     wxglRender.deconstructCounty()
-            }).start()
-            Thread(Runnable {
+            }.start()
+            Thread {
                 if (GeographyType.HIGHWAYS.pref) {
                     wxglRender.constructHWLines()
                     wxglSurfaceView.requestRender()
                 } else
                     wxglRender.deconstructHWLines()
-            }).start()
-            Thread(Runnable {
+            }.start()
+            Thread {
                 if (MyApplication.radarHwEnhExt) {
                     wxglRender.constructHWEXTLines()
                     wxglSurfaceView.requestRender()
                 } else
                     wxglRender.deconstructHWEXTLines()
-            }).start()
+            }.start()
             wxglTextObjects[index].addLabels()
             oldRadarSites[index] = wxglRenders[index].rid
         }
 
-
+	//elys mod
         //conus radar
-        Thread(Runnable {
+        Thread {
             if (MyApplication.radarConusRadar && !archiveMode) {
                 wxglRender.constructConusRadar()
                 wxglSurfaceView.requestRender()
             } else {
                 wxglRender.deconstructConusRadar()
             }
-        }).start()
+        }.start()
 
-        Thread(Runnable {
+        Thread {
             if (PolygonType.TST.pref && !archiveMode) wxglRender.constructWarningLines() else wxglRender.deconstructWarningLines()
             if (PolygonType.MCD.pref && !archiveMode) wxglRender.constructWatchMcdLines() else wxglRender.deconstructWatchMcdLines()
             if (PolygonType.MPD.pref && !archiveMode) wxglRender.constructMpdLines() else wxglRender.deconstructMpdLines()
             wxglRender.constructGenericWarningLines()
             wxglSurfaceView.requestRender()
-        }).start()
+        }.start()
         if (MyApplication.locationDotFollowsGps) fnGps()
         if (PolygonType.LOCDOT.pref || MyApplication.locationDotFollowsGps) {
             val latLon = fnGetLatLon()
@@ -270,38 +306,46 @@ internal object UtilityRadarUI {
     }
 
     fun plotWarningPolygons(wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender, archiveMode: Boolean = false) {
-        Thread(Runnable {
+        Thread {
             if (PolygonType.TST.pref && !archiveMode) wxglRender.constructWarningLines() else wxglRender.deconstructWarningLines()
             wxglRender.constructGenericWarningLines()
             wxglSurfaceView.requestRender()
-        }).start()
+        }.start()
     }
 
     fun plotMcdWatchPolygons(wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender, archiveMode: Boolean = false) {
-        Thread(Runnable {
+        Thread {
             if (PolygonType.MCD.pref && !archiveMode) wxglRender.constructWatchMcdLines() else wxglRender.deconstructWatchMcdLines()
             wxglRender.constructGenericWarningLines()
             wxglSurfaceView.requestRender()
-        }).start()
+        }.start()
     }
 
     fun plotMpdPolygons(wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender, archiveMode: Boolean = false) {
-        Thread(Runnable {
+        Thread {
             if (PolygonType.MPD.pref && !archiveMode) wxglRender.constructMpdLines() else wxglRender.deconstructMpdLines()
             wxglRender.constructGenericWarningLines()
             wxglSurfaceView.requestRender()
-        }).start()
+        }.start()
     }
 
     fun plotWpcFronts(wxglSurfaceView: WXGLSurfaceView, wxglRender: WXGLRender, archiveMode: Boolean = false) {
-        Thread(Runnable {
+        Thread {
             if (MyApplication.radarShowWpcFronts && !archiveMode) wxglRender.constructWpcFronts() else wxglRender.deconstructWpcFronts()
             wxglSurfaceView.requestRender()
-        }).start()
+        }.start()
     }
 
     //elys mod - removed showExtras to show everything
-    fun plotRadar(wxglRender: WXGLRender, urlString: String, context: Context, fnGps: () -> Unit, fnGetLatLon: () -> LatLon, /* showExtras: Boolean, */ archiveMode: Boolean = false) {
+    fun plotRadar(
+            wxglRender: WXGLRender,
+            urlString: String,
+            context: Context,
+            fnGps: () -> Unit,
+            fnGetLatLon: () -> LatLon,
+            /* showExtras: Boolean, */ 
+            archiveMode: Boolean = false
+    ) {
         wxglRender.constructPolygons("", urlString, true)
         // work-around for a bug in which raster doesn't show on first launch
         if (wxglRender.product == "NCR" || wxglRender.product == "NCZ") wxglRender.constructPolygons("", urlString, true)
@@ -342,14 +386,57 @@ internal object UtilityRadarUI {
         wxglSurfaceView.requestRender()
     }
 
-    private fun showNearestProduct(context: Context, polygonType: PolygonType, wxglSurfaceView: WXGLSurfaceView, uiDispatcher: CoroutineDispatcher) = GlobalScope.launch(uiDispatcher) {
-        val text = withContext(Dispatchers.IO) { UtilityWatch.show(wxglSurfaceView.latLon, polygonType) }
-        if (text != "") {
-            ObjectIntent.showMcd(context, arrayOf(text, "", polygonType.toString()))
-        }
+    private fun showNearestProduct(context: Context, polygonType: PolygonType, wxglSurfaceView: WXGLSurfaceView) {
+        //val text = withContext(Dispatchers.IO) { UtilityWatch.show(wxglSurfaceView.latLon, polygonType) }
+        //if (text != "") {
+        //    ObjectIntent.showMcd(context, arrayOf(text, "", polygonType.toString()))
+        //}
+
+        FutureText2(
+            context,
+            { UtilityWatch.show(wxglSurfaceView.latLon, polygonType) },
+            { s -> ObjectIntent.showMcd(context, arrayOf(s, "", polygonType.toString())) }
+        )
+
+
+
+
     }
     
     //elys mod
+    var getrid: String = ""
+    private fun showNearestRadarStatus(context: Context, activity: Activity, glview: WXGLSurfaceView) {
+        FutureText2(
+            context,
+            {
+                val pointX = glview.newY.toDouble()
+                val pointY = glview.newX * -1.0
+                getrid = UtilityLocation.getNearestRadarSite(
+                    LatLon(
+                        pointX.toString(),
+                        pointY.toString()
+                    )
+                )
+                UtilityLog.d("wx", "point: x: " + pointX + "y: " + pointY)
+                UtilityLog.d("wx", "radar status on point: " + getrid)
+                UtilityDownload.getRadarStatusMessage(context, getrid)
+
+            },
+            {   s ->
+                var radarStatus = s
+                if (radarStatus == "") {
+                    radarStatus = "The current radar status for " + getrid + " is not available."
+                }
+                ObjectDialogue(activity, Utility.fromHtml(radarStatus))
+            }
+        )
+
+
+    }
+
+
+
+    /*
     var getrid: String = ""
     private fun showNearestRadarStatus(context: Context, act: Activity, glview: WXGLSurfaceView, uiDispatcher: CoroutineDispatcher) = GlobalScope.launch(uiDispatcher) {
         var radarStatus = withContext(Dispatchers.IO) {
@@ -368,22 +455,25 @@ internal object UtilityRadarUI {
         ObjectDialogue(act, Utility.fromHtml(radarStatus))
 
     }
-    
+     */
 
-    private fun showSpotterInfo(act: Activity, glview: WXGLSurfaceView, uiDispatcher: CoroutineDispatcher) = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) {
-            UtilitySpotter.findClosestSpotter(glview.latLon)
-        }
-        ObjectDialogue(act, txt)
+
+    private fun showSpotterInfo(activity: Activity, glview: WXGLSurfaceView, context: Context) {
+        FutureText2(
+            context,
+            { UtilitySpotter.findClosestSpotter(glview.latLon) },
+            { s -> ObjectDialogue(activity, s) }
+        )
     }
 
 
     //UserPoints System
-    private fun showUserPointInfo(act: Activity, context: Context, glview: WXGLSurfaceView, uiDispatcher: CoroutineDispatcher) = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) {
-            UtilityUserPoints.findClosestUserPoint(context, glview.latLon)
-        }
-        ObjectDialogue(act, txt)
+    private fun showUserPointInfo(activity: Activity, context: Context, glview: WXGLSurfaceView)  {
+        FutureText2(
+            context,
+            { UtilityUserPoints.findClosestUserPoint(context, glview.latLon) },
+            { s -> ObjectDialogue(activity, s) }
+        )
     }
 
     private fun addUserPoint(act: Activity, context: Context, glview: WXGLSurfaceView) {
@@ -392,16 +482,18 @@ internal object UtilityRadarUI {
     }
 
 
-    private fun deleteUserPoint(act: Activity, context: Context, glview: WXGLSurfaceView, uiDispatcher: CoroutineDispatcher) = GlobalScope.launch(uiDispatcher) {
-        val txt = withContext(Dispatchers.IO) {
-            UtilityUserPoints.deleteUserPoint(context, glview.latLon)
-        }
-        ObjectDialogue(act, txt)
+    private fun deleteUserPoint(activity: Activity, context: Context, glview: WXGLSurfaceView)  {
+        FutureText2(
+            context,
+            { UtilityUserPoints.deleteUserPoint(context, glview.latLon) },
+            { s -> ObjectDialogue(activity, s) }
+        )
     }
 
-    private fun deleteAllUserPoints(act: Activity, context: Context, uiDispatcher: CoroutineDispatcher) = GlobalScope.launch(uiDispatcher) {
+    private fun deleteAllUserPoints(activity: Activity, context: Context) {
         UtilityUserPoints.deleteAllUserPoints(context)
-        ObjectDialogue(act, "Deleted all userpoints")
+        ObjectDialogue(activity, "Deleted all userpoints")
+
     }
 
 

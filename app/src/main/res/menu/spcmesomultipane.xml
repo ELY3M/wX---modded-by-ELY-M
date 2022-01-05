@@ -178,7 +178,7 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/action_layers"
-        android:title="Layers"
+        android:title="@string/layers"
         app:showAsAction="never">
         <menu>
             <item
@@ -195,7 +195,7 @@
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_toggleTopography"
-                android:title="Topography"
+                android:title="@string/topography"
                 app:showAsAction="never" />
         </menu>
     </item>

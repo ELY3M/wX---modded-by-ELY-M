@@ -28,14 +28,14 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import joshuatee.wx.Extensions.startAnimation
-
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ShortcutType
 import joshuatee.wx.radar.VideoRecordActivity
 import joshuatee.wx.ui.*
 import joshuatee.wx.util.*
-import kotlinx.coroutines.*
+import joshuatee.wx.util.To
 
 class GoesActivity : VideoRecordActivity() {
 
@@ -43,10 +43,14 @@ class GoesActivity : VideoRecordActivity() {
     // GOES 16 / GOES 17 image viewer
     // https://www.star.nesdis.noaa.gov/GOES/index.php
     //
+    // Misc tab and ObjectWidgetGeneric.kt have:
+    //    GoesActivity::class.java,
+    //    GoesActivity.RID,
+    //    arrayOf("CONUS", "09"),
+    //
 
     companion object { const val RID = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var bitmap = UtilityImg.getBlankBitmap()
     private lateinit var img: ObjectTouchImageView
     private var animDrawable = AnimationDrawable()
@@ -56,9 +60,15 @@ class GoesActivity : VideoRecordActivity() {
     private var savePrefs = true
     private lateinit var activityArguments: Array<String>
     private val prefImagePosition = "GOES16_IMG"
+    // NHC
+    var goesFloater = false
+    private var goesFloaterUrl = ""
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.goes16, menu)
+        if (goesFloater) {
+            menu.setGroupVisible(R.id.sectors, false)
+        }
         return true
     }
 
@@ -67,24 +77,27 @@ class GoesActivity : VideoRecordActivity() {
         super.onCreate(savedInstanceState, R.layout.activity_image_show_navdrawer, R.menu.goes16, iconsEvenlySpaced = true, bottomToolbar = false)
         UtilityShortcut.hidePinIfNeeded(toolbarBottom)
         activityArguments = intent.getStringArrayExtra(RID)!!
-        drw = ObjectNavDrawer(this, UtilityGoes.labels, UtilityGoes.codes, ::getContentFixThis)
+        drw = ObjectNavDrawer(this, UtilityGoes.labels, UtilityGoes.codes) { getContent(sector) }
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, "")
         img.setMaxZoom(8f)
-        img.setListener(this, drw, ::getContentFixThis)
+        img.setListener(this, drw) { getContent(sector) }
         readPrefs()
         getContent(sector)
     }
 
-    private fun getContentFixThis() {
-        getContent(sector)
-    }
-
-    private fun getContent(sectorF: String) = GlobalScope.launch(uiDispatcher) {
+    private fun getContent(sectorF: String) {
         sector = sectorF
         writePrefs()
         toolbar.title = UtilityGoes.sectorToName[sector] ?: ""
         toolbar.subtitle = drw.getLabel()
-        bitmap = withContext(Dispatchers.IO) { UtilityGoes.getImage(drw.url, sector) }
+        if (!goesFloater) {
+            FutureVoid(this, { bitmap = UtilityGoes.getImage(drw.url, sector) }, ::display)
+        } else {
+            FutureVoid(this, { bitmap = UtilityGoes.getImageGoesFloater(goesFloaterUrl, drw.url) }, ::display)
+        }
+    }
+
+    private fun display() {
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn(prefImagePosition)
         if (oldSector != sector) {
@@ -114,10 +127,17 @@ class GoesActivity : VideoRecordActivity() {
         if (activityArguments.isNotEmpty() && activityArguments[0] == "") {
             sector = Utility.readPref(this@GoesActivity, "GOES16_SECTOR", sector)
             drw.index = Utility.readPref(this@GoesActivity, "GOES16_IMG_FAV_IDX", 0)
+        } else if (activityArguments.size > 1 && activityArguments[0].contains("http")) {
+            // NHC floater
+            goesFloater = true
+            goesFloaterUrl = activityArguments[0]
+            drw.index = 0
+            sector = goesFloaterUrl
+            savePrefs = false
         } else {
             if (activityArguments.size > 1) {
                 sector = activityArguments[0]
-                drw.index = 9
+                drw.index = To.int(activityArguments[1])
                 savePrefs = false
             }
         }
@@ -192,8 +212,15 @@ class GoesActivity : VideoRecordActivity() {
         super.onStop()
     }
 
-    private fun getAnimate(frameCount: Int) = GlobalScope.launch(uiDispatcher) {
-        animDrawable = withContext(Dispatchers.IO) { UtilityGoes.getAnimation(this@GoesActivity, drw.url, sector, frameCount) }
-        animDrawable.startAnimation(img)
+    private fun getAnimate(frameCount: Int) {
+        if (!goesFloater) {
+            FutureVoid(this@GoesActivity,
+                { animDrawable = UtilityGoes.getAnimation(this@GoesActivity, drw.url, sector, frameCount) })
+                { animDrawable.startAnimation(img) }
+        } else {
+            FutureVoid(this@GoesActivity,
+                { animDrawable = UtilityGoes.getAnimationGoesFloater(this@GoesActivity, drw.url, sector, frameCount) })
+                { animDrawable.startAnimation(img) }
+        }
     }
 }

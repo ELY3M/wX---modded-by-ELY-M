@@ -25,13 +25,11 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
-
+import java.util.Locale
 import joshuatee.wx.util.UtilityImgAnim
 import joshuatee.wx.util.UtilityTime
 import joshuatee.wx.util.UtilityImg
-
 import joshuatee.wx.Extensions.*
-import java.util.*
 
 internal object UtilityModelNsslWrfInputOutput {
 
@@ -40,7 +38,7 @@ internal object UtilityModelNsslWrfInputOutput {
     val runTime: RunTimeData
         get() {
             val runData = RunTimeData()
-            val htmlRunStatus = (baseUrl).getHtml()
+            val htmlRunStatus = baseUrl.getHtml()
             val html = htmlRunStatus.parse("\\{model: \"fv3_nssl\",(rd: .[0-9]{8}\",rt: .[0-9]{4}\",)")
             val day = html.parse("rd:.(.*?),.*?").replace("\"", "")
             val time = html.parse("rt:.(.*?)00.,.*?").replace("\"", "")

@@ -22,7 +22,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_param"
-        android:title="Fav"
+        android:title="@string/fav"
         app:showAsAction="always"/>
 </menu>
 

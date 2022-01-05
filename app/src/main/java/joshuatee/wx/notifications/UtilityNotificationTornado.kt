@@ -24,13 +24,11 @@ package joshuatee.wx.notifications
 import android.content.Context
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
-
 import joshuatee.wx.R
 import joshuatee.wx.activitiesmisc.CapAlert
 import joshuatee.wx.activitiesmisc.USAlertsDetailActivity
 import joshuatee.wx.MyApplication
 import joshuatee.wx.util.UtilityLog
-
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.util.UtilityTime
 

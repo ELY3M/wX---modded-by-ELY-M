@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.TextSize
@@ -45,7 +44,8 @@ internal class AdapterSpotter(private val dataSet: MutableList<Spotter>) : Recyc
             itemView.setOnClickListener(this)
         }
 
-        override fun onClick(v: View) { myClickListener!!.onItemClick(adapterPosition) }
+//        override fun onClick(v: View) { myClickListener!!.onItemClick(adapterPosition) }
+        override fun onClick(v: View) { myClickListener!!.onItemClick(layoutPosition) }
     }
 
     fun setListener(fn: (Int) -> Unit) {

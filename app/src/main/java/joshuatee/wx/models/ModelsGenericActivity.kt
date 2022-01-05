@@ -26,36 +26,38 @@ import android.os.Bundle
 import android.content.res.Configuration
 import android.view.KeyEvent
 import android.view.Menu
-
-import java.util.Locale
-
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.LinearLayout
 import androidx.core.view.GravityCompat
+import java.util.Locale
 import joshuatee.wx.MyApplication
-
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.VideoRecordActivity
-import joshuatee.wx.ui.*
-import joshuatee.wx.util.*
-import kotlinx.coroutines.*
+import joshuatee.wx.ui.ObjectDialogue
+import joshuatee.wx.ui.ObjectFab
+import joshuatee.wx.ui.ObjectNavDrawer
+import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.util.Utility
+import joshuatee.wx.util.UtilityImg
 
 class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
+    //
     // This code provides a native android interface to Weather Models
     //
     // arg1 - number of panes, 1 or 2
     // arg2 - pref model token and hash lookup
     // arg3 - title string
+    //
 
     companion object { const val INFO = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var fab1: ObjectFab? = null
     private var fab2: ObjectFab? = null
     private var activityArguments: Array<String>? = arrayOf()
@@ -89,7 +91,9 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         } else {
             super.onCreate(savedInstanceState, R.layout.activity_models_generic_multipane_nospinner, R.menu.models_generic, iconsEvenlySpaced = false, bottomToolbar = true)
             val linearLayout: LinearLayout = findViewById(R.id.linearLayout)
-            if (UtilityUI.isLandScape(this)) linearLayout.orientation = LinearLayout.HORIZONTAL
+            if (UtilityUI.isLandScape(this)) {
+                linearLayout.orientation = LinearLayout.HORIZONTAL
+            }
         }
         toolbarBottom.setOnMenuItemClickListener(this)
         title = activityArguments!![2]
@@ -117,7 +121,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         miStatus = menu.findItem(R.id.action_status)
         miStatus.title = "in through"
-        menu.findItem(R.id.action_map).isVisible = false
+//        menu.findItem(R.id.action_map).isVisible = false
         om.displayData = DisplayDataNoSpinner(this, this, om.numPanes, om)
         drw = ObjectNavDrawer(this, om.labels, om.params)
         om.setUiElements(toolbar, fab1, fab2, miStatusParam1, miStatusParam2, ::getContent)
@@ -139,7 +143,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
             R.id.action_forward -> om.rightClick()
             R.id.action_time -> genericDialog(om.times) { om.setTimeIdx(it) }
             R.id.action_run -> genericDialog(om.rtd.listRun) { om.run = om.rtd.listRun[it] }
-            R.id.action_animate -> UtilityModels.getAnimate(om, listOf(""), uiDispatcher)
+            R.id.action_animate -> UtilityModels.getAnimate(this@ModelsGenericActivity ,om, listOf(""))
             R.id.action_img1 -> {
                 om.curImg = 0
                 UtilityModels.setSubtitleRestoreIMGXYZOOM(
@@ -188,9 +192,20 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         return true
     }
 
-    private fun getRunStatus() = GlobalScope.launch(uiDispatcher) {
+    private fun getRunStatus() {
+        FutureVoid(this, ::getRunStatusDownload, ::getRunStatusUpdate)
+    }
+
+    private fun getRunStatusDownload() {
         if (om.modelType == ModelType.NCEP) {
-            om.rtd = withContext(Dispatchers.IO) { UtilityModelNcepInputOutput.getRunTime(om.model, om.displayData.param[0], om.sectors[0]) }
+            om.rtd = UtilityModelNcepInputOutput.getRunTime(om.model, om.displayData.param[0], om.sectors[0])
+        } else {
+            om.rtd = om.getRunTime()
+        }
+    }
+
+    private fun getRunStatusUpdate() {
+        if (om.modelType == ModelType.NCEP) {
             om.run = om.rtd.mostRecentRun
             om.rtd.listRun = om.ncepRuns
             //spRun.setSelection(om.rtd.mostRecentRun)
@@ -201,7 +216,6 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
                 om.times[it] = "$items " + UtilityModels.convertTimeRunToTimeString(om.rtd.mostRecentRun.replace("Z", ""), items, true)
             }
         } else {
-            om.rtd = withContext(Dispatchers.IO) { om.getRunTime() }
             om.run = om.rtd.mostRecentRun
             miStatus.isVisible = true
             miStatus.title = om.rtd.mostRecentRun + " - " + om.rtd.imageCompleteStr
@@ -223,7 +237,7 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
     }
 
     private fun getContent() {
-        UtilityModels.getContentNonSpinner(this, om, listOf(""), uiDispatcher)
+        UtilityModels.getContentNonSpinner(this, om, listOf(""))
         updateMenuTitles()
     }
 

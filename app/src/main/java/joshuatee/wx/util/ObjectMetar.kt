@@ -89,7 +89,8 @@ internal class ObjectMetar(context: Context, location: LatLon) {
     private fun capitalizeString(string: String): String {
         val tokens = string.split(" ")
         var newString = ""
-        tokens.forEach { newString += it.capitalize(Locale.US) + " " }
+//        tokens.forEach { newString += it.capitalize(Locale.US) + " " }
+        tokens.forEach { word -> newString += word.replaceFirstChar { it.uppercase() } + " " }
         return newString.trimEnd()
     }
 

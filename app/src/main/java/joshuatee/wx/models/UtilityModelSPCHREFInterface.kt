@@ -21,9 +21,8 @@
 
 package joshuatee.wx.models
 
-import joshuatee.wx.ui.ObjectMenuTitle
 import android.util.SparseArray
-
+import joshuatee.wx.ui.ObjectMenuTitle
 import joshuatee.wx.util.Group
 
 internal object UtilityModelSpcHrefInterface {
@@ -96,10 +95,10 @@ internal object UtilityModelSpcHrefInterface {
             "guidance_hail_spchazcal_024h",
             "guidance_tor_spchazcal_024h",
             "guidance_wind_spchazcal_024h",
-            "guidance_tor_stp_024h", // NEW May 2020
-            "guidance_hrefct_001h", // NEW May 2020
+            "guidance_tor_stp_024h",
+            "guidance_hrefct_001h",
             "guidance_hrefct_004h",
-            "guidance_hrefct_024h", // NEW May 2020
+            "guidance_hrefct_024h",
 
             "500w_mean,500h_mean",
             "700w_mean,700h_mean",
@@ -213,10 +212,10 @@ internal object UtilityModelSpcHrefInterface {
             "24-hr HREF/SREF Calibrated: Hail",
             "24-hr HREF/SREF Calibrated: Tornado",
             "24-hr HREF/SREF Calibrated: Wind",
-            "24-hr STP Calibrated: Tornado",   // NEW May 2020
-            "1-hr HREF Calibrated: Thunder", // NEW May 2020
+            "24-hr STP Calibrated: Tornado",
+            "1-hr HREF Calibrated: Thunder",
             "4-hr HREF Calibrated: Thunder",
-            "24-hr HREF Calibrated: Thunder", // NEW May 2020
+            "24-hr HREF Calibrated: Thunder",
 
             "500 mb Height/Wind",
             "700 mb Height/Wind",

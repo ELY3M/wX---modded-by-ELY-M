@@ -24,11 +24,7 @@ package joshuatee.wx.models
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
-import joshuatee.wx.Extensions.getHtml
-import joshuatee.wx.Extensions.getImage
-
 import java.util.Locale
-
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 import joshuatee.wx.RegExp
@@ -70,7 +66,6 @@ internal object UtilityModelNcepInputOutput {
             else -> "${MyApplication.nwsMagNcepWebsitePrefix}/data/" + om.model.lowercase(Locale.US) + "/" + om.run.replace("Z", "") +
                     "/" + om.model.lowercase(Locale.US) + "_" + om.sector.lowercase(Locale.US) + "_" + time + "_" + om.currentParam + ".gif"
         }
-        // UtilityLog.d("wx", imgUrl)
         return imgUrl.getImage()
     }
 

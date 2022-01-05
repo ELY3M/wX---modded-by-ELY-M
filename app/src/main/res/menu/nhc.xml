@@ -24,68 +24,68 @@
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_atl_two"
-        android:title="ATL Tropical Weather Outlook"
+        android:title="@string/atl_tropical_weather_outlook"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_atl_twd"
-        android:title="ATL Tropical Weather Discussion"
+        android:title="@string/atl_tropical_weather_discussion"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_atl_tws"
-        android:title="ATL Monthly Tropical Summary"
+        android:title="@string/atl_monthly_tropical_summary"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_epac_two"
-        android:title="EPAC Tropical Weather Outlook"
+        android:title="@string/epac_tropical_weather_outlook"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_epac_twd"
-        android:title="EPAC Tropical Weather Discussion"
+        android:title="@string/epac_tropical_weather_discussion"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_epac_tws"
-        android:title="EPAC Monthly Tropical Summary"
+        android:title="@string/epac_monthly_tropical_summary"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_cpac_two"
-        android:title="CPAC Tropical Weather Outlook"
+        android:title="@string/cpac_tropical_weather_outlook"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_sst"
-        android:title="SST images..."
+        android:title="@string/sst_images"
         app:showAsAction="never">
         <menu>
             <item
                 android:id="@+id/action_epac_daily"
-                android:title="EPAC Daily Analysis"
+                android:title="@string/epac_daily_analysis"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_atl_daily"
-                android:title="ATL Daily Analysis"
+                android:title="@string/atl_daily_analysis"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_epac_7daily"
-                android:title="EPAC 7-Day Analysis"
+                android:title="@string/epac_7_day_analysis"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_atl_7daily"
-                android:title="ATL 7-Day Analysis"
+                android:title="@string/atl_7_day_analysis"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_epac_sst_anomaly"
-                android:title="EPAC SST Anomaly"
+                android:title="@string/epac_sst_anomaly"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_atl_sst_anomaly"
-                android:title="ATL SST Anomaly"
+                android:title="@string/atl_sst_anomaly"
                 app:showAsAction="never" />
         </menu>
     </item>
     <item
         android:id="@+id/action_glcfs"
-        android:title="GLCFS"
+        android:title="@string/glcfs"
         app:showAsAction="never" />
 </menu>

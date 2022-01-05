@@ -25,7 +25,6 @@ package joshuatee.wx.fragments
 
 import android.content.*
 import java.util.Locale
-
 import android.graphics.Bitmap
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
@@ -39,21 +38,16 @@ import android.widget.RelativeLayout
 import android.widget.ScrollView
 import androidx.fragment.app.Fragment
 import androidx.cardview.widget.CardView
-
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
-import joshuatee.wx.external.UtilityStringExternal
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.canada.UtilityCanada
 import joshuatee.wx.util.*
-
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.notifications.UtilityNotificationTools
-import joshuatee.wx.objects.ObjectIntent
-import joshuatee.wx.objects.PolygonType
-import joshuatee.wx.objects.TextSize
+import joshuatee.wx.objects.*
 import joshuatee.wx.radar.*
 import joshuatee.wx.ui.*
 import kotlinx.coroutines.*
@@ -111,6 +105,9 @@ class LocationFragment : Fragment() {
     private var locationChangedSevenDay = false
     private var locationChangedHazards = false
     private var paneList = listOf<Int>()
+    private var bitmapForCurrentConditions: Bitmap? = null
+    private var objectCurrentConditions = ObjectCurrentConditions()
+    var bitmaps = listOf<Bitmap>()
 
     private fun addDynamicCards() {
         var currentConditionsAdded = false
@@ -205,7 +202,7 @@ class LocationFragment : Fragment() {
         paneList = (0 until wxglSurfaceViews.size).toList()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         setupAlertDialogStatus()
         setupAlertDialogRadarLongPress()
         val view: View =
@@ -284,7 +281,7 @@ class LocationFragment : Fragment() {
         }
         homeScreenTextCards.indices.forEach { getTextProduct(it.toString()) }
         homeScreenImageCards.indices.forEach { getImageProduct(it.toString()) }
-        homeScreenWebViews.indices.forEach { getWebProduct(it.toString()) }
+        homeScreenWebViews.indices.forEach { _ -> getWebProduct() }
         x = Location.x
         y = Location.y
         if (MyApplication.locDisplayImg) {
@@ -449,35 +446,25 @@ class LocationFragment : Fragment() {
         }
     }
 
-    private fun getWebProduct(productString: String) {
+    private fun getWebProduct() {
         val forecastUrl = "https://forecast.weather.gov/MapClick.php?lat=" + Location.x + "&lon=" + Location.y + "&unit=0&lg=english&FcstType=text&TextType=2"
         homeScreenWebViews.last().loadUrl(forecastUrl)
     }
 
-    private fun getTextProduct(productString: String) = GlobalScope.launch(uiDispatcher) {
-        val productIndex = productString.toIntOrNull() ?: 0
-        val longTextDownload = withContext(Dispatchers.IO) {
-            UtilityDownload.getTextProduct(MyApplication.appContext, homeScreenTextCards[productIndex].product)
-        }
-        var longText = longTextDownload
-        if (homeScreenTextCards[productIndex].product=="NFDOFFN31" || homeScreenTextCards[productIndex].product=="NFDOFFN32") {
-            longText = Utility.fromHtml(longTextDownload)
-        }
-        homeScreenTextCards[productIndex].setTextLong(longText)
-        val shortText = UtilityStringExternal.truncate(longText, UIPreferences.homescreenTextLength)
-        homeScreenTextCards[productIndex].setTextShort(shortText)
-        homeScreenTextCards[productIndex].setText(shortText)
-        if (homeScreenTextCards[productIndex].product == "HOURLY") {
-            homeScreenTextCards[productIndex].typefaceMono()
-        }
+    private fun getTextProduct(productString: String) {
+        val productIndex = To.int(productString)
+        FutureText2(MyApplication.appContext,
+            { UtilityDownload.getTextProduct(MyApplication.appContext, homeScreenTextCards[productIndex].product) },
+            homeScreenTextCards[productIndex]::setup
+        )
     }
 
-    private fun getImageProduct(productString: String) = GlobalScope.launch(uiDispatcher) {
-        val productIndex = productString.toIntOrNull() ?: 0
-        val bitmap = withContext(Dispatchers.IO) {
-            UtilityDownload.getImageProduct(MyApplication.appContext, homeScreenImageCards[productIndex].product)
-        }
-        homeScreenImageCards[productIndex].setImage(bitmap)
+    private fun getImageProduct(productString: String) {
+        val productIndex = To.int(productString)
+        FutureBytes2(MyApplication.appContext,
+                { UtilityDownload.getImageProduct(MyApplication.appContext, homeScreenImageCards[productIndex].product) },
+                homeScreenImageCards[productIndex]::setImage
+        )
     }
 
     private val changeListener = object : WXGLSurfaceView.OnProgressChangeListener {
@@ -628,7 +615,7 @@ class LocationFragment : Fragment() {
         dialogRadarLongPress!!.setNegativeButton { dialog, _ -> dialog.dismiss() }
         dialogRadarLongPress!!.setSingleChoiceItems { dialog, which ->
             val item = radarLongPressItems[which]
-            UtilityRadarUI.doLongPressAction(item, activityReference, activityReference, wxglSurfaceViews[idxIntG], wxglRenders[idxIntG], uiDispatcher, ::longPressRadarSiteSwitch)
+            UtilityRadarUI.doLongPressAction(item, activityReference, activityReference, wxglSurfaceViews[idxIntG], wxglRenders[idxIntG], ::longPressRadarSiteSwitch)
             dialog.dismiss()
         }
     }
@@ -683,35 +670,37 @@ class LocationFragment : Fragment() {
     }
 
     private fun getForecastData() {
-        getLocationForecast()
-        getLocationForecastSevenDay()
-        getLocationHazards()
+        FutureVoid(MyApplication.appContext, ::getCc, ::updateCc)
+        if (locationChangedSevenDay) {
+            linearLayoutForecast?.removeAllViewsInLayout()
+            locationChangedSevenDay = false
+        }
+        FutureVoid(MyApplication.appContext, ::get7day, ::update7day)
+        if (locationChangedHazards) {
+            linearLayoutHazards?.removeAllViewsInLayout()
+            linearLayoutHazards?.visibility = View.GONE
+            locationChangedHazards = false
+        }
+        FutureVoid(MyApplication.appContext, ::getHazards, ::updateHazards)
     }
 
-    private fun getLocationForecast() = GlobalScope.launch(uiDispatcher) {
-        var bitmapForCurrentConditions: Bitmap? = null
-        var objectCurrentConditions = ObjectCurrentConditions()
-        //
-        // Current Conditions
-        //
-        withContext(Dispatchers.IO) {
-            try {
-                objectCurrentConditions = ObjectCurrentConditions(activityReference, Location.currentLocation)
-                if (homescreenFavLocal.contains("TXT-CC2")) {
-                    bitmapForCurrentConditions = if (Location.isUS) {
-                        UtilityNws.getIcon(activityReference, objectCurrentConditions.iconUrl)
-                    } else {
-                        UtilityNws.getIcon(activityReference, UtilityCanada.translateIconNameCurrentConditions(objectCurrentConditions.data, objectCurrentConditions.status))
-                    }
+    private fun getCc() {
+        try {
+            objectCurrentConditions = ObjectCurrentConditions(activityReference, Location.currentLocation)
+            if (homescreenFavLocal.contains("TXT-CC2")) {
+                bitmapForCurrentConditions = if (Location.isUS) {
+                    UtilityNws.getIcon(activityReference, objectCurrentConditions.iconUrl)
+                } else {
+                    UtilityNws.getIcon(activityReference, UtilityCanada.translateIconNameCurrentConditions(objectCurrentConditions.data, objectCurrentConditions.status))
                 }
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
             }
+        } catch (e: Exception) {
+            UtilityLog.handleException(e)
         }
+    }
+
+    private fun updateCc() {
         if (isAdded) {
-            //
-            // Current Conditions
-            //
             objectCardCurrentConditions?.let {
                 if (homescreenFavLocal.contains("TXT-CC2")) {
                     currentConditionsTime = objectCurrentConditions.status
@@ -727,28 +716,24 @@ class LocationFragment : Fragment() {
         }
     }
 
-    private fun getLocationForecastSevenDay() = GlobalScope.launch(uiDispatcher) {
-        var bitmaps = listOf<Bitmap>()
-        if (locationChangedSevenDay) {
-            linearLayoutForecast?.removeAllViewsInLayout()
-            locationChangedSevenDay = false
+    private fun get7day() {
+        try {
+            objectSevenDay = ObjectSevenDay(Location.currentLocation)
+            Utility.writePref(activityReference, "FCST", objectSevenDay.sevenDayLong)
+        } catch (e: Exception) {
+            UtilityLog.handleException(e)
         }
-        withContext(Dispatchers.IO) {
-            try {
-                objectSevenDay = ObjectSevenDay(Location.currentLocation)
-                Utility.writePref(activityReference, "FCST", objectSevenDay.sevenDayLong)
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
+        try {
+            Utility.writePref(activityReference, "FCST", objectSevenDay.sevenDayLong)
+            if (homescreenFavLocal.contains("TXT-7DAY")) {
+                bitmaps = objectSevenDay.icons.map { UtilityNws.getIcon(activityReference, it) }
             }
-            try {
-                Utility.writePref(activityReference, "FCST", objectSevenDay.sevenDayLong)
-                if (homescreenFavLocal.contains("TXT-7DAY")) {
-                    bitmaps = objectSevenDay.icons.map { UtilityNws.getIcon(activityReference, it) }
-                }
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
-            }
+        } catch (e: Exception) {
+            UtilityLog.handleException(e)
         }
+    }
+
+    private fun update7day() {
         if (isAdded) {
             if (homescreenFavLocal.contains("TXT-7DAY")) {
                 linearLayoutForecast?.removeAllViewsInLayout()
@@ -780,24 +765,20 @@ class LocationFragment : Fragment() {
         }
     }
 
-    private fun getLocationHazards() = GlobalScope.launch(uiDispatcher) {
-        if (locationChangedHazards) {
-            linearLayoutHazards?.removeAllViewsInLayout()
-            linearLayoutHazards?.visibility = View.GONE
-            locationChangedHazards = false
-        }
-        withContext(Dispatchers.IO) {
-            try {
-                objectHazards = if (Location.isUS(Location.currentLocation)) {
-                    ObjectHazards(Location.currentLocation)
-                } else {
-                    val html = UtilityCanada.getLocationHtml(Location.getLatLon(Location.currentLocation))
-                    ObjectHazards(html)
-                }
-            } catch (e: Exception) {
-                UtilityLog.handleException(e)
+    private fun getHazards() {
+        try {
+            objectHazards = if (Location.isUS(Location.currentLocation)) {
+                ObjectHazards(Location.currentLocation)
+            } else {
+                val html = UtilityCanada.getLocationHtml(Location.getLatLon(Location.currentLocation))
+                ObjectHazards(html)
             }
+        } catch (e: Exception) {
+            UtilityLog.handleException(e)
         }
+    }
+
+    private fun updateHazards() {
         if (isAdded) {
             if (Location.isUS) {
                 if (objectHazards.titles.isEmpty()) {

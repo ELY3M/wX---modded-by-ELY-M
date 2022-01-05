@@ -51,9 +51,12 @@ import java.nio.ShortBuffer
 
 class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
+    //
     // The is the OpenGL rendering engine that is used on the main screen and the main radar interface
-    // The goal is to be highly performant and configurable as such this module relies on C code accessed via JNI extensively
-    // Java can also be used in set in settings->radar
+    // The goal is to be highly performant and configurable as such this module used to rely on C code accessed via JNI extensively
+    // Kotlin can also be used in set in settings->radar and has been the default since 2017 as the performance is quite good
+    // and it's much easier to debug issue
+    //
 
     companion object {
         var ridGlobal = ""
@@ -1473,7 +1476,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
     }
 
     fun constructSwoLines() {
-        val hashSwo = UtilitySwoDayOne.HASH_SWO.toMap()
+        val hashSwo = UtilitySwoDayOne.hashSwo.toMap()
         var coordinates: DoubleArray
         val fSize = (0..4).filter { hashSwo[it] != null }.sumBy { hashSwo.getOrElse(it) { listOf() }.size }
         swoBuffers.breakSize = 15000

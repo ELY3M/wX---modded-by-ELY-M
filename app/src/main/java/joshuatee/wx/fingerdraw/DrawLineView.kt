@@ -28,12 +28,11 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
-
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.DistanceUnit
 import joshuatee.wx.radar.LatLon
+import joshuatee.wx.util.To
 import joshuatee.wx.util.Utility
-
 import kotlin.math.*
 
 // this class implements the radial distance tool available in single pane radar
@@ -79,10 +78,10 @@ class DrawLineView : View {
         this.oneDegreeScaleFactor = oneDegreeScaleFactor
         val xStr = Utility.getRadarSiteX(radarSite)
         val yStr = Utility.getRadarSiteY(radarSite)
-        centerX = xStr.toFloatOrNull() ?: 0.0f
-        centerY = yStr.toFloatOrNull() ?: 0.0f
-        xMiddle = (width / 2).toFloat()
-        yMiddle = (height / 2).toFloat()
+        centerX = To.float(xStr)
+        centerY = To.float(yStr)
+        xMiddle = width / 2.0f
+        yMiddle = height / 2.0f
         setup()
     }
 

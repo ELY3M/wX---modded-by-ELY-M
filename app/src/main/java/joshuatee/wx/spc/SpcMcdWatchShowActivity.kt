@@ -30,6 +30,7 @@ import android.widget.LinearLayout
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.audio.UtilityTts
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.objects.PolygonType
 import joshuatee.wx.ui.ObjectCardImage
@@ -38,7 +39,6 @@ import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityImg
 import joshuatee.wx.util.UtilityShare
-import kotlinx.coroutines.*
 
 class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
@@ -51,7 +51,6 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
     companion object { const val NUMBER = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var number = ""
     private lateinit var activityArguments: Array<String>
     private lateinit var objectCardImage: ObjectCardImage
@@ -85,8 +84,15 @@ class SpcMcdWatchShowActivity : AudioPlayActivity(), OnMenuItemClickListener {
         getContent()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        withContext(Dispatchers.IO) { objectWatchProduct.getData(this@SpcMcdWatchShowActivity) }
+    private fun getContent() {
+        FutureVoid(this, ::download, ::update)
+    }
+
+    private fun download() {
+        objectWatchProduct.getData(this@SpcMcdWatchShowActivity)
+    }
+
+    private fun update() {
         objectCardText.text = Utility.fromHtml(objectWatchProduct.text)
         toolbar.subtitle = objectWatchProduct.textForSubtitle
         if (tabletInLandscape) {

@@ -27,7 +27,6 @@ import android.graphics.Bitmap
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener
 import android.view.MenuItem
 import android.widget.LinearLayout
-
 import joshuatee.wx.R
 import joshuatee.wx.audio.AudioPlayActivity
 import joshuatee.wx.objects.PolygonType
@@ -36,22 +35,23 @@ import joshuatee.wx.ui.ObjectCardText
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityDownload
 import joshuatee.wx.util.UtilityShare
-
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import kotlinx.coroutines.*
 
 class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
 
+    //
     // show a summary of  MCD or a specific MCD, long press on image to save location
     //
     // Arguments
     // - MCD/Wat number
+    //
 
     companion object { const val NO = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private var number = ""
     private var imgUrl = ""
     private var textUrl = ""
@@ -71,6 +71,7 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
     private lateinit var miImage: MenuItem
     private lateinit var polygonType: PolygonType
     private lateinit var linearLayout: LinearLayout
+    private var mcdList = listOf<String>()
 
     @SuppressLint("MissingSuperCall")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,34 +112,38 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
         getContent()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        var mcdList: List<String>
-        withContext(Dispatchers.IO) {
-            mcdList = url.getHtml().parseColumn(patternStr)
-            mcdList.forEach {
-                if (number.contains("at")) {
-                    val mcdNo2 = String.format("%4s", it).replace(' ', '0')
-                    imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + mcdNo2 + "_radar.gif"
-                    mcdNumbers.add(mcdNo2)
-                } else {
-                    imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/mcd$it.gif"
-                    mcdNumbers.add(it)
-                }
-                bitmaps.add(imgUrl.getImage())
+    private fun getContent() {
+        FutureVoid(this, ::download, ::update)
+    }
+
+    private fun download() {
+        mcdList = url.getHtml().parseColumn(patternStr)
+        mcdList.forEach {
+            if (number.contains("at")) {
+                val mcdNo2 = String.format("%4s", it).replace(' ', '0')
+                imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/ww" + mcdNo2 + "_radar.gif"
+                mcdNumbers.add(mcdNo2)
+            } else {
+                imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/mcd$it.gif"
+                mcdNumbers.add(it)
             }
-            if (mcdList.size == 1) {
-                if (number.contains("at")) {
-                    textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/w" + mcdNumbers[0] + ".html"
-                    titleString = "Watch " + mcdNumbers[0].replace("w", "")
-                    product = "SPCWAT" + mcdNumbers[0].replace("w", "")
-                } else {
-                    textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/md" + mcdNumbers[0] + ".html"
-                    titleString = "MCD " + mcdNumbers[0]
-                    product = "SPCMCD" + mcdNumbers[0]
-                }
-                text = UtilityDownload.getTextProduct(this@SpcMcdWatchShowSummaryActivity, product)
-            }
+            bitmaps.add(imgUrl.getImage())
         }
+        if (mcdList.size == 1) {
+            if (number.contains("at")) {
+                textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/watch/w" + mcdNumbers[0] + ".html"
+                titleString = "Watch " + mcdNumbers[0].replace("w", "")
+                product = "SPCWAT" + mcdNumbers[0].replace("w", "")
+            } else {
+                textUrl = "${MyApplication.nwsSPCwebsitePrefix}/products/md/md" + mcdNumbers[0] + ".html"
+                titleString = "MCD " + mcdNumbers[0]
+                product = "SPCMCD" + mcdNumbers[0]
+            }
+            text = UtilityDownload.getTextProduct(this@SpcMcdWatchShowSummaryActivity, product)
+        }
+    }
+
+    private fun update() {
         mcdList.indices.forEach { mcdIndex ->
             val objectCardImage = ObjectCardImage(this@SpcMcdWatchShowSummaryActivity, linearLayout, bitmaps[mcdIndex])
             objectCardImage.setOnClickListener {

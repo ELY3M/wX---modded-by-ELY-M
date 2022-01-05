@@ -28,7 +28,7 @@ internal class PlayListAdapter(private val dataSet: MutableList<String>) : Recyc
             itemView.setOnClickListener(this)
         }
 
-        override fun onClick(v: View) { myClickListener!!.onItemClick(adapterPosition) }
+        override fun onClick(v: View) { myClickListener!!.onItemClick(layoutPosition) }
     }
 
     fun setListener(fn: (Int) -> Unit) {
@@ -50,7 +50,8 @@ internal class PlayListAdapter(private val dataSet: MutableList<String>) : Recyc
 
     fun deleteItem(index: Int) {
         dataSet.removeAt(index)
-        notifyDataSetChanged()
+        // notifyDataSetChanged()
+        notifyItemRemoved(index)
     }
 
     override fun getItemCount() = dataSet.size

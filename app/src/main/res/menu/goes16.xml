@@ -64,154 +64,154 @@
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_pin"
         android:icon="@drawable/ic_touch_app_24dp"
         android:title="@string/label_pin"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/action_FD"
-        android:title="Full Disk: GOES-East"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_FD_G17"
-        android:title="Full Disk: GOES-West"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_CONUS"
-        android:title="CONUS: GOES-East"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_CONUS_G17"
-        android:title="PACUS: GOES-West"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_regionalSectors"
-        android:title="Regional Views"
-        app:showAsAction="never">
-        <menu>
-            <item
-                android:id="@+id/action_pnw"
-                android:title="Pacific Northwest"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_nr"
-                android:title="Northern Rockies"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_umv"
-                android:title="Upper Mississippi Valley"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_cgl"
-                android:title="Central Great Lakes"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_ne"
-                android:title="Northeast"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_psw"
-                android:title="Pacific Southwest"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_sr"
-                android:title="Southern Rockies"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_sp"
-                android:title="Southern Plains"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_smv"
-                android:title="Southern Mississippi Valley"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_se"
-                android:title="Southeast"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_ak"
-                android:title="Alaska"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_cak"
-                android:title="Central Alaska"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_sea"
-                android:title="Southeastern Alaska"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_hi"
-                android:title="Hawaii"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_can"
-                android:title="Canada"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_mex"
-                android:title="Mexico"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_cam"
-                android:title="Central America"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_nsa"
-                android:title="South America (north)"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_ssa"
-                android:title="South America (south)"
-                app:showAsAction="never" />
-        </menu>
-    </item>
-    <item
-        android:id="@+id/action_ca"
-        android:title="Caribbean / Atlantic / Pacific"
-        app:showAsAction="never">
-        <menu>
-            <item
-                android:id="@+id/action_gm"
-                android:title="Gulf of Mexico"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_car"
-                android:title="Caribbean"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_eus"
-                android:title="U.S. Atlantic Coast"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_pr"
-                android:title="Puerto Rico"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_taw"
-                android:title="Tropical Atlantic: wide view"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_wus"
-                android:title="US Pacific Coast"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_tpw"
-                android:title="Tropical Pacific"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_eep"
-                android:title="Eastern Pacific"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/action_np"
-                android:title="Northern Pacific"
-                app:showAsAction="never" />
-        </menu>
-    </item>
+    <group android:id="@+id/sectors">
+        <item
+            android:id="@+id/action_FD"
+            android:title="@string/full_disk_goes_east"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_FD_G17"
+            android:title="@string/full_disk_goes_west"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_CONUS"
+            android:title="@string/conus_goes_east"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_CONUS_G17"
+            android:title="@string/pacus_goes_west"
+            app:showAsAction="never" />
+        <item
+            android:id="@+id/action_regionalSectors"
+            android:title="@string/regional_views"
+            app:showAsAction="never">
+            <menu>
+                <item
+                    android:id="@+id/action_pnw"
+                    android:title="@string/pacific_northwest"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_nr"
+                    android:title="@string/northern_rockies"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_umv"
+                    android:title="@string/upper_mississippi_valley"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_cgl"
+                    android:title="@string/central_great_lakes"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_ne"
+                    android:title="@string/northeast"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_psw"
+                    android:title="@string/pacific_southwest"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_sr"
+                    android:title="@string/southern_rockies"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_sp"
+                    android:title="@string/southern_plains"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_smv"
+                    android:title="@string/southern_mississippi_valley"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_se"
+                    android:title="@string/southeast"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_ak"
+                    android:title="@string/alaska"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_cak"
+                    android:title="@string/central_alaska"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_sea"
+                    android:title="@string/southeastern_alaska"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_hi"
+                    android:title="@string/hawaii"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_can"
+                    android:title="@string/canada"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_mex"
+                    android:title="@string/mexico"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_cam"
+                    android:title="@string/central_america"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_nsa"
+                    android:title="@string/south_america_north"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_ssa"
+                    android:title="@string/south_america_south"
+                    app:showAsAction="never" />
+            </menu>
+        </item>
+        <item
+            android:id="@+id/action_ca"
+            android:title="@string/caribbean_atlantic_pacific"
+            app:showAsAction="never">
+            <menu>
+                <item
+                    android:id="@+id/action_gm"
+                    android:title="@string/gulf_of_mexico"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_car"
+                    android:title="@string/caribbean"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_eus"
+                    android:title="@string/u_s_atlantic_coast"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_pr"
+                    android:title="@string/puerto_rico"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_taw"
+                    android:title="@string/tropical_atlantic_wide_view"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_wus"
+                    android:title="@string/us_pacific_coast"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_tpw"
+                    android:title="@string/tropical_pacific"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_eep"
+                    android:title="@string/eastern_pacific"
+                    app:showAsAction="never" />
+                <item
+                    android:id="@+id/action_np"
+                    android:title="@string/northern_pacific"
+                    app:showAsAction="never" />
+            </menu>
+        </item>
+    </group>
 </menu>
-
-

@@ -22,7 +22,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_save"
-        android:title="Save Location"
+        android:title="@string/save_location"
         app:showAsAction="always" />
 </menu>
-

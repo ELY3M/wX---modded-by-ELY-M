@@ -362,6 +362,7 @@ object UtilityMetarConditions {
             "Shallow Fog" to "fg",
             "Partial Fog" to "fg",
             "Patches of Fog" to "fg",
+            "Patches Of Fog" to "fg",
             "Fog in Vicinity" to "fg",
             "Freezing Fog in Vicinity" to "fg",
             "Shallow Fog in Vicinity" to "fg",

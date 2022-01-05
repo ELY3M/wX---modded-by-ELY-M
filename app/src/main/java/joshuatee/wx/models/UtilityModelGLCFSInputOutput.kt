@@ -25,24 +25,25 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.AnimationDrawable
 import joshuatee.wx.Extensions.getImage
-
+import joshuatee.wx.util.To
 import joshuatee.wx.util.UtilityImgAnim
-import java.util.*
 
 internal object UtilityModelGlcfsInputOutput {
 
     fun getImage(om: ObjectModelNoSpinner, timeOriginal: String): Bitmap {
-        var sector = ""
-        if (om.sector.split(" ").size > 1) sector = om.sector.split(" ")[1].substring(0, 1).lowercase(Locale.US)
         var time = timeOriginal.replace("00", "0")
-        val timeInt = time.toIntOrNull() ?: 0
-        if (timeInt > 9) time = time.replace(Regex("^0"), "")
-        val url = "https://www.glerl.noaa.gov/res/glcfs/fcast/$sector${om.currentParam}+$time.gif"
+        val timeInt = To.int(time)
+        if (timeInt > 9) {
+            time = time.replace(Regex("^0"), "")
+        }
+        val url = "https://www.glerl.noaa.gov/res/glcfs/lakes/cur/${om.currentParam}-$time.gif"
         return url.getImage()
     }
 
     fun getAnimation(context: Context, om: ObjectModelNoSpinner): AnimationDrawable {
-        if (om.spinnerTimeValue == -1) return AnimationDrawable()
+        if (om.spinnerTimeValue == -1) {
+            return AnimationDrawable()
+        }
         val bitmaps = (om.spinnerTimeValue until om.times.size).map { getImage(om, om.times[it].split(" ").getOrNull(0) ?: "") }
         return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }

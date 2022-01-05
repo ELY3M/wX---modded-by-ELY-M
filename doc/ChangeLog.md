@@ -1,27 +1,190 @@
-// TODO [FIX] Canada - some radars have changed code names - need to change maps.xml as well
+```
 // TODO [FIX] dual/quad pane radar don't take up the entire screen on chromeOS
 // TODO [FIX] chromeOS: text size for observations in nexrad
 // TODO [FIX] storm reports - having location follow gps breaks the location marker
 // TODO [REF] WXGLRender rename rid to radarSite
-// TODO [REF] rename files/classes in radar folder
-// TODO [ADD] Remove all non nws embedded websites
-// TODO [ADD] for alert closest radar use polygon center like mcd
-// TODO [ADD] certain GOES regions like CONUS have additional products (GLM, DMW)
 // TODO [FIX] NSSL WRF needs better runtime detection (reference C++ code)
-// TODO [ADD] update copyright 2021
 // TODO [ADD] 'IntentService' is deprecated. Deprecated in Jav
     https://stackoverflow.com/questions/62138507/intentservice-is-deprecated-how-do-i-replace-it-with-jobintentservice
 // TODO [ADD] 'getter for defaultDisplay: Display!' is deprecated. Deprecated in Java
 // TODO [ADD] 'getMetrics(DisplayMetrics!): Unit' is deprecated. Deprecated in Java
-// TODO [REF] move radarColorPalette,colorMap to ObjectColorPalette
-// TODO [ADD] LSR by WFO - download and show one at a time
-// TODO [FIX] Hourly onrestart graph
 // TODO [FIX] code cleanup in utilDownloadMcd/w/mpd
-// TODO [ADD] GOES option to follow location
-// TODO [ADD] allBlack refinements (Dash buttons are invisible)
 // TODO [REF] add ObjectLocation
+// TODO [FIX] 7day not honoring C/F setting
+// TODO [FIX] usalerts sps don't show radar icon if no poly
+// TODO [REF] deprecate SettingsPlaylistAutodownloadActivity
+// TODO [REF] migrate all to Future* (models/radar/LocationFragment)
+// TODO [FIX] textual vwp is not looking to good
+// TODO [FIX] deprecate UtilityUI.makeToastLegacy
+// TODO [ADD] alphabetize prefs in settings
+// TODO [ADD] have nexrad long press verbiage match iOS version
+// TODO [REF] replace String.format with stuff in to.
+// TODO [FIX] review multipane data usage
+// TODO [FIX] snow squall warning enabled - no way to long press
+// TODO [FIX] usalerts filter is not sorted
+```
+[[_TOC_]]
 
-55544 2021_05_14
+## 55582 2021_11_27
+* [ADD] SPC Meso in "Multi-Parameter Fields" add "Bulk Shear - Sfc-3km / Sfc-3km MLCAPE"
+* [FIX] SPC Meso in "Upper Air" change ordering for "Sfc Frontogenesis" to match SPC website
+
+## 55581 2021_11_27
+* [ADD] NDK 23 -> 23b
+* [ADD] first build with Mac M1
+* [ADD] switch to non-experimental WPC winter weather forecasts day 4-7
+
+## 55580 2021_11_11
+* release
+
+## 55578 2021_11_01
+* [REF] move imagemap xml file to multiple files to remove lint errors
+* [REF] "com.squareup.okhttp3:okhttp:4.9.1" upgrade to "com.squareup.okhttp3:okhttp:4.9.2"
+* [REF] changes in app/src/main/res/values/dimens.xml to reduce lint
+* [REF] changes in app/src/main/java/joshuatee/wx/settings/Location.kt to reduce lint
+
+## 55576 2021_10_31
+* [REF] misc refactor/lint
+
+## 55575 2021_10_30
+* [FIX] remove unprintable chars in `app/src/main/res/raw/gaz_counties_national.txt`
+* [REF] remove the following unused resources
+```
+	deleted:    app/src/main/res/drawable/ic_access_alarm_24dp.xml
+	deleted:    app/src/main/res/drawable/ic_alarm_add_24dp.xml
+	deleted:    app/src/main/res/drawable/ic_flash_on_24dp_black.xml
+	deleted:    app/src/main/res/drawable/ic_info_outline_24dp_black.xml
+	
+	deleted:    app/src/main/res/mipmap-anydpi-v26/ic_launcher_new_round.xml
+	deleted:    app/src/main/res/mipmap-hdpi/ic_launcher_new_round.png
+	deleted:    app/src/main/res/mipmap-mdpi/ic_launcher_new_round.png
+	deleted:    app/src/main/res/mipmap-xhdpi/ic_launcher_new_round.png
+	deleted:    app/src/main/res/mipmap-xxhdpi/ic_launcher_new_round.png
+	deleted:    app/src/main/res/mipmap-xxxhdpi/ic_launcher_new_round.png
+```
+## 55574 2021_10_29
+* [ADD] in nexrad long press show how far away nearest observation point is
+* [ADD] National Images - add "_conus" to end of filename for SNOW/ICE Day1-3 for better graphic
+* [ADD] SPC HRRR - add back SCP/STP param
+* [REF] remove SettingsPlaylistActivity.kt
+
+## 55572 2021_10_26
+* [REF] Lint fix especially move aware from hardcoded text in layout/menu
+* [REF] Lint fix - for menu items change from always to ifRoom if it won't impact anything
+
+## 55571 2021_10_23
+* [FIX] GOES Viewer, eep Eastern East Pacific image was not working after NOAA changed image resolution
+* [ADD] implementation 'androidx.media:media:1.4.2' -> implementation 'androidx.media:media:1.4.3'
+* [REF] Lint fix especially move aware from hardcoded text in layout/menu
+* [REF] remove external links in Color Palette editor
+
+## 55570 2021_10_22
+* [FIX] wx.kt nav draw lightning entry was not correct, now matches misc frag
+
+## 55569 2021_10_21
+* release to fdroid (tag)
+
+## 55568 2021_10_21
+* [FIX] NWS Icons not working after NWS html change
+
+## 55567 2021_10_10
+* [FIX] NHC - ordering of images was not consistent, implement fully parallel downloads
+* [REF] ObjectPopupMessage instead of static method in UtilityUI
+
+## 55566 2021_10_07
+* Add additional GOES products FireTemperature, Dust, GLM
+* Move ChangeLog and FAQ to Gitlab
+* Settings -> About, open browser when viewing FAQ or ChangeLog
+
+```
+55565 2021_10_03    [REF] misc
+55564 2021_10_02    [REF] migrate all to Future* (models/radar/LocationFragment) (continued)
+                    [REF] misc lint
+55563 2021_10_01    [ADD] Provide more data in Alert detail screen (vtec, storm motion, headline, max hail/wind, etc)
+                    [REF] change override fun onClick(v: View) { myClickListener!!.onItemClick(adapterPosition) } to
+                          override fun onClick(v: View) { myClickListener!!.onItemClick(layoutPosition) }
+                          in ViewHolders per lint
+55562 2021_09_28    [REF] convert multiple activities to use Future*
+                    [FIX] fix icon size on main window navigation drawer if using that option
+55561 2021_09_22    [REF] convert multiple activities to use Future*
+55560 2021_09_22    [REF] convert multiple activities to use Future*
+55559 2021_09_22    [FIX] remove CLI "Daily Climate Report" from Local text products since NWS no longer provides WFO to site mapping
+                    [ADD] per https://developer.android.com/about/versions/12/approximate-location
+                    if you request ACCESS_FINE_LOCATION you must also request ACCESS_COARSE_LOCATION
+                    [REF] LsrByWfoActivity refactor to use Future* and parallel download threads
+                    [REF] SpcMcdWatchShowActivity to use Future*
+55558 2021_09_21    [ADD] classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21" to
+                          classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+
+                          implementation 'androidx.media:media:1.4.0' to
+                          implementation 'androidx.media:media:1.4.2'
+
+                    -    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.21"
+                    -    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1' // was 1.3.6
+                    +    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.31"
+                    +    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
+
+                    [FIX] comment out dexOptions in build.gradle (obsolete/ignored)
+                    [REF] other misc lint fix
+
+                    -    compileSdkVersion 30
+                    -    buildToolsVersion '30.0.3'
+                    +    compileSdkVersion 31
+                    +    buildToolsVersion '31.0.0'
+
+                    -        targetSdkVersion 30
+                    +        targetSdkVersion 31
+
+                    Android NDK android-ndk-r22 -> android-ndk-r23
+
+55557 2021_09_18  tag  [FIX] add to UtilityMetarConditions "Patches Of Fog"
+                    [ADD] classpath 'com.android.tools.build:gradle:7.0.1' to classpath 'com.android.tools.build:gradle:7.0.2'
+55556 2021_08_15    [FIX] nav drawer was not respecting new lighting GOES GLM option
+55555 2021_08_15    [FIX] nav draw hide items was not working
+                    [ADD] more work on GLM
+55554 2021_08_13    [ADD] settings->UI "Use GOES GLM for lightning" option to control lightning activity in misc tab
+55553 2021_08_12    [FIX] NCEP - rename WW3 to GFS-WAVE and add additional sectors/products
+                    [FIX] NCEP - remove params that aren't working
+                    [FIX] NCEP - correct 2 sectors in ESTOFS and sort list
+                    [FIX] SPC SREF - navigation drawer colors were not matching
+                    [ADD] Adhoc forecast (long press nexrad) - add multiple download threads to speed up data display
+                    [ADD] US Alerts - add multiple download threads to speed up data display
+                    [ADD] Spc Storm Reports - add multiple download threads to speed up data display
+                    [FIX] url had changed in OPC for Alaska/Arctic Analysis Latest SST/Ice Edge Analysis
+                    [ADD] OPC - add 72 hour charts for most products
+                    [ADD] OPC - add lightning strike density - 15min for multiple sectors (bottom of list)
+                    [ADD] "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.10" -> "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21"
+                    [FIX] National Images, revise Labels for WPC Fronts so that start time is at left in case of truncation of header text
+                    [FIX] remove 4 outdated images in National Images
+                            "https://www.weather.gov/images/cle/ICE/dist9_concentration.jpg",
+                            "https://www.weather.gov/images/cle/ICE/dist9_thickness.jpg",
+                            "https://www.weather.gov/images/cle/ICE/egg_west.jpg",
+                            "https://www.weather.gov/images/cle/ICE/egg_east.jpg",
+55552 2021_08_02    [FIX] Aviation images don't work in Nation Images
+                    [FIX] more work on SPC HRRR
+55551 2021_08_02    [ADD] org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.0 -> 1.5.10
+                          com.google.android.material:material:1.3.0 -> 1.4.0
+                            this required adding "!!" after notification builders in UtilityNotification.kt (needs testing as emulator was not sufficient)
+                    [FIX] SPC HRRR is now working again
+                    [ADD] NSSL WRF_3KM has been discontinued by the upstream provider https://cams.nssl.noaa.gov/
+55550 2021_08_01    [ADD] update ESRL HRRR/RAP after NOAA changes
+                    [ADD] androidx.recyclerview:recyclerview:1.2.0 -> 1.2.1
+                          androidx.media:media:1.3.1 -> 1.4.0
+55549 2021_07_18    [FIX] WPC Forecast chart day1-3 URL has changed
+                    [ADD] NAMER domain to RAP Model in NCEP
+                    [ADD] Alask domain to HRRR Model in NCEP
+                    [ADD] NAMER domain to RAP Model in NCEP
+                    [ADD] Alask domain to HRRR Model in NCEP
+                    [ADD] Accumulated Maximum Updraft Helicity (accu_max_updraft_hlcy) to HRRR model (NCEP)
+                    [ADD] prob_cref_40dbz and prob_max_hlcy_75 to HREF model (NCEP)
+55548 2021_07_16    [ADD] refactor to use Future*, more threads in various activities
+55547 2021_07_15    [ADD] more download threads in SevereDashboard
+                    [ADD] add Future* classes to mimic desktop ports, test in Hourly
+                    [ADD] NHC Storm - cloud icon for GOES imagery of storm
+55546 2021_06_07    [ADD] NCEP MAG (main NWS production model display) has replaced HRW-NMMB with HRW-FV3. This is accessible via MISC tab, top left corner
+55545 2021_05_20    [FIX] SPC Thunderstorm outlook broke after NWS change (possible move to AWS?)
+55544 2021_05_16    [ADD] NOAA has made changes to GLCFS https://www.glerl.noaa.gov/res/glcfs which required changes to wX
+                    [FIX] Hourly graph was not clearing old data on reload
 55543 2021_05_14    [REF] misc lint 'B'.toByte() -> 'B'.code.toByte()
                     [REF] remove unused resources related to canada radar removal
                     [REF] 'com.android.tools.build:gradle:4.2.0' -> 'com.android.tools.build:gradle:4.2.1'
@@ -705,3 +868,4 @@
 55238 2019_06_21    [ADD] kotlin plugin 1.3.31 -> 1.3.40
                     [FIX] at joshuatee.wx.models.UtilityModels.setSubtitleRestoreIMGXYZOOM(UtilityModels.kt:294)
                             java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
+                            ```

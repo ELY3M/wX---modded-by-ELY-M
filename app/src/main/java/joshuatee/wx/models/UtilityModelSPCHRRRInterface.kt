@@ -23,7 +23,9 @@ package joshuatee.wx.models
 
 internal object UtilityModelSpcHrrrInterface {
 
-    val models = listOf("HRRR")
+    val models = listOf(
+            "HRRR"
+    )
 
     val sectors = listOf(
         "National",

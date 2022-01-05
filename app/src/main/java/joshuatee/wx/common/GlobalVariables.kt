@@ -19,9 +19,13 @@
 
  */
 
-package joshuatee.wx
+package joshuatee.wx.common
 
 object GlobalVariables {
 
+    const val nwsAWCwebsitePrefix = "https://www.aviationweather.gov"
+    const val nwsOpcWebsitePrefix = "https://ocean.weather.gov"
+    const val nwsSPCwebsitePrefix = "https://www.spc.noaa.gov"
+    const val newline = "\n"
 
 }

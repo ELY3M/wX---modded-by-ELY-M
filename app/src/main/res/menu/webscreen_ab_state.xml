@@ -23,11 +23,9 @@
     <item
         android:id="@+id/action_sector"
         android:title=""
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_browser"
-        android:title="Launch external browser"
+        android:title="@string/launch_external_browser"
         app:showAsAction="never" />
 </menu>
-
-

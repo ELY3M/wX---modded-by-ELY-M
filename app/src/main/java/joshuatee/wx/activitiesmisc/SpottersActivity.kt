@@ -33,6 +33,7 @@ import android.widget.TextView
 import joshuatee.wx.MyApplication
 import joshuatee.wx.R
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.Spotter
 import joshuatee.wx.radar.UtilitySpotter
@@ -44,7 +45,6 @@ import joshuatee.wx.ui.ObjectFab
 import joshuatee.wx.ui.ObjectRecyclerViewGeneric
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityMap
-import kotlinx.coroutines.*
 import java.util.*
 
 class SpottersActivity : BaseActivity() {
@@ -55,7 +55,6 @@ class SpottersActivity : BaseActivity() {
     // can tap on email or phone to respectively email or call the individual
     //
 
-    private val uiDispatcher = Dispatchers.Main
     private lateinit var ca: AdapterSpotter
     private var spotterList = mutableListOf<Spotter>()
     private var spotterList2 = mutableListOf<Spotter>()
@@ -81,7 +80,9 @@ class SpottersActivity : BaseActivity() {
                 return true
             }
         })
-        if (UIPreferences.themeIsWhite) changeSearchViewTextColor(searchView)
+        if (UIPreferences.themeIsWhite) {
+            changeSearchViewTextColor(searchView)
+        }
         return true
     }
 
@@ -95,10 +96,15 @@ class SpottersActivity : BaseActivity() {
         getContent()
     }
 
-    private fun reportFAB() { ObjectIntent(this, SpotterReportsActivity::class.java) }
+    private fun reportFAB() {
+        ObjectIntent(this, SpotterReportsActivity::class.java)
+    }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        spotterList = withContext(Dispatchers.IO) { UtilitySpotter.get(this@SpottersActivity) }.toMutableList()
+    private fun getContent() {
+        FutureVoid(this, { spotterList = UtilitySpotter.get(this@SpottersActivity) }, ::showText)
+    }
+
+    private fun showText() {
         markFavorites()
         ca = AdapterSpotter(spotterList)
         recyclerView.recyclerView.adapter = ca
@@ -154,6 +160,7 @@ class SpottersActivity : BaseActivity() {
             if (res != 0) return@Comparator res
             p1.firstName.compareTo(p2.firstName, ignoreCase = true)
         })
+        // spotterList = spotterList.sortedWith(compareBy({ it.lastName.lowercase() }, { it.firstName.lowercase() })).toMutableList()
         if (firstTime) {
             spotterList2 = mutableListOf()
             spotterList.indices.forEach { spotterList2.add(spotterList[it]) }
@@ -175,7 +182,7 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun showItemOnMap(position: Int) {
-        ObjectIntent.showWebView(this, arrayOf(UtilityMap.getMapUrl(spotterList[position].lat, spotterList[position].lon, "9"),
+        ObjectIntent.showWebView(this, arrayOf(UtilityMap.getUrl(spotterList[position].lat, spotterList[position].lon, "9"),
                 spotterList[position].lastName + ", " + spotterList[position].firstName)
         )
     }

@@ -24,7 +24,6 @@ package joshuatee.wx.objects
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import joshuatee.wx.UIPreferences
 import joshuatee.wx.activitiesmisc.*
 import joshuatee.wx.canada.CanadaHourlyActivity
 import joshuatee.wx.canada.CanadaTextActivity
@@ -53,12 +52,6 @@ class ObjectIntent() {
         val intent = Intent(context, clazz)
         intent.putExtra(url, stringArray)
         context.startActivity(intent)
-    }
-
-    constructor(context: Context, clazz: Class<*>, url: String, stringArray: String, dummyFlag: Boolean) : this() {
-        val intent = Intent(context, clazz)
-        intent.putExtra(url, stringArray)
-        context.startService(intent)
     }
 
     constructor(context: Context, clazz: Class<*>, url: String, string: String) : this() {
@@ -125,6 +118,10 @@ class ObjectIntent() {
             ObjectIntent(context, GoesActivity::class.java, GoesActivity.RID, arrayOf(""))
         }
 
+        fun showVisNhc(context: Context, url: String) {
+            ObjectIntent(context, GoesActivity::class.java, GoesActivity.RID, arrayOf(url, ""))
+        }
+
         fun showObservations(context: Context) {
             if (Location.isUS) {
                 ObjectIntent(context, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("OBSERVATIONS"))
@@ -143,21 +140,8 @@ class ObjectIntent() {
         }
 
         fun showRadarMosaic(context: Context) {
-//            if (Location.isUS) {
-            if (!UIPreferences.useAwcRadarMosaic) {
-                // ObjectIntent(context, USNwsMosaicActivity::class.java, USNwsMosaicActivity.URL, arrayOf("location"))
-            } else {
-                ObjectIntent(context, AwcRadarMosaicActivity::class.java, AwcRadarMosaicActivity.URL, arrayOf(""))
-            }
-//            } else {
-//                val prov = Utility.readPref(context, "NWS" + Location.currentLocationStr + "_STATE", "")
-//                ObjectIntent(context, CanadaRadarActivity::class.java, CanadaRadarActivity.RID, arrayOf(UtilityCanada.getSectorFromProvince(prov), "rad"))
-//            }
+            ObjectIntent(context, AwcRadarMosaicActivity::class.java, AwcRadarMosaicActivity.URL, arrayOf(""))
         }
-
-//        fun showCanadaRadar(context: Context, array: Array<String>) {
-//            ObjectIntent(context, CanadaRadarActivity::class.java, CanadaRadarActivity.RID, array)
-//        }
 
         fun showSpcStormReports(context: Context) {
             ObjectIntent(context, SpcStormReportsActivity::class.java, SpcStormReportsActivity.NO, arrayOf("today"))
@@ -218,4 +202,3 @@ class ObjectIntent() {
         }
     }
 }
-

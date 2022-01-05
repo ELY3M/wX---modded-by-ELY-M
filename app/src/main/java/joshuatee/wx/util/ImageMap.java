@@ -152,12 +152,7 @@ import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.Scroller;
-
 import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-//import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -316,7 +311,26 @@ public class ImageMap extends ImageView
 	private void loadMap(String map) {
 		boolean loading = false;
 		try {
-			XmlResourceParser xpp = getResources().getXml(R.xml.maps);
+			int mapRes;
+			switch (map) {
+				case "cwamap":
+					mapRes = R.xml.map_wfo;
+					break;
+				case "soundings":
+					mapRes = R.xml.map_soundings;
+					break;
+				case "ncar_nexrad_sites":
+					mapRes = R.xml.map_radarsite;
+					break;
+				case "cwamap3":
+					mapRes = R.xml.map_states;
+					break;
+				default:
+					mapRes = R.xml.map_ca;
+					break;
+			}
+			UtilityLog.INSTANCE.d("IMAGEMAP", map);
+			XmlResourceParser xpp = getResources().getXml(mapRes);
 
 			int eventType = xpp.getEventType();
 			while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -376,12 +390,9 @@ public class ImageMap extends ImageView
 				}
 				eventType = xpp.next();
 			}
-		} catch (XmlPullParserException | IOException xppe) {
+		}  // Having trouble loading? Log this exception
+		catch (Exception xppe) {
 			UtilityLog.INSTANCE.handleException(xppe);
-		} // Having trouble loading? Log this exception
-        catch (Exception ioe) {
-			// Having trouble loading? Log this exception
-			UtilityLog.INSTANCE.handleException(ioe);
 		}
 	}
 
@@ -400,17 +411,6 @@ public class ImageMap extends ImageView
 		String rid = id.replace("@+id/", "");
 		int _id;
 
-		/*try
-		{
-			Class<R.id> res = R.id.class;
-			Field field = res.getField(rid);
-			_id = field.getInt(null);
-		}
-		catch (Exception e)
-		{
-			UtilityLog.INSTANCE.HandleException(e);
-			_id = 0;
-		}*/
 		// FIXME appt2
 		_id = Integer.parseInt(rid.replace("@",""));
 
@@ -454,71 +454,6 @@ public class ImageMap extends ImageView
 		mAreaList.add(a);
 		mIdToArea.put(a.getId(), a);
 	}
-
-	/*private void addBubble(String text, int areaId)
-	{
-		if (mBubbleMap.get(areaId) == null)
-		{
-			Bubble b = new Bubble(text,areaId);
-			mBubbleMap.put(areaId,b);
-		}
-	}*/
-
-	/*public void showBubble(String text, int areaId)
-	{
-		mBubbleMap.clear();
-		addBubble(text,areaId);
-		invalidate();
-	}*/
-
-	/*public void showBubble(int areaId)
-	{
-		mBubbleMap.clear();
-		Area a = mIdToArea.get(areaId);
-		if (a != null)
-		{
-			addBubble(a.getName(),areaId);
-		}
-		invalidate();
-	}*/
-
-	/*public void centerArea( int areaId )
-	{
-		Area a = mIdToArea.get(areaId);
-		if (a != null)
-		{
-			float x = a.getOriginX()*mResizeFactorX;
-			float y = a.getOriginY()*mResizeFactorY;
-			int left = (int)((mViewWidth/2)-x);
-			int top = (int)((mViewHeight/2)-y);
-			moveTo(left,top);
-		}
-	}*/
-
-	/*public void centerAndShowArea(String text, int areaId)
-	{
-		centerArea(areaId);
-		showBubble(text,areaId);
-	}*/
-
-/*	public void centerAndShowArea(int areaId)
-	{
-		Area a = mIdToArea.get(areaId);
-		if (a != null) {
-			centerAndShowArea(a.getName(),areaId);
-		}
-	}
-
-	public String getAreaAttribute(int areaId, String key)
-	{
-		String value = null;
-		Area a = mIdToArea.get(areaId);
-		if (a != null)
-		{
-			value = a.getValue(key);
-		}
-		return value;
-	}*/
 
 	/**
 	 * initialize the view
@@ -757,8 +692,8 @@ public class ImageMap extends ImageView
 
 					mResizeFactorX = ((float) newWidth / mImageWidth);
 					mResizeFactorY = ((float) newHeight / mImageHeight);
-					mRightBound = 0 - (mExpandWidth - mViewWidth);
-					mBottomBound = 0 - (mExpandHeight - mViewHeight);
+					mRightBound = -(mExpandWidth - mViewWidth);
+					mBottomBound = -(mExpandHeight - mViewHeight);
 				}
 			}
 		}
@@ -806,8 +741,8 @@ public class ImageMap extends ImageView
 				mResizeFactorX = ((float) newWidth / mImageWidth);
 				mResizeFactorY = ((float) newHeight / mImageHeight);
 
-				mRightBound = mExpandWidth>mViewWidth ? 0 - (mExpandWidth - mViewWidth) : 0;
-				mBottomBound = mExpandHeight>mViewHeight ? 0 - (mExpandHeight - mViewHeight) : 0;
+				mRightBound = mExpandWidth>mViewWidth ? -(mExpandWidth - mViewWidth) : 0;
+				mBottomBound = mExpandHeight>mViewHeight ? -(mExpandHeight - mViewHeight) : 0;
 			}
 		}
 	}
@@ -913,12 +848,6 @@ public class ImageMap extends ImageView
 			// instead as they are much better names
 			index = (action & MotionEvent.ACTION_POINTER_INDEX_MASK);
 			index = index >> MotionEvent.ACTION_POINTER_INDEX_SHIFT;
-
-			// for api 7 and earlier we are stuck with these
-			// constants which are poorly named
-			// ID refers to INDEX, not the actual ID of the pointer
-			// index = (action & MotionEvent.ACTION_POINTER_ID_MASK);
-			// index = index >> MotionEvent.ACTION_POINTER_ID_SHIFT;
 		}
 
 		switch (action & MotionEvent.ACTION_MASK) {
@@ -1229,9 +1158,6 @@ public class ImageMap extends ImageView
 		// adjust for scroll
 		int testx = x-mScrollLeft;
 		int testy = y-mScrollTop;
-		//testx = (int)(((float)testx/mResizeFactorX)/densityFactor);
-		//testy = (int)(((float)testy/mResizeFactorY)/densityFactor);
-
 		testx = (int)(((float)testx/mResizeFactorX));
 		testy = (int)(((float)testy/mResizeFactorY));
 
@@ -1295,27 +1221,6 @@ public class ImageMap extends ImageView
 
 		invalidate();
 	}
-
-	/*
-	 * move the view to this x, y
-	 */
-	/*private void moveTo(int x, int y) {
-		mScrollLeft = x;
-		if (mScrollLeft > 0) {
-			mScrollLeft = 0;
-		}
-		if (mScrollLeft < mRightBound) {
-			mScrollLeft = mRightBound;
-		}
-		mScrollTop=y;
-		if (mScrollTop > 0) {
-			mScrollTop = 0;
-		}
-		if (mScrollTop < mBottomBound) {
-			mScrollTop = mBottomBound;
-		}
-		invalidate();
-	}*/
 
 	/*
 	 * move the view by this delta in X direction
@@ -1388,14 +1293,6 @@ public class ImageMap extends ImageView
 		}
 	}
 
-	/*public void removeOnImageMapClickedHandler( OnImageMapClickedHandler h ) {
-		if (mCallbackList != null) {
-			if (h != null) {
-				mCallbackList.remove(h);
-			}
-		}
-	}*/
-
 	/*
 	 * Begin map area support
 	 */
@@ -1433,14 +1330,6 @@ public class ImageMap extends ImageView
 			}
 			_values.put(key, value);
 		}
-
-		/*public String getValue(String key) {
-			String value=null;
-			if (_values!=null) {
-				value=_values.get(key);
-			}
-			return value;
-		}*/
 
 		// a method for setting a simple decorator for the area
 		public void setBitmap(Bitmap b) {
@@ -1609,20 +1498,6 @@ public class ImageMap extends ImageView
 			}
 			return c;
 		}
-
-		// For debugging maps, it is occasionally helpful to see the
-		// bounding box for the polygons
-		/*
-@Override
-public void onDraw(Canvas canvas) {
-// draw the bounding box
-canvas.drawRect(left * mResizeFactorX + mScrollLeft,
-top * mResizeFactorY + mScrollTop,
-right * mResizeFactorX + mScrollLeft,
-bottom * mResizeFactorY + mScrollTop,
-textOutlinePaint);
-}
-		 */
 	}
 
 	/**
@@ -1679,11 +1554,6 @@ textOutlinePaint);
 		int _baseline;
 		float _top;
 		float _left;
-
-		//Bubble(String text, float x, float y)
-		//{
-		//	init(text,x,y);
-		//}
 
 		Bubble(String text, int areaId)
 		{
@@ -1816,20 +1686,4 @@ textOutlinePaint);
 		 */
 		void onBubbleClicked(int id);
 	}
-
-
-/*	public float getmMaxSize()
-	{
-		return mMaxSize;
-	}
-
-	public boolean ismScaleFromOriginal()
-	{
-		return mScaleFromOriginal;
-	}
-
-	public boolean ismFitImageToScreen()
-	{
-		return mFitImageToScreen;
-	}*/
 }

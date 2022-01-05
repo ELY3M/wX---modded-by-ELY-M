@@ -35,8 +35,8 @@ class ObjectTouchImageView {
 
     var img: TouchImageView2
     private val context: Context
-    private var imageLoaded: Boolean = false
-    var firstRun: Boolean = false
+    private var imageLoaded = false
+    var firstRun = false
     private var prefTokenIdx = ""
     var drw: ObjectNavDrawer? = null
 
@@ -77,18 +77,20 @@ class ObjectTouchImageView {
     fun setBitmap(bitmap: Bitmap) {
         img.setImageBitmap(bitmap)
         imageLoaded = true
-        if (prefTokenIdx != "" && drw != null) Utility.writePref(context, prefTokenIdx, drw!!.index)
+        if (prefTokenIdx != "" && drw != null) {
+            Utility.writePref(context, prefTokenIdx, drw!!.index)
+        }
     }
 
-    fun setOnClickListener(listener: View.OnClickListener) = img.setOnClickListener(listener)
+    fun setOnClickListener(listener: View.OnClickListener): Unit = img.setOnClickListener(listener)
 
-    fun setImageDrawable(animDrawable: AnimationDrawable) = img.setImageDrawable(animDrawable)
+    fun setImageDrawable(animDrawable: AnimationDrawable): Unit = img.setImageDrawable(animDrawable)
 
-    fun resetZoom() = img.resetZoom()
+    fun resetZoom(): Unit = img.resetZoom()
 
     fun setMaxZoom(zoom: Float) { img.maxZoom = zoom }
 
-    fun setZoom(zoom: Float) = img.setZoom(zoom)
+    fun setZoom(zoom: Float): Unit = img.setZoom(zoom)
 
     fun setListener(context: Context, drw: ObjectNavDrawer, fn: () -> Unit) {
         img.setOnTouchListener(object : OnSwipeTouchListener(context) {

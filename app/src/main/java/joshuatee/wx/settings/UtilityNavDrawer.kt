@@ -180,8 +180,8 @@ internal object UtilityNavDrawer {
 
     // Go through all tokens and see if any are true
     // If one is true append it to the list which is colon separated
-    // Write the string to storage and return the string as well
-    fun generateNewTokenList(context: Context): String {
+    // Write the string to storage
+    fun generateNewTokenList(context: Context) {
         var tokenList = ""
         labelToTokenMap.forEach { (_, value) ->
             // check for not false since by default these aren't set at all
@@ -191,6 +191,5 @@ internal object UtilityNavDrawer {
         }
         // also write pref
         setNavDrawerTokenList(context, tokenList)
-        return tokenList
     }
 }

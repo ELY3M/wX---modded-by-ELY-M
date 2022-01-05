@@ -63,7 +63,6 @@ internal object UtilityWidgetDownload {
             val bitmap = if (Location.isUS(widgetLocationNumber)) {
                 UtilityUSImg.getPreferredLayeredImg(context, rid, false)
             } else {
-                // UtilityCanadaImg.getRadarBitmapOptionsApplied(context, rid, "")
                 UtilityImg.getBlankBitmap()
             }
             saveImage(context, bitmap, NEXRAD_RADAR.fileName)

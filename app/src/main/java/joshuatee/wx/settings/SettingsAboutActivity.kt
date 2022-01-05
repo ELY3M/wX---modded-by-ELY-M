@@ -36,7 +36,7 @@ import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.ui.BaseActivity
 import joshuatee.wx.ui.ObjectCardText
-import joshuatee.wx.ui.UtilityUI
+import joshuatee.wx.ui.ObjectPopupMessage
 import joshuatee.wx.util.Utility
 import joshuatee.wx.util.UtilityFileManagement
 import joshuatee.wx.util.UtilityShare
@@ -45,7 +45,7 @@ class SettingsAboutActivity : BaseActivity() {
 
     private var html = ""
     private lateinit var textCard: ObjectCardText
-    private val faqUrl = "https://docs.google.com/document/u/1/d/e/2PACX-1vQVkTWlnpRZCSn-ZI7tNLMDHUq-oWp9i1bf8e1yFf1ebEA2CFMapVUsALGJASj2aNhEMYAwBMs4GstL/pub"
+    private val faqUrl = "https://gitlab.com/joshua.tee/wxl23/-/tree/master/doc/FAQ.md"
     private val iOSUrl = "https://apps.apple.com/us/app/wxl23/id1171250052"
     //private val releaseNotesUrl = "https://docs.google.com/document/u/1/d/e/2PACX-1vT-YfH9yH_qmxLHe25UGlJvHHj_25qmTHJoeWPBbNWlvS4nm0YBmFeAnEpeel3GTL3OYKnvXkMNbnOX/pub"
     private val releaseNotesUrl = "https://github.com/ELY3M/wX---modded-by-ELY-M/blob/master/README.md"
@@ -62,33 +62,45 @@ class SettingsAboutActivity : BaseActivity() {
         linearLayout = findViewById(R.id.linearLayout)
         val version = Utility.getVersion(this)
         toolbar.subtitle = "version: $version"
+
         val faqButton = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         faqButton.setTextColor(UIPreferences.textHighlightColor)
         faqButton.text = "View FAQ (Outage notifications listed at top if any current)"
-        faqButton.setOnClickListener { ObjectIntent.showWebView(this, arrayOf(faqUrl, "Frequently Asked Questions")) }
+        faqButton.setOnClickListener {
+            ObjectIntent.showWeb(this, faqUrl)
+        }
+
         val releaseNotesButton = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         releaseNotesButton.setTextColor(UIPreferences.textHighlightColor)
         releaseNotesButton.text = "View release notes"
-        releaseNotesButton.setOnClickListener { ObjectIntent.showWebView(this, arrayOf(releaseNotesUrl, "Release Notes")) }
+        releaseNotesButton.setOnClickListener {
+            ObjectIntent.showWeb(this, releaseNotesUrl)
+        }
+
         val emailButton = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         emailButton.setTextColor(UIPreferences.textHighlightColor)
-        emailButton.text = "Email developer"
+        emailButton.text = "Email developer joshua.tee@gmail.com"
         emailButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO)
             intent.data = Uri.parse("mailto:")
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(MyApplication.emailAsString))
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("joshua.tee@gmail.com"))
             intent.putExtra(Intent.EXTRA_SUBJECT, "wX version $version")
             startActivity(Intent.createChooser(intent, "Send Email"))
         }
+
         val iOSVersion = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         iOSVersion.setTextColor(UIPreferences.textHighlightColor)
         iOSVersion.text = "iOS port of wX is called wXL23"
-        iOSVersion.setOnClickListener { ObjectIntent.showWebView(this, arrayOf(iOSUrl, "wXL23 for iOS")) }
-        textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
-        val cardDeleteFiles = ObjectCardText(this, "Delete old radar files", MyApplication.textSizeNormal, MyApplication.paddingSettings)
-        cardDeleteFiles.setOnClickListener {
-            UtilityUI.makeSnackBar(linearLayout, "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
+        iOSVersion.setOnClickListener {
+            ObjectIntent.showWeb(this, iOSUrl)
         }
+
+        textCard = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
+        val cardDeleteFiles = ObjectCardText(this, "Delete old radar files (should not be needed)", MyApplication.textSizeNormal, MyApplication.paddingSettings)
+        cardDeleteFiles.setOnClickListener {
+            ObjectPopupMessage(linearLayout, "Deleted old radar files: " + UtilityFileManagement.deleteCacheFiles(this))
+        }
+
         linearLayout.addView(cardDeleteFiles.card)
         displayContent()
     }

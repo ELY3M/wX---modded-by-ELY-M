@@ -92,7 +92,7 @@ object UtilityWXOGL {
             try {
                 while (!dis.isAtEndOfFile) {
                     byte = dis.readByte()
-                    if (byte.toChar() == 'V') vSpotted = true
+                    if (byte.toInt().toChar() == 'V') vSpotted = true
                     if (Character.isAlphabetic(byte.toInt()) || Character.isWhitespace(byte.toInt())
                             || Character.isDigit(byte.toInt()) || Character.isISOControl(byte.toInt()) || Character.isDefined(byte.toInt())) {
                         if (vSpotted) {

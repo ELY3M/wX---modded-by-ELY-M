@@ -34,7 +34,7 @@
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/action_playlist"
         android:icon="@drawable/ic_queue_24dp"
@@ -42,31 +42,31 @@
         app:showAsAction="never" />
     <item
         android:id="@+id/action_focn45"
-        android:title="Significant Weather Discussion, PASPC"
+        android:title="@string/significant_weather_discussion_paspc"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_fxcn01_d13_west"
-        android:title="FXCN01 D1-3 West"
+        android:title="@string/fxcn01_d1_3_west"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_fxcn01_d47_west"
-        android:title="FXCN01 D4-7 West"
+        android:title="@string/fxcn01_d4_7_west"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_fxcn01_d13_east"
-        android:title="FXCN01 D1-3 East"
+        android:title="@string/fxcn01_d1_3_east"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_fxcn01_d47_east"
-        android:title="FXCN01 D4-7 East"
+        android:title="@string/fxcn01_d4_7_east"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_uv"
-        android:title="UV index forecast"
+        android:title="@string/uv_index_forecast"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_ws_sub"
-        android:title="Weather Summaries"
+        android:title="@string/weather_summaries"
         app:showAsAction="never">
         <menu>
             <item

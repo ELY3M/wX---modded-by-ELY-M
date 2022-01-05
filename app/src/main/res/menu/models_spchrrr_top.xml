@@ -22,7 +22,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_region"
-        android:title="Region"
+        android:title="@string/region"
         app:showAsAction="always"/>
 </menu>
-

@@ -150,7 +150,7 @@ class WXGLNexradLevel3 internal constructor() {
             dis.skipBytes(10)
             val elevationNumber = dis.readUnsignedShort()
             val elevationAngle = dis.readShort()
-            degree = elevationAngle.toInt() / 10f
+            degree = elevationAngle.toInt() / 10.0f
             // hw 31-32 as a int
             //final int             halfword_31 = dis.readUnsignedShort();
             halfword3132 = dis.readFloat()

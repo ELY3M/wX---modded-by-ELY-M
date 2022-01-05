@@ -57,8 +57,6 @@
     </item>
     <item
         android:id="@+id/action_lsrbywfo"
-        android:title="All recent LSR by WFO"
+        android:title="@string/all_recent_lsr_by_wfo"
         app:showAsAction="never" />
 </menu>
-
-

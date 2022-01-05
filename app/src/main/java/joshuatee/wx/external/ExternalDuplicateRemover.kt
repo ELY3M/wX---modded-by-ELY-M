@@ -13,7 +13,9 @@ class ExternalDuplicateRemover {
         val uniqueLines = LinkedHashSet<String>()
         val chunks = aHunk.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         uniqueLines.addAll(listOf(*chunks))
-        for (chunk in uniqueLines) { result.append(chunk).append("\n") }
+        for (chunk in uniqueLines) {
+            result.append(chunk).append("\n")
+        }
         return result.toString()
     }
 }

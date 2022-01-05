@@ -30,19 +30,22 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.ScrollView
+import java.util.Locale
 import joshuatee.wx.MyApplication
-
 import joshuatee.wx.R
 import joshuatee.wx.fragments.UtilityNws
 import joshuatee.wx.settings.Location
-import joshuatee.wx.ui.*
-import joshuatee.wx.util.*
-import java.util.*
-
+import joshuatee.wx.util.ObjectCurrentConditions
+import joshuatee.wx.util.ObjectHazards
+import joshuatee.wx.util.ObjectSevenDay
+import joshuatee.wx.util.UtilityImg
+import joshuatee.wx.util.UtilityTimeSunMoon
+import joshuatee.wx.util.UtilityTime
 import joshuatee.wx.UIPreferences
+import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
 import joshuatee.wx.radar.LatLon
-import kotlinx.coroutines.*
+import joshuatee.wx.ui.*
 
 class ForecastActivity : BaseActivity() {
 
@@ -54,7 +57,6 @@ class ForecastActivity : BaseActivity() {
 
     companion object { const val URL = "" }
 
-    private val uiDispatcher = Dispatchers.Main
     private lateinit var activityArguments: Array<String>
     private var latLon = LatLon()
     private var objectCurrentConditions = ObjectCurrentConditions()
@@ -68,6 +70,8 @@ class ForecastActivity : BaseActivity() {
     private val hazardCards = mutableListOf<ObjectCardText>()
     private lateinit var scrollView: ScrollView
     private lateinit var linearLayout: LinearLayout
+    private var bitmapForCurrentCondition: Bitmap = UtilityImg.getBlankBitmap()
+    private var bitmaps = listOf<Bitmap>()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.adhoc_forecast, menu)
@@ -95,34 +99,42 @@ class ForecastActivity : BaseActivity() {
         super.onRestart()
     }
 
-    private fun getContent() = GlobalScope.launch(uiDispatcher) {
-        var bitmapForCurrentCondition: Bitmap?
-        var bitmaps = listOf<Bitmap>()
-        withContext(Dispatchers.IO) {
-            //
-            // Current conditions
-            //
-            objectCurrentConditions = ObjectCurrentConditions(this@ForecastActivity, latLon)
-            objectHazards = ObjectHazards(latLon)
-            objectSevenDay = ObjectSevenDay(latLon)
-            bitmapForCurrentCondition = UtilityNws.getIcon(this@ForecastActivity, objectCurrentConditions.iconUrl)
-            //
-            // 7day
-            //
-            bitmaps = objectSevenDay.icons.map { UtilityNws.getIcon(this@ForecastActivity, it) }
+    private fun getContent() {
+        FutureVoid(this, ::downloadCc, ::updateCc)
+        FutureVoid(this, ::downloadHazards, ::updateHazards)
+        FutureVoid(this, ::download7Day, ::update7Day)
+    }
+
+    private fun downloadCc() {
+        objectCurrentConditions = ObjectCurrentConditions(this@ForecastActivity, latLon)
+        bitmapForCurrentCondition = UtilityNws.getIcon(this@ForecastActivity, objectCurrentConditions.iconUrl)
+    }
+
+    private fun updateCc() {
+        currentConditionsTime = objectCurrentConditions.status
+        objectCardCurrentConditions.updateContent(bitmapForCurrentCondition, objectCurrentConditions, true, currentConditionsTime, radarTime)
+    }
+
+    private fun downloadHazards() {
+        objectHazards = ObjectHazards(latLon)
+    }
+
+    private fun updateHazards() {
+        if (objectHazards.titles.isEmpty()) {
+            linearLayoutHazards.removeAllViews()
+            linearLayoutHazards.visibility = View.GONE
+        } else {
+            linearLayoutHazards.visibility = View.VISIBLE
+            setupHazardCards()
         }
-        //
-        // CC
-        //
-        objectCardCurrentConditions.let {
-            currentConditionsTime = objectCurrentConditions.status
-            if (bitmapForCurrentCondition != null) {
-                it.updateContent(bitmapForCurrentCondition!!, objectCurrentConditions, true, currentConditionsTime, radarTime)
-            }
-        }
-        //
-        // 7day
-        //
+    }
+
+    private fun download7Day() {
+        objectSevenDay = ObjectSevenDay(latLon)
+        bitmaps = objectSevenDay.icons.map { UtilityNws.getIcon(this@ForecastActivity, it) }
+    }
+
+    private fun update7Day() {
         linearLayoutForecast.removeAllViewsInLayout()
         bitmaps.forEachIndexed { index, bitmap ->
             val objectCard7Day = ObjectCard7Day(this@ForecastActivity, bitmap, true, index, objectSevenDay.forecastList)
@@ -132,22 +144,8 @@ class ForecastActivity : BaseActivity() {
         // sunrise card
         val objectCardText = ObjectCardText(this@ForecastActivity)
         objectCardText.center()
-        try {
-            objectCardText.text = (UtilityTimeSunMoon.getSunriseSunset(this@ForecastActivity, Location.currentLocationStr, false) + MyApplication.newline + UtilityTime.gmtTime())
-        } catch (e: Exception) {
-            UtilityLog.handleException(e)
-        }
+        objectCardText.text = (UtilityTimeSunMoon.getSunriseSunset(this@ForecastActivity, Location.currentLocationStr, false) + MyApplication.newline + UtilityTime.gmtTime())
         linearLayoutForecast.addView(objectCardText.card)
-        //
-        // hazards
-        //
-        if (objectHazards.titles.isEmpty()) {
-            linearLayoutHazards.removeAllViews()
-            linearLayoutHazards.visibility = View.GONE
-        } else {
-            linearLayoutHazards.visibility = View.VISIBLE
-            setupHazardCards()
-        }
     }
 
     private fun setupHazardCards() {
@@ -166,16 +164,14 @@ class ForecastActivity : BaseActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_save -> saveLocation()
+            R.id.action_save -> FutureVoid.immediate { saveLocation() }
             else -> return super.onOptionsItemSelected(item)
         }
         return true
     }
 
-    private fun saveLocation() = GlobalScope.launch(uiDispatcher) {
-        withContext(Dispatchers.IO) {
-            val message = Location.save(this@ForecastActivity, latLon)
-            UtilityUI.makeSnackBar(linearLayout, message)
-        }
+    private fun saveLocation() {
+        val message = Location.save(this@ForecastActivity, latLon)
+        ObjectPopupMessage(linearLayout, message)
     }
 }

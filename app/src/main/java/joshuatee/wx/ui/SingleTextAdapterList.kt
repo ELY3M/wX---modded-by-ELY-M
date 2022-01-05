@@ -21,7 +21,8 @@ class SingleTextAdapterList(private val dataSet: MutableList<String>) : Recycler
             label.setPadding(MyApplication.paddingSettings)
         }
 
-        override fun onClick(v: View) { myClickListener!!.onItemClick(adapterPosition) }
+        // was onItemClick(adapterPosition)
+        override fun onClick(v: View) { myClickListener!!.onItemClick(layoutPosition) }
     }
 
     fun setOnItemClickListener(myClickListenerloc: MyClickListener) { myClickListener = myClickListenerloc }
