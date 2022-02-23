@@ -43,6 +43,18 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/action_n0b"
+        android:icon="@drawable/br_super"
+        android:title="@string/label_n0b"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_n0g"
+        android:icon="@drawable/bv_super"
+        android:title="@string/label_n0g"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_a"
         android:icon="@drawable/ic_play_arrow_24dp_white"
         android:title="@string/label_a"
