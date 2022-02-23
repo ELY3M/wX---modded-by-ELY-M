@@ -132,6 +132,13 @@ class WXGLNexradLevel3 internal constructor() {
             longitudeOfRadar = dis.readInt() / 1000.0
             radarHeight = dis.readUnsignedShort()
             productCode = dis.readUnsignedShort().toShort()
+            // TODO FIXME hack for n0b and n0g using same product code as Level 2
+            if (productCode == 153.toShort()) {
+                productCode = 2153
+            }
+            if (productCode == 154.toShort()) {
+                productCode = 2154
+            }
             operationalMode = dis.readUnsignedShort().toShort()
             volumeCoveragePattern = dis.readUnsignedShort().toShort()
             val sequenceNumber = dis.readUnsignedShort().toShort()

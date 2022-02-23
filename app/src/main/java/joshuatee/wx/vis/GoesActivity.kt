@@ -79,7 +79,7 @@ class GoesActivity : VideoRecordActivity() {
         activityArguments = intent.getStringArrayExtra(RID)!!
         drw = ObjectNavDrawer(this, UtilityGoes.labels, UtilityGoes.codes) { getContent(sector) }
         img = ObjectTouchImageView(this, this, toolbar, toolbarBottom, R.id.iv, drw, "")
-        img.setMaxZoom(8f)
+        img.setMaxZoom(8.0f)
         img.setListener(this, drw) { getContent(sector) }
         readPrefs()
         getContent(sector)

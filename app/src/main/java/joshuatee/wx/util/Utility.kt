@@ -37,6 +37,7 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.radar.UtilityRadar
 import joshuatee.wx.radar.UtilityRadarUI
+import joshuatee.wx.settings.UtilityNavDrawer
 import joshuatee.wx.ui.UtilityUI
 import joshuatee.wx.util.UtilityAlertDialog.showDialogueWithContext
 import android.net.ConnectivityManager
@@ -53,6 +54,7 @@ object Utility {
             landScape = true
         }
         diagnostics += landScape.toString() + " Landscape" + MyApplication.newline
+        diagnostics += "Homescreen navdrawer list: " + UtilityNavDrawer.getNavDrawerTokenList(context) + MyApplication.newline
         return diagnostics
     }
 

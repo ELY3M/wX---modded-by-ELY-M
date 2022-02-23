@@ -32,7 +32,6 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genTriangleUp(JNIEnv * env, jclass 
 	double point_y;
 	float pix_y_d;
 	float pix_x_d;
-	int i_count = 0;
 	int l_count = 0;
 	int c_count = 0;
 	int ix_count = 0;
@@ -41,12 +40,12 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genTriangleUp(JNIEnv * env, jclass 
 	double W_180_DIV_PI = 180.0 / M_PI;
 	double W_PI_DIV_360 = M_PI / 360.0 ;
 	double W_PI_DIV_4 = M_PI / 4.0;
-	for (i_count = 0; i_count < count; i_count++) {
+	for (int i_count = 0; i_count < count; i_count++) {
 		point_x = x_arr[i_count];
 		point_y = y_arr[i_count];
 		test1 = W_180_DIV_PI * log(tan(W_PI_DIV_4+point_x*W_PI_DIV_360));
 		test2 = W_180_DIV_PI * log(tan(W_PI_DIV_4+center_x*W_PI_DIV_360));
-		pix_y_d = -((test1 - test2) *  one_degree_scale_factor ) + y_image_center_pixels;
+		pix_y_d = -((test1 - test2) * one_degree_scale_factor ) + y_image_center_pixels;
 		pix_x_d = -((point_y - center_y ) * one_degree_scale_factor ) + x_image_center_pixels;
 		lBuff[l_count] = pix_x_d;
 		lBuff[l_count + 1] = -pix_y_d;
@@ -71,4 +70,3 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genTriangleUp(JNIEnv * env, jclass 
 		c_count += 9;
 	}
 }
-

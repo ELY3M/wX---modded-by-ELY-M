@@ -313,7 +313,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                 totalBins = UtilityWXOGLPerfRaster.generate(radarBuffers, wxglNexradLevel3.binWord)
             } else if (!product.contains("L2")) {
                 totalBins = if (!fourBitProducts.contains(radarBuffers.productCode)) {
-                    if (!MyApplication.radarUseJni)
+                    if (!MyApplication.radarUseJni || radarBuffers.productCode.toInt() == 2153 || radarBuffers.productCode.toInt() == 2154)
                         UtilityWXOGLPerf.decode8BitAndGenRadials(context, radarBuffers)
                     else {
                         Jni.decode8BitAndGenRadials(
@@ -330,7 +330,8 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                                 Color.blue(radarBuffers.bgColor).toByte(),
                                 objectColorPalette.redValues,
                                 objectColorPalette.greenValues,
-                                objectColorPalette.blueValues
+                                objectColorPalette.blueValues,
+                                radarBuffers.productCode.toInt()
                         )
                     }
                 } else {

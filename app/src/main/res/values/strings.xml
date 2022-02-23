@@ -57,6 +57,8 @@
     <string name="title_activity_spcswosummary">Convective Outlook Summary</string>
     <string name="label_br">N0Q: Base Reflectivity</string>
     <string name="label_bv">N0U: Base Velocity</string>
+    <string name="label_n0b">N0Q: Base Reflectivity super-res</string>
+    <string name="label_n0g">N0U: Base Velocity super-res</string>
     <string name="label_srm">N0S: Storm Relative Motion Velocity</string>
     <string name="label_eet">EET: Enhanced Echo Tops</string>
     <string name="label_dvl">DVL: Vertically Integrated Liquid</string>

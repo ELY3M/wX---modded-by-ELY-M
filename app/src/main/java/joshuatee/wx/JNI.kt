@@ -63,7 +63,8 @@ object Jni {
         bg_color_blue: Byte,
         c_r: ByteBuffer,
         c_g: ByteBuffer,
-        c_b: ByteBuffer
+        c_b: ByteBuffer,
+        product_code: Int
     ): Int
 
     // given a portion of a Level 2 radar file , decompress only what is needed for the lowest tilt of 153 ref or 154 vel

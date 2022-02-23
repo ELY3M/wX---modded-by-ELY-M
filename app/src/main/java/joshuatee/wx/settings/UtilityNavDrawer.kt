@@ -164,7 +164,7 @@ internal object UtilityNavDrawer {
 
     fun hideItems(context: Context, navigationView: NavigationView) {
         // if the token list is "" then it's set to the default which is show everything
-        // it will be appropriately set the first time existing the settings -> UI -> nav drawer screen
+        // it will be appropriately set the first time exiting the settings -> UI -> nav drawer screen
         val tokenString = getNavDrawerTokenList(context)
         if (tokenString != "") {
             navDrawerIdToToken.forEach { (key, value) ->

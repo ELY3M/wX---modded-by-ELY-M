@@ -93,7 +93,9 @@ object GlobalDictionaries {
             "H1C" to "DS.165h1",
             "H2C" to "DS.165h2",
             "H3C" to "DS.165h3",
-            "VWP" to "DS.48vwp"
+            "VWP" to "DS.48vwp",
+            "N0B" to "DS.00n1b", // TODO FIXME temp since lowest tilt not populating yet
+            "N0G" to "DS.00n1g"  // TODO FIXME should be n0b and n0g
     )
 
     val wfoToRadarSite = mapOf(

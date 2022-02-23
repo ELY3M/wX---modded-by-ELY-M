@@ -75,6 +75,14 @@
                 android:title="@string/label_bv"
                 app:showAsAction="never" />
             <item
+                android:id="@+id/action_n0b"
+                android:title="@string/label_n0b"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_n0g"
+                android:title="@string/label_n0g"
+                app:showAsAction="never" />
+            <item
                 android:id="@+id/action_net"
                 android:title="@string/label_eet"
                 app:showAsAction="never" />

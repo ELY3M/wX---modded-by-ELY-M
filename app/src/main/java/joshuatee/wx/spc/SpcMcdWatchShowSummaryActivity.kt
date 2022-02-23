@@ -39,7 +39,6 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.MyApplication
 import joshuatee.wx.objects.FutureVoid
 import joshuatee.wx.objects.ObjectIntent
-import kotlinx.coroutines.*
 
 class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListener {
 

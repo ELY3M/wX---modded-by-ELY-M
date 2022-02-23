@@ -87,7 +87,9 @@ internal object UtilityWXOGLPerf {
             var angleVCos: Float
             var angleNext = 0f
             var angle0 = 0f
-            val numberOfRadials = 360
+            // val numberOfRadials = 360
+            val numberOfRadials = radarBuffers.numberOfRadials
+            println("AAA " + numberOfRadials.toString())
             for (radialNumber in 0 until numberOfRadials) {
                 numberOfRleHalfWords = dataInputStream.readUnsignedShort()
                 angle = 450f - dataInputStream.readUnsignedShort() / 10f

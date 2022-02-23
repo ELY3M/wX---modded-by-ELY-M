@@ -27,11 +27,9 @@ JNIEXPORT void JNICALL Java_joshuatee_wx_Jni_genMercato(JNIEnv * env, jclass cla
 	double W_180_DIV_PI = 180.0 / M_PI;
 	double W_PI_DIV_360 = M_PI / 360.0;
 	double W_PI_DIV_4 = M_PI / 4.0;
-	int i_count = 0;
-	for (i_count = 0; i_count < count; i_count = i_count + 2){
+	for (int i_count = 0; i_count < count; i_count = i_count + 2){
 		oBuff[i_count+1] = -1.0f *( -(((W_180_DIV_PI * log(tan(W_PI_DIV_4+iBuff[i_count]*(W_PI_DIV_360))))
-									   - (W_180_DIV_PI * log(tan(W_PI_DIV_4+center_x*(W_PI_DIV_360))))) *  one_degree_scale_factor ) + y_image_center_pixels);
-		oBuff[i_count] =  -((iBuff[i_count+1] - center_y ) * one_degree_scale_factor ) + x_image_center_pixels;
+									   - (W_180_DIV_PI * log(tan(W_PI_DIV_4+center_x*(W_PI_DIV_360))))) * one_degree_scale_factor ) + y_image_center_pixels);
+		oBuff[i_count] = -((iBuff[i_count+1] - center_y ) * one_degree_scale_factor ) + x_image_center_pixels;
 	}
 }
-

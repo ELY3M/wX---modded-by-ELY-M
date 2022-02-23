@@ -22,9 +22,9 @@
 #include "level2GenRadials.h"
 
 JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_level2GenRadials(JNIEnv * env, jclass clazz, jobject rad_buff, jobject color_buff, jobject bin_buff, jobject radial_start, jint number_of_radials, jint num_range_bins, jfloat bin_size, jboolean bg_color, jobject colormap_r, jobject colormap_g, jobject colormap_b, int product_code) {
-	unsigned char* c_r = (*env)->GetDirectBufferAddress(env,colormap_r);
-	unsigned char* c_g = (*env)->GetDirectBufferAddress(env,colormap_g);
-	unsigned char* c_b = (*env)->GetDirectBufferAddress(env,colormap_b);
+	unsigned char* c_r = (*env)->GetDirectBufferAddress(env, colormap_r);
+	unsigned char* c_g = (*env)->GetDirectBufferAddress(env, colormap_g);
+	unsigned char* c_b = (*env)->GetDirectBufferAddress(env, colormap_b);
 	c_r[0] = bg_color;
 	c_g[0] = bg_color;
 	c_b[0] = bg_color;
@@ -38,10 +38,10 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_level2GenRadials(JNIEnv * env, jcla
 	int bin = 0;
 	int color_for = 0;
 	double W_180_DIV_PI = 180.0 / M_PI;
-	jfloat* rBuff = (*env)->GetDirectBufferAddress(env,rad_buff);
-	jbyte* cBuff = (*env)->GetDirectBufferAddress(env,color_buff);
-	jbyte* bBuff = (*env)->GetDirectBufferAddress(env,bin_buff);
-	jfloat* radial_start_angle = (*env)->GetDirectBufferAddress(env,radial_start);
+	jfloat* rBuff = (*env)->GetDirectBufferAddress(env, rad_buff);
+	jbyte* cBuff = (*env)->GetDirectBufferAddress(env, color_buff);
+	jbyte* bBuff = (*env)->GetDirectBufferAddress(env, bin_buff);
+	jfloat* radial_start_angle = (*env)->GetDirectBufferAddress(env, radial_start);
 	int r_i = 0;
 	int c_i = 0;
 	int b_i = 0;
@@ -65,8 +65,8 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_level2GenRadials(JNIEnv * env, jcla
 			} else {
 				bin_size_times_level_count = bin_size * level_count;
 
-				rBuff[r_i++] = bin_start * cos((angle_v) / (W_180_DIV_PI));
-				rBuff[r_i++] = bin_start * sin((angle_v) / (W_180_DIV_PI));
+				rBuff[r_i++] = bin_start * cos(angle_v / W_180_DIV_PI);
+				rBuff[r_i++] = bin_start * sin(angle_v / W_180_DIV_PI);
 
 				rBuff[r_i++] = (bin_start + (bin_size_times_level_count )) * cos((angle_v) / (W_180_DIV_PI));
 				rBuff[r_i++] = (bin_start + (bin_size_times_level_count )) * sin((angle_v) / (W_180_DIV_PI));
@@ -91,4 +91,3 @@ JNIEXPORT jint JNICALL Java_joshuatee_wx_Jni_level2GenRadials(JNIEnv * env, jcla
 	}
 	return total_bins;
 }
-

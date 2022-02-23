@@ -61,6 +61,7 @@ class SettingsNavDrawerActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
+                UtilityNavDrawer.generateNewTokenList(this)
                 UtilityAlertDialog.restart()
             }
             else -> return super.onOptionsItemSelected(item)

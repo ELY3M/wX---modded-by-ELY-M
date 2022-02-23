@@ -64,6 +64,7 @@ internal object UtilityModelNcepInterface {
     )
 
     val sectorsNam = listOf(
+            "CONUS",
             "NAMER",
             "NORTH-PAC",
             "EAST-PAC",
