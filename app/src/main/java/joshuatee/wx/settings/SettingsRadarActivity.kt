@@ -314,7 +314,7 @@ class SettingsRadarActivity : BaseActivity() {
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        "Remember location",
+                        "Remember location / product",
                         "WXOGL_REMEMBER_LOCATION",
                         R.string.rememberloc_label
                 ).card

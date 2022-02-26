@@ -195,7 +195,7 @@ object UtilityTime {
         return cal
     }
 
-    private fun getGmtTimeForVtec(): String{
+    private fun getGmtTimeForVtec(): String {
         val dateFormatGmt = SimpleDateFormat("yyMMddHHmm", Locale.US)
         dateFormatGmt.timeZone = TimeZone.getTimeZone("GMT")
         return dateFormatGmt.format(Date())

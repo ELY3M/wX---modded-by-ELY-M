@@ -21,12 +21,43 @@
 // TODO [REF] replace String.format with stuff in to.
 // TODO [FIX] review multipane data usage
 // TODO [FIX] snow squall warning enabled - no way to long press
+// TODO [FIX] settings label for C/F to indicate what it modifies
 // TODO [FIX] usalerts filter is not sorted
 ```
 [[_TOC_]]
 
-## 55589 2021_02_21
+## 55592 2021_02_23
+*
 
+## 55590 2021_02_23
+* [FIX] prune the list of Observation points by removing 57 sites that had not updated in the past 28 days
+        This pruning will occur more frequently in the future to avoid a bad user experience
+        In the future as the new NWS API stabilizes there might be a less manual (but still performant) way to handle this
+* [ADD] software upgrades that wX uses (in this case to just keep the linter happy)
+```
+-    implementation 'androidx.preference:preference:1.2.0'
++    implementation 'androidx.preference:preference-ktx:1.2.0'
+```
+## 55589 2021_02_23
+* [ADD] software upgrades that wX uses
+```
+-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
+-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.6'
++    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
++    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+
+-    implementation 'com.google.android.material:material:1.4.0'
++    implementation 'com.google.android.material:material:1.5.0'
+
+-    implementation 'androidx.media:media:1.4.3'
+-    implementation 'androidx.preference:preference:1.1.1'
+
++    implementation 'androidx.media:media:1.5.0'
++    implementation 'androidx.preference:preference:1.2.0'
+
+-    implementation "com.squareup.okhttp3:okhttp:4.9.2"
++    implementation "com.squareup.okhttp3:okhttp:4.9.3"
+```
 ## 55588 2021_02_21
 * [ADD] disable new super-res products as NWS has not fully reployed
 * [FIX] remove the following weather obs point in `stations_us4.txt` and `us_metar3.txt` as user reported it has not updated since Jan 26

@@ -134,8 +134,11 @@ On first start, the built-in color palettes are shown with a yellow label. The c
 </string>
 
     <string name="radar_use_jni_label">
-Use JNI ( native C code ) for performance sensitive areas in radar. Although this performs better for fast animations in general it is not as robust as the default Java based code especially if your device and Android version
-         is not close to stock Android. If this works without any crashes great, if not I recommend to turn it off. All development is occuring in the Java code first at this point in time.
+Use JNI ( native C code ) for performance sensitive areas in radar.
+        Although this performs better for fast animations, in general it is not as robust as the default Kotlin based code.
+         If this works without any crashes that is great but if not I recommend to turn it off.
+        It was helpful in the 2014-2017 time frame but as devices have gotten faster the need is not as great.
+        All future development is occurring in the Kotlin code base.
      </string>
 
     <string name="prevent_accidental_exit_label">
@@ -560,7 +563,7 @@ If enabled the WXOGL radar will hail signatures will show text of hail sizes</st
 
 
      <string name="show_tvs_label">
-If enabled the WXOGL radar will show tornado vortext signature as shown via upside down triangle with color matching tornado warning/watch polygons.</string>
+If enabled the WXOGL radar will show tornado vortex signature as shown via upside down triangle with color matching tornado warning/watch polygons.</string>
 
         <string name="hi_size_np">
 Allows one to change the size of the Hail markers.</string>
@@ -575,7 +578,7 @@ Allows one to change the size of the TVS markers.</string>
 Allows one to change the size of the Userpoints markers.</string>
 
     <string name="rememberloc_label">
-WXOGL will use the last location and zoom level instead of the radar site for the current location in the main tab.</string>
+Nexrad Radar will use the last location / product / zoom level / position viewed instead of the radar site for the current location in the main tab.</string>
 
     <string name="wxogl_refresh_interval_label">
 Controls the number of minutes before an auto  refresh is triggered if that option is enabled.</string>

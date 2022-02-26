@@ -21,11 +21,13 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+    <!-- I never used this map icon... not needed for me.  have to give this up to make room for other 2 new icons...  ELY M.
     <item
         android:id="@+id/action_ridmap"
         android:icon="@drawable/ic_public_24dp_white"
         android:title="@string/label_rid_map"
         app:showAsAction="always" />
+    -->
     <item
         android:id="@+id/action_n0q"
         android:icon="@drawable/br"
