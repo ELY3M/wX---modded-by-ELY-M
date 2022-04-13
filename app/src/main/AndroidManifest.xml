@@ -65,7 +65,7 @@
      android:icon="@drawable/ic_launcher_elys"
      android:label="@string/app_name"
      android:largeHeap="true"
-     android:theme="@style/MyCustomTheme_NOAB"
+     android:theme="@style/MyCustomTheme_BlackAqua_NOAB"
      android:name="MyApplication"
      android:supportsRtl="false"
      android:resizeableActivity="true"
@@ -90,7 +90,7 @@
       android:name="joshuatee.wx.WX"
       android:label="@string/app_name"
       android:launchMode="singleTop"
-      android:theme="@style/MyCustomTheme_whiter_NOAB"
+      android:theme="@style/MyCustomTheme_BlackAqua_NOAB"
       >
   </activity>
   <activity

@@ -33,7 +33,7 @@ object UtilityStorePreferences {
         if (value == null) {
             // Define the default location
             val stateDefault = "Oklahoma"
-            val themeBlueDefault = "whiteNew"
+            val themeBlueDefault = "BlackAqua"
             val locNumIntDefault = 1
             val loc1LabelDefault = "home"
             val alerts1Default = "true"

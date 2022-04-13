@@ -102,7 +102,7 @@ object UIPreferences {
             tilesPerRowDefault = 5
         }
         tilesPerRow = Utility.readPref(context, "UI_TILES_PER_ROW", tilesPerRowDefault)
-        themeStr = Utility.readPref(context, "THEME_BLUE", "whiteNew")
+        themeStr = Utility.readPref(context, "THEME_BLUE", "BlackAqua")
         themeInt = Utility.theme(themeStr)
         if (themeInt == R.style.MyCustomTheme_white_NOAB || themeInt == R.style.MyCustomTheme_whiter_NOAB || themeInt == R.style.MyCustomTheme_whitest_NOAB) {
             //smallTextTheme = android.R.style.TextAppearance_Small_Inverse

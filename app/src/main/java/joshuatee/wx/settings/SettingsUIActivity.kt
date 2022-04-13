@@ -54,8 +54,7 @@ class SettingsUIActivity : BaseActivity() {
             "whiteNew",
             "allWhite",
             "orange",
-	    "BlackAquaNew",
-	    "BlackAqua"
+	        "BlackAqua"
     )
     private val textSizeArr = mutableListOf<String>()
     private var tilesPerRowStart = 0
@@ -92,7 +91,7 @@ class SettingsUIActivity : BaseActivity() {
                         this,
                         "Theme (restarts app)",
                         "THEME_BLUE",
-                        "white",
+                        "BlackAqua",
                         R.string.spinner_theme_label,
                         colorArr
                 ).card

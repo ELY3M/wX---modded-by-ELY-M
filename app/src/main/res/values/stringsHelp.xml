@@ -463,7 +463,7 @@ The text in the tab headings is then modified. This also requires a periodic job
 to download warning data.
     </string>
     <string name="spinner_theme_label">
- The default theme is white. For those who do not like this you can select an alternate.
+ The default theme is BlackAqua. For those who do not like this you can select an alternate.
     </string>
     <string name="icons_spacing_label">
  Determines if icons are evenly spaced in the bottom toolbar.

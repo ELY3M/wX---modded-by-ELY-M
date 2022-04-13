@@ -319,7 +319,7 @@ Line 6: y-coordinate of center of upper left pixel
 
 
 
-object UtilityConusRadar {
+public object UtilityConusRadar {
 
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     var conusbitmap: Bitmap? = null
