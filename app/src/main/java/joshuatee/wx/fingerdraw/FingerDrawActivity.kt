@@ -1,22 +1,21 @@
-package joshuatee.wx.fingerdraw
-
 /*
 Credit for this file goes to
 FingerDraw https://github.com/ChrisLizon/FingerDraw (Chris Lizon)
  */
-
-import android.app.Activity
-import android.graphics.Color
-import android.os.Bundle
-import android.widget.RelativeLayout
-import joshuatee.wx.R
-
 /**
  * FingerDrawActivity is an activity showcases using motion
  * events to create a simple finger painting experience.
 
  * @author Chris Lizon
  */
+
+package joshuatee.wx.fingerdraw
+
+import android.app.Activity
+import android.graphics.Color
+import android.os.Bundle
+import android.widget.RelativeLayout
+import joshuatee.wx.R
 
 class FingerDrawActivity : Activity() {
 

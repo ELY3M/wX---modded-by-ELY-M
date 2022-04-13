@@ -53,4 +53,4 @@ class WidgetSPCMESO : AppWidgetProvider() {
                 { UtilityWidget.update(context, type) }
         )
     }
-} 
+}

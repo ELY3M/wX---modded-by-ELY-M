@@ -29,5 +29,3 @@ object UtilityUSImg {
     fun getPreferredLayeredImg(context: Context, radarSite: String, isInteractive: Boolean) =
         UtilityUSImgWX.layeredImg(context, radarSite, "N0Q", isInteractive)
 }
-
-

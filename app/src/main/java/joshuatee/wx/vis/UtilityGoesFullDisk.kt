@@ -67,4 +67,3 @@ internal object UtilityGoesFullDisk {
         return UtilityImgAnim.getAnimationDrawableFromUrlList(context, urls, UtilityImg.animInterval(context))
     }
 }
-

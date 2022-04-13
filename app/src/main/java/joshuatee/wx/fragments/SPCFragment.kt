@@ -173,4 +173,3 @@ class SpcFragment : Fragment() {
                     .mapTo(mutableListOf()) { hm[it]!! }
         }
 }
-

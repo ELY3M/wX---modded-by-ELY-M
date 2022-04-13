@@ -133,5 +133,3 @@ class ObjectCanadaWarnings(private val context: Context, private val activity: A
         )
     }
 }
-
-

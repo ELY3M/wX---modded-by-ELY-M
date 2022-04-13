@@ -158,8 +158,3 @@ class DrawLineView : View {
         }
     }
 }
-
-
-
-
-

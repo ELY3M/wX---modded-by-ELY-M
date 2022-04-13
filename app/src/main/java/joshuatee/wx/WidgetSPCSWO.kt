@@ -52,4 +52,4 @@ class WidgetSPCSWO : AppWidgetProvider() {
                 { UtilityWidget.update(context, type) }
         )
     }
-} 
+}

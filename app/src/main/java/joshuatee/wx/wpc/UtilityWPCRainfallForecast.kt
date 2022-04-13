@@ -40,4 +40,3 @@ internal object UtilityWpcRainfallForecast {
 
     const val activityTitle = R.string.title_activity_hpcrainfall_forecast
 }
-

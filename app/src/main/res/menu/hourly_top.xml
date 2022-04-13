@@ -25,5 +25,9 @@
         android:icon="@drawable/ic_share_24dp"
         android:title="@string/label_share"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_settings"
+        android:icon="@drawable/ic_settings_24dp_white"
+        android:title="@string/label_settings" />
 </menu>
 

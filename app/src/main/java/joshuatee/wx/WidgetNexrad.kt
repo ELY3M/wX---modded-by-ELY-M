@@ -53,4 +53,4 @@ class WidgetNexrad : AppWidgetProvider() {
                 { UtilityWidget.update(context, type) }
         )
     }
-} 
+}

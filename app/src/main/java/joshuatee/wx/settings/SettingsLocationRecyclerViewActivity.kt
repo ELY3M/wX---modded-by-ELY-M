@@ -153,4 +153,4 @@ class SettingsLocationRecyclerViewActivity : BaseActivity() {
     }
 
     private fun addLocation() { ObjectIntent.showLocationEdit(this, arrayOf((locations.size + 1).toString(), "")) }
-} 
+}

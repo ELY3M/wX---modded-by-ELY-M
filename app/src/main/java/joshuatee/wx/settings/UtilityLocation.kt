@@ -39,18 +39,17 @@ import java.util.*
 
 object UtilityLocation {
 
-    val latLonAsDouble: MutableList<Double>
-        get() {
-            val latLon = mutableListOf<Double>()
-            (0 until joshuatee.wx.settings.Location.numLocations).forEach {
-                val lat: String
-                val lon: String
-                if (!joshuatee.wx.settings.Location.getX(it).contains(":")) {
-                    lat = joshuatee.wx.settings.Location.getX(it)
-                    lon = joshuatee.wx.settings.Location.getY(it).replace("-", "")
-                } else {
-                    val tmpXArr = joshuatee.wx.settings.Location.getX(it).split(":")
-                    lat = if (tmpXArr.size > 2) tmpXArr[2] else ""
+    fun latLonAsDouble(): MutableList<Double> {
+        val latLon = mutableListOf<Double>()
+        (0 until joshuatee.wx.settings.Location.numLocations).forEach {
+            val lat: String
+            val lon: String
+            if (!joshuatee.wx.settings.Location.getX(it).contains(":")) {
+                lat = joshuatee.wx.settings.Location.getX(it)
+                lon = joshuatee.wx.settings.Location.getY(it).replace("-", "")
+            } else {
+                val tmpXArr = joshuatee.wx.settings.Location.getX(it).split(":")
+                lat = if (tmpXArr.size > 2) tmpXArr[2] else ""
                     val tmpYArr = joshuatee.wx.settings.Location.getY(it).replace("-", "").split(":")
                     lon = if (tmpYArr.size > 1) tmpYArr[1] else ""
                 }
@@ -94,17 +93,11 @@ object UtilityLocation {
             val labelArr = it.split(":")
             sites.add(RID(labelArr[0], getSiteLocation(labelArr[0], prefToken)))
         }
-        var shortestDistance = 30000.00
-        var currentDistance: Double
-        var bestRid = -1
-        sites.indices.forEach {
-            currentDistance = LatLon.distance(location, sites[it].location, DistanceUnit.KM)
-            if (currentDistance < shortestDistance) {
-                shortestDistance = currentDistance
-                bestRid = it
-            }
+        sites.forEach {
+            it.distance = LatLon.distance(location, it.location, DistanceUnit.KM).toInt()
         }
-        return sites[bestRid].name
+        sites.sortBy { it.distance }
+        return sites[0].name
     }
 
     fun getNearestRadarSites(location: LatLon, count: Int, includeTdwr: Boolean = true): List<RID> {
@@ -119,6 +112,24 @@ object UtilityLocation {
                 radarSites.add(RID(labels[0], getSiteLocation(labels[0])))
             }
         }
+        radarSites.forEach {
+            it.distance = LatLon.distance(location, it.location, DistanceUnit.MILE).toInt()
+        }
+        radarSites.sortBy { it.distance }
+        return radarSites.subList(0, count)
+    }
+    
+    //elys mod
+    fun getNearestRadarSite(location: LatLon): String {
+        val radarSites = mutableListOf<RID>()
+        GlobalArrays.radars.forEach {
+            val labels = it.split(":")
+            radarSites.add(RID(labels[0], getSiteLocation(labels[0])))
+        }
+            GlobalArrays.tdwrRadars.forEach {
+                val labels = it.split(" ")
+                radarSites.add(RID(labels[0], getSiteLocation(labels[0])))
+            }
         var currentDistance: Double
         radarSites.forEach {
             currentDistance = LatLon.distance(location, it.location, DistanceUnit.MILE)
@@ -126,9 +137,11 @@ object UtilityLocation {
         }
 //        Collections.sort(radarSites, RID.DESCENDING_COMPARATOR)
         radarSites.sortBy { it.distance }
-        return radarSites.subList(0, count)
+        return radarSites[0].name
     }
-    
+
+    /*
+    *
     //elys mod
     fun getNearestRadarSite(location: LatLon): String {
         val radarSites = mutableListOf<RID>()
@@ -154,26 +167,17 @@ object UtilityLocation {
         if (bestRid == -1) return "NOTFOUND"
         return radarSites[bestRid].name
     }
+    * */
+
+
 
     fun getNearestSoundingSite(location: LatLon): String {
-        val sites = GlobalArrays.soundingSites.map { RID(it, getSiteLocation(it, "SND")) }
-        var shortestDistance = 1000.00
-        var currentDistance: Double
-        var bestRid = -1
+        val sites = GlobalArrays.soundingSites.map { RID(it, getSiteLocation(it, "SND")) } as MutableList<RID>
         GlobalArrays.soundingSites.indices.forEach {
-            currentDistance = LatLon.distance(location, sites[it].location, DistanceUnit.KM)
-            if (currentDistance < shortestDistance) {
-                shortestDistance = currentDistance
-                bestRid = it
-            }
+            sites[it].distance = LatLon.distance(location, sites[it].location, DistanceUnit.KM).toInt()
         }
-        if (bestRid == -1) {
-            return "BLAH"
-        }
-        if (sites[bestRid].name == "MFX") {
-            return "MFL"
-        }
-        return sites[bestRid].name
+        sites.sortBy { it.distance }
+        return sites[0].name
     }
 
     fun getSiteLocation(site: String, officeType: String = "RID"): LatLon {

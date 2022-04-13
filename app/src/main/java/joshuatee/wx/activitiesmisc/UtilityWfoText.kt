@@ -86,4 +86,3 @@ object UtilityWfoText {
         "FFA" to "Areal Flood Watch"
     )
 }
-

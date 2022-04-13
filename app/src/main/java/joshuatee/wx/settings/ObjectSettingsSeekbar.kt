@@ -107,5 +107,3 @@ internal class ObjectSettingsSeekBar(
 
     val card get() = objectCard.card
 }
-
-

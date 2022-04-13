@@ -1133,7 +1133,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
         val x = locXCurrent.toDoubleOrNull() ?: 0.0
         val y = locYCurrent.toDoubleOrNull() ?: 0.0
         if (PolygonType.LOCDOT.pref) {
-            locationMarkers = UtilityLocation.latLonAsDouble
+            locationMarkers = UtilityLocation.latLonAsDouble()
         }
         if (MyApplication.locationDotFollowsGps || archiveMode) {
             locationMarkers.add(x)

@@ -56,5 +56,3 @@ class ObjectCardBlackHeaderText(context: Context, val linearLayout: LinearLayout
         objectTextView.tv.setTextColor(Color.WHITE)
     }
 }
-
-

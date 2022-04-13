@@ -58,4 +58,3 @@ class BZip2ReadException(message: String) : RuntimeException(message) {
     //constructor() : super() {}
 
 }
-

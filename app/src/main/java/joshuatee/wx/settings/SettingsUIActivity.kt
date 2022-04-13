@@ -156,7 +156,7 @@ class SettingsUIActivity : BaseActivity() {
         linearLayout.addView(
                 ObjectSettingsCheckBox(
                         this,
-                        "Use fahrenheit",
+                        "Use fahrenheit in current conditions",
                         "UNITS_F",
                         R.string.units_f_label
                 ).card

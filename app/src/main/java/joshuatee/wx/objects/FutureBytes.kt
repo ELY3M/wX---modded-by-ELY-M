@@ -38,4 +38,3 @@ class FutureBytes(val context: Context, val url: String, val updateFunc: (Bitmap
         updateFunc(s)
     }
 }
-

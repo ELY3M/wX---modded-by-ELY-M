@@ -57,5 +57,3 @@ class ObjectRecyclerView(context: Context, activity: Activity, resourceId: Int, 
 
     override fun toString() = ca.toString()
 }
-
-

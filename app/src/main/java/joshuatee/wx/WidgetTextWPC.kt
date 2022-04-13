@@ -53,4 +53,4 @@ class WidgetTextWPC : AppWidgetProvider() {
                 { UtilityWidget.update(context, type) }
         )
     }
-} 
+}

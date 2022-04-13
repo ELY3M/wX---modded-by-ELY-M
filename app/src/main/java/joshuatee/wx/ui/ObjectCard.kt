@@ -74,5 +74,3 @@ class ObjectCard {
 
     fun setOnClickListener(fn: View.OnClickListener) { card.setOnClickListener(fn) }
 }
-
-

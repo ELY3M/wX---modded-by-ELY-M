@@ -103,5 +103,3 @@ class ObjectColorPalette(val context: Context, private val colormapCode: Int) {
         }
     }
 }
-
-

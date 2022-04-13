@@ -74,4 +74,7 @@
     <string name="label_spotters">Spotters</string>
     <string name="label_severe_dashboard">Severe Dashboard</string>
     <string name="label_voice_command">Voice Command</string>
+
+    <string name="spc_meso_counties">Counties</string>
+
 </resources>

@@ -28,5 +28,3 @@ enum class ShortcutType {
     RADAR_MOSAIC,
     SPC_SWO_SUMMARY
 }
-
-

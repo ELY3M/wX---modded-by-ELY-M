@@ -126,5 +126,3 @@ class ObjectWidgetCC(context: Context) {
         }
     }
 }
-
-

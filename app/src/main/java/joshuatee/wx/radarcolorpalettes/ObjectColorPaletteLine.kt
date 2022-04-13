@@ -56,5 +56,3 @@ class ObjectColorPaletteLine {
 
     val asInt get() = Color.rgb(red, green, blue)
 }
-
-

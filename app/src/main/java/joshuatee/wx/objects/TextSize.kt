@@ -26,5 +26,3 @@ enum class TextSize {
     MEDIUM,
     LARGE,
 }
-
-

@@ -72,13 +72,13 @@ object UtilityHourlyOldApi {
             var temp3Val = "."
             var temp4Val = "."
             var temp5Val = "."
-            if (temp2Len == temp3Len) {
+            if (temp2Len <= temp3Len) {
                 temp3Val = temp3List[j]
             }
-            if (temp2Len == temp4Len) {
+            if (temp2Len <= temp4Len) {
                 temp4Val = temp4List[j]
             }
-            if (temp2Len == temp5Len) {
+            if (temp2Len <= temp5Len) {
                 temp5Val = temp5List[j]
             }
             time2List[j] = time2List[j].replace(":00", "")
@@ -94,4 +94,3 @@ object UtilityHourlyOldApi {
         return sb
     }
 }
-

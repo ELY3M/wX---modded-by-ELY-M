@@ -19,7 +19,6 @@
 
  */
 
-
 package joshuatee.wx.audio
 
 import android.app.IntentService
@@ -63,7 +62,4 @@ class DownloadPlaylistService : IntentService("DownloadPlaylistService") {
             notificationObj.sendNotification(this, url, 1, notification)
         }
     }
-} 
-
-
-
+}

@@ -109,5 +109,3 @@ class ObjectCardCurrentConditions(context: Context, version: Int) {
         }
     }
 }
-
-

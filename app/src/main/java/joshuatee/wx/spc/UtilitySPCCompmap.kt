@@ -63,7 +63,7 @@ internal object UtilitySpcCompmap {
         "CAPE/CINH",
         "HLCY/SHEAR",
         "3-hr surface pressure change",
-        "Boundary layer mositure (mixing ratio) convergence",
+        "Boundary layer moisture (mixing ratio) convergence",
         "K-Index and Precipitable Water (inches)",
         "12-hr Total Precipitation",
         "SFC OBS MAP",
@@ -104,5 +104,3 @@ internal object UtilitySpcCompmap {
         "20"
     )
 }
-
-

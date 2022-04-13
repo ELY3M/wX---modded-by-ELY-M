@@ -99,5 +99,3 @@ enum class GeographyType constructor(var relativeBuffer: ByteBuffer, var count: 
         }
     }
 }
-
-

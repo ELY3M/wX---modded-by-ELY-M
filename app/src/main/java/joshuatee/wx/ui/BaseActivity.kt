@@ -57,5 +57,3 @@ abstract class BaseActivity : AppCompatActivity() {
         UtilityToolbar.fullScreenMode(toolbar, false)
     }
 }
-
-

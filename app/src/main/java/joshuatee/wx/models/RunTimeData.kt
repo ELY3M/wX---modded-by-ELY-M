@@ -44,5 +44,3 @@ class RunTimeData {
         return "$mostRecentRun $imageCompleteStr $timeStrConv $validTime $listRun"
     }
 }
-
-

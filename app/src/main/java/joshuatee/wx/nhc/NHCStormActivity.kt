@@ -163,9 +163,3 @@ class NhcStormActivity : BaseActivity() {
         return true
     }
 }
-
-
-
-
-
-

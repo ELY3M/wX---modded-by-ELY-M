@@ -26,7 +26,6 @@ import joshuatee.wx.Extensions.getImage
 
 import joshuatee.wx.MyApplication
 
-
 class ObjectNhcRegionSummary(region: NhcOceanEnum) {
 
     var urls: List<String>
@@ -88,5 +87,3 @@ class ObjectNhcRegionSummary(region: NhcOceanEnum) {
 
     fun getTitle(index: Int) = arrayOf(urls[index], titles[index])
 }
-
-

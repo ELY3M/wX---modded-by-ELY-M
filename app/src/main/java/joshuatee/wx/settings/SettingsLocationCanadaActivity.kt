@@ -101,4 +101,4 @@ class SettingsLocationCanadaActivity : BaseActivity() {
         objectRecyclerView.refreshList(listCity.distinct().toMutableList())
         cityDisplay = true
     }
-} 
+}

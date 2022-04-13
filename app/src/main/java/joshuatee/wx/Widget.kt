@@ -58,4 +58,4 @@ class Widget : AppWidgetProvider() {
         const val WIDGET_IDS_KEY = "mywidgetproviderwidgetids"
         private const val WIDGET_DATA_KEY = "mywidgetproviderwidgetdata"
     }
-} 
+}

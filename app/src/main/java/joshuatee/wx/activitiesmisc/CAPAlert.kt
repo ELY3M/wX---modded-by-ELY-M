@@ -179,5 +179,3 @@ class CapAlert {
         }
     }
 }
-
-

@@ -43,7 +43,10 @@ class WXGLDownload {
 
     companion object {
 
-        private const val nwsRadarLevel2Pub = "https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
+        // in response to 56+ hr maint on 2022-04-19 to nomands, change URL to backup
+        // https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr.pdf
+        // private const val nwsRadarLevel2Pub = "https://nomads.ncep.noaa.gov/pub/data/nccf/radar/nexrad_level2/"
+        private const val nwsRadarLevel2Pub = "https://ftpprd.ncep.noaa.gov/data/nccf/radar/nexrad_level2/"
 
         fun getRadarFile(context: Context, urlStr: String, radarSite: String, product: String, indexString: String, tdwr: Boolean): String {
             val ridPrefix = UtilityWXOGL.getRidPrefix(radarSite, tdwr)

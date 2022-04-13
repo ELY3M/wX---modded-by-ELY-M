@@ -21,7 +21,6 @@
 
 package joshuatee.wx.notifications
 
-
 import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.ComponentName

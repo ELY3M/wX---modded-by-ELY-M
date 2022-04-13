@@ -35,4 +35,3 @@ class FutureText2(val context: Context, val downloadFunc: () -> String, val upda
         updateFunc(s)
     }
 }
-

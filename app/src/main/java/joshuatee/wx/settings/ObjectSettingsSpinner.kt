@@ -99,5 +99,3 @@ class ObjectSettingsSpinner(context: Context, label: String, pref: String, prefI
         }
     }
 }
-
-

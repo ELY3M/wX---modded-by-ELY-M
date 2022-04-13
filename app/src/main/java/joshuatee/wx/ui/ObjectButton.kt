@@ -56,5 +56,3 @@ class ObjectButton(context: Context, title: String, icon: Int) {
 
     val card get() = button
 }
-
-

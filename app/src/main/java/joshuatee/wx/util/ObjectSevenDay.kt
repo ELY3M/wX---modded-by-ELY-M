@@ -198,5 +198,3 @@ Tuesday Night: A slight chance of rain before 8pm, then a chance of thunderstorm
     Wednesday Night: Partly cloudy, with a low around 56.
 
  */
-
-

@@ -188,4 +188,3 @@ class SettingsWidgetsActivity : BaseActivity(), CompoundButton.OnCheckedChangeLi
         }
     }
 }
-

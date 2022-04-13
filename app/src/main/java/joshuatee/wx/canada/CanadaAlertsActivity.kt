@@ -19,7 +19,6 @@
 
  */
 
-
 package joshuatee.wx.canada
 
 import android.annotation.SuppressLint

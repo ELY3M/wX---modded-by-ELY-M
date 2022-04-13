@@ -1,5 +1,3 @@
-package joshuatee.wx.fingerdraw
-
 /*
 
 Credit for this file goes to
@@ -8,6 +6,8 @@ FingerDraw https://github.com/ChrisLizon/FingerDraw (Chris Lizon)
 This class is used for the drawing tool accessible from the screen recording toolbar.
 
  */
+
+package joshuatee.wx.fingerdraw
 
 import android.content.Context
 import android.graphics.Canvas
@@ -156,5 +156,3 @@ internal class Segment {
         return buffer.toString().replaceFirst("\\|".toRegex(), "")
     }
 }
-
-

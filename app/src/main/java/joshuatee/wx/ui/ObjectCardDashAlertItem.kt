@@ -70,5 +70,3 @@ class ObjectCardDashAlertItem(context: Context, val linearLayout: LinearLayout, 
 
     fun setId(id: Int) { objectCard.card.id = id }
 }
-
-

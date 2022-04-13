@@ -132,5 +132,4 @@ object UtilityIO {
     }
 
     fun getHtml(url: String) = UtilityNetworkIO.getStringFromUrl(url)
-
 }

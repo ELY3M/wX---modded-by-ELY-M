@@ -65,7 +65,7 @@ class SettingsAboutActivity : BaseActivity() {
 
         val faqButton = ObjectCardText(this, linearLayout, toolbar, toolbarBottom)
         faqButton.setTextColor(UIPreferences.textHighlightColor)
-        faqButton.text = "View FAQ (Outage notifications listed at top if any current)"
+        faqButton.text = "View FAQ (current app issues listed at top)"
         faqButton.setOnClickListener {
             ObjectIntent.showWeb(this, faqUrl)
         }

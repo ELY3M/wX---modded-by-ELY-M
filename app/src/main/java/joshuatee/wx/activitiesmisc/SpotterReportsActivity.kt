@@ -68,4 +68,4 @@ class SpotterReportsActivity : BaseActivity() {
         val radarSite = UtilityLocation.getNearestOffice("RADAR", LatLon(UtilitySpotter.reports[position].lat, UtilitySpotter.reports[position].lon))
         ObjectIntent.showRadar(this, arrayOf(radarSite, "", "N0Q", "", UtilitySpotter.reports[position].uniq))
     }
-} 
+}

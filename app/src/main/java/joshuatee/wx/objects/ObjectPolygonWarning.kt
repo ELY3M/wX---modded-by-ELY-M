@@ -123,4 +123,3 @@ class ObjectPolygonWarning(val context: Context, val type: PolygonWarningType) {
         }
     }
 }
-

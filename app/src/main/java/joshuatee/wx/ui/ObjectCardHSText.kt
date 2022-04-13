@@ -90,5 +90,3 @@ class ObjectCardHSText(context: Context, val product: String) {
 
     val card get() = objectCard.card
 }
-
-

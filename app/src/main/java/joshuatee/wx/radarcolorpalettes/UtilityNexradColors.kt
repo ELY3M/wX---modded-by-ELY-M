@@ -71,5 +71,3 @@ internal object UtilityNexradColors {
         return Color.HSVToColor(hsvB)
     }
 }
-
-

@@ -97,5 +97,3 @@ class ObjectCard7Day(context: Context, bitmap: Bitmap, isUS: Boolean, day: Int, 
 
     val card get() = objectCard.card
 }
-
-

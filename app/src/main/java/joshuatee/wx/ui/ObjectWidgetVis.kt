@@ -43,5 +43,3 @@ class ObjectWidgetVis(context: Context) {
         }
     }
 }
-
-

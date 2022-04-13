@@ -47,6 +47,4 @@ class WXJobService : JobService() {
 
     // Stopping jobs if our job requires change.
     override fun onStopJob(params: JobParameters) = false
-} 
-
-
+}

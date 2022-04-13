@@ -90,5 +90,3 @@ class ObjectCardAlertSummaryItem(context: Context) {
         }
     }
 }
-
-

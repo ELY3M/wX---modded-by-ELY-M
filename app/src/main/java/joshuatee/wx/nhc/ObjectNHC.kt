@@ -187,5 +187,3 @@ class ObjectNhc(val context: Context, linearLayout1: LinearLayout) {
         }
     }
 }
-
-

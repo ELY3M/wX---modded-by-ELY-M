@@ -84,4 +84,3 @@ internal object UtilityWatch {
         return text
     }
 }
-

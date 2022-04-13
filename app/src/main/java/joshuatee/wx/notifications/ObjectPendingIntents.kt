@@ -21,7 +21,6 @@
 
 package joshuatee.wx.notifications
 
-
 import android.app.PendingIntent
 import android.app.TaskStackBuilder
 import android.content.Context
@@ -71,5 +70,3 @@ class ObjectPendingIntents {
         resultPendingIntent2 = PendingIntent.getActivity(context, requestID + 1, resultIntent2, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
     }
 }
-
-

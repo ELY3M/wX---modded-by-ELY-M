@@ -72,6 +72,8 @@ android {
     }*/
 
     compileOptions {
+        // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -86,13 +88,13 @@ android {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
     // https://developer.android.com/jetpack/androidx/versions
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.media:media:1.4.3'
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.media:media:1.5.0'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'com.jjoe64:graphview:4.2.2'
     implementation "com.squareup.okhttp3:okhttp:4.9.3"

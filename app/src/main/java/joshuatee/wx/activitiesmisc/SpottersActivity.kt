@@ -193,4 +193,4 @@ class SpottersActivity : BaseActivity() {
     }
 
     private fun toggleFavorite(position: Int) { checkFavorite(position) }
-} 
+}

@@ -57,4 +57,3 @@ internal object UtilityColorPalette165 {
         generate(context, MyApplication.radarColorPalette[radarColorPaletteCode]!!)
     }
 }
-

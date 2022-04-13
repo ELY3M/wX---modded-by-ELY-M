@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Interface to listen for a move or dismissal event from a [ItemTouchHelper.Callback].
+
+ * @author Paul Burke (ipaulpro)
+ */
 
 package joshuatee.wx.fragments
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ItemTouchHelper
 
-/**
- * Interface to listen for a move or dismissal event from a [ItemTouchHelper.Callback].
-
- * @author Paul Burke (ipaulpro)
- */
 internal interface ItemTouchHelperAdapter {
 
     /**

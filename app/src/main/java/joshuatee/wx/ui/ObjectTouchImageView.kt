@@ -135,12 +135,9 @@ class ObjectTouchImageView {
                         MyApplication.wpcgefsX = x
                         MyApplication.wpcgefsY = y
                     }
-                    else -> {
-                    }
+                    else -> {}
                 }
             }
         }
     }
 }
-
-

@@ -107,5 +107,3 @@ class ObjectImageMap(
         map.layoutParams = layoutParams
     }
 }
-
-

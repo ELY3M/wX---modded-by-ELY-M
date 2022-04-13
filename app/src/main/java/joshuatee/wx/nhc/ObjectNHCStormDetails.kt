@@ -68,7 +68,6 @@ class ObjectNhcStormDetails(
     }
 }
 
-
 /*
 https://www.weather.gov/media/notification/scn20-25tropical_javascrpt.pdf
 https://www.nhc.noaa.gov/productexamples/NHC_JSON_Sample.json
@@ -173,5 +172,3 @@ https://www.nhc.noaa.gov/CurrentStorms.json
 }
 
 */
-
-

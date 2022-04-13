@@ -51,5 +51,3 @@ class ObjectWidgetAfd(context: Context) {
         }
     }
 }
-
-

@@ -233,7 +233,8 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
             menu.findItem(R.id.action_tilt_blank).isVisible = false
             menu.findItem(R.id.action_tools_blank).isVisible = false
         }
-
+	
+	//elys mod - I enabled those menus  
         // disable new Level3 super-res until NWS is past deployment phase
         //menu.findItem(R.id.action_n0b).isVisible = false
         //menu.findItem(R.id.action_n0g).isVisible = false
@@ -1218,4 +1219,3 @@ class WXGLRadarActivityMultiPane : VideoRecordActivity(), OnMenuItemClickListene
         }
     }
 }
-

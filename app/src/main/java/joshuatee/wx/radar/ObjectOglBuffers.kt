@@ -169,7 +169,7 @@ open class ObjectOglBuffers() {
         // TVS
         private fun redrawTriangle(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
             if (!MyApplication.radarUseJni) {
-                UtilityWXOGLPerf.genMarkerList(buffers, projectionNumbers, buffers.xList, buffers.yList)
+                UtilityWXOGLPerf.genTriangle(buffers, projectionNumbers)
             } else {
                 Jni.genTriangle(
                         buffers.floatBuffer,
@@ -192,7 +192,7 @@ open class ObjectOglBuffers() {
         // HI
         private fun redrawTriangleUp(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
             if (!MyApplication.radarUseJni) {
-                UtilityWXOGLPerf.genMarkerList(buffers, projectionNumbers, buffers.xList, buffers.yList)
+                UtilityWXOGLPerf.genTriangleUp(buffers, projectionNumbers)
             } else {
                 Jni.genTriangleUp(
                         buffers.floatBuffer,
@@ -261,5 +261,3 @@ open class ObjectOglBuffers() {
         }
     }
 }
-
-

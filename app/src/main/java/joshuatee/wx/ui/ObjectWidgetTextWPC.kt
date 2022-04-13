@@ -44,5 +44,3 @@ class ObjectWidgetTextWpc(context: Context) {
         }
     }
 }
-
-

@@ -347,11 +347,7 @@ class ViewColorLegend(context: Context, private val product: String) : View(cont
                     j -= WXGLRadarActivity.dspLegendMax / 16f
                 }
             }
-            else -> {
-            }
+            else -> {}
         }
     }
 }
-
-
-

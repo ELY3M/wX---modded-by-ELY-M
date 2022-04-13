@@ -426,4 +426,3 @@ class WfoTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
     }
 }
-

@@ -40,5 +40,3 @@ class ObjectWidgetNhc(context: Context) {
         }
     }
 }
-
-

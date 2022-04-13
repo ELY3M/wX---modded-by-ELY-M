@@ -245,4 +245,3 @@ object UtilityNws {
         return bitmap
     }
 }
-

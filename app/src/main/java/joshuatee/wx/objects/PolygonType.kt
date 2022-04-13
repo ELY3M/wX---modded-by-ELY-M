@@ -73,7 +73,7 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
             STI.pref = MyApplication.radarSti
             TVS.pref = MyApplication.radarTvs
             HI.pref = MyApplication.radarHi
-	        HAIL_LABELS.pref = MyApplication.radarHailSizeLabel
+	    HAIL_LABELS.pref = MyApplication.radarHailSizeLabel
             OBS.pref = MyApplication.radarObs
             SWO.pref = MyApplication.radarSwo
             USERPOINTS.pref = MyApplication.radarUserPoints
@@ -107,5 +107,3 @@ enum class PolygonType constructor(var color: Int, private val typeAsString: Str
         }
     }
 }
-
-

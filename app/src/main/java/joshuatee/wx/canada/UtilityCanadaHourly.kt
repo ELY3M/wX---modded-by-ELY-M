@@ -68,4 +68,3 @@ internal object UtilityCanadaHourly {
 
     private fun removeSpecialCharsFromString(text: String) = text.filter { it.isLetterOrDigit() || it.isWhitespace() || it == '>' || it == '<' }
 }
-

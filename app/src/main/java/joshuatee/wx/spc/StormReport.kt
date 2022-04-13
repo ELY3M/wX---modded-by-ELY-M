@@ -32,5 +32,3 @@ class StormReport(
     val state: String = "",
     val description: String = ""
 )
-
-

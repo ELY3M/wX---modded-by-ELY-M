@@ -67,5 +67,3 @@ class ObjectCardStormReportItem(context: Context) {
         textViewTop.tv.setTextColor(Color.WHITE)
     }
 }
-
-

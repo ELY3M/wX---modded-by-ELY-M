@@ -39,4 +39,3 @@ class ObjectIntentShortcut() {
         intent?.action = Intent.ACTION_VIEW
     }
 }
-

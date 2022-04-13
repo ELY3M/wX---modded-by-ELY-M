@@ -208,4 +208,3 @@ class WpcTextProductsActivity : AudioPlayActivity(), OnMenuItemClickListener {
         drw.actionBarDrawerToggle.onConfigurationChanged(newConfig)
     }
 }
-

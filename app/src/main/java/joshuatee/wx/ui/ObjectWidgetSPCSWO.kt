@@ -44,5 +44,3 @@ class ObjectWidgetSpcSwo(context: Context) {
         }
     }
 }
-
-

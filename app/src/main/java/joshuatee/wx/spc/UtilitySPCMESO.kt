@@ -35,7 +35,7 @@ object UtilitySpcMeso {
         ObjectMenuTitle("Surface", 15),
         ObjectMenuTitle("Upper Air", 25),
         ObjectMenuTitle("Thermodynamics", 19),
-        ObjectMenuTitle("Wind Shear", 19),
+        ObjectMenuTitle("Wind Shear", 20),
         ObjectMenuTitle("Composite Indices", 23),
         ObjectMenuTitle("Multi-Parameter Fields", 11),
         ObjectMenuTitle("Heavy Rain", 8),
@@ -269,6 +269,7 @@ object UtilitySpcMeso {
         "srh3_chg",
         "shr1_chg",
         "shr6_chg",
+        "hodo",
 
         "scp",
         "lscp",
@@ -437,6 +438,7 @@ object UtilitySpcMeso {
         "3hr Sfc-3km SR Helicity Change",
         "3hr Sfc-1km Bulk Shear Change",
         "3hr Sfc-6km Bulk Shear Change",
+        "Hodograph Map",
 
         "Supercell Composite",
         "Supercell Composite (left-moving)",
@@ -521,5 +523,3 @@ object UtilitySpcMeso {
         "PW * 3kmRH"
     )
 }
-
-

@@ -159,8 +159,7 @@ import java.util.HashMap;
 import joshuatee.wx.R;
 
 @SuppressLint("WrongCall")
-public class ImageMap extends ImageView
-{
+public class ImageMap extends ImageView {
 	// mFitImageToScreen
 	// if true - initial image resized to fit the screen, aspect ratio may be broken
 	// if false- initial image resized so that no empty screen is visible, aspect ratio maintained

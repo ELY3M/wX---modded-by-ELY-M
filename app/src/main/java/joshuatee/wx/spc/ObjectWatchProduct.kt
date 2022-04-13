@@ -127,5 +127,3 @@ internal class ObjectWatchProduct(val type: PolygonType, productNumber: String) 
             return subTitle
         }
 }
-
-

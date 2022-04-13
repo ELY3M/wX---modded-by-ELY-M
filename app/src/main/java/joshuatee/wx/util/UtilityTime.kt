@@ -205,9 +205,9 @@ object UtilityTime {
 
     fun translateTimeForHourly(originalTime: String): String {
         val originalTimeComponents = originalTime.replace("T", "-").split("-")
-        val year = originalTimeComponents[0].toIntOrNull() ?: 0
-        val month = originalTimeComponents[1].toIntOrNull() ?: 0
-        val day = originalTimeComponents[2].toIntOrNull() ?: 0
+        val year = To.int(originalTimeComponents[0])
+        val month = To.int(originalTimeComponents[1])
+        val day = To.int(originalTimeComponents[2])
         val hour = originalTimeComponents[3].replace(":00:00", "").toIntOrNull() ?: 0
         val hourString = hour.toString()
         val calendar = Calendar.getInstance()

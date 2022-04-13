@@ -27,5 +27,4 @@ object GlobalVariables {
     const val nwsOpcWebsitePrefix = "https://ocean.weather.gov"
     const val nwsSPCwebsitePrefix = "https://www.spc.noaa.gov"
     const val newline = "\n"
-
 }

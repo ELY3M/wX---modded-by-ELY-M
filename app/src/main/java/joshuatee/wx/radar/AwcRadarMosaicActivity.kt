@@ -145,5 +145,3 @@ class AwcRadarMosaicActivity : VideoRecordActivity() {
         super.onStop()
     }
 }
-
-

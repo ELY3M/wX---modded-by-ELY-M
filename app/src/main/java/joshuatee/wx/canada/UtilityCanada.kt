@@ -352,5 +352,3 @@ object UtilityCanada {
         return LatLon(latLon[0].toString(), latLon[1].toString())
     }
 }
-
-

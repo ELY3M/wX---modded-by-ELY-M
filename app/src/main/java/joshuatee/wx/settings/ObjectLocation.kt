@@ -129,5 +129,3 @@ class ObjectLocation(val context: Context, locNumInt: Int) {
 //
 //    val notificationWpcMpd get() = alertNotificationWpcmpdCurrent.startsWith("t")
 }
-
-

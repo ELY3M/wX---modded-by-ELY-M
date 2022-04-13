@@ -1178,4 +1178,3 @@ object UtilityCities {
         lon[344] = 92.1066
     }
 }
-

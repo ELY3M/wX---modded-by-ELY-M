@@ -26,5 +26,3 @@ enum class DistanceUnit {
     KM,
     NAUTICAL_MILE,
 }
-
-

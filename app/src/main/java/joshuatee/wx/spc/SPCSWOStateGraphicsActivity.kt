@@ -129,7 +129,3 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
         super.onStop()
     }
 }
-
-
-
-

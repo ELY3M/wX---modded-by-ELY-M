@@ -65,5 +65,3 @@ internal class ObjectSettingsColorLabel(val context: Context, label: String, pri
 
     val card get() = objectCard.card
 }
-
-

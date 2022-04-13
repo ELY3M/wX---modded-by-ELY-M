@@ -34,6 +34,3 @@ enum class ProjectionType constructor(
     WX_OGL(true, false, false, false),
     WX_OGL_48(true, false, false, false),
 }
-
-
-

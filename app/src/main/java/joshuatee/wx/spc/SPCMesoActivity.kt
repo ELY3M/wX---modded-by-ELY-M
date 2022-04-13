@@ -64,15 +64,18 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
     private var showOutlook = true
     private var showWatwarn = true
     private var showTopography = true
+    private var showCounty = false
     private var sector = "19"
     private lateinit var menuRadar: MenuItem
     private lateinit var menuOutlook: MenuItem
     private lateinit var menuWatwarn: MenuItem
     private lateinit var menuTopography: MenuItem
+    private lateinit var menuCounty: MenuItem
     private val menuRadarStr = "Radar"
     private val menuOutlookStr = "SPC Day 1 Outlook"
     private val menuWatwarnStr = "Watches/Warnings"
     private val menuTopographyStr = "Topography"
+    private val menuCountyStr = "Counties"
     private val on = "(on) "
     private var curImg = 0
     private var imageLoaded = false
@@ -143,11 +146,13 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         showOutlook = Utility.readPref(this, prefModel + "_SHOW_OUTLOOK", "false").startsWith("t")
         showWatwarn = Utility.readPref(this, prefModel + "_SHOW_WATWARN", "false").startsWith("t")
         showTopography = Utility.readPref(this, prefModel + "_SHOW_TOPO", "false").startsWith("t")
+        showCounty= Utility.readPref(this, prefModel + "_SHOW_COUNTY", "false").startsWith("t")
         val menu = toolbarBottom.menu
         menuRadar = menu.findItem(R.id.action_toggleRadar)
         menuOutlook = menu.findItem(R.id.action_toggleSPCOutlook)
         menuWatwarn = menu.findItem(R.id.action_toggleWatWarn)
         menuTopography = menu.findItem(R.id.action_toggleTopography)
+        menuCounty = menu.findItem(R.id.action_toggleCounty)
         if (numPanes < 2) {
             menu.findItem(R.id.action_img1).isVisible = false
             menu.findItem(R.id.action_img2).isVisible = false
@@ -166,6 +171,9 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
         if (showTopography) {
             menuTopography.title = on + menuTopographyStr
+        }
+        if (showCounty) {
+            menuCounty.title = on + menuCountyStr
         }
         if (numPanes == 1) {
             displayData.img[0].setOnTouchListener(object : OnSwipeTouchListener(this) {
@@ -282,6 +290,18 @@ class SpcMesoActivity : VideoRecordActivity(), OnMenuItemClickListener {
                     showTopography = true
                     menuTopography.title = on + menuTopographyStr
                     Utility.writePref(this, prefModel + "_SHOW_TOPO", "true")
+                }
+                getContent()
+            }
+            R.id.action_toggleCounty -> {
+                if (showCounty) {
+                    Utility.writePref(this, prefModel + "_SHOW_COUNTY", "false")
+                    menuCounty.title = menuCountyStr
+                    showCounty = false
+                } else {
+                    showCounty = true
+                    menuCounty.title = on + menuCountyStr
+                    Utility.writePref(this, prefModel + "_SHOW_COUNTY", "true")
                 }
                 getContent()
             }

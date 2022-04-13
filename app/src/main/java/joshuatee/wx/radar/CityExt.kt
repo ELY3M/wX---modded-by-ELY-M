@@ -22,4 +22,3 @@
 package joshuatee.wx.radar
 
 internal class CityExt(val state: String, val name: String)
-

@@ -121,4 +121,3 @@ class CanadaTextActivity : AudioPlayActivity(), OnMenuItemClickListener {
         return fullString.split(":").safeGet(1)
     }
 }
-

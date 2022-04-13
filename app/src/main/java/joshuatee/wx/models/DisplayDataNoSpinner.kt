@@ -59,5 +59,3 @@ class DisplayDataNoSpinner(context: Context, activity: Activity, numPanes: Int, 
         }
     }
 }
-
-

@@ -40,5 +40,3 @@ class ObjectWidgetMosaicRadar(context: Context) {
         }
     }
 }
-
-

@@ -117,5 +117,3 @@ open class ObjectCardImage {
 
     fun setOnClickListener(fn: View.OnClickListener) = img.setOnClickListener(fn)
 }
-
-

@@ -390,5 +390,3 @@ class Location(val context: Context, locNumInt: Int) {
         private const val ADD_LOC_STR = "Add Location..."
     }
 }
-
-

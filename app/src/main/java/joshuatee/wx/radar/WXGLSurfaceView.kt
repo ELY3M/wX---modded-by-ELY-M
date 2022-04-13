@@ -504,7 +504,3 @@ class WXGLSurfaceView : GLSurfaceView, GestureDetector.OnGestureListener,
             scaleFactorGlobal = mScaleFactor
         }
 }
-
-
-
-

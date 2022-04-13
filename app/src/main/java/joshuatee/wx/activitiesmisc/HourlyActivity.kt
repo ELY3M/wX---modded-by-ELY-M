@@ -43,6 +43,7 @@ import com.jjoe64.graphview.DefaultLabelFormatter
 import com.jjoe64.graphview.GraphView
 import joshuatee.wx.UIPreferences
 import joshuatee.wx.objects.FutureVoid
+import joshuatee.wx.objects.ObjectIntent
 
 class HourlyActivity : BaseActivity() {
 
@@ -109,6 +110,7 @@ class HourlyActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_share -> if (htmlShare.size > 1) UtilityShare.text(this, "Hourly", htmlShare[1])
+            R.id.action_settings -> ObjectIntent.showSettings(this)
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -143,4 +145,3 @@ class HourlyActivity : BaseActivity() {
         graph.addSeries(series)
     }
 }
-

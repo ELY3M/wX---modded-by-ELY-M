@@ -156,5 +156,4 @@ class USWarningsWithRadarActivity : BaseActivity() {
         }
         return true
     }
-} 
-
+}

@@ -49,6 +49,4 @@ class AlertService : IntentService("AlertService") {
             UtilityPlayListAutoDownload.setAllAlarms(this)
         }
     }
-} 
-
-
+}

@@ -42,5 +42,3 @@ class ObjectImageView(context: Context) {
         imageView.layoutParams = layoutParams
     }
 }
-
-

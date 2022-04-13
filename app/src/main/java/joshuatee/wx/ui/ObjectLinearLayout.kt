@@ -78,5 +78,3 @@ class ObjectLinearLayout(val context: Context) {
             gravityBacking = value
         }
 }
-
-

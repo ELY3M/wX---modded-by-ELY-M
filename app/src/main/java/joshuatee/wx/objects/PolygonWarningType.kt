@@ -42,5 +42,3 @@ enum class PolygonWarningType constructor(var productCode: String, var urlToken:
     SevereWeatherStatement("SVS", "Severe%20Weather%20Statement", Color.rgb(255, 203, 103)),
     SpecialWeatherStatement("SPS", "Special%20Weather%20Statement", Color.rgb(255, 204, 102));
 }
-
-

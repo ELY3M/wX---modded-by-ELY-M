@@ -27,8 +27,8 @@ import java.nio.ByteBuffer
 
 object Jni {
 
-    // Native code accessed via JNI was originally developed in 2014. At the time it was necessary for best performnace.
-    // 6+ years later gains in hardware and software make the gains negligible in most cases.
+    // Native code accessed via JNI was originally developed in 2014. At the time it was necessary for best performance.
+    // years later gains in hardware and software make the gains negligible in most cases.
 
     init {
         System.loadLibrary("radial")

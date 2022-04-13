@@ -318,6 +318,3 @@ class ModelsSpcSrefActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
     }
 }
-
-
-

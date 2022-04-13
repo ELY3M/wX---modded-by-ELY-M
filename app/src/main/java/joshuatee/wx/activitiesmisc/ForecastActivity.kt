@@ -107,6 +107,7 @@ class ForecastActivity : BaseActivity() {
 
     private fun downloadCc() {
         objectCurrentConditions = ObjectCurrentConditions(this@ForecastActivity, latLon)
+        objectCurrentConditions.timeCheck()
         bitmapForCurrentCondition = UtilityNws.getIcon(this@ForecastActivity, objectCurrentConditions.iconUrl)
     }
 

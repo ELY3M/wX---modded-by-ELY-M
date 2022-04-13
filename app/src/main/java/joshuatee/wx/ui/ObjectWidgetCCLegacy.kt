@@ -134,5 +134,3 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         remoteViews.setTextViewText(R.id.tab, tabStr[0] + "   " + tabStr[1])
     }
 }
-
-

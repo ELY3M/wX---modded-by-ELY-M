@@ -162,5 +162,3 @@ abstract class AudioPlayActivity : AppCompatActivity() {
         }
     }
 }
-
-

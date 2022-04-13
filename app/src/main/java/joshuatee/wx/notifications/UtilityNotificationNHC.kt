@@ -85,7 +85,3 @@ object UtilityNotificationNhc {
         return cancelString + MyApplication.notificationStrSep
     }
 }
-
-
-
-

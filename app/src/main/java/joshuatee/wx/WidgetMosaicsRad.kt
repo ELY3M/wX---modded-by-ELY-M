@@ -53,4 +53,4 @@ class WidgetMosaicsRad : AppWidgetProvider() {
                 { UtilityWidget.update(context, type) }
         )
     }
-} 
+}

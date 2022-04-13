@@ -285,5 +285,4 @@ class SettingsHomeScreenActivity : BaseActivity(), Toolbar.OnMenuItemClickListen
             ObjectPopupMessage(recyclerView.recyclerView, "$textProduct is already in home screen.")
         }
     }
-} 
-
+}

@@ -42,5 +42,3 @@ class ObjectCALegal(context: Context, linearLayout: LinearLayout, url: String) {
         linearLayout.addView(objectCardText.card)
     }
 }
-
-

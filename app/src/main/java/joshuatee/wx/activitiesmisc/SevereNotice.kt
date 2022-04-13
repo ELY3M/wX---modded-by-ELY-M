@@ -77,10 +77,7 @@ internal class SevereNotice(val type: PolygonType) {
         }
     }
 
-    fun getCount(): Int {
-        return bitmaps.size
-    }
+    fun getCount() = bitmaps.size
 
     override fun toString() = typeAsString
 }
-

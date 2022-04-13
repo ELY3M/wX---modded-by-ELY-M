@@ -40,5 +40,3 @@ internal object UtilitySpcFireOutlook {
 
     const val activityTitle = R.string.title_activity_spcfire_outlook
 }
-
-

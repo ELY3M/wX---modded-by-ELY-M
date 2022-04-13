@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package joshuatee.wx.fragments
-
-import androidx.recyclerview.widget.ItemTouchHelper
-
 /**
  * Interface to notify an item ViewHolder of relevant callbacks from [ ].
 
  * @author Paul Burke (ipaulpro)
  */
+
+package joshuatee.wx.fragments
+
+import androidx.recyclerview.widget.ItemTouchHelper
+
 internal interface ItemTouchHelperViewHolder {
 
     /**

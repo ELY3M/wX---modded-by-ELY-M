@@ -143,5 +143,3 @@ class ObjectSettingsCheckBox(context: Context, label: String, pref: String, strI
         checkBox.setOnCheckedChangeListener(listener)
     }
 }
-
-

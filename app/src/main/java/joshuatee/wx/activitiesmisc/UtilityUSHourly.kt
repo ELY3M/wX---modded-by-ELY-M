@@ -98,7 +98,10 @@ object UtilityUSHourly {
     }
 
     private fun getString(locationNumber: Int): List<String> {
-        val html = UtilityDownloadNws.getHourlyData(Location.getLatLon(locationNumber))
+        var html = UtilityDownloadNws.getHourlyData(Location.getLatLon(locationNumber))
+        if (html.length < 300) {
+            html = UtilityDownloadNws.getHourlyData(Location.getLatLon(locationNumber))
+        }
         // val header = String.format("%-7s", "Time") + " " + String.format("%-5s", "Temp") + String.format("%-9s", "WindSpd") + String.format("%-8s", "WindDir") + MyApplication.newline
         val header = To.stringPadLeft("Time", 7) + " " +
                 To.stringPadLeft("Temp", 5) +
@@ -140,4 +143,3 @@ object UtilityUSHourly {
         return content
     }
 }
-

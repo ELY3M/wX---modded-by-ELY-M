@@ -19,7 +19,6 @@
 
 */
 
-
 package joshuatee.wx.util
 
 import java.io.ByteArrayOutputStream
@@ -29,7 +28,7 @@ import android.app.IntentService
 import android.content.Intent
 import joshuatee.wx.MyApplication
 
-// this service notifies the alarm manager to run AlertReciever ( notifications ) according to the
+// this service notifies the alarm manager to run AlertReceiver ( notifications ) according to the
 // configured interval
 
 class CreateAnimatedGifService : IntentService("CreateAnimatedGifService") {
@@ -73,7 +72,4 @@ class CreateAnimatedGifService : IntentService("CreateAnimatedGifService") {
         sharingIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         startActivity(Intent.createChooser(sharingIntent, "Share via"))
     }
-} 
-
-
-
+}

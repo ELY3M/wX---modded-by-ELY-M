@@ -19,7 +19,6 @@
 
  */
 
-
 package joshuatee.wx.audio
 
 import android.app.IntentService
@@ -35,8 +34,4 @@ class AudioServiceToggleState : IntentService("AudioServiceToggleState") {
         }
         UtilityNotification.createMediaControlNotification(this, "")
     }
-} 
-
-
-
-
+}

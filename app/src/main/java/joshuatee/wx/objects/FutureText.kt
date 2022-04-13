@@ -36,4 +36,3 @@ class FutureText(val context: Context, val arg1: String, val updateFunc: (String
         updateFunc(s)
     }
 }
-

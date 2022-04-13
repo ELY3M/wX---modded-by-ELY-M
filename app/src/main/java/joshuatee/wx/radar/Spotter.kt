@@ -77,3 +77,4 @@ class Spotter internal constructor(uniq: String, icon: String, camera: String, r
 }
 
 
+

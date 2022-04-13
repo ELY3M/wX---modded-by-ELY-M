@@ -32,13 +32,11 @@ class SevereWarning(private val type: PolygonType) {
 
     var warningList = listOf<ObjectWarning>()
 
-    fun getName(): String {
-        return when (type) {
-            PolygonType.TOR -> "Tornado Warning"
-            PolygonType.TST -> "Severe Thunderstorm Warning"
-            PolygonType.FFW -> "Flash Flood Warning"
-            else -> ""
-        }
+    fun getName() = when (type) {
+        PolygonType.TOR -> "Tornado Warning"
+        PolygonType.TST -> "Severe Thunderstorm Warning"
+        PolygonType.FFW -> "Flash Flood Warning"
+        else -> ""
     }
 
     fun generateString() {
@@ -47,6 +45,7 @@ class SevereWarning(private val type: PolygonType) {
     }
 
     fun getCount(): Int {
+        // TODO FIXME
         var i = 0
         for (s in warningList) {
             if (s.isCurrent) {
@@ -56,4 +55,3 @@ class SevereWarning(private val type: PolygonType) {
         return i
     }
 }
-

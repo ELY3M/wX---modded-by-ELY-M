@@ -241,4 +241,3 @@ class FavRemoveActivity : BaseActivity() {
         saveMyApp(favoriteString)
     }
 }
-

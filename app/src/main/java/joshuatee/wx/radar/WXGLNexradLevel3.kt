@@ -289,5 +289,3 @@ class WXGLNexradLevel3 internal constructor() {
             ""
         }
 }
-
-

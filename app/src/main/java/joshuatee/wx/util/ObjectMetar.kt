@@ -29,12 +29,122 @@ import joshuatee.wx.Extensions.*
 import joshuatee.wx.radar.RID
 import java.util.*
 
-internal class ObjectMetar(context: Context, location: LatLon) {
-
+internal class ObjectMetar(context: Context, location: LatLon, index: Int = 0) {
 
     //
     // This is used to show the current conditions on the main screen of the app
     //
+
+    var condition = ""
+    var temperature = ""
+    var dewPoint = ""
+    var windDirection = ""
+    var windSpeed = ""
+    var windGust = ""
+    var seaLevelPressure = ""
+    var visibility = ""
+    var relativeHumidity = ""
+    var windChill = ""
+    var heatIndex = ""
+    var conditionsTimeStr = ""
+    var timeStringUtc = ""
+    var icon = ""
+    private var rawMetar = ""
+    private var metarSkyCondition = ""
+    private var metarWeatherCondition = ""
+
+    init {
+        val obsClosest = UtilityMetar.findClosestObservation(context, location, index)
+        UtilityUS.obsClosestClass = obsClosest.name
+        val urlMetar = "${MyApplication.nwsRadarPub}/data/observations/metar/decoded/" + obsClosest.name + ".TXT"
+        val metarData = urlMetar.getHtmlSep().replace("<br>", MyApplication.newline)
+        temperature = metarData.parse("Temperature: (.*?) F")
+        dewPoint = metarData.parse("Dew Point: (.*?) F")
+        windDirection = metarData.parse("Wind: from the (.*?) \\(.*? degrees\\) at .*? MPH ")
+        windSpeed = metarData.parse("Wind: from the .*? \\(.*? degrees\\) at (.*?) MPH ")
+        windGust = metarData.parse("Wind: from the .*? \\(.*? degrees\\) at .*? MPH \\(.*? KT\\) gusting to (.*?) MPH")
+        seaLevelPressure = metarData.parse("Pressure \\(altimeter\\): .*? in. Hg \\((.*?) hPa\\)")
+        visibility = metarData.parse("Visibility: (.*?) mile")
+        relativeHumidity = metarData.parse("Relative Humidity: (.*?)%")
+        windChill = metarData.parse("Windchill: (.*?) F")
+        heatIndex = UtilityMath.heatIndex(temperature, relativeHumidity)
+        rawMetar = metarData.parse("ob: (.*?)" + MyApplication.newline)
+        metarSkyCondition = metarData.parse("Sky conditions: (.*?)" + MyApplication.newline)
+        metarWeatherCondition = metarData.parse("Weather: (.*?)" + MyApplication.newline)
+        metarSkyCondition = capitalizeString(metarSkyCondition)
+        metarWeatherCondition = capitalizeString(metarWeatherCondition)
+        condition = if (metarWeatherCondition == "" || metarWeatherCondition.contains("Inches Of Snow On Ground")) {
+            metarSkyCondition
+        } else {
+            metarWeatherCondition
+        }
+        condition = condition.replace("; Lightning Observed", "")
+        if (condition == "Mist") condition = "Fog/Mist"
+        icon = decodeIconFromMetar(condition, obsClosest)
+        condition = condition.replace(";", " and")
+        val metarDataList = metarData.split(MyApplication.newline)
+        if (metarDataList.size > 2) {
+            val localStatus = metarDataList[1].split("/")
+            if (localStatus.size > 1) {
+                conditionsTimeStr = UtilityTime.convertFromUtcForMetar(localStatus[1].replace(" UTC", ""))
+                timeStringUtc = localStatus[1].trim()
+            }
+        }
+        seaLevelPressure = changePressureUnits(seaLevelPressure)
+        temperature = changeDegreeUnits(temperature)
+        dewPoint = changeDegreeUnits(dewPoint)
+        windChill = changeDegreeUnits(windChill)
+        heatIndex = changeDegreeUnits(heatIndex)
+        if (windSpeed == "") {
+            windSpeed = "0"
+        }
+        if (condition == "") {
+            condition = "NA"
+        }
+    }
+
+    //
+    // Capitalize the first letter of each word in the current condition string
+    //
+    private fun capitalizeString(string: String): String {
+        val tokens = string.split(" ")
+        var newString = ""
+        tokens.forEach { word -> newString += word.replaceFirstChar { it.uppercase() } + " " }
+        return newString.trimEnd()
+    }
+
+    private fun changeDegreeUnits(value: String): String {
+        var newValue = "NA"
+        if (value != "") {
+            val tempD = value.toDoubleOrNull() ?: 0.0
+            newValue = if (MyApplication.unitsF) UtilityMath.roundToString(tempD) else UtilityMath.fahrenheitToCelsius(tempD)
+        }
+        return newValue
+    }
+
+    private fun changePressureUnits(value: String) = if (!MyApplication.unitsM) UtilityMath.pressureMBtoIn(value) else "$value mb"
+
+    private fun decodeIconFromMetar(condition: String, obs: RID): String {
+        // https://api.weather.gov/icons/land/day/ovc?size=medium
+        val sunTimes = UtilityTimeSunMoon.getSunriseSunsetFromObs(obs)
+        val sunRiseDate = sunTimes[0].time
+        val sunSetDate = sunTimes[1].time
+        val currentTime = Date()
+        val fallsBetween = currentTime.after(sunRiseDate) && currentTime.before(sunSetDate)
+        val currentCal = Calendar.getInstance()
+        currentCal.time = Date()
+        currentCal.add(Calendar.DATE, 1)
+        val currentTimeTomorrow = currentCal.time
+        val fallsBetweenTomorrow = currentTimeTomorrow.after(sunRiseDate) && currentTimeTomorrow.before(sunSetDate)
+        var timeOfDay = "night"
+        if (fallsBetween || fallsBetweenTomorrow) {
+            timeOfDay = "day"
+        }
+        val conditionModified = condition.split(";")[0]
+        val shortCondition = UtilityMetarConditions.iconFromCondition[conditionModified] ?: ""
+        return MyApplication.nwsApiUrl + "/icons/land/$timeOfDay/$shortCondition?size=medium"
+    }
+}
 
 /*
  ANN ARBOR MUNICIPAL AIRPORT, MI, United States (KARB) 42-13N 083-45W 251M
@@ -65,119 +175,3 @@ internal class ObjectMetar(context: Context, location: LatLon) {
 
  https://stackoverflow.com/questions/42803349/swift-3-0-convert-server-utc-time-to-local-time-and-visa-versa/42811162
  */
-
-    var condition = ""
-    var temperature = ""
-    var dewPoint = ""
-    var windDirection = ""
-    var windSpeed = ""
-    var windGust = ""
-    var seaLevelPressure = ""
-    var visibility = ""
-    var relativeHumidity = ""
-    var windChill = ""
-    var heatIndex = ""
-    var conditionsTimeStr = ""
-    var icon = ""
-    private var rawMetar = ""
-    private var metarSkyCondition = ""
-    private var metarWeatherCondition = ""
-
-    //
-    // Capitalize the first letter of each word in the current condition string
-    //
-    private fun capitalizeString(string: String): String {
-        val tokens = string.split(" ")
-        var newString = ""
-//        tokens.forEach { newString += it.capitalize(Locale.US) + " " }
-        tokens.forEach { word -> newString += word.replaceFirstChar { it.uppercase() } + " " }
-        return newString.trimEnd()
-    }
-
-    private fun changeDegreeUnits(value: String): String {
-        var newValue = "NA"
-        if (value != "") {
-            val tempD = value.toDoubleOrNull() ?: 0.0
-            newValue = if (MyApplication.unitsF) UtilityMath.roundToString(tempD) else UtilityMath.fahrenheitToCelsius(tempD)
-        }
-        return newValue
-    }
-
-    private fun changePressureUnits(value: String) = if (!MyApplication.unitsM) UtilityMath.pressureMBtoIn(value) else "$value mb"
-
-    private fun decodeIconFromMetar(condition: String, obs: RID): String {
-        // https://api.weather.gov/icons/land/day/ovc?size=medium
-        val sunTimes = UtilityTimeSunMoon.getSunriseSunsetFromObs(obs)
-        val sunRiseDate = sunTimes[0].time
-        val sunSetDate = sunTimes[1].time
-        val currentTime = Date()
-        val fallsBetween = currentTime.after(sunRiseDate) && currentTime.before(sunSetDate)
-        val currentCal = Calendar.getInstance()
-        currentCal.time = Date()
-        currentCal.add(Calendar.DATE, 1)
-        val currentTimeTomorrow = currentCal.time
-        val fallsBetweenTomorrow = currentTimeTomorrow.after(sunRiseDate) && currentTimeTomorrow.before(sunSetDate)
-        var timeOfDay = "night"
-        if (fallsBetween || fallsBetweenTomorrow) timeOfDay = "day"
-        val conditionModified = condition.split(";")[0]
-        val shortCondition = UtilityMetarConditions.iconFromCondition[conditionModified] ?: ""
-        return MyApplication.nwsApiUrl + "/icons/land/$timeOfDay/$shortCondition?size=medium"
-    }
-
-    init {
-        val obsClosest = UtilityMetar.findClosestObservation(context, location)
-        UtilityUS.obsClosestClass = obsClosest.name
-        //val url = MyApplication.nwsApiUrl + "/stations/" + obsClosest.name + "/observations/current"
-        //val observationData = url.getNwsHtml()
-        //icon = observationData.parse("\"icon\": \"(.*?)\",")
-        //condition = observationData.parse("\"textDescription\": \"(.*?)\",")
-        val urlMetar = "${MyApplication.nwsRadarPub}/data/observations/metar/decoded/" + obsClosest.name + ".TXT"
-        val metarData = urlMetar.getHtmlSep().replace("<br>", MyApplication.newline)
-        temperature = metarData.parse("Temperature: (.*?) F")
-        dewPoint = metarData.parse("Dew Point: (.*?) F")
-        windDirection = metarData.parse("Wind: from the (.*?) \\(.*? degrees\\) at .*? MPH ")
-        windSpeed = metarData.parse("Wind: from the .*? \\(.*? degrees\\) at (.*?) MPH ")
-        windGust = metarData.parse("Wind: from the .*? \\(.*? degrees\\) at .*? MPH \\(.*? KT\\) gusting to (.*?) MPH")
-        seaLevelPressure = metarData.parse("Pressure \\(altimeter\\): .*? in. Hg \\((.*?) hPa\\)")
-        visibility = metarData.parse("Visibility: (.*?) mile")
-        relativeHumidity = metarData.parse("Relative Humidity: (.*?)%")
-        windChill = metarData.parse("Windchill: (.*?) F")
-        //heatIndex = metarData.parse("Heat index: (.*?) F")
-        heatIndex = UtilityMath.heatIndex(temperature, relativeHumidity)
-        rawMetar = metarData.parse("ob: (.*?)" + MyApplication.newline)
-        metarSkyCondition = metarData.parse("Sky conditions: (.*?)" + MyApplication.newline)
-        metarWeatherCondition = metarData.parse("Weather: (.*?)" + MyApplication.newline)
-        metarSkyCondition = capitalizeString(metarSkyCondition)
-        metarWeatherCondition = capitalizeString(metarWeatherCondition)
-        condition = if (metarWeatherCondition == "" || metarWeatherCondition.contains("Inches Of Snow On Ground")) {
-            metarSkyCondition
-        } else {
-            metarWeatherCondition
-        }
-        condition = condition.replace("; Lightning Observed", "")
-        if (condition == "Mist") condition = "Fog/Mist"
-        icon = decodeIconFromMetar(condition, obsClosest)
-        condition = condition.replace(";", " and")
-        val metarDataList = metarData.split(MyApplication.newline)
-        if (metarDataList.size > 2) {
-            val localStatus = metarDataList[1].split("/")
-            if (localStatus.size > 1) {
-                conditionsTimeStr = UtilityTime.convertFromUtcForMetar(localStatus[1].replace(" UTC", ""))
-            }
-        }
-        seaLevelPressure = changePressureUnits(seaLevelPressure)
-        temperature = changeDegreeUnits(temperature)
-        dewPoint = changeDegreeUnits(dewPoint)
-        windChill = changeDegreeUnits(windChill)
-        heatIndex = changeDegreeUnits(heatIndex)
-        if (windSpeed == "") {
-            windSpeed = "0"
-        }
-        if (condition == "") {
-            condition = "NA"
-        }
-    }
-}
-
-
-

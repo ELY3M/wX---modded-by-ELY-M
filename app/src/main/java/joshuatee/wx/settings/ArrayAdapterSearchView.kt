@@ -5,7 +5,6 @@
 
 package joshuatee.wx.settings
 
-
 import android.content.Context
 import androidx.cursoradapter.widget.CursorAdapter
 import androidx.appcompat.widget.SearchView

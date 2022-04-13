@@ -40,7 +40,7 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
     // SPC Fire Weather Outlooks
     //
 
-    private val bitmaps = MutableList(UtilitySpcFireOutlook.urls.size){ UtilityImg.getBlankBitmap() }
+    private val bitmaps = MutableList(UtilitySpcFireOutlook.urls.size) { UtilityImg.getBlankBitmap() }
     private var imagesPerRow = 2
     private lateinit var linearLayout: LinearLayout
     private lateinit var objectImageSummary: ObjectImageSummary

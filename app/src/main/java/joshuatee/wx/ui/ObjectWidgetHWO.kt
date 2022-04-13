@@ -46,5 +46,3 @@ class ObjectWidgetHwo(context: Context) {
         }
     }
 }
-
-

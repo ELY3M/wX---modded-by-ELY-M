@@ -64,4 +64,3 @@ class ObjectImagesCollection(val title: String, val urls: List<String>, val labe
         }
     }
 }
-

@@ -90,5 +90,3 @@ class ObjectOglRadarBuffers(val context: Context, var bgColor: Int) : ObjectOglB
         }
     }
 }
-
-

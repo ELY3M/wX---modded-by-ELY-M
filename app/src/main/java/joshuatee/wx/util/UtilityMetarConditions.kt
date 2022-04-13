@@ -374,6 +374,3 @@ object UtilityMetarConditions {
             "Precipitation and Mist" to "fg"
     )
 }
-
-
-

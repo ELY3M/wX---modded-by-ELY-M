@@ -29,7 +29,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION
@@ -265,7 +264,7 @@ class WX : CommonActionBarFragment() {
                         }
                     }
                     R.id.wpc_gefs -> ObjectIntent.showModel(this, arrayOf("1", "WPCGEFS", "WPC"))
-		            //elys mod
+		    //elys mod
                     R.id.aurora -> ObjectIntent(this, ImageCollectionActivity::class.java, ImageCollectionActivity.TYPE, arrayOf("AURORA"))
                 }
                 if (UIPreferences.navDrawerMainScreenOnRight) {
@@ -367,12 +366,8 @@ class WX : CommonActionBarFragment() {
                 }
             }
             KeyEvent.KEYCODE_I -> if (event.isCtrlPressed) openActivity(this, "WPCIMG")
-            KeyEvent.KEYCODE_Z -> {
-                if (event.isCtrlPressed) openActivity(this, "WPCTEXT")
-            }
-            KeyEvent.KEYCODE_SLASH -> {
-                if (event.isAltPressed) ObjectDialogue(this, Utility.showMainScreenShortCuts())
-            }
+            KeyEvent.KEYCODE_Z -> if (event.isCtrlPressed) openActivity(this, "WPCTEXT")
+            KeyEvent.KEYCODE_SLASH -> if (event.isAltPressed) ObjectDialogue(this, Utility.showMainScreenShortCuts())
             KeyEvent.KEYCODE_J -> {
                 if (event.isCtrlPressed) {
                     tabIndex += -1
@@ -400,6 +395,3 @@ class WX : CommonActionBarFragment() {
         return true
     }
 }
-
-
-

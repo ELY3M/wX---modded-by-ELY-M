@@ -113,5 +113,3 @@ class ProjectionNumbers {
     val yFloat
         get() = To.float(y)
 }
-
-

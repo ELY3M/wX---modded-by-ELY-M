@@ -77,7 +77,7 @@ object UtilityGoes {
     fun getAnimation(context: Context, product: String, sector: String, frameCount: Int): AnimationDrawable {
         val frameCountString = frameCount.toString()
         val satellite = if (sectorsInGoes17.contains(sector)) "G17" else "G16"
-        val productLocal = product.replace("GLM", "EXTENT")
+        val productLocal = product.replace("GLM", "EXTENT3")
         val url = when (sector) {
             // https://www.star.nesdis.noaa.gov/GOES/fulldisk_band.php?sat=G17&band=GEOCOLOR&length=12
             "FD", "FD-G17" -> MyApplication.goes16AnimUrl + "/GOES/fulldisk_band.php?sat=$satellite&band=$productLocal&length=$frameCountString"
@@ -235,4 +235,3 @@ object UtilityGoes {
         "hi" to "1200x1200"
     )
 }
-

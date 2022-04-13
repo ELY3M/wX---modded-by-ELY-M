@@ -50,5 +50,3 @@ class ObjectWidgetGeneric(context: Context, val type: WidgetFile) {
         }
     }
 }
-
-

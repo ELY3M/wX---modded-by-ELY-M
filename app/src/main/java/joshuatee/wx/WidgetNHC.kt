@@ -53,4 +53,4 @@ class WidgetNHC : AppWidgetProvider() {
                 { UtilityWidget.update(context, type) }
         )
     }
-} 
+}

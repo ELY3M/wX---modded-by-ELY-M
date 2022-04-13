@@ -37,9 +37,7 @@ fun String.parse(match: String) = UtilityString.parse(this, match)
 
 fun String.strip() = this.trim()
 
-fun String.ljust(padding: Int): String {
-    return String.format("%-" + padding.toString() + "s", this)
-}
+fun String.ljust(padding: Int) = String.format("%-" + padding.toString() + "s", this)
 
 fun String.condenseSpace()= this.replace("\\s+".toRegex(), " ")
 
@@ -94,9 +92,3 @@ fun Int.isEven() = this and 1 == 0
 fun AnimationDrawable.startAnimation(img: TouchImageView2) = UtilityImgAnim.startAnimation(this, img)
 
 fun AnimationDrawable.startAnimation(img: ObjectTouchImageView) = UtilityImgAnim.startAnimation(this, img)
-
-
-
-
-
-

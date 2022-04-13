@@ -70,5 +70,3 @@ class ObjectCardVerticalText(context: Context, numberOfColumns: Int) {
 
     fun setOnClickListener(fn: View.OnClickListener) = objectCard.setOnClickListener(fn)
 }
-
-

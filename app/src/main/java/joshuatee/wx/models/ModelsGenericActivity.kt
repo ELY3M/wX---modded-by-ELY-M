@@ -376,4 +376,3 @@ class ModelsGenericActivity : VideoRecordActivity(), OnMenuItemClickListener {
         }
     }
 }
-

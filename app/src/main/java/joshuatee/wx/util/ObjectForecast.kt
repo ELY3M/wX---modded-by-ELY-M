@@ -27,6 +27,3 @@ internal class ObjectForecast(
     val shortForecast: String,
     val detailedForecast: String
 )
-
-
-

@@ -101,5 +101,3 @@ class NhcActivity : BaseActivity() {
         super.onRestart()
     }
 }
-
-

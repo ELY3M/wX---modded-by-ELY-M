@@ -39,5 +39,3 @@ class ObjectRecyclerViewGeneric(context: Context, activity: Activity, resourceId
 
     fun scrollToPosition(position: Int): Unit = recyclerView.scrollToPosition(position)
 }
-
-

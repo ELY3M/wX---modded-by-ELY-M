@@ -190,4 +190,3 @@ class SpcMcdWatchShowSummaryActivity : AudioPlayActivity(), OnMenuItemClickListe
         return true
     }
 }
-

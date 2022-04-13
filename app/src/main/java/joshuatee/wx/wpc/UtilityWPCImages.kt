@@ -358,4 +358,3 @@ internal object UtilityWpcImages {
         }
     }
 }
-

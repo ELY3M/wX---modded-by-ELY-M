@@ -26,4 +26,3 @@ class RID(val name: String, val location: LatLon) {
     var distance = 0
 
 }
-

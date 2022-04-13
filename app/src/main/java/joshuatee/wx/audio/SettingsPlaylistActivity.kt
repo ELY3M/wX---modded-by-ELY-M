@@ -232,4 +232,4 @@ class SettingsPlaylistActivity : BaseActivity(), OnMenuItemClickListener {
     private fun playItem(position: Int) {
         UtilityTts.synthesizeTextAndPlayPlaylist(this, position + 1)
     }
-} 
+}

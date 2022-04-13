@@ -104,5 +104,3 @@ class ObjectDialogue {
 
     fun getItem(index: Int) = arrayAdapter.getItem(index) ?: ""
 }
-
-

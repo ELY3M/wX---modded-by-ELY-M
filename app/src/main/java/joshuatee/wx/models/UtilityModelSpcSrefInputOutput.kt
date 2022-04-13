@@ -69,4 +69,3 @@ internal object UtilityModelSpcSrefInputOutput {
         return UtilityImgAnim.getAnimationDrawableFromBitmapList(context, bitmaps)
     }
 }
-

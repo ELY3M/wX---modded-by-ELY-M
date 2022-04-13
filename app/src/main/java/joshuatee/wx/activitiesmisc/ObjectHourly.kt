@@ -28,5 +28,3 @@ internal class ObjectHourly(
     val windDir: String = "",
     val conditions: String = ""
 )
-
-

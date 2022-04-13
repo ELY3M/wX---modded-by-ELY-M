@@ -97,7 +97,7 @@ class NwsObsSitesActivity : BaseActivity() {
     private fun showObsSite(obsSite: String) {
         Utility.writePref(prefToken, obsSite)
         updateButton()
-        ObjectIntent.showWebView(this@NwsObsSitesActivity, arrayOf("https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=$obsSite", obsSite))
+        ObjectIntent.showWebView(this@NwsObsSitesActivity, arrayOf("https://www.weather.gov/wrh/timeseries?site=$obsSite", obsSite))
     }
 
     private fun stateSelected() {
@@ -131,4 +131,4 @@ class NwsObsSitesActivity : BaseActivity() {
         }
         return true
     }
-} 
+}

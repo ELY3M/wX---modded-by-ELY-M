@@ -148,5 +148,3 @@ class WXGLNexradLevel2 {
         }
     }
 }
-
-

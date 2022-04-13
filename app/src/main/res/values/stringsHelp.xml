@@ -476,7 +476,7 @@ to download warning data.
 Only the first tab will be available along with all action bar items. Can be used to present a more simplistic weather application.
     </string>
     <string name="units_f_label">
-Use Fahrenheit instead of Celsius.</string>
+Use Fahrenheit instead of Celsius in current conditions.</string>
     <string name="units_m_label">
 Use Millibars instead of inches.</string>
 

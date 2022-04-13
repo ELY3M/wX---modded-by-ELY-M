@@ -80,5 +80,3 @@ class ObjectFab {
         fab.translationZ = MyApplication.fabElevationDepressed
     }
 }
-
-

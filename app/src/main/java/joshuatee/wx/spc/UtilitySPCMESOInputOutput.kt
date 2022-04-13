@@ -42,10 +42,12 @@ object UtilitySpcMesoInputOutput {
 
     fun getImage(context: Context, param: String, sector: String): Bitmap {
         val prefModel = "SPCMESO"
-        val showRadar = Utility.readPref(context, prefModel + "_SHOW_RADAR", "false").startsWith("t")
+        var showRadar = Utility.readPref(context, prefModel + "_SHOW_RADAR", "false").startsWith("t")
         val showOutlook = Utility.readPref(context, prefModel + "_SHOW_OUTLOOK", "false").startsWith("t")
         val showWatchWarn = Utility.readPref(context, prefModel + "_SHOW_WATWARN", "false").startsWith("t")
         val showTopography = Utility.readPref(context, prefModel + "_SHOW_TOPO", "false").startsWith("t")
+        val showCounty = Utility.readPref(context, prefModel + "_SHOW_COUNTY", "false").startsWith("t")
+
         val drawables = mutableListOf<Drawable>()
         val gifUrl = if (UtilitySpcMeso.imgSf.contains(param) && !showRadar) "_sf.gif" else ".gif"
         val imgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/$param/$param$gifUrl"
@@ -53,8 +55,17 @@ object UtilitySpcMesoInputOutput {
         val outlookImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/otlk/otlk.gif"
         val watchWarningImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/warns/warns.gif"
         val topographyImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/topo/topo.gif"
+        val countyImgUrl = "${MyApplication.nwsSPCwebsitePrefix}/exper/mesoanalysis/s$sector/cnty/cnty.gif"
+
         var bitmap = imgUrl.getImage()
         drawables.add(ColorDrawable(Color.WHITE))
+
+        if (param == "hodo") {
+            showRadar = true
+        }
+        if (showCounty) {
+            drawables.add(BitmapDrawable(context.resources, UtilityImg.eraseBackground(countyImgUrl.getImage(), -1)))
+        }
         if (showTopography) {
             drawables.add(BitmapDrawable(context.resources, UtilityImg.eraseBackground(topographyImgUrl.getImage(), -1)))
         }
@@ -105,7 +116,3 @@ object UtilitySpcMesoInputOutput {
         return retArr
     }
 }
-
-
-
-

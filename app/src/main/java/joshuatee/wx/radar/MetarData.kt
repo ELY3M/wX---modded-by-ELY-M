@@ -21,7 +21,6 @@
 
 package joshuatee.wx.radar
 
-
 class MetarData {
 
     // FIXME rename
@@ -39,4 +38,3 @@ class MetarData {
     var obsArrAviationColor = listOf<Int>()
     var obsStateOld = ""
 }
-

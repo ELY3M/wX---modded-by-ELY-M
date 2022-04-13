@@ -22,5 +22,3 @@
 package joshuatee.wx.util
 
 internal class City(val city: String, val x: Double, val y: Double)
-
-

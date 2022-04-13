@@ -81,7 +81,3 @@ object UtilityNhc {
 
     fun getImage(rid: String, prod: String) = ("https://www.ssd.noaa.gov/PS/TROP/floaters/" + rid + "/imagery/" + prod + "0.gif").getImage()
 }
-
-
-
-

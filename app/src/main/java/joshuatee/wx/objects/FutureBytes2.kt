@@ -37,4 +37,3 @@ class FutureBytes2(val context: Context, val downloadFunc: () -> Bitmap, val upd
         updateFunc(s)
     }
 }
-

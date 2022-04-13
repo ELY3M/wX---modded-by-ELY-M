@@ -281,4 +281,3 @@ class ModelsSpcHrrrActivity : VideoRecordActivity(), OnMenuItemClickListener { /
         }
     }
 }
-

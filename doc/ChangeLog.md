@@ -23,13 +23,57 @@
 // TODO [FIX] snow squall warning enabled - no way to long press
 // TODO [FIX] settings label for C/F to indicate what it modifies
 // TODO [FIX] usalerts filter is not sorted
+// TODO [ADD] user request for metar homescreen widget
+// TODO [REF] ExternalGeodeticCalculator -> convert from class to object since all static
+// TODO [ADD] look to replace AWC radar mosaics with normal NWS (looks like AWC website redesign might obsolete)
+//             https://www.weather.gov/media/notification/pdf2/pns22-09_ridge_ii_public_local_standard_radar_pages.pdf
+//             https://www.weather.gov/media/notification/pdf2/pns22-19_aviation_website_upgrade.pdf
 ```
 [[_TOC_]]
 
-## 55592 2021_02_23
+## 55600 2022_04_06
 *
 
-## 55590 2021_02_23
+## 55599 2022_04_06
+* [FIX] more robustness for Hourly using old NWS API
+
+## 55598 2022_04_01
+* [REF] whitespace cleanup particularly at bottom of file, not consistent
+* [ADD] Nexrad Level2: in response to 56+ hr maint on 2022-04-19 to nomands, change URL to backup
+  - [https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr.pdf](https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr.pdf)
+  - A [reminder](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/FAQ.md#why-is-level-2-radar-not-the-default) on Level 2 support within wX
+
+## 55597 2022_03_24
+* [REF] whitespace cleanup particularly at bottom of file, not consistent
+* coroutine update
+```
+-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2'
+-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
++    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
++    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
+```
+
+## 55596 2022_03_24
+* [ADD] access to settings via hourly in case app won't load (can access via 4x4 blue widget -> hourly -> settings)
+
+## 55595 2022_03_20
+* [ADD] update about copyright and remove link to wxl23 ios version
+* [ADD] SPC Meso - new "layer" county boundaries. Turn on from submenu -> Layers (NOTE: the state line boundary provided for the Radar Mosaic does not quite match up with the county layer. This can be observed from the SPC Website as well)
+* [ADD] SPC Meso - new param: "Hodograph Map", access from "Wind Shear" submenu
+* [ADD] The default hourly data provided (the new NWS API) does not reliably return results on the first download, added a retry mechanism.
+
+## 55594 2022_03_06
+* NWS is deprecating this website on 3/22 (substitute NWS observation point, etc): https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KCAR
+  in favor of: https://www.weather.gov/wrh/timeseries?site=KCAR
+  Thus updated the activity accessed through the "MISC" tab to reflect this
+
+## 55593 2022_03_05
+* [FIX] GOES GLM (lightning) animation was not working
+
+## 55592 2022_02_26
+* [ADD] (main screen) if closest observation point has data older then 2 hours, show data for the 2nd closest obs point
+
+## 55590 2022_02_23
 * [FIX] prune the list of Observation points by removing 57 sites that had not updated in the past 28 days
         This pruning will occur more frequently in the future to avoid a bad user experience
         In the future as the new NWS API stabilizes there might be a less manual (but still performant) way to handle this
@@ -38,7 +82,7 @@
 -    implementation 'androidx.preference:preference:1.2.0'
 +    implementation 'androidx.preference:preference-ktx:1.2.0'
 ```
-## 55589 2021_02_23
+## 55589 2022_02_23
 * [ADD] software upgrades that wX uses
 ```
 -    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0'
@@ -58,7 +102,7 @@
 -    implementation "com.squareup.okhttp3:okhttp:4.9.2"
 +    implementation "com.squareup.okhttp3:okhttp:4.9.3"
 ```
-## 55588 2021_02_21
+## 55588 2022_02_21
 * [ADD] disable new super-res products as NWS has not fully reployed
 * [FIX] remove the following weather obs point in `stations_us4.txt` and `us_metar3.txt` as user reported it has not updated since Jan 26
 ```
@@ -66,14 +110,14 @@ IL,ROMEOVILLE/CHI  ,KLOT
 KLOT 41.6 -88.1
 ```
 
-## 55587 2021_02_12
+## 55587 2022_02_12
 * [ADD] nexrad: force 2153/2154 to use Kotlin and avoid native since we shouldn't need to use native anymore
 * [REF] native c code format cleanup
 
-## 55586 2021_02_12 (release should not be used for production yet due to N0B/N0G integration)
+## 55586 2022_02_12 (release should not be used for production yet due to N0B/N0G integration)
 * [ADD] work in native C code (via JNI) to support super-res products
 
-## 55585 2021_02_10 (release should not be used for production yet due to N0B/N0G integration)
+## 55585 2022_02_10 (release should not be used for production yet due to N0B/N0G integration)
 * [ADD] NXB and NXG framework, Level3 super-res
   - https://www.weather.gov/media/notification/pdf2/scn21-96_sbn_super-res.pdf
   - only at KRAX so far https://tgftp.nws.noaa.gov/SL.us008001/DF.of/DC.radar/DS.00n1b/ missing lowest tilt
@@ -92,7 +136,7 @@ KLOT 41.6 -88.1
 	modified:   app/src/main/res/values/strings.xml
 
 
-## 55584 2021_01_31
+## 55584 2022_01_31
 * [ADD] In Settings -> UI -> Navdrawer config, have top arrow respond in the same way that bottom arrow does when pressed
 * [ADD] In Settings -> about, add navdrawer token string to assist in troubleshooting
 * [ADD] com.android.tools.build:gradle:7.0.4 -> com.android.tools.build:gradle:7.1.0
@@ -101,7 +145,7 @@ KLOT 41.6 -88.1
   - "mimpac: Marine Weather disc for N PAC Ocean"
   - "mimatn: Marine disc for N Atlantic Ocean"
 
-## 55582 2021_01_15
+## 55582 2022_01_15
 * [ADD] SPC Meso in "Multi-Parameter Fields" add "Bulk Shear - Sfc-3km / Sfc-3km MLCAPE"
 * [FIX] SPC Meso in "Upper Air" change ordering for "Sfc Frontogenesis" to match SPC website
 * [FIX] Creating desktop shortcuts was not working on Android version 12

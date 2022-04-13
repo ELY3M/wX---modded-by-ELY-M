@@ -552,5 +552,3 @@ class ObjectModelNoSpinner(val context: Context, var prefModel: String, numPanes
         getContent()
     }
 }
-
-

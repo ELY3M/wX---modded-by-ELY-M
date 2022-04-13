@@ -110,5 +110,3 @@ class ObjectTextView(val context: Context) {
 
     fun setPadding(padding: Int): Unit = tv.setPadding(padding)
 }
-
-

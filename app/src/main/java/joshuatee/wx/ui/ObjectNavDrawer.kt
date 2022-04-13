@@ -139,5 +139,3 @@ class ObjectNavDrawer(activity: Activity, private var labels: List<String>) {
         }
     }
 }
-
-

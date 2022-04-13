@@ -45,4 +45,3 @@ class DataStorage(private val preference: String) {
         editor.apply()
     }
 }
-

@@ -71,4 +71,4 @@ class MyExpandableListAdapter(act: Activity, private val groups: SparseArray<Gro
     override fun hasStableIds() = true
 
     override fun isChildSelectable(groupPosition: Int, childPosition: Int) = true
-} 
+}

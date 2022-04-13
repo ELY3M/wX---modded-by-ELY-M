@@ -139,4 +139,3 @@ object UtilityNwsIcon {
         "smoke.png" to R.drawable.fu
     )
 }
-

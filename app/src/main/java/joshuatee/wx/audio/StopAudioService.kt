@@ -26,12 +26,8 @@ import android.content.Intent
 
 // this service notifies the alarm manager to run AlertReceiver ( notifications ) according to the
 // configured interval
-//
 
 class StopAudioService : IntentService("StopAudioService") {
 
     override fun onHandleIntent(intent: Intent?) { UtilityTts.mediaPlayerPause() }
-} 
-
-
-
+}

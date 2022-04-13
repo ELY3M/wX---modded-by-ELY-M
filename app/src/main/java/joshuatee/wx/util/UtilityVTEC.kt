@@ -52,7 +52,3 @@ object UtilityVtec {
 
     fun getStormCountGeneric(data: String) = data.parseColumn("(\"id\": \"https://api.weather.gov/alerts/urn:oid)").size
 }
-
-
-
-

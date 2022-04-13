@@ -216,4 +216,3 @@ class LsrByWfoActivity : AudioPlayActivity(), OnMenuItemClickListener {
         }
     }
 }
-

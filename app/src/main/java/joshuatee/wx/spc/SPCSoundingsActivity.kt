@@ -195,5 +195,3 @@ class SpcSoundingsActivity : BaseActivity(), OnMenuItemClickListener {
         super.onStop()
     }
 }
-
-

@@ -106,5 +106,3 @@ class ObjectAlertDetail(val context: Context, linearLayout: LinearLayout) {
         wfoTitle = wfo
     }
 }
-
-

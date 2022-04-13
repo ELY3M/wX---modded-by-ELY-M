@@ -24,12 +24,14 @@ package joshuatee.wx.util
 import android.content.Context
 import joshuatee.wx.MyApplication
 import joshuatee.wx.canada.UtilityCanada
+import joshuatee.wx.objects.ObjectDateTime
 import joshuatee.wx.settings.Location
 
 import joshuatee.wx.radar.LatLon
 
 class ObjectCurrentConditions {
 
+    var isUS = true
     var topLine = ""
     var data = ""
         private set
@@ -38,17 +40,23 @@ class ObjectCurrentConditions {
     private var time = ""
     var status = ""
         private set
+    private var timeStringUtc = ""
+    lateinit var context: Context
+    lateinit var latLon: LatLon
 
     constructor()
 
     constructor(context: Context, locationNumber: Int) {
+        this.context = context
         if (Location.isUS(locationNumber)) {
-            val tmpArr = getConditionsViaMetar(context, Location.getLatLon(locationNumber))
+            latLon = Location.getLatLon(locationNumber)
+            process(context, Location.getLatLon(locationNumber))
             // 62° / 54°(74%) - 1013 mb - ESE 7 mph - 8 mi - Partly Cloudy
-            data = tmpArr[0]
-            iconUrl = tmpArr[1]
-            status = UtilityUS.getStatusViaMetar(context, time)
+//            data = tmpArr[0]
+//            iconUrl = tmpArr[1]
+//            status = UtilityUS.getStatusViaMetar(context, time)
         } else {
+            isUS = false
             val html = UtilityCanada.getLocationHtml(Location.getLatLon(locationNumber))
             data = UtilityCanada.getConditions(html)
             status = UtilityCanada.getStatus(html)
@@ -56,14 +64,16 @@ class ObjectCurrentConditions {
     }
 
     constructor(context: Context, latLon: LatLon) {
-        val items = getConditionsViaMetar(context, latLon)
-        data = items[0]
-        iconUrl = items[1]
-        status = UtilityUS.getStatusViaMetar(context, time)
+        this.context = context
+        this.latLon = latLon
+        process(context, latLon)
+//        data = items[0]
+//        iconUrl = items[1]
+//        status = UtilityUS.getStatusViaMetar(context, time)
     }
 
-    private fun getConditionsViaMetar(context: Context, latLon: LatLon): List<String> {
-        val objectMetar = ObjectMetar(context, latLon)
+    private fun process(context: Context, latLon: LatLon, index: Int = 0) {
+        val objectMetar = ObjectMetar(context, latLon, index)
         time = objectMetar.conditionsTimeStr
         val temperature = objectMetar.temperature + MyApplication.DEGREE_SYMBOL
         val windChill = objectMetar.windChill + MyApplication.DEGREE_SYMBOL
@@ -76,6 +86,7 @@ class ObjectCurrentConditions {
         val windGust = objectMetar.windGust
         val visibility = objectMetar.visibility
         val condition = objectMetar.condition
+        timeStringUtc = objectMetar.timeStringUtc
         var string = temperature
         if (objectMetar.windChill != "NA") {
             string += "($windChill)"
@@ -86,7 +97,10 @@ class ObjectCurrentConditions {
         string += "$seaLevelPressure - $windDirection $windSpeed"
         if (windGust != "") string += " G "
         string += "$windGust mph - $visibility mi - $condition"
-        return listOf(string, objectMetar.icon)
+        // return listOf(string, objectMetar.icon)
+        data = string
+        iconUrl = objectMetar.icon
+        status = UtilityUS.getStatusViaMetar(context, time)
         // "NA° / 22°(NA%) - 1016 mb - W 13 mph - 10 mi - Mostly Cloudy"
     }
 
@@ -100,7 +114,17 @@ class ObjectCurrentConditions {
         }
         topLine = string
     }
+
+    // compare the timestamp in the metar to the current time
+    // if older then a certain amount, download the 2nd closest site and process
+    fun timeCheck() {
+        if (isUS) {
+            val obsTime: ObjectDateTime = ObjectDateTime.fromObs(timeStringUtc)
+            val currentTime = ObjectDateTime.getCurrentTimeInUTC()
+            val isTimeCurrent = ObjectDateTime.timeDifference(currentTime, obsTime.dateTime, 120)
+            if (!isTimeCurrent) {
+                process(context, latLon, 1)
+            }
+        }
+    }
 }
-
-
-

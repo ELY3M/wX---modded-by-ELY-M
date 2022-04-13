@@ -88,5 +88,3 @@ internal object UtilitySpcSwo {
 
     fun getImageUrlsDays48(day: String) = MyApplication.nwsSPCwebsitePrefix + "/products/exper/day4-8/day" + day + "prob.gif"
 }
-
-

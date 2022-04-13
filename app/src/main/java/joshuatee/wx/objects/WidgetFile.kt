@@ -40,5 +40,3 @@ enum class WidgetFile constructor(val fileName: String, val prefString: String, 
     CC("", "", "", WidgetCC::class.java),
     CCLegacy("", "", "", Widget::class.java);
 }
-
-

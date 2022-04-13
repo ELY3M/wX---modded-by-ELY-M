@@ -123,4 +123,3 @@ internal object UtilityNotificationSpcFireWeather {
         return notifUrls
     }
 }
-

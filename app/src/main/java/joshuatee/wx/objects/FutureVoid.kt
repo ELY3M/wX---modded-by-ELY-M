@@ -41,4 +41,3 @@ class FutureVoid(val context: Context, val downloadFunc: () -> Unit, val updateF
         }
     }
 }
-

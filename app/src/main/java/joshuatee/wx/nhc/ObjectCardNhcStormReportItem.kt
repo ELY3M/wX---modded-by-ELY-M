@@ -62,5 +62,3 @@ class ObjectCardNhcStormReportItem(context: Context, linearLayout: LinearLayout,
         objectCard.card.setOnClickListener(fn)
     }
 }
-
-

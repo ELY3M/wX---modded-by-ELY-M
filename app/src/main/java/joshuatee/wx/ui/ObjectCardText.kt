@@ -233,5 +233,3 @@ class ObjectCardText(context: Context) {
         }
     }
 }
-
-

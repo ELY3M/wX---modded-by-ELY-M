@@ -19,7 +19,6 @@
 
  */
 
-
 package joshuatee.wx.audio
 
 import android.app.Service
@@ -34,8 +33,4 @@ class AudioServiceForward : Service() {
         UtilityTts.synthesizeTextAndPlayNext(this)
         return START_NOT_STICKY
     }
-} 
-
-
-
-
+}

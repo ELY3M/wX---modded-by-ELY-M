@@ -31,6 +31,7 @@ import kotlin.math.abs
 
  * @author Paul Burke (ipaulpro)
  */
+
 internal class SimpleItemTouchHelperCallback(private val mAdapter: ItemTouchHelperAdapter) :
     ItemTouchHelper.Callback() {
 
