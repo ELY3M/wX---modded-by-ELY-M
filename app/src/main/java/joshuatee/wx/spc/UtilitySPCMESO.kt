@@ -34,12 +34,12 @@ object UtilitySpcMeso {
         ObjectMenuTitle("Observations", 3),
         ObjectMenuTitle("Surface", 15),
         ObjectMenuTitle("Upper Air", 25),
-        ObjectMenuTitle("Thermodynamics", 19),
+        ObjectMenuTitle("Thermodynamics", 20),
         ObjectMenuTitle("Wind Shear", 20),
         ObjectMenuTitle("Composite Indices", 23),
         ObjectMenuTitle("Multi-Parameter Fields", 11),
         ObjectMenuTitle("Heavy Rain", 8),
-        ObjectMenuTitle("Winter Weather", 14),
+        ObjectMenuTitle("Winter Weather", 15),
         ObjectMenuTitle("Fire Weather", 6),
         ObjectMenuTitle("Classic", 3),
         ObjectMenuTitle("Beta", 10)
@@ -249,6 +249,7 @@ object UtilitySpcMeso {
         "mucp_chg",
         "lllr_chg",
         "laps_chg",
+        "skewt",
 
         "eshr",
         "shr6",
@@ -330,6 +331,8 @@ object UtilitySpcMeso {
         "dendrh",
         "ddrh",
         "mxwb",
+        "skewt-winter",
+
         "sfir",
         "fosb",
         "lhan",
@@ -418,6 +421,7 @@ object UtilitySpcMeso {
         "3-hour Most-Unstable CAPE Change",
         "3-hour Low-Level LR Change",
         "6-hour Mid-Level LR Change",
+        "Skew-T Maps",
 
         "Bulk Shear - Effective",
         "Bulk Shear - Sfc-6km",
@@ -499,6 +503,7 @@ object UtilitySpcMeso {
         "Dendritic Growth Layer RH",
         "Dendritic Growth Layer Depth & RH",
         "Max Wet Bulb Temperature",
+        "Winter Skew-T Maps",
 
         "Sfc RH / Temp / Wind",
         "Fosberg Index",

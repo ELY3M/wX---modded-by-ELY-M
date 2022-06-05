@@ -60,7 +60,7 @@ object UtilitySpcMesoInputOutput {
         var bitmap = imgUrl.getImage()
         drawables.add(ColorDrawable(Color.WHITE))
 
-        if (param == "hodo") {
+        if (param == "hodo" || param.startsWith("skewt")) {
             showRadar = true
         }
         if (showCounty) {

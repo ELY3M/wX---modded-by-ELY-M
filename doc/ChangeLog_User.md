@@ -6,42 +6,30 @@ FAQ can be accessed via Settings -> About
 
 Please also review [Upcoming changes](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/UPCOMING_CHANGES.md) impacting all or some users.
 
-## 55599 2022_04_08 (BETA)
+## 55599 2022_04_16
 * [FIX] more robustness for Hourly using old NWS API
 * [ADD] Please see URL above for a new page about upcoming changes to certain parts of wX
-
-## 55598 2022_04_02 (BETA)
-* [ADD] Nexrad Level2: in response to 56+ hr IT maintenance on 2022-04-19 to nomads NWS servers, change URL to backup
-  - [https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr.pdf](https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr.pdf)
+* [ADD] Nexrad Level2: in response to 24+ hr IT maintenance on 2022-04-19 to nomads NWS servers, change URL to backup
+  - [https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr_aaa.pdf](https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr_aaa.pdf)
   - A [reminder](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/FAQ.md#why-is-level-2-radar-not-the-default) on Level 2 support within wX
-
-## 55596 2022_03_24 (BETA)
 * [ADD] SPC Meso - new "layer" county boundaries. Turn on from submenu -> Layers (NOTE: the state line boundary provided for the Radar Mosaic does not quite match up with the county layer. This can be observed from the SPC Website as well)
 * [ADD] SPC Meso - new param: "Hodograph Map", access from "Wind Shear" submenu. Only usable on region specific sectors, not CONUS.
 * [ADD] The default hourly data provided (the new NWS API) does not reliably return results on the first download, added a retry mechanism.
 * [ADD] access to settings via hourly in case app won't load (can access via 4x4 blue widget -> hourly -> settings)
-
-## 55594 2022_03_07 (BETA)
 * NWS is deprecating this website on 3/22 (substitute NWS observation point, etc): https://www.wrh.noaa.gov/mesowest/timeseries.php?sid=KCAR
   in favor of: https://www.weather.gov/wrh/timeseries?site=KCAR
   Thus updated the activity accessed through the "MISC" tab to reflect this
-
-## 55593 2022_03_05 (BETA)
 * [FIX] GOES GLM (lightning) animation was not working
-
-## 55592 2022_02_27 (BETA)
 * [ADD] (main screen) if closest observation point has data older then 2 hours, show data for the 2nd closest obs point instead
 * [FIX] prune the list of Observation points by removing 57 sites that had not updated in the past 28 days
         This pruning will occur more frequently in the future to avoid a bad user experience
 * [ADD] upgrade software that wX uses
-
-## 55588 2022_02_22 (BETA)
 * [FIX] remove the following weather obs point in `stations_us4.txt` and `us_metar3.txt` as user reported it has not updated since Jan 26
 ```
 IL,ROMEOVILLE/CHI  ,KLOT
 KLOT 41.6 -88.1
 ```
-NOTE: I'm going to audit the 2400+ obs sites and remove stale entries for the next planned release.
+
 ### version **55584** - released on 2022/02/10
 * [ADD] In Settings -> UI -> Navdrawer config, have top arrow respond in the same way that bottom arrow does when pressed
 * [ADD] In Settings -> about, add navdrawer token string to assist in troubleshooting

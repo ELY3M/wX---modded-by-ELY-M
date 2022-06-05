@@ -25,7 +25,6 @@ package joshuatee.wx.util
 import java.util.Locale
 import android.content.Context
 import android.graphics.Bitmap
-
 import joshuatee.wx.MyApplication
 import joshuatee.wx.activitiesmisc.UtilityLightning
 import joshuatee.wx.activitiesmisc.UtilitySunMoon
@@ -34,7 +33,6 @@ import joshuatee.wx.audio.UtilityPlayList
 import joshuatee.wx.settings.Location
 import joshuatee.wx.settings.UtilityLocation
 import joshuatee.wx.spc.*
-
 import joshuatee.wx.Extensions.*
 import joshuatee.wx.RegExp
 import joshuatee.wx.UIPreferences

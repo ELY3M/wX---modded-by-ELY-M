@@ -35,16 +35,11 @@ package joshuatee.wx.util;
 
 
 
-import android.util.Log;
-import android.widget.Toast;
-
 import java.io.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
-import joshuatee.wx.MyApplication;
 
 /**
  * A buffered drop-in replacement for java.io.RandomAccessFile.
@@ -807,8 +802,6 @@ public class UCARRandomAccessFile implements DataInput, DataOutput {
 		int ch1 = this.read();
 		int ch2 = this.read();
 		if ((ch1 | ch2) < 0) {
-			Log.d("wx", "Radar Files are not found!!!");
-			Toast.makeText(MyApplication.appContext, "This Radar Product is not available right now", Toast.LENGTH_SHORT).show();
 			throw new EOFException();
 		}
 		if (bigEndian) {

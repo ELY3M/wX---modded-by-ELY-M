@@ -63,6 +63,7 @@ import joshuatee.wx.activitiesmisc.WebView
 
 class WXGLRadarActivity : VideoRecordActivity(), OnMenuItemClickListener {
 
+    //
     // This activity is a general purpose viewer of nexrad and mosaic content
     // nexrad data is downloaded from NWS FTP, decoded and drawn using OpenGL ES
     //

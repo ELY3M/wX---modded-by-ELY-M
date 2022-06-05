@@ -31,17 +31,38 @@
 ```
 [[_TOC_]]
 
-## 55600 2022_04_06
-*
+## 55601 2022_06_03
+* software updates as follows
+```
+-    implementation 'com.google.android.material:material:1.6.0'
++    implementation 'com.google.android.material:material:1.6.1'
+
+-        classpath 'com.android.tools.build:gradle:7.2.0'
++        classpath 'com.android.tools.build:gradle:7.2.1'
+```
+
+## 55600 2022_05_13
+* SPC Meso additions
+  - under Thermodynamics add "Skew-T Maps" skewt
+  - under "Winter Weather" add "Winter Skew-T Maps" skewt-winter
+* In addition to Android Studio update (and the various updates it brings along), update the following:
+```
+-    implementation 'com.google.android.material:material:1.5.0'
++    implementation 'com.google.android.material:material:1.6.0'
+
+-    implementation 'androidx.media:media:1.5.0'
++    implementation 'androidx.media:media:1.6.0'
+```
 
 ## 55599 2022_04_06
 * [FIX] more robustness for Hourly using old NWS API
 
 ## 55598 2022_04_01
 * [REF] whitespace cleanup particularly at bottom of file, not consistent
-* [ADD] Nexrad Level2: in response to 56+ hr maint on 2022-04-19 to nomands, change URL to backup
-  - [https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr.pdf](https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr.pdf)
+* [ADD] Nexrad Level2: in response to 24+ hr maint on 2022-04-19 to nomands, change URL to backup
+  - [https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr_aaa.pdf](https://www.weather.gov/media/notification/pdf2/scn22-35_nomads_outage_apr_aaa.pdf)
   - A [reminder](https://gitlab.com/joshua.tee/wxl23/-/blob/master/doc/FAQ.md#why-is-level-2-radar-not-the-default) on Level 2 support within wX
+
 
 ## 55597 2022_03_24
 * [REF] whitespace cleanup particularly at bottom of file, not consistent

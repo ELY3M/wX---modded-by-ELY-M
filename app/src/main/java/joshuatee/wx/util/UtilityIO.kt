@@ -55,7 +55,7 @@ object UtilityIO {
     fun getFilePath(context: Context, fileName: String): String = context.getFileStreamPath(fileName).absolutePath
 
     fun readTextFileFromRaw(resources: Resources, fileRaw: Int) = readTextFile(resources.openRawResource(fileRaw))
-
+    //elys mod - cant be private. it is used in other file.  
     fun readTextFile(inputStream: InputStream): String {
         val byteArrayOutputStream = ByteArrayOutputStream()
         val byteArray = ByteArray(32768)

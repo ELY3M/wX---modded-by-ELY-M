@@ -312,7 +312,7 @@ class MyApplication : Application() {
         const val ICON_CURRENT = R.drawable.ic_info_outline_24dp
         const val ICON_CURRENT_WHITE = R.drawable.ic_info_outline_24dp_white
         const val ICON_NHC_1 = R.drawable.ic_brightness_auto_24dp
-        const val ICON_DELETE = R.drawable.ic_delete_24dp
+//        const val ICON_DELETE = R.drawable.ic_delete_24dp
         const val ICON_DELETE_WHITE = R.drawable.ic_delete_24dp_white
         const val STAR_ICON = R.drawable.ic_star_24dp
         const val STAR_OUTLINE_ICON = R.drawable.ic_star_outline_24dp
