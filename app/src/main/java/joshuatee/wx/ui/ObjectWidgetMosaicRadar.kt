@@ -28,15 +28,22 @@ import joshuatee.wx.settings.UIPreferences
 import joshuatee.wx.UtilityWidget
 import joshuatee.wx.objects.WidgetFile.MOSAIC_RADAR
 import joshuatee.wx.radar.AwcRadarMosaicActivity
+import joshuatee.wx.radar.RadarMosaicNwsActivity
 
 class ObjectWidgetMosaicRadar(context: Context) {
 
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
+    private val remoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
 
     init {
         UtilityWidget.setImage(context, remoteViews, MOSAIC_RADAR.fileName)
         if (!UIPreferences.widgetPreventTap) {
-            UtilityWidget.setupIntent(context, remoteViews, AwcRadarMosaicActivity::class.java, R.id.iv, AwcRadarMosaicActivity.URL, arrayOf("widget"), MOSAIC_RADAR.action)
+            if (UIPreferences.useAwcMosaic) {
+                UtilityWidget.setupIntent(context, remoteViews, AwcRadarMosaicActivity::class.java, R.id.iv, AwcRadarMosaicActivity.URL, arrayOf("widget"), MOSAIC_RADAR.action)
+            } else {
+                UtilityWidget.setupIntent(context, remoteViews, RadarMosaicNwsActivity::class.java, R.id.iv, RadarMosaicNwsActivity.URL, arrayOf(""), MOSAIC_RADAR.action)
+            }
         }
     }
+
+    fun get() = remoteViews
 }

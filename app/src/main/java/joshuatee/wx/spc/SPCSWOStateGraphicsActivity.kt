@@ -25,7 +25,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import joshuatee.wx.Extensions.getImage
 import joshuatee.wx.R
 import joshuatee.wx.settings.Location
@@ -88,7 +87,6 @@ class SpcSwoStateGraphicsActivity : VideoRecordActivity() {
     }
 
     private fun showImage() {
-        img.visibility = View.VISIBLE
         img.setBitmap(bitmap)
         img.firstRunSetZoomPosn(imgPrefToken)
     }

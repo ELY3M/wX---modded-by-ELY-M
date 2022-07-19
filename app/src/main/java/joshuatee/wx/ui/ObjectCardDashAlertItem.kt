@@ -48,15 +48,17 @@ class ObjectCardDashAlertItem(context: Context, val linearLayout: LinearLayout, 
         val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         val linearLayoutHorizontal = LinearLayout(context)
         linearLayoutHorizontal.layoutParams = layoutParams
-        linearLayoutHorizontal.addView(radarButton.card)
-        linearLayoutHorizontal.addView(detailsButton.card)
+        linearLayoutHorizontal.addView(radarButton.get())
+        linearLayoutHorizontal.addView(detailsButton.get())
         linearLayoutVertical.addView(linearLayoutHorizontal)
         objectCard.addView(linearLayoutVertical)
         setTextFields()
-        linearLayout.addView(objectCard.card)
+        linearLayout.addView(objectCard.get())
     }
 
-    fun setListener(fn: View.OnClickListener) = objectCard.card.setOnClickListener(fn)
+    fun setListener(fn: View.OnClickListener) {
+        objectCard.setOnClickListener(fn)
+    }
 
     private fun setTextFields() {
         textViewTop.text = warning.sender
@@ -67,6 +69,6 @@ class ObjectCardDashAlertItem(context: Context, val linearLayout: LinearLayout, 
     }
 
     fun setId(id: Int) {
-        objectCard.card.id = id
+        objectCard.setId(id)
     }
 }

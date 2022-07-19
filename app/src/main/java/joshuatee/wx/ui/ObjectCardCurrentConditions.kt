@@ -46,7 +46,7 @@ class ObjectCardCurrentConditions(context: Context, version: Int) {
             textViewMiddle.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, 0)
             textViewBottom.setPadding(UIPreferences.padding, 0, UIPreferences.paddingSmall, UIPreferences.paddingSmall)
             linearLayoutVertical.addViews(listOf(textViewTop.get(), textViewMiddle.get(), textViewBottom.get()))
-            linearLayoutHorizontal.addViews(listOf(objectImageView.imageView, linearLayoutVertical.linearLayout))
+            linearLayoutHorizontal.addViews(listOf(objectImageView.get(), linearLayoutVertical.linearLayout))
         } else {
             // legacy code
             textViewTop.gravity = Gravity.CENTER
@@ -62,7 +62,7 @@ class ObjectCardCurrentConditions(context: Context, version: Int) {
         objCard.addView(linearLayoutHorizontal)
     }
 
-    fun get() = objCard.card
+    fun get() = objCard.get()
 
     fun refreshTextSize() {
         textViewTop.refreshTextSize(TextSize.MEDIUM)
@@ -83,7 +83,7 @@ class ObjectCardCurrentConditions(context: Context, version: Int) {
     }
 
     fun setListener(alertDialogStatus: ObjectDialogue?, alertDialogStatusAl: MutableList<String>, radarTimestamps: () -> List<String>) {
-        objectImageView.imageView.setOnClickListener {
+        objectImageView.setOnClickListener {
             alertDialogStatusAl.clear()
             alertDialogStatusAl.add("Edit Location...")
             alertDialogStatusAl.add("Force Data Refresh...")

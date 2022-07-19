@@ -103,5 +103,5 @@ internal class ObjectSettingsSeekBar(
         objectTextView.text = label + " (default is " + defValue.toString() + "): " + convertForSave(seekBar.progress).toString()
     }
 
-    val card get() = objectCard.card
+    val card get() = objectCard.get()
 }

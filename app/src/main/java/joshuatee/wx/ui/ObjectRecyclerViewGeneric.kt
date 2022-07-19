@@ -28,7 +28,6 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ObjectRecyclerViewGeneric(context: Context, activity: Activity, resourceId: Int) {
 
-    // TODO FIXME property to set adapter
     val recyclerView: RecyclerView = activity.findViewById(resourceId)
 
     init {

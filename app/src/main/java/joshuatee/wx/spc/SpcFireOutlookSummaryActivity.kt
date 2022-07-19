@@ -75,8 +75,8 @@ class SpcFireOutlookSummaryActivity : BaseActivity() {
     }
 
     private fun updateImage(index: Int) {
-        objectImageSummary.objectCardImages[index].setImage2(bitmaps[index], 2)
-        objectImageSummary.objectCardImages[index].setOnClickListener {
+        objectImageSummary.setImage(index, bitmaps[index])
+        objectImageSummary.setOnClickListener(index) {
             val textProduct = UtilitySpcFireOutlook.textProducts[index]
             val imageUrl = UtilitySpcFireOutlook.urls[index]
             ObjectIntent(this@SpcFireOutlookSummaryActivity, SpcFireOutlookActivity::class.java, SpcFireOutlookActivity.NUMBER, arrayOf(textProduct, imageUrl))

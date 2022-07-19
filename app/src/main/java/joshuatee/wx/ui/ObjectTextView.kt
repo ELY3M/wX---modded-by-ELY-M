@@ -46,10 +46,6 @@ class ObjectTextView(val context: Context) {
         get() = tv.visibility
         set(value) { tv.visibility = value }
 
-//    var layoutParams: ViewGroup.LayoutParams
-//        get() = tv.layoutParams
-//        set(value) { tv.layoutParams = value }
-
     init {
         tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, UIPreferences.textSizeNormal)
         tv.setPadding(UIPreferences.padding, 0, UIPreferences.padding, 0)

@@ -23,11 +23,17 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.view.View
 import android.widget.LinearLayout
 
 class ObjectImageSummary(context: Context, val linearLayout: LinearLayout, val bitmaps: List<Bitmap>) {
 
-    val objectCardImages = mutableListOf<ObjectCardImage>()
+    //
+    // used by:
+    // SPC Swo summary, SPC Tstorm, WPC Rainfall summary, SPC Fire outlook summary
+    //
+
+    private val objectCardImages = mutableListOf<ObjectCardImage>()
 
     init {
         val imagesPerRow = 2
@@ -47,5 +53,13 @@ class ObjectImageSummary(context: Context, val linearLayout: LinearLayout, val b
             objectCardImages.add(objectCardImage)
             numberOfImages += 1
         }
+    }
+
+    fun setOnClickListener(index: Int, fn: View.OnClickListener) {
+        objectCardImages[index].setOnClickListener(fn)
+    }
+
+    fun setImage(index: Int, bitmap: Bitmap) {
+        objectCardImages[index].setImage2(bitmap, 2)
     }
 }

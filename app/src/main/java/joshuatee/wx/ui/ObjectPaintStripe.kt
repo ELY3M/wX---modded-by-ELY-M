@@ -27,7 +27,7 @@ import joshuatee.wx.settings.UIPreferences
 
 class ObjectPaintStripe {
 
-    val paint = Paint()
+    private val paint = Paint()
 
     init {
         val red = Color.red(UIPreferences.nwsIconBottomColor)
@@ -35,4 +35,6 @@ class ObjectPaintStripe {
         val blue = Color.blue(UIPreferences.nwsIconBottomColor)
         paint.color = Color.argb(200, red, green, blue)
     }
+
+    fun get() = paint
 }

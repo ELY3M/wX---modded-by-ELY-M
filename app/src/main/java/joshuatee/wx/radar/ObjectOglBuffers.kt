@@ -18,6 +18,7 @@
     along with wX.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+//modded by ELY M.  
 
 package joshuatee.wx.radar
 
@@ -167,7 +168,8 @@ open class ObjectOglBuffers() {
         // TVS
         private fun redrawTriangle(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
             if (!RadarPreferences.radarUseJni) {
-                UtilityWXOGLPerf.genTriangle(buffers, projectionNumbers)
+	    	//elys mod
+                UtilityWXOGLPerf.genMarkerList(buffers, projectionNumbers, buffers.xList, buffers.yList)
             } else {
                 Jni.genTriangle(
                         buffers.floatBuffer,
@@ -190,7 +192,8 @@ open class ObjectOglBuffers() {
         // HI
         private fun redrawTriangleUp(buffers: ObjectOglBuffers, projectionNumbers: ProjectionNumbers) {
             if (!RadarPreferences.radarUseJni) {
-                UtilityWXOGLPerf.genTriangleUp(buffers, projectionNumbers)
+	        //elys mod
+                UtilityWXOGLPerf.genMarkerList(buffers, projectionNumbers, buffers.xList, buffers.yList)
             } else {
                 Jni.genTriangleUp(
                         buffers.floatBuffer,

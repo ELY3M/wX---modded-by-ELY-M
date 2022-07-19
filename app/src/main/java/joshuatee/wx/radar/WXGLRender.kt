@@ -84,7 +84,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
     }
 
-    val TAG: String = "joshuatee WXGLRender"
+    val TAG: String = "WXGLRender"
     // this string is normally no string but for dual pane will be set to either 1 or 2 to differentiate timestamps
     var radarStatusStr = ""
     var indexString = "0"
@@ -464,6 +464,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             }
         }
 
+
         if (zoom > hiBuffers.scaleCutOff) {
             drawHI(hiBuffers)
         }
@@ -511,8 +512,8 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
 
 
         if (RadarPreferences.locdotBug)  {
-            Log.i(TAG, "bearing: " + WXGLRadarActivity.bearingCurrent)
-            Log.i(TAG, "speed: " + WXGLRadarActivity.speedCurrent)
+            //Log.i(TAG, "bearing: " + WXGLRadarActivity.bearingCurrent)
+            //Log.i(TAG, "speed: " + WXGLRadarActivity.speedCurrent)
             if (WXGLRadarActivity.speedCurrent >= 0.43) {
                 //set up location bug
                 Log.i(TAG, "location bug!!!!")
@@ -904,8 +905,8 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
             GLES20.glUniform1i(iTexture, 0)
             GLES20.glEnable(GLES20.GL_BLEND)
             GLES20.glBlendFunc(GLES20.GL_SRC_ALPHA, GLES20.GL_ONE_MINUS_SRC_ALPHA)
-            GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
-            //GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+            //GLES20.glDrawElements(GLES20.GL_POINTS, 1, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
+            GLES20.glDrawElements(GLES20.GL_POINTS, buffers.floatBuffer.capacity() / 8, GLES20.GL_UNSIGNED_SHORT, buffers.indexBuffer.slice().asShortBuffer())
             GLES20.glUseProgram(OpenGLShader.sp_SolidColor)
 
 
@@ -1317,6 +1318,7 @@ class WXGLRender(private val context: Context, val paneNumber: Int) : Renderer {
                     24 * buffers.count * buffers.triangleCount,
                     12 * buffers.count * buffers.triangleCount,
                     9 * buffers.count * buffers.triangleCount, 0)
+
             buffers.lenInit = 0f //scaleLength(buffers.lenInit)
             buffers.draw(projectionNumbers)
             buffers.isInitialized = true

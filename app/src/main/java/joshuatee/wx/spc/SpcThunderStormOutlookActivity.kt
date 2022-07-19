@@ -82,8 +82,8 @@ class SpcThunderStormOutlookActivity : BaseActivity() {
     }
 
     private fun updateImage(index: Int) {
-        objectImageSummary.objectCardImages[index].setImage2(bitmaps[index], 2)
-        objectImageSummary.objectCardImages[index].setOnClickListener{
+        objectImageSummary.setImage(index, bitmaps[index])
+        objectImageSummary.setOnClickListener(index) {
             ObjectIntent.showImage(this@SpcThunderStormOutlookActivity, arrayOf(urls[index], ""))
         }
     }

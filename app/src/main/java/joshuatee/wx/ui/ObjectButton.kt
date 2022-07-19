@@ -54,5 +54,5 @@ class ObjectButton(context: Context, title: String, icon: Int) {
         button.setOnClickListener(fn)
     }
 
-    val card get() = button
+    fun get() = button
 }

@@ -31,7 +31,7 @@ import joshuatee.wx.spc.SpcSwoActivity
 
 class ObjectWidgetSpcSwo(context: Context) {
 
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget_spcswo_layout)
+    private val remoteViews = RemoteViews(context.packageName, R.layout.widget_spcswo_layout)
     private val ivList = listOf(R.id.iv1, R.id.iv2, R.id.iv3, R.id.iv4)
 
     init {
@@ -43,4 +43,6 @@ class ObjectWidgetSpcSwo(context: Context) {
             }
         }
     }
+
+    fun get() = remoteViews
 }

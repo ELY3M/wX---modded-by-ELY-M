@@ -211,7 +211,7 @@ class ObjectCardText(context: Context) {
         tv.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
     }
 
-    fun get() = objectCard.card
+    fun get() = objectCard.get()
 
     var visibility
         get() = objectCard.visibility

@@ -33,7 +33,7 @@ import joshuatee.wx.util.Utility
 
 class ObjectWidgetNexradRadar(context: Context) {
 
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
+    private val remoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
 
     init {
         val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
@@ -43,4 +43,6 @@ class ObjectWidgetNexradRadar(context: Context) {
             UtilityWidget.setupIntent(context, remoteViews, WXGLRadarActivity::class.java, R.id.iv, WXGLRadarActivity.RID, arrayOf(radarSite), NEXRAD_RADAR.action)
         }
     }
+
+    fun get() = remoteViews
 }

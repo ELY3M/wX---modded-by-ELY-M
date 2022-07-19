@@ -71,8 +71,8 @@ class WpcRainfallForecastSummaryActivity : BaseActivity() {
     }
 
     private fun updateImage(index: Int) {
-        objectImageSummary.objectCardImages[index].setImage2(bitmaps[index], 2)
-        objectImageSummary.objectCardImages[index].setOnClickListener {
+        objectImageSummary.setImage(index, bitmaps[index])
+        objectImageSummary.setOnClickListener(index) {
             val textProduct = UtilityWpcRainfallForecast.productCode[index]
             val imageUrl = UtilityWpcRainfallForecast.urls[index]
             val day = (index + 1).toString()

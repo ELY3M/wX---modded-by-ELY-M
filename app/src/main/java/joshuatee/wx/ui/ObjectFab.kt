@@ -24,6 +24,7 @@ package joshuatee.wx.ui
 import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -32,7 +33,7 @@ import joshuatee.wx.settings.UIPreferences
 
 class ObjectFab {
 
-    val fab: FloatingActionButton
+    private val fab: FloatingActionButton
 
     constructor(activity: Activity, context: Context, resId: Int, fn: View.OnClickListener) {
         fab = activity.findViewById(resId)
@@ -44,6 +45,10 @@ class ObjectFab {
         fab = activity.findViewById(resId)
         setupFab(context, iconID)
         setOnClickListener(fn)
+    }
+
+    fun setImageDrawable(drawable: Drawable?) {
+        fab.setImageDrawable(drawable)
     }
 
     fun setOnClickListener(fn: View.OnClickListener) {

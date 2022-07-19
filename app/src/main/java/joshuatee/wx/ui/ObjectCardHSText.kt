@@ -96,5 +96,5 @@ class ObjectCardHSText(context: Context, val product: String) {
         textView.typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL)
     }
 
-    fun get() = objectCard.card
+    fun get() = objectCard.get()
 }

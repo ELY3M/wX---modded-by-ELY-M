@@ -25,7 +25,6 @@
 // TODO [REF] ExternalGeodeticCalculator -> convert from class to object since all static
 // TODO [ADD] look to replace AWC radar mosaics with normal NWS (looks like AWC website redesign might obsolete)
 // [FIX] when animating in vis/mosaic, show stop button, etc
-// [REF] move storage containers in MyApp (DataStorage types) somewhere else
 // [REF] ObjectPolygonWatch ?
 // [REF] PolygonType rename MCD -> Mcd, etc
 // [REF] IntentService is deprecated (AudioService* and others) https://stackoverflow.com/questions/62138507/intentservice-is-deprecated-how-do-i-replace-it-with-jobintentservice
@@ -33,11 +32,14 @@
 // [FIX] common verbiage between nexrad long press ios and android
 // [REF] WXGLRender should show elements based on pref not buffer size (ca/mx statelines ex.)
 // [REF] unecessary try in locfrag
-// [REF] ObjectCard make card protected or private
-// [REF] ObjectRecyclerViewGeneric and others getter/setter for adapter
-// [REF] ObjectTextView make tv private
+// [ADD] handle deprecations in UtilityUI https://stackoverflow.com/questions/62577645/android-view-view-systemuivisibility-deprecated-what-is-the-replacement
+// [FIX] settings color pal editor shows "null"
+// [REF] ImageCollection         toolbar.setOnClickListener { drw.drawerLayout.openDrawer(drw.listView) }
 ```
 [[_TOC_]]
+
+## 55624 2022_07_19
+* [REF] misc refactor
 
 ## 55623 2022_07_19
 * [REF] misc refactor - UI

@@ -27,7 +27,7 @@ import joshuatee.wx.settings.UIPreferences
 
 class ObjectPaint {
 
-    val paint = Paint()
+    private val paint = Paint()
 
     init {
         paint.color = UIPreferences.nwsIconTextColor
@@ -35,4 +35,6 @@ class ObjectPaint {
         paint.typeface = Typeface.DEFAULT_BOLD
         paint.isAntiAlias = true
     }
+
+    fun get() = paint
 }

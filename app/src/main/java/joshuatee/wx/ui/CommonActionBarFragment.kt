@@ -54,7 +54,7 @@ open class CommonActionBarFragment : AppCompatActivity(), OnMenuItemClickListene
     //
 
     private val requestOk = 1
-    lateinit var view: View
+    protected lateinit var view: View
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.cab, menu)

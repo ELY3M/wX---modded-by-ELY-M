@@ -35,9 +35,9 @@ class ObjectTouchImageView {
     private var img: TouchImageView2
     private val context: Context
     private var imageLoaded = false
-    var firstRun = false
+    private var firstRun = false
     private var prefTokenIdx = ""
-    var drw: ObjectNavDrawer? = null
+    private var drw: ObjectNavDrawer? = null
 
     constructor(activity: Activity, context: Context, resourceId: Int) {
         img = activity.findViewById(resourceId)

@@ -33,7 +33,7 @@ import joshuatee.wx.wpc.WpcTextProductsActivity
 
 class ObjectWidgetTextWpc(context: Context) {
 
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget_textview_layout)
+    private val remoteViews = RemoteViews(context.packageName, R.layout.widget_textview_layout)
 
     init {
         val text = Utility.readPref(context, "TEXTWPC_WIDGET", "")
@@ -43,4 +43,6 @@ class ObjectWidgetTextWpc(context: Context) {
             UtilityWidget.setupIntent(context, remoteViews, WpcTextProductsActivity::class.java, R.id.text1, WpcTextProductsActivity.URL, arrayOf("pmdspd", "Short Range Forecast Discussion"), TEXT_WPC.action)
         }
     }
+
+    fun get() = remoteViews
 }

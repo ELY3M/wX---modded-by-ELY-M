@@ -79,17 +79,17 @@ object UtilityWidget {
         val allWidgetIds = appWidgetManager.getAppWidgetIds(thisWidget)
         allWidgetIds.forEach { widgetId ->
             when (widgetType) {
-                MOSAIC_RADAR -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetMosaicRadar(context).remoteViews)
-                VIS -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetVis(context).remoteViews)
-                NEXRAD_RADAR -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetNexradRadar(context).remoteViews)
-                SPCMESO, CONUSWV, STRPT, WPCIMG -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetGeneric(context, widgetType).remoteViews)
-                SPCSWO -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetSpcSwo(context).remoteViews)
-                NHC -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetNhc(context).remoteViews)
+                MOSAIC_RADAR -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetMosaicRadar(context).get())
+                VIS -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetVis(context).get())
+                NEXRAD_RADAR -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetNexradRadar(context).get())
+                SPCMESO, CONUSWV, STRPT, WPCIMG -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetGeneric(context, widgetType).get())
+                SPCSWO -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetSpcSwo(context).get())
+                NHC -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetNhc(context).get())
                 AFD -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetAfd(context).get())
-                HWO -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetHwo(context).remoteViews)
-                TEXT_WPC -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetTextWpc(context).remoteViews)
-                CC -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetCC(context).remoteViews)
-                CCLegacy -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetCCLegacy(context, allWidgetIds).remoteViews)
+                HWO -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetHwo(context).get())
+                TEXT_WPC -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetTextWpc(context).get())
+                CC -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetCC(context).get())
+                CCLegacy -> appWidgetManager.updateAppWidget(widgetId, ObjectWidgetCCLegacy(context, allWidgetIds).get())
             }
         }
     }

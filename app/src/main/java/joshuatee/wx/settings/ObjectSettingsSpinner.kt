@@ -81,7 +81,7 @@ class ObjectSettingsSpinner(context: Context, label: String, pref: String, prefI
         objectCard.addView(objectLinearLayout.linearLayout)
     }
 
-    val card get() = objectCard.card
+    val card get() = objectCard.get()
 
     companion object {
 

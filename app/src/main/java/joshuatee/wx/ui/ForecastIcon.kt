@@ -31,12 +31,12 @@ import joshuatee.wx.util.UtilityNwsIcon
 
 class ForecastIcon {
 
-    var bitmap: Bitmap
-    var canvas: Canvas
-    var context: Context
-    val paint = ObjectPaint()
-    val paintStripe = ObjectPaintStripe()
-    val nullImage = R.drawable.white_box
+    private var bitmap: Bitmap
+    private var canvas: Canvas
+    private var context: Context
+    private val paint = ObjectPaint()
+    private val paintStripe = ObjectPaintStripe()
+    private val nullImage = R.drawable.white_box
 
     constructor(context: Context, weatherCondition: String) {
         this.context = context
@@ -77,8 +77,8 @@ class ForecastIcon {
     fun drawLeftText(leftNumber: String) {
         val xTextLeft = 2
         if (leftNumber != "" && leftNumber != "0") {
-            canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), halfWidth.toFloat(), dimensions.toFloat(), paintStripe.paint)
-            canvas.drawText("$leftNumber%", xTextLeft.toFloat(), yText.toFloat(), paint.paint)
+            canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), halfWidth.toFloat(), dimensions.toFloat(), paintStripe.get())
+            canvas.drawText("$leftNumber%", xTextLeft.toFloat(), yText.toFloat(), paint.get())
         }
     }
 
@@ -89,8 +89,8 @@ class ForecastIcon {
             58
         }
         if (rightNumber != "" && rightNumber != "0") {
-            canvas.drawRect(middlePoint.toFloat(), (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.paint)
-            canvas.drawText("$rightNumber%", xText.toFloat(), yText.toFloat(), paint.paint)
+            canvas.drawRect(middlePoint.toFloat(), (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.get())
+            canvas.drawText("$rightNumber%", xText.toFloat(), yText.toFloat(), paint.get())
         }
     }
 
@@ -102,8 +102,8 @@ class ForecastIcon {
             58
         }
         if (number != "" && number != "0") {
-            canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.paint)
-            canvas.drawText("$number%", xText.toFloat(), yText.toFloat(), paint.paint)
+            canvas.drawRect(0.0f, (dimensions - numHeight).toFloat(), dimensions.toFloat(), dimensions.toFloat(), paintStripe.get())
+            canvas.drawText("$number%", xText.toFloat(), yText.toFloat(), paint.get())
         }
     }
 

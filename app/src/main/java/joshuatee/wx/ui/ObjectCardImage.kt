@@ -31,7 +31,7 @@ import joshuatee.wx.util.UtilityImg
 
 open class ObjectCardImage {
 
-    private val objectCard: ObjectCard
+    protected val objectCard: ObjectCard
     private val context: Context
     var img: TouchImageView2
         internal set
@@ -99,7 +99,7 @@ open class ObjectCardImage {
     }
 
     open fun setImage2(bitmap: Bitmap, numberAcross: Int = 1) {
-        objectCard.card.removeAllViews()
+        objectCard.get().removeAllViews()
         img = TouchImageView2(context)
         img.layoutParams = layoutParams
         UtilityImg.resizeViewSetImgInCard(bitmap, img, numberAcross)
@@ -108,9 +108,9 @@ open class ObjectCardImage {
 
     fun resetZoom() = img.resetZoom()
 
-    protected val card get() = objectCard.card
+    protected val card get() = objectCard.get()
 
-    fun get() = objectCard.card
+    fun get() = objectCard.get()
 
     var visibility
         get() = objectCard.visibility

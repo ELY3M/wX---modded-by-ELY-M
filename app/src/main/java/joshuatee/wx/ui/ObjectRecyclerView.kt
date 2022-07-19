@@ -28,8 +28,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ObjectRecyclerView(context: Context, activity: Activity, resourceId: Int, list: MutableList<String>, fn: (Int) -> Unit) {
 
-    val recyclerView: RecyclerView = activity.findViewById(resourceId)
-    var ca = SingleTextAdapterList(list)
+    private val recyclerView: RecyclerView = activity.findViewById(resourceId)
+    private var ca = SingleTextAdapterList(list)
 
     init {
         recyclerView.setHasFixedSize(true)
@@ -60,6 +60,8 @@ class ObjectRecyclerView(context: Context, activity: Activity, resourceId: Int, 
     fun deleteItem(index: Int) {
         ca.deleteItem(index)
     }
+
+    fun get() = recyclerView
 
     override fun toString() = ca.toString()
 }

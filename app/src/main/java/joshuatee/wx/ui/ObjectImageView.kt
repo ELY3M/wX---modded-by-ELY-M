@@ -23,6 +23,7 @@ package joshuatee.wx.ui
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.view.View
 import android.widget.ImageView
 import joshuatee.wx.Extensions.setPadding
 import joshuatee.wx.fragments.UtilityLocationFragment
@@ -30,7 +31,7 @@ import joshuatee.wx.settings.UIPreferences
 
 class ObjectImageView(context: Context) {
 
-    val imageView = ImageView(context)
+    private val imageView = ImageView(context)
 
     fun setImage(bitmap: Bitmap) {
         imageView.setImageBitmap(bitmap)
@@ -41,4 +42,10 @@ class ObjectImageView(context: Context) {
         layoutParams.height = imageSize
         imageView.layoutParams = layoutParams
     }
+
+    fun setOnClickListener(fn: View.OnClickListener) {
+        imageView.setOnClickListener(fn)
+    }
+
+    fun get() = imageView
 }

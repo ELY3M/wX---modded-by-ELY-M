@@ -32,7 +32,7 @@ import joshuatee.wx.vis.GoesActivity
 
 class ObjectWidgetVis(context: Context) {
 
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
+    private val remoteViews = RemoteViews(context.packageName, R.layout.widget_generic_layout)
 
     init {
         val intentHome = Intent("android.intent.action.MAIN")
@@ -42,4 +42,6 @@ class ObjectWidgetVis(context: Context) {
             UtilityWidget.setupIntent(context, remoteViews, GoesActivity::class.java, R.id.iv, GoesActivity.RID, arrayOf(""), VIS.action)
         }
     }
+
+    fun get() = remoteViews
 }

@@ -34,17 +34,6 @@ import joshuatee.wx.util.Utility
 
 object UtilityUI {
 
-//    fun makeToastLegacy(context: Context, message: String) {
-//        val view = View.inflate(context, R.layout.toast, null)
-//        val linearLayout: LinearLayout = view.findViewById(R.id.toast_layout_root)
-//        val text: TextView = linearLayout.findViewById(R.id.text)
-//        text.text = message
-//        val toast = Toast(context.applicationContext)
-//        toast.duration = Toast.LENGTH_LONG
-//        toast.view = linearLayout
-//        toast.show()
-//    }
-
     fun immersiveMode(activity: Activity) {
         if (UIPreferences.radarImmersiveMode) {
             activity.window.decorView.systemUiVisibility =

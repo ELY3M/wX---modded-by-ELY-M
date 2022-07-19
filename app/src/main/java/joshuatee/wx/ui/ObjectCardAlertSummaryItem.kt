@@ -48,8 +48,8 @@ class ObjectCardAlertSummaryItem(context: Context) {
         val linearLayoutHorizontal = LinearLayout(context)
         val layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
         linearLayoutHorizontal.layoutParams = layoutParams
-        linearLayoutHorizontal.addView(radarButton.card)
-        linearLayoutHorizontal.addView(detailsButton.card)
+        linearLayoutHorizontal.addView(radarButton.get())
+        linearLayoutHorizontal.addView(detailsButton.get())
         objectLinearLayout.addView(linearLayoutHorizontal)
         objectCard.addView(objectLinearLayout)
     }
@@ -57,10 +57,12 @@ class ObjectCardAlertSummaryItem(context: Context) {
     fun get() = objectCard.get()
 
     fun setId(id: Int) {
-        objectCard.card.id = id
+        objectCard.setId(id)
     }
 
-    fun setListener(fn: View.OnClickListener) = objectCard.card.setOnClickListener(fn)
+    fun setListener(fn: View.OnClickListener) {
+        objectCard.setOnClickListener(fn)
+    }
 
     fun setTextFields(office: String, location: String, capAlert: CapAlert) {
         val title: String

@@ -82,8 +82,8 @@ class SpcSwoSummaryActivity : BaseActivity() {
         } else {
             "4-8"
         }
-        objectImageSummary.objectCardImages[index].setImage2(bitmaps[index], 2)
-        objectImageSummary.objectCardImages[index].setOnClickListener { ObjectIntent.showSpcSwo(this@SpcSwoSummaryActivity, arrayOf(day, "")) }
+        objectImageSummary.setImage(index, bitmaps[index])
+        objectImageSummary.setOnClickListener(index) { ObjectIntent.showSpcSwo(this@SpcSwoSummaryActivity, arrayOf(day, "")) }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

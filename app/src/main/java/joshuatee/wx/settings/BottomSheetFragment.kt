@@ -38,10 +38,8 @@ import joshuatee.wx.util.Utility
 
 class BottomSheetFragment(private val actContext: Context, val position: Int, private val topLabel: String, private val usedForLocation: Boolean) : BottomSheetDialogFragment() {
 
-    lateinit var linearLayout: LinearLayout
-    lateinit var label: TextView
-    lateinit var edit: TextView
-    lateinit var delete: TextView
+    private lateinit var linearLayout: LinearLayout
+    private lateinit var label: TextView
     lateinit var functions: List<(Int) -> Unit>
     lateinit var labelList: List<String>
     private var textViewList = mutableListOf<ObjectTextView>()
@@ -88,7 +86,9 @@ class BottomSheetFragment(private val actContext: Context, val position: Int, pr
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (usedForLocation && Location.numLocations == 1) {
-            listOf(1,2,3).forEach{ textViewList[it].visibility = View.INVISIBLE }
+            listOf(1, 2, 3).forEach{
+                textViewList[it].visibility = View.INVISIBLE
+            }
         }
         initView()
     }
@@ -99,5 +99,7 @@ class BottomSheetFragment(private val actContext: Context, val position: Int, pr
         behavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
-    private fun initView() { label.text = topLabel }
+    private fun initView() {
+        label.text = topLabel
+    }
 }

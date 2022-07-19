@@ -38,11 +38,13 @@ class ObjectCardBlackHeaderText(context: Context, val linearLayout: LinearLayout
         val objectLinearLayout = ObjectLinearLayout(context, LinearLayout.VERTICAL, Gravity.CENTER_VERTICAL)
         objectLinearLayout.addView(objectTextView)
         objectCard.addView(objectLinearLayout)
-        linearLayout.addView(objectCard.card)
+        linearLayout.addView(objectCard.get())
         setTextHeader()
     }
 
-    fun setListener(fn: View.OnClickListener) = objectCard.card.setOnClickListener(fn)
+    fun setListener(fn: View.OnClickListener) {
+        objectCard.setOnClickListener(fn)
+    }
 
     private fun setTextHeader() {
         objectTextView.text = text

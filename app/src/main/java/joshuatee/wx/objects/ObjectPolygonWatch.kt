@@ -46,24 +46,24 @@ class ObjectPolygonWatch(val context: Context, val type: PolygonType) {
 //        colorInt = Utility.readPrefInt(colorPrefByType[type]!!, colorDefaultByType[type]!!)
     }
 
-    private fun download(ignoreTimer: Boolean = false) {
-        if (ignoreTimer || timer.isRefreshNeeded(context)) {
-            val html = UtilityIO.getHtml(getUrl())
-            storage.valueSet(context, html)
-            when (type) {
-                PolygonType.MPD -> {
-
-                }
-                PolygonType.MCD -> {
-
-                }
-                PolygonType.WATCH -> {
-
-                }
-                else -> {}
-            }
-        }
-    }
+//    private fun download(ignoreTimer: Boolean = false) {
+//        if (ignoreTimer || timer.isRefreshNeeded(context)) {
+//            val html = UtilityIO.getHtml(getUrl())
+//            storage.valueSet(context, html)
+//            when (type) {
+//                PolygonType.MPD -> {
+//
+//                }
+//                PolygonType.MCD -> {
+//
+//                }
+//                PolygonType.WATCH -> {
+//
+//                }
+//                else -> {}
+//            }
+//        }
+//    }
 
     private fun prefTokenEnabled() = "RADAR_SHOW_" + getTypeName().uppercase()
 

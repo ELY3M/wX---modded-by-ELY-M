@@ -56,7 +56,7 @@ class ObjectLinearLayout(val context: Context) {
     }
 
     fun addView(objectImageView: ObjectImageView) {
-        linearLayout.addView(objectImageView.imageView)
+        linearLayout.addView(objectImageView.get())
     }
 
     fun addViews(children: List<View>) {

@@ -43,7 +43,7 @@ import java.util.regex.Pattern
 
 class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
 
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget_layout)
+    private val remoteViews = RemoteViews(context.packageName, R.layout.widget_layout)
     private val actionCc = "actionCc"
     private val actionSd = "actionSd"
     private val actionHazard = "actionHazard"
@@ -134,4 +134,6 @@ class ObjectWidgetCCLegacy(context: Context, allWidgetIds: IntArray) {
         remoteViews.setViewVisibility(R.id.tab, View.VISIBLE)
         remoteViews.setTextViewText(R.id.tab, tabStr[0] + "   " + tabStr[1])
     }
+
+    fun get() = remoteViews
 }

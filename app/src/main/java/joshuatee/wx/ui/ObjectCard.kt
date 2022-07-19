@@ -31,7 +31,7 @@ class ObjectCard {
 
     companion object { private const val padding = 2 }
 
-    val card: CardView
+    private val card: CardView
 
     constructor(context: Context) {
         card = CardView(context)

@@ -33,7 +33,7 @@ import joshuatee.wx.util.Utility
 
 class ObjectWidgetHwo(context: Context) {
 
-    val remoteViews = RemoteViews(context.packageName, R.layout.widget_textview_layout)
+    private val remoteViews = RemoteViews(context.packageName, R.layout.widget_textview_layout)
 
     init {
         val widgetLocationNumber = Utility.readPref(context, "WIDGET_LOCATION", "1")
@@ -45,4 +45,6 @@ class ObjectWidgetHwo(context: Context) {
             UtilityWidget.setupIntent(context, remoteViews, WfoTextActivity::class.java, R.id.text1, WfoTextActivity.URL, arrayOf(wfo, "HWO"), HWO.action)
         }
     }
+
+    fun get() = remoteViews
 }
